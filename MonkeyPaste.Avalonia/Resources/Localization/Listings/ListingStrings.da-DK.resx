@@ -59,15 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>Med dette abonnement modtager du:
-● op til 1.000 klip med indhold
-● ubegrænset papirkurv og arkivering</value>
+    <value>Med dette abonnement vil du modtage:
+● Op til 1.000 klip af indhold
+● Ubegrænset papirkurv og arkiv</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>Grundlæggende - Månedligt</value>
+    <value>Grundlæggende - månedligt</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>Grundlæggende - Årligt</value>
+    <value>Grundlæggende - årligt</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -100,31 +100,31 @@
     <value>sæt ind</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value>udklipsholder</value>
+    <value>Clipboard Manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>værktøj</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value>nytte</value>
+    <value>værktøj</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
     <value>automatisering</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>Trigger &amp; Action Designer til brugerdefinerede automatiseringer og handlingskæder</value>
+    <value>Trigger &amp; Action Designer til brugerdefinerede automater og handlingskæde</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>Horisontale/lodrette layouts, liste/gittervisning og understøttelse af flere skærme</value>
+    <value>Horisontale/lodrette layout, liste/gittervisning og multi - Monitor support</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>Fuldt udstyret klipeditor med find/erstat, rig tekst (tabeller, lister, links osv.) tekstskabelon til hurtig, dynamisk indsættelse fra din uddragssamling</value>
+    <value>Fuldt - Featured Clip Editor med Find/Erstat, rig tekst (tabeller, lister, links osv.) Teksttemel til hurtig, dynamisk indsats fra din uddragssamling</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>Sikker, sikker og privat lokal datalagring med valgfri 2-faktor adgangskodebeskyttelse</value>
+    <value>Sikker, sikker og privat lokal datalagring med valgfri 2 - Faktoradgangskodebeskyttelse</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>Indbygget plugin-browser med et stadigt voksende community-drevet bibliotek af plugins</value>
+    <value>Bygget - i pluginbrowser med et nogensinde voksende samfundsdrevet bibliotek med plugins</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -142,128 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste er et udklipsholder, automatiserings- og produktivitetsværktøj som ingen anden. Forbedring af dit udklipsholder til en beriget og organiseret del af din arbejdsgang,
-med en intuitiv og lav profil grænseflade, der understøtter tekst, filer og billeder. Designet til fleksibilitet med et stadigt voksende community-drevet bibliotek af plugins.
+    <value>Monkeypaste er en clipboard manager, automatisering og produktivitetsværktøj som ingen anden. Forbedring af dit udklipsholder til en beriget og organiseret del af din arbejdsgang,
+Med en intuitiv og lav -profilgrænseflade, der understøtter tekst, filer og billeder. Designet til fleksibilitet med et nogensinde voksende samfundsdrevet libray af plugins.
 
-Det begyndte som et eksperiment af en programmør, der ville mere end blot kopiere og indsætte ud af udklipsholderen. Han ville have en simpel kommando som Control+C, der ville "føje til" i stedet for
-af 'erstat' det, der var på udklipsholderen. Og eksperimentet virkede, eureka! Det lille værktøj var meget praktisk. Dette fascinerede programmøren med flere ideer og flere eksperimenter
-nu er blevet til "MonkeyPaste".
+Det begyndte som et eksperiment af en programmør, der ønsker mere end bare at kopiere og indsætte ud af udklipsholderen. Han ville have en simpel kommando som Ctrl+C, der ville 'tilføje til' i stedet
+af 'Udskift' hvad der var på udklipsholderen. Og eksperimentet fungerede. Det lille værktøj var meget praktisk. Denne indtrådte programmøren med flere ideer og flere eksperimenter, det
+er nu blevet "Monkeypaste".
 
-Da skrivebordet er til dine filer, har MonkeyPaste til hensigt at være til dit udklipsholder. Det er en pakke af værktøjer omhyggeligt designet til at integrere og interoperere uden problemer
-enhver applikation eller indholdsformat. Control+C og Control+V er meget mere end blot genveje. De er indgangshavne, som alle applikationer deler, med en
-rigdom af værdi og mening, du fortjener at have lige ved hånden. Ikke bare smidt ud efter næste Control+C.
+Da skrivebordet er til dine filer, har Monkeypaste til hensigt at være på dit udklipsholder. Det er en pakke med værktøjer, der er omhyggeligt designet til tilsyneladende at integrere og interoperere med
+Ethvert program eller format af indhold. Ctrl+C og Ctrl+V er meget mere end bare genveje. De er indgangsporte, som alle applikationer deler, bærer en
+Rigdom af værdi og mening, du fortjener at have til rådighed lige ved hånden. Ikke bare smidt væk efter den næste Ctrl+c.
 
-Jeg er den programmør, der er nævnt tidligere, og jeg ønsker, at alle skal kunne bruge MonkeyPaste. Så det og alle dets funktioner er helt gratis at bruge.
-Jeg vil også gerne have, at du føler dig tryg ved at bruge den. Så jeg forsikrer dig, som værende den eneste kraft bag dets oprettelse, at INGEN af de (meget) personlige oplysninger, der kan opstå på
-dit udklipsholder spores eller gemmes HVOR som helst ud over din egen maskine. Periode.</value>
+Jeg er den programmør, der er nævnt tidligere, og jeg vil have, at alle skal være i stand til at finde brug af Monkeypaste. Så det og alle dens funktioner er helt gratis at bruge.
+Jeg vil også have dig til at føle dig godt tilpas med at bruge det. Så jeg kan forsikre dig om at være den eneste kraft bag dens oprettelse, at ingen af ​​de (meget) personlige oplysninger, der kan opstå
+Dit udklipsholder spores eller gemmes nogensinde overalt ud over din egen maskine. Periode.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● Enkel og venlig grænseflade med både vandrette/lodrette layouts, liste-/gittervisning og understøttelse af flere skærme</value>
+    <value>● Enkel og venlig grænseflade med både vandrette/lodrette layouts, liste/gittervisning og multi - Monitor support</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Tilføj tilstand: Kopiering bliver "tilføj til" i stedet for "erstat" på udklipsholderen. Både tekst og filer kan tilpasses fuldt ud</value>
+    <value>● Tilføj tilstand: Kopiering bliver 'Tilføj til' i stedet for 'Udskift' på udklipsholderen. Både tekst og filer, fuldt tilpasselige</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Sofistikeret klipsporing, kilder og brug med forbedret understøttelse af Firefox og Chromium-baserede browsere (Chrome, Edge, Brave)</value>
+    <value>● Sofistikeret klipsporing, kilder og brug med forbedret støtte til Firefox og Chromium -baserede browsere (krom, kant, modig)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Fuldt udstyret klipeditor med rig tekst (tabeller, lister, links osv.) med find/erstat og fremhævning</value>
+    <value>● Fuldt - Featured Clip Editor med rig tekst (tabeller, lister, links osv.) Med Find/Udskift og fremhævning</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Gem dine billeder i den sikre database, klar til brug som filer når som helst on-demand bare træk-og-slip!</value>
+    <value>● Opbevar dine billeder i den sikre database, klar til brug som filer når som helst på - efterspørgsel bare træk - og - slip!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Kraftig tekstskabelon til hurtig, dynamisk indsætning fra din uddragssamling</value>
+    <value>● Kraftig teksttempler til hurtig, dynamisk indsats fra din uddragskollektion</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action designer til brugerdefinerede automatiseringer og handling chaining</value>
+    <value>● Trigger &amp; Action Designer til brugerdefinerede automatiseringer og handlingskæde</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Enkelt at bruge og udvide plugin-systemet til både at analysere klip eller læse/skrive ethvert format til din udklipsholder</value>
+    <value>● Enkelt at bruge og udvide plugin -systemet til både analyse af klip eller læse/skrive ethvert format til dit udklipsholder</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Indbygget plugin-browser med et stadigt voksende community-drevet bibliotek af plugins</value>
+    <value>● Bygget - i plugin -browser med et nogensinde voksende samfundsdrevet bibliotek med plugins</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatiser alt med plugin-forudindstillinger, gem og brug dine AI-prompter eller kommandoer med lethed</value>
+    <value>● Automatiser alt med plugin -forudindstillinger, stash og brug dine nogen af ​​dine AI -prompter eller kommandoer let</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Flere platforme og funktioner kommer snart! Vi er lige startet 🎉</value>
+    <value>● Flere platforme og funktioner, der snart kommer! Vi er bare ved at få startet 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>● Både lyse og mørke temaer er fuldstændig dynamiske, brug enhver farve du ønsker</value>
+    <value>● Både lette og mørke temaer er helt dynamiske, brug enhver farve, du ønsker</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● Integreret hjælp og tip lige i grænsefladen. Online manual, videoer og forum for at komme i gang alt sammen på webstedet (monkeypaste.com/docs)</value>
+    <value>● Integreret hjælp og tip lige i grænsefladen. Online manual, videoer og forum for at komme i gang med alt på hjemmesiden (Monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>● Optimeret til ydeevne og stresstestet med 1.000.000vis af klip.</value>
+    <value>● Optimeret til ydeevne og stresset testet med 1.000.000 klip.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● Når som helst søgning, skal du bare begynde at skrive med både enkel og avanceret filtrering på klip og deres kilder over snesevis af felter</value>
+    <value>● Når som helst søgning, skal du bare begynde at skrive ved hjælp af både enkel og avanceret filtrering på klip og deres kilder over snesevis af felter</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● Organiser dine klip i tag-træer og opret genbrugelige filtre</value>
+    <value>● Organiser dine klip i tagtræer og opret genanvendelige filtre</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● Sikker, sikker og privat lokal datalagring (ingen dataindsamling) altid krypteret med valgfri 2-faktor adgangskodebeskyttelse og bloker nemt apps eller websteder fra din tracker</value>
+    <value>● Sikker, sikker og privat lokal datalagring (ingen dataindsamling) krypteret altid med valgfri 2 - Faktoradgangskodebeskyttelse og let blokering af apps eller websteder fra din tracker</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Omfattende træk-og-slip-understøttelse, tilpassede globale genveje, routing og musefri navigation</value>
+    <value>● Omfattende træk - og - Drop support, brugerdefinerede globale genveje, routing og mus - Gratis navigation</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Brugerdefinerede musetilstande: Højreklik på indsæt og venstreklik på autokopier</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value>● Enkel og venlig grænseflade
-● Horisontale/lodrette layouts, liste/gittervisning og understøttelse af flere skærme
-● Både lyse og mørke temaer er fuldstændig dynamiske, brug enhver farve du ønsker
-
-● Integreret hjælp og tip lige i grænsefladen
-● Hjælpevejledning, videoer og forum til at komme i gang på webstedet (monkeypaste.com/docs)
-
-● Optimeret til ydeevne og stresstestet med 1.000.000vis af klip.
-● Søg når som helst, bare begynde at skrive
-● Både enkel og avanceret filtrering på klip og deres kilder over snesevis af felter
-● Organiser dine klip i tag-træer og opret genbrugelige filtre
-
-● Sikker, sikker og privat lokal datalagring (ingen dataindsamling) altid krypteret
-● Du kan ignorere klip fra bestemte apps eller websteder
-● Valgfri 2-faktor adgangskodebeskyttelse
-
-● Tilpassede globale genvejstaster, routing og musefri navigation
-● Omfattende træk-og-slip-understøttelse
-● Brugerdefinerede musetilstande: Højreklik på indsæt og venstreklik på autokopier
-● Tilføj tilstand: Kopiering bliver "tilføj til" i stedet for "erstat" på udklipsholderen. Både tekst og filer kan tilpasses fuldt ud
-
-● Sofistikeret klipsporing, kilder og brug
-● Forbedret understøttelse af Firefox og Chromium-baserede browsere (Chrome, Edge, Brave)
-
-● Fungerer med rig tekst (tabeller, lister, links osv.)
-● Fuldt udstyret klip-editor med find/erstat og fremhævning
-● Gem dine billeder i den sikre database, klar til brug som filer når som helst on-demand bare træk-og-slip!
-
-● Kraftig tekstskabelon til hurtig, dynamisk indsætning fra din uddragssamling
-
-● Trigger &amp; Action designer til brugerdefinerede automatiseringer og handling chaining
-
-● Enkelt at bruge og udvide plugin-systemet til både at analysere klip eller læse/skrive ethvert format til din udklipsholder
-● Indbygget plugin-browser med et stadigt voksende community-drevet bibliotek af plugins
-● Automatiser alt med plugin-forudindstillinger, gem og brug dine AI-prompter eller kommandoer med lethed
-
-● Flere platforme og funktioner kommer snart! Vi er lige startet 🎉</value>
+    <value>● Brugerdefinerede musetilstande: Højre - Klik på Indsæt og venstre - Klik på Auto - Kopi</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>Udklipsholderen er en jungle. MonkeyPaste er KONGEN! Skift fra app til app, kopier dette og indsæt det som aldrig før med MonkeyPaste!! Et helt nyt, banebrydende udklipsholder og analytisk automatiseringsværktøj!!!</value>
+    <value>Klippebordet er en jungle. Monkeypaste er kongen! Sving fra app til app, kopiering af dette og indsat det som aldrig før med abeypaste !! Et brand - nyt, banebrydende clipboard og analytisk automatiseringsværktøj !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>Prøve af MonkeyPaste i aktion!</value>
+    <value>Eksempel på abeypaste i aktion!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -272,18 +233,18 @@ dit udklipsholder spores eller gemmes HVOR som helst ud over din egen maskine. P
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value>Installeret på dette sprog. Engelsk er kun for disse eksempler</value>
+    <value>Installeret på dette sprog. Engelsk er kun til disse eksempler</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>Bemærk! Skærmbilleder er kun eksempler. Det, du installerer, er blevet oversat til dette sprog.</value>
+    <value>Skærmbilleder er kun eksempler. Hvad du installerer er blevet oversat til dette sprog.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Med dette abonnement modtager du:
-● ubegrænset kapacitet
-● enhedssynkronisering (efter tilgængelighed)</value>
+    <value>Med dette abonnement vil du modtage:
+● Ubegrænset kapacitet
+● Synkronisering af enheder (efter tilgængelighed)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>Ubegrænset - Månedligt</value>
+    <value>Ubegrænset - månedligt</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Ubegrænset - årligt</value>

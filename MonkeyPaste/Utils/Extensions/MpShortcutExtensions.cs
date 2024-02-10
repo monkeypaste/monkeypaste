@@ -6,9 +6,9 @@
                 // APPLICATION
                 case MpShortcutType.ToggleMainWindow:
                 case MpShortcutType.ToggleAppendPaused:
-                case MpShortcutType.ToggleAppendPreMode:
-                case MpShortcutType.ToggleAppendInsertMode:
-                case MpShortcutType.ToggleAppendLineMode:
+                case MpShortcutType.ToggleAppendPositionMode:
+                case MpShortcutType.ToggleAppendInlineMode:
+                case MpShortcutType.ToggleAppendBlockMode:
                 case MpShortcutType.ToggleAutoCopyMode:
                 case MpShortcutType.ToggleRightClickPasteMode:
                 case MpShortcutType.ToggleListenToClipboard:
@@ -24,11 +24,11 @@
 
         public static bool IsEditorShortcut(this MpShortcutType st) {
             switch (st) {
-                case MpShortcutType.ToggleAppendInsertMode:
-                case MpShortcutType.ToggleAppendLineMode:
-                case MpShortcutType.ToggleAppendPreMode:
+                case MpShortcutType.ToggleAppendInlineMode:
+                case MpShortcutType.ToggleAppendBlockMode:
+                case MpShortcutType.ToggleAppendPositionMode:
                 case MpShortcutType.ToggleAppendPaused:
-                case MpShortcutType.ToggleAppendManualMode:
+                case MpShortcutType.ToggleAppendDirectionMode:
                     return true;
                 default:
                     return false;

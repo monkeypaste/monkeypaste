@@ -3053,7 +3053,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable Paragraph.
+        ///   Looks up a localized string similar to Enable Block.
         /// </summary>
         public static string EditorAppendInlineModeLabel {
             get {
@@ -5476,15 +5476,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The clipboard is a jungle. You need the prowess of a primate to navigate the terrain and tap its true potential..
-        /// </summary>
-        public static string ProductDescription {
-            get {
-                return ResourceManager.GetString("ProductDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Unsaved Filter.
         /// </summary>
         public static string QueryTrayEmptyPendingTagName {
@@ -6534,7 +6525,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Append Line.
+        ///   Looks up a localized string similar to Append Block.
         /// </summary>
         public static string SysTrayAppendLineHeader {
             get {

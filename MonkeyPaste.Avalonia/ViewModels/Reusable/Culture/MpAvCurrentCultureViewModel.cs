@@ -90,12 +90,12 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private bool SetAllCultures(CultureInfo ci) {
-            var pre_def_titles = new string[] {
-                string.Empty,
-                UiStrings.ClipTileDefTitleTextPrefix,
-                UiStrings.ClipTileDefTitleImagePrefix,
-                UiStrings.ClipTileDefTitleFilesPrefix
-            };
+            //var pre_def_titles = new string[] {
+            //    string.Empty,
+            //    UiStrings.ClipTileDefTitleTextPrefix,
+            //    UiStrings.ClipTileDefTitleImagePrefix,
+            //    UiStrings.ClipTileDefTitleFilesPrefix
+            //};
 
             UiStrings.Culture = ci;
             EnumUiStrings.Culture = ci;
@@ -113,6 +113,7 @@ namespace MonkeyPaste.Avalonia {
             //#endif
             bool needs_restart1 = MpAvEnumUiStringResourceConverter.CheckEnumUiStrings();
             bool needs_restart2 = MpAvEditorUiStringBuilder.CheckJsUiStrings();
+            MpConsole.WriteLine($"Current Culture: '{ci.Name}' Enums: {(needs_restart1 ? "CHANGED" : "VALID")} Editor: {(needs_restart2 ? "CHANGED" : "VALID")}");
             return needs_restart1 || needs_restart2;
         }
         private string GetCultureDisplayValue(CultureInfo culture) {

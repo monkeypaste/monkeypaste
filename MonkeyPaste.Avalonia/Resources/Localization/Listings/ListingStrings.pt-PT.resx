@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>Com esta assinatura, você receberá:
+● Até 1.000 clipes de conteúdo
+● Lixo e arquivo ilimitados</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Básico - mensal</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Básico - anual</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>cópia de</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>colar</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>Gerenciador da área de transferência</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>ferramenta</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>Utilitário</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>automação</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>Gatilho e designer de ação para automações personalizadas e encadeamento de ação</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>Layouts horizontais/verticais, visualização de lista/grade e suporte multi -monitor</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>Totalmente - Editor de clipes em destaque com Find/Substituir, Rich Text (Tabelas, Listas, Links etc.)</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>Armazenamento de dados local seguro, seguro e privado com proteção de senha de 2 fator opcional</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>Construído - no navegador do plug -in com uma comunidade de plugins, em crescimento - acionado por uma comunidade em crescimento</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>A Monkeypaste é um gerente de quadro de transferência, ferramenta de automação e produtividade como nenhuma outra. Aprimorando sua prancha em uma parte enriquecida e organizada do seu fluxo de trabalho,
+Apresentando uma interface intuitiva e baixa - que suporta texto, arquivos e imagens. Projetado para flexibilidade, com um Libray de plug -ins, orientado a uma comunidade em crescimento.
+
+Começou como um experimento de um programador querendo mais do que apenas copiar e colar fora da área de transferência. Ele queria um comando simples como Ctrl+C que 'adicionaria' em vez disso
+de 'substituir' o que estava na área de transferência. E o experimento funcionou. A pequena ferramenta foi muito útil. Isso entrou o programador com mais idéias e mais experimentos, que
+agora se tornou "macaco".
+
+Como o desktop é para seus arquivos, o MonkeyySaste pretende estar na sua área de transferência. É um conjunto de ferramentas cuidadosamente projetadas para integrar e integrar com aparecimento com
+qualquer aplicação ou formato de conteúdo. Ctrl+C e Ctrl+V são muito mais do que apenas atalhos. Eles são os portos de entrada, todos os aplicativos compartilham, carregando um
+Riqueza de valor e significado que você merece ter disponível na ponta dos dedos. Não apenas jogado fora após o próximo Ctrl+c.
+
+Eu sou o programador mencionado anteriormente e quero que todos possam encontrar o uso de Monkeyyyasaste. Então, e todos os seus recursos são totalmente gratuitos.
+Eu também quero que você se sinta confortável em usá -lo. Por isso, garanto -lhe, como sendo a única força por trás de sua criação, que nenhuma das informações (muito) pessoais que podem surgir
+Sua área de transferência é sempre rastreada ou armazenada em qualquer lugar além da sua própria máquina. Período.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● Interface simples e amigável com layouts horizontais/verticais, visualização de lista/grade e suporte multi -monitor</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● Modo de anexo: a cópia se torna 'adicione' em vez de 'substituir' na área de transferência. Texto e arquivos, totalmente personalizáveis</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● Rastreamento sofisticado de clipe, fontes e uso com suporte aprimorado para navegadores baseados em Firefox e Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● Totalmente - editor de clipes em destaque com texto rico (tabelas, listas, links etc.) com encontrar/substituir e destacar</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● Armazene suas imagens no banco de dados seguro, pronto para uso como arquivos a qualquer momento - a demanda, basta arrastar - e - soltar!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>● Modelo de texto poderoso para coleta rápida e dinâmica da sua coleção de snippets</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● Designer de gatilho e ação para automações personalizadas e encadeamento de ação</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● Simples de usar e estender o sistema de plug -in para analisar os clipes ou ler/escrever qualquer formato na sua área de transferência</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● Construído - no navegador do plug -in com uma comunidade de plugins de plugins, em crescimento - acionado por uma comunidade em crescimento</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>● Automatize tudo com predefinições de plug -in, esconder e usar qualquer um de seus solicitados ou comandos de IA com facilidade</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● Mais plataformas e recursos em breve! Estamos apenas começando</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● Os temas claros e escuros são completamente dinâmicos, use qualquer cor que você quiser</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● Ajuda e dicas integradas diretamente na interface. Manual on -line, vídeos e fórum para você começar tudo no site (MonkeyySaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● Otimizado para desempenho e estressado testado com 1.000.000 de clipes.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● A qualquer momento a pesquisa, apenas comece a digitar usando filtragem simples e avançada em clipes e suas fontes em dezenas de campos</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● Organize seus clipes em árvores de etiquetas e crie filtros ressusíveis</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● Armazenamento de dados local seguro, seguro e privado (sem coleta de dados) sempre criptografado com proteção de senha de 2 fatores opcionais e bloqueia facilmente aplicativos ou sites do seu rastreador</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>● Arrasto extenso - e - soltar suporte, atalhos globais personalizados, roteamento e navegação gratuita -</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Modos personalizados do mouse: Direita - Clique em Cole e à esquerda - Clique em Auto - Copiar</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>A área de transferência é uma selva. Monkeypaste é o rei! Swing de aplicativo para aplicativo, copiando isso e colando isso como nunca antes com o MonkeyyySaste !! Uma marca - Ferramenta de transferência de arestas de ponta e ferramenta de automação analítica !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>Amostra de macacão em ação!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>Instalado neste idioma. O inglês é apenas para esses exemplos</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>Capturas de tela são apenas exemplos. O que você instala foi traduzido para esse idioma.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>Com esta assinatura, você receberá:
+● Capacidade ilimitada
+● Sincronização de dispositivos (mediante disponibilidade)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Ilimitado - mensalmente</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Ilimitado - anualmente</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>Lançamento inicial</value>
   </data>
 </root>

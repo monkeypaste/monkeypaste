@@ -59,15 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>このサブスクリプションでは、次のものを受け取ります。
-●最大1,000クリップのコンテンツ
-●無制限のゴミ箱とアーカイブ</value>
+    <value>このサブスクリプションを使用すると、以下を受け取ります。
+●最大1,000個のコンテンツクリップ
+●無制限のゴミ＆アーカイブ</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>基本 - 月次</value>
+    <value>基本 - 毎月</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>基本 - 年単位</value>
+    <value>基本 - 毎年</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -94,10 +94,10 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value>写し</value>
+    <value>コピー</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value>糊</value>
+    <value>ペースト</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
     <value>クリップボードマネージャー</value>
@@ -106,25 +106,25 @@
     <value>道具</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value>効用</value>
+    <value>ユーティリティ</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
     <value>オートメーション</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>Trigger &amp; Action Designerによるカスタム自動化とアクションチェーン</value>
+    <value>カスタム自動化とアクションチェーンのためのトリガー＆アクションデザイナー</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>水平/垂直レイアウト、リスト/グリッドビュー、マルチモニターのサポート</value>
+    <value>水平/垂直レイアウト、リスト/グリッドビューとマルチモニターサポート</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>検索/置換、リッチテキスト(テーブル、リスト、リンクなど)テキストテンプレートを備えたフル機能のクリップエディタで、スニペットコレクションからすばやく動的に貼り付けることができます。</value>
+    <value>Find/Opplated、Rich Text（テーブル、リスト、リンクなど）テキストテンプレートのためのテキストのテキストを備えた機能 - スニペットコレクションからの迅速なダイナミックな貼り付けを備えた機能</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>安全、安心、プライベートなローカルデータストレージ、オプションの2要素パスワード保護</value>
+    <value>オプションの2つのファクターパスワード保護を備えた安全で安全なプライベートローカルデータストレージ</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>成長を続けるコミュニティ主導のプラグインライブラリを備えたプラグインブラウザを内蔵</value>
+    <value>ビルド - これまでにないコミュニティを備えたプラグインブラウザ - プラグインのライブラリ</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -142,92 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPasteは、他に類を見ないクリップボードマネージャー、自動化および生産性ツールです。クリップボードをワークフローの充実した整理された部分に強化します。
-テキスト、ファイル、画像をサポートする直感的で薄型のインターフェイスを備えています。柔軟性を重視して設計されており、成長を続けるコミュニティ主導のプラグインライブラリを備えています。
+    <value>Monkeypasteは、クリップボードマネージャー、オートメーション、生産性ツールと他に類を見ないものです。クリップボードをワークフローの豊かで整理した部分に強化し、
+テキスト、ファイル、画像をサポートする直感的で低いプロファイルインターフェイスを備えています。柔軟性のために設計されており、これまでにないコミュニティ - プラグインの駆動型のLibray。
 
-これは、クリップボードからコピー&amp;ペーストするだけではないというプログラマーの実験から始まりました。彼は、代わりに Ctrl+C のような単純なコマンドで "追加" したかったのです
-クリップボードにあったものを「置き換える」の。そして実験はうまくいった、エウレカ!小さなツールはとても便利でした。これにより、プログラマーはより多くのアイデアと実験に興味をそそられました。
-現在は「モンキーペースト」となっています。
+それは、クリップボードからコピーして貼り付けるだけではなく、プログラマーによる実験として始まりました。彼は代わりに「追加」するCtrl+Cのような単純なコマンドを望んでいました
+クリップボードにあったものを「交換」します。そして実験はうまくいきました。小さなツールはとても便利でした。これにより、プログラマーはより多くのアイデアとより多くの実験を受けました。
+今では「Monkeypaste」になりました。
 
-デスクトップがファイルに対するものであるように、MonkeyPasteはクリップボードに対するものです。その一連のツールは、一見シームレスに統合および相互運用するために慎重に設計されています。
-コンテンツのアプリケーションまたは形式。Ctrl+C と Ctrl+V は単なるショートカットではありません。これらは、すべてのアプリケーションが共有するエントリポートであり、
-あなたがあなたの指先で利用できるに値する価値と意味の豊かさ。次のCtrl+Cの後に捨てられるだけではありません。
+デスクトップはファイルにあるため、Monkeypasteはクリップボードに到達するつもりです。その一連のツールは、シームレスに統合して相互運用するように慎重に設計されています
+コンテンツのアプリケーションまたは形式。 Ctrl+CおよびCtrl+Vは、単なるショートカット以上のものです。それらはすべてのアプリケーションを共有するエントリポートであり、
+豊富な価値と意味は、あなたの指先で利用できるようにするに値します。次のctrl+cの後に捨てられただけではありません。
 
-私は前述のプログラマーであり、誰もがMonkeyPasteから使用方法を見つけられるようにしたいと考えています。したがって、それとそのすべての機能は完全に無料で使用できます。
-また、快適に使ってもらいたいです。ですから、私は、その作成の背後にある唯一の力として、発生する可能性のある(非常に)個人情報は一切ないことを保証します。
-あなたのクリップボードは、あなた自身のマシン以外のどこにでも追跡または保存されます。時代。</value>
+私は前述のプログラマーであり、誰もがサルパステの使用を見つけることができるようにしたいと思っています。したがって、それとそのすべての機能は完全に自由に使用できます。
+また、あなたにそれを使って快適に感じてもらいたいです。ですから、私はあなたが、その創造の背後にある唯一の力であるとして、（非常に）個人的な個人情報が生じることがないことを保証します。
+クリップボードは、自分のマシンを越えてどこにでも追跡または保管されています。期間。</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>●水平/垂直レイアウト、リスト/グリッドビュー、マルチモニターサポートを備えたシンプルでフレンドリーなインターフェイス</value>
+    <value>●水平/垂直レイアウト、リスト/グリッドビュー、マルチモニターサポートの両方を備えたシンプルでフレンドリーなインターフェイス</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● 追加モード: コピーは、クリップボード上で「置換」ではなく「追加」になります。テキストとファイルの両方、完全にカスタマイズ可能</value>
+    <value>●モードの追加：クリップボードの「交換」の代わりにコピーが「追加」になります。テキストとファイルの両方、完全にカスタマイズ可能</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Firefox および Chromium ベースのブラウザ(Chrome、Edge、Brave)のサポートを強化した、洗練されたクリップのトラッキング、ソース、使用状況</value>
+    <value>●FirefoxおよびChromiumベースのブラウザ（Chrome、Edge、Brave）のサポートを強化した洗練されたクリップトラッキング、ソース、および使用法</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>●検索/置換と強調表示を備えたリッチテキスト(テーブル、リスト、リンクなど)を備えたフル機能のクリップエディタ</value>
+    <value>●完全 - 豊富なテキスト（テーブル、リスト、リンクなど）を備えた注目のクリップエディター検索/交換と強調表示</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>●画像を安全なデータベースに保存し、いつでもファイルとしてすぐに使用できます-オンデマンドでドラッグアンドドロップするだけです!</value>
+    <value>●画像を安全なデータベースに保存し、いつでもファイルとして使用する準備ができています - 需要だけでドラッグと - ドロップ！</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>●スニペットコレクションからすばやく動的に貼り付けるための強力なテキストテンプレート</value>
+    <value>●スニペットコレクションからの迅速でダイナミックな貼り付けのための強力なテキストテンプレート</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● トリガーおよびアクションデザイナによるカスタム自動化とアクションチェーン</value>
+    <value>●カスタム自動化とアクションチェーンのトリガー＆アクションデザイナー</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>●クリップの分析やクリップボードへの任意のフォーマットの読み取り/書き込みの両方のためのプラグインシステムの使用と拡張が簡単</value>
+    <value>●クリップを分析するか、クリップボードに任意のフォーマットを読み取り/書き込むためのプラグインシステムを使用して拡張できます</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>●成長し続けるコミュニティ主導のプラグインライブラリを備えた組み込みのプラグインブラウザ</value>
+    <value>●ビルド - これまでにないコミュニティを備えたプラグインブラウザ - プラグインのライブラリ</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>●プラグインプリセットですべてを自動化し、AIプロンプトやコマンドを簡単に隠して使用します</value>
+    <value>●プラグインプリセットですべてを自動化し、AIプロンプトまたはコマンドを簡単に使用して使用します</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>●より多くのプラットフォームと機能が近日公開されます!まだ始まった🎉ばかりです</value>
+    <value>●近日公開予定のプラットフォームと機能が増えます！私たちはちょうど始め始めました🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>●明るいテーマと暗いテーマの両方が完全に動的で、好きな色を使用できます</value>
+    <value>●明るいテーマと暗いテーマの両方が完全に動的で、必要な色を使用してください</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● インターフェイスに統合されたヘルプとヒント。オンラインマニュアル、ビデオ、フォーラムは、ウェブサイト(monkeypaste.com/docs)ですべて開始します</value>
+    <value>●統合ヘルプ＆ヒントは、インターフェイスに直接ヒントします。オンラインマニュアル、ビデオ、フォーラムは、Webサイトですべてを始めましょう（monkeypaste.com/docs）</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>●パフォーマンスが最適化され、1,000,000個のクリップでストレステスト済み。</value>
+    <value>●パフォーマンスのために最適化され、1,000,000個のクリップでテストされました。</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>●いつでも検索、数十のフィールドにわたるクリップとそのソースに対して、単純なフィルタリングと高度なフィルタリングの両方を使用して入力を開始するだけです</value>
+    <value>●いつでも検索、クリップでの単純なフィルタリングと高度なフィルタリングの両方を使用して、数十個のフィールドを超えるソースの両方を使用して入力を開始するだけです</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>●クリップをタグツリーに整理し、再利用可能なフィルターを作成します</value>
+    <value>●タグツリーでクリップを整理し、再利用可能なフィルターを作成します</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>●安全、安心、プライベートなローカルデータストレージ(データ収集なし)、オプションの2要素パスワード保護で常に暗号化され、トラッカーからアプリやWebサイトを簡単にブロックします</value>
+    <value>●セーフ、セキュリティ、プライベートのローカルデータストレージ（データ収集なし）オプションの2つのファクターパスワード保護で常に暗号化され、トラッカーからアプリまたはWebサイトを簡単にブロックする</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>●広範なドラッグ&amp;ドロップのサポート、カスタムグローバルショートカット、ルーティング、マウス-フリーナビゲーション</value>
+    <value>●大規模なドラッグと - ドロップサポート、カスタムグローバルショートカット、ルーティング、マウス - 無料ナビゲーション</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>●カスタムマウスモード:右クリック[貼り付け]と左クリック[自動]-コピー</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>●カスタムマウスモード：右 - 貼り付けと左をクリック -  [自動]をクリック - コピー</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>クリップボードはジャングルです。MonkeyPasteは王様です!アプリからアプリへとスイングし、これをコピーして、MonkeyPasteでこれまでにないほど貼り付けます!まったく新しい最先端のクリップボードと分析自動化ツール!!</value>
+    <value>クリップボードはジャングルです。 Monkeypasteは王です！アプリからアプリにスイングし、これをコピーし、Monkeypasteでこれまでにないように貼り付ける!!ブランド - 新しい最先端のクリップボードと分析オートメーションツール!!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>MonkeyPasteのサンプル!</value>
+    <value>動作中のMonkeypasteのサンプル！</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -239,20 +236,20 @@
     <value>この言語にインストールされています。英語はこれらの例のみです</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>手記！スクリーンショットは一例です。インストールしたものは、この言語に翻訳されています。</value>
+    <value>スクリーンショットは単なる例です。インストールするものはこの言語に翻訳されています。</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value>このサブスクリプションでは、次のものを受け取ります。
+    <value>このサブスクリプションを使用すると、以下を受け取ります。
 ●無制限の容量
-● デバイスの同期(利用可能な場合)</value>
+●デバイスの同期（可用性）</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>無制限 - 月次</value>
+    <value>無制限 - 毎月</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value>無制限 - 年単位</value>
+    <value>無制限 - 毎年</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>初版</value>
+    <value>初回リリース</value>
   </data>
 </root>

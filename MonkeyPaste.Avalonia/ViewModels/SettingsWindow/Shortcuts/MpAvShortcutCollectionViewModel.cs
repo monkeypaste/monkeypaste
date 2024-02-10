@@ -236,19 +236,19 @@ namespace MonkeyPaste.Avalonia {
                             MpAvSystemTrayViewModel.Instance.ExitApplicationCommand
                         },
                         {
-                            MpShortcutType.ToggleAppendInsertMode,
+                            MpShortcutType.ToggleAppendInlineMode,
                             MpAvClipTrayViewModel.Instance.ToggleAppendInsertModeCommand
                         },
                         {
-                            MpShortcutType.ToggleAppendLineMode,
+                            MpShortcutType.ToggleAppendBlockMode,
                             MpAvClipTrayViewModel.Instance.ToggleAppendLineModeCommand
                         },
                         {
-                            MpShortcutType.ToggleAppendPreMode,
+                            MpShortcutType.ToggleAppendPositionMode,
                             MpAvClipTrayViewModel.Instance.ToggleAppendPreModeCommand
                         },
                         {
-                            MpShortcutType.ToggleAppendManualMode,
+                            MpShortcutType.ToggleAppendDirectionMode,
                             MpAvClipTrayViewModel.Instance.ToggleAppendManualModeCommand
                         },
                         {

@@ -40,15 +40,29 @@ namespace MonkeyPaste.Avalonia {
             get {
                 //string cul_suff = MpAvCurrentCultureViewModel.IsDefaultCulture(UiStrings.Culture) ?
                 //    string.Empty : "." + UiStrings.Culture.Name;
-                string cul_suff = UiStrings.Culture.Name;
+                string cur_cc = UiStrings.Culture.Name;
+                if (cur_cc == "en-US" || string.IsNullOrEmpty(cur_cc)) {
+                    string com_ui_str_path = Path.Combine(
+                        GetRootDir(),
+                        "Resources",
+                        "Localization",
+                        "UiStrings",
+                        $"{COMMON_UI_STR_FILE_NAME}.{cur_cc}.{COMMON_UI_STR_FILE_EXT}").Replace("..", ".");
+                    if (com_ui_str_path.IsFile()) {
+                        return com_ui_str_path;
+                    }
+                    // no en-US version
+                    cur_cc = string.Empty;
+                    com_ui_str_path = Path.Combine(
+                        GetRootDir(),
+                        "Resources",
+                        "Localization",
+                        "UiStrings",
+                        $"{COMMON_UI_STR_FILE_NAME}.{cur_cc}.{COMMON_UI_STR_FILE_EXT}").Replace("..", ".");
+                    return com_ui_str_path;
+                }
 
-                string com_ui_str_path = Path.Combine(
-                    GetRootDir(),
-                    "Resources",
-                    "Localization",
-                    "UiStrings",
-                    COMMON_UI_STR_FILE_NAME + cul_suff + "." + COMMON_UI_STR_FILE_EXT);
-                return com_ui_str_path;
+                return null;
             }
         }
 
@@ -56,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
             get {
 
                 // append culture suffix for non-defaults
-                string cul_suff = UiStrings.Culture.Name;
+                string cur_cc = UiStrings.Culture.Name;
                 return Path.Combine(
                     GetRootDir(),
                     "Resources",
@@ -64,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
                     "src",
                     "components",
                     "localizer",
-                    EDITOR_UI_STR_FILE_NAME + cul_suff + "." + EDITOR_UI_STR_FILE_EXT);
+                    $"{EDITOR_UI_STR_FILE_NAME}.{cur_cc}.{EDITOR_UI_STR_FILE_EXT}").Replace("..", ".");
             }
         }
 
@@ -86,10 +100,14 @@ namespace MonkeyPaste.Avalonia {
         public static bool CheckJsUiStrings() {
             // target runtime dir
             UseRuntimePaths = true;
+#if RELEASE
+            SetJsUiStringScriptTag();
+            return false;
+#endif
 
             bool needs_restart = CheckJsUiStrings_internal();
 
-#if DEBUG && WINDOWS
+#if WINDOWS
             // target project dir
             UseRuntimePaths = false;
             bool needs_restart_debug = CheckJsUiStrings_internal();
@@ -135,12 +153,10 @@ namespace MonkeyPaste.Avalonia {
                 if (!was_ref_updated) {
                     return false;
                 }
-                MpDebug.Break($"CAUTION! Js uistrings ref changed. App will shutdown and changes will be reflected on restart...", true);
-
-                //Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.EditorResourceUpdate, $"Js UI strings ref updated");
+                MpDebug.Break($"CAUTION! Js uistrings ref changed. App will shutdown and changes will be reflected on restart...");
                 return true;
             }
-            MpDebug.Break($"CAUTION! Js uistrings changed. App will shutdown and changes will be reflected on restart...", true);
+            MpDebug.Break($"CAUTION! Js uistrings changed. App will shutdown and changes will be reflected on restart...");
             // create/update uistrings.js file
             string result = MpFileIo.WriteTextToFile(EditorUiStrPath, runtime_content);
             bool success = result == EditorUiStrPath;
@@ -149,16 +165,7 @@ namespace MonkeyPaste.Avalonia {
                 SetJsUiStringScriptTag();
             }
             // NOTE! Clean and rebuild before re-running
-            //Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.EditorResourceUpdate, $"Js UI strings updated at path '{EditorUiStrPath}'");
             return true;
-        }
-        private static string GetRootDir() {
-            if (UseRuntimePaths) {
-                return Path.GetDirectoryName(typeof(MpAvEditorUiStringBuilder).Assembly.Location);
-            }
-            return Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
-                    typeof(MpAvEditorUiStringBuilder).Assembly.GetName().Name);
         }
 
         private static bool SetJsUiStringScriptTag() {
@@ -200,6 +207,14 @@ namespace MonkeyPaste.Avalonia {
         }
         private static string GetEntryJs(KeyValuePair<string, string> kvp) {
             return $"\t{kvp.Key}: `{kvp.Value}`,{Environment.NewLine}";
+        }
+        private static string GetRootDir() {
+            if (UseRuntimePaths) {
+                return Path.GetDirectoryName(typeof(MpAvEditorUiStringBuilder).Assembly.Location);
+            }
+            return Path.Combine(
+                    MpCommonHelpers.GetSolutionDir(),
+                    typeof(MpAvEditorUiStringBuilder).Assembly.GetName().Name);
         }
         #endregion
     }

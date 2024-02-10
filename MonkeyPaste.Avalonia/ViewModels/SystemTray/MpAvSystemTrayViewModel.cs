@@ -93,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
                                     CommandPath = nameof(MpAvClipTrayViewModel.Instance.ToggleAppendInsertModeCommand),
                                     //ShortcutArgs = new object[] { MpShortcutType.ToggleAppendInsertMode },
                                     
-                                    InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleAppendInsertMode),
+                                    InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleAppendInlineMode),
                                     InputGesturePropPath = nameof(MpAvShortcutViewModel.KeyString)
                                 },
 
@@ -109,7 +109,7 @@ namespace MonkeyPaste.Avalonia {
                                     CommandSrcObj = MpAvClipTrayViewModel.Instance,
                                     CommandPath = nameof(MpAvClipTrayViewModel.Instance.ToggleAppendLineModeCommand),
                                     //ShortcutArgs = new object[] { MpShortcutType.ToggleAppendLineMode },
-                                    InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleAppendLineMode),
+                                    InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleAppendBlockMode),
                                     InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                                 },
                                 new MpAvMenuItemViewModel() {IsSeparator = true},

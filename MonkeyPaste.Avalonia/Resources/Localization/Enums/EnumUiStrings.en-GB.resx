@@ -1,0 +1,1189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MpThemeType_Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="MpThemeType_Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
+    <value>Daily</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
+    <value>Weekly</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
+    <value>Last Output</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_SourceClip" xml:space="preserve">
+    <value>Source Clip</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
+    <value>Holding Shift</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
+    <value>Top Right Corner</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
+    <value>Top Left Corner</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
+    <value>Always</value>
+  </data>
+  <data name="MpBillingCycleType_Never" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="MpBillingCycleType_Monthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="MpBillingCycleType_Yearly" xml:space="preserve">
+    <value>Yearly</value>
+  </data>
+  <data name="MpNotificationType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpNotificationType_Loader" xml:space="preserve">
+    <value>Loader</value>
+  </data>
+  <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
+    <value>Subscription Expired</value>
+  </data>
+  <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
+    <value>Account Login Failed</value>
+  </data>
+  <data name="MpNotificationType_DbError" xml:space="preserve">
+    <value>Db Error</value>
+  </data>
+  <data name="MpNotificationType_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
+    <value>Plugin Updated</value>
+  </data>
+  <data name="MpNotificationType_Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="MpNotificationType_AppModeChange" xml:space="preserve">
+    <value>App Mode Change</value>
+  </data>
+  <data name="MpNotificationType_Debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
+    <value>Content Cap Reached</value>
+  </data>
+  <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
+    <value>Trash Cap Reached</value>
+  </data>
+  <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
+    <value>Content Add Blocked By Account</value>
+  </data>
+  <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
+    <value>Content Restore Blocked By Account</value>
+  </data>
+  <data name="MpNotificationType_AccountChanged" xml:space="preserve">
+    <value>Account Changed</value>
+  </data>
+  <data name="MpNotificationType_Welcome" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
+    <value>Update Available</value>
+  </data>
+  <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
+    <value>No Update Available</value>
+  </data>
+  <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
+    <value>Append Mode Changed</value>
+  </data>
+  <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
+    <value>Trigger Enabled</value>
+  </data>
+  <data name="MpNotificationType_AlertAction" xml:space="preserve">
+    <value>Alert Action</value>
+  </data>
+  <data name="MpNotificationType_StartupComplete" xml:space="preserve">
+    <value>Startup Complete</value>
+  </data>
+  <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
+    <value>File Io Warning</value>
+  </data>
+  <data name="MpNotificationType_UnloadPluginError" xml:space="preserve">
+    <value>Unload Plugin Error</value>
+  </data>
+  <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
+    <value>Invalid Plugin</value>
+  </data>
+  <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
+    <value>Invalid Clipboard Format Handler</value>
+  </data>
+  <data name="MpNotificationType_InvalidAction" xml:space="preserve">
+    <value>Invalid Action</value>
+  </data>
+  <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
+    <value>Bad Http Request</value>
+  </data>
+  <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
+    <value>Analyzer Timeout</value>
+  </data>
+  <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
+    <value>Invalid Request</value>
+  </data>
+  <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
+    <value>Invalid Response</value>
+  </data>
+  <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
+    <value>Execute Parameters Request</value>
+  </data>
+  <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
+    <value>Db Password Input</value>
+  </data>
+  <data name="MpNotificationType_RateApp" xml:space="preserve">
+    <value>Rate App</value>
+  </data>
+  <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
+    <value>Modal Reset Shared Value Preset</value>
+  </data>
+  <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
+    <value>Modal Content Format Degradation</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
+    <value>Modal Yes No Cancel Message Box</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
+    <value>Modal Yes No Message Box</value>
+  </data>
+  <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
+    <value>Modal Ok Cancel Message Box</value>
+  </data>
+  <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
+    <value>Modal Ok Message Box</value>
+  </data>
+  <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>Modal Text Box Ok Cancel Message Box</value>
+  </data>
+  <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>Modal Rememberable Text Box Ok Cancel Message Box</value>
+  </data>
+  <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
+    <value>Modal Progress Cancel Message Box</value>
+  </data>
+  <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
+    <value>Modal Busy Message Box</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
+    <value>Modal Restart Ignore</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
+    <value>Modal Restart Now Or Later</value>
+  </data>
+  <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
+    <value>Confirm End Append</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
+    <value>Plugin Response Message</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
+    <value>Plugin Response Error</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
+    <value>Plugin Response Warning</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
+    <value>Plugin Response Warning With Option</value>
+  </data>
+  <data name="MpShortcutType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
+    <value>Toggle Main Window</value>
+  </data>
+  <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
+    <value>Toggle Auto Copy Mode</value>
+  </data>
+  <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
+    <value>Toggle Right Click Paste Mode</value>
+  </data>
+  <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
+    <value>Toggle Listen To Clipboard</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendInlineMode" xml:space="preserve">
+    <value>Toggle Append Inline Mode</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendBlockMode" xml:space="preserve">
+    <value>Toggle Append Block Mode</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPositionMode" xml:space="preserve">
+    <value>Toggle Append Position Mode</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
+    <value>Toggle Append Paused</value>
+  </data>
+  <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
+    <value>Manually Add From Clipboard</value>
+  </data>
+  <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
+    <value>Decrease Focus</value>
+  </data>
+  <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
+    <value>Increase Focus</value>
+  </data>
+  <data name="MpShortcutType_ExitApplication" xml:space="preserve">
+    <value>Exit Application</value>
+  </data>
+  <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
+    <value>Paste To External</value>
+  </data>
+  <data name="MpShortcutType_PasteSelection" xml:space="preserve">
+    <value>Paste Selection</value>
+  </data>
+  <data name="MpShortcutType_CopySelection" xml:space="preserve">
+    <value>Copy Selection</value>
+  </data>
+  <data name="MpShortcutType_CutSelection" xml:space="preserve">
+    <value>Cut Selection</value>
+  </data>
+  <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
+    <value>Delete Selected Items</value>
+  </data>
+  <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
+    <value>Select Next Column Item</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
+    <value>Select Previous Column Item</value>
+  </data>
+  <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
+    <value>Select Next Row Item</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
+    <value>Select Previous Row Item</value>
+  </data>
+  <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
+    <value>Assign Shortcut</value>
+  </data>
+  <data name="MpShortcutType_Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="MpShortcutType_Redo" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
+    <value>Toggle Content Read Only</value>
+  </data>
+  <data name="MpShortcutType_Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="MpShortcutType_Duplicate" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
+  <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
+    <value>Scroll To Home</value>
+  </data>
+  <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
+    <value>Scroll To End</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
+    <value>Window Size Up</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
+    <value>Window Size Down</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
+    <value>Window Size Left</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
+    <value>Window Size Right</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowTop" xml:space="preserve">
+    <value>Orient Main Window Top</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowBottom" xml:space="preserve">
+    <value>Orient Main Window Bottom</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowLeft" xml:space="preserve">
+    <value>Orient Main Window Left</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowRight" xml:space="preserve">
+    <value>Orient Main Window Right</value>
+  </data>
+  <data name="MpShortcutType_PreviousPage" xml:space="preserve">
+    <value>Previous Page</value>
+  </data>
+  <data name="MpShortcutType_NextPage" xml:space="preserve">
+    <value>Next Page</value>
+  </data>
+  <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
+    <value>Find And Replace Selected Item</value>
+  </data>
+  <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
+    <value>Toggle Main Window Locked</value>
+  </data>
+  <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
+    <value>Toggle Filter Menu Visible</value>
+  </data>
+  <data name="MpShortcutType_ShowSettings" xml:space="preserve">
+    <value>Show Settings</value>
+  </data>
+  <data name="MpShortcutType_TogglePinned" xml:space="preserve">
+    <value>Toggle Pinned</value>
+  </data>
+  <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
+    <value>Open In Window</value>
+  </data>
+  <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
+    <value>Permanently Delete</value>
+  </data>
+  <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
+    <value>Force Minimize Main Window</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendDirectionMode" xml:space="preserve">
+    <value>Toggle Append Direction Mode</value>
+  </data>
+  <data name="MpShortcutType_OpenHelp" xml:space="preserve">
+    <value>Open Help</value>
+  </data>
+  <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
+    <value>Zoom In On Selection</value>
+  </data>
+  <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
+    <value>Zoom Out On Selection</value>
+  </data>
+  <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
+    <value>Reset Selection Zoom</value>
+  </data>
+  <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
+    <value>Clear Pin Tray</value>
+  </data>
+  <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
+    <value>M A XA P PS H O R T C U T</value>
+  </data>
+  <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
+    <value>Paste Copy Item</value>
+  </data>
+  <data name="MpShortcutType_SelectTag" xml:space="preserve">
+    <value>Select Tag</value>
+  </data>
+  <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
+    <value>Analyze Copy Item With Preset</value>
+  </data>
+  <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
+    <value>Invoke Trigger</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
+    <value>Clip Text</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
+    <value>Raw Clip Data</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
+    <value>Clip Type</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
+    <value>Source App Path</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
+    <value>Source App Name</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
+    <value>Source Url</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
+    <value>Source Url Title</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
+    <value>Source Url Domain</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
+    <value>Copy Date Time</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
+    <value>Copy Count</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
+    <value>Paste Count</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
+    <value>Source Device Name</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
+    <value>Source Device Type</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
+    <value>Last Output</value>
+  </data>
+  <data name="MpActionType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpActionType_Classify" xml:space="preserve">
+    <value>Classify</value>
+  </data>
+  <data name="MpActionType_Analyze" xml:space="preserve">
+    <value>Analyze</value>
+  </data>
+  <data name="MpActionType_Conditional" xml:space="preserve">
+    <value>Conditional</value>
+  </data>
+  <data name="MpActionType_Trigger" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="MpActionType_Repeater" xml:space="preserve">
+    <value>Repeater</value>
+  </data>
+  <data name="MpActionType_FileWriter" xml:space="preserve">
+    <value>File Writer</value>
+  </data>
+  <data name="MpActionType_SetClipboard" xml:space="preserve">
+    <value>Set Clipboard</value>
+  </data>
+  <data name="MpActionType_Delay" xml:space="preserve">
+    <value>Delay</value>
+  </data>
+  <data name="MpActionType_Alert" xml:space="preserve">
+    <value>Alert</value>
+  </data>
+  <data name="MpActionType_ApplicationCommand" xml:space="preserve">
+    <value>Application Command</value>
+  </data>
+  <data name="MpTriggerType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpTriggerType_ClipAdded" xml:space="preserve">
+    <value>Clip Added</value>
+  </data>
+  <data name="MpTriggerType_FileSystemChanged" xml:space="preserve">
+    <value>File System Changed</value>
+  </data>
+  <data name="MpTriggerType_ClipTagged" xml:space="preserve">
+    <value>Clip Tagged</value>
+  </data>
+  <data name="MpTriggerType_Shortcut" xml:space="preserve">
+    <value>Shortcut</value>
+  </data>
+  <data name="MpTriggerType_MonkeyCopyShortcut" xml:space="preserve">
+    <value>Monkey Copy Shortcut</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="MpPluginDependencyType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpPluginDependencyType_os" xml:space="preserve">
+    <value>os</value>
+  </data>
+  <data name="MpPluginDependencyType_app" xml:space="preserve">
+    <value>app</value>
+  </data>
+  <data name="MpPluginDependencyType_lib" xml:space="preserve">
+    <value>lib</value>
+  </data>
+  <data name="MpClipboardFormatType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpClipboardFormatType_Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="MpClipboardFormatType_Html" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
+    <value>Bitmap</value>
+  </data>
+  <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
+    <value>File Drop</value>
+  </data>
+  <data name="MpClipboardFormatType_Csv" xml:space="preserve">
+    <value>Csv</value>
+  </data>
+  <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
+    <value>Internal Content</value>
+  </data>
+  <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
+    <value>Unicode Text</value>
+  </data>
+  <data name="MpClipboardFormatType_OemText" xml:space="preserve">
+    <value>Oem Text</value>
+  </data>
+  <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
+    <value>Xaml</value>
+  </data>
+  <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
+    <value>Xaml Package</value>
+  </data>
+  <data name="MpClipboardFormatType_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="MpSettingsFrameType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpSettingsFrameType_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="MpSettingsFrameType_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="MpSettingsFrameType_Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="MpSettingsFrameType_Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
+    <value>Default Fonts</value>
+  </data>
+  <data name="MpSettingsFrameType_Sound" xml:space="preserve">
+    <value>Sound</value>
+  </data>
+  <data name="MpSettingsFrameType_Window" xml:space="preserve">
+    <value>Window</value>
+  </data>
+  <data name="MpSettingsFrameType_Hints" xml:space="preserve">
+    <value>Hints</value>
+  </data>
+  <data name="MpSettingsFrameType_International" xml:space="preserve">
+    <value>International</value>
+  </data>
+  <data name="MpSettingsFrameType_Limits" xml:space="preserve">
+    <value>Limits</value>
+  </data>
+  <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
+    <value>Tracking</value>
+  </data>
+  <data name="MpSettingsFrameType_Startup" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="MpSettingsFrameType_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="MpSettingsFrameType_Content" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
+    <value>Top Screen Edge Gestures</value>
+  </data>
+  <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
+    <value>Shortcuts</value>
+  </data>
+  <data name="MpSettingsFrameType_System" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="MpSettingsFrameType_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="MpSettingsFrameType_Logs" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
+    <value>Installed</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
+    <value>Updates</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
+    <value>Root</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
+    <value>App</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
+    <value>Device</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
+    <value>Meta</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="MpNextJoinOptionType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpNextJoinOptionType_And" xml:space="preserve">
+    <value>And</value>
+  </data>
+  <data name="MpNextJoinOptionType_Or" xml:space="preserve">
+    <value>Or</value>
+  </data>
+  <data name="MpNextJoinOptionType_Not" xml:space="preserve">
+    <value>Not</value>
+  </data>
+  <data name="MpRootOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpRootOptionType_Clip" xml:space="preserve">
+    <value>Clip</value>
+  </data>
+  <data name="MpRootOptionType_Collection" xml:space="preserve">
+    <value>Collection</value>
+  </data>
+  <data name="MpRootOptionType_Sources" xml:space="preserve">
+    <value>Sources</value>
+  </data>
+  <data name="MpRootOptionType_History" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="MpTextOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpTextOptionType_Matches" xml:space="preserve">
+    <value>Matches</value>
+  </data>
+  <data name="MpTextOptionType_Contains" xml:space="preserve">
+    <value>Contains</value>
+  </data>
+  <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
+    <value>Begins With</value>
+  </data>
+  <data name="MpTextOptionType_EndsWith" xml:space="preserve">
+    <value>Ends With</value>
+  </data>
+  <data name="MpTextOptionType_RegEx" xml:space="preserve">
+    <value>Reg Ex</value>
+  </data>
+  <data name="MpNumberOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpNumberOptionType_Equals" xml:space="preserve">
+    <value>Equals</value>
+  </data>
+  <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
+    <value>Greater Than</value>
+  </data>
+  <data name="MpNumberOptionType_LessThan" xml:space="preserve">
+    <value>Less Than</value>
+  </data>
+  <data name="MpNumberOptionType_IsNot" xml:space="preserve">
+    <value>Is Not</value>
+  </data>
+  <data name="MpColorOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpColorOptionType_Hex" xml:space="preserve">
+    <value>Hex</value>
+  </data>
+  <data name="MpColorOptionType_ARGB" xml:space="preserve">
+    <value>A R G B</value>
+  </data>
+  <data name="MpDimensionOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpDimensionOptionType_Width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="MpDimensionOptionType_Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="MpImageOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpImageOptionType_Dimensions" xml:space="preserve">
+    <value>Dimensions</value>
+  </data>
+  <data name="MpImageOptionType_Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="MpFileOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpFileOptionType_Audio" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="MpFileOptionType_Compressed" xml:space="preserve">
+    <value>Compressed</value>
+  </data>
+  <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
+    <value>Disc And Media</value>
+  </data>
+  <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
+    <value>Data And Database</value>
+  </data>
+  <data name="MpFileOptionType_Document" xml:space="preserve">
+    <value>Document</value>
+  </data>
+  <data name="MpFileOptionType_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="MpFileOptionType_Executable" xml:space="preserve">
+    <value>Executable</value>
+  </data>
+  <data name="MpFileOptionType_Font" xml:space="preserve">
+    <value>Font</value>
+  </data>
+  <data name="MpFileOptionType_Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="MpFileOptionType_Internet" xml:space="preserve">
+    <value>Internet</value>
+  </data>
+  <data name="MpFileOptionType_Presentation" xml:space="preserve">
+    <value>Presentation</value>
+  </data>
+  <data name="MpFileOptionType_Programming" xml:space="preserve">
+    <value>Programming</value>
+  </data>
+  <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
+    <value>Spreadsheet</value>
+  </data>
+  <data name="MpFileOptionType_System" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="MpFileOptionType_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="MpFileOptionType_UserDefined" xml:space="preserve">
+    <value>User Defined</value>
+  </data>
+  <data name="MpFileOptionType_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="MpFileContentOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpFileContentOptionType_Path" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="MpFileContentOptionType_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="MpFileContentOptionType_Kind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="MpContentTypeOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpContentTypeOptionType_Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="MpContentTypeOptionType_Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="MpContentTypeOptionType_Files" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="MpAppOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
+    <value>Application Name</value>
+  </data>
+  <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
+    <value>Process Path</value>
+  </data>
+  <data name="MpWebsiteOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpWebsiteOptionType_Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
+    <value>Domain</value>
+  </data>
+  <data name="MpWebsiteOptionType_Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="MpSourcesOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpSourcesOptionType_Device" xml:space="preserve">
+    <value>Device</value>
+  </data>
+  <data name="MpSourcesOptionType_App" xml:space="preserve">
+    <value>App</value>
+  </data>
+  <data name="MpSourcesOptionType_Website" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="MpTransactionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpTransactionType_Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="MpTransactionType_Dropped" xml:space="preserve">
+    <value>Dropped</value>
+  </data>
+  <data name="MpTransactionType_Dragged" xml:space="preserve">
+    <value>Dragged</value>
+  </data>
+  <data name="MpTransactionType_Pasted" xml:space="preserve">
+    <value>Pasted</value>
+  </data>
+  <data name="MpTransactionType_Copied" xml:space="preserve">
+    <value>Copied</value>
+  </data>
+  <data name="MpTransactionType_Cut" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="MpTransactionType_Edited" xml:space="preserve">
+    <value>Edited</value>
+  </data>
+  <data name="MpTransactionType_Analyzed" xml:space="preserve">
+    <value>Analyzed</value>
+  </data>
+  <data name="MpTransactionType_Appended" xml:space="preserve">
+    <value>Appended</value>
+  </data>
+  <data name="MpTransactionType_Recreated" xml:space="preserve">
+    <value>Recreated</value>
+  </data>
+  <data name="MpTransactionType_Linked" xml:space="preserve">
+    <value>Linked</value>
+  </data>
+  <data name="MpTransactionType_Unlinked" xml:space="preserve">
+    <value>Unlinked</value>
+  </data>
+  <data name="MpTransactionType_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="MpTransactionType_System" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="MpDateTimeOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
+    <value>Within Last</value>
+  </data>
+  <data name="MpDateTimeOptionType_Before" xml:space="preserve">
+    <value>Before</value>
+  </data>
+  <data name="MpDateTimeOptionType_After" xml:space="preserve">
+    <value>After</value>
+  </data>
+  <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="MpDateBeforeUnitType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
+    <value>This Week</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
+    <value>This Month</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
+    <value>This Year</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="MpDateAfterUnitType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
+    <value>Last Week</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
+    <value>Last Month</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
+    <value>Last Year</value>
+  </data>
+  <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
+    <value>Hours</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
+    <value>Days</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
+    <value>Weeks</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
+    <value>Months</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
+    <value>Years</value>
+  </data>
+  <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
+    <value>Copy Date Time</value>
+  </data>
+  <data name="MpContentSortType_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="MpContentSortType_Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="MpContentSortType_ItemData" xml:space="preserve">
+    <value>Item Data</value>
+  </data>
+  <data name="MpContentSortType_ItemType" xml:space="preserve">
+    <value>Item Type</value>
+  </data>
+  <data name="MpContentSortType_UsageScore" xml:space="preserve">
+    <value>Usage Score</value>
+  </data>
+  <data name="MpRoutingType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpRoutingType_Internal" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="MpRoutingType_Passive" xml:space="preserve">
+    <value>Passive</value>
+  </data>
+  <data name="MpRoutingType_Pre" xml:space="preserve">
+    <value>Pre</value>
+  </data>
+  <data name="MpRoutingType_Post" xml:space="preserve">
+    <value>Post</value>
+  </data>
+  <data name="MpRoutingType_Override" xml:space="preserve">
+    <value>Override</value>
+  </data>
+  <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
+    <value>Exclusive Override</value>
+  </data>
+  <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
+    <value>Contains</value>
+  </data>
+  <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
+    <value>Begins With</value>
+  </data>
+  <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
+    <value>Ends With</value>
+  </data>
+  <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
+    <value>Regex</value>
+  </data>
+  <data name="MpUserAccountType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpUserAccountType_Free" xml:space="preserve">
+    <value>Free</value>
+  </data>
+  <data name="MpUserAccountType_Basic" xml:space="preserve">
+    <value>Basic</value>
+  </data>
+  <data name="MpUserAccountType_Unlimited" xml:space="preserve">
+    <value>Unlimited</value>
+  </data>
+  <data name="MpContentOptionType_None" xml:space="preserve">
+    <value>- Please Select -</value>
+  </data>
+  <data name="MpContentOptionType_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="MpContentOptionType_Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="MpContentOptionType_Images" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="MpContentOptionType_Files" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="MpContentOptionType_AnyContent" xml:space="preserve">
+    <value>Any Content</value>
+  </data>
+  <data name="MpContentOptionType_Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="MpContentOptionType_Annotation" xml:space="preserve">
+    <value>Annotation</value>
+  </data>
+  <data name="MpContentOptionType_Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
+    <value>Primary</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
+    <value>Mouse</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="MpTagType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpTagType_Link" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="MpTagType_Query" xml:space="preserve">
+    <value>Query</value>
+  </data>
+  <data name="MpTagType_Group" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="MpReadOnlyTagType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="MpReadOnlyTagType_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="MpReadOnlyTagType_Favorites" xml:space="preserve">
+    <value>Favorites</value>
+  </data>
+  <data name="MpReadOnlyTagType_Filters" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="MpReadOnlyTagType_Trash" xml:space="preserve">
+    <value>Trash</value>
+  </data>
+  <data name="MpReadOnlyTagType_Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="MpReadOnlyTagType_Formats" xml:space="preserve">
+    <value>Formats</value>
+  </data>
+  <data name="MpReadOnlyTagType_Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="MpReadOnlyTagType_Images" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="MpReadOnlyTagType_Files" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="WatcherChangeTypes_Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="WatcherChangeTypes_Deleted" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+  <data name="WatcherChangeTypes_Changed" xml:space="preserve">
+    <value>Changed</value>
+  </data>
+  <data name="WatcherChangeTypes_Renamed" xml:space="preserve">
+    <value>Renamed</value>
+  </data>
+  <data name="WatcherChangeTypes_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+</root>

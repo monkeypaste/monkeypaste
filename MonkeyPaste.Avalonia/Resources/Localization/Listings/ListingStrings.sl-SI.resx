@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>S to naročnino boste prejeli:
+● do 1.000 posnetkov vsebine
+● Neomejeni smeti in arhiv</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Osnovni - mesečno</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Osnovno - letno</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>kopirati</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>Prilepi</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>Upravitelj odložišč</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>orodje</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>uporabnost</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>avtomatizacija</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>Trigger &amp; Action Designer za avtomatizacije po meri in verigo akcij</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>Vodoravne/navpične postavitve, pogled na seznam/omrežje in večkratna podpora za spremljanje</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>Popolnoma - predstavljen urejevalnik posnetkov z iskanjem/zamenjavo, bogato besedilo (tabele, sezname, povezave itd.)</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>Varno, varno in zasebno lokalno shranjevanje podatkov z neobvezno zaščito gesla za faktor</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>Vgrajen - v brskalniku vtičnikov z vedno rastočo skupnostjo - gnana knjižnica vtičnikov</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste je upravitelj odložišč, orodje za avtomatizacijo in produktivnost kot nobeno drugo. Izboljšanje odložišča v obogateni in organiziran del vašega delovnega toka,
+z intuitivnim in nizkim profilnim vmesnikom, ki podpira besedilo, datoteke in slike. Zasnovan za prilagodljivost, z vedno rastočo skupnostjo - podvig v knjižnico vtičnikov.
+
+Začel se je kot eksperiment programerja, ki želi več kot samo kopirati in prilepiti iz odložišča. Želel je preprost ukaz, kot je Ctrl+C, ki bi namesto tega "dodal"
+od 'zamenjajte' tisto, kar je bilo na odložišču. In eksperiment je deloval. Majhno orodje je bilo zelo priročno. To je programerja vključilo z več idejami in več poskusi, to
+zdaj je postal "MonkeyPaste".
+
+Ker je namizje za vaše datoteke, namerava MonkeyPaste na odložišču. Je nabor orodij, ki je skrbno zasnovana tako, da se na videz integrira in sodeluje z
+katero koli aplikacijo ali obliko vsebine. Ctrl+C in Ctrl+V sta veliko več kot le bližnjice. So vhodna vrata, ki jih delijo vse aplikacije, ki nosijo a
+bogastvo vrednosti in pomena, ki si ga zaslužite, da imate na voljo na dosegu roke. Ne samo vrženo po naslednjem CTRL+C.
+
+Jaz sem tisti programer, ki smo ga omenjali prej in želim, da bi vsi lahko našli uporabo iz MonkeyPaste. Torej so in vse njegove lastnosti popolnoma brezplačne za uporabo.
+Prav tako želim, da se počutite udobno z uporabo. Zato vam zagotavljam, da ste edina sila njegovega ustvarjanja, da nobenega od (zelo) osebnih podatkov, ki bi lahko nastali
+Odložišče je kdajkoli spremljano ali shranjeno kjer koli zunaj vašega stroja. Obdobje.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● Preprost in prijazen vmesnik tako z vodoravnimi/navpičnimi postavitvami, seznamom/omrežjem in večkratno podporo za spremljanje</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● Dodatni način: Kopiranje postane "dodaj v" namesto "zamenjajte" na odložišču. Tako besedilo kot datoteke, popolnoma prilagodljive</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● Prefinjeno sledenje sponka, viri in uporaba z izboljšano podporo za brskalnike na osnovi Firefox in krom (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● Popolnoma - predstavljen urejevalnik posnetkov z bogatim besedilom (tabele, seznami, povezave itd.) Z FIED/zamenjavo in poudarjanjem</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● Slike shranite v varno bazo podatkov, pripravljene za uporabo kot datoteke kadar koli vklopljen - povpraševanje samo povlecite - in - spustite!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>● Zmogljivo besedilo za hitro, dinamično lepljenje iz vaše zbirke Skipeta</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● Trigger &amp; Action Designer za avtomatizacije po meri in verigo akcij</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● Preprost sistem za uporabo in razširitev vtičnikov za analizo posnetkov ali branje/pisanje katere koli oblike v odložišče</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● Vgrajen - v brskalniku vtičnikov z vedno večjo skupnostjo - Genty Library of Plugins</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>● Avtomatizirajte vse s prednastavitvami vtičnikov, zamašite in z lahkoto uporabite svoje pozive ali ukaze AI</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● Kmalu prihaja več platform in funkcij! Pravkar smo začeli 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● Tako svetlo in temne teme sta popolnoma dinamični, uporabite katero koli barvo, ki jo želite</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● Integrirana pomoč in namige prav v vmesniku. Spletni priročnik, videoposnetki in forum, da začnete vse na spletnem mestu (monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● Optimiziran za zmogljivost in stresno preizkušeno s 1.000.000s posnetkov.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● Kadar koli iskanje, samo začnite tipkati tako s preprostim in naprednim filtriranjem na posnetkih in njihovih virih na več deset poljih</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● Organizirajte svoje posnetke v oznakah in ustvarite filtre za oživitev</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● Varno, varno in zasebno lokalno shranjevanje podatkov (brez zbiranja podatkov) je vedno šifrirano z izbirno zaščito gesla za 2 - faktor in enostavno blokirati aplikacije ali spletna mesta s svojega sledilca</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>● Obsežna vleka - in - spusti podporo, globalne bližnjice po meri, usmerjanje in miško - brezplačna navigacija</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Načini miške po meri: desno - kliknite Prilepo in levo - AUTO - Kopirajte</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>Odložišče je džungla. MonkeyPaste je kralj! Nihajte iz aplikacije do aplikacije, kopirate to in prilepite, kot še nikoli prej z MonkeyPaste !! Blagovna znamka - novo, vrhunsko odložišče in analitično orodje za avtomatizacijo !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>Vzorec MonkeyPaste v akciji!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>Nameščen v tem jeziku. Angleščina je samo za te primere</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>Zaslonski posnetki so le primeri. Kaj namestite, je prevedeno v ta jezik.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>S to naročnino boste prejeli:
+● Neomejena zmogljivost
+● Sinhronizacija naprave (ob razpoložljivosti)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Neomejeno - mesečno</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Neomejeno - letno</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>Začetna izdaja</value>
   </data>
 </root>

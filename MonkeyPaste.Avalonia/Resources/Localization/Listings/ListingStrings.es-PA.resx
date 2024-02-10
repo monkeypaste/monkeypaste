@@ -59,12 +59,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>Con esta suscripción recibirás:
-● Hasta 1.000 clips de contenido 
-● Basura y archivo ilimitados</value>
+    <value>Con esta suscripción recibirá:
+● Hasta 1,000 clips de contenido
+● Trash y archivo ilimitado</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>Básico - Mensual</value>
+    <value>Básico - mensual</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
     <value>Básico - Anual</value>
@@ -94,13 +94,13 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value>copiar</value>
+    <value>Copiar</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pegar</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value>Administrador del portapapeles</value>
+    <value>administrador de portapapeles</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>herramienta</value>
@@ -112,19 +112,19 @@
     <value>automatización</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>Trigger &amp; Action Designer para automatizaciones personalizadas y encadenamiento de acciones</value>
+    <value>Diseñador de activación y acción para automataciones personalizadas y encadenamiento de acción</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>Diseños horizontales/verticales, vista de lista/cuadrícula y compatibilidad con varios monitores</value>
+    <value>Diseños horizontales/verticales, visión de lista/cuadrícula y soporte de monitoreo múltiple</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>Editor de clips con todas las funciones con buscar/reemplazar, plantillas de texto enriquecido (tablas, listas, enlaces, etc.) para pegar de forma rápida y dinámica desde su colección de fragmentos</value>
+    <value>Editor de clip totalmente destinado con Find/Reemplazar, texto enriquecido (tablas, listas, enlaces, etc.) Plantilla de texto para un pegado rápido y dinámico desde su colección de fragmentos</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>Almacenamiento local de datos seguro y privado con protección opcional con contraseña de 2 factores</value>
+    <value>Almacenamiento de datos local seguro, seguro y privado con protección de contraseña de 2 factores opcional</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>Navegador de plugins integrado con una biblioteca de plugins impulsada por la comunidad en constante crecimiento</value>
+    <value>BROWSER BRIGURADO - EN CULTIMINES CON UNA COMUNIDAD ESTUDA - COMUNITY - Biblioteca de complementos impulsados</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -142,128 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste es un administrador de portapapeles, una herramienta de automatización y productividad como ninguna otra. Mejorar su portapapeles para convertirlo en una parte enriquecida y organizada de su flujo de trabajo,
-Con una interfaz intuitiva y de bajo perfil que admite texto, archivos e imágenes. Diseñado para la flexibilidad, con una biblioteca de complementos impulsada por la comunidad en constante crecimiento.
+    <value>MonkyPaste es un administrador de portapapeles, una herramienta de automatización y productividad como ninguna otra. Mejorar su portapapeles en una parte enriquecida y organizada de su flujo de trabajo,
+Con una interfaz intuitiva y de bajo perfil que admite texto, archivos e imágenes. Diseñado para la flexibilidad, con una libra de complementos de la comunidad cada vez mayor.
 
-Comenzó como un experimento de un programador que quería algo más que copiar y pegar del portapapeles. Quería un comando simple como Control+C que 'agregara' en su lugar 
-de 'reemplazar' lo que estaba en el portapapeles. Y el experimento funcionó, ¡eureka! La pequeña herramienta era muy útil. Esto entiguó al programador con más ideas y más experimentos, que 
-ahora se ha convertido en "MonkeyPaste". 
+Comenzó como un experimento de un programador que quería más que solo copiar y pegar del portapapeles. Quería un comando simple como Ctrl+C que 'se sumaría a' en su lugar
+de 'reemplazar' lo que había en el portapapeles. Y el experimento funcionó. La pequeña herramienta era muy útil. Esto apiló al programador con más ideas y más experimentos, que
+Ahora se ha convertido en "monjeyypaste".
 
-Así como el escritorio es para sus archivos, MonkeyPaste tiene la intención de estar para su portapapeles. Es un conjunto de herramientas cuidadosamente diseñadas para integrarse e interoperar sin problemas con 
-cualquier aplicación o formato de contenido. Control+C y Control+V son mucho más que simples atajos. Son los puertos de entrada que comparten todas las aplicaciones, que llevan un 
-riqueza de valor y significado que mereces tener disponible al alcance de tu mano. No se tira a la basura después del siguiente Control+C.
+Como el escritorio es para sus archivos, MonkyPaste tiene la intención de estar en su portapapeles. Es un conjunto de herramientas cuidadosamente diseñadas para integrarse e interoperar aparentemente con
+cualquier aplicación o formato de contenido. Ctrl+C y Ctrl+V son mucho más que solo atajos. Son los puertos de entrada que todas las aplicaciones comparten, con un
+Riqueza de valor y significado que merece tener disponible a su alcance. No solo tirado después del próximo Ctrl+c.
 
-Soy ese programador mencionado anteriormente y quiero que todos puedan encontrar uso de MonkeyPaste. Por lo tanto, él y todas sus funciones son de uso completamente gratuito. 
-También quiero que te sientas cómodo usándolo. Así que les aseguro, como la única fuerza detrás de su creación, que NINGUNA de las (muy) personales información que puede surgir en 
-su portapapeles se rastrea o almacena en cualquier lugar más allá de su propia máquina. Periodo.</value>
+Soy ese programador mencionado anteriormente y quiero que todos puedan encontrar el uso de MonkyyPaste. Entonces, y todas sus características son completamente gratuitas.
+También quiero que te sientas cómodo usándolo. Así que te aseguro, como la única fuerza detrás de su creación, que ninguna de las (muy) información personal que puede surgir en
+Su portapapeles siempre se rastrea o almacena en cualquier lugar más allá de su propia máquina. Período.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● Interfaz simple y amigable con diseños horizontales / verticales, vista de lista / cuadrícula y soporte para múltiples monitores</value>
+    <value>● Interfaz simple y amigable con diseños horizontales/verticales, vista de lista/cuadrícula y soporte de monitoreo múltiple</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Modo de anexar: La copia se convierte en "agregar a" en lugar de "reemplazar" en el portapapeles. Tanto texto como archivos, totalmente personalizables</value>
+    <value>● Modo de agregado: la copia se convierte en 'agregar' en lugar de 'reemplazar' en el portapapeles. Tanto el texto como los archivos, totalmente personalizable</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Seguimiento sofisticado de clips, fuentes y uso con soporte mejorado para Firefox y navegadores basados en Chromium (Chrome, Edge, Brave)</value>
+    <value>● Seguimiento, fuentes y uso de clip sofisticados con un mayor soporte para los navegadores basados ​​en Firefox y Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Editor de clips con todas las funciones con texto enriquecido (tablas, listas, enlaces, etc.) con buscar/reemplazar y resaltar</value>
+    <value>● Completamente: editor de clips destacado con texto enriquecido (tablas, listas, enlaces, etc.) con buscar/reemplazar y resaltar</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Almacene sus imágenes en la base de datos segura, listas para usar como archivos en cualquier momento bajo demanda, ¡simplemente arrastre y suelte!</value>
+    <value>● Almacene sus imágenes en la base de datos segura, listas para usar como archivos en cualquier momento: demanda simplemente arrastre - y - ¡solte!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Potentes plantillas de texto para pegar de forma rápida y dinámica desde tu colección de fragmentos</value>
+    <value>● Potentes plantillas de texto para un pegado rápido y dinámico de su colección de fragmentos</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Diseñador de disparadores y acciones para automatizaciones personalizadas y encadenamiento de acciones</value>
+    <value>● Diseñador de activación y acción para automatizaciones personalizadas y encadenamiento de acción</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Sistema de complementos fácil de usar y extendido tanto para analizar clips como para leer / escribir cualquier formato en su portapapeles</value>
+    <value>● Sistema de complemento fácil de usar y extender para analizar clips o leer/escribir cualquier formato en su portapapeles</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Navegador de complementos incorporado con una biblioteca de complementos impulsada por la comunidad en constante crecimiento</value>
+    <value>● Built, en el navegador de complementos con una biblioteca de complementos de la comunidad cada vez más en crecimiento.</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatiza todo con ajustes preestablecidos de complementos, guarda y usa cualquiera de tus indicaciones o comandos de IA con facilidad</value>
+    <value>● Automatice todo con presets de complementos, esconde y use sus indicaciones o comandos de AI con facilidad</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● ¡Más plataformas y funciones próximamente! Apenas estamos empezando 🎉</value>
+    <value>● Más plataformas y características próximamente! Solo somos consejos iniciados 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>● Tanto los temas claros como los oscuros son completamente dinámicos, usa el color que desees</value>
+    <value>● Tanto los temas ligeros como los oscuros son completamente dinámicos, use cualquier color que desee</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● Ayuda y sugerencias integradas directamente en la interfaz. Manual en línea, videos y foro para comenzar todo en el sitio web (monkeypaste.com/docs)</value>
+    <value>● Ayuda y sugerencias integradas en la interfaz. Manual en línea, videos y foro para comenzar todo en el sitio web (monkyypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>● Optimizado para el rendimiento y sometido a pruebas de estrés con 1.000.000 de clips.</value>
+    <value>● Optimizado para el rendimiento y estresado probado con 1,000,000s de clips.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● Búsqueda en cualquier momento, simplemente comience a escribir usando filtros simples y avanzados en clips y sus fuentes en docenas de campos</value>
+    <value>● En cualquier momento de búsqueda, simplemente comience a escribir usando filtrado simple y avanzado en clips y sus fuentes durante docenas de campos</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● Organiza tus clips en árboles de etiquetas y crea filtros reutilizables</value>
+    <value>● Organice sus clips en árboles de etiqueta y cree filtros resutables</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● Almacenamiento de datos local seguro y privado (sin recopilación de datos) siempre encriptado con protección opcional con contraseña de 2 factores y bloquee fácilmente aplicaciones o sitios web de su rastreador</value>
+    <value>● Almacenamiento de datos local seguro, seguro y privado (sin recopilación de datos) siempre encriptado con protección de contraseña opcional de 2 y bloquea fácilmente aplicaciones o sitios web desde su rastreador</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Amplia compatibilidad con arrastrar y soltar, accesos directos globales personalizados, enrutamiento y navegación sin mouse</value>
+    <value>● Extensa resistencia de arrastre - y - Soporte, atajos globales personalizados, enrutamiento y mouse - Navegación gratuita</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Modos de mouse personalizados: pegar con el botón derecho y copiar automáticamente con el botón izquierdo</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value>● Interfaz simple y amigable 
-● Diseños horizontales/verticales, vista de lista/cuadrícula y soporte para múltiples monitores
-● Tanto los temas claros como los oscuros son completamente dinámicos, usa el color que desees
-
-● Ayuda y sugerencias integradas directamente en la interfaz
-● Manual de ayuda, videos y foro para comenzar, todo en el sitio web (monkeypaste.com/docs)
-
-● Optimizado para el rendimiento y sometido a pruebas de estrés con 1.000.000 de clips.
-● Búsqueda en cualquier momento, simplemente comience a escribir
-● Filtrado simple y avanzado en clips y sus fuentes en docenas de campos
-● Organiza tus clips en árboles de etiquetas y crea filtros reutilizables
-
-● Almacenamiento local de datos seguro y privado (sin recopilación de datos) siempre encriptado
-● Puede ignorar clips de aplicaciones o sitios web específicos
-● Protección opcional con contraseña de 2 factores
-
-● Teclas de acceso rápido globales personalizadas, enrutamiento y navegación sin mouse
-● Amplio soporte de arrastrar y soltar
-● Modos de mouse personalizados: pegar con el botón derecho y copiar automáticamente con el botón izquierdo 
-● Modo de anexar: La copia se convierte en "agregar a" en lugar de "reemplazar" en el portapapeles. Tanto texto como archivos, totalmente personalizables
-
-● Seguimiento sofisticado de clips, fuentes y uso
-● Compatibilidad mejorada con Firefox y navegadores basados en Chromium (Chrome, Edge, Brave)
-
-● Funciona con texto enriquecido (tablas, listas, enlaces, etc.)
-● Editor de clips con todas las funciones de buscar/reemplazar y resaltar
-● Almacene sus imágenes en la base de datos segura, listas para usar como archivos en cualquier momento bajo demanda, ¡simplemente arrastre y suelte!
-
-● Potentes plantillas de texto para pegar de forma rápida y dinámica desde tu colección de fragmentos
-
-● Diseñador de disparadores y acciones para automatizaciones personalizadas y encadenamiento de acciones
-
-● Sistema de complementos fácil de usar y extendido tanto para analizar clips como para leer / escribir cualquier formato en su portapapeles
-● Navegador de complementos incorporado con una biblioteca de complementos impulsada por la comunidad en constante crecimiento 
-● Automatiza todo con ajustes preestablecidos de complementos, guarda y usa cualquiera de tus indicaciones o comandos de IA con facilidad
-
-● ¡Más plataformas y funciones próximamente! Apenas estamos empezando 🎉</value>
+    <value>● Modos de mouse personalizados: a la derecha: haga clic en Pegar e izquierda - Haga clic en Automático - Copiar</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>El portapapeles es una jungla. ¡MonkeyPaste es el REY! ¡Pasa de una aplicación a otra, copiando esto y pegando aquello como nunca antes con MonkeyPaste! Un portapapeles y una herramienta de automatización analítica completamente nuevos y de vanguardia!!</value>
+    <value>El portapapeles es una jungla. ¡Monkipaste es el rey! ¡Gire de la aplicación a la aplicación, copiando esto y pegando eso como nunca antes con MonkyyPaste! ¡Una marca: la nueva herramienta de automatización analítica y portapapeles de vanguardia!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>¡Muestra de MonkeyPaste en acción!</value>
+    <value>¡Muestra de monje en acción!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -275,18 +236,18 @@ su portapapeles se rastrea o almacena en cualquier lugar más allá de su propia
     <value>Instalado en este idioma. El inglés es solo para estos ejemplos</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>¡Nota! Las capturas de pantalla son solo ejemplos. Lo que instale se ha traducido a este idioma.</value>
+    <value>Las capturas de pantalla son solo ejemplos. Lo que instala ha sido traducido a este idioma.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Con esta suscripción recibirás:
+    <value>Con esta suscripción recibirá:
 ● Capacidad ilimitada
-● Sincronización de dispositivos (según disponibilidad)</value>
+● Sincronización de dispositivos (tras disponibilidad)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>Ilimitado - Mensual</value>
+    <value>Ilimitado - mensualmente</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value>Ilimitado - Anual</value>
+    <value>Ilimitado - anual</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Versión inicial</value>

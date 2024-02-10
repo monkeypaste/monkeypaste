@@ -830,10 +830,10 @@
 	APD_PAUSED_SCT_IDX: 4,
 
 	SHORTCUT_TYPES: [
-		'ToggleAppendInsertMode',
-		'ToggleAppendLineMode',
-		'ToggleAppendPreMode',
-		'ToggleAppendManualMode',
+		'ToggleAppendInlineMode',
+		'ToggleAppendBlockMode',
+		'ToggleAppendDirectionMode',
+		'ToggleAppendPositionMode',
 		'ToggleAppendPaused',
 	],
 

@@ -1,0 +1,1189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MpThemeType_Light" xml:space="preserve">
+    <value>Valgus</value>
+  </data>
+  <data name="MpThemeType_Dark" xml:space="preserve">
+    <value>Tume</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
+    <value>Mitte kunagi</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
+    <value>Iga päev</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
+    <value>Iganädalane</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
+    <value>Igakuine</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
+    <value>Viimane väljund</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_SourceClip" xml:space="preserve">
+    <value>Lähteklipp</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
+    <value>Mitte ükski</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
+    <value>Hoidmine nihe</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
+    <value>Paremas ülanurgas</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
+    <value>Ülemine vasak nurk</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
+    <value>Alati</value>
+  </data>
+  <data name="MpBillingCycleType_Never" xml:space="preserve">
+    <value>Mitte kunagi</value>
+  </data>
+  <data name="MpBillingCycleType_Monthly" xml:space="preserve">
+    <value>Igakuine</value>
+  </data>
+  <data name="MpBillingCycleType_Yearly" xml:space="preserve">
+    <value>Igal aastal</value>
+  </data>
+  <data name="MpNotificationType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpNotificationType_Loader" xml:space="preserve">
+    <value>Laadur</value>
+  </data>
+  <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
+    <value>Tellimus aegub</value>
+  </data>
+  <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
+    <value>Konto sisselogimine ebaõnnestus</value>
+  </data>
+  <data name="MpNotificationType_DbError" xml:space="preserve">
+    <value>Db viga</value>
+  </data>
+  <data name="MpNotificationType_Help" xml:space="preserve">
+    <value>Abi</value>
+  </data>
+  <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
+    <value>Pistikprogramm värskendatud</value>
+  </data>
+  <data name="MpNotificationType_Message" xml:space="preserve">
+    <value>Teade</value>
+  </data>
+  <data name="MpNotificationType_AppModeChange" xml:space="preserve">
+    <value>Rakenduse režiimi muutmine</value>
+  </data>
+  <data name="MpNotificationType_Debug" xml:space="preserve">
+    <value>Silumine</value>
+  </data>
+  <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
+    <value>Sisukork saavutas</value>
+  </data>
+  <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
+    <value>Prügikasti jõudis</value>
+  </data>
+  <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
+    <value>Sisu lisab konto järgi blokeeritud</value>
+  </data>
+  <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
+    <value>Sisu taastamine on konto kaupa blokeeritud</value>
+  </data>
+  <data name="MpNotificationType_AccountChanged" xml:space="preserve">
+    <value>Konto muudetud</value>
+  </data>
+  <data name="MpNotificationType_Welcome" xml:space="preserve">
+    <value>Tere tulemast</value>
+  </data>
+  <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
+    <value>Uuendus saadaval</value>
+  </data>
+  <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
+    <value>Pole värskendust saadaval</value>
+  </data>
+  <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
+    <value>Lisage režiim muudetud</value>
+  </data>
+  <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
+    <value>Päästik lubatud</value>
+  </data>
+  <data name="MpNotificationType_AlertAction" xml:space="preserve">
+    <value>Hoiatusmeetmed</value>
+  </data>
+  <data name="MpNotificationType_StartupComplete" xml:space="preserve">
+    <value>Startup on valmis</value>
+  </data>
+  <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
+    <value>Faili IO hoiatus</value>
+  </data>
+  <data name="MpNotificationType_UnloadPluginError" xml:space="preserve">
+    <value>Laadige pistikprogrammi viga</value>
+  </data>
+  <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
+    <value>Kehtetu pistikprogramm</value>
+  </data>
+  <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
+    <value>Kehtetu lõikelaua vormingu käitleja</value>
+  </data>
+  <data name="MpNotificationType_InvalidAction" xml:space="preserve">
+    <value>Kehtetu tegevus</value>
+  </data>
+  <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
+    <value>Halb HTTP päring</value>
+  </data>
+  <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
+    <value>Analüsaatori ajalõpp</value>
+  </data>
+  <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
+    <value>Kehtetu taotlus</value>
+  </data>
+  <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
+    <value>Kehtetu vastus</value>
+  </data>
+  <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
+    <value>Täitke parameetrite taotlus</value>
+  </data>
+  <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
+    <value>DB parooli sisend</value>
+  </data>
+  <data name="MpNotificationType_RateApp" xml:space="preserve">
+    <value>Hindade rakendus</value>
+  </data>
+  <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
+    <value>Modaalne lähtestage jagatud väärtus eelseade</value>
+  </data>
+  <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
+    <value>Modaalse sisu vormingu halvenemine</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
+    <value>Modaalne jah ei tühista sõnumikasti</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
+    <value>Modaalne jah ei sõnumikasti</value>
+  </data>
+  <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
+    <value>Modaalne OK Tühista teadete kast</value>
+  </data>
+  <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
+    <value>Modaalne OK sõnumikast</value>
+  </data>
+  <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>Modaalne tekstikast OK Tühista teadete kast</value>
+  </data>
+  <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>Modaalne mäletav tekstikast OK Tühista sõnumikast</value>
+  </data>
+  <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
+    <value>Modaalne progress tühista teadete kast</value>
+  </data>
+  <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
+    <value>Modaalne hõivatud sõnumikast</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
+    <value>Modaalne taaskäivitamine ignoreeritakse</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
+    <value>Modaalne taaskäivitage nüüd või hiljem</value>
+  </data>
+  <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
+    <value>Kinnitage lõpp -lisa</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
+    <value>Pistikprogrammi vastuse teade</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
+    <value>Pistikprogrammi reageerimise viga</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
+    <value>Pistikprogrammi reageerimise hoiatus</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
+    <value>Pistikprogrammi reageerimise hoiatus valikuga</value>
+  </data>
+  <data name="MpShortcutType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
+    <value>Lülitage peaakna</value>
+  </data>
+  <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
+    <value>Lülitage automaatne koopiarežiim</value>
+  </data>
+  <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
+    <value>Lülitage paremklõpsake pasta režiim</value>
+  </data>
+  <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
+    <value>Lülitage lõikelauda</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendInlineMode" xml:space="preserve">
+    <value>Lülitage lisage režiim</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendBlockMode" xml:space="preserve">
+    <value>Lülitage plokirežiim lisage</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPositionMode" xml:space="preserve">
+    <value>Lülitage lisage positsioonirežiim</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
+    <value>Lülitage lisa pausi</value>
+  </data>
+  <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
+    <value>Lisage lõikelauast käsitsi</value>
+  </data>
+  <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
+    <value>Vähendama fookust</value>
+  </data>
+  <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
+    <value>Suurendada fookust</value>
+  </data>
+  <data name="MpShortcutType_ExitApplication" xml:space="preserve">
+    <value>Väljumistaotlus</value>
+  </data>
+  <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
+    <value>Pasta välisele</value>
+  </data>
+  <data name="MpShortcutType_PasteSelection" xml:space="preserve">
+    <value>Pastavalik</value>
+  </data>
+  <data name="MpShortcutType_CopySelection" xml:space="preserve">
+    <value>Koopiavalimine</value>
+  </data>
+  <data name="MpShortcutType_CutSelection" xml:space="preserve">
+    <value>Lõige</value>
+  </data>
+  <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
+    <value>Kustutage valitud üksused</value>
+  </data>
+  <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
+    <value>Valige järgmine veerg üksus</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
+    <value>Valige eelmine veerg üksus</value>
+  </data>
+  <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
+    <value>Valige järgmine rida üksus</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
+    <value>Valige eelmine rea üksus</value>
+  </data>
+  <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
+    <value>Määrake otsetee</value>
+  </data>
+  <data name="MpShortcutType_Undo" xml:space="preserve">
+    <value>Tühistama</value>
+  </data>
+  <data name="MpShortcutType_Redo" xml:space="preserve">
+    <value>Uuesti tegema</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
+    <value>Lülitage sisu ainult lugema</value>
+  </data>
+  <data name="MpShortcutType_Rename" xml:space="preserve">
+    <value>Nimetage ümber nimetama</value>
+  </data>
+  <data name="MpShortcutType_Duplicate" xml:space="preserve">
+    <value>Duplikaat</value>
+  </data>
+  <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
+    <value>Kerige koju</value>
+  </data>
+  <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
+    <value>Kerige lõpuni</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
+    <value>Akna suurus üles</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
+    <value>Akna suurus allapoole</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
+    <value>Akna suurus on vasakul</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
+    <value>Akna suurus paremal</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowTop" xml:space="preserve">
+    <value>Orient peaakna ülaosa</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowBottom" xml:space="preserve">
+    <value>Orient peaakna põhi</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowLeft" xml:space="preserve">
+    <value>Orienti peaakna vasak</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowRight" xml:space="preserve">
+    <value>Orient peaakna paremal</value>
+  </data>
+  <data name="MpShortcutType_PreviousPage" xml:space="preserve">
+    <value>Eelmine leht</value>
+  </data>
+  <data name="MpShortcutType_NextPage" xml:space="preserve">
+    <value>Järgmine leht</value>
+  </data>
+  <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
+    <value>Leidke ja asendage valitud üksus</value>
+  </data>
+  <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
+    <value>Lülitage peaakna lukustatud</value>
+  </data>
+  <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
+    <value>Lülitusfiltri menüü on nähtav</value>
+  </data>
+  <data name="MpShortcutType_ShowSettings" xml:space="preserve">
+    <value>Näita sätteid</value>
+  </data>
+  <data name="MpShortcutType_TogglePinned" xml:space="preserve">
+    <value>Lülitage kinnitatud</value>
+  </data>
+  <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
+    <value>Aknas avatud</value>
+  </data>
+  <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
+    <value>Püsivalt kustutama</value>
+  </data>
+  <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
+    <value>Jõud minimeerib peaakna</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendDirectionMode" xml:space="preserve">
+    <value>Lülitage suuna režiim</value>
+  </data>
+  <data name="MpShortcutType_OpenHelp" xml:space="preserve">
+    <value>Avatud abi</value>
+  </data>
+  <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
+    <value>Suumi valimisel</value>
+  </data>
+  <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
+    <value>Suumige valikut</value>
+  </data>
+  <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
+    <value>Lähtestage valiku suum</value>
+  </data>
+  <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
+    <value>Selge tihvtsalus</value>
+  </data>
+  <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
+    <value>M a xa p ps h o r t c u t</value>
+  </data>
+  <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
+    <value>Kleebi koopia üksus</value>
+  </data>
+  <data name="MpShortcutType_SelectTag" xml:space="preserve">
+    <value>Valige silt</value>
+  </data>
+  <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
+    <value>Analüüsige koopiaüksust eelseadetega</value>
+  </data>
+  <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
+    <value>Esile kutsuma</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
+    <value>Lõiketekst</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
+    <value>Toore klipi andmed</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
+    <value>Klipi tüüp</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
+    <value>Tiitel</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
+    <value>Allikarakenduse tee</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
+    <value>Allikarakenduse nimi</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
+    <value>Allika URL</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
+    <value>Allika URL -i pealkiri</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
+    <value>Allika URL -domeen</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
+    <value>Koopia kuupäeva aeg</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
+    <value>Koopiaarvestus</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
+    <value>Pastaarvestus</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
+    <value>Lähteseadme nimi</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
+    <value>Lähteseadme tüüp</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
+    <value>Viimane väljund</value>
+  </data>
+  <data name="MpActionType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpActionType_Classify" xml:space="preserve">
+    <value>Liigitama</value>
+  </data>
+  <data name="MpActionType_Analyze" xml:space="preserve">
+    <value>Analüüsima</value>
+  </data>
+  <data name="MpActionType_Conditional" xml:space="preserve">
+    <value>Tingimuslik</value>
+  </data>
+  <data name="MpActionType_Trigger" xml:space="preserve">
+    <value>Päästik</value>
+  </data>
+  <data name="MpActionType_Repeater" xml:space="preserve">
+    <value>Kordaja</value>
+  </data>
+  <data name="MpActionType_FileWriter" xml:space="preserve">
+    <value>Failikirjutaja</value>
+  </data>
+  <data name="MpActionType_SetClipboard" xml:space="preserve">
+    <value>Määra lõikelaud</value>
+  </data>
+  <data name="MpActionType_Delay" xml:space="preserve">
+    <value>Viivitus</value>
+  </data>
+  <data name="MpActionType_Alert" xml:space="preserve">
+    <value>Märguanne</value>
+  </data>
+  <data name="MpActionType_ApplicationCommand" xml:space="preserve">
+    <value>Käsk</value>
+  </data>
+  <data name="MpTriggerType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpTriggerType_ClipAdded" xml:space="preserve">
+    <value>Klipp lisatud</value>
+  </data>
+  <data name="MpTriggerType_FileSystemChanged" xml:space="preserve">
+    <value>Failisüsteem muudetud</value>
+  </data>
+  <data name="MpTriggerType_ClipTagged" xml:space="preserve">
+    <value>Klipp märgistatud</value>
+  </data>
+  <data name="MpTriggerType_Shortcut" xml:space="preserve">
+    <value>Otsetee</value>
+  </data>
+  <data name="MpTriggerType_MonkeyCopyShortcut" xml:space="preserve">
+    <value>Ahvikoopia otsetee</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
+    <value>Sisemine</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
+    <value>Täitmata jätmine</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
+    <value>Kohandatud</value>
+  </data>
+  <data name="MpPluginDependencyType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpPluginDependencyType_os" xml:space="preserve">
+    <value>OS</value>
+  </data>
+  <data name="MpPluginDependencyType_app" xml:space="preserve">
+    <value>rakendus</value>
+  </data>
+  <data name="MpPluginDependencyType_lib" xml:space="preserve">
+    <value>lib</value>
+  </data>
+  <data name="MpClipboardFormatType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpClipboardFormatType_Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="MpClipboardFormatType_Html" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
+    <value>Bitikaart</value>
+  </data>
+  <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
+    <value>Failide langus</value>
+  </data>
+  <data name="MpClipboardFormatType_Csv" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
+    <value>Sise sisu</value>
+  </data>
+  <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
+    <value>Unicode tekst</value>
+  </data>
+  <data name="MpClipboardFormatType_OemText" xml:space="preserve">
+    <value>OEM -tekst</value>
+  </data>
+  <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
+    <value>Xaml</value>
+  </data>
+  <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
+    <value>XAML -pakett</value>
+  </data>
+  <data name="MpClipboardFormatType_Custom" xml:space="preserve">
+    <value>Kohandatud</value>
+  </data>
+  <data name="MpSettingsFrameType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpSettingsFrameType_Login" xml:space="preserve">
+    <value>Logi sisse</value>
+  </data>
+  <data name="MpSettingsFrameType_Status" xml:space="preserve">
+    <value>Olek</value>
+  </data>
+  <data name="MpSettingsFrameType_Register" xml:space="preserve">
+    <value>Registreeri</value>
+  </data>
+  <data name="MpSettingsFrameType_Theme" xml:space="preserve">
+    <value>Teema</value>
+  </data>
+  <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
+    <value>Vaikefondid</value>
+  </data>
+  <data name="MpSettingsFrameType_Sound" xml:space="preserve">
+    <value>Heli</value>
+  </data>
+  <data name="MpSettingsFrameType_Window" xml:space="preserve">
+    <value>Aken</value>
+  </data>
+  <data name="MpSettingsFrameType_Hints" xml:space="preserve">
+    <value>Vihjed</value>
+  </data>
+  <data name="MpSettingsFrameType_International" xml:space="preserve">
+    <value>Rahvusvaheline</value>
+  </data>
+  <data name="MpSettingsFrameType_Limits" xml:space="preserve">
+    <value>Piirid</value>
+  </data>
+  <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
+    <value>Jälgimine</value>
+  </data>
+  <data name="MpSettingsFrameType_Startup" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="MpSettingsFrameType_Search" xml:space="preserve">
+    <value>Otsing</value>
+  </data>
+  <data name="MpSettingsFrameType_Content" xml:space="preserve">
+    <value>Sisu</value>
+  </data>
+  <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
+    <value>Ülemise ekraani serva žestid</value>
+  </data>
+  <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
+    <value>Otseteed</value>
+  </data>
+  <data name="MpSettingsFrameType_System" xml:space="preserve">
+    <value>Süsteem</value>
+  </data>
+  <data name="MpSettingsFrameType_Password" xml:space="preserve">
+    <value>Parool</value>
+  </data>
+  <data name="MpSettingsFrameType_Logs" xml:space="preserve">
+    <value>Logid</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
+    <value>Sirvima</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
+    <value>Paigaldatud</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
+    <value>Värskendused</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
+    <value>Juur</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
+    <value>Rakendus</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
+    <value>Seade</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
+    <value>Meta</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
+    <value>Statistika</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="MpNextJoinOptionType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpNextJoinOptionType_And" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="MpNextJoinOptionType_Or" xml:space="preserve">
+    <value>Või</value>
+  </data>
+  <data name="MpNextJoinOptionType_Not" xml:space="preserve">
+    <value>Mitte</value>
+  </data>
+  <data name="MpRootOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpRootOptionType_Clip" xml:space="preserve">
+    <value>Klamber</value>
+  </data>
+  <data name="MpRootOptionType_Collection" xml:space="preserve">
+    <value>Kogumine</value>
+  </data>
+  <data name="MpRootOptionType_Sources" xml:space="preserve">
+    <value>Allikad</value>
+  </data>
+  <data name="MpRootOptionType_History" xml:space="preserve">
+    <value>Ajalugu</value>
+  </data>
+  <data name="MpTextOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpTextOptionType_Matches" xml:space="preserve">
+    <value>Tikud</value>
+  </data>
+  <data name="MpTextOptionType_Contains" xml:space="preserve">
+    <value>Sisaldab</value>
+  </data>
+  <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
+    <value>Algab</value>
+  </data>
+  <data name="MpTextOptionType_EndsWith" xml:space="preserve">
+    <value>Lõppema</value>
+  </data>
+  <data name="MpTextOptionType_RegEx" xml:space="preserve">
+    <value>Reg ex</value>
+  </data>
+  <data name="MpNumberOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpNumberOptionType_Equals" xml:space="preserve">
+    <value>Võrdub</value>
+  </data>
+  <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
+    <value>Suurem kui</value>
+  </data>
+  <data name="MpNumberOptionType_LessThan" xml:space="preserve">
+    <value>Vähem kui</value>
+  </data>
+  <data name="MpNumberOptionType_IsNot" xml:space="preserve">
+    <value>Ei ole</value>
+  </data>
+  <data name="MpColorOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpColorOptionType_Hex" xml:space="preserve">
+    <value>Heks</value>
+  </data>
+  <data name="MpColorOptionType_ARGB" xml:space="preserve">
+    <value>A R G B</value>
+  </data>
+  <data name="MpDimensionOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpDimensionOptionType_Width" xml:space="preserve">
+    <value>Laius</value>
+  </data>
+  <data name="MpDimensionOptionType_Height" xml:space="preserve">
+    <value>Kõrgus</value>
+  </data>
+  <data name="MpImageOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpImageOptionType_Dimensions" xml:space="preserve">
+    <value>Mõõtmed</value>
+  </data>
+  <data name="MpImageOptionType_Color" xml:space="preserve">
+    <value>Värvus</value>
+  </data>
+  <data name="MpFileOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpFileOptionType_Audio" xml:space="preserve">
+    <value>Heli</value>
+  </data>
+  <data name="MpFileOptionType_Compressed" xml:space="preserve">
+    <value>Kokkusurutud</value>
+  </data>
+  <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
+    <value>Ketas ja meedia</value>
+  </data>
+  <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
+    <value>Andmed ja andmebaas</value>
+  </data>
+  <data name="MpFileOptionType_Document" xml:space="preserve">
+    <value>Dokument</value>
+  </data>
+  <data name="MpFileOptionType_Email" xml:space="preserve">
+    <value>E -kiri</value>
+  </data>
+  <data name="MpFileOptionType_Executable" xml:space="preserve">
+    <value>Käivitatav</value>
+  </data>
+  <data name="MpFileOptionType_Font" xml:space="preserve">
+    <value>Font</value>
+  </data>
+  <data name="MpFileOptionType_Image" xml:space="preserve">
+    <value>Pilt</value>
+  </data>
+  <data name="MpFileOptionType_Internet" xml:space="preserve">
+    <value>Internet</value>
+  </data>
+  <data name="MpFileOptionType_Presentation" xml:space="preserve">
+    <value>Esitlus</value>
+  </data>
+  <data name="MpFileOptionType_Programming" xml:space="preserve">
+    <value>Programmeerimine</value>
+  </data>
+  <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
+    <value>Arvutustabel</value>
+  </data>
+  <data name="MpFileOptionType_System" xml:space="preserve">
+    <value>Süsteem</value>
+  </data>
+  <data name="MpFileOptionType_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="MpFileOptionType_UserDefined" xml:space="preserve">
+    <value>Kasutaja määratletud</value>
+  </data>
+  <data name="MpFileOptionType_Custom" xml:space="preserve">
+    <value>Kohandatud</value>
+  </data>
+  <data name="MpFileContentOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpFileContentOptionType_Path" xml:space="preserve">
+    <value>Tee</value>
+  </data>
+  <data name="MpFileContentOptionType_Name" xml:space="preserve">
+    <value>Nimetus</value>
+  </data>
+  <data name="MpFileContentOptionType_Kind" xml:space="preserve">
+    <value>Lahke</value>
+  </data>
+  <data name="MpContentTypeOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpContentTypeOptionType_Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="MpContentTypeOptionType_Image" xml:space="preserve">
+    <value>Pilt</value>
+  </data>
+  <data name="MpContentTypeOptionType_Files" xml:space="preserve">
+    <value>Faisid</value>
+  </data>
+  <data name="MpAppOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
+    <value>Rakenduse nimi</value>
+  </data>
+  <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
+    <value>Protsessitee</value>
+  </data>
+  <data name="MpWebsiteOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpWebsiteOptionType_Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
+    <value>Domeen</value>
+  </data>
+  <data name="MpWebsiteOptionType_Title" xml:space="preserve">
+    <value>Tiitel</value>
+  </data>
+  <data name="MpSourcesOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpSourcesOptionType_Device" xml:space="preserve">
+    <value>Seade</value>
+  </data>
+  <data name="MpSourcesOptionType_App" xml:space="preserve">
+    <value>Rakendus</value>
+  </data>
+  <data name="MpSourcesOptionType_Website" xml:space="preserve">
+    <value>Veebisait</value>
+  </data>
+  <data name="MpTransactionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpTransactionType_Created" xml:space="preserve">
+    <value>Loodud</value>
+  </data>
+  <data name="MpTransactionType_Dropped" xml:space="preserve">
+    <value>Langus</value>
+  </data>
+  <data name="MpTransactionType_Dragged" xml:space="preserve">
+    <value>Lohistatud</value>
+  </data>
+  <data name="MpTransactionType_Pasted" xml:space="preserve">
+    <value>Kleepitud</value>
+  </data>
+  <data name="MpTransactionType_Copied" xml:space="preserve">
+    <value>Kopeeritud</value>
+  </data>
+  <data name="MpTransactionType_Cut" xml:space="preserve">
+    <value>Kärpimine</value>
+  </data>
+  <data name="MpTransactionType_Edited" xml:space="preserve">
+    <value>Redigeeritud</value>
+  </data>
+  <data name="MpTransactionType_Analyzed" xml:space="preserve">
+    <value>Analüüsitud</value>
+  </data>
+  <data name="MpTransactionType_Appended" xml:space="preserve">
+    <value>Lisatud</value>
+  </data>
+  <data name="MpTransactionType_Recreated" xml:space="preserve">
+    <value>Taasloomine</value>
+  </data>
+  <data name="MpTransactionType_Linked" xml:space="preserve">
+    <value>Ühendatud</value>
+  </data>
+  <data name="MpTransactionType_Unlinked" xml:space="preserve">
+    <value>Ühendamata</value>
+  </data>
+  <data name="MpTransactionType_Error" xml:space="preserve">
+    <value>Viga</value>
+  </data>
+  <data name="MpTransactionType_System" xml:space="preserve">
+    <value>Süsteem</value>
+  </data>
+  <data name="MpDateTimeOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
+    <value>Viimati</value>
+  </data>
+  <data name="MpDateTimeOptionType_Before" xml:space="preserve">
+    <value>Enne</value>
+  </data>
+  <data name="MpDateTimeOptionType_After" xml:space="preserve">
+    <value>Pärast</value>
+  </data>
+  <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
+    <value>Täpne</value>
+  </data>
+  <data name="MpDateBeforeUnitType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
+    <value>Täna</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
+    <value>Eile</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
+    <value>See nädal</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
+    <value>See kuu</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
+    <value>Sellel aastal</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
+    <value>Täpne</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="MpDateAfterUnitType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
+    <value>Eile</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
+    <value>Eelmine nädal</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
+    <value>Eelmine kuu</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
+    <value>Eelmisel aastal</value>
+  </data>
+  <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
+    <value>Täpne</value>
+  </data>
+  <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
+    <value>Tööaeg</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
+    <value>Päevad</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
+    <value>Nädalad</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
+    <value>Kuud</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
+    <value>Aastaid</value>
+  </data>
+  <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
+    <value>Koopia kuupäeva aeg</value>
+  </data>
+  <data name="MpContentSortType_Source" xml:space="preserve">
+    <value>Allikas</value>
+  </data>
+  <data name="MpContentSortType_Title" xml:space="preserve">
+    <value>Tiitel</value>
+  </data>
+  <data name="MpContentSortType_ItemData" xml:space="preserve">
+    <value>Üksuse andmed</value>
+  </data>
+  <data name="MpContentSortType_ItemType" xml:space="preserve">
+    <value>Eseme tüüp</value>
+  </data>
+  <data name="MpContentSortType_UsageScore" xml:space="preserve">
+    <value>Kasutusskoor</value>
+  </data>
+  <data name="MpRoutingType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpRoutingType_Internal" xml:space="preserve">
+    <value>Sisemine</value>
+  </data>
+  <data name="MpRoutingType_Passive" xml:space="preserve">
+    <value>Passiivne</value>
+  </data>
+  <data name="MpRoutingType_Pre" xml:space="preserve">
+    <value>Eel-</value>
+  </data>
+  <data name="MpRoutingType_Post" xml:space="preserve">
+    <value>Postitus</value>
+  </data>
+  <data name="MpRoutingType_Override" xml:space="preserve">
+    <value>Ületama</value>
+  </data>
+  <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
+    <value>Eksklusiivne alistamine</value>
+  </data>
+  <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
+    <value>Sisaldab</value>
+  </data>
+  <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
+    <value>Täpne</value>
+  </data>
+  <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
+    <value>Algab</value>
+  </data>
+  <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
+    <value>Lõppema</value>
+  </data>
+  <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
+    <value>Regex</value>
+  </data>
+  <data name="MpUserAccountType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpUserAccountType_Free" xml:space="preserve">
+    <value>Vaba</value>
+  </data>
+  <data name="MpUserAccountType_Basic" xml:space="preserve">
+    <value>Põhiline</value>
+  </data>
+  <data name="MpUserAccountType_Unlimited" xml:space="preserve">
+    <value>Piiramatu</value>
+  </data>
+  <data name="MpContentOptionType_None" xml:space="preserve">
+    <value>- Palun vali -</value>
+  </data>
+  <data name="MpContentOptionType_Type" xml:space="preserve">
+    <value>Tüüp</value>
+  </data>
+  <data name="MpContentOptionType_Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="MpContentOptionType_Images" xml:space="preserve">
+    <value>Pildid</value>
+  </data>
+  <data name="MpContentOptionType_Files" xml:space="preserve">
+    <value>Faisid</value>
+  </data>
+  <data name="MpContentOptionType_AnyContent" xml:space="preserve">
+    <value>Mis tahes sisu</value>
+  </data>
+  <data name="MpContentOptionType_Title" xml:space="preserve">
+    <value>Tiitel</value>
+  </data>
+  <data name="MpContentOptionType_Annotation" xml:space="preserve">
+    <value>Annotatsioon</value>
+  </data>
+  <data name="MpContentOptionType_Color" xml:space="preserve">
+    <value>Värvus</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
+    <value>Alg-</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
+    <value>Hiir</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
+    <value>Selge</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
+    <value>Kustutama</value>
+  </data>
+  <data name="MpTagType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpTagType_Link" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="MpTagType_Query" xml:space="preserve">
+    <value>Päring</value>
+  </data>
+  <data name="MpTagType_Group" xml:space="preserve">
+    <value>Grupp</value>
+  </data>
+  <data name="MpReadOnlyTagType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
+    <value>Sildid</value>
+  </data>
+  <data name="MpReadOnlyTagType_All" xml:space="preserve">
+    <value>Kõik</value>
+  </data>
+  <data name="MpReadOnlyTagType_Favorites" xml:space="preserve">
+    <value>Lemmikud</value>
+  </data>
+  <data name="MpReadOnlyTagType_Filters" xml:space="preserve">
+    <value>Filtrid</value>
+  </data>
+  <data name="MpReadOnlyTagType_Trash" xml:space="preserve">
+    <value>Prügikast</value>
+  </data>
+  <data name="MpReadOnlyTagType_Today" xml:space="preserve">
+    <value>Täna</value>
+  </data>
+  <data name="MpReadOnlyTagType_Formats" xml:space="preserve">
+    <value>Formaadid</value>
+  </data>
+  <data name="MpReadOnlyTagType_Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="MpReadOnlyTagType_Images" xml:space="preserve">
+    <value>Pildid</value>
+  </data>
+  <data name="MpReadOnlyTagType_Files" xml:space="preserve">
+    <value>Faisid</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Image" xml:space="preserve">
+    <value>Pilt</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_File" xml:space="preserve">
+    <value>Toimik</value>
+  </data>
+  <data name="WatcherChangeTypes_Created" xml:space="preserve">
+    <value>Loodud</value>
+  </data>
+  <data name="WatcherChangeTypes_Deleted" xml:space="preserve">
+    <value>Kustutatud</value>
+  </data>
+  <data name="WatcherChangeTypes_Changed" xml:space="preserve">
+    <value>Muudetud</value>
+  </data>
+  <data name="WatcherChangeTypes_Renamed" xml:space="preserve">
+    <value>Ümbernimetatud</value>
+  </data>
+  <data name="WatcherChangeTypes_All" xml:space="preserve">
+    <value>Kõik</value>
+  </data>
+</root>

@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>Cu acest abonament veți primi:
+● Până la 1.000 de clipuri de conținut
+● gunoi și arhivă nelimitate</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Basic - lunar</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>BASIC - anual</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>copie</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>pastă</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>Clipboard Manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>instrument</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>utilitate</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>automatizare</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>Trigger &amp; Action Designer pentru automatizări personalizate și înlănțuire de acțiune</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>Aspecte orizontale/verticale, vizualizare lista/grilă și asistență multi -monitor</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>Complet - editor de clipuri prezentat cu descoperire/înlocuire, text bogat (tabele, liste, link -uri, etc.) Text Text Text pentru lipirea rapidă și dinamică din colecția de fragmente</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>Stocare de date locale sigure, sigure și private cu protecție opțională a parolei cu 2 - factor</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>Construit - în browserul de pluginuri cu o comunitate în creștere - Biblioteca de pluginuri conduse</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>Monkeypaste este un manager de clipboard, un instrument de automatizare și productivitate ca niciun altul. Îmbunătățirea clipboard -ului într -o parte îmbogățită și organizată din fluxul dvs. de lucru,
+Prezentând o interfață intuitivă și scăzută de profil care acceptă text, fișiere și imagini. Proiectat pentru flexibilitate, cu o comunitate în creștere - o libray de plugin -uri conduse în permanență.
+
+A început ca un experiment de către un programator care dorește mai mult decât să copieze și să lipească din clipboard. El a vrut o comandă simplă precum Ctrl+C, care să „adauge la” în schimb
+din „înlocuiți” ceea ce a fost pe clipboard. Iar experimentul a funcționat. Micul instrument era foarte la îndemână. Acest lucru a înregistrat programatorul cu mai multe idei și mai multe experimente, care
+Acum a devenit „Monkeypaste”.
+
+Deoarece desktopul este la fișierele dvs., Monkeypaste intenționează să fie la clipboard. Este o suită de instrumente concepute cu atenție pentru a se integra și a se interopa pe aparent cu
+orice aplicație sau format de conținut. Ctrl+C și Ctrl+V sunt mult mai mult decât doar comenzile rapide. Sunt porturile de intrare toate aplicațiile, care transportă un
+Bogăția de valoare și sensul pe care meritați să îl aveți la dispoziție la îndemână. Nu doar aruncat după următorul Ctrl+C.
+
+Sunt acel programator menționat mai devreme și vreau ca toată lumea să poată găsi utilizarea din Monkeypaste. Deci și toate caracteristicile sale sunt complet gratuite de utilizat.
+De asemenea, vreau să vă simțiți confortabil folosindu -l. Așa că vă asigur, ca fiind singura forță din spatele creației sale, că niciuna dintre informațiile personale (foarte) personale nu pot apărea
+Clipboard -ul dvs. este urmărit sau păstrat oriunde dincolo de propria mașină. Perioadă.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● Interfață simplă și prietenoasă atât cu machete orizontale/verticale, vizualizare lista/grilă și asistență multi -monitor</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● Modul de anexare: copierea devine „Adăugare la„ în loc să „înlocuiți” pe clipboard. Atât text, cât și fișiere, complet personalizabil</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● Urmărirea sofisticată a clipurilor, sursele și utilizarea cu suport îmbunătățit pentru browserele pe bază de Firefox și Chrom (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● În totalitate - editor de clipuri prezentat cu text bogat (tabele, liste, link -uri etc.) cu găsiți/înlocuiți și evidențiați</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● Stocați -vă imaginile în baza de date sigură, gata de utilizare ca fișiere oricând pe - cereți doar trageți - și - Drop!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>● Șablon de text puternic pentru lipirea rapidă și dinamică din colecția dvs. de fragmente</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● Trigger &amp; Action Designer pentru automatizări personalizate și înlănțuire de acțiune</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● Simplu de utilizat și extins sistemul de pluginuri atât pentru analizarea clipurilor sau pentru a citi/scrie orice format în clipboard</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● Construit - în browserul de pluginuri cu o comunitate în creștere - Biblioteca de pluginuri conduse</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>Log</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● Mai multe platforme și funcții în curând! Suntem doar getsings a început 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● Atât temele deschise și întunecate sunt complet dinamice, utilizați orice culoare doriți</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● Ajutor integrat și indicii chiar în interfață. Manual online, videoclipuri și forum pentru a vă începe totul pe site (Monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● Optimizat pentru performanță și stresat testat cu 1.000.000 de clipuri.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● Oricând căutare, începeți să tastați folosind atât filtrare simplă, cât și avansată pe clipuri și surse pe zeci de câmpuri</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● Organizați -vă clipurile în arbori de etichete și creați filtre resuzabile</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● Stocare de date locale sigure, sigure și private (fără colectare de date) criptate întotdeauna cu protecție opțională cu 2 - factor de parolă și blochează cu ușurință aplicații sau site -uri web de pe tracker</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>.000</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Moduri personalizate ale mouse -ului: dreapta - Faceți clic pe Lipire și la stânga - Faceți clic pe Auto - Copiați</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>Clipboard -ul este o junglă. Monkeypaste este regele! Swing de la aplicație în aplicație, copierea acestui lucru și lipirea asta ca niciodată cu Monkeypaste !! Un brand - instrument nou, clipboard de ultimă oră și automatizare analitică !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>Eșantion de Monkeypaste în acțiune!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>Instalat în această limbă. Engleza este doar pentru aceste exemple</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>Fotografiile de ecran sunt doar exemple. Ceea ce instalați a fost tradus în această limbă.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>Cu acest abonament veți primi:
+● Capacitate nelimitată
+● Sincronizarea dispozitivului (la disponibilitate)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Nelimitat - lunar</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Nelimitat - anual</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>Eliberare inițială</value>
   </data>
 </root>

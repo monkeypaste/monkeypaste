@@ -59,15 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>Sa ovom pretplatom ćete dobiti:
-● do 1.000 klipova sadržaja
-● neograničeno smeće i arhiva</value>
+    <value>Ovom pretplatom primit ćete:
+● Do 1.000 isječaka sadržaja
+● Neograničeno smeće i arhiva</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>Osnovni - Mjesečni</value>
+    <value>Basic - Mjesečno</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>Osnovni - Godišnje</value>
+    <value>Basic - Godišnje</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -97,10 +97,10 @@
     <value>kopija</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value>paste</value>
+    <value>zalijepiti</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value>clipboard manager</value>
+    <value>Clipboard Manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>alat</value>
@@ -112,19 +112,19 @@
     <value>automatizacija</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>Trigger &amp; Action Designer za prilagođenu automatizaciju i ulančavanje akcija</value>
+    <value>Dizajner okidača i akcije za prilagođene automatizacije i akcijsko laženje</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>Horizontalni/vertikalni rasporedi, prikaz liste/mreže i podrška za više monitora</value>
+    <value>Horizontalni / vertikalni raspored, Lista / Grid View i Multi - Podrška za monitor</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>Potpuno opremljen uređivač isječaka sa pronalaženjem/zamjenom, obogaćenim tekstom (tabele, liste, veze, itd.) predloškom teksta za brzo, dinamično lijepljenje iz vaše kolekcije isječaka</value>
+    <value>Potpuno - Istaknuti uređivač snimka sa pronalaženjem / zamenom, bogatom tekstu (tablice, liste, linkove itd.) Tekst Predložak za brzo, dinamično zalijepivanje iz vaše kolekcije isjeckanja</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>Sigurno, bezbedno i privatno lokalno skladištenje podataka sa opcionom zaštitom od 2 faktora</value>
+    <value>Sigurna, sigurna i privatna lokalna pohranjivanje podataka s opcionalnim 2 - Faktor zaštite lozinke</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>Ugrađeni plugin pretraživač sa stalno rastućom bibliotekom dodataka koju pokreće zajednica</value>
+    <value>Izgrađen - u dodatku sa čekićem sa ikad - rastuća zajednica - pogonjena biblioteka dodataka</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -142,128 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste je menadžer međuspremnika, alat za automatizaciju i produktivnost kao nijedan drugi. Poboljšanje vašeg međuspremnika u obogaćen i organiziran dio vašeg toka posla,
-sa intuitivnim interfejsom niskog profila koji podržava tekst, datoteke i slike. Dizajniran za fleksibilnost, sa stalno rastućom bibliotekom dodataka koju pokreće zajednica.
+    <value>MonkeyyPaste je međuspremnik menadžer, alat za automatizaciju i produktivnost kao nijedan drugi. Poboljšavajući međuspremnik u obogaćeni i organizirani dio vašeg tipa rada,
+Sadrži intuitivno i nisko - profilno sučelje koje podržava tekst, datoteke i slike. Dizajniran za fleksibilnost, sa ikad - rastuća zajednica - pogoršana libraj dodataka.
 
-Počelo je kao eksperiment programera koji je želio više od samo kopiranja i lijepljenja iz međuspremnika. Želio je jednostavnu komandu poput Control+C koja bi umjesto toga 'dodavala'
-od 'zamijeni' ono što je bilo u međuspremniku. I eksperiment je uspio, eureka! Mali alat je bio vrlo zgodan. Ovo je zaintrigiralo programera sa više ideja i više eksperimenata
-sada je postao "MonkeyPaste".
+Počelo je kao eksperiment od strane programera koji želi više od kopirati i zalijepiti iz međuspremnika. Želeo je jednostavnu naredbu poput Ctrl + C koja bi "dodala"
+"Zamijeni" ono što je bilo na međuspremnici. A eksperiment je radio. Mali alat je bio vrlo zgodan. Ovo je ugledalo programeru s više ideja i više eksperimenata, to
+Sada je postao "monkeyypaste".
 
-Kako je radna površina za vaše datoteke, MonkeyPaste namjerava biti u vašem međuspremniku. To je skup alata pažljivo dizajniran za besprijekornu integraciju i međuoperaciju
-bilo koju aplikaciju ili format sadržaja. Control+C i Control+V su mnogo više od običnih prečica. Oni su ulazne luke koje dijele sve aplikacije, koje nose a
-bogatstvo vrijednosti i značenja koje zaslužujete da imate na dohvat ruke. Ne samo bačen nakon sljedećeg Control+C.
+Kako je radna površina u vaše datoteke, monkeyyPaste namjerava biti u vašem međuspremniku. To je paket alata pažljivo dizajniran da se naglo integrira i interoperira
+svaka aplikacija ili format sadržaja. Ctrl + C i Ctrl + V su mnogo više od prečica. Oni su portovi unosa svih aplikacija udjela, noseći a
+Bogatstvo vrijednos i značenje zaslužujete da imate dostupan na dohvat ruke. Nije baš bačen nakon sledećeg Ctrl + c.
 
-Ja sam onaj programer koji smo ranije spomenuli i želim da svi mogu pronaći upotrebu MonkeyPaste-a. Dakle, on i sve njegove karakteristike su potpuno besplatni za korištenje.
-Također želim da se osjećate ugodno koristeći ga. Stoga vas uvjeravam, kao jedinu snagu koja stoji iza njegovog stvaranja, da NIKAD od (veoma) ličnih podataka koji se mogu pojaviti na
-vaš međuspremnik se ikada prati ili pohranjuje BILO GDJE izvan vaše vlastite mašine. Period.</value>
+Ja sam taj programer koji je ranije spomenut i želim da svi budu u mogućnosti da pronađu upotrebu iz MonkeyPaste. Tako i sve njegove karakteristike su potpuno slobodne za upotrebu.
+Želim i da se osjećate ugodno koristeći ga. Zavjerujem vas, kao jedino sile iza njegovog stvaranja, da nijedan od (vrlo) ličnih podataka koji mogu nastaviti
+Vaš međuspremnik se ikad prati ili pohranjuje bilo gdje izvan vlastite mašine. Period.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● Jednostavan i prijateljski interfejs sa horizontalnim i vertikalnim rasporedom, prikazom liste/mreže i podrškom za više monitora</value>
+    <value>● Jednostavno i prijateljsko sučelje sa horizontalnim / vertikalnim rasporedima, popis / rešetka za prikaz i multi - monitor podrška</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Način dodavanja: Kopiranje postaje 'dodaj u' umjesto 'zamijeni' u međuspremniku. I tekst i fajlovi, potpuno prilagodljivi</value>
+    <value>● Dodatak Način: kopiranje postaje 'dodaj u' umjesto 'zamijeni' na međuspremnici. I tekst i datoteke, potpuno prilagodljivi</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Sofisticirano praćenje klipova, izvori i upotreba uz poboljšanu podršku za Firefox i Chromium-bazirane preglednike (Chrome, Edge, Brave)</value>
+    <value>● Sofisticirani praćenje, izvori i upotreba sa poboljšanom podrškom za preglednike zasnovane na Firefox i hrom - hrom, rub, hrabro)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Potpuno opremljen uređivač klipova sa bogatim tekstom (tabele, liste, veze, itd.) sa pronalaženjem/zamjenom i isticanjem</value>
+    <value>● Potpuno - Izdvojeni uređivač snimka sa bogatim tekstom (tablicama, listama, veza itd.) Sa pronalaženjem / zamijeni i isticanje</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Čuvajte svoje slike u bezbednoj bazi podataka, spremne za upotrebu kao fajlove u bilo kom trenutku na zahtev samo prevucite i ispustite!</value>
+    <value>● Snimite svoje slike u sigurnu bazu podataka, spremni za upotrebu kao datoteke u bilo kojem trenutku - Potražnja samo povucite - i - kap!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Moćni šabloni teksta za brzo, dinamično lijepljenje iz kolekcije isječaka</value>
+    <value>● Snažan tekst teksta za brzo, dinamično zalijepivanje iz vaše kolekcije isjeckanja</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Dizajner okidača i akcija za prilagođenu automatizaciju i ulančavanje akcija</value>
+    <value>● Okidač i akcijski dizajner za prilagođene automatizacije i analizu akcije</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Jednostavan za korištenje i prošireni sistem dodataka za analizu klipova ili čitanje/upisivanje bilo kojeg formata u međuspremnik</value>
+    <value>● Jednostavna za upotrebu i proširite dodatni sistem za analizu isječaka ili za čitanje / napišite bilo koji format u svoj međuspremnik</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Ugrađeni plugin pretraživač sa stalno rastućom bibliotekom dodataka koju pokreće zajednica</value>
+    <value>● Izgrađena - u dodatku sa čekićem sa ikad - rastuća zajednica - pogonjena biblioteka dodataka</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatizirajte sve pomoću unaprijed postavljenih dodataka, sakrijte i s lakoćom koristite bilo koju od svojih AI upita ili komandi</value>
+    <value>● Automatizirajte sve sa dodacima dodataka, učvrstite i koristite svoj bilo koji od svojih AI upita ili naredbi</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Uskoro stiže više platformi i funkcija! Tek smo počeli 🎉</value>
+    <value>● Uskoro više platformi i funkcija! Mi smo samo gotovini 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>● I svijetle i tamne teme su potpuno dinamične, koristite bilo koju boju koju želite</value>
+    <value>● I svetle i tamne teme su u potpunosti dinamične, koriste bilo koju boju koju želite</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● Integrisana pomoć i saveti direktno u interfejsu. Online priručnik, video zapisi i forum za početak na web stranici (monkeypaste.com/docs)</value>
+    <value>● Integrirana pomoć i nagovještaje u pravu u sučelju. Online priručnik, videozapisi i forum za započinjanje svih na web mjestu (MonkeyPaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>● Optimizovano za performanse i testirano pod stresom sa 1.000.000 klipova.</value>
+    <value>● Optimiziran za performanse i naglašeno testirano sa 1.000.000 isječaka.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● Pretraživanje bilo kada, samo počnite kucati koristeći jednostavno i napredno filtriranje isječaka i njihovih izvora u desetinama polja</value>
+    <value>● Bilo kada pretraživanje, samo počnite kucati koristeći jednostavno i napredno filtriranje na isječcima i njihovim izvorima preko desetaka polja</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● Organizujte svoje klipove u stablima oznaka i kreirajte filtere za ponovnu upotrebu</value>
+    <value>● Organizirajte svoje isječke u stablima oznaka i stvarajte refudne filtere</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● Sigurna, sigurna i privatna lokalna pohrana podataka (bez prikupljanja podataka) uvijek šifrirana s opcionom zaštitom lozinkom od 2 faktora i jednostavno blokiranje aplikacija ili web stranica s vašeg trackera</value>
+    <value>● Sigurna, sigurna i privatna lokalna pohranjivanje podataka (bez prikupljanja podataka) uvijek šifriranim opcionalnim 2 - faktorskim zaštitom lozinke i lako blokiraju aplikacije ili web stranice iz vašeg Tracker-a</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Opsežna podrška za prevlačenje i ispuštanje, prilagođene globalne prečice, usmjeravanje i navigacija bez miša</value>
+    <value>● Opsežna povlačenje - i - Podrška za ispuštanje, prilagođene globalne prečice, usmjeravanje i miš - besplatna navigacija</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Prilagođeni režimi miša: desni klik na lepljenje i levi klik na automatsko kopiranje</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value>● Jednostavan i prijateljski interfejs
-● Horizontalni/vertikalni rasporedi, prikaz liste/mreže i podrška za više monitora
-● I svijetle i tamne teme su potpuno dinamične, koristite bilo koju boju koju želite
-
-● Integrisana pomoć i saveti direktno u interfejsu
-● Priručnik za pomoć, video zapisi i forum za početak na web stranici (monkeypaste.com/docs)
-
-● Optimizovano za performanse i testirano pod stresom sa 1.000.000 klipova.
-● Pretraživanje bilo kada, samo počnite da kucate
-● Jednostavno i napredno filtriranje klipova i njihovih izvora u desetinama polja
-● Organizujte svoje klipove u stablima oznaka i kreirajte filtere za ponovnu upotrebu
-
-● Sigurno, bezbedno i privatno lokalno skladištenje podataka (bez prikupljanja podataka) uvek šifrovano
-● Možete zanemariti klipove iz određenih aplikacija ili web lokacija
-● Opciona 2-faktorna zaštita lozinkom
-
-● Prilagođene globalne prečice, rutiranje i navigacija bez miša
-● Opsežna podrška za prevlačenje i ispuštanje
-● Prilagođeni režimi miša: desni klik na lepljenje i levi klik na automatsko kopiranje
-● Način dodavanja: Kopiranje postaje 'dodaj u' umjesto 'zamijeni' u međuspremniku. I tekst i fajlovi, potpuno prilagodljivi
-
-● Sofisticirano praćenje klipova, izvora i upotrebe
-● Poboljšana podrška za Firefox i preglednike zasnovane na Chromiumu (Chrome, Edge, Brave)
-
-● Radi sa obogaćenim tekstom (tabele, liste, veze, itd.)
-● Potpuno opremljen uređivač klipova sa pronalaženjem/zamjenom i isticanjem
-● Čuvajte svoje slike u bezbednoj bazi podataka, spremne za upotrebu kao fajlove u bilo kom trenutku na zahtev samo prevucite i ispustite!
-
-● Moćni šabloni teksta za brzo, dinamično lijepljenje iz kolekcije isječaka
-
-● Dizajner okidača i akcija za prilagođenu automatizaciju i ulančavanje akcija
-
-● Jednostavan za korištenje i prošireni sistem dodataka za analizu klipova ili čitanje/upisivanje bilo kojeg formata u međuspremnik
-● Ugrađeni plugin pretraživač sa stalno rastućom bibliotekom dodataka koju pokreće zajednica
-● Automatizirajte sve pomoću unaprijed postavljenih dodataka, sakrijte i s lakoćom koristite bilo koju od svojih AI upita ili komandi
-
-● Uskoro stiže više platformi i funkcija! Tek smo počeli 🎉</value>
+    <value>● Prilagođeni modovi miša: desno - kliknite Zalijepi i lijevo - kliknite Auto - Kopiraj</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>Međuspremnik je džungla. MonkeyPaste je KRALJ! Ljuljajte se od aplikacije do aplikacije, kopirajte ovo i zalijepite ono kao nikada prije uz MonkeyPaste!! Potpuno nov, najsavremeniji međuspremnik i analitički alat za automatizaciju!!!</value>
+    <value>Međuspremnik je džungla. MonkeyyPaste je kralj! Zahtevajte od aplikacije do aplikacije, kopirajte ovo i zalijepite to kao nikad prije monski lista !! Brend - novi, vrhunski alat za mirnice i analitički automatizacija !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>Uzorak MonkeyPaste u akciji!</value>
+    <value>Uzorak monahana u akciji!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -272,23 +233,23 @@ vaš međuspremnik se ikada prati ili pohranjuje BILO GDJE izvan vaše vlastite 
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value>Instalirano na ovom jeziku. Engleski je samo za ove primjere</value>
+    <value>Instaliran na ovom jeziku. Engleski je samo za ove primjere</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>Bilješka! Snimci ekrana su samo primjeri. Ono što instalirate prevedeno je na ovaj jezik.</value>
+    <value>Snimke zaslona su samo primjeri. Ono što instalirate prevedeno je na ovaj jezik.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Sa ovom pretplatom ćete dobiti:
-● neograničen kapacitet
-● sinhronizacija uređaja (prema dostupnosti)</value>
+    <value>Ovom pretplatom primit ćete:
+● Neograničen kapacitet
+● Sinkronizacija uređaja (po dostupnosti)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>Neograničeno - mjesečno</value>
+    <value>Neograničeno - mesečno</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Neograničeno - godišnje</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Prvo izdanje</value>
+    <value>Početno izdanje</value>
   </data>
 </root>

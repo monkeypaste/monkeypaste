@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>Með þessari áskrift færðu:</value>
+    <value>Með þessari áskrift færðu:
+● allt að 1.000 úrklippur af innihaldi
+● Ótakmarkað rusl og skjalasafn</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>Basic - Mánaðarlega</value>
+    <value>Grunn - mánaðarlega</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>Basic - Árlega</value>
+    <value>Grunn - Árlega</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value>afrit</value>
+    <value>Afritaðu</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value>líma</value>
+    <value>Límu</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value>klippiborðsstjóri</value>
+    <value>Klemmuspjaldastjóri</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value>verkfæri</value>
+    <value>Tól</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
     <value>gagnsemi</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value>sjálfvirkni</value>
+    <value>Sjálfvirkni</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
     <value>Trigger &amp; Action Designer fyrir sérsniðna sjálfvirkni og aðgerðakeðju</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>Lárétt/lóðrétt skipulag, lista/netskjár og stuðningur fyrir marga skjái</value>
+    <value>Lárétt/lóðrétt skipulag, listi/ristaskoðun og fjölvarnarstuðningur</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>Fullkominn klipparitill með finna/skipta út, auðugum texta (töflum, listum, hlekkjum o.s.frv.) textasniðmát fyrir fljótlega, kraftmikla límingu úr bútasafninu þínu</value>
+    <value>Að fullu - Valinn Clip Editor með Find/Skiptu um, ríkur texti (töflur, listar, tenglar osfrv.) Texti sniðmát fyrir skjótan, kraftmikla líma úr snippet safninu þínu</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>Örugg, örugg og persónuleg staðbundin gagnageymsla með valfrjálsu tveggja þátta lykilorðavörn</value>
+    <value>Örugg, örugg og einkarekin staðbundin gagnageymsla með valfrjálsri 2 - Þátt</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>Innbyggður viðbótavafri með sívaxandi samfélagsdrifnu safni af viðbótum</value>
+    <value>Innbyggt - Í viðbótarvafra með sífellt vaxandi samfélagi - Driven Library of Plugins</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste er klemmuspjaldstjóri, sjálfvirkni og framleiðni tól eins og ekkert annað.</value>
+    <value>MonkeyPaste er klemmuspjaldastjóri, sjálfvirkni og framleiðni tól eins og enginn annar. Auka klemmuspjaldið þitt í auðgaðan og skipulagðan hluta af vinnuflæðinu þínu,
+Með innsæi og lágt og sniðviðmóti sem styður texta, skrár og myndir. Hannað fyrir sveigjanleika, með sífellt vaxandi samfélagi - ekið libray af viðbótum.
+
+Það byrjaði sem tilraun forritara sem vildi meira en bara afritun og líma út úr klemmuspjaldinu. Hann vildi einfalda skipun eins og Ctrl+C sem myndi 'bæta við' í staðinn
+að „skipta um“ það sem var á klemmuspjaldinu. Og tilraunin virkaði. Litla tólið var mjög vel. Þetta fagnaði forritaranum með fleiri hugmyndum og fleiri tilraunum, að
+Nú er orðið „acepyaste“.
+
+Eins og skjáborðið er á skrárnar þínar, þá ætlar Monkeysta að vera á klemmuspjaldinu þínu. Það er föruneyti af verkfærum sem eru vandlega hönnuð til að virðast virðast samþætta og tengja saman við
+Sérhvert forrit eða snið af innihaldi. Ctrl+C og Ctrl+V eru miklu meira en bara flýtileiðir. Þær eru hafnir aðgangs allra umsókna deila, með a
+Auður gildi og merking sem þú átt skilið að hafa tiltækt innan seilingar. Ekki bara hent eftir næsta Ctrl+c.
+
+Ég er sá forritari sem nefndur var áðan og ég vil að allir geti fundið notkun úr monkeypaste. Svo það og allir eiginleikar þess eru alveg frjálsir í notkun.
+Ég vil líka að þér líði vel með að nota það. Svo ég fullvissa þig, sem eini krafturinn að baki sköpun sinni, að engar af (mjög) persónulegu upplýsingum sem geta komið upp á
+Klemmuspjaldið þitt er nokkru sinni rakið eða geymt hvar sem er handan eigin vélar. Tímabil.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● Einfalt og vinalegt viðmót með bæði láréttum/lóðréttum uppsetningum, lista/netskjá og fjölskjástuðningi</value>
+    <value>I</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Bæta við: Afritun verður „bæta við“ í stað „skipta út“ á klippiborðinu.</value>
+    <value>● Bætið við stillingu: Afritun verður 'Bæta við' í stað þess að 'skipta um' á klemmuspjaldinu. Bæði texti og skrár, að fullu sérhannaðar</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Háþróuð klippumakningu, heimildir og notkun með auknum stuðningi fyrir Firefox og Chromium-byggða vafra (Chrome, Edge, Brave)</value>
+    <value>● Háþróuð klemmuspor, heimildir og notkun með auknum stuðningi við Firefox og Chromium byggða vafra (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Alhliða - klipparitill með auðugum texta (töflum, listum, tenglum osfrv.) með finna/skipta út og auðkenna</value>
+    <value>I</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Geymdu myndirnar þínar í öruggum gagnagrunni, tilbúnar til notkunar sem skrár hvenær sem er - eftirspurn bara dragðu - og - slepptu!</value>
+    <value>● Geymið myndirnar þínar í öruggum gagnagrunni, tilbúin til notkunar sem skrár hvenær sem er - eftirspurn bara dragið - og - slepptu!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Öflug textasniðmát fyrir fljótlega, kraftmikla límingu úr bútasafninu þínu</value>
+    <value>● öflugur texti sniðmát fyrir skjótan, kraftmikla líma úr snippet safninu</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action hönnuður fyrir sérsniðna sjálfvirkni og aðgerðakeðju</value>
+    <value>● Trigger &amp; Action Designer fyrir sérsniðna sjálfvirkni og aðgerðakeðju</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Einfalt í notkun og stækka viðbætur til að bæði greina úrklippur eða lesa/skrifa hvaða snið sem er á klemmuspjaldið þitt</value>
+    <value>● Einfalt í notkun og lengja viðbótarkerfi til að greina bæði úrklippur eða lesa/skrifa hvaða snið sem er á klemmuspjaldið þitt</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Innbyggður viðbótavafri með sívaxandi samfélagsdrifnu bókasafni með viðbótum</value>
+    <value>● Innbyggt - Í viðbótarvafra með sífellt vaxandi samfélagi - Drifið bókasafn af viðbótum</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Gerðu allt sjálfvirkt með forstillingum viðbóta, geymdu og notaðu allar gervigreindarleiðbeiningar þínar eða skipanir á auðveldan hátt</value>
+    <value>● Sjálfvirku allt með forstillingum fyrir viðbót, stash og notaðu hvaða AI leiðbeiningar eða skipanir þínar eru auðveldlega</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Fleiri vettvangar og eiginleikar væntanlegir!</value>
+    <value>● Fleiri pallar og eiginleikar koma fljótlega! Við erum bara að hefja byrjað 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>● Bæði ljós og dökk þemu eru algjörlega kraftmikil, notaðu hvaða lit sem þú vilt</value>
+    <value>● Bæði ljós og dökk þemu eru fullkomlega kraftmikil, notaðu hvaða lit sem þú vilt</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● Innbyggð hjálp og vísbendingar beint í viðmótinu.</value>
+    <value>● Samþætt hjálp og vísbendingar rétt í viðmótinu. Nethandbók, myndbönd og vettvangur til að koma þér af stað á vefsíðunni (monkeysta.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>● Bjartsýni fyrir frammistöðu og álagsprófuð með 1.000.000 sekúndum af klemmum.</value>
+    <value>● Bjartsýni fyrir frammistöðu og stressuð prófuð með 1.000.000 af úrklippum.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● Leitaðu hvenær sem er, byrjaðu bara að slá inn með því að nota bæði einfalda og háþróaða síun á úrklippum og uppruna þeirra yfir heilmikið af reitum</value>
+    <value>Ðar</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● Skipuleggðu klippurnar þínar í merkjatré og búðu til endurnýtanlegar síur</value>
+    <value>● Skipuleggðu úrklippurnar þínar í merkjatrjám og búðu til resusable síur</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● Örugg, örugg og einkarekin staðbundin gagnageymsla (engin gagnasöfnun) alltaf dulkóðuð með valfrjálsri 2 - þátta lykilorðavörn og loka auðveldlega fyrir forrit eða vefsíður frá rekja spor einhvers</value>
+    <value>● Örugg, örugg og einkarekin staðbundin gagnageymsla (engin gagnaöflun) alltaf dulkóðuð með valfrjálsri 2 - Factor lykilorðsvernd og auðveldlega loka fyrir forrit eða vefsíður frá rekja spor einhvers</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Víðtækur stuðningur við draga og sleppa, sérsniðnar alþjóðlegar flýtileiðir, leið og mús - ókeypis leiðsögn</value>
+    <value>I</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Sérsniðnar músarstillingar: hægri - smelltu á líma og vinstri - smelltu á sjálfvirkt - afrita</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Sérsniðin músastillingar: Hægri - Smelltu á Límu og vinstri - Smelltu á Auto - Afritaðu</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>Klemmuspjaldið er frumskógur.</value>
+    <value>Klemmuspjaldið er frumskógur. Monkeysta er konungur! Sveifla frá appi til app, afrita þetta og líma það eins og aldrei áður með MonkeyPaste !! Vörumerki - Nýtt, fremsta klemmuspjald og greinandi sjálfvirkni tól !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>Sýnishorn af MonkeyPaste í aðgerð!</value>
+    <value>Sýnishorn af monkeypaste í aðgerð!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,16 +233,18 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value>Uppsett á þessu tungumáli.</value>
+    <value>Sett upp á þessu tungumáli. Enska er aðeins fyrir þessi dæmi</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>Athugið!</value>
+    <value>Skjámyndir eru aðeins dæmi. Það sem þú setur upp hefur verið þýtt á þetta tungumál.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Með þessari áskrift færðu:</value>
+    <value>Með þessari áskrift færðu:
+● Ótakmarkað afkastageta
+● Samstilling tæki (við framboð)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>Ótakmarkað - Mánaðarlega</value>
+    <value>Ótakmarkað - mánaðarlega</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Ótakmarkað - Árlega</value>

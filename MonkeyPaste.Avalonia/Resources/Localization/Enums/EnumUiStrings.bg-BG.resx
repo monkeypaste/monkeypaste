@@ -1,0 +1,1189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MpThemeType_Light" xml:space="preserve">
+    <value>Светлина</value>
+  </data>
+  <data name="MpThemeType_Dark" xml:space="preserve">
+    <value>Тъмно</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
+    <value>Никога</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
+    <value>Ежедневно</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
+    <value>Седмично</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
+    <value>Месечно</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
+    <value>Последен изход</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_SourceClip" xml:space="preserve">
+    <value>Източен клип</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
+    <value>Нито един</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
+    <value>Задържане на смяна</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
+    <value>Горният десен ъгъл</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
+    <value>Горен ляв ъгъл</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
+    <value>Винаги</value>
+  </data>
+  <data name="MpBillingCycleType_Never" xml:space="preserve">
+    <value>Никога</value>
+  </data>
+  <data name="MpBillingCycleType_Monthly" xml:space="preserve">
+    <value>Месечно</value>
+  </data>
+  <data name="MpBillingCycleType_Yearly" xml:space="preserve">
+    <value>Годишно</value>
+  </data>
+  <data name="MpNotificationType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpNotificationType_Loader" xml:space="preserve">
+    <value>Товарач</value>
+  </data>
+  <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
+    <value>Абонамент изтече</value>
+  </data>
+  <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
+    <value>Входът в акаунта не успя</value>
+  </data>
+  <data name="MpNotificationType_DbError" xml:space="preserve">
+    <value>DB грешка</value>
+  </data>
+  <data name="MpNotificationType_Help" xml:space="preserve">
+    <value>Помогне</value>
+  </data>
+  <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
+    <value>Приставка актуализирана</value>
+  </data>
+  <data name="MpNotificationType_Message" xml:space="preserve">
+    <value>Съобщение</value>
+  </data>
+  <data name="MpNotificationType_AppModeChange" xml:space="preserve">
+    <value>Промяна на режима на приложението</value>
+  </data>
+  <data name="MpNotificationType_Debug" xml:space="preserve">
+    <value>Отстраняване на грешки</value>
+  </data>
+  <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
+    <value>Достигна се капачка за съдържание</value>
+  </data>
+  <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
+    <value>Достигна капачката на боклука</value>
+  </data>
+  <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
+    <value>Съдържание Добавете блокирано по акаунт</value>
+  </data>
+  <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
+    <value>Възстановяване на съдържанието, блокирано по акаунт</value>
+  </data>
+  <data name="MpNotificationType_AccountChanged" xml:space="preserve">
+    <value>Променете акаунта</value>
+  </data>
+  <data name="MpNotificationType_Welcome" xml:space="preserve">
+    <value>Добре дошли</value>
+  </data>
+  <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
+    <value>Налична актуализация</value>
+  </data>
+  <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
+    <value>Няма налична актуализация</value>
+  </data>
+  <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
+    <value>Режимът на добавяне се промени</value>
+  </data>
+  <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
+    <value>Спусък активиран</value>
+  </data>
+  <data name="MpNotificationType_AlertAction" xml:space="preserve">
+    <value>ALERT ACTION</value>
+  </data>
+  <data name="MpNotificationType_StartupComplete" xml:space="preserve">
+    <value>Стартиране завършен</value>
+  </data>
+  <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
+    <value>Файл IO предупреждение</value>
+  </data>
+  <data name="MpNotificationType_UnloadPluginError" xml:space="preserve">
+    <value>Разтоварване на грешка в приставката</value>
+  </data>
+  <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
+    <value>Невалиден плъгин</value>
+  </data>
+  <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
+    <value>Невалиден манипулатор на формата на клипборда</value>
+  </data>
+  <data name="MpNotificationType_InvalidAction" xml:space="preserve">
+    <value>Невалидно действие</value>
+  </data>
+  <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
+    <value>Лоша HTTP заявка</value>
+  </data>
+  <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
+    <value>Тайм -аут на анализатора</value>
+  </data>
+  <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
+    <value>Невалидна заявка</value>
+  </data>
+  <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
+    <value>Невалиден отговор</value>
+  </data>
+  <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
+    <value>Изпълнете заявка за параметри</value>
+  </data>
+  <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
+    <value>DB въвеждане на парола</value>
+  </data>
+  <data name="MpNotificationType_RateApp" xml:space="preserve">
+    <value>Приложение за оценка</value>
+  </data>
+  <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
+    <value>Модално нулиране на общата стойност предварително зададена</value>
+  </data>
+  <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
+    <value>Модално деградация на формата на съдържанието</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
+    <value>Модален Да Не Отменете полето за съобщения</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
+    <value>Модален да не кутия за съобщения</value>
+  </data>
+  <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
+    <value>Модален OK Отменете полето за съобщения</value>
+  </data>
+  <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
+    <value>Модална OK кутия за съобщения</value>
+  </data>
+  <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>Модална текстова кутия OK Отменете полето за съобщения</value>
+  </data>
+  <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>Модална запомняща се текстова кутия OK Отказ от полето за съобщения</value>
+  </data>
+  <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
+    <value>Модален поле за отмяна на прогрес</value>
+  </data>
+  <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
+    <value>Модална натоварена кутия за съобщения</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
+    <value>Модален рестарт Игнорирайте</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
+    <value>Модален рестарт сега или по -късно</value>
+  </data>
+  <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
+    <value>Потвърдете крайното допълнение</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
+    <value>Съобщение за отговор на плъгин</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
+    <value>Грешка в отговора на плъгина</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
+    <value>Предупреждение за отговор на плъгина</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
+    <value>Предупреждение за отговор на плъгин с опция</value>
+  </data>
+  <data name="MpShortcutType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
+    <value>Превключване на главния прозорец</value>
+  </data>
+  <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
+    <value>Превключване на режим на автоматично копиране</value>
+  </data>
+  <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
+    <value>Превключване на десния бутон върху режим на поставяне</value>
+  </data>
+  <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
+    <value>Toggle Слушайте клипборда</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendInlineMode" xml:space="preserve">
+    <value>Превключване на добавка в режим на вграждане</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendBlockMode" xml:space="preserve">
+    <value>Превключете режим на добавяне на блок</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPositionMode" xml:space="preserve">
+    <value>Превключване на режим на позиция за добавяне</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
+    <value>Toggle Append спря</value>
+  </data>
+  <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
+    <value>Ръчно добавете от клипборда</value>
+  </data>
+  <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
+    <value>Намалете фокуса</value>
+  </data>
+  <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
+    <value>Увеличете фокуса</value>
+  </data>
+  <data name="MpShortcutType_ExitApplication" xml:space="preserve">
+    <value>Излезте от приложение</value>
+  </data>
+  <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
+    <value>Поставете на външни</value>
+  </data>
+  <data name="MpShortcutType_PasteSelection" xml:space="preserve">
+    <value>Избор на паста</value>
+  </data>
+  <data name="MpShortcutType_CopySelection" xml:space="preserve">
+    <value>Избор на копие</value>
+  </data>
+  <data name="MpShortcutType_CutSelection" xml:space="preserve">
+    <value>Избор на изрязване</value>
+  </data>
+  <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
+    <value>Изтриване на избрани елементи</value>
+  </data>
+  <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
+    <value>Изберете следващия елемент от колоната</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
+    <value>Изберете предишен елемент от колоната</value>
+  </data>
+  <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
+    <value>Изберете елемент от следващия ред</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
+    <value>Изберете елемент от предишния ред</value>
+  </data>
+  <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
+    <value>Присвойте пряк път</value>
+  </data>
+  <data name="MpShortcutType_Undo" xml:space="preserve">
+    <value>Отмяна</value>
+  </data>
+  <data name="MpShortcutType_Redo" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
+    <value>Изчезване само на съдържание на превключване</value>
+  </data>
+  <data name="MpShortcutType_Rename" xml:space="preserve">
+    <value>Преименуване</value>
+  </data>
+  <data name="MpShortcutType_Duplicate" xml:space="preserve">
+    <value>Дубликат</value>
+  </data>
+  <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
+    <value>Превъртете до дома</value>
+  </data>
+  <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
+    <value>Превъртете до края</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
+    <value>Размер на прозореца нагоре</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
+    <value>Размер на прозореца надолу</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
+    <value>Размер на прозореца вляво</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
+    <value>Размер на прозореца вдясно</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowTop" xml:space="preserve">
+    <value>Ориентирайте основния прозорец отгоре</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowBottom" xml:space="preserve">
+    <value>Ориентирайте основния прозорец отдолу</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowLeft" xml:space="preserve">
+    <value>Ориентирайте основния прозорец вляво</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowRight" xml:space="preserve">
+    <value>Ориентирайте основния прозорец вдясно</value>
+  </data>
+  <data name="MpShortcutType_PreviousPage" xml:space="preserve">
+    <value>Предишна страница</value>
+  </data>
+  <data name="MpShortcutType_NextPage" xml:space="preserve">
+    <value>Следваща страница</value>
+  </data>
+  <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
+    <value>Намерете и заменете избрания елемент</value>
+  </data>
+  <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
+    <value>Превключвайте главния прозорец заключен</value>
+  </data>
+  <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
+    <value>Видимо меню за превключване на филтъра</value>
+  </data>
+  <data name="MpShortcutType_ShowSettings" xml:space="preserve">
+    <value>Показване на настройки</value>
+  </data>
+  <data name="MpShortcutType_TogglePinned" xml:space="preserve">
+    <value>Toggle приковано</value>
+  </data>
+  <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
+    <value>Отворете в прозореца</value>
+  </data>
+  <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
+    <value>Постоянно изтрийте</value>
+  </data>
+  <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
+    <value>Силата минимизира основния прозорец</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendDirectionMode" xml:space="preserve">
+    <value>Превключване на режим на посока на добавяне</value>
+  </data>
+  <data name="MpShortcutType_OpenHelp" xml:space="preserve">
+    <value>Отворена помощ</value>
+  </data>
+  <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
+    <value>Увеличаване на селекцията</value>
+  </data>
+  <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
+    <value>Увеличаване на селекцията</value>
+  </data>
+  <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
+    <value>Нулиране на селекцията увеличение</value>
+  </data>
+  <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
+    <value>Изчистена тава за щифтове</value>
+  </data>
+  <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
+    <value>M a xa p ps h o r t c u t</value>
+  </data>
+  <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
+    <value>Поставете елемент за копиране</value>
+  </data>
+  <data name="MpShortcutType_SelectTag" xml:space="preserve">
+    <value>Изберете маркер</value>
+  </data>
+  <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
+    <value>Анализирайте елемента за копиране с предварително зададен</value>
+  </data>
+  <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
+    <value>Призоваване на спусъка</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
+    <value>Текст на клипа</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
+    <value>Сурови данни за клип</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
+    <value>Тип клип</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
+    <value>Заглавие</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
+    <value>Пътят на приложението на източника</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
+    <value>Име на приложението Източник</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
+    <value>URL адрес на източника</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
+    <value>Заглавие на URL адреса на източника</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
+    <value>Източник URL домейн</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
+    <value>КОПИРАНЕ НА ДАТА ВРЕМЕ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
+    <value>Брой за копиране</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
+    <value>Брой на пастата</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
+    <value>Име на източник на устройство</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
+    <value>Тип на източника на устройство</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
+    <value>Последен изход</value>
+  </data>
+  <data name="MpActionType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpActionType_Classify" xml:space="preserve">
+    <value>Класифицирайте</value>
+  </data>
+  <data name="MpActionType_Analyze" xml:space="preserve">
+    <value>Анализирам</value>
+  </data>
+  <data name="MpActionType_Conditional" xml:space="preserve">
+    <value>Условно</value>
+  </data>
+  <data name="MpActionType_Trigger" xml:space="preserve">
+    <value>Спусък</value>
+  </data>
+  <data name="MpActionType_Repeater" xml:space="preserve">
+    <value>Повтаряне</value>
+  </data>
+  <data name="MpActionType_FileWriter" xml:space="preserve">
+    <value>Файлов писател</value>
+  </data>
+  <data name="MpActionType_SetClipboard" xml:space="preserve">
+    <value>Задайте клипборда</value>
+  </data>
+  <data name="MpActionType_Delay" xml:space="preserve">
+    <value>Забавяне</value>
+  </data>
+  <data name="MpActionType_Alert" xml:space="preserve">
+    <value>Тревога</value>
+  </data>
+  <data name="MpActionType_ApplicationCommand" xml:space="preserve">
+    <value>Команда за приложение</value>
+  </data>
+  <data name="MpTriggerType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpTriggerType_ClipAdded" xml:space="preserve">
+    <value>Клип се добавя</value>
+  </data>
+  <data name="MpTriggerType_FileSystemChanged" xml:space="preserve">
+    <value>Файловата система се промени</value>
+  </data>
+  <data name="MpTriggerType_ClipTagged" xml:space="preserve">
+    <value>Clip Tagged</value>
+  </data>
+  <data name="MpTriggerType_Shortcut" xml:space="preserve">
+    <value>Пряк път</value>
+  </data>
+  <data name="MpTriggerType_MonkeyCopyShortcut" xml:space="preserve">
+    <value>Маймунски копие пряк път</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
+    <value>Вътрешен</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
+    <value>По подразбиране</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
+    <value>Персонализиран</value>
+  </data>
+  <data name="MpPluginDependencyType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpPluginDependencyType_os" xml:space="preserve">
+    <value>операционна система</value>
+  </data>
+  <data name="MpPluginDependencyType_app" xml:space="preserve">
+    <value>приложение</value>
+  </data>
+  <data name="MpPluginDependencyType_lib" xml:space="preserve">
+    <value>lib</value>
+  </data>
+  <data name="MpClipboardFormatType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpClipboardFormatType_Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="MpClipboardFormatType_Html" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
+    <value>Rtf</value>
+  </data>
+  <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
+    <value>Bitmap</value>
+  </data>
+  <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
+    <value>Капка на файла</value>
+  </data>
+  <data name="MpClipboardFormatType_Csv" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
+    <value>Вътрешно съдържание</value>
+  </data>
+  <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
+    <value>Текст на Unicode</value>
+  </data>
+  <data name="MpClipboardFormatType_OemText" xml:space="preserve">
+    <value>OEM текст</value>
+  </data>
+  <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
+    <value>XAML</value>
+  </data>
+  <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
+    <value>XAML пакет</value>
+  </data>
+  <data name="MpClipboardFormatType_Custom" xml:space="preserve">
+    <value>Персонализиран</value>
+  </data>
+  <data name="MpSettingsFrameType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpSettingsFrameType_Login" xml:space="preserve">
+    <value>Влизам</value>
+  </data>
+  <data name="MpSettingsFrameType_Status" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="MpSettingsFrameType_Register" xml:space="preserve">
+    <value>Регистрирам</value>
+  </data>
+  <data name="MpSettingsFrameType_Theme" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
+    <value>Шрифтове по подразбиране</value>
+  </data>
+  <data name="MpSettingsFrameType_Sound" xml:space="preserve">
+    <value>Звук</value>
+  </data>
+  <data name="MpSettingsFrameType_Window" xml:space="preserve">
+    <value>Прозорец</value>
+  </data>
+  <data name="MpSettingsFrameType_Hints" xml:space="preserve">
+    <value>Съвети</value>
+  </data>
+  <data name="MpSettingsFrameType_International" xml:space="preserve">
+    <value>Международен</value>
+  </data>
+  <data name="MpSettingsFrameType_Limits" xml:space="preserve">
+    <value>Ограничения</value>
+  </data>
+  <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
+    <value>Проследяване</value>
+  </data>
+  <data name="MpSettingsFrameType_Startup" xml:space="preserve">
+    <value>Започвам</value>
+  </data>
+  <data name="MpSettingsFrameType_Search" xml:space="preserve">
+    <value>Търсене</value>
+  </data>
+  <data name="MpSettingsFrameType_Content" xml:space="preserve">
+    <value>Съдържание</value>
+  </data>
+  <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
+    <value>Гестове на ръба на горния екран</value>
+  </data>
+  <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
+    <value>Преки пътища</value>
+  </data>
+  <data name="MpSettingsFrameType_System" xml:space="preserve">
+    <value>Система</value>
+  </data>
+  <data name="MpSettingsFrameType_Password" xml:space="preserve">
+    <value>Парола</value>
+  </data>
+  <data name="MpSettingsFrameType_Logs" xml:space="preserve">
+    <value>Трупи</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
+    <value>Разгледайте</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
+    <value>Инсталиран</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
+    <value>Актуализации</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
+    <value>Корен</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
+    <value>Приложение</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
+    <value>Устройство</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
+    <value>Мета</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
+    <value>Статистика</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="MpNextJoinOptionType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpNextJoinOptionType_And" xml:space="preserve">
+    <value>И</value>
+  </data>
+  <data name="MpNextJoinOptionType_Or" xml:space="preserve">
+    <value>Или</value>
+  </data>
+  <data name="MpNextJoinOptionType_Not" xml:space="preserve">
+    <value>Не</value>
+  </data>
+  <data name="MpRootOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpRootOptionType_Clip" xml:space="preserve">
+    <value>Клип</value>
+  </data>
+  <data name="MpRootOptionType_Collection" xml:space="preserve">
+    <value>колекция</value>
+  </data>
+  <data name="MpRootOptionType_Sources" xml:space="preserve">
+    <value>Източници</value>
+  </data>
+  <data name="MpRootOptionType_History" xml:space="preserve">
+    <value>История</value>
+  </data>
+  <data name="MpTextOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpTextOptionType_Matches" xml:space="preserve">
+    <value>Мачове</value>
+  </data>
+  <data name="MpTextOptionType_Contains" xml:space="preserve">
+    <value>Съдържа</value>
+  </data>
+  <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
+    <value>Започва с</value>
+  </data>
+  <data name="MpTextOptionType_EndsWith" xml:space="preserve">
+    <value>Завършва със</value>
+  </data>
+  <data name="MpTextOptionType_RegEx" xml:space="preserve">
+    <value>Reg Ex</value>
+  </data>
+  <data name="MpNumberOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpNumberOptionType_Equals" xml:space="preserve">
+    <value>Равно на</value>
+  </data>
+  <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
+    <value>По-велик от</value>
+  </data>
+  <data name="MpNumberOptionType_LessThan" xml:space="preserve">
+    <value>По-малко от</value>
+  </data>
+  <data name="MpNumberOptionType_IsNot" xml:space="preserve">
+    <value>Не е</value>
+  </data>
+  <data name="MpColorOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpColorOptionType_Hex" xml:space="preserve">
+    <value>Шестнадесетичен</value>
+  </data>
+  <data name="MpColorOptionType_ARGB" xml:space="preserve">
+    <value>A R G B</value>
+  </data>
+  <data name="MpDimensionOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpDimensionOptionType_Width" xml:space="preserve">
+    <value>Ширина</value>
+  </data>
+  <data name="MpDimensionOptionType_Height" xml:space="preserve">
+    <value>Височина</value>
+  </data>
+  <data name="MpImageOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpImageOptionType_Dimensions" xml:space="preserve">
+    <value>Размери</value>
+  </data>
+  <data name="MpImageOptionType_Color" xml:space="preserve">
+    <value>Цвят</value>
+  </data>
+  <data name="MpFileOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpFileOptionType_Audio" xml:space="preserve">
+    <value>Аудио</value>
+  </data>
+  <data name="MpFileOptionType_Compressed" xml:space="preserve">
+    <value>Компресиран</value>
+  </data>
+  <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
+    <value>Диск и медия</value>
+  </data>
+  <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
+    <value>Данни и база данни</value>
+  </data>
+  <data name="MpFileOptionType_Document" xml:space="preserve">
+    <value>Документ</value>
+  </data>
+  <data name="MpFileOptionType_Email" xml:space="preserve">
+    <value>електронна поща</value>
+  </data>
+  <data name="MpFileOptionType_Executable" xml:space="preserve">
+    <value>Изпълним</value>
+  </data>
+  <data name="MpFileOptionType_Font" xml:space="preserve">
+    <value>Шрифт</value>
+  </data>
+  <data name="MpFileOptionType_Image" xml:space="preserve">
+    <value>Изображение</value>
+  </data>
+  <data name="MpFileOptionType_Internet" xml:space="preserve">
+    <value>интернет</value>
+  </data>
+  <data name="MpFileOptionType_Presentation" xml:space="preserve">
+    <value>Презентация</value>
+  </data>
+  <data name="MpFileOptionType_Programming" xml:space="preserve">
+    <value>Програмиране</value>
+  </data>
+  <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
+    <value>Електронна таблица</value>
+  </data>
+  <data name="MpFileOptionType_System" xml:space="preserve">
+    <value>Система</value>
+  </data>
+  <data name="MpFileOptionType_Video" xml:space="preserve">
+    <value>Видео</value>
+  </data>
+  <data name="MpFileOptionType_UserDefined" xml:space="preserve">
+    <value>Определен от потребителя</value>
+  </data>
+  <data name="MpFileOptionType_Custom" xml:space="preserve">
+    <value>Персонализиран</value>
+  </data>
+  <data name="MpFileContentOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpFileContentOptionType_Path" xml:space="preserve">
+    <value>Път</value>
+  </data>
+  <data name="MpFileContentOptionType_Name" xml:space="preserve">
+    <value>Име</value>
+  </data>
+  <data name="MpFileContentOptionType_Kind" xml:space="preserve">
+    <value>Мил</value>
+  </data>
+  <data name="MpContentTypeOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpContentTypeOptionType_Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="MpContentTypeOptionType_Image" xml:space="preserve">
+    <value>Изображение</value>
+  </data>
+  <data name="MpContentTypeOptionType_Files" xml:space="preserve">
+    <value>Файлове</value>
+  </data>
+  <data name="MpAppOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
+    <value>Име на приложението</value>
+  </data>
+  <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
+    <value>Пътят на процеса</value>
+  </data>
+  <data name="MpWebsiteOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpWebsiteOptionType_Url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
+    <value>Домейн</value>
+  </data>
+  <data name="MpWebsiteOptionType_Title" xml:space="preserve">
+    <value>Заглавие</value>
+  </data>
+  <data name="MpSourcesOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpSourcesOptionType_Device" xml:space="preserve">
+    <value>Устройство</value>
+  </data>
+  <data name="MpSourcesOptionType_App" xml:space="preserve">
+    <value>Приложение</value>
+  </data>
+  <data name="MpSourcesOptionType_Website" xml:space="preserve">
+    <value>Уебсайт</value>
+  </data>
+  <data name="MpTransactionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpTransactionType_Created" xml:space="preserve">
+    <value>Създаден</value>
+  </data>
+  <data name="MpTransactionType_Dropped" xml:space="preserve">
+    <value>Отпадна</value>
+  </data>
+  <data name="MpTransactionType_Dragged" xml:space="preserve">
+    <value>Влачеше</value>
+  </data>
+  <data name="MpTransactionType_Pasted" xml:space="preserve">
+    <value>Поставени</value>
+  </data>
+  <data name="MpTransactionType_Copied" xml:space="preserve">
+    <value>Копиран</value>
+  </data>
+  <data name="MpTransactionType_Cut" xml:space="preserve">
+    <value>Разрез</value>
+  </data>
+  <data name="MpTransactionType_Edited" xml:space="preserve">
+    <value>Редактиран</value>
+  </data>
+  <data name="MpTransactionType_Analyzed" xml:space="preserve">
+    <value>Анализиран</value>
+  </data>
+  <data name="MpTransactionType_Appended" xml:space="preserve">
+    <value>Приложени</value>
+  </data>
+  <data name="MpTransactionType_Recreated" xml:space="preserve">
+    <value>Пресъздаден</value>
+  </data>
+  <data name="MpTransactionType_Linked" xml:space="preserve">
+    <value>Свързан</value>
+  </data>
+  <data name="MpTransactionType_Unlinked" xml:space="preserve">
+    <value>Несвързан</value>
+  </data>
+  <data name="MpTransactionType_Error" xml:space="preserve">
+    <value>Грешка</value>
+  </data>
+  <data name="MpTransactionType_System" xml:space="preserve">
+    <value>Система</value>
+  </data>
+  <data name="MpDateTimeOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
+    <value>В последно</value>
+  </data>
+  <data name="MpDateTimeOptionType_Before" xml:space="preserve">
+    <value>Преди</value>
+  </data>
+  <data name="MpDateTimeOptionType_After" xml:space="preserve">
+    <value>След</value>
+  </data>
+  <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
+    <value>Точно</value>
+  </data>
+  <data name="MpDateBeforeUnitType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
+    <value>Днес</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
+    <value>Вчера</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
+    <value>Тази седмица</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
+    <value>Този месец</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
+    <value>Тази година</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
+    <value>Точно</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
+    <value>Започвам</value>
+  </data>
+  <data name="MpDateAfterUnitType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
+    <value>Вчера</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
+    <value>Миналата седмица</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
+    <value>Миналия месец</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
+    <value>Миналата година</value>
+  </data>
+  <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
+    <value>Точно</value>
+  </data>
+  <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
+    <value>Започвам</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
+    <value>Часа</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
+    <value>Дни</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
+    <value>Седмици</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
+    <value>Месеци</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
+    <value>Години</value>
+  </data>
+  <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
+    <value>КОПИРАНЕ НА ДАТА ВРЕМЕ</value>
+  </data>
+  <data name="MpContentSortType_Source" xml:space="preserve">
+    <value>Източник</value>
+  </data>
+  <data name="MpContentSortType_Title" xml:space="preserve">
+    <value>Заглавие</value>
+  </data>
+  <data name="MpContentSortType_ItemData" xml:space="preserve">
+    <value>Данни за артикула</value>
+  </data>
+  <data name="MpContentSortType_ItemType" xml:space="preserve">
+    <value>Тип елемент</value>
+  </data>
+  <data name="MpContentSortType_UsageScore" xml:space="preserve">
+    <value>Резултат за използване</value>
+  </data>
+  <data name="MpRoutingType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpRoutingType_Internal" xml:space="preserve">
+    <value>Вътрешен</value>
+  </data>
+  <data name="MpRoutingType_Passive" xml:space="preserve">
+    <value>Пасивен</value>
+  </data>
+  <data name="MpRoutingType_Pre" xml:space="preserve">
+    <value>Пред</value>
+  </data>
+  <data name="MpRoutingType_Post" xml:space="preserve">
+    <value>Пост</value>
+  </data>
+  <data name="MpRoutingType_Override" xml:space="preserve">
+    <value>Отменя</value>
+  </data>
+  <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
+    <value>Изключително отмяна</value>
+  </data>
+  <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
+    <value>Съдържа</value>
+  </data>
+  <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
+    <value>Точно</value>
+  </data>
+  <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
+    <value>Започва с</value>
+  </data>
+  <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
+    <value>Завършва със</value>
+  </data>
+  <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
+    <value>Регекс</value>
+  </data>
+  <data name="MpUserAccountType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpUserAccountType_Free" xml:space="preserve">
+    <value>Безплатно</value>
+  </data>
+  <data name="MpUserAccountType_Basic" xml:space="preserve">
+    <value>Основен</value>
+  </data>
+  <data name="MpUserAccountType_Unlimited" xml:space="preserve">
+    <value>Неограничен</value>
+  </data>
+  <data name="MpContentOptionType_None" xml:space="preserve">
+    <value>- Моля изберете -</value>
+  </data>
+  <data name="MpContentOptionType_Type" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="MpContentOptionType_Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="MpContentOptionType_Images" xml:space="preserve">
+    <value>Изображения</value>
+  </data>
+  <data name="MpContentOptionType_Files" xml:space="preserve">
+    <value>Файлове</value>
+  </data>
+  <data name="MpContentOptionType_AnyContent" xml:space="preserve">
+    <value>Всяко съдържание</value>
+  </data>
+  <data name="MpContentOptionType_Title" xml:space="preserve">
+    <value>Заглавие</value>
+  </data>
+  <data name="MpContentOptionType_Annotation" xml:space="preserve">
+    <value>Анотация</value>
+  </data>
+  <data name="MpContentOptionType_Color" xml:space="preserve">
+    <value>Цвят</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
+    <value>Първичен</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
+    <value>Мишка</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
+    <value>Ясно</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
+    <value>Изтрий</value>
+  </data>
+  <data name="MpTagType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpTagType_Link" xml:space="preserve">
+    <value>Връзка</value>
+  </data>
+  <data name="MpTagType_Query" xml:space="preserve">
+    <value>Заявка</value>
+  </data>
+  <data name="MpTagType_Group" xml:space="preserve">
+    <value>Група</value>
+  </data>
+  <data name="MpReadOnlyTagType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
+    <value>Етикети</value>
+  </data>
+  <data name="MpReadOnlyTagType_All" xml:space="preserve">
+    <value>всичко</value>
+  </data>
+  <data name="MpReadOnlyTagType_Favorites" xml:space="preserve">
+    <value>Любими</value>
+  </data>
+  <data name="MpReadOnlyTagType_Filters" xml:space="preserve">
+    <value>Филтри</value>
+  </data>
+  <data name="MpReadOnlyTagType_Trash" xml:space="preserve">
+    <value>Боклук</value>
+  </data>
+  <data name="MpReadOnlyTagType_Today" xml:space="preserve">
+    <value>Днес</value>
+  </data>
+  <data name="MpReadOnlyTagType_Formats" xml:space="preserve">
+    <value>Формати</value>
+  </data>
+  <data name="MpReadOnlyTagType_Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="MpReadOnlyTagType_Images" xml:space="preserve">
+    <value>Изображения</value>
+  </data>
+  <data name="MpReadOnlyTagType_Files" xml:space="preserve">
+    <value>Файлове</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Image" xml:space="preserve">
+    <value>Изображение</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="WatcherChangeTypes_Created" xml:space="preserve">
+    <value>Създаден</value>
+  </data>
+  <data name="WatcherChangeTypes_Deleted" xml:space="preserve">
+    <value>Изтрит</value>
+  </data>
+  <data name="WatcherChangeTypes_Changed" xml:space="preserve">
+    <value>Променен</value>
+  </data>
+  <data name="WatcherChangeTypes_Renamed" xml:space="preserve">
+    <value>Преименуван</value>
+  </data>
+  <data name="WatcherChangeTypes_All" xml:space="preserve">
+    <value>всичко</value>
+  </data>
+</root>

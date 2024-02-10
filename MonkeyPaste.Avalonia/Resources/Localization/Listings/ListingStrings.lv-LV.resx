@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>Ar šo abonementu jūs saņemsiet:
+● Līdz 1000 satura klipiem
+● Neierobežota miskaste un arhīvs</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Pamata - mēnesī</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Pamata - gadā</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>kopija</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>pastā</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>starpliktuves vadītājs</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>instruments</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>lietderība</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>automatizācija</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>Trigger &amp; Action Designer pielāgotajām automatizācijām un darbības ķēdi</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>Horizontālais/vertikālais izkārtojums, saraksta/režģa skats un vairāku - monitora atbalsts</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>Pilnībā - piedāvātais klipu redaktors ar atrašanu/aizstāšanu, bagātīgu tekstu (tabulas, saraksti, saites utt</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>Droša, droša un privāta vietējā datu glabāšana ar izvēles 2 - koeficienta paroles aizsardzību</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>Uzbūvēts - spraudņu pārlūkprogrammā ar vienmēr augošu kopienu - spraudņu bibliotēku, kas vadīta</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste ir starpliktuves pārvaldnieks, automatizācijas un produktivitātes rīks kā neviens cits. Starpliktuves uzlabošana bagātinātā un organizētā darbplūsmas daļā,
+ar intuitīvu un zemu profila saskarni, kas atbalsta tekstu, failus un attēlus. Paredzēts elastībai, ar vienmēr augošu kopienu - spraudņu vadītu libriju.
+
+Tas sākās kā eksperiments ar programmētāju, kurš vēlas vairāk nekā tikai kopēt un ielīmēt no starpliktuves. Viņš gribēja tādu vienkāršu komandu kā Ctrl+C, kas “pievienotu” tā vietā
+no “nomainiet”, kas bija uz starpliktuves. Un eksperiments darbojās. Mazais rīks bija ļoti parocīgs. Tas programmētāju izvirzīja ar vairāk ideju un vairāk eksperimentu, tas
+Tagad ir kļuvis par "pērtiķiem".
+
+Tā kā darbvirsma attiecas uz jūsu failiem, Monkeypaste plāno atrasties starpliktuvē. Tā rīku komplekts, kas rūpīgi izstrādāts, lai šķietami integrētu un sadarbotos ar
+jebkura satura lietojumprogramma vai formāts. Ctrl+C un Ctrl+V ir daudz vairāk nekā tikai saīsnes. Tās ir visas lietojumprogrammu akcijas, kas ir ieejas, pārvadājot a
+Vērtības un nozīmes bagātība, kuru esat pelnījis, lai jums būtu pieejams pirkstu galos. Ne tikai izmests pēc nākamā Ctrl+c.
+
+Es esmu tas programmētājs, kas minēts iepriekš, un es vēlos, lai visi varētu atrast lietojumu no pērtiķiem. Tātad tā un visas tās funkcijas ir pilnīgi brīvi izmantot.
+Es arī vēlos, lai jūs justos ērti, izmantojot to. Tāpēc es jums kā vienīgais spēks jums apliecinu, ka tā nav tā, ka neviena no (ļoti) personiskajām informācijām, kas var rasties
+Jūsu starpliktuvē kādreiz tiek izsekots vai glabāts jebkur ārpus jūsu mašīnas. Periods.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● Vienkārša un draudzīga saskarne ar gan horizontāliem, gan vertikāliem izkārtojumiem, saraksta/režģa skatu un vairāku - monitora atbalstu</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● Pievienot režīmu: Kopēšana kļūst par “pievienošanu”, nevis “nomainiet” starpliktuvē. Gan teksts, gan faili, pilnībā pielāgojami</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● Sarežģīta klipu izsekošana, avoti un lietošana ar pastiprinātu atbalstu Firefox un Chromium balstītām pārlūkprogrammām (hroms, mala, drosmīgs)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● Pilnībā - piedāvātais klipu redaktors ar bagātīgu tekstu (tabulas, saraksti, saites utt.) Ar Atrodi/aizstāšanu un izcelšanu</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● Saglabājiet savus attēlus drošā datu bāzē, kas ir gatava lietošanai kā failiem jebkurā laikā - pieprasiet, vienkārši velciet - un - Drop!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>● Jaudīga teksta veidne ātrai, dinamiskai ielīmēšanai no jūsu fragmentu kolekcijas</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● Trigger &amp; Action Designer pielāgotām automatizācijām un darbības ķēdi</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● Vienkārši lietojama un paplašina spraudņu sistēmu gan klipu analīzei, gan arī par starpliktuves formātu lasiet/rakstiet jebkuru formātu</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● iebūvēts - spraudņu pārlūkprogrammā ar vienmēr augošu kopienu - vadītu spraudņu bibliotēku</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>● Automatizējiet visu ar spraudņa iepriekšējiem iestatījumiem, atliciniet un viegli izmantojiet jebkuru no jūsu AI uzvednēm vai komandām</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● Drīzumā parādīsies vairāk platformu un funkciju! Mēs tikai sākam sākt 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● Gan gaismas, gan tumšās tēmas ir pilnīgi dinamiskas, izmantojiet jebkuru vēlamo krāsu</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● Integrēta palīdzība un padomi tieši saskarnē. Tiešsaistes rokasgrāmata, videoklipi un forums, lai jūs varētu sākt visu vietnē (Monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● Optimizēts veiktspējai un tiek pārbaudīts ar stresu ar 1 000 000 klipu.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● Jebkurā laikā meklējot, vienkārši sāciet rakstīt gan vienkāršu, gan uzlabotu filtrēšanu uz klipiem un to avotiem vairāk nekā desmitiem lauku</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● Sakārtojiet klipus tagu kokos un izveidojiet atkārtoti lietojamus filtrus</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● Droša, droša un privāta vietējā datu glabāšana (bez datu vākšanas) vienmēr ir šifrēta ar izvēles 2 - faktoru paroles aizsardzību un viegli bloķēt lietotnes vai vietnes no jūsu izsekotāja</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>● Plašs vilkšanas un nometnes atbalsts, pielāgoti globālie saīsnes, maršrutēšana un pele - bezmaksas navigācija</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Pielāgoti peles režīmi: labajā pusē - noklikšķiniet uz Ielīmēt un kreisi - noklikšķiniet uz Auto - kopēt</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>Starpliktuvē ir džungļi. Monkeypaste ir karalis! Pārejiet no lietotnes uz lietotni, kopējot to un ielīmējot to kā vēl nekad ar pērtiķiem !! Zīmols - jauns, progresīvas starpliktuves un analītiskās automatizācijas rīks !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>Monkeypaste paraugs darbībā!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>Instalēts šajā valodā. Angļu valoda ir paredzēta tikai šiem piemēriem</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>Ekrānuzņēmumi ir tikai piemēri. Tas, ko jūs instalējat, ir tulkots šajā valodā.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>Ar šo abonementu jūs saņemsiet:
+● Neierobežota ietilpība
+● Ierīces sinhronizēšana (pēc pieejamības)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Neierobežots - mēnesis</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Neierobežots - gada</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>Sākotnējā atbrīvošana</value>
   </data>
 </root>

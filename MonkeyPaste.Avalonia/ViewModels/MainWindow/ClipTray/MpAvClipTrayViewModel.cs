@@ -4959,8 +4959,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task UpdateAppendModeStateFlagsAsync(MpAppendModeFlags flags, string source, bool silent = false) {
-            IsAppendLineMode = flags.HasFlag(MpAppendModeFlags.AppendLine);
-            IsAppendInsertMode = flags.HasFlag(MpAppendModeFlags.AppendInsert);
+            IsAppendLineMode = flags.HasFlag(MpAppendModeFlags.AppendBlock);
+            IsAppendInsertMode = flags.HasFlag(MpAppendModeFlags.AppendInline);
             IsAppendManualMode = flags.HasFlag(MpAppendModeFlags.Manual);
             IsAppendPaused = flags.HasFlag(MpAppendModeFlags.Paused);
             IsAppendPreMode = flags.HasFlag(MpAppendModeFlags.Pre);
@@ -5037,11 +5037,11 @@ namespace MonkeyPaste.Avalonia {
 
             MpAppendModeFlags amf = _appendModeFlags;
             if (isAppendLine) {
-                amf.AddFlag(MpAppendModeFlags.AppendLine);
-                amf.RemoveFlag(MpAppendModeFlags.AppendInsert);
+                amf.AddFlag(MpAppendModeFlags.AppendBlock);
+                amf.RemoveFlag(MpAppendModeFlags.AppendInline);
             } else {
-                amf.AddFlag(MpAppendModeFlags.AppendInsert);
-                amf.RemoveFlag(MpAppendModeFlags.AppendLine);
+                amf.AddFlag(MpAppendModeFlags.AppendInline);
+                amf.RemoveFlag(MpAppendModeFlags.AppendBlock);
             }
             if (isManualMode) {
                 amf.AddFlag(MpAppendModeFlags.Manual);

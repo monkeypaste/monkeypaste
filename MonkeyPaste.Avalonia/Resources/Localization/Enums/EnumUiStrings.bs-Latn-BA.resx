@@ -1,0 +1,1189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MpThemeType_Light" xml:space="preserve">
+    <value>Svjetlost</value>
+  </data>
+  <data name="MpThemeType_Dark" xml:space="preserve">
+    <value>Mrak</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
+    <value>Nikad</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
+    <value>Svakodnevno</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
+    <value>Tjedan</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
+    <value>Mjesečno</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
+    <value>Zadnji izlaz</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_SourceClip" xml:space="preserve">
+    <value>Izvorni isječak</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
+    <value>Nijedan</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
+    <value>Držanje pomaka</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
+    <value>Gornji desni ugao</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
+    <value>Gornji lijevi ugao</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
+    <value>Uvek</value>
+  </data>
+  <data name="MpBillingCycleType_Never" xml:space="preserve">
+    <value>Nikad</value>
+  </data>
+  <data name="MpBillingCycleType_Monthly" xml:space="preserve">
+    <value>Mjesečno</value>
+  </data>
+  <data name="MpBillingCycleType_Yearly" xml:space="preserve">
+    <value>Godišnje</value>
+  </data>
+  <data name="MpNotificationType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpNotificationType_Loader" xml:space="preserve">
+    <value>Utovarivač</value>
+  </data>
+  <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
+    <value>Pretplata je istekla</value>
+  </data>
+  <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
+    <value>Prijava računa nije uspjela</value>
+  </data>
+  <data name="MpNotificationType_DbError" xml:space="preserve">
+    <value>Db greška</value>
+  </data>
+  <data name="MpNotificationType_Help" xml:space="preserve">
+    <value>Pomoći</value>
+  </data>
+  <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
+    <value>Dodatak je ažuriran</value>
+  </data>
+  <data name="MpNotificationType_Message" xml:space="preserve">
+    <value>Poruka</value>
+  </data>
+  <data name="MpNotificationType_AppModeChange" xml:space="preserve">
+    <value>Promjena načina aplikacije</value>
+  </data>
+  <data name="MpNotificationType_Debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
+    <value>Dosegnuta kapaka za sadržaj</value>
+  </data>
+  <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
+    <value>Postignut je kap za smeće</value>
+  </data>
+  <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
+    <value>Sadržaj Dodavanje blokiranim računom</value>
+  </data>
+  <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
+    <value>Restore sadržaja blokiran po računu</value>
+  </data>
+  <data name="MpNotificationType_AccountChanged" xml:space="preserve">
+    <value>Račun se promijenio</value>
+  </data>
+  <data name="MpNotificationType_Welcome" xml:space="preserve">
+    <value>Dobrodošli</value>
+  </data>
+  <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
+    <value>Ažuriranje dostupno</value>
+  </data>
+  <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
+    <value>Nema dostupnog ažuriranja</value>
+  </data>
+  <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
+    <value>Promijenjen način dodavanja</value>
+  </data>
+  <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
+    <value>Okidač omogućen</value>
+  </data>
+  <data name="MpNotificationType_AlertAction" xml:space="preserve">
+    <value>ALERT AKCIJA</value>
+  </data>
+  <data name="MpNotificationType_StartupComplete" xml:space="preserve">
+    <value>Pokretanje kompletnog</value>
+  </data>
+  <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
+    <value>Datoteka IO Upozorenje</value>
+  </data>
+  <data name="MpNotificationType_UnloadPluginError" xml:space="preserve">
+    <value>Uključite grešku dodatka</value>
+  </data>
+  <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
+    <value>Nevažeći dodatak</value>
+  </data>
+  <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
+    <value>Nevažeći ručka formata međuspremnika</value>
+  </data>
+  <data name="MpNotificationType_InvalidAction" xml:space="preserve">
+    <value>Nevažeća akcija</value>
+  </data>
+  <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
+    <value>Loš http zahtjev</value>
+  </data>
+  <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
+    <value>Timeout analizatora</value>
+  </data>
+  <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
+    <value>Nevažeći zahtjev</value>
+  </data>
+  <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
+    <value>Nevažeći odgovor</value>
+  </data>
+  <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
+    <value>Izvršite zahtev parametara</value>
+  </data>
+  <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
+    <value>Unos lozinke DB</value>
+  </data>
+  <data name="MpNotificationType_RateApp" xml:space="preserve">
+    <value>Ocenite aplikaciju</value>
+  </data>
+  <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
+    <value>Modalno resetovanje zajedničke vrijednosti</value>
+  </data>
+  <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
+    <value>Degradacija formata modalnog sadržaja</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
+    <value>Modal Da Ne Otkaži okvir za poruke</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
+    <value>Modal Da Ne BOX PORSEM</value>
+  </data>
+  <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
+    <value>Modalno OK Otkaži okvir za poruke</value>
+  </data>
+  <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
+    <value>Modal OK Box poruke</value>
+  </data>
+  <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>Modalni tekstni okvir OK Otkaži okvir za poruke</value>
+  </data>
+  <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>Modalno pamtiv tekstualni okvir OK Otkaži okvir za poruke</value>
+  </data>
+  <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
+    <value>Otkazivanje poruke modalnog napretka</value>
+  </data>
+  <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
+    <value>Modalna zauzeta kutija za poruke</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
+    <value>Modalno ponovno pokretanje zanemari</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
+    <value>Modalno ponovno pokretanje sada ili kasnije</value>
+  </data>
+  <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
+    <value>Potvrdite kraj prilog</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
+    <value>Poruka odgovora dodataka</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
+    <value>Greška odgovora dodataka</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
+    <value>Upozorenje o referu dodatka</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
+    <value>UPOZORENJE ODGOVORNIKA PLUBIN-a sa opcijom</value>
+  </data>
+  <data name="MpShortcutType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
+    <value>Prebaci glavni prozor</value>
+  </data>
+  <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
+    <value>Prebacite režim automatskog kopiranja</value>
+  </data>
+  <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
+    <value>Prebacite desni klik za paste</value>
+  </data>
+  <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
+    <value>Prebacivati ​​slušati međuspremnik</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendInlineMode" xml:space="preserve">
+    <value>Prebacite dodavanje u inline režim</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendBlockMode" xml:space="preserve">
+    <value>Preklopni način rada</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPositionMode" xml:space="preserve">
+    <value>Prebacite način rada na poziciju</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
+    <value>Prebacivanje dodataka pauzirano</value>
+  </data>
+  <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
+    <value>Ručno dodajte iz međuspremnika</value>
+  </data>
+  <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
+    <value>Smanjenje fokusa</value>
+  </data>
+  <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
+    <value>Povećati fokus</value>
+  </data>
+  <data name="MpShortcutType_ExitApplication" xml:space="preserve">
+    <value>Izlaz iz aplikacije</value>
+  </data>
+  <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
+    <value>Zalijepite na vanjsko</value>
+  </data>
+  <data name="MpShortcutType_PasteSelection" xml:space="preserve">
+    <value>Izbor zalijepi</value>
+  </data>
+  <data name="MpShortcutType_CopySelection" xml:space="preserve">
+    <value>Izbor kopiranja</value>
+  </data>
+  <data name="MpShortcutType_CutSelection" xml:space="preserve">
+    <value>Izbor izrezanja</value>
+  </data>
+  <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
+    <value>Izbrišite odabrane stavke</value>
+  </data>
+  <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
+    <value>Odaberite sljedeću stavku stupca</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
+    <value>Odaberite prethodnu stavku stupca</value>
+  </data>
+  <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
+    <value>Odaberite sljedeću stavku reda</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
+    <value>Odaberite prethodnu stavku retka</value>
+  </data>
+  <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
+    <value>Dodijelite prečicu</value>
+  </data>
+  <data name="MpShortcutType_Undo" xml:space="preserve">
+    <value>Poništiti</value>
+  </data>
+  <data name="MpShortcutType_Redo" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
+    <value>Prebacivanje sadržaja samo za čitanje</value>
+  </data>
+  <data name="MpShortcutType_Rename" xml:space="preserve">
+    <value>Preimenovati</value>
+  </data>
+  <data name="MpShortcutType_Duplicate" xml:space="preserve">
+    <value>Duplikat</value>
+  </data>
+  <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
+    <value>Dođite do kuće</value>
+  </data>
+  <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
+    <value>Dođite do kraja</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
+    <value>Veličina prozora prema gore</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
+    <value>Veličina prozora dolje</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
+    <value>Veličina prozora lijevo</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
+    <value>Veličina prozora desno</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowTop" xml:space="preserve">
+    <value>Orijentišite glavni prozor</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowBottom" xml:space="preserve">
+    <value>Orijentisati glavni prozorski dno</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowLeft" xml:space="preserve">
+    <value>Orijentiran glavni prozor lijevo</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowRight" xml:space="preserve">
+    <value>Orijentirajte glavni prozor desno</value>
+  </data>
+  <data name="MpShortcutType_PreviousPage" xml:space="preserve">
+    <value>Prethodna stranica</value>
+  </data>
+  <data name="MpShortcutType_NextPage" xml:space="preserve">
+    <value>Sljedeća stranica</value>
+  </data>
+  <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
+    <value>Pronađite i zamijenite odabranu stavku</value>
+  </data>
+  <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
+    <value>Zaključani glavni prozor zaključani</value>
+  </data>
+  <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
+    <value>Prebacite meni filtra vidljiv</value>
+  </data>
+  <data name="MpShortcutType_ShowSettings" xml:space="preserve">
+    <value>Prikaži postavke</value>
+  </data>
+  <data name="MpShortcutType_TogglePinned" xml:space="preserve">
+    <value>Prebacite se</value>
+  </data>
+  <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
+    <value>Otvoren u prozoru</value>
+  </data>
+  <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
+    <value>Trajno izbrisati</value>
+  </data>
+  <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
+    <value>Sila minimiziraju glavni prozor</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendDirectionMode" xml:space="preserve">
+    <value>Prebacivanje načina dodavanja pravnog režima</value>
+  </data>
+  <data name="MpShortcutType_OpenHelp" xml:space="preserve">
+    <value>Otvorena pomoć</value>
+  </data>
+  <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
+    <value>Zum u odabiru</value>
+  </data>
+  <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
+    <value>Umanjivanje po izboru</value>
+  </data>
+  <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
+    <value>Resetirajte izbor izbora</value>
+  </data>
+  <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
+    <value>Jasna pin ladica</value>
+  </data>
+  <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
+    <value>M a xa p ps h o r t c u t</value>
+  </data>
+  <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
+    <value>Predmet za paste kopiranje</value>
+  </data>
+  <data name="MpShortcutType_SelectTag" xml:space="preserve">
+    <value>Odaberite oznaku</value>
+  </data>
+  <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
+    <value>Analizirajte stavku kopiranja pomoću unaprijed postavljenog</value>
+  </data>
+  <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
+    <value>Pozovite okidač</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
+    <value>Klip tekst</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
+    <value>Podaci o sirovim isječkom</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
+    <value>Vrsta isječka</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
+    <value>Naslov</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
+    <value>Izvor Put aplikacije</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
+    <value>Izvor Naziv aplikacije</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
+    <value>Izvor URL</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
+    <value>Izvor URL naslov</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
+    <value>Izvor URL domena</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
+    <value>Vrijeme kopiranja</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
+    <value>Kopiraj</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
+    <value>Prestupi za pastu</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
+    <value>Naziv izvornog uređaja</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
+    <value>Vrsta izvornog uređaja</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
+    <value>Zadnji izlaz</value>
+  </data>
+  <data name="MpActionType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpActionType_Classify" xml:space="preserve">
+    <value>Klasificirati</value>
+  </data>
+  <data name="MpActionType_Analyze" xml:space="preserve">
+    <value>Analiza</value>
+  </data>
+  <data name="MpActionType_Conditional" xml:space="preserve">
+    <value>Uslovno</value>
+  </data>
+  <data name="MpActionType_Trigger" xml:space="preserve">
+    <value>Okidač</value>
+  </data>
+  <data name="MpActionType_Repeater" xml:space="preserve">
+    <value>Repetitor</value>
+  </data>
+  <data name="MpActionType_FileWriter" xml:space="preserve">
+    <value>Pisac datoteka</value>
+  </data>
+  <data name="MpActionType_SetClipboard" xml:space="preserve">
+    <value>Podesite međuspremnik</value>
+  </data>
+  <data name="MpActionType_Delay" xml:space="preserve">
+    <value>Kašnjenje</value>
+  </data>
+  <data name="MpActionType_Alert" xml:space="preserve">
+    <value>Upozoriti</value>
+  </data>
+  <data name="MpActionType_ApplicationCommand" xml:space="preserve">
+    <value>Naredba aplikacije</value>
+  </data>
+  <data name="MpTriggerType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpTriggerType_ClipAdded" xml:space="preserve">
+    <value>Dodano isječak</value>
+  </data>
+  <data name="MpTriggerType_FileSystemChanged" xml:space="preserve">
+    <value>Datotečni sistem se promijenio</value>
+  </data>
+  <data name="MpTriggerType_ClipTagged" xml:space="preserve">
+    <value>Klip označen</value>
+  </data>
+  <data name="MpTriggerType_Shortcut" xml:space="preserve">
+    <value>Prečac</value>
+  </data>
+  <data name="MpTriggerType_MonkeyCopyShortcut" xml:space="preserve">
+    <value>Prečica za kopiranje majmuna</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
+    <value>Unutrašnji</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
+    <value>Podrazumevano</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
+    <value>Običaj</value>
+  </data>
+  <data name="MpPluginDependencyType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpPluginDependencyType_os" xml:space="preserve">
+    <value>OS</value>
+  </data>
+  <data name="MpPluginDependencyType_app" xml:space="preserve">
+    <value>aplikacija</value>
+  </data>
+  <data name="MpPluginDependencyType_lib" xml:space="preserve">
+    <value>lib</value>
+  </data>
+  <data name="MpClipboardFormatType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpClipboardFormatType_Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="MpClipboardFormatType_Html" xml:space="preserve">
+    <value>Html</value>
+  </data>
+  <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
+    <value>Bitmap</value>
+  </data>
+  <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
+    <value>Pad datoteke</value>
+  </data>
+  <data name="MpClipboardFormatType_Csv" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
+    <value>Interni sadržaj</value>
+  </data>
+  <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
+    <value>Unicode tekst</value>
+  </data>
+  <data name="MpClipboardFormatType_OemText" xml:space="preserve">
+    <value>OEM tekst</value>
+  </data>
+  <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
+    <value>Xaml</value>
+  </data>
+  <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
+    <value>Xaml paket</value>
+  </data>
+  <data name="MpClipboardFormatType_Custom" xml:space="preserve">
+    <value>Običaj</value>
+  </data>
+  <data name="MpSettingsFrameType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpSettingsFrameType_Login" xml:space="preserve">
+    <value>Ulogovati se</value>
+  </data>
+  <data name="MpSettingsFrameType_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="MpSettingsFrameType_Register" xml:space="preserve">
+    <value>Upisati</value>
+  </data>
+  <data name="MpSettingsFrameType_Theme" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
+    <value>Zadani fontovi</value>
+  </data>
+  <data name="MpSettingsFrameType_Sound" xml:space="preserve">
+    <value>Zvuk</value>
+  </data>
+  <data name="MpSettingsFrameType_Window" xml:space="preserve">
+    <value>Prozor</value>
+  </data>
+  <data name="MpSettingsFrameType_Hints" xml:space="preserve">
+    <value>Savjeti</value>
+  </data>
+  <data name="MpSettingsFrameType_International" xml:space="preserve">
+    <value>Međunarodni</value>
+  </data>
+  <data name="MpSettingsFrameType_Limits" xml:space="preserve">
+    <value>Ograničenja</value>
+  </data>
+  <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
+    <value>Praćenje</value>
+  </data>
+  <data name="MpSettingsFrameType_Startup" xml:space="preserve">
+    <value>Pokretanje</value>
+  </data>
+  <data name="MpSettingsFrameType_Search" xml:space="preserve">
+    <value>Pretražiti</value>
+  </data>
+  <data name="MpSettingsFrameType_Content" xml:space="preserve">
+    <value>Sadržaj</value>
+  </data>
+  <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
+    <value>Grede za vrhunske ekrane</value>
+  </data>
+  <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
+    <value>Prečice</value>
+  </data>
+  <data name="MpSettingsFrameType_System" xml:space="preserve">
+    <value>Sistem</value>
+  </data>
+  <data name="MpSettingsFrameType_Password" xml:space="preserve">
+    <value>Lozinka</value>
+  </data>
+  <data name="MpSettingsFrameType_Logs" xml:space="preserve">
+    <value>Trupci</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
+    <value>Pretražiti</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
+    <value>Instaliran</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
+    <value>Ažuriranja</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
+    <value>Korijen</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
+    <value>Aplikacija</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
+    <value>Uređaj</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
+    <value>Meta</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
+    <value>Statistika</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="MpNextJoinOptionType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpNextJoinOptionType_And" xml:space="preserve">
+    <value>I</value>
+  </data>
+  <data name="MpNextJoinOptionType_Or" xml:space="preserve">
+    <value>Ili</value>
+  </data>
+  <data name="MpNextJoinOptionType_Not" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="MpRootOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpRootOptionType_Clip" xml:space="preserve">
+    <value>Isječak</value>
+  </data>
+  <data name="MpRootOptionType_Collection" xml:space="preserve">
+    <value>Zbirka</value>
+  </data>
+  <data name="MpRootOptionType_Sources" xml:space="preserve">
+    <value>Izvori</value>
+  </data>
+  <data name="MpRootOptionType_History" xml:space="preserve">
+    <value>istorija</value>
+  </data>
+  <data name="MpTextOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpTextOptionType_Matches" xml:space="preserve">
+    <value>Utakmice</value>
+  </data>
+  <data name="MpTextOptionType_Contains" xml:space="preserve">
+    <value>Sadrži</value>
+  </data>
+  <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
+    <value>Počinje sa</value>
+  </data>
+  <data name="MpTextOptionType_EndsWith" xml:space="preserve">
+    <value>Završava sa</value>
+  </data>
+  <data name="MpTextOptionType_RegEx" xml:space="preserve">
+    <value>Reg ex</value>
+  </data>
+  <data name="MpNumberOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpNumberOptionType_Equals" xml:space="preserve">
+    <value>Jednakosti</value>
+  </data>
+  <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
+    <value>Veci nego</value>
+  </data>
+  <data name="MpNumberOptionType_LessThan" xml:space="preserve">
+    <value>Manje od</value>
+  </data>
+  <data name="MpNumberOptionType_IsNot" xml:space="preserve">
+    <value>Nije</value>
+  </data>
+  <data name="MpColorOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpColorOptionType_Hex" xml:space="preserve">
+    <value>Hex</value>
+  </data>
+  <data name="MpColorOptionType_ARGB" xml:space="preserve">
+    <value>A r g b</value>
+  </data>
+  <data name="MpDimensionOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpDimensionOptionType_Width" xml:space="preserve">
+    <value>Širina</value>
+  </data>
+  <data name="MpDimensionOptionType_Height" xml:space="preserve">
+    <value>Visina</value>
+  </data>
+  <data name="MpImageOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpImageOptionType_Dimensions" xml:space="preserve">
+    <value>Dimenzije</value>
+  </data>
+  <data name="MpImageOptionType_Color" xml:space="preserve">
+    <value>Boja</value>
+  </data>
+  <data name="MpFileOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpFileOptionType_Audio" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="MpFileOptionType_Compressed" xml:space="preserve">
+    <value>Komprimiran</value>
+  </data>
+  <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
+    <value>Disk i mediji</value>
+  </data>
+  <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
+    <value>Podaci i baza podataka</value>
+  </data>
+  <data name="MpFileOptionType_Document" xml:space="preserve">
+    <value>Dokument</value>
+  </data>
+  <data name="MpFileOptionType_Email" xml:space="preserve">
+    <value>E-pošta</value>
+  </data>
+  <data name="MpFileOptionType_Executable" xml:space="preserve">
+    <value>Izvršni</value>
+  </data>
+  <data name="MpFileOptionType_Font" xml:space="preserve">
+    <value>Font</value>
+  </data>
+  <data name="MpFileOptionType_Image" xml:space="preserve">
+    <value>Slika</value>
+  </data>
+  <data name="MpFileOptionType_Internet" xml:space="preserve">
+    <value>Internet</value>
+  </data>
+  <data name="MpFileOptionType_Presentation" xml:space="preserve">
+    <value>Prezentacija</value>
+  </data>
+  <data name="MpFileOptionType_Programming" xml:space="preserve">
+    <value>Programiranje</value>
+  </data>
+  <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
+    <value>Proračunska tablica</value>
+  </data>
+  <data name="MpFileOptionType_System" xml:space="preserve">
+    <value>Sistem</value>
+  </data>
+  <data name="MpFileOptionType_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="MpFileOptionType_UserDefined" xml:space="preserve">
+    <value>Definisano od strane korisnika</value>
+  </data>
+  <data name="MpFileOptionType_Custom" xml:space="preserve">
+    <value>Običaj</value>
+  </data>
+  <data name="MpFileContentOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpFileContentOptionType_Path" xml:space="preserve">
+    <value>Put</value>
+  </data>
+  <data name="MpFileContentOptionType_Name" xml:space="preserve">
+    <value>Ime</value>
+  </data>
+  <data name="MpFileContentOptionType_Kind" xml:space="preserve">
+    <value>Ljubazan</value>
+  </data>
+  <data name="MpContentTypeOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpContentTypeOptionType_Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="MpContentTypeOptionType_Image" xml:space="preserve">
+    <value>Slika</value>
+  </data>
+  <data name="MpContentTypeOptionType_Files" xml:space="preserve">
+    <value>Datoteke</value>
+  </data>
+  <data name="MpAppOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
+    <value>Naziv aplikacije</value>
+  </data>
+  <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
+    <value>Procesni put</value>
+  </data>
+  <data name="MpWebsiteOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpWebsiteOptionType_Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
+    <value>Domena</value>
+  </data>
+  <data name="MpWebsiteOptionType_Title" xml:space="preserve">
+    <value>Naslov</value>
+  </data>
+  <data name="MpSourcesOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpSourcesOptionType_Device" xml:space="preserve">
+    <value>Uređaj</value>
+  </data>
+  <data name="MpSourcesOptionType_App" xml:space="preserve">
+    <value>Aplikacija</value>
+  </data>
+  <data name="MpSourcesOptionType_Website" xml:space="preserve">
+    <value>Web stranica</value>
+  </data>
+  <data name="MpTransactionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpTransactionType_Created" xml:space="preserve">
+    <value>Stvoren</value>
+  </data>
+  <data name="MpTransactionType_Dropped" xml:space="preserve">
+    <value>Opao</value>
+  </data>
+  <data name="MpTransactionType_Dragged" xml:space="preserve">
+    <value>Vući</value>
+  </data>
+  <data name="MpTransactionType_Pasted" xml:space="preserve">
+    <value>Zalijepljen</value>
+  </data>
+  <data name="MpTransactionType_Copied" xml:space="preserve">
+    <value>Kopiran</value>
+  </data>
+  <data name="MpTransactionType_Cut" xml:space="preserve">
+    <value>Rezati</value>
+  </data>
+  <data name="MpTransactionType_Edited" xml:space="preserve">
+    <value>Uređen</value>
+  </data>
+  <data name="MpTransactionType_Analyzed" xml:space="preserve">
+    <value>Analiziran</value>
+  </data>
+  <data name="MpTransactionType_Appended" xml:space="preserve">
+    <value>Dodaran</value>
+  </data>
+  <data name="MpTransactionType_Recreated" xml:space="preserve">
+    <value>Rekreiran</value>
+  </data>
+  <data name="MpTransactionType_Linked" xml:space="preserve">
+    <value>Povezan</value>
+  </data>
+  <data name="MpTransactionType_Unlinked" xml:space="preserve">
+    <value>Neupvjetan</value>
+  </data>
+  <data name="MpTransactionType_Error" xml:space="preserve">
+    <value>Greška</value>
+  </data>
+  <data name="MpTransactionType_System" xml:space="preserve">
+    <value>Sistem</value>
+  </data>
+  <data name="MpDateTimeOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
+    <value>U posljednjem</value>
+  </data>
+  <data name="MpDateTimeOptionType_Before" xml:space="preserve">
+    <value>Prije</value>
+  </data>
+  <data name="MpDateTimeOptionType_After" xml:space="preserve">
+    <value>Poslije</value>
+  </data>
+  <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
+    <value>Tačan</value>
+  </data>
+  <data name="MpDateBeforeUnitType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
+    <value>Danas</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
+    <value>Jučer</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
+    <value>Ove sedmice</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
+    <value>Ovog mjeseca</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
+    <value>Ove godine</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
+    <value>Tačan</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
+    <value>Pokretanje</value>
+  </data>
+  <data name="MpDateAfterUnitType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
+    <value>Jučer</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
+    <value>Prošle sedmice</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
+    <value>Prošli mjesec</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
+    <value>Prošle godine</value>
+  </data>
+  <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
+    <value>Tačan</value>
+  </data>
+  <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
+    <value>Pokretanje</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
+    <value>Sati</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
+    <value>Dani</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
+    <value>Sedmicama</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
+    <value>Mjeseci</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
+    <value>Godina</value>
+  </data>
+  <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
+    <value>Vrijeme kopiranja</value>
+  </data>
+  <data name="MpContentSortType_Source" xml:space="preserve">
+    <value>Izvor</value>
+  </data>
+  <data name="MpContentSortType_Title" xml:space="preserve">
+    <value>Naslov</value>
+  </data>
+  <data name="MpContentSortType_ItemData" xml:space="preserve">
+    <value>Podaci o artiklu</value>
+  </data>
+  <data name="MpContentSortType_ItemType" xml:space="preserve">
+    <value>Vrsta predmeta</value>
+  </data>
+  <data name="MpContentSortType_UsageScore" xml:space="preserve">
+    <value>Ocjena upotrebe</value>
+  </data>
+  <data name="MpRoutingType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpRoutingType_Internal" xml:space="preserve">
+    <value>Unutrašnji</value>
+  </data>
+  <data name="MpRoutingType_Passive" xml:space="preserve">
+    <value>Pasivan</value>
+  </data>
+  <data name="MpRoutingType_Pre" xml:space="preserve">
+    <value>Pre</value>
+  </data>
+  <data name="MpRoutingType_Post" xml:space="preserve">
+    <value>Pošta</value>
+  </data>
+  <data name="MpRoutingType_Override" xml:space="preserve">
+    <value>Prevladati</value>
+  </data>
+  <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
+    <value>Ekskluzivno prevladanje</value>
+  </data>
+  <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
+    <value>Sadrži</value>
+  </data>
+  <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
+    <value>Tačan</value>
+  </data>
+  <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
+    <value>Počinje sa</value>
+  </data>
+  <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
+    <value>Završava sa</value>
+  </data>
+  <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
+    <value>Regex</value>
+  </data>
+  <data name="MpUserAccountType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpUserAccountType_Free" xml:space="preserve">
+    <value>Slobodan</value>
+  </data>
+  <data name="MpUserAccountType_Basic" xml:space="preserve">
+    <value>Osnovni</value>
+  </data>
+  <data name="MpUserAccountType_Unlimited" xml:space="preserve">
+    <value>Neograničen</value>
+  </data>
+  <data name="MpContentOptionType_None" xml:space="preserve">
+    <value>- Molimo odaberite -</value>
+  </data>
+  <data name="MpContentOptionType_Type" xml:space="preserve">
+    <value>Vrsta</value>
+  </data>
+  <data name="MpContentOptionType_Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="MpContentOptionType_Images" xml:space="preserve">
+    <value>Slike</value>
+  </data>
+  <data name="MpContentOptionType_Files" xml:space="preserve">
+    <value>Datoteke</value>
+  </data>
+  <data name="MpContentOptionType_AnyContent" xml:space="preserve">
+    <value>Bilo koji sadržaj</value>
+  </data>
+  <data name="MpContentOptionType_Title" xml:space="preserve">
+    <value>Naslov</value>
+  </data>
+  <data name="MpContentOptionType_Annotation" xml:space="preserve">
+    <value>Napomena</value>
+  </data>
+  <data name="MpContentOptionType_Color" xml:space="preserve">
+    <value>Boja</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
+    <value>Primarni</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
+    <value>Miša</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
+    <value>Jasan</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
+    <value>Izbrisati</value>
+  </data>
+  <data name="MpTagType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpTagType_Link" xml:space="preserve">
+    <value>Veza</value>
+  </data>
+  <data name="MpTagType_Query" xml:space="preserve">
+    <value>Upiti</value>
+  </data>
+  <data name="MpTagType_Group" xml:space="preserve">
+    <value>Grupa</value>
+  </data>
+  <data name="MpReadOnlyTagType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
+    <value>Oznake</value>
+  </data>
+  <data name="MpReadOnlyTagType_All" xml:space="preserve">
+    <value>Sve</value>
+  </data>
+  <data name="MpReadOnlyTagType_Favorites" xml:space="preserve">
+    <value>Favoriti</value>
+  </data>
+  <data name="MpReadOnlyTagType_Filters" xml:space="preserve">
+    <value>Filteri</value>
+  </data>
+  <data name="MpReadOnlyTagType_Trash" xml:space="preserve">
+    <value>Smeće</value>
+  </data>
+  <data name="MpReadOnlyTagType_Today" xml:space="preserve">
+    <value>Danas</value>
+  </data>
+  <data name="MpReadOnlyTagType_Formats" xml:space="preserve">
+    <value>Formati</value>
+  </data>
+  <data name="MpReadOnlyTagType_Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="MpReadOnlyTagType_Images" xml:space="preserve">
+    <value>Slike</value>
+  </data>
+  <data name="MpReadOnlyTagType_Files" xml:space="preserve">
+    <value>Datoteke</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Image" xml:space="preserve">
+    <value>Slika</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="WatcherChangeTypes_Created" xml:space="preserve">
+    <value>Stvoren</value>
+  </data>
+  <data name="WatcherChangeTypes_Deleted" xml:space="preserve">
+    <value>Izbrisan</value>
+  </data>
+  <data name="WatcherChangeTypes_Changed" xml:space="preserve">
+    <value>Promijenjen</value>
+  </data>
+  <data name="WatcherChangeTypes_Renamed" xml:space="preserve">
+    <value>Preimenovan</value>
+  </data>
+  <data name="WatcherChangeTypes_All" xml:space="preserve">
+    <value>Sve</value>
+  </data>
+</root>

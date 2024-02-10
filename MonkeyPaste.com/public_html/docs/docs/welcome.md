@@ -3,7 +3,7 @@ sidebar_position: 1
 ---
 
 # Welcome 
-🇦🇫🇦🇫🇦🇫
+
 Welcome to the docs for MonkeyPaste, a clipboard automation and productivity tool. 
 
 Here you will find details about how to use the app **beyond the intergrated help** which is found by hovering over any of the <img src={require('/img/info.png').default} width="15"/> icons.

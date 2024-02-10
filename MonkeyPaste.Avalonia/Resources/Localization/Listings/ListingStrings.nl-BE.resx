@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>Met dit abonnement ontvangt u:
+● Tot 1.000 content clips
+● Onbeperkt afval en archief</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Basis - Maandelijks</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>BASIS - jaarlijks</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>kopiëren</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>Plakken</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>klembordmanager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>hulpmiddel</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>nutsvoorziening</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>automatisering</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>Trigger &amp; Action Designer voor aangepaste automatisering en actieketens</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>Horizontale/verticale lay -outs, lijst/rasterweergave en multi - monitorondersteuning</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>Volledig - Featured Clip Editor met Find/vervang, Rich Text (Tables, Lists, Links, etc.) Tekst Templating voor snel, dynamisch plakken uit uw snippet -collectie</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>Veilige, veilige en private lokale gegevensopslag met optionele 2 - factor wachtwoordbeveiliging</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>Gebouwd - in plug -in browser met een steeds groeiende community - aangedreven bibliotheek met plug -ins</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>Monkeypaste is een klembordmanager, automatisering en productiviteitstool als geen ander. Uw klembord verbeteren tot een verrijkt en georganiseerd deel van uw workflow,
+Met een intuïtieve en lage profielinterface die tekst, bestanden en afbeeldingen ondersteunt. Ontworpen voor flexibiliteit, met een steeds groeiende community - gedreven lifray van plug -ins.
+
+Het begon als een experiment door een programmeur die meer wilde dan alleen kopiëren en plakken uit het klembord. Hij wilde een eenvoudig commando zoals Ctrl+C die in plaats daarvan zou 'toevoegen aan'
+van 'vervangen' wat er op het klembord was. En het experiment werkte. Het kleine gereedschap was erg handig. Dit heeft de programmeur meer ideeën en meer experimenten geactiveerd, dat
+nu is "Monkeypaste" geworden.
+
+Omdat het bureaublad naar uw bestanden is, is Monkeypaste van plan om op uw klembord te zijn. Het is een reeks hulpmiddelen die zorgvuldig zijn ontworpen om te lijken te integreren en mee te werken
+elke toepassing of inhoudsopmaak. Ctrl+C en Ctrl+V zijn veel meer dan alleen snelkoppelingen. Ze zijn de toegangspoorten die alle toepassingen delen, die een
+De rijkdom van waarde en betekenis die u verdient om binnen handbereik beschikbaar te zijn. Niet alleen weggegooid na de volgende Ctrl+C.
+
+Ik ben die eerder genoemde programmeur en ik wil dat iedereen in staat is om gebruik te maken van Monkeypaste. Dus het en alle functies zijn volledig gratis te gebruiken.
+Ik wil ook dat je je op je gemak voelt om het te gebruiken. Dus ik verzeker je, als de enige kracht achter de creatie ervan, dat geen van de (zeer) persoonlijke informatie die kan optreden
+Uw klembord wordt ooit bijgehouden of opgeslagen overal voorbij uw eigen machine. Periode.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● Eenvoudige en vriendelijke interface met zowel horizontale/verticale lay -outs, lijst/rasterweergave en multi - monitorondersteuning</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● Append -modus: kopiëren wordt 'toevoegen aan' in plaats van 'vervangen' op het klembord. Zowel tekst als bestanden, volledig aanpasbaar</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● Geavanceerde clip volgen, bronnen en gebruik met verbeterde ondersteuning voor firefox en chroom -gebaseerde browsers (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● Volledig - Uitgelichte clipeditor met rijke tekst (tabellen, lijsten, links, enz.) Met Find/vervangen en markeren</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● Bewaar uw afbeeldingen in de beveiligde database, klaar voor gebruik als bestanden op elk gewenst moment - Draag Sleep gewoon - en - Drop!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>● Krachtige tekst sjablonen voor een snelle, dynamische plakken uit uw snippetcollectie</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● Trigger &amp; Action Designer voor aangepaste automatisering en actieketens</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● Eenvoudig te gebruiken en het plug -insysteem uit te breiden voor zowel het analyseren van clips of lees/schrijf elk formaat naar uw klembord</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● Gebouwd - in plug -in browser met een steeds groeiende community - aangedreven bibliotheek met plug -ins</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>● Automatiseer alles met plug -in voorinstellingen, stash en gebruik uw AI -prompts of opdrachten gemakkelijk</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● Binnenkort meer platforms en functies! We zijn gewoon GetTings begonnen 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● Zowel lichte als donkere thema's zijn volledig dynamisch, gebruik elke gewenste kleur</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● Geïntegreerde hulp en hints in de interface. Online handleiding, video's en forum om u allemaal op de website te laten starten (monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● Geoptimaliseerd voor prestaties en gestrest getest met 1.000.000 sclips.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● Begin elke keer op zoek naar typen met zowel eenvoudige als geavanceerde filtering op clips en hun bronnen over tientallen velden</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● Organiseer uw clips in tagbomen en maak resusable filters</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● Veilige, veilige en private lokale gegevensopslag (geen gegevensverzameling) altijd gecodeerd met optionele 2 - factor wachtwoordbeveiliging en blokkeren eenvoudig apps of websites van uw tracker</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>● Uitgebreide drag - en - drop -ondersteuning, aangepaste globale snelkoppelingen, routering en muis - gratis navigatie</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Aangepaste muismodi: Rechts - Klik op Pakken en Links - Klik op Auto - Kopiëren</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>Het klembord is een jungle. Monkeypaste is de koning! Swing van app naar app, kopieer dit en plakten dat als nooit tevoren met Monkeypaste !! Een merk - nieuw, gesneden klembord en analyse -automatiseringstool !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>Voorbeeld van Monkeypaste in actie!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>Geïnstalleerd in deze taal. Engels is alleen voor deze voorbeelden</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>Schermafbeeldingen zijn slechts voorbeelden. Wat u installeert is vertaald naar deze taal.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>Met dit abonnement ontvangt u:
+● Onbeperkte capaciteit
+● Synchronisatie van apparaten (bij beschikbaarheid)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Onbeperkt - maandelijks</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Onbeperkt - jaarlijks</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>Eerste uitgave</value>
   </data>
 </root>

@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>Su šia prenumerata gausite:
+● Iki 1000 turinio klipų
+● Neribotos šiukšliadėžės ir archyvas</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Pagrindinis - kas mėnesį</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Pagrindinis - kasmet</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>kopijuoti</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>įklijuoti</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>iškarpų srities tvarkyklė</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>įrankis</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>naudingumas</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>Automatizavimas</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>„Trigger &amp; Action Designer“, skirtas pasirinktinėms automatizmams ir veiksmų sujungimui</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>Horizontalūs/vertikalūs išdėstymai, sąrašo/tinklelio vaizdas ir daugialypės terpės palaikymas</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>Visiškai - rodomas klipo redaktorius su „Find“/„Resike“, „Rich Text“ (lentelės, sąrašai, nuorodos ir kt.) Teksto šablonas, kad būtų galima greitai, dinamiškai paslėpti iš savo fragmentų kolekcijos</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>Saugus, saugus ir privatus vietinis duomenų saugojimas su pasirenkama 2 faktoriaus slaptažodžio apsauga</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>Sukurtas - papildinio naršyklėje su augančia bendruomene - varoma papildinių biblioteka</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>„MonkeYPaste“ yra mainų srities tvarkyklė, automatikos ir produktyvumo įrankis, kaip niekas kitas. Patobulinkite mainų sritį į praturtintą ir organizuojančią jūsų darbo eigos dalį,
+Pateikiama intuityvi ir žema profilio sąsaja, palaikanti tekstą, failus ir vaizdus. Skirta lankstumo, su vis augančia bendruomene - paskatinta papildinių bibliotekos.
+
+Tai prasidėjo programuotojo, norinčio ne tik kopijuoti ir įklijuoti iš mainų srities, prasidėjo. Jis norėjo paprastos komandos, tokios kaip „Ctrl+C“, kuri „pridėtų“ vietoj to
+„Pakeiskite“ tai, kas buvo mainų srityje. Ir eksperimentas veikė. Mažas įrankis buvo labai patogus. Tai sužadino programuotoją daugiau idėjų ir daugiau eksperimentų, tai
+Dabar tapo „Monkeypaste“.
+
+Kadangi darbalaukis yra jūsų failams, „MonkeYPaste“ ketina būti jūsų mainų srityje. Tai įrankių komplektas
+Bet kokia programa ar turinio formatas. „Ctrl+C“ ir „Ctrl+V“ yra daug daugiau nei tik nuorodos. Jie yra įėjimo uostai, kuriuos dalijasi visos programos, nešančios a
+Vertės ir prasmės, kurią nusipelnėte turėti po ranka. Ne tik išmestas po kito „Ctrl+C“.
+
+Aš esu tas anksčiau minėtas programuotojas ir noriu, kad visi galėtų rasti naudą iš „MonkeYPaste“. Taigi tai ir visos jo funkcijos yra visiškai nemokamos.
+Aš taip pat noriu, kad jaustumėtės patogiai naudodamiesi tuo. Taigi patikinu jus kaip vienintelę jo kūrimo jėgą, kad nė viena iš (labai) asmeninės informacijos, kuri gali kilti
+Jūsų mainų sritis yra kada nors stebima ar saugoma bet kur už savo mašinos už savo mašinos. Laikotarpis.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● Paprasta ir draugiška sąsaja tiek su horizontaliais/vertikaliais išdėstymais, sąrašo/tinklelio vaizdu ir daugialypė dalis - monitoriaus palaikymas</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● Priedo režimas: kopijavimas tampa „pridėti į“, o ne „pakeisti“ mainų srityje. Tiek tekstas, tiek failai, visiškai pritaikyti</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● Sudėtingas spaustukų stebėjimas, šaltiniai ir naudojimas su patobulinta „Firefox“ ir „Chromio“ naršyklių palaikymu („Chrome“, „Edge“, „Brave“)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● Visiškai - rodomas klipo redaktorius su turtingu tekstu (lentelėmis, sąrašais, nuorodomis ir kt</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● Saugokite savo vaizdus saugioje duomenų bazėje, paruoštą naudoti kaip failus bet kuriuo metu - paklausa tiesiog vilkite - ir - Drop!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>● Galingas teksto šablonas, skirtas greitam, dinamiškam įklijavimui iš jūsų fragmentų kolekcijos</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● „Trigger &amp; Action Designer“, skirtas pasirinktinėms automatizmams ir veiksmo grandinėlėms</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● Paprasta naudoti ir išplėsti papildinių sistemą, skirtą analizuoti spaustukus arba skaityti/rašyti bet kokį formatą savo mainų srityje</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● Sukurtas - papildinių naršyklėje su vis augančia bendruomene - varoma papildinių biblioteka</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>M</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● Netrukus pasirodys daugiau platformų ir funkcijų! Mes tiesiog pradedame 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● Tiek šviesios, tiek tamsios temos yra visiškai dinamiškos, naudokite bet kokią norimą spalvą</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● Integruota pagalba ir užuominos tiesiai sąsajoje. Internetinis vadovas, vaizdo įrašai ir forumas, kad galėtumėte pradėti viską svetainėje (Monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● Optimizuotas našumui ir stresui, išbandytam su 1 000 000 segtukų.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● Bet kuriuo metu paieška, tiesiog pradėkite rašyti ir naudodamiesi paprastu, ir pažengusiu filtravimu spaustukuose ir jų šaltiniuose per dešimtis laukų</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● Sutvarkykite savo spaustukus į „Tag Tree“ ir sukurkite atnaujinamus filtrus</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● Saugus, saugus ir privatus vietinis duomenų saugojimas (nėra duomenų rinkimo) visada užšifruota su pasirenkama 2 faktoriaus slaptažodžio apsauga ir lengvai užblokuokite programas ar svetaines iš jūsų „Tracker“</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>T</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Pasirinktiniai pelių režimai: dešinė</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>Mainų sritis yra džiunglės. Monkeypaste yra karalius! Pasisukite iš programos į programą, nukopijuokite tai ir įklijuokite, kaip niekad anksčiau su „MonkeYPaste“ !! Prekės ženklas - naujas, pažangiausias mainų sritis ir analitinis automatizavimo įrankis !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>Monkeypaste pavyzdys veikia!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>Įdiegta šia kalba. Anglų kalba skirta tik šiems pavyzdžiams</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>Ekrano kadrai yra tik pavyzdžiai. Tai, ką įdiegėte, buvo išversta į šią kalbą.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>Su šia prenumerata gausite:
+● Neribotas pajėgumas
+● Įrenginio sinchronizavimas (esant prieinamumui)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Neribotas - kas mėnesį</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Neribotas - kasmet</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>Pradinis išleidimas</value>
   </data>
 </root>

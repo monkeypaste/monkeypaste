@@ -1,0 +1,1189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MpThemeType_Light" xml:space="preserve">
+    <value>আলো</value>
+  </data>
+  <data name="MpThemeType_Dark" xml:space="preserve">
+    <value>অন্ধকার</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
+    <value>কখনও না</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
+    <value>প্রতিদিন</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
+    <value>সাপ্তাহিক</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
+    <value>মাসিক</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
+    <value>শেষ আউটপুট</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_SourceClip" xml:space="preserve">
+    <value>উত্স ক্লিপ</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
+    <value>কিছুই না</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
+    <value>হোল্ডিং শিফট</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
+    <value>উপরের ডান কোণ</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
+    <value>উপরের বাঁদিকের কোণায়</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
+    <value>সর্বদা</value>
+  </data>
+  <data name="MpBillingCycleType_Never" xml:space="preserve">
+    <value>কখনও না</value>
+  </data>
+  <data name="MpBillingCycleType_Monthly" xml:space="preserve">
+    <value>মাসিক</value>
+  </data>
+  <data name="MpBillingCycleType_Yearly" xml:space="preserve">
+    <value>বার্ষিক</value>
+  </data>
+  <data name="MpNotificationType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpNotificationType_Loader" xml:space="preserve">
+    <value>লোডার</value>
+  </data>
+  <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
+    <value>সাবস্ক্রিপশন মেয়াদোত্তীর্ণ</value>
+  </data>
+  <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
+    <value>অ্যাকাউন্ট লগইন ব্যর্থ হয়েছে</value>
+  </data>
+  <data name="MpNotificationType_DbError" xml:space="preserve">
+    <value>ডিবি ত্রুটি</value>
+  </data>
+  <data name="MpNotificationType_Help" xml:space="preserve">
+    <value>সাহায্য</value>
+  </data>
+  <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
+    <value>প্লাগইন আপডেট হয়েছে</value>
+  </data>
+  <data name="MpNotificationType_Message" xml:space="preserve">
+    <value>বার্তা</value>
+  </data>
+  <data name="MpNotificationType_AppModeChange" xml:space="preserve">
+    <value>অ্যাপ মোড পরিবর্তন</value>
+  </data>
+  <data name="MpNotificationType_Debug" xml:space="preserve">
+    <value>ডিবাগ</value>
+  </data>
+  <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
+    <value>সামগ্রী ক্যাপ পৌঁছেছে</value>
+  </data>
+  <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
+    <value>ট্র্যাশ ক্যাপ পৌঁছেছে</value>
+  </data>
+  <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
+    <value>অ্যাকাউন্ট দ্বারা অবরুদ্ধ বিষয়বস্তু যুক্ত করুন</value>
+  </data>
+  <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
+    <value>অ্যাকাউন্ট দ্বারা অবরুদ্ধ বিষয়বস্তু পুনরুদ্ধার</value>
+  </data>
+  <data name="MpNotificationType_AccountChanged" xml:space="preserve">
+    <value>অ্যাকাউন্ট পরিবর্তন হয়েছে</value>
+  </data>
+  <data name="MpNotificationType_Welcome" xml:space="preserve">
+    <value>স্বাগত</value>
+  </data>
+  <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
+    <value>আপডেট উপলব্ধ</value>
+  </data>
+  <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
+    <value>কোন আপডেট উপলব্ধ</value>
+  </data>
+  <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
+    <value>সংযোজন মোড পরিবর্তিত হয়েছে</value>
+  </data>
+  <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
+    <value>ট্রিগার সক্ষম</value>
+  </data>
+  <data name="MpNotificationType_AlertAction" xml:space="preserve">
+    <value>সতর্কতা ক্রিয়া</value>
+  </data>
+  <data name="MpNotificationType_StartupComplete" xml:space="preserve">
+    <value>স্টার্টআপ সম্পূর্ণ</value>
+  </data>
+  <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
+    <value>ফাইল আইও সতর্কতা</value>
+  </data>
+  <data name="MpNotificationType_UnloadPluginError" xml:space="preserve">
+    <value>প্লাগইন ত্রুটি আনলোড করুন</value>
+  </data>
+  <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
+    <value>অবৈধ প্লাগইন</value>
+  </data>
+  <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
+    <value>অবৈধ ক্লিপবোর্ড ফর্ম্যাট হ্যান্ডলার</value>
+  </data>
+  <data name="MpNotificationType_InvalidAction" xml:space="preserve">
+    <value>অবৈধ ক্রিয়া</value>
+  </data>
+  <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
+    <value>খারাপ http অনুরোধ</value>
+  </data>
+  <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
+    <value>বিশ্লেষক সময়সীমা</value>
+  </data>
+  <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
+    <value>অনুরোধ অগ্রহণযোগ্য</value>
+  </data>
+  <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
+    <value>অবৈধ প্রতিক্রিয়া</value>
+  </data>
+  <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
+    <value>পরামিতি অনুরোধ সম্পাদন করুন</value>
+  </data>
+  <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
+    <value>ডিবি পাসওয়ার্ড ইনপুট</value>
+  </data>
+  <data name="MpNotificationType_RateApp" xml:space="preserve">
+    <value>হার অ্যাপ্লিকেশন</value>
+  </data>
+  <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
+    <value>মডেল রিসেট ভাগ করা মান প্রিসেট</value>
+  </data>
+  <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
+    <value>মডেল বিষয়বস্তু বিন্যাস অবক্ষয়</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
+    <value>মডেল হ্যাঁ কোনও বাতিল বার্তা বাক্স</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
+    <value>মডেল হ্যাঁ কোনও বার্তা বাক্স নেই</value>
+  </data>
+  <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
+    <value>মডেল ওকে বাতিল বার্তা বাক্স</value>
+  </data>
+  <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
+    <value>মডেল ওকে বার্তা বাক্স</value>
+  </data>
+  <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>মডেল পাঠ্য বাক্স ঠিক আছে বার্তা বাক্স বাতিল করুন</value>
+  </data>
+  <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>মডেল স্মরণীয় পাঠ্য বাক্স ঠিক আছে বার্তা বাক্স বাতিল করুন</value>
+  </data>
+  <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
+    <value>মডেল অগ্রগতি বার্তা বাক্স বাতিল</value>
+  </data>
+  <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
+    <value>মডেল ব্যস্ত বার্তা বাক্স</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
+    <value>মডেল পুনঃসূচনা উপেক্ষা করুন</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
+    <value>মডেল এখন বা পরে পুনরায় চালু করুন</value>
+  </data>
+  <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
+    <value>শেষ সংযোজন নিশ্চিত করুন</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
+    <value>প্লাগইন প্রতিক্রিয়া বার্তা</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
+    <value>প্লাগইন প্রতিক্রিয়া ত্রুটি</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
+    <value>প্লাগইন প্রতিক্রিয়া সতর্কতা</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
+    <value>বিকল্প সহ প্লাগইন প্রতিক্রিয়া সতর্কতা</value>
+  </data>
+  <data name="MpShortcutType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
+    <value>টগল প্রধান উইন্ডো</value>
+  </data>
+  <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
+    <value>টগল অটো কপি মোড</value>
+  </data>
+  <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
+    <value>টগল ডান ক্লিক পেস্ট মোড</value>
+  </data>
+  <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
+    <value>টগল ক্লিপবোর্ড শুনুন</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendInlineMode" xml:space="preserve">
+    <value>টগল ইনলাইন মোড অ্যাপেন্ড করুন</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendBlockMode" xml:space="preserve">
+    <value>টগল ব্লক মোড অ্যাপেন্ড করুন</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPositionMode" xml:space="preserve">
+    <value>টগল অ্যাপেন্ড পজিশন মোড</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
+    <value>টগল অ্যাপেন্ড বিরতি দেওয়া</value>
+  </data>
+  <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
+    <value>ক্লিপবোর্ড থেকে ম্যানুয়ালি যুক্ত করুন</value>
+  </data>
+  <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
+    <value>ফোকাস হ্রাস</value>
+  </data>
+  <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
+    <value>ফোকাস বৃদ্ধি</value>
+  </data>
+  <data name="MpShortcutType_ExitApplication" xml:space="preserve">
+    <value>প্রস্থান আবেদন</value>
+  </data>
+  <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
+    <value>বাহ্যিক পেস্ট</value>
+  </data>
+  <data name="MpShortcutType_PasteSelection" xml:space="preserve">
+    <value>পেস্ট নির্বাচন</value>
+  </data>
+  <data name="MpShortcutType_CopySelection" xml:space="preserve">
+    <value>অনুলিপি নির্বাচন</value>
+  </data>
+  <data name="MpShortcutType_CutSelection" xml:space="preserve">
+    <value>কাটা নির্বাচন</value>
+  </data>
+  <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
+    <value>নির্বাচিত আইটেমগুলি মুছুন</value>
+  </data>
+  <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
+    <value>পরবর্তী কলাম আইটেমটি নির্বাচন করুন</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
+    <value>পূর্ববর্তী কলাম আইটেমটি নির্বাচন করুন</value>
+  </data>
+  <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
+    <value>পরবর্তী সারি আইটেম নির্বাচন করুন</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
+    <value>পূর্ববর্তী সারি আইটেম নির্বাচন করুন</value>
+  </data>
+  <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
+    <value>শর্টকাট বরাদ্দ করুন</value>
+  </data>
+  <data name="MpShortcutType_Undo" xml:space="preserve">
+    <value>পূর্বাবস্থায় ফিরিয়ে দেওয়া</value>
+  </data>
+  <data name="MpShortcutType_Redo" xml:space="preserve">
+    <value>পুনরায়</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
+    <value>টগল সামগ্রী কেবল পড়ুন</value>
+  </data>
+  <data name="MpShortcutType_Rename" xml:space="preserve">
+    <value>নাম পরিবর্তন</value>
+  </data>
+  <data name="MpShortcutType_Duplicate" xml:space="preserve">
+    <value>নকল</value>
+  </data>
+  <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
+    <value>বাড়িতে স্ক্রোল</value>
+  </data>
+  <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
+    <value>শেষ করতে স্ক্রোল</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
+    <value>উইন্ডো আকার আপ</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
+    <value>উইন্ডো আকার নিচে</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
+    <value>উইন্ডো আকার বাকি</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
+    <value>উইন্ডো আকার ঠিক</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowTop" xml:space="preserve">
+    <value>ওরিয়েন্ট মেইন উইন্ডো শীর্ষ</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowBottom" xml:space="preserve">
+    <value>ওরিয়েন্ট মেইন উইন্ডো নীচে</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowLeft" xml:space="preserve">
+    <value>ওরিয়েন্ট মেইন উইন্ডো বাম</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowRight" xml:space="preserve">
+    <value>ওরিয়েন্ট মেইন উইন্ডো ডানদিকে</value>
+  </data>
+  <data name="MpShortcutType_PreviousPage" xml:space="preserve">
+    <value>আগের পৃষ্ঠা</value>
+  </data>
+  <data name="MpShortcutType_NextPage" xml:space="preserve">
+    <value>পরবর্তী পৃষ্ঠা</value>
+  </data>
+  <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
+    <value>নির্বাচিত আইটেমটি সন্ধান করুন এবং প্রতিস্থাপন করুন</value>
+  </data>
+  <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
+    <value>টগল প্রধান উইন্ডোটি লক করা হয়েছে</value>
+  </data>
+  <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
+    <value>ফিল্টার মেনু দৃশ্যমান টগল করুন</value>
+  </data>
+  <data name="MpShortcutType_ShowSettings" xml:space="preserve">
+    <value>সেটিংস দেখান</value>
+  </data>
+  <data name="MpShortcutType_TogglePinned" xml:space="preserve">
+    <value>টগল পিনড</value>
+  </data>
+  <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
+    <value>উইন্ডোতে খুলুন</value>
+  </data>
+  <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
+    <value>স্থায়ীভাবে মুছুন</value>
+  </data>
+  <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
+    <value>বাধ্যতামূলক প্রধান উইন্ডো ন্যূনতম করুন</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendDirectionMode" xml:space="preserve">
+    <value>টগল অ্যাপেন্ড দিকনির্দেশ মোড</value>
+  </data>
+  <data name="MpShortcutType_OpenHelp" xml:space="preserve">
+    <value>সহায়তা খুলুন</value>
+  </data>
+  <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
+    <value>নির্বাচনের উপর জুম ইন</value>
+  </data>
+  <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
+    <value>নির্বাচনের উপর জুম আউট</value>
+  </data>
+  <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
+    <value>রিসেট সিলেকশন জুম</value>
+  </data>
+  <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
+    <value>পরিষ্কার পিন ট্রে</value>
+  </data>
+  <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
+    <value>এম এ এক্সএ পি পিএস এইচ ও আর টি সি ইউ টি</value>
+  </data>
+  <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
+    <value>অনুলিপি আইটেম পেস্ট করুন</value>
+  </data>
+  <data name="MpShortcutType_SelectTag" xml:space="preserve">
+    <value>ট্যাগ নির্বাচন করুন</value>
+  </data>
+  <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
+    <value>প্রিসেট সহ অনুলিপি আইটেম বিশ্লেষণ করুন</value>
+  </data>
+  <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
+    <value>ট্রিগার অনুরোধ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
+    <value>ক্লিপ পাঠ্য</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
+    <value>কাঁচা ক্লিপ ডেটা</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
+    <value>ক্লিপ টাইপ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
+    <value>শিরোনাম</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
+    <value>উত্স অ্যাপ পাথ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
+    <value>উত্স অ্যাপের নাম</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
+    <value>উত্স url</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
+    <value>উত্স ইউআরএল শিরোনাম</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
+    <value>উত্স ইউআরএল ডোমেন</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
+    <value>অনুলিপি তারিখ সময়</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
+    <value>অনুলিপি গণনা</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
+    <value>পেস্ট গণনা</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
+    <value>উত্স ডিভাইসের নাম</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
+    <value>উত্স ডিভাইস প্রকার</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
+    <value>শেষ আউটপুট</value>
+  </data>
+  <data name="MpActionType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpActionType_Classify" xml:space="preserve">
+    <value>শ্রেণিবদ্ধ করুন</value>
+  </data>
+  <data name="MpActionType_Analyze" xml:space="preserve">
+    <value>বিশ্লেষণ করুন</value>
+  </data>
+  <data name="MpActionType_Conditional" xml:space="preserve">
+    <value>শর্তসাপেক্ষ</value>
+  </data>
+  <data name="MpActionType_Trigger" xml:space="preserve">
+    <value>ট্রিগার</value>
+  </data>
+  <data name="MpActionType_Repeater" xml:space="preserve">
+    <value>রিপিটার</value>
+  </data>
+  <data name="MpActionType_FileWriter" xml:space="preserve">
+    <value>ফাইল লেখক</value>
+  </data>
+  <data name="MpActionType_SetClipboard" xml:space="preserve">
+    <value>ক্লিপবোর্ড সেট করুন</value>
+  </data>
+  <data name="MpActionType_Delay" xml:space="preserve">
+    <value>বিলম্ব</value>
+  </data>
+  <data name="MpActionType_Alert" xml:space="preserve">
+    <value>সতর্ক</value>
+  </data>
+  <data name="MpActionType_ApplicationCommand" xml:space="preserve">
+    <value>অ্যাপ্লিকেশন কমান্ড</value>
+  </data>
+  <data name="MpTriggerType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpTriggerType_ClipAdded" xml:space="preserve">
+    <value>ক্লিপ যুক্ত</value>
+  </data>
+  <data name="MpTriggerType_FileSystemChanged" xml:space="preserve">
+    <value>ফাইল সিস্টেম পরিবর্তন হয়েছে</value>
+  </data>
+  <data name="MpTriggerType_ClipTagged" xml:space="preserve">
+    <value>ক্লিপ ট্যাগ</value>
+  </data>
+  <data name="MpTriggerType_Shortcut" xml:space="preserve">
+    <value>শর্টকাট</value>
+  </data>
+  <data name="MpTriggerType_MonkeyCopyShortcut" xml:space="preserve">
+    <value>বানর অনুলিপি শর্টকাট</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
+    <value>অভ্যন্তরীণ</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
+    <value>ডিফল্ট</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
+    <value>কাস্টম</value>
+  </data>
+  <data name="MpPluginDependencyType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpPluginDependencyType_os" xml:space="preserve">
+    <value>ওএস</value>
+  </data>
+  <data name="MpPluginDependencyType_app" xml:space="preserve">
+    <value>অ্যাপ</value>
+  </data>
+  <data name="MpPluginDependencyType_lib" xml:space="preserve">
+    <value>lib</value>
+  </data>
+  <data name="MpClipboardFormatType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpClipboardFormatType_Text" xml:space="preserve">
+    <value>পাঠ্য</value>
+  </data>
+  <data name="MpClipboardFormatType_Html" xml:space="preserve">
+    <value>এইচটিএমএল</value>
+  </data>
+  <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
+    <value>আরটিএফ</value>
+  </data>
+  <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
+    <value>বিটম্যাপ</value>
+  </data>
+  <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
+    <value>ফাইল ড্রপ</value>
+  </data>
+  <data name="MpClipboardFormatType_Csv" xml:space="preserve">
+    <value>সিএসভি</value>
+  </data>
+  <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
+    <value>অভ্যন্তরীণ সামগ্রী</value>
+  </data>
+  <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
+    <value>ইউনিকোড পাঠ্য</value>
+  </data>
+  <data name="MpClipboardFormatType_OemText" xml:space="preserve">
+    <value>OEM পাঠ্য</value>
+  </data>
+  <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
+    <value>Xaml</value>
+  </data>
+  <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
+    <value>Xaml প্যাকেজ</value>
+  </data>
+  <data name="MpClipboardFormatType_Custom" xml:space="preserve">
+    <value>কাস্টম</value>
+  </data>
+  <data name="MpSettingsFrameType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpSettingsFrameType_Login" xml:space="preserve">
+    <value>প্রবেশ করুন</value>
+  </data>
+  <data name="MpSettingsFrameType_Status" xml:space="preserve">
+    <value>স্থিতি</value>
+  </data>
+  <data name="MpSettingsFrameType_Register" xml:space="preserve">
+    <value>নিবন্ধন</value>
+  </data>
+  <data name="MpSettingsFrameType_Theme" xml:space="preserve">
+    <value>থিম</value>
+  </data>
+  <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
+    <value>ডিফল্ট ফন্ট</value>
+  </data>
+  <data name="MpSettingsFrameType_Sound" xml:space="preserve">
+    <value>শব্দ</value>
+  </data>
+  <data name="MpSettingsFrameType_Window" xml:space="preserve">
+    <value>জানলা</value>
+  </data>
+  <data name="MpSettingsFrameType_Hints" xml:space="preserve">
+    <value>ইঙ্গিত</value>
+  </data>
+  <data name="MpSettingsFrameType_International" xml:space="preserve">
+    <value>আন্তর্জাতিক</value>
+  </data>
+  <data name="MpSettingsFrameType_Limits" xml:space="preserve">
+    <value>সীমা</value>
+  </data>
+  <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
+    <value>ট্র্যাকিং</value>
+  </data>
+  <data name="MpSettingsFrameType_Startup" xml:space="preserve">
+    <value>স্টার্টআপ</value>
+  </data>
+  <data name="MpSettingsFrameType_Search" xml:space="preserve">
+    <value>অনুসন্ধান</value>
+  </data>
+  <data name="MpSettingsFrameType_Content" xml:space="preserve">
+    <value>বিষয়বস্তু</value>
+  </data>
+  <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
+    <value>শীর্ষ স্ক্রিন প্রান্ত অঙ্গভঙ্গি</value>
+  </data>
+  <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
+    <value>শর্টকাটস</value>
+  </data>
+  <data name="MpSettingsFrameType_System" xml:space="preserve">
+    <value>পদ্ধতি</value>
+  </data>
+  <data name="MpSettingsFrameType_Password" xml:space="preserve">
+    <value>পাসওয়ার্ড</value>
+  </data>
+  <data name="MpSettingsFrameType_Logs" xml:space="preserve">
+    <value>লগ</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
+    <value>ব্রাউজ করুন</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
+    <value>ইনস্টল</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
+    <value>আপডেট</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
+    <value>মূল</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
+    <value>অ্যাপ</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
+    <value>যন্ত্র</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
+    <value>মেটা</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
+    <value>পরিসংখ্যান</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="MpNextJoinOptionType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpNextJoinOptionType_And" xml:space="preserve">
+    <value>এবং</value>
+  </data>
+  <data name="MpNextJoinOptionType_Or" xml:space="preserve">
+    <value>বা</value>
+  </data>
+  <data name="MpNextJoinOptionType_Not" xml:space="preserve">
+    <value>না</value>
+  </data>
+  <data name="MpRootOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpRootOptionType_Clip" xml:space="preserve">
+    <value>ক্লিপ</value>
+  </data>
+  <data name="MpRootOptionType_Collection" xml:space="preserve">
+    <value>সংগ্রহ</value>
+  </data>
+  <data name="MpRootOptionType_Sources" xml:space="preserve">
+    <value>উত্স</value>
+  </data>
+  <data name="MpRootOptionType_History" xml:space="preserve">
+    <value>ইতিহাস</value>
+  </data>
+  <data name="MpTextOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpTextOptionType_Matches" xml:space="preserve">
+    <value>ম্যাচ</value>
+  </data>
+  <data name="MpTextOptionType_Contains" xml:space="preserve">
+    <value>রয়েছে</value>
+  </data>
+  <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
+    <value>এর সাথে শুরু</value>
+  </data>
+  <data name="MpTextOptionType_EndsWith" xml:space="preserve">
+    <value>দিয়ে শেষ হয়</value>
+  </data>
+  <data name="MpTextOptionType_RegEx" xml:space="preserve">
+    <value>রেজি প্রাক্তন</value>
+  </data>
+  <data name="MpNumberOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpNumberOptionType_Equals" xml:space="preserve">
+    <value>সমান</value>
+  </data>
+  <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
+    <value>অপেক্ষা বৃহত্তর</value>
+  </data>
+  <data name="MpNumberOptionType_LessThan" xml:space="preserve">
+    <value>এর চেয়ে কম</value>
+  </data>
+  <data name="MpNumberOptionType_IsNot" xml:space="preserve">
+    <value>এটি না</value>
+  </data>
+  <data name="MpColorOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpColorOptionType_Hex" xml:space="preserve">
+    <value>হেক্স</value>
+  </data>
+  <data name="MpColorOptionType_ARGB" xml:space="preserve">
+    <value>এ আর জি বি</value>
+  </data>
+  <data name="MpDimensionOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpDimensionOptionType_Width" xml:space="preserve">
+    <value>প্রস্থ</value>
+  </data>
+  <data name="MpDimensionOptionType_Height" xml:space="preserve">
+    <value>উচ্চতা</value>
+  </data>
+  <data name="MpImageOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpImageOptionType_Dimensions" xml:space="preserve">
+    <value>মাত্রা</value>
+  </data>
+  <data name="MpImageOptionType_Color" xml:space="preserve">
+    <value>রঙ</value>
+  </data>
+  <data name="MpFileOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpFileOptionType_Audio" xml:space="preserve">
+    <value>শ্রুতি</value>
+  </data>
+  <data name="MpFileOptionType_Compressed" xml:space="preserve">
+    <value>সংকুচিত</value>
+  </data>
+  <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
+    <value>ডিস্ক এবং মিডিয়া</value>
+  </data>
+  <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
+    <value>ডেটা এবং ডাটাবেস</value>
+  </data>
+  <data name="MpFileOptionType_Document" xml:space="preserve">
+    <value>নথি</value>
+  </data>
+  <data name="MpFileOptionType_Email" xml:space="preserve">
+    <value>ইমেল</value>
+  </data>
+  <data name="MpFileOptionType_Executable" xml:space="preserve">
+    <value>এক্সিকিউটেবল</value>
+  </data>
+  <data name="MpFileOptionType_Font" xml:space="preserve">
+    <value>ফন্ট</value>
+  </data>
+  <data name="MpFileOptionType_Image" xml:space="preserve">
+    <value>চিত্র</value>
+  </data>
+  <data name="MpFileOptionType_Internet" xml:space="preserve">
+    <value>ইন্টারনেট</value>
+  </data>
+  <data name="MpFileOptionType_Presentation" xml:space="preserve">
+    <value>উপস্থাপনা</value>
+  </data>
+  <data name="MpFileOptionType_Programming" xml:space="preserve">
+    <value>প্রোগ্রামিং</value>
+  </data>
+  <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
+    <value>স্প্রেডশিট</value>
+  </data>
+  <data name="MpFileOptionType_System" xml:space="preserve">
+    <value>পদ্ধতি</value>
+  </data>
+  <data name="MpFileOptionType_Video" xml:space="preserve">
+    <value>ভিডিও</value>
+  </data>
+  <data name="MpFileOptionType_UserDefined" xml:space="preserve">
+    <value>ব্যবহারকারী সংজ্ঞায়িত</value>
+  </data>
+  <data name="MpFileOptionType_Custom" xml:space="preserve">
+    <value>কাস্টম</value>
+  </data>
+  <data name="MpFileContentOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpFileContentOptionType_Path" xml:space="preserve">
+    <value>পথ</value>
+  </data>
+  <data name="MpFileContentOptionType_Name" xml:space="preserve">
+    <value>নাম</value>
+  </data>
+  <data name="MpFileContentOptionType_Kind" xml:space="preserve">
+    <value>দয়ালু</value>
+  </data>
+  <data name="MpContentTypeOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpContentTypeOptionType_Text" xml:space="preserve">
+    <value>পাঠ্য</value>
+  </data>
+  <data name="MpContentTypeOptionType_Image" xml:space="preserve">
+    <value>চিত্র</value>
+  </data>
+  <data name="MpContentTypeOptionType_Files" xml:space="preserve">
+    <value>নথি পত্র</value>
+  </data>
+  <data name="MpAppOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
+    <value>আবেদনের নাম</value>
+  </data>
+  <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
+    <value>প্রক্রিয়া পথ</value>
+  </data>
+  <data name="MpWebsiteOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpWebsiteOptionType_Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
+    <value>ডোমেইন</value>
+  </data>
+  <data name="MpWebsiteOptionType_Title" xml:space="preserve">
+    <value>শিরোনাম</value>
+  </data>
+  <data name="MpSourcesOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpSourcesOptionType_Device" xml:space="preserve">
+    <value>যন্ত্র</value>
+  </data>
+  <data name="MpSourcesOptionType_App" xml:space="preserve">
+    <value>অ্যাপ</value>
+  </data>
+  <data name="MpSourcesOptionType_Website" xml:space="preserve">
+    <value>ওয়েবসাইট</value>
+  </data>
+  <data name="MpTransactionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpTransactionType_Created" xml:space="preserve">
+    <value>তৈরি</value>
+  </data>
+  <data name="MpTransactionType_Dropped" xml:space="preserve">
+    <value>বাদ পড়েছে</value>
+  </data>
+  <data name="MpTransactionType_Dragged" xml:space="preserve">
+    <value>টেনে আনা</value>
+  </data>
+  <data name="MpTransactionType_Pasted" xml:space="preserve">
+    <value>আটকানো</value>
+  </data>
+  <data name="MpTransactionType_Copied" xml:space="preserve">
+    <value>অনুলিপি</value>
+  </data>
+  <data name="MpTransactionType_Cut" xml:space="preserve">
+    <value>কাটা</value>
+  </data>
+  <data name="MpTransactionType_Edited" xml:space="preserve">
+    <value>সম্পাদিত</value>
+  </data>
+  <data name="MpTransactionType_Analyzed" xml:space="preserve">
+    <value>বিশ্লেষণ করা হয়েছে</value>
+  </data>
+  <data name="MpTransactionType_Appended" xml:space="preserve">
+    <value>সংযোজন</value>
+  </data>
+  <data name="MpTransactionType_Recreated" xml:space="preserve">
+    <value>পুনরায় তৈরি</value>
+  </data>
+  <data name="MpTransactionType_Linked" xml:space="preserve">
+    <value>সংযুক্ত</value>
+  </data>
+  <data name="MpTransactionType_Unlinked" xml:space="preserve">
+    <value>লিঙ্কযুক্ত</value>
+  </data>
+  <data name="MpTransactionType_Error" xml:space="preserve">
+    <value>ত্রুটি</value>
+  </data>
+  <data name="MpTransactionType_System" xml:space="preserve">
+    <value>পদ্ধতি</value>
+  </data>
+  <data name="MpDateTimeOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
+    <value>শেষের মধ্যে</value>
+  </data>
+  <data name="MpDateTimeOptionType_Before" xml:space="preserve">
+    <value>আগে</value>
+  </data>
+  <data name="MpDateTimeOptionType_After" xml:space="preserve">
+    <value>পরে</value>
+  </data>
+  <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
+    <value>ঠিক</value>
+  </data>
+  <data name="MpDateBeforeUnitType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
+    <value>আজ</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
+    <value>গতকাল</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
+    <value>এই সপ্তাহ</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
+    <value>এই মাস</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
+    <value>এই বছর</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
+    <value>ঠিক</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
+    <value>স্টার্টআপ</value>
+  </data>
+  <data name="MpDateAfterUnitType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
+    <value>গতকাল</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
+    <value>গত সপ্তাহে</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
+    <value>গত মাসে</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
+    <value>গত বছর</value>
+  </data>
+  <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
+    <value>ঠিক</value>
+  </data>
+  <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
+    <value>স্টার্টআপ</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
+    <value>ঘন্টার</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
+    <value>দিন</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
+    <value>সপ্তাহ</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
+    <value>মাস</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
+    <value>বছর</value>
+  </data>
+  <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
+    <value>অনুলিপি তারিখ সময়</value>
+  </data>
+  <data name="MpContentSortType_Source" xml:space="preserve">
+    <value>উৎস</value>
+  </data>
+  <data name="MpContentSortType_Title" xml:space="preserve">
+    <value>শিরোনাম</value>
+  </data>
+  <data name="MpContentSortType_ItemData" xml:space="preserve">
+    <value>আইটেম ডেটা</value>
+  </data>
+  <data name="MpContentSortType_ItemType" xml:space="preserve">
+    <value>খবর ধরন</value>
+  </data>
+  <data name="MpContentSortType_UsageScore" xml:space="preserve">
+    <value>ব্যবহার স্কোর</value>
+  </data>
+  <data name="MpRoutingType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpRoutingType_Internal" xml:space="preserve">
+    <value>অভ্যন্তরীণ</value>
+  </data>
+  <data name="MpRoutingType_Passive" xml:space="preserve">
+    <value>প্যাসিভ</value>
+  </data>
+  <data name="MpRoutingType_Pre" xml:space="preserve">
+    <value>প্রাক</value>
+  </data>
+  <data name="MpRoutingType_Post" xml:space="preserve">
+    <value>পোস্ট</value>
+  </data>
+  <data name="MpRoutingType_Override" xml:space="preserve">
+    <value>অগ্রাহ্য করা</value>
+  </data>
+  <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
+    <value>এক্সক্লুসিভ ওভাররাইড</value>
+  </data>
+  <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
+    <value>রয়েছে</value>
+  </data>
+  <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
+    <value>ঠিক</value>
+  </data>
+  <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
+    <value>এর সাথে শুরু</value>
+  </data>
+  <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
+    <value>দিয়ে শেষ হয়</value>
+  </data>
+  <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
+    <value>রেজেক্স</value>
+  </data>
+  <data name="MpUserAccountType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpUserAccountType_Free" xml:space="preserve">
+    <value>বিনামূল্যে</value>
+  </data>
+  <data name="MpUserAccountType_Basic" xml:space="preserve">
+    <value>বেসিক</value>
+  </data>
+  <data name="MpUserAccountType_Unlimited" xml:space="preserve">
+    <value>সীমাহীন</value>
+  </data>
+  <data name="MpContentOptionType_None" xml:space="preserve">
+    <value>- অনুগ্রহ করে নির্বাচন করুন -</value>
+  </data>
+  <data name="MpContentOptionType_Type" xml:space="preserve">
+    <value>প্রকার</value>
+  </data>
+  <data name="MpContentOptionType_Text" xml:space="preserve">
+    <value>পাঠ্য</value>
+  </data>
+  <data name="MpContentOptionType_Images" xml:space="preserve">
+    <value>চিত্র</value>
+  </data>
+  <data name="MpContentOptionType_Files" xml:space="preserve">
+    <value>নথি পত্র</value>
+  </data>
+  <data name="MpContentOptionType_AnyContent" xml:space="preserve">
+    <value>কোন সামগ্রী</value>
+  </data>
+  <data name="MpContentOptionType_Title" xml:space="preserve">
+    <value>শিরোনাম</value>
+  </data>
+  <data name="MpContentOptionType_Annotation" xml:space="preserve">
+    <value>টীকা</value>
+  </data>
+  <data name="MpContentOptionType_Color" xml:space="preserve">
+    <value>রঙ</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
+    <value>প্রাথমিক</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
+    <value>মাউস</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
+    <value>পরিষ্কার</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
+    <value>মুছে ফেলা</value>
+  </data>
+  <data name="MpTagType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpTagType_Link" xml:space="preserve">
+    <value>লিঙ্ক</value>
+  </data>
+  <data name="MpTagType_Query" xml:space="preserve">
+    <value>প্রশ্ন</value>
+  </data>
+  <data name="MpTagType_Group" xml:space="preserve">
+    <value>গ্রুপ</value>
+  </data>
+  <data name="MpReadOnlyTagType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
+    <value>ট্যাগ</value>
+  </data>
+  <data name="MpReadOnlyTagType_All" xml:space="preserve">
+    <value>সব</value>
+  </data>
+  <data name="MpReadOnlyTagType_Favorites" xml:space="preserve">
+    <value>প্রিয়</value>
+  </data>
+  <data name="MpReadOnlyTagType_Filters" xml:space="preserve">
+    <value>ফিল্টার</value>
+  </data>
+  <data name="MpReadOnlyTagType_Trash" xml:space="preserve">
+    <value>আবর্জনা</value>
+  </data>
+  <data name="MpReadOnlyTagType_Today" xml:space="preserve">
+    <value>আজ</value>
+  </data>
+  <data name="MpReadOnlyTagType_Formats" xml:space="preserve">
+    <value>ফর্ম্যাট</value>
+  </data>
+  <data name="MpReadOnlyTagType_Text" xml:space="preserve">
+    <value>পাঠ্য</value>
+  </data>
+  <data name="MpReadOnlyTagType_Images" xml:space="preserve">
+    <value>চিত্র</value>
+  </data>
+  <data name="MpReadOnlyTagType_Files" xml:space="preserve">
+    <value>নথি পত্র</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
+    <value>পাঠ্য</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Image" xml:space="preserve">
+    <value>চিত্র</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_File" xml:space="preserve">
+    <value>ফাইল</value>
+  </data>
+  <data name="WatcherChangeTypes_Created" xml:space="preserve">
+    <value>তৈরি</value>
+  </data>
+  <data name="WatcherChangeTypes_Deleted" xml:space="preserve">
+    <value>মুছে ফেলা</value>
+  </data>
+  <data name="WatcherChangeTypes_Changed" xml:space="preserve">
+    <value>পরিবর্তিত</value>
+  </data>
+  <data name="WatcherChangeTypes_Renamed" xml:space="preserve">
+    <value>নামকরণ করা হয়েছে</value>
+  </data>
+  <data name="WatcherChangeTypes_All" xml:space="preserve">
+    <value>সব</value>
+  </data>
+</root>

@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>Ezzel az előfizetéssel a következőket kapod:</value>
+    <value>Ezzel az előfizetéssel megkapja:
+● Legfeljebb 1000 tartalomklip
+● Korlátlan szemét és archívum</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>Alap – havi</value>
+    <value>Alapvető - havonta</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>Alap – Évente</value>
+    <value>Alap - évente</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -110,19 +112,19 @@
     <value>automatizálás</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>Trigger &amp; Action Designer egyedi automatizáláshoz és akcióláncoláshoz</value>
+    <value>Trigger &amp; Action Designer az egyéni automatizáláshoz és a cselekvési láncoláshoz</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>Vízszintes/függőleges elrendezések, lista/rács nézet és több monitoros támogatás</value>
+    <value>Vízszintes/függőleges elrendezések, lista/rács nézet és multi -monitor támogatás</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>Teljes értékű klipszerkesztő keresés/csere, formázott szöveg (táblázatok, listák, hivatkozások stb.) szövegsablonokkal a gyors, dinamikus beillesztés érdekében a kivonatgyűjteményből</value>
+    <value>Teljesen - kiemelt klip -szerkesztő a keresés/csere, a gazdag szöveg (táblázatok, listák, linkek stb.) Szöveg sablonja a gyors, dinamikus beillesztéshez a részletek gyűjteményéből</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>Biztonságos, biztonságos és privát helyi adattárolás opcionális 2-faktoros jelszavas védelemmel</value>
+    <value>Biztonságos, biztonságos és privát helyi adattárolás az opcionális 2 -vel - Faktor jelszóvédelem</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>Beépített bővítményböngésző folyamatosan növekvő közösség által vezérelt bővítmények könyvtárával</value>
+    <value>Beépített - Plugin böngészőben, egyre növekvő közösséggel - meghajtott beépülő modul</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>A MonkeyPaste egy olyan vágólapkezelő, automatizálási és termelékenységi eszköz, amely semmihez sem hasonlítható.</value>
+    <value>A MonkeyPaste egy vágólapkezelő, automatizálási és termelékenységi eszköz, mint senki más. A vágólap fejlesztése a munkafolyamat dúsított és szervezett részévé,
+Intuitív és alacsony profil interfész, amely támogatja a szöveget, a fájlokat és a képeket. Rugalmasságra tervezték, egy folyamatosan növekvő közösséggel meghajtott beépülő modulokkal.
+
+Egy programozó kísérleteként kezdődött, amely nemcsak a vágólapról való másolás és beillesztés vágyakozik. Egy egyszerű parancsot akart, mint például a Ctrl+C, amely ehelyett „hozzáadna”
+a „Cserélje le”, ami a vágólapon volt. És a kísérlet működött. A kis szerszám nagyon hasznos volt. Ez több ötletet és több kísérletet vett fel a programozóra, ami
+Most "majompaste" lett.
+
+Mivel az asztal az Ön fájljainál található, a MonkeyPaste a vágólapra szándékozik lenni. Ez egy olyan szerszámcsomag, amely gondosan úgy van kialakítva, hogy látszólag integrálódjon és együttműködjön
+bármely alkalmazás vagy tartalom formátuma. A Ctrl+C és a Ctrl+V sokkal több, mint a parancsikonok. Ezek a belépési portok, amelyekben az összes alkalmazás megosztja a
+Az érték és a jelentés gazdagsága megérdemli, hogy kéznél elérhető legyen. Nem csak a következő Ctrl+c után dobták el.
+
+Én vagyok az a programozó, aki korábban említett, és azt akarom, hogy mindenki megtalálja a Monkepaste -ból való felhasználást. Tehát ez és annak minden funkciója teljesen szabadon használható.
+Azt is szeretném, ha jól érezheti magát. Tehát biztosíthatom Önöket, hogy az egyetlen erő a teremtés mögött, hogy egyik (nagyon) személyes információt sem felmerülhet
+A vágólapot valaha is nyomon követik vagy tárolják, bárhol a saját gépén túl. Időszak.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● Egyszerű és barátságos felület vízszintes/függőleges elrendezéssel, lista/rács nézettel és több monitoros támogatással</value>
+    <value>● Egyszerű és barátságos interfész mind vízszintes/függőleges elrendezésekkel, lista/rács nézet és multi -monitor támogatás</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Hozzáfűzés mód: A másolás „hozzáadás” lesz a „csere” helyett a vágólapon.</value>
+    <value>● Függelék mód: A másolás „hozzáadása” helyett a vágólapon történő „csere” helyett. Mind a szöveg, mind a fájlok, teljesen testreszabható</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Kifinomult klipkövetés, források és használat a Firefox és Chromium alapú böngészők (Chrome, Edge, Brave) fokozott támogatásával</value>
+    <value>● Kifinomult klipkövetés, források és használat fokozott támogatással a Firefox és a króm alapú böngészők számára (króm, él, bátor)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Teljes értékű klipszerkesztő formázott szöveggel (táblázatok, listák, hivatkozások stb.) kereséssel/cserével és kiemeléssel</value>
+    <value>● Teljesen - kiemelt klip -szerkesztő gazdag szöveggel (táblázatok, listák, linkek stb.) Find/csere és kiemeléssel</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Tárolja képeit a biztonságos adatbázisban, bármikor készen áll a fájlként való használatra – igény szerint csak húzza – és dobja le!</value>
+    <value>● Tárolja a képeit a biztonságos adatbázisban, készen áll a fájlokként történő használatra - KÖVETKEZŐ DRAG - ÉS - DROP!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Hatékony szövegsablonok a gyors, dinamikus beillesztéshez a részletgyűjteményből</value>
+    <value>● Nagy teljesítményű szöveges sablon a gyors, dinamikus beillesztéshez a részletgyűjteményéből</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action tervező egyéni automatizáláshoz és műveletláncoláshoz</value>
+    <value>● Trigger &amp; Action Designer az egyéni automatizáláshoz és az akció láncolásahoz</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Egyszerűen használható és bővíthető bővítményrendszer klipek elemzéséhez vagy bármilyen formátum olvasásához/írásához a vágólapra</value>
+    <value>● Egyszerűen használható és kiterjeszti a plugin rendszert mind a klipek elemzésére, vagy bármilyen formátumot olvasni/írni a vágólapra</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Beépített bővítményböngésző folyamatosan növekvő közösség által vezérelt bővítménykönyvtárral</value>
+    <value>● Beépített - Plugin böngészőben, örökké növekvő közösséggel - meghajtott beépülő modul</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatizáljon mindent előre beépülő modulokkal, tárolja el, és könnyedén használja bármelyik AI promptját vagy parancsát</value>
+    <value>● Automatizálja mindent a plugin preset -ekkel, botlódjon és könnyedén használja az AI -utasításokat vagy parancsokat</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● További platformok és funkciók hamarosan!</value>
+    <value>● További platformok és funkciók hamarosan! Csak a Gettings elindultak 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>● Mind a világos, mind a sötét témák teljesen dinamikusak, bármilyen színt használhat</value>
+    <value>● Mind a világos, mind a sötét témák teljesen dinamikusak, használj bármilyen színt, amire vágyik</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● Integrált súgó és tippek közvetlenül a felületen.</value>
+    <value>● Integrált súgó és tippek közvetlenül az interfészen. Online kézikönyv, videók és fórumok, hogy elindítsa az összeset a weboldalon (monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>● Teljesítményre optimalizált, és 1 000 000 klippel tesztelték.</value>
+    <value>● Optimalizálva a teljesítményre, és stresszes tesztelt 1 000 000 klipekkel.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● Bármikor kereshet, egyszerűen kezdjen el gépelni a klipek és forrásaik egyszerű és speciális szűrésével több tucat mezőben.</value>
+    <value>● Bármikor keresés, kezdje el a gépelést az egyszerű és a fejlett szűréssel a klipeken és azok forrásaiban több tucat mezőben</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● Rendezze klipjeit címkefákba, és hozzon létre újrafelhasználható szűrőket</value>
+    <value>● Rendszeresítse meg klipeit címkefákban, és hozzon létre rezisztens szűrőket</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● Biztonságos, biztonságos és privát helyi adattárolás (nincs adatgyűjtés) mindig titkosítva az opcionális kétfaktoros jelszavas védelemmel, és egyszerűen blokkolja az alkalmazásokat vagy webhelyeket a nyomkövetőből</value>
+    <value>● Biztonságos, biztonságos és privát helyi adattárolás (nincs adatgyűjtés) mindig titkosítva az opcionális 2 -vel - Faktor jelszó védelme, és könnyen blokkolja az alkalmazásokat vagy webhelyeket a nyomkövetőből</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Széleskörű fogd és vidd támogatás, egyéni globális parancsikonok, útválasztás és egér – ingyenes navigáció</value>
+    <value>● Széles körű húzás - és - csepp támogatás, egyedi globális hivatkozások, útválasztás és egér - Ingyenes navigáció</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Egyéni egérmódok: jobb gombbal kattintson a beillesztésre és balra kattintás az automatikus másolásra</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Egyéni egér üzemmódok: Jobbra - kattintson a beillesztés és a bal oldali elemzés - Kattintson az Auto - másolás gombra</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>A vágólap egy dzsungel.</value>
+    <value>A vágólap egy dzsungel. A majomító a király! Swing az alkalmazástól az alkalmazásig, másolva ezt, és beilleszteni, mint még soha nem a MonkeyPaste -val !! Márka - új, élvonalbeli vágólap és analitikus automatizálási eszköz !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>Minta MonkeyPaste működés közben!</value>
+    <value>Munkaminta a majompaszta akcióban!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,19 +233,21 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value>Ezen a nyelven telepítve.</value>
+    <value>Telepítve erre a nyelvre. Az angol csak ezekre a példákra vonatkozik</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>Jegyzet!</value>
+    <value>A képernyőfelvételek csak példa. A telepítését a nyelvre lefordítottuk.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Ezzel az előfizetéssel a következőket kapod:</value>
+    <value>Ezzel az előfizetéssel megkapja:
+● Korlátlan kapacitás
+● Az eszköz szinkronizálása (a rendelkezésre állás alapján)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Korlátlan - havonta</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value>Korlátlan - Évente</value>
+    <value>Korlátlan - évente</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Első kiadás</value>

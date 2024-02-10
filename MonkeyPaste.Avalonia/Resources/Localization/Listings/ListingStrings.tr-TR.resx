@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>Bu abonelikle:
+● 1.000'e kadar klip içerik
+● Sınırsız çöp ve arşiv</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Temel - Aylık</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Temel - Yıllık</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>kopya</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>yapıştırmak</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>Pano Yöneticisi</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>alet</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>Yarar</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>otomasyon</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>Özel otomasyonlar ve aksiyon zincirleri için tetik ve aksiyon tasarımcısı</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>Yatay/dikey düzenler, liste/ızgara görünümü ve çoklu monitör desteği</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>Tamamen - Bul/Değiştir, Zengin Metin (Tablolar, Listeler, Bağlantılar, vb.)</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>İsteğe bağlı 2 - Faktör Parola Koruması ile Güvenli, Güvenli ve Özel Yerel Veri Depolama</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>Yahudi - Eklenti -Büyüyen Topluluk - Tahrik Kütüphanesi ile Eklenti Tarayıcısı</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>Monkeypaste, bir pano yöneticisi, otomasyon ve üretkenlik aracıdır. Panonuzu iş akışınızın zenginleştirilmiş ve organize bir bölümüne dönüştürmek,
+Metin, dosyalar ve resimleri destekleyen sezgisel ve düşük profilli bir arayüze sahip. Esneklik için tasarlanmış, sürekli büyüyen bir topluluk - eklenti kütüphanesi ile.
+
+Bir programcı tarafından panodan kopyalamak ve yapıştırmadan daha fazlasını isteyen bir deney olarak başladı. Ctrl+C gibi basit bir komut istedi, bunun yerine 'ekleyecek'
+Panoda olanı 'değiştir'. Ve deney çalıştı. Küçük araç çok kullanışlıydı. Bu, programcıya daha fazla fikir ve daha fazla deneyle uğraştı,
+Şimdi "Monkeycaste" haline geldi.
+
+Masaüstü dosyalarınıza göre, Monkeypaste panonuza olmayı planlıyor. Görünüşte entegre ve birlikte çalışmak için özenle tasarlanmış bir araç paketi
+herhangi bir içerik uygulaması veya biçimi. Ctrl+C ve Ctrl+V sadece kısayollardan çok daha fazlasıdır. Bunlar, tüm uygulamaların paylaştığı giriş bağlantı noktalarıdır.
+Değer ve anlam zenginliği, parmaklarınızın ucunda mevcut olmayı hak ettiğiniz. Sadece bir sonraki CTRL+c'den sonra atılmadı.
+
+Ben daha önce bahsetti ve herkesin Monkeypaste'den kullanım bulabilmesini istiyorum. Yani o ve tüm özelliklerinin kullanımı tamamen ücretsizdir.
+Ayrıca onu kullanırken rahat hissetmenizi istiyorum. Bu yüzden, yaratılışının arkasındaki tek güç olarak, ortaya çıkabilecek (çok) kişisel bilgilerin hiçbiri
+Panonunuz kendi makinenizin ötesinde herhangi bir yerde izlenir veya saklanır. Dönem.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● Hem yatay/dikey düzenler, liste/ızgara görünümü ve çoklu monitör desteği ile basit ve dostça arayüz</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● Ekleme Modu: Kopyalama, panoya 'Değiştir' yerine 'Ekle' olur. Hem metin hem de dosyalar, tamamen özelleştirilebilir</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● Firefox ve Chromium tabanlı tarayıcılara (krom, kenar, cesur) gelişmiş destekle gelişmiş klips izleme, kaynaklar ve kullanım</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● Tamamen - Find/Değiştir ve Vurgulama ile Zengin Metin (Tablolar, Listeler, Bağlantılar vb.)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● Görüntülerinizi her zaman dosya olarak kullanmaya hazır olan güvenli veritabanında saklayın - sadece sürükleyin - ve - bırakın!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>● Snippet koleksiyonunuzdan hızlı, dinamik yapıştırma için güçlü metin şablonu</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● Özel otomasyonlar ve aksiyon zinciri için tetik ve aksiyon tasarımcısı</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● Hem klipsleri analiz etmek için kullanımı ve eklenti sistemini genişletme veya panonuza herhangi bir format okuma/yazın</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● İnşa - sürekli büyüyen bir topluluk - tahrikli eklenti kütüphanesine sahip eklenti tarayıcısında</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>● Her şeyi eklenti ön ayarlarıyla otomatikleştirin, saklayın ve AI isteminizi veya komutlarınızı kolaylıkla kullanın</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● Yakında daha fazla platform ve özellik geliyor! Sadece başlıyoruz 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● Hem hafif hem de karanlık temalar tamamen dinamiktir, istediğiniz rengi kullanın</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● Entegre yardım ve arabirimde ipuçları. Online Kılavuz, Videolar ve Forum Web sitesinde başlamanızı sağlamak için (Monkeypaste.com/DOCS)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● Performans için optimize edilmiş ve 1.000.000 klip ile test edilmiş stresli.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● Her zaman arama, klipslerde hem basit hem de gelişmiş filtreleme ve onlarca alandan fazla alan yazmaya başlamaya başlayın</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● Kliplerinizi etiket ağaçlarında düzenleyin ve yeniden düzenlenebilir filtreler oluşturun</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● Güvenli, güvenli ve özel yerel veri depolama (veri toplama yok) her zaman isteğe bağlı 2 - faktör şifre koruması ile şifrelenmiş ve izleyicinizdeki uygulamaları veya web sitelerini kolayca engelleyin</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>● Kapsamlı sürükleme - ve - Bırak desteği, özel global kısayollar, yönlendirme ve fare - ücretsiz navigasyon</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Özel Fare Modları: Sağ - Yapıştır ve Sol - Otomatik'e tıklayın - Kopyala</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>Pano bir orman. Moneypaste Kral! Uygulamadan uygulamaya, bunu kopyalama ve daha önce hiç olmadığı gibi Monkeypaste ile yapıştırma !! Bir marka - yeni, son teknoloji pano ve analitik otomasyon aracı !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>Moneypaste örneği çalışmada!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>Bu dilde yüklü. İngilizce sadece bu örnekler içindir</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>Ekran görüntüleri sadece örneklerdir. Kurulduğunuz şey bu dile çevrildi.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>Bu abonelikle:
+● Sınırsız kapasite
+● Cihaz senkronizasyonu (kullanılabilirlik üzerine)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Sınırsız - Aylık</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Sınırsız - Yıllık</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>İlk sürüm</value>
   </data>
 </root>

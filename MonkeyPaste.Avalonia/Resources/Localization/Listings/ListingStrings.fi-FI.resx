@@ -60,14 +60,14 @@
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
     <value>Tällä tilauksella saat:
-● Jopa 1,000 leikettä sisältöä 
+● Jopa 1 000 sisältöä
 ● Rajoittamaton roskakori ja arkisto</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
     <value>Perus - kuukausittain</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>Perus - vuosittain</value>
+    <value>Vuosittainen</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -94,10 +94,10 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value>kopioida</value>
+    <value>kopio</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value>tahna</value>
+    <value>liittää</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
     <value>leikepöydän hallinta</value>
@@ -106,25 +106,25 @@
     <value>työkalu</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value>hyöty</value>
+    <value>apuohjelma</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
     <value>automaatio</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>Trigger &amp; Action Designer mukautettuja automaatioita ja toimintojen ketjutusta varten</value>
+    <value>Trigger &amp; Action Designer räätälöityihin automaatioihin ja toimintojen ketjuttamiseen</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>Vaaka-/pystysuuntaiset asettelut, luettelo-/ruudukkonäkymä ja usean näytön tuki</value>
+    <value>Vaaka-/pystysuuntaiset asettelut, luettelo/ruudukonäkymä ja monivalvontatuki</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>Täysin varusteltu leikeeditori, jossa on etsi/korvaa, RTF-teksti (taulukot, luettelot, linkit jne.), joka mallintaa nopeaa ja dynaamista liittämistä katkelmakokoelmastasi</value>
+    <value>Täysin - esitelty Clip Editor, jossa on Find/Korvaa, rikas teksti (taulukot, luettelot, linkit jne.) Tekstin mallintaminen nopeaan, dynaamiseen liittämiseen katkelmakokoelmastasi</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>Turvallinen, suojattu ja yksityinen paikallinen tietojen tallennus valinnaisella 2-vaiheisella salasanasuojauksella</value>
+    <value>Turvallinen, turvallinen ja yksityinen paikallinen tietojen tallennus valinnaisella 2 - tekijä salasanan suojaus</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>Sisäänrakennettu laajennusselain, jossa on jatkuvasti kasvava yhteisövetoinen laajennuskirjasto</value>
+    <value>Rakennettu - Laajennusselain, jolla on jatkuvasti kasvava yhteisö - ohjaava laajennuskirjasto</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -142,128 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste on leikepöydän hallinta-, automaatio- ja tuottavuustyökalu kuin mikään muu. Leikepöydän parantaminen rikastetuksi ja organisoiduksi osaksi työnkulkua,
-sisältää intuitiivisen ja matalan profiilin käyttöliittymän, joka tukee tekstiä, tiedostoja ja kuvia. Suunniteltu joustavaksi, jatkuvasti kasvavalla yhteisövetoisella laajennusvalikoimalla.
+    <value>Monkeypaste on leikepöydän hallinta-, automaatio- ja tuottavuustyökalu kuin mikään muu. Leikepöydän parantaminen rikastettuun ja järjestäytyneeseen osaan työnkulkuasi,
+Mukana intuitiivisen ja matalan profiilin käyttöliittymän, joka tukee tekstiä, tiedostoja ja kuvia. Suunniteltu joustavuuteen, ja jatkuvasti kasvava yhteisö - ohjaavat libray -laajennuksia.
 
-Se alkoi ohjelmoijan kokeiluna, joka halusi enemmän kuin vain kopioida ja liittää leikepöydältä. Hän halusi yksinkertaisen komennon, kuten Control+C, joka "lisäisi" sen sijaan 
-"korvata" leikepöydällä ollut. Ja kokeilu toimi, eureka! Pieni työkalu oli erittäin kätevä. Tämä kiehtoi ohjelmoijaa enemmän ideoita ja kokeita, jotka 
-nyt on tullut "MonkeyPaste". 
+Se alkoi ohjelmoijan kokeiluna, joka haluaa enemmän kuin vain kopioida ja liittää leikepöydältä. Hän halusi Ctrl+C: n kaltaisen yksinkertaisen komennon, joka "lisää"
+"Korvaa", mikä oli leikepöydällä. Ja kokeilu toimi. Pieni työkalu oli erittäin kätevä. Tämä tarttui ohjelmoijaan lisää ideoita ja enemmän kokeita, että
+Nyt on tullut "monkepaste".
 
-Koska työpöytä on tiedostoillesi, MonkeyPaste aikoo olla leikepöydällesi. Se on joukko työkaluja, jotka on suunniteltu huolellisesti näennäisesti integroimaan ja toimimaan yhdessä 
-mikä tahansa sovellus tai sisällön muoto. Ctrl+C ja Ctrl+V ovat paljon muutakin kuin pikanäppäimiä. Ne ovat kaikkien sovellusten yhteisiä maahantulosatamia, joissa on 
-Arvon ja merkityksen rikkaus, jonka ansaitset olla käden ulottuvilla. Ei vain heitetä pois seuraavan Control+C:n jälkeen.
+Kuten työpöytä on tiedostosi, MonkeyPaste aikoo olla leikepöydällesi. Sen sarja työkaluja, jotka on huolellisesti suunniteltu integroimaan ja yhteistyöhön
+kaikki sisällön sovellukset tai muoto. Ctrl+C ja Ctrl+V ovat paljon enemmän kuin vain pikakuvakkeita. Ne ovat kaikkien sovellusten jakamisen sisäänkäynnin satamat, jotka kantavat a
+Rikkaus arvo ja merkitys, jonka ansaitset, että sinulla on käytettävissä sormenpäässäsi. Ei vain heitetty pois seuraavan Ctrl+c: n jälkeen.
 
-Olen aiemmin mainittu ohjelmoija ja haluan, että jokainen voi löytää käyttöä MonkeyPastesta. Joten se ja kaikki sen ominaisuudet ovat täysin ilmaisia käyttää. 
-Haluan myös, että tunnet olosi mukavaksi käyttää sitä. Joten vakuutan teille, ainoana voimana sen luomisen takana, että MIKÄÄN (erittäin) henkilökohtaisista tiedoista, joita voi syntyä 
-leikepöytääsi seurataan tai tallennetaan MIHIN tahansa oman koneesi ulkopuolelle. Jakso.</value>
+Olen se aiemmin mainittu ohjelmoija ja haluan, että kaikki voivat löytää käytön monkepasteista. Joten se ja kaikki sen ominaisuudet ovat täysin ilmaisia.
+Haluan myös sinun olevan mukava käyttää sitä. Joten vakuutan teille, että se on ainoa voima sen luomisen takana, ettei mikään (erittäin) henkilökohtaista tietoa, joka voi syntyä
+Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ulkopuolella. Ajanjakso.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● Yksinkertainen ja ystävällinen käyttöliittymä, jossa on sekä vaaka- / pystysuuntaiset asettelut, luettelo- / ruudukkonäkymä että usean näytön tuki</value>
+    <value>● Yksinkertainen ja ystävällinen käyttöliittymä sekä vaakasuuntaisten/pystysuuntaisten asettelujen, luettelon/ruudukonäkymän että monivalvonnan tuen kanssa</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Liitä-tila: Kopioinnista tulee leikepöydällä "lisää" eikä "korvaa". Sekä teksti että tiedostot, täysin muokattavissa</value>
+    <value>● Liite -tila: Kopioinnista tulee 'Lisää' leikepöydän "korvaamisen sijaan". Sekä teksti että tiedostot, täysin muokattavissa</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Hienostunut leikkeiden seuranta, lähteet ja käyttö parannetulla tuella Firefox- ja Chromium-pohjaisille selaimille (Chrome, Edge, Brave)</value>
+    <value>● Hienostunut leikkeiden seuranta, lähteet ja käyttö parannetulla tuella Firefox- ja Chromium -pohjaisille selaimille (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Täysin varusteltu leikeeditori, jossa on rikas teksti (taulukot, luettelot, linkit jne.), Etsi / korvaa ja korosta</value>
+    <value>● Täysin - esitelty leikeeditori rikkaalla tekstillä (taulukot, luettelot, linkit jne.) Löydä/korvaa ja korostamalla</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Tallenna kuvasi suojattuun tietokantaan, joka on valmis käytettäväksi tiedostoina milloin tahansa pyynnöstä vetämällä ja pudottamalla!</value>
+    <value>● Tallenna kuvat suojattuun tietokantaan, valmiina tiedostoina milloin tahansa - Kysyntä vain vedä - ja - pudota!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Tehokas tekstimallinnus nopeaan ja dynaamiseen liittämiseen katkelmakokoelmastasi</value>
+    <value>● Tehokas tekstin malli nopeaa, dynaamista liittämistä katkelmakokoelmastasi</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action -suunnittelija mukautettuihin automaatioihin ja toimintojen ketjutukseen</value>
+    <value>● Trigger &amp; Action Designer räätälöityjen automaatioiden ja toimintojen ketjuttamiseksi</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Helppo käyttää ja laajentaa laajennusjärjestelmää sekä leikkeiden analysointiin että minkä tahansa muodon lukemiseen / kirjoittamiseen leikepöydälle</value>
+    <value>● Helppokäyttöinen ja laajennusta laajennusjärjestelmä molemmille leikkeille tai lue/kirjoita mitä tahansa muotoa leikepöydällesi</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Sisäänrakennettu laajennusselain, jossa on jatkuvasti kasvava yhteisövetoinen laajennuskirjasto</value>
+    <value>● Rakennettu - Plugin -selaimessa, jolla on jatkuvasti kasvava yhteisö - ohjaavan laajennuskirjaston</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatisoi kaikki laajennusten esiasetuksilla, kätköillä ja käytä mitä tahansa tekoälykehotteita tai komentoja helposti</value>
+    <value>● Automatisoi kaikki laajennuksen esiasetuksella, stash ja käytä mitä tahansa AI -kehotustasi tai komentoasi helposti</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Lisää alustoja ja ominaisuuksia tulossa pian! Olemme vasta aloittamassa 🎉</value>
+    <value>● Lisää alustoja ja ominaisuuksia tulossa pian! Olemme juuri aloittamassa 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Sekä vaaleat että tummat teemat ovat täysin dynaamisia, käytä mitä tahansa haluamaasi väriä</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● Integroitu ohje ja vihjeet suoraan käyttöliittymään. Online-käsikirja, videot ja foorumi, joiden avulla pääset alkuun verkkosivustolla (monkeypaste.com/docs)</value>
+    <value>● Integroitu apu ja vihjeet suoraan käyttöliittymään. Online -käsikirja, videot ja foorumi, jotta voit aloittaa kaikki verkkosivustolla (monkepaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>● Optimoitu suorituskykyä varten ja stressitestattu 1 000 000 leikkeellä.</value>
+    <value>● Optimoitu suorituskykyyn ja stressissä testattu 1 000 000 leikkeellä.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● Aloita kirjoittaminen milloin tahansa käyttämällä sekä yksinkertaista että edistynyttä suodatusta leikkeille ja niiden lähteille kymmenien kenttien yli</value>
+    <value>● milloin tahansa haku, aloita kirjoittaminen vain leikkeiden ja niiden lähteiden yksinkertaisen että edistyneen suodatuksen avulla kymmenien kenttien yli</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● Järjestä leikkeet tunnistepuihin ja luo uudelleenkäytettäviä suodattimia</value>
+    <value>● Järjestä leikkeet tunnistepuissa ja luo uudelleen käytettäviä suodattimia</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● Turvallinen, suojattu ja yksityinen paikallinen tietojen tallennus (ei tiedonkeruuta), joka on aina salattu valinnaisella 2-vaiheisella salasanasuojauksella ja estää helposti sovellukset tai verkkosivustot seurannastasi</value>
+    <value>● Turvallinen, suojattu ja yksityinen paikallinen tietojen tallennus (ei tiedonkeruu) salattu aina valinnaisella 2 - tekijä salasanasuojaus ja estä helposti sovellukset tai verkkosivustot Trackerilta</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Laaja vedä ja pudota -tuki, mukautetut yleiset pikakuvakkeet, reititys ja hiiretön navigointi</value>
+    <value>● Laaja veto - ja - pudota tuki, räätälöityjä globaaleja pikanäppäimiä, reititystä ja hiiriä - ilmainen navigointi</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Mukautetut hiiritilat: napsauta hiiren kakkospainikkeella liitä ja napsauta hiiren vasemmalla painikkeella automaattista kopiointia</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value>● Yksinkertainen ja ystävällinen käyttöliittymä 
-● Vaaka- / pystysuuntaiset asettelut, luettelo- / ruudukkonäkymä ja usean näytön tuki
-● Sekä vaaleat että tummat teemat ovat täysin dynaamisia, käytä mitä tahansa haluamaasi väriä
-
-● Integroitu ohje ja vihjeet suoraan käyttöliittymään
-● Ohjekirja, videot ja foorumi, joiden avulla pääset alkuun verkkosivustolla (monkeypaste.com/docs)
-
-● Optimoitu suorituskykyä varten ja stressitestattu 1 000 000 leikkeellä.
-● Aloita kirjoittaminen milloin tahansa
-● Sekä yksinkertainen että edistynyt suodatus leikkeille ja niiden lähteille kymmenien kenttien yli
-● Järjestä leikkeet tunnistepuihin ja luo uudelleenkäytettäviä suodattimia
-
-● Turvallinen, suojattu ja yksityinen paikallinen tietojen tallennus (ei tiedonkeruuta) aina salattu
-● Voit ohittaa leikkeet tietyistä sovelluksista tai verkkosivustoista
-● Valinnainen 2-vaiheinen salasanasuojaus
-
-● Mukautetut globaalit pikanäppäimet, reititys ja hiiretön navigointi
-● Laaja vedä ja pudota -tuki
-● Mukautetut hiiritilat: napsauta hiiren kakkospainikkeella liitä ja napsauta hiiren vasemmalla painikkeella automaattista kopiointia 
-● Liitä-tila: Kopioinnista tulee leikepöydällä "lisää" eikä "korvaa". Sekä teksti että tiedostot, täysin muokattavissa
-
-● Hienostunut leikkeiden seuranta, lähteet ja käyttö
-● Parannettu tuki Firefox- ja Chromium-pohjaisille selaimille (Chrome, Edge, Brave)
-
-● Toimii RTF-tekstin kanssa (taulukot, luettelot, linkit jne.)
-● Täysin varusteltu leikeeditori, jossa etsi / korvaa ja korosta
-● Tallenna kuvasi suojattuun tietokantaan, joka on valmis käytettäväksi tiedostoina milloin tahansa pyynnöstä vetämällä ja pudottamalla!
-
-● Tehokas tekstimallinnus nopeaan ja dynaamiseen liittämiseen katkelmakokoelmastasi
-
-● Trigger &amp; Action -suunnittelija mukautettuihin automaatioihin ja toimintojen ketjutukseen
-
-● Helppo käyttää ja laajentaa laajennusjärjestelmää sekä leikkeiden analysointiin että minkä tahansa muodon lukemiseen / kirjoittamiseen leikepöydälle
-● Sisäänrakennettu laajennusselain, jossa on jatkuvasti kasvava yhteisövetoinen laajennuskirjasto 
-● Automatisoi kaikki laajennusten esiasetuksilla, kätköillä ja käytä mitä tahansa tekoälykehotteita tai komentoja helposti
-
-● Lisää alustoja ja ominaisuuksia tulossa pian! Olemme vasta aloittamassa 🎉</value>
+    <value>● Mukautetut hiiren tilat: Oikea - Napsauta liitä ja vasemmalla - Napsauta AUTO - Kopioi</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>Leikepöytä on viidakko. MonkeyPaste on KUNINGAS! Heilahda sovelluksesta toiseen, kopioi tämä ja liitä se kuin koskaan ennen MonkeyPaste!! Upouusi, huippuluokan leikepöytä ja analyyttinen automaatiotyökalu!!</value>
+    <value>Leikepöytä on viidakko. Monkepaste on kuningas! Käännä sovelluksesta sovellukseen, kopioimalla tämä ja liittämällä, joka ei ole koskaan ennen Monkeypasten kanssa !! Tuotemerkki - uusi, huippuluokan leikepöytä ja analyyttinen automaatiotyökalu !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>Näyte MonkeyPastesta toiminnassa!</value>
+    <value>Näyte Monkeypasten toiminnasta!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -272,15 +233,15 @@ leikepöytääsi seurataan tai tallennetaan MIHIN tahansa oman koneesi ulkopuole
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value>Asennettu tällä kielellä. Englanti on vain näitä esimerkkejä varten</value>
+    <value>Asennettu tähän kieleen. Englanti on tarkoitettu vain näille esimerkeille</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>Muistiinpano! Näyttökuvat ovat vain esimerkkejä. Asentamasi sisältö on käännetty tälle kielelle.</value>
+    <value>Näyttökuvat ovat vain esimerkkejä. Asennus on käännetty tälle kielelle.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Tällä tilauksella saat:
-● rajoittamaton kapasiteetti
-● Laitteen synkronointi (saatavuuden mukaan)</value>
+● Rajoittamaton kapasiteetti
+● Laitteen synkronointi (saatavuuden yhteydessä)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Rajoittamaton - kuukausittain</value>
@@ -289,6 +250,6 @@ leikepöytääsi seurataan tai tallennetaan MIHIN tahansa oman koneesi ulkopuole
     <value>Rajoittamaton - vuosittain</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Ensimmäinen julkaisu</value>
+    <value>Alkuperäinen julkaisu</value>
   </data>
 </root>

@@ -274,14 +274,14 @@
   <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
     <value>Toggle Listen To Clipboard</value>
   </data>
-  <data name="MpShortcutType_ToggleAppendInsertMode" xml:space="preserve">
-    <value>Toggle Append Insert Mode</value>
+  <data name="MpShortcutType_ToggleAppendInlineMode" xml:space="preserve">
+    <value>Toggle Append Inline Mode</value>
   </data>
-  <data name="MpShortcutType_ToggleAppendLineMode" xml:space="preserve">
-    <value>Toggle Append Line Mode</value>
+  <data name="MpShortcutType_ToggleAppendBlockMode" xml:space="preserve">
+    <value>Toggle Append Block Mode</value>
   </data>
-  <data name="MpShortcutType_ToggleAppendPreMode" xml:space="preserve">
-    <value>Toggle Append Pre Mode</value>
+  <data name="MpShortcutType_ToggleAppendPositionMode" xml:space="preserve">
+    <value>Toggle Append Position Mode</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
     <value>Toggle Append Paused</value>
@@ -403,8 +403,8 @@
   <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
     <value>Force Minimize Main Window</value>
   </data>
-  <data name="MpShortcutType_ToggleAppendManualMode" xml:space="preserve">
-    <value>Toggle Append Manual Mode</value>
+  <data name="MpShortcutType_ToggleAppendDirectionMode" xml:space="preserve">
+    <value>Toggle Append Direction Mode</value>
   </data>
   <data name="MpShortcutType_OpenHelp" xml:space="preserve">
     <value>Open Help</value>

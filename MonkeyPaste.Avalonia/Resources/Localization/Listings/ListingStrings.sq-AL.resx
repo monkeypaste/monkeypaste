@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>Me këtë pajtim do të merrni:
+● Deri në 1.000 klipe të përmbajtjes
+● plehra dhe arkiv i pakufizuar</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Themelore - Mujore</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Themelore - vjetore</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>kopjoj</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>ngjit</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>menaxher</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>mjet</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>dobi</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>automatizim</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>Trigger &amp; Designer Action për automatizimin me porosi dhe zinxhirin e veprimit</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>Paraqitjet horizontale/vertikale, pamja e listës/rrjetit dhe mbështetja shumë -monitoruese</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>Plotësisht - Redaktori i Klipit i Paraqitur me Find/Replace, Rich Text (Tabela, Listat, Lidhjet, etj.)</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>Ruajtja e të dhënave lokale të sigurta, të sigurta dhe private me mbrojtje me fjalëkalim të faktorit 2 - faktor</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>Ndërtuar - në Shfletuesin e Plugin me një komunitet gjithnjë në rritje - Biblioteka e Shtojcave të Shtojcave</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste është një menaxher i klipit, automatizimi dhe mjeti i produktivitetit si askush tjetër. Përmirësimi i clipboard tuaj në një pjesë të pasuruar dhe të organizuar të rrjedhës suaj të punës,
+Duke shfaqur një ndërfaqe intuitive dhe të ulët me profil që mbështet tekstin, skedarët dhe imazhet. Projektuar për fleksibilitet, me një komunitet gjithnjë në rritje - të drejtuar nga plugins.
+
+Filloi si një eksperiment nga një programues që dëshironte më shumë sesa thjesht të kopjoni dhe ngjiteni nga clipboard. Ai donte një komandë të thjeshtë si ctrl+c që do të 'shtonte në' në vend të kësaj
+të 'zëvendësoni' atë që ishte në clipboard. Dhe eksperimenti funksionoi. Mjeti i vogël ishte shumë i dobishëm. Kjo e futi programuesin me më shumë ide dhe më shumë eksperimente, që
+Tani është bërë "Monkeypaste".
+
+Ndërsa desktopi është për skedarët tuaj, MonkeyPaste synon të jetë në clipboard tuaj. Itsshtë një grup mjetesh të dizajnuara me kujdes për të integruar dhe ndërvepruar në dukje
+çdo aplikacion ose format i përmbajtjes. Ctrl+C dhe Ctrl+V janë shumë më tepër sesa thjesht shkurtore. Ato janë portet e hyrjes të gjitha aplikacionet ndajnë, që mbajnë një
+Pasuria e vlerës dhe kuptimit që ju meritoni të keni në dispozicion në majë të gishtave. Jo vetëm u hodh pas Ctrl+C tjetër.
+
+Unë jam ai programues i përmendur më parë dhe dua që të gjithë të jenë në gjendje të gjejnë përdorim nga Monkeypaste. Kështu që dhe të gjitha tiparet e saj janë plotësisht të lira për t'u përdorur.
+Unë gjithashtu dua që ju të ndjeheni rehat duke e përdorur atë. Kështu që unë ju siguroj, si forca e vetme që qëndron pas krijimit të saj, se asnjë nga (shumë) informacione personale që mund të lindin
+Clipboard juaj është ndjekur ose ruajtur ndonjëherë diku përtej makinës suaj. Periudhë</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>Inter Ndërfaqja e thjeshtë dhe miqësore me të dy paraqitjet horizontale/vertikale, pamjen e listës/rrjetit dhe mbështetjen e monitorimit të shumëfishtë</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>Mode Modaliteti i Shtojcës: Kopjimi bëhet 'Shto në' në vend të 'Replace' në Clipboard. Si tekst ashtu edhe skedarë, plotësisht të personalizueshëm</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>Ndjekja e sofistikuar e klipit, burimet dhe përdorimi me mbështetje të zgjeruar për shfletuesit e bazuar në Firefox dhe Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● plotësisht - Redaktori i Klipit i paraqitur me tekst të pasur (tabela, lista, lidhje, etj.) Me Gjeni/Zëvendësoni dhe Thekson</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● Ruani imazhet tuaja në bazën e të dhënave të sigurta, të gatshme për t'u përdorur si skedarë në çdo kohë në - Kërkoni vetëm zvarritje - dhe - Drop!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>Tem Templating Tekst i fuqishëm për ngjitjen e shpejtë, dinamike nga koleksioni juaj i copëzave</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● Dizajneri i Trigger &amp; Action për automatizimin me porosi dhe zinxhirin e veprimit</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● E thjeshtë për t’u përdorur dhe zgjatur sistemin e shtojcave për të dyja analizat e klipeve ose lexoni/shkruani ndonjë format në clipboard tuaj</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● Ndërtuar - në Shfletuesin e Shtojcave me një Komunitet Gjithmonë - në rritje - Biblioteka e Shtojcave të Shtojcave</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>● Automatizoni gjithçka me paracaktimet e shtojcave, nxirrni dhe përdorni ndonjë nga udhëzimet ose komandat tuaja të AI me lehtësi</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● Më shumë platforma dhe karakteristika që vijnë së shpejti! Ne thjesht po fillojmë</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● Të dy temat e lehta dhe të errëta janë plotësisht dinamike, përdorni çdo ngjyrë që dëshironi</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>Help Ndihmë e integruar dhe lë të kuptohet në ndërfaqe. Manual online, video dhe forum për t'ju filluar të gjitha në faqen e internetit (Monkeypaste.com/DOCS)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● Optimizuar për performancën dhe stresuar testuar me 1.000.000s klipe.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● Kërko në çdo kohë, thjesht filloni të shtypni duke përdorur të dy filtrimin e thjeshtë dhe të përparuar në klipe dhe burimet e tyre mbi dhjetëra fusha</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● Organizoni klipet tuaja në pemët e etiketave dhe krijoni filtra të ringjallshëm</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>Storage Ruajtja e të dhënave lokale e sigurt, e sigurt dhe private lokale (pa mbledhjen e të dhënave) gjithmonë e koduar me mbrojtje me fjalëkalim 2 - faktor dhe bllokoni lehtësisht aplikacionet ose faqet e internetit nga gjurmuesi juaj</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>● Zvarritje e gjerë - dhe - Mbështetje për të rënë, shkurtore globale me porosi, kurs dhe miun - navigim falas</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>Modes Mode të personalizuara të miut: Djathtas - Klikoni Paste dhe Majtas - Klikoni Auto - Kopjoni</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>Clipboard është një xhungël. Monkeypaste është mbreti! Lëvizni nga aplikacioni në aplikacion, duke kopjuar këtë dhe ngjitur atë si kurrë më parë me Monkeypaste !! Një markë - Clipboard i ri, prerje dhe mjet automatizimi analitik !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>Shembull i Monkeypaste në veprim!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>Instaluar në këtë gjuhë. Anglishtja është vetëm për këto shembuj</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>Të shtënat në ekran janë vetëm shembuj. Ajo që instaloni është përkthyer në këtë gjuhë.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>Me këtë pajtim do të merrni:
+● Kapaciteti i pakufizuar
+● Sinkronizimi i pajisjes (me disponueshmërinë)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>I pakufizuar - mujor</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>I pakufizuar - vjetor</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>Lëshimi fillestar</value>
   </data>
 </root>

@@ -60,14 +60,14 @@
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
     <value>Với đăng ký này, bạn sẽ nhận được:
-● Lên đến 1.000 clip nội dung 
+● tối đa 1.000 clip nội dung
 ● Thùng rác &amp; Lưu trữ không giới hạn</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>Cơ bản - Hàng tháng</value>
+    <value>Cơ bản - hàng tháng</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>Cơ bản - Hàng năm</value>
+    <value>Cơ bản - hàng năm</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -94,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value>bản sao</value>
+    <value>sao chép</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>dán</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value>Quản lý clipboard</value>
+    <value>Trình quản lý bảng tạm</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value>công cụ</value>
+    <value>dụng cụ</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value>Tiện ích</value>
+    <value>tính thiết thực</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
     <value>Tự động hóa</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>Trình kích hoạt &amp; Trình thiết kế hành động để tự động hóa tùy chỉnh và chuỗi hành động</value>
+    <value>Trigger &amp; Action Designer cho tự động hóa tùy chỉnh và chuỗi hành động</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>Bố cục ngang / dọc, chế độ xem danh sách / lưới và hỗ trợ đa màn hình</value>
+    <value>Bố cục ngang/dọc, Danh sách/Chế độ xem lưới và Hỗ trợ Multi - Màn hình</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>Trình chỉnh sửa clip đầy đủ tính năng với tính năng tìm / thay thế, văn bản đa dạng thức (bảng, danh sách, liên kết, v.v.) tạo khuôn mẫu văn bản để dán nhanh, động từ bộ sưu tập đoạn trích của bạn</value>
+    <value>Trình chỉnh sửa clip đầy đủ - đặc trưng với Find/thay thế, văn bản phong phú (bảng, danh sách, liên kết, v.v.) Templating văn bản để dán nhanh, năng động từ bộ sưu tập đoạn trích của bạn</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>Lưu trữ dữ liệu cục bộ an toàn, bảo mật và riêng tư với tùy chọn bảo vệ bằng mật khẩu 2 yếu tố</value>
+    <value>Lưu trữ dữ liệu cục bộ an toàn, an toàn và riêng tư với bảo vệ mật khẩu 2 - yếu tố tùy chọn</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>Được xây dựng - trong trình duyệt plugin với thư viện plugin dựa trên cộng đồng ngày càng phát triển</value>
+    <value>Được xây dựng - trong trình duyệt plugin với một cộng đồng phát triển ngày càng tăng - Thư viện plugin điều khiển</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -142,92 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste là một trình quản lý clipboard, công cụ tự động hóa và năng suất không giống ai. Nâng cao clipboard của bạn thành một phần phong phú và có tổ chức trong quy trình làm việc của bạn,
-Có giao diện trực quan và cấu hình thấp hỗ trợ văn bản, tệp và hình ảnh. Được thiết kế để linh hoạt, với một cộng đồng ngày càng phát triển - điều khiển libray của các plugin.
+    <value>MonkeyPaste là một người quản lý bảng tạm, công cụ tự động hóa và năng suất không giống ai. Nâng cao bảng tạm của bạn thành một phần được làm giàu và có tổ chức trong quy trình làm việc của bạn,
+Với giao diện hồ sơ trực quan và thấp hỗ trợ văn bản, tệp và hình ảnh. Được thiết kế cho sự linh hoạt, với một cộng đồng phát triển ngày càng tăng - thư viện các plugin.
 
-Nó bắt đầu như một thử nghiệm của một lập trình viên muốn nhiều hơn là chỉ sao chép và dán ra khỏi khay nhớ tạm. Anh ấy muốn một lệnh đơn giản như Ctrl + C sẽ 'thêm vào' thay thế 
-của 'thay thế' những gì có trên khay nhớ tạm. Và thí nghiệm đã hoạt động, eureka! Công cụ nhỏ rất tiện dụng. Điều này hấp dẫn lập trình viên với nhiều ý tưởng hơn và nhiều thử nghiệm hơn, rằng 
-nay đã trở thành "MonkeyPaste". 
+Nó bắt đầu như một thử nghiệm của một lập trình viên muốn nhiều hơn là chỉ sao chép và dán ra khỏi bảng tạm. Anh ấy muốn một lệnh đơn giản như ctrl+c sẽ 'thêm vào' thay vào đó
+của 'thay thế' những gì trên bảng tạm. Và thí nghiệm đã làm việc. Công cụ nhỏ rất tiện dụng. Điều này đã thu hút các lập trình viên với nhiều ý tưởng hơn và nhiều thử nghiệm hơn, rằng
+Bây giờ đã trở thành "khỉ".
 
-Vì máy tính để bàn là các tệp của bạn, MonkeyPaste dự định sẽ vào khay nhớ tạm của bạn. Đó là một bộ công cụ được thiết kế cẩn thận để dường như tích hợp và tương tác với 
-bất kỳ ứng dụng hoặc định dạng nội dung nào. Ctrl + C và Ctrl + V không chỉ là các phím tắt. Chúng là các cổng nhập cảnh mà tất cả các ứng dụng chia sẻ, mang theo một 
-Sự giàu có về giá trị và ý nghĩa mà bạn xứng đáng có sẵn trong tầm tay. Không chỉ vứt đi sau Ctrl + C tiếp theo.
+Vì máy tính để bàn là cho các tệp của bạn, khỉ dự định sẽ đến bảng tạm của bạn. Đó là một bộ công cụ được thiết kế cẩn thận để tích hợp và tương tác một cách vô tận với
+bất kỳ ứng dụng hoặc định dạng của nội dung. Ctrl+C và Ctrl+V không chỉ là các phím tắt. Chúng là các cổng nhập cảnh tất cả các ứng dụng chia sẻ, mang theo
+Sự giàu có của giá trị và nghĩa là bạn xứng đáng có sẵn trong tầm tay của bạn. Không chỉ vứt bỏ sau Ctrl+c tiếp theo.
 
-Tôi là lập trình viên đã đề cập trước đó và tôi muốn mọi người có thể tìm thấy cách sử dụng từ MonkeyPaste. Vì vậy, nó và tất cả các tính năng của nó là hoàn toàn miễn phí để sử dụng. 
-Tôi cũng muốn bạn cảm thấy thoải mái khi sử dụng nó. Vì vậy, tôi đảm bảo với bạn, với tư cách là lực lượng duy nhất đằng sau sự sáng tạo của nó, rằng KHÔNG có thông tin cá nhân (rất) nào có thể phát sinh trên 
-khay nhớ tạm của bạn đã từng được theo dõi hoặc lưu trữ BẤT CỨ NƠI NÀO ngoài máy của riêng bạn. Thì.</value>
+Tôi là lập trình viên đã đề cập trước đó và tôi muốn mọi người có thể tìm thấy sử dụng từ khỉ. Vì vậy, nó và tất cả các tính năng của nó hoàn toàn miễn phí để sử dụng.
+Tôi cũng muốn bạn cảm thấy thoải mái khi sử dụng nó. Vì vậy, tôi đảm bảo với bạn, là lực lượng duy nhất đằng sau sự sáng tạo của nó, rằng không có thông tin cá nhân nào (rất) có thể phát sinh
+Clipboard của bạn được theo dõi hoặc lưu trữ ở bất cứ đâu ngoài máy của riêng bạn. Giai đoạn.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● Giao diện đơn giản và thân thiện với cả bố cục ngang / dọc, chế độ xem danh sách / lưới và hỗ trợ đa màn hình</value>
+    <value>● Giao diện đơn giản và thân thiện với cả bố cục ngang/dọc, danh sách/chế độ xem lưới và hỗ trợ Multi -</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Chế độ nối thêm: Sao chép trở thành 'thêm vào' thay vì 'thay thế' trên khay nhớ tạm. Cả văn bản và tệp, hoàn toàn có thể tùy chỉnh</value>
+    <value>● Chế độ nối tiếp: Sao chép trở thành 'Thêm vào' thay vì 'thay thế' trên bảng tạm. Cả văn bản và tệp, hoàn toàn có thể tùy chỉnh</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Theo dõi clip, nguồn và cách sử dụng tinh vi với sự hỗ trợ nâng cao cho các trình duyệt dựa trên Firefox và Chromium (Chrome, Edge, Brave)</value>
+    <value>● Theo dõi clip tinh vi, nguồn và sử dụng với hỗ trợ nâng cao cho các trình duyệt dựa trên Firefox và Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Trình chỉnh sửa clip đầy đủ tính năng với văn bản đa dạng thức (bảng, danh sách, liên kết, v.v.) với tìm / thay thế và đánh dấu</value>
+    <value>● Trình chỉnh sửa clip đầy đủ - nổi bật với văn bản phong phú (bảng, danh sách, liên kết, v.v.) với tìm/thay thế và làm nổi bật</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Lưu trữ hình ảnh của bạn trong cơ sở dữ liệu an toàn, sẵn sàng sử dụng dưới dạng tệp bất cứ lúc nào theo yêu cầu chỉ cần kéo - và - thả!</value>
+    <value>● Lưu trữ hình ảnh của bạn trong cơ sở dữ liệu an toàn, sẵn sàng sử dụng làm tệp bất cứ lúc nào - Yêu cầu chỉ kéo - và - thả!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Tạo khuôn mẫu văn bản mạnh mẽ để dán nhanh, động từ bộ sưu tập đoạn trích của bạn</value>
+    <value>● Templating văn bản mạnh mẽ để dán nhanh, năng động từ bộ sưu tập đoạn trích của bạn</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trình thiết kế kích hoạt &amp; hành động để tự động hóa tùy chỉnh và chuỗi hành động</value>
+    <value>● Trình kích hoạt &amp; thiết kế hành động cho tự động hóa và chuỗi hành động tùy chỉnh</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Sử dụng đơn giản và mở rộng hệ thống plugin cho cả phân tích clip hoặc đọc / ghi bất kỳ định dạng nào vào khay nhớ tạm của bạn</value>
+    <value>● Đơn giản để sử dụng và mở rộng hệ thống plugin cho cả hai clip phân tích hoặc đọc/viết bất kỳ định dạng nào vào bảng tạm của bạn</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Được xây dựng - trong trình duyệt plugin với thư viện plugin dựa trên cộng đồng ngày càng phát triển</value>
+    <value>● Được xây dựng - trong trình duyệt plugin với một cộng đồng phát triển ngày càng tăng - thư viện plugin điều khiển</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Tự động hóa mọi thứ với các cài đặt trước plugin, cất giữ và sử dụng bất kỳ lời nhắc hoặc lệnh AI nào của bạn một cách dễ dàng</value>
+    <value>● Tự động hóa mọi thứ bằng các cài đặt trước plugin, stash và sử dụng bất kỳ lời nhắc hoặc lệnh AI nào của bạn</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Nhiều nền tảng và tính năng sắp ra mắt! Chúng tôi chỉ mới bắt đầu 🎉</value>
+    <value>● Nhiều nền tảng và tính năng sắp ra mắt! Chúng tôi vừa mới bắt đầu 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>● Cả hai chủ đề sáng và tối đều hoàn toàn động, sử dụng bất kỳ màu nào bạn muốn</value>
+    <value>● Cả hai chủ đề ánh sáng &amp; tối hoàn toàn năng động, hãy sử dụng bất kỳ màu nào bạn muốn</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● Tích hợp trợ giúp &amp; gợi ý ngay trong giao diện. Hướng dẫn sử dụng trực tuyến, video và diễn đàn để giúp bạn bắt đầu tất cả trên trang web (monkeypaste.com/docs)</value>
+    <value>● Trợ giúp và gợi ý tích hợp ngay trong giao diện. Hướng dẫn trực tuyến, video và diễn đàn để giúp bạn bắt đầu tất cả trên trang web (monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>● Tối ưu hóa cho hiệu suất và thử nghiệm căng thẳng với 1.000.000 clip.</value>
+    <value>● Tối ưu hóa hiệu suất và được nhấn mạnh được thử nghiệm với 1.000.000 clip.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● Tìm kiếm bất cứ lúc nào, chỉ cần bắt đầu nhập bằng cả bộ lọc đơn giản và nâng cao trên các clip và nguồn của chúng trên hàng chục trường</value>
+    <value>● Tìm kiếm bất cứ lúc nào, chỉ cần bắt đầu gõ bằng cả lọc đơn giản và nâng cao trên clip và nguồn của chúng trên hàng chục trường</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● Sắp xếp các clip của bạn trong cây thẻ và tạo các bộ lọc có thể sử dụng lại</value>
+    <value>● Tổ chức các clip của bạn trong cây thẻ và tạo các bộ lọc có thể thay đổi</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● Lưu trữ dữ liệu cục bộ an toàn, bảo mật và riêng tư (không thu thập dữ liệu) luôn được mã hóa với tùy chọn bảo vệ bằng mật khẩu 2 yếu tố và dễ dàng chặn các ứng dụng hoặc trang web khỏi trình theo dõi của bạn</value>
+    <value>● Lưu trữ dữ liệu cục bộ an toàn, an toàn và riêng tư (không thu thập dữ liệu) luôn được mã hóa bằng bảo vệ mật khẩu 2 - yếu tố tùy chọn và dễ dàng chặn các ứng dụng hoặc trang web khỏi trình theo dõi của bạn</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Hỗ trợ kéo - và thả mở rộng, phím tắt toàn cầu tùy chỉnh, định tuyến và chuột - điều hướng miễn phí</value>
+    <value>Is</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Chế độ chuột tùy chỉnh: phải - nhấp vào dán và trái - nhấp vào tự động - sao chép</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Chế độ chuột tùy chỉnh: Phải - Nhấp vào Dán và Trái - Nhấp vào Tự động - Sao chép</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>Bảng tạm là một khu rừng. MonkeyPaste là KING! Chuyển từ ứng dụng này sang ứng dụng khác, sao chép cái này và dán cái đó hơn bao giờ hết với MonkeyPaste !! Một thương hiệu - clipboard mới, tiên tiến và công cụ tự động hóa phân tích!!</value>
+    <value>Clipboard là một rừng rậm. Monkeypaste là Vua! Swing từ ứng dụng này sang ứng dụng khác, sao chép điều này và dán mà chưa từng có với khỉ !! Một thương hiệu - mới, clipboard tiên tiến và công cụ tự động hóa phân tích !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>Mẫu MonkeyPaste đang hoạt động!</value>
+    <value>Mẫu khỉ trong hành động!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -236,23 +233,23 @@ khay nhớ tạm của bạn đã từng được theo dõi hoặc lưu trữ B�
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value>Được cài đặt bằng ngôn ngữ này. Tiếng Anh chỉ dành cho những ví dụ sau:</value>
+    <value>Được cài đặt trong ngôn ngữ này. Tiếng Anh chỉ dành cho những ví dụ này</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>Ghi! Ảnh chụp màn hình chỉ là ví dụ. Những gì bạn cài đặt đã được dịch sang ngôn ngữ này.</value>
+    <value>Ảnh chụp màn hình chỉ là ví dụ. Những gì bạn cài đặt đã được dịch sang ngôn ngữ này.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Với đăng ký này, bạn sẽ nhận được:
-● Dung lượng không giới hạn
-● Đồng bộ hóa thiết bị (tùy theo tính khả dụng)</value>
+● Công suất không giới hạn
+● Đồng bộ hóa thiết bị (khi có sẵn)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>Không giới hạn - Hàng tháng</value>
+    <value>Không giới hạn - hàng tháng</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Không giới hạn - Hàng năm</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Bản phát hành ban đầu</value>
+    <value>Phát hành lần đầu</value>
   </data>
 </root>

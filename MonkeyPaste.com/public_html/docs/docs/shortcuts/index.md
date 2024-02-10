@@ -2,6 +2,9 @@
 sidebar_position: 4
 ---
 # Shortcuts
+:::warning unified keys
+MonkeyPaste **ignores** the difference between left or right **modkeys** and num pad or home row **number keys**. They are all considered **the same key**. 
+:::
 
 ## Managing Shortcuts
 All available shortcuts can be found in the *Settings->Shortcuts* menu.

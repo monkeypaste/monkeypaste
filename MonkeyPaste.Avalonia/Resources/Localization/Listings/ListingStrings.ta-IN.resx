@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>இந்த சந்தாவுடன் நீங்கள் பெறுவீர்கள்:
+The உள்ளடக்கம் 1,000 கிளிப்புகள் வரை
+● வரம்பற்ற குப்பை மற்றும் காப்பகம்</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>அடிப்படை - மாதாந்திர</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>அடிப்படை - ஆண்டு</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>நகலெடு</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>ஒட்டவும்</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>கிளிப்போர்டு மேலாளர்</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>கருவி</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>பயன்பாடு</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>தானியங்கு</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>தனிப்பயன் ஆட்டோமேஷன் மற்றும் செயல் சங்கிலிக்கான தூண்டுதல் மற்றும் செயல் வடிவமைப்பாளர்</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>கிடைமட்ட/செங்குத்து தளவமைப்புகள், பட்டியல்/கட்டம் பார்வை மற்றும் மல்டி - கண்காணிப்பு ஆதரவு</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>முழுமையாக - கண்டுபிடி/மாற்றுதல், பணக்கார உரை (அட்டவணைகள், பட்டியல்கள், இணைப்புகள் போன்றவை) உங்கள் துணுக்கை சேகரிப்பிலிருந்து விரைவான, மாறும் ஒட்டுதலுக்கான உரை வார்ப்புரு</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>விருப்பமான 2 - காரணி கடவுச்சொல் பாதுகாப்புடன் பாதுகாப்பான, பாதுகாப்பான மற்றும் தனியார் உள்ளூர் தரவு சேமிப்பு</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>கட்டப்பட்டது - எப்போதும் வளர்ந்து வரும் சமூகத்துடன் சொருகி உலாவியில் - செருகுநிரல்களின் இயக்கப்படும் நூலகம்</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>குரங்கிபேஸ்ட் என்பது ஒரு கிளிப்போர்டு மேலாளர், ஆட்டோமேஷன் மற்றும் உற்பத்தித்திறன் கருவியாகும். உங்கள் பணிப்பாய்வுகளின் செறிவூட்டப்பட்ட மற்றும் ஒழுங்கமைக்கப்பட்ட பகுதிக்கு உங்கள் கிளிப்போர்டை மேம்படுத்துதல்,
+உரை, கோப்புகள் மற்றும் படங்களை ஆதரிக்கும் உள்ளுணர்வு மற்றும் குறைந்த - சுயவிவர இடைமுகத்தைக் கொண்டுள்ளது. நெகிழ்வுத்தன்மைக்காக வடிவமைக்கப்பட்டுள்ளது, எப்போதும் வளர்ந்து வரும் சமூகம் - செருகுநிரல்களின் இயக்கப்படும் லிப்ரே.
+
+கிளிப்போர்டில் இருந்து நகலெடுத்து ஒட்டுவதை விட அதிகமாக விரும்பும் ஒரு புரோகிராமரின் பரிசோதனையாக இது தொடங்கியது. Ctrl+C போன்ற ஒரு எளிய கட்டளையை அவர் விரும்பினார், அதற்கு பதிலாக 'சேர்க்க'
+கிளிப்போர்டில் இருந்ததை 'மாற்றுதல்'. மற்றும் சோதனை வேலை செய்தது. சிறிய கருவி மிகவும் எளிது. இது புரோகிராமரை அதிக யோசனைகள் மற்றும் கூடுதல் சோதனைகளை ஏற்படுத்தியது
+இப்போது "குரங்கு சுவை" ஆகிவிட்டது.
+
+டெஸ்க்டாப் உங்கள் கோப்புகளுக்கு இருப்பதால், குரங்கிபேஸ்ட் உங்கள் கிளிப்போர்டுக்கு இருக்க விரும்புகிறது. அதன் ஒரு தொகுப்பு கருவிகளின் தொகுப்பு கவனமாக வடிவமைக்கப்பட்டுள்ளது
+எந்தவொரு பயன்பாடு அல்லது உள்ளடக்கத்தின் வடிவம். CTRL+C மற்றும் CTRL+V ஆகியவை குறுக்குவழிகளை விட அதிகம். அவை நுழைவு துறைமுகங்கள், அனைத்து பயன்பாடுகளும் பகிர்கின்றன, சுமந்து செல்கின்றன
+உங்கள் விரல் நுனியில் கிடைக்க நீங்கள் தகுதியான மதிப்பு மற்றும் பொருள். அடுத்த ctrl+c க்குப் பிறகு தூக்கி எறியப்படவில்லை.
+
+நான் முன்னர் குறிப்பிட்ட புரோகிராமர், எல்லோரும் குரங்கு சுவையிலிருந்து பயன்படுத்த முடியும் என்று நான் விரும்புகிறேன். எனவே அதுவும் அதன் அனைத்து அம்சங்களும் பயன்படுத்த முற்றிலும் இலவசம்.
+அதைப் பயன்படுத்த நீங்கள் வசதியாக இருக்க வேண்டும் என்றும் நான் விரும்புகிறேன். ஆகவே, அதன் படைப்பின் பின்னணியில் உள்ள ஒரே சக்தியாக இருப்பதால், (மிக) தனிப்பட்ட தகவல்கள் எதுவும் எழாது என்று நான் உங்களுக்கு உறுதியளிக்கிறேன்
+உங்கள் கிளிப்போர்டு உங்கள் சொந்த இயந்திரத்திற்கு அப்பால் எங்கும் கண்காணிக்கப்படுகிறது அல்லது சேமிக்கப்படுகிறது. காலம்.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>Velive கிடைமட்ட/செங்குத்து தளவமைப்புகள், பட்டியல்/கட்டம் பார்வை மற்றும் மல்டி - கண்காணிப்பு ஆதரவு இரண்டையும் கொண்ட எளிய மற்றும் நட்பு இடைமுகம்</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>Modep பயன்பாட்டு பயன்முறை: கிளிப்போர்டில் 'மாற்றுவதற்கு' பதிலாக நகலெடுப்பது 'சேர்' ஆகிறது. உரை மற்றும் கோப்புகள் இரண்டும், முழுமையாக தனிப்பயனாக்கக்கூடியவை</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>Fire ஃபைஃபாக்ஸ் மற்றும் குரோமியம் அடிப்படையிலான உலாவிகளுக்கான மேம்பட்ட ஆதரவுடன் அதிநவீன கிளிப் கண்காணிப்பு, ஆதாரங்கள் மற்றும் பயன்பாடு (குரோம், எட்ஜ், தைரியம்)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● முழுமையாக - பணக்கார உரையுடன் (அட்டவணைகள், பட்டியல்கள், இணைப்புகள் போன்றவை) கண்டுபிடி/மாற்றியமைத்தல் மற்றும் சிறப்பம்சத்துடன் பிரத்யேக கிளிப் எடிட்டர்</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>Prication உங்கள் படங்களை பாதுகாப்பான தரவுத்தளத்தில் சேமிக்கவும், எப்போது வேண்டுமானாலும் கோப்புகளாகப் பயன்படுத்தத் தயாராக உள்ளது - தேவை இழுக்கவும் - மற்றும் - கைவிடவும்!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>Your உங்கள் துணுக்கை சேகரிப்பிலிருந்து விரைவான, மாறும் ஒட்டுதலுக்கான சக்திவாய்ந்த உரை வார்ப்புரு</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>Custom தனிப்பயன் ஆட்டோமேஷன்ஸ் மற்றும் செயல் சங்கிலிக்கான தூண்டுதல் மற்றும் செயல் வடிவமைப்பாளர்</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>Clips ஐ பகுப்பாய்வு செய்வதற்கும் அல்லது உங்கள் கிளிப்போர்டில் எந்த வடிவமைப்பையும் படிக்க/எழுதவும் சொருகி அமைப்பைப் பயன்படுத்தவும் நீட்டிக்கவும் எளிது</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>கட்டமைக்கப்பட்டது - எப்போதும் வளர்ந்து வரும் சமூகத்துடன் சொருகி உலாவியில் - செருகுநிரல்களின் இயக்கப்படும் நூலகம்</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>Premand எல்லாவற்றையும் சொருகி முன்னமைவுகளுடன் தானியங்குபடுத்துங்கள், உங்கள் AI கேட்கும் அல்லது கட்டளைகளை எளிதாகப் பயன்படுத்தவும்</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>Matodes விரைவில் வரும் மேலும் தளங்கள் மற்றும் அம்சங்கள்! நாங்கள் தொடங்கினோம்</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>Light ஒளி மற்றும் இருண்ட கருப்பொருள்கள் இரண்டும் முற்றிலும் மாறும், நீங்கள் விரும்பும் எந்த நிறத்தையும் பயன்படுத்தவும்</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>Internation ஒருங்கிணைந்த உதவி &amp; குறிப்புகள் இடைமுகத்தில் சரியானவை. ஆன்லைன் கையேடு, வீடியோக்கள் மற்றும் மன்றம் நீங்கள் அனைத்தையும் இணையதளத்தில் தொடங்கலாம் (MonkeyPaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>The செயல்திறனுக்காக உகந்ததாக இருக்கும் மற்றும் 1,000,000 கிளிப்களுடன் சோதிக்கப்பட்டது.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>Search எப்போது வேண்டுமானாலும், கிளிப்புகள் மற்றும் அவற்றின் மூலங்களில் எளிய மற்றும் மேம்பட்ட வடிகட்டுதல் இரண்டையும் பயன்படுத்தி டஜன் கணக்கான புலங்களுக்கு மேல் தட்டச்சு செய்யத் தொடங்குங்கள்</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>The உங்கள் கிளிப்களை குறிச்சொல் மரங்களில் ஒழுங்கமைத்து, புத்துயிர் பெறக்கூடிய வடிப்பான்களை உருவாக்கவும்</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● பாதுகாப்பான, பாதுகாப்பான மற்றும் தனியார் உள்ளூர் தரவு சேமிப்பு (தரவு சேகரிப்பு இல்லை) எப்போதும் விருப்பமான 2 - காரணி கடவுச்சொல் பாதுகாப்பு மற்றும் உங்கள் டிராக்கரிலிருந்து பயன்பாடுகள் அல்லது வலைத்தளங்களை எளிதாகத் தடுக்கவும்</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>Prock விரிவான இழுவை - மற்றும் - ஆதரவு ஆதரவு, தனிப்பயன் உலகளாவிய குறுக்குவழிகள், ரூட்டிங் மற்றும் சுட்டி - இலவச வழிசெலுத்தல்</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● தனிப்பயன் சுட்டி முறைகள்: வலது - பேஸ்ட் மற்றும் இடது என்பதைக் கிளிக் செய்க - ஆட்டோ - நகலெடு என்பதைக் கிளிக் செய்க</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>கிளிப்போர்டு ஒரு காடு. குரங்க் பேஸ்ட் தான் ராஜா! பயன்பாட்டிலிருந்து பயன்பாட்டிற்கு ஆடுங்கள், இதை நகலெடுத்து, குரங்கிபேஸ்டுடன் முன்பைப் போலவே ஒட்டவும் !! ஒரு பிராண்ட் - புதிய, கட்டிங் எட்ஜ் கிளிப்போர்டு மற்றும் பகுப்பாய்வு ஆட்டோமேஷன் கருவி !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>செயலில் குரங்கு சுவையின் மாதிரி!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>இந்த மொழியில் நிறுவப்பட்டுள்ளது. ஆங்கிலம் இந்த எடுத்துக்காட்டுகளுக்கு மட்டுமே</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>திரை காட்சிகள் எடுத்துக்காட்டுகள் மட்டுமே. நீங்கள் நிறுவுவது இந்த மொழிக்கு மொழிபெயர்க்கப்பட்டுள்ளது.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>இந்த சந்தாவுடன் நீங்கள் பெறுவீர்கள்:
+● வரம்பற்ற திறன்
+ஒத்திசைவு (கிடைத்தவுடன்)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>வரம்பற்ற - மாதாந்திர</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>வரம்பற்ற - ஆண்டு</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>தொடக்க வெளியீடு</value>
   </data>
 </root>

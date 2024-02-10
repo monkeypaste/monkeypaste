@@ -59,7 +59,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>עם מנוי זה תקבלו:</value>
+    <value>עם מנוי זה תקבל:
+● עד 1,000 קטעי תוכן
+● אשפה וארכיון ללא הגבלה</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
     <value>בסיסי - חודשי</value>
@@ -110,19 +112,19 @@
     <value>אוטומציה</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>Trigger &amp; Action Designer עבור אוטומציות מותאמות אישית ושרשור פעולה</value>
+    <value>מעצב טריגר ופעולה לאוטומציות בהתאמה אישית ושרשרת פעולה</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>פריסות אופקיות/אנכיות, תצוגת רשימה/רשת ותמיכה בריבוי צגים</value>
+    <value>פריסות אופקיות/אנכיות, תצוגת רשימה/רשת ותמיכה רב -צג</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>עורך קליפים כולל עם חיפוש/החלפה, טקסט עשיר (טבלאות, רשימות, קישורים וכו') תבנית טקסט להדבקה מהירה ודינמית מאוסף הקטעים שלך</value>
+    <value>מלא - עורך קליפ מוצג עם למצוא/החלף, טקסט עשיר (טבלאות, רשימות, קישורים וכו ') תבנית טקסט להדבקה מהירה ודינאמית מאוסף הקטע שלך</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>אחסון נתונים מקומי בטוח, מאובטח ופרטי עם הגנה אופציונלית על בסיס 2 גורמים</value>
+    <value>אחסון נתונים מקומי בטוח, מאובטח ופרטי עם אופציונלי 2 - הגנה על סיסמא</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>דפדפן תוספים מובנה עם ספריית תוספים מונעת מקהילה שהולכת וגדלה</value>
+    <value>נבנה - בדפדפן תוסף עם קהילה הולכת וגדלה - ספריית תוספים מונעת</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste הוא כלי מנהל לוח, אוטומציה ופרודוקטיביות שאין כמותו.</value>
+    <value>Monkeypaste הוא מנהל לוח, כלי אוטומציה ופרודוקטיביות כמו לא אחר. שיפור הלוח שלך לחלק מועשר ומאורגן של זרימת העבודה שלך,
+הכולל ממשק אינטואיטיבי ונמוך - פרופיל התומך בטקסט, קבצים ותמונות. מיועד לגמישות, עם קהילה הולכת וגוברת - ספרייה מונעת של תוספים.
+
+זה התחיל כניסוי של מתכנת שרוצה יותר מסתם העתק והדבק מהלוח. הוא רצה פקודה פשוטה כמו Ctrl+C שת 'תוסיף' במקום זאת
+של 'החלף' את מה שהיה על הלוח. והניסוי עבד. הכלי הקטן היה שימושי מאוד. זה הפיל את המתכנת עם יותר רעיונות ועוד ניסויים, זה
+עכשיו הפך ל"קוף -קוף ".
+
+מכיוון ששולחן העבודה הוא לקבצים שלך, Conkeypaste מתכוון להיות ללוח שלך. זה חבילת כלים שתוכננה בקפידה לשלב וללא -אסיפה ללא כביכול
+כל יישום או פורמט של תוכן. Ctrl+C ו- Ctrl+V הם הרבה יותר מסתם קיצורי דרך. הם נמלי הכניסה שכל היישומים חולקים, הנושאים א
+עושר של ערך ומשמעות מגיע לך להיות זמין בהישג ידך. לא סתם נזרק אחרי ה- Ctrl+C הבא.
+
+אני המתכנת הזה שהוזכר קודם לכן ואני רוצה שכולם יוכלו למצוא שימוש מחוץ לקוף. אז זה וכל התכונות שלה חופשיות לחלוטין לשימוש.
+אני גם רוצה שתרגיש בנוח להשתמש בזה. אז אני מבטיח לך, ככוח היחיד מאחורי יצירתו, שאף אחד מהמידע האישי (מאוד) שיכול להתעורר עליו
+הלוח שלך אי פעם עוקב או מאוחסן בכל מקום מעבר למכונה שלך. פרק זמן.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● ממשק פשוט וידידותי עם פריסות אופקיות/אנכיות, תצוגת רשימה/רשת ותמיכה בריבוי צגים</value>
+    <value>● ממשק פשוט וידידותי עם פריסות אופקיות/אנכיות, תצוגת רשימה/רשת ותמיכה רב -צג</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● מצב הוסף: העתקה הופכת ל'הוסף ל' במקום 'החלף' בלוח.</value>
+    <value>● מצב הוסף: העתקה הופכת 'הוסף' במקום 'להחליף' על הלוח. גם טקסט וגם קבצים, הניתנים להתאמה אישית מלאה</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● מעקב אחר קליפים מתוחכמים, מקורות ושימוש עם תמיכה משופרת בדפדפנים מבוססי Firefox ו-Chromium (Chrome, Edge, Brave)</value>
+    <value>● מעקב אחר קליפים מתוחכמים, מקורות ושימוש עם תמיכה משופרת לדפדפנים מבוססי פיירפוקס וכרום (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● עורך קליפים מלא עם טקסט עשיר (טבלאות, רשימות, קישורים וכו') עם חיפוש/החלפה והדגשה</value>
+    <value>● באופן מלא - עורך קליפ מוצג עם טקסט עשיר (טבלאות, רשימות, קישורים וכו ') עם מצא/החלפה והדגשה</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● אחסן את התמונות שלך במסד הנתונים המאובטח, מוכן לשימוש כקבצים בכל עת לפי דרישה - פשוט גרור - ושחרר!</value>
+    <value>● אחסן את התמונות שלך במסד הנתונים המאובטח, מוכן לשימוש כקבצים בכל עת - דרישה פשוט לגרור - ו - צניחה!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● תבנית טקסט רבת עוצמה להדבקה מהירה ודינמית מאוסף הקטעים שלך</value>
+    <value>● תבנית טקסט עוצמתית להדבקה מהירה ודינאמית מקולקציית הקטע שלך</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● מעצב Trigger &amp; Action עבור אוטומציות מותאמות אישית ושרשור פעולות</value>
+    <value>● מעצב הפעלה ופעולה לאוטומציות בהתאמה אישית ושרשור פעולה</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● מערכת פלאגין פשוטה לשימוש ולהרחבה הן לניתוח קליפים והן לקריאה/כתיבה של כל פורמט ללוח שלכם</value>
+    <value>● פשוט לשימוש ולהרחיב את מערכת התוספים לניתוח קליפים או לקרוא/לכתוב כל פורמט ללוח שלך</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● דפדפן תוספים מובנה עם ספריית תוספים מונעת מקהילה שהולכת וגדלה</value>
+    <value>● בנוי - בדפדפן תוסף עם קהילה הולכת וגדלה - ספריית תוספים מונעת</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● הפוך הכל לאוטומטי עם קביעות מוגדרות מראש של הפלאגין, שמור והשתמש בכל אחת מההנחיות או הפקודות שלך בינה מלאכותית בקלות</value>
+    <value>ביא</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● פלטפורמות ותכונות נוספות בקרוב!</value>
+    <value>● עוד פלטפורמות ותכונות בקרוב! אנחנו רק מתחילים 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>● נושאים בהירים וכהים הם דינמיים לחלוטין, השתמשו בכל צבע שתרצו</value>
+    <value>● גם הנושאים הקלים והכהים הם דינאמיים לחלוטין, השתמש בכל צבע שתרצה</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● עזרה ורמזים משולבים ישירות בממשק.</value>
+    <value>● עזרה משולבת ורמזים ממש בממשק. מדריך מקוון, קטעי וידאו ופורום כדי להתחיל את הכל באתר (monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>● מותאם לביצועים ונבדק במתח עם 1,000,000 שניות של קליפים.</value>
+    <value>● אופטימיזציה לביצועים ולחוץ נבדק עם 1,000,000 קליפים.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● בכל עת חיפוש, פשוט התחל להקליד באמצעות סינון פשוט ומתקדם כאחד על קליפים ומקורותיהם על פני עשרות שדות</value>
+    <value>● בכל עת חיפוש, פשוט התחל להקליד באמצעות סינון פשוט ומתקדם על קליפים ומקורותיהם על עשרות שדות</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● ארגן את הקליפים שלך בעצי תג וצור מסננים הניתנים לשימוש חוזר</value>
+    <value>● ארגן את הקליפים שלך בעצי תג</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● אחסון נתונים מקומי בטוח, מאובטח ופרטי (ללא איסוף נתונים) מוצפן תמיד עם הגנת סיסמה אופציונלית 2 - גורם וחסימת אפליקציות או אתרים בקלות מהמעקב שלך</value>
+    <value>● אחסון נתונים מקומי בטוח, מאובטח ופרטי (ללא איסוף נתונים) מוצפנים תמיד עם אופציונלי 2 - הגנה על סיסמא של גורם וחסום בקלות אפליקציות או אתרים מהגשש שלך</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● תמיכה נרחבת בגרירה ושחרור, קיצורי דרך גלובליים מותאמים אישית, ניתוב ועכבר - ניווט חופשי</value>
+    <value>● דראג נרחב - ו - טיפה תמיכה, קיצורי דרך גלובליים בהתאמה אישית, ניתוב ועכבר - ניווט חינם</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● מצבי עכבר מותאמים אישית: לחיצה ימנית - הדבק ושמאלה - לחיצה אוטומטית - העתקה</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● מצבי עכבר מותאמים אישית: מימין - לחץ על הדבק ושמאל - לחץ על אוטומטית - העתק</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>הלוח הוא ג'ונגל.</value>
+    <value>הלוח הוא ג'ונגל. Monkeypaste הוא המלך! התנדנדו מאפליקציה לאפליקציה, העתקת זאת והדביקו את זה שאוהב מעולם עם קופיפסטה !! מותג - לוח חדש, חדיש את הלוח וכלי אוטומציה אנליטית !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>דוגמה של MonkeyPaste בפעולה!</value>
+    <value>מדגם של קופיפסטה בפעולה!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,13 +233,15 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value>מותקן בשפה זו.</value>
+    <value>מותקן בשפה זו. אנגלית מיועדת רק לדוגמאות אלה</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>הערה!</value>
+    <value>צילומי מסך הם רק דוגמאות. מה שאתה מתקין תורגם לשפה זו.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value>עם מנוי זה תקבלו:</value>
+    <value>עם מנוי זה תקבל:
+● קיבולת בלתי מוגבלת
+● סנכרון מכשירים (עם זמינות)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>ללא הגבלה - חודשי</value>

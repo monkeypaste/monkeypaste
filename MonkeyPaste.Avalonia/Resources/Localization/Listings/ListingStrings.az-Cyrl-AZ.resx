@@ -59,15 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>Bu abunə ilə siz alacaqsınız:
-● 1000-ə qədər məzmunlu klip 
-● limitsiz zibil ... arxiv</value>
+    <value>Bu abunə ilə alacaqsınız:
+● 1000-ə qədər məzmunlu klip
+● Limitsiz zibil və arxiv</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>Əsas - Aylıq</value>
+    <value>Əsas - aylıq</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>Əsas - İllik</value>
+    <value>Əsas - illik</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -94,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value>köçür</value>
+    <value>surətini çıxarmaq</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>yapışdır</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value>pano meneceri</value>
+    <value>paneli meneceri</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value>vasitə</value>
+    <value>alət</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value>utility</value>
+    <value>yardım proqramı</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
     <value>avtomatlaşdırma</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>Trigger &amp;Action Designer for Custom automations and action chaining</value>
+    <value>Xüsusi avtomatlaşdırma və hərəkət zəncirləri üçün tetik və hərəkət dizayneri</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>Üfüqi/şaquli düzülüşlər, siyahı/grid görünüşü və multi-monitor dəstəyi</value>
+    <value>Üfüqi / şaquli planlar, siyahı / grid görünüşü və çox - monitor dəstəyi</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>Find/replace ilə tam özellikli klip redaktoru, zəngin mətn (tablolar, siyahılar, linklər və s.) snippet kolleksiyanızdan tez, dinamik yapışdırma üçün mətn şablonu</value>
+    <value>Tamamilə - For, Zəngin Mətn (Masalar, Siyahılar, Links, Links və s.) Sürətli, dinamik yastığı üçün mətn şablonu olan, zəngin mətni (masalar, siyahılar və s.) Olan xüsusiyyətli klip redaktoru</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>İsteğə bağlı 2-faktorlu şifrə mühafizəsi ilə təhlükəsiz, təhlükəsiz və şəxsi lokal məlumatların saxlanılması</value>
+    <value>Könüllü 2 ilə təhlükəsiz, təhlükəsiz və özəl yerli məlumat saxlama - Faktor parol qorunması</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>Daim artan icma-driven library of plugins ilə built-in plugin browser</value>
+    <value>İnkişaf etmiş - həmişəlik böyüyən bir cəmiyyət - pluginlərin idarə olunan kitabxanası olan plugin brauzerində</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -142,128 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste digər heç kim kimi clipboard meneceri, avtomatlaşdırma və məhsuldarlıq vasitədir. Panonuzun zənginləşdirilmiş və mütəşəkkil bir iş axınına çevrilməsi,
-mətn, fayl və şəkilləri dəstəkləyən intuitiv və aşağı profilli interfeysi nümayiş etdirir. 2000-ci ildə 100-dən çox plaqin istehsal edilmişdir.
+    <value>MonkeySaste, digərləri kimi bir panoya meneceri, avtomatlaşdırma və məhsuldarlıq vasitəsidir. Panoya işləmə axınınızın zənginləşdirilmiş və mütəşəkkil bir hissəsinə keçin,
+Mətn, faylları və şəkilləri dəstəkləyən intuitiv və aşağı profilli interfeys təqdim olunur. İndiyə qədər böyüyən bir cəmiyyətlə rahatlıq üçün hazırlanmışdır - pluginlərin idarə olunan tərbiyəsi.
 
-Bu, sadəcə köçürmək və panodan yapışdırmaqdan daha çox şey istəyən proqramçının eksperimenti kimi başladı. Control+C kimi sadə bir əmr istəyirdi ki, onun yerinə 'əlavə edəcək' 
-"əvəz et" (lər)ində nə vardı? Təcrübə də işə yaradı, evrika! Balaca alət çox əla idi. Bu, proqramçını daha çox ideya və daha çox eksperimentlərlə maraqlandırmış, ki, 
-hazırda "MonkeyPaste" oldu. 
+Panoya çıxmaq və yapışdırmaqdan daha çox istəyən bir proqramçı tərəfindən bir təcrübə olaraq başladı. Bunun əvəzinə 'əlavə edər' Ctrl + C kimi sadə bir əmr istədi
+panoya nə olduğunu 'dəyişdirin'. Və təcrübə işlədi. Kiçik vasitə çox əlverişli idi. Bu, proqramçıya daha çox fikir və daha çox təcrübə ilə yazdı
+İndi "Monkeytast" oldu.
 
-Masa üstü fayllarınıza olduğu kimi, MonkeyPaste də sizin panonuzda olmaq niyyətindədir. Onun, göründüyü kimi, bir-birinə inteqrasiya etmək və qarşılıqlı əməkdaşlıq etmək üçün diqqətlə hazırlanmış alətlər dəsti 
-məzmunun istənilən tətbiqi və ya formatı. Control+C və Control+V sadəcə qısa yollardan çoxdur. Onlar giriş limanları bütün applications pay, daşıyır a 
-zəngin dəyəri və mənası siz barmaqlarınızın ucunda mövcud olmağa layiqsiniz. Yalnız növbəti Control+C-dan sonra atılmır.
+Masaüstü sənədlərinizdəki kimi, Monkeypaste panoya getmək niyyətindədir. Görünürlük bir şəkildə inteqrasiya və müdaxilə etmək üçün diqqətlə hazırlanmış alətlər dəsti
+hər hansı bir tətbiq və ya məzmun formatı. CTRL + C və CTRL + V yalnız qısa yollardan daha çox şeydir. Onlar a aparan bütün ərizələrin paylaşımının portlarıdır
+Parmaklarınızın ucunda olmağa layiq olduğunuz dəyər və məna var. Növbəti Ctrl + c-dən sonra yalnız atılmadı.
 
-Mən yuxarıda xatırlanan o proqramçıyam və istəyirəm ki, hamı "MonkeyPaste"dan istifadəni öyrənə bilsin. Beləliklə, o və onun bütün xüsusiyyətləri istifadə etmək üçün tamamilə pulsuzdur. 
-Həmçinin istəyirəm ki, siz ondan istifadə edərək özünüzü rahat hiss edirsiniz. Buna görə də sizi əmin edirəm ki, onun yaradılmasının arxasında duran yeganə qüvvə kimi, ortaya çıxa biləcək (çox) şəxsi məlumatların HEÇ BIRI 
-sizin clipboard nə vaxtsa öz maşınınızdan kənarda ANYWHERE izlənilir və ya saxlanılır. Dövr.</value>
+Mən əvvəlki proqramçıyam və hər kəsin meymundan istifadə edə bilməyəcəyimi istəyirəm. Beləliklə, onun bütün xüsusiyyətləri istifadə etmək üçün tamamilə pulsuzdur.
+İstəyirəm ki, onu da istifadə edərək rahat hiss etməyinizi istəyirəm. Buna görə sizi inandırıram, yaradılışının yeganə qüvvəsi olduğu kimi, ortaya çıxa biləcək şəxsi məlumatların heç biri
+Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır. Dövr.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● Həm üfüqi/şaquli düzülüşü, həm siyahı/grid görünüşü, həm də çox-monitor dəstəyi ilə sadə və mehriban interfeys</value>
+    <value>● Həm üfüqi / şaquli düzenlər, siyahı / grid görünüşü və çox - monitor dəstəyi ilə sadə və mehriban interfeys</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Əlavələr rejimi: Köçürmək lövhədə "replace" əvəzinə "add to" olur. Həm mətn, həm də fayllar, tam özelleştirilebilir</value>
+    <value>● Əlavə etmə rejimi: Kopyalama panoya 'dəyişdirin' yerinə 'əlavə' olur. Həm mətn, həm də fayl, tam özelleştirilebilir</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Firefox və Chromium əsaslı brauzerlər (Chrome, Edge, Brave) üçün təkmilləşdirilmiş dəstəyi ilə mürəkkəb klip izləmə, qaynaqlar və istifadə</value>
+    <value>● Firefox və xrom əsaslı brauzerlər (xrom, kənar, cəsarətli) üçün inkişaf etmiş dəstək və inkişaf etmiş dəstəyi ilə mürəkkəb klip izləmə, mənbələr və istifadə</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Tam özellikli klip redaktoru zəngin mətnlə (tablolar, siyahılar, linklər və s.) tap/əvəz edib vurğulamaqla</value>
+    <value>● Tamamilə - tapıntı / dəyişdirmək və vurğulamaqla zəngin mətn (masalar, siyahılar, linklər və s.) Olan tam xüsusiyyətli klip redaktoru</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Şəkillərinizi təhlükəsiz verilənlər bazasında saxlayın, istənilən vaxt tələb olunan zaman fayl kimi istifadə etməyə hazır olun, sadəcə sürün və atın!</value>
+    <value>● Şəkillərinizi etibarlı verilənlər bazasına saxlayın, istənilən vaxt fayl kimi istifadə etməyə hazırsınız - tələb edin - və - Drop!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Snippet kolleksiyanızdan tez, dinamik yapışdırma üçün güclü mətn şablonu</value>
+    <value>Sürətli, dinamik yapon üçün güclü, dinamik yapon üçün güclü mətn şablonu</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Xüsusi avtomatlaşdırma və hərəkət zəncirləmə üçün trigger &amp;action dizayner</value>
+    <value>● Xüsusi avtomatlaşdırma və hərəkət zəncirləri üçün tetik və hərəkət dizayneri</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Həm klipləri təhlil etmək, həm də hər hansı bir formatı klipinizə oxumaq/yazmaq üçün plugin sistemini istifadə etmək və uzatmaq sadədir</value>
+    <value>● Həm təhlil etmək üçün plugin sistemini istifadə etmək və silmək üçün sadə, həm də panoya hər hansı bir format oxumaq / yazmaq / yazmaq</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● daim inkişaf edən icma yönümlü plugin kitabxanası olan built-in plugin brauzeri</value>
+    <value>● İnkişaf etmiş - həmişəlik böyüyən bir cəmiyyət - pluginlərin idarə olunan kitabxanası olan plugin brauzerində</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Plugin presets ilə hər şeyi avtomatlaşdırma, AI-lərinizdən və ya əmrlərinizdən hər hansı birini rahatlıqla qeyd edin və istifadə edin</value>
+    <value>● Hər şeyi plugin hafızası ilə avtomatlaşdırın, atın və AI təkliflərinizdən və ya əmrlərinizi asanlıqla istifadə edin</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Tezliklə daha çox platformalar və səciyyəvi xüsusiyyətlər gəlir! Biz sadəcə olaraq başlayırıq 🎉</value>
+    <value>● Daha çox platforma və xüsusiyyətlər tezliklə! Biz yalnız gettings 🎉 başlamışıq</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>● Hər iki işıq &amp; tünd mövzuları tamamilə dinamikdir, istədiyiniz rəngdən istifadə edin</value>
+    <value>● Həm yüngül, həm də tünd mövzular tamamilə dinamikdir, istədiyiniz rəngdən istifadə edin</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● Integrated yardım &amp; işarələr interface doğru. İnternetdə manual, videolar və forum bütün veb saytda bütün başlamaq üçün (monkeypaste.com/docs)</value>
+    <value>● İnteqrasiya edilmiş yardım və interfeysdə göstərişlər. Bütün veb saytında başlamaq üçün onlayn təlimat, video və forum (MonkeySaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>● Performans üçün optimize edilmiş və 1.000.000s klip ilə test edilmiş stressli.</value>
+    <value>● Performans üçün optimallaşdırılmış və 1.000.000 kliplə sınaqdan keçirilmişdir.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● Hər hansı bir zaman axtarış, sadəcə, clips və onların mənbələri üzərində həm sadə &amp; advanced filtering istifadə edərək, onlarca sahə üzərində typing başlayın</value>
+    <value>● İstənilən vaxt axtarış, yalnız həm sadə, həm də qabaqcıl süzgəcdən və onlarla sahə üzərində mənbələrindən istifadə edərək yazmağa başlayın</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● Kliplərinizi tag ağaclarında təşkil edin və yenidən istifadə edilə bilən filtrlər yaradın</value>
+    <value>● Kliplərinizi etiket ağaclarında təşkil edin və reysləşdirilə bilən filtrlər yaradın</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● Təhlükəsiz, təhlükəsiz və şəxsi lokal məlumatların saxlanması (heç bir məlumat toplamaq) həmişə seçimli 2-fakturalı şifrənin qorunması ilə şifrələnir və asanlıqla sizin izləyicidən proqramlar və ya veb-saytlar blok edir</value>
+    <value>● Təhlükəsiz, təhlükəsiz və özəl yerli məlumatların saxlanması (Məlumat toplusu yoxdur) həmişə isteğe bağlı 2 ilə şifrələndi - Faktor parol qorunması və tracker-dən tətbiqləri və ya veb saytları asanlıqla bloklayın</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Geniş drag-and-drop dəstək, custom qlobal qısayolları, routing və siçan-free naviqasiya</value>
+    <value>● Geniş sürükləmə - və - Drop dəstəyi, xüsusi qlobal qısa yollar, marşrutlaşdırma və siçan - pulsuz naviqasiya</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Xüsusi siçan modları: sağ-klik yapışdırma və sol-klik auto-copy</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value>● Sadə və mehriban interfeys 
-● Üfüqi/şaquli düzülüşlər, siyahı/grid görünüşü və multi-monitor dəstəyi
-● Hər iki işıq &amp; tünd mövzuları tamamilə dinamikdir, istədiyiniz rəngdən istifadə edin
-
-● Inteqrasiya edilmiş yardım &amp; işarələr interfeysdə doğru
-● Manual, video və forum kömək ki, bütün başlamaq üçün veb-saytda (monkeypaste.com/docs)
-
-● Performans üçün optimize edilmiş və 1.000.000s klip ilə test edilmiş stressli.
-● Axtardığın zaman, sadəcə olaraq, qeydlər etməyə başla
-● Həm kliplərdə sadə , həm də inkişaf etmiş filtrləmə və onların çoxlu sahələr üzərində mənbələri
-● Kliplərinizi tag ağaclarında təşkil edin və yenidən istifadə edilə bilən filtrlər yaradın
-
-● Təhlükəsiz, təhlükəsiz və şəxsi lokal məlumatların saxlanılması (heç bir məlumat toplama) həmişə şifrələnir
-● Konkret proqramlardan və ya veb saytlardan kliplərə məhəl qoymamaq olar
-● 2-faktorlu şifrənin qorunması
-
-● Custom qlobal isti açarlar, routing və siçan-free naviqasiya
-● Geniş süründürmə-damcı dəstəyi
-● Xüsusi siçan modları: sağ-klik yapışdırma və sol-klik auto-copy 
-● Əlavələr rejimi: Köçürmək lövhədə "replace" əvəzinə "add to" olur. Həm mətn, həm də fayllar, tam özelleştirilebilir
-
-● Baxımlı klip izləmə, qaynaq və istifadə
-● Firefox və Xrom əsaslı brauzerlər üçün gücləndirilmiş dəstək (Chrome, Edge, Brave)
-
-● Zəngin mətnlə işləyir (tablolar, siyahılar, linklər və s.)
-● find/replace və highlighting ilə tam özellikli klip redaktoru
-● Şəkillərinizi təhlükəsiz verilənlər bazasında saxlayın, istənilən vaxt tələb olunan zaman fayl kimi istifadə etməyə hazır olun, sadəcə sürün və atın!
-
-● Snippet kolleksiyanızdan tez, dinamik yapışdırma üçün güclü mətn şablonu
-
-● Xüsusi avtomatlaşdırma və hərəkət zəncirləmə üçün trigger &amp;action dizayner
-
-● Həm klipləri təhlil etmək, həm də hər hansı bir formatı klipinizə oxumaq/yazmaq üçün plugin sistemini istifadə etmək və uzatmaq sadədir
-● daim inkişaf edən icma yönümlü plugin kitabxanası olan built-in plugin brauzeri 
-● Plugin presets ilə hər şeyi avtomatlaşdırma, AI-lərinizdən və ya əmrlərinizdən hər hansı birini rahatlıqla qeyd edin və istifadə edin
-
-● Tezliklə daha çox platformalar və səciyyəvi xüsusiyyətlər gəlir! Biz sadəcə olaraq başlayırıq 🎉</value>
+    <value>● Xüsusi siçan rejimləri: sağ - pastanı və sola vurun - Auto - Kopyalayın</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>Какукава жайка) — cəngəllik. MonkeyPaste – KRAL! Swing from app, bunu kopyalayaraq və əvvəlki kimi pasting ilə MonkeyPaste!! Yeni, kəsikli pano və analitik avtomatlaşdırma vasitəsi!!</value>
+    <value>Panoya bir cəngəllikdir. Monkeytaste padşahdır! App-dən tətbiqə, bu və yapışdırmaqdan əvvəl Monkeyte ilə heç vaxt olmadığını kopyalayın! Bir marka - yeni, qabaqcıl panoya və analitik avtomatlaşdırma vasitəsi !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>Fəaliyyətdə olan MonkeyPaste nümunəsi!</value>
+    <value>Fəaliyyətdə Monkeysaste nümunəsi!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -272,23 +233,23 @@ sizin clipboard nə vaxtsa öz maşınınızdan kənarda ANYWHERE izlənilir və
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value>Bu dildə quraşdırılmışdır. İngilis dili yalnız bu nümunələr üçün</value>
+    <value>Bu dildə quraşdırılmışdır. İngilis dili yalnız bu nümunələr üçündür</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>Qeyd! Ekran çəkilişləri yalnız nümunələrdir. Quraşdırdığınız bu dilə tərcümə edilmişdir.</value>
+    <value>Ekran görüntüləri yalnız nümunələrdir. Quraşdırdığınız şey bu dilə tərcümə edilmişdir.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Bu abunə ilə siz alacaqsınız:
-● qeyri-məhdud qabiliyyət
-● avadanlığın sinxronlaşdırılması (mövcud olandan sonra)</value>
+    <value>Bu abunə ilə alacaqsınız:
+● Limitsiz tutum
+● Cihaz sinxronizasiyası (mövcudluğu ilə)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>Zaminsiz - Aylıq</value>
+    <value>Limitsiz - aylıq</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value>İldə bir dəfə</value>
+    <value>Limitsiz - illik</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>İlk buraxılış</value>
+    <value>İlkin buraxılış</value>
   </data>
 </root>

@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>Ushbu obuna bilan siz olasiz:
+● 1000 tagacha klip
+● Cheksiz axlat va arxiv</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Asosiy - oylik</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Asosiy - yil</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>nusxa ko'chirmoq</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>pastroq qilmoq</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>Clipboard menejeri</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>asbob</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>qulaylik</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>avtomatika</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>Maxsus avtomatlashtirish va harakatlar uchun stigger va harakat dizayneri</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>Gorizontal / vertikal tartibda, ro'yxat / panjara va ko'p mitti qo'llab-quvvatlash</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>To'liq - taniqli klip muharriri, boy matn (stollar, ro'yxatlar, havolalar, havolalar va boshqalar) Sizning Forppet to'plamingizdan tezkor, dinamik o'yin-kulgi uchun mo'ljallangan matnlar</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>Xavfsiz, xavfsiz va xususiy ma'lumotlarni saqlash Ixtiyoriy 2 - parolni himoya qilish</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>O'rnatilgan - plagin brauzerida tobora ortib borayotgan jamoatchilik plaginlari kutubxonasi</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,7 +142,20 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>Monkeypste - bu klipboard menejer, boshqa boshqa bo'lmagan avtomatlashtirish va unumdorlik vositasi. Klipbordni ish oqimingizning boyitilgan va tashkillashtirilgan qismiga aylantirish,
+Matn, fayllar va rasmlarni qo'llab-quvvatlaydigan intuitiv va past darajadagi interfeys. Plaginlar kutubxonasini boshqargan holda moslashuvchanlik uchun mo'ljallangan.
+
+Bu dasturchi tomonidan shunchaki nusxa ko'chirish va pleymdan chiqib ketishni istagan dasturchi tomonidan tajriba sifatida boshlandi. U Ctrl + C kabi oddiy buyruqni xohlagan
+Klipboard nima bo'lganini 'almashtiring. Va tajriba ishladi. Kichkina asbob juda qulay edi. Bu dasturchini yanada g'oyalar va qo'shimcha tajribalar bilan to'ldirdi
+Endi "maymun past" ga aylandi.
+
+Ish stolingiz sizning fayllaringiz uchun, maykeyp pastroq sizning rozetkangizga tegishli bo'lish niyatida. Uning to'plami, ehtimol, birlashishga va o'zaro bog'liqlik bilan ajralib turishi mumkin
+har qanday kontent yoki tarkib formati. CTRL + C va CTRL + v - bu shunchaki yorliqlardan ancha ko'p. Ular barcha ilovalarning barcha ulushini olish, olib yurish portlari
+Sizning boylik boyligi va sizning barmoqlaringizingizda mavjud bo'lishga loyiqdir. Keyingi Ctrl + C dan keyin shunchaki tashlanmaydi.
+
+Men ilgari bu dasturchiman va men hamma narsani maymun pastasidan foydalanishni istayman. Shunday qilib, uning barcha xususiyatlari to'liq bepul foydalanish mumkin.
+Bundan tashqari, men uni qulay his qilishingizni xohlayman. Shunday qilib, men sizni yaratgan yagona kuch sifatida, bu erda yuzaga keladigan shaxsiy ma'lumotlar emas
+Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi yoki saqlanadi. Davr.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
@@ -170,39 +185,36 @@
     <value />
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● O'rnatilgan - plagin brauzerida tobora ortib borayotgan jamoatchilik plaginlari kutubxonasi</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>● Plaginni oldindan belgilab qo'yilgan barcha narsalarni avtomatlashtiring, O'zingizning AI Prompts yoki buyruqlaringizni osonlikcha ishlating</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● Yaqin orada ko'proq platformalar va xususiyatlar keladi! Biz shunchaki arting</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● Yengil va qorong'i mavzular mutlaqo dinamik, xohlagan rangdan foydalaning</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● Integratsiyalashgan yordam va ishchilar interfeysda to'g'ri. Onlayn qo'llanma, video va forum siz hamma veb-saytda (Monkeypaste.com/docs) boshlaganingiz uchun</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● Ishlab chiqarish uchun optimallashtirilgan va 1,000 000 000 klip bilan sinovdan o'tkazilgan.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● Istalgan vaqtda qidirish, shunchaki kliplarda oddiy va ilg'or filtrlashni kliplar va ularning o'nlab sohalardan boshlab yozishni boshlang</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● Kliplaringizni yorliqlarda joylashtiring va qayta ishlatiladigan filtrlar yarating</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● Xavfsiz, xavfsiz va xususiy mahalliy ma'lumotlar saqlanishi (ma'lumotlar yig'ish) har doim ixtiyoriy 2 - parolni himoya qilish va parollarni yoki veb-saytlarni kuzatuvchingiz bilan blokirovka qilish</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
     <value />
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
@@ -227,7 +239,9 @@
     <value />
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>Ushbu obuna bilan siz olasiz:
+● unlimited capacity
+● device syncing (upon availability)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value />

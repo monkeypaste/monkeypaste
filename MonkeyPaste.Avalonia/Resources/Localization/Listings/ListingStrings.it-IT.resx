@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>Con questo abbonamento riceverai:</value>
+    <value>Con questo abbonamento riceverai:
+● Fino a 1.000 clip di contenuti
+● Cestino e archivio illimitati</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>Base - Mensile</value>
+    <value>BASIC - Monthly</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>Base - Annuale</value>
+    <value>BASIC - annuale</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -98,7 +100,7 @@
     <value>impasto</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value>gestore degli appunti</value>
+    <value>Manager degli appunti</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>attrezzo</value>
@@ -110,19 +112,19 @@
     <value>automazione</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>Trigger &amp; Action Designer per automazioni personalizzate e concatenamento di azioni</value>
+    <value>Trigger &amp; Action Designer per automazione personalizzate e incapaci d'azione</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>Layout orizzontali/verticali, visualizzazione elenco/griglia e supporto multi-monitor</value>
+    <value>Layout orizzontale/verticale, Elenco/Vista a griglia e supporto multiplo</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>Editor di clip completo di funzionalità con trova/sostituisci, modelli di testo rich text (tabelle, elenchi, collegamenti, ecc.) per incollare rapidamente e dinamicamente dalla raccolta di snippet</value>
+    <value>Completamente - Editor di clip in primo piano con Find/Sostituisci, Rich Testo (tabelle, elenchi, collegamenti, ecc.) Modello di testo per incollaggio rapido e dinamico dalla collezione di snippet</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>Archiviazione dati locale sicura, protetta e privata con protezione tramite password a 2 fattori opzionale</value>
+    <value>Archiviazione dati locale sicura, sicura e privata con protezione da password 2 - fattore facoltativo</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>Browser plug-in integrato con una libreria di plug-in guidata dalla comunità in continua crescita</value>
+    <value>Costruito - In browser di plug -in con una comunità in sempre più in crescita - Biblioteca di plugin guidata</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste è un gestore di appunti, uno strumento di automazione e produttività come nessun altro.</value>
+    <value>Monkeypaste è un gestore degli appunti, l'automazione e lo strumento di produttività come nessun altro. Migliorare gli appunti in una parte arricchita e organizzata del flusso di lavoro,
+Con un'interfaccia intuitiva e bassa - profilo che supporta testo, file e immagini. Progettato per la flessibilità, con una biblioteca di plugin in costante comunità.
+
+È iniziato come esperimento da un programmatore che desiderava molto più che copia e incolla dagli appunti. Voleva un semplice comando come ctrl+c che invece "si aggiungesse"
+di "Sostituisci" ciò che era negli appunti. E l'esperimento ha funzionato. Il piccolo strumento era molto utile. Ciò ha fatto entrare il programmatore con più idee e più esperimenti, quello
+Ora è diventato "Monkeypaste".
+
+Dato che il desktop è per i tuoi file, Monkeypaste intende essere negli appunti. È una suite di strumenti attentamente progettati per integrare e interabicare apparentemente con
+qualsiasi applicazione o formato di contenuto. CTRL+C e CTRL+V sono molto più di semplici scorciatoie. Sono i porti di voce che tutte le applicazioni condividono, che trasportano un
+ricchezza di valore e significato che meriti di avere a disposizione a portata di mano. Non solo gettato via dopo il prossimo Ctrl+C.
+
+Sono quel programmatore menzionato in precedenza e voglio che tutti siano in grado di trovare l'uso da Monkeypaste. Quindi e tutte le sue caratteristiche sono completamente gratuite da usare.
+Voglio anche che tu ti senta a tuo agio a usarlo. Quindi ti assicuro, come l'unica forza dietro la sua creazione, che nessuna delle (molto) informazioni personali che possono sorgere
+Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Periodo.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● Interfaccia semplice e intuitiva con layout orizzontale/verticale, visualizzazione elenco/griglia e supporto multi-monitor</value>
+    <value>● Interfaccia semplice e amichevole con layout orizzontale/verticale, vista elenco/griglia e supporto multi -monitor</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Modalità Aggiungi: la copia diventa 'aggiungi a' invece di 'sostituisci' negli appunti.</value>
+    <value>● Modalità aggiunta: la copia diventa "Aggiungi a" invece di "Sostituisci" negli appunti. Sia testo che file, completamente personalizzabili</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Tracciamento, fonti e utilizzo sofisticati dei clip con supporto migliorato per i browser basati su Firefox e Chromium (Chrome, Edge, Brave)</value>
+    <value>● Tracciamento di clip sofisticato, fonti e utilizzo con supporto migliorato per browser a base di Firefox e Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Editor di clip completo di tutte le funzionalità con rich text (tabelle, elenchi, collegamenti, ecc.) con trova/sostituisci ed evidenziazione</value>
+    <value>● Completamente - Editor di clip in primo piano con testo ricco (tabelle, elenchi, collegamenti, ecc.) Con ricerca/sostituzione e evidenziazione</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Archivia le tue immagini nel database sicuro, pronte per essere utilizzate come file in qualsiasi momento: basta trascinarle e rilasciarle su richiesta!</value>
+    <value>● Conservare le immagini nel database sicuro, pronti per l'uso come file in qualsiasi momento - richiedi semplicemente trascina - e - lascia cadere!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Potenti modelli di testo per incollare in modo rapido e dinamico la tua raccolta di snippet</value>
+    <value>● Potente modello di testo per incollaggio rapido e dinamico dalla collezione di snippet</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Designer di trigger e azioni per automazioni personalizzate e concatenamento di azioni</value>
+    <value>● Trigger &amp; Action Designer per automazione personalizzate e incapaci d'azione</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Sistema di plug-in semplice da usare ed estendere sia per analizzare clip che per leggere/scrivere qualsiasi formato negli appunti</value>
+    <value>● Semplice da usare ed estendere il sistema di plug -in sia per l'analisi delle clip o per leggere/scrivere qualsiasi formato negli appunti</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Browser plug-in integrato con una libreria di plug-in guidata dalla comunità in continua crescita</value>
+    <value>● Costruito - Nel browser di plug -in con una comunità di plugin sempre in crescita -</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatizza tutto con le preimpostazioni dei plug-in, archivia e utilizza facilmente qualsiasi suggerimento o comando dell'intelligenza artificiale</value>
+    <value>● Automatizza tutto con preset di plug -in, riforniti e usa facilmente una delle istruzioni o dei comandi dell'IA</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Altre piattaforme e funzionalità in arrivo!</value>
+    <value>● Più piattaforme e funzionalità in arrivo! Stiamo appena iniziando 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>● Entrambi i temi chiaro e scuro sono completamente dinamici, usa qualsiasi colore tu voglia</value>
+    <value>● Sia i temi leggeri che quelli scuri sono completamente dinamici, usa qualsiasi colore desiderato</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● Guida e suggerimenti integrati direttamente nell'interfaccia.</value>
+    <value>● Aiuto integrato e suggerimenti direttamente nell'interfaccia. Manuale, video e forum online per farti iniziare tutto sul sito Web (Monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>● Ottimizzato per le prestazioni e sottoposto a stress test con milioni di clip.</value>
+    <value>● Ottimizzato per le prestazioni e stressato testato con 1.000.000 di clip.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● Effettua una ricerca in qualsiasi momento, inizia a digitare utilizzando filtri semplici e avanzati sui clip e sulle relative fonti in decine di campi</value>
+    <value>● Anytime Search, basta iniziare a digitare utilizzando sia il filtro semplice e avanzato sulle clip che le loro fonti su dozzine di campi</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● Organizza i tuoi clip in alberi di tag e crea filtri riutilizzabili</value>
+    <value>● Organizza le clip in tag alberi e crea filtri risusabili</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● Archiviazione dati locale sicura, protetta e privata (nessuna raccolta dati) sempre crittografata con protezione password a 2 fattori opzionale e blocca facilmente app o siti Web dal tuo tracker</value>
+    <value>● Archiviazione dati locale sicura, sicura e privata (nessuna raccolta di dati) sempre crittografata con protezione da password a 2 - fattore facilmente bloccato e bloccare facilmente le app o i siti Web dal tracker</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Ampio supporto drag-and-drop, scorciatoie globali personalizzate, routing e navigazione senza mouse</value>
+    <value>● Ampia supporto di resistenza - e - drop, scorciatoie globali personalizzate, routing e mouse - Navigazione gratuita</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Modalità mouse personalizzate: fai clic con il pulsante destro del mouse su Incolla e fai clic con il pulsante sinistro su Copia automatica</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Modalità del mouse personalizzate: destro: fare clic su Incolla e sinistra - Fare clic su Auto - Copia</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>Gli appunti sono una giungla.</value>
+    <value>Lo Appuntante è una giungla. Monkeypaste è il re! Swing da app a app, copiando questo e incollando che non prima con Monkeypaste !! Un marchio - Nuovo strumento di appunti e automazione analitica !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>Esempio di MonkeyPaste in azione!</value>
+    <value>Esempio di Monkeypaste in azione!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,19 +233,21 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value>Installato in questa lingua.</value>
+    <value>Installato in questa lingua. L'inglese è solo per questi esempi</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>Nota!</value>
+    <value>Le schermate sono solo esempi. Ciò che installi è stato tradotto in questa lingua.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Con questo abbonamento riceverai:</value>
+    <value>Con questo abbonamento riceverai:
+● Capacità illimitata
+● Sincronizzazione del dispositivo (su disponibilità)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>Illimitato - Mensile</value>
+    <value>Unlimited - Monthly</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value>Illimitato - Annuale</value>
+    <value>Unlimited - annuale</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Versione iniziale</value>

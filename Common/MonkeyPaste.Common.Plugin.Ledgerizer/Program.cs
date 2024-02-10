@@ -31,6 +31,13 @@ namespace Ledgerizer {
 
         static IEnumerable<string> WorkingCultures {
             get {
+                // these give 400 error on google translate
+
+                string[] omitted = new string[] {
+                    "iu-Latn",
+                    "iu-Latn-CA",
+                    "kok-IN"
+                };
                 // get cultures resx tool supports
                 var specificCultures = CultureInfo.GetCultures(CultureTypes.AllCultures)
                 .Where(c => c.GetAncestors().Any())
@@ -43,11 +50,17 @@ namespace Ledgerizer {
                 };
                 // get ms store cultures resx tool AND azure supports
                 var common_cultures_before = specificCultures.Where(x => MsStoreCultures.Any(y => y == x.Name)).ToList();
-                var common_cultures = specificCultures.Where(x => MsStoreCultures.Any(y => y == x.Name) && azure_langs.Any(y => x.Name.ToLower().StartsWith(y.Item2.ToLower()))).ToList();
+                var common_cultures =
+                    specificCultures
+                    .Where(x =>
+                        MsStoreCultures.Any(y => y == x.Name) &&
+                        azure_langs.Any(y => x.Name.ToLower().StartsWith(y.Item2.ToLower())) &&
+                        omitted.All(y => y.ToLower() != x.Name.ToLower())).ToList();
 
-                string diffs = string.Join(",", common_cultures_before.Select(x => x.Name).Difference(common_cultures.Select(x => x.Name)).ToList());
+                //string diffs = string.Join(",", common_cultures_before.Select(x => x.Name).Difference(common_cultures.Select(x => x.Name)).ToList());
 
                 return common_cultures.Select(x => x.Name).OrderBy(x => x);
+
             }
         }
 
@@ -909,13 +922,13 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         static void GenAllEmptyLocalizedResx() {
             List<string> all_ref_resxs =
             [
-                Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
-                    "MonkeyPaste.Avalonia",
-                    "Resources",
-                    "Localization",
-                    "Listings",
-                    "ListingStrings.resx"),
+                //Path.Combine(
+                //    MpCommonHelpers.GetSolutionDir(),
+                //    "MonkeyPaste.Avalonia",
+                //    "Resources",
+                //    "Localization",
+                //    "Listings",
+                //    "ListingStrings.resx"),
                 Path.Combine(
                     MpCommonHelpers.GetSolutionDir(),
                     "MonkeyPaste.Avalonia",
@@ -923,18 +936,18 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     "Localization",
                     "Enums",
                     "EnumUiStrings.resx"),
-                Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
-                    "MonkeyPaste.Avalonia",
-                    "Resources",
-                    "Localization",
-                    "UiStrings",
-                    "UiStrings.resx"),
-                .. PluginNames.Select(x =>
-                    Path.Combine(
-                        GetPluginProjDir(x),
-                        "Resources",
-                        "Resources.resx")),
+                //Path.Combine(
+                //    MpCommonHelpers.GetSolutionDir(),
+                //    "MonkeyPaste.Avalonia",
+                //    "Resources",
+                //    "Localization",
+                //    "UiStrings",
+                //    "UiStrings.resx"),
+                //.. PluginNames.Select(x =>
+                //    Path.Combine(
+                //        GetPluginProjDir(x),
+                //        "Resources",
+                //        "Resources.resx")),
             ];
 
             foreach (string ref_resx_path in all_ref_resxs) {
@@ -946,11 +959,14 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     string empty_localized_resx_path = Path.Combine(
                         ref_resx_dir,
                         string.Format(localized_resx_file_name_format, cc));
-                    MpFileIo.DeleteFile(empty_localized_resx_path);
-                    if (ref_resx_dir.Contains("Plugins")) {
-                        MpFileIo.DeleteFile(Path.Combine(
-                            Path.GetDirectoryName(empty_localized_resx_path), $"manifest.{cc}.json"));
+                    if (empty_localized_resx_path.IsFile()) {
+                        continue;
                     }
+                    //MpFileIo.DeleteFile(empty_localized_resx_path);
+                    //if (ref_resx_dir.Contains("Plugins")) {
+                    //    MpFileIo.DeleteFile(Path.Combine(
+                    //        Path.GetDirectoryName(empty_localized_resx_path), $"manifest.{cc}.json"));
+                    //}
                     var lookup_to_write = cc == "en-US" ? resx_lookup : empty_lookup;
                     MpResxTools.WriteResxToPath(empty_localized_resx_path, lookup_to_write);
                     MpConsole.WriteLine(empty_localized_resx_path);

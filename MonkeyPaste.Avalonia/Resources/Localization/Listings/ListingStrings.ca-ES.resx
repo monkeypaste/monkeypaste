@@ -59,12 +59,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>Amb aquesta subscripció rebràs:
-● fins a 1.000 clips de contingut
-● paperera i arxiu il·limitats</value>
+    <value>Amb aquesta subscripció rebrà:
+● Fins a 1.000 clips de contingut
+● Trash i arxiu il·limitats</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>Bàsic - Mensual</value>
+    <value>Bàsic: mensual</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
     <value>Bàsic - Anual</value>
@@ -97,10 +97,10 @@
     <value>còpia</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value>pasta</value>
+    <value>pastar</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value>gestor de porta-retalls</value>
+    <value>Gestor de porta -retalls</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>eina</value>
@@ -109,22 +109,22 @@
     <value>utilitat</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value>automatització</value>
+    <value>automatizació</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>Trigger &amp; Action Designer per a automatitzacions personalitzades i encadenament d'accions</value>
+    <value>Desencadenant i dissenyador d’acció per a automatitzacions personalitzades i encadenament d’acció</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>Dissenys horitzontals/verticals, vista de llista/quadrícula i suport per a diversos monitors</value>
+    <value>Dissenys horitzontals/verticals, vista de llista/quadrícula i suport multi - monitor</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>Editor de clips amb totes les funcions amb plantilles de text de cerca/substitució, text enriquit (taules, llistes, enllaços, etc.) per enganxar de manera ràpida i dinàmica de la vostra col·lecció de fragments</value>
+    <value>EDITOR DE CLIP COMPLETAT completament amb cerca/substitució, text ric (taules, llistes, enllaços, etc.) Plantilització de text per enganxar ràpid i dinàmic de la col·lecció de fragments</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>Emmagatzematge de dades local segur, segur i privat amb protecció de contrasenya opcional de 2 factors</value>
+    <value>Emmagatzematge de dades local segur, segur i privat amb opcional 2: protecció de contrasenya del factor</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>Navegador de connectors integrat amb una biblioteca de connectors impulsada per la comunitat en constant creixement</value>
+    <value>Construït: en el navegador de plugins amb una comunitat en creixement - Biblioteca de plugins impulsada</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -142,128 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste és un gestor de porta-retalls, una eina d'automatització i productivitat com cap altra. Millorar el porta-retalls en una part enriquida i organitzada del vostre flux de treball,
-amb una interfície intuïtiva i de baix perfil que admet text, fitxers i imatges. Dissenyat per a la flexibilitat, amb una biblioteca de connectors impulsada per la comunitat en constant creixement.
+    <value>MonkeyPaste és un gestor de porta -retalls, una eina d'automatització i productivitat com cap altra. Millora del porta -retalls en una part enriquida i organitzada del vostre flux de treball,
+Amb una interfície de perfil intuïtiva i baixa que admet text, fitxers i imatges. Dissenyat per a la flexibilitat, amb una comunitat en creixement, Libray de plugins impulsada.
 
-Va començar com un experiment d'un programador que volia més que copiar i enganxar fora del porta-retalls. Volia una ordre senzilla com Control+C que s'afegiria a
-de "substituir" el que hi havia al porta-retalls. I l'experiment va funcionar, eureka! La petita eina era molt útil. Això va intrigar el programador amb més idees i més experiments, això
-ara s'ha convertit en "MonkeyPaste".
+Va començar com un experiment d’un programador que volia més que copiar i enganxar fora del porta -retalls. Volia una ordre senzilla com Ctrl+C que s’afegiria a ’en lloc seu
+de "substituir" el que hi havia al porta -retalls. I l’experiment va funcionar. La petita eina era molt útil. Això va atraure el programador amb més idees i més experiments, això
+Ara s’ha convertit en "Monkeypaste".
 
-Com que l'escriptori està als vostres fitxers, MonkeyPaste vol estar al vostre porta-retalls. És un conjunt d'eines dissenyades acuradament per integrar-se i interoperar sense problemes
-qualsevol aplicació o format de contingut. Control+C i Control+V són molt més que només dreceres. Són els ports d'entrada que comparteixen totes les aplicacions, portant a
-riquesa de valor i significat que mereixeu tenir disponible al vostre abast. No només es llença després del següent Control+C.
+Com que l'escriptori és als vostres fitxers, MonkeyPaste té la intenció de ser al porta -retalls. És un conjunt d’eines dissenyades acuradament per integrar -se i interoperar -se sense
+qualsevol aplicació o format de contingut. Ctrl+C i Ctrl+V són molt més que les dreceres. Són els ports d'entrada que totes les aplicacions comparteixen, que porten un
+La riquesa de valor i el significat que mereixeu tenir a l’abast del vostre abast. No només llançat després del següent Ctrl+c.
 
-Sóc el programador esmentat anteriorment i vull que tothom pugui trobar un ús a MonkeyPaste. Per tant, ell i totes les seves funcions són totalment gratuïts.
-També vull que us sentiu còmode utilitzant-lo. Així que us asseguro, com a única força darrere de la seva creació, que NINGUNA de la informació (molt) personal que pot sorgir en
-el vostre porta-retalls es fa un seguiment o s'emmagatzema en qualsevol lloc més enllà de la vostra pròpia màquina. Període.</value>
+Sóc el programador esmentat anteriorment i vull que tothom pugui trobar ús fora de Monkeypaste. De manera que i totes les seves funcions són completament lliures d’utilitzar.
+També vull que us sentiu còmode fent -lo servir. Així que us asseguro, com a única força de la seva creació, que cap de les (molt) informació personal que pugui sorgir
+El vostre porta -retalls es fa un seguiment o emmagatzemat en qualsevol lloc més enllà de la vostra pròpia màquina. Període.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● Interfície senzilla i amigable amb dissenys horitzontals/verticals, vista de llista/quadrícula i suport per a diversos monitors</value>
+    <value>● Interfície senzilla i amable amb els dissenys horitzontals/verticals, la vista/vista de la graella i el suport multi - monitor</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Mode d'afegir: la còpia es converteix en "afegir a" en lloc de "substituir" al porta-retalls. Tant text com fitxers, totalment personalitzables</value>
+    <value>● Mode append: la còpia es converteix en "Afegir a" en lloc de "substituir" al porta -retalls. Tant els textos com els fitxers, completament personalitzables</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Seguiment de clips, fonts i ús sofisticats amb compatibilitat millorada per a navegadors basats en Firefox i Chromium (Chrome, Edge, Brave)</value>
+    <value>● Seguiment de clips sofisticats, fonts i ús amb un suport millorat per als navegadors basats en Firefox i Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Editor de clips amb totes les funcions amb text enriquit (taules, llistes, enllaços, etc.) amb cercar/substituir i ressaltar</value>
+    <value>● Totalment: editor de clips destacat amb text ric (taules, llistes, enllaços, etc.) amb cerca/substitució i ressalt</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Emmagatzemeu les vostres imatges a la base de dades segura, a punt per utilitzar-les com a fitxers en qualsevol moment sota demanda, només heu d'arrossegar i deixar anar!</value>
+    <value>● Emmagatzemeu les vostres imatges a la base de dades segura, a punt per utilitzar -les com a fitxers en qualsevol moment. Demaneu només arrossegar - i - deixar -ho anar!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Plantilles de text potents per enganxar de forma ràpida i dinàmica des de la col·lecció de fragments</value>
+    <value>● Potent plantilla de text per a enganxar ràpid i dinàmic de la col·lecció de fragments</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Dissenyador Trigger &amp; Action per a automatitzacions personalitzades i encadenament d'accions</value>
+    <value>● Descriptor i dissenyador d’acció per a automatitzacions personalitzades i encadenament d’acció</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Fàcil d'utilitzar i estendre el sistema de connectors tant per analitzar clips com per llegir/escriure qualsevol format al porta-retalls</value>
+    <value>● Simple d'utilitzar i ampliar el sistema de complements per analitzar clips o llegir/escriure qualsevol format al porta -retalls</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Navegador de connectors integrat amb una biblioteca de connectors impulsada per la comunitat en constant creixement</value>
+    <value>● Construït: en el navegador de plugins amb una comunitat en creixement - Biblioteca de plugins impulsada</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatitzeu-ho tot amb els valors predefinits de connectors, amagueu i utilitzeu qualsevol de les vostres indicacions o ordres d'IA amb facilitat</value>
+    <value>● Automatitzeu -ho tot amb els presets de plugin, poseu -vos i utilitzeu qualsevol de les vostres indicacions o ordres de IA amb facilitat</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Aviat més plataformes i funcions! Tot just comencem 🎉</value>
+    <value>● Més plataformes i funcions properament! Acabem de començar 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>● Tant els temes clars com els foscos són completament dinàmics, utilitzeu el color que vulgueu</value>
+    <value>● Els temes lleugers i foscos són completament dinàmics, utilitzeu qualsevol color que vulgueu</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● Ajuda i consells integrats directament a la interfície. Manual en línia, vídeos i fòrum per començar tot al lloc web (monkeypaste.com/docs)</value>
+    <value>● Ajuda integrada i suggeriments a la interfície. Manual en línia, vídeos i fòrum per començar tot al lloc web (monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
     <value>● Optimitzat per al rendiment i provat amb 1.000.000 de clips.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● Cerqueu en qualsevol moment, només heu de començar a escriure utilitzant tant el filtratge simple com el avançat de clips i les seves fonts en desenes de camps.</value>
+    <value>● En qualsevol moment de cerca, només comenceu a escriure amb filtres simples i avançats en clips i les seves fonts més de desenes de camps</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● Organitzeu els vostres clips en arbres d'etiquetes i creeu filtres reutilitzables</value>
+    <value>● Organitzeu els clips en arbres d'etiquetes i creeu filtres resusibles</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● Emmagatzematge de dades local segur, segur i privat (sense recopilació de dades) sempre xifrat amb una protecció de contrasenya opcional de 2 factors i bloqueja fàcilment aplicacions o llocs web del vostre rastrejador</value>
+    <value>● Emmagatzematge de dades local segur, segur i privat (sense recollida de dades) sempre xifrat amb opcional 2: protecció de contrasenya de factor i bloquejar fàcilment aplicacions o llocs web del vostre rastrejador</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Ampli suport per arrossegar i deixar anar, dreceres globals personalitzades, encaminament i navegació sense ratolí</value>
+    <value>● Extensament d’arrossegament i - dipòsit, dreceres globals personalitzades, encaminament i ratolí - Navegació gratuïta</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Modes de ratolí personalitzats: feu clic amb el botó dret a enganxar i feu clic amb el botó esquerre a la còpia automàtica</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value>● Interfície senzilla i amigable
-● Dissenys horitzontals/verticals, vista de llista/quadrícula i suport per a diversos monitors
-● Tant els temes clars com els foscos són completament dinàmics, utilitzeu el color que vulgueu
-
-● Ajuda i consells integrats directament a la interfície
-● Manual d'ajuda, vídeos i fòrums per començar tot al lloc web (monkeypaste.com/docs)
-
-● Optimitzat per al rendiment i provat amb 1.000.000 de clips.
-● Quan cerqueu, només heu de començar a escriure
-● Filtre simple i avançat de clips i les seves fonts en desenes de camps
-● Organitzeu els vostres clips en arbres d'etiquetes i creeu filtres reutilitzables
-
-● Emmagatzematge de dades local segur, segur i privat (sense recollida de dades) sempre xifrat
-● Podeu ignorar clips d'aplicacions o llocs web concrets
-● Protecció amb contrasenya opcional de 2 factors
-
-● Tecles d'accés directe globals personalitzades, encaminament i navegació sense ratolí
-● Suport ampli per arrossegar i deixar anar
-● Modes de ratolí personalitzats: feu clic amb el botó dret a enganxar i feu clic amb el botó esquerre a la còpia automàtica
-● Mode d'afegir: la còpia es converteix en "afegir a" en lloc de "substituir" al porta-retalls. Tant text com fitxers, totalment personalitzables
-
-● Seguiment de clips, fonts i ús sofisticats
-● Compatibilitat millorada per a navegadors basats en Firefox i Chromium (Chrome, Edge, Brave)
-
-● Funciona amb text enriquit (taules, llistes, enllaços, etc.)
-● Editor de clips amb totes les funcions amb cercar/substituir i ressaltar
-● Emmagatzemeu les vostres imatges a la base de dades segura, a punt per utilitzar-les com a fitxers en qualsevol moment sota demanda, només heu d'arrossegar i deixar anar!
-
-● Plantilles de text potents per enganxar de forma ràpida i dinàmica des de la col·lecció de fragments
-
-● Dissenyador Trigger &amp; Action per a automatitzacions personalitzades i encadenament d'accions
-
-● Fàcil d'utilitzar i estendre el sistema de connectors tant per analitzar clips com per llegir/escriure qualsevol format al porta-retalls
-● Navegador de connectors integrat amb una biblioteca de connectors impulsada per la comunitat en constant creixement
-● Automatitzeu-ho tot amb els valors predefinits de connectors, amagueu i utilitzeu qualsevol de les vostres indicacions o ordres d'IA amb facilitat
-
-● Aviat més plataformes i funcions! Tot just comencem 🎉</value>
+    <value>● Modes de ratolí personalitzats: a la dreta - feu clic a Paste i a l'esquerra - feu clic a Auto - Copia</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>El porta-retalls és una selva. MonkeyPaste és el REI! Passa d'aplicació en aplicació, copiant-ho i enganxant-lo com mai abans amb MonkeyPaste!! Una nova eina d'automatització analítica i un porta-retalls d'avantguarda!!!</value>
+    <value>El porta -retalls és una selva. Monkeypaste és el rei! Swing des de l'aplicació a l'aplicació, copiant això i enganxant això com mai abans amb Monkeypaste !! Una marca: porta -retalls de retallada i eina d’automatització analítica nova !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>Mostra de MonkeyPaste en acció!</value>
+    <value>Mostra de Monkeypaste en acció!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -272,21 +233,21 @@ el vostre porta-retalls es fa un seguiment o s'emmagatzema en qualsevol lloc mé
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value>Instal·lat en aquest idioma. L'anglès és només per a aquests exemples</value>
+    <value>Instal·lat en aquest idioma. L’anglès només és per a aquests exemples</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>Nota! Les captures de pantalla són només exemples. El que instal·leu s'ha traduït a aquest idioma.</value>
+    <value>Els trets de pantalla només són exemples. El que instal·leu s’ha traduït a aquest idioma.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Amb aquesta subscripció rebràs:
-● capacitat il·limitada
-● sincronització del dispositiu (segons disponibilitat)</value>
+    <value>Amb aquesta subscripció rebrà:
+● Capacitat il·limitada
+● Sincronització del dispositiu (després de la disponibilitat)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>Il·limitat - Mensual</value>
+    <value>Il·limitat: mensual</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value>Il·limitat - Anual</value>
+    <value>Il·limitat - anual</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Versió inicial</value>

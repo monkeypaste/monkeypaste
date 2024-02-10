@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>ഈ സബ്സ്ക്രിപ്ഷൻ ഉപയോഗിച്ച് നിങ്ങൾക്ക് ലഭിക്കും:
+Fontrage ഉള്ളടക്കത്തിന്റെ 1,000 ക്ലിപ്പുകൾ വരെ
+● പരിധിയില്ലാത്ത ട്രാഷ് &amp; ആർക്കൈവ്</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>അടിസ്ഥാന - പ്രതിമാസം</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>അടിസ്ഥാന - വാർഷികം</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>പകര്ത്തുക</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>പേസ്റ്റ്</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>ക്ലിപ്പ്ബോർഡ് മാനേജർ</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>ഉപകരണം</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>മേച്ചില</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>യന്തവല്ക്കരണം</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>ഇഷ്ടാനുസൃത യാന്ത്രികത്തിനും പ്രവർത്തന ശൃംഖലയ്ക്കും ട്രിഗർ &amp; ആക്ഷൻ ഡിസൈനർ</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>തിരശ്ചീന / ലംബ രേഖകൾ, പട്ടിക / ഗ്രിഡ് കാഴ്ച, മൾട്ടി - മോണിറ്റർ പിന്തുണ</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>പൂർണ്ണമായും - തിരഞ്ഞെടുത്ത / മാറ്റിസ്ഥാപിച്ച, സമ്പന്നമായ വാചകം (പട്ടികകൾ, ലിസ്റ്റുകൾ, ലിങ്കുകൾ മുതലായവ) ഉപയോഗിച്ച് തിരഞ്ഞെടുത്ത ക്ലിപ്പ് എഡിറ്റർ) നിങ്ങളുടെ സ്നിപ്പെറ്റ് ശേഖരത്തിൽ നിന്ന് ദ്രുത, ചലനാത്മക പേയ്നിംഗ്</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>ഓപ്ഷണൽ 2 ഉപയോഗിച്ച് സുരക്ഷിതവും സുരക്ഷിതവും സ്വകാര്യവുമായ പ്രാദേശിക ഡാറ്റ സംഭരണം - ഫാക്ടർ പാസ്വേഡ് പരിരക്ഷണം</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>നിർമ്മിച്ച - എക്കാലത്തെയും - വളരുന്ന കമ്മ്യൂണിറ്റി - പ്ലഗിനുകൾ ഓടിക്കുന്ന കമ്മ്യൂണിറ്റി ഉപയോഗിച്ച് പ്ലഗിൻ ബ്ര browser സറിൽ</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>മങ്കിപെസ്റ്റ് ഒരു ക്ലിപ്പ്ബോർഡ് മാനേജർ, മറ്റൊന്ന് പോലുള്ള ഓട്ടോമേഷൻ, ഉൽപാദനക്ഷമത ഉപകരണം എന്നിവയാണ്. നിങ്ങളുടെ വിളകളുടെ സമ്പന്നമായും സംഘടിതവുമായ ഒരു ഭാഗത്ത് നിങ്ങളുടെ ക്ലിപ്പ്ബോർഡ് വർദ്ധിപ്പിക്കുന്നു,
+വാചകം, ഫയലുകൾ, ചിത്രങ്ങൾ എന്നിവ പിന്തുണയ്ക്കുന്ന ഒരു അവബോധജന്യവും കുറഞ്ഞതുമായ ഒരു പ്രൊഫൈൽ ഇന്റർഫേസ് ഫീച്ചർ ചെയ്യുന്നു. എന്നേക്കും - വളരുന്ന കമ്മ്യൂണിറ്റി - നയിക്കുന്ന ലൈബ്ര പ്ലഗിനുകളുടെ ഉള്ള സസ്യത്തിനായി രൂപകൽപ്പന ചെയ്തിരിക്കുന്നു.
+
+ക്ലിപ്പ്ബോർഡിൽ നിന്ന് പകർത്തി ഒട്ടിച്ച് ഒട്ടിച്ച് ഒട്ടിക്കുന്ന ഒരു പ്രോഗ്രാമർ എന്ന പരീക്ഷയായി ഇത് ആരംഭിച്ചു. പകരം 'ചേർക്കാൻ' Ctrl + C പോലുള്ള ലളിതമായ കമാൻഡ് വേണം
+ക്ലിപ്പ്ബോർഡിലുള്ളത് 'മാറ്റിസ്ഥാപിക്കുക'. പരീക്ഷണം പ്രവർത്തിച്ചു. ചെറിയ ഉപകരണം വളരെ എളുപ്പമായിരുന്നു. ഇത് പ്രോഗ്രാമർ പ്രോഗ്രാമർ കൂടുതൽ ആശയങ്ങളും കൂടുതൽ പരീക്ഷണങ്ങളും ഉൾക്കൊള്ളുന്നു, അത്
+ഇപ്പോൾ "കുരങ്ങൻകാർ" ആയി മാറി.
+
+ഡെസ്ക്ടോപ്പ് നിങ്ങളുടെ ഫയലുകളിലേക്കുള്ളതാകുമ്പോൾ, മങ്കിപേസ്റ്റ് നിങ്ങളുടെ ക്ലിപ്പ്ബോർഡിലേക്ക് ഉദ്ദേശിക്കുന്നു. ഇത് ശ്രദ്ധാപൂർവ്വം രൂപകൽപ്പന ചെയ്തതും പരസ്പരബന്ധിതവുമായ ഒരു സ്യൂട്ട്
+ഉള്ളടക്കത്തിന്റെ ഏതെങ്കിലും അപ്ലിക്കേഷൻ അല്ലെങ്കിൽ ഫോർമാറ്റ്. Ctrl + C, Ctrl + V എന്നിവ മാത്രമാണ് കുറുക്കുവഴികൾ എന്നതിനേക്കാൾ കൂടുതൽ. എല്ലാ ആപ്ലിക്കേഷനുകൾ പങ്കിടലും നടക്കുന്ന എൻട്രികളുടെ തുറമുഖങ്ങളാണ് അവ
+മൂല്യത്തിന്റെ സമ്പത്ത്, അർത്ഥം നിങ്ങളുടെ വിരൽത്തുമ്പിൽ ലഭ്യമായിരിക്കാൻ നിങ്ങൾ അർഹനാണ്. അടുത്ത Ctrl + C ന് ശേഷം വലിച്ചെറിയരുത്.
+
+പ്രോഗ്രാമർ നേരത്തെ സൂചിപ്പിച്ചതും മങ്കി പൊതിയത്തിൽ നിന്ന് നിങ്ങൾ ഉപയോഗിക്കാൻ എല്ലാവർക്കും കഴിയുമെന്ന് ഞാൻ ആഗ്രഹിക്കുന്നു. അതിനാൽ അതിന്റെ എല്ലാ സവിശേഷതകളും ഉപയോഗിക്കാൻ പൂർണ്ണമായും സ്വാഭാവികമാണ്.
+നിങ്ങൾക്കത് ഉപയോഗിക്കാൻ ഞാൻ ആഗ്രഹിക്കുന്നു. അതിനാൽ, തുടരാൻ കഴിയുന്ന (വളരെ) വ്യക്തിപരമായ വിവരങ്ങളൊന്നും ഉണ്ടാകില്ലെന്ന് ഞാൻ നിങ്ങൾക്ക് ഉറപ്പുനൽകുന്നു
+നിങ്ങളുടെ ക്ലിപ്പ്ബോർഡ് എപ്പോഴെങ്കിലും നിങ്ങളുടെ സ്വന്തം മെഷീനിനപ്പുറത്ത് എവിടെയും സൂക്ഷിക്കുന്നു അല്ലെങ്കിൽ സംഭരിക്കുന്നു. കാലയളവ്.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● തിരശ്ചീന / ലംബ രേഖകൾ, പട്ടിക / ഗ്രിഡ് കാഴ്ച, മൾട്ടി - മോണിറ്റർ പിന്തുണ എന്നിവയുള്ള ലളിതവും സൗഹൃദവുമായ ഇന്റർഫേസ്</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● append append append കൂട്ടിച്ചേർക്കൽ: ക്ലിപ്പ്ബോർഡിൽ 'മാറ്റിസ്ഥാപിക്കുന്നതിന്' പകരം പകർത്തുന്നതിന് '' ചേർക്കുന്നത് 'ആയിത്തീരുന്നു. വാചകവും ഫയലുകളും, പൂർണ്ണമായി ഇഷ്ടാനുസൃതമാക്കാവുന്ന</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● സങ്കീർണ്ണമായ ക്ലിപ്പ് ട്രാക്കിംഗ്, ഫയർഫോക്സ്, ക്രോമിയം എന്നിവയ്ക്കുള്ള മെച്ചപ്പെടുത്തിയ പിന്തുണയുള്ള ഉപയോഗങ്ങളും ഉപയോഗവും (Chrome, Adge, ധൈര്യം)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● പൂർണ്ണമായും - സമ്പന്നമായ വാചകം (പട്ടികകൾ, ലിസ്റ്റുകൾ, ലിങ്കുകൾ മുതലായവ) കണ്ടെത്തി / മാറ്റിസ്ഥാപിച്ച് ഹൈലൈറ്റിംഗ്</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>Fiemair നിങ്ങളുടെ ഇമേജുകൾ സുരക്ഷിത ഡാറ്റാബേസിൽ സംഭരിക്കുക, എപ്പോൾ വേണമെങ്കിലും ആവശ്യപ്പെടുക - ഡിമാൻഡ് വെറും ഡ്രാഗ് - ഡ്രോപ്പ്!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>Sn നിങ്ങളുടെ സ്നിപ്പെറ്റ് ശേഖരത്തിൽ നിന്ന് ദ്രുത, ചലനാത്മക ഒട്ടിക്കുന്നതിനായി ശക്തമായ ടെക്സ്റ്റ് ടെംപ്ലേറ്റിംഗ്</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>ഇഷ്ടാനുസൃത യാന്ത്രികത്തിനും പ്രവർത്തന ചെയിനിംഗിനുമുള്ള ട്രിഗർ &amp; ആക്ഷൻ ഡിസൈനർ</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>Cliples വിശകലനം ചെയ്യുന്നതിനോ നിങ്ങളുടെ ക്ലിപ്പ്ബോർഡിലേക്ക് ഏതെങ്കിലും ഫോർമാറ്റ് വായിക്കുന്നതിനോ അല്ലെങ്കിൽ ഏതെങ്കിലും ഫോർമാറ്റ് വായിക്കുന്നതിനോ പ്രദർശിപ്പിക്കുന്നതിനും ലളിതമാണ്</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● നിർമ്മിച്ച - എക്കാലത്തെയും - വളരുന്ന കമ്മ്യൂണിറ്റി - ഡ്രൈവിംഗ് ലൈബ്രറി പ്ലഗിനുകൾ</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>Plug പ്ലഗിൻ പ്രീസെറ്റുകൾ ഉപയോഗിച്ച് എല്ലാം ഓട്ടോമേറ്റ് ചെയ്യുക, നിങ്ങളുടെ ഏതെങ്കിലും എഐ ആവശ്യങ്ങൾ തടയുകയോ കമാൻഡുകൾ എളുപ്പത്തിൽ ഉപയോഗിക്കുകയോ ചെയ്യുക</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● കൂടുതൽ പ്ലാറ്റ്ഫോമുകളും സവിശേഷതകളും ഉടൻ വരുന്നു! ഞങ്ങൾ ഗെറ്റ് ടിംഗുകൾ ആരംഭിച്ചു</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>Light ലഘുവായ ഇരുണ്ട തീമുകൾ പൂർണ്ണമായും ചലനാത്മകമാണ്, നിങ്ങൾക്ക് ആവശ്യമുള്ള ഏത് നിറവും ഉപയോഗിക്കുക</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● സംയോജിത സഹായവും സൂചനകളും ഇന്റർഫേസിൽ ശരിയാണ്. വെബ്സൈറ്റിൽ നിങ്ങൾ ആരംഭിക്കുന്നതിന് ഓൺലൈൻ മാനുവൽ, വീഡിയോകൾ, ഫോറം എന്നിവ (Monkeypast.com/DoC)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>Preport പ്രകടനത്തിനായി ഒപ്റ്റിമൈസ് ചെയ്യുകയും 1,000,000 ക്ലിപ്പുകൾ ഉപയോഗിച്ച് പരീക്ഷിക്കുകയും ചെയ്തു.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● ഏത് സമയ തിരയലും, ക്ലിപ്പുകളിൽ ലളിതവും വിപുലീകൃതവുമായ ഫിൽട്ടറിംഗ് ഉപയോഗിച്ച് ടൈപ്പുചെയ്യാൻ ആരംഭിക്കുക, ഡസൻ കണക്കിന് വയലുകളിൽ അവയുടെ ഉറവിടങ്ങൾ</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>The നിങ്ങളുടെ ക്ലിപ്പുകൾ ടാഗ മരങ്ങളിൽ സംഘടിപ്പിക്കുകയും പുനരുജ്ജീവിപ്പിക്കാൻ കഴിവുള്ള ഫിൽട്ടറുകൾ സൃഷ്ടിക്കുകയും ചെയ്യുക</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>Said സുരക്ഷിതവും സുരക്ഷിതവും സ്വകാര്യവുമായ പ്രാദേശിക ഡാറ്റ സംഭരണം (ഡാറ്റ ശേഖരം ഇല്ല) ഓപ്ഷണൽ 2 ഉപയോഗിച്ച് എൻക്രിപ്റ്റ് ചെയ്തു - ഫാക്ടർ പാസ്വേഡ് പരിരക്ഷണവും നിങ്ങളുടെ ട്രാക്കറിൽ നിന്ന് എളുപ്പത്തിൽ തടയുക</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>● വിപുലമായ വലിച്ചിടൽ - കൂടാതെ - പിന്തുണ പിന്തുണ, ഇഷ്ടാനുസൃത ആഗോള കുറുക്കുവഴികൾ, റൂട്ടിംഗ്, മൗസ് എന്നിവ - സ En നാവിഗേഷൻ</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● ഇഷ്ടാനുസൃത മൗസ് മോഡുകൾ: വലത് - പേസ്റ്റും ഇടത് ക്ലിക്കുചെയ്യുക - യാന്ത്രികമാക്കുക</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>ക്ലിപ്പ്ബോർഡ് ഒരു കാടിലാണ്. കുങ്കിപാസ്റ്റ് രാജാവാണ്! അപ്ലിക്കേഷനിൽ നിന്ന് അപ്ലിക്കേഷനിലേക്ക് സ്വിംഗ് ചെയ്യുക, ഇത് പകർത്തി ഒരിക്കലും ഒരിക്കലും കുരങ്ങൻ പൊതിയുമായി ഇതുപോലെ ഒട്ടിക്കുന്നു !! ഒരു ബ്രാൻഡ് - പുതിയത്, കട്ടിംഗ് എഡ്ജ് ക്ലിപ്പ്ബോർഡ്, അനലിറ്റിക് ഓട്ടോമേഷൻ ഉപകരണം !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>പ്രവർത്തനത്തിൽ കുരങ്ങന്റെ സാമ്പിൾ!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>ഈ ഭാഷയിൽ ഇൻസ്റ്റാൾ ചെയ്തു. ഈ ഉദാഹരണങ്ങൾക്ക് മാത്രമാണ് ഇംഗ്ലീഷ്</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>സ്ക്രീൻ ഷോട്ടുകൾ ഉദാഹരണങ്ങൾ മാത്രമാണ്. നിങ്ങൾ ഇൻസ്റ്റാൾ ചെയ്യുന്നത് ഈ ഭാഷയിലേക്ക് വിവർത്തനം ചെയ്തു.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>ഈ സബ്സ്ക്രിപ്ഷൻ ഉപയോഗിച്ച് നിങ്ങൾക്ക് ലഭിക്കും:
+● പരിധിയില്ലാത്ത ശേഷി
+● ഉപകരണ സമന്വയം (ലഭ്യതയ്ക്ക്)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>പരിധിയില്ലാത്തത് - പ്രതിമാസം</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>പരിധിയില്ലാത്തത് - വാർഷികം</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>പ്രാരംഭ റിലീസ്</value>
   </data>
 </root>

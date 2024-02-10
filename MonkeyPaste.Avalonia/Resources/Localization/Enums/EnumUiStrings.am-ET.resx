@@ -1,0 +1,1200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MpThemeType_Light" xml:space="preserve">
+    <value>ብርሃን</value>
+  </data>
+  <data name="MpThemeType_Dark" xml:space="preserve">
+    <value>ጨለማ</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Never" xml:space="preserve">
+    <value>በጭራሽ</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Daily" xml:space="preserve">
+    <value>በየቀኑ</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Weekly" xml:space="preserve">
+    <value>በየሳምንቱ</value>
+  </data>
+  <data name="MpTrashCleanupModeType_Monthly" xml:space="preserve">
+    <value>ወርሃዊ</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_LastOutput" xml:space="preserve">
+    <value>የመጨረሻው ውፅዓት</value>
+  </data>
+  <data name="MpAnalyzerChildInputType_SourceClip" xml:space="preserve">
+    <value>ምንጭ ቅንጥብ</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_None" xml:space="preserve">
+    <value>የለም</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_HoldingShift" xml:space="preserve">
+    <value>ሽግግር መያዝ</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopRightCorner" xml:space="preserve">
+    <value>የላይኛው ቀኝ ጥግ</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_TopLeftCorner" xml:space="preserve">
+    <value>ከላይ ግራ ጥግ</value>
+  </data>
+  <data name="MpScrollToOpenAndLockType_Always" xml:space="preserve">
+    <value>ሁሌም</value>
+  </data>
+  <data name="MpBillingCycleType_Never" xml:space="preserve">
+    <value>በጭራሽ</value>
+  </data>
+  <data name="MpBillingCycleType_Monthly" xml:space="preserve">
+    <value>ወርሃዊ</value>
+  </data>
+  <data name="MpBillingCycleType_Yearly" xml:space="preserve">
+    <value>በየአመቱ</value>
+  </data>
+  <data name="MpNotificationType_Loader" xml:space="preserve">
+    <value>ጭነት</value>
+  </data>
+  <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
+    <value>ምዝገባው ጊዜው አልፎበታል</value>
+  </data>
+  <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
+    <value>የመለያ መግቢያ አልተሳካም</value>
+  </data>
+  <data name="MpNotificationType_DbError" xml:space="preserve">
+    <value>DB ስህተት</value>
+  </data>
+  <data name="MpNotificationType_Help" xml:space="preserve">
+    <value>እገዛ</value>
+  </data>
+  <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
+    <value>ተሰኪ ዘምኗል</value>
+  </data>
+  <data name="MpNotificationType_Message" xml:space="preserve">
+    <value>መልእክት</value>
+  </data>
+  <data name="MpNotificationType_AppModeChange" xml:space="preserve">
+    <value>የመተግበሪያ ሁኔታ ለውጥ</value>
+  </data>
+  <data name="MpNotificationType_Debug" xml:space="preserve">
+    <value>ማረሻ</value>
+  </data>
+  <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
+    <value>የይዘት ካፕ ደርሷል</value>
+  </data>
+  <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
+    <value>የቆሻሻ መጣያ ካፕ ደርሷል</value>
+  </data>
+  <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
+    <value>የይዘት አክል በመለያ የታገደ አክል</value>
+  </data>
+  <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
+    <value>የይዘት መልስ በአካል ተገኝቷል</value>
+  </data>
+  <data name="MpNotificationType_AccountChanged" xml:space="preserve">
+    <value>መለያ ተለወጠ</value>
+  </data>
+  <data name="MpNotificationType_Welcome" xml:space="preserve">
+    <value>እንኳን ደህና መጣህ</value>
+  </data>
+  <data name="MpNotificationType_UpdateAvailable" xml:space="preserve">
+    <value>ዝመና ይገኛል</value>
+  </data>
+  <data name="MpNotificationType_NoUpdateAvailable" xml:space="preserve">
+    <value>ምንም ዝመና የለም</value>
+  </data>
+  <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
+    <value>የአብሌም ሁኔታ ተቀይሯል</value>
+  </data>
+  <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
+    <value>ትሪጅ ነቅቷል</value>
+  </data>
+  <data name="MpNotificationType_AlertAction" xml:space="preserve">
+    <value>ንቁ እርምጃ</value>
+  </data>
+  <data name="MpNotificationType_StartupComplete" xml:space="preserve">
+    <value>ጅምር ተጠናቅቋል</value>
+  </data>
+  <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
+    <value>ፋይል አይኦ ማስጠንቀቂያ</value>
+  </data>
+  <data name="MpNotificationType_UnloadPluginError" xml:space="preserve">
+    <value>የተንቀጠቀጡ ተሰኪ ስህተት</value>
+  </data>
+  <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
+    <value>ልክ ያልሆነ ተሰኪ</value>
+  </data>
+  <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
+    <value>ልክ ያልሆነ የቅንጥብ ሰሌዳ ቅርጸት ተቆጣጣሪ</value>
+  </data>
+  <data name="MpNotificationType_InvalidAction" xml:space="preserve">
+    <value>ልክ ያልሆነ እርምጃ</value>
+  </data>
+  <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
+    <value>መጥፎ የኤች ቲ ቲ ፒ ጥያቄ</value>
+  </data>
+  <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
+    <value>ትንታኔ ዘመቻ</value>
+  </data>
+  <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
+    <value>ልክ ያልሆነ ጥያቄ</value>
+  </data>
+  <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
+    <value>ልክ ያልሆነ ምላሽ</value>
+  </data>
+  <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
+    <value>የመለኪያዎች ጥያቄን ያስፈጽሙ</value>
+  </data>
+  <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
+    <value>DB የይለፍ ቃል ግቤት</value>
+  </data>
+  <data name="MpNotificationType_RateApp" xml:space="preserve">
+    <value>ደረጃ ይስጡ</value>
+  </data>
+  <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
+    <value>Modal ዳግም የተጋራ እሴት ቅድሚያዎች</value>
+  </data>
+  <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
+    <value>የ Modale የይዘት ቅርጸት መበላሸት</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
+    <value>Modal አዎ አዎ የለም አይስክሬም የመልእክት ሳጥን ሳጥን</value>
+  </data>
+  <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
+    <value>ሞዱል አዎ የለም ምንም የመልእክት ሳጥን</value>
+  </data>
+  <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
+    <value>Modal ok Whock የመልእክት ሳጥን</value>
+  </data>
+  <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
+    <value>Modal እሺ የመልእክት ሳጥን</value>
+  </data>
+  <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>Edale የጽሑፍ ሳጥን እሺ የመልእክት ሳጥን</value>
+  </data>
+  <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
+    <value>Modal የሚታዘዝ የጽሑፍ ሳጥን መልካም የመልእክት ሳጥን</value>
+  </data>
+  <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
+    <value>Modal እድገት የመልእክት ሳጥን</value>
+  </data>
+  <data name="MpNotificationType_ModalBusyMessageBox" xml:space="preserve">
+    <value>ሞዳል ሥራ የተጠመደ የመልእክት ሳጥን</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartIgnore" xml:space="preserve">
+    <value>Modal እንደገና እንደገና መጀመር</value>
+  </data>
+  <data name="MpNotificationType_ModalRestartNowOrLater" xml:space="preserve">
+    <value>አሁን ሞድ አሁን ወይም በኋላ</value>
+  </data>
+  <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
+    <value>ማጠናቀቂያ አረጋግጥ ያረጋግጡ</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
+    <value>ተሰኪ ምላሽ መልእክት</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
+    <value>ተሰኪ ምላሽ ስህተት</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
+    <value>ተሰኪ ምላሽ መስጠት</value>
+  </data>
+  <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
+    <value>የተካሚ ምላሽ ምላሽ ከ አማራጭ ጋር</value>
+  </data>
+  <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
+    <value>ዋና መስኮት ይቀያይሩ</value>
+  </data>
+  <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
+    <value>የመኪና ቅጂ ሁኔታን ይቀያይሩ</value>
+  </data>
+  <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
+    <value>የቀኝ ጠቅታ የ PATE ሁነታን ይቀያይሩ</value>
+  </data>
+  <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
+    <value>የቅንጥብ ሰሌዳውን ያዳምጡ</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendInlineMode" xml:space="preserve">
+    <value>የመግቢያ ሁኔታን ያጌጡ ሁኔታ</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendBlockMode" xml:space="preserve">
+    <value>የአስተያየት ሁኔታ ሁኔታን ይቀያይሩ</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPositionMode" xml:space="preserve">
+    <value>የቦታ አቀማመጥ ሁኔታ ሁኔታን ይቀያይሩ</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
+    <value>ቀዳዳዎች ተጎድተዋል</value>
+  </data>
+  <data name="MpShortcutType_ManuallyAddFromClipboard" xml:space="preserve">
+    <value>ከ Clipboard ውስጥ እራስዎ ይጨምሩ</value>
+  </data>
+  <data name="MpShortcutType_DecreaseFocus" xml:space="preserve">
+    <value>ትኩረት ይስጡ</value>
+  </data>
+  <data name="MpShortcutType_IncreaseFocus" xml:space="preserve">
+    <value>ትኩረት መጨመር</value>
+  </data>
+  <data name="MpShortcutType_ExitApplication" xml:space="preserve">
+    <value>ማመልከቻ</value>
+  </data>
+  <data name="MpShortcutType_PasteToExternal" xml:space="preserve">
+    <value>ወደ ውጫዊ ወደ ውጫዊ</value>
+  </data>
+  <data name="MpShortcutType_PasteSelection" xml:space="preserve">
+    <value>የልብስ ምርጫ</value>
+  </data>
+  <data name="MpShortcutType_CopySelection" xml:space="preserve">
+    <value>ምርጫን ይቅዱ</value>
+  </data>
+  <data name="MpShortcutType_CutSelection" xml:space="preserve">
+    <value>ምርኮን ይቁረጡ</value>
+  </data>
+  <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
+    <value>የተመረጡ እቃዎችን ሰርዝ</value>
+  </data>
+  <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
+    <value>የሚቀጥለው አምድ እቃ ይምረጡ</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
+    <value>ቀዳሚ አምድ ንጥል ይምረጡ</value>
+  </data>
+  <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
+    <value>የሚቀጥለው ረድፍ ንጥል ይምረጡ</value>
+  </data>
+  <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
+    <value>የቀደመውን ረድፍ ይምረጡ</value>
+  </data>
+  <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
+    <value>አቋራጭ መድብ</value>
+  </data>
+  <data name="MpShortcutType_Undo" xml:space="preserve">
+    <value>መቀልበስ</value>
+  </data>
+  <data name="MpShortcutType_Redo" xml:space="preserve">
+    <value>ድጋሚ</value>
+  </data>
+  <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
+    <value>ይዘት ብቻ ያነባል</value>
+  </data>
+  <data name="MpShortcutType_Rename" xml:space="preserve">
+    <value>እንደገና ይሰይሙ</value>
+  </data>
+  <data name="MpShortcutType_Duplicate" xml:space="preserve">
+    <value>የተባዛ</value>
+  </data>
+  <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
+    <value>ወደ ቤት ያሸብልሉ</value>
+  </data>
+  <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
+    <value>ወደ መጨረሻ ያሸብልሉ</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
+    <value>የመስኮት መጠን</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
+    <value>መስኮት መጠን ወደታች</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
+    <value>የመስኮት መጠን ግራ</value>
+  </data>
+  <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
+    <value>የመስኮት መጠን መብት</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowTop" xml:space="preserve">
+    <value>ምስራቃዊ ዋና መስኮት ከላይ</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowBottom" xml:space="preserve">
+    <value>ምስራቃዊ ዋና መስኮት ታች</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowLeft" xml:space="preserve">
+    <value>ምስራቃዊ ዋና መስኮት ግራ</value>
+  </data>
+  <data name="MpShortcutType_OrientMainWindowRight" xml:space="preserve">
+    <value>አቅጣጫ ዋና መስኮት ቀኝ</value>
+  </data>
+  <data name="MpShortcutType_PreviousPage" xml:space="preserve">
+    <value>ቀዳሚ ገጽ</value>
+  </data>
+  <data name="MpShortcutType_NextPage" xml:space="preserve">
+    <value>ቀጣይ ገጽ</value>
+  </data>
+  <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
+    <value>የተመረጠውን ንጥል ይፈልጉ እና ይተኩ</value>
+  </data>
+  <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
+    <value>ዋና መስኮት የተቆለፈ መስኮት ይቀያይሩ</value>
+  </data>
+  <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
+    <value>የማጣሪያ ምናሌ እንዲታይ ያድርጉ</value>
+  </data>
+  <data name="MpShortcutType_ShowSettings" xml:space="preserve">
+    <value>ቅንብሮችን አሳይ</value>
+  </data>
+  <data name="MpShortcutType_TogglePinned" xml:space="preserve">
+    <value>የተንሸራታች</value>
+  </data>
+  <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
+    <value>በመስኮት ውስጥ ይክፈቱ</value>
+  </data>
+  <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
+    <value>በቋሚነት ሰርዝ</value>
+  </data>
+  <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
+    <value>ኃይል ዋና መስኮትን ያሳድጉ</value>
+  </data>
+  <data name="MpShortcutType_ToggleAppendDirectionMode" xml:space="preserve">
+    <value>የወንጀል አቅጣጫ ሁኔታን ይቀያይሩ</value>
+  </data>
+  <data name="MpShortcutType_OpenHelp" xml:space="preserve">
+    <value>እገዛ</value>
+  </data>
+  <data name="MpShortcutType_ZoomInOnSelection" xml:space="preserve">
+    <value>በምርጫ ላይ ያጉሉ</value>
+  </data>
+  <data name="MpShortcutType_ZoomOutOnSelection" xml:space="preserve">
+    <value>በምርጫ ላይ ያጉሉ</value>
+  </data>
+  <data name="MpShortcutType_ResetSelectionZoom" xml:space="preserve">
+    <value>የምርጫ ምርጫን ዳግም አስጀምር</value>
+  </data>
+  <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
+    <value>የፒን ፒን ትሪ</value>
+  </data>
+  <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
+    <value>M xa p ps h o t c c c c t co t</value>
+  </data>
+  <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
+    <value>የመለጠጥ ቅጅ ዕቃዎች</value>
+  </data>
+  <data name="MpShortcutType_SelectTag" xml:space="preserve">
+    <value>መለያ ይምረጡ</value>
+  </data>
+  <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
+    <value>ቅጂውን ከቅድመ ቅድመ ቅድመ ሁኔታ ይተንትኑ</value>
+  </data>
+  <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
+    <value>የመርከብ ጉዞ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipText" xml:space="preserve">
+    <value>ክሊፕ ጽሑፍ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_RawClipData" xml:space="preserve">
+    <value>ጥሬ ቅንጥብ ውሂብ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_ClipType" xml:space="preserve">
+    <value>ክሊፕ አይነት</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
+    <value>ርዕስ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppPath" xml:space="preserve">
+    <value>ምንጭ የመተግበሪያ መንገድ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceAppName" xml:space="preserve">
+    <value>ምንጭ መተግበሪያ ስም</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrl" xml:space="preserve">
+    <value>ምንጭ ዩ.አር.ኤል.</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlTitle" xml:space="preserve">
+    <value>ምንጭ ዩ.አር.ኤል.</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceUrlDomain" xml:space="preserve">
+    <value>ምንጭ ዩ አር ኤል ጎራ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
+    <value>የቀን ሰዓት ይቅዱ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
+    <value>ቅዳ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
+    <value>ለጥፍ</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
+    <value>የመሣሪያ ስም</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
+    <value>የምንጭ መሳሪያ አይነት</value>
+  </data>
+  <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
+    <value>የመጨረሻው ውፅዓት</value>
+  </data>
+  <data name="MpActionType_Classify" xml:space="preserve">
+    <value>መመደብ</value>
+  </data>
+  <data name="MpActionType_Analyze" xml:space="preserve">
+    <value>ትንታኔ</value>
+  </data>
+  <data name="MpActionType_Conditional" xml:space="preserve">
+    <value>ሁኔታዊ</value>
+  </data>
+  <data name="MpActionType_Trigger" xml:space="preserve">
+    <value>ቀስቅሴ</value>
+  </data>
+  <data name="MpActionType_Repeater" xml:space="preserve">
+    <value>ንጋት</value>
+  </data>
+  <data name="MpActionType_FileWriter" xml:space="preserve">
+    <value>የፋይል ጸሐፊ</value>
+  </data>
+  <data name="MpActionType_SetClipboard" xml:space="preserve">
+    <value>ቅንጥብ ሰሌዳ ያዘጋጁ</value>
+  </data>
+  <data name="MpActionType_Delay" xml:space="preserve">
+    <value>መዘግየት</value>
+  </data>
+  <data name="MpActionType_Alert" xml:space="preserve">
+    <value>ማንቂያ</value>
+  </data>
+  <data name="MpActionType_ApplicationCommand" xml:space="preserve">
+    <value>የትግበራ ትእዛዝ</value>
+  </data>
+  <data name="MpTriggerType_ClipAdded" xml:space="preserve">
+    <value>ክሊፕ ታክሏል</value>
+  </data>
+  <data name="MpTriggerType_FileSystemChanged" xml:space="preserve">
+    <value>የፋይል ስርዓት ተቀየረ</value>
+  </data>
+  <data name="MpTriggerType_ClipTagged" xml:space="preserve">
+    <value>ክሊፕ መለያ ተሰጥቶታል</value>
+  </data>
+  <data name="MpTriggerType_Shortcut" xml:space="preserve">
+    <value>አቋራጭ</value>
+  </data>
+  <data name="MpTriggerType_MonkeyCopyShortcut" xml:space="preserve">
+    <value>ዝንጀሮ አቋራጭ አቋራጭ</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
+    <value>ውስጣዊ</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
+    <value>ነባሪ</value>
+  </data>
+  <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
+    <value>ብጁ</value>
+  </data>
+  <data name="MpPluginDependencyType_os" xml:space="preserve">
+    <value>OS</value>
+  </data>
+  <data name="MpPluginDependencyType_app" xml:space="preserve">
+    <value>መተግበሪያ</value>
+  </data>
+  <data name="MpPluginDependencyType_lib" xml:space="preserve">
+    <value>ሊብ</value>
+  </data>
+  <data name="MpClipboardFormatType_Text" xml:space="preserve">
+    <value>ጽሑፍ</value>
+  </data>
+  <data name="MpClipboardFormatType_Html" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+  <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
+    <value>RTF</value>
+  </data>
+  <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
+    <value>Bitmap</value>
+  </data>
+  <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
+    <value>ፋይል መጣል</value>
+  </data>
+  <data name="MpClipboardFormatType_Csv" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
+    <value>ውስጣዊ ይዘት</value>
+  </data>
+  <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
+    <value>የዩኒኮድ ጽሑፍ</value>
+  </data>
+  <data name="MpClipboardFormatType_OemText" xml:space="preserve">
+    <value>ኦሪኪ ጽሑፍ</value>
+  </data>
+  <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
+    <value>Xaml</value>
+  </data>
+  <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
+    <value>የ XMAL ጥቅል</value>
+  </data>
+  <data name="MpClipboardFormatType_Custom" xml:space="preserve">
+    <value>ብጁ</value>
+  </data>
+  <data name="MpSettingsFrameType_Login" xml:space="preserve">
+    <value>ግባ</value>
+  </data>
+  <data name="MpSettingsFrameType_Status" xml:space="preserve">
+    <value>ሁኔታ</value>
+  </data>
+  <data name="MpSettingsFrameType_Register" xml:space="preserve">
+    <value>ይመዝገቡ</value>
+  </data>
+  <data name="MpSettingsFrameType_Theme" xml:space="preserve">
+    <value>ጭብጥ</value>
+  </data>
+  <data name="MpSettingsFrameType_DefaultFonts" xml:space="preserve">
+    <value>ነባሪ ቅርጸ ቁምፊዎች</value>
+  </data>
+  <data name="MpSettingsFrameType_Sound" xml:space="preserve">
+    <value>ድምፅ</value>
+  </data>
+  <data name="MpSettingsFrameType_Window" xml:space="preserve">
+    <value>መስኮት</value>
+  </data>
+  <data name="MpSettingsFrameType_Hints" xml:space="preserve">
+    <value>ፍንጮች</value>
+  </data>
+  <data name="MpSettingsFrameType_International" xml:space="preserve">
+    <value>ዓለም አቀፍ</value>
+  </data>
+  <data name="MpSettingsFrameType_Limits" xml:space="preserve">
+    <value>ገደቦች</value>
+  </data>
+  <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
+    <value>መከታተል</value>
+  </data>
+  <data name="MpSettingsFrameType_Startup" xml:space="preserve">
+    <value>መነሻ ነገር</value>
+  </data>
+  <data name="MpSettingsFrameType_Search" xml:space="preserve">
+    <value>ፍለጋ</value>
+  </data>
+  <data name="MpSettingsFrameType_Content" xml:space="preserve">
+    <value>ይዘት</value>
+  </data>
+  <data name="MpSettingsFrameType_TopScreenEdgeGestures" xml:space="preserve">
+    <value>ከፍተኛ ማያ ገጽ ምልክቶች</value>
+  </data>
+  <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
+    <value>አቋራጮች</value>
+  </data>
+  <data name="MpSettingsFrameType_System" xml:space="preserve">
+    <value>ስርዓት</value>
+  </data>
+  <data name="MpSettingsFrameType_Password" xml:space="preserve">
+    <value>የይለፍ ቃል</value>
+  </data>
+  <data name="MpSettingsFrameType_Logs" xml:space="preserve">
+    <value>ምዝግብ ማስታወሻዎች</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
+    <value>ያስሱ</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
+    <value>ተጭኗል</value>
+  </data>
+  <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
+    <value>ዝመናዎች</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
+    <value>ሥር</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
+    <value>መተግበሪያ</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
+    <value>መሣሪያ</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
+    <value>ሜታ</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
+    <value>ስታቲስቲክስ</value>
+  </data>
+  <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
+    <value>ዩ አር ኤል</value>
+  </data>
+  <data name="MpNextJoinOptionType_And" xml:space="preserve">
+    <value>እና</value>
+  </data>
+  <data name="MpNextJoinOptionType_Or" xml:space="preserve">
+    <value>ወይም</value>
+  </data>
+  <data name="MpNextJoinOptionType_Not" xml:space="preserve">
+    <value>አይደለም</value>
+  </data>
+  <data name="MpRootOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpRootOptionType_Clip" xml:space="preserve">
+    <value>ክሊፕ</value>
+  </data>
+  <data name="MpRootOptionType_Collection" xml:space="preserve">
+    <value>ክምችት</value>
+  </data>
+  <data name="MpRootOptionType_Sources" xml:space="preserve">
+    <value>ምንጮች</value>
+  </data>
+  <data name="MpRootOptionType_History" xml:space="preserve">
+    <value>ታሪክ</value>
+  </data>
+  <data name="MpTextOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpTextOptionType_Matches" xml:space="preserve">
+    <value>ግጥሚያዎች</value>
+  </data>
+  <data name="MpTextOptionType_Contains" xml:space="preserve">
+    <value>ይይዛል</value>
+  </data>
+  <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
+    <value>ይጀምራል</value>
+  </data>
+  <data name="MpTextOptionType_EndsWith" xml:space="preserve">
+    <value>ከ ጋር ያበቃል</value>
+  </data>
+  <data name="MpTextOptionType_RegEx" xml:space="preserve">
+    <value>Reg</value>
+  </data>
+  <data name="MpNumberOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpNumberOptionType_Equals" xml:space="preserve">
+    <value>እኩል</value>
+  </data>
+  <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
+    <value>ከዚያ ይበልጣል</value>
+  </data>
+  <data name="MpNumberOptionType_LessThan" xml:space="preserve">
+    <value>ከ በታች</value>
+  </data>
+  <data name="MpNumberOptionType_IsNot" xml:space="preserve">
+    <value>አይደለም</value>
+  </data>
+  <data name="MpColorOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpColorOptionType_Hex" xml:space="preserve">
+    <value>ሄክስ</value>
+  </data>
+  <data name="MpColorOptionType_ARGB" xml:space="preserve">
+    <value>አንድ r g b</value>
+  </data>
+  <data name="MpDimensionOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpDimensionOptionType_Width" xml:space="preserve">
+    <value>ስፋት</value>
+  </data>
+  <data name="MpDimensionOptionType_Height" xml:space="preserve">
+    <value>ቁመት</value>
+  </data>
+  <data name="MpImageOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpImageOptionType_Dimensions" xml:space="preserve">
+    <value>ልኬቶች</value>
+  </data>
+  <data name="MpImageOptionType_Color" xml:space="preserve">
+    <value>ቀለም</value>
+  </data>
+  <data name="MpFileOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpFileOptionType_Audio" xml:space="preserve">
+    <value>ኦዲዮ</value>
+  </data>
+  <data name="MpFileOptionType_Compressed" xml:space="preserve">
+    <value>ተጭኗል</value>
+  </data>
+  <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
+    <value>ዲስክ እና ሚዲያ</value>
+  </data>
+  <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
+    <value>ውሂብ እና የውሂብ ጎታ</value>
+  </data>
+  <data name="MpFileOptionType_Document" xml:space="preserve">
+    <value>ሰነድ</value>
+  </data>
+  <data name="MpFileOptionType_Email" xml:space="preserve">
+    <value>ኢሜል</value>
+  </data>
+  <data name="MpFileOptionType_Executable" xml:space="preserve">
+    <value>አስፈፃሚ</value>
+  </data>
+  <data name="MpFileOptionType_Font" xml:space="preserve">
+    <value>ቅርጸ-ቁምፊ</value>
+  </data>
+  <data name="MpFileOptionType_Image" xml:space="preserve">
+    <value>ምስል</value>
+  </data>
+  <data name="MpFileOptionType_Internet" xml:space="preserve">
+    <value>በይነመረብ</value>
+  </data>
+  <data name="MpFileOptionType_Presentation" xml:space="preserve">
+    <value>ማቅረቢያ</value>
+  </data>
+  <data name="MpFileOptionType_Programming" xml:space="preserve">
+    <value>መርሃግብሩ</value>
+  </data>
+  <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
+    <value>የተመን ሉህ</value>
+  </data>
+  <data name="MpFileOptionType_System" xml:space="preserve">
+    <value>ስርዓት</value>
+  </data>
+  <data name="MpFileOptionType_Video" xml:space="preserve">
+    <value>ቪዲዮ</value>
+  </data>
+  <data name="MpFileOptionType_UserDefined" xml:space="preserve">
+    <value>ተጠቃሚው ተገልጻል</value>
+  </data>
+  <data name="MpFileOptionType_Custom" xml:space="preserve">
+    <value>ብጁ</value>
+  </data>
+  <data name="MpFileContentOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpFileContentOptionType_Path" xml:space="preserve">
+    <value>መንገድ</value>
+  </data>
+  <data name="MpFileContentOptionType_Name" xml:space="preserve">
+    <value>ስም</value>
+  </data>
+  <data name="MpFileContentOptionType_Kind" xml:space="preserve">
+    <value>ደግ</value>
+  </data>
+  <data name="MpContentTypeOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpContentTypeOptionType_Text" xml:space="preserve">
+    <value>ጽሑፍ</value>
+  </data>
+  <data name="MpContentTypeOptionType_Image" xml:space="preserve">
+    <value>ምስል</value>
+  </data>
+  <data name="MpContentTypeOptionType_Files" xml:space="preserve">
+    <value>ፋይሎች</value>
+  </data>
+  <data name="MpAppOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
+    <value>የትግበራ ስም</value>
+  </data>
+  <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
+    <value>የሂደት መንገድ</value>
+  </data>
+  <data name="MpWebsiteOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpWebsiteOptionType_Url" xml:space="preserve">
+    <value>ዩ አር ኤል</value>
+  </data>
+  <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
+    <value>ጎራ</value>
+  </data>
+  <data name="MpWebsiteOptionType_Title" xml:space="preserve">
+    <value>ርዕስ</value>
+  </data>
+  <data name="MpSourcesOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpSourcesOptionType_Device" xml:space="preserve">
+    <value>መሣሪያ</value>
+  </data>
+  <data name="MpSourcesOptionType_App" xml:space="preserve">
+    <value>መተግበሪያ</value>
+  </data>
+  <data name="MpSourcesOptionType_Website" xml:space="preserve">
+    <value>ድህረገፅ</value>
+  </data>
+  <data name="MpTransactionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpTransactionType_Created" xml:space="preserve">
+    <value>ተፈጠረ</value>
+  </data>
+  <data name="MpTransactionType_Dropped" xml:space="preserve">
+    <value>ወረደ</value>
+  </data>
+  <data name="MpTransactionType_Dragged" xml:space="preserve">
+    <value>ጎትት</value>
+  </data>
+  <data name="MpTransactionType_Pasted" xml:space="preserve">
+    <value>ተለጠፈ</value>
+  </data>
+  <data name="MpTransactionType_Copied" xml:space="preserve">
+    <value>ተቀደደ</value>
+  </data>
+  <data name="MpTransactionType_Cut" xml:space="preserve">
+    <value>መቆረጥ</value>
+  </data>
+  <data name="MpTransactionType_Edited" xml:space="preserve">
+    <value>ተስተካክሏል</value>
+  </data>
+  <data name="MpTransactionType_Analyzed" xml:space="preserve">
+    <value>ተመርቷል</value>
+  </data>
+  <data name="MpTransactionType_Appended" xml:space="preserve">
+    <value>ተገለጠ</value>
+  </data>
+  <data name="MpTransactionType_Recreated" xml:space="preserve">
+    <value>ተሰብስቧል</value>
+  </data>
+  <data name="MpTransactionType_Linked" xml:space="preserve">
+    <value>የተገናኘ</value>
+  </data>
+  <data name="MpTransactionType_Unlinked" xml:space="preserve">
+    <value>አልተገለጸም</value>
+  </data>
+  <data name="MpTransactionType_Error" xml:space="preserve">
+    <value>ስህተት</value>
+  </data>
+  <data name="MpTransactionType_System" xml:space="preserve">
+    <value>ስርዓት</value>
+  </data>
+  <data name="MpDateTimeOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
+    <value>በመጨረሻ</value>
+  </data>
+  <data name="MpDateTimeOptionType_Before" xml:space="preserve">
+    <value>ከዚህ በፊት</value>
+  </data>
+  <data name="MpDateTimeOptionType_After" xml:space="preserve">
+    <value>በኋላ</value>
+  </data>
+  <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
+    <value>ትክክለኛ</value>
+  </data>
+  <data name="MpDateBeforeUnitType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
+    <value>ዛሬ</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
+    <value>ትናንት</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
+    <value>በዚህ ሳምንት</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
+    <value>በዚህ ወር</value>
+  </data>
+  <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
+    <value>የህ አመት</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
+    <value>ትክክለኛ</value>
+  </data>
+  <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
+    <value>መነሻ ነገር</value>
+  </data>
+  <data name="MpDateAfterUnitType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
+    <value>ትናንት</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
+    <value>ባለፈው ሳምንት</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
+    <value>ባለፈው ወር</value>
+  </data>
+  <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
+    <value>ባለፈው ዓመት</value>
+  </data>
+  <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
+    <value>ትክክለኛ</value>
+  </data>
+  <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
+    <value>መነሻ ነገር</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
+    <value>ሰዓታት</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
+    <value>ቀናት</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
+    <value>ሳምንታት</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
+    <value>ወራት</value>
+  </data>
+  <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
+    <value>ዓመታት</value>
+  </data>
+  <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
+    <value>የቀን ሰዓት ይቅዱ</value>
+  </data>
+  <data name="MpContentSortType_Source" xml:space="preserve">
+    <value>ምንጭ</value>
+  </data>
+  <data name="MpContentSortType_Title" xml:space="preserve">
+    <value>ርዕስ</value>
+  </data>
+  <data name="MpContentSortType_ItemData" xml:space="preserve">
+    <value>የእቃ ውሂብ</value>
+  </data>
+  <data name="MpContentSortType_ItemType" xml:space="preserve">
+    <value>የንጥል አይነት</value>
+  </data>
+  <data name="MpContentSortType_UsageScore" xml:space="preserve">
+    <value>የአጠቃቀም ውጤት</value>
+  </data>
+  <data name="MpRoutingType_Internal" xml:space="preserve">
+    <value>ውስጣዊ</value>
+  </data>
+  <data name="MpRoutingType_Passive" xml:space="preserve">
+    <value>መተላለፊያዎች</value>
+  </data>
+  <data name="MpRoutingType_Pre" xml:space="preserve">
+    <value>ቅድመ</value>
+  </data>
+  <data name="MpRoutingType_Post" xml:space="preserve">
+    <value>ልጥፍ</value>
+  </data>
+  <data name="MpRoutingType_Override" xml:space="preserve">
+    <value>መሻር</value>
+  </data>
+  <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
+    <value>ብቸኛ መሻገሪያ</value>
+  </data>
+  <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
+    <value>ይይዛል</value>
+  </data>
+  <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
+    <value>ትክክለኛ</value>
+  </data>
+  <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
+    <value>ይጀምራል</value>
+  </data>
+  <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
+    <value>ከ ጋር ያበቃል</value>
+  </data>
+  <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
+    <value>ሬጌክስ</value>
+  </data>
+  <data name="MpUserAccountType_Free" xml:space="preserve">
+    <value>ፍርይ</value>
+  </data>
+  <data name="MpUserAccountType_Basic" xml:space="preserve">
+    <value>መሰረታዊ</value>
+  </data>
+  <data name="MpUserAccountType_Unlimited" xml:space="preserve">
+    <value>ያልተገደበ</value>
+  </data>
+  <data name="MpContentOptionType_None" xml:space="preserve">
+    <value>- ይምረጡ -</value>
+  </data>
+  <data name="MpContentOptionType_Type" xml:space="preserve">
+    <value>ዓይነት</value>
+  </data>
+  <data name="MpContentOptionType_Text" xml:space="preserve">
+    <value>ጽሑፍ</value>
+  </data>
+  <data name="MpContentOptionType_Images" xml:space="preserve">
+    <value>ምስሎች</value>
+  </data>
+  <data name="MpContentOptionType_Files" xml:space="preserve">
+    <value>ፋይሎች</value>
+  </data>
+  <data name="MpContentOptionType_AnyContent" xml:space="preserve">
+    <value>ማንኛውም ይዘት</value>
+  </data>
+  <data name="MpContentOptionType_Title" xml:space="preserve">
+    <value>ርዕስ</value>
+  </data>
+  <data name="MpContentOptionType_Annotation" xml:space="preserve">
+    <value>ማብራሪያ</value>
+  </data>
+  <data name="MpContentOptionType_Color" xml:space="preserve">
+    <value>ቀለም</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
+    <value>የመጀመሪያ ደረጃ</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
+    <value>አይጥ</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
+    <value>ማጽዳት</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
+    <value>ሰርዝ</value>
+  </data>
+  <data name="MpTagType_Link" xml:space="preserve">
+    <value>አገናኝ</value>
+  </data>
+  <data name="MpTagType_Query" xml:space="preserve">
+    <value>መጠይቅ</value>
+  </data>
+  <data name="MpTagType_Group" xml:space="preserve">
+    <value>ቡድን</value>
+  </data>
+  <data name="MpReadOnlyTagType_Tags" xml:space="preserve">
+    <value>መለያዎች</value>
+  </data>
+  <data name="MpReadOnlyTagType_All" xml:space="preserve">
+    <value>ሁሉም</value>
+  </data>
+  <data name="MpReadOnlyTagType_Favorites" xml:space="preserve">
+    <value>ተወዳጆች</value>
+  </data>
+  <data name="MpReadOnlyTagType_Filters" xml:space="preserve">
+    <value>ማጣሪያዎች</value>
+  </data>
+  <data name="MpReadOnlyTagType_Trash" xml:space="preserve">
+    <value>መጣያ</value>
+  </data>
+  <data name="MpReadOnlyTagType_Today" xml:space="preserve">
+    <value>ዛሬ</value>
+  </data>
+  <data name="MpReadOnlyTagType_Formats" xml:space="preserve">
+    <value>ቅርፀቶች</value>
+  </data>
+  <data name="MpReadOnlyTagType_Text" xml:space="preserve">
+    <value>ጽሑፍ</value>
+  </data>
+  <data name="MpReadOnlyTagType_Images" xml:space="preserve">
+    <value>ምስሎች</value>
+  </data>
+  <data name="MpReadOnlyTagType_Files" xml:space="preserve">
+    <value>ፋይሎች</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Text" xml:space="preserve">
+    <value>ጽሑፍ</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_Image" xml:space="preserve">
+    <value>ምስል</value>
+  </data>
+  <data name="MpAnalyzerInputFormatFlags_File" xml:space="preserve">
+    <value>ፋይል</value>
+  </data>
+  <data name="WatcherChangeTypes_Created" xml:space="preserve">
+    <value>ተፈጠረ</value>
+  </data>
+  <data name="WatcherChangeTypes_Deleted" xml:space="preserve">
+    <value>ተሰር .ል</value>
+  </data>
+  <data name="WatcherChangeTypes_Changed" xml:space="preserve">
+    <value>ተቀይሯል</value>
+  </data>
+  <data name="WatcherChangeTypes_Renamed" xml:space="preserve">
+    <value>እንደገና ተሰይሟል</value>
+  </data>
+  <data name="WatcherChangeTypes_All" xml:space="preserve">
+    <value>ሁሉም</value>
+  </data>
+</root>

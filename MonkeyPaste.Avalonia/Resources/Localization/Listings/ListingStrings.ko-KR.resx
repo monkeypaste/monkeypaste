@@ -59,15 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value>이 서브스크립션을 통해 다음을 받게 됩니다.
-● 최대 1,000개의 콘텐츠 클립 
-● 무제한 휴지통 &amp; 아카이브</value>
+    <value>이 구독을 사용하면 다음을 받게됩니다.
+● 최대 1,000 개의 컨텐츠 클립
+● 무제한 쓰레기 및 아카이브</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value>Basic - 월간</value>
+    <value>기본 - 월별</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>기본 - 연간</value>
+    <value>기본 - 매년</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -97,34 +97,34 @@
     <value>복사</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value>붙여넣기</value>
+    <value>반죽</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value>클립보드 관리자</value>
+    <value>클립 보드 관리자</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>도구</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value>유틸리티</value>
+    <value>공익사업</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value>자동화</value>
+    <value>오토메이션</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>사용자 지정 자동화 및 작업 체인을 위한 Trigger &amp; Action Designer</value>
+    <value>맞춤형 자동화 및 액션 체인을위한 트리거 및 액션 디자이너</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>수평/수직 레이아웃, 목록/그리드 보기 및 다중 모니터 지원</value>
+    <value>수평/수직 레이아웃, 목록/그리드보기 및 멀티 - 모니터 지원</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>스니펫 모음에서 빠르고 동적으로 붙여넣을 수 있는 찾기/바꾸기, 서식 있는 텍스트(표, 목록, 링크 등) 텍스트 템플릿이 있는 완전한 기능을 갖춘 클립 편집기</value>
+    <value>완전 - Find/Replace, Rich Text (테이블, 목록, 링크 등)가 포함 된 기능이있는 클립 편집기, 스 니펫 컬렉션에서 빠르고 역동적 인 붙여 넣기를위한 텍스트 템플릿</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>안전하고 보안이 유지되는 개인 로컬 데이터 스토리지(2단계 암호 보호 옵션)</value>
+    <value>옵션이있는 안전하고 안전하며 개인 로컬 데이터 저장소 2- 팩터 암호 보호</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>계속 성장하는 커뮤니티 중심의 플러그인 라이브러리가 있는 내장 플러그인 브라우저</value>
+    <value>구축 - 영원히 성장하는 커뮤니티가있는 플러그인 브라우저에서 - 구동 플러그인 라이브러리</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -142,92 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste는 다른 어떤 것과도 비교할 수 없는 클립보드 관리자, 자동화 및 생산성 도구입니다. 클립보드를 작업 흐름의 풍부하고 체계적인 부분으로 향상시키고,
-텍스트, 파일 및 이미지를 지원하는 직관적이고 로우 프로파일 인터페이스가 특징입니다. 계속 성장하는 커뮤니티 중심의 플러그인 라이브러리와 함께 유연성을 위해 설계되었습니다.
+    <value>MonkeyPaste는 클립 보드 관리자, 자동화 및 생산성 도구입니다. 클립 보드를 워크 플로의 풍부하고 정리 된 부분으로 향상시킵니다.
+텍스트, 파일 및 이미지를 지원하는 직관적이고 낮은 프로필 인터페이스를 특징으로합니다. 끊임없이 성장하는 커뮤니티와 함께 ​​유연성을 위해 설계되었습니다.
 
-그것은 클립보드에서 복사하여 붙여넣는 것 이상을 원하는 프로그래머의 실험으로 시작되었습니다. 그는 대신 '추가'하는 Ctrl+C와 같은 간단한 명령을 원했습니다 
-클립보드에 있던 것을 '교체'합니다. 그리고 실험은 성공했습니다, 유레카! 작은 도구는 매우 편리했습니다. 이것은 프로그래머가 더 많은 아이디어와 더 많은 실험에 흥미를 갖도록 했습니다. 
-이제 "MonkeyPaste"가되었습니다. 
+클립 보드 밖으로 복사하여 붙여 넣기를 원하는 프로그래머의 실험으로 시작되었습니다. 그는 Ctrl+C와 같은 간단한 명령을 대신에 '추가'하는 것을 원했습니다.
+클립 보드에있는 '교체'의. 그리고 실험이 효과가있었습니다. 작은 도구는 매우 편리했습니다. 이것은 더 많은 아이디어와 더 많은 실험으로 프로그래머에게
+이제 "원숭이 스타"가되었습니다.
 
-바탕 화면이 파일에 있으므로 MonkeyPaste는 클립 보드에 있습니다. 겉보기에 통합되고 상호 운용되도록 신중하게 설계된 도구 모음입니다. 
-콘텐츠의 모든 응용 프로그램 또는 형식. Ctrl+C 및 Ctrl+V는 단순한 단축키 그 이상입니다. 그들은 모든 응용 프로그램이 공유하는 입국 항입니다. 
-손끝에서 사용할 수 있는 가치와 의미의 부. 다음 Ctrl+C 이후에 그냥 버리는 것이 아닙니다.
+데스크탑이 파일에 이르기 때문에 MonkeyPaste는 클립 보드에 가려고합니다. 그것의 도구 제품군은
+컨텐츠의 모든 응용 프로그램 또는 형식. Ctrl+C 및 Ctrl+V는 단순한 바로 가기 이상입니다. 그것들은 모든 응용 프로그램이 공유하는 입국 포트입니다.
+풍부한 가치와 의미 당신은 당신의 손가락 끝에서 이용할 자격이 있습니다. 다음 Ctrl+이후에 버려진 것이 아닙니다. c.
 
-저는 앞서 언급 한 프로그래머이며 모든 사람이 MonkeyPaste를 사용할 수 있기를 바랍니다. 따라서 모든 기능을 완전히 무료로 사용할 수 있습니다. 
-나도 당신이 그것을 편안하게 사용하기를 바랍니다. 그래서 나는 그 창조의 유일한 힘으로서 (매우) 개인 정보 중 어느 것도 발생할 수 없다고 확신합니다. 
-클립보드는 자신의 컴퓨터 이외의 어느 곳에서나 추적되거나 저장됩니다. 마침표.</value>
+나는 이전에 언급 된 프로그래머이며 모든 사람들이 monkeypaste에서 사용할 수 있기를 원합니다. 따라서 모든 기능은 완전히 무료로 사용할 수 있습니다.
+나는 또한 당신이 그것을 사용하는 편안함을 느끼기를 원합니다. 그래서 나는 당신이 창조의 배후에있는 유일한 힘으로서 당신을
+클립 보드는 자신의 컴퓨터 너머의 어느 곳에서나 추적되거나 저장됩니다. 기간.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● 수평/수직 레이아웃, 목록/그리드 보기 및 다중 모니터 지원을 모두 갖춘 간단하고 친숙한 인터페이스</value>
+    <value>● 수평/수직 레이아웃, 목록/그리드보기 및 다중 모니터 지원과 함께 간단하고 친숙한 인터페이스</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● 추가 모드: 복사는 클립보드에서 '바꾸기'가 아닌 '추가'가 됩니다. 텍스트와 파일 모두, 완전히 사용자 정의 가능</value>
+    <value>● 추가 모드 : 복사는 클립 보드에서 '교체'대신 '추가'가됩니다. 텍스트와 파일, 완전히 사용자 정의 할 수 있습니다</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Firefox 및 Chromium 기반 브라우저(Chrome, Edge, Brave)에 대한 향상된 지원을 통한 정교한 클립 추적, 소스 및 사용</value>
+    <value>● Firefox 및 Chromium- 기반 브라우저 (Chrome, Edge, Brave)에 대한 지원이 향상된 정교한 클립 추적, 소스 및 사용법</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● 찾기/바꾸기 및 강조 표시 기능이 있는 서식 있는 텍스트(표, 목록, 링크 등)가 있는 완전한 기능을 갖춘 클립 편집기</value>
+    <value>● 완전 - Rich Text (테이블, 목록, 링크 등)가있는 기능이있는 클립 편집기 찾기/교체 및 강조 표시</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● 이미지를 안전한 데이터베이스에 저장하여 언제든지 파일로 사용할 수 있습니다 - 필요에 따라 드래그 앤 드롭!</value>
+    <value>● 이미지를 보안 데이터베이스에 저장하고 언제든지 파일로 사용할 준비가되어 있습니다.</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● 스니펫 모음에서 빠르고 동적으로 붙여넣을 수 있는 강력한 텍스트 템플릿</value>
+    <value>● 스 니펫 컬렉션에서 빠르고 역동적 인 붙여 넣기를위한 강력한 텍스트 템플릿</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● 사용자 지정 자동화 및 작업 체인을 위한 트리거 및 작업 디자이너</value>
+    <value>● 맞춤형 자동화 및 액션 체인을위한 트리거 및 액션 디자이너</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● 클립을 분석하거나 클립보드에 모든 형식을 읽고 쓸 수 있는 플러그인 시스템을 사용하고 확장하기 쉽습니다.</value>
+    <value>● 클립 분석 또는 클립 보드에 형식을 읽거나 쓰는 데 사용하기 쉬운 플러그인 시스템.</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● 계속 성장하는 커뮤니티 중심의 플러그인 라이브러리가 있는 내장 플러그인 브라우저</value>
+    <value>● 구축 - 계속 성장하는 커뮤니티가있는 플러그인 브라우저에서 - 구동 플러그인 라이브러리</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● 플러그인 사전 설정으로 모든 것을 자동화하고, AI 프롬프트 또는 명령을 쉽게 숨기고 사용할 수 있습니다.</value>
+    <value>● 플러그인 사전 설정으로 모든 내용을 자동화하고, AI 프롬프트 또는 명령을 쉽게 사용하여 보관하고 사용하십시오.</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● 더 많은 플랫폼과 기능이 곧 출시됩니다! 이제 시작일 뿐입니다 🎉</value>
+    <value>● 더 많은 플랫폼과 기능이 곧 제공됩니다! 우리는 방금 시작하고 있습니다</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>● 밝은 테마와 어두운 테마 모두 완전히 동적이며 원하는 색상을 사용하십시오.</value>
+    <value>● Light &amp; Dark 테마는 모두 완전히 역동적이며 원하는 색상을 사용하십시오.</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● 인터페이스에 바로 통합 된 도움말 및 힌트. 웹 사이트에서 모두 시작할 수 있는 온라인 설명서, 비디오 및 포럼(monkeypaste.com/docs)</value>
+    <value>● 인터페이스에서 통합 된 도움말 및 힌트. 온라인 매뉴얼, 비디오 및 포럼을 웹 사이트에서 시작할 수 있도록하십시오 (monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>● 성능에 최적화되었으며 1,000,000개의 클립으로 스트레스 테스트를 거쳤습니다.</value>
+    <value>● 성능에 최적화되었으며 1,000,000의 클립으로 스트레스를 받았습니다.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● 언제든지 검색, 수십 개의 필드에 걸쳐 클립과 해당 소스에 대한 단순 및 고급 필터링을 모두 사용하여 입력을 시작하십시오.</value>
+    <value>● 언제든지 검색 할 때는 클립의 단순 및 고급 필터링 및 수십 개의 필드에 대한 소스를 사용하여 입력을 시작하십시오.</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● 태그 트리에서 클립을 구성하고 재사용 가능한 필터를 만듭니다.</value>
+    <value>● 태그 트리에서 클립을 구성하고 재현 가능한 필터를 만듭니다.</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● 안전하고 안전한 개인 로컬 데이터 저장소(데이터 수집 없음)는 2단계 암호 보호(옵션)로 항상 암호화되며 추적기에서 앱이나 웹사이트를 쉽게 차단합니다.</value>
+    <value>● 안전하고 안전하며 개인 로컬 데이터 스토리지 (데이터 수집 없음) 항상 옵션으로 암호화되어 2 팩터 암호 보호 및 추적기에서 앱 또는 웹 사이트를 쉽게 차단합니다.</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● 광범위한 드래그 앤 드롭 지원, 사용자 지정 글로벌 단축키, 라우팅 및 마우스 무료 탐색</value>
+    <value>● 광범위한 드래그 및 - 드롭 지원, 맞춤형 글로벌 단축키, 라우팅 및 마우스 - 무료 내비게이션</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● 사용자 정의 마우스 모드 : 오른쪽 클릭 붙여 넣기 및 왼쪽 클릭 자동 클릭 - 복사</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● 사용자 정의 마우스 모드 : 오른쪽 오른쪽 - 붙여 넣기 및 왼쪽을 클릭하고 자동 복사를 클릭합니다.</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>클립보드는 정글입니다. MonkeyPaste는 왕입니다! 앱에서 앱으로 스윙하고, MonkeyPaste로 이전과는 다른 방식으로 이것을 복사하고 붙여넣으세요!! 완전히 새로운 최첨단 클립보드 및 분석 자동화 도구입니다!!</value>
+    <value>클립 보드는 정글입니다. Monkeypaste는 왕입니다! 앱에서 앱으로 스윙하고, 이것을 복사하고 monkeypaste와 함께 전에는 그와 같이 붙여 넣기 !! 브랜드 - 새롭고 최첨단 클립 보드 및 분석 자동화 도구 !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value>작동 중인 MonkeyPaste 샘플!</value>
+    <value>행동중인 원숭이의 샘플!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -236,21 +233,21 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value>이 언어로 설치됩니다. 영어는 이러한 예에만 해당됩니다.</value>
+    <value>이 언어로 설치되었습니다. 영어는이 예제에만 해당됩니다</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>메모! 스크린샷은 예시일 뿐입니다. 설치하는 내용이 이 언어로 번역되었습니다.</value>
+    <value>스크린 샷은 예제입니다. 설치 한 내용은이 언어로 번역되었습니다.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value>이 서브스크립션을 통해 다음을 받게 됩니다.
+    <value>이 구독을 사용하면 다음을 받게됩니다.
 ● 무제한 용량
-● 장치 동기화(사용 가능 여부에 따라)</value>
+● 장치 동기화 (가용성시)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>무제한 - 월간</value>
+    <value>무제한 - 월별</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value>무제한 - 연간</value>
+    <value>무제한 - 매년</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>초판</value>

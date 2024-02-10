@@ -2725,29 +2725,29 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Toggle Append Insert Mode.
+        ///   Looks up a localized string similar to Toggle Append Block Mode.
         /// </summary>
-        public static string MpShortcutType_ToggleAppendInsertMode {
+        public static string MpShortcutType_ToggleAppendBlockMode {
             get {
-                return ResourceManager.GetString("MpShortcutType_ToggleAppendInsertMode", resourceCulture);
+                return ResourceManager.GetString("MpShortcutType_ToggleAppendBlockMode", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Toggle Append Line Mode.
+        ///   Looks up a localized string similar to Toggle Append Direction Mode.
         /// </summary>
-        public static string MpShortcutType_ToggleAppendLineMode {
+        public static string MpShortcutType_ToggleAppendDirectionMode {
             get {
-                return ResourceManager.GetString("MpShortcutType_ToggleAppendLineMode", resourceCulture);
+                return ResourceManager.GetString("MpShortcutType_ToggleAppendDirectionMode", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Toggle Append Manual Mode.
+        ///   Looks up a localized string similar to Toggle Append Inline Mode.
         /// </summary>
-        public static string MpShortcutType_ToggleAppendManualMode {
+        public static string MpShortcutType_ToggleAppendInlineMode {
             get {
-                return ResourceManager.GetString("MpShortcutType_ToggleAppendManualMode", resourceCulture);
+                return ResourceManager.GetString("MpShortcutType_ToggleAppendInlineMode", resourceCulture);
             }
         }
         
@@ -2761,11 +2761,11 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Toggle Append Pre Mode.
+        ///   Looks up a localized string similar to Toggle Append Position Mode.
         /// </summary>
-        public static string MpShortcutType_ToggleAppendPreMode {
+        public static string MpShortcutType_ToggleAppendPositionMode {
             get {
-                return ResourceManager.GetString("MpShortcutType_ToggleAppendPreMode", resourceCulture);
+                return ResourceManager.GetString("MpShortcutType_ToggleAppendPositionMode", resourceCulture);
             }
         }
         

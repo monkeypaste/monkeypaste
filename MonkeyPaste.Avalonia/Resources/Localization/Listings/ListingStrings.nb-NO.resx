@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>Med dette abonnementet vil du motta:
+● Opptil 1000 klipp av innhold
+● Ubegrenset søppel og arkiv</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Grunnleggende - månedlig</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Grunnleggende - årlig</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>kopiere</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>lim inn</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>Utklippstavle manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>verktøy</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>nytte</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>automasjon</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>Trigger &amp; Action Designer for tilpassede automatiseringer og handlingskjeding</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>Horisontale/vertikale oppsett, liste/rutenett og multi - Monitor Support</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>Fullt - Utvalgt Clip Editor med Find/erstatt, rik tekst (tabeller, lister, lenker, etc.) Teksttemplering for rask, dynamisk liming fra utdraget</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>Sikker, sikker og privat lokal datalagring med valgfri 2 - Faktor passordbeskyttelse</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>Bygget - i plugin -nettleser med et stadig - voksende fellesskap - drevet bibliotek med plugins</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste er en utklippsbehandler, automatisering og produktivitetsverktøy som ingen andre. Forbedre utklippstavlen til en beriket og organisert del av arbeidsflyten din,
+Med et intuitivt og lavt profilgrensesnitt som støtter tekst, filer og bilder. Designet for fleksibilitet, med et stadig - voksende fellesskap - drevet libray av plugins.
+
+Det begynte som et eksperiment av en programmerer som ønsket mer enn bare å kopiere og lime ut av utklippstavlen. Han ønsket en enkel kommando som Ctrl+C som ville 'legge til' i stedet
+av 'erstatt' hva som var på utklippstavlen. Og eksperimentet fungerte. Det lille verktøyet var veldig nyttig. Dette medførte programmereren med flere ideer og flere eksperimenter, det
+Nå har blitt "Monkeypaste".
+
+Som skrivebordet er på filene dine, har MonkeyPaste til hensikt å være på utklippstavlen. Det er en serie verktøy som er nøye designet for å tilsynelatende integrere og interoperere med
+Enhver applikasjon eller format for innhold. Ctrl+C og Ctrl+V er mye mer enn bare snarveier. De er inngangsportene alle applikasjoner deler, og bærer en
+Value av verdi og mening du fortjener å ha tilgjengelig til fingerspissene. Ikke bare kastet etter neste Ctrl+c.
+
+Jeg er den programmereren som er nevnt tidligere, og jeg vil at alle skal kunne finne bruk av MonkeyPaste. Så det og alle funksjonene er helt gratis å bruke.
+Jeg vil også at du skal føle deg komfortabel med å bruke det. Så jeg forsikrer deg, som den eneste kraften bak opprettelsen, at ingen av de (veldig) personlige informasjonen som kan oppstå
+Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din egen maskin. Periode.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● Enkelt og vennlig grensesnitt med både horisontale/vertikale oppsett, liste/rutenett og multi - Monitor -støtte</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● Append Mode: Kopiering blir 'tillegg til' i stedet for 'erstatt' på utklippstavlen. Både tekst og filer, fullstendig tilpasses</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● Sofistikert klippsporing, kilder og bruk med forbedret støtte for Firefox og krom - baserte nettlesere (krom, kant, modig)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● Fullt - Utvalgt klippeditor med rik tekst (tabeller, lister, lenker osv.) Med å finne/erstatte og utheve</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● Lagre bildene dine i den sikre databasen, klare til bruk som filer når som helst på - etterspørsel bare dra - og - slipp!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>● Kraftig tekststempling for rask, dynamisk liming fra utdraget</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● Trigger &amp; Action Designer for tilpassede automatiseringer og handlingskjeding</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● Enkelt å bruke og utvide plugin -systemet for både å analysere klipp eller lese/skrive ethvert format til utklippstavlen</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● Bygget - i plugin -nettleser med et stadig - voksende fellesskap - Drevet bibliotek med plugins</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>● Automatiser alt med forhåndsinnstillinger for plugin, stash og bruk noen av AI -spørsmålene eller kommandoene dine med letthet</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● Flere plattformer og funksjoner kommer snart! Vi er bare startet 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● Både lyse og mørke temaer er helt dynamiske, bruk hvilken som helst farge du vil ha</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● Integrert hjelp og antyder rett i grensesnittet. Online manual, videoer og forum for å komme i gang alt på nettstedet (monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● Optimalisert for ytelse og stresset testet med 1 000 000 klipp.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● Når som helst søk, bare begynn å skrive med både enkel og avansert filtrering på klipp og deres kilder over dusinvis av felt</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● Organiser klippene dine i tagrær og lag resusable filtre</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● Sikker, sikker og privat lokal datalagring (ingen datainnsamling) alltid kryptert med valgfri 2 - Faktor passordbeskyttelse og enkelt blokkere apper eller nettsteder fra trackeren din</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>● Omfattende drag - og - drop support, tilpassede globale snarveier, ruting og mus - gratis navigasjon</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Tilpasset musemodus: Høyre - Klikk på Paste og venstre - Klikk på Auto - Kopier</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>Utklippstavlen er en jungel. Monkeypaste er kongen! Sving fra app til app, kopiere dette og lim inn det som aldri før med MonkeyPaste !! Et helt nytt, ny, banebrytende utklippstavle og analytisk automatiseringsverktøy !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>Eksempel på MonkeyPaste i aksjon!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>Installert på dette språket. Engelsk er bare for disse eksemplene</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>Skjermbilder er bare eksempler. Det du installerer er oversatt til dette språket.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>Med dette abonnementet vil du motta:
+● Ubegrenset kapasitet
+● Synkronisering av enheter (ved tilgjengelighet)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Ubegrenset - månedlig</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Ubegrenset - årlig</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>Første utgivelse</value>
   </data>
 </root>

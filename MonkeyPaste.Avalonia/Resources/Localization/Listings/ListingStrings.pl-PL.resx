@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>Dzięki tej subskrypcji otrzymasz:
+● Do 1000 klipów treści
+● Nieograniczone śmieci i archiwum</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Podstawowy - miesięczny</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Podstawowe - roczne</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>Kopiuj</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>pasta</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>Menedżer schowka</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>narzędzie</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>pożytek</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>automatyzacja</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>Trigger &amp; Action Designer do niestandardowych automatyzacji i łączenia akcji</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>Układy poziome/pionowe, widok listy/siatki i obsługa Multi -Monitor</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>W pełni - wyróżniony edytor klipów z Find/Replain, Rich Tekst (tabele, listy, linki itp.) Szablony tekstu dla szybkiego, dynamicznego wklejania z kolekcji fragmentu</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>Bezpieczne, bezpieczne i prywatne przechowywanie danych lokalnych z opcjonalną 2 - czynnik ochrona hasła</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>Zbudowany - w przeglądarce wtyczki z wiecznie rozwijającą się społecznością wtycznymi wtyczkami</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>Monkeypaste to menedżer schowka, narzędzie automatyzacji i produktywności jak żaden inny. Ulepszanie schowka w wzbogaconą i zorganizowaną część przepływu pracy,
+Wyposażony w intuicyjny i niski interfejs profilu, który obsługuje tekst, pliki i obrazy. Zaprojektowany pod kątem elastyczności, z wiecznie rozwijającą się społecznością napędzaną wtyczkami.
+
+Zaczęło się jako eksperyment programisty, który chce coś więcej niż tylko kopiować i wkleić ze schowka. Chciał prostego polecenia, takiego jak Ctrl+C, które zamiast tego dodałoby „do”
+„Wymień” to, co było w schowku. I eksperyment zadziałał. Małe narzędzie było bardzo przydatne. To pogrążyło programistę większą liczbą pomysłów i większej liczby eksperymentów, że
+Teraz stał się „małpą”.
+
+Ponieważ pulpit jest dla twoich plików, Monkeypaste zamierza być w schowku. Jest to pakiet narzędzi starannie zaprojektowany tak, aby pozornie się zintegrować i współpracować
+dowolna aplikacja lub format treści. Ctrl+C i Ctrl+V to znacznie więcej niż tylko skróty. Są to porty wejścia wszystkie aplikacje, które mają podzielić
+Bogactwo wartości i znaczenia, na które zasługujesz na dostępne na wyciągnięcie ręki. Nie tylko wyrzucony po następnym Ctrl+c.
+
+Jestem tym programistą wspomnianym wcześniej i chcę, aby wszyscy mogli dowiedzieć się z małpy. Tak więc i wszystkie jego funkcje są całkowicie bezpłatne.
+Chcę też, żebyś czuł się komfortowo, używając go. Zapewniam więc, że jesteś jedyną siłą stojącą za jego stworzeniem, że żadna z (bardzo) danych osobowych, która może się pojawić
+Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza własną maszyną. Okres.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● Prosty i przyjazny interfejs z zarówno układami poziomymi/pionowymi, widokiem listy/siatką i obsługą wielu monitor</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● Tryb dołączania: Kopiowanie staje się „Dodaj do” zamiast „Wymień” w schowku. Zarówno tekst, jak i pliki, w pełni konfigurowalne</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● Wyrafinowane śledzenie klipsów, źródła i użycie z zwiększonym wsparciem dla przeglądarek Firefox i chromu (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● W pełni - wyróżniony edytor klipów z bogatym tekstem (tabele, listy, linki itp.)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● Przechowuj swoje obrazy w bezpiecznej bazie danych, gotowe do użycia jako pliki w dowolnym momencie - żądaj po prostu przeciągnij - i - upuść!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>● Potężne szablony tekstu dla szybkiego, dynamicznego wklejania z kolekcji fragmentów</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● Projektant wyzwalający i akcji w celu automatyzacji niestandardowych i łączenia akcji</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● Prosty w obsłudze i rozszerzenie systemu wtyczek zarówno do analizy klipów lub odczytu/zapisu dowolnego formatu do schowka</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● Zbudowany - w przeglądarce wtyczki z wiecznie rozwijającą się społecznością wtyczkową</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>● Zautomatyzuj wszystko za pomocą ustawień wtyczek, z łatwością zapasuj i użyj dowolnej monitu lub poleceń AI</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● Wkrótce pojawi się więcej platform i funkcji! Po prostu zaczęliśmy 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● Zarówno światło, jak i ciemne motywy są całkowicie dynamiczne, użyj dowolnego koloru</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● Zintegrowana pomoc i wskazówki bezpośrednio w interfejsie. Instrukcja online, filmy i forum, aby zacząć od Ciebie na stronie (Monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● Zoptymalizowane pod kątem wydajności i zestresowane przetestowane z 1 000 000 klipsów.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● W każdym razie wyszukiwanie po prostu zacznij pisać przy użyciu zarówno prostego, jak i zaawansowanego filtrowania klipów i ich źródeł powyżej dziesiątek pól</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● Zorganizuj klipy w drzewach tagów i utwórz filtry</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● Bezpieczne, bezpieczne i prywatne przechowywanie danych lokalnych (bez gromadzenia danych) zawsze szyfrowane opcjonalnie 2 - Współczynnik ochrony hasła i łatwo blokuj aplikacje lub strony internetowe z trackera</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>● Obsługa rozległa - i - upuszcza, niestandardowe globalne skróty, routing i mysz - bezpłatna nawigacja</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● niestandardowe tryby myszy: Kliknij wklej i lewy - kliknij Auto - Kopiuj</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>Schowek to dżungla. Małpa jest królem! Huśtaj się z aplikacji, kopiując to i wklejając, jak nigdy dotąd z małpą !! Marka - nowe, najnowocześniejsze narzędzie do automatyzacji schowka i analitycznej !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>Próbka małpy w akcji!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>Zainstalowane w tym języku. Angielski jest tylko dla tych przykładów</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>Ujęcia ekranu są tylko przykładami. To, co instalujesz, zostało przetłumaczone na ten język.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>Dzięki tej subskrypcji otrzymasz:
+● Nieograniczona pojemność
+● Synchronizacja urządzeń (po dostępności)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Nieograniczone - co miesiąc</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Nieograniczony - co roku</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>Pierwsze wydanie</value>
   </data>
 </root>

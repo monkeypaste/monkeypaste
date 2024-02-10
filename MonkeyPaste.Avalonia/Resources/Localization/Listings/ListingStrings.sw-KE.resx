@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>Na usajili huu utapokea:
+● Hadi sehemu 1,000 za yaliyomo
+● Takataka na kumbukumbu isiyo na kikomo</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Msingi - kila mwezi</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Msingi - kila mwaka</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>Nakala</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>Bandika</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>Meneja wa Clipboard</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>chombo</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>matumizi</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>otomatiki</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>Trigger &amp; mbuni wa hatua kwa otomatiki na minyororo ya hatua</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>Mpangilio wa usawa/wima, orodha/mtazamo wa gridi ya taifa na msaada wa kufuatilia anuwai</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>Mhariri wa kipande cha picha kamili - na Pata/Badilisha, Nakala Tajiri (Jedwali, Orodha, Viungo, nk) Maombi ya maandishi kwa uchungaji wa haraka, wenye nguvu kutoka kwa mkusanyiko wako wa snippet</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>Hifadhi salama, salama na ya kibinafsi ya ndani na hiari 2 - Factor Nenosiri ulinzi</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>Imejengwa - katika kivinjari cha programu -jalizi na jamii inayokua - maktaba inayoendeshwa ya programu -jalizi</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>Monkeypaste ni meneja wa clipboard, zana ya automatisering na tija kama hakuna mwingine. Kuongeza clipboard yako kuwa sehemu yenye utajiri na iliyopangwa ya utiririshaji wako,
+Inashirikiana na interface ya angavu na ya chini - ambayo inasaidia maandishi, faili na picha. Iliyoundwa kwa ajili ya kubadilika, na jamii inayokua - inayoendeshwa kwa programu -jalizi za programu -jalizi.
+
+Ilianza kama jaribio la programu inayotaka zaidi ya kunakili tu na kubandika nje ya clipboard. Alitaka amri rahisi kama Ctrl+C ambayo 'ingeongeza' badala yake
+ya 'Badilisha' kile kilichokuwa kwenye clipboard. Na majaribio yalifanya kazi. Chombo kidogo kilikuwa kizuri sana. Hii ilisababisha programu na maoni zaidi na majaribio zaidi, ambayo
+Sasa imekuwa "Monkeypaste".
+
+Kama desktop ilivyo kwa faili zako, Monkeypaste inakusudia kuwa kwenye clipboard yako. Suite yake ya zana iliyoundwa kwa uangalifu ili kujumuisha na kushirikiana na
+matumizi yoyote au muundo wa yaliyomo. Ctrl+C na Ctrl+V ni zaidi ya njia za mkato tu. Ni bandari za kuingia kwa matumizi yote ya kushiriki, kubeba
+Utajiri wa thamani na maana unastahili kupatikana kwa vidole vyako. Sio tu kutupwa mbali baada ya Ctrl+C ijayo.
+
+Mimi ndiye programu iliyotajwa hapo awali na ninataka kila mtu aweze kupata matumizi ya Monkeypaste. Kwa hivyo na huduma zake zote ni bure kabisa kutumia.
+Pia nataka ujisikie vizuri kuitumia. Kwa hivyo ninakuhakikishia, kama nguvu pekee nyuma ya uumbaji wake, kwamba hakuna habari yoyote ya kibinafsi (sana) ambayo inaweza kutokea
+Clipboard yako inafuatiliwa au kuhifadhiwa mahali popote zaidi ya mashine yako mwenyewe. Kipindi.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● Maingiliano rahisi na ya kirafiki na mpangilio wa usawa/wima, orodha/mtazamo wa gridi ya taifa na msaada wa kufuatilia anuwai</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● Njia ya Append: kunakili inakuwa 'ongeza kwa' badala ya 'badala' kwenye clipboard. Nakala zote mbili na faili, zinazoweza kuboreshwa kikamilifu</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● Ufuatiliaji wa klipu ya kisasa, vyanzo na utumiaji kwa msaada ulioimarishwa wa vivinjari vya Firefox na Chromium (Chrome, Edge, Jasiri)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● Mhariri wa kipande cha picha kamili - na maandishi tajiri (meza, orodha, viungo, nk) na kupata/kubadilisha na kuonyesha</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● Hifadhi picha zako kwenye hifadhidata salama, tayari kutumia kama faili wakati wowote - mahitaji tu Drag - na - kushuka!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>● Maombi ya maandishi yenye nguvu kwa uchungaji wa haraka, wenye nguvu kutoka kwa mkusanyiko wako wa snippet</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● Trigger &amp; Mbuni wa Kitendo cha Automations Forodha na Unyonyaji wa Kitendo</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● Rahisi kutumia na kupanua mfumo wa programu -jalizi kwa kuchambua sehemu zote mbili au kusoma/kuandika muundo wowote kwenye ubao wako wa clipboard</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● Imejengwa - katika kivinjari cha programu -jalizi na jamii inayokua - maktaba inayoendeshwa ya programu -jalizi</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>● Ondoa kila kitu na vifaa vya programu -jalizi, stash na utumie yoyote ya ai yako ya AI au amri kwa urahisi</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● Majukwaa zaidi na huduma zinakuja hivi karibuni! Tunaanza tu 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● Mada zote mbili na za giza zina nguvu kabisa, tumia rangi yoyote unayotaka</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● Msaada uliojumuishwa na vidokezo kwenye interface. Mwongozo wa Mkondoni, Video na Jukwaa Ili Kukufanya Uanze yote kwenye Wavuti (Monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● Kuboreshwa kwa utendaji na kusisitiza kupimwa na sehemu 1,000,000.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● Utafutaji wa wakati wowote, anza kuandika tu kwa kutumia vichungi rahisi na vya hali ya juu kwenye sehemu na vyanzo vyao juu ya uwanja kadhaa</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● Panga sehemu zako kwenye miti ya lebo na uunda vichungi vinavyoweza kusongeshwa</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● Hifadhi salama, salama na ya kibinafsi (hakuna mkusanyiko wa data) kila wakati husimbwa na hiari 2 - Factor Nenosiri ulinzi na programu za kuzuia kwa urahisi au tovuti kutoka kwa tracker yako</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>● Drag kubwa - na - msaada wa kuacha, njia za mkato za ulimwengu, njia na panya - urambazaji wa bure</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Njia za Panya za Kitamaduni: Kulia - Bonyeza Bandika na Kushoto - Bonyeza Auto - Nakili</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>Clipboard ni msitu. Monkeypaste ndiye mfalme! Swing kutoka kwa programu hadi programu, kunakili hii na kubandika kama hapo awali na Monkeypaste !! Chapa - mpya, ya kukata clipboard na zana ya uchanganuzi wa vifaa !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>Mfano wa Monkeypaste katika hatua!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>Imewekwa katika lugha hii. Kiingereza ni kwa mifano hii tu</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>Shots za skrini ni mifano tu. Unachosanikisha kimetafsiriwa kwa lugha hii.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>Na usajili huu utapokea:
+● Uwezo usio na kikomo
+● Usawazishaji wa kifaa (juu ya kupatikana)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>Isiyo na kikomo - kila mwezi</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>Isiyo na kikomo - kila mwaka</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>Kutolewa kwa awali</value>
   </data>
 </root>

@@ -60,14 +60,14 @@
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
     <value>Gyda'r tanysgrifiad hwn byddwch yn derbyn:
-● hyd at 1,000 o glipiau o gynnwys
-● sbwriel ac archif diderfyn</value>
+● Hyd at 1,000 o glipiau o gynnwys
+● Sbwriel ac Archif Diderfyn</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
     <value>Sylfaenol - Misol</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value>Sylfaenol - Blynyddol</value>
+    <value>Sylfaenol - blynyddol</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -94,13 +94,13 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value>copi</value>
+    <value>copïan</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value>pastio</value>
+    <value>pastia</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value>rheolwr clipfwrdd</value>
+    <value>Rheolwr Clipfwrdd</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>offeryn</value>
@@ -109,22 +109,22 @@
     <value>cyfleustodau</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value>awtomeiddio</value>
+    <value>awtomeiddiadau</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value>Sbardun a Dylunydd Gweithredu ar gyfer awtomeiddio personol a chadwynu gweithredu</value>
+    <value>Dylunydd Sbardun a Gweithredu ar gyfer Awtomegion Custom a Chadwyn Gweithredu</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value>Cynlluniau llorweddol / fertigol, golygfa rhestr / grid a chefnogaeth aml-fonitro</value>
+    <value>Cynlluniau Llorweddol/Fertigol, Gweld Rhestr/Grid a Chefnogaeth Aml -Fonitro</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value>Golygydd clipiau llawn sylw gyda thempled testun canfod/amnewid, testun cyfoethog (tablau, rhestrau, dolenni, ac ati) ar gyfer pastio cyflym a deinamig o'ch casgliad pytiau</value>
+    <value>Golygydd clip llawn - dan sylw gyda Find/Amnewid, testun cyfoethog (tablau, rhestrau, dolenni, ac ati) testun yn templedi ar gyfer pastio cyflym, deinamig o'ch casgliad pytiau</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value>Storio data lleol diogel, diogel a phreifat gyda diogelwch cyfrinair 2 ffactor dewisol</value>
+    <value>Storio data lleol diogel, diogel a phreifat gyda diogelu cyfrinair dewisol 2 - Ffactor</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value>Porwr ategyn adeiledig gyda llyfrgell o ategion sy'n cael eu gyrru gan y gymuned sy'n tyfu'n barhaus</value>
+    <value>Wedi'i adeiladu - mewn porwr ategion gyda llyfrgell o ategion sy'n cael ei yrru gan gymuned sy'n tyfu erioed</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -142,122 +142,83 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value>Mae MonkeyPaste yn offeryn rheolwr clipfwrdd, awtomeiddio a chynhyrchiant fel dim arall. Gwella'ch clipfwrdd yn rhan gyfoethog a threfnus o'ch llif gwaith,
-yn cynnwys rhyngwyneb sythweledol a phroffil isel sy'n cefnogi testun, ffeiliau a delweddau. Wedi'i gynllunio ar gyfer hyblygrwydd, gyda llyfrgell gynyddol o ategion a yrrir gan y gymuned.
+    <value>Mae MonkeyPaste yn rheolwr clipfwrdd, offeryn awtomeiddio a chynhyrchedd fel dim arall. Gwella'ch clipfwrdd i mewn i ran gyfoethog a threfnus o'ch llif gwaith,
+Yn cynnwys rhyngwyneb greddfol ac proffil isel sy'n cefnogi testun, ffeiliau a delweddau. Wedi'i gynllunio ar gyfer hyblygrwydd, gyda Libray o ategion sy'n cael ei yrru gan gymuned sy'n tyfu erioed.
 
-Dechreuodd fel arbrawf gan raglennydd sydd eisiau mwy na dim ond copïo a gludo allan o'r clipfwrdd. Roedd eisiau gorchymyn syml fel Control+C a fyddai'n 'ychwanegu at' yn lle hynny
-o 'disodli' yr hyn oedd ar y clipfwrdd. A gweithiodd yr arbrawf, eureka! Roedd y teclyn bach yn handi iawn. Roedd hyn yn swyno'r rhaglennydd gyda mwy o syniadau a mwy o arbrofion, hynny
-bellach wedi dod yn "MonkeyPaste".
+Dechreuodd fel arbrawf gan raglennydd eisiau mwy na chopïo a gludo allan o'r clipfwrdd yn unig. Roedd eisiau gorchymyn syml fel Ctrl+C a fyddai'n 'ychwanegu at' yn lle
+o 'Amnewid' beth oedd ar y clipfwrdd. Ac roedd yr arbrawf yn gweithio. Roedd yr offeryn bach yn ddefnyddiol iawn. Roedd hyn yn ymroi i'r rhaglennydd gyda mwy o syniadau a mwy o arbrofion, hynny
+Nawr mae wedi dod yn "monkeypaste".
 
-Gan fod y bwrdd gwaith i'ch ffeiliau, mae MonkeyPaste yn bwriadu bod i'ch clipfwrdd. Mae'n gyfres o offer sydd wedi'u cynllunio'n ofalus i integreiddio a rhyngweithio'n ddiymhongar â nhw
-unrhyw gymhwysiad neu fformat cynnwys. Mae Control+C a Control+V yn llawer mwy na llwybrau byr yn unig. Dyma'r porthladdoedd mynediad y mae pob cais yn ei rannu, gan gario a
-cyfoeth o werth ac ystyr yr ydych yn haeddu ei gael ar flaenau eich bysedd. Nid yn unig yn cael ei daflu ar ôl y Control+C nesaf.
+Gan fod y bwrdd gwaith i'ch ffeiliau, mae MonkeyPaste yn bwriadu bod i'ch clipfwrdd. Mae'n gyfres o offer sydd wedi'u cynllunio'n ofalus i integreiddio a rhyngweithio yn ddi -ymddangos
+unrhyw gymhwysiad neu fformat o gynnwys. Mae Ctrl+C a Ctrl+V yn llawer mwy na llwybrau byr yn unig. Nhw yw'r porthladdoedd mynediad y mae pob cais yn eu rhannu, gan gario a
+Cyfoeth o werth ac ystyr rydych chi'n haeddu bod ar gael ar flaenau eich bysedd. Nid dim ond ei daflu ar ôl y Ctrl+c nesaf.
 
-Fi yw'r rhaglennydd hwnnw y soniwyd amdano yn gynharach ac rwyf am i bawb allu dod o hyd i ddefnydd allan o MonkeyPaste. Felly mae ef a'i holl nodweddion yn hollol rhad ac am ddim i'w defnyddio.
-Rwyf hefyd am i chi deimlo'n gyfforddus yn ei ddefnyddio. Felly fe’ch sicrhaf, fel yr unig rym y tu ôl i’w greu, na fydd DIM o’r wybodaeth bersonol (iawn) a all godi ar
-mae eich clipfwrdd byth yn cael ei olrhain neu ei storio UNRHYW UN Y tu hwnt i'ch peiriant eich hun. Cyfnod.</value>
+Fi yw'r rhaglennydd hwnnw y soniwyd amdano yn gynharach ac rwyf am i bawb allu dod o hyd i ddefnydd allan o MonkeyPaste. Felly mae hi a phob un o'i nodweddion yn hollol rhydd i'w defnyddio.
+Rwyf hefyd eisiau ichi deimlo'n gyffyrddus yn ei ddefnyddio. Felly fe'ch sicrhaf, fel yr unig rym y tu ôl i'w greu, nad oes yr un o'r wybodaeth bersonol (iawn) a all godi arni
+Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt i'ch peiriant eich hun. Cyfnod.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>● Rhyngwyneb syml a chyfeillgar gyda chynlluniau llorweddol / fertigol, golwg rhestr / grid a chefnogaeth aml-fonitro</value>
+    <value>● Rhyngwyneb syml a chyfeillgar gyda chynlluniau llorweddol/fertigol, golwg rhestr/grid a chefnogaeth aml -fonitro</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Modd atodi: Mae copïo yn dod yn 'ychwanegu at' yn lle 'amnewid' ar y clipfwrdd. Testun a ffeiliau, yn gwbl addasadwy</value>
+    <value>● Modd atodi: daw copïo yn 'ychwanegu at' yn lle 'disodli' ar y clipfwrdd. Testun a ffeiliau, yn gwbl addasadwy</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
     <value>● Olrhain clipiau soffistigedig, ffynonellau a defnydd gyda chefnogaeth well i borwyr Firefox a Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Golygydd clip llawn sylw gyda thestun cyfoethog (tablau, rhestrau, dolenni, ac ati) gyda chanfod/amnewid ac amlygu</value>
+    <value>● Llawn - Golygydd Clip dan sylw gyda Thestun Cyfoethog (Tablau, Rhestrau, Dolenni, ac ati) gyda Find/Amnewid ac Uchafbwynt</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Storiwch eich delweddau yn y gronfa ddata ddiogel, yn barod i'w defnyddio fel ffeiliau unrhyw bryd ar-alw dim ond llusgo a gollwng!</value>
+    <value>● Storiwch eich delweddau yn y gronfa ddata ddiogel, yn barod i'w defnyddio fel ffeiliau unrhyw bryd ymlaen - mynnu dim ond llusgo - a - gollwng!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
     <value>● Templed testun pwerus ar gyfer pastio cyflym, deinamig o'ch casgliad pytiau</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Dylunydd Sbardun a Gweithredu ar gyfer awtomeiddio arfer a chadwynu gweithredu</value>
+    <value>● Dylunydd Sbardun a Gweithredu ar gyfer Awtomegion Custom a Chadwyn Gweithredu</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● System ategyn syml i'w defnyddio a'i hymestyn ar gyfer dadansoddi clipiau neu ddarllen/ysgrifennu unrhyw fformat i'ch clipfwrdd</value>
+    <value>● System ategyn Syml i'w defnyddio ac ymestyn ar gyfer dadansoddi clipiau neu ddarllen/ysgrifennu unrhyw fformat i'ch clipfwrdd</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Built-in porwr ategyn gyda llyfrgell gynyddol gymunedol sy'n cael ei gyrru o ategion</value>
+    <value>● Adeiladu - mewn porwr ategion gyda llyfrgell o ategion sy'n cael ei yrru gan gymuned sy'n tyfu erioed</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Awtomeiddio popeth gyda rhagosodiadau ategyn, stash a defnyddio unrhyw un o'ch awgrymiadau neu orchmynion AI yn rhwydd</value>
+    <value>● Awtomeiddio popeth gyda rhagosodiadau ategyn, stashio a defnyddio'ch unrhyw beth o'ch awgrymiadau neu orchmynion AI yn rhwydd</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Mwy o lwyfannau a nodweddion yn dod yn fuan! Newydd ddechrau da ni 🎉</value>
+    <value>● Mwy o lwyfannau a nodweddion yn dod yn fuan! Rydyn ni'n cychwyn 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value>● Mae'r ddwy thema golau a thywyll yn gwbl ddeinamig, defnyddiwch unrhyw liw rydych chi ei eisiau</value>
+    <value>● Mae themâu ysgafn a thywyll yn hollol ddeinamig, defnyddiwch unrhyw liw rydych chi ei eisiau</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value>● Cymorth integredig &amp; awgrymiadau hawl yn y rhyngwyneb. Llawlyfr ar-lein, fideos a fforwm i roi cychwyn i chi i gyd ar y wefan (monkeypaste.com/docs)</value>
+    <value>● Cymorth integredig ac awgrymiadau reit yn y rhyngwyneb. Llawlyfr ar -lein, fideos a fforwm i'ch rhoi ar ben i chi i gyd ar y wefan (monkeypaste.com/docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value>● Wedi'i optimeiddio ar gyfer perfformiad a straen wedi'i brofi gyda 1,000,000au o glipiau.</value>
+    <value>● Wedi'i optimeiddio ar gyfer perfformiad a dan straen wedi'i brofi gyda 1,000,000s o glipiau.</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value>● Chwilio unrhyw bryd, dechreuwch deipio gan ddefnyddio hidlo syml ac uwch ar glipiau a'u ffynonellau dros ddwsinau o feysydd</value>
+    <value>● Chwilio unrhyw bryd, dechreuwch deipio gan ddefnyddio hidlo syml ac uwch ar glipiau a'u ffynonellau dros ddwsinau o gaeau</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value>● Trefnwch eich clipiau mewn coed tag a chreu hidlwyr y gellir eu hailddefnyddio</value>
+    <value>● Trefnwch eich clipiau mewn coed tagiau a chreu hidlwyr y gellir eu defnyddio</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value>● Storio data lleol diogel, diogel a phreifat (dim casglu data) bob amser wedi'i amgryptio gydag amddiffyniad cyfrinair 2-ffactor dewisol a rhwystro apps neu wefannau yn hawdd o'ch traciwr</value>
+    <value>● Storio data lleol diogel, diogel a phreifat (dim casglu data) bob amser wedi'i amgryptio â diogelu cyfrinair dewisol 2 - Ffactor a rhwystro apiau neu wefannau yn hawdd o'ch traciwr</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Cefnogaeth llusgo a gollwng helaeth, llwybrau byr byd-eang wedi'u teilwra, llwybro a llywio heb lygoden</value>
+    <value>● Llusgo helaeth - a - Gollwng cefnogaeth, llwybrau byr byd -eang arferol, llwybro a llygoden - llywio am ddim</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Moddau llygoden Custom: de-gliciwch past a chwith-gliciwch awto-copi</value>
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value>● Rhyngwyneb syml a chyfeillgar
-● Cynlluniau llorweddol/fertigol, golwg rhestr/grid a chefnogaeth aml-fonitro
-● Mae'r ddwy thema golau a thywyll yn gwbl ddeinamig, defnyddiwch unrhyw liw rydych chi ei eisiau
-
-● Cymorth integredig &amp; awgrymiadau hawl yn y rhyngwyneb
-● Llawlyfr cymorth, fideos a fforwm i'ch rhoi ar ben ffordd i gyd ar y wefan (monkeypaste.com/docs)
-
-● Wedi'i optimeiddio ar gyfer perfformiad a straen wedi'i brofi gyda 1,000,000au o glipiau.
-● Chwilio unrhyw bryd, dim ond dechrau teipio
-● Hidlo syml ac uwch ar glipiau a'u ffynonellau dros ddwsinau o feysydd
-● Trefnwch eich clipiau mewn coed tag a chreu hidlwyr y gellir eu hailddefnyddio
-
-● Storio data lleol diogel, diogel a phreifat (dim casglu data) bob amser wedi'i hamgryptio
-● Gallwch anwybyddu clipiau o apps neu wefannau penodol
-● Amddiffyniad cyfrinair 2-ffactor dewisol
-
-● Allweddi poeth byd-eang Custom, llwybro a llywio heb lygoden
-● Cefnogaeth llusgo a gollwng helaeth
-● Moddau llygoden Custom: de-gliciwch past a chwith-gliciwch awto-copi
-● Modd atodi: Mae copïo yn dod yn 'ychwanegu at' yn lle 'amnewid' ar y clipfwrdd. Mae'r ddau destun a ffeiliau, yn llawn customizable
-
-● Olrhain clipiau soffistigedig, ffynonellau a defnydd
-● Cefnogaeth well i borwyr Firefox a Chromium (Chrome, Edge, Brave)
-
-● Yn gweithio gyda thestun cyfoethog (tablau, rhestrau, dolenni, ac ati)
-● Golygydd clip llawn sylw gyda darganfyddiad/amnewid ac amlygu
-● Storiwch eich delweddau yn y gronfa ddata ddiogel, yn barod i'w defnyddio fel ffeiliau unrhyw bryd ar-alw dim ond llusgo a gollwng!
-
-● Templed testun pwerus ar gyfer pastio cyflym, deinamig o'ch casgliad pytiau
-
-● Dylunydd Sbardun a Gweithredu ar gyfer awtomeiddio arfer a chadwynu gweithredu
-
-● System ategyn syml i'w defnyddio a'i hymestyn ar gyfer dadansoddi clipiau neu ddarllen/ysgrifennu unrhyw fformat i'ch clipfwrdd
-● Built-in porwr ategyn gyda llyfrgell gynyddol gymunedol sy'n cael ei gyrru o ategion
-● Awtomeiddio popeth gyda rhagosodiadau ategyn, stash a defnyddio unrhyw un o'ch awgrymiadau neu orchmynion AI yn rhwydd
-
-● Mwy o lwyfannau a nodweddion yn dod yn fuan! Newydd ddechrau da ni 🎉</value>
+    <value>● Moddau Llygoden Custom: Dde - Cliciwch Gludo a Chwith - Cliciwch Auto - Copi</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value>Mae'r clipfwrdd yn jyngl. MonkeyPaste yw'r BRENIN! Sigwch o ap i ap, gan gopïo hwn a gludo hynny fel erioed o'r blaen gyda MonkeyPaste !! Clipfwrdd newydd sbon ac offer awtomeiddio dadansoddol !!!</value>
+    <value>Jyngl yw'r clipfwrdd. MonkeyPaste yw'r brenin! Swing o app i app, copïo hwn a gludo hynny fel erioed o'r blaen gyda monkeyPaste !! Clipfwrdd Brand - Newydd, Cutting Edge ac Offeryn Awtomeiddio Dadansoddol !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
@@ -272,23 +233,23 @@ mae eich clipfwrdd byth yn cael ei olrhain neu ei storio UNRHYW UN Y tu hwnt i'c
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value>Wedi'i osod yn yr iaith hon. Saesneg yn unig ar gyfer yr enghreifftiau hyn</value>
+    <value>Wedi'i osod yn yr iaith hon. Mae'r Saesneg yn unig ar gyfer yr enghreifftiau hyn</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value>Nodyn! Enghreifftiau yn unig yw lluniau sgrin. Mae'r hyn rydych chi'n ei osod wedi'i gyfieithu i'r iaith hon.</value>
+    <value>Dim ond enghreifftiau yw lluniau sgrin. Mae'r hyn rydych chi'n ei osod wedi'i gyfieithu i'r iaith hon.</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Gyda'r tanysgrifiad hwn byddwch yn derbyn:
-● gallu diderfyn
-● cysoni dyfais (ar argaeledd)</value>
+● Capasiti diderfyn
+● Cydamseru dyfeisiau (ar gael)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value>Anghyfyngedig - Misol</value>
+    <value>Diderfyn - misol</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value>Anghyfyngedig - Blynyddol</value>
+    <value>Diderfyn - blynyddol</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Rhyddhad Cychwynnol</value>
+    <value>Rhyddhau Cychwynnol</value>
   </data>
 </root>

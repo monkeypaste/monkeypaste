@@ -157,7 +157,7 @@ You can debug your plugins with VS Code too, the process is a little more involv
 
 Explaining the details of localizing is outside the scope of this article. But if you look at any of the [sample repos](#samples) you may notice they all have `./Resources` folders and the [plugin ledger](https://github.com/monkeypaste/ledger) has a `./Cultures` folder too. 
 
-It's not necessary to follow the sample's localization conventions but *you can* with your `manifest.json`. Just realize the root level `manifest.json` is basically an invariant version and *all* languages you want to support will need their own `./Resources/manifest.<culture-code>.json` file.
+It's not necessary to follow the sample's localization conventions but *you can* with your `manifest.json`. The neutral language is English(en-US) and the root level `manifest.json` should be the neutral manifest. *All* languages you want to support will need their **own** `./Resources/manifest.<culture-code>.json` file.
 
 ##### Packaging
 Your release needs to be a zip file where the contents is your plugins container **folder** *not* the **contents** of the folder. The name can be whatever you want.

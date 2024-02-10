@@ -59,13 +59,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BasicDescription" xml:space="preserve">
-    <value />
+    <value>በዚ ምዝገባ እዚ ክትረኽቦ ኢኻ፤
+● ክሳብ 1000 ክሊፕ ትሕዝቶ
+● ደረት ኣልቦ ጓሓፍን ማህደርን</value>
   </data>
   <data name="BasicMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>መሰረታዊ - ወርሓዊ</value>
   </data>
   <data name="BasicYearlyTitle" xml:space="preserve">
-    <value />
+    <value>መሰረታዊ - ዓመት ዓመት</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
     <value />
@@ -92,37 +94,37 @@
     <value />
   </data>
   <data name="SearchTerm2" xml:space="preserve">
-    <value />
+    <value>ቅዳሕ</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
-    <value />
+    <value>ምልጣፍ .</value>
   </data>
   <data name="SearchTerm4" xml:space="preserve">
-    <value />
+    <value>ናይ ቅንጥብጣብ ሰሌዳ ኣካያዲ ስራሕ</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
-    <value />
+    <value>መሳርሒ</value>
   </data>
   <data name="SearchTerm6" xml:space="preserve">
-    <value />
+    <value>ኣቕርቦት</value>
   </data>
   <data name="SearchTerm7" xml:space="preserve">
-    <value />
+    <value>ኣውቶማቲክ</value>
   </data>
   <data name="ssCaption1" xml:space="preserve">
-    <value />
+    <value>ትሪግርን ኣክሽን ዲዛይነርን ንብሕታዊ ኣውቶማቲክን ኣክሽን ሰንሰለታዊን</value>
   </data>
   <data name="ssCaption2" xml:space="preserve">
-    <value />
+    <value>ልኡል/ቀጥታዊ ኣቀማምጣ፣ ዝርዝር/ግሪድ ትርኢትን ማልቲ - ሞኒተርን ደገፍ</value>
   </data>
   <data name="ssCaption3" xml:space="preserve">
-    <value />
+    <value>ምሉእ ብምሉእ - ፍሉይ ዝኾነ ክሊፕ ኤዲተር ምስ Find/Replace, Rich Text (ሰንጠረዥ፡ ዝርዝር፡ መላግቦታት ወዘተ) ጽሑፍ templating ንቕልጡፍን ዳይናሚክን ምልጣፍ ካብ ቁንጣሮ ቁንጣሮ እኩብ</value>
   </data>
   <data name="ssCaption4" xml:space="preserve">
-    <value />
+    <value>ውሑስ፣ ውሑስን ናይ ብሕቲን ናይ ከባቢ መኽዘን ዳታ ምስ ኣማራጺ 2 - ረቛሒ ምክልኻል ምልክት ቃል</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
-    <value />
+    <value>ዝተሃንጸ - ኣብ ፕላግ-ኢን ብራውዘር ምስ ኩሉ ግዜ ዝዓቢ ማሕበረሰብ - ዝምራሕ ቤተ መጻሕፍቲ ፕላጊናት</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
     <value />
@@ -140,79 +142,89 @@
     <value />
   </data>
   <data name="StoreDescription" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste ናይ ቅንጥብጣብ ሰሌዳ ማናጀር፣ ኣውቶማቲክን ኣፍራይነትን መሳርሒ ኮይኑ ከም ካልእ ኣይኮነን። ቅንጥብጣብ ሰሌዳኻ ናብ ሓደ ዝሃብተመን ዝተወደበን ክፋል ዋሕዚ ስራሕካ ምዕባይ፣
+ንጽሑፍ፡ ፋይላትን ምስልታትን ዝድግፍ ንጹርን ትሑት - ፕሮፋይል ዘለዎ መተሓላለፊ ዘለዎ። ንተዓጻጻፍነት ዝተዳለወ፣ ምስ ሓደ ወትሩ ዝዓቢ ዘሎ ማሕበረሰብ - ዝዝወር ሊብራይ ናይ ፕላጊናት።
+
+ካብቲ ቅንጥብጣብ ሰሌዳ ምቕዳሕን ምልጣፍን ጥራይ ንላዕሊ ዝደሊ ፕሮግራመር ከም ፈተነ እዩ ጀሚሩ። ኣብ ክንድኡ 'add to' ዝብል ቀሊል ትእዛዝ ከም Ctrl+C ደልዩ
+ናይ 'ትክቶ' ኣብ ቅንጥብጣብ ሰሌዳ ዝነበረ። እቲ ፈተነ ድማ ሰሪሑ። እታ ንእሽቶ መሳርሒት ኣዝያ ኣብ ኢድካ እያ ነይራ። እዚ ድማ ነቲ ፕሮግራመር ብዝያዳ ሓሳባትን ዝያዳ ፈተነታትን ኣዕነዮ፣ ንሱ .
+ሕጂ "MonkeyPaste" ኮይኑ ኣሎ።
+
+ከምቲ ዴስክቶፕ ንፋይላትካ ዝገብሮ፡ ሞንኪፓስቲ ናብ ቅንጥብጣብ ሰሌዳኻ ክኸውን ሓሲቡ ኣሎ። ናቱ ሓደ ስሩዕ መሳርሒታት ብጥንቃቐ ብጥንቃቐ ዝተዳለዉ ንኽወሃሃዱን ንኽተሓባበሩን ምስ 2019።
+ዝኾነ ይኹን መተግበሪ ወይ ቅርጺ ትሕዝቶ። CTRL+Cን CTRL+Vን ካብ ኣቋራጭ መንገዲ ኣዝዩ ዝበዝሕ እዩ። ንሳቶም ናይ ምእታው ወደባት እዮም ኩሎም መመልከቲታት ዝካፈሉ፣ ሓደ
+ኣብ ጫፍ ኣጻብዕትኻ ክህልወካ ዝግብኣካ ሃብቲ ዋጋን ትርጉምን እዩ። ድሕሪ ዝቕጽል Ctrl+C ጥራይ ኣይድርበን እዩ።
+
+ኣነ እቲ ፕሮግራመር ኣቐዲመ ዝጠቐስኩሉ ኩሉ ሰብ ካብ MonkeyPaste ኣጠቓቕማ ክረክብ ክኽእል እየ ዝደሊ። ስለዚ ንሱን ኩሉ ባህርያቱን ምሉእ ብምሉእ ነጻ እዩ።
+ክትጥቀመሉ ምቹእ ስምዒት ክስምዓካ እውን እደሊ እየ። ስለዚ፡ ድሕሪ ፍጥረቱ እንኮ ሓይሊ ምዃንካ፡ ካብቲ (ኣዝዩ) ኣብ ልዕሊ እቲ (ኣዝዩ) ክለዓል ዘይክእል ውልቃዊ ሓበሬታ ከም ዘይነበረት የረጋግጸልካ።
+ቅንጥብጣብ ሰሌዳኻ ካብ ናይ ገዛእ ርእስኻ ማሽን ወጻኢ ኣብ ዝኾነ ቦታ ይከታተሎ ወይ ይኽዘን። ግዘ.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● ቀሊልን ምሕዝነታውን መተሓላለፊ ምስ ክልቲኡ ልኡል/ቀጥታዊ ኣቀማምጣ፣ ዝርዝር/ግሪድ ቪውን ማልቲ - ሞኒተርን ደገፍ</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● ምውሳኽ ሞድ፡ ምቕዳሕ ኣብ ክንዲ ኣብቲ ቅንጥብጣብ ሰሌዳ 'ምትካእ' 'add to' ይኸውን። ክልቲኡ ጽሑፍን ፋይላትን፡ ምሉእ ብምሉእ ብዝጥዕመካ መንገዲ</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● ዝተራቐቐ ናይ ክሊፕ ምክትታል፣ ምንጭታትን ኣጠቓቕማን ብዝተዓጻጸፈ ደገፍ ንፋየርፎክስን ክሮሚየምን - መሰረት ዝገበረ መርበብ ሓበሬታ (ክሮም፣ ወሰን፣ ተባዓት)</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● ምሉእ ብምሉእ - ፍሉይ ዝኾነ ክሊፕ ኤዲተር ምስ ሃብታም ጽሑፍ (ሰንጠረዥ፡ ዝርዝር፡ መላግቦታት ወዘተ) ምስ Find/replace and signinging</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● ምስልታትካ ኣብቲ ውሑስ ዳታቤዝ ኣቐምጦ፣ ኣብ ዝኾነ እዋን ከም ፋይላት ንኽትጥቀመሉ ድሉው - Demand just drag - and - drop!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>● ሓያል ጽሑፍ templating ንቕልጡፍን ዳይናሚክን ምልጣፍ ካብ ቁንጣሮ ቁንጣሮ እኩብ</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● ትሪግር &amp; ኣክሽን ዲዛይነር ንብሕታዊ ኣውቶማቲክን ኣክሽን ሰንሰለትን</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● ንኽልቲኡ ክሊፓት ንምትንታን ወይ ዝኾነ ቅርጺ ናብ ቅንጥብጣብ ሰሌዳኻ ንባብ/ምጽሓፍ ቀሊል ንኣጠቓቕማን ንምንዋሕን ቀሊል ስርዓት ፕላግ-ኢን</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value />
+    <value>● ዝተሃንጸ - ኣብ ፕላግ-ኢን ብራውዘር ምስ ወትሩ - እናዓበየ ዝኸይድ ዘሎ ማሕበረሰብ - ዝዝወር ቤተ መጻሕፍቲ ፕላግኢናት</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value />
+    <value>● ንኹሉ ብፕላግኢን ቅድመ-ምድላዋት፡ ስታሽ ጌርካ ንዝኾነ ናይ AI ምልክትካ ወይ ትእዛዛትካ ብቐሊሉ ተጠቐም</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value />
+    <value>● ኣብ ቀረባ እዋን ዝያዳ መድረኻትን ባህርያትን! ንሕና ጥራይ ኢና ንጅምር ዘለና 🎉</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
-    <value />
+    <value>● ክልቲኦም Light &amp; Dark themes ምሉእ ብምሉእ ዳይናሚክ እዮም፣ ዝደለኻዮ ሕብሪ ተጠቐም</value>
   </data>
   <data name="StoreFeature3" xml:space="preserve">
-    <value />
+    <value>● ዝተዋደደ ሓገዝ &amp; ምልክት ትኽክል ኣብቲ መተሓላለፊ። ኣብ መርበብ ሓበሬታ ንኹሉ ኣብ መርበብ ሓበሬታ ንኽትጅምር ብኢንተርነት ማንዋል፡ ቪድዮታትን መድረኽን (MonkeyPaste.com/Docs)</value>
   </data>
   <data name="StoreFeature4" xml:space="preserve">
-    <value />
+    <value>● ብ1,000,000ታት ክሊፓት ዝተፈተነ ንኣፈፃፅማ ዝተመቻቸወ።</value>
   </data>
   <data name="StoreFeature5" xml:space="preserve">
-    <value />
+    <value>● ኣብ ዝኾነ እዋን ምድላይ፡ ኣብ ልዕሊ ዓሰርተታት ዓውድታት ኣብ ልዕሊ ክሊፓትን ምንጭታቶምን ብኽልቲኡ Simple &amp; Advanced Filtering ተጠቂምካ ምጽሓፍ ጥራይ ጀምር</value>
   </data>
   <data name="StoreFeature6" xml:space="preserve">
-    <value />
+    <value>● ክሊፓታትካ ኣብ መለለዪ ኣግራብ ምውዳብን ዳግማይ ክጥቀማሉ ዝኽእሉ መጽረዪታት ምፍጣርን .</value>
   </data>
   <data name="StoreFeature7" xml:space="preserve">
-    <value />
+    <value>● ውሑስ፣ ውሑስን ናይ ብሕቲን ናይ ከባቢ መኽዘን ዳታ መኽዘን (እኩብ መረዳእታ የለን) ኩሉ ግዜ ብኣማራጺ 2 - ረቛሒ ምክልኻል ምልክት ቃልን ብቐሊሉ ካብ መከታተሊኻ ኣፕስ ወይ ዌብሳይት ምዕጋትን</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>● ሰፊሕ ስሕበት - ከምኡውን - ናይ ድሮፕ ደገፍ፣ ብሕታዊ ዓለማዊ ኣቋራጭ መንገዲ፣ መስመርን ማውስን - ነጻ ምምራሕ</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
-  </data>
-  <data name="StoreFeatures" xml:space="preserve">
-    <value />
+    <value>● Custom Mouse Modes: Right - Paste ጠውቕ እሞ ጸጋም - Auto ዝብል ጠውቕ - Copy</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>እቲ ቅንጥብጣብ ሰሌዳ ጫካ እዩ። ሞንኪፓስቲ ንጉስ እዩ! ካብ ኣፕ ናብ ኣፕ ምውጥዋጥ፡ ነዚ ምቕዳሕን ምልጣፍን ከምቲ ቅድሚ ሕጂ ምስ MonkeyPaste!! ሓደ ምልክት - ሓድሽ፣ መቑረፂ ወሰን ቅንጥብጣብ ሰሌዳን ትንተናዊ ኣውቶማቲክ መሳርሒን!!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>ናሙና ናይ MonkeyPaste ብተግባር!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -221,21 +233,23 @@
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>ኣብዚ ቋንቋ ዝተተኽለ። እንግሊዝኛ ነዞም ኣብነታት ጥራይ ’ ዩ።</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>ስክሪን ሾት ኣብነታት ጥራይ እዮም። እቲ ትተኽሎ ናብዚ ቋንቋ እዚ ተተርጒሙ ኣሎ።</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
-    <value />
+    <value>በዚ ምዝገባ እዚ ክትረኽቦ ኢኻ፤
+● ደረት ኣልቦ ዓቕሚ .
+● ናይ መሳርሒ ምትእስሳር (ኣብ ልዕሊ ምህላው)</value>
   </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
+    <value>ደረት ኣልቦ - ወርሓዊ</value>
   </data>
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
+    <value>ደረት ኣልቦ - ዓመት ዓመት</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value />
+    <value>ናይ መጀመርታ ምፍታሕ</value>
   </data>
 </root>
