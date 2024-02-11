@@ -2,6 +2,7 @@
 using MonkeyPaste.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO.Compression;
@@ -23,7 +24,9 @@ namespace Ledgerizer {
         GEN_EMPTY_RESX = 1L << 10,
         GEN_ADDON_LISTING = 1L << 11,
         GEN_PROD_LISTING = 1L << 12,
-        TRANSLATE_RESX = 1L << 13
+        TRANSLATE_RESX = 1L << 13,
+        VERIFY_CONSISTENT_CULTURES = 1L << 14,
+        GEN_EDITOR_UISTRS = 1L << 15
     }
     internal class Program {
         //static string ALL_CULTURES_CSV = "ar,ar-sa,ar-ae,ar-bh,ar-dz,ar-eg,ar-iq,ar-jo,ar-kw,ar-lb,ar-ly,ar-ma,ar-om,ar-qa,ar-sy,ar-tn,ar-ye,af,af-za,sq,sq-al,am,am-et,hy,hy-am,as,as-in,az-arab,az-arab-az,az-cyrl,az-cyrl-az,az-latn,az-latn-az,eu,eu-es,be,be-by,bn,bn-bd,bn-in,bs,bs-cyrl,bs-cyrl-ba,bs-latn,bs-latn-ba,bg,bg-bg,ca,ca-es,ca-es-valencia,chr-cher,chr-cher-us,chr-latn,zh-Hans,zh-cn,zh-hans-cn,zh-sg,zh-hans-sg,zh-Hant,zh-hk,zh-mo,zh-tw,zh-hant-hk,zh-hant-mo,zh-hant-tw,hr,hr-hr,hr-ba,cs,cs-cz,da,da-dk,prs,prs-af,prs-arab,nl,nl-nl,nl-be,en,en-au,en-ca,en-gb,en-ie,en-in,en-nz,en-sg,en-us,en-za,en-bz,en-hk,en-id,en-jm,en-kz,en-mt,en-my,en-ph,en-pk,en-tt,en-vn,en-zw,en-053,en-021,en-029,en-011,en-018,en-014,et,et-ee,fil,fil-latn,fil-ph,fi,fi-fi,fr,fr-be ,fr-ca ,fr-ch ,fr-fr ,fr-lu,fr-015,fr-cd,fr-ci,fr-cm,fr-ht,fr-ma,fr-mc,fr-ml,fr-re,frc-latn,frp-latn,fr-155,fr-029,fr-021,fr-011,gl,gl-es,ka,ka-ge,de,de-at,de-ch,de-de,de-lu,de-li,el,el-gr,gu,gu-in,ha,ha-latn,ha-latn-ng,he,he-il,hi,hi-in,hu,hu-hu,is,is-is,ig-latn,ig-ng,id,id-id,iu-cans,iu-latn,iu-latn-ca,ga,ga-ie,xh,xh-za,zu,zu-za,it,it-it,it-ch,ja ,ja-jp,kn,kn-in,kk,kk-kz,km,km-kh,quc-latn,qut-gt,qut-latn,rw,rw-rw,sw,sw-ke,kok,kok-in,ko,ko-kr,ku-arab,ku-arab-iq,ky-kg,ky-cyrl,lo,lo-la,lv,lv-lv,lt,lt-lt,lb,lb-lu,mk,mk-mk,ms,ms-bn,ms-my,ml,ml-in,mt,mt-mt,mi,mi-latn,mi-nz,mr,mr-in,mn-cyrl,mn-mong,mn-mn,mn-phag,ne,ne-np,nb,nb-no,nn,nn-no,no,no-no,or,or-in,fa,fa-ir,pl,pl-pl,pt-br,pt,pt-pt,pa,pa-arab,pa-arab-pk,pa-deva,pa-in,quz,quz-bo,quz-ec,quz-pe,ro,ro-ro,ru ,ru-ru,gd-gb,gd-latn,sr-Latn,sr-latn-cs,sr,sr-latn-ba,sr-latn-me,sr-latn-rs,sr-cyrl,sr-cyrl-ba,sr-cyrl-cs,sr-cyrl-me,sr-cyrl-rs,nso,nso-za,tn,tn-bw,tn-za,sd-arab,sd-arab-pk,sd-deva,si,si-lk,sk,sk-sk,sl,sl-si,es,es-cl,es-co,es-es,es-mx,es-ar,es-bo,es-cr,es-do,es-ec,es-gt,es-hn,es-ni,es-pa,es-pe,es-pr,es-py,es-sv,es-us,es-uy,es-ve,es-019,es-419,sv,sv-se,sv-fi,tg-arab,tg-cyrl,tg-cyrl-tj,tg-latn,ta,ta-in,tt-arab,tt-cyrl,tt-latn,tt-ru,te,te-in,th,th-th,ti,ti-et,tr,tr-tr,tk-cyrl,tk-latn,tk-tm,tk-latn-tr,tk-cyrl-tr,uk,uk-ua,ur,ur-pk,ug-arab,ug-cn,ug-cyrl,ug-latn,uz,uz-cyrl,uz-latn,uz-latn-uz,vi,vi-vn,cy,cy-gb,wo,wo-sn,yo-latn,yo-ng";
@@ -38,7 +41,8 @@ namespace Ledgerizer {
                 string[] omitted = new string[] {
                     "iu-Latn",
                     "iu-Latn-CA",
-                    "kok-IN"
+                    "kok-IN",
+                    "tk-TM",
                 };
                 // get cultures resx tool supports
                 var specificCultures = CultureInfo.GetCultures(CultureTypes.AllCultures)
@@ -71,14 +75,15 @@ namespace Ledgerizer {
 
 
         static MpLedgerizerFlags LEDGERIZER_FLAGS =
-            MpLedgerizerFlags.TRANSLATE_RESX
+            //MpLedgerizerFlags.TRANSLATE_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
             //MpLedgerizerFlags.GEN_PROD_LISTING |
             //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_LOCAL_INDEX |
-            //MpLedgerizerFlags.MOVE_CORE_TO_DAT
+            //MpLedgerizerFlags.MOVE_CORE_TO_DAT |
             //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
             //MpLedgerizerFlags.LOCALIZE_MANIFESTS
+            MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
             ;
 
         static bool DO_LOCAL_PACKAGING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
@@ -102,6 +107,9 @@ namespace Ledgerizer {
         static bool GEN_EMPTY_RESX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_EMPTY_RESX);
 
         static bool TRANS_RESX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.TRANSLATE_RESX);
+        static bool DO_CULTURE_VERIFY = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES);
+
+        static bool GEN_EDITOR_UISTRS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_EDITOR_UISTRS);
 
         const string BUILD_CONFIG =
 #if DEBUG
@@ -152,7 +160,6 @@ namespace Ledgerizer {
         static string ManifestExt = "json";
         static string ManifestFileName => ManifestPrefix + "." + ManifestExt;
 
-        static List<string> CulturesFound { get; set; } = [];
         static void Main(string[] args) {
             Console.WriteLine("Press any key to ledgerize!");
             Console.WriteLine($"Tasks: {LEDGERIZER_FLAGS}");
@@ -165,11 +172,8 @@ namespace Ledgerizer {
             Console.ReadLine();
         }
         static void ProcessAll() {
-            if (TRANS_RESX) {
-                TranslateAllResxWrapper();
-            }
-            if (GEN_EMPTY_RESX) {
-                GenAllEmptyLocalizedResx();
+            if (GEN_EDITOR_UISTRS) {
+                GenEditorUiStrings();
             }
             if (GEN_ADDON_LISTING) {
                 GenAddOnListings();
@@ -177,8 +181,17 @@ namespace Ledgerizer {
             if (GEN_PROD_LISTING) {
                 GenProdListing();
             }
+            if (TRANS_RESX) {
+                TranslateAllResxWrapper();
+            }
+            if (GEN_EMPTY_RESX) {
+                GenAllEmptyLocalizedResx();
+            }
             if (LOCALIZE_MANIFESTS) {
                 LocalizeManifests();
+            }
+            if (DO_CULTURE_VERIFY) {
+                VerifyConsitentCultures();
             }
             if (DO_LOCAL_PACKAGING) {
                 PublishLocal();
@@ -919,14 +932,13 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
             var lang_codes = MpLocalizationHelpers.FindCulturesInDirectory(
                     dir: plugin_res_dir,
-                    file_name_prefix: "Resources");
+                    file_name_filter: "Resources");
 
             foreach (string lang_code in lang_codes.Where(x => !x.IsInvariant()).Select(x => x.Name)) {
                 Localizer.Program.LocalizeManifest(invariant_resource_path, inv_mf_path, lang_code, plugin_res_dir);
             }
             MpConsole.WriteLine("", stampless: true);
         }
-
         static void GenAllEmptyLocalizedResx() {
             var all_ref_resxs = GetAllNeutralResxPaths();
 
@@ -950,6 +962,9 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             }
         }
 
+        static void GenEditorUiStrings() {
+
+        }
         static void TranslateAllResxWrapper() {
             var all_neutral_resxs = GetAllNeutralResxPaths();
             int done_count = 0;
@@ -1102,16 +1117,36 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         }
         static void PrintResxStats() {
             var all_neu_resxs = GetAllNeutralResxPaths().First();
-            var all_cultures_per_neu_lookup = MpLocalizationHelpers.FindCulturesInDirectory(Path.GetDirectoryName(all_neu_resxs), inv_code: string.Empty).ToList();
+            var all_cultures_per_neu_lookup = MpLocalizationHelpers.FindCulturesInDirectory(Path.GetDirectoryName(all_neu_resxs)).ToList();
             var lang_groups = all_cultures_per_neu_lookup.Where(x => !x.Name.IsNullOrEmpty()).GroupBy(x => x.Name.SplitNoEmpty("-").First()).ToList();
             MpConsole.WriteLine($"Languages: {lang_groups.Count} Dialects: {all_cultures_per_neu_lookup.Count}");
+        }
+
+        static bool VerifyConsitentCultures() {
+            var all_neutral_resx = GetAllNeutralResxPaths();
+            var neutral_resx_culture_lookup =
+                all_neutral_resx
+                .ToDictionary(x => x, x => MpLocalizationHelpers.FindCulturesInDirectory(Path.GetDirectoryName(x), file_ext_filter: "resx"));
+            var all_cultures = neutral_resx_culture_lookup.SelectMany(x => x.Value).DistinctBy(x => x.Name);
+            bool success = true;
+            foreach (string neutral_resx_path in all_neutral_resx) {
+                var missing_cultures = all_cultures.Where(x => neutral_resx_culture_lookup[neutral_resx_path].All(y => y.Name != x.Name)).ToList();
+                if (missing_cultures.Any()) {
+                    success = false;
+                    MpConsole.WriteLine($"Culture Check FAILED: {neutral_resx_path}", true);
+                    MpConsole.WriteLine("Missing Cultures: ");
+                    missing_cultures.ForEach((x, idx) => MpConsole.WriteLine($"{x.Name}", false, idx == missing_cultures.Count - 1));
+                } else {
+                    MpConsole.WriteLine($"Culture Check PASSED: {neutral_resx_path}", true, true);
+                }
+            }
+            return success;
         }
         #endregion
 
         #region Index
         static void CreateIndex(bool is_remote) {
             MpConsole.WriteLine($"Creating {(is_remote ? "REMOTE" : "LOCAL")} Cultures...", true);
-            string inv_code = "";
 
             List<string> found_cultures = [];
             // find all distinct cultures
@@ -1121,7 +1156,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     // no resources dir
                     continue;
                 }
-                if (MpLocalizationHelpers.FindCulturesInDirectory(plugin_cultures_dir, file_name_prefix: ManifestPrefix, inv_code: inv_code) is { } cil) {
+                if (MpLocalizationHelpers.FindCulturesInDirectory(plugin_cultures_dir, file_name_filter: ManifestPrefix) is { } cil) {
                     var to_add = cil.Where(x => !found_cultures.Contains(x.Name) && !string.IsNullOrEmpty(x.Name)).Select(x => x.Name);
                     found_cultures.AddRange(to_add);
                 }
@@ -1134,15 +1169,20 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             foreach (string cc in found_cultures) {
                 var culture_manifests = new List<MpManifestFormat>();
                 foreach (string plugin_name in PluginNames) {
-                    // find closest culture for each plugin and create that manifest
-                    var culture_manifest = GetLocalizedManifest(plugin_name, cc, inv_code);
-                    if (ledger.manifests.FirstOrDefault(x => x.guid == culture_manifest.guid) is { } ledger_manifest) {
-                        // use inv ledger packageUrl
-                        culture_manifest.publishedAppVersion = VERSION;
-                        culture_manifest.packageUrl = ledger_manifest.packageUrl;
-                    }
+                    try {
+                        // find closest culture for each plugin and create that manifest
+                        var culture_manifest = GetLocalizedManifest(plugin_name, cc);
+                        if (ledger.manifests.FirstOrDefault(x => x.guid == culture_manifest.guid) is { } ledger_manifest) {
+                            // use inv ledger packageUrl
+                            culture_manifest.publishedAppVersion = VERSION;
+                            culture_manifest.packageUrl = ledger_manifest.packageUrl;
+                        }
 
-                    culture_manifests.Add(culture_manifest);
+                        culture_manifests.Add(culture_manifest);
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"Error deserializing {plugin_name} '{cc}'", ex);
+                    }
                 }
                 var culture_ledger = new MpManifestLedger() {
                     manifests = culture_manifests
@@ -1169,14 +1209,13 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             MpConsole.WriteLine(ledger_index_path);
         }
 
-        static MpManifestFormat GetLocalizedManifest(string plugin_name, string culture, string inv_code) {
+        static MpManifestFormat GetLocalizedManifest(string plugin_name, string culture) {
             string plugin_proj_cultures_dir = GetPluginResourcesDir(plugin_name);
             string localized_manifest_path = Path.Combine(GetPluginProjDir(plugin_name), ManifestFileName);
             if (plugin_proj_cultures_dir != null) {
                 string resolved_cultre = MpLocalizationHelpers.FindClosestCultureCode(
                 culture, plugin_proj_cultures_dir,
-                file_name_prefix: ManifestPrefix,
-                inv_code: inv_code);
+                file_name_filter: ManifestPrefix);
                 if (!string.IsNullOrEmpty(resolved_cultre)) {
                     localized_manifest_path = Path.Combine(
                     plugin_proj_cultures_dir,
@@ -1184,7 +1223,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     MpDebug.Assert(localized_manifest_path.IsFile(), $"ERror can't find manifest {localized_manifest_path}");
                 }
             }
-            return MpFileIo.ReadTextFromFile(localized_manifest_path).DeserializeObject<MpManifestFormat>();
+            return JsonConvert.DeserializeObject<MpManifestFormat>(MpFileIo.ReadTextFromFile(localized_manifest_path));
         }
 
 
@@ -1248,16 +1287,12 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             ZipFile.CreateFromDirectory(publish_dir, output_path, CompressionLevel.Fastest, true);
 
             // get plugin install dir
+
             string plugin_install_dir =
                 Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-#if DEBUG
-                    "MonkeyPaste_DEBUG",
-#else
-                    "MonkeyPaste",
-#endif
+                    MpCommonHelpers.GetStorageDir(),
                     "Plugins",
-                    guid);
+                    guid).LocalStoragePathToPackagePath();
             string install_update_suffix = string.Empty;
             if (plugin_install_dir.IsDirectory()) {
                 // if plugin is installed we need to use this build output 
@@ -1317,9 +1352,13 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     continue;
                 }
                 string plugin_name = Path.GetFileName(proj_dir);
-                manifest.readmeUrl = string.Format(README_URL_FORMAT, plugin_name);
-                manifest.projectUrl = string.Format(PROJ_URL_FORMAT, plugin_name);
-                manifest.iconUri = string.Format(ICON_URL_FORMAT, plugin_name);
+                if (CorePlugins.Contains(plugin_name)) {
+
+                } else {
+                    manifest.readmeUrl = string.Format(README_URL_FORMAT, plugin_name);
+                    manifest.projectUrl = string.Format(PROJ_URL_FORMAT, plugin_name);
+                    manifest.iconUri = string.Format(ICON_URL_FORMAT, plugin_name);
+                }
             }
 
             WriteLedger(ledger, true);

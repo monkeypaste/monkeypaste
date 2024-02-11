@@ -524,8 +524,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public DateTime LastRightClickDateTime { get; set; }
-        public DateTime LastLeftClickDateTime { get; set; }
+        public DateTime? LastRightClickDateTime { get; set; }
+        public DateTime? LastLeftClickDateTime { get; set; }
 
         public int RoutingProfileTypeIdx {
             get => (int)RoutingProfileType;

@@ -1,4 +1,4 @@
-﻿using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -28,43 +28,46 @@ namespace MonkeyPaste.Common {
         public static bool IsInvariant(this CultureInfo ci) {
             return ci != null && ci.Name == string.Empty;
         }
-        public static IEnumerable<CultureInfo> FindCulturesInDirectory(string dir, string file_name_prefix = default, string inv_code = "en-US") {
+        public static IEnumerable<CultureInfo> FindCulturesInDirectory(string dir, string file_name_filter = default, string file_ext_filter = default) {
             List<CultureInfo> cl = new List<CultureInfo>();
             var fil = new DirectoryInfo(dir).EnumerateFiles();
-            foreach (var fi in fil) {
-                if (file_name_prefix != default && !fi.Name.StartsWith(file_name_prefix)) {
-                    continue;
-                }
-                CultureInfo to_add = null;
-                var fn_parts = fi.Name.SplitNoEmpty(".");
-                if (fn_parts.Length == 2) {
-                    // default
-                    to_add = CultureInfo.InvariantCulture;
-                } else if (fn_parts.Length == 3) {
-                    try {
-                        to_add = new CultureInfo(fn_parts[1]);
-                    }
-                    catch (CultureNotFoundException) {
-                        continue;
-                    }
 
-                } else {
-                    MpDebug.Break($"Localization error, weird file name: '{fi.Name}'");
+            foreach (var fi in fil) {
+                if (file_name_filter != default && !fi.Name.StartsWith(file_name_filter)) {
                     continue;
                 }
-                if (to_add != null) {
-                    if (to_add == CultureInfo.InvariantCulture) {
-                        to_add = new CultureInfo(inv_code);
-                    }
-                    if (cl.All(x => x.Name != to_add.Name)) {
-                        // ensure not to dup inv
-                        cl.Add(to_add);
-                    }
+                if (file_ext_filter != default && !fi.Extension.EndsWith(file_ext_filter)) {
+                    continue;
+                }
+                if (fi.Name.SplitNoEmpty(".") is not { } fn_parts ||
+                    fn_parts.Length <= 2) {
+                    // ignore neutral
+                    continue;
+                }
+
+                try {
+                    CultureInfo to_add = new(fn_parts[1]);
+                    cl.Add(to_add);
+                }
+                catch (CultureNotFoundException) {
+                    MpConsole.WriteTraceLine($"Error parsing culture from file '{fi.FullName}'");
+                    continue;
                 }
             }
             return cl;
         }
 
+        public static string FindClosestCultureCode(string target_culture_code, string dir, string file_name_filter = default, string file_ext_filter = default) {
+            CultureInfo closest_info = CultureInfo.InvariantCulture;
+            var acl = FindCulturesInDirectory(dir, file_name_filter, file_ext_filter);
+            foreach (var ac in acl) {
+                if (GetSelfOrAncestorByCode(ac, target_culture_code) is CultureInfo match) {
+                    closest_info = match;
+                    break;
+                }
+            }
+            return closest_info.Name;
+        }
         public static string FindClosestCultureCode(string culture_code, string[] cultures) {
             CultureInfo closest_info = CultureInfo.InvariantCulture;
             var acl = cultures.Select(x => new CultureInfo(x));
@@ -77,17 +80,6 @@ namespace MonkeyPaste.Common {
             return closest_info.Name;
         }
 
-        public static string FindClosestCultureCode(string target_culture_code, string dir, string file_name_prefix = default, string inv_code = "en-US") {
-            CultureInfo closest_info = CultureInfo.InvariantCulture;
-            var acl = FindCulturesInDirectory(dir, file_name_prefix, inv_code);
-            foreach (var ac in acl) {
-                if (GetSelfOrAncestorByCode(ac, target_culture_code) is CultureInfo match) {
-                    closest_info = match;
-                    break;
-                }
-            }
-            return closest_info.Name;
-        }
         private static CultureInfo GetSelfOrAncestorByCode(CultureInfo ci, string culture_code) {
             if (ci == null ||
                 string.IsNullOrEmpty(culture_code) ||
@@ -98,6 +90,53 @@ namespace MonkeyPaste.Common {
                 return ci;
             }
             return GetSelfOrAncestorByCode(ci.Parent, culture_code);
+        }
+        public static IEnumerable<CultureInfo> GetAncestors(this CultureInfo self) {
+            var item = self.Parent;
+
+            while (!string.IsNullOrEmpty(item.Name)) {
+                yield return item;
+                item = item.Parent;
+            }
+        }
+
+        /// <summary>
+        /// Returns an enumeration of elements that contain this element, and the ancestors of this element.
+        /// </summary>
+        /// <param name="self">The starting element.</param>
+        /// <returns>The ancestor list.</returns>
+        public static IEnumerable<CultureInfo> GetAncestorsAndSelf(this CultureInfo self) {
+            var item = self;
+
+            while (!string.IsNullOrEmpty(item.Name)) {
+                yield return item;
+                item = item.Parent;
+            }
+        }
+
+        /// <summary>
+        /// Enumerates the immediate children of the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>The immediate children of the specified item.</returns>
+        public static ICollection<CultureInfo> GetChildren(this CultureInfo item) {
+            return CultureInfo.GetCultures(CultureTypes.AllCultures).Where(child => child?.Parent.Equals(item) == true).ToArray();
+        }
+
+
+        /// <summary>
+        /// Enumerates all descendants of the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>The descendants of the item.</returns>
+        public static IEnumerable<CultureInfo> GetDescendants(this CultureInfo item) {
+            foreach (var child in item.GetChildren()) {
+                yield return child;
+
+                foreach (var d in child.GetDescendants()) {
+                    yield return d;
+                }
+            }
         }
     }
 }

@@ -5,7 +5,7 @@
   "author": "Monkey",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "projectUrl": "https://www.monkeypaste.com",
-  "iconUri": "/Resources/Images/icon.png",
+  "iconUri": "https://www.monkeypaste.com/dat/CoreOleHandler.png",
   "tags": "Core, topenga, toia me te maturuturu, te kuputuhi, te kNF, te html, te html, te whakaahua, te kng, te jpeg, te jpeg, te jpeg, JPG, hono",
   "pluginType": "Clipboard",
   "packageType": "Dll"

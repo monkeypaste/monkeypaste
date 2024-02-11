@@ -284,6 +284,213 @@ namespace MonkeyPaste.Avalonia {
                 return tmivm;
             }
         }
+        public MpAvMenuItemViewModel TrayMenuItemViewModel2 {
+            get {
+                var tmivm = new MpAvMenuItemViewModel() {
+                    TooltipSrcObj = this,
+                    TooltipPropPath = nameof(SystemTrayTooltip),
+                    IconSrcBindingObj = this,
+                    IconPropPath = nameof(SystemTrayIconResourceObj),
+                    CommandPath = nameof(TrayIconClickCommand),
+                    CommandSrcObj = this,
+                    SubItems = new List<MpAvMenuItemViewModel>() {
+
+                        // SHOW/HIDE MW
+
+                        new MpAvMenuItemViewModel() {
+                            Header = MpAvMainWindowViewModel.Instance.ShowOrHideLabel,
+                            IconSourceObj = MpAvMainWindowViewModel.Instance.ShowOrHideIconSourceObj,
+                            Command = MpAvMainWindowViewModel.Instance.ToggleShowMainWindowCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.ToggleMainWindow },
+
+                        },
+
+                        // PAUSE/RESUME CB
+
+                        new MpAvMenuItemViewModel() {
+                            Header = MpAvClipTrayViewModel.Instance.PlayOrPauseLabel,
+                            IconSourceObj = MpAvClipTrayViewModel.Instance.PlayOrPauseIconResoureKey,
+                            Command = MpAvClipTrayViewModel.Instance.ToggleIsAppPausedCommand,
+                            CommandParameter = "Click",
+                            ShortcutArgs = new object[] { MpShortcutType.ToggleListenToClipboard }
+                        },
+
+                        // MODE SUB-MENU
+
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.SysTrayModeHeader,
+                            //IconResourceKey = "RobotArmColorImage",
+                            SubItems = new List<MpAvMenuItemViewModel>() {
+
+                                // APPEND INLINE 
+
+                                new MpAvMenuItemViewModel() {
+                                    Header = UiStrings.SysTrayAppenInlineHeader,
+                                    IsChecked = MpAvClipTrayViewModel.Instance.IsAppendInsertMode,
+                                    IconSourceObj = MpAvClipTrayViewModel.Instance.AppendInlineSysTrayIconSourceObj,
+                                    ToggleType = "Radio",
+                                    Command = MpAvClipTrayViewModel.Instance.ToggleAppendInsertModeCommand,
+                                },
+
+                                // APPEND LINE
+
+                                new MpAvMenuItemViewModel() {
+                                    Header = UiStrings.SysTrayAppendLineHeader,
+                                    IsChecked = MpAvClipTrayViewModel.Instance.IsAppendLineMode,
+                                    IconSourceObj = MpAvClipTrayViewModel.Instance.AppendLineSysTrayIconSourceObj,
+                                    ToggleType = "Radio",
+                                    Command = MpAvClipTrayViewModel.Instance.ToggleAppendLineModeCommand,
+                                    ShortcutArgs = new object[] { MpShortcutType.ToggleAppendBlockMode },
+                                },
+
+                                // AUTO-COPY
+
+                                new MpAvMenuItemViewModel() {
+                                    HasLeadingSeparator = true,
+                                    Header = UiStrings.SysTrayAutoCopyHeader,
+                                    IsChecked = MpAvClipTrayViewModel.Instance.IsAutoCopyMode,
+                                    IconSourceObj = MpAvClipTrayViewModel.Instance.AutoCopySysTrayIconSourceObj,
+                                    ToggleType = "CheckBox",
+                                    Command = MpAvClipTrayViewModel.Instance.ToggleAutoCopyModeCommand,
+                                    ShortcutArgs = new object[] { MpShortcutType.ToggleAutoCopyMode },
+                                },
+
+                                // RIGHT-CLICK PASTE
+
+                                new MpAvMenuItemViewModel() {
+                                    Header = UiStrings.SysTrayRightClickPasteHeader,
+                                    IsChecked = MpAvClipTrayViewModel.Instance.IsRightClickPasteMode,
+                                    IconSourceObj = MpAvClipTrayViewModel.Instance.RightClickPasteSysTrayIconSourceObj,
+                                    ToggleType = "CheckBox",
+                                    Command = MpAvClipTrayViewModel.Instance.ToggleRightClickPasteCommand,
+                                    ShortcutArgs = new object[] { MpShortcutType.ToggleRightClickPasteMode },
+                                },
+                            }
+                        },
+
+                        // PLUGIN BROWSER
+
+                        new MpAvMenuItemViewModel() {
+                            HasLeadingSeparator = true,
+                            Header = UiStrings.SysTrayPluginBrowserLabel,
+                            IconResourceKey = "JigsawImage",
+                            Command = MpAvPluginBrowserViewModel.Instance.ShowPluginBrowserCommand
+                        },
+                        
+                        // SETTINGS
+
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.CommonSettingsTitle,
+                            IconSourceObj = "CogColorImage",
+                            Command = MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.ShowSettings },
+                        },
+
+                        // HELP
+
+                        new MpAvMenuItemViewModel() {
+                            HasLeadingSeparator = true,
+                            Header = UiStrings.SettingsHelpTabLabel,
+                            IconResourceKey = MpAvHelpViewModel.HELP_ICON_KEY,
+                            Command = MpAvHelpViewModel.Instance.NavigateToHelpLinkCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.OpenHelp },
+                        },
+
+
+                        // RATE APP
+
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.SysTrayRateAppLabel,
+                            IconResourceKey = "StarYellowImage",
+                            Command = MpAvAccountViewModel.Instance.RateAppCommand
+                        },
+                        
+                        // CHECK FOR UPDATE
+
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.SysTrayCheckForUpdateLabel,
+                            IconResourceKey = "RadarImage",
+                            Command = MpAvThisAppVersionViewModel.Instance.CheckForUpdateCommand,
+                            CommandParameter = "Click"
+                        },
+                        
+                        // CHECK FOR UPDATE
+
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.SysTrayFeebackLabel,
+                            IconResourceKey = "LetterImage",
+                            Command = MpAvUriNavigator.Instance.NavigateToUriCommand,
+                            CommandParameter = MpServerConstants.SUPPORT_EMAIL_URI
+                        },
+
+                        // ABOUT
+
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.SysTrayAboutHeader,
+                            IconResourceKey = "InfoImage",
+                            Command = MpAvAboutViewModel.Instance.ShowAboutWindowCommand
+                        },
+#region DEBUG STUFF
+#if DEBUG && DESKTOP
+                        new MpAvMenuItemViewModel() {
+                            HasLeadingSeparator = true,
+                            Header = "Show Converter DevTools",
+                            Command = MpAvPlainHtmlConverter.Instance.ShowConverterDevTools,
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = "Open Cef Uri",
+                            Command = NavigateToCefNetUriCommand,
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = "Duplicate storage to desktop",
+                            Command = CreateLocalStorageCopyCommand,
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = MpAvShortcutCollectionViewModel.Instance.HookPauseLabel,
+                            Command = MpAvShortcutCollectionViewModel.Instance.ToggleGlobalHooksCommand
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = "Test Command 1",
+                            Command = GenericTestCommand1,
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = "Test Command 2",
+                            Command = GenericTestCommand2,
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = "Test Command 3",
+                            Command = GenericTestCommand3,
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = "Test Command 4",
+                            Command = GenericTestCommand4,
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = "Test Command 5",
+                            Command = GenericTestCommand5,
+                        },
+                        //new MpMenuItemViewModel() {
+                        //    Header = "Show Notifier DevTools",
+                        //    Command = MpAvClipTrayViewModel.Instance.ShowAppendDevToolsCommand
+                        //},
+#endif
+#endregion
+
+                        // QUIT
+
+                        new MpAvMenuItemViewModel() {
+                            HasLeadingSeparator = true,
+                            Header = UiStrings.SysTrayQuitHeader,
+                            IconResourceKey = "SignOutImage",
+                            Command = ExitApplicationCommand,
+                            CommandParameter = "systray menu click",
+                            ShortcutArgs = new object[] { MpShortcutType.ExitApplication },
+                        }
+                    }
+                };
+                return tmivm;
+            }
+        }
         #endregion
 
         #region State
@@ -362,17 +569,56 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand TrayIconClickCommand => new MpCommand(
-            () => {
+        public ICommand TrayIconClickCommand => new MpCommand<object>(
+            (args) => {
                 // left click only
                 if (MpAvThisAppVersionViewModel.Instance.IsOutOfDate) {
                     MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(MpAvAccountTools.Instance.ThisProductUri);
                     return;
                 }
                 MpAvMainWindowViewModel.Instance.ToggleShowMainWindowCommand.Execute(null);
+
+
+                //                bool is_left_click = args == null;
+                //#if WINDOWS
+                //                is_left_click = false;
+                //#endif
+
+                //                if (is_left_click) {
+                //                    MpAvMainWindowViewModel.Instance.ToggleShowMainWindowCommand.Execute(null);
+                //                    return;
+                //                }
+
+                //                var cm = MpAvMenuView.ShowMenu(
+                //                    App.MainView,
+                //                    TrayMenuItemViewModel2);
+
+
+                //                void Cm_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+                //                    if (e.Source is not Control c || c.DataContext is not MpAvMenuItemViewModel) {
+                //                        return;
+                //                    }
+                //                    CloseMenu();
+
+                //                }
+                //                void OnGlobalMouseReleased(object sender, bool is_left) {
+                //                    CloseMenu();
+                //                }
+                //                void OnGlobalEscReleased(object sender, EventArgs e) {
+                //                    CloseMenu();
+                //                }
+
+                //                void CloseMenu() {
+                //                    cm.Close();
+                //                    cm.LostFocus -= Cm_LostFocus;
+                //                    MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased -= OnGlobalMouseReleased;
+                //                    MpAvShortcutCollectionViewModel.Instance.OnGlobalEscapeReleased -= OnGlobalEscReleased;
+
+                //                }
+                //                cm.LostFocus += Cm_LostFocus;
+                //                MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += OnGlobalMouseReleased;
+                //                MpAvShortcutCollectionViewModel.Instance.OnGlobalEscapeReleased += OnGlobalEscReleased;
             });
-
-
 
 
         public ICommand ExitApplicationCommand => new MpCommand<object>(
@@ -409,7 +655,7 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand CreateLocalStorageCopyCommand => new MpCommand(
             () => {
-                string source_dir = Mp.Services.PlatformInfo.StorageDir;
+                string source_dir = Mp.Services.PlatformInfo.StorageDir.LocalStoragePathToPackagePath();
                 string target_dir = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                     Path.GetFileName(source_dir));

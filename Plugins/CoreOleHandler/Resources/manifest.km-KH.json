@@ -5,7 +5,7 @@
   "author": "Monkey",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "projectUrl": "https://www.monkeypaste.com",
-  "iconUri": "/Resources/Images/icon.png",
+  "iconUri": "https://www.monkeypaste.com/dat/CoreOleHandler.png",
   "tags": "ក្តារតម្បៀតខ្ទាស់អូសអូសអូសនិងទម្លាក់អត្ថបទឯកសារ RTF, អត្ថបទសម្បូរ, HTML, CSV, រូបភាព, PNG, JPEG, jpe, តំណភ្ជាប់",
   "pluginType": "Clipboard",
   "packageType": "Dll"

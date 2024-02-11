@@ -95,7 +95,7 @@ MinimalExample/
 The only requirements for folder structure are that the `manifest.json` and plugin assembly (whichever references a `MpIPluginComponentBase` ie. `MpIAnalyzeComponent` or `MpIAnalyzeComponentAsync`) **must be in the root folder** and the **root folder name must match the plugin assembly name**.
 
 #### Testing
-Your plugin will be loaded automatically on startup once the plugin folder (`MinimalExample/`) is in MonkeyPaste's root plugin folder found (likely at `C:\Users\<username>\AppData\Local\MonkeyPaste\Plugins`) by clicking the 📁 button in the Plugin Browser, adding your plugin folder there and then restarting the application.
+Your plugin will be loaded automatically on startup once the plugin folder (`MinimalExample/`) is in MonkeyPaste's root plugin folder found by clicking the 📁 button in the Plugin Browser, adding your plugin folder there and then restarting the application.
 
 You will get toast notifications of any issues initializing the plugin and some will give you the option to fix and retry the errors in realtime (the retry/fix options may not make sense to the error but occasionally can save you some time). 
 

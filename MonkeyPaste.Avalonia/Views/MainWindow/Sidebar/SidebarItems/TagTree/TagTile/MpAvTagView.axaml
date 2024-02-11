@@ -203,8 +203,8 @@
                     <Grid x:Name="CountContainer">
                         <TextBlock x:Name="TagCountTextBlock"
                                    Background="Transparent"
-                                   VerticalAlignment="Stretch"
-                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
                                    TextAlignment="Center"
                                    FontWeight="SemiBold"
                                    Padding="3,0"

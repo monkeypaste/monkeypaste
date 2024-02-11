@@ -607,9 +607,9 @@
     <None Remove="CefNet" />
     <None Remove="CefNet.Avalonia" />
     <None Remove="Resources\Editor\images\delete.png" />
-    <None Remove="Resources\Editor\index2.html" />
     <None Remove="Resources\Editor\lib\jquery-context-menus\src\context-menu.css" />
     <None Remove="resources\editor\ribbon.html" />
+    <None Remove="Resources\Editor\src\components\localizer\localizer-style.css" />
     <None Remove="resources\editor\src\components\quill-wrapper\parchment\parchment-wrapper.js" />
     <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
     <None Remove="Resources\Legal\credits.html" />
@@ -952,6 +952,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\staryellow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    
+    <!-- FLAGS -->
+    <AvaloniaResource Include="Assets\Images\Flags\*.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
   </ItemGroup>
@@ -1765,10 +1770,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Resources\Editor\index2.html">
+    <Content Update="Resources\Editor\lib\jquery-context-menus\src\context-menu.css">
       <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
     </Content>
-    <Content Update="Resources\Editor\lib\jquery-context-menus\src\context-menu.css">
+    <Content Update="Resources\Editor\src\components\localizer\localizer-style.css">
       <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
     </Content>
   </ItemGroup>

@@ -75,6 +75,8 @@
                                         VerticalAlignment="Center"
                                         Margin="{DynamicResource MenuInputGestureTextMargin}">
                                     <local:MpAvShortcutLabel Classes="menuItemGesture"
+                                                             Classes.global="{TemplateBinding InputGesture,
+                                                                                              Converter={x:Static local:MpAvKeyStringToIsGlobalBoolConverterConverter.Instance}}"
                                                              KeyGesture="{TemplateBinding InputGesture}"
                                                              HorizontalAlignment="Right"
                                                              VerticalAlignment="Center" />

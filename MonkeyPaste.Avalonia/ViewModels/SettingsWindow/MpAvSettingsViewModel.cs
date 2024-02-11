@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -1235,6 +1234,15 @@ namespace MonkeyPaste.Avalonia {
         private void InitRuntimeParams() {
             _runtimeParamAttachActions = new Dictionary<object, Action<MpAvPluginParameterItemView>>() {
                 {
+                    nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
+                    (piv) => {
+                        if(piv.GetVisualDescendant<ComboBox>() is not ComboBox cb) {
+                            return;
+                        }
+                        SetupCulturesComboBox(cb);
+                    }
+                },
+                {
                     nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
                     (piv) => {
                         if(piv.GetVisualDescendant<ComboBox>() is not ComboBox cb) {
@@ -1248,12 +1256,6 @@ namespace MonkeyPaste.Avalonia {
                     (piv) => {
                         if(piv.GetVisualDescendant<ComboBox>() is not ComboBox cb) {
                             return;
-                        }
-                        if(!cb.Classes.Contains("fontFamilyOverride")) {
-                            cb
-                            .GetSelfAndVisualDescendants()
-                            .OfType<TemplatedControl>()
-                            .ForEach(x=>x.Classes.Add("fontFamilyOverride"));
                         }
                         SetupFontFamilyComboBox(cb);
                     }
@@ -1614,45 +1616,26 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #region Culture Helpers
+
+        private void SetupCulturesComboBox(ComboBox cb) {
+            if (cb == null ||
+                cb.DataContext is not MpAvEnumerableParameterViewModelBase cbpvm) {
+                return;
+            }
+
+            cb.Classes.Add("culture-chooser");
+        }
+        #endregion
+
         #region Font Helpers
 
         private void SetupFontFamilyComboBox(ComboBox cb) {
-
-            if (cb == null) {
+            if (cb == null || cb.DataContext is not MpAvEnumerableParameterViewModelBase cbpvm) {
                 return;
             }
 
-            var cbpvm = cb.DataContext as MpAvEnumerableParameterViewModelBase;
-            if (cbpvm == null) {
-                return;
-            }
-            cb.FontFamily = MpAvStringToFontFamilyConverter.Instance.Convert(cbpvm.CurrentValue, null, null, null) as FontFamily;
-
-
-            cb.DropDownOpened += Cb_DropDownOpened;
-
-            if (MpAvWindowManager.LocateWindow(this) is Window w) {
-                EventHandler w_closed_handler = null;
-                w_closed_handler = (s, e) => {
-                    cb.DropDownOpened -= Cb_DropDownOpened;
-                    w.Closed -= w_closed_handler;
-                };
-                w.Closed += w_closed_handler;
-            }
-        }
-
-        private void Cb_DropDownOpened(object sender, EventArgs e) {
-            var cb = sender as ComboBox;
-            if (cb == null) {
-                return;
-            }
-            var cbil = cb.GetLogicalDescendants<ComboBoxItem>();
-            foreach (var cbi in cbil) {
-                if (cbi.DataContext is MpAvEnumerableParameterValueViewModel epvvm) {
-                    cbi.FontFamily = MpAvStringToFontFamilyConverter.Instance.Convert(epvvm.Value, null, null, null) as FontFamily;
-                }
-            }
-
+            cb.Classes.Add("font-chooser");
         }
         #endregion
 

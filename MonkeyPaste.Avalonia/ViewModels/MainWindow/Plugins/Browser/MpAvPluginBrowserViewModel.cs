@@ -320,7 +320,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand OpenPluginFolderCommand => new MpCommand(
             () => {
-                MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(MpPluginLoader.PluginRootDir);
+                MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(MpPluginLoader.PluginRootDir.LocalStoragePathToPackagePath());
             });
 
         public ICommand ClearFilterTextCommand => new MpCommand(

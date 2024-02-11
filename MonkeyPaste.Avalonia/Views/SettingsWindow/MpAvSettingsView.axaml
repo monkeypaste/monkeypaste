@@ -371,6 +371,11 @@
             <Setter Property="CornerRadius"
                     Value="0,0,10,10" />
         </Style>
+        <!--  PREF COMBO BOXES  -->
+        <!--<Style Selector="ListBox#PluginParameterListBox ComboBox">
+            <Setter Property="MaxWidth"
+                    Value="120" />
+        </Style>-->
     </local:MpAvUserControl.Styles>
     <DockPanel x:Name="OuterContainer"
                Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvThemeViewModel.Instance}}"

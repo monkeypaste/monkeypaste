@@ -123,6 +123,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public bool IsRtl {
+            get =>
+                GetThemeValue<bool>(MpThemeResourceKey.IsRtl);
+            set {
+                if (IsRtl != value) {
+                    SetThemeValue(MpThemeResourceKey.IsRtl, value);
+                    OnPropertyChanged(nameof(IsRtl));
+                }
+            }
+        }
         public double GlobalBgOpacity {
             get =>
                 GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity);
@@ -514,6 +524,20 @@ namespace MonkeyPaste.Avalonia {
 
             SetThemeValue(MpThemeResourceKey.ThemeLightColor, colors[27]);
             SetThemeValue(MpThemeResourceKey.ThemeDarkColor, colors[28]);
+
+            // FONT STUFF
+            MpAvPrefViewModel.Instance.OnPropertyChanged(nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft));
+
+            SetThemeValue(MpThemeResourceKey.IsRtl, MpAvPrefViewModel.Instance.IsTextRightToLeft);
+            bool test = GetThemeValue<bool>(MpThemeResourceKey.IsRtl);
+            IsRtl = MpAvPrefViewModel.Instance.IsTextRightToLeft;
+
+            if (IsRtl &&
+                MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily == MpAvPrefViewModel.BASELINE_DEFAULT_READ_ONLY_FONT) {
+                // BUG not sure what the cause is but Nunito in Arabic has random problems rendering...
+                // so if font isn't user defined change to avoid
+                MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily = MpAvPrefViewModel.BASELINE_DEFAULT_READ_ONLY_FONT2;
+            }
 
             MpMessenger.SendGlobal(MpMessageType.ThemeChanged);
         }

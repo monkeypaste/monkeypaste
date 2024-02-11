@@ -36,7 +36,7 @@
   <PropertyGroup>
     <DefaultLangVersion>Latest</DefaultLangVersion>
     <Nullable>disable</Nullable>
-    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
+    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.ApplicationData))</AppDataLocalDir>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
   </PropertyGroup>

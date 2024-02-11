@@ -5,7 +5,7 @@
   "author": "Monkey",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "projectUrl": "https://www.monkeypaste.com",
-  "iconUri": "/Resources/Images/icon.png",
+  "iconUri": "https://www.monkeypaste.com/dat/CoreOleHandler.png",
   "tags": "کور ، کلپ بورڈ ، ڈریگ اینڈ ڈراپ ، ٹیکسٹ ، آر ٹی ایف ، رچ ٹیکسٹ ، ایچ ٹی ایم ایل ، سی ایس وی ، امیج ، پی این جی ، جے پی جی ، جے پی ای جی ، لنک",
   "pluginType": "Clipboard",
   "packageType": "Dll"

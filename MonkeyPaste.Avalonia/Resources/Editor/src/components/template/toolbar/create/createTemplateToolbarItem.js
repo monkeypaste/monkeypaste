@@ -174,7 +174,7 @@ function showTemplateToolbarContextMenu() {
                         icon: 'plus',
                         iconFgColor: 'lime',
                         iconClasses: 'svg-no-defaults',
-                        label: 'New...',
+                        label: UiStrings.EditorNewTemplateLabel,
                         action: function (option, contextMenuIndex, optionIndex) {
                             createTemplateFromDropDown(null, tmi.templateType, allTemplateDefs);
                         },

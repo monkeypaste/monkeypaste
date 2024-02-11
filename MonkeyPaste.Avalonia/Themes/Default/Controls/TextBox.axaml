@@ -11,6 +11,22 @@
     </Styles.Resources>
 
 
+    <Style Selector=":is(TextBox)">
+        <Setter Property="FlowDirection"
+                Value="LeftToRight" />
+    </Style>
+    <Style Selector=":is(Window).rtl :is(TextBox)">
+        <Setter Property="FlowDirection"
+                Value="RightToLeft" />
+    </Style>
+    <Style Selector="AutoCompleteBox">
+        <Setter Property="FlowDirection"
+                Value="LeftToRight" />
+    </Style>
+    <Style Selector=":is(Window).rtl AutoCompleteBox">
+        <Setter Property="FlowDirection"
+                Value="RightToLeft" />
+    </Style>
     <Style Selector=":is(TextBox)[IsReadOnly=false]:not(.fontFamilyOverride)">
         <Setter Property="FontFamily"
                 Value="{Binding Source={DynamicResource DefaultEditableFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />

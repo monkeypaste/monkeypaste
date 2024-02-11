@@ -12,15 +12,57 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
-        <Style Selector="ComboBox.fontChooser"
+        <Style Selector="ComboBox"
+               x:DataType="local:MpAvSingleEnumerableParameterViewModel">
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock x:DataType="local:MpAvEnumerableParameterValueViewModel"
+                                   Text="{Binding Label}" />
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ComboBox.font-chooser"
+               x:DataType="local:MpAvSingleEnumerableParameterViewModel">
+            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
+                    Value="fontFamilyOverride" />
+            <Setter Property="FontFamily"
+                    Value="{Binding SelectedValue, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock x:DataType="local:MpAvEnumerableParameterValueViewModel"
+                                   HorizontalAlignment="Left"
+                                   MinWidth="250"
+                                   Classes="fontFamilyOverride"
+                                   FontFamily="{Binding $self.Text, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}"
+                                   Text="{Binding Label}" />
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ComboBox.culture-chooser"
                x:DataType="local:MpAvSingleEnumerableParameterViewModel">
             <Setter Property="FontFamily"
                     Value="{Binding SelectedValue, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
-        </Style>
-        <Style Selector="ComboBox.fontChooser ComboBoxItem TextBlock"
-               x:DataType="local:MpAvSingleEnumerableParameterViewModel">
-            <Setter Property="FontFamily"
-                    Value="{Binding $self.Text, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <DockPanel MinWidth="250"
+                                   x:DataType="local:MpAvEnumerableParameterValueViewModel">
+                            <Image DockPanel.Dock="Left"
+                                   Width="16"
+                                   Height="11"
+                                   Margin="0,0,5,0"
+                                   Source="{Binding Value, Converter={x:Static local:MpAvCultureCodeToFlagImageSourceConverter.Instance}}" />
+
+                            <TextBlock FontFamily="{Binding $self.Text, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}"
+                                       Text="{Binding Label}" />
+                        </DockPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </local:MpAvUserControl.Styles>
     <Border Classes="paramBorder">
@@ -30,13 +72,7 @@
                   IsDropDownOpen="{Binding IsParameterDropDownOpen}"
                   HorizontalAlignment="Stretch"
                   Margin="0,3,10,3"
-                  MaxWidth="150"
-                  MinWidth="80">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Label}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+                  MaxWidth="120"
+                  MinWidth="80" />
     </Border>
 </local:MpAvUserControl>

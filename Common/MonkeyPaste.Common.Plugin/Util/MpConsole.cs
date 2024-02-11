@@ -47,10 +47,6 @@ namespace MonkeyPaste.Common.Plugin {
             LogFilePath = logPath;
             IsLogEnabled = logPath != null;
 
-            // if (LogToConsole && pi.ConsoleTraceListener != null) {
-            //Trace.Listeners.Clear();
-            //Trace.Listeners.Add(pi.ConsoleTraceListener);
-            //}
             if (IsLogEnabled) {
                 if (IsFileInUse(LogFilePath)) {
                     return;

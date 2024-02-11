@@ -97,7 +97,7 @@ namespace WebSearch {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Core,Google,Bing,DuckDuckGo,Yandex,Yahoo,Text,Search.
+        ///   Looks up a localized string similar to Google, Bing, DuckDuckGo, Yandex, Yahoo, Tekst, Gözleg.
         /// </summary>
         public static string Tags {
             get {

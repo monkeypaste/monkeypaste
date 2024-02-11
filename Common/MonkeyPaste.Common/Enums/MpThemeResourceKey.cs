@@ -59,6 +59,7 @@
         DefaultEditableFontFamily,
         DefaultReadOnlyFontFamily,
         ContentControlThemeFontFamily,
+        IsRtl,
 
         #endregion
 

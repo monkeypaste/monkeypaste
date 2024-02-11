@@ -5,7 +5,7 @@
   "author": "Monkey",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "projectUrl": "https://www.monkeypaste.com",
-  "iconUri": "/Resources/Images/icon.png",
+  "iconUri": "https://www.monkeypaste.com/dat/CoreOleHandler.png",
   "tags": "কোর, ক্লিপবোর্ড, ড্র্যাগ এবং ড্রপ, পাঠ্য, আরটিএফ, সমৃদ্ধ পাঠ্য, এইচটিএমএল, সিএসভি, চিত্র, পিএনজি, জেপিজি, জেপিজি, লিঙ্ক",
   "pluginType": "Clipboard",
   "packageType": "Dll"

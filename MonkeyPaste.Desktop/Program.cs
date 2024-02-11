@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using MonkeyPaste.Common.Plugin;
-using System.IO;
 
 #if CEFNET_WV
 using CefNet;
@@ -52,12 +51,7 @@ namespace MonkeyPaste.Avalonia {
             //bool success = MpFileIo.DeleteDirectory(Path.Combine(@"C:\Users\tkefauver\AppData\Local", "MonkeyPaste_DEBUG", "Plugins", "cf2ec03f-9edd-45e9-a605-2a2df71e03bd"));
             if (CLEAR_STORAGE) {
                 // NOTE use this when local storage folder won't go away
-                string path1 = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "MonkeyPaste");
-#if DEBUG
-                path1 += "_DEBUG";
-#endif
+                string path1 = MpCommonHelpers.GetStorageDir();
                 bool success1 = MpFileIo.DeleteDirectory(path1);
                 Console.WriteLine($"Deleted '{path1}': {success1.ToTestResultLabel()}");
             }

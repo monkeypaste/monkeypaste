@@ -5,7 +5,7 @@
   "author": "Monkey",
   "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
   "projectUrl": "https://www.monkeypaste.com",
-  "iconUri": "icon.png",
+  "iconUri": "https://www.monkeypaste.com/dat/CoreAnnotator.png",
   "packageType": "Dll",
   "tags": "कोर, एनोटेट, पाठ, लिंक, रंग, पार्सिंग, पता, फोन, ईमेल, मुद्रा, वित्त"
 }

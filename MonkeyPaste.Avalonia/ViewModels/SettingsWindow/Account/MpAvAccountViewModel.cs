@@ -128,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
                 // offline (optional) [UserName/Unregistered] AccountType
                 // (312 total) Unlimited 
                 // or
-                // (5 total | 5 capacity | 0 remaining) Free/Standard
+                // (5 total | 5 capacity) Free/Standard
 
                 var sb = new StringBuilder();
                 string line_0 = $"{Mp.Services.ThisAppInfo.ThisAppProductName} {Mp.Services.ThisAppInfo.ThisAppProductVersion}";
@@ -138,27 +138,35 @@ namespace MonkeyPaste.Avalonia {
                 sb.AppendLine(line_0);
                 string offline = IsServerAvailable ? string.Empty : $"{UiStrings.AccountOfflineLabel} ";
                 string acct_name = !IsUserViewEnabled ? string.Empty : IsRegistered ? AccountUsername : UiStrings.AccountUnregisteredLabel;
-                string line_1 = string.Format(@"{0} [{1}] {2}", offline, acct_name, WorkingAccountType.EnumToUiString());
+                //string line_1 = string.Format(@"{0} [{1}] {2}", offline, acct_name, WorkingAccountType.EnumToUiString());
+                string line_1 = string.Join(" ", new string[] { offline, acct_name, WorkingAccountType.EnumToUiString() }.Where(x => !string.IsNullOrWhiteSpace(x)));
                 sb.AppendLine(line_1);
 
-                int content_count = MpAvAccountTools.Instance.LastContentCount;
-                int cap_count = MpAvAccountTools.Instance.GetContentCapacity(WorkingAccountType);
-                string line_2;
-                if (WorkingAccountType == MpUserAccountType.Unlimited) {
-                    line_2 = string.Format(@"({0} {1})", content_count, UiStrings.AccountInfoTotalText);
-                } else {
+
+                if (WorkingAccountType != MpUserAccountType.Unlimited) {
+                    int content_count = MpAvAccountTools.Instance.LastContentCount;
+                    int cap_count = MpAvAccountTools.Instance.GetContentCapacity(WorkingAccountType);
+                    string line_2;
+                    //line_2 = string.Format(
+                    //    @"({0} {1} | {2} {3} | {4} {5})",
+                    //    content_count,
+                    //    UiStrings.AccountInfoTotalText,
+                    //    cap_count,
+                    //    UiStrings.AccountInfoCapacityText,
+                    //    (Math.Max(0, cap_count - content_count)),
+                    //    UiStrings.AccountInfoRemainingText);
                     line_2 = string.Format(
-                        @"({0} {1} | {2} {3} | {4} {5})",
+                        @"({0} {1} | {2} {3})",
                         content_count,
                         UiStrings.AccountInfoTotalText,
                         cap_count,
-                        UiStrings.AccountInfoCapacityText,
-                        (Math.Max(0, cap_count - content_count)),
-                        UiStrings.AccountInfoRemainingText);
+                        UiStrings.AccountInfoCapacityText);
+                    sb.AppendLine(line_2);
                 }
-                sb.AppendLine(line_2);
 
-                return sb.ToString();
+                string result = sb.ToString().TrimEnd();
+                MpConsole.WriteLine($"Sys Tray Tooltip: '{result}'");
+                return result;
             }
         }
 

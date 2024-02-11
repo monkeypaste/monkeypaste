@@ -3,12 +3,33 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
+using PropertyChanged;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using KeyGesture = Avalonia.Input.KeyGesture;
 
 namespace MonkeyPaste.Avalonia {
+    [DoNotNotify]
+    public class MpNativeMenu : NativeMenu {
+        public MpNativeMenu() {
+            this.Opening += MpNativeMenu_Opening;
+            this.NeedsUpdate += MpNativeMenu_Opening;
+        }
+        public new event EventHandler<EventArgs>? Closed;
+        private void MpNativeMenu_Opening(object sender, System.EventArgs e) {
+            this.Closed?.Invoke(this, EventArgs.Empty);
+            MpAvSystemTrayViewModel.Instance.TrayIconClickCommand.Execute(this);
+        }
+        public new IEnumerator<NativeMenuItemBase> GetEnumerator() {
+
+            MpAvSystemTrayViewModel.Instance.TrayIconClickCommand.Execute(this);
+            this.Closed?.Invoke(this, EventArgs.Empty);
+            return base.GetEnumerator();
+        }
+    }
+
     public static class MpAvSystemTray {
         public static void Init() {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);

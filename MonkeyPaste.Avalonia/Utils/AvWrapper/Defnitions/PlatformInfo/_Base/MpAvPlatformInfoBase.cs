@@ -200,18 +200,7 @@ namespace MonkeyPaste.Avalonia {
                     if (OperatingSystem.IsBrowser()) {
                         _storageDir = @"/tmp";
                     } else {
-                        string suffix = string.Empty;
-#if DEBUG
-                        suffix = "_DEBUG";
-#endif
-                        MpIThisAppInfo tai =
-                            Mp.Services == null ||
-                            Mp.Services.PlatformInfo == null ?
-                                new MpAvThisAppInfo() :
-                                Mp.Services.ThisAppInfo;
-                        _storageDir = Path.Combine(
-                            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                            tai.ThisAppProductName + suffix);
+                        _storageDir = MpCommonHelpers.GetStorageDir();
                         if (!_storageDir.IsDirectory()) {
 
                             MpFileIo.CreateDirectory(_storageDir);

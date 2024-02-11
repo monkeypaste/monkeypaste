@@ -213,7 +213,7 @@ namespace MonkeyPaste.Avalonia {
                 Title = string.Format(UiStrings.PluginErrNtfTitle, msg),
                 Body = msg,
                 NotificationType = MpNotificationType.InvalidPlugin,
-                FixCommand = new MpCommand(() => MpFileIo.OpenFileBrowser(pf.ManifestPath))
+                FixCommand = new MpCommand(() => MpFileIo.OpenFileBrowser(pf.ManifestPath.LocalStoragePathToPackagePath()))
             };
         }
 
@@ -356,7 +356,7 @@ namespace MonkeyPaste.Avalonia {
                             notificationType: MpNotificationType.InvalidPlugin,
                             body: string.Format(UiStrings.PluginErrManifestText, plugin.ManifestPath, ex.Message),
                             retryAction: retryFunc,
-                            fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(plugin.ManifestPath)));
+                            fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(plugin.ManifestPath.LocalStoragePathToPackagePath())));
                     if (invalid_or_malformed_json_result == MpNotificationDialogResultType.Ignore) {
                         await DetachPluginByManifestPathAsync(plugin.ManifestPath);
                         return false;
@@ -405,7 +405,7 @@ namespace MonkeyPaste.Avalonia {
                                 notificationType: MpNotificationType.InvalidPlugin,
                                 body: ex.Message,
                                 retryAction: retryFunc,
-                                fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(plugin.ManifestPath)));
+                                fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(plugin.ManifestPath.LocalStoragePathToPackagePath())));
                         if (ivalid_plugin_component_result == MpNotificationDialogResultType.Ignore) {
                             await DetachPluginByManifestPathAsync(plugin.ManifestPath);
                             return false;
@@ -522,7 +522,7 @@ namespace MonkeyPaste.Avalonia {
                         notificationType: MpNotificationType.InvalidPlugin,
                         body: msg,
                         retryAction: retryFunc,
-                        fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(PluginRootDir, to_remove_min_refs.Select(x => Path.GetFileName(x.RootDirectory)))));
+                        fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(PluginRootDir, to_remove_min_refs.Select(x => Path.GetFileName(x.RootDirectory).LocalStoragePathToPackagePath()))));
                 if (dup_guids_detected_result == MpNotificationDialogResultType.Ignore) {
                     return true;
                 }
@@ -909,7 +909,7 @@ namespace MonkeyPaste.Avalonia {
                 string man_culture_code = MpLocalizationHelpers.FindClosestCultureCode(
                     target_culture_code: Mp.Services.UserCultureInfo.CultureCode,
                     dir: res_dir,
-                    file_name_prefix: MANIFEST_FILE_NAME_PREFIX);
+                    file_name_filter: MANIFEST_FILE_NAME_PREFIX);
 
                 string localized_manifest_file_name =
                     $"{MANIFEST_FILE_NAME_PREFIX}.{man_culture_code}.{MANIFEST_FILE_EXT}".Replace("..", ".");

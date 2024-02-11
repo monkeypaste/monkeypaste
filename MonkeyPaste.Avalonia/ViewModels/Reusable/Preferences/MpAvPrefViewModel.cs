@@ -64,6 +64,11 @@ namespace MonkeyPaste.Avalonia {
         public const string PREF_BACKUP_PATH_EXT = "backup";
 
         [JsonIgnore]
+        public const string BASELINE_DEFAULT_READ_ONLY_FONT = "Nunito";
+        public const string BASELINE_DEFAULT_READ_ONLY_FONT2 = "Tahoma";
+        public const string BASELINE_DEFAULT_CONTENT_FONT = "Arial";
+
+        [JsonIgnore]
         public const bool ENCRYPT_DB = true;
 
         #endregion
@@ -198,10 +203,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
 
-        [JsonIgnore]
-        public string LocalStoragePath =>
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-
         #region Db        
         [JsonIgnore]
         public bool EncryptDb { get; set; } = true;
@@ -216,7 +217,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Sync
         [JsonIgnore]
-        public string SyncCertFolderPath => Path.Combine(LocalStoragePath, "SyncCerts");
+        public string SyncCertFolderPath => Path.Combine(MpCommonHelpers.GetStorageDir(), "SyncCerts");
         [JsonIgnore]
         public string SyncCaPath => Path.Combine(SyncCertFolderPath, @"MPCA.cert");
         [JsonIgnore]
@@ -327,8 +328,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool AnimateMainWindow { get; set; } = true;
 
-        public string DefaultReadOnlyFontFamily { get; set; } = "Nunito";
-        public string DefaultEditableFontFamily { get; set; } = "Arial";
+        public string DefaultReadOnlyFontFamily { get; set; } = BASELINE_DEFAULT_READ_ONLY_FONT;
+        public string DefaultEditableFontFamily { get; set; } = BASELINE_DEFAULT_CONTENT_FONT;
         public double DefaultFontSize { get; set; } = BASE_DEFAULT_FONT_SIZE;
 
         public bool HideCapWarnings { get; set; }

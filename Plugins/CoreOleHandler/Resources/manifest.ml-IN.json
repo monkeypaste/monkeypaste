@@ -5,7 +5,7 @@
   "author": "Monkey",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "projectUrl": "https://www.monkeypaste.com",
-  "iconUri": "/Resources/Images/icon.png",
+  "iconUri": "https://www.monkeypaste.com/dat/CoreOleHandler.png",
   "tags": "കോർ, ക്ലിപ്പ്ബോർഡ്, ഡ്രാഗ്, ഡ്രോപ്പ്, ടെക്സ്റ്റ്, ആർടിഎഫ്, റിച്ച് ടെക്സ്റ്റ്, HTML, CSV, ചിത്രം, PNG, JPG, JPEG, LING, LING",
   "pluginType": "Clipboard",
   "packageType": "Dll"

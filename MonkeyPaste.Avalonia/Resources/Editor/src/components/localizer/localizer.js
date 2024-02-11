@@ -97,6 +97,11 @@ function toggleRightToLeft(isRightToLeft) {
 
     globals.quill.format('direction', dir);
     globals.quill.format('align', align);
+    if (isRightToLeft) {
+        document.body.classList.add('right-to-left');
+    } else {
+        document.body.classList.remove('right-to-left');
+    }
 
     log('editor right-to-left enabled: ' + isRightToLeft);
 }

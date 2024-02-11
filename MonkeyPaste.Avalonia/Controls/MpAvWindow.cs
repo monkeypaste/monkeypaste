@@ -202,6 +202,9 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvPrefViewModel.Instance.IsThemeDark) {
                 Classes.Add("dark");
             }
+            if (MpAvPrefViewModel.Instance.IsTextRightToLeft) {
+                Classes.Add("rtl");
+            }
 
             MpAvWindowManager.AllWindows.Add(this);
             this.Closed += MpAvWindow_Closed;

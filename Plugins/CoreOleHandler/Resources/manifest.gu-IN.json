@@ -5,7 +5,7 @@
   "author": "Monkey",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "projectUrl": "https://www.monkeypaste.com",
-  "iconUri": "/Resources/Images/icon.png",
+  "iconUri": "https://www.monkeypaste.com/dat/CoreOleHandler.png",
   "tags": "કોર, ક્લિપબોર્ડ, ખેંચો અને ડ્રોપ, ટેક્સ્ટ, આરટીએફ, સમૃદ્ધ ટેક્સ્ટ, એચટીએમએલ, સીએસવી, ઇમેજ, પીએનજી, જેપીજી, જેપીઇજી, લિંક",
   "pluginType": "Clipboard",
   "packageType": "Dll"

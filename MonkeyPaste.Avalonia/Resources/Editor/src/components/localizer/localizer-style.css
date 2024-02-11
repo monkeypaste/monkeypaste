@@ -1,0 +1,8 @@
+body.right-to-left input[type=text], body.right-to-left textarea {
+    direction: rtl;
+    text-align: right;
+}
+body:not(.right-to-left) input[type=text], body:not(.right-to-left) textarea {
+    direction: ltr;
+    text-align: left;
+}

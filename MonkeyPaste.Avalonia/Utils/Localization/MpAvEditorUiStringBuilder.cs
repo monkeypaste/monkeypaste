@@ -99,26 +99,61 @@ namespace MonkeyPaste.Avalonia {
 
         public static bool CheckJsUiStrings() {
             // target runtime dir
-            UseRuntimePaths = true;
-#if RELEASE
-            SetJsUiStringScriptTag();
-            return false;
-#endif
+            //            UseRuntimePaths = true;
+            //#if RELEASE
+            //            SetJsUiStringScriptTag();
+            //            return false;
+            //#endif
 
-            bool needs_restart = CheckJsUiStrings_internal();
+            //            bool needs_restart = CheckJsUiStrings_internal();
 
-#if WINDOWS
-            // target project dir
-            UseRuntimePaths = false;
-            bool needs_restart_debug = CheckJsUiStrings_internal();
-            MpDebug.Assert(needs_restart == needs_restart_debug, $"Editor UiString runtime result mismatch", true);
-#endif
+            //#if WINDOWS
+            //            // target project dir
+            //            UseRuntimePaths = false;
+            //            bool needs_restart_debug = CheckJsUiStrings_internal();
+            //            MpDebug.Assert(needs_restart == needs_restart_debug, $"Editor UiString runtime result mismatch", true);
+            //#endif
+            //            if (!needs_restart) {
+            //                SetJsUiStringScriptTag();
+            //            }
+            GenJsUiStrings();
             // no resx gen needed so don't restart
             return false;
         }
         #endregion
 
         #region Private Methods
+
+        private static void GenJsUiStrings() {
+            string js_uistr_path = Path.Combine(
+                    GetRuntimeRootDir(),
+                    "Resources",
+                    "Editor",
+                    "src",
+                    "components",
+                    "localizer",
+                    "UiStrings.js");
+
+            string uistr_path = Path.Combine(
+                    GetRuntimeRootDir(),
+                    "Resources",
+                    "Localization",
+                    "UiStrings",
+                    $"UiStrings.{MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name}.resx");
+            var uistr_lookup = MpResxTools.ReadResxFromPath(uistr_path);
+
+            string inner_content =
+                string.Join(
+                    string.Empty,
+                    uistr_lookup
+                    .Where(x => x.Key.StartsWith(EDITOR_KEY_PREFIX))
+                    .OrderBy(x => x.Key)
+                    .Select(x => GetEntryJs((x.Key, x.Value.value))));
+
+            // swap placeholder w/ key-values
+            string runtime_content = EditorUiStringJsContentTemplate.Replace(EDITOR_STR_INSERT_MARKER, inner_content);
+            MpFileIo.WriteTextToFile(js_uistr_path, runtime_content, overwrite: true);
+        }
 
         private static bool CheckJsUiStrings_internal() {
             if (!CommonUiStrPath.IsFile()) {
@@ -169,8 +204,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static bool SetJsUiStringScriptTag() {
+            if (!EditorUiStrPath.IsFile()) {
+
+            }
             // read index.html
             string index_html_text = MpFileIo.ReadTextFromFile(EditorIndexHtmlPath);
+
 
             // get cur uistring file name
             string ed_ui_str_file_name = Path.GetFileName(EditorUiStrPath);
@@ -208,13 +247,25 @@ namespace MonkeyPaste.Avalonia {
         private static string GetEntryJs(KeyValuePair<string, string> kvp) {
             return $"\t{kvp.Key}: `{kvp.Value}`,{Environment.NewLine}";
         }
-        private static string GetRootDir() {
-            if (UseRuntimePaths) {
-                return Path.GetDirectoryName(typeof(MpAvEditorUiStringBuilder).Assembly.Location);
-            }
+        private static string GetEntryJs((string, string) kvp) {
+            return $"\t{kvp.Item1}: `{kvp.Item2}`,{Environment.NewLine}";
+        }
+
+        private static string GetRuntimeRootDir() {
+            return Path.GetDirectoryName(typeof(MpAvEditorUiStringBuilder).Assembly.Location);
+
+        }
+        private static string GetProjRootDir() {
+
             return Path.Combine(
                     MpCommonHelpers.GetSolutionDir(),
                     typeof(MpAvEditorUiStringBuilder).Assembly.GetName().Name);
+        }
+        private static string GetRootDir(bool? forceRuntime = default) {
+            if (UseRuntimePaths) {
+                return GetRuntimeRootDir();
+            }
+            return GetProjRootDir();
         }
         #endregion
     }

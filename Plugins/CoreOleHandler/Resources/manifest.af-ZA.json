@@ -5,7 +5,7 @@
   "author": "Monkey",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "projectUrl": "https://www.monkeypaste.com",
-  "iconUri": "/Resources/Images/icon.png",
+  "iconUri": "https://www.monkeypaste.com/dat/CoreOleHandler.png",
   "tags": "Core, Clipboard, Drag and Drop, Text, RTF, Rich Text, HTML, CSV, Image, PNG, JPG, JPEG, Link",
   "pluginType": "Clipboard",
   "packageType": "Dll"

@@ -707,11 +707,6 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillShowCustomColorPickerNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillShowCustomColorPickerNotification showCustomColorPickerMsg) {
                         Dispatcher.UIThread.Post(async () => {
-
-                            if (string.IsNullOrWhiteSpace(showCustomColorPickerMsg.pickerTitle)) {
-                                // editor should provide title for templates but for content set to title here if ya want (may
-                                showCustomColorPickerMsg.pickerTitle = $"Pick a color, any color for '{ctvm.CopyItemTitle}'";
-                            }
                             string pickerResult = await Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
                                 selectedColor: showCustomColorPickerMsg.currentHexColor,
                                 title: showCustomColorPickerMsg.pickerTitle,

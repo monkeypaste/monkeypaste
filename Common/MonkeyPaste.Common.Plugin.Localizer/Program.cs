@@ -39,8 +39,8 @@ namespace Localizer {
 
             var lang_codes = string.IsNullOrWhiteSpace(target_lang_code) ?
                 MpLocalizationHelpers.FindCulturesInDirectory(
-                    Path.GetDirectoryName(invariant_resource_path),
-                    Path.GetFileNameWithoutExtension(invariant_resource_path))
+                    dir: Path.GetDirectoryName(invariant_resource_path),
+                    file_name_filter: Path.GetFileNameWithoutExtension(invariant_resource_path))
                 .Select(x => x.Name) :
                 new string[] { target_lang_code };
 

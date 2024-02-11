@@ -63,16 +63,20 @@
       <Pack>True</Pack>
     </None>
   </ItemGroup>
+  
+  <!-- CUSTOM ATTRIBUTES-->
 
   <ItemGroup>
     <!-- https://stackoverflow.com/a/49537163/105028 -->
-  <AssemblyAttribute Include="MonkeyPaste.Common.MpSolutionPathAttribute">
-    <_Parameter1>$(SolutionPath)</_Parameter1>
-  </AssemblyAttribute>
-    <AssemblyAttribute Include="MonkeyPaste.Common.MpTargetDatDirAttribute">
-    <_Parameter1>$(TargetDatDir)</_Parameter1>
-  </AssemblyAttribute>
+    <AssemblyAttribute Include="MonkeyPaste.Common.MpLocalStorageDirAttribute">
+      <_Parameter1>$(StorageDir)</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="MonkeyPaste.Common.MpSolutionPathAttribute">
+      <_Parameter1>$(SolutionPath)</_Parameter1>
+    </AssemblyAttribute>
+      <AssemblyAttribute Include="MonkeyPaste.Common.MpTargetDatDirAttribute">
+      <_Parameter1>$(TargetDatDir)</_Parameter1>
+    </AssemblyAttribute>
 </ItemGroup>
 
-  <Target Name="CommonReqsDone" AfterTargets="PostBuildEvent"></Target>
 </Project>

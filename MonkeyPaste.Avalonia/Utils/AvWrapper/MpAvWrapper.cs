@@ -138,7 +138,6 @@ namespace MonkeyPaste.Avalonia {
             DbInfo = new MpAvDbInfo();
             await MpAvPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
-            MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily = "Nunito";
             DefaultDataCreator = new MpAvDefaultDataCreator();
             UserAgentProvider = MpAvPlainHtmlConverter.Instance;
             SslInfo = MpAvPrefViewModel.Instance;
