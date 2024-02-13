@@ -1,6 +1,6 @@
 ﻿namespace MonkeyPaste.Avalonia {
     public static class MpServerConstants {
-        public const bool IS_SERVER_LOCAL = true;
+        public const bool IS_SERVER_LOCAL = false;
 
         public const string LOCAL_SERVER_URL =
 #if WINDOWS

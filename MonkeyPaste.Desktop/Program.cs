@@ -97,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
 #if CEFNET_WV
         .StartWithCefNetApplicationLifetime(App.Args);
 #else
-        .StartWithClassicDesktopLifetime(args);
+        .StartWithClassicDesktopLifetime(App.Args);
 #endif
                 // 
             }

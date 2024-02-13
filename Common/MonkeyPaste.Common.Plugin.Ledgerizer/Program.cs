@@ -79,11 +79,15 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
             //MpLedgerizerFlags.GEN_PROD_LISTING |
             //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            MpLedgerizerFlags.DO_REMOTE_PACKAGING |
+            //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
+            MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG
             //MpLedgerizerFlags.DO_LOCAL_INDEX |
-            //MpLedgerizerFlags.MOVE_CORE_TO_DAT |
+            //MpLedgerizerFlags.DO_REMOTE_INDEX
+            //MpLedgerizerFlags.MOVE_CORE_TO_DAT
             //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
             //MpLedgerizerFlags.LOCALIZE_MANIFESTS
-            MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
+            //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
             ;
 
         static bool DO_LOCAL_PACKAGING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
@@ -1292,17 +1296,20 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 Path.Combine(
                     MpCommonHelpers.GetStorageDir(),
                     "Plugins",
-                    guid).LocalStoragePathToPackagePath();
+                    guid);
             string install_update_suffix = string.Empty;
             if (plugin_install_dir.IsDirectory()) {
-                // if plugin is installed we need to use this build output 
-                // at least for debugging but probably in general too
-                string inner_install_dir = Path.Combine(plugin_install_dir, plugin_name);
-                MpFileIo.DeleteDirectory(inner_install_dir);
-                // duplicate just published dir to plugin container dir
-                MpFileIo.CreateDirectory(inner_install_dir);
-                MpFileIo.CopyDirectory(publish_dir, inner_install_dir);
-                install_update_suffix = " install UPDATED";
+                plugin_install_dir = plugin_install_dir.LocalStoragePathToPackagePath();
+                if (plugin_install_dir.IsDirectory()) {
+                    // if plugin is installed we need to use this build output 
+                    // at least for debugging but probably in general too
+                    string inner_install_dir = Path.Combine(plugin_install_dir, plugin_name);
+                    MpFileIo.DeleteDirectory(inner_install_dir);
+                    // duplicate just published dir to plugin container dir
+                    MpFileIo.CreateDirectory(inner_install_dir);
+                    MpFileIo.CopyDirectory(publish_dir, inner_install_dir);
+                    install_update_suffix = " install UPDATED";
+                }
             }
             // cleanup published output
             MpFileIo.DeleteDirectory(publish_dir);
@@ -1340,35 +1347,38 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         static void PublishRemote() {
             // returns the complete remote ledger
 
-            var ledger = GetInvLedger(true);
-            foreach (var manifest in ledger.manifests) {
-                string proj_dir = Path.Combine(
-                                MpCommonHelpers.GetSolutionDir(),
-                                "Plugins",
-                                Path.GetFileNameWithoutExtension(manifest.packageUrl.ToPathFromUri()));
-                manifest.packageUrl = PushReleaseToRemote(manifest, proj_dir);
-                if (manifest.packageUrl == null) {
+            MpManifestLedger ledger = new MpManifestLedger();
+            foreach (var plugin_name in PluginNames) {
+                string plugin_proj_dir = GetPluginProjDir(plugin_name);
+                string plugin_manifest_path = Path.Combine(
+                        plugin_proj_dir,
+                        ManifestFileName);
+
+                string plugin_manifest_text = MpFileIo.ReadTextFromFile(plugin_manifest_path);
+                MpManifestFormat plugin_manifest = plugin_manifest_text.DeserializeObject<MpManifestFormat>();
+                plugin_manifest.publishedAppVersion = VERSION;
+
+                plugin_manifest.packageUrl = PushReleaseToRemote(plugin_manifest, plugin_proj_dir);
+                if (plugin_manifest.packageUrl == null) {
                     // didn't upload
                     continue;
                 }
-                string plugin_name = Path.GetFileName(proj_dir);
                 if (CorePlugins.Contains(plugin_name)) {
 
                 } else {
-                    manifest.readmeUrl = string.Format(README_URL_FORMAT, plugin_name);
-                    manifest.projectUrl = string.Format(PROJ_URL_FORMAT, plugin_name);
-                    manifest.iconUri = string.Format(ICON_URL_FORMAT, plugin_name);
+                    plugin_manifest.readmeUrl = string.Format(README_URL_FORMAT, plugin_name);
+                    plugin_manifest.projectUrl = string.Format(PROJ_URL_FORMAT, plugin_name);
+                    plugin_manifest.iconUri = string.Format(ICON_URL_FORMAT, plugin_name);
                 }
+                ledger.manifests.Add(plugin_manifest);
             }
 
             WriteLedger(ledger, true);
         }
         static string PushReleaseToRemote(MpManifestFormat manifest, string proj_dir, string initial_failed_ver = null) {
             string plugin_name = Path.GetFileName(proj_dir);
-            string local_package_uri = manifest.packageUrl;
             string version = manifest.version;
-            // see this about gh release https://cli.github.com/manual/gh_release_create
-            string source_package_path = local_package_uri.ToPathFromUri();
+            string source_package_path = Path.Combine(MpLedgerConstants.PLUGIN_PACKAGES_DIR, $"{plugin_name}.zip");
             string target_tag_name = $"v{version}";
             string target_package_file_name = $"{target_tag_name}.zip";
             string target_package_path = Path.Combine(proj_dir, target_package_file_name);
@@ -1380,6 +1390,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             }
 
             MpFileIo.CopyFileOrDirectory(source_package_path, target_package_path, forceOverwrite: true);
+            // see this about gh release https://cli.github.com/manual/gh_release_create
             (int exit_code, string proc_output) = RunProcess(
                 file: "gh.exe",
                 dir: proj_dir,
@@ -1400,9 +1411,9 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                         RunProcess(
                             file: "gh.exe",
                             dir: proj_dir,
-                            args: $"release delete {target_tag_name} -yes --cleanup-tag");
-                    if (exit_code != 0) {
-                        MpConsole.WriteLine($"Error delete failed exit code {del_exit_code}");
+                            args: $"release delete {target_tag_name} --yes --cleanup-tag");
+                    if (del_exit_code != 0) {
+                        MpConsole.WriteLine($"Error delete failed exit code {del_exit_code}. Output: {del_proc_output}");
                         return null;
                     }
                 } else {

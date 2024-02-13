@@ -9,28 +9,14 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpIcon> CreateAsync(
             string iconBase64,
-            bool createBorder = true,
             bool allowDup = false,
             bool suppressWrite = false) {
             var icon = await MpIcon.CreateAsync(
                 iconImgBase64: iconBase64,
-                createBorder: createBorder,
                 allowDup: allowDup,
                 suppressWrite: suppressWrite);
 
             return icon;
-        }
-
-        public string CreateBorder(string iconBase64, double scale, string hexColor) {
-            // return CreateBorder(iconBase64.ToBitmapSource(), scale, hexColor.ToWinMediaColor()).ToBase64String();
-            var bmp = iconBase64.ToAvBitmap();
-            if (bmp == null) {
-                return string.Empty;
-            }
-            var borderBmp = bmp.Tint(hexColor, true);
-            //var borderSize = new Size(borderBmpSrc.Width * scale, bordherBmpSrc.Height * scale);
-            borderBmp = borderBmp.Scale(new MpSize(scale, scale));
-            return borderBmp.ToBase64String();
         }
 
         public List<string> CreatePrimaryColorList(string iconBase64, int palleteSize = 5) {
@@ -38,9 +24,10 @@ namespace MonkeyPaste.Avalonia {
             ////sw.Start();
             var bmp = iconBase64.ToAvBitmap();
             var primaryIconColorList = new List<string>();
-            var hist = bmp.GetStatistics();
+            var hist = MpAvImageExtensions.GetStatistics(iconBase64);
+            //var hist = bmp.GetStatistics();
             foreach (var kvp in hist) {
-                var c = kvp.Key.ToPortableColor(); //Color.FromArgb(255, kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue);
+                var c = kvp.Item1; //Color.FromArgb(255, kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue);
 
                 //MpConsole.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
                 if (primaryIconColorList.Count == palleteSize) {

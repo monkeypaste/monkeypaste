@@ -7,10 +7,10 @@ using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using CefNet;
-using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
-
-
+#if DEBUG
+using MonkeyPaste.Common.Plugin;
+#endif
 
 #if CEFNET_WV
 using CefNet.Avalonia;
@@ -59,14 +59,12 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 #if CEFNET_WV || OUTSYS_WV
         public void OpenDevTools() {
-#if !DEBUG
+#if RELEASE
             return;
-#endif
-#if OUTSYS_WV
+#elif OUTSYS_WV
             ShowDeveloperTools();
             return;
-#endif
-#if CEFNET_WV
+#elif CEFNET_WV
             base.ShowDevTools();
             return;
 #endif
@@ -90,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
             object ntf = null;
             switch (notificationType) {
                 case MpEditorBindingFunctionType.notifyShowDebugger:
-                    ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillShowDebuggerNotification>(msgJsonBase64Str);
+                    ntf = msgJsonBase64Str.DeserializeBase64Object<MpQuillShowDebuggerNotification>();
                     if (ntf is MpQuillShowDebuggerNotification showDebugNtf) {
                         MpConsole.WriteLine($"WebView ShowDebugger Request Received [{DataContext}] {showDebugNtf.reason}");
                         OpenDevTools();

@@ -1,6 +1,6 @@
 ﻿namespace MonkeyPaste.Avalonia {
     public static class MpLedgerConstants {
-        public static bool USE_LOCAL_LEDGER => true;
+        public static bool USE_LOCAL_LEDGER => false;
 
         public const string CULTURE_DIR_NAME = "Cultures";
         public const string LEDGER_PREFIX = "ledger";

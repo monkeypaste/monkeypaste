@@ -287,7 +287,7 @@ namespace MonkeyPaste.Avalonia {
                                             value = new MpParameterValueFormat(
                                                 MpAvPrefViewModel.Instance.AccountBillingCycleType == MpBillingCycleType.Never ?
                                                     MpBillingCycleType.Never.EnumToUiString() :
-                                                    MpAvPrefViewModel.Instance.AccountNextPaymentDateTime.ToString(UiStrings.CommonDateFormat))
+                                                    MpAvPrefViewModel.Instance.AccountNextPaymentDateTime.ToString(MpAvCurrentCultureViewModel.Instance.DateFormat))
                                         },
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountLogout.ToString(),
@@ -1551,9 +1551,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             tb.Margin = new Thickness(0);
-            //tb.Padding = new Thickness(0);
             tb.Content = new MpAvClipBorder() {
-                //CornerRadius = tb.CornerRadius,
                 BorderBrush = Brushes.Transparent,
                 Background = MpAvPrefViewModel.Instance.ThemeColor.ToAvBrush(),
                 Content = new TextBlock() {
@@ -1975,7 +1973,7 @@ namespace MonkeyPaste.Avalonia {
                             break;
                         }
                     case MpRuntimePrefParamType.ShowLogsFolder: {
-                            MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(Mp.Services.PlatformInfo.LogDir.ToFileSystemUriFromPath());
+                            MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(Mp.Services.PlatformInfo.LogDir.ToFileSystemUriFromPath().LocalStoragePathToPackagePath());
                             break;
                         }
 

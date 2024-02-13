@@ -183,8 +183,9 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task<IEnumerable<MpManifestFormat>> GetRemoteManifestsAsync() {
             try {
-                string ledger_uri = await GetLocalizedLedgerUriAsync();
-                string ledger_json = await MpFileIo.ReadTextFromUriAsync(ledger_uri);
+                int timeout_ms = (int)TimeSpan.FromMinutes(3).TotalMilliseconds;
+                string ledger_uri = await GetLocalizedLedgerUriAsync(timeout_ms);
+                string ledger_json = await MpFileIo.ReadTextFromUriAsync(ledger_uri, timeoutMs: timeout_ms);
                 var ledger = ledger_json.DeserializeObject<MpManifestLedger>();
                 if (ledger == null || ledger.manifests == null) {
                     return Array.Empty<MpManifestFormat>();
@@ -198,13 +199,13 @@ namespace MonkeyPaste.Avalonia {
                 return new List<MpManifestFormat>();
             }
         }
-        private async Task<string> GetLocalizedLedgerUriAsync() {
+        private async Task<string> GetLocalizedLedgerUriAsync(int timeout_ms) {
             string ledger_index_uri = MpLedgerConstants.USE_LOCAL_LEDGER ?
                 MpLedgerConstants.LOCAL_LEDGER_INDEX_URI :
                 MpLedgerConstants.REMOTE_LEDGER_INDEX_URI;
 
             // read ledger index
-            string ledger_index_json = await MpFileIo.ReadTextFromUriAsync(ledger_index_uri);
+            string ledger_index_json = await MpFileIo.ReadTextFromUriAsync(ledger_index_uri, timeoutMs: timeout_ms);
             var avail_cultures = ledger_index_json.DeserializeObject<List<string>>();
 
             // find closest culture

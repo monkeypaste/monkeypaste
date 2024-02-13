@@ -213,13 +213,6 @@ namespace MonkeyPaste.Avalonia {
 #if DEBUG
                             HasLeadingSeparator = true,
 #endif
-                            Header = UiStrings.CommonRefreshTooltip,
-                            IconResourceKey = "ResetImage",
-                            Command = ReloadSelectedItemCommand,
-                            IsVisible = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled
-                        },
-                        new MpAvMenuItemViewModel() {
-                            HasLeadingSeparator = true,
                             Header = UiStrings.CommonCutOpLabel,
                             IconResourceKey = "ScissorsImage",
                             Command = CutSelectionFromContextMenuCommand,
@@ -232,13 +225,6 @@ namespace MonkeyPaste.Avalonia {
                             IconResourceKey = "CopyImage",
                             Command = CopySelectionFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.CopySelection },
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.CommonDuplicateLabel,
-                            //AltNavIdx = 0,
-                            IconResourceKey = "DuplicateImage",
-                            Command = DuplicateSelectedClipsCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.Duplicate },
                         },
                         new MpAvMenuItemViewModel() {
                             Header =UiStrings.ClipTilePasteHereHeaderLabel,
@@ -265,6 +251,13 @@ namespace MonkeyPaste.Avalonia {
                             ShortcutArgs = new object[] { MpShortcutType.DeleteSelectedItems },
                         },
                         new MpAvMenuItemViewModel() {
+                            Header = UiStrings.CommonDuplicateLabel,
+                            //AltNavIdx = 0,
+                            IconResourceKey = "DuplicateImage",
+                            Command = DuplicateSelectedClipsCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.Duplicate },
+                        },
+                        new MpAvMenuItemViewModel() {
                             Header = UiStrings.CommonRenameLabel,
                             IsVisible = MpAvPrefViewModel.Instance.ShowContentTitles,
                             IconResourceKey = "RenameImage",
@@ -272,7 +265,8 @@ namespace MonkeyPaste.Avalonia {
                             ShortcutArgs = new object[] { MpShortcutType.Rename },
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = UiStrings.CommonEditLabel,
+                            HasLeadingSeparator = true,
+                            Header = UiStrings.SettingsInteropAppOleFormatButtonPointerOverLabel,
                             IsVisible = !IsAutoEditEnabled,
                             //AltNavIdx = 0,
                             IconResourceKey = "EditContentImage",
@@ -281,10 +275,17 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.ClipTileFindReplaceHeader,
-                            //AltNavIdx = 0,
                             IconResourceKey = "SearchImage",
                             Command = EnableFindAndReplaceForSelectedItem,
                             ShortcutArgs = new object[] { MpShortcutType.FindAndReplaceSelectedItem },
+                        },
+
+                        new MpAvMenuItemViewModel() {
+                            HasLeadingSeparator = true,
+                            Header = UiStrings.CommonRefreshTooltip,
+                            IconResourceKey = "ResetImage",
+                            Command = ReloadSelectedItemCommand,
+                            IsVisible = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled
                         },
                         // share
                         new MpAvMenuItemViewModel() {

@@ -133,13 +133,13 @@ This is a **threading issue** between *Visual Studio* and the low-level global i
 ##### Attaching your Debugger
 After you set `debugMode` in your `manifest.json` you should see something similar to below after starting up MonkeyPaste:
 
-<p><img class="figure narrow" src={require('/img/plugin_development_attach_debugger.png').default} /></p>
+<p class="figure narrow"><img src={require('/img/plugin_development_attach_debugger.png').default} /></p>
 
 Then in your plugin project (assuming you're using Visual Studio) select *Debug->Attach to Process...*.
-<p><img class="figure narrow" src={require('/img/plugin_development_attach_debugger_vs2022_menu1.png').default} /></p>
+<p class="figure narrow"><img src={require('/img/plugin_development_attach_debugger_vs2022_menu1.png').default} /></p>
 
 In the *Attach to process* menu type 'MonkeyPaste' in the search box, select it and click *Attach* at the bottom.
-<p><img class="figure narrow" src={require('/img/plugin_development_attach_debugger_vs2022_menu2.png').default} /></p>
+<p class="figure narrow"><img src={require('/img/plugin_development_attach_debugger_vs2022_menu2.png').default} /></p>
 
 Now anytime code from your plugin is invoked your breakpoints will be hit.
 

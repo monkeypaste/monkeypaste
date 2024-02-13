@@ -10,4 +10,4 @@ In some scenerios if you have switchable graphics cards MonkeyPaste will freeze 
 2. In *Custom Options For Apps->Add an app* select 'Microsoft Store App'
 3. Search or scroll down then highlight 'MonkeyPaste' and select *Options*
 4. In the pop up select a **specific card**. High-performance is preferred just as long as **'Let Windows Decide' is not selected**
-<p><img class="figure" src={require('/img/troubleshooting_win11_graphics.png').default} /></p>
+<p class="figure"><img src={require('/img/troubleshooting_win11_graphics.png').default} /></p>

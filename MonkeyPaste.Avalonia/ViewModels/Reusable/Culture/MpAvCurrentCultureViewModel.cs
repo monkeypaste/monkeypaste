@@ -64,6 +64,26 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public CultureInfo CurrentCulture { get; private set; }
+
+        public string DateTimeFormat {
+            get {
+                var ci = CurrentCulture ?? CultureInfo.InvariantCulture;
+                return ci.DateTimeFormat.FullDateTimePattern;
+            }
+        }
+        public string DateFormat {
+            get {
+                var ci = CurrentCulture ?? CultureInfo.InvariantCulture;
+                return ci.DateTimeFormat.ShortDatePattern;
+            }
+        }
+        public string TimeFormat {
+            get {
+                var ci = CurrentCulture ?? CultureInfo.InvariantCulture;
+                return ci.DateTimeFormat.ShortTimePattern;
+            }
+        }
+
         #endregion
 
         #endregion
@@ -77,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public void Init() {
-            //MpAvPrefViewModel.Instance.CurrentCultureCode = "en-US";f
+            //MpAvPrefViewModel.Instance.CurrentCultureCode = "en-US";
             string culture_name = MpAvPrefViewModel.Instance.CurrentCultureCode;
             SetCultureCommand.Execute(culture_name);
 

@@ -28,7 +28,7 @@
     <CFBundlePackageType>APPL</CFBundlePackageType>
     <CFBundleSignature>4242</CFBundleSignature>
     <CFBundleShortVersionString>$(ApplicationVersion)</CFBundleShortVersionString>
-    <CFBundleExecutable>MonkeyPaste.Avalonia.Desktop</CFBundleExecutable>
+    <CFBundleExecutable>MonkeyPaste.Desktop</CFBundleExecutable>
     <NSPrincipalClass>NSApplication</NSPrincipalClass>
     <!--<NSHighResolutionCapable>true</NSHighResolutionCapable>-->
     <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
@@ -73,6 +73,18 @@
     <Content Include="$(CefPlatformDir)\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(TargetDatDir)\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <AvaloniaXaml Remove="bin\**" />
+    <Compile Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <None Remove="bin\**" />
   </ItemGroup>
 
   <ItemGroup>

@@ -44,7 +44,7 @@ namespace MonkeyPaste.Common {
         public static string GetStorageDir() {
             return typeof(MpCommonHelpers).Assembly.GetCustomAttribute<MpLocalStorageDirAttribute>().Value;
         }
-        public static string GetPackageDir() {
+        private static string GetPackageDir() {
 #if !WINDOWS
             return GetStorageDir();
 #endif
@@ -52,9 +52,12 @@ namespace MonkeyPaste.Common {
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Packages");
             var all_packages = Directory.GetDirectories(packages_dir);
-            var possible_dirs = all_packages.Where(x => x.Contains("MonkeyPaste")).ToList();
-            MpDebug.Assert(possible_dirs.Count == 1, $"Error mutliple package dirs found: {(string.Join(Environment.NewLine, possible_dirs))}");
-            return possible_dirs.FirstOrDefault();
+            var possible_dirs = all_packages.Where(x => x.Contains("MonkeyPaste"));
+            if (possible_dirs.FirstOrDefault() is not string package_dir || !package_dir.IsDirectory()) {
+                return null;
+            }
+
+            return packages_dir;
         }
         public static string LocalStoragePathToPackagePath(this string local_storage_path) {
 #if !WINDOWS
@@ -64,12 +67,18 @@ namespace MonkeyPaste.Common {
             // source="C:\Users\tkefauver\AppData\Roaming\MonkeyPaste_DEBUG\Plugins\cf2ec03f-9edd-45e9-a605-2a2df71e03bd"
             // target="C:\Users\tkefauver\AppData\Local\Packages\10843MonkeyLLC.MonkeyPaste_gak2v2dkd2bkp\LocalCache\Roaming\MonkeyPaste_DEBUG\Plugins\cf2ec03f-9edd-45e9-a605-2a2df71e03bd"
 
+            if (GetPackageDir() is not string root_package_dir ||
+                !root_package_dir.IsDirectory()) {
+                // probably not using WAP
+                return local_storage_path;
+            }
             // gets "C:\Users\tkefauver\AppData"
             string app_data_dir = Path.GetDirectoryName(Path.GetDirectoryName(GetStorageDir()));
             // gets "C:\Users\tkefauver\AppData\Local\Packages\10843MonkeyLLC.MonkeyPaste_gak2v2dkd2bkp\LocalCache"
             string package_cache_dir = Path.Combine(
-                GetPackageDir(),
+                root_package_dir,
                 "LocalCache");
+            MpDebug.Assert(package_cache_dir.IsDirectory(), $"Storage error can't find package dir '{package_cache_dir}'");
             // replace one for the other
             string package_cache_path = local_storage_path.Replace(app_data_dir, package_cache_dir);
             return package_cache_path;

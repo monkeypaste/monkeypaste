@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.Globalization;
 using System.IO;
 using System.Resources.NetStandard;
 
@@ -36,17 +35,5 @@ namespace MonkeyPaste.Common {
             oWriter.Close();
             return resx_path;
         }
-
-        #region Extensions
-
-        public static IEnumerable<CultureInfo> GetAncestors(this CultureInfo self) {
-            var item = self.Parent;
-
-            while (!string.IsNullOrEmpty(item.Name)) {
-                yield return item;
-                item = item.Parent;
-            }
-        }
-        #endregion
     }
 }

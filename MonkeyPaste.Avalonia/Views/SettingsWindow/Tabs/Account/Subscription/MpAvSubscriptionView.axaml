@@ -338,94 +338,96 @@
                                                FontWeight="SemiBold"
                                                Text="{Binding LabelText}" />
                                     <!--  ACCOUNT TYPE INFO  -->
+                                    <Viewbox Grid.Column="2"
+                                             HorizontalAlignment="Left"
+                                             Stretch="None">
+                                        <ContentControl Margin="0,0,0,0"
+                                                        Content="{Binding}"
+                                                        HorizontalAlignment="Stretch"
+                                                        VerticalAlignment="Center">
+                                            <ContentControl.DataTemplates>
+                                                <local:MpAvSubscriptionDetailTemplateSelector>
+                                                    <!--  FREE TEMPLATE  -->
+                                                    <DataTemplate x:Key="FreeTemplate"
+                                                                  x:DataType="local:MpAvSubscriptionItemViewModel">
+                                                        <TextBlock Classes="sub-info"
+                                                                   TextWrapping="WrapWithOverflow"
+                                                                   TextAlignment="Left">
+                                                            <TextBlock.Inlines>
+                                                                <!--  Clip line  -->
+                                                                <Run Classes="bullet" />
+                                                                <Run Classes="limited" />
+                                                                <Run Classes="storage" />
+                                                                <Run Text="(" />
+                                                                <Run Text="{Binding ClipCapCount}"
+                                                                     Classes="cap nudge-left" />
+                                                                <Run Text=")"
+                                                                     Classes="nudge-left" />
+                                                                <LineBreak />
+                                                                <!--  Trash line  -->
+                                                                <Run Classes="bullet" />
+                                                                <Run Classes="limited" />
+                                                                <Run Classes="trash" />
+                                                                <Run Text="(" />
+                                                                <Run Text="{Binding TrashCapCount}"
+                                                                     Classes="cap" />
+                                                                <Run Text=")" />
+                                                            </TextBlock.Inlines>
+                                                        </TextBlock>
+                                                    </DataTemplate>
 
-                                    <ContentControl Grid.Column="2"
-                                                    Margin="0,0,0,0"
-                                                    Content="{Binding}"
-                                                    HorizontalAlignment="Stretch"
-                                                    VerticalAlignment="Center">
-                                        <ContentControl.DataTemplates>
-                                            <local:MpAvSubscriptionDetailTemplateSelector>
-                                                <!--  FREE TEMPLATE  -->
-                                                <DataTemplate x:Key="FreeTemplate"
-                                                              x:DataType="local:MpAvSubscriptionItemViewModel">
-                                                    <TextBlock Classes="sub-info"
-                                                               TextWrapping="WrapWithOverflow"
-                                                               TextAlignment="Left">
-                                                        <TextBlock.Inlines>
-                                                            <!--  Clip line  -->
-                                                            <Run Classes="bullet" />
-                                                            <Run Classes="limited" />
-                                                            <Run Classes="storage" />
-                                                            <Run Text="(" />
-                                                            <Run Text="{Binding ClipCapCount}"
-                                                                 Classes="cap nudge-left" />
-                                                            <Run Text=")"
-                                                                 Classes="nudge-left" />
-                                                            <LineBreak />
-                                                            <!--  Trash line  -->
-                                                            <Run Classes="bullet" />
-                                                            <Run Classes="limited" />
-                                                            <Run Classes="trash" />
-                                                            <Run Text="(" />
-                                                            <Run Text="{Binding TrashCapCount}"
-                                                                 Classes="cap" />
-                                                            <Run Text=")" />
-                                                        </TextBlock.Inlines>
-                                                    </TextBlock>
-                                                </DataTemplate>
+                                                    <!--  BASIC TEMPLATE  -->
+                                                    <DataTemplate x:Key="BasicTemplate"
+                                                                  x:DataType="local:MpAvSubscriptionItemViewModel">
+                                                        <TextBlock Classes="sub-info"
+                                                                   TextWrapping="WrapWithOverflow"
+                                                                   TextAlignment="Left">
+                                                            <TextBlock.Inlines>
+                                                                <!--  Clip line  -->
+                                                                <Run Classes="bullet" />
+                                                                <Run Classes="limited" />
+                                                                <Run Classes="storage" />
+                                                                <Run Text="(" />
+                                                                <Run Text="{Binding ClipCapCount}"
+                                                                     Classes="cap nudge-left" />
+                                                                <Run Text=")"
+                                                                     Classes="nudge-left" />
+                                                                <LineBreak />
+                                                                <!--  Trash line  -->
+                                                                <Run Classes="bullet" />
+                                                                <Run Classes="unlimited" />
+                                                                <Run Classes="trash" />
+                                                            </TextBlock.Inlines>
+                                                        </TextBlock>
+                                                    </DataTemplate>
 
-                                                <!--  BASIC TEMPLATE  -->
-                                                <DataTemplate x:Key="BasicTemplate"
-                                                              x:DataType="local:MpAvSubscriptionItemViewModel">
-                                                    <TextBlock Classes="sub-info"
-                                                               TextWrapping="WrapWithOverflow"
-                                                               TextAlignment="Left">
-                                                        <TextBlock.Inlines>
-                                                            <!--  Clip line  -->
-                                                            <Run Classes="bullet" />
-                                                            <Run Classes="limited" />
-                                                            <Run Classes="storage" />
-                                                            <Run Text="(" />
-                                                            <Run Text="{Binding ClipCapCount}"
-                                                                 Classes="cap nudge-left" />
-                                                            <Run Text=")"
-                                                                 Classes="nudge-left" />
-                                                            <LineBreak />
-                                                            <!--  Trash line  -->
-                                                            <Run Classes="bullet" />
-                                                            <Run Classes="unlimited" />
-                                                            <Run Classes="trash" />
-                                                        </TextBlock.Inlines>
-                                                    </TextBlock>
-                                                </DataTemplate>
+                                                    <!--  UNLIMITED TEMPLATE  -->
+                                                    <DataTemplate x:Key="UnlimitedTemplate"
+                                                                  x:DataType="local:MpAvSubscriptionItemViewModel">
+                                                        <TextBlock Classes="sub-info"
+                                                                   TextWrapping="WrapWithOverflow"
+                                                                   TextAlignment="Left">
+                                                            <TextBlock.Inlines>
+                                                                <!--  Clip line  -->
+                                                                <Run Classes="bullet" />
+                                                                <Run Classes="unlimited" />
+                                                                <Run Classes="storage" />
+                                                                <LineBreak />
+                                                                <!--  Trash line  -->
+                                                                <Run Classes="bullet" />
+                                                                <Run Classes="unlimited" />
+                                                                <Run Classes="trash" />
+                                                            </TextBlock.Inlines>
+                                                        </TextBlock>
+                                                    </DataTemplate>
 
-                                                <!--  UNLIMITED TEMPLATE  -->
-                                                <DataTemplate x:Key="UnlimitedTemplate"
-                                                              x:DataType="local:MpAvSubscriptionItemViewModel">
-                                                    <TextBlock Classes="sub-info"
-                                                               TextWrapping="WrapWithOverflow"
-                                                               TextAlignment="Left">
-                                                        <TextBlock.Inlines>
-                                                            <!--  Clip line  -->
-                                                            <Run Classes="bullet" />
-                                                            <Run Classes="unlimited" />
-                                                            <Run Classes="storage" />
-                                                            <LineBreak />
-                                                            <!--  Trash line  -->
-                                                            <Run Classes="bullet" />
-                                                            <Run Classes="unlimited" />
-                                                            <Run Classes="trash" />
-                                                        </TextBlock.Inlines>
-                                                    </TextBlock>
-                                                </DataTemplate>
-
-                                            </local:MpAvSubscriptionDetailTemplateSelector>
-                                        </ContentControl.DataTemplates>
-                                    </ContentControl>
-
+                                                </local:MpAvSubscriptionDetailTemplateSelector>
+                                            </ContentControl.DataTemplates>
+                                        </ContentControl>
+                                    </Viewbox>
                                     <!--  RATE  -->
                                     <TransitioningContentControl Grid.Column="3"
+                                                                 ClipToBounds="False"
                                                                  HorizontalAlignment="Right"
                                                                  VerticalAlignment="Center"
                                                                  Content="{Binding IsMonthlyEnabled}">
@@ -442,28 +444,34 @@
                                                             DataContext="{Binding $parent[ListBoxItem].DataContext}"
                                                             Spacing="3">
                                                     <!--  RATE TEXT  -->
-                                                    <TextBlock HorizontalAlignment="Left"
-                                                               VerticalAlignment="Center"
-                                                               TextWrapping="NoWrap"
-                                                               TextAlignment="Right"
-                                                               FontWeight="SemiBold"
-                                                               FontStyle="Italic"
-                                                               FontSize="16"
-                                                               Text="{Binding RateText}" />
+                                                    <Viewbox Stretch="UniformToFill">
+                                                        <TextBlock HorizontalAlignment="Left"
+                                                                   ClipToBounds="False"
+                                                                   VerticalAlignment="Center"
+                                                                   TextWrapping="Wrap"
+                                                                   TextAlignment="Right"
+                                                                   FontWeight="SemiBold"
+                                                                   FontStyle="Italic"
+                                                                   FontSize="16"
+                                                                   Text="{Binding RateText}" />
+
+                                                    </Viewbox>
                                                     <!--  TRIAL BADGE  -->
-                                                    <Border Grid.Row="1"
-                                                            Margin="0"
-                                                            Classes="badge trial"
-                                                            HorizontalAlignment="Right"
-                                                            VerticalAlignment="Center"
-                                                            Padding="5,1"
-                                                            IsVisible="{Binding TrialText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                                            Background="Crimson">
-                                                        <TextBlock Foreground="White"
-                                                                   LineHeight="10"
-                                                                   TextWrapping="WrapWithOverflow"
-                                                                   Text="{Binding TrialText}" />
-                                                    </Border>
+                                                    <Viewbox Stretch="UniformToFill">
+                                                        <Border Grid.Row="1"
+                                                                Margin="0"
+                                                                Classes="badge trial"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center"
+                                                                Padding="5,1"
+                                                                IsVisible="{Binding TrialText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                                Background="Crimson">
+                                                            <TextBlock Foreground="White"
+                                                                       LineHeight="10"
+                                                                       TextWrapping="WrapWithOverflow"
+                                                                       Text="{Binding TrialText}" />
+                                                        </Border>
+                                                    </Viewbox>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </TransitioningContentControl.ContentTemplate>

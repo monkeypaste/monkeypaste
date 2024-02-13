@@ -73,6 +73,7 @@ namespace MonkeyPaste.Common.Plugin {
 
         public static void WriteLine(string line, bool pad_pre = false, bool pad_post = false, bool stampless = false, MpLogLevel level = MpLogLevel.Verbose) {
             if (!CanLog(level)) {
+                WriteLine($"Log prevented for level: {level}", level: MpLogLevel.Verbose);
                 return;
             }
             var sb = new StringBuilder();

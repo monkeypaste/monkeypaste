@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginIconLocator {
         public static async Task<int> LocatePluginIconIdAsync(MpRuntimePlugin pf, string overrideUri = null) {
+            //int timeout_ms = 30_000;
             string uri = overrideUri == null ? pf.iconUri : overrideUri;
             var bytes = await MpFileIo.ReadBytesFromUriAsync(uri, pf.ManifestDir);
             if (bytes == null || bytes.Length == 0) {
@@ -21,7 +22,9 @@ namespace MonkeyPaste.Avalonia {
             }
             var icon = await Mp.Services.IconBuilder.CreateAsync(
                 iconBase64: bytes.ToBase64String());
-
+            if (icon == null) {
+                return MpAvPrefViewModel.Instance.DefaultPluginIconId;
+            }
             return icon.Id;
         }
     }

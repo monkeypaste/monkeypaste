@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
                 return new MpAvMenuItemViewModel() {
                     ParentObj = this,
                     Header =
-                        MpAvDateTimeToStringConverter.Instance.Convert(Parent.TransactionDateTime, null, UiStrings.CommonDateTimeFormat, null) as string,
+                        MpAvDateTimeToStringConverter.Instance.Convert(Parent.TransactionDateTime, null, MpAvCurrentCultureViewModel.Instance.DateTimeFormat, null) as string,
                     IconSourceObj = PresetViewModel.IconId,
                     SubItems = new List<MpAvMenuItemViewModel>() {
                         new MpAvMenuItemViewModel() {

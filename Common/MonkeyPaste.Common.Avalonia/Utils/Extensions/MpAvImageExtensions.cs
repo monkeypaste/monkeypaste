@@ -12,6 +12,7 @@ namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvImageExtensions {
         static object _getPixelsLock = new object();
         public static object TintLock = new object();
+        public static object _statsLock = new object();
         #region Converters        
 
         public static Bitmap? ToAvBitmap(this string base64Str, double scale = 1.0, string tint_hex_color = "") {
@@ -224,19 +225,24 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
-        public static unsafe List<KeyValuePair<PixelColor, int>> GetStatistics(this Bitmap bmpSrc) {
-            var countDictionary = new Dictionary<PixelColor, int>();
-            //var pixels = GetPixels(bmpSource);
-            using (var memoryStream = new MemoryStream()) {
-                bmpSrc.Save(memoryStream);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                var writeableBitmap = WriteableBitmap.Decode(memoryStream);
-                using (var lockedBitmap = writeableBitmap.Lock()) {
+        // public static unsafe IEnumerable<(MpColor, int)> GetStatistics(this Bitmap bmpSrc) {
+        public static unsafe IEnumerable<(MpColor, int)> GetStatistics(this string imgBase64) {
+            lock (_statsLock) {
+                try {
+                    var countDictionary = new Dictionary<PixelColor, int>();
+                    //var pixels = GetPixels(bmpSrc);
+                    var memoryStream = new MemoryStream(Convert.FromBase64String(imgBase64));
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    //bmpSrc.Save(memoryStream);
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    var writeableBitmap = WriteableBitmap.Decode(memoryStream);
+                    var lockedBitmap = writeableBitmap.Lock();
                     byte* bmpPtr = (byte*)lockedBitmap.Address;
                     int idx = 0;
-                    for (int x = 0; x < bmpSrc.PixelSize.Width; x++) {
-                        for (int y = 0; y < bmpSrc.PixelSize.Height; y++) {
+                    for (int x = 0; x < writeableBitmap.PixelSize.Width; x++) {
+                        for (int y = 0; y < writeableBitmap.PixelSize.Height; y++) {
                             PixelColor currentColor = GetPixel(bmpPtr, idx * 4);
+                            //PixelColor currentColor = pixels[x, y];
                             idx++;
                             if (currentColor.Alpha == 0) {
                                 continue;
@@ -253,13 +259,21 @@ namespace MonkeyPaste.Common.Avalonia {
                             }
                         }
                     }
-
+                    lockedBitmap.Dispose();
+                    lockedBitmap = null;
+                    memoryStream.Dispose();
+                    memoryStream = null;
+                    GC.Collect();
                     //order the list from most used to least used before returning
-                    return countDictionary.OrderByDescending(o => o.Value).ToList();
+                    var output = countDictionary.OrderByDescending(o => o.Value).Select(x => (new MpColor(x.Key.Alpha, x.Key.Red, x.Key.Green, x.Key.Blue), x.Value)).ToList();
+
+                    return output;
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error getting image stats.", ex);
+                    return new List<(MpColor, int)>();
                 }
             }
-
-
         }
 
         public static bool IsEmptyOrTransprent(this Bitmap bmp, byte min_alpha = 0) {

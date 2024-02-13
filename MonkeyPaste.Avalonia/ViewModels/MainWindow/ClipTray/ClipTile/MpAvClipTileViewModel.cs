@@ -378,6 +378,9 @@ namespace MonkeyPaste.Avalonia {
         public string DetailText {
             get {
                 DetailTooltipText = string.Empty;
+                if (IsPlaceholder) {
+                    return string.Empty;
+                }
                 string detailText = string.Empty;
                 switch ((MpCopyItemDetailType)SelectedDetailIdx) {
                     //created

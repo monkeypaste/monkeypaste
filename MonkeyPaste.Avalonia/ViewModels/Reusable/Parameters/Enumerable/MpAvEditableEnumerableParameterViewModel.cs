@@ -1,6 +1,6 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -57,32 +57,14 @@ namespace MonkeyPaste.Avalonia {
         public override async Task InitializeAsync(MpParameterValue aipv) {
             IsBusy = true;
             await base.InitializeAsync(aipv);
-            Items.Clear();
-
-            if (Parent is MpAvSettingsFrameViewModel) {
-
-            }
 
             List<string> current_values = DefaultValues;
-
             if (!string.IsNullOrEmpty(ParameterValue.Value)) {
                 // when not initial load use stored values
                 current_values = ParameterValue.Value.ToListFromCsv(CsvProperties);
             }
-
-            foreach (var paramVal in current_values) {
-                var naipvvm = await CreateAnalyticItemParameterValueViewModel(Items.Count, string.Empty, paramVal);
-                Items.Add(naipvvm);
-            }
-            if (Selection.Count == 0 && Items.Count > 0) {
-                Selection.Select(0);
-            }
-
-
-            OnPropertyChanged(nameof(CurrentValue));
+            await SetCurrentValueAsync(current_values);
             SetLastValue(CurrentValue);
-
-            OnPropertyChanged(nameof(Items));
 
             IsBusy = false;
         }
@@ -95,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(HasModelChanged):
                 case nameof(Items):
-                    if (Parent is MpISaveOrCancelableViewModel socvm) {
+                    if (SaveOrCancelableViewModel is MpISaveOrCancelableViewModel socvm) {
                         socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
                     }
                     break;
@@ -113,6 +95,18 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+        protected override void RestoreLastValue() {
+            if (!CanSetModelValue()) {
+                return;
+            }
+            Dispatcher.UIThread.Post(async () => {
+                var lvl = _lastValue.ToListFromCsv(CsvProperties);
+                await SetCurrentValueAsync(lvl, _lastValue);
+                if (SaveOrCancelableViewModel is MpISaveOrCancelableViewModel socvm) {
+                    socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
+                }
+            });
+        }
         protected override string GetCurrentValue() {
 
             return Items == null ? null : Items.Select(x => x.Value).ToList().ToCsv(CsvProperties);
@@ -120,6 +114,23 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+        private async Task SetCurrentValueAsync(List<string> newValue, string forced_last_value = default) {
+            string new_last_value = forced_last_value ?? CurrentValue;
+
+            Items.Clear();
+            foreach (var paramVal in newValue) {
+                var naipvvm = await CreateAnalyticItemParameterValueViewModel(Items.Count, string.Empty, paramVal);
+                Items.Add(naipvvm);
+            }
+            if (Selection.Count == 0 && Items.Count > 0) {
+                Selection.Select(0);
+            }
+
+            OnPropertyChanged(nameof(CurrentValue));
+            SetLastValue(new_last_value);
+
+            OnPropertyChanged(nameof(Items));
+        }
         #endregion
 
         #region Commands

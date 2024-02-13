@@ -90,7 +90,19 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
+        public MpISaveOrCancelableViewModel SaveOrCancelableViewModel {
+            get {
+                if (Parent is MpISaveOrCancelableViewModel socvm) {
+                    return socvm;
 
+                }
+                if (Parent is not MpAvHandledClipboardFormatViewModel hcfvm) {
+                    return null;
+                }
+                // find preset using this param val id
+                return hcfvm.Items.FirstOrDefault(x => x.Items.Any(x => x.ParameterValueId == ParameterValueId));
+            }
+        }
         #endregion
 
         #region Business Logic

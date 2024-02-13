@@ -168,14 +168,14 @@ namespace MonkeyPaste.Avalonia {
             MpIcon icon = await MpDataModelProvider.GetItemAsync<MpIcon>(uivm.IconId);
             if (icon == null) {
                 // likely means its current icon is a default reference to a parent
-                icon = await Mp.Services.IconBuilder.CreateAsync(bmpSrc.ToBase64String(), createBorder: false);
+                icon = await Mp.Services.IconBuilder.CreateAsync(bmpSrc.ToBase64String());
                 uivm.IconId = icon.Id;
             } else {
                 var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(icon.IconImageId);
                 img.ImageBase64 = bmpSrc.ToBase64String();
                 await img.WriteToDatabaseAsync();
             }
-            await icon.CreateOrUpdateBorderAsync(forceHexColor: hexColor);
+            await icon.CreateOrUpdateIconColorPaletteAsync(forceHexColor: hexColor);
 
             // wait for db handler
             await Task.Delay(300);

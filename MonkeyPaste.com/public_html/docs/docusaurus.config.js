@@ -46,9 +46,9 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/monkeypaste/monkeypaste-docs/tree/main/'
         },
-        blog: {
-          showReadingTime: true,
-        },
+        // blog: {
+        //   showReadingTime: true,
+        // },
         pages: {
           path: 'src/pages',
           routeBasePath: '',
@@ -122,9 +122,14 @@ const config = {
             position: 'left',
             label: 'Docs',
           },
-          { to: '/blog', label: 'Blog', position: 'left' },
+          // { to: '/blog', label: 'Blog', position: 'left' },
+          { to: 'https://www.monkeypaste.com/forum', label: 'Forum', position: 'left' },
           { to: '/about', label: 'About', position: 'left' },
-          { to: 'https://www.monkeypaste.com/forum', label: 'Forum', position: 'right' },
+          {
+            href: '#translate-btn',
+            position: 'right',
+            label: 'Translate'
+          },
           { to: '/download', label: 'Download', position: 'right' },
           {
             href: 'https://github.com/monkeypaste',
@@ -169,10 +174,10 @@ const config = {
           {
             title: 'More',
             items: [
-              {
-                to: '/blog',
-                label: 'Blog',
-              },
+              // {
+              //   to: '/blog',
+              //   label: 'Blog',
+              // },
               {
                 to: '/about',
                 label: 'About'
@@ -212,6 +217,9 @@ const config = {
     mermaid: true,
   },
   themes: ['@docusaurus/theme-mermaid'],
+  scripts: [
+    require.resolve('./src/scripts/gtranslate.js'),
+  ],
   plugins: [
     'image-zoom',
     [

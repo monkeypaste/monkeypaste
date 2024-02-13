@@ -120,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string NextPaymentDisplayValue =>
             HasBillingCycle ?
-                NextPaymentUtc.ToLocalTime().ToString(UiStrings.CommonDateFormat) :
+                NextPaymentUtc.ToLocalTime().ToString(MpAvCurrentCultureViewModel.Instance.DateFormat) :
                 UiStrings.AccountFreeNextPaymentDisplayText;
 
         public string AccountStateInfo {

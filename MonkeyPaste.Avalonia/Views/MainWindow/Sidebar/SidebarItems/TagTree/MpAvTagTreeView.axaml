@@ -86,12 +86,18 @@
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           Cursor="{Binding IsBusy, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=Wait|unset}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"
+                           MinHeight="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <TreeView x:Name="TagTreeView"
+                  Grid.Row="1"
                   local:MpAvHelpAnchorExtension.IsEnabled="True"
                   local:MpAvHelpAnchorExtension.LinkType="Collections"
                   Classes="tagTree"
                   Classes.tagDrag="{Binding IsAnyDragging}"
-                  Margin="5,10,20,0"
+                  Margin="0"
                   Padding="0,0,0,150"
                   SelectionMode="Single"
                   AutoScrollToSelectedItem="False"
@@ -132,6 +138,7 @@
             </TreeView.ItemTemplate>
         </TreeView>
         <Button x:Name="AddTagButton"
+                Grid.Row="0"
                 Classes="noBg noHoverBg outlineOver"
                 IsVisible="{Binding ShowAddTagButton}"
                 HorizontalAlignment="Right"
@@ -139,7 +146,7 @@
                 CornerRadius="7"
                 Width="30"
                 Height="30"
-                Margin="0,10,20,0"
+                Margin="0,0,10,0"
                 Command="{Binding SelectedItem.AddNewChildTagCommand}"
                 CommandParameter="{Binding $self}">
             <ToolTip.Tip>
