@@ -23,6 +23,11 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style Selector="ComboBox[IsDropDownOpen=true] ComboBoxItem"
+               x:DataType="local:MpAvSingleEnumerableParameterViewModel">
+            <Setter Property="MinWidth"
+                    Value="250" />
+        </Style>
         <Style Selector="ComboBox.font-chooser"
                x:DataType="local:MpAvSingleEnumerableParameterViewModel">
             <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
@@ -34,7 +39,6 @@
                     <DataTemplate>
                         <TextBlock x:DataType="local:MpAvEnumerableParameterValueViewModel"
                                    HorizontalAlignment="Left"
-                                   MinWidth="250"
                                    Classes="fontFamilyOverride"
                                    FontFamily="{Binding $self.Text, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}"
                                    Text="{Binding Label}" />
@@ -49,8 +53,7 @@
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <DockPanel MinWidth="250"
-                                   x:DataType="local:MpAvEnumerableParameterValueViewModel">
+                        <DockPanel x:DataType="local:MpAvEnumerableParameterValueViewModel">
                             <Image DockPanel.Dock="Left"
                                    Width="16"
                                    Height="11"

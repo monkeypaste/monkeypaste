@@ -116,7 +116,7 @@ namespace MonkeyPaste.Avalonia {
             //            if (!needs_restart) {
             //                SetJsUiStringScriptTag();
             //            }
-            GenJsUiStrings();
+            //GenJsUiStrings();
             // no resx gen needed so don't restart
             return false;
         }

@@ -2,6 +2,8 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.IO;
+using Windows.ApplicationModel;
 using SchedulerTask = Microsoft.Win32.TaskScheduler.Task;
 
 namespace MonkeyPaste.Avalonia {
@@ -15,6 +17,24 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
                 return t.Enabled;
+            }
+        }
+        static string ExecProcessPath =>
+            !MpCommonHelpers.IsRunningAsStoreApp() ?
+                Mp.Services.PlatformInfo.ExecutingPath :
+                Environment.Is64BitOperatingSystem ?
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.SystemX86), "cmd.exe") :
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "cmd.exe");
+
+        static string ExecProcessArgs {
+            get {
+                string args = App.LOGIN_LOAD_ARG;
+
+                if (MpCommonHelpers.IsRunningAsStoreApp()) {
+                    string package_family_name = Package.Current.Id.FamilyName;
+                    return $"/C \"\" \"start shell:AppsFolder\\{package_family_name}!App\" {args}";
+                }
+                return args;
             }
         }
         public void SetLoadOnLogin(bool isLoadOnLogin, bool silent = false) {
@@ -37,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
                     string userId = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                     td.Triggers.Add(new LogonTrigger { UserId = userId, Delay = TimeSpan.FromSeconds(3) });
 
-                    td.Actions.Add(new ExecAction(Mp.Services.PlatformInfo.ExecutingPath, App.LOGIN_LOAD_ARG));
+                    td.Actions.Add(new ExecAction(ExecProcessPath, ExecProcessArgs));
 
                     // Register the task in the root folder
                     var task = TaskService.Instance.RootFolder.RegisterTaskDefinition(LoginLoadTaskName, td);

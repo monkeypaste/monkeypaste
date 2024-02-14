@@ -81,6 +81,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
+        public MpAvCommonCancelableProgressIndicatorViewModel ProgressViewModel { get; set; }
         public MpAvPluginDependencyViewModel RootDependencyViewModel =>
             RootDependencyCollection.FirstOrDefault();
 
@@ -163,6 +164,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool IsDownloading =>
+            ProgressViewModel != null;
         public bool ShowDisabledInstallTooltip =>
             IsUninstallPending || IsUpdatePending || IsCorePlugin;
         public bool ShowDisabledUpdateTooltip =>
@@ -513,6 +516,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
+                    OnPropertyChanged(nameof(InstallButtonText));
                     break;
                 case nameof(IsReadmeExpanded):
                     if (IsReadmeExpanded) {
@@ -643,7 +647,9 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 IsBusy = true;
-                bool success = await cm.InstallAsync(PluginGuid, SelectedRemotePackageUrl);
+                ProgressViewModel = new MpAvCommonCancelableProgressIndicatorViewModel(this);
+                bool success = await cm.InstallAsync(PluginGuid, SelectedRemotePackageUrl, ProgressViewModel);
+                ProgressViewModel = null;
 
                 // TODO success should only return true if plugin installs fine but it gets gummed up w/
                 // all the nested exception handling...this shouldn't be done here
@@ -698,13 +704,14 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 IsBusy = true;
-                bool success = await cm.BeginUpdateAsync(PluginGuid, SelectedRemotePackageUrl);
-
+                ProgressViewModel = new MpAvCommonCancelableProgressIndicatorViewModel(this);
+                bool success = await cm.BeginUpdateAsync(PluginGuid, SelectedRemotePackageUrl, ProgressViewModel);
+                ProgressViewModel = null;
                 IsBusy = false;
 
                 Parent.PerformFilterCommand.Execute("Refresh");
             }, () => {
-                return CanUpdate;
+                return CanUpdate && !IsBusy;
             });
 
         public ICommand ToggleIsPluginInstalledCommand => new MpCommand(
@@ -715,6 +722,9 @@ namespace MonkeyPaste.Avalonia {
                     InstallPluginCommand.Execute(null);
                 }
             }, () => {
+                if (IsBusy) {
+                    return false;
+                }
                 if (HasInstallation) {
                     return UninstallPluginCommand.CanExecute(null);
                 } else {

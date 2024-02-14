@@ -34,6 +34,10 @@ namespace MonkeyPaste.Common {
         //            MpDebug.Break();
         //#endif
         //        }
+        public static bool IsRunningAsStoreApp() {
+            return Assembly.GetExecutingAssembly().Location.Contains(@"Program Files\WindowsApps");
+
+        }
         public static string GetSolutionDir() {
             //string solution_path = MpCommonTools.Services.PlatformInfo.ExecutingDir.FindParentDirectory("MonkeyPaste");
             //string solution_dir = AppDomain.CurrentDomain.BaseDirectory.FindParentDirectory("MonkeyPaste");
@@ -57,8 +61,9 @@ namespace MonkeyPaste.Common {
                 return null;
             }
 
-            return packages_dir;
+            return package_dir;
         }
+
         public static string LocalStoragePathToPackagePath(this string local_storage_path) {
 #if !WINDOWS
             return local_storage_path;
@@ -83,10 +88,6 @@ namespace MonkeyPaste.Common {
             string package_cache_path = local_storage_path.Replace(app_data_dir, package_cache_dir);
             return package_cache_path;
         }
-        public static string GetTargetDatDir() {
-            return typeof(MpCommonHelpers).Assembly.GetCustomAttribute<MpTargetDatDirAttribute>().Value;
-        }
-
 
         public static string NewLineByEnv(MpUserDeviceType deviceType) {
             switch (deviceType) {

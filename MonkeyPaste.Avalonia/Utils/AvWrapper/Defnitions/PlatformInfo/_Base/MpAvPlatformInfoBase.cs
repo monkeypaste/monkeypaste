@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Avalonia {
@@ -175,7 +176,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public virtual string ExecutingDir =>
-            AppContext.BaseDirectory;
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);//AppContext.BaseDirectory;
         public virtual string ExecutableName {
             get {
                 if (Environment.GetCommandLineArgs().Any()) {

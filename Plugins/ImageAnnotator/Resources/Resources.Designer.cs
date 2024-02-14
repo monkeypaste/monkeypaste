@@ -106,6 +106,18 @@ namespace ImageAnnotator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was an error. Please make sure your OS is up to date. Check the ReadMe for more details.
+        ///
+        ///Error:
+        ///{0}.
+        /// </summary>
+        public static string ExText {
+            get {
+                return ResourceManager.GetString("ExText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Image Detection, Annotation, Image, AI, Text.
         /// </summary>
         public static string Tags {

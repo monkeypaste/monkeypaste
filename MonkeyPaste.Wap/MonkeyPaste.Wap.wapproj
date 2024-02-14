@@ -64,6 +64,7 @@
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <AppxBundle>Always</AppxBundle>
@@ -166,8 +167,8 @@
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Desktop\MonkeyPaste.Desktop.csproj" />
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy OverwriteReadOnlyFiles="True" SkipUnchangedFiles="True" SourceFiles="$(TargetDatDir)\$(CoreOleGuid).zip" DestinationFolder="$(TargetDir)\AppX\$(MainProjectName)\dat" />
     <Copy OverwriteReadOnlyFiles="True" SkipUnchangedFiles="True" SourceFiles="$(TargetDatDir)\$(CoreAnnGuid).zip" DestinationFolder="$(TargetDir)\AppX\$(MainProjectName)\dat" />
-  </Target>
+  </Target>-->
 </Project>

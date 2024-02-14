@@ -54,7 +54,7 @@ namespace ImageAnnotator {
             }
             catch (Exception ex) {
                 return new MpAnalyzerPluginResponseFormat() {
-                    errorMessage = ex.Message
+                    errorMessage = string.Format(Resources.ExText, ex.Message)
                 };
             }
         }

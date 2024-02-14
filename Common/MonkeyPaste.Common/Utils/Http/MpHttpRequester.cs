@@ -2,14 +2,80 @@
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
+
     public static class MpHttpRequester {
         const string SUCCESS_PREFIX = "[SUCCESS]";
         const string ERROR_PREFIX = "[ERROR]";
+        public static async Task DownloadAsync(
+               string downloadUrl,
+               string destinationFilePath,
+               Func<long?, long, double?, bool> progressChanged) {
+            try {
+                if (Uri.IsWellFormedUriString(downloadUrl, UriKind.Absolute) &&
+                    new Uri(downloadUrl) is { } uri &&
+                    uri.Scheme == "file") {
+                    var bytes = await MpFileIo.ReadBytesFromUriAsync(downloadUrl, string.Empty);
+                    if (bytes != null) {
+                        MpFileIo.WriteByteArrayToFile(destinationFilePath, bytes);
+                    }
+                    return;
+                }
+
+                // from https://stackoverflow.com/a/69826649
+                using var httpClient = new HttpClient { Timeout = TimeSpan.FromDays(1) };
+                using var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
+
+                response.EnsureSuccessStatusCode();
+                var totalBytes = response.Content.Headers.ContentLength;
+
+                using var contentStream = await response.Content.ReadAsStreamAsync();
+                var totalBytesRead = 0L;
+                var readCount = 0L;
+                var buffer = new byte[8192];
+                var isMoreToRead = true;
+
+                static double? calculatePercentage(long? totalDownloadSize, long totalBytesRead) =>
+                    totalDownloadSize.HasValue ?
+                        Math.Round((double)totalBytesRead / totalDownloadSize.Value * 100, 2) :
+                        null;
+
+                using var fileStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+
+                do {
+                    int bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length);
+                    if (bytesRead == 0) {
+                        isMoreToRead = false;
+
+                        if (progressChanged(totalBytes, totalBytesRead, calculatePercentage(totalBytes, totalBytesRead))) {
+                            throw new OperationCanceledException();
+                        }
+
+                        continue;
+                    }
+
+                    await fileStream.WriteAsync(buffer, 0, bytesRead);
+
+                    totalBytesRead += bytesRead;
+                    readCount++;
+
+                    if (readCount % 100 == 0) {
+                        if (progressChanged(totalBytes, totalBytesRead, calculatePercentage(totalBytes, totalBytesRead))) {
+                            throw new OperationCanceledException();
+                        }
+                    }
+                }
+                while (isMoreToRead);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error downloading url '{downloadUrl}'.", ex);
+            }
+        }
 
         public static async Task<string> SubmitPostDataToUrlAsync(
             string url,

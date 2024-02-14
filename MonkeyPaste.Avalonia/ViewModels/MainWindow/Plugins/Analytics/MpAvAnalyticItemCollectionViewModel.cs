@@ -12,8 +12,8 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIManagePluginComponents {
-        Task<bool> InstallAsync(string pluginGuid, string packageUrl);
-        Task<bool> BeginUpdateAsync(string pluginGuid, string packageUrl);
+        Task<bool> InstallAsync(string pluginGuid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm);
+        Task<bool> BeginUpdateAsync(string pluginGuid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm);
         Task<bool> UninstallAsync(string pluginGuid);
     }
 
@@ -32,8 +32,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIManagePluginComponents Implementation
 
-        async Task<bool> MpIManagePluginComponents.InstallAsync(string pluginGuid, string packageUrl) {
-            bool success = await MpPluginLoader.InstallPluginAsync(pluginGuid, packageUrl);
+        async Task<bool> MpIManagePluginComponents.InstallAsync(string pluginGuid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm) {
+            bool success = await MpPluginLoader.InstallPluginAsync(pluginGuid, packageUrl, false, cpivm);
             if (success) {
                 IsBusy = true;
 
@@ -66,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
             return success;
         }
 
-        async Task<bool> MpIManagePluginComponents.BeginUpdateAsync(string plugin_guid, string package_url) {
+        async Task<bool> MpIManagePluginComponents.BeginUpdateAsync(string plugin_guid, string package_url, MpICancelableProgressIndicatorViewModel cpivm) {
             if (Items.FirstOrDefault(x => x.PluginGuid == plugin_guid) is not { } aivm) {
                 MpDebug.Break($"Error updating plugin guid '{plugin_guid}' can't find analyer");
                 return false;
@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             //await RemoveAnalyzerReferencesAsync(aivm, false);
-            bool success = await MpPluginLoader.BeginUpdatePluginAsync(plugin_guid, package_url);
+            bool success = await MpPluginLoader.BeginUpdatePluginAsync(plugin_guid, package_url, cpivm);
 
             IsBusy = false;
             return success;

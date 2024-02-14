@@ -133,6 +133,13 @@
   <data name="Description" xml:space="preserve">
     <value>A totally free, local and lightweight object detector trained on 80 different types of objects.</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>There was an error. Please make sure your OS is up to date. Check the ReadMe for more details.
+
+Error:
+{0}</value>
+    <comment>Exception Message</comment>
+  </data>
   <data name="Tags" xml:space="preserve">
     <value>Image Detection, Annotation, Image, AI, Text</value>
   </data>

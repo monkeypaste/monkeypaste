@@ -852,6 +852,7 @@
     <None Remove="Resources\Editor\lib\jquery-context-menus\src\context-menu.css" />
     <None Remove="resources\editor\ribbon.html" />
     <None Remove="Resources\Editor\src\components\localizer\localizer-style.css" />
+    <None Remove="Resources\Editor\src\components\localizer\UiStrings.js" />
     <None Remove="resources\editor\src\components\quill-wrapper\parchment\parchment-wrapper.js" />
     <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
     <None Remove="Resources\Legal\credits.html" />
@@ -2007,7 +2008,7 @@
     <AvaloniaResource Include="Assets\Images\clipboard.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Close.png">
+    <AvaloniaResource Include="Assets\Images\close.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\cog.png">
@@ -2738,6 +2739,9 @@
       <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
     </Content>
     <Content Update="Resources\Editor\src\components\localizer\localizer-style.css">
+      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
+    </Content>
+    <Content Update="Resources\Editor\src\components\localizer\UiStrings.js">
       <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
     </Content>
   </ItemGroup>

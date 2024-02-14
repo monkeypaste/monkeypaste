@@ -1097,6 +1097,7 @@ namespace MonkeyPaste.Avalonia {
                 internalSourceBaseUri = Mp.Services.SourceRefTools.InternalSourceBaseUri,
                 minLogLevel = (int)MpConsole.MinLogLevel,
                 isDebug = MpDebug.IsDebug,
+                cultureCode = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name,
                 isRightToLeft = MpAvPrefViewModel.Instance.IsTextRightToLeft,
                 defaultFontFamily = MpAvPrefViewModel.Instance.DefaultEditableFontFamily,
                 defaultFontSize = MpAvPrefViewModel.Instance.DefaultFontSize.ToString() + "px",

@@ -1,10 +1,32 @@
 
 // #region Life Cycle
-function initLocalizer() {
-    toggleRightToLeft(globals.IsRtl);
-    localizeGlobals();
-    initLocalizerDomWatcher();
-    getLocalizableElements().forEach(x => localizeElement(x));
+function initLocalizer(cc) {    
+    let src_str = `src/components/localizer/UiStrings.${cc}.js`;
+    let culture_script_elm = document.createElement('script');
+    culture_script_elm.classList.add('culture-script');
+    culture_script_elm.setAttribute('defer', null);
+    culture_script_elm.setAttribute('async', null);
+    culture_script_elm.setAttribute('src', src_str);
+    culture_script_elm.addEventListener('load', (e) => {
+        let cur_culture_elms = Array.from(document.head.querySelectorAll('.culture-script'));
+        for (var i = 0; i < cur_culture_elms.length; i++) {
+            if (cur_culture_elms[i].getAttribute('src') == src_str) {
+                continue;
+            }
+            cur_culture_elms[i].remove();
+        }
+        toggleRightToLeft(globals.IsRtl);
+        localizeGlobals();
+        initLocalizerDomWatcher();
+        getLocalizableElements().forEach(x => localizeElement(x));
+        updateEditorPlaceholderText();
+        log('culture set to: ' + cc);
+    });
+    document.head.appendChild(culture_script_elm);
+    //document.write(culture_script_elm.outerHTML);
+
+
+    
 }
 
 function initLocalizerDomWatcher() {

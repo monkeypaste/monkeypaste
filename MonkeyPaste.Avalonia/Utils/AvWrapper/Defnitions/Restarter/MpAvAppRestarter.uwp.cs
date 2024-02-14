@@ -2,6 +2,8 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.IO;
+using Windows.ApplicationModel;
 using SchedulerTask = Microsoft.Win32.TaskScheduler.Task;
 
 namespace MonkeyPaste.Avalonia {
@@ -9,6 +11,24 @@ namespace MonkeyPaste.Avalonia {
         static string RestartTaskPath =>
             "MonkeyPasteRestart";
 
+        static string ExecProcessPath =>
+            !MpCommonHelpers.IsRunningAsStoreApp() ?
+                Mp.Services.PlatformInfo.ExecutingPath :
+                Environment.Is64BitOperatingSystem ?
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.SystemX86), "cmd.exe") :
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "cmd.exe");
+
+        static string ExecProcessArgs {
+            get {
+                string args = App.RESTART_ARG;
+
+                if (MpCommonHelpers.IsRunningAsStoreApp()) {
+                    string package_family_name = Package.Current.Id.FamilyName;
+                    return $"/C \"\" \"start shell:AppsFolder\\{package_family_name}!App\" {args}";
+                }
+                return args;
+            }
+        }
 
         public static void ShutdownWithRestartTask(string detail) {
             RemoveRestartTask();
@@ -23,8 +43,8 @@ namespace MonkeyPaste.Avalonia {
                 tt.EndBoundary = et;
 
                 var ea = new ExecAction(
-                    path: Mp.Services.PlatformInfo.ExecutingPath,
-                    arguments: App.RESTART_ARG);
+                    path: ExecProcessPath,
+                    arguments: ExecProcessArgs);
 
                 TaskDefinition td = TaskService.Instance.NewTask();
                 td.Triggers.Add(tt);

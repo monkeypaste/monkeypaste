@@ -3,6 +3,8 @@
 function initMain(initObj) {
 	try {
 		globals.EnvName = initObj && initObj.envName ? initObj.envName : globals.WindowsEnv;
+
+		initLocalizer(initObj.defaults.cultureCode);
 		initGlobals();
 		initDefaults(initObj.defaults);
 		initTheme();
@@ -50,6 +52,7 @@ function initDefaults(defaultsObj) {
 		globals.isDataTransferDestFormattingEnabled = defaultsObj.isDataTransferDestFormattingEnabled;
 	}
 		
+	
 	if (!isNullOrUndefined(defaultsObj.maxUndo)) {
 		globals.MaxUndoLimit = defaultsObj.maxUndo;
 	}

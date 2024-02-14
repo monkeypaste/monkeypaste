@@ -74,9 +74,6 @@
     <AssemblyAttribute Include="MonkeyPaste.Common.MpSolutionPathAttribute">
       <_Parameter1>$(SolutionPath)</_Parameter1>
     </AssemblyAttribute>
-      <AssemblyAttribute Include="MonkeyPaste.Common.MpTargetDatDirAttribute">
-      <_Parameter1>$(TargetDatDir)</_Parameter1>
-    </AssemblyAttribute>
 </ItemGroup>
 
 </Project>

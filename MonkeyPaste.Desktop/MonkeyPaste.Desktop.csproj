@@ -45,7 +45,18 @@
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
   </PropertyGroup>
+
   <ItemGroup>
+    <None Remove="dat\cf2ec03f-9edd-45e9-a605-2a2df71e03bd.zip" />
+    <None Remove="dat\ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31.zip" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dat\cf2ec03f-9edd-45e9-a605-2a2df71e03bd.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dat\ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="monkey.ico" />
   </ItemGroup>
 
@@ -73,18 +84,6 @@
     <Content Include="$(CefPlatformDir)\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="$(TargetDatDir)\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <AvaloniaXaml Remove="bin\**" />
-    <Compile Remove="bin\**" />
-    <EmbeddedResource Remove="bin\**" />
-    <None Remove="bin\**" />
   </ItemGroup>
 
   <ItemGroup>

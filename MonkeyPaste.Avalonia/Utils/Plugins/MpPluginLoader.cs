@@ -136,9 +136,9 @@ namespace MonkeyPaste.Avalonia {
             return backup_path;
         }
 
-        public static async Task<bool> InstallPluginAsync(string plugin_guid, string packageUrl, bool silentInstall = false) {
+        public static async Task<bool> InstallPluginAsync(string plugin_guid, string packageUrl, bool silentInstall, MpICancelableProgressIndicatorViewModel cpivm) {
             try {
-                string install_dir = await DownloadAndExtractPluginToDirAsync(plugin_guid, packageUrl, PluginRootDir);
+                string install_dir = await DownloadAndExtractPluginToDirAsync(plugin_guid, packageUrl, PluginRootDir, cpivm);
                 if (install_dir == null) {
                     throw new MpUserNotifiedException($"Error downloading plugin. Please try again later.");
                 }
@@ -191,8 +191,8 @@ namespace MonkeyPaste.Avalonia {
             return success;
         }
 
-        public static async Task<bool> BeginUpdatePluginAsync(string plugin_guid, string packageUrl) {
-            string plugin_update_dir = await DownloadAndExtractPluginToDirAsync(plugin_guid, packageUrl, PluginUpdatesDir);
+        public static async Task<bool> BeginUpdatePluginAsync(string plugin_guid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm) {
+            string plugin_update_dir = await DownloadAndExtractPluginToDirAsync(plugin_guid, packageUrl, PluginUpdatesDir, cpivm);
             if (!plugin_update_dir.IsDirectory()) {
                 // update failed, only returns if no restart
                 await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
@@ -316,15 +316,20 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
             }
+            var missing_core_plugin_guids = CorePluginGuids.Where(x => !Path.Combine(PluginRootDir, x).IsDirectory());
+            if (!missing_core_plugin_guids.Any()) {
+                // all installed
+                return;
+            }
 
-            foreach (var core_guid in CorePluginGuids) {
+            foreach (var core_guid in missing_core_plugin_guids) {
                 if (Path.Combine(PluginRootDir, core_guid).IsDirectory()) {
                     // if guid dir exists, assume core plugin exists
                     continue;
                 }
                 string core_plugin_zip_path = Path.Combine(CoreDatDir, $"{core_guid}.zip");
                 MpDebug.Assert(core_plugin_zip_path.IsFile(), $"Dat zip error, core plugin not found at '{core_plugin_zip_path}'");
-                _ = await InstallPluginAsync(core_guid, core_plugin_zip_path.ToFileSystemUriFromPath(), true);
+                _ = await InstallPluginAsync(core_guid, core_plugin_zip_path.ToFileSystemUriFromPath(), true, null);
                 MpConsole.WriteLine($"Core plugin '{core_plugin_zip_path}' installed.");
             }
         }
@@ -634,18 +639,7 @@ namespace MonkeyPaste.Avalonia {
             // increment install stats for all updates 
             Task.WhenAll(UpdatedPluginGuids.Select(x => GetOrUpdatePluginStatsAsync(x, true))).FireAndForgetSafeAsync();
         }
-        private static async Task<string> DownloadAndExtractPluginToDirAsync(string plugin_guid, string packageUrl, string targetBaseDir) {
-            // returns packagr CONTAINING dir ie the guid wrapper dir
-            var package_bytes = await Task.Run(async () => {
-                // do download in background. Not sure if this still blocks ui thread though...
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(packageUrl, string.Empty, 10 * 60_000);
-                return bytes;
-            });
-
-            if (package_bytes == null || package_bytes.Length == 0) {
-                // download error
-                return null;
-            }
+        private static async Task<string> DownloadAndExtractPluginToDirAsync(string plugin_guid, string packageUrl, string targetBaseDir, MpICancelableProgressIndicatorViewModel cpivm) {
             string target_dir = Path.Combine(targetBaseDir, plugin_guid);
             if (target_dir.IsDirectory()) {
                 if (!MpFileIo.DeleteDirectory(target_dir)) {
@@ -657,8 +651,15 @@ namespace MonkeyPaste.Avalonia {
                 // shouldn't really happen
                 return null;
             }
-            // write zip to target dir
-            string temp_package_zip_path = MpFileIo.WriteByteArrayToFile(Path.Combine(target_dir, Path.GetRandomFileName()), package_bytes);
+            string temp_package_zip_path = Path.Combine(target_dir, Path.GetRandomFileName());
+            await MpHttpRequester.DownloadAsync(packageUrl, temp_package_zip_path, cpivm == null ? null : (a, b, c) => { return cpivm.UpdateProgress(a.Value, b, c.Value); });
+
+            if (!temp_package_zip_path.IsFile() ||
+                    MpFileIo.ReadBytesFromFile(temp_package_zip_path) is not { } package_bytes) {
+                // download error
+                return null;
+            }
+
 
             try {
                 // extract zip to target dir

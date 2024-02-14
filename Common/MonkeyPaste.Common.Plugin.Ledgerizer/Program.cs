@@ -19,14 +19,16 @@ namespace Ledgerizer {
         DO_REMOTE_VERSIONS = 1L << 5,
         DO_LOCAL_INDEX = 1L << 6,
         DO_REMOTE_INDEX = 1L << 7,
-        MOVE_CORE_TO_DAT = 1L << 8,
+        LOCAL_MOVE_CORE_TO_DAT = 1L << 8,
         LOCALIZE_MANIFESTS = 1L << 9,
         GEN_EMPTY_RESX = 1L << 10,
         GEN_ADDON_LISTING = 1L << 11,
         GEN_PROD_LISTING = 1L << 12,
         TRANSLATE_RESX = 1L << 13,
         VERIFY_CONSISTENT_CULTURES = 1L << 14,
-        GEN_EDITOR_UISTRS = 1L << 15
+        GEN_EDITOR_UISTRS = 1L << 15,
+        REMOTE_MOVE_CORE_TO_DAT = 1L << 16,
+        MOVE_JS_UISTRINGS = 1L << 17,
     }
     internal class Program {
         //static string ALL_CULTURES_CSV = "ar,ar-sa,ar-ae,ar-bh,ar-dz,ar-eg,ar-iq,ar-jo,ar-kw,ar-lb,ar-ly,ar-ma,ar-om,ar-qa,ar-sy,ar-tn,ar-ye,af,af-za,sq,sq-al,am,am-et,hy,hy-am,as,as-in,az-arab,az-arab-az,az-cyrl,az-cyrl-az,az-latn,az-latn-az,eu,eu-es,be,be-by,bn,bn-bd,bn-in,bs,bs-cyrl,bs-cyrl-ba,bs-latn,bs-latn-ba,bg,bg-bg,ca,ca-es,ca-es-valencia,chr-cher,chr-cher-us,chr-latn,zh-Hans,zh-cn,zh-hans-cn,zh-sg,zh-hans-sg,zh-Hant,zh-hk,zh-mo,zh-tw,zh-hant-hk,zh-hant-mo,zh-hant-tw,hr,hr-hr,hr-ba,cs,cs-cz,da,da-dk,prs,prs-af,prs-arab,nl,nl-nl,nl-be,en,en-au,en-ca,en-gb,en-ie,en-in,en-nz,en-sg,en-us,en-za,en-bz,en-hk,en-id,en-jm,en-kz,en-mt,en-my,en-ph,en-pk,en-tt,en-vn,en-zw,en-053,en-021,en-029,en-011,en-018,en-014,et,et-ee,fil,fil-latn,fil-ph,fi,fi-fi,fr,fr-be ,fr-ca ,fr-ch ,fr-fr ,fr-lu,fr-015,fr-cd,fr-ci,fr-cm,fr-ht,fr-ma,fr-mc,fr-ml,fr-re,frc-latn,frp-latn,fr-155,fr-029,fr-021,fr-011,gl,gl-es,ka,ka-ge,de,de-at,de-ch,de-de,de-lu,de-li,el,el-gr,gu,gu-in,ha,ha-latn,ha-latn-ng,he,he-il,hi,hi-in,hu,hu-hu,is,is-is,ig-latn,ig-ng,id,id-id,iu-cans,iu-latn,iu-latn-ca,ga,ga-ie,xh,xh-za,zu,zu-za,it,it-it,it-ch,ja ,ja-jp,kn,kn-in,kk,kk-kz,km,km-kh,quc-latn,qut-gt,qut-latn,rw,rw-rw,sw,sw-ke,kok,kok-in,ko,ko-kr,ku-arab,ku-arab-iq,ky-kg,ky-cyrl,lo,lo-la,lv,lv-lv,lt,lt-lt,lb,lb-lu,mk,mk-mk,ms,ms-bn,ms-my,ml,ml-in,mt,mt-mt,mi,mi-latn,mi-nz,mr,mr-in,mn-cyrl,mn-mong,mn-mn,mn-phag,ne,ne-np,nb,nb-no,nn,nn-no,no,no-no,or,or-in,fa,fa-ir,pl,pl-pl,pt-br,pt,pt-pt,pa,pa-arab,pa-arab-pk,pa-deva,pa-in,quz,quz-bo,quz-ec,quz-pe,ro,ro-ro,ru ,ru-ru,gd-gb,gd-latn,sr-Latn,sr-latn-cs,sr,sr-latn-ba,sr-latn-me,sr-latn-rs,sr-cyrl,sr-cyrl-ba,sr-cyrl-cs,sr-cyrl-me,sr-cyrl-rs,nso,nso-za,tn,tn-bw,tn-za,sd-arab,sd-arab-pk,sd-deva,si,si-lk,sk,sk-sk,sl,sl-si,es,es-cl,es-co,es-es,es-mx,es-ar,es-bo,es-cr,es-do,es-ec,es-gt,es-hn,es-ni,es-pa,es-pe,es-pr,es-py,es-sv,es-us,es-uy,es-ve,es-019,es-419,sv,sv-se,sv-fi,tg-arab,tg-cyrl,tg-cyrl-tj,tg-latn,ta,ta-in,tt-arab,tt-cyrl,tt-latn,tt-ru,te,te-in,th,th-th,ti,ti-et,tr,tr-tr,tk-cyrl,tk-latn,tk-tm,tk-latn-tr,tk-cyrl-tr,uk,uk-ua,ur,ur-pk,ug-arab,ug-cn,ug-cyrl,ug-latn,uz,uz-cyrl,uz-latn,uz-latn-uz,vi,vi-vn,cy,cy-gb,wo,wo-sn,yo-latn,yo-ng";
@@ -78,13 +80,15 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.TRANSLATE_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
             //MpLedgerizerFlags.GEN_PROD_LISTING |
-            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
-            MpLedgerizerFlags.DO_REMOTE_PACKAGING |
+            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
-            MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG
+            //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG
             //MpLedgerizerFlags.DO_LOCAL_INDEX |
             //MpLedgerizerFlags.DO_REMOTE_INDEX
-            //MpLedgerizerFlags.MOVE_CORE_TO_DAT
+            MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+            MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT
+            //MpLedgerizerFlags.MOVE_JS_UISTRINGS
             //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
             //MpLedgerizerFlags.LOCALIZE_MANIFESTS
             //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
@@ -101,7 +105,8 @@ namespace Ledgerizer {
         static bool DO_LOCAL_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_INDEX);
         static bool DO_REMOTE_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_INDEX);
 
-        static bool MOVE_CORE_TO_DAT = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.MOVE_CORE_TO_DAT);
+        static bool LOCAL_MOVE_CORE_TO_DAT = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT);
+        static bool REMOTE_MOVE_CORE_TO_DAT = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT);
 
         static bool LOCALIZE_MANIFESTS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.LOCALIZE_MANIFESTS);
 
@@ -114,6 +119,8 @@ namespace Ledgerizer {
         static bool DO_CULTURE_VERIFY = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES);
 
         static bool GEN_EDITOR_UISTRS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_EDITOR_UISTRS);
+
+        static bool MOVE_JS_UISTRINGS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.MOVE_JS_UISTRINGS);
 
         const string BUILD_CONFIG =
 #if DEBUG
@@ -215,8 +222,14 @@ namespace Ledgerizer {
             if (DO_REMOTE_INDEX) {
                 CreateIndex(true);
             }
-            if (MOVE_CORE_TO_DAT) {
-                MoveCoreToDat();
+            if (LOCAL_MOVE_CORE_TO_DAT) {
+                MoveCoreToDat_local();
+            }
+            if (REMOTE_MOVE_CORE_TO_DAT) {
+                MoveCoreToDat_remote();
+            }
+            if (MOVE_JS_UISTRINGS) {
+                MoveJsUiStrings();
             }
         }
 
@@ -886,9 +899,73 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         #endregion
 
         #region Move Core 
-        static void MoveCoreToDat() {
+        static void MoveCoreToDat_remote() {
+            int done_count = 0;
+
+
+            MpConsole.WriteLine($"[REMOTE] Moving core plugins to dat STARTED", true);
             string root_pack_dir = MpLedgerConstants.PLUGIN_PACKAGES_DIR;
-            MpConsole.WriteLine($"Moving core plugins to dat STARTED", true);
+
+            foreach (string core_plugin_name in CorePlugins) {
+                string core_plugin_zip_path = Path.Combine(root_pack_dir, $"{core_plugin_name}.zip");
+                if (!core_plugin_zip_path.IsFile()) {
+                    MpConsole.WriteLine($"Error! No package found for '{core_plugin_name}' at '{core_plugin_zip_path}'");
+                    done_count++;
+                    return;
+                }
+                if (ReadPluginManifestFromProjDir(core_plugin_name) is not { } core_mf) {
+                    MpConsole.WriteLine($"Error could not find core manifest for '{core_plugin_name}'");
+                    done_count++;
+                    return;
+                }
+
+                try {
+                    // transfer icon
+                    string plugin_icon_path =
+                        Path.Combine(
+                            GetPluginProjDir(core_plugin_name),
+                            "icon.png");
+
+                    var icon_result = MpFtpTools.FtpFileUpload(
+                        ftpUrl: $"ftp://ftp.monkeypaste.com//public_html/dat/{core_plugin_name}.png",
+                        userName: "monkeypa",
+                        password: "rYcT3eip",
+                        filePath: plugin_icon_path);
+                    MpConsole.WriteLine($"{core_plugin_name} icon result: {(icon_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
+
+                    // transfer package
+                    var zip_result = MpFtpTools.FtpFileUpload(
+                        ftpUrl: $"ftp://ftp.monkeypaste.com/public_html/dat/{core_mf.guid}/v{core_mf.version}.zip",
+                        userName: "monkeypa",
+                        password: "rYcT3eip",
+                        filePath: core_plugin_zip_path);
+
+                    MpConsole.WriteLine($"{core_plugin_name} zip result: {(zip_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
+
+                    // duplicate as latest
+                    var latest_result = MpFtpTools.FtpFileUpload(
+                        ftpUrl: $"ftp://ftp.monkeypaste.com/public_html/dat/{core_mf.guid}/latest.zip",
+                        userName: "monkeypa",
+                        password: "rYcT3eip",
+                        filePath: core_plugin_zip_path);
+                    MpConsole.WriteLine($"{core_plugin_name} zip result: {(latest_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error moving remote dat {core_plugin_name}.", ex);
+                }
+            }
+            MpConsole.WriteLine($"[REMOTE] Moving core plugins to dat DONE", false, true);
+        }
+        static void MoveCoreToDat_local() {
+            MpConsole.WriteLine($"[LOCAL] Moving core plugins to dat STARTED", true);
+            string root_pack_dir = MpLedgerConstants.PLUGIN_PACKAGES_DIR;
+            string proj_dat_dir =
+                Path.Combine(
+                    MpCommonHelpers.GetSolutionDir(),
+                    "MonkeyPaste.Desktop",
+                    "dat");
+            MpFileIo.DeleteDirectory(proj_dat_dir);
+            MpFileIo.CreateDirectory(proj_dat_dir);
 
             foreach (string core_plugin_name in CorePlugins) {
                 string core_plugin_zip_path = Path.Combine(root_pack_dir, $"{core_plugin_name}.zip");
@@ -901,18 +978,61 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     continue;
                 }
 
-                string target_dat_path = Path.Combine(MpCommonHelpers.GetTargetDatDir(), $"{core_mf.guid}.zip");
-                if (!MpCommonHelpers.GetTargetDatDir().IsDirectory()) {
-                    MpFileIo.CreateDirectory(MpCommonHelpers.GetTargetDatDir());
+                string target_dat_path = Path.Combine(proj_dat_dir, $"{core_mf.guid}.zip");
+                if (!proj_dat_dir.IsDirectory()) {
+                    MpFileIo.CreateDirectory(proj_dat_dir);
                 }
                 MpFileIo.CopyFileOrDirectory(core_plugin_zip_path, target_dat_path, forceOverwrite: true);
                 MpConsole.WriteLine(target_dat_path);
             }
-            MpConsole.WriteLine($"Moving core plugins to dat DONE", false, true);
+            MpConsole.WriteLine($"[LOCAL] Moving core plugins to dat DONE", false, true);
         }
         #endregion
 
         #region Localizing
+        static void MoveJsUiStrings() {
+            foreach (string cc in WorkingCultures) {
+                string uistr_path = Path.Combine(
+                    MpCommonHelpers.GetSolutionDir(),
+                    "MonkeyPaste.Avalonia",
+                    "Resources",
+                    "Localization",
+                    "UiStrings",
+                    $"UiStrings.{cc}.resx");
+                var uistr_lookup = MpResxTools.ReadResxFromPath(uistr_path);
+
+                string EDITOR_KEY_PREFIX = "Editor";
+                string EDITOR_STR_INSERT_MARKER = "<INSERT KVP HERE>";
+                string EditorUiStringJsContentTemplate = string.Format(
+@"var UiStrings = {{
+{0}
+}};", EDITOR_STR_INSERT_MARKER);
+
+                string inner_content =
+                    string.Join(
+                        string.Empty,
+                        uistr_lookup
+                        .Where(x => x.Key.StartsWith(EDITOR_KEY_PREFIX))
+                        .OrderBy(x => x.Key)
+                        .Select(x => $"\t{x.Key}: `{x.Value.value}`,{Environment.NewLine}"));
+
+                // swap placeholder w/ key-values
+                string runtime_content =
+                    EditorUiStringJsContentTemplate.Replace(EDITOR_STR_INSERT_MARKER, inner_content);
+
+                string js_uistr_path =
+                    Path.Combine(
+                        MpCommonHelpers.GetSolutionDir(),
+                        "MonkeyPaste.Avalonia",
+                        "Resources",
+                        "Editor",
+                        "src",
+                        "components",
+                        "localizer",
+                        $"UiStrings.{cc}.js");
+                MpFileIo.WriteTextToFile(js_uistr_path, runtime_content, overwrite: true);
+            }
+        }
         static void LocalizeManifests() {
             MpConsole.WriteLine("Localize Manifest...STARTED", true);
             foreach (string plugin_name in PluginNames) {
@@ -1495,6 +1615,9 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         #endregion
 
         #region Helpers
+        static string GetRemotePluginPackageName(string version) {
+            return $"v{version}.zip";
+        }
         static MpManifestLedger GetInvLedger(bool is_remote) {
             string inv_ledger_path = Path.Combine(
                 MpLedgerConstants.LEDGER_PROJ_DIR,

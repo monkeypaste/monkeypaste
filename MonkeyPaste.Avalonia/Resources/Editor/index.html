@@ -11,6 +11,7 @@
 
         if (window.location.search.toLowerCase().includes(AUTO_TEST.toLowerCase())) {
             document.write('<script defer src="src/components/tester/editor_tester.js"><\/script>');
+            //document.write('<script defer src="src/components/localizer/UiStrings.en-US.js"><\/script>');
             window.addEventListener('load', function () {
                 init_test();
             });
@@ -167,7 +168,7 @@
     <!-- default culture file name is UiStrings.js -->
     <!--<script defer src="src/components/localizer/uiStrings.js"></script>-->
     <!-- INSERT CULTURE SCRIPT REF AFTER ME -->
-    <script defer src="src/components/localizer/UiStrings.js"></script>
+    <script class="culture-script" defer src="src/components/localizer/UiStrings.js"></script>
     <script defer src="src/components/svg/svgloader.js"></script>
     <script defer src="src/components/append/append.js"></script>
     <script defer src="src/components/append/toolbar/append-toolbar-items.js"></script>

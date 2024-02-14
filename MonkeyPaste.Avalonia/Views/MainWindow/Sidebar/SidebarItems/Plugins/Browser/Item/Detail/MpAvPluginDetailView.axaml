@@ -84,6 +84,21 @@
 
         </Style>
 
+        <!--  INSTALL BUTTON  -->
+        <Style Selector="Button#ToggleInstallSelectedPluginButton local|MpAvProgressSpinner"
+               x:DataType="local:MpAvPluginItemViewModel">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Button#ToggleInstallSelectedPluginButton.installing local|MpAvProgressSpinner">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+        <Style Selector="Button#ToggleInstallSelectedPluginButton.installing TextBlock.cmd-text">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+
     </local:MpAvUserControl.Styles>
 
     <ScrollViewer MinHeight="300">
@@ -120,26 +135,33 @@
                         Spacing="20">
 
                 <!--  TOGGLE INSTALL BUTTON  -->
-                <Button x:Name="ToggleInstallSelectedPluginButton"
-                        Classes.installed="{Binding HasInstallation}"
-                        Classes="defaultButton textOnlyButton manageButton"
-                        local:MpAvShowDisabledTooltipExtension.ShowOnDisabled="{Binding ShowDisabledInstallTooltip}"
-                        Command="{Binding ToggleIsPluginInstalledCommand}">
-                    <ToolTip.Tip>
-                        <local:MpAvToolTipView Classes="warning"
-                                               ToolTipText="{Binding DisabledInstallTooltip}" />
-                    </ToolTip.Tip>
-                    <Grid>
+                <Grid>
+                    <Button x:Name="ToggleInstallSelectedPluginButton"
+                            Classes.installed="{Binding HasInstallation}"
+                            Classes.installing="{Binding ProgressViewModel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                            Classes="defaultButton textOnlyButton manageButton"
+                            local:MpAvShowDisabledTooltipExtension.ShowOnDisabled="{Binding ShowDisabledInstallTooltip}"
+                            Command="{Binding ToggleIsPluginInstalledCommand}">
+                        <ToolTip.Tip>
+                            <local:MpAvToolTipView Classes="warning"
+                                                   ToolTipText="{Binding DisabledInstallTooltip}" />
+                        </ToolTip.Tip>
 
-                        <TextBlock Text="{Binding InstallButtonText}"
-                                   IsVisible="{Binding !IsBusy}" />
-                        <local:MpAvBusySpinnerView Width="15"
-                                                   Height="15"
-                                                   IsVisible="{Binding IsBusy}"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center" />
-                    </Grid>
-                </Button>
+                        <Grid>
+                            <TextBlock Classes="cmd-text"
+                                       Text="{Binding InstallButtonText}" />
+                            <local:MpAvProgressSpinner HorizontalAlignment="Center"
+                                                       VerticalAlignment="Stretch"
+                                                       MinHeight="20"
+                                                       Classes="squareByHeight"
+                                                       ArcWidth="3.5"
+                                                       RingBrush="{DynamicResource ThemeGrayAccent2Brush}"
+                                                       PercentBrush="{DynamicResource ThemeInteractiveBrush}"
+                                                       LabelBrush="Transparent"
+                                                       Percent="{Binding ProgressViewModel.PercentLoaded}" />
+                        </Grid>
+                    </Button>
+                </Grid>
 
                 <!--  DONATE BUTTON  -->
                 <Button x:Name="DonateToPluginButton"

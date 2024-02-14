@@ -34,6 +34,9 @@ namespace MonkeyPaste.Avalonia {
 
         public CancellationToken? BusyCancellationToken {
             get {
+                if (ProgressIndicatorViewModel is MpICancelableProgressIndicatorViewModel cpivm) {
+                    return cpivm.CancellationToken;
+                }
                 if (OtherArgs is CancellationToken ct) {
                     return ct;
                 }
@@ -226,7 +229,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpNotificationButtonsType.Progress: {
                         ShowProgressSpinner = true;
-                        ShowCancelButton = OtherBoolArg.IsTrue();
+                        ShowCancelButton = OtherBoolArg.IsTrue() || ProgressIndicatorViewModel is MpICancelableProgressIndicatorViewModel;
                         break;
                     }
 
@@ -523,6 +526,9 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CancelCommand => new MpCommand(
             () => {
                 InputResult = null;
+                if (ProgressIndicatorViewModel is MpICancelableProgressIndicatorViewModel cpivm) {
+                    cpivm.CancelCommand.Execute(null);
+                }
                 DialogResult = MpNotificationDialogResultType.Cancel;
             });
 

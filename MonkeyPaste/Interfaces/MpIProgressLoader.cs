@@ -1,5 +1,7 @@
 ﻿using MonkeyPaste.Common;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste {
     public interface MpINotification : MpIViewModel {
@@ -18,6 +20,11 @@ namespace MonkeyPaste {
 
     public interface MpIProgressIndicatorViewModel : MpIViewModel {
         double PercentLoaded { get; }
+    }
+    public interface MpICancelableProgressIndicatorViewModel : MpIProgressIndicatorViewModel {
+        CancellationToken CancellationToken { get; }
+        ICommand CancelCommand { get; }
+        bool UpdateProgress(long totalBytes, long? bytesReceived, double percentComplete);
     }
 
     public interface MpIProgressLoaderViewModel : MpIProgressIndicatorViewModel, MpINotification {

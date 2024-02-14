@@ -6,7 +6,7 @@ const { themes } = require('prism-react-renderer');
 const lightTheme = themes.synthwave84;
 const darkTheme = themes.dracula;
 
-const local = true;
+const local = false;
 
 const siteUrl = local ?
   "https://localhost" :
@@ -123,14 +123,26 @@ const config = {
             label: 'Docs',
           },
           // { to: '/blog', label: 'Blog', position: 'left' },
-          { to: 'https://www.monkeypaste.com/forum', label: 'Forum', position: 'left' },
-          { to: '/about', label: 'About', position: 'left' },
           {
-            href: '#translate-btn',
-            position: 'right',
-            label: 'Translate'
+            to: 'https://www.monkeypaste.com/forum',
+            label: 'Forum',
+            cposition: 'left'
           },
-          { to: '/download', label: 'Download', position: 'right' },
+          {
+            to: '/about',
+            label: 'About',
+            position: 'left'
+          },
+          {
+            to: '/download',
+            label: 'Download',
+            position: 'right'
+          },
+          {
+            href: 'https://translate.google.com/translate?u=https%3A%2F%2Fwww.monkeypaste.com%2F',
+            label: 'Translate',
+            position: 'right',
+          },
           {
             href: 'https://github.com/monkeypaste',
             label: 'GitHub',
@@ -217,9 +229,6 @@ const config = {
     mermaid: true,
   },
   themes: ['@docusaurus/theme-mermaid'],
-  scripts: [
-    require.resolve('./src/scripts/gtranslate.js'),
-  ],
   plugins: [
     'image-zoom',
     [

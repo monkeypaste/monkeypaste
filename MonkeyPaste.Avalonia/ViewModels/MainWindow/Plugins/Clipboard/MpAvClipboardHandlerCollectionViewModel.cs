@@ -36,11 +36,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIManagePluginComponents Implementation (unimplemented)
 
-        Task<bool> MpIManagePluginComponents.InstallAsync(string pluginGuid, string packageUrl) {
+        Task<bool> MpIManagePluginComponents.InstallAsync(string pluginGuid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm) {
             throw new NotImplementedException();
         }
 
-        Task<bool> MpIManagePluginComponents.BeginUpdateAsync(string pluginGuid, string packageUrl) {
+        Task<bool> MpIManagePluginComponents.BeginUpdateAsync(string pluginGuid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm) {
             throw new NotImplementedException();
         }
         private async Task RemoveHandlerReferencesAsync(MpAvClipboardHandlerItemViewModel chivm, bool deletePresets) {
