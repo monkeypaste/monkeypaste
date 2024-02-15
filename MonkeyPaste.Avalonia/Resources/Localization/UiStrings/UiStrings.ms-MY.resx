@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Tindakan Ibu Bapa '{0}' tidak menyokong jenis harta input 'output terakhir'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Ketahui lebih lanjut mengenai rancangan</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Permohonan</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Tag</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Ketahui lebih lanjut mengenai rancangan</value>
   </data>
 </root>

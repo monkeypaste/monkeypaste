@@ -2689,9 +2689,6 @@ terugvoer@monkeypaste.com</value>
     <value>Oueraksie '{0}' ondersteun nie die invoer -eienskapstipe 'laaste uitset' nie</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Lees meer oor planne</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Toepassing</value>
   </data>
@@ -2706,5 +2703,8 @@ terugvoer@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Tag tag</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Lees meer oor planne</value>
   </data>
 </root>

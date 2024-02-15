@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Anodiad Delwedd</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Roedd gwall. Gwnewch yn siŵr bod eich OS yn gyfredol. Ar gyfer defnyddwyr Windows efallai y bydd angen i chi hefyd osod &lt;a href="{0}"&gt; hwn &lt;/a&gt; (pecyn ailddosbarthu gweledol C ++).
+
+Gweler y &lt;a href="{1}"&gt; ImageAnnotator Github Repo &lt;/a&gt; i gael mwy o wybodaeth neu i riportio'r mater.
+
+Gwall:
+{2}</value>
+  </data>
 </root>

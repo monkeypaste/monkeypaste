@@ -2689,9 +2689,6 @@
     <value>પેરન્ટ એક્શન '{0}' ઇનપુટ પ્રોપર્ટી પ્રકાર 'છેલ્લું આઉટપુટ' ને સપોર્ટ કરતું નથી</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>યોજનાઓ વિશે વધુ જાણો</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>નિયમ</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>ટેગ</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>યોજનાઓ વિશે વધુ જાણો</value>
   </data>
 </root>

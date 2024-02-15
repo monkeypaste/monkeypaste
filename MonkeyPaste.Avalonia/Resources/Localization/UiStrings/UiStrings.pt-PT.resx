@@ -2689,9 +2689,6 @@ feedback@monkeypsaste.com</value>
     <value>Ação dos pais '{0}' não suporta o tipo de propriedade de entrada 'Última saída'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Saiba mais sobre os planos</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Aplicativo</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypsaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Marcação</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Saiba mais sobre planos</value>
   </data>
 </root>

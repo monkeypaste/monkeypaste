@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>छवि एनोटेटर</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>एक त्रुटि हुई। कृपया सुनिश्चित करें कि आपका OS अद्यतित है। Windows उपयोगकर्ताओं के लिए आपको &lt;a href="ribus"&gt; यह &lt;/a&gt; (Visual C ++ redistributable पैकेज) स्थापित करने की आवश्यकता हो सकती है।
+
+अधिक जानकारी के लिए या समस्या की रिपोर्ट करने के लिए &lt;a href=" (1 }"&gt; imageannotator github repo &lt;/a&gt; देखें।
+
+गलती:
+{२}</value>
+  </data>
 </root>

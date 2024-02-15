@@ -241,11 +241,17 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string LogDir =>
-            Path.Combine(StorageDir, "logs");
-        string LogFileName =>
-            "mp.log";
-        public string LogPath =>
-            Path.Combine(LogDir, LogFileName);
+            Path.Combine(StorageDir, "Logs");
+        private string _logPath;
+        public string LogPath {
+            get {
+                if (_logPath == null) {
+                    _logPath = Path.Combine(LogDir, $"mp_{DateTime.Now.Ticks}.log");
+                }
+                return _logPath;
+            }
+        }
+
 
         public string LoggingEnabledCheckPath =>
             Path.Combine(LogDir, ".enabled");
@@ -263,6 +269,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         #endregion
+
         #endregion
 
         #region Constructors

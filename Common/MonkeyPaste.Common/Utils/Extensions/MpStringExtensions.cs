@@ -827,8 +827,8 @@ namespace MonkeyPaste.Common {
                 return false;
             }
             return
-                text.StartsWith("<html>", StringComparison.InvariantCultureIgnoreCase) &&
-                text.EndsWith("</html>", StringComparison.InvariantCultureIgnoreCase);
+                text.Trim().StartsWith("<html>", StringComparison.InvariantCultureIgnoreCase) &&
+                text.Trim().EndsWith("</html>", StringComparison.InvariantCultureIgnoreCase);
         }
         public static string ToHtmlDocumentFromTextOrPartialHtml(this string text) {
             return $"<html><body>{text}</body></html>";
@@ -862,19 +862,24 @@ namespace MonkeyPaste.Common {
             return stringCollection;
         }
 
-        public static string IncludeOrRemoveHexAlpha(this string hexStr, bool remove, string alpha_to_include = "FF", bool force_included = false) {
+        public static string IncludeOrRemoveHexAlpha(this string hexStr, bool remove, string fallback_alpha = "FF") {
             if (remove) {
                 return hexStr.RemoveHexAlpha();
             }
-            if (!force_included && hexStr.Length == 9) {
+            if (hexStr.Length == 9) {
                 return hexStr;
             }
-            hexStr = hexStr.RemoveHexAlpha(out string removed_alpha);
-            if (!force_included && !string.IsNullOrEmpty(removed_alpha)) {
-                alpha_to_include = removed_alpha;
+            hexStr = hexStr.RemoveHexAlpha(out string removed_alpha).Replace("#", string.Empty);
+            if (!string.IsNullOrEmpty(removed_alpha)) {
+                fallback_alpha = removed_alpha;
+            }
+            int to_add = 6 - hexStr.Length;
+            while (to_add > 0) {
+                hexStr += "0";
+                to_add--;
             }
 
-            return $"#{alpha_to_include}{hexStr}";
+            return $"#{fallback_alpha}{hexStr}";
         }
 
         public static string RemoveHexAlpha(this string hexStr) {

@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Anotador de imágenes</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Hubo un error. Asegúrese de que su sistema operativo esté actualizado. Para los usuarios de Windows, es posible que también deba instalar &lt;a href=" =0h}"&gt; this &lt;/a&gt; (paquete Visual C ++ Redistributable).
+
+Consulte el &lt;a href="{1h}"&gt; Repo Github Github &lt;/a&gt; para obtener más información o para informar el problema.
+
+Error:
+{2}</value>
+  </data>
 </root>

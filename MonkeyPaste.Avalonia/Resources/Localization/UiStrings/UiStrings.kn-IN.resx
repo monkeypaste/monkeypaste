@@ -2689,9 +2689,6 @@
     <value>ಪೋಷಕರ ಕ್ರಿಯೆ '{0}' ಇನ್ಪುಟ್ ಆಸ್ತಿ ಪ್ರಕಾರವನ್ನು 'ಕೊನೆಯ output ಟ್‌ಪುಟ್' ಬೆಂಬಲಿಸುವುದಿಲ್ಲ</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>ಯೋಜನೆಗಳ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>ಅನ್ವಯಿಸು</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>ತ ೦ ತ್ರ</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>ಯೋಜನೆಗಳ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ</value>
   </data>
 </root>

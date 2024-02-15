@@ -2689,9 +2689,6 @@ feedback@monkyepaste.com</value>
     <value>La acción matriz '{0}' no admite el tipo de propiedad de entrada 'Última salida'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Obtenga más información sobre los planes</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Solicitud</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkyepaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Etiqueta</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Obtenga más información sobre los planes</value>
   </data>
 </root>

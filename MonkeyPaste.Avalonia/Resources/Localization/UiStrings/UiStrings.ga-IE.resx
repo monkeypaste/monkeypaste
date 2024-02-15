@@ -2689,9 +2689,6 @@ aisckback@monkeypaste.com</value>
     <value>Ní thacaíonn gníomh tuismitheora '{0}' le cineál maoine ionchuir 'aschur deireanach'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Níos mó a fhoghlaim faoi phleananna</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Iarrchán</value>
   </data>
@@ -2706,5 +2703,8 @@ aisckback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Lipéad</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Níos mó a fhoghlaim faoi phleananna</value>
   </data>
 </root>

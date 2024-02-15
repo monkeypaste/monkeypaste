@@ -28,6 +28,11 @@
             <Setter Property="MinWidth"
                     Value="250" />
         </Style>
+        <Style Selector="ComboBox[IsDropDownOpen=true].culture-chooser ComboBoxItem"
+               x:DataType="local:MpAvSingleEnumerableParameterViewModel">
+            <Setter Property="MinWidth"
+                    Value="350" />
+        </Style>
         <Style Selector="ComboBox.font-chooser"
                x:DataType="local:MpAvSingleEnumerableParameterViewModel">
             <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"

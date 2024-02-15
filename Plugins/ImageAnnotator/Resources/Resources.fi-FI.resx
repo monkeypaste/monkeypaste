@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Kuvan merkintä</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Tapahtui virhe. Varmista, että käyttöjärjestelmä on ajan tasalla. Windows -käyttäjille sinun on ehkä myös asennettava &lt;a href=" {0 }"&gt; tämä &lt;/a&gt; (visuaalinen C ++ -jakelupaketti).
+
+Katso &lt;a href=" {12"&gt; imageanNotator github repo &lt;/a&gt; Lisätietoja tai ongelman ilmoittaminen.
+
+Virhe:
+{2}</value>
+  </data>
 </root>

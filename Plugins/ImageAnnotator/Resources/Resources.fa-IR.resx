@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>عکس</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>یک خطای وجود دارد. لطفاً اطمینان حاصل کنید که سیستم عامل شما به روز است. برای کاربران ویندوز نیز ممکن است نیاز به نصب &lt;a href=" {0 }"&gt; این &lt;/a&gt; (بسته بندی مجدد Visual C ++).
+
+برای اطلاعات بیشتر یا گزارش مسئله ، به &lt;a href=" {1 }"&gt; inteannotator github repo &lt;/a&gt; مراجعه کنید.
+
+خطا:
+{2}</value>
+  </data>
 </root>

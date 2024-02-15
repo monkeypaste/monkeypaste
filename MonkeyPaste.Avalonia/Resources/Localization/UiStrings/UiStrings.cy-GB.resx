@@ -2689,9 +2689,6 @@ adborth@monkeypaste.com</value>
     <value>Nid yw gweithredu rhiant '{0}' yn cefnogi math o eiddo mewnbwn 'allbwn olaf'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Dysgu mwy am gynlluniau</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Nghais</value>
   </data>
@@ -2706,5 +2703,8 @@ adborth@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Tac</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Dysgu mwy am gynlluniau</value>
   </data>
 </root>

@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Annotatur tal-immaġni</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Kien hemm żball. Jekk jogħġbok kun żgur li l-OS tiegħek huwa aġġornat. Għall-utenti tal-Windows jista 'jkollok bżonn ukoll tinstalla &lt;a href=" {0&gt;"&gt; dan &lt;/a&gt; (pakkett viżwali C ++ Redistributable).
+
+Ara l- &lt;a href=" {1&gt;"&gt; imageAnnoTator github repo &lt;/a&gt; Għal aktar tagħrif jew biex tirrapporta l-kwistjoni.
+
+Żball:
+{2}</value>
+  </data>
 </root>

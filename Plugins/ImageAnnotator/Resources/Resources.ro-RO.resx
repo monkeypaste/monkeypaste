@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Adnotator de imagine</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>A fost o eroare. Vă rugăm să vă asigurați că sistemul de operare este actualizat. Pentru utilizatorii Windows, poate fi necesar să instalați &lt;a href=" [0 tariful
+
+Consultați &lt;a href=" [1}"&gt; ImagineAnnotator GitHub Repo &lt;/a&gt; Pentru mai multe informații sau pentru a raporta problema.
+
+Eroare:
+{2}</value>
+  </data>
 </root>

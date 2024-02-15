@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Obrazová anotátor</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Byla tam chyba. Ujistěte se, že váš operační systém je aktuální. Pro uživatele Windows budete možná také muset nainstalovat &lt;a href="{0}"&gt; toto &lt;/a&gt; (vizuální redistribuovatelný balíček C ++).
+
+Další informace naleznete na &lt;a href="{1}"&gt; imageannotator github repo &lt;/a&gt;.
+
+Chyba:
+{2}</value>
+  </data>
 </root>

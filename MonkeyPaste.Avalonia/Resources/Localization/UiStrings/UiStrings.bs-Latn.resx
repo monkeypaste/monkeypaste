@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Matična akcija '{0}' ne podržava ulaznu nekretninu tipa "zadnja izlaza"</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Saznajte više o planovima</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Primjena</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Označiti</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Saznajte više o planovima</value>
   </data>
 </root>

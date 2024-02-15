@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Ата-эне иш-аракеттери '{0}' касиеттерди 'акыркы чыгуучу "мүлк түрүн колдобойт</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Пландар жөнүндө көбүрөөк билүү</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Колдонмо</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Теги</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Пландары жөнүндө көбүрөөк билүү</value>
   </data>
 </root>

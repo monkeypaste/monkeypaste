@@ -1,6 +1,7 @@
 ﻿using Compunet.YoloV8;
 using MonkeyPaste.Common.Plugin;
 using SixLabors.ImageSharp;
+using System.Runtime.InteropServices;
 
 namespace ImageAnnotator {
     public class ImageAnnotator : MpIAnalyzeComponentAsync {
@@ -49,12 +50,19 @@ namespace ImageAnnotator {
                         };
                     }
 
-
                 }
             }
             catch (Exception ex) {
                 return new MpAnalyzerPluginResponseFormat() {
-                    errorMessage = string.Format(Resources.ExText, ex.Message)
+                    errorMessage = string.Format(
+                        Resources.ExText,
+                        RuntimeInformation.ProcessArchitecture == Architecture.Arm ?
+                            "https://aka.ms/vs/17/release/vc_redist.arm64.exe" :
+                            Environment.Is64BitProcess ?
+                                "https://aka.ms/vs/17/release/vc_redist.x64.exe" :
+                                "https://aka.ms/vs/17/release/vc_redist.x86.exe",
+                        "https://www.github.com/monkeypaste/ImageAnnotator",
+                        ex.Message)
                 };
             }
         }

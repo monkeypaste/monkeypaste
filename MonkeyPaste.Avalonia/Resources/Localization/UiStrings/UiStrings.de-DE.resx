@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Die übergeordnete Aktion '{0}' unterstützt keine Eingangseigenschaftstyp 'Letzter Ausgabe'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Erfahren Sie mehr über Pläne</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Anwendung</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Etikett</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Erfahren Sie mehr über Pläne</value>
   </data>
 </root>

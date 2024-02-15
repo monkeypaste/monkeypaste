@@ -259,11 +259,12 @@ namespace MonkeyPaste.Avalonia {
                     Items.Add(avm);
                     IsBusy = false;
                     MpConsole.WriteLine($"App w/ id: '{a.Id}' added to collection.");
+                    UpdateComponentSources();
                 });
             } else if (e is MpAppClipboardShortcuts apsc &&
                 Items.FirstOrDefault(x => x.AppId == apsc.AppId) is MpAvAppViewModel avm) {
                 Dispatcher.UIThread.Post(() => {
-                    OnPropertyChanged(nameof(CustomClipboardShortcutItems));
+                    UpdateComponentSources();
                 });
             }
         }

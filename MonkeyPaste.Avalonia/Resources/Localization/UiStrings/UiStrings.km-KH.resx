@@ -2689,9 +2689,6 @@ feedback@monkeypales.com</value>
     <value>សកម្មភាពឪពុកម្តាយ '{0}' មិនគាំទ្រប្រភេទចុងក្រោយរបស់អចលនទ្រព្យ 'លទ្ធផលចុងក្រោយឡើយ</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>ស្វែងយល់បន្ថែមអំពីផែនការ</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>ការស្ម័រក</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypales.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>រាបសប</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>ស្វែងយល់បន្ថែមអំពីផែនការ</value>
   </data>
 </root>

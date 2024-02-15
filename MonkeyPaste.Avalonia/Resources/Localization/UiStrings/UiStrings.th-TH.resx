@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>การกระทำของพาเรนต์ '{0}' ไม่รองรับประเภทคุณสมบัติอินพุต 'เอาต์พุตล่าสุด'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>เรียนรู้เพิ่มเติมเกี่ยวกับแผนการ</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>แอปพลิเคชัน</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>ติดแท็ก</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>เรียนรู้เพิ่มเติมเกี่ยวกับแผนการ</value>
   </data>
 </root>

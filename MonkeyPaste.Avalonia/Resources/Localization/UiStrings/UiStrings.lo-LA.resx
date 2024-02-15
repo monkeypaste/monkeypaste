@@ -2689,9 +2689,6 @@ monkeypaste ໃນອຸປະກອນ
     <value>ການປະຕິບັດຂອງພໍ່ແມ່ '{0}' ບໍ່ຮອງຮັບຄຸນສົມບັດສິນຄ້າ</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>ຮຽນຮູ້ເພີ່ມເຕີມກ່ຽວກັບແຜນການ</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>ຄໍາຮ້ອງສະຫມັກ</value>
   </data>
@@ -2706,5 +2703,8 @@ monkeypaste ໃນອຸປະກອນ
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>tag</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>ຮຽນຮູ້ເພີ່ມເຕີມກ່ຽວກັບແຜນການ</value>
   </data>
 </root>

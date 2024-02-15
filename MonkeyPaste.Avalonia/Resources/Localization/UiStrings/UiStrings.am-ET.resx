@@ -2689,9 +2689,6 @@
     <value>የወላጅ እርምጃ '{0}' የግቤት ንብረትን ዓይነት 'የመጨረሻውን ውፅዓት' አይደግፍም</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>ስለ እቅዶች የበለጠ ይረዱ</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>ትግበራ</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>መለያ</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>ስለ እቅዶች የበለጠ ይረዱ</value>
   </data>
 </root>

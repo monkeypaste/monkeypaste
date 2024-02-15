@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>لا يدعم إجراء الوالدين '{0}' نوع خاصية الإدخال "الإخراج الأخير"</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>تعرف على المزيد حول الخطط</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>طلب</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>بطاقة شعار</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>تعرف على المزيد حول الخطط</value>
   </data>
 </root>

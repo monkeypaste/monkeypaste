@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Ang aksyon ng magulang '{0}' ay hindi sumusuporta sa uri ng pag -aari ng pag -aari na 'Huling Output'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Dagdagan ang nalalaman tungkol sa mga plano</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Application</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Tag</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Matuto nang higit pa tungkol sa mga plano</value>
   </data>
 </root>

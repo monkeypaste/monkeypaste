@@ -2761,7 +2761,7 @@ feedback@monkeypaste.com</value>
     <comment>Action Label</comment>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Learn more about about plans</value>
+    <value>Learn more about plans</value>
   </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Application</value>

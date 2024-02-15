@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>親アクション '{0}'は入力プロパティタイプ '最終出力'をサポートしません</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>計画の詳細については、詳細をご覧ください</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>応用</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>鬼ごっこ</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>計画の詳細をご覧ください</value>
   </data>
 </root>

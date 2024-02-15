@@ -2689,9 +2689,6 @@ Changeзгәрешләр өчен сылтамага иярегез
     <value>"{0}" ата-аналар хәрәкәте кертү милеген "соңгы чыгышын" кертүне хупламый.</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Планнар турында күбрәк белү</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Кушымта</value>
   </data>
@@ -2706,5 +2703,8 @@ Changeзгәрешләр өчен сылтамага иярегез
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Тег</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Планнар турында күбрәк белү</value>
   </data>
 </root>

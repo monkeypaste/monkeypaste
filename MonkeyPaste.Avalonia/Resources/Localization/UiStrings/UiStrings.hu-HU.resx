@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>A '{0}' szülői művelet nem támogatja a „utolsó kimenet” bemeneti tulajdonságtípust</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Tudjon meg többet a tervekről</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Alkalmazás</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Címke</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Tudjon meg többet a tervekről</value>
   </data>
 </root>

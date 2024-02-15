@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>სურათის ანოტატორი</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Შეცდომა იყო. გთხოვთ, დარწმუნდეთ, რომ თქვენი OS განახლებულია. Windows- ის მომხმარებლებისთვის შეიძლება ასევე დაგჭირდეთ &lt;a href=" 90 }"&gt; ამ &lt;/a&gt; (Visual C ++ გადამისამართებული პაკეტი).
+
+იხილეთ &lt;a href="{1}"&gt; ImageAnnotator Github repo &lt;/a&gt; დამატებითი ინფორმაციისთვის ან საკითხის დასადგენად.
+
+შეცდომა:
+{2}</value>
+  </data>
 </root>

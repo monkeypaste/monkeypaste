@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Image Annotator</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Došlo je do greške. Provjerite je li vaš OS ažuriran. Za korisnike za Windows možda ćete morati da instalirate &lt;A href="{0}"&gt; ovu &lt;/a&gt; (Visual C ++ Redistributable paket).
+
+Pogledajte &lt;a href="{1}"&gt; Imageanotator GitHub repo &lt;/a&gt; za više informacija ili prijaviti problem.
+
+Greška:
+{2}</value>
+  </data>
 </root>

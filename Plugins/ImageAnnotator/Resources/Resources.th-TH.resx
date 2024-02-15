@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Annotator รูปภาพ</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>มีข้อผิดพลาด โปรดตรวจสอบให้แน่ใจว่าระบบปฏิบัติการของคุณทันสมัย สำหรับผู้ใช้ Windows คุณอาจต้องติดตั้ง &lt;a href=" {0 }"&gt; สิ่งนี้ &lt;/a&gt; (แพ็คเกจ Visual C ++ Redistributable)
+
+ดู &lt;a href=" {1}"&gt; imageannotator github repo &lt;/a&gt; สำหรับข้อมูลเพิ่มเติมหรือเพื่อรายงานปัญหา
+
+ข้อผิดพลาด:
+{2}</value>
+  </data>
 </root>

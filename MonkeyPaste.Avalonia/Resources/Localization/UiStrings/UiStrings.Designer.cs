@@ -6507,7 +6507,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Learn more about about plans.
+        ///   Looks up a localized string similar to Learn more about plans.
         /// </summary>
         public static string SubscriptionLearnMoreLinkText {
             get {

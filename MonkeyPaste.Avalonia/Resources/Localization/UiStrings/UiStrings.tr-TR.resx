@@ -2689,9 +2689,6 @@ beckback@monkeycaste.com</value>
     <value>Üst eylem '{0}', 'Son Çıktı' girdi özelliği türünü desteklemiyor</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Planlar hakkında daha fazla bilgi edinin</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Başvuru</value>
   </data>
@@ -2706,5 +2703,8 @@ beckback@monkeycaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Etiket</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Planlar hakkında daha fazla bilgi edinin</value>
   </data>
 </root>

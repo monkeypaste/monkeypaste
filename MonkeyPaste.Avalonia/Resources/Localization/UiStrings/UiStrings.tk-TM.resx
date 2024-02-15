@@ -2689,9 +2689,6 @@ Feehlibes@monkePase.com</value>
     <value>Ene-ata hereketi '{0}' Giriş emläk görnüşini 'iň soňky çykyş görnüşini' goldamaýar '</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Meýilnamalar barada has giňişleýin öwreniň</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Amaly</value>
   </data>
@@ -2706,5 +2703,8 @@ Feehlibes@monkePase.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Bellik</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Meýilnamalar barada has giňişleýin öwreniň</value>
   </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,7 +21,8 @@ namespace MonkeyPaste.Avalonia {
             }
 
             string flags_base_uri = Mp.Services.PlatformResource.GetResource<string>("FlagsBase");
-            string source = $"{flags_base_uri}/{key.ToLowerInvariant()}.gif";
+            string source = $"{flags_base_uri}/{key.ToLowerInvariant()}.png";
+            MpConsole.WriteLine($"{source}");
             return MpAvIconSourceObjToBitmapConverter.Instance.Convert(source, typeof(Bitmap), parameter, culture);
         }
 

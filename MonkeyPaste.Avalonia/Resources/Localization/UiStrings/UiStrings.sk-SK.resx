@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Rodičovská akcia '{0}' nepodporuje typ vlastnosti vstupu „posledný výstup“</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Viac informácií o plánoch</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Aplikácia</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Označenie</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Dozviete sa viac o plánoch</value>
   </data>
 </root>

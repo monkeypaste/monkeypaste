@@ -37,6 +37,9 @@ Tags can be nested. If you added a 'Pets' tag and drag-and-dropped the 'Cats' an
 4. After a moment the plugin will be installed and ready for use.
 <p class="figure"><img src={require('/img/auto_tag_plugin_browser.png').default} /></p>
 
+:::danger Stay Updated
+*Image Annotator* has a few temperamental dependencies so its important to make sure your **OS is up-to-date**. Check the [Image Annotator Repo](https:/www.github.com/monkeypaste/ImageAnnotator) for more info or to report any issues.
+:::
 ## Trigger Setup
 1. Switch to the *Triggers Sidebar* (the ⚡ button) and click the ➕ button on the top-right of the sidebar to show the *Create Trigger* menu.
 2. Select the *Clip Added* trigger to create the new trigger.

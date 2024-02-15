@@ -2689,9 +2689,6 @@ Feedback@monkeypaste.com</value>
     <value>Akcija staršev '{0}' ne podpira vrst lastnosti vhoda 'Last Output'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Preberite več o načrtih</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Aplikacija</value>
   </data>
@@ -2706,5 +2703,8 @@ Feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Oznaka</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Preberite več o načrtih</value>
   </data>
 </root>

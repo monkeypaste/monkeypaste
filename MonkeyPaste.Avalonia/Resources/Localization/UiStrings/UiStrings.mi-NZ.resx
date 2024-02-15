@@ -2689,9 +2689,6 @@ urupare@monkeypaste.com</value>
     <value>Nga Mahi a nga matua '{0}' Kāore e tautoko i te momo whakaurunga whakauru 'putanga whakamutunga'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Ako atu mo nga mahere</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Puka tono</value>
   </data>
@@ -2706,5 +2703,8 @@ urupare@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Tuhinga</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Ako atu mo nga mahere</value>
   </data>
 </root>

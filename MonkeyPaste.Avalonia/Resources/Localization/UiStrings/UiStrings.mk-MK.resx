@@ -2689,9 +2689,6 @@ Monkeypaste на уредот
     <value>Акција на родители „{0}“ не поддржува тип на внес на својство „Последен излез“</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Дознајте повеќе за плановите</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Апликација</value>
   </data>
@@ -2706,5 +2703,8 @@ Monkeypaste на уредот
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Ознака</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Дознајте повеќе за плановите</value>
   </data>
 </root>

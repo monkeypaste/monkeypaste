@@ -2689,9 +2689,6 @@
     <value>মূল কাৰ্য্য '{0}' এ ইনপুট বৈশিষ্ট্যৰ ধৰণ 'শেষ আউটপুট' সমৰ্থন নকৰে</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>পৰিকল্পনাসমূহৰ বিষয়ে অধিক জানক</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>দৰ্খাস্ত</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>টেগ</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>পৰিকল্পনাৰ বিষয়ে অধিক জানক</value>
   </data>
 </root>

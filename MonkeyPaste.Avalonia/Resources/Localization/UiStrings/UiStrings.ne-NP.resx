@@ -2689,9 +2689,6 @@
     <value>अभिभावक कार्य '9} '' इनपुट सम्पत्ति प्रकार 'अन्तिम आउटपुट' समर्थन गर्दैन '</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>योजनाहरूको बारेमा अधिक जान्नुहोस्</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>दरखास्त</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>ट्याग</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>योजनाहरूको बारेमा अधिक जान्नुहोस्</value>
   </data>
 </root>

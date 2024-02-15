@@ -2689,9 +2689,6 @@
     <value>প্যারেন্ট অ্যাকশন '{0}' ইনপুট সম্পত্তি প্রকার 'শেষ আউটপুট' সমর্থন করে না</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>পরিকল্পনা সম্পর্কে আরও জানুন</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>আবেদন</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>ট্যাগ</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>পরিকল্পনা সম্পর্কে আরও জানুন</value>
   </data>
 </root>

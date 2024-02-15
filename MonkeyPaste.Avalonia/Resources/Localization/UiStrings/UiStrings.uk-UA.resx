@@ -2689,9 +2689,6 @@
     <value>Батьківська дія '{0}' не підтримує тип властивості введення 'останнього виходу'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Дізнайтеся більше про плани</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Застосування</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Мітка</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Дізнайтеся більше про плани</value>
   </data>
 </root>

@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Anótálaí íomhá</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Bhí earráid ann. Déan cinnte go bhfuil do OS cothrom le dáta. Maidir le húsáideoirí Windows, b'fhéidir go mbeidh ort freisin &lt;a href=" (0 }"&gt; a shuiteáil &lt;/a&gt; (pacáiste athdháilte Visual C ++).
+
+Féach an &lt;a href=" ({1 }"&gt; Imamainnotator github repo &lt;/a&gt; le haghaidh tuilleadh eolais nó chun an cheist a thuairisciú.
+
+Earráid:
+{2}</value>
+  </data>
 </root>

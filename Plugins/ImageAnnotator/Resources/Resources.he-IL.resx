@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Antantator Image</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>ארעה שגיאה. אנא וודא שמערכת ההפעלה שלך מעודכנת. עבור משתמשי Windows ייתכן שתצטרך להתקין &lt;a href=" {0}"&gt; זה &lt;/a&gt; (חבילה לחלק מחדש של Visual C ++).
+
+עיין ב &lt;a href=" {1 }"&gt; imageNonotator github repo &lt;/a&gt; למידע נוסף או לדיווח על הבעיה.
+
+שְׁגִיאָה:
+{2}</value>
+  </data>
 </root>

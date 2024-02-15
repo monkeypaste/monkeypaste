@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
+using MonkeyPaste.Common;
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
@@ -20,7 +21,10 @@ namespace MonkeyPaste.Avalonia {
                 } else if (uanvm.ShowBusySpinner || uanvm.ShowProgressSpinner) {
                     key = "BusyTemplate";
                 }
-
+                if (key == "TextBodyTemplate" &&
+                    uanvm.Body.ToStringOrEmpty().ContainsHtml()) {
+                    key = "HtmlBodyTemplate";
+                }
             }
             return AvailableTemplates[key].Build(param);
         }

@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>អ្នកកំណត់អត្តសញ្ញាណរូបភាព</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>មាន​កំហុស​មួយ​គឺ។ សូមប្រាកដថាប្រព័ន្ធប្រតិបត្តិការរបស់អ្នកទាន់សម័យ។ សម្រាប់អ្នកប្រើវីនដូអ្នកក៏ប្រហែលជាត្រូវដំឡើង &lt;a href="} अअअअ}នេះ &lt;/a&gt; (ដែលអាចបំបែកបាន &lt;CUSCH (រូបភាព C ++) បាន) ។
+
+មើល &lt;a href="} }"&gt; រូបភាពដែលស្រមៃ github repo repo &lt;/a&gt; សម្រាប់ព័ត៌មានបន្ថែមឬរាយការណ៍បញ្ហា។
+
+កំហុស:
+{2}</value>
+  </data>
 </root>

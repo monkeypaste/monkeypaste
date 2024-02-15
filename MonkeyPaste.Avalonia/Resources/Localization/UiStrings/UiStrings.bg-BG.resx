@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Родителско действие '{0}' не поддържа типа на свойството на входното свойство „Последно изход“</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Научете повече за плановете</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Приложение</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Маркер</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Научете повече за плановете</value>
   </data>
 </root>

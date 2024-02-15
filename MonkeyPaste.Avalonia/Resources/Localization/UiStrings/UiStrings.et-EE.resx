@@ -2689,9 +2689,6 @@ tagasiside@monkeypaste.com</value>
     <value>Vanemate toiming '{0}' ei toeta sisendomandi tüüpi 'Viimane väljund'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Lisateave plaanide kohta</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Rakendus</value>
   </data>
@@ -2706,5 +2703,8 @@ tagasiside@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Silt</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Lisateavet plaanide kohta</value>
   </data>
 </root>

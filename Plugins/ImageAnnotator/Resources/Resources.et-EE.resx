@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Pildi annotaator</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Seal oli viga. Veenduge, et teie OS oleks ajakohane. Windowsi kasutajatele peate võib -olla installima ka &lt;a href="{0 )"&gt; see &lt;/a&gt; (visuaalne C ++ ümberjagatav pakett).
+
+Lisateavet leiate lisateabe saamiseks või probleemist teatamise kohta vaadake &lt;a href="{11 }"&gt; imageAnnotator GitHub Repo &lt;/a&gt;.
+
+Viga:
+{2}</value>
+  </data>
 </root>

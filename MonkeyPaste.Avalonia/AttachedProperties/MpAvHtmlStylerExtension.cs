@@ -154,6 +154,10 @@ namespace MonkeyPaste.Avalonia {
             hc.LinkClicked += Hc_LinkClicked;
 
             hc.BaseStylesheet = GetStyleSheet(hc);
+            if (!hc.Text.ToStringOrEmpty().IsStringHtmlDocument()) {
+                // ensure text is full html doc or stylesheet stuff doesn't work
+                hc.Text = hc.Text.ToStringOrEmpty().ToHtmlDocumentFromTextOrPartialHtml();
+            }
         }
 
         private static void Hc_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
@@ -219,15 +223,14 @@ namespace MonkeyPaste.Avalonia {
                 case MpHtmlStyleType.Tooltip:
                 default:
                     return string.Format(
-@"* {{ margin: 0; padding: 0;}}
-body {{ color: {0}; font: {1}px {2}; }}
+@"* {{ margin: 0; padding: 0; color: {0}; font: {1}px {2};}}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 a:link {{ text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}",
-                        GetDefaultHexColor(hc),
+                        GetDefaultHexColor(hc).RemoveHexAlpha(),
                         GetDefaultFontSize(hc),
                         MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily,
-                        Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeGrayAccent3Color.ToString()).RemoveHexAlpha());
+                        MpSystemColors.gold1.RemoveHexAlpha());
             }
         }
     }

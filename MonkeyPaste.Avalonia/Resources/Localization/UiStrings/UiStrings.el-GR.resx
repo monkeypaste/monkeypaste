@@ -2689,9 +2689,6 @@ feedble@monkeypaste.com</value>
     <value>Η γονική δράση '{0}' δεν υποστηρίζει τον τύπο ιδιότητας εισόδου 'τελευταία έξοδο'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Μάθετε περισσότερα σχετικά με τα σχέδια</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Εφαρμογή</value>
   </data>
@@ -2706,5 +2703,8 @@ feedble@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Ετικέτα</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Μάθετε περισσότερα για τα σχέδια</value>
   </data>
 </root>

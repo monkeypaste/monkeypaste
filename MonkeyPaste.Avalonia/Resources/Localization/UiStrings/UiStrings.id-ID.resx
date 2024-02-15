@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Tindakan induk '{0}' tidak mendukung tipe properti input 'output terakhir'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Pelajari lebih lanjut tentang rencana</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Aplikasi</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Menandai</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Pelajari lebih lanjut tentang rencana</value>
   </data>
 </root>

@@ -812,7 +812,8 @@ But don't worry, no data is lost after downgrading. Only new clips will be evalu
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapBlockHint1" xml:space="preserve">
-    <value />
+    <value>குப்பை அல்லது எதையாவது அவிழ்த்து விடுங்கள்
+மேலும் சேர்க்க '{0}' இலிருந்து.</value>
   </data>
   <data name="NtfCapBlockHint2" xml:space="preserve">
     <value>அதிகபட்சம் '{0}' சேமிப்பு {1}.</value>
@@ -835,7 +836,9 @@ But don't worry, no data is lost after downgrading. Only new clips will be evalu
     <value>உள்ளடக்க திறன் எட்டப்பட்டது!</value>
   </data>
   <data name="NtfCapHideHint" xml:space="preserve">
-    <value />
+    <value>* இந்த எச்சரிக்கைகளை நீங்கள் மறைக்க முடியும்
+'அனைத்தையும் மறைக்க' என்பதைக் கிளிக் செய்க
+விருப்பங்கள் மெனு மேலே.</value>
   </data>
   <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
     <value>அதிகபட்ச குப்பை சேமிப்பு {0}.</value>
@@ -868,10 +871,26 @@ Please update your
 கொடுப்பனவு தகவல்.</value>
   </data>
   <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
-    <value />
+    <value>உங்கள் {0 for க்கான கட்டணம்
+சந்தா காரணமாக இருந்தது {1}
+மற்றும் பெறப்படவில்லை.
+
+தயவுசெய்து இணைக்கவும்
+சாதனத்தில் இணையம்
+உங்கள் சந்தாவுடன் மற்றும்
+தொடர மறுதொடக்கம் செய்யுங்கள்
+உங்கள் {0} திட்டத்தைப் பயன்படுத்துதல்.</value>
   </data>
   <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
-    <value />
+    <value>உங்கள் {0 for க்கான கட்டணம்
+சந்தா காரணமாக இருந்தது {1}
+மற்றும் பெறப்படவில்லை.
+
+தயவுசெய்து திறக்கவும் அல்லது மறுதொடக்கம் செய்யவும்
+சாதனத்தில் குரங்கு சுவை
+உங்கள் சந்தாவுடன்
+உங்கள் பயன்படுத்துவதைத் தொடரவும்
+{0} திட்டம்.</value>
   </data>
   <data name="AccountExpiredNtfTitle" xml:space="preserve">
     <value>கணக்கு காலாவதியானது</value>
@@ -880,7 +899,14 @@ Please update your
     <value>குறிப்பு</value>
   </data>
   <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
-    <value />
+    <value>மைக்ரோசாஃப்ட் ஸ்டோர் அடுக்கு அனுமதிக்காது
+சந்தா துணை நிரல்களில் மாற்றங்கள்.
+
+நீங்கள் ரத்து செய்ய வேண்டும்
+{0}/{1} நீங்களே திட்டமிடுங்கள்
+அல்லது இருவருக்கும் கட்டணம் வசூலிக்கப்படும்.
+
+இப்போது அதைச் செய்ய விரும்புகிறீர்களா?</value>
   </data>
   <data name="AccountResetPasswordCaption" xml:space="preserve">
     <value>உங்களுடைய கடவுச்சொல் மாற்றப்பட்டது.
@@ -2663,9 +2689,6 @@ furedback@monkeypaste.com</value>
     <value>பெற்றோர் செயல் '{0}' உள்ளீட்டு சொத்து வகையை 'கடைசி வெளியீடு' ஆதரிக்காது</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>திட்டங்களைப் பற்றி மேலும் அறிக</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>விண்ணப்பம்</value>
   </data>
@@ -2680,5 +2703,8 @@ furedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>குறிச்சொல்</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>திட்டங்களைப் பற்றி மேலும் அறிக</value>
   </data>
 </root>

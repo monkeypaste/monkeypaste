@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Annotator ng imahe</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Nagkaroon ng isang error. Mangyaring tiyaking napapanahon ang iyong OS. Para sa mga gumagamit ng Windows maaaring kailanganin mo ring i -install ang &lt;a href=" /0}"&gt; ito &lt;/a&gt; (Visual C ++ Redistributable Package).
+
+Tingnan ang &lt;a href=" /1}"&gt; ImageAnnotator github repo &lt;/a&gt; Para sa karagdagang impormasyon o iulat ang isyu.
+
+Error:
+{2}</value>
+  </data>
 </root>

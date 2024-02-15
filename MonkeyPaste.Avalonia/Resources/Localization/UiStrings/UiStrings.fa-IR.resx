@@ -2689,9 +2689,6 @@
     <value>عمل والدین '{0}' از نوع ویژگی ورودی "آخرین خروجی" پشتیبانی نمی کند</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>درباره برنامه ها بیشتر بدانید</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>کاربرد</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>نشان</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>درباره برنامه ها بیشتر بدانید</value>
   </data>
 </root>

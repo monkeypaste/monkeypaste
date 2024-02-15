@@ -2689,9 +2689,6 @@ feathback@monkeypaste.com</value>
     <value>父行動'{0}'不支持輸入屬性類型'最後輸出'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>了解有關計劃的更多信息</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>應用</value>
   </data>
@@ -2706,5 +2703,8 @@ feathback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>標籤</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>了解有關計劃的更多信息</value>
   </data>
 </root>

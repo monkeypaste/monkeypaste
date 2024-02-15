@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Анотатор на слика</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Имаше грешка. Ве молиме, проверете дали вашиот оперативен систем е ажуриран. За корисниците на Windows, можеби исто така ќе треба да инсталирате &lt;a href=" корита;
+
+Видете го &lt;a href=" =1}"&gt; ImageAnnotator github repo &lt;/a&gt; за повеќе информации или да го пријавите проблемот.
+
+Грешка:
+{2}</value>
+  </data>
 </root>

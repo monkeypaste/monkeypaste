@@ -29,6 +29,8 @@ namespace Ledgerizer {
         GEN_EDITOR_UISTRS = 1L << 15,
         REMOTE_MOVE_CORE_TO_DAT = 1L << 16,
         MOVE_JS_UISTRINGS = 1L << 17,
+        DO_LOCAL_LEDGER = 1L << 18,
+        DO_REMOTE_LEDGER = 1L << 19,
     }
     internal class Program {
         //static string ALL_CULTURES_CSV = "ar,ar-sa,ar-ae,ar-bh,ar-dz,ar-eg,ar-iq,ar-jo,ar-kw,ar-lb,ar-ly,ar-ma,ar-om,ar-qa,ar-sy,ar-tn,ar-ye,af,af-za,sq,sq-al,am,am-et,hy,hy-am,as,as-in,az-arab,az-arab-az,az-cyrl,az-cyrl-az,az-latn,az-latn-az,eu,eu-es,be,be-by,bn,bn-bd,bn-in,bs,bs-cyrl,bs-cyrl-ba,bs-latn,bs-latn-ba,bg,bg-bg,ca,ca-es,ca-es-valencia,chr-cher,chr-cher-us,chr-latn,zh-Hans,zh-cn,zh-hans-cn,zh-sg,zh-hans-sg,zh-Hant,zh-hk,zh-mo,zh-tw,zh-hant-hk,zh-hant-mo,zh-hant-tw,hr,hr-hr,hr-ba,cs,cs-cz,da,da-dk,prs,prs-af,prs-arab,nl,nl-nl,nl-be,en,en-au,en-ca,en-gb,en-ie,en-in,en-nz,en-sg,en-us,en-za,en-bz,en-hk,en-id,en-jm,en-kz,en-mt,en-my,en-ph,en-pk,en-tt,en-vn,en-zw,en-053,en-021,en-029,en-011,en-018,en-014,et,et-ee,fil,fil-latn,fil-ph,fi,fi-fi,fr,fr-be ,fr-ca ,fr-ch ,fr-fr ,fr-lu,fr-015,fr-cd,fr-ci,fr-cm,fr-ht,fr-ma,fr-mc,fr-ml,fr-re,frc-latn,frp-latn,fr-155,fr-029,fr-021,fr-011,gl,gl-es,ka,ka-ge,de,de-at,de-ch,de-de,de-lu,de-li,el,el-gr,gu,gu-in,ha,ha-latn,ha-latn-ng,he,he-il,hi,hi-in,hu,hu-hu,is,is-is,ig-latn,ig-ng,id,id-id,iu-cans,iu-latn,iu-latn-ca,ga,ga-ie,xh,xh-za,zu,zu-za,it,it-it,it-ch,ja ,ja-jp,kn,kn-in,kk,kk-kz,km,km-kh,quc-latn,qut-gt,qut-latn,rw,rw-rw,sw,sw-ke,kok,kok-in,ko,ko-kr,ku-arab,ku-arab-iq,ky-kg,ky-cyrl,lo,lo-la,lv,lv-lv,lt,lt-lt,lb,lb-lu,mk,mk-mk,ms,ms-bn,ms-my,ml,ml-in,mt,mt-mt,mi,mi-latn,mi-nz,mr,mr-in,mn-cyrl,mn-mong,mn-mn,mn-phag,ne,ne-np,nb,nb-no,nn,nn-no,no,no-no,or,or-in,fa,fa-ir,pl,pl-pl,pt-br,pt,pt-pt,pa,pa-arab,pa-arab-pk,pa-deva,pa-in,quz,quz-bo,quz-ec,quz-pe,ro,ro-ro,ru ,ru-ru,gd-gb,gd-latn,sr-Latn,sr-latn-cs,sr,sr-latn-ba,sr-latn-me,sr-latn-rs,sr-cyrl,sr-cyrl-ba,sr-cyrl-cs,sr-cyrl-me,sr-cyrl-rs,nso,nso-za,tn,tn-bw,tn-za,sd-arab,sd-arab-pk,sd-deva,si,si-lk,sk,sk-sk,sl,sl-si,es,es-cl,es-co,es-es,es-mx,es-ar,es-bo,es-cr,es-do,es-ec,es-gt,es-hn,es-ni,es-pa,es-pe,es-pr,es-py,es-sv,es-us,es-uy,es-ve,es-019,es-419,sv,sv-se,sv-fi,tg-arab,tg-cyrl,tg-cyrl-tj,tg-latn,ta,ta-in,tt-arab,tt-cyrl,tt-latn,tt-ru,te,te-in,th,th-th,ti,ti-et,tr,tr-tr,tk-cyrl,tk-latn,tk-tm,tk-latn-tr,tk-cyrl-tr,uk,uk-ua,ur,ur-pk,ug-arab,ug-cn,ug-cyrl,ug-latn,uz,uz-cyrl,uz-latn,uz-latn-uz,vi,vi-vn,cy,cy-gb,wo,wo-sn,yo-latn,yo-ng";
@@ -76,16 +78,17 @@ namespace Ledgerizer {
         static string VERSION => "1.0.7.0";
 
 
+
         static MpLedgerizerFlags LEDGERIZER_FLAGS =
             //MpLedgerizerFlags.TRANSLATE_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
             //MpLedgerizerFlags.GEN_PROD_LISTING |
-            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
+            //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
             //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
-            //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG
             //MpLedgerizerFlags.DO_LOCAL_INDEX |
-            //MpLedgerizerFlags.DO_REMOTE_INDEX
+            //MpLedgerizerFlags.DO_REMOTE_INDEX |
             MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
             MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT
             //MpLedgerizerFlags.MOVE_JS_UISTRINGS
@@ -104,6 +107,9 @@ namespace Ledgerizer {
 
         static bool DO_LOCAL_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_INDEX);
         static bool DO_REMOTE_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_INDEX);
+
+        static bool DO_LOCAL_LEDGER = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_LEDGER);
+        static bool DO_REMOTE_LEDGER = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_LEDGER);
 
         static bool LOCAL_MOVE_CORE_TO_DAT = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT);
         static bool REMOTE_MOVE_CORE_TO_DAT = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT);
@@ -143,18 +149,17 @@ namespace Ledgerizer {
         const string PRIVATE_ICON_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}.png";
 
         static string[] PluginNames => [
-            "ChatGpt",
-            "ComputerVision",
+            //"ChatGpt",
+            //"ComputerVision",
             "CoreAnnotator",
-            "CoreOleHandler",
-            "FileConverter",
-            "GoogleLiteTextTranslator",
-            "ImageAnnotator",
-            //"MinimalExample",
-            "QrCoder",
-            "TextToSpeech",
-            "TextTranslator",
-            "WebSearch"
+            //"CoreOleHandler",
+            //"FileConverter",
+            //"GoogleLiteTextTranslator",
+            //"ImageAnnotator",
+            //"QrCoder",
+            //"TextToSpeech",
+            //"TextTranslator",
+            //"WebSearch"
         ];
 
         static string[] CorePlugins => [
@@ -207,8 +212,14 @@ namespace Ledgerizer {
             if (DO_LOCAL_PACKAGING) {
                 PublishLocal();
             }
+            if (DO_LOCAL_LEDGER) {
+                WriteLedger(false);
+            }
             if (DO_REMOTE_PACKAGING) {
                 PublishRemote();
+            }
+            if (DO_REMOTE_LEDGER) {
+                WriteLedger(true);
             }
             if (DO_LOCAL_VERSIONS) {
                 UpdateVersions(false);
@@ -940,7 +951,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                         password: "rYcT3eip",
                         filePath: core_plugin_zip_path);
 
-                    MpConsole.WriteLine($"{core_plugin_name} zip result: {(zip_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
+                    MpConsole.WriteLine($"{core_plugin_name} {core_mf.version} zip result: {(zip_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
 
                     // duplicate as latest
                     var latest_result = MpFtpTools.FtpFileUpload(
@@ -948,7 +959,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                         userName: "monkeypa",
                         password: "rYcT3eip",
                         filePath: core_plugin_zip_path);
-                    MpConsole.WriteLine($"{core_plugin_name} zip result: {(latest_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
+                    MpConsole.WriteLine($"{core_plugin_name} latest zip result: {(latest_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error moving remote dat {core_plugin_name}.", ex);
@@ -964,8 +975,9 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     MpCommonHelpers.GetSolutionDir(),
                     "MonkeyPaste.Desktop",
                     "dat");
-            MpFileIo.DeleteDirectory(proj_dat_dir);
-            MpFileIo.CreateDirectory(proj_dat_dir);
+            if (!proj_dat_dir.IsDirectory()) {
+                MpFileIo.CreateDirectory(proj_dat_dir);
+            }
 
             foreach (string core_plugin_name in CorePlugins) {
                 string core_plugin_zip_path = Path.Combine(root_pack_dir, $"{core_plugin_name}.zip");
@@ -979,9 +991,6 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 }
 
                 string target_dat_path = Path.Combine(proj_dat_dir, $"{core_mf.guid}.zip");
-                if (!proj_dat_dir.IsDirectory()) {
-                    MpFileIo.CreateDirectory(proj_dat_dir);
-                }
                 MpFileIo.CopyFileOrDirectory(core_plugin_zip_path, target_dat_path, forceOverwrite: true);
                 MpConsole.WriteLine(target_dat_path);
             }
@@ -1056,7 +1065,8 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
             var lang_codes = MpLocalizationHelpers.FindCulturesInDirectory(
                     dir: plugin_res_dir,
-                    file_name_filter: "Resources");
+                    file_name_filter: "Resources",
+                    file_ext_filter: "resx");
 
             foreach (string lang_code in lang_codes.Where(x => !x.IsInvariant()).Select(x => x.Name)) {
                 Localizer.Program.LocalizeManifest(invariant_resource_path, inv_mf_path, lang_code, plugin_res_dir);
@@ -1354,11 +1364,12 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         #endregion
 
         #region Packaging
-        static void WriteLedger(MpManifestLedger ledger, bool is_remote) {
+        static void WriteLedger(bool is_remote) {
             // filter any ledger ignored plugins (minimal example)
             //var output_ledger = new MpManifestLedger() {
             //    manifests =
             //}
+            var ledger = GetInvLedger(is_remote);
             string output_path = is_remote ?
                 MpLedgerConstants.REMOTE_INV_LEDGER_PATH :
                 MpLedgerConstants.LOCAL_INV_LEDGER_PATH;
@@ -1379,13 +1390,15 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 // create packages dir if first pack
                 MpFileIo.CreateDirectory(root_pack_dir);
             }
-            string publish_dir = Path.Combine(root_pack_dir, plugin_name);
 
             // delete build stuff
             MpFileIo.DeleteDirectory(Path.Combine(proj_dir, "bin"));
             MpFileIo.DeleteDirectory(Path.Combine(proj_dir, "obj"));
 
             // perform publish and output to ledger proj/packages_* dir
+            string publish_dir = Path.Combine(root_pack_dir, plugin_name);
+            // clear last output
+            MpFileIo.DeleteDirectory(publish_dir);
             string args = CorePlugins.Contains(plugin_name) ?
                 $"msbuild /p:OutDir={publish_dir} -target:Publish /property:Configuration={BUILD_CONFIG} /property:DefineConstants=AUX%3B{BUILD_OS} -restore" :
                 $"publish --configuration {BUILD_CONFIG} --output {publish_dir}";
@@ -1407,6 +1420,8 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             if (!publish_dir.IsDirectory()) {
                 return null;
             }
+            // clear previous package
+            MpFileIo.DeleteFile(output_path);
             // zip publish output 
             ZipFile.CreateFromDirectory(publish_dir, output_path, CompressionLevel.Fastest, true);
 
@@ -1439,7 +1454,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             return output_path.ToFileSystemUriFromPath();
         }
         static void PublishLocal() {
-            MpFileIo.DeleteDirectory(MpLedgerConstants.PLUGIN_PACKAGES_DIR);
+            //MpFileIo.DeleteDirectory(MpLedgerConstants.PLUGIN_PACKAGES_DIR);
 
             MpManifestLedger ledger = new MpManifestLedger();
             foreach (var plugin_name in PluginNames) {
@@ -1461,8 +1476,6 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 plugin_manifest.packageUrl = local_package_uri;
                 ledger.manifests.Add(plugin_manifest);
             }
-            // write ledger-local.js
-            WriteLedger(ledger, false);
         }
         static void PublishRemote() {
             // returns the complete remote ledger
@@ -1492,13 +1505,17 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 }
                 ledger.manifests.Add(plugin_manifest);
             }
-
-            WriteLedger(ledger, true);
         }
         static string PushReleaseToRemote(MpManifestFormat manifest, string proj_dir, string initial_failed_ver = null) {
             string plugin_name = Path.GetFileName(proj_dir);
             string version = manifest.version;
             string source_package_path = Path.Combine(MpLedgerConstants.PLUGIN_PACKAGES_DIR, $"{plugin_name}.zip");
+            if (!source_package_path.IsFile()) {
+                // local package missing so pack local first
+                MpConsole.WriteLine($"Local package missing for {plugin_name}. Packing...");
+                string local_pack_path = PackPlugin(proj_dir, manifest.guid);
+                MpDebug.Assert(local_pack_path == source_package_path, $"Remote publish error package path mismatch. Expected: '{source_package_path}' Found: '{local_pack_path}'");
+            }
             string target_tag_name = $"v{version}";
             string target_package_file_name = $"{target_tag_name}.zip";
             string target_package_path = Path.Combine(proj_dir, target_package_file_name);
@@ -1508,15 +1525,15 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 // but for now must be handled manually
                 return GetRemotePackageUrl(plugin_name, manifest.guid, target_tag_name);
             }
-
+            MpConsole.WriteLine($"Pushing {target_package_file_name} for {plugin_name} to github...");
             MpFileIo.CopyFileOrDirectory(source_package_path, target_package_path, forceOverwrite: true);
+
             // see this about gh release https://cli.github.com/manual/gh_release_create
             (int exit_code, string proc_output) = RunProcess(
                 file: "gh.exe",
                 dir: proj_dir,
                 args: $"release create {target_tag_name} --latest --generate-notes {target_package_file_name}");
 
-            MpFileIo.DeleteFile(target_package_path);
 
             if (exit_code == 1) {
                 // version exist
@@ -1548,7 +1565,6 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 // if first fail use failed version
                 var new_ver_result = PushReleaseToRemote(manifest, proj_dir, initial_failed_ver ?? version);
                 return new_ver_result;
-
             } else if (exit_code == 0 && initial_failed_ver != null) {
                 // new rev works, update local manifest to match
 

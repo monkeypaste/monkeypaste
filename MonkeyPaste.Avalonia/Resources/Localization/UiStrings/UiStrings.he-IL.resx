@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>פעולת ההורה '{0}' אינה תומכת בסוג המאפיין הקלט 'פלט אחרון'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>למידע נוסף על תוכניות</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>יישום</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>תָג</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>למידע נוסף על תוכניות</value>
   </data>
 </root>

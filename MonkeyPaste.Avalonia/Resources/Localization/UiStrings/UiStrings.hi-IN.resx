@@ -2689,9 +2689,6 @@
     <value>पैरेंट एक्शन '{0}' इनपुट प्रॉपर्टी प्रकार 'लास्ट आउटपुट' का समर्थन नहीं करता है</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>योजनाओं के बारे में और जानें</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>आवेदन</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>टैग</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>योजनाओं के बारे में और जानें</value>
   </data>
 </root>

@@ -2689,9 +2689,6 @@ Feedlaffack@monkeypaste.com</value>
     <value>Działanie nadrzędne „{0}” nie obsługuje Typ właściwości wejściowej „Ostatnie wyjście”</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Dowiedz się więcej o planach</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Aplikacja</value>
   </data>
@@ -2706,5 +2703,8 @@ Feedlaffack@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Etykietka</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Dowiedz się więcej o planach</value>
   </data>
 </root>

@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Képnadrág</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Hiba történt. Kérjük, ellenőrizze, hogy az operációs rendszer naprakész -e. A Windows felhasználók számára a &lt;a href="&gt; {0 }"&gt; ezt &lt;/a&gt; (vizuális C ++ újraelosztható csomag) telepítésére is kell telepítenie.
+
+További információkért lásd a &lt;a href=" (1 }"&gt; imageannotator github repo &lt;/a&gt;.
+
+Hiba:
+{2}</value>
+  </data>
 </root>

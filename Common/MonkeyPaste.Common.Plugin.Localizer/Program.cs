@@ -1,5 +1,4 @@
 ﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -53,11 +52,8 @@ namespace Localizer {
             Environment.Exit(0);
         }
 
-        public static string LocalizeManifest(string invariant_resource_path, string templated_manifest_path, string lang_code, string output_dir) {
-
-
+        public static string LocalizeManifest(string invariant_resource_path, string templated_manifest_path, string lang_code, string output_dir, bool overwrite = true) {
             string templated_manifest_json = MpFileIo.ReadTextFromFile(templated_manifest_path);
-            MpPluginFormat localized_manifest = new MpPluginFormat();
 
             var localized_name_parts = new string[] {
                 Path.GetFileNameWithoutExtension(invariant_resource_path),
@@ -95,7 +91,8 @@ namespace Localizer {
 
             MpFileIo.WriteTextToFile(
                 output_path,
-                localized_json);
+                localized_json,
+                overwrite: overwrite);
             Console.WriteLine(output_path);
             return output_path;
         }

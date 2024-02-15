@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Annotateur d'image</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Il y avait une erreur. Veuillez vous assurer que votre système d'exploitation est à jour. Pour les utilisateurs de Windows, vous devrez peut-être également installer &lt;a href=" /0 }"&gt; ce &lt;/a&gt; (package redistribuable visuel C ++).
+
+Voir le &lt;a href=" /1 }"&gt; ImageeanNotator GitHub Repo &lt;/a&gt; pour plus d'informations ou pour signaler le problème.
+
+Erreur:
+{2}</value>
+  </data>
 </root>

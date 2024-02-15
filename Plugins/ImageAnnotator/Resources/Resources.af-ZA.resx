@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>Beeld -aantekening</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>Daar was 'n fout. Maak seker dat u bedryfstelsel op datum is. Vir Windows -gebruikers moet u dalk ook &lt;a href=" {0 )"&gt; hierdie &lt;/a&gt; (Visual C ++ herverdeelbare pakket) installeer.
+
+Raadpleeg die &lt;a href=" {1 )"&gt; Imageannotator github repo &lt;/a&gt; vir meer inligting of om die kwessie aan te meld.
+
+Fout:
+{2}</value>
+  </data>
 </root>

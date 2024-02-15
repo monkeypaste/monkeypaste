@@ -106,10 +106,12 @@ namespace ImageAnnotator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There was an error. Please make sure your OS is up to date. Check the ReadMe for more details.
+        ///   Looks up a localized string similar to There was an error. Please make sure your OS is up to date. For Windows users you may also need to install &lt;a href=&quot;{0}&quot;&gt;this&lt;/a&gt; (Visual C++ Redistributable Package). 
+        ///
+        ///See the &lt;a href=&quot;{1}&quot;&gt;ImageAnnotator github repo&lt;/a&gt; for more info or to report the issue.
         ///
         ///Error:
-        ///{0}.
+        ///{2}.
         /// </summary>
         public static string ExText {
             get {

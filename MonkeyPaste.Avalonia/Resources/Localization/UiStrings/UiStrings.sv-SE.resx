@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Överordnad action '{0}' stöder inte inmatningsegenskapstyp 'Last Output'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Lär dig mer om planer</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Ansökan</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Märka</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Lär dig mer om planer</value>
   </data>
 </root>

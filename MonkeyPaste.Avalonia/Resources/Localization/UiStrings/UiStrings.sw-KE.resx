@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Kitendo cha mzazi '{0}' hakiungi mkono aina ya mali ya pembejeo 'pato la mwisho'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Jifunze zaidi juu ya mipango</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Maombi</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Tag</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Jifunze zaidi juu ya mipango</value>
   </data>
 </root>

@@ -2689,9 +2689,6 @@
     <value>부모 조치 '{0}'는 입력 속성 유형 '마지막 출력'을 지원하지 않습니다.</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>계획에 대해 자세히 알아보십시오</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>애플리케이션</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>꼬리표</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>계획에 대해 자세히 알아보십시오</value>
   </data>
 </root>

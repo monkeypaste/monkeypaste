@@ -16,7 +16,7 @@ hide_table_of_contents: true
 <p class=" dl-btn coming-soon">
 <a><img src={require('/img/download_mac.png').default}/></a>
 <a><img src={require('/img/download_linux.png').default}/></a><br/>
-<span>( MonkeyPaste is designed for any platform and both Mac & Linux support should be available *very* soon! )</span><br/>
+<span>( MonkeyPaste is designed to be multi-platform and both Mac & Linux support should be available *very* soon! )</span><br/>
 </p>
 
 <p class=" dl-btn coming-soon">

@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>పేరెంట్ యాక్షన్ '{0}' ఇన్పుట్ ఆస్తి రకం 'చివరి అవుట్పుట్' కు మద్దతు ఇవ్వదు</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>ప్రణాళికల గురించి మరింత తెలుసుకోండి</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>అప్లికేషన్</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>ట్యాగ్</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>ప్రణాళికల గురించి మరింత తెలుసుకోండి</value>
   </data>
 </root>

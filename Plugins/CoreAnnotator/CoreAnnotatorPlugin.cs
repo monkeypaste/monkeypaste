@@ -27,14 +27,12 @@ namespace CoreAnnotator {
             // select all checked ann formats
             var formats =
                 req.GetParamValue<List<string>>(OPTIONS_PARAM_ID)
-                //req.items.Where(x => x.paramId != CONTENT_PARAM_ID && x.paramValue.ParseOrConvertToBool())
                 .Select(x => Enum.Parse(typeof(TextAnnotationType), x))
                 .Cast<TextAnnotationType>();
 
             // create delta of all annotation ranges from plain text
             // more info on delta here: https://github.com/quilljs/delta
             MpQuillDelta delta = DeltaAnnotator.Annotate(content_pt, formats);
-            MpConsole.WriteLine($"annotation Count: {delta.ops.Count} types: {string.Join(",", delta.ops.Select(x => x.attributes.linkType))}");
 
             var resp = new MpAnalyzerPluginResponseFormat();
             resp.dataObjectLookup = new Dictionary<string, object>();
@@ -67,7 +65,7 @@ namespace CoreAnnotator {
                             new[] {
                                 new MpPresetValueFormat(
                                     OPTIONS_PARAM_ID,
-                                    "Currency,Email,HexColor,PhoneNumber,Url")
+                                    "Currency,Email,HexColor,Url")
                             }.ToList()
                     }
                 },

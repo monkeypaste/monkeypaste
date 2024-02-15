@@ -478,6 +478,7 @@
         </Border>
         <!--  Content  -->
         <ScrollViewer x:Name="BodyScrollViewer"
+                      IsScrollInertiaEnabled="False"
                       BringIntoViewOnFocusChange="False">
             <ScrollViewer.Transitions>
                 <Transitions>

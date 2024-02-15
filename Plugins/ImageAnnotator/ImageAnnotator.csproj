@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <!--<RuntimeIdentifiers>win-arm;win-arm64;win-x64;win-x86</RuntimeIdentifiers>-->
   </PropertyGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(PushPlugins)' == 'True'">

@@ -2689,9 +2689,6 @@ atsiliepimai@monkeypaste.com</value>
     <value>Tėvų veiksmas '{0}' nepalaiko įvesties nuosavybės tipo 'Paskutinis išvestis'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Sužinokite daugiau apie planus</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Paraiška</value>
   </data>
@@ -2706,5 +2703,8 @@ atsiliepimai@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Žyma</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Sužinokite daugiau apie planus</value>
   </data>
 </root>

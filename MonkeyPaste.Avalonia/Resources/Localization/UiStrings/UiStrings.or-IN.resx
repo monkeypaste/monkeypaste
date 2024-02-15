@@ -2689,9 +2689,6 @@ FANDUCE@ONKEYPASTET.com</value>
     <value>ପ୍ୟାରେଣ୍ଟ୍ ଆକ୍ସନ୍ '{0}' ଇନପୁଟ୍ ପ୍ରପର୍ଟିଜ୍ ପ୍ରକାର 'ଶେଷ ଆଉଟପୁଟ୍' ସମର୍ଥନ କରେନାହିଁ |</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>ଯୋଜନା ବିଷୟରେ ଅଧିକ ଜାଣନ୍ତୁ |</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>ପ୍ରୟୋଗ</value>
   </data>
@@ -2706,5 +2703,8 @@ FANDUCE@ONKEYPASTET.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>ଟ୍ୟାଗ୍ |</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>ଯୋଜନା ବିଷୟରେ ଅଧିକ ଜାଣନ୍ତୁ |</value>
   </data>
 </root>

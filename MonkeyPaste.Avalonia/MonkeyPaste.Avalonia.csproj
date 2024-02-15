@@ -429,248 +429,6 @@
     <None Remove="Assets\Images\eye_closed.png" />
     <None Remove="Assets\Images\fileSystemEvent.png" />
     <None Remove="Assets\Images\filter.png" />
-    <None Remove="Assets\Images\Flags\ad.gif" />
-    <None Remove="Assets\Images\Flags\ae.gif" />
-    <None Remove="Assets\Images\Flags\af.gif" />
-    <None Remove="Assets\Images\Flags\ag.gif" />
-    <None Remove="Assets\Images\Flags\ai.gif" />
-    <None Remove="Assets\Images\Flags\al.gif" />
-    <None Remove="Assets\Images\Flags\am.gif" />
-    <None Remove="Assets\Images\Flags\an.gif" />
-    <None Remove="Assets\Images\Flags\ao.gif" />
-    <None Remove="Assets\Images\Flags\ar.gif" />
-    <None Remove="Assets\Images\Flags\as.gif" />
-    <None Remove="Assets\Images\Flags\at.gif" />
-    <None Remove="Assets\Images\Flags\au.gif" />
-    <None Remove="Assets\Images\Flags\aw.gif" />
-    <None Remove="Assets\Images\Flags\ax.gif" />
-    <None Remove="Assets\Images\Flags\az.gif" />
-    <None Remove="Assets\Images\Flags\ba.gif" />
-    <None Remove="Assets\Images\Flags\bb.gif" />
-    <None Remove="Assets\Images\Flags\bd.gif" />
-    <None Remove="Assets\Images\Flags\be.gif" />
-    <None Remove="Assets\Images\Flags\bf.gif" />
-    <None Remove="Assets\Images\Flags\bg.gif" />
-    <None Remove="Assets\Images\Flags\bh.gif" />
-    <None Remove="Assets\Images\Flags\bi.gif" />
-    <None Remove="Assets\Images\Flags\bj.gif" />
-    <None Remove="Assets\Images\Flags\bm.gif" />
-    <None Remove="Assets\Images\Flags\bn.gif" />
-    <None Remove="Assets\Images\Flags\bo.gif" />
-    <None Remove="Assets\Images\Flags\br.gif" />
-    <None Remove="Assets\Images\Flags\bs.gif" />
-    <None Remove="Assets\Images\Flags\bt.gif" />
-    <None Remove="Assets\Images\Flags\bv.gif" />
-    <None Remove="Assets\Images\Flags\bw.gif" />
-    <None Remove="Assets\Images\Flags\by.gif" />
-    <None Remove="Assets\Images\Flags\bz.gif" />
-    <None Remove="Assets\Images\Flags\ca.gif" />
-    <None Remove="Assets\Images\Flags\cc.gif" />
-    <None Remove="Assets\Images\Flags\cd.gif" />
-    <None Remove="Assets\Images\Flags\cf.gif" />
-    <None Remove="Assets\Images\Flags\cg.gif" />
-    <None Remove="Assets\Images\Flags\ch.gif" />
-    <None Remove="Assets\Images\Flags\ci.gif" />
-    <None Remove="Assets\Images\Flags\ck.gif" />
-    <None Remove="Assets\Images\Flags\cl.gif" />
-    <None Remove="Assets\Images\Flags\cm.gif" />
-    <None Remove="Assets\Images\Flags\cn.gif" />
-    <None Remove="Assets\Images\Flags\co.gif" />
-    <None Remove="Assets\Images\Flags\cr.gif" />
-    <None Remove="Assets\Images\Flags\cs.gif" />
-    <None Remove="Assets\Images\Flags\cu.gif" />
-    <None Remove="Assets\Images\Flags\cv.gif" />
-    <None Remove="Assets\Images\Flags\cx.gif" />
-    <None Remove="Assets\Images\Flags\cy.gif" />
-    <None Remove="Assets\Images\Flags\cz.gif" />
-    <None Remove="Assets\Images\Flags\de.gif" />
-    <None Remove="Assets\Images\Flags\dj.gif" />
-    <None Remove="Assets\Images\Flags\dk.gif" />
-    <None Remove="Assets\Images\Flags\dm.gif" />
-    <None Remove="Assets\Images\Flags\do.gif" />
-    <None Remove="Assets\Images\Flags\dz.gif" />
-    <None Remove="Assets\Images\Flags\ec.gif" />
-    <None Remove="Assets\Images\Flags\ee.gif" />
-    <None Remove="Assets\Images\Flags\eg.gif" />
-    <None Remove="Assets\Images\Flags\eh.gif" />
-    <None Remove="Assets\Images\Flags\er.gif" />
-    <None Remove="Assets\Images\Flags\es.gif" />
-    <None Remove="Assets\Images\Flags\et.gif" />
-    <None Remove="Assets\Images\Flags\fi.gif" />
-    <None Remove="Assets\Images\Flags\fj.gif" />
-    <None Remove="Assets\Images\Flags\fk.gif" />
-    <None Remove="Assets\Images\Flags\fm.gif" />
-    <None Remove="Assets\Images\Flags\fo.gif" />
-    <None Remove="Assets\Images\Flags\fr.gif" />
-    <None Remove="Assets\Images\Flags\fy.gif" />
-    <None Remove="Assets\Images\Flags\ga.gif" />
-    <None Remove="Assets\Images\Flags\gb.gif" />
-    <None Remove="Assets\Images\Flags\gd.gif" />
-    <None Remove="Assets\Images\Flags\ge.gif" />
-    <None Remove="Assets\Images\Flags\gf.gif" />
-    <None Remove="Assets\Images\Flags\gh.gif" />
-    <None Remove="Assets\Images\Flags\gi.gif" />
-    <None Remove="Assets\Images\Flags\gl.gif" />
-    <None Remove="Assets\Images\Flags\gm.gif" />
-    <None Remove="Assets\Images\Flags\gn.gif" />
-    <None Remove="Assets\Images\Flags\gp.gif" />
-    <None Remove="Assets\Images\Flags\gq.gif" />
-    <None Remove="Assets\Images\Flags\gr.gif" />
-    <None Remove="Assets\Images\Flags\gs.gif" />
-    <None Remove="Assets\Images\Flags\gt.gif" />
-    <None Remove="Assets\Images\Flags\gu.gif" />
-    <None Remove="Assets\Images\Flags\gw.gif" />
-    <None Remove="Assets\Images\Flags\gy.gif" />
-    <None Remove="Assets\Images\Flags\hk.gif" />
-    <None Remove="Assets\Images\Flags\hm.gif" />
-    <None Remove="Assets\Images\Flags\hn.gif" />
-    <None Remove="Assets\Images\Flags\hr.gif" />
-    <None Remove="Assets\Images\Flags\ht.gif" />
-    <None Remove="Assets\Images\Flags\hu.gif" />
-    <None Remove="Assets\Images\Flags\id.gif" />
-    <None Remove="Assets\Images\Flags\ie.gif" />
-    <None Remove="Assets\Images\Flags\il.gif" />
-    <None Remove="Assets\Images\Flags\in.gif" />
-    <None Remove="Assets\Images\Flags\io.gif" />
-    <None Remove="Assets\Images\Flags\iq.gif" />
-    <None Remove="Assets\Images\Flags\ir.gif" />
-    <None Remove="Assets\Images\Flags\is.gif" />
-    <None Remove="Assets\Images\Flags\it.gif" />
-    <None Remove="Assets\Images\Flags\jm.gif" />
-    <None Remove="Assets\Images\Flags\jo.gif" />
-    <None Remove="Assets\Images\Flags\jp.gif" />
-    <None Remove="Assets\Images\Flags\ke.gif" />
-    <None Remove="Assets\Images\Flags\kg.gif" />
-    <None Remove="Assets\Images\Flags\kh.gif" />
-    <None Remove="Assets\Images\Flags\ki.gif" />
-    <None Remove="Assets\Images\Flags\km.gif" />
-    <None Remove="Assets\Images\Flags\kn.gif" />
-    <None Remove="Assets\Images\Flags\kp.gif" />
-    <None Remove="Assets\Images\Flags\kr.gif" />
-    <None Remove="Assets\Images\Flags\kw.gif" />
-    <None Remove="Assets\Images\Flags\ky.gif" />
-    <None Remove="Assets\Images\Flags\kz.gif" />
-    <None Remove="Assets\Images\Flags\la.gif" />
-    <None Remove="Assets\Images\Flags\lb.gif" />
-    <None Remove="Assets\Images\Flags\lc.gif" />
-    <None Remove="Assets\Images\Flags\li.gif" />
-    <None Remove="Assets\Images\Flags\lk.gif" />
-    <None Remove="Assets\Images\Flags\lr.gif" />
-    <None Remove="Assets\Images\Flags\ls.gif" />
-    <None Remove="Assets\Images\Flags\lt.gif" />
-    <None Remove="Assets\Images\Flags\lu.gif" />
-    <None Remove="Assets\Images\Flags\lv.gif" />
-    <None Remove="Assets\Images\Flags\ly.gif" />
-    <None Remove="Assets\Images\Flags\ma.gif" />
-    <None Remove="Assets\Images\Flags\mc.gif" />
-    <None Remove="Assets\Images\Flags\md.gif" />
-    <None Remove="Assets\Images\Flags\me.gif" />
-    <None Remove="Assets\Images\Flags\mg.gif" />
-    <None Remove="Assets\Images\Flags\mh.gif" />
-    <None Remove="Assets\Images\Flags\mk.gif" />
-    <None Remove="Assets\Images\Flags\ml.gif" />
-    <None Remove="Assets\Images\Flags\mm.gif" />
-    <None Remove="Assets\Images\Flags\mn.gif" />
-    <None Remove="Assets\Images\Flags\mo.gif" />
-    <None Remove="Assets\Images\Flags\mp.gif" />
-    <None Remove="Assets\Images\Flags\mq.gif" />
-    <None Remove="Assets\Images\Flags\mr.gif" />
-    <None Remove="Assets\Images\Flags\ms.gif" />
-    <None Remove="Assets\Images\Flags\mt.gif" />
-    <None Remove="Assets\Images\Flags\mu.gif" />
-    <None Remove="Assets\Images\Flags\mv.gif" />
-    <None Remove="Assets\Images\Flags\mw.gif" />
-    <None Remove="Assets\Images\Flags\mx.gif" />
-    <None Remove="Assets\Images\Flags\my.gif" />
-    <None Remove="Assets\Images\Flags\mz.gif" />
-    <None Remove="Assets\Images\Flags\na.gif" />
-    <None Remove="Assets\Images\Flags\nc.gif" />
-    <None Remove="Assets\Images\Flags\ne.gif" />
-    <None Remove="Assets\Images\Flags\nf.gif" />
-    <None Remove="Assets\Images\Flags\ng.gif" />
-    <None Remove="Assets\Images\Flags\ni.gif" />
-    <None Remove="Assets\Images\Flags\nl.gif" />
-    <None Remove="Assets\Images\Flags\no.gif" />
-    <None Remove="Assets\Images\Flags\np.gif" />
-    <None Remove="Assets\Images\Flags\nr.gif" />
-    <None Remove="Assets\Images\Flags\nu.gif" />
-    <None Remove="Assets\Images\Flags\nz.gif" />
-    <None Remove="Assets\Images\Flags\om.gif" />
-    <None Remove="Assets\Images\Flags\pa.gif" />
-    <None Remove="Assets\Images\Flags\pe.gif" />
-    <None Remove="Assets\Images\Flags\pf.gif" />
-    <None Remove="Assets\Images\Flags\pg.gif" />
-    <None Remove="Assets\Images\Flags\ph.gif" />
-    <None Remove="Assets\Images\Flags\pk.gif" />
-    <None Remove="Assets\Images\Flags\pl.gif" />
-    <None Remove="Assets\Images\Flags\pm.gif" />
-    <None Remove="Assets\Images\Flags\pn.gif" />
-    <None Remove="Assets\Images\Flags\pr.gif" />
-    <None Remove="Assets\Images\Flags\ps.gif" />
-    <None Remove="Assets\Images\Flags\pt.gif" />
-    <None Remove="Assets\Images\Flags\pw.gif" />
-    <None Remove="Assets\Images\Flags\py.gif" />
-    <None Remove="Assets\Images\Flags\qa.gif" />
-    <None Remove="Assets\Images\Flags\re.gif" />
-    <None Remove="Assets\Images\Flags\ro.gif" />
-    <None Remove="Assets\Images\Flags\rs.gif" />
-    <None Remove="Assets\Images\Flags\ru.gif" />
-    <None Remove="Assets\Images\Flags\rw.gif" />
-    <None Remove="Assets\Images\Flags\sa.gif" />
-    <None Remove="Assets\Images\Flags\sb.gif" />
-    <None Remove="Assets\Images\Flags\sc.gif" />
-    <None Remove="Assets\Images\Flags\sd.gif" />
-    <None Remove="Assets\Images\Flags\se.gif" />
-    <None Remove="Assets\Images\Flags\sg.gif" />
-    <None Remove="Assets\Images\Flags\sh.gif" />
-    <None Remove="Assets\Images\Flags\si.gif" />
-    <None Remove="Assets\Images\Flags\sj.gif" />
-    <None Remove="Assets\Images\Flags\sk.gif" />
-    <None Remove="Assets\Images\Flags\sl.gif" />
-    <None Remove="Assets\Images\Flags\sm.gif" />
-    <None Remove="Assets\Images\Flags\sn.gif" />
-    <None Remove="Assets\Images\Flags\so.gif" />
-    <None Remove="Assets\Images\Flags\sr.gif" />
-    <None Remove="Assets\Images\Flags\st.gif" />
-    <None Remove="Assets\Images\Flags\sv.gif" />
-    <None Remove="Assets\Images\Flags\sy.gif" />
-    <None Remove="Assets\Images\Flags\sz.gif" />
-    <None Remove="Assets\Images\Flags\tc.gif" />
-    <None Remove="Assets\Images\Flags\td.gif" />
-    <None Remove="Assets\Images\Flags\tf.gif" />
-    <None Remove="Assets\Images\Flags\tg.gif" />
-    <None Remove="Assets\Images\Flags\th.gif" />
-    <None Remove="Assets\Images\Flags\tj.gif" />
-    <None Remove="Assets\Images\Flags\tk.gif" />
-    <None Remove="Assets\Images\Flags\tl.gif" />
-    <None Remove="Assets\Images\Flags\tm.gif" />
-    <None Remove="Assets\Images\Flags\tn.gif" />
-    <None Remove="Assets\Images\Flags\to.gif" />
-    <None Remove="Assets\Images\Flags\tr.gif" />
-    <None Remove="Assets\Images\Flags\tt.gif" />
-    <None Remove="Assets\Images\Flags\tv.gif" />
-    <None Remove="Assets\Images\Flags\tw.gif" />
-    <None Remove="Assets\Images\Flags\tz.gif" />
-    <None Remove="Assets\Images\Flags\ua.gif" />
-    <None Remove="Assets\Images\Flags\ug.gif" />
-    <None Remove="Assets\Images\Flags\um.gif" />
-    <None Remove="Assets\Images\Flags\us.gif" />
-    <None Remove="Assets\Images\Flags\uy.gif" />
-    <None Remove="Assets\Images\Flags\uz.gif" />
-    <None Remove="Assets\Images\Flags\va.gif" />
-    <None Remove="Assets\Images\Flags\vc.gif" />
-    <None Remove="Assets\Images\Flags\ve.gif" />
-    <None Remove="Assets\Images\Flags\vg.gif" />
-    <None Remove="Assets\Images\Flags\vi.gif" />
-    <None Remove="Assets\Images\Flags\vn.gif" />
-    <None Remove="Assets\Images\Flags\vu.gif" />
-    <None Remove="Assets\Images\Flags\wf.gif" />
-    <None Remove="Assets\Images\Flags\ws.gif" />
-    <None Remove="Assets\Images\Flags\ye.gif" />
-    <None Remove="Assets\Images\Flags\yt.gif" />
-    <None Remove="Assets\Images\Flags\za.gif" />
-    <None Remove="Assets\Images\Flags\zm.gif" />
-    <None Remove="Assets\Images\Flags\zw.gif" />
     <None Remove="Assets\Images\folder.png" />
     <None Remove="Assets\Images\folderoutline.png" />
     <None Remove="Assets\Images\foldersolid.png" />
@@ -1071,730 +829,727 @@
     <AvaloniaResource Include="Assets\Images\equation.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ad.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ae.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ae.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\af.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\af.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ag.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ag.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ai.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ai.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\al.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\al.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\am.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\am.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\an.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\an.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ao.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ao.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ar.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\as.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\as.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\at.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\at.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\au.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\au.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\aw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\aw.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ax.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ax.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\az.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\az.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ba.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ba.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bb.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bb.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bd.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\be.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\be.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bf.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bf.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bg.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bh.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bh.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bi.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bi.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bj.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bj.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bm.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bn.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bo.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\br.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\br.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bs.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bs.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bt.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bv.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bw.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\by.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\by.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\bz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\bz.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ca.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ca.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cc.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cc.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cd.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cf.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cf.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cg.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ch.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ch.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ci.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ci.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ck.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ck.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cl.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cl.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cm.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cn.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\co.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\co.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cr.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cr.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cs.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cs.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cu.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cu.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cv.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cx.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cx.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cy.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\cz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\cz.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\de.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\de.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\dj.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\dj.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\dk.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\dk.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\dm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\dm.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\do.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\do.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\dz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\dz.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ec.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ec.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ee.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ee.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\eg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\eg.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\eh.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\eh.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\er.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\er.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\es.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\es.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\et.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\et.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\fi.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\fi.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\fj.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\fj.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\fk.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\fk.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\fm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\fm.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\fo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\fo.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\fr.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\fr.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\fy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\fy.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ga.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ga.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gb.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gb.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gd.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ge.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ge.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gf.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gf.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gh.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gh.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gi.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gi.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gl.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gl.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gm.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gn.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gp.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gp.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gq.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gq.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gr.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gr.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gs.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gs.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gt.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gu.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gu.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gw.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\gy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\gy.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\hk.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\hk.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\hm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\hm.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\hn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\hn.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\hr.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\hr.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ht.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ht.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\hu.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\hu.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\id.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\id.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ie.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ie.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\il.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\il.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\in.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\in.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\io.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\io.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\iq.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\iq.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ir.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ir.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\is.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\is.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\it.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\it.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\jm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\jm.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\jo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\jo.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\jp.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\jp.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ke.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ke.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\kg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\kg.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\kh.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\kh.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ki.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ki.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\km.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\km.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\kn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\kn.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\kp.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\kp.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\kr.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\kr.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\kw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\kw.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ky.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ky.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\kz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\kz.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\la.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\la.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\lb.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\lb.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\lc.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\lc.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\li.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\li.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\lk.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\lk.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\lr.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\lr.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ls.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ls.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\lt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\lt.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\lu.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\lu.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\lv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\lv.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ly.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ly.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ma.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ma.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mc.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mc.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\md.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\md.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\me.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\me.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mg.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mh.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mh.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mk.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mk.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ml.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ml.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mm.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mn.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mo.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mp.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mp.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mq.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mq.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mr.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mr.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ms.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ms.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mt.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mu.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mu.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mv.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mw.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mx.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mx.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\my.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\my.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\mz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\mz.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\na.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\na.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\nc.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\nc.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ne.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ne.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\nf.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\nf.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ng.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ng.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ni.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ni.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\nl.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\nl.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\no.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\no.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\np.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\np.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\nr.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\nr.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\nu.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\nu.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\nz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\nz.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\om.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\om.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\pa.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\pa.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\pe.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\pe.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\pf.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\pf.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\pg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\pg.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ph.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ph.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\pk.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\pk.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\pl.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\pl.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\pm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\pm.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\pn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\pn.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\pr.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\pr.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ps.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ps.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\pt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\pt.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\pw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\pw.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\py.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\py.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\qa.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\qa.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\re.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\re.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ro.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ro.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\rs.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\rs.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ru.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ru.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\rw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\rw.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sa.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sa.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sb.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sb.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sc.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sc.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sd.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sd.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\se.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\se.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sg.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sh.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sh.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\si.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\si.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sj.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sj.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sk.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sk.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sl.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sl.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sm.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sn.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\so.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\so.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sr.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sr.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\st.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\st.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sv.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sy.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\sz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\sz.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tc.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tc.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\td.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\td.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tf.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tf.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tg.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\th.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\th.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tj.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tj.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tk.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tk.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tl.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tl.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tm.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tn.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\to.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\to.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tr.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tr.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tt.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tv.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tw.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\tz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\tz.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ua.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ua.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ug.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ug.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\um.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\um.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\us.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\us.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\uy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\uy.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\uz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\uz.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\va.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\va.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\vc.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\vc.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ve.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ve.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\vg.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\vg.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\vi.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\vi.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\vn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\vn.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\vu.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\vu.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\wf.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\wf.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ws.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ws.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\ye.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\ye.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\yt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\yt.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\za.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\za.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\zm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\zm.gif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Flags\zw.gif">
+    <AvaloniaResource Include="Assets\Images\Flags\zw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\folderoutline.png">
@@ -2639,7 +2394,7 @@
     <PackageReference Include="SharpHook" Version="5.2.2" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
     <PackageReference Include="System.Management" Version="8.0.0" />
-    <PackageReference Include="NetCoreAudio" Version="1.8.0" />
+    <PackageReference Include="NetCoreAudio" Version="2.0.0" />
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
     <PackageReference Include="System.Speech" Version="8.0.0" />
     <PackageReference Include="TaskScheduler" Version="2.10.1" />
@@ -2794,5 +2549,8 @@
   <ItemGroup Condition="'$(IncludeCultures)' == 'False'">
     <None Include="Resources\Localization\UiStrings\UiStrings.*.resx" />
     <None Include="Resources\Localization\EnumUiStrings\EnumUiStrings.*.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Assets\Images\Flags\ad.png" />
   </ItemGroup>
 </Project>

@@ -2689,9 +2689,6 @@ Filbir@monkeypaste.com</value>
     <value>"{0}" Ota harakati "So'nggi ishlab chiqarish" mulk turini qo'llab-quvvatlamaydi</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Rejalar haqida ko'proq ma'lumot oling</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Ariza</value>
   </data>
@@ -2706,5 +2703,8 @@ Filbir@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Yorliq</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Rejalar haqida ko'proq ma'lumot oling</value>
   </data>
 </root>

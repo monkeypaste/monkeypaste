@@ -2689,9 +2689,6 @@ FEEDBOWY@monkeypue.com</value>
     <value>Эцэг эхийн арга хэмжээ '{0}' нь оролтын өмчийн төрөл 'Сүүлийн гаралтыг дэмжихгүй байна.</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Төлөвлөгөөний талаар илүү ихийг олж мэдэх</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Хүсэлт</value>
   </data>
@@ -2706,5 +2703,8 @@ FEEDBOWY@monkeypue.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Захьдхны</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Төлөвлөгөөний талаар илүү ихийг олж мэдэх</value>
   </data>
 </root>

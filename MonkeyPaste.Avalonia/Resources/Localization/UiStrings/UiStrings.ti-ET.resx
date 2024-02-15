@@ -2689,9 +2689,6 @@
     <value>ናይ ወላዲ ስጉምቲ '{0}' ናይ ምእታው ንብረት ዓይነት 'ናይ መወዳእታ ውጽኢት' ኣይድግፍን እዩ።</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>ብዛዕባ መደባት ዝያዳ ክትፈልጡ</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>ማመልከቻ</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>ምልጣፍ</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>ብዛዕባ ውጥናት ዝያዳ ክትፈልጡ</value>
   </data>
 </root>

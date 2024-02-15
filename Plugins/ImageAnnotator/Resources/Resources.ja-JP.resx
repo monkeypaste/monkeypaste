@@ -80,4 +80,12 @@
   <data name="Title" xml:space="preserve">
     <value>画像アノテーター</value>
   </data>
+  <data name="ExText" xml:space="preserve">
+    <value>エラーがありました。 OSが最新であることを確認してください。 Windowsユーザーの場合、&lt;a href=" {0 }"&gt; this &lt;/a&gt;（Visual C ++再配布可能なパッケージ）をインストールする必要があります。
+
+&lt;a href=" {1 }"&gt; ImageAnnotator github repo &lt;/a&gt;を参照してください。詳細または問題を報告してください。
+
+エラー：
+{2}</value>
+  </data>
 </root>

@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Ouderactie '{0}' ondersteunt geen invoer -eigenschapstype 'Laatste uitvoer'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Lees meer over plannen</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Sollicitatie</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Label</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Meer informatie over plannen</value>
   </data>
 </root>

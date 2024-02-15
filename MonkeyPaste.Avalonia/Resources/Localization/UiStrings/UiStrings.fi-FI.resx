@@ -2689,9 +2689,6 @@ palaute@monkeypaste.com</value>
     <value>Vanhempien toiminta '{0}' ei tue syöttöominaisuuden tyyppiä 'viimeinen lähtö'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Lisätietoja suunnitelmista</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Soveltaminen</value>
   </data>
@@ -2706,5 +2703,8 @@ palaute@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Tag</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Lisätietoja suunnitelmista</value>
   </data>
 </root>

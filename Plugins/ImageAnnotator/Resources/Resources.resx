@@ -134,11 +134,13 @@
     <value>A totally free, local and lightweight object detector trained on 80 different types of objects.</value>
   </data>
   <data name="ExText" xml:space="preserve">
-    <value>There was an error. Please make sure your OS is up to date. Check the ReadMe for more details.
+    <value>There was an error. Please make sure your OS is up to date. For Windows users you may also need to install &lt;a href="{0}"&gt;this&lt;/a&gt; (Visual C++ Redistributable Package). 
+
+See the &lt;a href="{1}"&gt;ImageAnnotator github repo&lt;/a&gt; for more info or to report the issue.
 
 Error:
-{0}</value>
-    <comment>Exception Message</comment>
+{2}</value>
+    <comment>Link,Link,Exception Message</comment>
   </data>
   <data name="Tags" xml:space="preserve">
     <value>Image Detection, Annotation, Image, AI, Text</value>

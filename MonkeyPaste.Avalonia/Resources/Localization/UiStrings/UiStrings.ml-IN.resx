@@ -2689,9 +2689,6 @@
     <value>'{0 your' installe പ്രോപ്പർട്ടി 'അവസാന output ട്ട്പുട്ട്' എന്ന ഇൻപുട്ട് പ്രോപ്പർട്ടി പിന്തുണയ്ക്കുന്നില്ല</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>പദ്ധതികളെക്കുറിച്ച് കൂടുതലറിയുക</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>അപേക്ഷ</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>ടാഗ്</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>പദ്ധതികളെക്കുറിച്ച് കൂടുതലറിയുക</value>
   </data>
 </root>

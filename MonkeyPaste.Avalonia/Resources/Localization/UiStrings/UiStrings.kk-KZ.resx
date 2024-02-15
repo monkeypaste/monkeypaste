@@ -2689,9 +2689,6 @@ feedback@monkeyptaste.com</value>
     <value>'{0}' ата-аналық әрекеті «Соңғы шығу» енгізу сипаты түрін қолдамайды</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Жоспарлар туралы көбірек біліңіз</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Қолдану</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeyptaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Белгілеу</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Жоспарлар туралы көбірек біліңіз</value>
   </data>
 </root>

@@ -64,7 +64,7 @@ namespace MonkeyPaste.Common {
             return package_dir;
         }
 
-        public static string LocalStoragePathToPackagePath(this string local_storage_path) {
+        public static string LocalStoragePathToPackagePath(this string local_storage_path, bool must_exist = true) {
 #if !WINDOWS
             return local_storage_path;
 #endif
@@ -86,6 +86,12 @@ namespace MonkeyPaste.Common {
             MpDebug.Assert(package_cache_dir.IsDirectory(), $"Storage error can't find package dir '{package_cache_dir}'");
             // replace one for the other
             string package_cache_path = local_storage_path.Replace(app_data_dir, package_cache_dir);
+            if (!package_cache_path.IsFileOrDirectory() &&
+                must_exist) {
+                // not found fallback 
+                return local_storage_path;
+            }
+
             return package_cache_path;
         }
 

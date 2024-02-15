@@ -2689,9 +2689,6 @@ Monkeypaste მოწყობილობაზე
     <value>მშობლის მოქმედება '{0}' არ უჭერს მხარს შეყვანის ქონების ტიპს 'ბოლო გამომავალი'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>შეიტყვეთ მეტი გეგმების შესახებ</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>გამოყენება</value>
   </data>
@@ -2706,5 +2703,8 @@ Monkeypaste მოწყობილობაზე
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>დრო</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>შეიტყვეთ მეტი გეგმების შესახებ</value>
   </data>
 </root>

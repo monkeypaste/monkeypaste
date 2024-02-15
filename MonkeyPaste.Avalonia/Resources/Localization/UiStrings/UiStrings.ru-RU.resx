@@ -2689,9 +2689,6 @@
     <value>Родительский действие '{0}' не поддерживает тип свойства ввода «Последний вывод»</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Узнайте больше о планах</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Приложение</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Ярлык</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Узнайте больше о планах</value>
   </data>
 </root>

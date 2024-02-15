@@ -2689,9 +2689,6 @@ zpětná vazba@monkeypaste.com</value>
     <value>Akce nadřazenosti '{0}' nepodporuje typ vlastnosti vstupu „Poslední výstup“</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Zjistěte více o plánech</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>aplikace</value>
   </data>
@@ -2706,5 +2703,8 @@ zpětná vazba@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Štítek</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Další informace o plánech</value>
   </data>
 </root>

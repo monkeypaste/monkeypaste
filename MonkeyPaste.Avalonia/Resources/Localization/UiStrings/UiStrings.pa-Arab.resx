@@ -2689,9 +2689,6 @@
     <value>ਮਾਤਾ-ਕਾਰਵਾਈ '{0}' ਪ੍ਰਾਪਰਟੀ ਦੀ ਕਿਸਮ 'ਆਖਰੀ ਆਉਟਪੁੱਟ' ਦਾ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦਾ</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>ਯੋਜਨਾਵਾਂ ਬਾਰੇ ਬਾਰੇ ਹੋਰ ਜਾਣੋ</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>ਐਪਲੀਕੇਸ਼ਨ</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>ਟੈਗ</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>ਯੋਜਨਾਵਾਂ ਬਾਰੇ ਹੋਰ ਜਾਣੋ</value>
   </data>
 </root>

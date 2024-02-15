@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Veprimi i Prindërve '{0}' nuk e mbështet llojin e pronës së hyrjes 'Prodhimi i fundit'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Mësoni më shumë rreth planeve</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Aplikacion</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Etiketim</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Mësoni më shumë rreth planeve</value>
   </data>
 </root>

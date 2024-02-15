@@ -2689,9 +2689,6 @@ feedback@monkeypaste.com</value>
     <value>Parent Action '{0}' ne prend pas en charge le type de propriété d'entrée 'Last Output'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>En savoir plus sur les plans</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Application</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Étiqueter</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>En savoir plus sur les plans</value>
   </data>
 </root>

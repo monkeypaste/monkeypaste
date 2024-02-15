@@ -2689,9 +2689,6 @@
     <value>والدین کی کارروائی '{0}' ان پٹ پراپرٹی کی قسم 'آخری آؤٹ پٹ' کی حمایت نہیں کرتی ہے</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>منصوبوں کے بارے میں مزید معلومات حاصل کریں</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>درخواست</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>ٹیگ</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>منصوبوں کے بارے میں مزید معلومات حاصل کریں</value>
   </data>
 </root>

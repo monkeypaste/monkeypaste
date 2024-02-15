@@ -2689,9 +2689,6 @@ feedback@monkepte.com</value>
     <value>«{0}» ծնողական գործողությունը չի ապահովում «Վերջին ելքը» ներդրման գույքի տեսակը</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Իմացեք ավելին պլանների մասին</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Ծրագիր</value>
   </data>
@@ -2706,5 +2703,8 @@ feedback@monkepte.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Պիտակ</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Իմացեք ավելին պլանների մասին</value>
   </data>
 </root>

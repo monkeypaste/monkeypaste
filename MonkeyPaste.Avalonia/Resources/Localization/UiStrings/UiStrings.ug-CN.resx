@@ -2689,9 +2689,6 @@ tempo@Monkepaste.com</value>
     <value>ئاتا-ئانىلارنىڭ ھەرىكىتى '{0}' كىرگۈزۈش مۈلۈك تىپىدىكى مۈلۈك تىپىنىڭ «ئاخىرقى چىقىمى» نى قوللىمايدۇ.</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>پىلان ھەققى ھەققىدە تېخىمۇ كۆپ نەرسىلەرنى ئۆگىنىۋېلىڭ</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Application</value>
   </data>
@@ -2706,5 +2703,8 @@ tempo@Monkepaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Tag</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>پىلان ھەققىدىكى تەپسىلاتلار</value>
   </data>
 </root>

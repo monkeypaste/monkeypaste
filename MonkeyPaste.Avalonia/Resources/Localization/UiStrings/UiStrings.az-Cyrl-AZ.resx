@@ -2689,9 +2689,6 @@ geribildirim@monkeypaste.com</value>
     <value>Valideyn Fəaliyyəti '{0}' 'Son çıxışı' giriş mülkiyyəti tipini dəstəkləmir</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Planlar haqqında daha çox məlumat əldə edin</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Tətbiqi</value>
   </data>
@@ -2706,5 +2703,8 @@ geribildirim@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Etiket</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Planlar haqqında daha çox məlumat əldə edin</value>
   </data>
 </root>

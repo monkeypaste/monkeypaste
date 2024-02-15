@@ -2689,9 +2689,6 @@ endurgjöf@monkeypaste.com</value>
     <value>Foreldraaðgerð '{0}' styður ekki innsláttargerðargerð 'Last Output'</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>Lærðu meira um áætlanir</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>Umsókn</value>
   </data>
@@ -2706,5 +2703,8 @@ endurgjöf@monkeypaste.com</value>
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>Merki</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>Lærðu meira um áætlanir</value>
   </data>
 </root>

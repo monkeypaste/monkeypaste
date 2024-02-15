@@ -2,6 +2,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
                        mc:Ignorable="d"
@@ -210,7 +211,7 @@
                                     Content="{Binding}">
                         <ContentControl.DataTemplates>
                             <local:MpAvUserActionBodyTemplateSelector>
-                                <!--  MESSAGE  -->
+                                <!--  TEXT MESSAGE  -->
                                 <DataTemplate x:Key="TextBodyTemplate"
                                               x:DataType="local:MpAvUserActionNotificationViewModel">
                                     <SelectableTextBlock x:Name="MessageBody"
@@ -222,6 +223,19 @@
                                                          Focusable="True"
                                                          Foreground="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
                                                          Text="{Binding Body}" />
+                                </DataTemplate>
+
+                                <!--  HTML MESSAGE  -->
+                                <DataTemplate x:Key="HtmlBodyTemplate"
+                                              x:DataType="local:MpAvUserActionNotificationViewModel">
+                                    <av:HtmlLabel x:Name="ToolTipHtmlPanel"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Top"
+                                                  IsSelectionEnabled="True"
+                                                  local:MpAvHtmlStylerExtension.DefaultFontSize="14"
+                                                  local:MpAvHtmlStylerExtension.DefaultHexColor="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastHexColorConverter.Instance}}"
+                                                  local:MpAvHtmlStylerExtension.IsEnabled="True"
+                                                  Text="{Binding Body}" />
                                 </DataTemplate>
                                 <!--  PARAMS  -->
                                 <DataTemplate x:Key="ParameterCollectionTemplate"

@@ -2689,9 +2689,6 @@
     <value>मूळ क्रिया '{0}' इनपुट प्रॉपर्टी प्रकाराला 'शेवटचे आउटपुट' चे समर्थन करत नाही</value>
     <comment>Action Label</comment>
   </data>
-  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
-    <value>योजनांबद्दल अधिक जाणून घ्या</value>
-  </data>
   <data name="ShortcutInternalName" xml:space="preserve">
     <value>अर्ज</value>
   </data>
@@ -2706,5 +2703,8 @@
   </data>
   <data name="ShortcutSelectTagName" xml:space="preserve">
     <value>टॅग</value>
+  </data>
+  <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
+    <value>योजनांबद्दल अधिक जाणून घ्या</value>
   </data>
 </root>
