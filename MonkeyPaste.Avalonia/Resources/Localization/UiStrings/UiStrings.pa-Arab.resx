@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>ਸਕ੍ਰੌਲ - ਤੋਂ - ਖੋਲ੍ਹੋ</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "ਕੇਂਦਰ"&gt; Maunkepaste &lt;ਸਪੈਨ ਰੰਗ = "ਲਾਲ&gt; ਪੂਰੀ ਤਰ੍ਹਾਂ ਏਕੀਕ੍ਰਿਤ &lt;/ ਸਪੈਨ&gt; ਡਰਾਅ &lt;/ ਪੀ&gt;&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>ਇਸ ਨੂੰ ਇੱਥੇ ਸੁੱਟੋ!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "ਕੇਂਦਰੀ"&gt; ਇਸ ਤਰ੍ਹਾਂ, ਬਾਂਕੀਪਾਸਟ ਨੂੰ ਐਕਸੈਸ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ &lt;/ ਸਪੈਨ&gt; ਜਾਂ ਇੱਥੋਂ ਤੱਕ ਕਿ &lt;/ ਡਾਂਗ&gt; ਬੱਲੇਬਾਜ਼ੀ &amp; # x1f440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>ਮੈਨੂੰ ਖਿੱਚੋ!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>ਇਸ਼ਾਰੇ ਬਦਨਾਮ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ ਅਤੇ ਸਿਰਫ ਇੱਕ ਇੰਪੁੱਟ ਕੁੰਜੀ ਹੋ ਸਕਦੀ ਹੈ.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; ਅੰਦਰੂਨੀ &lt;/ ਬੀ&gt; ਐਪਲੀਕੇਸ਼ਨ ਦੇ ਅੰਦਰ ਸਾਰੇ ਸ਼ਾਰਟਕੱਟ ਸੀਮਤ ਹਨ. ਇਹ ਅਸਲ ਵਿੱਚ ਇੱਕ ਉਦੇਸ਼ਿਤ ਵਿਕਲਪ ਨਹੀਂ ਹੈ ਪਰ ਇਹ ਅਨੁਕੂਲਿਤ ਕਰਨ ਦੀ ਆਗਿਆ ਦੇ ਸਕਦਾ ਹੈ ਕਿ ਤੁਸੀਂ ਕਿਹੜਾ ਸ਼ਾਰਟਕੱਟੋ ਗਲੋਬਲ &lt;i&gt; ਕਿਸੇ ਦਿਨ / i&gt; ਬਣਾਉਣ ਦਾ ਇਰਾਦਾ ਰੱਖ ਸਕਦੇ ਹੋ. &lt;/ Li&gt;
-&lt;li&gt;
-&lt;b&gt; ਡਿਫਾਲਟ &lt;/ ਬੀ&gt; ਸਾਰੇ ਗਲੋਬਲ ਸ਼ਾਰਟਕੱਟ ਸਮਰੱਥ ਹਨ. &lt;B&gt; ਮੁੱਖ ਵਿੰਡੋ ਨੂੰ ਦਿਖਾਓ / ਓਹਲੇ ਕਰੋ &lt;/ b&gt; ਸ਼ਾਰਟਕੱਟ &lt;ਬੀ&gt; ਕੈਪਸ ਲਾਕ &lt;/ ਬੀ&gt; ਕੁੰਜੀ ਲਈ ਓਵਰਰਾਈਡ &lt;/ ਸਪੈਨ&gt; ਰੂਟਿੰਗ ਦੀ ਵਰਤੋਂ ਕਰਦਾ ਹੈ. ਤੁਸੀਂ ਕਿਸੇ ਵੀ ਸਮੇਂ ਉਸ ਰੂਟਿੰਗ ਜਾਂ ਇਸ਼ਾਰੇ ਨੂੰ ਬਦਲ ਸਕਦੇ ਹੋ. ਪਰ &lt;ਸਪੈਨ ਰੰਗ = "ਹਰਾ"&gt; ਇਸ ਨੂੰ ਅਜ਼ਮਾਓ &lt;/ ਸਪੈਨ&gt;
-&lt;/ li&gt;
-&lt;/ ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;ਹੈਡ&gt; &lt;/ ਹੈੱਡ&gt;
-&lt;ਸਰੀਰ&gt;
-&lt;h1&gt; ਗਲੋਬਲ ਸ਼ੌਰਟਕਟ ਮੋਡ &lt;/ h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; ਪੈਸਿਵ &lt;/ ਬੀ&gt; ਇੱਕ ਸ਼ਾਰਟਕੱਟ ਕਿਸੇ ਵੀ ਅਰਜ਼ੀ ਵਿੱਚ ਸੁਣਵਾਈ ਕਰੇਗਾ. &lt;br&gt;
-* ਹੁਣ ਲਈ ਲੀਨਕਸ 'ਤੇ ਸਿਰਫ &lt;i&gt; ਸਿਰਫ &lt;/ i&gt; ਵਿਕਲਪ ਹੈ.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; f&gt; fra&gt; ਸ਼ੌਰਟਕਟ &lt;/ b&gt; &lt;/ b&gt; &lt;/ b&gt; ਤੋਂ ਪਹਿਲਾਂ ਹੀ ਕਿਰਿਆਸ਼ੀਲ ਕਾਰਜ ਨੂੰ ਲਾਗੂ ਕੀਤਾ ਜਾਂਦਾ ਹੈ. &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; ਪੋਸਟ &lt;/ B&gt; ਸ਼ੌਰਟਕਟ &lt;/ i&gt; &lt;/ b&gt; ਤੋਂ ਬਾਅਦ ਨੂੰ ਐਕਸਟ੍ਰੈਕਟ ਐਪਲੀਕੇਸ਼ਨ ਦੁਆਰਾ ਚਲਾਏਗਾ. &lt;/ li&gt;
-&lt;li&gt;
-&lt;ਬੀ&gt; ਓਵਰਰਾਈਡ &lt;/ ਬੀ&gt; ਜਦੋਂ ਮੋਨਕੇਪਾਸਾਈਟ ਨੂੰ ਓਵਰਰਾਈਡ ਸ਼ਾਰਟਕੱਟ ਦਾ ਇੰਪੁੱਟ ਕੁੰਜੀ (I&gt; I&gt; OLE ਨੂੰ ਓਹਲੇ ਕਰਨ ਦੀ ਚੋਣ ਕਰੋ. &lt;br&gt;
-ਇਹ ਵਿਕਲਪ ਸ਼ਾਰਟਕੱਟ ਦੀ ਗਰੰਟੀ ਦੇਵੇਗਾ ਕਿ ਸ਼ਾਰਟਕੱਟ ਨੂੰ ਸਰਗਰਮ ਐਪਲੀਕੇਸ਼ਨ ਦੇ ਵਿਵਾਦਾਂ ਤੋਂ ਬਿਨਾਂ ਚਾਲੂ ਕੀਤਾ ਜਾਂਦਾ ਹੈ.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; ਵਿਸ਼ੇਸ਼ ਓਵਰਰਾਈਡ &lt;/ ਬੀ&gt; ਇਹ ਇਕ ਵਿਸ਼ੇਸ਼ ਕਿਸਮ ਦਾ ਓਵਰਰਾਈਡ ਮੋਡ ਹੈ ਜੋ ਕੈਪਸ ਲਾਕ ਕੁੰਜੀ ਲਈ ਤਿਆਰ ਕੀਤਾ ਗਿਆ ਹੈ. ਇਹ ਸਿਰਫ ਆਪਣੀ ਜ਼ਿੰਮੇਵਾਰੀ ਲਈ &lt;b&gt; ਨੂੰ &lt;/ ਬੀ&gt; ਕੁੰਜੀ (ਨਾਨ - ਸੋਧਕ) ਦੀ ਆਗਿਆ ਦਿੰਦਾ ਹੈ. &lt;br&gt;
-ਆਮ ਤੌਰ 'ਤੇ ਓਵਰਰਾਈਡ ਮੋਡ ਦੇ ਤਾਲੇ ਬਣ ਸਕਦੇ ਹਨ &lt;/ i&gt; ਤੇ ਅਟਕਿਆ ਹੋਇਆ ਹੈ ਜਦੋਂ ਹੋਰ ਕੁੰਜੀਆਂ ਦੇ ਨਾਲ ਸੁਮੇਲ ਵਿੱਚ ਦਬਾਇਆ ਜਾਂਦਾ ਹੈ. &lt;br&gt;
-ਇਸ ਲਈ ਕੋਈ ਫ਼ਰਕ ਨਹੀਂ ਪੈਂਦਾ ਕਿ ਹੋਰ ਕੁੰਜੀਆਂ ਹੇਠਾਂ ਹਨ, ਜੇ ਕੋਈ &lt;b&gt; ਹੌਟਕੀ &lt;/ b&gt; ਸ਼ਾਰਟਕੱਟ ਨੂੰ ਵੇਖ ਲਿਆ ਜਾਵੇਗਾ ਅਤੇ &lt;/ i&gt; 'ਤੇ ਫਸੇ ਹੋਏ ਹੋ ਜਾਣਗੇ.
-&lt;/ li&gt;
-&lt;/ ul&gt;
-&lt;/ ਸਰੀਰ&gt;
-&lt;/ HTML&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>ਅਯੋਗ</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>ਜਦੋਂ ਇਹ ਉਪਭੋਗਤਾ ਖਾਤਾ ਲੌਗਇਨ ਹੁੰਦਾ ਹੈ, ਤਾਂ ਦੂਜੇ ਉਪਭੋਗਤਾਵਾਂ ਲਈ ਨਹੀਂ.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; ਉਪਲਬਧ ਸੰਪਰਕ ਦੀ ਵਰਤੋਂ (ਇੱਕ ਸ਼ਥੇਰ ਪਲੱਗਇਨ ਚਾਹੀਦਾ ਹੈ) ਇਹ ਖੇਤਰ ਇਸ ਟੈਂਪਲੇਟ ਦੇ ਸਾਰੇ ਉਦਾਹਰਣਾਂ ਲਈ ਵਰਤਿਆ ਜਾਏਗਾ ਜਾਂ ਕਿਸੇ ਵੀ ਉਦਾਹਰਣ ਲਈ ਇਸ ਦਾ ਹਵਾਲਾ ਦਿੱਤਾ ਜਾਂਦਾ ਹੈ ਜੇ ਈਮੇਲ ਪਤਾ ਚੁਣੋ ਇੱਥੇ ਇਸ ਦਸਤਾਵੇਜ਼ ਦੇ ਈਮੇਲ ਖੇਤਰ ਦੀ ਚੋਣ ਕਰੋ ਇਸ ਦਸਤਾਵੇਜ਼ ਵਿੱਚ ਸਾਰੇ ਉਦਾਹਰਣਾਂ ਲਈ ਵਰਤੇ ਜਾਣਗੇ. &lt;/ P&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = ਛੋਟਾ ਜਿਹਾ ਸਾਲ &lt;br/&gt; m = ਮਹੀਨਾ (1-12) ਵਾਲਾ (1-12) ਵਾਲਾ (01-12) (01-12) (ਜਨਵਰੀ, ਫਰਵਰੀ) . ਦਸੰਬਰ (&gt; ਐਮਐਮਐਮਐਮ = ਲੰਬਾ ਮਹੀਨਾ (ਜਨਵਰੀ, ਫਰਵਰੀ ... ਦਸੰਬਰ) &lt;br/&gt; dd = 1 - 31) (01 - 31) (01 - 31) (01 - 31) ਹਫ਼ਤੇ ਦਾ ਦਿਨ (ਸੋਮਵਾਰ, ਮੰਗਲਵਾਰ ... ਹਫ਼ਤੇ ਦਾ ਦਿਨ ਦਾ ਦਿਨ ਦਾ ਛੋਟਾ ਦਿਨ) &lt;br/&gt; ਡੀ - ਆਰਗੇਨਲ ਡੇ (1, 2, 2, 3 ਵੇਂ, 21 ਵੇਂ, 22 ਵੇਂ, 31 ਵੇਂ ਨੰਬਰ 'ਤੇ / ਸ਼ਾਮ ਨੂੰ (0-12) / 0-122 ਵਿਚ ਘੰਟਾ = ਸਵੇਰੇ / ਸ਼ਾਮ ਨੂੰ (00-12) &lt;BR / &gt; H = 0-23) ਵਾਲਾ (0-23) ਵਾਲਾ (0-23) / 1 ਘੰਟਾ (00-23) ਏ = am / pm&gt; a.m./p.m. ਮਾਰਕਰ</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>ਮੌਜੂਦਾ ਤਾਰੀਖ ਅਤੇ / ਜਾਂ / ਜਾਂ ਸਮਾਂ ਤਾਰੀਖ ਦੇ ਟੈਂਪਲੇਟਸ ਲਈ ਬਦਲ ਦਿੱਤਾ ਜਾਵੇਗਾ ਜਦੋਂ ਉਹ ਚਿਪਕ ਜਾਂਦੇ ਹਨ.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; ਇਸ ਟੈਂਪਲੇਟ ਦੇ ਸਾਰੇ ਅਵਸ਼ੇਸ਼ਾਨੀ ਪਾਠ ਦੀ ਵਰਤੋਂ ਕਰਨਗੇ. &lt;/ P&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; ਇਸ ਟੈਂਪਲੇਟ ਦੇ ਸਾਰੇ ਅਵਸ਼ੇਸ਼ਾਨੀ ਪਾਠ ਦੀ ਵਰਤੋਂ ਕਰਨਗੇ. &lt;/ P&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>ਅਪੀਲ ਨੂੰ ਖਤਮ ਕਰੋ</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>ਆਖਰੀ ਐਕਟਿਵ ਐਪ ਅਣਜਾਣ. ਬਾਂਦਰ ਦੇ ਪੇਸਟ ਨੂੰ ਉਦੇਸ਼ਿਤ ਐਪ ਤੇ ਸਵਿਚ ਕਰੋ.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ਪੇਸਟ ਕਰੋ: &lt;em&gt; &lt;i ਕਲਾਸ = "ਪੇਸਟ-ਟੂਲਟੈਪ -ਫੀਕਸ"&gt; {0} &lt;/ i&gt; &lt;/ i&gt; &lt;/ e&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>ਘੱਟੋ ਘੱਟ</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>ਕੋਈ ਨਹੀਂ</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>ਸਿਰਫ ਚੁਣੇ ਗਏ ਪ੍ਰੀਸੈਟਾਂ ਲਈ ਨਿਰਧਾਰਤ ਕਾਰਜ ਲਈ ਵਰਤੇ ਜਾਣਗੇ. ਜਦੋਂ ਨਿਰਧਾਰਤ ਕੀਤਾ ਜਾਂਦਾ ਹੈ, &lt;&lt;&gt; ਕਲਿੱਪਬੋਰਡ ਸਾਈਡਬਾਰ ਵਿੱਚ ਪਾਇਆ ਜਾਂਦਾ ਡਿਫੌਲਟ ਪ੍ਰੀਸੈਟਸ &lt;/ ਐਮ&gt; ਵਰਤਿਆ ਜਾਵੇਗਾ.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>ਬਹੁਤ ਸਾਰੀਆਂ ਬਾਂਦਰਪ੍ਰਾਈਟ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਹੋਰ ਐਪਲੀਕੇਸ਼ਨਾਂ ਨਾਲ ਗੱਲਬਾਤ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਆਟੋਮੈਟਿਕ ਵਰਤਦੇ ਹਨ.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>ਪਾਠਕ</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>ਰੱਦ ਕੀਤੇ ਕਾਰਜਾਂ ਤੋਂ ਸਾਰੇ ਕਲਿੱਪਬੋਰਡ ਨਿਗਰਾਨੀ &lt;ਬੀ&gt; ਨਜ਼ਰਅੰਦਾਜ਼ ਕੀਤੇ ਜਾਣਗੇ &lt;/ b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>ਲੇਖਕ</value>
@@ -1331,11 +1268,6 @@
     <value>ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਸਾਰੀਆਂ ਸੂਚਨਾਵਾਂ ਨੂੰ ਰੀਸੈਟ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?
 
 *ਇਸ ਨੂੰ ਵਾਪਸ ਨਹੀ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>ਬਾਂਦਰ ਦਾ ਪੇਸਟ ਬਾਹਰੀ ਪ੍ਰੋਗਰਾਮ ਨੂੰ ਛੱਡ ਕੇ ਕਲਿੱਪਬੋਰਡ (ਓਵਰਰਾਈਡ) ਸੈੱਟ ਕਰਦਾ ਹੈ. ਇਹ &lt;/ b&gt; ਨੂੰ ਬਾਹਰੀ ਪੇਸਟ ਦੇ ਬਾਅਦ ਕਲਿੱਪਬੋਰਡ ਦੀ ਸਥਿਤੀ ਨੂੰ ਬਹਾਲ ਕਰੇਗਾ.
-
-ਕੁੱਲ ਬਹਾਲੀ ਦੀ ਗਰੰਟੀ ਨਹੀਂ ਹੋ ਸਕਦੀ ਅਤੇ ਡੇਟਾ ਦੇ ਸਰੋਤ ਦੇ ਅਧਾਰ ਤੇ ਪ੍ਰਦਰਸ਼ਨ ਜਾਂ ਕਰੈਸ਼ ਮੋਨਕੇਪਾਸਟ ਨੂੰ ਵੀ ਘਟਾ ਸਕਦਾ ਹੈ.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>ਬਾਂਦਰ ਦੇ ਚਿਪਕਣ ਤੋਂ ਬਾਅਦ ਕਲਿੱਪਬੋਰਡ ਰੀਸੈਟ ਕਰੋ</value>
@@ -2706,5 +2638,132 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ਯੋਜਨਾਵਾਂ ਬਾਰੇ ਹੋਰ ਜਾਣੋ</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>ਪੇਸਟ ਕਰੋ: {0}</value>
+    <comment>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</comment>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>ਉਪਲਬਧ ਸੰਪਰਕ ਦੀ ਵਰਤੋਂ ਕਰਨਾ (ਗ੍ਰਹਿ ਪਲੱਗਇਨ ਦੀ ਜ਼ਰੂਰਤ ਹੈ) ਇਹ ਖੇਤਰ ਇਸ ਟੈਂਪਲੇਟ ਦੇ ਸਾਰੇ ਉਦਾਹਰਣਾਂ ਲਈ ਇਸ ਦਸਤਾਵੇਜ਼ ਦੇ ਸਾਰੇ ਮਾਮਲਿਆਂ ਲਈ ਵਰਤਿਆ ਜਾਏਗਾ ਜਾਂ ਕਿਸੇ ਵੀ ਇਸ ਨੂੰ ਬਾਅਦ ਵਿਚ ਦੱਸਿਆ ਜਾਵੇਗਾ.
+ ਇਸ ਲਈ ਉਦਾਹਰਣ ਦੇ ਤੌਰ ਤੇ ਜੇ ਇੱਥੇ ਈਮੇਲ ਪਤਾ ਚੁਣੋ ਅਤੇ ਇਸ ਦਸਤਾਵੇਜ਼ ਦੇ ਈਮੇਲ ਖੇਤਰ ਇਸ ਦਸਤਾਵੇਜ਼ ਦੇ ਸਾਰੇ ਉਦਾਹਰਣਾਂ ਲਈ ਵਰਤੇ ਜਾਣਗੇ.</value>
+    <comment>&lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;</comment>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = ਛੋਟਾ ਸਾਲ
+yyyy = ਲੰਬਾ ਸਾਲ
+ਐਮ = ​​ਮਹੀਨਾ (1-12)
+ਐਮ ਐਮ = ਮਹੀਨਾ (01-12)
+ਐਮ ਐਮ ਐਮ = ਮਹੀਨੇ ਦੇ ਸੰਖੇਪ (ਜਨਵਰੀ, ਫਰਵਰੀ ... ਦਸੰਬਰ)
+Mmmm = ਲੰਮਾ ਮਹੀਨਾ (ਜਨਵਰੀ, ਫਰਵਰੀ ... ਦਸੰਬਰ)
+ਡੀ = ਦਿਨ (1 - 31)
+ਡੀਡੀ = ਦਿਨ (01 - 31)
+ਡੀਡੀਡੀ = ਹਫ਼ਤੇ ਦੇ ਹਫ਼ਤੇ ਦੇ ਦਿਨ (ਸੋਮਵਾਰ, ਮੰਗਲਵਾਰ ... ਐਤਵਾਰ)
+ਈ = ਹਫ਼ਤੇ ਦਾ ਛੋਟਾ ਦਿਨ ਸ਼ਬਦਾਂ ਵਿਚ (ਸੋਮ, ਮੰਗ)
+ਡੀ - ਆਰਡੀਨਲ ਡੇ (1, 2, ਦੂਜਾ, 21, 22, 22, 22, 31, ਚੌਥਾ, ਚੌਥਾ ...)
+h = ਸਵੇਰੇ / ਵਜੇ (0-12)
+hh = ਸਵੇਰੇ / ਵਜੇ ਵਿੱਚ (00-12)
+H = ਦਿਨ ਵਿਚ (0-23)
+Hh = ਦਿਨ ਵਿਚ (00-23)
+mm = ਮਿੰਟ
+ਐਸ ਐਸ = ਦੂਜਾ
+Sss = ਮਿਲੀਸਕਿੰਟਸ
+ਏ = am / ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਮਾਰਕਰ
+p = a.m./p.m. ਮਾਰਕਰ</value>
+    <comment>yy = short year&lt;br/&gt;yyyy = long year&lt;br/&gt;M = month (1-12)&lt;br/&gt;MM = month (01-12)&lt;br/&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;br/&gt;MMMM = long month (January, February ... December)&lt;br/&gt;d = day (1 - 31)&lt;br/&gt;dd = day (01 - 31)&lt;br/&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;br/&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;br/&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;br/&gt;h = hour in am/pm (0-12)&lt;br/&gt;hh = hour in am/pm (00-12)&lt;br/&gt;H = hour in day (0-23)&lt;br/&gt;HH = hour in day (00-23)&lt;br/&gt;mm = minute&lt;br/&gt;ss = second&lt;br/&gt;SSS = milliseconds&lt;br/&gt;a = AM/PM marker&lt;br/&gt;p = a.m./p.m. marker</comment>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>ਇਸ ਟੈਂਪਲੇਟ ਦੇ ਸਾਰੇ ਅਵਸਰ ਪ੍ਰਦਾਨ ਕੀਤੇ ਟੈਕਸਟ ਦੀ ਵਰਤੋਂ ਕਰਨਗੇ.</value>
+    <comment>&lt;p&gt;All occurances of this template will use the provided text.&lt;/p&gt;</comment>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>ਇਸ ਟੈਂਪਲੇਟ ਦੇ ਸਾਰੇ ਅਵਸਰ ਪ੍ਰਦਾਨ ਕੀਤੇ ਟੈਕਸਟ ਦੀ ਵਰਤੋਂ ਕਰਨਗੇ.</value>
+    <comment>&lt;p&gt;All occurances of this template will use the provided text.&lt;/p&gt;</comment>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>ਬਾਂਦਰ ਦਾ ਪੇਸਟ ਬਾਹਰੀ ਪ੍ਰੋਗਰਾਮ ਨੂੰ ਛੱਡ ਕੇ ਕਲਿੱਪਬੋਰਡ (ਓਵਰਰਾਈਡ) ਸੈੱਟ ਕਰਦਾ ਹੈ. ਇਹ ਬਾਹਰੀ ਪੇਸਟ ਤੋਂ ਬਾਅਦ ਕਲਿੱਪਬੋਰਡ ਦੀ ਸਥਿਤੀ ਨੂੰ ਬਹਾਲ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੇਗਾ.
+
+ਕੁੱਲ ਬਹਾਲੀ ਦੀ ਗਰੰਟੀ ਨਹੀਂ ਹੋ ਸਕਦੀ ਅਤੇ ਡੇਟਾ ਦੇ ਸਰੋਤ ਦੇ ਅਧਾਰ ਤੇ ਪ੍ਰਦਰਸ਼ਨ ਜਾਂ ਕਰੈਸ਼ ਮੋਨਕੇਪਾਸਟ ਨੂੰ ਵੀ ਘਟਾ ਸਕਦਾ ਹੈ.</value>
+    <comment>Monkey Paste sets the clipboard (overrides) when pasting to an external program. This will &lt;b&gt;attempt&lt;/b&gt; to restore the state of the clipboard after an external paste. 
+
+Total restoration cannot be guaranteed and may reduce performance or even crash MonkeyPaste depending on the source of the data.</comment>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>ਸਿਰਫ ਚੁਣੇ ਗਏ ਪ੍ਰੀਸੈਟਾਂ ਲਈ ਨਿਰਧਾਰਤ ਕਾਰਜ ਲਈ ਵਰਤੇ ਜਾਣਗੇ. ਜਦੋਂ ਨਿਰਧਾਰਤ ਕੀਤਾ ਜਾਂਦਾ ਹੈ, ਕਲਿੱਪਬੋਰਡ ਸਾਈਡਬਾਰ ਵਿੱਚ ਪਾਇਆ ਜਾਂਦਾ ਡਿਫੌਲਟ ਪ੍ਰੀਸੈਟਸ ਦੀ ਵਰਤੋਂ ਕੀਤੀ ਜਾਏਗੀ.</value>
+    <comment>Only the selected presets will be used for the specified application. When unspecified, the default presets found in the &lt;em&gt;Clipboard Sidebar&lt;/em&gt; will be used.</comment>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>ਰੱਦ ਕੀਤੇ ਕਾਰਜਾਂ ਤੋਂ ਸਾਰੇ ਕਲਿੱਪਬੋਰਡ ਨਿਗਰਾਨੀ ਨੂੰ ਨਜ਼ਰ ਅੰਦਾਜ਼ ਕਰ ਦਿੱਤਾ ਜਾਵੇਗਾ.</value>
+    <comment>All clipboard monitoring from rejected applications will be &lt;b&gt;ignored&lt;/b&gt;.</comment>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>ਅਰਨੇਸਲੈਲ ਸ਼ੌਰਟਕਟ ਐਪਲੀਕੇਸ਼ਨ ਦੇ ਅੰਦਰ ਸੀਮਿਤ ਹਨ. ਇਹ ਅਸਲ ਵਿੱਚ ਇੱਕ ਉਦੇਸ਼ਿਤ ਵਿਕਲਪ ਨਹੀਂ ਹੈ ਪਰ ਉਹਨਾਂ ਨੂੰ ਅਨੁਕੂਲਿਤ ਕਰਨ ਦੀ ਆਗਿਆ ਦੇ ਸਕਦਾ ਹੈ ਜੋ ਤੁਸੀਂ ਗਲੋਬਲਕੋਮੋਮੋਮੋਮੋਮੋਮ ਨੂੰ ਬਣਾਉਣ ਦਾ ਇਰਾਦਾ ਰੱਖਦੇ ਹੋ.
+ 
+  ਮੂਲ ਸਾਰੇ ਗਲੋਬਲ ਸ਼ਾਰਟਕੱਟ ਯੋਗ ਹਨ. ਥੀਕੇਪੀਐਸ ਲਾਕ ਕੁੰਜੀ ਲਈ ਕੱਸੋ / ਓਹਲੇਸ ਲੌਕ ਬਟਨ ਨੂੰ ਓਹਲੇ ਕਰੋ / ਓਹਲੇ ਕਰੋ. ਤੁਸੀਂ ਕਿਸੇ ਵੀ ਸਮੇਂ ਉਸ ਰੂਟਿੰਗ ਜਾਂ ਇਸ਼ਾਰੇ ਨੂੰ ਬਦਲ ਸਕਦੇ ਹੋ. ਬਗੀਚ ਕਰੋ</value>
+    <comment>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Default&lt;/b&gt; All global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color="red"&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color="green"&gt;give it a try&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</comment>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>ਗਲੋਬਲ ਸ਼ੌਰਟਕਟ .ੰਗ
+  
+   
+    ਪੈਸਿਵ ਇੱਕ ਸ਼ਾਰਟਕੱਟ ਕਿਸੇ ਵੀ ਅਰਜ਼ੀ ਵਿੱਚ ਸੁਣਦਾ ਹੈ.
+
+    * ਹੁਣ ਲਈ ਲੀਨਕਸ ਤੇ ਇਹ ਇਕੋ ਇਕ ਵਿਕਲਪ ਹੈ.
+   
+   
+    ਐਕਟਿਵ ਐਪਲੀਕੇਸ਼ਨ ਦੁਆਰਾ ਹੈਂਡਲ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਪ੍ਰੀ ਸ਼ਾਰਟਕੱਟ ਲਾਗੂ ਹੁੰਦਾ ਹੈ.
+   
+    ਸਰਗਰਮ ਐਪਲੀਕੇਸ਼ਨ ਦੁਆਰਾ ਹੈਂਡਲ ਕੀਤੇ ਜਾਣ ਤੋਂ ਬਾਅਦ ਪੋਸਟ ਸ਼ੌਰਟਕਟ ਚਲਾ ਜਾਵੇਗਾ.
+   
+    ਓਵਰਰਾਈਡ ਜਦੋਂ ਮੋਨਕੇਪਾਸਾਈਟ ਨੂੰ ਓਵਰਰਾਈਡ ਸ਼ਾਰਟਕੱਟ ਦਾ ਇਨਪੁਟ ਕੁੰਜੀ (ਨਾਨ - ਸੋਧਕ ਕੁੰਜੀ) ਸੁਣਦਾ ਹੈ ਤਾਂ ਐਪਲੀਕੇਸ਼ਨ - ਲੈਵਲ ਇਨਪੁਟ ਤੋਂ ਉਹ ਕੁੰਜੀ ਦਬਾਓ.
+
+    ਇਹ ਵਿਕਲਪ ਸ਼ਾਰਟਕੱਟ ਦੀ ਗਰੰਟੀ ਦੇਵੇਗਾ ਕਿ ਸ਼ਾਰਟਕੱਟ ਨੂੰ ਸਰਗਰਮ ਐਪਲੀਕੇਸ਼ਨ ਦੇ ਵਿਵਾਦਾਂ ਤੋਂ ਬਿਨਾਂ ਚਾਲੂ ਕੀਤਾ ਜਾਂਦਾ ਹੈ.
+   
+   
+    ਵਿਸ਼ੇਸ਼ ਓਵਰਰਾਈਡ ਇਹ ਇਕ ਵਿਸ਼ੇਸ਼ ਕਿਸਮ ਦਾ ਓਵਰਰਾਈਡ ਮੋਡ ਹੈ ਜੋ ਕੈਪਸ ਲਾਕ ਕੁੰਜੀ ਲਈ ਤਿਆਰ ਕੀਤਾ ਗਿਆ ਹੈ. ਇਹ ਸਿਰਫ ਆਪਣੀ ਜ਼ਿੰਮੇਵਾਰੀ ਲਈ ਇੱਕ ਕੁੰਜੀ (ਨਾਨ - ਸੋਧਕ) ਦੀ ਆਗਿਆ ਦਿੰਦਾ ਹੈ.
+
+    ਆਮ ਤੌਰ 'ਤੇ ਓਵਰਰਾਈਡ ਮੋਡ ਦੇ ਟਾਪਅ ਲੌਕ ਹੋਰ ਕੁੰਜੀਆਂ ਦੇ ਨਾਲ ਸੁਮੇਲ ਵਿੱਚ ਦਬਾਇਆ ਜਾਂਦਾ ਹੈ ਤੇ ਅਟਕ ਸਕਦਾ ਹੈ.
+
+    ਇਸ ਲਈ ਕੋਈ ਫ਼ਰਕ ਨਹੀਂ ਪੈਂਦਾ ਕਿ ਹੋਰ ਕੁੰਜੀਆਂ ਹੇਠਾਂ ਆਉਂਦੀਆਂ ਹਨ, ਜੇ ਇੱਕ ਹਾਟਕੀ ਸ਼ੌਰਟਕਟ ਨੂੰ ਦਬਾਇਆ ਜਾਂਦਾ ਹੈ ਤਾਂ ਇਹ ਇਸ ਦੇ ਫਸੇ ਹੋਣ ਤੋਂ ਰੋਕਦਾ ਹੈ ਅਤੇ ਇਸਨੂੰ ਫਸਣ ਤੋਂ ਰੋਕਦਾ ਹੈ.</value>
+    <comment>
+&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passive&lt;/b&gt; A shortcut MonkeyPaste will listen for in any application.&lt;br&gt;
+    *This is the &lt;i&gt;only&lt;/i&gt; option on Linux for now.
+   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Override&lt;/b&gt; When MonkeyPaste hears the input key (non - modifier key) of an override shortcut it will &lt;i&gt;hide&lt;/i&gt; that key press from application - level input.&lt;br&gt;
+    This option will guarantee the shortcut is triggered without conflicts to the active application.
+   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Exclusive Override&lt;/b&gt; This is a special type of override mode designed for the Caps Lock key. It only allows &lt;b&gt;one&lt;/b&gt; key (non - modifier) for its assignment.&lt;br&gt;
+    In normal override mode Caps Lock can become &lt;i&gt;stuck on&lt;/i&gt; when pressed in combination with other keys.&lt;br&gt;
+    So no matter what other keys are down, if a &lt;b&gt;Hotkey&lt;/b&gt; shortcut is pressed it will be overriden and prevent it from becoming &lt;i&gt;stuck on&lt;/i&gt;.
+   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</comment>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>ਮੋਨਕੇਪਾਸਟ ਹੈ</value>
+    <comment>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</comment>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>ਇਸ ਤਰੀਕੇ ਨਾਲ, ਮੋਨਕੇਪਾਸਟ ਨੂੰ ਐਕਸੈਸ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ
+ ਬਿਨਾਂ ਕਲਿੱਕ ਕੀਤੇ ਜਾਂ ਇੱਥੋਂ ਤੱਕ ਕਿ ਅੱਖਾਂ ਨੂੰ ਬੱਲੇਬਾਜ਼ੀ ਅਤੇ # x1f440</value>
+    <comment>&lt;p align="center"&gt;This way, MonkeyPaste can be accessed&lt;br&gt; &lt;span color="red"&gt;without a click&lt;/span&gt; or even &lt;span color="red"&gt;batting an eye&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</comment>
   </data>
 </root>

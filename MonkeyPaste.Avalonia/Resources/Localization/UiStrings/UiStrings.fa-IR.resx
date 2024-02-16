@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>پیمایش - به - باز</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; monkeypaste &lt;span color = "red&gt; کاملاً یکپارچه &lt;/span&gt; با کشیدن - و - قطره &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>اینجا را رها کنید!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; به این ترتیب ، به Monkeypaste می توان دسترسی پیدا کرد &lt;br&gt; &lt;span color = "red"&gt; بدون کلیک &lt;/span&gt; یا حتی &lt;span color = "red"&gt; ضرب و شتم چشم &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>مرا بکش!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>حرکات باید منحصر به فرد باشد و فقط ممکن است یک کلید ورودی باشد.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; داخلی &lt;/b&gt; همه میانبرها در داخل برنامه محدود هستند. این واقعاً یک گزینه در نظر گرفته شده نیست اما می تواند به سفارشی کردن چه میانبرهایی که قصد ساخت یک روز جهانی را دارید &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; پیش فرض &lt;/b&gt; همه میانبرهای جهانی فعال هستند. میانبر &lt;b&gt; نمایش/پنهان کردن پنجره اصلی &lt;/b&gt; از &lt;span color = "red"&gt; override &lt;/span&gt; مسیریابی برای قفل &lt;b&gt; caps lock &lt;/b&gt; استفاده می کند. شما می توانید در هر زمان آن مسیریابی یا ژست را تغییر دهید. اما &lt;span color = "green"&gt; آن را امتحان کنید &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;Html&gt;
-&lt;Head&gt; &lt;/head&gt;
-&lt;setody&gt;
-&lt;H1&gt; حالت های میانبر جهانی &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; منفعل &lt;/b&gt; یک میمون میانبر در هر برنامه گوش می دهد. &lt;br&gt;
-*در حال حاضر این گزینه &lt;i&gt; تنها در لینوکس است.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; قبل از &lt;/b&gt; میانبر قبل از &lt;/i&gt; &lt;/i&gt; &lt;/i&gt; &lt;/i&gt; &lt;/i&gt; انجام می شود. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; پست &lt;/b&gt; میانبر &lt;b&gt; &lt;i&gt; پس از &lt;/i&gt; &lt;/b&gt; توسط برنامه فعال انجام می شود. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Override &lt;/b&gt; هنگامی که Monkeypaste کلید ورودی (کلید غیر اصلاح کننده) یک میانبر Override را می شنود ، آن را پنهان می کند &lt;/i&gt; که کلید را از ورودی سطح فشار می دهد - &lt;br&gt;
-این گزینه تضمین می کند که میانبر بدون درگیری با برنامه فعال ایجاد می شود.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; انحصاری انحصاری &lt;/b&gt; این یک نوع خاص از حالت Override است که برای کلید قفل Caps طراحی شده است. این فقط به &lt;b&gt; یک کلید &lt;/b&gt; (غیر اصلاح کننده) برای تکالیف خود اجازه می دهد. &lt;br&gt;
-در حالت Override Override Mode Caps Lock می تواند در صورت فشار دادن در ترکیب با سایر کلیدها ، در &lt;/i&gt; گیر بیفتد. &lt;br&gt;
-بنابراین مهم نیست که چه کلیدهای دیگری پایین آمده اند ، اگر کلید کلید &lt;b&gt; هات کلید &lt;/b&gt; فشرده شود ، بیش از حد نادیده گرفته می شود و از اینکه در &lt;/i&gt; گیر بیفتد جلوگیری می شود.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>غیرفعال کردن</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>هنگام ورود به این حساب کاربری ، نه برای سایر کاربران بارگیری کنید.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; با استفاده از مخاطبین موجود (به افزونه Fetcher نیاز دارد) این قسمت برای تمام موارد این الگوی در این سند یا در هر مورد در بعداً مورد استفاده قرار می گیرد. &lt;/p&gt; &lt;p&gt; بنابراین به عنوان مثال اگر آدرس ایمیل را انتخاب کنید در اینجا قسمت ایمیل مخاطبی که انتخاب می کنید برای همه موارد موجود در این سند استفاده می شود. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = سال کوتاه &lt;br/&gt; yyyy = سال طولانی &lt;br/&gt; m = ماه (1-12) &lt;br/&gt; mm = ماه (01-12) &lt;br/&gt; mmm = مخفف ماه (ژانویه ، فوریه .. دسامبر) &lt;br/&gt; mmmm = ماه طولانی (ژانویه ، فوریه ... دسامبر) &lt;br/&gt; d = روز (1 - 31) &lt;br/&gt; dd = روز (01 - 31) &lt;br/&gt; ddd = روز هفته کلمات (دوشنبه ، سه شنبه ... یکشنبه) &lt;br/&gt; e = روز کوتاه هفته در کلمات (دوشنبه ، سه شنبه ... خورشید) &lt;br/&gt; d - روز سفارش (اول ، 2 ، 3 ، 21 ، 22 ، 23 ، 31 ، 4 ...) &lt;br/&gt; h = ساعت در am/pm (0-12) &lt;br/&gt; hh = ساعت در am/pm (00-12) &lt;br/ &gt; H = ساعت در روز (0-23) &lt;br/&gt; HH = ساعت در روز (00-23) &lt;br/&gt; mm = دقیقه &lt;br/&gt; ss = دوم &lt;br/&gt; sss = میلی ثانیه &lt;br/&gt; A = Am/PM نشانگر &lt;br/&gt; P = A.M./P.M. نشانگر</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>تاریخ و/یا زمان فعلی در هنگام چسباندن برای الگوهای DateTime جایگزین می شود.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; تمام اتفاقات این الگوی از متن ارائه شده استفاده می کند. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; تمام اتفاقات این الگوی از متن ارائه شده استفاده می کند. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>ضمیمه کردن</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>آخرین برنامه فعال ناشناخته است. به برنامه در نظر گرفته شده به میمون خمیر بروید.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>چسباندن به: &lt;em&gt; &lt;i class = "paste-tooltip-soffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>به حداقل رساندن</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>هیچ یک</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>فقط از پیش تنظیم شده انتخاب شده برای برنامه مشخص استفاده می شود. هنگامی که نامشخص باشد ، از پیش فرض های پیش فرض موجود در نوار کناری کلیپ بورد &lt;/em&gt; استفاده می شود.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>بسیاری از ویژگی های Monkeypaste از اتوماسیون صفحه کلید برای تعامل با سایر برنامه ها استفاده می کنند.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>خوانندگان</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>تمام نظارت کلیپ بورد از برنامه های رد شده &lt;b&gt; نادیده گرفته می شود.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>نویسندگان</value>
@@ -1331,11 +1268,6 @@
     <value>آیا مطمئن هستید که می خواهید همه اعلان ها را مجدداً تنظیم کنید؟
 
 *این قابل بازگشت نیست!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste هنگام چسباندن به یک برنامه خارجی ، کلیپ بورد (غلبه بر آن) را تنظیم می کند. این تلاش برای بازگرداندن وضعیت کلیپ بورد پس از خمیر خارجی خواهد بود.
-
-ترمیم کامل نمی تواند تضمین شود و بسته به منبع داده ها ممکن است عملکرد یا حتی میمون تصادف را کاهش دهد.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>تنظیم مجدد کلیپ بورد پس از چسباندن میمون</value>
@@ -2706,5 +2638,66 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>درباره برنامه ها بیشتر بدانید</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>چسباندن به: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;با استفاده از اشناهای موجود ) نیاز به وصلۀ واکشی ( این زمینه برای همۀ نمونههای این قالب در سراسر این سند یا در هر موردی که بعدا به ان ارجاع داده خواهد شد ، استفاده خواهد شد.&lt;/p&gt;&lt;p&gt; بنابراین به عنوان مثال اگر ادرس ایمیل را در اینجا انتخاب کنید، فیلد ایمیل مخاطبی که انتخاب می کنید برای همه موارد موجود در این سند استفاده می شود.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>YY = سال کوتاه&lt;br/&gt;yyyyy = سال طولانی&lt;br/&gt;M = ماه (1-12)&lt;br/&gt;MM = ماه (01-12)&lt;br/&gt;MMM = اختصار ماه (ژانویه، فوریه ... دسامبر)&lt;br/&gt;MMMM = ماه طولانی (ژانویه، فوریه ... دسامبر)&lt;br/&gt;d = روز (1 - 31)&lt;br/&gt;dd = روز (01 - 31)&lt;br/&gt;ddd = روز هفته در کلمات (دوشنبه، سه شنبه ... یکشنبه)&lt;br/&gt;E = روز کوتاه هفته در کلمات (دوشنبه، سه شنبه ... خورشید)&lt;br/&gt;D - روز ترتیبی (1، 2، 3، 21، 22، 23، 31، 4 ...)&lt;br/&gt;h = ساعت در am / pm (0-12)&lt;br/&gt;hh = ساعت در am / pm (00-12)&lt;br/&gt;H = ساعت در روز (0-23)&lt;br/&gt;HH = ساعت در روز (00-23)&lt;br/&gt;mm = دقیقه&lt;br/&gt;ss = ثانیه&lt;br/&gt;SSS = میلی ثانیه&lt;br/&gt;a = نشانگر AM / PM&lt;br/&gt;p = نشانگر صبح / بعد از ظهر</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;تمام رخدادهای این قالب از متن ارائه شده استفاده خواهند کرد.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;تمام رخدادهای این قالب از متن ارائه شده استفاده خواهند کرد.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste کلیپ بورد (overrides) را هنگام چسباندن به یک برنامه خارجی تنظیم می کند. این &lt;b&gt;تلاش&lt;/b&gt; برای بازگرداندن وضعیت کلیپ بورد پس از چسباندن خارجی است. 
+
+بازسازی کل را نمی توان تضمین کرد و ممکن است عملکرد را کاهش دهد یا حتی MonkeyPaste را بسته به منبع داده ها خراب کند.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>فقط ایستگاه از پیش تنظیم انتخاب شده برای کاربرد مشخص شده استفاده می شود. هنگامی که نامشخص است، ایستگاه از پیش تنظیم پیش فرض موجود در &lt;em&gt;نوار کناری کلیپ بورد&lt;/em&gt; استفاده خواهد شد.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>تمام نظارت بر کلیپ بورد از برنامه های رد &lt;b&gt;شده نادیده گرفته خواهد شد&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;داخلی&lt;/b&gt;تمام میانبرها در داخل برنامه محدود می شوند. این واقعا یک گزینه در نظر گرفته شده نیست، اما می تواند به شما اجازه می دهد تا سفارشی کنید که چه میانبرهایی را قصد دارید&lt;i&gt;روزی&lt;/i&gt; جهانی کنید.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;پیش فرض&lt;/b&gt; تمام میانبرهای سراسری فعال هستند. میانبر&lt;b&gt;Show/Hide Main Window&lt;/b&gt;از مسیریابی&lt;span color="red"&gt;Override&lt;/span&gt;برای کلید&lt;b&gt;Caps Lock&lt;/b&gt; استفاده می کند. شما می توانید این مسیر یا حرکت را در هر زمان تغییر دهید. اما&lt;span color="green"&gt;ان را امتحان کنید&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;حالتهای میانبر سراسری&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;منفعل&lt;/b&gt; یک میانبر MonkeyPaste در هر برنامه ای گوش می دهد.&lt;br&gt;* این &lt;i&gt;تنها&lt;/i&gt; گزینه در لینوکس در حال حاضر است.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;پیش&lt;/b&gt; میانبر اجرا خواهد شد &lt;b&gt;&lt;i&gt;قبل از&lt;/i&gt;&lt;/b&gt; ان است که توسط برنامه فعال به کار گرفته شود.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;&lt;/b&gt; میانبر &lt;b&gt;&lt;i&gt;بعد از&lt;/i&gt;&lt;/b&gt; اینکه توسط برنامه فعال اداره می شود اجرا می شود.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;نادیده گرفتن&lt;/b&gt; هنگامی که MonkeyPaste کلید ورودی (کلید غیر اصلاح کننده) یک میانبر لغو را می شنود، ان کلید را از ورودی سطح برنامه &lt;i&gt;پنهان&lt;/i&gt; می کند.&lt;br&gt;این گزینه تضمین می کند که میانبر بدون درگیری با برنامه فعال ایجاد می شود.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;لغو منحصر به فرد&lt;/b&gt; این یک نوع خاص از حالت override است که برای کلید Caps Lock طراحی شده است. این تنها اجازه می دهد &lt;b&gt;تا یک&lt;/b&gt; کلید (غیر - اصلاح کننده) برای انتساب ان.&lt;br&gt;در حالت لغو نرمال کلاه قفل می تواند در زمانی که در ترکیب با کلید های دیگر فشرده &lt;i&gt;گیر کرده است&lt;/i&gt; .&lt;br&gt;بنابراین مهم نیست که چه کلید های دیگر پایین هستند، اگر یک میانبر &lt;b&gt;کلید میانبر&lt;/b&gt; فشار داده شود، لغو خواهد شد و از گیر کردن ان جلوگیری &lt;i&gt;می شود&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;میمونPaste است &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;به این ترتیب، MonkeyPaste می تواند قابل دسترسی باشد&lt;br&gt;&lt;span color="red"&gt;بدون یک کلیک&lt;/span&gt; و یا حتی &lt;span color="red"&gt;ضربه زدن به چشم&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

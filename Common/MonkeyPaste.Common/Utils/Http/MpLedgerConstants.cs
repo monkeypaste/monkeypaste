@@ -19,7 +19,7 @@
         public const string LOCAL_LEDGER_INDEX_NAME = $"{LEDGER_PREFIX}{LOCAL_SUFFIX}{INDEX_SUFFIX}.{LEDGER_EXT}";
 
         public const string LEDGER_PROJ_DIR = "C:/Users/tkefauver/Source/Repos/MonkeyPaste/Common/Ledger";
-
+        public const string REMOTE_CORE_PLUGIN_BASE_URI = "https://www.monkeypaste.com/dat";
         public static string DEBUG_PACKAGES_DIR =>
             $"{LEDGER_PROJ_DIR}/plugin_packages_debug/";
         public static string RELEASE_PACKAGES_DIR =>

@@ -166,14 +166,8 @@ atitinkamai klipai.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Slinkite - į - atidarykite</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "centras"&gt; MonkeYPaste yra &lt;span Color = "Raudona&gt; visiškai integruota &lt;/span&gt; su vilkimu - ir - Drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Nuleiskite čia!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "centre"&gt; Tokiu būdu, beždžioninę gali būti pasiekiama &lt;br&gt; &lt;span color = "raudona"&gt; be paspaudimo &lt;/span&gt; ar net &lt;spoch Color = "Raudona"&gt; Mušimas akis &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Vilk mane!</value>
@@ -364,62 +358,14 @@ Atnaujinkite, kad išvengtumėte.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Gestai turi būti unikalūs ir gali būti tik vienas įvesties raktas.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Vidiniai &lt;/b&gt; Visi sparčiosios klavišai apsiriboja programa. Tai tikrai nėra numatyta parinktis, tačiau gali leisti pritaikyti tai, kokius nuorodas ketinate padaryti visuotiniu &lt;i&gt; kažkada &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Numatytasis &lt;/b&gt; įjungti visi visuotiniai nuorodos. &lt;b&gt; rodyti/slėpti pagrindinį langą &lt;/b&gt; trumpas klavišas naudoja &lt;spoch Color = "Red"&gt; Override &lt;/span&gt; maršrutizavimas &lt;b&gt; CAPS užraktas &lt;/b&gt; klavišas. Bet kuriuo metu galite pakeisti tą maršrutą ar gestą. Bet &lt;spoch color = "Green"&gt; išbandykite &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;sody&gt;
-&lt;h1&gt; Global Shortcut režimai &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; pasyvus &lt;/b&gt; „Shortcut MonkeYPaste“ klausys bet kurioje programoje. &lt;br&gt;
-*Tai tik &lt;i&gt; tik &lt;/i&gt; parinktis „Linux“ kol kas.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; trumpas klavišas įvykdys &lt;b&gt; &lt;i&gt; prieš &lt;/i&gt; &lt;/b&gt; jį tvarko aktyvi programa. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; trumpas klavišas vykdys &lt;b&gt; &lt;i&gt; po &lt;/i&gt; &lt;/b&gt; jį tvarko aktyvi programa. &lt;/li&gt;
-&lt;li&gt;
-ė
-Ši parinktis garantuos, kad nuoroda sukelta be aktyvios programos konfliktų.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Išskirtinis nepaisymas &lt;/b&gt; Tai yra specialus nepaisymo režimo tipas, skirtas „CAPS Lock“ klavišui. Tai leidžia tik &lt;b&gt; vieną &lt;/b&gt; klavišą (ne - modifikatorių) savo priskyrimui. &lt;br&gt;
-Normaliame nepaisymo režimo dangteliuose užraktas gali būti įstrigęs &lt;/i&gt;, kai paspaudžiama kartu su kitais klavišais. &lt;br&gt;
-Taigi, nesvarbu, kokie kiti klavišai neveikia, jei paspaudžiamas &lt;b&gt; spartusis klavišas, jis bus panaikintas ir neleis jam tapti &lt;i&gt; įstrigęs &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Išjungti</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Įkelkite, kai ši vartotojo abonementas yra prisijungęs, o ne kitiems vartotojams.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Naudojant turimus kontaktus (reikalingas „Fetcher“ papildinys) Šis laukas bus naudojamas visais šio šablono atvejų visame šiame dokumente arba bet kuriame jis bus nurodytas vėliau. &lt;/p&gt; &lt;p&gt; Taigi, pavyzdžiui, jei pasirinkite el. Pašto adresą Tuomet jūsų pasirinktas kontakto el. Pašto laukas bus naudojamas visiems šio dokumento egzemplioriams. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = trumpi metai &lt;br/&gt; yyyy = ilgi metai &lt;br/&gt; m = mėnuo (1-12) &lt;br/&gt; mm = mėnuo (01-12) &lt;br/&gt; mmm = mėnesio santrumpos (sausio mėn., Vasario mėn. . Gruodis) &lt;br/&gt; mmmm = ilgas mėnuo (sausis, vasaris ... gruodis) &lt;br/&gt; d = diena (1 - 31) &lt;br/&gt; dd = diena (01 - 31) &lt;br/&gt; ddd = Savaitės diena žodžiais (pirmadienis, antradienis ... sekmadienis) &lt;br/&gt; e = trumpa savaitės diena žodžiais (pirmadienis, antradienis ... saulė) &lt;br/&gt; d - ordino diena (1, 2 -oji, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; h = valanda am/pm (0-12) &lt;br/&gt; hh = valanda am/pm (00-12) &lt;br/ &gt; H = valanda dieną (0–23) &lt;br/&gt; hh = valanda dieną (00–23) &lt;br/&gt; mm = minutė &lt;br/&gt; ss = antra &lt;br/&gt; sss = milisekundės &lt;br/&gt; a = am/pm žymeklis &lt;br/&gt; p = a.m./p.m. žymeklis</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Dabartinė data ir (arba) laikas bus pakeistas į „Datetime“ šablonus, kai jie bus įklijuojami.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Visi šio šablono atsiradimai bus naudojami pateiktame tekste. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Visi šio šablono atsiradimai bus naudojami pateiktame tekste. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Baigti pridėti</value>
@@ -469,9 +415,6 @@ Taigi, nesvarbu, kokie kiti klavišai neveikia, jei paspaudžiamas &lt;b&gt; spa
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Paskutinė aktyvi programa nežinoma. Perjunkite į numatytą programą į „Monkey Paste“.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Įklijuokite į: &lt;em&gt; &lt;i class = "Paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Sumažinkite</value>
@@ -547,9 +490,6 @@ Pridėkite ir (arba) pasirinkite programą naudodami unikalų kopijavimo nuorod�
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Nė vienas</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Nurodytai programai bus naudojami tik atrinkti išankstiniai nustatymai. Kai nepatikslinus, bus naudojami numatytuosius išankstinius nustatymus, esančius &lt;em&gt; mainų srityje „SideBar &lt;/em&gt;“.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Daugelyje „MonkeYPaste“ funkcijų naudojama klaviatūros automatizavimas, kad sąveikautų su kitomis programomis.
 
@@ -562,9 +502,6 @@ Norėdami užtikrinti tinkamą sąveiką, įrašykite šias programos nuorodas �
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Skaitytojai</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Visos mainų srities stebėjimas iš atmestų programų bus ignoruojamas &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Rašytojai</value>
@@ -1331,11 +1268,6 @@ Tai negali būti panaikinta!
     <value>Ar tikrai norite iš naujo nustatyti visus pranešimus?
 
 *Tai negali būti panaikinta!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Beždžionių pastas nustato mainų sritį (nepaisoma), kai įklijuojama į išorinę programą. Tai bandys &lt;/b&gt; atkurti mainų srities būseną po išorinės pastos.
-
-Bendras restauravimas negali būti garantuotas ir gali sumažinti našumą ar net sugadinti beždžionių, atsižvelgiant į duomenų šaltinį.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Iš naujo nustatykite mainų sritį po beždžionių įklijavimo</value>
@@ -2706,5 +2638,66 @@ atsiliepimai@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Sužinokite daugiau apie planus</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Įklijuoti į: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Naudojant galimus kontaktus (reikalingas fetcher papildinys), šis laukas bus naudojamas visiems šio šablono egzemplioriams šiame dokumente arba bet kuriame, kuriame jis bus nurodytas vėliau.&lt;/p&gt;&lt;p&gt; Pavyzdžiui, jei čia pasirinkite el. pašto adresą, pasirinkto kontakto el. pašto laukas bus naudojamas visiems šio dokumento atvejams.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = trumpi metai&lt;br/&gt;yyyy = ilgi metai&lt;br/&gt;M = mėnuo (1-12)&lt;br/&gt;MM = mėnuo (01-12)&lt;br/&gt;MMM = mėnesio santrumpa (sausis, vasaris ... Gruodis)&lt;br/&gt;MMMM = ilgas mėnuo (sausis, vasaris ... Gruodis)&lt;br/&gt;d = diena (1 - 31)&lt;br/&gt;dd = diena (01-31)&lt;br/&gt;ddd = savaitės diena žodžiais (pirmadienis, antradienis ... Sekmadienis)&lt;br/&gt;E = trumpa savaitės diena žodžiais (Pirmadienis, Antradienis ... Saulė)&lt;br/&gt;D - Ordino diena (1, 2, 3, 21, 22, 23, 31, 4...)&lt;br/&gt;h = valanda am/pm (0–12)&lt;br/&gt;hh = valanda am/pm (00-12)&lt;br/&gt;H = valanda per dieną (0–23)&lt;br/&gt;HH = valanda per dieną (00–23)&lt;br/&gt;mm = minutė&lt;br/&gt;ss = sekundė&lt;br/&gt;SSS = milisekundės&lt;br/&gt;a = AM/PM žymeklis&lt;br/&gt;p = a.m./p.m. žymeklis</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Visuose šio šablono įvykiuose bus naudojamas pateiktas tekstas.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Visuose šio šablono įvykiuose bus naudojamas pateiktas tekstas.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>"Monkey Paste" nustato iškarpinę (nepaiso), kai įklijuojama į išorinę programą. Taip &lt;b&gt;bus bandoma&lt;/b&gt; atkurti iškarpinės būseną po išorinės pastos. 
+
+Visiškas atkūrimas negali būti garantuotas ir gali sumažinti našumą arba net sugesti "MonkeyPaste", priklausomai nuo duomenų šaltinio.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Nurodytai programai bus naudojami tik pasirinkti išankstiniai nustatymai. Kai nenurodyta, bus naudojami numatytieji parengtiniai nustatymai, esantys &lt;em&gt;mainų srities šoninėje juostoje&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Visas iškarpinės stebėjimas iš atmestų paraiškų bus &lt;b&gt;ignoruojamas&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Vidaus&lt;/b&gt;Visi spartieji klavišai yra tik programoje. Tai tikrai nėra numatyta parinktis, tačiau gali leisti tinkinti, kokius sparčiuosius klavišus ketinate&lt;i&gt;kada nors&lt;/i&gt; padaryti visuotinius.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Numatytasis&lt;/b&gt; Visi visuotiniai spartieji klavišai įjungti. Spartusis klavišas&lt;b&gt;Rodyti / slėpti pagrindinį langą&lt;/b&gt;naudoja klavišo&lt;b&gt;"Caps Lock&lt;/b&gt;" maršruto&lt;span color="red"&gt;parinkimą&lt;/span&gt;. Šį maršruto parinkimą ar gestą galite bet kada pakeisti. Bet&lt;span color="green"&gt;pabandykite&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Visuotiniai sparčiųjų klavišų režimai&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pasyvus&lt;/b&gt; Spartusis klavišas MonkeyPaste klausys bet kurioje programoje.&lt;br&gt;*Kol kas tai &lt;i&gt;vienintelė&lt;/i&gt; "Linux" parinktis.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Anksto&lt;/b&gt; Spartusis klavišas bus vykdomas, &lt;b&gt;&lt;i&gt;kol&lt;/i&gt;&lt;/b&gt; jį tvarkys aktyvi programa.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Spartusis klavišas bus vykdomas, &lt;b&gt;&lt;i&gt;kai&lt;/i&gt;&lt;/b&gt; jį tvarkys aktyvi programa.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Nepaisyti&lt;/b&gt; Kai MonkeyPaste išgirs nepaisymo nuorodos įvesties klavišą (ne modifikatoriaus klavišą), jis &lt;i&gt;paslėps&lt;/i&gt; tą klavišo paspaudimą nuo programos lygio įvesties.&lt;br&gt;Ši parinktis garantuos, kad spartusis klavišas bus suaktyvintas be konfliktų su aktyvia programa.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Išskirtinis nepaisymas&lt;/b&gt; Tai specialus nepaisymo režimo tipas, skirtas "Caps Lock" klavišui. Jis leidžia priskirti tik &lt;b&gt;vieną&lt;/b&gt; raktą (ne modifikatorių).&lt;br&gt;Įprastu nepaisymo režimu "Caps Lock" gali &lt;i&gt;įstrigti&lt;/i&gt; , kai paspaudžiamas kartu su kitais klavišais.&lt;br&gt;Taigi, nesvarbu, kokie kiti klavišai neveikia, paspaudus &lt;b&gt;spartųjį&lt;/b&gt; klavišą, jis bus perrašytas ir neleis jam &lt;i&gt;įstrigti&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste yra &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Tokiu būdu galima pasiekti "MonkeyPaste"&lt;br&gt;&lt;span color="red"&gt;be paspaudimo&lt;/span&gt; ar net &lt;span color="red"&gt;akių užmetimo&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

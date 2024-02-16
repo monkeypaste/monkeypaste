@@ -166,14 +166,8 @@ sehemu mtawaliwa.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Tembeza - kwa - Fungua</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "kituo"&gt; Monkeypaste ni &lt;span color = "nyekundu&gt; imejumuishwa kikamilifu &lt;/span&gt; na Drag - na - tone &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Tupa hapa!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "kituo"&gt; Kwa njia hii, MonkeyPaste inaweza kupatikana &lt;br&gt; &lt;span color = "nyekundu"&gt; bila kubonyeza &lt;/span&gt; au hata &lt;span color = "nyekundu"&gt; kupiga jicho &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Vuta!</value>
@@ -364,62 +358,14 @@ Boresha ili kuepusha.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Ishara lazima ziwe za kipekee na zinaweza kuwa na kitufe kimoja cha kuingiza.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Ndani &lt;/b&gt; njia za mkato zote ni mdogo ndani ya programu. Hii sio chaguo lililokusudiwa lakini inaweza kuruhusu kubadilisha njia za mkato unazokusudia kufanya Global &lt;i&gt; siku moja &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Default &lt;/b&gt; Njia zote za mkato za ulimwengu zimewezeshwa. The &lt;b&gt; onyesha/ficha dirisha kuu &lt;/b&gt; njia ya mkato hutumia &lt;span color = "nyekundu"&gt; override &lt;/span&gt; njia ya ufunguo wa &lt;b&gt; Caps Lock &lt;/b&gt;. Unaweza kubadilisha njia hiyo au ishara wakati wowote. Lakini &lt;span color = "kijani"&gt; jaribu kujaribu &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;ead&gt; &lt;/ead&gt;
-&lt;Dedy&gt;
-&lt;h1&gt; Njia za mkato za ulimwengu &lt;/h1&gt;&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Passive &lt;/b&gt; Monkeypaste ya njia ya mkato itasikiliza katika programu yoyote. &lt;br&gt;
-*Hii ndio chaguo la &lt;i&gt; tu &lt;/i&gt; kwenye Linux kwa sasa.
-&lt;/li&gt;
-&lt;li&gt;
-Njia ya mkato ya &lt;b&gt; pre &lt;/b&gt; itatoa &lt;b&gt; &lt;i&gt; kabla ya &lt;/i&gt; &lt;/b&gt; inashughulikiwa na programu inayotumika. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt; njia ya mkato itatoa &lt;b&gt; &lt;i&gt; baada ya &lt;/i&gt; &lt;/b&gt; inashughulikiwa na programu inayotumika. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Overside &lt;/b&gt; Wakati MonkeyPaste inasikia kitufe cha kuingiza (kitufe cha modifier) ​​cha njia ya mkato ya kupita kiasi itakuwa &lt;i&gt; Ficha &lt;/i&gt; vyombo vya habari muhimu kutoka kwa Maombi - Kiwango cha Kuingiza. &lt;br&gt;
-Chaguo hili litahakikisha njia ya mkato inasababishwa bila migogoro kwa matumizi ya kazi.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Exclusive Overside &lt;/b&gt; Hii ni aina maalum ya modi ya ziada iliyoundwa kwa kitufe cha kufuli cha Caps. Inaruhusu tu kifungu cha &lt;b&gt; moja &lt;/b&gt; (isiyo ya kurekebisha) kwa mgawo wake. &lt;br&gt;
-Katika kufuli kwa kawaida ya kofia za kawaida kunaweza kuwa &lt;i&gt; kukwama kwenye &lt;/i&gt; wakati wa kushinikiza pamoja na funguo zingine. &lt;br&gt;
-Kwa hivyo haijalishi ni funguo zingine ziko chini, ikiwa njia ya mkato ya &lt;b&gt; hotkey &lt;/b&gt; imesisitizwa itakuwa ya kupindukia na kuizuia isiwe &lt;i&gt; kukwama kwenye &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Lemaza</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Pakia wakati akaunti hii ya mtumiaji imeingia, sio kwa watumiaji wengine.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Kutumia anwani zinazopatikana (inahitaji programu -jalizi ya Fetcher) uwanja huu utatumika kwa visa vyote vya template hii kwenye hati hii au kwa yoyote itarejelewa baadaye. &lt;/p&gt; &lt;p&gt; Kwa mfano ikiwa chagua anwani ya barua pepe Hapa basi uwanja wa barua pepe wa anwani unayochagua utatumika kwa visa vyote kwenye hati hii. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>YY = mwaka mfupi &lt;br/&gt; yyyy = mwaka mrefu &lt;br/&gt; m = mwezi (1-12) &lt;br/&gt; mm = mwezi (01-12) . DEC) &lt;br/&gt; mmmm = mwezi mrefu (Januari, Februari ... Desemba) &lt;br/&gt; d = siku (1 - 31) Siku ya Wiki kwa maneno (Jumatatu, Jumanne ... Jumapili) &lt;br/&gt; e = siku fupi ya wiki kwa maneno (mon, tue ... jua) &lt;br/&gt; d - siku ya kawaida (1, 2, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; h = saa katika am/pm (0-12) &gt; H = saa katika siku (0-23) A = AM/PM alama ya &lt;br/&gt; p = a.m./p.m. alama</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Tarehe ya sasa na/au wakati itabadilishwa kwa templeti za wakati wa wakati zinapowekwa.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Matukio yote ya template hii yatatumia maandishi yaliyotolewa. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Matukio yote ya template hii yatatumia maandishi yaliyotolewa. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Maliza kukabiliana</value>
@@ -469,9 +415,6 @@ Kwa hivyo haijalishi ni funguo zingine ziko chini, ikiwa njia ya mkato ya &lt;b&
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Programu ya mwisho haijulikani. Badilisha kwa programu iliyokusudiwa kwa kuweka tumbili.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Bandika kwa:</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Punguza</value>
@@ -547,9 +490,6 @@ Ongeza na/au uchague programu na njia ya mkato ya nakala ya kipekee (kama koni a
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Hakuna</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Matumizi tu yaliyochaguliwa yatatumika kwa programu maalum. Wakati haijafafanuliwa, vifaa vya msingi vinavyopatikana katika barabara ya &lt;em&gt; clipboard &lt;/em&gt; itatumika.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Vipengee vingi vya MonkeyPaste hutumia automatisering ya kibodi kuingiliana na programu zingine.
 
@@ -562,9 +502,6 @@ Ili kuhakikisha ushirikiano mzuri, rekodi njia za mkato za programu hiyo hapa.</
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Wasomaji</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Ufuatiliaji wote wa clipboard kutoka kwa programu zilizokataliwa utapuuzwa &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Waandishi</value>
@@ -1331,11 +1268,6 @@ Hii haiwezi kutekelezwa!
     <value>Je! Una uhakika unataka kuweka upya arifa zote?
 
 *Hii haiwezi kutekelezwa!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Kuweka tumbili huweka clipboard (oversides) wakati wa kubandika kwa mpango wa nje. Hii itajaribu &lt;/b&gt; kurejesha hali ya clipboard baada ya kuweka nje.
-
-Marejesho ya jumla hayawezi kuhakikishiwa na inaweza kupunguza utendaji au hata ajali ya Monkeypaste kulingana na chanzo cha data.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Rudisha clipboard baada ya kubandika tumbili</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Jifunze zaidi juu ya mipango</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Weka kwenye: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Kutumia anwani zinazopatikana (inahitaji programu-jalizi ya fetcher) uwanja huu utatumika kwa matukio yote ya template hii katika hati hii au kwa yoyote itarejelewa baadaye.&lt;/p&gt;&lt;p&gt; Kwa hivyo kwa mfano ikiwa chagua anwani ya barua pepe hapa basi uwanja wa barua pepe wa mwasiliani unayechagua utatumika kwa matukio yote katika hati hii.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = mwaka mfupi&lt;br/&gt;yyyy = mwaka mrefu&lt;br/&gt;M = mwezi (1-12)&lt;br/&gt;MM = mwezi (01-12)&lt;br/&gt;MMM = kifupi cha mwezi (Jan, Feb ... Dec)&lt;br/&gt;MMMM = mwezi mrefu (Januari, Februari ... ya Desemba)&lt;br/&gt;D = siku (1 - 31)&lt;br/&gt;dd = siku (01 - 31)&lt;br/&gt;ddd = siku ya wiki kwa maneno (Jumatatu, Jumanne ... Jumapili ya (Jumapili)&lt;br/&gt;E = siku fupi ya wiki kwa maneno (Mon, Tue ... Jua)&lt;br/&gt;D - Siku ya kawaida (1, 2, 3, 21, 22, 23, 31, 4...)&lt;br/&gt;h = saa katika am / jioni (0-12)&lt;br/&gt;hh = saa katika am / pm (00-12)&lt;br/&gt;H = saa kwa siku (0-23)&lt;br/&gt;HH = saa kwa siku (00-23)&lt;br/&gt;mm = dakika&lt;br/&gt;ss = ya pili&lt;br/&gt;SSS = milliseconds&lt;br/&gt;a = alama ya AM / PM&lt;br/&gt;p = a.m./p.m. alama</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Matukio yote ya kiolezo hiki yatatumia maandishi yaliyotolewa.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Matukio yote ya kiolezo hiki yatatumia maandishi yaliyotolewa.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Bandika huweka ubao wa kunakili (overrides) wakati wa kubandika kwenye programu ya nje. Hii &lt;b&gt;itajaribu&lt;/b&gt; kurejesha hali ya ubao wa kunakili baada ya kubandika nje. 
+
+Marejesho ya jumla hayawezi kuhakikishiwa na inaweza kupunguza utendaji au hata ajali ya MonkeyPaste kulingana na chanzo cha data.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Seti za awali zilizochaguliwa tu ndizo zitakazotumika kwa programu bainifu. Wakati haijabainishwa, seti za awali za chaguo-msingi zinazopatikana kwenye &lt;em&gt;Upau wa Ubao wa Clipboard&lt;/em&gt; zitatumika.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Ufuatiliaji wote wa ubao wa kunakili kutoka kwa programu zilizokataliwa &lt;b&gt;utapuuzwa&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Ndani&lt;/b&gt;Njia zote za mkato ni mdogo ndani ya programu. Hii sio chaguo lililokusudiwa lakini inaweza kuruhusu kubadilisha njia za mkato unazokusudia kufanya&lt;i&gt;siku moja&lt;/i&gt; ulimwenguni.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Kaida&lt;/b&gt; Njia zote za mkato za ulimwengu zimewezeshwa. Njia ya mkato ya&lt;b&gt;Show/Ficha Dirisha Kuu&lt;/b&gt;hutumia uelekezaji&lt;span color="red"&gt;wa override&lt;/span&gt;kwa kitufe cha&lt;b&gt;Caps Lock&lt;/b&gt; . Unaweza kubadilisha njia hiyo au ishara wakati wowote. Lakini&lt;span color="green"&gt;jaribu&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Njia za mkato za Ulimwenguni&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passiv&lt;/b&gt; Njia ya mkato MonkeyPaste itasikiliza katika programu yoyote.&lt;br&gt;* Hii ndio chaguo &lt;i&gt;pekee&lt;/i&gt; kwenye Linux kwa sasa.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Kabla&lt;/b&gt; Njia ya mkato itatekeleza &lt;b&gt;&lt;i&gt;kabla&lt;/i&gt;&lt;/b&gt; ya kushughulikiwa na programu amilifu.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Njia ya mkato itatekeleza &lt;b&gt;&lt;i&gt;baada&lt;/i&gt;&lt;/b&gt; ya kushughulikiwa na programu amilifu.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Kuzidi kwa&lt;/b&gt; Wakati MonkeyPaste inasikia ufunguo wa pembejeo (isiyo - kitufe cha kurekebisha) cha njia ya mkato ya override &lt;i&gt;itaficha&lt;/i&gt; vyombo vya habari muhimu kutoka kwa programu - pembejeo ya kiwango.&lt;br&gt;Chaguo hili litahakikisha njia ya mkato inasababishwa bila migogoro kwa programu amilifu.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Override ya kipekee&lt;/b&gt; Hii ni aina maalum ya hali ya override iliyoundwa kwa ufunguo wa Caps Lock. Inaruhusu tu ufunguo &lt;b&gt;mmoja&lt;/b&gt; (isiyo - modifier) kwa kazi yake.&lt;br&gt;Katika hali ya kawaida ya override Caps Lock inaweza kukwama &lt;i&gt;wakati&lt;/i&gt; wa kubanwa pamoja na funguo zingine.&lt;br&gt;Kwa hivyo haijalishi funguo zingine ziko chini, ikiwa njia ya mkato ya &lt;b&gt;Hotkey&lt;/b&gt; imebanwa itazidiwa na kuizuia &lt;i&gt;kukwama&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste ni &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Kwa njia hii, MonkeyPaste inaweza kupatikana&lt;br&gt;&lt;span color="red"&gt;bila kubofya&lt;/span&gt; au hata &lt;span color="red"&gt;kupiga jicho na #x1F440&lt;/span&gt;&lt;/p&gt;</value>
   </data>
 </root>

@@ -304,11 +304,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private static async Task CheckAndInstallCorePluginsAsync() {
-            if (!CoreDatDir.IsDirectory()) {
-                // android dat dir supposed to be '/data/user/0/com.Monkey.MonkeyPaste.Avalonia/files/dat'
-                MpDebug.Break($"Dat dir error, '{CoreDatDir}' does not exist");
-                return;
-            }
+            //if (!CoreDatDir.IsDirectory()) {
+            //    // android dat dir supposed to be '/data/user/0/com.Monkey.MonkeyPaste.Avalonia/files/dat'
+            //    MpDebug.Break($"Dat dir error, '{CoreDatDir}' does not exist");
+            //    return;
+            //}
             if (!PluginRootDir.IsDirectory()) {
                 bool success = MpFileIo.CreateDirectory(PluginRootDir);
                 MpDebug.Assert(success, $"Error creating root plugin folder at path '{PluginRootDir}'");
@@ -323,14 +323,15 @@ namespace MonkeyPaste.Avalonia {
             }
 
             foreach (var core_guid in missing_core_plugin_guids) {
-                if (Path.Combine(PluginRootDir, core_guid).IsDirectory()) {
-                    // if guid dir exists, assume core plugin exists
-                    continue;
-                }
-                string core_plugin_zip_path = Path.Combine(CoreDatDir, $"{core_guid}.zip");
-                MpDebug.Assert(core_plugin_zip_path.IsFile(), $"Dat zip error, core plugin not found at '{core_plugin_zip_path}'");
-                _ = await InstallPluginAsync(core_guid, core_plugin_zip_path.ToFileSystemUriFromPath(), true, null);
-                MpConsole.WriteLine($"Core plugin '{core_plugin_zip_path}' installed.");
+                //string core_plugin_zip_path = Path.Combine(CoreDatDir, $"{core_guid}.zip");
+                //string core_plugin_uri = core_plugin_zip_path.ToFileSystemUriFromPath();
+                //if (!core_plugin_zip_path.IsFile()) {
+                //    core_plugin_uri = $"https://www.monkeypaste.com/dat/{core_guid}/latest.zip";
+                //}
+                //MpDebug.Assert(core_plugin_zip_path.IsFile(), $"Dat zip error, core plugin not found at '{core_plugin_zip_path}'");
+                string core_plugin_uri = $"avares://MonkeyPaste.Avalonia/Assets/dat/{core_guid}.zip";
+                _ = await InstallPluginAsync(core_guid, core_plugin_uri, true, null);
+                MpConsole.WriteLine($"Core plugin '{core_guid}' installed.");
             }
         }
         private static async Task<bool> LoadPluginAsync(string manifestPath, bool isLoadFromInstall = false) {

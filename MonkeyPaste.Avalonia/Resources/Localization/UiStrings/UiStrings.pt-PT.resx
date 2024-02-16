@@ -166,14 +166,8 @@ clipes respectivamente.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Role - para - aberto</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P align = "Center"&gt; MonkeyYySaste é &lt;span color = "Red&gt; totalmente integrado &lt;/span&gt; com arrasto - e - soltar &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Solte aqui!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "Center"&gt; Dessa forma, o macaco pode ser acessado &lt;br&gt; &lt;span color = "Red"&gt; sem um clique &lt;/span&gt; ou mesmo &lt;span color = "Red"&gt; batendo um olho &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Arraste-me!</value>
@@ -364,62 +358,14 @@ Atualizar para evitar.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Os gestos devem ser únicos e podem conter apenas uma chave de entrada.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; interno &lt;/b&gt; Todos os atalhos são limitados a dentro do aplicativo. Esta não é realmente uma opção pretendida, mas pode permitir personalizar quais atalhos você pretende tornar global &lt;i&gt; algum dia &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; padrão &lt;/b&gt; Todos os atalhos globais estão ativados. A janela principal &lt;b&gt; Mostrar/ocultar &lt;/b&gt; Shortcut usa &lt;span color = "Red"&gt; Substituir &lt;/span&gt; roteamento para a tecla &lt;b&gt; Caps bloqueio &lt;/b&gt;. Você pode alterar esse roteamento ou gesto a qualquer momento. Mas &lt;span color = "verde"&gt; experimente &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;Body&gt;
-&lt;H1&gt; Modos de atalho global &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Passivo &lt;/b&gt; Um macaco de atalho ouvirá em qualquer aplicativo. &lt;br&gt;
-*Esta é a opção &lt;i&gt; &lt;/i&gt; no Linux por enquanto.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; PRE &lt;/b&gt; O atalho será executado &lt;b&gt; &lt;i&gt; antes &lt;/i&gt; &lt;/b&gt; é tratado pelo aplicativo ativo. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; O atalho será executado &lt;b&gt; &lt;i&gt; depois de &lt;/i&gt; &lt;/b&gt; é tratado pelo aplicativo ativo. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Substituir &lt;/b&gt; Quando o MonkeyyySaste ouve a tecla de entrada (tecla não modificadora) de um atalho de substituição, ele &lt;i&gt; ocultará &lt;/i&gt; que a tecla pressione a partir do aplicativo - entrada de nível. &lt;br&gt;
-Esta opção garantirá que o atalho seja acionado sem conflitos para o aplicativo ativo.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; substituição exclusiva &lt;/b&gt; Este é um tipo especial de modo de substituição projetado para a tecla de bloqueio do CAPS. Ele apenas permite &lt;b&gt; uma chave &lt;/b&gt; (não - modificador) para sua tarefa. &lt;br&gt;
-No modo de substituição normal, as tampas de bloqueio podem ficar &lt;i&gt; presas &lt;/i&gt; quando pressionadas em combinação com outras chaves. &lt;br&gt;
-Portanto, não importa quais outras teclas estejam baixas, se uma tecla de atalho &lt;b&gt; &lt;/b&gt; for pressionada, ele será substituído e impedirá que ela se torne &lt;i&gt; presa &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Desativar</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Carregue quando essa conta de usuário estiver conectada, não para outros usuários.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Usando contatos disponíveis (requer um plug -in Fetcher), este campo será usado para todas as instâncias deste modelo neste documento ou em qualquer um será referenciado posteriormente. &lt;/p&gt; &lt;p&gt; Por exemplo, se selecionar endereço de email Aqui, então o campo de email do contato que você selecionar será usado para todas as instâncias neste documento. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = ano curto &lt;br/&gt; yyyy = longo ano &lt;br/&gt; m = mês (1-12) &lt;br/&gt; mm = mês (01-12) &lt;br/&gt; mmm = abreviatura do mês (janeiro, fevereiro .. . Dez) &lt;br/&gt; mmmm = longo mês (janeiro, fevereiro ... dezembro) &lt;br/&gt; d = dia (1 - 31) &lt;br/&gt; dd = dia (01 - 31) &lt;br/&gt; ddd = Dia da semana em palavras (segunda -feira, terça -feira ... domingo) &lt;br/&gt; e = curto dia da semana em palavras (seg, ter ... sol) &lt;br/&gt; D - Dia ordinal (1º, 2º, 3º, 21, 22, 23, 31, 4º ...) &lt;br/&gt; h = hora em am/pm (0-12) &lt;br/&gt; hh = hora em am/pm (00-12) &lt;br/ &gt; H = hora no dia (0-23) &lt;br/&gt; hh = hora no dia (00-23) &lt;br/&gt; mm = minuto &lt;br/&gt; ss = segundo &lt;br/&gt; sss = milissegundos &lt;br/&gt; A = AM/PM Marcador &lt;br/&gt; p = A.M./P.M. marcador</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>A data atual e/ou a hora serão substituídas por modelos de datetime quando forem colados.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Todas as ocorrências deste modelo usarão o texto fornecido. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Todas as ocorrências deste modelo usarão o texto fornecido. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Termine de anexar</value>
@@ -469,9 +415,6 @@ Portanto, não importa quais outras teclas estejam baixas, se uma tecla de atalh
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Último aplicativo ativo desconhecido. Mude para o aplicativo pretendido para pasta de macaco.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Cole para: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimizar</value>
@@ -547,9 +490,6 @@ Adicione e/ou selecione o aplicativo com o atalho de cópia exclusivo (como um c
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Nenhum</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Somente as predefinições selecionadas serão usadas para o aplicativo especificado. Quando não especificado, as predefinições padrão encontradas na barra lateral da área de transferência &lt;/em&gt; serão usadas.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Muitos recursos do MonkeyyYSaste usam a automação do teclado para interagir com outros aplicativos.
 
@@ -562,9 +502,6 @@ Para garantir a interoperabilidade adequada, registre esses atalhos para esse ap
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Leitores</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Todo o monitoramento da área de transferência de aplicativos rejeitados será &lt;b&gt; ignorada &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Escritoras</value>
@@ -1331,11 +1268,6 @@ Isto não pode ser desfeito!
     <value>Tem certeza de que deseja redefinir todas as notificações?
 
 *Isto não pode ser desfeito!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>A pasta de macaco define a área de transferência (substitui) ao colar para um programa externo. Isso &lt;b&gt; tentará restaurar o estado da prancheta após uma pasta externa.
-
-A restauração total não pode ser garantida e pode reduzir o desempenho ou até mesmo falhar macacão, dependendo da fonte dos dados.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Redefinir a área de transferência após a coleta de macacos</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypsaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Saiba mais sobre planos</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Cole em: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Usando contatos disponíveis (requer um plug-in fetcher) este campo será usado para todas as instâncias deste modelo neste documento ou em qualquer um que será referenciado mais tarde.&lt;/p&gt;&lt;p&gt; Assim, por exemplo, se selecionar o endereço de e-mail aqui, o campo de e-mail do contato selecionado será usado para todas as instâncias neste documento.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = ano curto&lt;br/&gt;aaaa = ano longo&lt;br/&gt;M = mês (1-12)&lt;br/&gt;MM = mês (01-12)&lt;br/&gt;MMM = abreviatura do mês (jan, fev ... Dez)&lt;br/&gt;MMMM = mês longo (janeiro, fevereiro ... Dezembro)&lt;br/&gt;d = dia (1 - 31)&lt;br/&gt;dd = dia (01 - 31)&lt;br/&gt;ddd = dia da semana em palavras (segunda-feira, terça-feira ... Domingo)&lt;br/&gt;E = dia curto da semana em palavras (Seg, Ter... Sol)&lt;br/&gt;D - Dia ordinal (1º, 2º, 3º, 21º, 22º, 23º, 31º, 4º...)&lt;br/&gt;h = hora em am/pm (0-12)&lt;br/&gt;hh = hora em am/pm (00-12)&lt;br/&gt;H = hora do dia (0-23)&lt;br/&gt;HH = hora do dia (00-23)&lt;br/&gt;mm = minuto&lt;br/&gt;ss = segundo&lt;br/&gt;SSS = milissegundos&lt;br/&gt;a = marcador AM/PM&lt;br/&gt;p = marcador a.m./p.m.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Todas as ocorrências deste modelo usarão o texto fornecido.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Todas as ocorrências deste modelo usarão o texto fornecido.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>O Monkey Paste define a área de transferência (substitui) ao colar em um programa externo. Isso &lt;b&gt;tentará&lt;/b&gt; restaurar o estado da área de transferência após uma pasta externa. 
+
+A restauração total não pode ser garantida e pode reduzir o desempenho ou até mesmo travar o MonkeyPaste, dependendo da fonte dos dados.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Somente as predefinições selecionadas serão usadas para o aplicativo especificado. Quando não especificado, as predefinições padrão encontradas na &lt;em&gt;barra lateral da área de transferência&lt;/em&gt; serão usadas.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Todo o monitoramento da área de transferência de aplicativos rejeitados será &lt;b&gt;ignorado&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Interno&lt;/b&gt;Todos os atalhos são limitados a dentro do aplicativo. Esta não é realmente uma opção pretendida, mas pode permitir personalizar quais atalhos você pretende tornar global&lt;i&gt;algum dia&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Inadimplência&lt;/b&gt; Todos os atalhos globais estão ativados. O atalho&lt;b&gt;Mostrar/Ocultar Janela Principal&lt;/b&gt;usa o roteamento de&lt;span color="red"&gt;substituição&lt;/span&gt;para a tecla&lt;b&gt;Caps Lock&lt;/b&gt; . Você pode alterar esse roteamento ou gesto a qualquer momento. Mas&lt;span color="green"&gt;experimente&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Modos de atalho globais&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passivo&lt;/b&gt; Um atalho MonkeyPaste irá escutar em qualquer aplicação.&lt;br&gt;*Esta é a &lt;i&gt;única&lt;/i&gt; opção no Linux por enquanto.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pré&lt;/b&gt; O atalho será executado &lt;b&gt;&lt;i&gt;antes&lt;/i&gt;&lt;/b&gt; de ser manipulado pelo aplicativo ativo.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Publicar&lt;/b&gt; O atalho será executado &lt;b&gt;&lt;i&gt;depois&lt;/i&gt;&lt;/b&gt; de ser manipulado pelo aplicativo ativo.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Substituir&lt;/b&gt; Quando o MonkeyPaste ouve a tecla de entrada (não - tecla modificadora) de um atalho de substituição, ele &lt;i&gt;ocultará&lt;/i&gt; essa tecla pressionada da entrada de nível do aplicativo.&lt;br&gt;Essa opção garantirá que o atalho seja acionado sem conflitos com o aplicativo ativo.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Substituição exclusiva&lt;/b&gt; Este é um tipo especial de modo de substituição projetado para a tecla Caps Lock. Ele só permite &lt;b&gt;uma&lt;/b&gt; chave (não - modificador) para sua atribuição.&lt;br&gt;No modo de substituição normal, o Caps Lock pode ficar &lt;i&gt;preso&lt;/i&gt; quando pressionado em combinação com outras teclas.&lt;br&gt;Portanto, não importa quais outras teclas estejam inativas, se um atalho de &lt;b&gt;tecla de atalho&lt;/b&gt; for pressionado, ele será sobrecarregado e evitará que fique &lt;i&gt;preso&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste é &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Desta forma, MonkeyPaste pode ser acessado&lt;br&gt;&lt;span color="red"&gt;sem um clique&lt;/span&gt; ou mesmo &lt;span color="red"&gt;batendo um olho&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

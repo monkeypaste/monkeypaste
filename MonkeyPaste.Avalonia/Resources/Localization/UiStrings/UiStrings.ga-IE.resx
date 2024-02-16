@@ -166,14 +166,8 @@ gearrthóga faoi seach.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Scrolla - go - oscailte</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; Is é monkeypaste &lt;span dath = "red&gt; comhtháite go hiomlán &lt;/span&gt; le tarraing - agus - Drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Buail é anseo!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "lár"&gt; Sa tslí seo, is féidir rochtain a fháil ar monkeypaste &lt;br&gt; &lt;span colot = "dearg"&gt; gan cliceáil &lt;/span&gt; nó fiú &lt;span dath = "dearg"&gt; ag batáil súl &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Tarraing dom!</value>
@@ -364,62 +358,14 @@ Uasghrádú a sheachaint.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Caithfidh gothaí a bheith uathúil agus ní fhéadfaidh siad ach eochair ionchuir amháin a bheith iontu.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Inmheánach &lt;/b&gt; Tá gach aicearra teoranta laistigh den iarratas. Ní rogha beartaithe é seo i ndáiríre ach is féidir leis a cheadú cad iad na haicearraí a bhfuil sé i gceist agat a dhéanamh ar an domhanda &lt;i&gt; someday &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Réamhshocrú &lt;/b&gt; Cumasaítear gach aicearra domhanda. Úsáideann an t -aicearra &lt;b&gt;/Folaigh an Príomh -Fhuinneog &lt;/b&gt; an t -aicearra &lt;span dath = "dearg"&gt; sárú &lt;/span&gt; ródú don eochair Caipíní &lt;b&gt; Caps &lt;/b&gt;. Is féidir leat an ródú nó an chomhartha sin a athrú ag am ar bith. Ach &lt;span dath = "glas"&gt; Tabhair triail as &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;pordy&gt;
-&lt;h1&gt; Modhanna aicearra domhanda &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; éighníomhach &lt;/b&gt; Éistfidh monkeypaste aicearra in aon iarratas. &lt;br&gt;
-*Is é seo an rogha &lt;i&gt; amháin &lt;/i&gt; ar Linux anois.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Réamh -&lt;/b&gt; Cuirfidh an t -aicearra i gcrích &lt;b&gt; &lt;i&gt; roimh &lt;/i&gt; &lt;/b&gt; Déileálann an t -iarratas gníomhach leis. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; Cuirfidh an t -aicearra i bhfeidhm &lt;b&gt; &lt;i&gt; tar éis &lt;/i&gt; &lt;/b&gt; Déileálann an t -iarratas gníomhach leis. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; sárú &lt;/b&gt; Nuair a chloiseann monkeypaste an eochair ionchuir (eochair neamh -mhionathraithe) de aicearra sáraithe a dhéanfaidh sé &lt;i&gt; i bhfolach &lt;/i&gt; an príomh -phreas sin ón iarratas - ionchur leibhéal. &lt;br&gt; &lt;br&gt;
-Ráthaíonn an rogha seo go spreagfar an t -aicearra gan choinbhleachtaí leis an iarratas gníomhach.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; sárú eisiach &lt;/b&gt; Is cineál speisialta modh sáraithe é seo atá deartha don eochair CAPS Lock. Ní cheadaíonn sé ach &lt;b&gt; eochair one &lt;/b&gt; (neamh -mhionathraitheoir) dá shannadh. &lt;br&gt;
-I ngnáth -mhód sáraithe is féidir caipíní a bheith faoi ghlas &lt;i&gt; greamaithe ar &lt;/i&gt; nuair a bhrúitear iad i gcomhar le heochracha eile. &lt;br&gt; &lt;br&gt;
-Mar sin, is cuma cad iad na heochracha eile atá síos, má bhrúitear aicearra &lt;b&gt; hotkey &lt;/b&gt; go mbeidh sé sáraithe agus go gcuirfidh sé cosc ​​air a bheith i bhfostú ar &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/corp&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Míchumais</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Luchtaigh suas nuair a bhíonn an cuntas úsáideora seo logáilte isteach, ní d'úsáideoirí eile.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Ag baint úsáide as na teagmhálacha atá ar fáil (teastaíonn breiseán fetcher) bainfear úsáid as an réimse seo do gach cás den teimpléad seo ar fud an doiciméid seo nó in aon cheann, déanfar tagairt dó níos déanaí. Anseo ansin bainfear úsáid as réimse ríomhphoist na teagmhála a roghnaíonn tú do gach cás sa doiciméad seo. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = bliain ghearr &lt;br/&gt; yyyy = bliain fhada &lt;br/&gt; m = month (1-12) &lt;br/&gt; mm = mí (01-12) &lt;br/&gt; Mmm = Mí Giorrúchán (Eanáir, Feabhra. Dec) &lt;br/&gt; mmmm = mí fhada (Eanáir, Feabhra ... Nollaig) &lt;br/&gt; d = lá (1 - 31) &lt;br/&gt; dd = lá (01 - 31) &lt;br/&gt; ddd = Lá na seachtaine i bhfocail (Dé Luain, Dé Máirt ... Dé Domhnaigh) &lt;br/&gt; e = lá gearr na seachtaine i bhfocail (Luan, tue ... Sun) &lt;br/&gt; D - Lá Ordaitheach (1ú, 2ú, 3ú, 21ú, 22ú, 23ú, 31ú, 4ú ...) &lt;br/&gt; H = uair an chloig in AM/PM (0-12) &lt;br/&gt; HH = uair an chloig in AM/PM (00-12) &lt;br/ &gt; H = uair an chloig sa lá (0-23) &lt;br/&gt; hh = uair an chloig sa lá (00-23) &lt;br/&gt; mm = nóiméad &lt;br/&gt; ss = an dara &lt;br/&gt; sss = milliseconds &lt;br/&gt; a = am/pm marcóir &lt;br/&gt; p = a.m./p.m. marcálaí</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Cuirfear an dáta agus/nó an t -am reatha in ionad teimpléid dhátú nuair a ghreamaítear iad.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Bainfidh gach tarlú den teimpléad seo úsáid as an téacs atá curtha ar fáil. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Bainfidh gach tarlú den teimpléad seo úsáid as an téacs atá curtha ar fáil. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Críochnaigh ag clúdach</value>
@@ -469,9 +415,6 @@ Mar sin, is cuma cad iad na heochracha eile atá síos, má bhrúitear aicearra 
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>App gníomhach deireanach anaithnid. Athraigh go dtí an aip atá beartaithe go Greamaigh Moncaí.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Greamaigh go: &lt;em&gt; &lt;i class = "greamaigh-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Íoslaghdú</value>
@@ -547,9 +490,6 @@ Cuir agus/nó roghnaigh an feidhmchlár leis an aicearra cóip uathúil (cosúil
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Aon</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Ní úsáidfear ach na réamhshocruithe roghnaithe don iarratas sonraithe. Nuair a bhíonn siad neamhshonraithe, bainfear úsáid as na réamhshocruithe réamhshocraithe a fhaightear sa &lt;em&gt; gearrthaisce taobh &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Baineann go leor gnéithe monkeypaste úsáid as uathoibriú méarchláir chun idirghníomhú le hiarratais eile.
 
@@ -562,9 +502,6 @@ Chun idir -inoibritheacht chuí a chinntiú, déan taifead ar na haicearraí sin
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Léitheoirí</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Déanfar gach monatóireacht gearrthaisce ó iarratais dhiúltaithe a neamhaird &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Scríbhneoirí</value>
@@ -1331,11 +1268,6 @@ Ní féidir é seo a dhíothú!
     <value>An bhfuil tú cinnte gur mhaith leat gach fógra a athshocrú?
 
 *Ní féidir é seo a dhíscaoileadh!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Socraíonn Monkey Paste an gearrthaisce (sáraíonn sé) nuair a ghreamaíonn sé ar chlár seachtrach. Déanfaidh sé seo iarracht &lt;/b&gt; staid na gearrthaisce a athbhunú tar éis greamaigh sheachtraigh.
-
-Ní féidir an t -athchóiriú iomlán a ráthú agus d'fhéadfadh sé feidhmíocht a laghdú nó fiú monkeypaste tuairteála a laghdú ag brath ar fhoinse na sonraí.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Athshocraigh gearrthaisce tar éis pasting moncaí</value>
@@ -2706,5 +2638,66 @@ aisckback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Níos mó a fhoghlaim faoi phleananna</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Greamaigh go: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Ag baint úsáide as teagmhálacha atá ar fáil (éilíonn breiseán fetcher) Beidh an réimse seo a úsáid le haghaidh gach cás den teimpléad seo ar fud an doiciméad seo nó in aon beidh sé tagairt i níos déanaí.&lt;/p&gt;&lt;p&gt; Mar sin, mar shampla má roghnaíonn tú seoladh ríomhphoist anseo, úsáidfear réimse ríomhphoist na teagmhála a roghnaíonn tú do gach cás sa doiciméad seo.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = bliain ghearr&lt;br/&gt;yyyy = bliain fhada&lt;br/&gt;M = mí (1-12)&lt;br/&gt;MM = mí (01-12)&lt;br/&gt;MMM = giorrúchán míosa (Eanáir, Feabhra ... Nollaig)&lt;br/&gt;MMMM = mí fhada (Eanáir, Feabhra ... Nollaig)&lt;br/&gt;d = lá (1 - 31)&lt;br/&gt;dd = lá (01 - 31)&lt;br/&gt;ddd = lá na seachtaine i bhfocail (Dé Luain, Dé Máirt ... Dé Domhnaigh)&lt;br/&gt;E = lá gearr na seachtaine i bhfocail (Luan, Máirt ... An Ghrian)&lt;br/&gt;D - Ordinal day (1ú, 2ú, 3ú, 21ú, 22ú, 23ú, 31ú, 4ú...)&lt;br/&gt;h = uair an chloig in am / pm (0-12)&lt;br/&gt;HH = uair an chloig i AM / PM (00-12)&lt;br/&gt;H = uair an chloig sa lá (0-23)&lt;br/&gt;HH = uair sa lá (00-23)&lt;br/&gt;mm = nóiméad&lt;br/&gt;ss = an dara&lt;br/&gt;SSS = milleasoicindí&lt;br/&gt;a = marcóir AM / PM&lt;br/&gt;p = a.m./p.m. marcóir</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Bainfidh gach tarlú den teimpléad seo úsáid as an téacs atá curtha ar fáil.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Bainfidh gach tarlú den teimpléad seo úsáid as an téacs atá curtha ar fáil.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Socraíonn Greamaigh Moncaí an ghearrthaisce (sáraithe) nuair a ghreamaítear é le clár seachtrach. Déanfaidh sé seo &lt;b&gt;iarracht&lt;/b&gt; staid na gearrthaisce a chur ar ais tar éis greamaigh sheachtrach. 
+
+Ní féidir athchóiriú iomlán a ráthú agus d'fhéadfadh sé feidhmíocht a laghdú nó fiú moncaí tuairteála ag brath ar fhoinse na sonraí.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Ní úsáidfear ach na réamhshocruithe roghnaithe don iarratas sonraithe. Nuair a bheidh siad neamhshonraithe, úsáidfear na réamhshocruithe réamhshocraithe a aimsíodh sa &lt;em&gt;Bharra Taoibh Gearrthaisce&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Déanfar &lt;b&gt;neamhaird ar&lt;/b&gt; gach monatóireacht ghearrthaisce ó iarratais a diúltaíodh.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Inmheánach&lt;/b&gt;Tá gach aicearra teoranta don fheidhmchlár. Ní rogha bheartaithe é seo i ndáiríre ach is féidir leis na aicearraí a bhfuil sé ar intinn agat a dhéanamh ar fud an domhain a shaincheapadh&lt;i&gt;lá éigin&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Réamhshocrú&lt;/b&gt; Cumasaítear gach aicearra domhanda. Úsáideann an&lt;b&gt;t-aicearra Taispeáin / Folaigh Príomhfhuinneog&lt;/b&gt;ródú&lt;span color="red"&gt;sáraitheach&lt;/span&gt;don eochair&lt;b&gt;Caps Lock&lt;/b&gt; . Is féidir leat an ródú nó an gotha sin a athrú ag am ar bith. Ach&lt;span color="green"&gt;bain triail as&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Modhanna Aicearra Domhanda&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Éighníomhach&lt;/b&gt; Beidh aicearra MoncaíPaste éisteacht le haghaidh in aon iarratas.&lt;br&gt;* Is é seo an &lt;i&gt;t-aon&lt;/i&gt; rogha ar Linux anois.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Roimh&lt;/b&gt; Rithfear an t-aicearra &lt;b&gt;&lt;i&gt;sula&lt;/i&gt;&lt;/b&gt; láimhseálann an feidhmchlár gníomhach é.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Rithfear an t-aicearra &lt;b&gt;&lt;i&gt;tar éis&lt;/i&gt;&lt;/b&gt; don fheidhmchlár gníomhach é a láimhseáil.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Sáraigh&lt;/b&gt; Nuair a chloiseann MoncaíPaste an eochair ionchuir (eochair neamh- mionathraitheoir) d'aicearra sáraitheach, &lt;i&gt;folóidh&lt;/i&gt; sé an preas eochrach sin ó ionchur leibhéal an fheidhmchláir.&lt;br&gt;Ráthóidh an rogha seo go spreagfar an t-aicearra gan coinbhleachtaí leis an bhfeidhmchlár gníomhach.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Sáraíocht Eisiach&lt;/b&gt; Is cineál speisialta mód sáraithe é seo atá deartha don eochair Caps Lock. Ní cheadaíonn sé ach eochair &lt;b&gt;amháin&lt;/b&gt; (neamh- mionathraitheoir) dá shannadh.&lt;br&gt;Sa ghnáthmhodh sáraitheach is féidir le Caps Lock a bheith &lt;i&gt;greamaithe air&lt;/i&gt; nuair a bhrúitear é in éineacht le heochracha eile.&lt;br&gt;Mar sin, is cuma cad iad na heochracha eile atá síos, má bhrúitear aicearra &lt;b&gt;Hotkey&lt;/b&gt; beidh sé sáraithe agus cosc a chur &lt;i&gt;air dul i bhfostú air&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MoncaíPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Ar an mbealach seo, is féidir rochtain a fháil ar MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;gan cliceáil&lt;/span&gt; nó fiú &lt;span color="red"&gt;batting súil&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

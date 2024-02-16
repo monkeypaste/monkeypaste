@@ -166,14 +166,8 @@ clips respectivament.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Scroll - to - Obre</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P align = "Centre"&gt; MonkeyPaste és &lt;span color = "vermell&gt; completament integrat &lt;/span&gt; amb arrossegament - i - gota &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Deixeu -ho aquí!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "centre"&gt; d'aquesta manera, es pot accedir a Monkeypaste &lt;br&gt; &lt;span color = "vermell"&gt; sense fer clic &lt;/span&gt; o fins i tot &lt;span color = "vermell"&gt; batre un ull &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Arrossegueu -me!</value>
@@ -364,62 +358,14 @@ Actualització per evitar.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Els gestos han de ser únics i només poden contenir una clau d’entrada.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Intern &lt;/b&gt; Totes les dreceres es limiten a l'aplicació. Aquesta no és realment una opció prevista, però pot permetre personalitzar quines dreceres teniu intenció de fer un &lt;i&gt; algun dia &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; per defecte &lt;/b&gt; Totes les dreceres globals estan habilitades. La drecera &lt;b&gt; show/oculta la finestra principal &lt;/b&gt; Utilitza &lt;span color = "vermell"&gt; substituir &lt;/span&gt; enrutament per a la tecla &lt;b&gt; bloqueig de taps &lt;/b&gt;. Podeu canviar aquest encaminament o gest en qualsevol moment. Però &lt;span color = "verd"&gt; proveu -ho &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;now&gt; &lt;/now&gt;
-&lt;Body&gt;
-&lt;H1&gt; Modes de drecera global &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; passiu &lt;/b&gt; Una drecera Monkeypaste escoltarà en qualsevol aplicació. &lt;br&gt;
-*Aquesta és l'opció &lt;i&gt; només &lt;/i&gt; de Linux per ara.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; La drecera executarà &lt;b&gt; &lt;i&gt; abans &lt;/i&gt; &lt;/b&gt; és gestionada per l'aplicació activa. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; La drecera executarà &lt;b&gt; &lt;i&gt; després &lt;/i&gt; &lt;/b&gt; és gestionada per l’aplicació activa. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; substituir &lt;/b&gt; quan MonkeyPaste sent la tecla d'entrada (tecla no modificadora) d'una drecera de substitució &lt;i&gt; oculta &lt;/i&gt; aquesta tecla premsa des de l'entrada de l'aplicació. &lt;br&gt;
-Aquesta opció garantirà que la drecera es desencadeni sense conflictes a l'aplicació activa.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; exclusiu de substitució &lt;/b&gt; Es tracta d'un tipus especial de mode de substitució dissenyat per a la tecla de bloqueig de CAPS. Només permet &lt;b&gt; una &lt;/b&gt; clau (no modificador) per a la seva tasca. &lt;br&gt;
-En el mode normal de substitució, el bloqueig es pot enganxar &lt;i&gt; enganxat a &lt;/i&gt; quan es premeu en combinació amb altres tecles. &lt;br&gt;
-Per tant, no importa quines altres claus siguin cap avall, si es pressiona una drecera &lt;b&gt; hotkey &lt;/b&gt;, es sobrevocarà i evitarà que es quedi &lt;i&gt; enganxada a &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Desactivar</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Carregueu -lo quan es connecti aquest compte d'usuari, no per a altres usuaris.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;P&gt; Utilitzant els contactes disponibles (requereix un complement de cercador) Aquest camp s'utilitzarà per a totes les instàncies d'aquesta plantilla a través d'aquest document o en qualsevol que es faci referència a més endavant. &lt;/p&gt; &lt;p&gt; Per exemple, per exemple, si seleccioneu l'adreça de correu electrònic A continuació, el camp de correu electrònic del contacte que seleccioneu s'utilitzarà per a totes les instàncies d'aquest document. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = any curt &lt;br/&gt; Aaa = llarg any &lt;br/&gt; m = mes (1-12) &lt;br/&gt; mm = mes (01-12) &lt;br/&gt; mmm = abreviació del mes (Jan, febrer .. . Dec) &lt;br/&gt; mmmm = mes llarg (gener, febrer ... desembre) &lt;br/&gt; d = dia (1 - 31) &lt;br/&gt; dd = dia (01 - 31) &lt;br/&gt; ddd = dia de la setmana amb paraules (dilluns, dimarts ... diumenge) &lt;br/&gt; e = curt dia de la setmana en paraules (dilluns ... sol) &lt;br/&gt; d - dia ordinal (1r, 2n, 3r, 21, 22, 23, 31a, 4t ...) &lt;br/&gt; h = hora en am/pm (0-12) &lt;br/&gt; hh = hora en am/pm (00-12) &lt;br/ &gt; H = hora al dia (0-23) &lt;br/&gt; hh = hora al dia (00-23) &lt;br/&gt; mm = minut &lt;br/&gt; ss = segon &lt;br/&gt; sss = mil·lisegons &lt;br/&gt; A = AM/PM marcador &lt;br/&gt; P = A.M./P.M. marcador</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>La data i/o hora actuals es substituiran per les plantilles de DateTime quan siguin enganxades.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Totes les ocasions d'aquesta plantilla utilitzaran el text proporcionat. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Totes les ocasions d'aquesta plantilla utilitzaran el text proporcionat. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Acaba de afegir</value>
@@ -469,9 +415,6 @@ Per tant, no importa quines altres claus siguin cap avall, si es pressiona una d
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Última aplicació activa desconeguda. Canvieu a l'aplicació prevista a la pasta de mico.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Enganxeu a: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimitzar</value>
@@ -547,9 +490,6 @@ Afegiu i/o seleccioneu l’aplicació amb la drecera de còpia única (com ara u
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Res</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Només s’utilitzaran els presets seleccionats per a l’aplicació especificada. Quan no es especifiqui, s’utilitzaran els presets predeterminats que es troben a la barra lateral &lt;em&gt; retalls &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Moltes funcions de MonkeyPaste utilitzen l’automatització del teclat per interactuar amb altres aplicacions.
 
@@ -562,9 +502,6 @@ Per garantir una interoperabilitat adequada, registreu les dreceres per a aquest
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Lectors</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Tot el control del porta -retalls de les aplicacions rebutjades serà &lt;b&gt; ignorar &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Escriptors</value>
@@ -1331,11 +1268,6 @@ Això no es pot desfer!
     <value>Esteu segur que voleu restablir totes les notificacions?
 
 *Això no es pot desfer!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste estableix el porta -retalls (anul·la) en enganxar -se a un programa extern. Això &lt;b&gt; intentarà &lt;/b&gt; restaurar l'estat del porta -retalls després d'una pasta externa.
-
-La restauració total no es pot garantir i pot reduir el rendiment o fins i tot bloquejar Monkeypaste segons la font de les dades.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Restableix el porta -retalls després de la enganxada del mico</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Obteniu més informació sobre els plans</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Enganxeu-lo a: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Utilitzant els contactes disponibles (requereix un connector d'obtenció), aquest camp s'utilitzarà per a totes les instàncies d'aquesta plantilla en aquest document o en qualsevol en què es farà referència més endavant.&lt;/p&gt;&lt;p&gt; Així, per exemple, si seleccioneu l'adreça de correu electrònic aquí, el camp de correu electrònic del contacte que seleccioneu s'utilitzarà per a totes les instàncies d'aquest document.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = any curt&lt;br/&gt;yyyy = any llarg&lt;br/&gt;M = mes (1-12)&lt;br/&gt;MM = mes (01-12)&lt;br/&gt;MMM = abreviatura de mes (gener, febrer ... Des)&lt;br/&gt;MMMM = mes llarg (gener, febrer... Desembre)&lt;br/&gt;d = dia (1 - 31)&lt;br/&gt;dd = dia (01 - 31)&lt;br/&gt;ddd = dia de la setmana en paraules (dilluns, dimarts... Diumenge)&lt;br/&gt;E = dia curt de la setmana en paraules (dll, dm... Sol)&lt;br/&gt;D - Dia ordinal (1r, 2n, 3r, 21, 22, 23, 31, 4t...)&lt;br/&gt;h = hora a am/pm (0-12)&lt;br/&gt;hh = hora a am/pm (00-12)&lt;br/&gt;H = hora al dia (0-23)&lt;br/&gt;HH = hora al dia (00-23)&lt;br/&gt;mm = minut&lt;br/&gt;ss = segon&lt;br/&gt;SSS = mil·lisegons&lt;br/&gt;a = marcador AM/PM&lt;br/&gt;p = marcador a.m./p.m.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Totes les ocurrències d'aquesta plantilla utilitzaran el text proporcionat.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Totes les ocurrències d'aquesta plantilla utilitzaran el text proporcionat.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste estableix el porta-retalls (substitueix) quan s'enganxa a un programa extern. Això &lt;b&gt;intentarà&lt;/b&gt; restaurar l'estat del porta-retalls després d'una pasta externa. 
+
+La restauració total no es pot garantir i pot reduir el rendiment o fins i tot bloquejar MonkeyPaste depenent de la font de les dades.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Només s'utilitzaran els presets seleccionats per a l'aplicació especificada. Quan no s'especifiqui, s'utilitzaran els valors predeterminats predeterminats que es troben a la &lt;em&gt;barra lateral del porta-retalls&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>&lt;b&gt;S'ignorarà&lt;/b&gt; tota la supervisió del porta-retalls des de les aplicacions rebutjades.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Intern&lt;/b&gt;Totes les dreceres es limiten a dins de l'aplicació. Aquesta no és realment una opció prevista, però pot permetre personalitzar quines dreceres voleu fer globals&lt;i&gt;algun dia&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Omissió&lt;/b&gt; Totes les dreceres globals estan habilitades. La drecera "&lt;b&gt;Mostrar/Amagar finestra principal"&lt;/b&gt;utilitza l'encaminament&lt;span color="red"&gt;Substitueix&lt;/span&gt;per a la tecla&lt;b&gt;Bloq Maj&lt;/b&gt; . Podeu canviar aquest encaminament o gest en qualsevol moment. Però&lt;span color="green"&gt;proveu-ho&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Modes de drecera globals&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passiu&lt;/b&gt; Una drecera MonkeyPaste escoltarà en qualsevol aplicació.&lt;br&gt;*Aquesta és &lt;i&gt;l'única&lt;/i&gt; opció a Linux per ara.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; La drecera s'executarà &lt;b&gt;&lt;i&gt;abans&lt;/i&gt;&lt;/b&gt; que l'aplicació activa la gestioni.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Correu&lt;/b&gt; La drecera s'executarà &lt;b&gt;&lt;i&gt;després&lt;/i&gt;&lt;/b&gt; de ser gestionada per l'aplicació activa.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Invalidar&lt;/b&gt; Quan MonkeyPaste sent la tecla d'entrada (clau no modificadora) d'una drecera de substitució, &lt;i&gt;ocultarà&lt;/i&gt; aquesta tecla d'entrada de nivell d'aplicació.&lt;br&gt;Aquesta opció garantirà que la drecera s'activi sense conflictes amb l'aplicació activa.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Anul·lació exclusiva&lt;/b&gt; Aquest és un tipus especial de mode de substitució dissenyat per a la tecla Bloq Majúscules. Només permet &lt;b&gt;una&lt;/b&gt; clau (no modificadora) per a la seva assignació.&lt;br&gt;En el mode de substitució normal, el bloqueig de majúscules es pot &lt;i&gt;encallar&lt;/i&gt; quan es prem en combinació amb altres tecles.&lt;br&gt;Per tant, independentment de les altres tecles caigudes, si es prem una drecera de &lt;b&gt;tecla d'accés ràpid&lt;/b&gt; , s'anul·larà i evitarà que &lt;i&gt;s'encalli&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste és &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;D'aquesta manera, es pot accedir a MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;sense un clic&lt;/span&gt; ni tan sols &lt;span color="red"&gt;batent un ull&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

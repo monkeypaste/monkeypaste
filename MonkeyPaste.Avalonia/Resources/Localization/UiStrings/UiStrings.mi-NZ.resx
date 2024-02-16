@@ -166,14 +166,8 @@ pūkete tika.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Panuku - to - tuwhera</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "Center"&gt; Monkeypaste ko te &lt;span tae = "Whero&gt; Whakahoahoa &lt;/ span&gt; me - maturuturu &lt;/ prop &lt;/ pro&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Maturuturu mai i konei!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p allign = "Center" Tenei ara, ka taea te Monkeypaste &lt;br&gt; &lt;Span "&gt;" whero "me te" whero " &amp; # x1440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Toia mai!</value>
@@ -364,62 +358,14 @@ Whakahoutu kia kore ai e karo.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Me noho motuhake nga tohu me te whakauru noa i tetahi waahanga whakauru.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; roto &lt;/ b&gt; Ko nga poto poto he iti noa iho nga waahanga poto ki roto i te tono. Ehara tenei i te mea tino pai engari ka taea e koe te whakarite he aha nga wa poto ka hiahia koe ki te mahi i te ao &lt;i&gt; i tetahi ra.
-&lt;li&gt;
-&lt;b&gt; taunoa &lt;/ b&gt; Ka whakahohea nga poto poto o te ao. Ko te &lt;b&gt; Whakaatu / Huna te matapihi matua &lt;/ B&gt; Spanfort = "whero" Ka taea e koe te whakarereke i taua ara, i te tohu ranei i nga wa katoa. Engari ko te "Span tae =" Green "&gt; hoatu he whakamatautau &lt;/ SPAN&gt;
-&lt;/ li&gt;
-&lt;/ ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;te upoko&gt; &lt;/ upoko&gt;
-&lt;te tinana&gt;
-&lt;h1&gt; Taonga Poto o te Ao &lt;/ H1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; paanui &lt;/ b&gt; Ka whakarongo te monkeypaste poto mo tetahi tono. &lt;br&gt;
-* Koinei te &lt;i&gt; anake &lt;/ i&gt; whiriwhiri i Linux mo naianei.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/ b&gt; poto ka mahia &lt;b&gt; &lt;i&gt; i mua &lt;/ i&gt; &lt;/ b&gt; ka whakahaerehia e te tono kaha. &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; Ka tukuna e &lt;/ B&gt; poto poto &lt;b&gt; &lt;i&gt; i muri i te &lt;/ i&gt; &lt;/ b&gt; ka whakahaerehia e te tono kaha. &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; Ka hurihia te &lt;/ B&gt; ka rongohia e MonkeyPaste te tohu whakauru (kore-a-ringa) o te poto poto o te waa poto
-Ma tenei whiringa ka whakaingoatia te poto poto ka kitea kaore he tautohetohe ki te tono hohe.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; Whakakahorehia te Urunga &lt;/ B&gt; He momo motuhake tenei o te aratau o te nui i hangaia mo te tohu raka. Ka taea noa e te &lt;B&gt; tetahi &lt;/ B&gt; (kore-a-kore) mo tana mahi. &lt;br&gt;
-I roto i nga momo aratau aratau noa ka taea te &lt;i&gt; ka mau ki runga &lt;/ i&gt; ka pehia ki etahi atu. &lt;br&gt;
-Na ahakoa he aha etahi atu mau taviri, mena he &lt;b&gt; Hotkey &lt;/ b&gt; ka pahemo te poto poto ka mutu ka aukati i te &lt;/ I&gt;.
-&lt;/ li&gt;
-&lt;/ ul&gt;
-&lt;/ tinana&gt;
-&lt;/ html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Mahue</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Whakanuia I te wa kua uru mai tenei kaute kaiwhakamahi, kaua mo etahi atu kaiwhakamahi.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Ma te whakamahi i nga hoapaki e waatea ana (me tono te waahi Fetcret) tenei mara mo nga wa katoa o tenei tuhinga, i roto i tetahi korero ka tohua mena ka tohua te wahitau imeera I konei ka whakamahia te mara imeera o te whakapā ka tohua e koe mo nga waa katoa o tenei tuhinga. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>YY = Tau poto &lt;br/&gt; Yyyy = Long &lt;br/&gt; MM = MM = MMP = MMBER (JAN, FOB .. . Dec) &lt;br/&gt; mmmm = roa (marama roa (Hui-tanguru, Hui-tanguru ... Hakihea) &lt;ber/&gt;) Ra o te wiki i roto i nga kupu (Mane, Rātapu ... Rātapu) 3th, 21st, 22nd, 23th, 31st, 4th ...) &lt;br/&gt; HA = HM (0-12) &lt;br/&gt; HAH (00-12) &lt;BR / &gt; H = Hutahi i te ra (0-23) &lt;br/&gt; HH = haora i te ra (00-23) &lt;br/&gt; &lt;br/&gt; &lt;br/&gt; (milliseconds &lt;br/&gt; A = am / pm tohu &lt;br/&gt; p = a.m./p.m. tohu</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Ko te ra o naianei me / te waa ranei ka whakakapihia mo nga tauira o te waa ka oti te whakakii.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Ko nga ahuatanga katoa o tenei tauira ka whakamahi i te tuhinga kua whakaratohia. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Ko nga ahuatanga katoa o tenei tauira ka whakamahi i te tuhinga kua whakaratohia. &lt;/ p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Whakaoti i te Apiti</value>
@@ -469,9 +415,6 @@ Na ahakoa he aha etahi atu mau taviri, mena he &lt;b&gt; Hotkey &lt;/ b&gt; ka p
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Ko te taupānga kaha whakamutunga kaore e mohiotia. Huri ki te taupānga e hiahiatia ana ki a Monekey whakapiri.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Whakapiri ki: &lt;em&gt; &lt;i te akomanga = "whakapiri-whakaurua-suramix"&gt; {0} &lt;/ i&gt; &lt;/ i&gt; &lt;/ em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Whakau</value>
@@ -547,9 +490,6 @@ Tāpirihia me / te kowhiri ranei i te taupānga i te poto o te kape kape (penei 
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Kāore tētahi</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Ko nga pou anake i tohua ka whakamahia mo te tono kua tohua. Ki te kore e tohua, ka whakamahia nga whakaaturanga taunoa i te &lt;em&gt; Clipboard Sidel &lt;/ em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>He maha nga waahanga monkeypaste e whakamahi ana i nga aporo papapātuhi ki te taunekeneke ki etahi atu tono.
 
@@ -562,9 +502,6 @@ Hei whakarite i te whakahoahoa tika, ka tuhia e enei poto poto mo taua tono i ko
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Kaipānui</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Ko te aro turuki i nga paparanga katoa mai i nga tono kua paopao ka waiho &lt;b&gt; kaore i warewarehia &lt;/ B&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Kaituhi</value>
@@ -1331,11 +1268,6 @@ Kaore e taea te whakakore!
     <value>Kei te hiahia koe ki te tautuhi i nga whakamohiotanga katoa?
 
 * Kaore e taea te whakakore!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Ko te paoho makimaki e whakatakoto ana i te topenga (ka huri) i te wa e pa ana ki tetahi hotaka o waho. Ka mutu tenei &lt;b&gt; ngana &lt;/ b&gt; ki te whakahoki i te ahua o te topenga i muri i te whakapiri o waho.
-
-Kaore e taea te whakamanahia kia kore e tau te whakaora me te whakaiti i te mahi, i te pareparenga ranei i runga i te putake o nga raraunga.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Tautuhi i te kaata i muri i te mokete monikei</value>
@@ -2706,5 +2638,66 @@ urupare@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Ako atu mo nga mahere</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Whakapiri ki: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Mā te whakamahi i ngā hoapā e wātea ana (e hiahiatia ana he mono mai tiki) ka whakamahia tēnei āpure mō ngā tauira katoa o tēnei tātauira puta noa i tēnei tuhinga, ka tohutorotia rānei ā muri ake rānei.&lt;/p&gt;&lt;p&gt; Hei tauira, ki te tīpako wāhitau īmēra ki konei ka whakamahia te āpure īmēra o te hoapā ka tīpakohia e koe mō ngā tauira katoa o tēnei tuhinga.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = tau poto&lt;br/&gt;yyyy = tau roa&lt;br/&gt;M = marama (1-12)&lt;br/&gt;MM = marama (01-12)&lt;br/&gt;MMM = marama abbreviation (Jan, Feb ... Tekau mā rua)&lt;br/&gt;MMMM = marama roa (Ko Hānuere, Hēpuari ... Haki)&lt;br/&gt;d = rā (1 - 31)&lt;br/&gt;dd = rā (01 - 31)&lt;br/&gt;ddd = rā o te wiki i roto i ngā kupu (Monday, Tūrei ... Rātapu)&lt;br/&gt;E = rā poto o te wiki ki ngā kupu (Mon, Tue ... Rā)&lt;br/&gt;D - Rā Ordinal (1, tua2, tua3, 21, 22nd, 23, 31, 4th...)&lt;br/&gt;h = haora i roto i te am/pm (0-12)&lt;br/&gt;hh = haora i roto i te am/pm (00-12)&lt;br/&gt;H = haora i te rā (0-23)&lt;br/&gt;HH = haora i te rā (00-23)&lt;br/&gt;mm = meneti&lt;br/&gt;ss = hēkona&lt;br/&gt;SSS = hēkona mira&lt;br/&gt;he tautohu = AM/PM&lt;br/&gt;p = a.m./p.m. tautohu</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Ka whakamahia e ngā putanga katoa o tēnei tātauira te kupu kua whakaratoa.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Ka whakamahia e ngā putanga katoa o tēnei tātauira te kupu kua whakaratoa.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Ka tautuhia e Monkey Whakapiri te papatopenga (overrides) ina whakapiri ki tētahi papatono o waho. Ka &lt;b&gt;ngana&lt;/b&gt; tēnei ki te whakaora i te āhua o te papatopenga i muri i te whakapiri o waho. 
+
+Kāore e taea te whakaū i te whakaoratanga katoa, ā, ka whakaiti rānei i te mahinga, te hinga rānei i a MonkeyPaste i runga anō i te pūtake o te raraunga.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Ka whakamahia anake ngā tautuhinga kua tīpakohia mō te taupānga i whakapūtātia. Ki te kore e whakapūtātia, ka whakamahia ngā tautuhinga taunoa i kitea i te &lt;em&gt;Paetopenga Papatopenga&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Ka waihotia katoatia te aroturuki papatopenga mai i ngā taupānga &lt;b&gt;kua ākiritia&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Ā-Roto&lt;/b&gt;Kua whakawhāitihia ngā pokatata katoa ki roto i te taupānga. Ehara tēnei i te kōwhiringa tika engari ka taea te whakaae ki te whakarite ake he aha ngā pokatata e hiahia ana koe ki te mahi i&lt;i&gt;tētahi rā&lt;/i&gt; huri noa.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Taunoa&lt;/b&gt; Kua whakahohea ngā pokatata huri noa. Ka whakamahi&lt;b&gt;te pokatata Whakaatu/Huna i te matapihi Matua&lt;/b&gt;i te ararere&lt;span color="red"&gt;takahi&lt;/span&gt;mō te pātuhi&lt;b&gt;Maukati Pūmatua&lt;/b&gt; . Ka taea e koe te huri i tēnā ararere, i te tohu ā-ringa rānei ahakoa te wā. Engari&lt;span color="green"&gt;me ngana&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Ngā Aratau Pokatata Huri noa&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;ngoikore&lt;/b&gt; Ka whakarongo tētahi pokatata MonkeyPaste ki tētahi taupānga.&lt;br&gt;*Ko tēnei &lt;i&gt;anake&lt;/i&gt; te kōwhiringa i Linux mō tēnei wā.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Tōmua&lt;/b&gt; Ka kawea te &lt;b&gt;&lt;i&gt;pokatata i mua i&lt;/i&gt;&lt;/b&gt; te whakahaeretanga e te taupānga hohe.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Tuku&lt;/b&gt; Ka kawea te pokatata &lt;b&gt;&lt;i&gt;ā muri i&lt;/i&gt;&lt;/b&gt; te whakahaeretanga e te taupānga hohe.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Kua hipa&lt;/b&gt; Ina rongo a MonkeyPaste i te kī tāuru (pātuhi whakakē- whakakē) o tētahi pokatata takahi ka &lt;i&gt;hunaia&lt;/i&gt; taua pēhi kī mai i te taupānga - tāuru taumata.&lt;br&gt;Mā tēnei kōwhiringa e whakaū te pokatata ka whakaohotia me te kore papā ki te taupānga hohe.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Taupoki Tāuke&lt;/b&gt; He momo aratau takahi motuhake tēnei i hoahoatia mō te pātuhi Maukati Pūmatua. Ka whakaae anake i &lt;b&gt;tētahi&lt;/b&gt; kī (kore - whakakē) mō tōna whakaritenga.&lt;br&gt;Ka taea te &lt;i&gt;mau i te&lt;/i&gt; Maukati Pūmatua aratau takahi pūnoa ina pēhia te pahekotanga ki ētahi atu kī.&lt;br&gt;Nā reira ahakoa he aha ētahi atu kī, mēnā ka pēhia tētahi pokatata &lt;b&gt;Hotkey&lt;/b&gt; ka takahia, ka āraia kia kore ai e &lt;i&gt;mau&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Ko MonkeyPaste ko &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Mā tēnei, ka taea te uru atu ki MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;kaore he pāwhiri, he&lt;/span&gt; &lt;span color="red"&gt;patu rānei i te whatu&lt;/span&gt; me te #x1F440&lt;/p&gt;</value>
   </data>
 </root>

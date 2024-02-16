@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>સ્ક્રોલ - થી - ખોલો</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;પી સંરેખિત = "કેન્દ્ર"&gt; વાંદરો છે &lt;સ્પેન કલર = "લાલ&gt; સંપૂર્ણ રીતે એકીકૃત &lt;/સ્પેન&gt; ડ્રેગ સાથે - અને - ડ્રોપ &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>તેને અહીં મૂકો!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;પી સંરેખિત = "કેન્દ્ર"&gt; આ રીતે, વાંદરાની access ક્સેસ કરી શકાય છે &lt;br&gt; &lt;span રંગ = "લાલ"&gt; ક્લિક વિના &lt;/span&gt; અથવા તો &lt;span રંગ = "લાલ"&gt; આંખ બેટિંગ &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>મને ખેંચો!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>હાવભાવ અનન્ય હોવા જોઈએ અને તેમાં ફક્ત એક ઇનપુટ કી હોઈ શકે છે.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; આંતરિક &lt;/b&gt; બધા શ shortc ર્ટકટ્સ એપ્લિકેશનની અંદર મર્યાદિત છે. આ ખરેખર હેતુપૂર્ણ વિકલ્પ નથી પરંતુ તમે વૈશ્વિક &lt;i&gt; કોઈ દિવસ &lt;/i&gt; બનાવવાનો ઇરાદો ધરાવતા શ shortc ર્ટકટ્સને કસ્ટમાઇઝ કરવાની મંજૂરી આપી શકે છે. &lt;/li&gt;.
-&lt;li&gt;
-&lt;b&gt; ડિફ default લ્ટ &lt;/b&gt; બધા વૈશ્વિક શ shortc ર્ટકટ્સ સક્ષમ છે. &lt;b&gt; મુખ્ય વિંડો બતાવો/છુપાવો &lt;/b&gt; શ shortc ર્ટકટ &lt;સ્પેન રંગ = "લાલ"&gt; ઓવરરાઇડ &lt;/સ્પેન&gt; &lt;b&gt; કેપ્સ લ lock ક &lt;/b&gt; કી માટે રૂટીંગનો ઉપયોગ કરે છે. તમે કોઈપણ સમયે તે રૂટીંગ અથવા હાવભાવને બદલી શકો છો. પરંતુ &lt;span રંગ = "લીલો"&gt; તેને અજમાવો &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;હેડ&gt; &lt;/red&gt;
-&lt;બોડી&gt;
-&lt;h1&gt; ગ્લોબલ શોર્ટકટ મોડ્સ &lt;/H1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; નિષ્ક્રિય &lt;/b&gt; એક શોર્ટકટ વાંદરાની કોઈપણ એપ્લિકેશનમાં સાંભળશે. &lt;br&gt;
-*આ હમણાં માટે લિનક્સ પર &lt;i&gt; ફક્ત &lt;/i&gt; વિકલ્પ છે.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; પ્રિ &lt;/b&gt; શોર્ટકટ &lt;/b&gt; &lt;i&gt; એક્ટિવ એપ્લિકેશન દ્વારા સંચાલિત થાય તે પહેલાં &lt;b&gt; &lt;i&gt; ચલાવશે. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; પોસ્ટ &lt;/b&gt; શોર્ટકટ &lt;/b&gt; &lt;i&gt; &lt;/i&gt; &lt;/b&gt; પછી તે સક્રિય એપ્લિકેશન દ્વારા સંચાલિત કરવામાં આવશે. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ઓવરરાઇડ &lt;/b&gt; જ્યારે ઓવરરાઇડ શ shortc ર્ટકટની ઇનપુટ કી (નોન - મોડિફાયર કી) સાંભળે છે તે &lt;i&gt; છુપાવો &lt;/i&gt; એપ્લિકેશન - લેવલ ઇનપુટમાંથી તે કી પ્રેસ. &lt;br&gt;
-આ વિકલ્પ ખાતરી આપશે કે સક્રિય એપ્લિકેશનના વિરોધાભાસ વિના શોર્ટકટ શરૂ થાય છે.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; વિશિષ્ટ ઓવરરાઇડ &lt;/b&gt; આ એક ખાસ પ્રકારનો ઓવરરાઇડ મોડ છે જે કેપ્સ લ lock ક કી માટે રચાયેલ છે. તે ફક્ત તેની સોંપણી માટે &lt;b&gt; એક &lt;/b&gt; કી (નોન - મોડિફાયર) ને મંજૂરી આપે છે. &lt;br&gt;
-સામાન્ય ઓવરરાઇડ મોડમાં કેપ્સ લ lock ક &lt;/i&gt; પર અટકી શકે છે જ્યારે અન્ય કીઓ સાથે સંયોજનમાં દબાવવામાં આવે છે. &lt;br&gt;
-તેથી અન્ય કીઓ નીચે શું છે તે મહત્વનું નથી, જો &lt;b&gt; હોટકી &lt;/b&gt; શ shortc ર્ટકટ દબાવવામાં આવે છે, તો તે ઓવરરીડેન થઈ જશે અને તેને &lt;/i&gt; પર અટવાયેલા &lt;/i&gt; બનતા અટકાવશે.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>અપંગ કરવું</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>જ્યારે આ વપરાશકર્તા એકાઉન્ટ લ logged ગ ઇન થાય છે ત્યારે લોડ અપ કરો, અન્ય વપરાશકર્તાઓ માટે નહીં.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; ઉપલબ્ધ સંપર્કોનો ઉપયોગ કરીને (ફેચર પ્લગઇનની જરૂર છે) આ ક્ષેત્રનો ઉપયોગ આ દસ્તાવેજમાં આ નમૂનાના બધા દાખલાઓ માટે કરવામાં આવશે અથવા કોઈપણમાં તેનો સંદર્ભ પછીથી કરવામાં આવશે. &lt;/p&gt; &lt;p&gt; તેથી ઉદાહરણ તરીકે જો ઇમેઇલ સરનામું પસંદ કરો અહીં પછી તમે પસંદ કરેલા સંપર્કના ઇમેઇલ ફીલ્ડનો ઉપયોગ આ દસ્તાવેજના બધા દાખલાઓ માટે કરવામાં આવશે. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = ટૂંકા વર્ષ &lt;br/&gt; yyyy = લાંબા વર્ષ &lt;br/&gt; મી = મહિનો (1-12) &lt;br/&gt; મીમી = મહિનો (01-12) &lt;br/&gt; એમએમએમ = મહિનો સંક્ષેપ (જાન્યુ, ફેબ્રુઆરી .. . ડિસે) &lt;br/&gt; એમએમએમએમ = લાંબા મહિનો (જાન્યુઆરી, ફેબ્રુઆરી ... ડિસેમ્બર) &lt;br/&gt; ડી = દિવસ (1 - 31) &lt;br/&gt; ડીડી = દિવસ (01 - 31) &lt;br/&gt; ડીડીડી = શબ્દોમાં અઠવાડિયાનો દિવસ (સોમવાર, મંગળવાર ... રવિવાર) &lt;br/&gt; ઇ = અઠવાડિયાના ટૂંકા દિવસ શબ્દો (સોમ, મંગળ ... સૂર્ય) &lt;br/&gt; ડી - ઓર્ડિનલ ડે (1 લી, 2 જી, 3 જી, 21 મી, 22, 23, 31 મી, 4 થી ...) &lt;br/&gt; એચ = એએમ/પીએમ (0-12) માં કલાક &lt;br/&gt; એચએચ = એએમ/પીએમ (00-12) &lt;બીઆર/ &gt; એચ = દિવસમાં કલાક (0-23) &lt;br/&gt; એચએચ = દિવસમાં કલાક (00-23) &lt;br/&gt; મીમી = મિનિટ &lt;br/&gt; એસએસ = સેકન્ડ &lt;br/&gt; એસએસએસ = મિલિસેકન્ડ્સ &lt;br/&gt; a = am/pm માર્કર &lt;br/&gt; p = a.m./p.m. નિશાનીક</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>વર્તમાન તારીખ અને/અથવા સમય જ્યારે પેસ્ટ કરવામાં આવે ત્યારે ડેટટાઇમ નમૂનાઓ માટે બદલવામાં આવશે.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; આ નમૂનાની બધી ઘટનાઓ પ્રદાન કરેલા ટેક્સ્ટનો ઉપયોગ કરશે. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; આ નમૂનાની બધી ઘટનાઓ પ્રદાન કરેલા ટેક્સ્ટનો ઉપયોગ કરશે. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>ઉમેરવાનું સમાપ્ત કરો</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>છેલ્લી સક્રિય એપ્લિકેશન અજ્ unknown ાત. મંકી પેસ્ટ પર હેતુવાળી એપ્લિકેશન પર સ્વિચ કરો.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>પેસ્ટ કરો: &lt;em&gt; &lt;i વર્ગ = "પેસ્ટ-ટૂલ્ટિપ-સફિક્સ"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>ઘટાડવા</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>કોઈ</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>ઉલ્લેખિત એપ્લિકેશન માટે ફક્ત પસંદ કરેલા પ્રીસેટ્સનો ઉપયોગ કરવામાં આવશે. જ્યારે અનિશ્ચિત હોય, ત્યારે &lt;em&gt; ક્લિપબોર્ડ સાઇડબાર &lt;/em&gt; માં મળેલા ડિફ default લ્ટ પ્રીસેટ્સનો ઉપયોગ કરવામાં આવશે.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>ઘણી વાંદરાની સુવિધાઓ અન્ય એપ્લિકેશનો સાથે સંપર્ક કરવા માટે કીબોર્ડ auto ટોમેશનનો ઉપયોગ કરે છે.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>વાચકો</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>નામંજૂર કરેલી એપ્લિકેશનોમાંથી તમામ ક્લિપબોર્ડ મોનિટરિંગ &lt;b&gt; અવગણવામાં આવશે &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>લેખકો</value>
@@ -1331,11 +1268,6 @@
     <value>શું તમે ખરેખર બધી સૂચનાઓને ફરીથી સેટ કરવા માંગો છો?
 
 *આ પૂર્વવત્ કરી શકાતું નથી!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>બાહ્ય પ્રોગ્રામમાં પેસ્ટ કરતી વખતે વાંદરાની પેસ્ટ ક્લિપબોર્ડ (ઓવરરાઇડ્સ) સેટ કરે છે. આ બાહ્ય પેસ્ટ પછી ક્લિપબોર્ડની સ્થિતિને પુનર્સ્થાપિત કરવા &lt;/b&gt; પ્રયાસ કરશે.
-
-કુલ પુન oration સ્થાપનાની બાંયધરી આપી શકાતી નથી અને ડેટાના સ્ત્રોતને આધારે કામગીરી અથવા તો ક્રેશ વાંદરાની પણ ઘટાડો કરી શકે છે.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>વાંદરો પેસ્ટ કર્યા પછી ક્લિપબોર્ડને ફરીથી સેટ કરો</value>
@@ -2706,5 +2638,66 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>યોજનાઓ વિશે વધુ જાણો</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>ને ચોંટાડો: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;ઉપલબ્ધ સંપર્કોને વાપરી રહ્યા છે (લાવવાનું પ્લગઇન જરૂરી છે) આ ક્ષેત્ર આ દસ્તાવેજમાં આ ટેમ્પલેટના બધા દાખલાઓ માટે વપરાશે અથવા કોઇપણમાં તે પછીથી સંદર્ભિત થશે.&lt;/p&gt;&lt;p&gt; તેથી ઉદાહરણ તરીકે, જો અહીં ઇમેઇલ એડ્રેસ પસંદ કરો, તો તમે પસંદ કરો છો તે સંપર્કનું ઇમેઇલ ક્ષેત્ર આ દસ્તાવેજના તમામ દાખલાઓ માટે ઉપયોગમાં લેવામાં આવશે.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = ટૂંકુ વર્ષ&lt;br/&gt;yyyy = long year&lt;br/&gt;M = મહિનો (૧-૧૨)&lt;br/&gt;MM = મહિનો (01-12)&lt;br/&gt;MMM = મહિનાનું સંક્ષિપ્ત શબ્દ (જાન્યુઆરી, ફેબ્રુઆરી ... ડિસેમ્બર)&lt;br/&gt;MMMM = લાંબો મહિનો (જાન્યુઆરી, ફેબ્રુઆરી ... ડિસેમ્બર)&lt;br/&gt;d = દિવસ (1 - 31)&lt;br/&gt;dd = દિવસ (01 - 31)&lt;br/&gt;ddd = અઠવાડિયાનો દિવસ શબ્દોમાં (સોમવાર, મંગળવાર ... રવિવાર)&lt;br/&gt;E = અઠવાડિયાનો ટૂંકો દિવસ શબ્દોમાં (મોન, ટુ... સૂર્ય)&lt;br/&gt;ડી - ઓર્ડિનરી દિવસ (પ્રથમ, દ્વિતીય, ત્રીજો, 21મો, 22, 23, 31મો, ચોથો દિવસ...)&lt;br/&gt;h = કલાક in am/pm (0-12)&lt;br/&gt;hh = કલાક in am/pm (00-12)&lt;br/&gt;H = દિવસમાં કલાક (૦-૨૩)&lt;br/&gt;HH = દિવસમાં કલાક (૦૦-૨૩)&lt;br/&gt;mm = મિનિટ&lt;br/&gt;ss = second&lt;br/&gt;SSS = મિલિસેકન્ડો&lt;br/&gt;a = AM/PM માર્કર&lt;br/&gt;p = a.m./p.m. marker</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;આ ટેમ્પલેટની તમામ ઘટનાઓ પ્રદાન કરેલા લખાણનો ઉપયોગ કરશે.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;આ ટેમ્પલેટની તમામ ઘટનાઓ પ્રદાન કરેલા લખાણનો ઉપયોગ કરશે.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>જ્યારે બાહ્ય પ્રોગ્રામ ચોંટાડવામાં આવે ત્યારે મંકી પેસ્ટ ક્લિપબોર્ડ (ઓવરરાઇડ) સુયોજિત કરે છે. આ બાહ્ય પેસ્ટ પછી ક્લિપબોર્ડની સ્થિતિને પુનર્સ્થાપિત &lt;b&gt;કરવાનો પ્રયાસ&lt;/b&gt; કરશે. 
+
+કુલ પુન:સ્થાપનાની બાંયધરી આપી શકાતી નથી અને ડેટાના સ્રોતના આધારે પ્રભાવને ઘટાડી શકે છે અથવા તો મંકીપેસ્ટને ક્રેશ કરી શકે છે.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>ફક્ત પસંદ કરેલ પૂર્વસુયોજનો સ્પષ્ટ કરેલ કાર્યક્રમ માટે વપરાશે. જ્યારે સ્પષ્ટ થયેલ ન હોય, &lt;em&gt;ત્યારે ક્લિપબોર્ડ બાજુપટ્ટીમાં&lt;/em&gt; મળેલ મૂળભૂત પૂર્વસુયોજનો વાપરેલ હશે.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>અસ્વીકૃત કાર્યક્રમોમાંથી બધા ક્લિપબોર્ડ દેખરેખને &lt;b&gt;અવગણવામાં&lt;/b&gt; આવશે.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;આંતરિક&lt;/b&gt;બધા શોર્ટકટ્સ એપ્લિકેશનની અંદર સુધી મર્યાદિત છે. આ ખરેખર ઇચ્છિત વિકલ્પ નથી, પરંતુ&lt;i&gt;તમે કોઈ દિવસ&lt;/i&gt; વૈશ્વિક બનાવવા માંગો છો તે શોર્ટકટ્સને કસ્ટમાઇઝ કરવાની મંજૂરી આપી શકે છે.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;મૂળભૂત&lt;/b&gt; બધા વૈશ્વિક ટૂંકાણો સક્રિય થયેલ છે. &lt;b&gt;મુખ્ય વિન્ડો બતાવો/છુપાવો&lt;/b&gt;ટુંકાણ&lt;b&gt;કેપ્સ લોક&lt;/b&gt; કી માટે&lt;span color="red"&gt;ઓવરરાઇડ&lt;/span&gt;રાઉટીંગનો ઉપયોગ કરે છે. તમે કોઈપણ સમયે તે રાઉટિંગ અથવા હાવભાવ બદલી શકો છો. પરંતુ&lt;span color="green"&gt;તેને અજમાવી જુઓ&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;વૈશ્વિક ટૂંકાણ સ્થિતિઓ&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;નિષ્ક્રિય&lt;/b&gt; શોર્ટકટ મંકીપેસ્ટ કોઈપણ એપ્લિકેશનમાં સાંભળશે.&lt;br&gt;*લિનક્સ પર હાલ પૂરતો આ &lt;i&gt;એકમાત્ર&lt;/i&gt; વિકલ્પ છે.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;પહેલાંનું&lt;/b&gt; સક્રિય એપ્લિકેશન દ્વારા સંચાલિત થાય તે &lt;b&gt;&lt;i&gt;પહેલાં&lt;/i&gt;&lt;/b&gt; ટૂંકાણ ચાલશે.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;પોસ્ટ&lt;/b&gt; સક્રિય એપ્લિકેશન દ્વારા સંચાલિત &lt;b&gt;&lt;i&gt;થયા પછી&lt;/i&gt;&lt;/b&gt; શોર્ટકટ ચાલશે.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ઓવરરાઇડ કરો&lt;/b&gt; જ્યારે મંકીપેસ્ટ ઓવરરાઇડ ટૂંકાણની ઇનપુટ કી (બિન -સુધારક કી) ને સાંભળે છે, ત્યારે તે તે કીને એપ્લિકેશન - સ્તર ઇનપુટમાંથી &lt;i&gt;દબાવે છે તે છુપાવશે&lt;/i&gt; .&lt;br&gt;આ વિકલ્પ ખાતરી આપશે કે ટૂંકાણ સક્રિય એપ્લિકેશન સાથે તકરાર વિના ટ્રીગર થયેલ છે.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;વિશિષ્ટ ઓવરરાઇડ&lt;/b&gt; આ એક ખાસ પ્રકારનો ઓવરરાઇડ મોડ છે જે કેપ્સ લોક કી માટે ડિઝાઇન કરવામાં આવ્યો છે. તે તેની સોંપણી માટે ફક્ત &lt;b&gt;એક&lt;/b&gt; કી (નોન -સુધારક) ની મંજૂરી આપે છે.&lt;br&gt;સામાન્ય ઓવરરાઇડ મોડમાં અન્ય કી સાથે સંયોજનમાં દબાવવામાં આવે ત્યારે કેપ્સ લોક &lt;i&gt;અટકી&lt;/i&gt; શકે છે.&lt;br&gt;તેથી બીજી કોઈ પણ ચાવીઓ નીચે હોય, જો &lt;b&gt;હોટકી&lt;/b&gt; શોર્ટકટ દબાવવામાં આવે તો તે ઓવરરાઇડ થઈ જશે અને તેને &lt;i&gt;અટકી&lt;/i&gt; જતા અટકાવશે.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;મંકીપેસ્ટ છે &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;આ રીતે, મંકીપેસ્ટ એક્સેસ કરી શકાય છે&lt;br&gt;&lt;span color="red"&gt;એક પણ ક્લિક કર્યા વિના&lt;/span&gt; અથવા &lt;span color="red"&gt;તો આંખ&lt;/span&gt; અને #x1F440&lt;/p&gt;</value>
   </data>
 </root>

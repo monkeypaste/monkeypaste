@@ -166,14 +166,8 @@ Mga clip ayon sa pagkakabanggit.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Mag -scroll - TO - Buksan</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; monkeypaste is &lt;span color = "red&gt; ganap na isinama &lt;/span&gt; na may drag - at - drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>I -drop ito dito!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; sa ganitong paraan, maaaring ma -access ang Monkeypaste &lt;br&gt; &lt;span color = "pula"&gt; nang walang pag -click &lt;/span&gt; o kahit na &lt;span color = "pula"&gt; batting isang mata &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>I -drag mo ako!</value>
@@ -364,62 +358,14 @@ Mag -upgrade upang maiwasan.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Ang mga kilos ay dapat na natatangi at maaari lamang maglaman ng isang input key.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; panloob &lt;/b&gt; Lahat ng mga shortcut ay limitado sa loob ng aplikasyon. Hindi talaga ito isang inilaan na pagpipilian ngunit maaaring payagan na ipasadya kung ano ang mga shortcut na balak mong gawin ang pandaigdigang &lt;i&gt; balang araw &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; default &lt;/b&gt; Ang lahat ng mga pandaigdigang shortcut ay pinagana. Ang &lt;b&gt; Ipakita/Itago ang Main Window &lt;/b&gt; Ang shortcut ay gumagamit ng &lt;span color = "red"&gt; override &lt;/span&gt; ruta para sa &lt;b&gt; caps lock &lt;/b&gt; key. Maaari mong baguhin ang ruta o kilos sa anumang oras. Ngunit &lt;span color = "berde"&gt; subukan ito &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;pread&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt; Global Shortcut Modes &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; passive &lt;/b&gt; Ang isang shortcut monkeypaste ay makikinig para sa anumang aplikasyon. &lt;br&gt;
-*Ito ang pagpipilian ng &lt;i&gt; lamang &lt;/i&gt; sa Linux sa ngayon.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Pre &lt;/b&gt; Ang shortcut ay isasagawa &lt;b&gt; &lt;i&gt; bago &lt;/i&gt; &lt;/b&gt; ito ay hawakan ng aktibong aplikasyon. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt; Ang shortcut ay isasagawa &lt;b&gt; &lt;i&gt; pagkatapos &lt;/i&gt; &lt;/b&gt; ito ay hawakan ng aktibong aplikasyon. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; override &lt;/b&gt; Kapag naririnig ng Monkeypaste ang input key (non -modifier key) ng isang override shortcut ito ay &lt;i&gt; itago &lt;/i&gt; ang key press mula sa application -level input. &lt;br&gt;
-Ang pagpipiliang ito ay gagarantiyahan ang shortcut ay na -trigger nang walang mga salungatan sa aktibong aplikasyon.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; eksklusibong override &lt;/b&gt; Ito ay isang espesyal na uri ng override mode na idinisenyo para sa caps lock key. Pinapayagan lamang nito ang &lt;b&gt; isa &lt;/b&gt; key (non -modifier) ​​para sa pagtatalaga nito. &lt;br&gt;
-Sa normal na override mode caps lock ay maaaring maging &lt;i&gt; suplado sa &lt;/i&gt; kapag pinindot kasama ang iba pang mga susi.
-Kaya kahit na ano ang ibang mga susi ay bumaba, kung ang isang &lt;b&gt; hotkey &lt;/b&gt; shortcut ay pinindot ito ay mapapawi at pipigilan itong maging &lt;i&gt; na natigil sa &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Huwag paganahin</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Mag -load kapag ang account ng gumagamit na ito ay naka -log in, hindi para sa iba pang mga gumagamit.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; gamit ang mga magagamit na contact (nangangailangan ng isang fetcher plugin) ang patlang na ito ay gagamitin para sa lahat ng mga pagkakataon ng template na ito sa buong dokumentong ito o sa anumang ito ay mai -refer sa ibang pagkakataon. &lt;/p&gt; &lt;p&gt; Kaya halimbawa kung piliin ang email address Narito pagkatapos ang larangan ng email ng contact na iyong pinili ay gagamitin para sa lahat ng mga pagkakataon sa dokumentong ito. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = maikling taon &lt;br/&gt; yyyy = mahabang taon &lt;br/&gt; m = buwan (1-12) &lt;br/&gt; mm = buwan (01-12) . Dis) &lt;br/&gt; mmmm = mahabang buwan (Enero, Pebrero ... Disyembre) &lt;br/&gt; d = araw (1 - 31) Araw ng Linggo sa Mga Salita (Lunes, Martes ... Linggo) &lt;br/&gt; e = Maikling Araw ng Linggo sa Mga Salita (Mon, Tue ... Araw) Ika-3, ika-21, ika-22, ika-23, ika-31, ika-4 ...) &gt; H = oras sa araw (0-23) &lt;br/&gt; hh = oras sa araw (00-23) &lt;br/&gt; mm = minuto &lt;br/&gt; ss = pangalawa A = AM/PM marker &lt;br/&gt; p = a.m./p.m. pananda</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Ang kasalukuyang petsa at/o oras ay mapapalitan para sa mga template ng dateTime kapag sila ay na -paste.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Lahat ng mga pangyayari ng template na ito ay gagamitin ang ibinigay na teksto. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Lahat ng mga pangyayari ng template na ito ay gagamitin ang ibinigay na teksto. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Tapusin ang pagdidikit</value>
@@ -469,9 +415,6 @@ Kaya kahit na ano ang ibang mga susi ay bumaba, kung ang isang &lt;b&gt; hotkey 
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Huling aktibong app na hindi kilala. Lumipat sa inilaan na app sa Monkey I -paste.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>I-paste sa: &lt;em&gt; &lt;i class = "I-paste-tooltip-suffix"&gt; {0}</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>I -minimize</value>
@@ -547,9 +490,6 @@ Idagdag at/o piliin ang app gamit ang natatanging shortcut ng kopya (tulad ng is
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Wala</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Ang mga napiling preset lamang ang gagamitin para sa tinukoy na aplikasyon. Kapag hindi natukoy, ang mga default na preset na matatagpuan sa &lt;em&gt; clipboard sidebar &lt;/em&gt; ay gagamitin.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Maraming mga tampok ng Monkeypaste ang gumagamit ng automation ng keyboard upang makipag -ugnay sa iba pang mga aplikasyon.
 
@@ -562,9 +502,6 @@ Upang matiyak ang wastong interoperability, itala ang mga shortcut para sa appli
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Mga mambabasa</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Ang lahat ng pagsubaybay sa clipboard mula sa tinanggihan na mga aplikasyon ay magiging &lt;b&gt; hindi pinansin &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Manunulat</value>
@@ -1331,11 +1268,6 @@ Hindi ito maaalis!
     <value>Sigurado ka bang nais mong i -reset ang lahat ng mga abiso?
 
 *Hindi ito maaalis!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Itinatakda ng Monkey Paste ang clipboard (overrides) kapag nag -paste sa isang panlabas na programa. Ito ay &lt;b&gt; pagtatangka &lt;/b&gt; upang maibalik ang estado ng clipboard pagkatapos ng isang panlabas na i -paste.
-
-Ang kabuuang pagpapanumbalik ay hindi maaaring garantisado at maaaring mabawasan ang pagganap o kahit na pag -crash ng unggoy depende sa mapagkukunan ng data.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>I -reset ang clipboard pagkatapos ng pag -paste ng unggoy</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Matuto nang higit pa tungkol sa mga plano</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Idikit sa: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Gamit ang magagamit na mga contact (nangangailangan ng isang fetcher plugin) ang patlang na ito ay gagamitin para sa lahat ng mga pagkakataon ng template na ito sa buong dokumentong ito o sa anumang ito ay sanggunian sa mamaya.&lt;/p&gt;&lt;p&gt; Kaya halimbawa kung piliin ang email address dito pagkatapos ay ang email field ng contact na iyong pinili ay gagamitin para sa lahat ng mga pagkakataon sa dokumentong ito.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = maikling taon&lt;br/&gt;yyyy = mahaba ang taon&lt;br/&gt;M = buwan (1-12)&lt;br/&gt;MM = buwan (01 12)&lt;br/&gt;MMM = buwan na pagdadaglat (Enero, Peb ... Dec)&lt;br/&gt;MMMM = mahabang buwan (Enero, Pebrero ... Disyembre)&lt;br/&gt;d = araw (1 - 31)&lt;br/&gt;dd = araw (01 - 31)&lt;br/&gt;ddd = araw ng linggo sa mga salita (Lunes, Martes ... Linggo)&lt;br/&gt;E = maikling araw ng linggo sa mga salita (Mon, Tue ... Sun)&lt;br/&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;br/&gt;h = oras sa am/pm (0-12)&lt;br/&gt;hh = oras sa am/pm (00-12)&lt;br/&gt;H = oras sa araw (0-23)&lt;br/&gt;HH = oras sa araw (00-23)&lt;br/&gt;mm = minuto&lt;br/&gt;ss = pangalawa&lt;br/&gt;SSS = milliseconds&lt;br/&gt;a = AM / PM marker&lt;br/&gt;p = marker ng a.m./p.m.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Ang lahat ng mga pangyayari ng template na ito ay gagamitin ang ibinigay na teksto.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Ang lahat ng mga pangyayari ng template na ito ay gagamitin ang ibinigay na teksto.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste set ang clipboard (overrides) kapag nag paste sa isang panlabas na programa. &lt;b&gt;Susubukan&lt;/b&gt; nitong ibalik ang estado ng clipboard pagkatapos ng isang panlabas na paste. 
+
+Ang kabuuang pagpapanumbalik ay hindi maaaring garantisadong at maaaring mabawasan ang pagganap o kahit na pag crash ng MonkeyPaste depende sa pinagmulan ng data.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Tanging ang mga napiling preset ang gagamitin para sa tinukoy na application. Kapag hindi tinukoy, ang mga default na preset na matatagpuan sa &lt;em&gt;Clipboard Sidebar&lt;/em&gt; ay gagamitin.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Ang lahat ng pagsubaybay sa clipboard mula sa mga tinanggihan na application ay hindi &lt;b&gt;papansinin&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Panloob na&lt;/b&gt;Ang lahat ng mga shortcut ay limitado sa loob ng application. Ito ay hindi talaga isang nilalayong pagpipilian ngunit maaaring payagan upang ipasadya kung ano ang mga shortcut na balak mong gawing global&lt;i&gt;balang araw&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Default na&lt;/b&gt; Ang lahat ng mga global shortcut ay pinagana. Ang shortcut ng&lt;b&gt;Ipakita / Itago ang Main Window&lt;/b&gt;ay gumagamit ng&lt;span color="red"&gt;override&lt;/span&gt;routing para sa&lt;b&gt;Caps Lock&lt;/b&gt; key. Maaari mong baguhin ang routing o kilos na iyon anumang oras. Ngunit&lt;span color="green"&gt;bigyan ito ng isang subukan&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Mga Global Shortcut Mode&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passive&lt;/b&gt; Ang isang shortcut MonkeyPaste ay makikinig para sa anumang application.&lt;br&gt;*Ito &lt;i&gt;lang&lt;/i&gt; ang opsyon sa Linux sa ngayon.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Ang shortcut ay magpapatupad &lt;b&gt;&lt;i&gt;bago&lt;/i&gt;&lt;/b&gt; ito hawakan ng aktibong application.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Mag-post&lt;/b&gt; Ang shortcut ay magpapatupad &lt;b&gt;&lt;i&gt;pagkatapos&lt;/i&gt;&lt;/b&gt; na ito ay hawakan ng aktibong application.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Talunin ang lahat&lt;/b&gt; Kapag narinig ng MonkeyPaste ang input key (non - modifier key) ng override shortcut ay &lt;i&gt;itago&lt;/i&gt; nito ang key press na iyon mula sa input sa application - level.&lt;br&gt;Ang pagpipiliang ito ay garantiya ang shortcut ay nag trigger nang walang mga salungatan sa aktibong application.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Eksklusibong Pag override&lt;/b&gt; Ito ay isang espesyal na uri ng override mode na idinisenyo para sa Caps Lock key. Nagtutugot lamang ito ng &lt;b&gt;isang&lt;/b&gt; susi (hindi nagbabago) para sa toka nito.&lt;br&gt;Sa normal na override mode Caps Lock ay maaaring maging stuck sa kapag pinindot sa kumbinasyon &lt;i&gt;sa&lt;/i&gt; iba pang mga key.&lt;br&gt;Kaya kahit anong iba pang keys ang down, kung may &lt;b&gt;Hotkey&lt;/b&gt; shortcut na pinindot ay magiging overriden ito at mapipigilan itong ma &lt;i&gt;stuck on&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Ang MonkeyPaste ay &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Sa ganitong paraan, maaaring ma access ang MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;walang click&lt;/span&gt; o &lt;span color="red"&gt;kahit batting isang mata&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

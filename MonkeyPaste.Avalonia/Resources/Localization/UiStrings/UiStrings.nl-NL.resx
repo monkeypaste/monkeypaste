@@ -166,14 +166,8 @@ clips respectievelijk.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Scroll - naar - Open</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; monkeypaste is &lt;span color = "rood&gt; volledig geïntegreerd &lt;/span&gt; met slepen - en - drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Laat het hier vallen!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; Op deze manier is Monkeypaste toegankelijk &lt;br&gt; &lt;span color = "red"&gt; zonder een klik &lt;/span&gt; of zelfs &lt;span color = "rood"&gt; slaat een oog &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Sleep me!</value>
@@ -364,62 +358,14 @@ Upgrade om te vermijden.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Gebaren moeten uniek zijn en mogen slechts één invoersleutel bevatten.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Interne &lt;/b&gt; Alle snelkoppelingen zijn beperkt tot binnen de toepassing. Dit is niet echt een beoogde optie, maar kan het mogelijk maken om aan te passen welke snelkoppelingen u van plan bent om ooit wereldwijd &lt;i&gt; te maken &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Standaard &lt;/b&gt; Alle globale snelkoppelingen zijn ingeschakeld. Het &lt;b&gt; Show/verbergen hoofdvenster &lt;/b&gt; sneltoets gebruikt &lt;span color = "red"&gt; overschrijven &lt;/span&gt; Routing voor de slot &lt;b&gt; Caps Lock &lt;/b&gt;. U kunt die routering of gebaar op elk gewenst moment wijzigen. Maar &lt;span color = "green"&gt; probeer het eens &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;HTML&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;Body&gt;
-&lt;H1&gt; Globale sneltoetsmodi &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Passief &lt;/b&gt; Een snelkoppeling Monkeypaste luistert naar in elke applicatie. &lt;br&gt;
-*Dit is de optie &lt;i&gt; alleen &lt;/i&gt; voor nu op Linux.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Pre &lt;/b&gt; snelkoppeling zal &lt;b&gt; &lt;i&gt; vóór &lt;/i&gt; &lt;/b&gt; worden uitgevoerd. Het wordt afgehandeld door de actieve toepassing. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; snelkoppeling wordt &lt;b&gt; &lt;i&gt; na &lt;/i&gt; &lt;/b&gt; uitgevoerd, wordt het afgehandeld door de actieve toepassing. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; override &lt;/b&gt; Wanneer Monkeypaste de invoertoets (niet - Modifiersleutel) hoort van een overschrijvingsbekleding, zal het &lt;i&gt; verbergen &lt;/i&gt; Die sleutel drukt op de invoer van de toepassing - niveau. &lt;br&gt;
-Deze optie garandeert dat de snelkoppeling wordt geactiveerd zonder conflicten voor de actieve toepassing.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Exclusieve override &lt;/b&gt; Dit is een speciaal type override -modus ontworpen voor de CAPS Lock -toets. Het maakt slechts &lt;b&gt; één &lt;/b&gt; -toets (niet - modificator) mogelijk voor de toewijzing. &lt;br&gt;
-In de normale override -modus kan de doppenvergrendeling &lt;i&gt; vastzitten aan &lt;/i&gt; wanneer ingedrukt in combinatie met andere toetsen. &lt;br&gt;
-Dus wat andere toetsen ook zijn, als een &lt;b&gt; sneltoets &lt;/b&gt; sneltoets wordt ingedrukt, wordt het overschreven en voorkomt dat het &lt;i&gt; wordt vastgelopen &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Uitzetten</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Laden wanneer dit gebruikersaccount is aangemeld, niet voor andere gebruikers.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Beschikbare contacten gebruiken (vereist een fetcher -plug -in) Dit veld wordt gebruikt voor alle instanties van deze sjabloon in dit document of in een andere wordt er later naar verwezen. &lt;/p&gt; &lt;p&gt; Dus bijvoorbeeld als selecteer e -mailadres selecteert Hier dan wordt het e -mailveld van het contact dat u selecteert voor alle instanties in dit document gebruikt. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = kort jaar &lt;br/&gt; yyyy = lang jaar &lt;br/&gt; m = maand (1-12) &lt;br/&gt; mm = maand (01-12) &lt;br/&gt; mmm = maand afkorting (jan, februari .. . Dec) &lt;br/&gt; mmmm = lange maand (januari, februari ... december) &lt;br/&gt; d = dag (1 - 31) &lt;br/&gt; dd = dag (01 - 31) &lt;br/&gt; ddd = Dag van de week in woorden (maandag, dinsdag ... zondag) &lt;br/&gt; e = korte dag van de week in woorden (ma, di ... zon) &lt;br/&gt; d - Ordinal Day (1e, 2e, 3e, 21e, 22e, 23e, 31e, 4e ...) &lt;br/&gt; h = uur in AM/PM (0-12) &lt;br/&gt; HH = uur in AM/PM (00-12) &lt;Br/ &gt; H = uur in dag (0-23) &lt;br/&gt; hh = uur in dag (00-23) &lt;br/&gt; mm = minuut &lt;br/&gt; ss = tweede &lt;br/&gt; sss = milliseconden &lt;br/&gt; A = AM/PM -marker &lt;br/&gt; P = A.M./P.M. markeerstift</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>De huidige datum en/of tijd worden vervangen door datetime -sjablonen wanneer ze worden geplakt.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Alle gebeurtenissen van deze sjabloon zullen de opgegeven tekst gebruiken. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Alle gebeurtenissen van deze sjabloon zullen de opgegeven tekst gebruiken. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Voltooi toevoegen</value>
@@ -469,9 +415,6 @@ Dus wat andere toetsen ook zijn, als een &lt;b&gt; sneltoets &lt;/b&gt; sneltoet
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Laatste actieve app onbekend. Schakel over naar de beoogde app naar apenpasta.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Plakken naar: &lt;em&gt; &lt;i class = "Paste-ToolTip-Suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimaliseren</value>
@@ -547,9 +490,6 @@ Toevoegen en/of selecteer de app met de unieke kopie -snelkoppeling (zoals bijvo
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Geen</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Alleen de geselecteerde presets worden gebruikt voor de opgegeven toepassing. Indien niet gespecificeerd, worden de standaardvoorinstellingen in de zijkant &lt;em&gt; klembord -zijbalk &lt;/em&gt; gebruikt.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Veel Monkeypaste -functies gebruiken toetsenbordautomatisering om te communiceren met andere applicaties.
 
@@ -562,9 +502,6 @@ Om de juiste interoperabiliteit te garanderen, neemt u die snelkoppelingen voor 
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Lezers</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Alle klembordbewaking van afgewezen toepassingen zijn &lt;b&gt; genegeerd &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Schrijvers</value>
@@ -1331,11 +1268,6 @@ Dit kan niet ongedaan gemaakt worden!
     <value>Weet u zeker dat u alle meldingen wilt resetten?
 
 *Dit kan niet ongedaan gemaakt worden!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste stelt het klembord in (overschrijven) bij het plakken naar een extern programma. Dit zal &lt;b&gt; poging &lt;/b&gt; om de status van het klembord na een externe pasta te herstellen.
-
-Het totale herstel kan niet worden gegarandeerd en kan de prestaties verminderen of zelfs Monkeypaste crashen, afhankelijk van de bron van de gegevens.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Reset klembord na het plakken van de aap</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Meer informatie over plannen</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Plakken op: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Met behulp van beschikbare contacten (vereist een fetcher-plug-in) wordt dit veld gebruikt voor alle exemplaren van dit sjabloon in dit document of in een ander waarnaar later wordt verwezen.&lt;/p&gt;&lt;p&gt; Dus als u hier bijvoorbeeld een e-mailadres selecteert, wordt het e-mailveld van de contactpersoon die u selecteert gebruikt voor alle instanties in dit document.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = kort jaar&lt;br/&gt;jjjj = lang jaar&lt;br/&gt;M = maand (1-12)&lt;br/&gt;MM = maand (01-12)&lt;br/&gt;MMM = maand afkorting (jan, feb ... Dec)&lt;br/&gt;MMMM = lange maand (januari, februari ... december)&lt;br/&gt;d = dag (1 - 31)&lt;br/&gt;dd = dag (01 - 31)&lt;br/&gt;ddd = dag van de week in woorden (maandag, dinsdag ... Zondag)&lt;br/&gt;E = korte dag van de week in woorden (ma, di ... Zon)&lt;br/&gt;D - Ordinale dag (1e, 2e, 3e, 21e, 22e, 23e, 31e, 4e...)&lt;br/&gt;h = uur in am/pm (0-12)&lt;br/&gt;hh = uur in am/pm (00-12)&lt;br/&gt;H = uur in dag (0-23)&lt;br/&gt;HH = uur in dag (00-23)&lt;br/&gt;mm = minuut&lt;br/&gt;hs = seconde&lt;br/&gt;SSS = milliseconden&lt;br/&gt;a = AM/PM-markering&lt;br/&gt;p = a.m./p.m. markering</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Alle keren dat dit sjabloon voorkomt, wordt de meegeleverde tekst gebruikt.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Alle keren dat dit sjabloon voorkomt, wordt de meegeleverde tekst gebruikt.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste stelt het klembord in (overschrijft) bij het plakken naar een extern programma. Hiermee wordt &lt;b&gt;geprobeerd&lt;/b&gt; de status van het klembord te herstellen na een externe plak. 
+
+Volledig herstel kan niet worden gegarandeerd en kan de prestaties verminderen of zelfs MonkeyPaste laten crashen, afhankelijk van de bron van de gegevens.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Alleen de geselecteerde voorinstellingen worden gebruikt voor de opgegeven toepassing. Als dit niet is opgegeven, worden de standaardvoorinstellingen in de &lt;em&gt;zijbalk van het klembord&lt;/em&gt; gebruikt.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Alle klembordbewaking van afgewezen aanvragen wordt &lt;b&gt;genegeerd&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Intern&lt;/b&gt;Alle snelkoppelingen zijn beperkt tot binnen de applicatie. Dit is niet echt een beoogde optie, maar kan het mogelijk maken om aan te passen welke snelkoppelingen u&lt;i&gt;ooit&lt;/i&gt; globaal wilt maken.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Verstek&lt;/b&gt; Alle algemene snelkoppelingen zijn ingeschakeld. De snelkoppeling '&lt;b&gt;Hoofdvenster weergeven/verbergen'&lt;/b&gt;maakt gebruik van&lt;span color="red"&gt;een overbruggingsroute&lt;/span&gt;voor de&lt;b&gt;Caps Lock-toets&lt;/b&gt; . U kunt die routing of dat gebaar op elk gewenst moment wijzigen. Maar&lt;span color="green"&gt;probeer het eens&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Algemene snelkoppelingsmodi&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passief&lt;/b&gt; Een snelkoppeling waar MonkeyPaste naar luistert in elke toepassing.&lt;br&gt;*Dit is voorlopig de &lt;i&gt;enige&lt;/i&gt; optie op Linux.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; De snelkoppeling wordt uitgevoerd &lt;b&gt;&lt;i&gt;voordat&lt;/i&gt;&lt;/b&gt; deze wordt afgehandeld door de actieve toepassing.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Verzenden&lt;/b&gt; De snelkoppeling wordt uitgevoerd &lt;b&gt;&lt;i&gt;nadat&lt;/i&gt;&lt;/b&gt; deze is afgehandeld door de actieve toepassing.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Afjakkeren&lt;/b&gt; Wanneer MonkeyPaste de invoertoets (niet-wijzigingstoets) van een override-snelkoppeling hoort, wordt die toetsaanslag &lt;i&gt;verborgen voor&lt;/i&gt; invoer op toepassingsniveau.&lt;br&gt;Deze optie garandeert dat de snelkoppeling wordt geactiveerd zonder conflicten met de actieve toepassing.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Exclusieve overschrijving&lt;/b&gt; Dit is een speciaal type override-modus dat is ontworpen voor de Caps Lock-toets. Het staat slechts &lt;b&gt;één&lt;/b&gt; toets (niet-modifier) toe voor de toewijzing ervan.&lt;br&gt;In de normale override-modus kan Caps Lock &lt;i&gt;blijven hangen&lt;/i&gt; wanneer deze in combinatie met andere toetsen wordt ingedrukt.&lt;br&gt;Dus het maakt niet uit welke andere toetsen er zijn, als er op een &lt;b&gt;sneltoets&lt;/b&gt; wordt gedrukt, wordt deze overschreven en wordt voorkomen dat deze &lt;i&gt;vastloopt&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Op deze manier kan MonkeyPaste worden benaderd&lt;br&gt;&lt;span color="red"&gt;zonder een klik&lt;/span&gt; of zelfs maar &lt;span color="red"&gt;met de ogen te knipperen&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

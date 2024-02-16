@@ -20,7 +20,7 @@ namespace Ledgerizer {
         DO_LOCAL_INDEX = 1L << 6,
         DO_REMOTE_INDEX = 1L << 7,
         LOCAL_MOVE_CORE_TO_DAT = 1L << 8,
-        LOCALIZE_MANIFESTS = 1L << 9,
+        GEN_LOCALIZED_MANIFESTS = 1L << 9,
         GEN_EMPTY_RESX = 1L << 10,
         GEN_ADDON_LISTING = 1L << 11,
         GEN_PROD_LISTING = 1L << 12,
@@ -31,8 +31,13 @@ namespace Ledgerizer {
         MOVE_JS_UISTRINGS = 1L << 17,
         DO_LOCAL_LEDGER = 1L << 18,
         DO_REMOTE_LEDGER = 1L << 19,
+        DEBUG = 1L << 20,
+        RELEASE = 1L << 21,
     }
     internal class Program {
+        #region Localizer Props
+
+        static GoogleLiteTextTranslatorPlugin _Translator = new GoogleLiteTextTranslatorPlugin();
         //static string ALL_CULTURES_CSV = "ar,ar-sa,ar-ae,ar-bh,ar-dz,ar-eg,ar-iq,ar-jo,ar-kw,ar-lb,ar-ly,ar-ma,ar-om,ar-qa,ar-sy,ar-tn,ar-ye,af,af-za,sq,sq-al,am,am-et,hy,hy-am,as,as-in,az-arab,az-arab-az,az-cyrl,az-cyrl-az,az-latn,az-latn-az,eu,eu-es,be,be-by,bn,bn-bd,bn-in,bs,bs-cyrl,bs-cyrl-ba,bs-latn,bs-latn-ba,bg,bg-bg,ca,ca-es,ca-es-valencia,chr-cher,chr-cher-us,chr-latn,zh-Hans,zh-cn,zh-hans-cn,zh-sg,zh-hans-sg,zh-Hant,zh-hk,zh-mo,zh-tw,zh-hant-hk,zh-hant-mo,zh-hant-tw,hr,hr-hr,hr-ba,cs,cs-cz,da,da-dk,prs,prs-af,prs-arab,nl,nl-nl,nl-be,en,en-au,en-ca,en-gb,en-ie,en-in,en-nz,en-sg,en-us,en-za,en-bz,en-hk,en-id,en-jm,en-kz,en-mt,en-my,en-ph,en-pk,en-tt,en-vn,en-zw,en-053,en-021,en-029,en-011,en-018,en-014,et,et-ee,fil,fil-latn,fil-ph,fi,fi-fi,fr,fr-be ,fr-ca ,fr-ch ,fr-fr ,fr-lu,fr-015,fr-cd,fr-ci,fr-cm,fr-ht,fr-ma,fr-mc,fr-ml,fr-re,frc-latn,frp-latn,fr-155,fr-029,fr-021,fr-011,gl,gl-es,ka,ka-ge,de,de-at,de-ch,de-de,de-lu,de-li,el,el-gr,gu,gu-in,ha,ha-latn,ha-latn-ng,he,he-il,hi,hi-in,hu,hu-hu,is,is-is,ig-latn,ig-ng,id,id-id,iu-cans,iu-latn,iu-latn-ca,ga,ga-ie,xh,xh-za,zu,zu-za,it,it-it,it-ch,ja ,ja-jp,kn,kn-in,kk,kk-kz,km,km-kh,quc-latn,qut-gt,qut-latn,rw,rw-rw,sw,sw-ke,kok,kok-in,ko,ko-kr,ku-arab,ku-arab-iq,ky-kg,ky-cyrl,lo,lo-la,lv,lv-lv,lt,lt-lt,lb,lb-lu,mk,mk-mk,ms,ms-bn,ms-my,ml,ml-in,mt,mt-mt,mi,mi-latn,mi-nz,mr,mr-in,mn-cyrl,mn-mong,mn-mn,mn-phag,ne,ne-np,nb,nb-no,nn,nn-no,no,no-no,or,or-in,fa,fa-ir,pl,pl-pl,pt-br,pt,pt-pt,pa,pa-arab,pa-arab-pk,pa-deva,pa-in,quz,quz-bo,quz-ec,quz-pe,ro,ro-ro,ru ,ru-ru,gd-gb,gd-latn,sr-Latn,sr-latn-cs,sr,sr-latn-ba,sr-latn-me,sr-latn-rs,sr-cyrl,sr-cyrl-ba,sr-cyrl-cs,sr-cyrl-me,sr-cyrl-rs,nso,nso-za,tn,tn-bw,tn-za,sd-arab,sd-arab-pk,sd-deva,si,si-lk,sk,sk-sk,sl,sl-si,es,es-cl,es-co,es-es,es-mx,es-ar,es-bo,es-cr,es-do,es-ec,es-gt,es-hn,es-ni,es-pa,es-pe,es-pr,es-py,es-sv,es-us,es-uy,es-ve,es-019,es-419,sv,sv-se,sv-fi,tg-arab,tg-cyrl,tg-cyrl-tj,tg-latn,ta,ta-in,tt-arab,tt-cyrl,tt-latn,tt-ru,te,te-in,th,th-th,ti,ti-et,tr,tr-tr,tk-cyrl,tk-latn,tk-tm,tk-latn-tr,tk-cyrl-tr,uk,uk-ua,ur,ur-pk,ug-arab,ug-cn,ug-cyrl,ug-latn,uz,uz-cyrl,uz-latn,uz-latn-uz,vi,vi-vn,cy,cy-gb,wo,wo-sn,yo-latn,yo-ng";
         static string MS_STORE_CULTURES_CSV = "ar-SA,ar-AE,ar-BH,ar-DZ,ar-EG,ar-IQ,ar-JO,ar-KW,ar-LB,ar-LY,ar-MA,ar-OM,ar-QA,ar-SY,ar-TN,ar-YE,af-ZA,sq-AL,am-ET,hy-AM,as-IN,az-Arab,az-Arab-AZ,az-Cyrl,az-Cyrl-AZ,az-Latn,az-Latn-AZ,eu-ES,be-BY,bn-BD,bn-IN,bs-Cyrl,bs-Cyrl-BA,bs-Latn,bs-Latn-BA,bg-BG,ca-ES,ca-ES-VALENCIA,chr-Cher,chr-Cher-US,chr-Latn,zh-Hans,zh-CN,zh-Hans-CN,zh-SG,zh-Hans-SG,zh-Hant,zh-HK,zh-MO,zh-TW,zh-Hant-HK,zh-Hant-MO,zh-Hant-TW,hr-HR,hr-BA,cs-CZ,da-DK,prs-AF,prs-Arab,nl-NL,nl-BE,en-AU,en-CA,en-GB,en-IE,en-IN,en-NZ,en-SG,en-US,en-ZA,en-BZ,en-HK,en-ID,en-JM,en-KZ,en-MT,en-MY,en-PH,en-PK,en-TT,en-VN,en-ZW,en-053,en-021,en-029,en-011,en-018,en-014,et-EE,fil-Latn,fil-PH,fi-FI,fr-LU,fr-015,fr-CD,fr-CI,fr-CM,fr-HT,fr-MA,fr-MC,fr-ML,fr-RE,frc-Latn,frp-Latn,fr-155,fr-029,fr-021,fr-011,gl-ES,ka-GE,de-AT,de-CH,de-DE,de-LU,de-LI,el-GR,gu-IN,ha-Latn,ha-Latn-NG,he-IL,hi-IN,hu-HU,is-IS,ig-Latn,ig-NG,id-ID,iu-Cans,iu-Latn,iu-Latn-CA,ga-IE,xh-ZA,zu-ZA,it-IT,it-CH,ja-JP,kn-IN,kk-KZ,km-KH,quc-Latn,qut-GT,qut-Latn,rw-RW,sw-KE,kok-IN,ko-KR,ku-Arab,ku-Arab-IQ,ky-KG,ky-Cyrl,lo-LA,lv-LV,lt-LT,lb-LU,mk-MK,ms-BN,ms-MY,ml-IN,mt-MT,mi-Latn,mi-NZ,mr-IN,mn-Cyrl,mn-Mong,mn-MN,mn-Phag,ne-NP,nb-NO,nn-NO,no-NO,or-IN,fa-IR,pl-PL,pt-BR,pt-PT,pa-Arab,pa-Arab-PK,pa-Deva,pa-IN,quz-BO,quz-EC,quz-PE,ro-RO,ru-RU,gd-GB,gd-Latn,sr-Latn,sr-Latn-CS,sr-Latn-BA,sr-Latn-ME,sr-Latn-RS,sr-Cyrl,sr-Cyrl-BA,sr-Cyrl-CS,sr-Cyrl-ME,sr-Cyrl-RS,nso-ZA,tn-BW,tn-ZA,sd-Arab,sd-Arab-PK,sd-Deva,si-LK,sk-SK,sl-SI,es-CL,es-CO,es-ES,es-MX,es-AR,es-BO,es-CR,es-DO,es-EC,es-GT,es-HN,es-NI,es-PA,es-PE,es-PR,es-PY,es-SV,es-US,es-UY,es-VE,es-019,es-419,sv-SE,sv-FI,tg-Arab,tg-Cyrl,tg-Cyrl-TJ,tg-Latn,ta-IN,tt-Arab,tt-Cyrl,tt-Latn,tt-RU,te-IN,th-TH,ti-ET,tr-TR,tk-Cyrl,tk-Latn,tk-TM,tk-Latn-TR,tk-Cyrl-TR,uk-UA,ur-PK,ug-Arab,ug-CN,ug-Cyrl,ug-Latn,uz-Cyrl,uz-Latn,uz-Latn-UZ,vi-VN,cy-GB,wo-SN,yo-Latn,yo-NG";
         static List<string> MsStoreCultures =>
@@ -41,12 +46,10 @@ namespace Ledgerizer {
         static IEnumerable<string> WorkingCultures {
             get {
                 // these give 400 error on google translate
-
                 string[] omitted = new string[] {
                     "iu-Latn",
                     "iu-Latn-CA",
                     "kok-IN",
-                    "tk-TM",
                 };
                 // get cultures resx tool supports
                 var specificCultures = CultureInfo.GetCultures(CultureTypes.AllCultures)
@@ -74,27 +77,97 @@ namespace Ledgerizer {
             }
         }
 
+        static IEnumerable<string> GetAllNeutralResxPaths() {
+            return
+            [
+                //Path.Combine(
+                //    MpCommonHelpers.GetSolutionDir(),
+                //    "MonkeyPaste.Avalonia",
+                //    "Resources",
+                //    "Localization",
+                //    "Listings",
+                //    "ListingStrings.resx"),
+                //Path.Combine(
+                //    MpCommonHelpers.GetSolutionDir(),
+                //    "MonkeyPaste.Avalonia",
+                //    "Resources",
+                //    "Localization",
+                //    "Enums",
+                //    "EnumUiStrings.resx"),
+                //Path.Combine(
+                //    MpCommonHelpers.GetSolutionDir(),
+                //    "MonkeyPaste.Avalonia",
+                //    "Resources",
+                //    "Localization",
+                //    "UiStrings",
+                //    "UiStrings.resx"),
+                .. WorkingPluginNames.Select(x =>
+                    Path.Combine(
+                        GetPluginProjDir(x),
+                        "Resources",
+                        "Resources.resx")),
+            ];
+        }
+        #endregion
+
+        #region Version Props
+
         const string VERSION_PHRASE = "Im the big T pot check me out";
         static string VERSION => "1.0.7.0";
+        #endregion
 
+        #region General Props
 
+        static string[] WorkingPluginNames => [
+            "AzureComputerVision",
+            "AzureTextTranslator",
+            "ChatGpt",
+            "CoreAnnotator",
+            "CoreOleHandler",
+            "FileConverter",
+            "GoogleLiteTextTranslator",
+            "QrCoder",
+            "TextToSpeech",
+            "WebSearch",
+            "YoloImageAnnotator",
+        ];
+
+        static string[] AllPluginNames => [
+            "AzureComputerVision",
+            "AzureTextTranslator",
+            "ChatGpt",
+            "CoreAnnotator",
+            "CoreOleHandler",
+            "FileConverter",
+            "GoogleLiteTextTranslator",
+            "QrCoder",
+            "TextToSpeech",
+            "WebSearch",
+            "YoloImageAnnotator",
+        ];
 
         static MpLedgerizerFlags LEDGERIZER_FLAGS =
-            //MpLedgerizerFlags.TRANSLATE_RESX
+            //MpLedgerizerFlags.TRANSLATE_RESX |
+            //MpLedgerizerFlags.GEN_EMPTY_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
             //MpLedgerizerFlags.GEN_PROD_LISTING |
             //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
+            //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
             //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
-            //MpLedgerizerFlags.DO_LOCAL_INDEX |
-            //MpLedgerizerFlags.DO_REMOTE_INDEX |
-            MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
-            MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT
+            MpLedgerizerFlags.DO_LOCAL_INDEX |
+            MpLedgerizerFlags.DO_REMOTE_INDEX |
+            MpLedgerizerFlags.DO_LOCAL_LEDGER |
+            MpLedgerizerFlags.DO_REMOTE_LEDGER |
+            //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+            //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT
             //MpLedgerizerFlags.MOVE_JS_UISTRINGS
             //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
-            //MpLedgerizerFlags.LOCALIZE_MANIFESTS
+            // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
             //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
+            //MpLedgerizerFlags.DEBUG |
+            MpLedgerizerFlags.RELEASE
             ;
 
         static bool DO_LOCAL_PACKAGING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
@@ -114,7 +187,7 @@ namespace Ledgerizer {
         static bool LOCAL_MOVE_CORE_TO_DAT = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT);
         static bool REMOTE_MOVE_CORE_TO_DAT = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT);
 
-        static bool LOCALIZE_MANIFESTS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.LOCALIZE_MANIFESTS);
+        static bool GEN_LOCALIZED_MANIFESTS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS);
 
         static bool GEN_ADDON_LISTING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_ADDON_LISTING);
         static bool GEN_PROD_LISTING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_PROD_LISTING);
@@ -140,27 +213,6 @@ namespace Ledgerizer {
 #else
             "";
 #endif
-        const string README_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/README.md";
-        const string PROJ_URL_FORMAT = @"https://github.com/monkeypaste/{0}";
-        const string ICON_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/icon.png";
-        const string PUBLIC_PACKAGE_URL_FORMAT = @"https://github.com/monkeypaste/{0}/releases/download/{1}/{1}.zip";
-
-        const string PRIVATE_PACKAGE_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}/{1}.zip";
-        const string PRIVATE_ICON_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}.png";
-
-        static string[] PluginNames => [
-            //"ChatGpt",
-            //"ComputerVision",
-            "CoreAnnotator",
-            //"CoreOleHandler",
-            //"FileConverter",
-            //"GoogleLiteTextTranslator",
-            //"ImageAnnotator",
-            //"QrCoder",
-            //"TextToSpeech",
-            //"TextTranslator",
-            //"WebSearch"
-        ];
 
         static string[] CorePlugins => [
             "CoreAnnotator",
@@ -175,6 +227,20 @@ namespace Ledgerizer {
         static string ManifestPrefix = "manifest";
         static string ManifestExt = "json";
         static string ManifestFileName => ManifestPrefix + "." + ManifestExt;
+        #endregion
+
+        #region Packaging Props
+
+        const string README_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/README.md";
+        const string PROJ_URL_FORMAT = @"https://github.com/monkeypaste/{0}";
+        const string ICON_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/icon.png";
+        const string PUBLIC_PACKAGE_URL_FORMAT = @"https://github.com/monkeypaste/{0}/releases/download/{1}/{1}.zip";
+
+        const string PRIVATE_PACKAGE_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}/{1}.zip";
+        const string PRIVATE_ICON_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}.png";
+
+        #endregion
+
 
         static void Main(string[] args) {
             Console.WriteLine("Press any key to ledgerize!");
@@ -203,7 +269,7 @@ namespace Ledgerizer {
             if (GEN_EMPTY_RESX) {
                 GenAllEmptyLocalizedResx();
             }
-            if (LOCALIZE_MANIFESTS) {
+            if (GEN_LOCALIZED_MANIFESTS) {
                 LocalizeManifests();
             }
             if (DO_CULTURE_VERIFY) {
@@ -213,13 +279,13 @@ namespace Ledgerizer {
                 PublishLocal();
             }
             if (DO_LOCAL_LEDGER) {
-                WriteLedger(false);
+                GenInvLedger(false);
             }
             if (DO_REMOTE_PACKAGING) {
                 PublishRemote();
             }
             if (DO_REMOTE_LEDGER) {
-                WriteLedger(true);
+                GenInvLedger(true);
             }
             if (DO_LOCAL_VERSIONS) {
                 UpdateVersions(false);
@@ -910,60 +976,58 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         #endregion
 
         #region Move Core 
-        static void MoveCoreToDat_remote() {
-            int done_count = 0;
-
-
-            MpConsole.WriteLine($"[REMOTE] Moving core plugins to dat STARTED", true);
+        static void MoveCorePluginToServer(string core_plugin_name) {
             string root_pack_dir = MpLedgerConstants.PLUGIN_PACKAGES_DIR;
+            string core_plugin_zip_path = Path.Combine(root_pack_dir, $"{core_plugin_name}.zip");
+            if (!core_plugin_zip_path.IsFile()) {
+                MpConsole.WriteLine($"Error! No package found for '{core_plugin_name}' at '{core_plugin_zip_path}'");
+                return;
+            }
+            if (ReadPluginManifestFromProjDir(core_plugin_name) is not { } core_mf) {
+                MpConsole.WriteLine($"Error could not find core manifest for '{core_plugin_name}'");
+                return;
+            }
+
+            try {
+                // transfer icon
+                string plugin_icon_path =
+                    Path.Combine(
+                        GetPluginProjDir(core_plugin_name),
+                        "icon.png");
+
+                var icon_result = MpFtpTools.FtpFileUpload(
+                    ftpUrl: $"ftp://ftp.monkeypaste.com//public_html/dat/{core_plugin_name}.png",
+                    userName: "monkeypa",
+                    password: "rYcT3eip",
+                    filePath: plugin_icon_path);
+                MpConsole.WriteLine($"{core_plugin_name} icon result: {(icon_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
+
+                // transfer package
+                var zip_result = MpFtpTools.FtpFileUpload(
+                    ftpUrl: $"ftp://ftp.monkeypaste.com/public_html/dat/{core_mf.guid}/v{core_mf.version}.zip",
+                    userName: "monkeypa",
+                    password: "rYcT3eip",
+                    filePath: core_plugin_zip_path);
+
+                MpConsole.WriteLine($"{core_plugin_name} {core_mf.version} zip result: {(zip_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
+
+                // duplicate as latest
+                var latest_result = MpFtpTools.FtpFileUpload(
+                    ftpUrl: $"ftp://ftp.monkeypaste.com/public_html/dat/{core_mf.guid}/latest.zip",
+                    userName: "monkeypa",
+                    password: "rYcT3eip",
+                    filePath: core_plugin_zip_path);
+                MpConsole.WriteLine($"{core_plugin_name} latest zip result: {(latest_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error moving remote dat {core_plugin_name}.", ex);
+            }
+        }
+        static void MoveCoreToDat_remote() {
+            MpConsole.WriteLine($"[REMOTE] Moving core plugins to dat STARTED", true);
 
             foreach (string core_plugin_name in CorePlugins) {
-                string core_plugin_zip_path = Path.Combine(root_pack_dir, $"{core_plugin_name}.zip");
-                if (!core_plugin_zip_path.IsFile()) {
-                    MpConsole.WriteLine($"Error! No package found for '{core_plugin_name}' at '{core_plugin_zip_path}'");
-                    done_count++;
-                    return;
-                }
-                if (ReadPluginManifestFromProjDir(core_plugin_name) is not { } core_mf) {
-                    MpConsole.WriteLine($"Error could not find core manifest for '{core_plugin_name}'");
-                    done_count++;
-                    return;
-                }
-
-                try {
-                    // transfer icon
-                    string plugin_icon_path =
-                        Path.Combine(
-                            GetPluginProjDir(core_plugin_name),
-                            "icon.png");
-
-                    var icon_result = MpFtpTools.FtpFileUpload(
-                        ftpUrl: $"ftp://ftp.monkeypaste.com//public_html/dat/{core_plugin_name}.png",
-                        userName: "monkeypa",
-                        password: "rYcT3eip",
-                        filePath: plugin_icon_path);
-                    MpConsole.WriteLine($"{core_plugin_name} icon result: {(icon_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
-
-                    // transfer package
-                    var zip_result = MpFtpTools.FtpFileUpload(
-                        ftpUrl: $"ftp://ftp.monkeypaste.com/public_html/dat/{core_mf.guid}/v{core_mf.version}.zip",
-                        userName: "monkeypa",
-                        password: "rYcT3eip",
-                        filePath: core_plugin_zip_path);
-
-                    MpConsole.WriteLine($"{core_plugin_name} {core_mf.version} zip result: {(zip_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
-
-                    // duplicate as latest
-                    var latest_result = MpFtpTools.FtpFileUpload(
-                        ftpUrl: $"ftp://ftp.monkeypaste.com/public_html/dat/{core_mf.guid}/latest.zip",
-                        userName: "monkeypa",
-                        password: "rYcT3eip",
-                        filePath: core_plugin_zip_path);
-                    MpConsole.WriteLine($"{core_plugin_name} latest zip result: {(latest_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error moving remote dat {core_plugin_name}.", ex);
-                }
+                MoveCorePluginToServer(core_plugin_name);
             }
             MpConsole.WriteLine($"[REMOTE] Moving core plugins to dat DONE", false, true);
         }
@@ -973,7 +1037,8 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             string proj_dat_dir =
                 Path.Combine(
                     MpCommonHelpers.GetSolutionDir(),
-                    "MonkeyPaste.Desktop",
+                    "MonkeyPaste.Avalonia",
+                    "Assets",
                     "dat");
             if (!proj_dat_dir.IsDirectory()) {
                 MpFileIo.CreateDirectory(proj_dat_dir);
@@ -1044,7 +1109,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         }
         static void LocalizeManifests() {
             MpConsole.WriteLine("Localize Manifest...STARTED", true);
-            foreach (string plugin_name in PluginNames) {
+            foreach (string plugin_name in WorkingPluginNames) {
                 LocalizeManifest(plugin_name);
             }
             MpConsole.WriteLine("Localize Manifest...DONE", false, true);
@@ -1118,10 +1183,60 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         static async Task TranslateAllResxAsync(string neutral_resx_path) {
             foreach (string cc in WorkingCultures) {
                 var sw = Stopwatch.StartNew();
-                await TranslateResxAsync(neutral_resx_path, cc);
+                //await TranslateResxOneLinersAsync(neutral_resx_path, cc);
+                await TranslateResxHtmlAsync(neutral_resx_path, cc);
             }
         }
-        static async Task TranslateResxAsync(string neutral_resx_path, string cc) {
+
+        static async Task TranslateResxHtmlAsync(string neutral_resx_path, string cc) {
+            var neutral_resx_lookup = MpResxTools.ReadResxFromPath(neutral_resx_path);
+
+            string trans_resx_path = GetLocalizedPathFromNeutral(neutral_resx_path, cc);
+            if (!trans_resx_path.IsFile()) {
+                MpResxTools.WriteResxToPath(trans_resx_path, neutral_resx_lookup.ToDictionary(x => x.Key, x => (string.Empty, string.Empty)));
+            }
+            var trans_resx_lookup = MpResxTools.ReadResxFromPath(trans_resx_path);
+
+            // get non-empty neutral single line keys that aren't html, invariant or have localized data
+            var neutral_html_kvps =
+                neutral_resx_lookup
+                .Where(x =>
+                    x.Value.value.ContainsHtml() &&// (!trans_resx_lookup.ContainsKey(x.Key) || trans_resx_lookup[x.Key].value.IsNullOrEmpty()) &&
+                    x.Value.comment != "@Invariant")
+                .OrderBy(x => x.Key)
+                .ToArray();
+            if (!neutral_html_kvps.Any()) {
+                return;
+            }
+
+            List<string> neutral_text_node_texts = [];
+
+            foreach (var neutral_html_kvp in neutral_html_kvps) {
+                //var html_doc = new HtmlDocument();
+                //html_doc.LoadHtml(neutral_html_kvp.Value.value);
+                //var text_nodes = html_doc.DocumentNode.SelectNodes("//text()[normalize-space(.) != '']").Cast<HtmlTextNode>().ToList();
+                //neutral_text_node_texts.AddRange(text_nodes.Select(x => x.Text));
+                string pt = MpRichHtmlToPlainTextConverter.Convert(neutral_html_kvp.Value.value);
+                string trans_pt = await TranslateTextAsync(pt, cc);
+                trans_resx_lookup.AddOrReplace(neutral_html_kvp.Key, (trans_pt, neutral_html_kvp.Value.value));
+            }
+            //var translated_text_node_texts = await TranslateTextsAsync(neutral_text_node_texts.ToArray(), cc);
+            //int cur_idx = 0;
+            //foreach (var neutral_html_kvp in neutral_html_kvps) {
+            //    var html_doc = new HtmlDocument();
+            //    html_doc.LoadHtml(neutral_html_kvp.Value.value);
+            //    var text_nodes = html_doc.DocumentNode.SelectNodes("//text()[normalize-space(.) != '']").Cast<HtmlTextNode>().ToList();
+            //    foreach (var node in text_nodes) {
+            //        node.Text = translated_text_node_texts[cur_idx++];
+            //    }
+            //    trans_resx_lookup[neutral_html_kvp.Key] = (html_doc.DocumentNode.OuterHtml, neutral_html_kvp.Value.value);
+            //}
+
+            MpResxTools.WriteResxToPath(trans_resx_path, trans_resx_lookup);
+            MpConsole.WriteLine(trans_resx_path);
+
+        }
+        static async Task TranslateResxOneLinersAsync(string neutral_resx_path, string cc) {
             var translator = new GoogleLiteTextTranslatorPlugin();
             int max_len = 5000;
 
@@ -1167,10 +1282,67 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             for (int i = 0; i < batches.Count; i++) {
                 var batch = batches[i];
                 string neutral_text = string.Join(splitter, batch);
+                string result_single_line_str = await TranslateTextAsync(neutral_text, cc);
+                var trans_results = result_single_line_str.Split(new string[] { splitter }, StringSplitOptions.None);
+                int expected_count = neutral_text.Split(new string[] { splitter }, StringSplitOptions.None).Length;
+                MpDebug.Assert(trans_results.Length == expected_count, $"Count mismiatch. Source {expected_count} Target {trans_results.Length}");
 
-                var resp = await translator.AnalyzeAsync(new() {
-                    culture = "en-US",
-                    items = new List<MpParameterRequestItemFormat>() {
+                for (int j = 0; j < trans_results.Length; j++) {
+                    if (base_idx >= neutral_single_line_kvps.Length) {
+                        break;
+                    }
+                    string key = neutral_single_line_kvps[base_idx].Key;
+                    string val = trans_results[j];
+                    trans_resx_lookup[key] = (val, neutral_single_line_kvps[base_idx].Value.comment);
+                    base_idx++;
+                }
+            }
+            MpDebug.Assert(base_idx == neutral_single_line_kvps.Length, $"Base idx mismatch");
+
+            MpResxTools.WriteResxToPath(trans_resx_path, trans_resx_lookup);
+            MpConsole.WriteLine(trans_resx_path);
+
+        }
+        static async Task<string[]> TranslateTextsAsync(string[] neutral_texts, string cc, int max_len = 5000) {
+            // create batches of text in max len chunks (including splitter length)
+            string splitter = Environment.NewLine + "<> ";
+            List<List<string>> batches = new() { new() };
+            for (int i = 0; i < neutral_texts.Length; i++) {
+                var batch = batches.Last();
+                var cur_text = neutral_texts[i];
+                batch.Add(cur_text);
+                int batch_length = batch.Sum(x => x.Length) + (Math.Max(0, batch.Count - 1) * splitter.Length);
+                if (batch_length > max_len) {
+                    List<string> next_batch = new() { batch.Last() };
+                    batch.RemoveAt(batch.Count - 1);
+                    batches.Add(next_batch);
+                }
+            }
+            List<string> translated_texts = [];
+            for (int i = 0; i < batches.Count; i++) {
+                // loop through each batch
+                var batch = batches[i];
+                // translate batch by splitter into single string
+                string neutral_batched_text = string.Join(splitter, batch);
+                string translated_batch_text = await TranslateTextAsync(neutral_batched_text, cc);
+                var trans_results = translated_batch_text.Split(new string[] { splitter }, StringSplitOptions.None);
+                int expected_count = neutral_batched_text.Split(new string[] { splitter }, StringSplitOptions.None).Length;
+                MpDebug.Assert(trans_results.Length == expected_count, $"Count mismiatch. Source {expected_count} Target {trans_results.Length}");
+
+                for (int j = 0; j < trans_results.Length; j++) {
+                    if (j >= neutral_texts.Length) {
+                        break;
+                    }
+                    translated_texts.Add(trans_results[j]);
+                }
+            }
+            MpDebug.Assert(translated_texts.Count == neutral_texts.Length, $"Count mismiatch. Source {neutral_texts.Length} Target {translated_texts.Count}");
+            return translated_texts.ToArray();
+        }
+        static async Task<string> TranslateTextAsync(string neutral_text, string cc) {
+            var resp = await _Translator.AnalyzeAsync(new() {
+                culture = "en-US",
+                items = new List<MpParameterRequestItemFormat>() {
                             new MpParameterRequestItemFormat() {
                                 paramId = "from",
                                 paramValue = "en-US"
@@ -1184,60 +1356,14 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                                 paramValue = neutral_text
                             }
                         }
-                });
-                if (!resp.dataObjectLookup.TryGetValue(MpPortableDataFormats.Text, out var result_single_line_str_obj) ||
-                        result_single_line_str_obj is not string result_single_line_str) {
-                    return;
-                }
-                var trans_results = result_single_line_str.Split(new string[] { splitter }, StringSplitOptions.None);
-                int expected_count = neutral_text.Split(new string[] { splitter }, StringSplitOptions.None).Length;
-                MpDebug.Assert(trans_results.Length == expected_count, $"Count mismiatch. Source {expected_count} Target {trans_results.Length}");
-
-                for (int j = 0; j < trans_results.Length; j++) {
-                    string key = neutral_single_line_kvps[base_idx].Key;
-                    string val = trans_results[j];
-                    trans_resx_lookup[key] = (val, neutral_single_line_kvps[base_idx].Value.comment);
-                    base_idx++;
-                }
+            });
+            if (!resp.dataObjectLookup.TryGetValue(MpPortableDataFormats.Text, out var translated_text_obj) ||
+                    translated_text_obj is not string translated_text) {
+                return neutral_text;
             }
-            MpDebug.Assert(base_idx == neutral_single_line_kvps.Length, $"Base idx mismatch");
-
-            MpResxTools.WriteResxToPath(trans_resx_path, trans_resx_lookup);
-            MpConsole.WriteLine(trans_resx_path);
-
+            return translated_text;
         }
 
-        static IEnumerable<string> GetAllNeutralResxPaths() {
-            return
-            [
-                Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
-                    "MonkeyPaste.Avalonia",
-                    "Resources",
-                    "Localization",
-                    "Listings",
-                    "ListingStrings.resx"),
-                Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
-                    "MonkeyPaste.Avalonia",
-                    "Resources",
-                    "Localization",
-                    "Enums",
-                    "EnumUiStrings.resx"),
-                Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
-                    "MonkeyPaste.Avalonia",
-                    "Resources",
-                    "Localization",
-                    "UiStrings",
-                    "UiStrings.resx"),
-                .. PluginNames.Select(x =>
-                    Path.Combine(
-                        GetPluginProjDir(x),
-                        "Resources",
-                        "Resources.resx")),
-            ];
-        }
         static string GetLocalizedPathFromNeutral(string ref_resx_path, string cc) {
             string ref_resx_dir = Path.GetDirectoryName(ref_resx_path);
             string ref_resx_file_name = Path.GetFileNameWithoutExtension(ref_resx_path);
@@ -1284,7 +1410,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
             List<string> found_cultures = [];
             // find all distinct cultures
-            foreach (var plugin_name in PluginNames) {
+            foreach (var plugin_name in WorkingPluginNames) {
                 string plugin_cultures_dir = GetPluginResourcesDir(plugin_name);
                 if (plugin_cultures_dir == null) {
                     // no resources dir
@@ -1297,12 +1423,12 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             }
 
             // recreate invariant ledger
-            var ledger = GetInvLedger(is_remote);
+            var ledger = ReadInvLedger(is_remote);
 
             // create localized ledger for each distinct culture in /Cultures dir
             foreach (string cc in found_cultures) {
                 var culture_manifests = new List<MpManifestFormat>();
-                foreach (string plugin_name in PluginNames) {
+                foreach (string plugin_name in WorkingPluginNames) {
                     try {
                         // find closest culture for each plugin and create that manifest
                         var culture_manifest = GetLocalizedManifest(plugin_name, cc);
@@ -1364,26 +1490,45 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         #endregion
 
         #region Packaging
-        static void WriteLedger(bool is_remote) {
+        static void GenInvLedger(bool is_remote) {
             // filter any ledger ignored plugins (minimal example)
-            //var output_ledger = new MpManifestLedger() {
-            //    manifests =
-            //}
-            var ledger = GetInvLedger(is_remote);
-            string output_path = is_remote ?
-                MpLedgerConstants.REMOTE_INV_LEDGER_PATH :
-                MpLedgerConstants.LOCAL_INV_LEDGER_PATH;
+            void GenLedger(bool is_release) {
+                var output_ledger = new MpManifestLedger() {
+                    manifests = []
+                };
+                foreach (string plugin_name in AllPluginNames) {
+                    var mf = MpFileIo.ReadTextFromFile(Path.Combine(GetPluginProjDir(plugin_name), ManifestFileName)).DeserializeObject<MpManifestFormat>();
+                    // set pub app version for all plugins
+                    mf.publishedAppVersion = VERSION;
+                    mf.packageUrl = GetPluginPackageUri(plugin_name, !is_remote, !is_release);
+                    mf.readmeUrl = GetPluginPropertyUri(plugin_name, "readme");
+                    mf.projectUrl = GetPluginPropertyUri(plugin_name, "project");
+                    mf.iconUri = GetPluginPropertyUri(plugin_name, "icon");
+                    output_ledger.manifests.Add(mf);
+                }
 
-            MpFileIo.WriteTextToFile(
-                    output_path,
-                    ledger.SerializeObject(true).ToPrettyPrintJson());
-            MpConsole.WriteLine($"{(is_remote ? "REMOTE" : "LOCAL")} ledger written to: {output_path}", true);
+                string output_path = is_remote ?
+                    MpLedgerConstants.REMOTE_INV_LEDGER_PATH :
+                    MpLedgerConstants.LOCAL_INV_LEDGER_PATH;
+
+                MpFileIo.WriteTextToFile(
+                        output_path,
+                        output_ledger.SerializeObject(true).ToPrettyPrintJson());
+                MpConsole.WriteLine($"{(is_remote ? "REMOTE" : "LOCAL")} ledger written to: {output_path}", true);
+            }
+            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DEBUG)) {
+                GenLedger(false);
+            }
+            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.RELEASE)) {
+                GenLedger(true);
+            }
         }
-        static string PackPlugin(string proj_dir, string guid) {
+        static string PackPlugin(string plugin_name, bool is_release) {
             // returns zip uri to use for local packageUrl
-            string root_pack_dir = MpLedgerConstants.PLUGIN_PACKAGES_DIR;
-            string plugin_name = Path.GetFileName(proj_dir);
-            string output_path = Path.Combine(root_pack_dir, $"{plugin_name}.zip");
+            string proj_dir = GetPluginProjDir(plugin_name);
+            string guid = ReadPluginManifestFromProjDir(plugin_name).guid;
+            string output_path = GetPluginPackageUri(plugin_name, true, !is_release).ToPathFromUri();
+            string root_pack_dir = Path.GetDirectoryName(output_path);
 
 
             if (!root_pack_dir.IsDirectory()) {
@@ -1399,9 +1544,10 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             string publish_dir = Path.Combine(root_pack_dir, plugin_name);
             // clear last output
             MpFileIo.DeleteDirectory(publish_dir);
+            string config = is_release ? "Release" : "Debug";
             string args = CorePlugins.Contains(plugin_name) ?
-                $"msbuild /p:OutDir={publish_dir} -target:Publish /property:Configuration={BUILD_CONFIG} /property:DefineConstants=AUX%3B{BUILD_OS} -restore" :
-                $"publish --configuration {BUILD_CONFIG} --output {publish_dir}";
+                $"msbuild /p:OutDir={publish_dir} -target:Publish /property:Configuration={config} /property:DefineConstants=AUX%3B{BUILD_OS} -restore" :
+                $"publish --configuration {config} --output {publish_dir}";
 
             (int exit_code, string proc_output) =
                 RunProcess(
@@ -1448,82 +1594,49 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             }
             // cleanup published output
             MpFileIo.DeleteDirectory(publish_dir);
-            MpConsole.WriteLine($"{plugin_name} local DONE" + install_update_suffix);
+            MpConsole.WriteLine($"{plugin_name} local [{config.ToUpper()}] DONE" + install_update_suffix);
 
             // return zip uri to use for local packageUrl
             return output_path.ToFileSystemUriFromPath();
         }
         static void PublishLocal() {
-            //MpFileIo.DeleteDirectory(MpLedgerConstants.PLUGIN_PACKAGES_DIR);
-
-            MpManifestLedger ledger = new MpManifestLedger();
-            foreach (var plugin_name in PluginNames) {
-                string plugin_proj_dir = GetPluginProjDir(plugin_name);
-                string plugin_manifest_path = Path.Combine(
-                        plugin_proj_dir,
-                        ManifestFileName);
-
-                string plugin_manifest_text = MpFileIo.ReadTextFromFile(plugin_manifest_path);
-                MpManifestFormat plugin_manifest = plugin_manifest_text.DeserializeObject<MpManifestFormat>();
-
-                string local_package_uri = PackPlugin(plugin_proj_dir, plugin_manifest.guid);
-                if (local_package_uri == null) {
-                    continue;
+            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DEBUG)) {
+                foreach (var plugin_name in WorkingPluginNames) {
+                    string local_package_uri = PackPlugin(plugin_name, false);
                 }
-                // set pub app version for all plugins
-                plugin_manifest.publishedAppVersion = VERSION;
-                // set package uri to output of local packaging
-                plugin_manifest.packageUrl = local_package_uri;
-                ledger.manifests.Add(plugin_manifest);
+            }
+            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.RELEASE)) {
+                foreach (var plugin_name in WorkingPluginNames) {
+                    string local_package_uri = PackPlugin(plugin_name, true);
+                }
             }
         }
         static void PublishRemote() {
             // returns the complete remote ledger
 
-            MpManifestLedger ledger = new MpManifestLedger();
-            foreach (var plugin_name in PluginNames) {
-                string plugin_proj_dir = GetPluginProjDir(plugin_name);
-                string plugin_manifest_path = Path.Combine(
-                        plugin_proj_dir,
-                        ManifestFileName);
-
-                string plugin_manifest_text = MpFileIo.ReadTextFromFile(plugin_manifest_path);
-                MpManifestFormat plugin_manifest = plugin_manifest_text.DeserializeObject<MpManifestFormat>();
-                plugin_manifest.publishedAppVersion = VERSION;
-
-                plugin_manifest.packageUrl = PushReleaseToRemote(plugin_manifest, plugin_proj_dir);
-                if (plugin_manifest.packageUrl == null) {
-                    // didn't upload
-                    continue;
-                }
-                if (CorePlugins.Contains(plugin_name)) {
-
-                } else {
-                    plugin_manifest.readmeUrl = string.Format(README_URL_FORMAT, plugin_name);
-                    plugin_manifest.projectUrl = string.Format(PROJ_URL_FORMAT, plugin_name);
-                    plugin_manifest.iconUri = string.Format(ICON_URL_FORMAT, plugin_name);
-                }
-                ledger.manifests.Add(plugin_manifest);
+            foreach (var plugin_name in WorkingPluginNames) {
+                PushReleaseToRemote(plugin_name);
             }
         }
-        static string PushReleaseToRemote(MpManifestFormat manifest, string proj_dir, string initial_failed_ver = null) {
-            string plugin_name = Path.GetFileName(proj_dir);
-            string version = manifest.version;
-            string source_package_path = Path.Combine(MpLedgerConstants.PLUGIN_PACKAGES_DIR, $"{plugin_name}.zip");
+        static string PushReleaseToRemote(string plugin_name, string forced_new_version = null) {
+            // NOTE this should always be release
+            string proj_dir = GetPluginProjDir(plugin_name);
+            var manifest = ReadPluginManifestFromProjDir(plugin_name);
+            string working_version = forced_new_version ?? manifest.version;
+            string source_package_path = GetPluginPackageUri(plugin_name, true, false).ToPathFromUri();
             if (!source_package_path.IsFile()) {
                 // local package missing so pack local first
                 MpConsole.WriteLine($"Local package missing for {plugin_name}. Packing...");
-                string local_pack_path = PackPlugin(proj_dir, manifest.guid);
+                string local_pack_path = PackPlugin(plugin_name, true);
                 MpDebug.Assert(local_pack_path == source_package_path, $"Remote publish error package path mismatch. Expected: '{source_package_path}' Found: '{local_pack_path}'");
             }
-            string target_tag_name = $"v{version}";
+            string target_tag_name = $"v{working_version}";
             string target_package_file_name = $"{target_tag_name}.zip";
             string target_package_path = Path.Combine(proj_dir, target_package_file_name);
 
             if (CorePlugins.Contains(plugin_name)) {
-                // TODO would be nice to be able to ssh onto server and push core plugins
-                // but for now must be handled manually
-                return GetRemotePackageUrl(plugin_name, manifest.guid, target_tag_name);
+                MoveCorePluginToServer(plugin_name);
+                return GetPluginPackageUri(plugin_name, false, false);
             }
             MpConsole.WriteLine($"Pushing {target_package_file_name} for {plugin_name} to github...");
             MpFileIo.CopyFileOrDirectory(source_package_path, target_package_path, forceOverwrite: true);
@@ -1539,9 +1652,10 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 // version exist
                 if (FORCE_REPLACE_REMOTE_TAG) {
                     // delete version, call again
-                    if (initial_failed_ver != null) {
+                    if (forced_new_version != null) {
                         // should only occur once 
                         MpConsole.WriteLine($"Uncaught error after delete for '{proj_dir}' skipping upload");
+                        MpFileIo.DeleteFile(target_package_path);
                         return null;
                     }
                     (int del_exit_code, string del_proc_output) =
@@ -1551,27 +1665,29 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                             args: $"release delete {target_tag_name} --yes --cleanup-tag");
                     if (del_exit_code != 0) {
                         MpConsole.WriteLine($"Error delete failed exit code {del_exit_code}. Output: {del_proc_output}");
+                        MpFileIo.DeleteFile(target_package_path);
                         return null;
                     }
                 } else {
                     // increment, call again
-                    if (version.SplitNoEmpty(".") is not { } verParts ||
+                    if (working_version.SplitNoEmpty(".") is not { } verParts ||
                         !int.TryParse(verParts.Last(), out int minor_rev)) {
                         MpConsole.WriteLine($"Error bad version for plugin at '{proj_dir}'");
+                        MpFileIo.DeleteFile(target_package_path);
                         return null;
                     }
-                    manifest.version = $"{verParts[0]}.{verParts[1]}.{minor_rev + 1}";
+                    working_version = $"{verParts[0]}.{verParts[1]}.{minor_rev + 1}";
                 }
                 // if first fail use failed version
-                var new_ver_result = PushReleaseToRemote(manifest, proj_dir, initial_failed_ver ?? version);
+                var new_ver_result = PushReleaseToRemote(plugin_name, working_version);
                 return new_ver_result;
-            } else if (exit_code == 0 && initial_failed_ver != null) {
+            } else if (exit_code == 0 && forced_new_version != null) {
                 // new rev works, update local manifest to match
 
                 // NOTE avoiding full re-write since manifest can be subclass, just replacing version...
                 string manifest_json = MpFileIo.ReadTextFromFile(Path.Combine(proj_dir, ManifestFileName));
-                string old_ver_json = $"\"version\": \"{initial_failed_ver}\"";
-                string new_ver_json = $"\"version\": \"{version}\"";
+                string old_ver_json = $"\"version\": \"{manifest.version}\"";
+                string new_ver_json = $"\"version\": \"{working_version}\"";
                 if (manifest_json.Contains(old_ver_json)) {
                     manifest_json = manifest_json.Replace(old_ver_json, new_ver_json);
                     MpFileIo.WriteTextToFile(Path.Combine(proj_dir, ManifestFileName), manifest_json);
@@ -1583,25 +1699,21 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             if (exit_code != 0) {
                 MpConsole.WriteLine($"Error from '{plugin_name}' exit code '{exit_code}'", true);
                 MpConsole.WriteLine(proc_output, false, true);
+                MpFileIo.DeleteFile(target_package_path);
                 return null;
             }
 
-            string github_release_uri = string.Format(PUBLIC_PACKAGE_URL_FORMAT, plugin_name, target_tag_name);
+            MpFileIo.DeleteFile(target_package_path);
+            string github_release_uri = GetPluginPackageUri(plugin_name, false, false);
             MpConsole.WriteLine($"{plugin_name} remote DONE");
             return github_release_uri;
-        }
-        static string GetRemotePackageUrl(string plugin_name, string plugin_guid, string target_tag_name) {
-            if (CorePlugins.Contains(plugin_name)) {
-                return string.Format(PRIVATE_PACKAGE_URL_FORMAT, plugin_guid, target_tag_name);
-            }
-            return string.Format(PUBLIC_PACKAGE_URL_FORMAT, plugin_name, target_tag_name);
         }
         #endregion
 
         #region Version
 
         static void UpdateVersions(bool is_remote) {
-            MpManifestLedger ledger = GetInvLedger(is_remote);
+            MpManifestLedger ledger = ReadInvLedger(is_remote);
             bool is_done = false;
 
             _ = Task.Run(async () => {
@@ -1634,7 +1746,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         static string GetRemotePluginPackageName(string version) {
             return $"v{version}.zip";
         }
-        static MpManifestLedger GetInvLedger(bool is_remote) {
+        static MpManifestLedger ReadInvLedger(bool is_remote) {
             string inv_ledger_path = Path.Combine(
                 MpLedgerConstants.LEDGER_PROJ_DIR,
                 is_remote ?
@@ -1664,6 +1776,44 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 return null;
             }
             return res_dir;
+        }
+
+        static string GetPluginPropertyUri(string plugin_name, string prop) {
+            switch (prop) {
+                case "readme":
+                    if (CorePlugins.Contains(plugin_name)) {
+                        return null;
+                    }
+                    return string.Format(README_URL_FORMAT, plugin_name);
+                case "project":
+                    if (CorePlugins.Contains(plugin_name)) {
+                        return "https://www.monkeypaste.com";
+                    }
+                    return string.Format(PROJ_URL_FORMAT, plugin_name);
+                case "icon":
+                    if (CorePlugins.Contains(plugin_name)) {
+                        return string.Format(PRIVATE_ICON_URL_FORMAT, plugin_name);
+                    }
+                    return string.Format(ICON_URL_FORMAT, plugin_name);
+
+            }
+            return null;
+        }
+        static string GetPluginPackageUri(string plugin_name, bool is_local, bool is_debug) {
+            if (is_local) {
+                string root_pack_dir = is_debug ?
+                    MpLedgerConstants.DEBUG_PACKAGES_DIR :
+                    MpLedgerConstants.RELEASE_PACKAGES_DIR;
+                string output_path = Path.Combine(root_pack_dir, $"{plugin_name}.zip");
+                return output_path.ToFileSystemUriFromPath();
+            }
+            var mf = ReadPluginManifestFromProjDir(plugin_name);
+            if (CorePlugins.Contains(plugin_name)) {
+                // NOTE returning THIS version not latest
+                string package_name = $"v{mf.version}.zip";
+                return $"{MpLedgerConstants.REMOTE_CORE_PLUGIN_BASE_URI}/{mf.guid}/{package_name}";
+            }
+            return string.Format(PUBLIC_PACKAGE_URL_FORMAT, plugin_name, $"v{mf.version}");
         }
 
         static (int, string) RunProcess(string file, string dir, string args) {

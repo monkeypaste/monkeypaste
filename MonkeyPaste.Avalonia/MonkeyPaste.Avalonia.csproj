@@ -54,7 +54,6 @@
     <AvaloniaXaml Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <AvaloniaXaml Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <AvaloniaXaml Remove="Controls\Content\TextElement\**" />
-    <AvaloniaXaml Remove="dat\**" />
     <AvaloniaXaml Remove="Interfaces\Content\**" />
     <AvaloniaXaml Remove="Resources\Localization\UiStrings\Baselines\**" />
     <AvaloniaXaml Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
@@ -95,7 +94,6 @@
     <Compile Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <Compile Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <Compile Remove="Controls\Content\TextElement\**" />
-    <Compile Remove="dat\**" />
     <Compile Remove="Interfaces\Content\**" />
     <Compile Remove="Resources\Localization\UiStrings\Baselines\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
@@ -136,7 +134,6 @@
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <EmbeddedResource Remove="Controls\Content\TextElement\**" />
-    <EmbeddedResource Remove="dat\**" />
     <EmbeddedResource Remove="Interfaces\Content\**" />
     <EmbeddedResource Remove="Resources\Localization\UiStrings\Baselines\**" />
     <EmbeddedResource Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
@@ -179,7 +176,6 @@
     <None Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <None Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <None Remove="Controls\Content\TextElement\**" />
-    <None Remove="dat\**" />
     <None Remove="Interfaces\Content\**" />
     <None Remove="Resources\Localization\UiStrings\Baselines\**" />
     <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
@@ -218,7 +214,6 @@
     <Page Remove="cef_old\**" />
     <Page Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <Page Remove="Controls\Content\TextElement\**" />
-    <Page Remove="dat\**" />
     <Page Remove="Interfaces\Content\**" />
     <Page Remove="Resources\Localization\UiStrings\Baselines\**" />
     <Page Remove="ViewModels\MainWindow\Actions\Action\Triggers\System\**" />
@@ -606,6 +601,8 @@
     <None Remove="Assets\svg\text-insert-caret.svg" />
     <None Remove="CefNet" />
     <None Remove="CefNet.Avalonia" />
+    <None Remove="Assets\dat\cf2ec03f-9edd-45e9-a605-2a2df71e03bd.zip" />
+    <None Remove="Assets\dat\ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31.zip" />
     <None Remove="Resources\Editor\images\delete.png" />
     <None Remove="Resources\Editor\lib\jquery-context-menus\src\context-menu.css" />
     <None Remove="resources\editor\ribbon.html" />
@@ -2058,6 +2055,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\svg\text-insert-caret.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\dat\cf2ec03f-9edd-45e9-a605-2a2df71e03bd.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\dat\ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Accents\Gradients.axaml" />

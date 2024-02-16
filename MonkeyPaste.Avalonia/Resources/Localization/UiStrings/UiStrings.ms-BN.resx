@@ -166,14 +166,8 @@ klip masing -masing.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Tatal - ke - buka</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; monkeypaste adalah &lt;span color = "red&gt; sepenuhnya bersepadu &lt;/span&gt; dengan seret - dan - drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Jatuhkannya di sini!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; Dengan cara ini, monkeypaste boleh diakses &lt;br&gt; &lt;span color = "red"&gt; tanpa klik &lt;/span&gt; atau bahkan &lt;span color = "red"&gt; memukul mata &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Heret saya!</value>
@@ -364,62 +358,14 @@ Menaik taraf untuk mengelakkan.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Gerak isyarat mestilah unik dan hanya boleh mengandungi satu kunci input.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Internal &lt;/b&gt; Semua pintasan adalah terhad kepada dalam permohonan. Ini bukan pilihan yang dimaksudkan tetapi boleh membenarkan untuk menyesuaikan apa jalan pintas yang anda ingin buat global &lt;i&gt; suatu hari nanti &lt;/i&gt;. &lt;/Li&gt;
-&lt;li&gt;
-&lt;b&gt; Default &lt;/b&gt; Semua pintasan global diaktifkan. The &lt;b&gt; Show/Hide Main Window &lt;/b&gt; menggunakan pintasan &lt;span color = "red"&gt; override &lt;/span&gt; routing untuk kunci &lt;b&gt; caps Lock &lt;/b&gt;. Anda boleh menukar penghalaan atau isyarat pada bila -bila masa. Tetapi &lt;span color = "hijau"&gt; Cubalah &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt; Mod pintasan global &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Pasif &lt;/b&gt; Monkeypaste pintasan akan didengar dalam sebarang permohonan. &lt;br&gt;
-*Ini adalah pilihan &lt;i&gt; sahaja &lt;/i&gt; pada Linux buat masa ini.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Pintasan Pre &lt;/b&gt; akan melaksanakan &lt;b&gt; &lt;i&gt; sebelum &lt;/i&gt; &lt;/b&gt; ia dikendalikan oleh aplikasi aktif. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; pintasan akan melaksanakan &lt;b&gt; &lt;i&gt; selepas &lt;/i&gt; &lt;/b&gt; ia dikendalikan oleh aplikasi aktif. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Override &lt;/b&gt; Apabila monkeypaste mendengar kekunci input (kekunci pengubahsuaian bukan) daripada pintasan yang menimpa ia akan &lt;i&gt; menyembunyikan &lt;/i&gt; Tekan kunci dari input tahap aplikasi. &lt;br&gt;
-Pilihan ini akan menjamin pintasan yang dicetuskan tanpa konflik kepada permohonan aktif.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Override eksklusif &lt;/b&gt; Ini adalah jenis mod override khas yang direka untuk kekunci kunci Caps. Ia hanya membenarkan &lt;b&gt; satu &lt;/b&gt; kekunci (bukan pengubah) untuk tugasannya. &lt;br&gt;
-Dalam mod caps mod override normal boleh menjadi &lt;i&gt; terjebak pada &lt;/i&gt; apabila ditekan dalam kombinasi dengan kekunci lain. &lt;br&gt;
-Jadi tidak kira apa kunci lain turun, jika pintasan &lt;b&gt; hotkey &lt;/b&gt; ditekan, ia akan mengatasi dan menghalangnya daripada menjadi &lt;i&gt; terjebak pada &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Lumpuhkan</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Muatkan apabila akaun pengguna ini dilog masuk, bukan untuk pengguna lain.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Menggunakan kenalan yang ada (memerlukan plugin perap) medan ini akan digunakan untuk semua contoh templat ini merentasi dokumen ini atau di mana -mana ia akan dirujuk di kemudian hari. &lt;/P&gt; &lt;p&gt; Di sini kemudian medan e -mel kenalan yang anda pilih akan digunakan untuk semua contoh dalam dokumen ini. &lt;/P&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = tahun pendek &lt;br/&gt; yyyy = tahun panjang &lt;br/&gt; m = bulan (1-12) &lt;br/&gt; mm = bulan (01-12) &lt;br/&gt; mmm = bulan singkatan (Jan, Feb .. . Dec) &lt;br/&gt; mmmm = bulan panjang (Januari, Februari ... Disember) &lt;br/&gt; d = hari (1 - 31) &lt;br/&gt; dd = hari (01 - 31) &lt;br/&gt; ddd = hari dalam seminggu dalam kata -kata (Isnin, Selasa ... Ahad) &lt;br/&gt; e = hari pendek minggu dalam kata -kata (mon, tue ... sun) &lt;br/&gt; d - hari ordinal (1st, 2nd, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; h = jam di am/pm (0-12) &lt;br/&gt; hh = jam di am/pm (00-12) &lt;br/ &gt; H = jam sehari (0-23) &lt;br/&gt; hh = jam dalam hari (00-23) &lt;br/&gt; mm = minit &lt;br/&gt; ss = kedua &lt;br/&gt; sss = milliseconds &lt;br/&gt; a = am/pm penanda &lt;br/&gt; p = a.m./p.m. penanda</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Tarikh dan/atau masa semasa akan digantikan untuk template datetime apabila mereka disisipkan.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Semua kejadian templat ini akan menggunakan teks yang disediakan. &lt;/P&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Semua kejadian templat ini akan menggunakan teks yang disediakan. &lt;/P&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Selesai</value>
@@ -469,9 +415,6 @@ Jadi tidak kira apa kunci lain turun, jika pintasan &lt;b&gt; hotkey &lt;/b&gt; 
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Aplikasi Aktif Terakhir Tidak Diketahui. Beralih ke aplikasi yang dimaksudkan ke Monkey Paste.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Tampal ke: &lt;em&gt; &lt;i class = "Paste-Tooltip-Suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Meminimumkan</value>
@@ -547,9 +490,6 @@ Tambah dan/atau pilih aplikasi dengan pintasan salinan unik (seperti konsol atau
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Tiada</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Hanya pratetap yang dipilih yang akan digunakan untuk aplikasi yang ditentukan. Apabila tidak ditentukan, pratetap lalai yang terdapat dalam sidebar &lt;em&gt; sidebar papan &lt;/em&gt; akan digunakan.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Banyak ciri monkeypaste menggunakan automasi papan kekunci untuk berinteraksi dengan aplikasi lain.
 
@@ -562,9 +502,6 @@ Untuk memastikan kebolehoperasian yang betul, rekod pintasan tersebut untuk perm
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Pembaca</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Semua pemantauan papan klip dari aplikasi yang ditolak akan &lt;b&gt; diabaikan &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Penulis</value>
@@ -1331,11 +1268,6 @@ Perkara ini tidak boleh diubah!
     <value>Adakah anda pasti mahu menetapkan semula semua pemberitahuan?
 
 *Perkara ini tidak boleh diubah!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Paste monyet menetapkan papan klip (mengatasi) apabila menampal ke program luaran. Ini akan cuba &lt;/b&gt; untuk memulihkan keadaan papan klip selepas pes luar.
-
-Pemulihan Jumlah tidak boleh dijamin dan boleh mengurangkan prestasi atau bahkan Crash Monkeypaste bergantung kepada sumber data.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Reset clipboard selepas pemadaman monyet</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Ketahui lebih lanjut mengenai rancangan</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Tampal ke: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Menggunakan kenalan yang tersedia (memerlukan plugin fetcher) medan ini akan digunakan untuk semua kejadian templat ini merentasi dokumen ini atau dalam mana-mana ia akan dirujuk kemudian.&lt;/p&gt;&lt;p&gt; Jadi sebagai contoh jika pilih alamat e-mel di sini maka medan e-mel kenalan yang anda pilih akan digunakan untuk semua keadaan dalam dokumen ini.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = tahun pendek&lt;br/&gt;yyyy = tahun panjang&lt;br/&gt;M = bulan (1-12)&lt;br/&gt;MM = bulan (01-12)&lt;br/&gt;MMM = singkatan bulan (Jan, Feb ... Disember)&lt;br/&gt;MMMM = bulan panjang (Januari, Februari ... Disember)&lt;br/&gt;d = hari (1 - 31)&lt;br/&gt;dd = hari (01 - 31)&lt;br/&gt;ddd = hari dalam seminggu dalam perkataan (Isnin, Selasa ... Ahad)&lt;br/&gt;E = hari pendek dalam seminggu dalam perkataan (Isnin, Tue ... Ahad)&lt;br/&gt;D - Hari ordinal (1, ke-2, ke-3, ke-21, ke-22, ke-23, ke-31, ke-4...)&lt;br/&gt;h = jam dalam am/pm (0-12)&lt;br/&gt;HH = jam dalam AM/PM (00-12)&lt;br/&gt;H = jam dalam hari (0-23)&lt;br/&gt;HH = jam dalam sehari (00-23)&lt;br/&gt;mm = minit&lt;br/&gt;ss = saat&lt;br/&gt;SSS = milisaat&lt;br/&gt;a = Penanda AM / PM&lt;br/&gt;p = a.m./p.m. penanda</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Semua kejadian templat ini akan menggunakan teks yang disediakan.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Semua kejadian templat ini akan menggunakan teks yang disediakan.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste menetapkan papan keratan (overrides) apabila menampal ke program luaran. Ini akan &lt;b&gt;cuba&lt;/b&gt; memulihkan keadaan papan keratan selepas pes luaran. 
+
+Pemulihan total tidak boleh dijamin dan boleh mengurangkan prestasi atau bahkan kemalangan MonkeyPaste bergantung kepada sumber data.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Hanya pratetap yang dipilih akan digunakan untuk permohonan yang ditentukan. Apabila tidak ditentukan, pratetap lalai yang terdapat dalam &lt;em&gt;Bar Sisi Papan Klip&lt;/em&gt; akan digunakan.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Semua pemantauan papan keratan daripada permohonan yang ditolak akan &lt;b&gt;diabaikan&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Dalaman&lt;/b&gt;Semua pintasan adalah terhad kepada dalam aplikasi. Ini sebenarnya bukan pilihan yang dimaksudkan tetapi boleh membolehkan untuk menyesuaikan jalan pintas yang anda ingin buat&lt;i&gt;global suatu hari nanti&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Lalai&lt;/b&gt; Semua pintasan global didayakan. Pintasan&lt;b&gt;Tunjukkan/Sembunyikan Tetingkap Utama&lt;/b&gt;menggunakan penghalaan&lt;span color="red"&gt;ganti&lt;/span&gt;untuk kekunci&lt;b&gt;Caps Lock&lt;/b&gt; . Anda boleh mengubah penghalaan atau gerak isyarat itu pada bila-bila masa. Tetapi&lt;span color="green"&gt;cubalah&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Mod Pintasan Global&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pasif&lt;/b&gt; Pintasan MonkeyPaste akan mendengar dalam sebarang permohonan.&lt;br&gt;*Ini adalah &lt;i&gt;satu-satunya&lt;/i&gt; pilihan pada Linux buat masa ini.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pra&lt;/b&gt; Pintasan akan dilaksanakan &lt;b&gt;&lt;i&gt;sebelum&lt;/i&gt;&lt;/b&gt; ia dikendalikan oleh aplikasi aktif.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Pintasan akan dilaksanakan &lt;b&gt;&lt;i&gt;selepas&lt;/i&gt;&lt;/b&gt; ia dikendalikan oleh aplikasi aktif.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Mengatasi&lt;/b&gt; Apabila MonkeyPaste mendengar kekunci input (kekunci bukan pengubah suai) pintasan override, ia akan &lt;i&gt;menyembunyikan&lt;/i&gt; tekan kekunci itu daripada aplikasi - input tahap.&lt;br&gt;Pilihan ini akan menjamin jalan pintas dicetuskan tanpa konflik dengan aplikasi aktif.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Override eksklusif&lt;/b&gt; Ini ialah jenis mod override khas yang direka untuk kekunci Caps Lock. Ia hanya membenarkan &lt;b&gt;satu&lt;/b&gt; kunci (bukan - pengubahsuai) untuk tugasannya.&lt;br&gt;Dalam mod override biasa Caps Lock boleh &lt;i&gt;tersekat apabila&lt;/i&gt; ditekan dalam kombinasi dengan kekunci lain.&lt;br&gt;Oleh itu, tidak kira apa kunci lain yang turun, jika pintasan &lt;b&gt;Hotkey&lt;/b&gt; ditekan, ia akan menjadi overriden dan menghalangnya daripada &lt;i&gt;tersekat&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste adalah &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Dengan cara ini, MonkeyPaste boleh diakses&lt;br&gt;&lt;span color="red"&gt;tanpa klik&lt;/span&gt; atau &lt;span color="red"&gt;memukul mata&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

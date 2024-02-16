@@ -17,9 +17,11 @@ namespace MonkeyPaste.Common {
                string destinationFilePath,
                Func<long?, long, double?, bool> progressChanged) {
             try {
-                if (Uri.IsWellFormedUriString(downloadUrl, UriKind.Absolute) &&
-                    new Uri(downloadUrl) is { } uri &&
-                    uri.Scheme == "file") {
+                if (!Uri.IsWellFormedUriString(downloadUrl, UriKind.Absolute) ||
+                    new Uri(downloadUrl) is not { } uri) {
+                    return;
+                }
+                if (uri.Scheme == "file" || uri.Scheme == "avares") {
                     var bytes = await MpFileIo.ReadBytesFromUriAsync(downloadUrl, string.Empty);
                     if (bytes != null) {
                         MpFileIo.WriteByteArrayToFile(destinationFilePath, bytes);

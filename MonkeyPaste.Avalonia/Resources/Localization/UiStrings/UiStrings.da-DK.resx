@@ -166,14 +166,8 @@ klip henholdsvis.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Rulle - til - åben</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; Monkeypaste er &lt;span color = "rød&gt; fuldt integreret &lt;/span&gt; med træk - og - drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Slip det her!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; på denne måde kan abeypaste fås adgang &lt;br&gt; &lt;span color = "rød"&gt; uden et klik &lt;/span&gt; eller endda &lt;span color = "rød"&gt; batting et øje &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Træk mig!</value>
@@ -364,62 +358,14 @@ Opgrader for at undgå.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Bevægelser skal være unikke og kan kun indeholde en inputnøgle.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Intern &lt;/b&gt; Alle genveje er begrænset til inden for applikationen. Dette er ikke rigtig en tilsigtet mulighed, men kan give mulighed for at tilpasse, hvilke genveje du har til hensigt at gøre global &lt;i&gt; en dag &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Standard &lt;/b&gt; Alle globale genveje er aktiveret. Main -vinduet &lt;b&gt; Show/Hide Main &lt;/b&gt; bruger &lt;span color = "rød"&gt; tilsidesættende &lt;/span&gt; routing til &lt;b&gt; caps lock &lt;/b&gt; -tasten. Du kan til enhver tid ændre den routing eller gestus. Men &lt;span color = "grøn"&gt; prøv det &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;chef&gt; &lt;/chef&gt;
-&lt;Body&gt;
-&lt;H1&gt; Globale genvejstilstande &lt;/H1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Passiv &lt;/b&gt; En genvejs -aber vil lytte til i enhver applikation. &lt;br&gt;
-*Dette er kun &lt;i&gt; -indstillingen &lt;/i&gt; på Linux for nu.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; genvej udfører &lt;b&gt; &lt;i&gt; før &lt;/i&gt; &lt;/b&gt; det håndteres af den aktive anvendelse. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt; genvej udfører &lt;b&gt; &lt;i&gt; efter &lt;/i&gt; &lt;/b&gt; det håndteres af den aktive anvendelse. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; tilsidesættelse &lt;/b&gt; Når Monkeypaste hører inputtasten (ikke -modifikatornøgle) af en tilsidesættende genvej, vil det &lt;i&gt; skjule &lt;/i&gt; den nøglepresse fra applikationsinput. &lt;br&gt;
-Denne mulighed garanterer, at genvejen udløses uden konflikter til den aktive anvendelse.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Eksklusiv tilsidesættelse &lt;/b&gt; Dette er en speciel type tilsidesættelsestilstand designet til CAPS Lock -tasten. Det tillader kun &lt;b&gt; en &lt;/b&gt; nøgle (ikke -modifikator) for sin opgave. &lt;br&gt;
-I normal tilsidesættelsestilstand kan lås blive &lt;i&gt; fast på &lt;/i&gt;, når de trykkes i kombination med andre nøgler. &lt;br&gt;
-Så uanset hvilke andre nøgler der er nede, hvis der trykkes på en &lt;b&gt; hotkey &lt;/b&gt; genvej, vil det blive tilsidesat og forhindre, at den bliver &lt;i&gt; fast på &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Deaktiver</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Indlæs, når denne brugerkonto er logget ind, ikke for andre brugere.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>meget Her bruges e -mail -feltet for den kontakt, du vælger, til alle tilfælde i dette dokument. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = kort år &lt;br/&gt; yyyy = lang år &lt;br/&gt; m = måned (1-12) &lt;br/&gt; mm = måned (01-12) &lt;br/&gt; mmm = måned forkortelse (januar, februar .. . Dec) &lt;br/&gt; mmmm = lang måned (januar, februar ... december) &lt;br/&gt; d = dag (1 - 31) &lt;br/&gt; dd = dag (01 - 31) &lt;br/&gt; ddd = Ugedag med ord (mandag, tirsdag ... søndag) &lt;br/&gt; e = kort ugedag i ord (mandag, tirsdag ... sol) &lt;br/&gt; d - ordinal dag (1., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; H = time i am/pm (0-12) &lt;br/&gt; hh = time i am/pm (00-12) &lt;br/ &gt; H = time i dag (0-23) &lt;br/&gt; hh = time in dag (00-23) &lt;br/&gt; mm = minut &lt;br/&gt; ss = anden &lt;br/&gt; sss = millisekunder &lt;br/&gt; A = am/pm markør &lt;br/&gt; p = a.m./p.m. markør</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Den aktuelle dato og/eller tiden erstattes af DateTime -skabeloner, når de indsættes.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Alle forekomster af denne skabelon bruger den medfølgende tekst. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Alle forekomster af denne skabelon bruger den medfølgende tekst. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Afslut at tilføje</value>
@@ -469,9 +415,6 @@ Så uanset hvilke andre nøgler der er nede, hvis der trykkes på en &lt;b&gt; h
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Sidste aktive app ukendt. Skift til den tilsigtede app til abepasta.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Pasta til: &lt;em&gt; &lt;i class = "pasta-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimer</value>
@@ -547,9 +490,6 @@ Tilføj og/eller vælg appen med den unikke kopi -genvej (som en konsol eller sk
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Ingen</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Kun de valgte forudindstillinger vil blive brugt til den specificerede applikation. Når den er uspecificeret, vil de standardindstillinger, der findes i &lt;em&gt; clipboard -sidebjælken &lt;/em&gt;, blive brugt.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Mange Monkeypaste -funktioner bruger tastaturautomation til at interagere med andre applikationer.
 
@@ -562,9 +502,6 @@ For at sikre korrekt interoperabilitet skal du registrere disse genveje til denn
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Læsere</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Al clipboard -overvågning fra afviste applikationer vil blive &lt;b&gt; ignoreret &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Forfattere</value>
@@ -1331,11 +1268,6 @@ Dette kan ikke fortrydes!
     <value>Er du sikker på, at du vil nulstille alle meddelelser?
 
 *Dette kan ikke fortrydes!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkeypasta indstiller udklipsholderen (tilsidesætter), når det indsættes til et eksternt program. Dette vil &lt;b&gt; forsøge &lt;/b&gt; at gendanne klippebordets tilstand efter en ekstern pasta.
-
-Total restaurering kan ikke garanteres og kan reducere ydelsen eller endda nedbryde aber afhængigt af kilden til dataene.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Nulstil udklipsholder efter abepastning</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lær mere om planer</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Sæt ind i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Ved hjælp af tilgængelige kontakter (kræver et hentningsplugin) vil dette felt blive brugt til alle forekomster af denne skabelon på tværs af dette dokument eller i nogen, der vil blive refereret til senere.&lt;/p&gt;&lt;p&gt; Så hvis du f.eks. vælger e-mail-adresse her, vil e-mail-feltet for den kontakt, du vælger, blive brugt til alle forekomster i dette dokument.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = kort år&lt;br/&gt;åååå = langt år&lt;br/&gt;M = måned (1-12)&lt;br/&gt;MM = måned (01-12)&lt;br/&gt;MMM = måned forkortelse (Jan, Feb ... dec)&lt;br/&gt;MMMM = lang måned (januar, februar ... December)&lt;br/&gt;d = dag (1 - 31)&lt;br/&gt;dd = dag (01 - 31)&lt;br/&gt;ddd = ugedag i ord (mandag, tirsdag ... Søndag)&lt;br/&gt;E = kort ugedag i ord (man, tirs ... søn)&lt;br/&gt;D - Ordinær dag (1., 2., 3., 21., 22., 23., 31., 4....)&lt;br/&gt;h = time i am/pm (0-12)&lt;br/&gt;hh = time i am/pm (00-12)&lt;br/&gt;H = time i dag (0-23)&lt;br/&gt;HH = time i døgnet (00-23)&lt;br/&gt;mm = minut&lt;br/&gt;ss = sekund&lt;br/&gt;SSS = millisekunder&lt;br/&gt;a = AM/PM markør&lt;br/&gt;p = a.m./p.m. markør</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Alle forekomster af denne skabelon bruger den medfølgende tekst.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Alle forekomster af denne skabelon bruger den medfølgende tekst.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste indstiller udklipsholderen (tilsidesættelser), når du indsætter i et eksternt program. Dette vil &lt;b&gt;forsøge&lt;/b&gt; at gendanne udklipsholderens tilstand efter en ekstern pasta. 
+
+Total gendannelse kan ikke garanteres og kan reducere ydeevnen eller endda gå ned MonkeyPaste afhængigt af datakilden.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Kun de valgte forudindstillinger vil blive brugt til det angivne program. Når det ikke er angivet, bruges standardforudindstillingerne, der findes i &lt;em&gt;sidebjælken i Udklipsholder&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Al overvågning af udklipsholderen fra afviste ansøgninger &lt;b&gt;ignoreres&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Indre&lt;/b&gt;Alle genveje er begrænset til i applikationen. Dette er ikke rigtig en tilsigtet mulighed, men kan give mulighed for at tilpasse, hvilke genveje du har til hensigt at gøre globale&lt;i&gt;en dag&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Standard&lt;/b&gt; Alle globale genveje er aktiveret. &lt;b&gt;Genvejen Vis/skjul hovedvindue&lt;/b&gt;&lt;span color="red"&gt;bruger tilsidesættelse&lt;/span&gt;af routing til&lt;b&gt;Caps Lock-tasten&lt;/b&gt;. Du kan til enhver tid ændre denne routing eller gestus. Men&lt;span color="green"&gt;prøv det&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Globale genvejstilstande&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passiv&lt;/b&gt; En genvej MonkeyPaste vil lytte efter i enhver applikation.&lt;br&gt;*Dette er den &lt;i&gt;eneste&lt;/i&gt; mulighed på Linux indtil videre.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Genvej udføres, &lt;b&gt;&lt;i&gt;før&lt;/i&gt;&lt;/b&gt; den håndteres af det aktive program.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Genvej udføres &lt;b&gt;&lt;i&gt;, når&lt;/i&gt;&lt;/b&gt; den er håndteret af det aktive program.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Tilsidesætte&lt;/b&gt; Når MonkeyPaste hører inputtasten (ikke-modifikatortasten) på en tilsidesættelsesgenvej, &lt;i&gt;skjuler&lt;/i&gt; den tastetryk fra input på applikationsniveau.&lt;br&gt;Denne mulighed garanterer, at genvejen udløses uden konflikter med den aktive applikation.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Eksklusiv tilsidesættelse&lt;/b&gt; Dette er en speciel type tilsidesættelsestilstand designet til Caps Lock-tasten. Det tillader kun &lt;b&gt;en&lt;/b&gt; nøgle (ikke-modifikator) til sin tildeling.&lt;br&gt;I normal tilsidesættelsestilstand kan Caps Lock sidde fast, når der trykkes &lt;i&gt;på&lt;/i&gt; den i kombination med andre taster.&lt;br&gt;Så uanset hvilke andre taster der er nede, hvis der trykkes på en &lt;b&gt;genvejstast&lt;/b&gt; , tilsidesættes den og forhindrer, at den &lt;i&gt;sidder fast&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste er &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;På denne måde kan du få adgang til MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;uden et klik&lt;/span&gt; eller endda &lt;span color="red"&gt;slå et øje&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

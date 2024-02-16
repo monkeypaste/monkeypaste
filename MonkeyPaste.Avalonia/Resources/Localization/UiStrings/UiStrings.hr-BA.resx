@@ -166,14 +166,8 @@ isječci.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Pomicanje - do - otvoren</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p agign = "CENTY"&gt; Monkeypaste je &lt;span color = "crveno&gt; Potpuno integrirano &lt;/span&gt; s povlačenjem - i - Drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Ispusti ga ovdje!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p agign = "CENTY"&gt; Na ovaj način, monkeypasteu se može pristupiti &lt;br&gt; &lt;span color = "crveno"&gt; bez klika &lt;/span&gt; ili čak &lt;span color = "crveno"&gt; udaranje oko &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Povucite me!</value>
@@ -364,62 +358,14 @@ Nadogradite kako biste izbjegli.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Geste moraju biti jedinstvene i mogu sadržavati samo jedan ulazni ključ.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Unutarnji &lt;/b&gt; Svi prečaci ograničeni su na prijavu. Ovo zapravo nije namjeravana opcija, ali može omogućiti prilagodbu prečaca koje namjeravate napraviti globalni &lt;i&gt; jednog dana &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Omogućeni su zadani &lt;/b&gt; Svi globalni prečaci. Prečac &lt;b&gt; show/sakrij glavni prozor &lt;/b&gt; koristi &lt;span color = "crveni"&gt; overside &lt;/span&gt; usmjeravanje za tipku &lt;b&gt; Caps Lock &lt;/b&gt;. To usmjeravanje ili gestu možete promijeniti u bilo kojem trenutku. Ali &lt;span color = "zeleno"&gt; Pokušajte &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;Body&gt;
-&lt;H1&gt; Globalni načini prečaca &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Pasivna &lt;/b&gt; Monkeypaste prečaca će slušati u bilo kojoj prijavi. &lt;br&gt;
-*Ovo je za sada &lt;i&gt; samo &lt;/i&gt; opcija na Linuxu.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Pre &lt;/b&gt; prečac će se izvršiti &lt;b&gt; &lt;i&gt; prije &lt;/i&gt; &lt;/b&gt; s njim se bavi aktivnom primjenom. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; prečac će se izvršiti &lt;b&gt; &lt;i&gt; Nakon &lt;/i&gt; &lt;/b&gt; s njim se bavi aktivnom primjenom. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Override &lt;/b&gt; Kad MonkeyPaste čuje ulaznu tipku (tipka bez modifikatora) prečaca o prevladavanju, ona će se sakriti &lt;/i&gt; ta tipka pritisnuta s unosa aplikacije - nivoa. &lt;br&gt;
-Ova će opcija jamčiti da se prečac pokreće bez sukoba aktivne aplikacije.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Ekskluzivno nadjačavanje &lt;/b&gt; Ovo je posebna vrsta načina za prevladavanje dizajniranog za ključ zaključavanja CAPS -a. Omogućuje samo &lt;b&gt; jedan &lt;/b&gt; tipku (non -modifikator) za njegovo dodjeljivanje. &lt;br&gt;
-U uobičajenom načinu režide kapice zaključavanje može postati &lt;i&gt; zaglavljeno na &lt;/i&gt; kada se pritisnete u kombinaciji s drugim tipkama. &lt;br&gt;
-Dakle, bez obzira na to koji su drugi ključevi dolje, ako se pritisne prečac &lt;b&gt; Hotkey &lt;/b&gt; prečac, bit će nadjačan i spriječiti da postane &lt;i&gt; zaglavljen na &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/tijelo&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Onesposobiti</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Učitajte se kada je ovaj korisnički račun prijavljen, a ne za ostale korisnike.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Korištenje dostupnih kontakata (zahtijeva dodatak Fetcher) Ovo će se polje koristiti za sve instance ovog predloška u ovom dokumentu ili će se u bilo kojem referencirati kasnije. &lt;/p&gt; &lt;p&gt; Dakle, na primjer, ako odaberete adresu e -pošte Ovdje će se polje e -pošte kontakta koji ste odabrali koristiti za sve instance u ovom dokumentu. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = kratka godina &lt;br/&gt; yyyy = duga godina &lt;br/&gt; m = mjesec (1-12) &lt;br/&gt; mm = mjesec (01-12) &lt;br/&gt; mmm = Mjesec kratica (siječanj, veljača. . Prosinca) &lt;br/&gt; mmmm = dugi mjesec (siječanj, veljača ... prosinac) &lt;br/&gt; d = dan (1 - 31) &lt;br/&gt; dd = dan (01 - 31) &lt;br/&gt; ddd = dan u tjednu riječima (ponedjeljak, utorak ... nedjelja) &lt;br/&gt; e = kratak dan u tjednu riječima (pon, utorak ... sunce) &lt;br/&gt; d - Ordinalni dan (1., 2., 2. 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; h = sat u am/pm (0-12) &lt;br/&gt; hh = sat u am/pm (00-12) &lt;br/ &gt; H = sat u danu (0-23) &lt;br/&gt; hh = sat u danu (00-23) &lt;br/&gt; mm = minute &lt;br/&gt; ss = sekundu &lt;br/&gt; sss = milisekundi &lt;br/&gt; A = AM/PM Marker &lt;br/&gt; P = A.M./P.M. marker</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Trenutni datum i/ili vrijeme bit će zamijenjeni za predloške DateTime kada su zalijepljeni.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Sve pojave ovog predloška upotrijebit će navedeni tekst. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Sve pojave ovog predloška upotrijebit će navedeni tekst. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Završiti dodavanje</value>
@@ -469,9 +415,6 @@ Dakle, bez obzira na to koji su drugi ključevi dolje, ako se pritisne prečac &
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Posljednja aktivna aplikacija nepoznata. Prebacite se na predviđenu aplikaciju na majmun.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Zalijepite na: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Umanjiti</value>
@@ -547,9 +490,6 @@ Dodajte i/ili odaberite aplikaciju s jedinstvenom prečacom kopiranja (na primje
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Nijedan</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Za navedenu aplikaciju koristit će se samo odabrane unaprijed postavljene postavke. Kad se ne odrede, upotrijebit će se zadane unaprijed postavljene postavke pronađene u &lt;em&gt; međuspremnik &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Mnoge značajke monkeypaste koriste automatizaciju tipkovnice za interakciju s drugim aplikacijama.
 
@@ -562,9 +502,6 @@ Da biste osigurali odgovarajuću interoperabilnost, zabilježite te prečace za 
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Čitatelji</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Sav praćenje međuspremnika iz odbačenih aplikacija bit će &lt;b&gt; zanemaren &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Pisci</value>
@@ -1331,11 +1268,6 @@ To se ne može poništiti!
     <value>Jeste li sigurni da želite resetirati sve obavijesti?
 
 *To se ne može poništiti!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste postavlja međuspremnik (poništavanje) prilikom lijepljenja na vanjski program. To će &lt;b&gt; pokušati &lt;/b&gt; vratiti stanje međuspremnika nakon vanjske paste.
-
-Ukupna restauracija ne može se zajamčiti i može smanjiti performanse ili čak srušiti monkeypaste, ovisno o izvoru podataka.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Resetirajte međuspremnik nakon lijepljenja majmuna</value>
@@ -2706,5 +2638,66 @@ povratne informacije@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Saznajte više o planovima</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Zalijepi u: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Korištenjem dostupnih kontakata (potreban je dodatak za dohvaćanje) ovo će se polje koristiti za sve instance ovog predloška u ovom dokumentu ili u bilo kojem na koje će se kasnije referencirati.&lt;/p&gt;&lt;p&gt; Tako, na primjer, ako ovdje odaberete adresu e-pošte, polje e-pošte odabranog kontakta koristit će se za sve instance u ovom dokumentu.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = kratka godina&lt;br/&gt;gggg = duga godina&lt;br/&gt;M = mjesec (1-12)&lt;br/&gt;MM = mjesec (01-12)&lt;br/&gt;MMM = kratica mjeseca (siječanj, veljača ... Prosinca)&lt;br/&gt;MMMM = dugi mjesec (siječanj, veljača ... Prosinac)&lt;br/&gt;d = dan (1 - 31)&lt;br/&gt;dd = dan (01 - 31)&lt;br/&gt;ddd = dan u tjednu riječima (ponedjeljak, utorak ... Nedjelja)&lt;br/&gt;E = kratki dan u tjednu riječima (pon, uto ... Sunce)&lt;br/&gt;D - Redni dan (1., 2., 3., 21., 22., 23., 31., 4.)&lt;br/&gt;h = sat u am/pm (0-12)&lt;br/&gt;HH = sat u AM/PM (00-12)&lt;br/&gt;H = sat u danu (0-23)&lt;br/&gt;HH = sat u danu (00-23)&lt;br/&gt;mm = minuta&lt;br/&gt;ss = drugi&lt;br/&gt;SSS = milisekunde&lt;br/&gt;a = AM/PM oznaka&lt;br/&gt;p = oznaka a.m./p.m.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Sva pojavljivanja ovog predloška koristit će navedeni tekst.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Sva pojavljivanja ovog predloška koristit će navedeni tekst.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste postavlja međuspremnik (nadjačava) prilikom lijepljenja na vanjski program. Time ćete &lt;b&gt;pokušati&lt;/b&gt; vratiti stanje međuspremnika nakon vanjske paste. 
+
+Potpuna obnova ne može biti zajamčena i može smanjiti performanse ili čak srušiti MonkeyPaste, ovisno o izvoru podataka.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Za navedenu aplikaciju koristit će se samo odabrane gotove konfiguracije. Kada nije određeno, koristit će se zadane gotove konfiguracije pronađene u &lt;em&gt;bočnoj traci međuspremnika&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Svi nadzori međuspremnika iz odbijenih aplikacija bit će &lt;b&gt;zanemareni&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Unutrašnji&lt;/b&gt;Svi prečaci ograničeni su na aplikaciju. Ovo zapravo nije predviđena opcija, ali može omogućiti prilagodbu prečaca koje namjeravate jednog&lt;i&gt;dana&lt;/i&gt; učiniti globalnim.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Propust&lt;/b&gt; Omogućeni su svi globalni prečaci. Prečac&lt;b&gt;Prikaži/sakrij glavni prozor&lt;/b&gt;koristi&lt;span color="red"&gt;zaobilazno&lt;/span&gt;usmjeravanje za tipku&lt;b&gt;Caps Lock&lt;/b&gt; . Taj usmjeravanje ili gestu možete promijeniti u bilo kojem trenutku. Ali&lt;span color="green"&gt;probaj&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Globalni načini prečaca&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pasivan&lt;/b&gt; Prečac MonkeyPaste slušat će u bilo kojoj aplikaciji.&lt;br&gt;*Ovo je &lt;i&gt;za sada jedina&lt;/i&gt; opcija na Linuxu.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Prije&lt;/b&gt; Prečac će se izvršiti &lt;b&gt;&lt;i&gt;prije nego što&lt;/i&gt;&lt;/b&gt; njime rukuje aktivna aplikacija.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Prečac će se izvršiti &lt;b&gt;&lt;i&gt;nakon što&lt;/i&gt;&lt;/b&gt; njime rukuje aktivna aplikacija.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Gaziti nogama&lt;/b&gt; Kada MonkeyPaste čuje ulaznu tipku (ne-modifikatorsku tipku) prečaca za premošćivanje, &lt;i&gt;sakrit&lt;/i&gt; će taj pritisak tipke iz aplikacije - unos razine.&lt;br&gt;Ova opcija jamči da se prečac pokreće bez sukoba s aktivnom aplikacijom.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Ekskluzivno nadjačavanje&lt;/b&gt; Ovo je posebna vrsta načina nadjačavanja dizajnirana za tipku Caps Lock. Omogućuje samo &lt;b&gt;jedan&lt;/b&gt; ključ (ne - modifikator) za njegovu dodjelu.&lt;br&gt;U normalnom načinu nadjačavanja Caps Lock može se &lt;i&gt;zaglaviti&lt;/i&gt; kada se pritisne u kombinaciji s drugim tipkama.&lt;br&gt;Dakle, bez obzira na to koje su druge tipke spuštene, ako se pritisne prečac &lt;b&gt;hotkey&lt;/b&gt; , on će biti nadjačan i spriječiti njegovo &lt;i&gt;zaglavljivanje&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste je &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Na taj se način može pristupiti MonkeyPasteu&lt;br&gt;&lt;span color="red"&gt;bez klika&lt;/span&gt; ili čak &lt;span color="red"&gt;udaranja okom&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

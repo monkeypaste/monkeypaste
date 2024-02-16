@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>滚动 - 至 - 打开</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align =“ center”&gt; monkePaste是&lt;span color =“紅色&gt;完全集成&lt;/span&gt;與拖動 - 和 -  drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>放在这里！</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align =“ center”&gt;以這種方式，可以訪問monkeypaste &lt;br&gt; &lt;span color =“ red”&gt;而無需單擊&lt;/span&gt; &lt;/span&gt;，甚至&lt;span color =“ red”&gt;擊打眼睛&lt;/span&gt; ＆＃x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>拉我一把！</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>手势必须是唯一的，并且只能包含一个输入密钥。</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt;內部&lt;/b&gt;所有快捷方式都限於應用程序內部。這並不是真正的預期選項，但可以允許自定義您打算進行全局的快捷方式&lt;/i&gt;。&lt;/i&gt;。&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt;默認值&lt;/b&gt;啟用了所有全局快捷方式。 &lt;b&gt;顯示/隱藏主窗口&lt;/b&gt;快捷方式使用&lt;span color =“ red”&gt; Override &lt;/span&gt; &lt;b&gt; caps lock lock &lt;/b&gt;鍵的路由。您可以隨時更改該路由或手勢。但是&lt;span color =“ green”&gt;嘗試一下&lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;頭&gt; &lt;/head&gt;
-&lt;身體&gt;
-&lt;h1&gt;全局快捷方式&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt;被動&lt;/b&gt;快捷方式monkeypaste將在任何應用程序中聆聽。&lt;br&gt;
-*這是Linux上的&lt;i&gt;唯一&lt;i&gt; &lt;/i&gt;。
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt;快捷方式將在&lt;/i&gt; &lt;/b&gt;之前執行&lt;b&gt; &lt;i&gt;由Active應用程序處理。&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt;快捷方式將在&lt;/i&gt; &lt;/b&gt;之後執行&lt;b&gt; &lt;i&gt;由Active應用程序處理。&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Override &lt;/b&gt;當monkeypaste聽到覆蓋快捷方式的輸入鍵（非修飾符鍵）時，它將&lt;i&gt; hide &lt;i&gt; hide &lt;/i&gt; &lt;/i&gt; &lt;/i&gt; &lt;/ i&gt; &lt;/i&gt;從application -level -level輸入。&lt;br&gt;
-此選項將保證觸發快捷方式，而無需與活動應用程序發生衝突。
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt;獨家覆蓋&lt;/b&gt;這是為Caps Lock鍵而設計的一種特殊類型的替代模式。它僅允許&lt;b&gt;一個&lt;/b&gt;鍵（非修飾符）進行分配。&lt;br&gt;
-在正常的覆蓋模式下，蓋帽可以與其他密鑰結合在一起時鎖定&lt;/i&gt;。&lt;br&gt;
-因此，無論其他鍵都會下降，如果按下A &lt;b&gt; hotkey &lt;/b&gt;按下捷徑，它將被覆蓋並防止其粘在&lt;/i&gt;上。
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>禁用</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>登录此用户帐户时加载，而不是其他用户。</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt;使用可用的聯繫人（需要一個fetcher插件）此字段將用於本文檔的所有模板的所有實例，或者在以後將在任何文檔中引用任何內容。&lt;/p&gt; &lt;p&gt;，例如，如果選擇選擇電子郵件地址在這裡，您選擇的聯繫人的電子郵件字段將用於本文檔中的所有實例。&lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy =短期&lt;br/&gt; yyyy = long y yyy &lt;br/&gt; m =月（1-12）&lt;br/&gt; mm =月（01-12）&lt;br/&gt; mmm =月縮寫（2月1日， 1月。 。一周中的一周（星期一，星期二...星期日）&lt;br/&gt;第三，21日，22日，23日，第31，第4頁...） &gt; h =每天的小時（0-23）&lt;br/&gt; hh = hh = hh = hH = hH = hh = hH &lt;br/&gt; mm = minute &lt;br/&gt; ss = second &lt;br/&gt; sss = milliseconds &lt;br/&gt; a = am /pm標記&lt;br/&gt; p = a.m./p.m。標記</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>当前日期和/或时间将粘贴时DateTime模板。</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt;此模板的所有發生都將使用提供的文本。&lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt;此模板的所有發生都將使用提供的文本。&lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>完成添加</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>最后一个活动应用未知。切换到预期的应用到猴子糊。</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>粘貼到：&lt;em&gt; &lt;i class =“ paste-tooltip-suffix”&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>最小化</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>没有任何</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>僅選定的預設將用於指定的應用程序。未指定時，將使用剪貼板側欄中的默認預設&lt;/em&gt;。</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>許多MonkePaste功能都使用鍵盤自動化與其他應用程序進行交互。
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>读者</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>來自被拒絕的應用程序的所有剪貼板監視將被忽略&lt;/b&gt;。</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>作家</value>
@@ -1331,11 +1268,6 @@
     <value>您確定要重置所有通知嗎？
 
 *這不能被撤消！</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>當粘貼到外部程序時，猴子糊將剪貼板（覆蓋）設置。這將嘗試&lt;/b&gt;在外部糊劑之後恢復剪貼板的狀態。
-
-無法保證總恢復，並且可能會根據數據來源降低性能，甚至可以降低monkeypaste。</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>猴子粘贴后重置剪贴板</value>
@@ -2706,5 +2638,66 @@ feathback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>了解有關計劃的更多信息</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>粘貼到： &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;使用可用嘅聯繫人（需要提取器插件），此字段將用于本文檔中此糢闆嘅所有實例，或稍後將引用嘅任何糢闆。&lt;/p&gt;&lt;p&gt; 因此，例如，如果在此处選擇電子郵件地址，則你揀嘅聯繫人嘅電子郵件字段將用于本文檔中嘅所有實例。&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy =短年&lt;br/&gt;yyyy =長年&lt;br/&gt;M =月（ 1-12 ）&lt;br/&gt;MM =月（ 01-12 ）&lt;br/&gt;MMM =月份縮寫（ Jan、Feb... 12月）&lt;br/&gt;MMMM =長月（ 1月、2月...... 12月）&lt;br/&gt;d =天（ 1 - 31 ）&lt;br/&gt;dd =天（ 01 - 31 ）&lt;br/&gt;ddd =星期幾（星期一、星期二...... 星期日）&lt;br/&gt;E =一周中嘅短日子（周一、周二...... 周日）&lt;br/&gt;D -序數日（ 1日、2日、3日、21日、22日、23日、31日、4日...&lt;br/&gt;h =鐘頭，單位為上午/下晝（ 0-12 ）&lt;br/&gt;hh =鐘頭（上午/下晝） （ 00-12 ）&lt;br/&gt;H =一日中嘅鐘頭（ 0-23 ）&lt;br/&gt;HH =一日中嘅鐘頭（ 00-23 ）&lt;br/&gt;mm =分鐘&lt;br/&gt;ss =秒&lt;br/&gt;SSS =毫秒&lt;br/&gt;A = AM/PM標記&lt;br/&gt;p =上午/下晝標記</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;此糢闆嘅所有匹配項都將使用提供嘅文本。&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;此糢闆嘅所有匹配項都將使用提供嘅文本。&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste喺粘貼到外部程序時設置剪貼板（覆蓋）。 將 &lt;b&gt;嘗試&lt;/b&gt; 喺外部粘貼後恢復剪貼板嘅狀態。 
+
+無法保證完全恢復，並且可能會降低性能，甚至令MonkeyPaste崩潰，具體取決於數據源。</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>只有選定嘅預設將用于指定嘅應用程序。 如果未指定，則將使用 &lt;em&gt;剪貼板邊欄&lt;/em&gt; 中嘅默認預設。</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>來自食檸檬應用程序嘅所有剪貼板監視都將 &lt;b&gt;被忽略&lt;/b&gt;。</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;內部&lt;/b&gt;所有快捷方式僅限於應用程序內。 並不昰一個真正嘅預期選項，但可以允許自定義你打算&lt;i&gt;有朝一日&lt;/i&gt;將其設置為全局嘅快捷方式。&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;違約&lt;/b&gt; 所有全局快捷方式均已啟用。 “&lt;b&gt;顯示/隱藏主窗口”&lt;/b&gt;快捷方式對&lt;b&gt;Caps Lock&lt;/b&gt;鍵使用&lt;span color="red"&gt;覆蓋&lt;/span&gt;路由。 你可以隨時更改該路線或手勢。 但係&lt;span color="green"&gt;試一試&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;全局快捷方式模式&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;被動&lt;/b&gt; 快捷方式MonkeyPaste將在任何應用程序中偵聽。&lt;br&gt;*係目前Linux上 &lt;i&gt;唯一嘅&lt;/i&gt; 選項。   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;前&lt;/b&gt; 快捷方式將在活動應用程序處理 &lt;b&gt;&lt;i&gt;之前&lt;/i&gt;&lt;/b&gt; 執行。&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;發佈&lt;/b&gt; 快捷方式將在活動應用程序處理 &lt;b&gt;&lt;i&gt;後&lt;/i&gt;&lt;/b&gt; 執行。&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;覆蓋&lt;/b&gt; 当MonkeyPaste聽到覆蓋快捷方式嘅輸入鍵（非修飾鍵）時，它將由應用程序級輸入 &lt;i&gt;中隱藏&lt;/i&gt; 該鍵按下。&lt;br&gt;此選項將保證喺唔與活動應用程序發生衝突嘅情況下觸發快捷方式。   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;獨家覆蓋&lt;/b&gt; 係一種特殊類型嘅覆蓋模式，專為Caps Lock鍵設計。 它只允許 &lt;b&gt;一個&lt;/b&gt; 鍵（非修飾符）進行分配。&lt;br&gt;在正常覆蓋模式的，当與其他鍵一起按下時，Caps Lock可能會 &lt;i&gt;卡住&lt;/i&gt; 。&lt;br&gt;因此，無論其他鍵關閉，如果按下熱鍵快捷 &lt;b&gt;鍵&lt;/b&gt; ，它都會被覆蓋並防止它被 &lt;i&gt;卡住&lt;/i&gt;。   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste係 &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;咁，就可以訪問MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;冇咔哒聲&lt;/span&gt;，甚至冇&lt;span color="red"&gt;眨眼&lt;/span&gt;&amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

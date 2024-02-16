@@ -166,14 +166,8 @@ klipps rispettivament.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Scroll - to - Open</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; MonkeyPaste huwa &lt;span color = "aħmar&gt; integrat kompletament &lt;/span&gt; bi tkaxkir - u - qatra &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Waqqa 'hawn!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; B'dan il-mod, il-monkeypaste jista 'jkun aċċessat &lt;br&gt; &lt;span color = "aħmar"&gt; Mingħajr klikk &lt;/span&gt; jew saħansitra &lt;span color = "aħmar"&gt; batting għajn &lt;/span&gt; &amp; # x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Drag me!</value>
@@ -364,62 +358,14 @@ Aġġornament biex tevita.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Il-ġesti għandhom ikunu uniċi u jista 'jkun fihom biss ċavetta ta' input waħda.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; intern &lt;/b&gt; il-shortcuts kollha huma limitati għal fl-applikazzjoni. Din mhix verament għażla maħsuba imma tista 'tippermetti li tippersonalizza liema shortcuts biħsiebek tagħmel globali &lt;i&gt; xi darba &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; default &lt;/b&gt; il-shortcuts globali kollha huma attivati. It-tieqa &lt;b&gt; turi / taħbi t-tieqa ewlenija &lt;/b&gt; shortcut tuża &lt;span color = "aħmar"&gt; Override &lt;/span&gt; Rotta għall-buttuna &lt;b&gt; Lock &lt;/b&gt;. Tista 'tbiddel dak ir-rotta jew ġest fi kwalunkwe ħin. Imma &lt;span color = "aħdar"&gt; ipprovaha &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;H1&gt; modi ta 'shortcut globali &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; passiv &lt;/b&gt; Monkeypaste shortcut se jisma 'fi kwalunkwe applikazzjoni. &lt;br&gt;
-* Din hija l-għażla &lt;i&gt; biss &lt;/i&gt; fuq Linux għalissa.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; shortcut se tesegwixxi &lt;b&gt; &lt;i&gt; qabel &lt;/i&gt; &lt;/b&gt; hija mmaniġġjata mill-applikazzjoni attiva. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; shortcut se tesegwixxi &lt;b&gt; &lt;i&gt; wara &lt;/i&gt; &lt;/b&gt; hija mmaniġġjata mill-applikazzjoni attiva. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Override &lt;/b&gt; Meta MonkeyPaste jisma 'ċ-ċavetta tal-input (ċavetta mhux modifikatur) ta' shortcut override se &lt;i&gt; Hide &lt;/i&gt; dik iċ-ċavetta tagħfas mill-applikazzjoni - livell ta 'input. &lt;br&gt;
-Din l-għażla tiggarantixxi li s-shortcut jiġi attivat mingħajr kunflitti għall-applikazzjoni attiva.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; override esklussiv &lt;/b&gt; Dan huwa tip speċjali ta 'modalità ta' override iddisinjata għaċ-ċavetta tas-serratura Caps. Jippermetti biss &lt;b&gt; ċavetta waħda &lt;/b&gt; (mhux modifikatur) għall-assenjazzjoni tagħha. &lt;br&gt;
-Fil-modalità ta 'override normali, is-serratura tista' ssir &lt;i&gt; mwaħħla fuq &lt;/i&gt; meta tkun ippressat flimkien ma 'ċwievet oħra. &lt;br&gt;
-Allura irrispettivament minn liema ċwievet oħra huma 'l isfel, jekk A &lt;b&gt; Hotkey &lt;/b&gt; shortcut huwa ppressat, se jkun overriden u jevitaha milli ssir &lt;i&gt; mwaħħla fuq &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Itfi</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Tagħbija meta dan il-kont tal-utent ikun illoggjat, mhux għal utenti oħra.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Uża l-kuntatti disponibbli (teħtieġ plugin Fetcher) Dan il-qasam se jintuża għall-każijiet kollha ta 'dan il-mudell f'dan id-dokument jew f'kull wieħed minnhom se jkun referenzjat aktar tard. &lt;/p&gt; &lt;p&gt; Allura pereżempju jekk tagħżel l-indirizz elettroniku Hawnhekk allura l-kamp tal-email tal-kuntatt li tagħżel se jintuża għall-każijiet kollha f'dan id-dokument. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = sena qasira &lt;br/&gt; yyyy = sena twila &lt;br/&gt; m = xahar (1-12) &lt;br/&gt; mm = xahar (01-12) &lt;br/&gt; mmm = Arevrevediment ta 'xahar (Jan, Feb .. . Dec) &lt;br/&gt; mmmm = xahar twil (Jannar, Frar ... Diċembru) &lt;br/&gt; d = jum (1 - 31) &lt;br/&gt; dd = jum (01 - 31) &lt;br/&gt; ddd = Jum tal-Ġimgħa fi kliem (it-Tnejn, it-Tlieta ... il-Ħadd) &lt;br/&gt; E = Jum Qasir tal-Ġimgħa bil-Kliem (Tnejn, Tue ... Sun) &lt;br/&gt; D - Jum Ordinal (1, it-2, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; H = siegħa f'Am / PM (0-12) &lt;br/&gt; hh = siegħa f'Am / PM (00-12) &lt;br / &gt; H = siegħa fil-jum (0-23) &lt;br/&gt; hh = siegħa fil-jum (00-23) &lt;br/&gt; mm = minuta &lt;br/&gt; ss = it-tieni &lt;br/&gt; sss = millisekondi &lt;br/&gt; A = AM / PM markatur &lt;br/&gt; p = a.m./p.m. markatur</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Id-data kurrenti u / jew il-ħin jiġu sostitwiti għal mudelli ta 'datetime meta jiġu mwaħħlin.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; L-okkorrenzi kollha ta 'dan il-mudell jużaw it-test provdut. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; L-okkorrenzi kollha ta 'dan il-mudell jużaw it-test provdut. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Tispiċċa l-apping</value>
@@ -469,9 +415,6 @@ Allura irrispettivament minn liema ċwievet oħra huma 'l isfel, jekk A &lt;b&gt
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>L-aħħar app attiva mhux magħrufa. Aqleb għal app maħsuba għal pejst tax-xadini.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Ippejstja lil: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Timminimizza</value>
@@ -547,9 +490,6 @@ Allura irrispettivament minn liema ċwievet oħra huma 'l isfel, jekk A &lt;b&gt
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Xejn</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Il-presets magħżula biss se jintużaw għall-applikazzjoni speċifikata. Meta mhux speċifikat, il-presets default misjuba fil-ġenb &lt;em&gt; clipboard &lt;/em&gt; se jintużaw.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Ħafna karatteristiċi ta 'MonkeyPaste jużaw l-awtomazzjoni tat-tastiera biex jinteraġixxu ma' applikazzjonijiet oħra.
 
@@ -562,9 +502,6 @@ Biex tiżgura interoperabilità xierqa, irreġistra dawk is-shortcuts għal dik 
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Qarrejja</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Il-monitoraġġ kollu tal-clipboard minn applikazzjonijiet rifjutati se jkun &lt;b&gt; injorat &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Kittieba</value>
@@ -1331,11 +1268,6 @@ Dan ma jistax jitneħħa!
     <value>Int żgur li trid tirrisettja n-notifiki kollha?
 
 * Dan ma jistax jitneħħa!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste tistabbilixxi l-clipboard (twarrab) meta twaħħal ma 'programm estern. Dan &lt;b&gt; attentat &lt;/b&gt; biex jerġa 'jġib l-istat tal-clipboard wara pejst estern.
-
-Ir-restawr totali ma jistax jiġi garantit u jista 'jnaqqas il-prestazzjoni jew saħansitra ħabta ta' monkeypaste skont is-sors tad-dejta.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Irrisettja l-clipboard wara pasta tax-xadini</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Tgħallem aktar dwar il-pjanijiet</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Ippejstja għal: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Bl-użu ta' kuntatti disponibbli (jeħtieġ plugin tal-fetcher) dan il-qasam se jintuża għall-każijiet kollha ta' dan il-mudell f'dan id-dokument kollu jew fi kwalunkwe wieħed minnhom se jiġi referenzjat aktar tard.&lt;/p&gt;&lt;p&gt; Allura per eżempju jekk tagħżel l-indirizz elettroniku hawn allura l-qasam tal-email tal-kuntatt li tagħżel se jintuża għall-istanzi kollha f'dan id-dokument.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = sena qasira&lt;br/&gt;ssss = sena twila&lt;br/&gt;M = xahar (1-12)&lt;br/&gt;MM = xahar (01-12)&lt;br/&gt;MMM = abbrevjazzjoni tax-xahar (Jan, Frar ... Diċembru)&lt;br/&gt;MMMM = xahar twil (Jannar, Frar ... Diċembru)&lt;br/&gt;d = jum (1 - 31)&lt;br/&gt;DD = jum (01 - 31)&lt;br/&gt;ddd = jum tal-ġimgħa bil-kliem (it-Tnejn, it-Tlieta ... Il-Ħadd)&lt;br/&gt;E = jum qasir tal-ġimgħa fi kliem (Mon, Tue ... Xemx)&lt;br/&gt;D - Jum ordinali (l-1, it-2, it-3, il-21, it-22, it-23, il-31, ir-4 ...)&lt;br/&gt;h = siegħa f'am/pm (0-12)&lt;br/&gt;hh = siegħa f'am/pm (00-12)&lt;br/&gt;H = siegħa f'jum (0-23)&lt;br/&gt;HH = siegħa fil-ġurnata (00-23)&lt;br/&gt;mm = minuta&lt;br/&gt;ss = it-tieni&lt;br/&gt;SSS = millisekondi&lt;br/&gt;a = Markatur AM/PM&lt;br/&gt;p = a.m./p.m. markatur</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;L-okkorrenzi kollha ta' dan il-mudell se jużaw it-test ipprovdut.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;L-okkorrenzi kollha ta' dan il-mudell se jużaw it-test ipprovdut.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste jissettja l-klibbord (overrides) meta jwaħħal ma 'programm estern. Dan &lt;b&gt;jipprova&lt;/b&gt; jirrestawra l-istat tal-klibbord wara pejst estern. 
+
+Ir-restawr totali ma jistax jiġi garantit u jista 'jnaqqas il-prestazzjoni jew saħansitra jaħbat MonkeyPaste skont is-sors tad-dejta.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Għall-applikazzjoni speċifikata se jintużaw biss il-presets magħżula. Meta ma jkunx speċifikat, se jintużaw il-presets default li jinsabu &lt;em&gt;fl-Istrixxa tal-Ġenb tal-Klibbord&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Il-monitoraġġ kollu tal-klibbord minn applikazzjonijiet miċħuda se jiġi &lt;b&gt;injorat.&lt;/b&gt;</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Intern&lt;/b&gt;Ix-shortcuts kollha huma limitati għal ġewwa l-applikazzjoni. Din mhix verament għażla maħsuba iżda tista 'tippermetti li tippersonalizza liema shortcuts beħsiebek tagħmel globali&lt;i&gt;xi darba&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Default&lt;/b&gt; Ix-shortcuts globali kollha huma attivati. Ix-shortcut&lt;b&gt;Show / Hide Main Window&lt;/b&gt;tuża routing&lt;span color="red"&gt;override&lt;/span&gt;għaċ-ċavetta&lt;b&gt;Caps Lock&lt;/b&gt; . Tista' tibdel dik ir-rotta jew ġest fi kwalunkwe ħin. Imma&lt;span color="green"&gt;agħtiha prova&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Modi ta 'Shortcut Globali&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passiv&lt;/b&gt; Shortcut MonkeyPaste se tisma 'fi kwalunkwe applikazzjoni.&lt;br&gt;* Din hija &lt;i&gt;l-unika&lt;/i&gt; għażla fuq Linux għalissa.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Qabel&lt;/b&gt; Shortcut tesegwixxi &lt;b&gt;&lt;i&gt;qabel ma&lt;/i&gt;&lt;/b&gt; tiġi ttrattata mill-applikazzjoni attiva.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Shortcut tesegwixxi &lt;b&gt;&lt;i&gt;wara&lt;/i&gt;&lt;/b&gt; li tiġi ttrattata mill-applikazzjoni attiva.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Override&lt;/b&gt; Meta MonkeyPaste jisma 'ċ-ċavetta tal-input (mhux - ċavetta modifikatur) ta' shortcut override &lt;i&gt;jaħbi dik&lt;/i&gt; l-istampa ewlenija mill-applikazzjoni - input tal-livell.&lt;br&gt;Din l-għażla tiggarantixxi li x-shortcut tiġi attivata mingħajr kunflitti għall-applikazzjoni attiva.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Override Esklussiva&lt;/b&gt; Dan huwa tip speċjali ta 'modalità override iddisinjata għaċ-ċavetta Caps Lock. Jippermetti biss ċavetta &lt;b&gt;waħda&lt;/b&gt; (mhux - modifikatur) għall-assenjazzjoni tagħha.&lt;br&gt;Fil-modalità override normali Caps Lock jista ' &lt;i&gt;jeħel meta jingħafas&lt;/i&gt; flimkien ma' ċwievet oħra.&lt;br&gt;Allura tkun xi tkun it-tasti l-oħra 'l isfel, jekk tingħafas &lt;b&gt;shortcut Hotkey&lt;/b&gt; tkun misjura żżejjed u ma tħallihiex &lt;i&gt;teħel&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste huwa &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;B'dan il-mod, MonkeyPaste jista 'jiġi aċċessat&lt;br&gt;&lt;span color="red"&gt;mingħajr klikk&lt;/span&gt; jew saħansitra &lt;span color="red"&gt;batting għajn&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>スクロール--TO-開く</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; monkeypaste is &lt;span color = "red&gt;完全に統合された&lt;/span&gt;ドラッグと - ドロップ&lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>ここにドロップしてください！</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt;このように、monkeypasteにアクセスできます&lt;br&gt; &lt;span color = "red"&gt; &lt;/span&gt;または&lt;span color = "red"&gt;目をバッティング&lt;/span&gt; ＆＃x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>私をドラッグ！</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>ジェスチャーは一意でなければならず、入力キーは1つだけ含まれている場合があります。</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt;内部&lt;/b&gt;すべてのショートカットはアプリケーション内に限定されています。これは実際には意図されたオプションではありませんが、いつかグローバルにするショートカットをカスタマイズできます&lt;/i&gt; &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt;デフォルト&lt;/b&gt;すべてのグローバルショートカットが有効になっています。 &lt;b&gt;メインウィンドウの表示/非表示&lt;/b&gt;ショートカットは、&lt;b&gt; caps lock &lt;/b&gt;キーに&lt;span color = "red"&gt;オーバーライド&lt;/span&gt;ルーティングを使用します。いつでもそのルーティングやジェスチャーを変更できます。しかし、&lt;スパンカラー= "緑"&gt;試してみてください&lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;ヘッド&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt;グローバルショートカットモード&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt;パッシブ&lt;/b&gt;ショートカットMonkeypasteはどのアプリケーションでも聴きます。&lt;br&gt;
-*これは、今のところLinuxの&lt;i&gt;のみ&lt;/i&gt;オプションです。
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt;ショートカットは、アクティブなアプリケーションによって処理される前に&lt;b&gt; &lt;i&gt;を実行します。&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt;ショートカットは、アクティブなアプリケーションによって処理された後に&lt;b&gt; &lt;i&gt;を実行します。&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt;オーバーライド&lt;/b&gt; Monkeypasteがオーバーライドショートカットの入力キー（非修飾子キー）を聞くと、アプリケーションからキーを押す - レベル入力を非表示にします。
-このオプションは、アクティブなアプリケーションとの競合なしにショートカットがトリガーされることを保証します。
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt;排他的オーバーライド&lt;/b&gt;これは、キャップロックキー用に設計された特別なタイプのオーバーライドモードです。割り当てに対して&lt;b&gt; 1つの&lt;/b&gt; key（non -modifier）のみを許可します。&lt;br&gt;
-通常のオーバーライドモードでは、他のキーと組み合わせて押された場合、ロックは&lt;/i&gt;に詰まってしまう可能性があります。&lt;br&gt;
-したがって、他のキーがダウンしていても、&lt;b&gt; hotkey &lt;/b&gt;ショートカットが押された場合、それはオーバーライデンになり、&lt;i&gt; &lt;/i&gt;に詰まらないようにします。
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>無効にします</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>他のユーザーではなく、このユーザーアカウントがログインしたときにロードします。</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt;利用可能な連絡先を使用（フェッチャープラグインが必要）このフィールドは、このドキュメント全体でこのテンプレートのすべてのインスタンスに使用されます。ここで、選択した連絡先の電子メールフィールドは、このドキュメントのすべてのインスタンスに使用されます。&lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy =短い年&lt;br/&gt; yyyy = long year &lt;br/&gt; m = month（1-12）&lt;br/&gt; mm = month（01-12）&lt;br/&gt; mmm =月略語（1月、2月。 。dec）&lt;br/&gt; mmmm =長年（1月、2月... 12月）&lt;br/&gt; d = day（1-31）&lt;br/&gt; dd = day（01-31）&lt;br/&gt; ddd =言葉の曜日（月曜日、火曜日...日曜日）&lt;br/&gt; e =言葉での短い曜日（月、火...太陽）&lt;br/&gt; d-序数（1日、2日、2日、 3番目、21日、22日、23日、31日、4日...）&lt;br/&gt; h = hour in am/pm（0-12）&lt;br/&gt; hh = hour in am/pm（00-12）&lt;br/ &gt; h = 1日の時間（0-23）&lt;br/&gt; hh = hour in day（00-23）&lt;br/&gt; mm = minute &lt;br/&gt; ss = second &lt;br/&gt; sss = milliseconds &lt;br/&gt; a = am/pmマーカー&lt;br/&gt; p = a.m./p.m。マーカー</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>現在の日付および/または時間は、貼り付けられたときにDateTimeテンプレートに置き換えられます。</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt;このテンプレートのすべての発生は、提供されたテキストを使用します。&lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt;このテンプレートのすべての発生は、提供されたテキストを使用します。&lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Applingを終了します</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>最後のアクティブアプリ不明。モンキーペーストに目的のアプリに切り替えます。</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>貼り付け：&lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>最小化します</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>なし</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>選択したプリセットのみが指定されたアプリケーションに使用されます。不特定の場合、&lt;em&gt;クリップボードサイドバー&lt;/em&gt;にあるデフォルトのプリセットが使用されます。</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>多くのMonkeypaste機能は、キーボードオートメーションを使用して他のアプリケーションと対話します。
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>読者</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>拒否されたアプリケーションからのすべてのクリップボード監視は、&lt;b&gt;無視されます&lt;/b&gt;。</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>作家</value>
@@ -1331,11 +1268,6 @@
     <value>すべての通知をリセットしたいですか？
 
 *これは、元に戻すことはできません！</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>モンキーペーストは、外部プログラムに貼り付けるときにクリップボード（オーバーライド）を設定します。これにより、&lt;/b&gt; &lt;/b&gt;は、外部ペーストの後にクリップボードの状態を復元します。
-
-完全な復元を保証することはできず、データのソースに応じてパフォーマンスを低下させたり、モンキーパストをクラッシュさせたりすることさえあります。</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>猿の貼り付け後にクリップボードをリセットします</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>計画の詳細をご覧ください</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>貼り付け先: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;利用可能な連絡先(フェッチャープラグインが必要)を使用すると、このフィールドは、このドキュメント全体のこのテンプレートのすべてのインスタンス、または後で参照されるすべてのインスタンスに使用されます。&lt;/p&gt;&lt;p&gt; たとえば、ここでメールアドレスを選択すると、選択した連絡先のメールフィールドがこのドキュメントのすべてのインスタンスに使用されます。&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = 短い年&lt;br/&gt;yyyy = 長い年&lt;br/&gt;M = 月 (1-12)&lt;br/&gt;MM = 月 (01-12)&lt;br/&gt;MMM = 月の省略形 (Jan, Feb ...12月)&lt;br/&gt;MMMM = 長い月(1月、2月...12月)&lt;br/&gt;d = 日 (1 - 31)&lt;br/&gt;dd = 日 (01 - 31)&lt;br/&gt;ddd =単語の曜日(月曜日、火曜日...日曜日)&lt;br/&gt;E =単語の短い曜日(月、火...日)&lt;br/&gt;D - 通常の日(1日、2日、3日、21日、22日、23日、31日、4日...)&lt;br/&gt;h = 時間 (午前/午後) (0-12)&lt;br/&gt;hh = 午前/午後の時間 (00 から 12)&lt;br/&gt;H = 時間 (0 から 23)&lt;br/&gt;HH = 時間 (00-23)&lt;br/&gt;mm = 分&lt;br/&gt;ss = 秒&lt;br/&gt;SSS = ミリ秒&lt;br/&gt;a = AM/PM マーカー&lt;br/&gt;p = a.m./p.m. マーカー</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;このテンプレートのすべての出現箇所では、提供されたテキストが使用されます。&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;このテンプレートのすべての出現箇所では、提供されたテキストが使用されます。&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>モンキーペーストは、外部プログラムに貼り付けるときにクリップボードを設定(オーバーライド)します。これにより、外部貼り付け後のクリップボードの状態の復元 &lt;b&gt;が試行&lt;/b&gt; されます。
+
+完全な復元は保証されず、データのソースによってはパフォーマンスが低下したり、MonkeyPasteがクラッシュしたりする可能性があります。</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>選択したプリセットのみが、指定したアプリケーションに使用されます。指定しない場合、 &lt;em&gt;クリップボードサイドバー&lt;/em&gt; にあるデフォルトのプリセットが使用されます。</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>拒否されたアプリケーションからのクリップボード監視はすべて &lt;b&gt;無視され&lt;/b&gt;ます。</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;国内&lt;/b&gt;すべてのショートカットは、アプリケーション内に限定されます。これは実際には意図されたオプションではありませんが、&lt;i&gt;いつか&lt;/i&gt;グローバルにする予定のショートカットをカスタマイズできます。&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;デフォルト&lt;/b&gt;すべてのグローバルショートカットが有効になります。&lt;b&gt;メインウィンドウの表示/非表示&lt;/b&gt;ショートカットでは、&lt;b&gt;Caps Lock&lt;/b&gt;キーの&lt;span color="red"&gt;ルーティングを上書き&lt;/span&gt;します。このルーティングやジェスチャーはいつでも変更できます。しかし&lt;span color="green"&gt;、試してみてください&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;グローバル ショートカット モード&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;受け身&lt;/b&gt; MonkeyPasteが任意のアプリケーションでリッスンするショートカット。&lt;br&gt;*これは今のところLinuxの &lt;i&gt;唯一の&lt;/i&gt; オプションです。   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;前&lt;/b&gt;ショートカットは、アクティブなアプリケーションによって処理&lt;b&gt;&lt;i&gt;される前に実行されます。&lt;/i&gt;&lt;/b&gt;&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;投稿&lt;/b&gt; ショートカットは、アクティブなアプリケーションによって処理 &lt;b&gt;&lt;i&gt;された後に&lt;/i&gt;&lt;/b&gt; 実行されます。&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;オーバーライド&lt;/b&gt; MonkeyPasteがオーバーライドショートカットの入力キー(修飾キー以外)を聞くと、そのキー押下がアプリケーションレベル入力から &lt;i&gt;非表示&lt;/i&gt; になります。&lt;br&gt;このオプションは、アクティブなアプリケーションとの競合なしにショートカットがトリガーされることを保証します。   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;排他オーバーライド&lt;/b&gt; これは、Caps Lock キー用に設計された特殊なオーバーライド モードです。割り当てには &lt;b&gt;1 つの&lt;/b&gt; キー (非修飾子) のみが許可されます。&lt;br&gt;通常のオーバーライドモードでは、Caps Lockを他のキーと組み合わせて押すと &lt;i&gt;、オン&lt;/i&gt; のままになることがあります。&lt;br&gt;したがって、他のキーが押されていても、 &lt;b&gt;ホットキー&lt;/b&gt; のショートカットが押されると、それが上書きされ、 &lt;i&gt;スタック&lt;/i&gt;するのを防ぎます。   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste は &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;このようにして、MonkeyPasteにアクセスできます&lt;br&gt;&lt;span color="red"&gt;クリックしたり、&lt;/span&gt;&lt;span color="red"&gt;目を打ったり&lt;/span&gt;することなく&amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

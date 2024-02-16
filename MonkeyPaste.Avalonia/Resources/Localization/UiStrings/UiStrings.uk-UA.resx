@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Прокрутка - до - відкрити</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>...</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Киньте його сюди!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; Таким чином, у мавпасті можна отримати доступ &lt;br&gt; &lt;span color = "червоний"&gt; без клацання &lt;/span&gt; або навіть &lt;span color = "червоний"&gt; ватин око &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Перетягніть мене!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Жести повинні бути унікальними і можуть містити лише один вхідний ключ.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; внутрішні &lt;/b&gt; Усі ярлики обмежені в межах програми. Це насправді не передбачений варіант, але може дозволити налаштувати те, що ви маєте намір зробити глобальний &lt;i&gt; колись &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; за замовчуванням &lt;/b&gt; Всі глобальні ярлики увімкнено. Ярлик &lt;b&gt; шоу/приховати головне вікно &lt;/b&gt; використовує &lt;span color = "red"&gt; repride &lt;/span&gt; маршрутизацію для клавіші &lt;b&gt; caps &lt;/b&gt;. Ви можете змінити цю маршрутизацію або жест у будь -який час. Але &lt;span color = "зелений"&gt; спробуйте &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;Голова&gt; &lt;/ Голова&gt;
-&lt;body&gt;
-&lt;h1&gt; Глобальні режими ярлика &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-4
-*Це зараз лише &lt;i&gt; &lt;/i&gt; опція на Linux.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; до &lt;/b&gt; ярлик виконає &lt;b&gt; &lt;i&gt; до &lt;/i&gt; &lt;/b&gt;.
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt; ярлик виконає &lt;b&gt; &lt;i&gt; після &lt;/i&gt; &lt;/b&gt;. Він обробляється активною програмою. &lt;/li&gt;
-&lt;li&gt;
-4
-Цей варіант гарантує, що ярлик спрацьовує без конфліктів активному додатку.
-&lt;/li&gt;
-&lt;li&gt;
-4 Це дозволяє &lt;b&gt; один &lt;/b&gt; ключ (non -модифікатор) для його призначення. &lt;br&gt;
-У звичайному замиканні режиму переопрацьованості може стати &lt;i&gt; застрягти на &lt;/i&gt; при натисканні в поєднанні з іншими клавішами. &lt;br&gt;
-Тож незалежно від того, які інші клавіші вниз, якщо &lt;b&gt; гаряча клавіша &lt;/b&gt; ярлик буде натиснуто, він буде переоцінений і запобігає йому, щоб він не застряг на &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/tml&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Відключати</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Завантажте, коли цей обліковий запис користувача ввійшов, а не для інших користувачів.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>4 Тут поле електронної пошти вибраного вами контакту буде використовуватися для всіх екземплярів цього документа. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = короткий рік &lt;br/&gt; yyyy = довгий рік &lt;br/&gt; m = місяць (1-12) &lt;br/&gt; мм = місяць (01-12) &lt;br/&gt; mmm = абревіатура місяця (січень, лютий .. . Грудня) &lt;br/&gt; ммм = довгий місяць (січень, лютий ... грудень) &lt;br/&gt; d = день (1 - 31) &lt;br/&gt; dd = день (01 - 31) &lt;br/&gt; ddd = День тижня у словах (понеділок, вівторок ... неділя) &lt;br/&gt; e = короткий день тижня у словах (пн, тю ... сонце) &lt;br/&gt; d - порядковий день (1 -й, 2 -й, 3-й, 21-й, 22-й, 23-й, 31-й, 4-й ...) &lt;br/&gt; H = година в AM/PM (0-12) &lt;br/&gt; HH = година в AM/PM (00-12) &lt;BR/ &gt; H = година в день (0-23) &lt;br/&gt; hh = година в день (00-23) &lt;br/&gt; мм = хвилина &lt;br/&gt; ss = другий &lt;br/&gt; sss = мілісекунди &lt;br/&gt; A = AM/PM Маркер &lt;br/&gt; p = a.m./p.m. маркер</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Поточна дата та/або час буде замінена на шаблони DateTime, коли вони вставляються.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Усі трапляються цього шаблону використовуватимуть наданий текст. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Усі трапляються цього шаблону використовуватимуть наданий текст. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Закінчити додавання</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Останній активний додаток невідомий. Перейдіть на призначений додаток на пасту для мавп.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Вставити до: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Мінімізувати</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Ні</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Для зазначеної програми будуть використані лише вибрані попередні встановлення. Якщо не визначити, будуть використані попередні встановлення за замовчуванням, знайдені в бічній панелі буфера обміну &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Багато функцій MonkeyPaste використовують автоматизацію клавіатури для взаємодії з іншими програмами.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Читачі</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Весь моніторинг буфера обміну з відхилених програм буде &lt;b&gt; ігноровано &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Письменники</value>
@@ -1331,11 +1268,6 @@
     <value>Ви впевнені, що хочете скинути всі сповіщення?
 
 *Це не може бути скасоване!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Паста мавп встановлює буфер обміну (переосмислює) під час вставки до зовнішньої програми. Це буде &lt;b&gt; спроби &lt;/b&gt; відновити стан буфера обміну після зовнішньої пасти.
-
-Загальна реставрація не може бути гарантована і може знизити продуктивність або навіть зламати мавпасту залежно від джерела даних.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Скидання буфера обміну після вставки мавп</value>
@@ -2706,5 +2638,66 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Дізнайтеся більше про плани</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Вставити до: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Використовуючи доступні контакти (потрібен плагін отримання), це поле буде використано для всіх екземплярів цього шаблону в цьому документі або в будь-якому з них, на які він буде посилатися пізніше.&lt;/p&gt;&lt;p&gt; Так, наприклад, якщо тут вибрано адресу електронної пошти, поле електронної пошти вибраного вами контакту буде використано для всіх екземплярів у цьому документі.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = короткий рік&lt;br/&gt;рррр = довгий рік&lt;br/&gt;М = місяць (1-12)&lt;br/&gt;ММ = місяць (01-12)&lt;br/&gt;МММ = абревіатура місяця (січень, лютий ... грудень)&lt;br/&gt;ММММ = довгий місяць (січень, лютий ... Грудень)&lt;br/&gt;d = день (1 - 31)&lt;br/&gt;dd = день (01 - 31)&lt;br/&gt;ddd = день тижня прописом (понеділок, вівторок ... Неділя)&lt;br/&gt;Е = короткий день тижня прописом (Пн, Вт ... Сонце)&lt;br/&gt;D - порядковий день (1-й, 2-й, 3-й, 21-й, 22-й, 23-й, 31-й, 4-й...)&lt;br/&gt;h = година в ранку/вечора (0-12)&lt;br/&gt;hh = година в ранку/вечора (00-12)&lt;br/&gt;H = година в добі (0-23)&lt;br/&gt;HH = година в добі (00-23)&lt;br/&gt;мм = хвилина&lt;br/&gt;ss = секунда&lt;br/&gt;SSS = мілісекунди&lt;br/&gt;a = маркер AM/PM&lt;br/&gt;p = маркер a.m./p.m.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Усі входження цього шаблону використовуватимуть наданий текст.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Усі входження цього шаблону використовуватимуть наданий текст.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste встановлює буфер обміну (перевизначає) при вставці в зовнішню програму. Це &lt;b&gt;спробує&lt;/b&gt; відновити стан буфера обміну даними після зовнішньої вставки. 
+
+Повне відновлення не може бути гарантоване і може знизити продуктивність або навіть збій MonkeyPaste в залежності від джерела даних.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Для вказаної програми будуть використовуватися лише вибрані стилі. Якщо не вказано, буде використано типові стилі, які можна знайти на &lt;em&gt;бічній панелі буфера обміну&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Будь-який моніторинг буфера обміну відхиленими програмами буде &lt;b&gt;проігноровано&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Внутрішні&lt;/b&gt;Усі ярлики обмежені програмою. Насправді це не передбачуваний варіант, але він може дозволити налаштувати, які ярлики ви збираєтеся&lt;i&gt;колись&lt;/i&gt; зробити глобальними.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;За промовчанням&lt;/b&gt; Усі глобальні ярлики ввімкнено. У комбінації клавіш&lt;b&gt;Показати/Приховати головне вікно&lt;/b&gt;використовується&lt;span color="red"&gt;перевизначення&lt;/span&gt;маршрутизації для клавіші&lt;b&gt;Caps Lock&lt;/b&gt; . Ви можете змінити маршрут або жест у будь-який час. Але&lt;span color="green"&gt;спробуйте&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Глобальні режими швидкого доступу&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Пасивний&lt;/b&gt; Ярлик MonkeyPaste буде прослуховуватися в будь-якій програмі.&lt;br&gt;*На даний момент це &lt;i&gt;єдина&lt;/i&gt; опція в Linux.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Попередньо&lt;/b&gt; Ярлик буде виконано &lt;b&gt;&lt;i&gt;до того, як&lt;/i&gt;&lt;/b&gt; його буде оброблено активною програмою.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Пост&lt;/b&gt; Ярлик буде виконано &lt;b&gt;&lt;i&gt;після того, як&lt;/i&gt;&lt;/b&gt; його буде оброблено активною програмою.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Перевизначити&lt;/b&gt; Коли MonkeyPaste почує клавішу введення (не - клавіша-модифікатор) комбінації клавіш перевизначення, вона &lt;i&gt;приховає&lt;/i&gt; це натискання клавіші від програми - введення рівня.&lt;br&gt;Цей параметр гарантує, що клавіатурне скорочення буде запущено без конфліктів з активною програмою.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Ексклюзивне заміщення&lt;/b&gt; Це особливий тип режиму перевизначення, призначений для клавіші Caps Lock. Він допускає лише &lt;b&gt;один&lt;/b&gt; ключ (non - модифікатор) для його призначення.&lt;br&gt;У звичайному режимі перевизначення Caps Lock може &lt;i&gt;застрягати&lt;/i&gt; при натисканні в поєднанні з іншими клавішами.&lt;br&gt;Отже, незалежно від того, які інші клавіші не працюють, якщо натиснути комбінацію &lt;b&gt;клавіш Hotkey&lt;/b&gt; , вона буде перевизначена та запобігатиме її &lt;i&gt;застряганню&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste - це &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Таким чином, можна отримати доступ до MonkeyPaste&lt;br&gt;не &lt;span color="red"&gt;клацнувши&lt;/span&gt; і навіть &lt;span color="red"&gt;не моргнувши оком&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

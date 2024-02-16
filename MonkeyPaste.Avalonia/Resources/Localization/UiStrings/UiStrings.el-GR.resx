@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Κύλλος - σε - Ανοίξτε</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; monkeypaste είναι &lt;span color = "red&gt; πλήρως ενσωματωμένο &lt;/span&gt; με drag - και - drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Πετάξτε το εδώ!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; Με αυτόν τον τρόπο, το monkeypaste μπορεί να προσεγγιστεί &lt;br&gt; &lt;span color = "red"&gt; χωρίς κλικ &lt;/span&gt; ή ακόμα και &lt;span color = "red"&gt; batting ένα μάτι &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Σύρε με!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Οι χειρονομίες πρέπει να είναι μοναδικές και μπορεί να περιέχουν μόνο ένα κλειδί εισόδου.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Εσωτερικές &lt;/b&gt; Όλες οι συντομεύσεις περιορίζονται σε μέσα στην εφαρμογή. Αυτό δεν είναι πραγματικά μια επιδιωκόμενη επιλογή, αλλά μπορεί να επιτρέψει να προσαρμόσει τις συντομεύσεις που σκοπεύετε να φτιάξετε παγκόσμια &lt;i&gt; κάποια μέρα &lt;/i&gt; &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Προεπιλογή &lt;/b&gt; Όλες οι παγκόσμιες συντομεύσεις είναι ενεργοποιημένες. Το &lt;b&gt; show/απόκρυψη κύριου παραθύρου &lt;/b&gt; χρησιμοποιεί δρομολόγηση &lt;/b&gt;. Μπορείτε να αλλάξετε αυτή τη δρομολόγηση ή τη χειρονομία ανά πάσα στιγμή. Αλλά &lt;span color = "πράσινο"&gt; Δοκιμάστε το &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;HTML&gt;
-&lt;ead&gt; &lt;/head&gt;
-&lt;side&gt;
-&lt;H1&gt; Παγκόσμιες λειτουργίες συντόμευσης &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; παθητικό &lt;/b&gt; Μια συντόμευση monkeypaste θα ακούσει σε οποιαδήποτε εφαρμογή. &lt;br&gt;
-*Αυτή είναι η επιλογή &lt;i&gt; μόνο &lt;/i&gt; στο Linux για τώρα.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; Η συντόμευση θα εκτελέσει &lt;b&gt; &lt;i&gt; Πριν &lt;/i&gt; &lt;/b&gt; αντιμετωπίζεται από την ενεργή εφαρμογή. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt; Η συντόμευση θα εκτελέσει &lt;b&gt; &lt;i&gt; Μετά το &lt;/i&gt; &lt;/b&gt; αντιμετωπίζεται από την ενεργή εφαρμογή. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; override &lt;/b&gt; Όταν ο MonkeyPaste ακούει το πλήκτρο εισόδου (πλήκτρο μη τροποποιητή) μιας συντόμευσης override, θα κρύψει &lt;/i&gt; το πλήκτρο από την Application - επίπεδο εισόδου. &lt;br&gt;
-Αυτή η επιλογή θα εγγυηθεί ότι η συντόμευση ενεργοποιείται χωρίς συγκρούσεις στην ενεργό εφαρμογή.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Αποκλειστική παράκαμψη &lt;/b&gt; Αυτός είναι ένας ειδικός τύπος λειτουργίας override σχεδιασμένο για το κλειδί κλειδώματος CAPS. Επιτρέπει μόνο το &lt;b&gt; ένα κλειδί &lt;/b&gt; (μη τροποποιητής) για την ανάθεση του. &lt;br&gt;
-Σε κανονική παράκαμψη, η κλειδαριά των καλύμματος λειτουργίας μπορεί να γίνει κολλημένη σε &lt;/i&gt; όταν πατηθεί σε συνδυασμό με άλλα κλειδιά. &lt;br&gt;
-Έτσι, ανεξάρτητα από το τι άλλα κλειδιά είναι κάτω, εάν ένα &lt;b&gt; hotkey &lt;/b&gt; συντομεύεται, θα ξεπεράσει και θα την αποτρέψει να γίνει &lt;i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/σώμα&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Καθιστώ ανίκανο</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Φορτώστε όταν αυτός ο λογαριασμός χρήστη έχει συνδεθεί, όχι για άλλους χρήστες.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Χρησιμοποιώντας τις διαθέσιμες επαφές (απαιτεί ένα plugin fetcher) Αυτό το πεδίο θα χρησιμοποιηθεί για όλες τις περιπτώσεις αυτού του προτύπου σε αυτό το έγγραφο ή σε οποιοδήποτε που θα αναφερθεί αργότερα. Εδώ τότε το πεδίο ηλεκτρονικού ταχυδρομείου της επαφής που επιλέξετε θα χρησιμοποιηθεί για όλες τις περιπτώσεις σε αυτό το έγγραφο. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = σύντομο έτος &lt;br/&gt; yyyy = long year &lt;br/&gt; m = μήνας (1-12) &lt;br/&gt; mm = μήνας (01-12) &lt;br/&gt; mmm = μήνας συντομογραφία (Jan, Feb .. . Δεκ) Ημέρα της εβδομάδας με λόγια (Δευτέρα, Τρίτη ... Κυριακή) &lt;br/&gt; E = σύντομη ημέρα της εβδομάδας με λέξεις (Mon, Tue ... Sun) &lt;br/&gt; D - Ορτική ημέρα (1η, 2η, 3η, 21η, 22η, 23η, 31η, 4η ...) &lt;br/&gt; h = ώρα σε am/pm (0-12) &lt;br/&gt; hh = ώρα σε am/pm (00-12) &lt;Br/ &gt; H = ώρα την ημέρα (0-23) &lt;br/&gt; hh = ώρα την ημέρα (00-23) &lt;br/&gt; mm = λεπτό &lt;br/&gt; ss = δεύτερο &lt;br/&gt; sss = milliseconds &lt;br/&gt; a = am/pm marker &lt;br/&gt; p = a.m./p.m. σημάδι</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Η τρέχουσα ημερομηνία ή/και ο χρόνος θα αντικατασταθούν για πρότυπα ημερομηνίας όταν είναι επικολλημένες.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Όλες οι εμφανίσεις αυτού του προτύπου θα χρησιμοποιήσουν το παρεχόμενο κείμενο. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Όλες οι εμφανίσεις αυτού του προτύπου θα χρησιμοποιήσουν το παρεχόμενο κείμενο. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Ολοκληρώστε την κατάρτιση</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Τελευταία ενεργή εφαρμογή άγνωστη. Μεταβείτε στην προβλεπόμενη εφαρμογή σε πάστα μαϊμού.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Επικόλληση σε: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Ελαττώνω</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Κανένας</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Μόνο οι επιλεγμένες προεπιλογές θα χρησιμοποιηθούν για την καθορισμένη εφαρμογή. Όταν δεν είναι καθορισμένο, θα χρησιμοποιηθούν οι προεπιλεγμένες προεπιλογές που βρίσκονται στην πλαϊνή γραμμή &lt;/em&gt; &lt;em&gt; &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Πολλά χαρακτηριστικά MonkeyPaste χρησιμοποιούν αυτοματοποίηση πληκτρολογίου για να αλληλεπιδρούν με άλλες εφαρμογές.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Αναγνώστες</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Όλη η παρακολούθηση του πρόχειρου από απορριφθείσες εφαρμογές θα αγνοηθεί &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Συγγραφείς</value>
@@ -1331,11 +1268,6 @@ Monkeypaste στη συσκευή
     <value>Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλες τις ειδοποιήσεις;
 
 *Αυτό δεν μπορεί να αναιρεθεί!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Το Monkey Paste θέτει το πρόχειρο (παρακάμπτεται) όταν επικολλείται σε ένα εξωτερικό πρόγραμμα. Αυτό θα προσπαθήσει &lt;b&gt; &lt;/b&gt; να αποκαταστήσει την κατάσταση του πρόχειρου μετά από μια εξωτερική πάστα.
-
-Η συνολική αποκατάσταση δεν μπορεί να εγγυηθεί και μπορεί να μειώσει την απόδοση ή ακόμα και να συντρίψει πιθήκους ανάλογα με την πηγή των δεδομένων.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Επαναφέρετε το πρόχειρο μετά την επικόλληση των μαϊμού</value>
@@ -2706,5 +2638,66 @@ feedble@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Μάθετε περισσότερα για τα σχέδια</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Επικόλληση σε: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Χρησιμοποιώντας τις διαθέσιμες επαφές (απαιτεί ένα πρόσθετο fetcher), αυτό το πεδίο θα χρησιμοποιηθεί για όλες τις εμφανίσεις αυτού του προτύπου σε αυτό το έγγραφο ή σε οποιοδήποτε θα αναφερθεί αργότερα.&lt;/p&gt;&lt;p&gt; Έτσι, για παράδειγμα, εάν επιλέξετε διεύθυνση ηλεκτρονικού ταχυδρομείου εδώ, τότε το πεδίο ηλεκτρονικού ταχυδρομείου της επαφής που επιλέγετε θα χρησιμοποιηθεί για όλες τις παρουσίες σε αυτό το έγγραφο.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = σύντομο έτος&lt;br/&gt;εεεε = μακρύ έτος&lt;br/&gt;M = μήνας (1-12)&lt;br/&gt;MM = μήνας (01-12)&lt;br/&gt;MMM = συντομογραφία μήνα (Ιαν, Φεβ ... Δεκ)&lt;br/&gt;MMMM = μακρύς μήνας (Ιανουάριος, Φεβρουάριος ... Δεκέμβριος)&lt;br/&gt;d = ημέρα (1 - 31)&lt;br/&gt;dd = ημέρα (01 - 31)&lt;br/&gt;ddd = ημέρα της εβδομάδας με λέξεις (Δευτέρα, Τρίτη ... Κυριακή)&lt;br/&gt;E = σύντομη ημέρα της εβδομάδας με λέξεις (Δευ, Τρ ... Κυρ)&lt;br/&gt;D - Κανονική ημέρα (1η, 2η, 3η, 21η, 22η, 23η, 31η, 4η...)&lt;br/&gt;h = ώρα π.μ./μ.μ. (0-12)&lt;br/&gt;hh = ώρα π.μ./μ.μ. (00-12)&lt;br/&gt;H = ώρα την ημέρα (0-23)&lt;br/&gt;HH = ώρα την ημέρα (00-23)&lt;br/&gt;mm = λεπτό&lt;br/&gt;ss = δευτερόλεπτο&lt;br/&gt;SSS = χιλιοστά του δευτερολέπτου&lt;br/&gt;a = δείκτης π.μ./μ.μ.&lt;br/&gt;p = δείκτης π.μ./μ.μ.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Όλες οι εμφανίσεις αυτού του προτύπου θα χρησιμοποιούν το παρεχόμενο κείμενο.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Όλες οι εμφανίσεις αυτού του προτύπου θα χρησιμοποιούν το παρεχόμενο κείμενο.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Η Monkey Paste ορίζει το πρόχειρο (παρακάμπτει) κατά την επικόλληση σε εξωτερικό πρόγραμμα. Αυτό θα &lt;b&gt;προσπαθήσει&lt;/b&gt; να επαναφέρει την κατάσταση του προχείρου μετά από μια εξωτερική επικόλληση. 
+
+Η ολική αποκατάσταση δεν είναι εγγυημένη και μπορεί να μειώσει την απόδοση ή ακόμα και να καταρρεύσει το MonkeyPaste ανάλογα με την πηγή των δεδομένων.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Μόνο οι επιλεγμένες προεπιλογές θα χρησιμοποιηθούν για την καθορισμένη εφαρμογή. Όταν δεν καθορίζεται, θα χρησιμοποιηθούν οι προεπιλεγμένες προκαθορισμένες ρυθμίσεις που βρίσκονται στην &lt;em&gt;πλαϊνή στήλη του Προχείρου&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Όλη η παρακολούθηση του προχείρου από απορριφθείσες αιτήσεις θα &lt;b&gt;αγνοηθεί&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Εσωτερικός&lt;/b&gt;Όλες οι συντομεύσεις περιορίζονται εντός της εφαρμογής. Αυτή δεν είναι πραγματικά μια προβλεπόμενη επιλογή, αλλά μπορεί να σας επιτρέψει να προσαρμόσετε ποιες συντομεύσεις σκοπεύετε να κάνετε παγκόσμιες&lt;i&gt;κάποια μέρα&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Προεπιλογή&lt;/b&gt; Όλες οι καθολικές συντομεύσεις είναι ενεργοποιημένες. &lt;b&gt;Η συντόμευση Εμφάνιση/απόκρυψη κύριου παραθύρου&lt;/b&gt;χρησιμοποιεί δρομολόγηση&lt;span color="red"&gt;παράκαμψης&lt;/span&gt;για το πλήκτρο&lt;b&gt;Caps Lock&lt;/b&gt; . Μπορείτε να αλλάξετε αυτήν τη δρομολόγηση ή χειρονομία ανά πάσα στιγμή. Αλλά&lt;span color="green"&gt;δοκιμάστε το&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Καθολικές λειτουργίες συντόμευσης&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Παθητικός&lt;/b&gt; Μια συντόμευση MonkeyPaste θα ακούσει σε οποιαδήποτε εφαρμογή.&lt;br&gt;*Αυτή είναι η &lt;i&gt;μόνη&lt;/i&gt; επιλογή στο Linux προς το παρόν.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Προ&lt;/b&gt; Η συντόμευση θα εκτελεστεί &lt;b&gt;&lt;i&gt;πριν&lt;/i&gt;&lt;/b&gt; από τον χειρισμό της από την ενεργή εφαρμογή.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Θέση&lt;/b&gt; Η συντόμευση θα εκτελεστεί &lt;b&gt;&lt;i&gt;αφού&lt;/i&gt;&lt;/b&gt; αντιμετωπιστεί από την ενεργή εφαρμογή.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Παρακάμπτω&lt;/b&gt; Όταν το MonkeyPaste ακούσει το πλήκτρο εισόδου (μη τροποποιητικό πλήκτρο) μιας συντόμευσης παράκαμψης, θα &lt;i&gt;κρύψει&lt;/i&gt; αυτό το πάτημα πλήκτρου από την είσοδο επιπέδου εφαρμογής.&lt;br&gt;Αυτή η επιλογή θα εγγυηθεί ότι η συντόμευση ενεργοποιείται χωρίς διενέξεις στην ενεργή εφαρμογή.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Αποκλειστική παράκαμψη&lt;/b&gt; Αυτός είναι ένας ειδικός τύπος λειτουργίας παράκαμψης που έχει σχεδιαστεί για το πλήκτρο Caps Lock. Επιτρέπει μόνο &lt;b&gt;ένα&lt;/b&gt; κλειδί (μη τροποποιητή) για την εκχώρησή του.&lt;br&gt;Στην κανονική λειτουργία παράκαμψης, το Caps Lock μπορεί να &lt;i&gt;κολλήσει όταν&lt;/i&gt; πατηθεί σε συνδυασμό με άλλα πλήκτρα.&lt;br&gt;Έτσι, ανεξάρτητα από το ποια άλλα πλήκτρα είναι κάτω, εάν πατηθεί μια συντόμευση &lt;b&gt;πλήκτρου πρόσβασης&lt;/b&gt; , θα παρακαμφθεί και θα αποφευχθεί η &lt;i&gt;κόλλησή&lt;/i&gt; της.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Το MonkeyPaste είναι &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Με αυτόν τον τρόπο, μπορείτε να έχετε πρόσβαση στο MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;χωρίς κλικ&lt;/span&gt; ή ακόμα και &lt;span color="red"&gt;χτύπημα ενός ματιού&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

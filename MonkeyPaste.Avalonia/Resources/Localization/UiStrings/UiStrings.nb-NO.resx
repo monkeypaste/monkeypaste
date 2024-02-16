@@ -166,14 +166,8 @@ klipp.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Rulle - til - Åpne</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; monkeypaste er &lt;span color = "rød&gt; fullt integrert &lt;/span&gt; med drag - og - slipp &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Slipp det her!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "Center"&gt; På denne måten kan MonkeyPaste nås &lt;br&gt; &lt;span color = "rød"&gt; uten et klikk &lt;/span&gt; eller til og med &lt;span color = "rød"&gt; batting et øye &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Dra meg!</value>
@@ -364,62 +358,14 @@ Oppgrader for å unngå.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Bevegelser må være unike og kan bare inneholde en inngangsnøkkel.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Intern &lt;/b&gt; Alle snarveier er begrenset til innen applikasjonen. Dette er egentlig ikke et tiltenkt alternativ, men kan tillate å tilpasse hvilke snarveier du har tenkt å lage global &lt;i&gt; en dag &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Standard &lt;/b&gt; Alle globale snarveier er aktivert. &lt;b&gt; show/skjul hovedvinduet &lt;/b&gt; snarvei bruker &lt;span color = "rød"&gt; overstyr &lt;/span&gt; ruting for &lt;b&gt; caps -låsen &lt;/b&gt; -tasten. Du kan endre den rutingen eller gesten når som helst. Men &lt;span color = "grønn"&gt; prøv det &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;H1&gt; Globale snarveismodus &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Passiv &lt;/b&gt; En snarvei MonkeyPaste vil lytte etter i alle applikasjoner. &lt;br&gt;
-*Dette er bare &lt;i&gt; bare &lt;/i&gt; -alternativet på Linux for nå.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; snarvei vil utføre &lt;b&gt; &lt;i&gt; før &lt;/i&gt; &lt;/b&gt; den håndteres av den aktive applikasjonen. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt; snarvei vil utføre &lt;b&gt; &lt;i&gt; etter &lt;/i&gt; &lt;/b&gt; den håndteres av den aktive applikasjonen. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Overskridelse &lt;/b&gt; Når MonkeyPaste hører inngangstasten (ikke - modifiserende tast) til en overstyringssnarvei, vil den &lt;i&gt; skjule &lt;/i&gt; at tastetrykk fra applikasjon - nivåinngang. &lt;br&gt;
-Dette alternativet vil garantere at snarveien utløses uten konflikter til den aktive applikasjonen.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Eksklusiv overstyring &lt;/b&gt; Dette er en spesiell type overstyringsmodus designet for Caps Lock -tasten. Det tillater bare &lt;b&gt; én &lt;/b&gt; nøkkel (ikke - modifiserer) for tildelingen. &lt;br&gt;
-I normal overstyringsmodus kan kapsler lås &lt;i&gt; sittende på &lt;/i&gt; når den trykker i kombinasjon med andre taster. &lt;br&gt;
-Så uansett hvilke andre nøkler som er nede, hvis en &lt;b&gt; hurtigtast &lt;/b&gt; snarvei blir presset, vil den bli overstyret og forhindre at den blir &lt;i&gt; sittende på &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Deaktiver</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Last opp når denne brukerkontoen er logget inn, ikke for andre brukere.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Bruke tilgjengelige kontakter (krever en fetcher -plugin) Dette feltet vil bli brukt i alle forekomster av denne malen på tvers av dette dokumentet eller i hvilken som helst det vil bli referert til senere. &lt;/p&gt; &lt;p&gt; Så for eksempel hvis velg e -postadresse Her vil e -postfeltet til kontakten du velger bli brukt i alle tilfeller i dette dokumentet. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = kort år &lt;br/&gt; yyyy = langt år &lt;br/&gt; m = måned (1-12) &lt;br/&gt; mm = måned (01-12) &lt;br/&gt; mmm = måned Forkortelse (jan, februar .. . Desember) &lt;br/&gt; mmmm = lang måned (januar, februar ... desember) &lt;br/&gt; d = dag (1 - 31) &lt;br/&gt; dd = dag (01 - 31) &lt;br/&gt; DDD = Ukens dag med ord (mandag, tirsdag ... søndag) &lt;br/&gt; e = kort ukedag i ord (man, tirs ... sol) &lt;br/&gt; D - Ordinal dag (1., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; h = time i AM/PM (0-12) &lt;br/&gt; HH = time i AM/PM (00-12) &lt;Br/ &gt; H = time i dagen (0-23) &lt;br/&gt; hh = time på dagen (00-23) &lt;br/&gt; mm = minutt &lt;br/&gt; ss = sekund &lt;br/&gt; sss = millisekunder &lt;br/&gt; a = am/pm markør &lt;br/&gt; p = A.M./P.M. markør</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Gjeldende dato og/eller tid vil bli erstattet av datetime -maler når de limes inn.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Alle forekomster av denne malen vil bruke den medfølgende teksten. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Alle forekomster av denne malen vil bruke den medfølgende teksten. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Fullfør å legge til</value>
@@ -469,9 +415,6 @@ Så uansett hvilke andre nøkler som er nede, hvis en &lt;b&gt; hurtigtast &lt;/
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Siste aktive app ukjent. Bytt til tiltenkt app til apepasta.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Lim inn til: &lt;em&gt; &lt;i class = "Paste-ToolTip-Suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimere</value>
@@ -547,9 +490,6 @@ Legg til og/eller velg appen med den unike kopien snarveien (som en konsoll elle
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Ingen</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Bare de valgte forhåndsinnstillingene vil bli brukt til den spesifiserte applikasjonen. Når de er uspesifisert, vil standard forhåndsinnstillinger som finnes i &lt;em&gt; utklippstavlen til utklippstavlen &lt;/em&gt; bli brukt.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Mange MonkeyPaste -funksjoner bruker tastaturautomatisering for å samhandle med andre applikasjoner.
 
@@ -562,9 +502,6 @@ For å sikre riktig interoperabilitet, registrer du snarveiene for den applikasj
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Lesere</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>All overvåking av utklippstavlen fra avviste applikasjoner vil bli ignorert &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Forfattere</value>
@@ -1331,11 +1268,6 @@ Dette kan ikke angres!
     <value>Er du sikker på at du vil tilbakestille alle varsler?
 
 *Dette kan ikke angres!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkeypasta angir utklippstavlen (overstyrer) når du limer til et eksternt program. Dette vil &lt;b&gt; forsøk &lt;/b&gt; å gjenopprette tilstanden til utklippstavlen etter en ekstern pasta.
-
-Total restaurering kan ikke garanteres og kan redusere ytelsen eller til og med krasje Monkeypaste avhengig av kilden til dataene.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Tilbakestill utklippstavlen etter ape liming</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lær mer om planer</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Lim inn til: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Ved hjelp av tilgjengelige kontakter (krever en plugin-modul for henteren) vil dette feltet bli brukt for alle forekomster av denne malen på tvers av dette dokumentet, eller i alle tilfeller det vil bli referert til senere.&lt;/p&gt;&lt;p&gt; Så hvis du for eksempel velger e-postadresse her, vil e-postfeltet til kontakten du velger, bli brukt for alle forekomster i dette dokumentet.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = kort år&lt;br/&gt;åååå = langt år&lt;br/&gt;M = måned (1-12)&lt;br/&gt;MM = måned (01-12)&lt;br/&gt;MMM = måned forkortelse (jan, feb ... desember)&lt;br/&gt;MMMM = lang måned (januar, februar ... desember)&lt;br/&gt;d = dag (1 - 31)&lt;br/&gt;dd = dag (01 - 31)&lt;br/&gt;ddd = ukedag i ord (mandag, tirsdag ... Søndag)&lt;br/&gt;E = kort dag i uken i ord (man, ti ... Sol)&lt;br/&gt;D - Ordinær dag (1., 2., 3., 21., 22., 23., 31., 4. ...)&lt;br/&gt;h = time i am/pm (0-12)&lt;br/&gt;hh = time i am/pm (00-12)&lt;br/&gt;H = time i døgn (0-23)&lt;br/&gt;HH = time i døgnet (00-23)&lt;br/&gt;mm = minutt&lt;br/&gt;ss = andre&lt;br/&gt;SSS = millisekunder&lt;br/&gt;a = AM/PM-markør&lt;br/&gt;p = a.m./p.m. markør</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Alle forekomster av denne malen vil bruke den angitte teksten.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Alle forekomster av denne malen vil bruke den angitte teksten.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste angir utklippstavlen (overstyringer) når du limer inn i et eksternt program. Dette vil &lt;b&gt;forsøke&lt;/b&gt; å gjenopprette tilstanden til utklippstavlen etter en ekstern lim inn. 
+
+Total restaurering kan ikke garanteres og kan redusere ytelsen eller til og med krasje MonkeyPaste avhengig av kilden til dataene.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Bare de valgte forhåndsinnstillingene vil bli brukt for det angitte programmet. Når det ikke er spesifisert, brukes standard forhåndsinnstillinger som finnes i &lt;em&gt;utklippstavlens sidefelt&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>All utklippstavleovervåking fra avviste søknader vil bli &lt;b&gt;ignorert&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Intern&lt;/b&gt;Alle snarveier er begrenset til i applikasjonen. Dette er egentlig ikke et tiltenkt alternativ, men kan tillate å tilpasse hvilke snarveier du har tenkt å gjøre globalt&lt;i&gt;en dag&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Standard&lt;/b&gt; Alle globale snarveier er aktivert. Vis&lt;b&gt;/skjul hovedvindu-snarveien&lt;/b&gt;bruker&lt;span color="red"&gt;overstyringsruting&lt;/span&gt;for&lt;b&gt;Caps Lock-tasten&lt;/b&gt; . Du kan endre denne rutingen eller bevegelsen når som helst. Men&lt;span color="green"&gt;prøv det&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Globale snarveimoduser&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passiv&lt;/b&gt; En snarvei MonkeyPaste vil lytte etter i alle applikasjoner.&lt;br&gt;* Dette er det &lt;i&gt;eneste&lt;/i&gt; alternativet på Linux for nå.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Snarveien kjøres &lt;b&gt;&lt;i&gt;før&lt;/i&gt;&lt;/b&gt; den håndteres av det aktive programmet.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Snarveien kjøres &lt;b&gt;&lt;i&gt;etter&lt;/i&gt;&lt;/b&gt; at den er håndtert av det aktive programmet.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Overstyre&lt;/b&gt; Når MonkeyPaste hører inndatatasten (ikke modifikasjonstast) til en overstyringssnarvei, vil den &lt;i&gt;skjule&lt;/i&gt; det tastetrykket fra applikasjon - nivåinngang.&lt;br&gt;Dette alternativet garanterer at snarveien utløses uten konflikter med det aktive programmet.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Eksklusiv overstyring&lt;/b&gt; Dette er en spesiell type overstyringsmodus designet for Caps Lock-tasten. Det tillater bare en nøkkel (ikke modifikator) for &lt;b&gt;tildelingen&lt;/b&gt; .&lt;br&gt;I normal overstyringsmodus kan Caps Lock bli &lt;i&gt;sittende fast&lt;/i&gt; når du trykker på når du trykker på den i kombinasjon med andre taster.&lt;br&gt;Så uansett hvilke andre taster som er nede, hvis du trykker på en &lt;b&gt;hurtigtastsnarvei&lt;/b&gt; , vil den bli overstyrt og forhindre at den &lt;i&gt;blir sittende fast&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste er &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;På denne måten kan du få tilgang til MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;uten et klikk&lt;/span&gt; eller til og med &lt;span color="red"&gt;batting et øye&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

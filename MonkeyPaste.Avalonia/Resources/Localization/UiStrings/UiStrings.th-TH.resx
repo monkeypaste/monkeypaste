@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Scroll - to - เปิด</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p allign = "center"&gt; monkeypaste คือ &lt;span color = "สีแดง&gt; รวมเข้าด้วยกัน &lt;/span&gt; ด้วยการลาก - และ - วาง &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>วางที่นี่!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p allign = "center"&gt; ด้วยวิธีนี้ monkeypaste สามารถเข้าถึงได้ &lt;br&gt; &lt;span color = "red"&gt; โดยไม่ต้องคลิก &lt;/span&gt; หรือแม้กระทั่ง &lt;span color = "สีแดง"&gt; ตีตา &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>ลากฉัน!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>ท่าทางจะต้องไม่ซ้ำกันและอาจมีคีย์อินพุตเดียวเท่านั้น</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; ภายใน &lt;/b&gt; ทางลัดทั้งหมดถูก จำกัด ภายในแอปพลิเคชัน นี่ไม่ใช่ตัวเลือกที่ตั้งใจไว้จริงๆ แต่สามารถอนุญาตให้ปรับแต่งทางลัดที่คุณตั้งใจจะทำให้ทั่วโลก &lt;i&gt; สักวัน &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ค่าเริ่มต้น &lt;/b&gt; ทางลัดทั่วโลกทั้งหมดจะเปิดใช้งาน &lt;b&gt; show/ซ่อนหน้าต่างหลัก &lt;/b&gt; ทางลัดใช้ &lt;span color = "red"&gt; override &lt;/span&gt; การกำหนดเส้นทางสำหรับปุ่ม &lt;b&gt; caps lock &lt;/b&gt; คุณสามารถเปลี่ยนการกำหนดเส้นทางหรือท่าทางได้ตลอดเวลา แต่ &lt;span color = "สีเขียว"&gt; ลองดู &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt; โหมดทางลัดทั่วโลก &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; passive &lt;/b&gt; monkeypaste ทางลัดจะฟังในแอปพลิเคชันใด ๆ &lt;br&gt;
-*นี่คือตัวเลือก &lt;i&gt; เท่านั้น &lt;/i&gt; บน Linux สำหรับตอนนี้
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; ทางลัดจะดำเนินการ &lt;b&gt; &lt;i&gt; ก่อน &lt;/i&gt; &lt;/b&gt; มันได้รับการจัดการโดยแอปพลิเคชันที่ใช้งานอยู่ &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; โพสต์ &lt;/b&gt; ทางลัดจะดำเนินการ &lt;b&gt; &lt;i&gt; หลังจาก &lt;/i&gt; &lt;/b&gt; มันได้รับการจัดการโดยแอปพลิเคชันที่ใช้งานอยู่ &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; แทนที่ &lt;/b&gt; เมื่อ monkeypaste ได้ยินคีย์อินพุต (ไม่ใช่ - คีย์ตัวดัดแปลง) ของทางลัดแทนที่มันจะ &lt;i&gt; ซ่อน &lt;/i&gt; คีย์กดจากแอปพลิเคชัน - ระดับอินพุต &lt;br&gt;
-ตัวเลือกนี้จะรับประกันว่าทางลัดจะถูกทริกเกอร์โดยไม่มีความขัดแย้งกับแอปพลิเคชันที่ใช้งานอยู่
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; การแทนที่พิเศษ &lt;/b&gt; นี่เป็นโหมดการแทนที่แบบพิเศษที่ออกแบบมาสำหรับคีย์ล็อค Caps อนุญาตเฉพาะ &lt;b&gt; หนึ่ง &lt;/b&gt; คีย์ (non - modifier) ​​สำหรับการกำหนด &lt;br&gt;
-ในการล็อคโหมดการแทนที่ปกติอาจกลายเป็น &lt;i&gt; ติดอยู่บน &lt;/i&gt; เมื่อกดร่วมกับปุ่มอื่น ๆ &lt;br&gt;
-ดังนั้นไม่ว่าคีย์อื่นจะลงไปถ้ากด &lt;b&gt; hotkey &lt;/b&gt; ทางลัดจะถูกกดมันจะถูกแทนที่และป้องกันไม่ให้มันกลายเป็น &lt;i&gt; ติดอยู่บน &lt;/i&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>ปิดการใช้งาน</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>โหลดขึ้นเมื่อบัญชีผู้ใช้นี้เข้าสู่ระบบไม่ใช่สำหรับผู้ใช้รายอื่น</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; การใช้ผู้ติดต่อที่มีอยู่ (ต้องใช้ปลั๊กอินดึงข้อมูล) ฟิลด์นี้จะใช้สำหรับทุกอินสแตนซ์ของเทมเพลตนี้ในเอกสารนี้หรือในใด ๆ จะมีการอ้างอิงในภายหลัง &lt;/p&gt; &lt;p&gt; ตัวอย่างเช่นหากเลือกที่อยู่อีเมล ที่นี่ฟิลด์อีเมลของผู้ติดต่อที่คุณเลือกจะถูกใช้สำหรับทุกอินสแตนซ์ในเอกสารนี้ &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = ปีสั้น ๆ &lt;br/&gt; yyyy = ปีที่ยาวนาน &lt;br/&gt; m = เดือน (1-12) &lt;br/&gt; mm = เดือน (01-12) &lt;br/&gt; mmm = ตัวย่อเดือน (มกราคม, ก.พ. .. . ธ.ค. ) &lt;br/&gt; mmmm = เดือนที่ยาวนาน (มกราคม, กุมภาพันธ์ ... ธันวาคม) &lt;br/&gt; d = วัน (1 - 31) &lt;br/&gt; dd = วัน (01 - 31) &lt;br/&gt; ddd = วันของสัปดาห์ด้วยคำพูด (วันจันทร์, วันอังคาร ... วันอาทิตย์) &lt;br/&gt; e = วันสั้น ๆ ของสัปดาห์ด้วยคำพูด (จันทร์, อังคาร ... ดวงอาทิตย์) &lt;br/&gt; D - วันที่ 1 (1, 2nd, 3, 21, 22, 23, 31st, 4 ... ) &lt;br/&gt; h = ชั่วโมงใน AM/PM (0-12) &lt;br/&gt; HH = ชั่วโมงใน AM/PM (00-12) &lt;Br/ &gt; h = ชั่วโมงในแต่ละวัน (0-23) &lt;br/&gt; hh = ชั่วโมงในวัน (00-23) &lt;br/&gt; mm = นาที &lt;br/&gt; ss = วินาที &lt;br/&gt; sss = มิลลิวินาที &lt;br/&gt; A = AM/PM marker &lt;br/&gt; P = A.M./P.M เครื่องทำเครื่องหมาย</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>วันที่และ/หรือเวลาปัจจุบันจะถูกแทนที่สำหรับเทมเพลต dateTime เมื่อวาง</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; การเกิดขึ้นทั้งหมดของเทมเพลตนี้จะใช้ข้อความที่ให้มา &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; การเกิดขึ้นทั้งหมดของเทมเพลตนี้จะใช้ข้อความที่ให้มา &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>จบท้าย</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>ไม่ทราบแอพที่ใช้งานอยู่ล่าสุด เปลี่ยนเป็นแอพที่ตั้งใจไว้เป็น Monkey Paste</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>วางไปที่: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>ลดขนาด</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>ไม่มี</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>เฉพาะที่ตั้งค่าล่วงหน้าที่เลือกจะใช้สำหรับแอปพลิเคชันที่ระบุ เมื่อไม่ได้ระบุค่าที่ตั้งไว้ล่วงหน้าเริ่มต้นที่พบในแถบด้านข้าง &lt;em&gt; คลิปบอร์ด &lt;/em&gt; จะถูกนำมาใช้</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>คุณสมบัติของ monkeypaste จำนวนมากใช้แป้นพิมพ์อัตโนมัติเพื่อโต้ตอบกับแอปพลิเคชันอื่น ๆ
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>ผู้อ่าน</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>การตรวจสอบคลิปบอร์ดทั้งหมดจากแอปพลิเคชันที่ถูกปฏิเสธจะถูกละเว้น &lt;b&gt; &lt;/b&gt;</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>นักเขียน</value>
@@ -1331,11 +1268,6 @@ Monkeypaste บนอุปกรณ์
     <value>แน่ใจหรือว่าต้องการรีเซ็ตการแจ้งเตือนทั้งหมด?
 
 *สิ่งนี้ไม่สามารถยกเลิกได้!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste ตั้งค่าคลิปบอร์ด (แทนที่) เมื่อวางลงในโปรแกรมภายนอก นี่จะเป็น &lt;b&gt; พยายาม &lt;/b&gt; เพื่อกู้คืนสถานะของคลิปบอร์ดหลังจากวางภายนอก
-
-ไม่สามารถรับประกันการฟื้นฟูทั้งหมดและอาจลดประสิทธิภาพหรือแม้กระทั่งการขัดข้อง monkeypaste ขึ้นอยู่กับแหล่งที่มาของข้อมูล</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>รีเซ็ตคลิปบอร์ดหลังจากวางลิง</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>เรียนรู้เพิ่มเติมเกี่ยวกับแผนการ</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>วางบน: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;การใช้ผู้ติดต่อที่มีอยู่ (ต้องใช้ปลั๊กอินตัวดึงข้อมูล) ฟิลด์นี้จะใช้สําหรับอินสแตนซ์ทั้งหมดของเทมเพลตนี้ในเอกสารนี้หรือในการอ้างอิงในภายหลัง&lt;/p&gt;&lt;p&gt; ตัวอย่างเช่น หากเลือกที่อยู่อีเมลที่นี่ ช่องอีเมลของผู้ติดต่อที่คุณเลือกจะถูกใช้สําหรับทุกอินสแตนซ์ในเอกสารนี้&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = ปีสั้น&lt;br/&gt;yyyy = ปีที่ยาวนาน&lt;br/&gt;M = เดือน (1-12)&lt;br/&gt;MM = เดือน (01-12)&lt;br/&gt;MMM = ตัวย่อเดือน (ม.ค. ก.พ. ... ธ.ค.)&lt;br/&gt;MMMM = เดือนที่ยาวนาน (มกราคมกุมภาพันธ์ ... ธันวาคม)&lt;br/&gt;d = วัน (1 - 31)&lt;br/&gt;dd = วัน (01 - 31)&lt;br/&gt;ddd = วันในสัปดาห์ในคํา (วันจันทร์วันอังคาร ... วันอาทิตย์)&lt;br/&gt;= วันสั้น ๆ ของสัปดาห์ในคํา (จันทร์ อังคาร ... อาทิตย์)&lt;br/&gt;D - วันลําดับ (วันที่ 1, 2, 3, 21, 22, 23, 31, 4...)&lt;br/&gt;h = ชั่วโมงเป็น am/pm (0-12)&lt;br/&gt;hh = ชั่วโมงเป็น am/pm (00-12)&lt;br/&gt;H = ชั่วโมงในวัน (0-23)&lt;br/&gt;HH = ชั่วโมงในวัน (00-23)&lt;br/&gt;มม. = นาที&lt;br/&gt;ss = วินาที&lt;br/&gt;SSS = มิลลิวินาที&lt;br/&gt;a = เครื่องหมาย AM/PM&lt;br/&gt;p = เครื่องหมาย am/pm</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;การเกิดขึ้นทั้งหมดของเทมเพลตนี้จะใช้ข้อความที่ให้มา&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;การเกิดขึ้นทั้งหมดของเทมเพลตนี้จะใช้ข้อความที่ให้มา&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste ตั้งค่าคลิปบอร์ด (แทนที่) เมื่อวางลงในโปรแกรมภายนอก การดําเนินการนี้จะ &lt;b&gt;พยายาม&lt;/b&gt; กู้คืนสถานะของคลิปบอร์ดหลังจากวางภายนอก 
+
+ไม่สามารถรับประกันการกู้คืนทั้งหมดและอาจลดประสิทธิภาพหรือแม้แต่ MonkeyPaste ขัดข้องขึ้นอยู่กับแหล่งที่มาของข้อมูล</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>เฉพาะค่าที่ตั้งไว้ล่วงหน้าที่เลือกเท่านั้นที่จะถูกใช้สําหรับแอปพลิเคชันที่ระบุ เมื่อไม่ได้ระบุ ค่าที่ตั้งไว้ล่วงหน้าเริ่มต้นที่พบใน &lt;em&gt;แถบด้านข้างคลิปบอร์ด&lt;/em&gt; จะถูกใช้</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>การตรวจสอบคลิปบอร์ดทั้งหมดจากแอปพลิเคชันที่ถูกปฏิเสธจะถูก&lt;b&gt;ละเว้น&lt;/b&gt;</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;ภายใน&lt;/b&gt;ทางลัดทั้งหมดถูก จํากัด ไว้ที่ภายในแอปพลิเคชัน นี่ไม่ใช่ตัวเลือกที่ตั้งใจไว้จริงๆ แต่สามารถปรับแต่งทางลัดที่คุณตั้งใจจะทําให้เป็นสากล&lt;i&gt;ได้ในสักวัน&lt;/i&gt;หนึ่ง&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;เริ่ม ต้น&lt;/b&gt; เปิดใช้งานทางลัดส่วนกลางทั้งหมด ทางลัด&lt;b&gt;แสดง/ซ่อนหน้าต่างหลัก&lt;/b&gt;ใช้การกําหนดเส้นทาง&lt;span color="red"&gt;แทนที่&lt;/span&gt;สําหรับแป้น&lt;b&gt;Caps Lock&lt;/b&gt; คุณสามารถเปลี่ยนเส้นทางหรือท่าทางสัมผัสนั้นได้ตลอดเวลา แต่&lt;span color="green"&gt;ลองดูสิ&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;โหมดทางลัดส่วนกลาง&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;เฉื่อย&lt;/b&gt; ทางลัด MonkeyPaste จะฟังในแอปพลิเคชันใดก็ได้&lt;br&gt;*นี่เป็นตัวเลือก &lt;i&gt;เดียว&lt;/i&gt; บน Linux ในตอนนี้   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ก่อน&lt;/b&gt; ทางลัดจะดําเนินการ &lt;b&gt;&lt;i&gt;ก่อนที่จะ&lt;/i&gt;&lt;/b&gt; จัดการโดยแอปพลิเคชันที่ใช้งานอยู่&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ประกาศ&lt;/b&gt; ทางลัดจะดําเนินการ &lt;b&gt;&lt;i&gt;หลังจาก&lt;/i&gt;&lt;/b&gt; จัดการโดยแอปพลิเคชันที่ใช้งานอยู่&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ครอบงํา&lt;/b&gt; เมื่อ MonkeyPaste ได้ยินคีย์อินพุต (คีย์ที่ไม่ใช่ตัวปรับแต่ง) ของทางลัดแทนที่ มันจะ &lt;i&gt;ซ่อน&lt;/i&gt; การกดปุ่มนั้นจากการป้อนข้อมูลระดับแอปพลิเคชัน&lt;br&gt;ตัวเลือกนี้จะรับประกันว่าทางลัดจะถูกทริกเกอร์โดยไม่มีข้อขัดแย้งกับแอปพลิเคชันที่ใช้งานอยู่   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;การแทนที่พิเศษ&lt;/b&gt; นี่คือโหมดแทนที่ชนิดพิเศษที่ออกแบบมาสําหรับปุ่ม Caps Lock อนุญาตเพียง &lt;b&gt;คีย์เดียว&lt;/b&gt; (ไม่ใช่ตัวปรับแต่ง) สําหรับการมอบหมาย&lt;br&gt;ในโหมดแทนที่ปกติ Caps Lock อาจ &lt;i&gt;ค้าง&lt;/i&gt; อยู่เมื่อกดร่วมกับปุ่มอื่นๆ&lt;br&gt;ดังนั้นไม่ว่าปุ่มอื่น ๆ จะหยุดทํางานหากกดปุ่มลัดปุ่ม &lt;b&gt;ลัด&lt;/b&gt; มันจะถูกแทนที่และป้องกันไม่ให้ &lt;i&gt;ค้าง&lt;/i&gt;อยู่   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste คือ &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;ด้วยวิธีนี้ MonkeyPaste สามารถเข้าถึงได้&lt;br&gt;&lt;span color="red"&gt;โดยไม่ต้องคลิก&lt;/span&gt;หรือแม้แต่&lt;span color="red"&gt;ตบตา&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

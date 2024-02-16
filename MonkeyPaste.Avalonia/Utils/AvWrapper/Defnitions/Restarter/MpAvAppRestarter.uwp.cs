@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (MpCommonHelpers.IsRunningAsStoreApp()) {
                     string package_family_name = Package.Current.Id.FamilyName;
-                    return $"/C \"\" \"start shell:AppsFolder\\{package_family_name}!App\" {args}";
+                    return $"/C \"start shell:AppsFolder\\{package_family_name}!App\" {args}";
                 }
                 return args;
             }

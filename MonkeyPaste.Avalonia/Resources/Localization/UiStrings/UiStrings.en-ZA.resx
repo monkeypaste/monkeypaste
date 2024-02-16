@@ -166,14 +166,8 @@ clips respectively.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Scroll - to - Open</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Drop it here!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align="center"&gt;This way, MonkeyPaste can be accessed&lt;br&gt; &lt;span color="red"&gt;without a click&lt;/span&gt; or even &lt;span color="red"&gt;batting an eye&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Drag Me!</value>
@@ -364,62 +358,14 @@ Upgrade to avoid.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Gestures must be unique and may only contain one input key.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-	&lt;li&gt;
-		&lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
-	&lt;li&gt;
-		&lt;b&gt;Default&lt;/b&gt; All global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color="red"&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color="green"&gt;give it a try&lt;/span&gt;
-	&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-	&lt;head&gt;&lt;/head&gt;
-	&lt;body&gt;
-		&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;
-		&lt;ul&gt;
-			&lt;li&gt;
-				&lt;b&gt;Passive&lt;/b&gt; A shortcut MonkeyPaste will listen for in any application.&lt;br&gt;
-				*This is the &lt;i&gt;only&lt;/i&gt; option on Linux for now.
-			&lt;/li&gt;
-			&lt;li&gt;
-				&lt;b&gt;Pre&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
-			&lt;li&gt;
-				&lt;b&gt;Post&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
-			&lt;li&gt;
-				&lt;b&gt;Override&lt;/b&gt; When MonkeyPaste hears the input key (non - modifier key) of an override shortcut it will &lt;i&gt;hide&lt;/i&gt; that key press from application - level input.&lt;br&gt;
-				This option will guarantee the shortcut is triggered without conflicts to the active application.
-			&lt;/li&gt;
-			&lt;li&gt;
-				&lt;b&gt;Exclusive Override&lt;/b&gt; This is a special type of override mode designed for the Caps Lock key. It only allows &lt;b&gt;one&lt;/b&gt; key (non - modifier) for its assignment.&lt;br&gt;
-				In normal override mode Caps Lock can become &lt;i&gt;stuck on&lt;/i&gt; when pressed in combination with other keys.&lt;br&gt;
-				So no matter what other keys are down, if a &lt;b&gt;Hotkey&lt;/b&gt; shortcut is pressed it will be overriden and prevent it from becoming &lt;i&gt;stuck on&lt;/i&gt;.
-			&lt;/li&gt;
-		&lt;/ul&gt;
-	&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Disable</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Load up when this user account is logged in, not for other users.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = short year&lt;br/&gt;yyyy = long year&lt;br/&gt;M = month (1-12)&lt;br/&gt;MM = month (01-12)&lt;br/&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;br/&gt;MMMM = long month (January, February ... December)&lt;br/&gt;d = day (1 - 31)&lt;br/&gt;dd = day (01 - 31)&lt;br/&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;br/&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;br/&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;br/&gt;h = hour in am/pm (0-12)&lt;br/&gt;hh = hour in am/pm (00-12)&lt;br/&gt;H = hour in day (0-23)&lt;br/&gt;HH = hour in day (00-23)&lt;br/&gt;mm = minute&lt;br/&gt;ss = second&lt;br/&gt;SSS = milliseconds&lt;br/&gt;a = AM/PM marker&lt;br/&gt;p = a.m./p.m. marker</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>The current date and/or time will be substituted for DateTime templates when they are pasted.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt;All occurances of this template will use the provided text.&lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt;All occurances of this template will use the provided text.&lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Finish appending</value>
@@ -469,9 +415,6 @@ Upgrade to avoid.</value>
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Last active app unknown. Switch to intended app to monkey paste.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimize</value>
@@ -547,9 +490,6 @@ Add and/or select the app with the unique copy shortcut (like a console or shell
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>None</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Only the selected presets will be used for the specified application. When unspecified, the default presets found in the &lt;em&gt;Clipboard Sidebar&lt;/em&gt; will be used.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Many MonkeyPaste features use keyboard automation to interact with other applications.
 
@@ -562,9 +502,6 @@ To ensure proper interoperability, record those shortcuts for that application h
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Readers</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>All clipboard monitoring from rejected applications will be &lt;b&gt;ignored&lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Writers</value>
@@ -1331,11 +1268,6 @@ This cannot be undone!
     <value>Are you sure you want to reset all notifications?
 
 *This cannot be undone!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste sets the clipboard (overrides) when pasting to an external program. This will &lt;b&gt;attempt&lt;/b&gt; to restore the state of the clipboard after an external paste. 
-
-Total restoration cannot be guaranteed and may reduce performance or even crash MonkeyPaste depending on the source of the data.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Reset Clipboard after Monkey Pasting</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Learn more about plans</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = short year&lt;br/&gt;yyyy = long year&lt;br/&gt;M = month (1-12)&lt;br/&gt;MM = month (01-12)&lt;br/&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;br/&gt;MMMM = long month (January, February ... December)&lt;br/&gt;d = day (1 - 31)&lt;br/&gt;dd = day (01 - 31)&lt;br/&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;br/&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;br/&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;br/&gt;h = hour in am/pm (0-12)&lt;br/&gt;hh = hour in am/pm (00-12)&lt;br/&gt;H = hour in day (0-23)&lt;br/&gt;HH = hour in day (00-23)&lt;br/&gt;mm = minute&lt;br/&gt;ss = second&lt;br/&gt;SSS = milliseconds&lt;br/&gt;a = AM/PM marker&lt;br/&gt;p = a.m./p.m. marker</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;All occurances of this template will use the provided text.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;All occurances of this template will use the provided text.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste sets the clipboard (overrides) when pasting to an external program. This will &lt;b&gt;attempt&lt;/b&gt; to restore the state of the clipboard after an external paste. 
+
+Total restoration cannot be guaranteed and may reduce performance or even crash MonkeyPaste depending on the source of the data.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Only the selected presets will be used for the specified application. When unspecified, the default presets found in the &lt;em&gt;Clipboard Sidebar&lt;/em&gt; will be used.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>All clipboard monitoring from rejected applications will be &lt;b&gt;ignored&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Default&lt;/b&gt; All global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color="red"&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color="green"&gt;give it a try&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passive&lt;/b&gt; A shortcut MonkeyPaste will listen for in any application.&lt;br&gt;*This is the &lt;i&gt;only&lt;/i&gt; option on Linux for now.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Override&lt;/b&gt; When MonkeyPaste hears the input key (non - modifier key) of an override shortcut it will &lt;i&gt;hide&lt;/i&gt; that key press from application - level input.&lt;br&gt;This option will guarantee the shortcut is triggered without conflicts to the active application.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Exclusive Override&lt;/b&gt; This is a special type of override mode designed for the Caps Lock key. It only allows &lt;b&gt;one&lt;/b&gt; key (non - modifier) for its assignment.&lt;br&gt;In normal override mode Caps Lock can become &lt;i&gt;stuck on&lt;/i&gt; when pressed in combination with other keys.&lt;br&gt;So no matter what other keys are down, if a &lt;b&gt;Hotkey&lt;/b&gt; shortcut is pressed it will be overriden and prevent it from becoming &lt;i&gt;stuck on&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;This way, MonkeyPaste can be accessed&lt;br&gt;&lt;span color="red"&gt;without a click&lt;/span&gt; or even &lt;span color="red"&gt;batting an eye&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

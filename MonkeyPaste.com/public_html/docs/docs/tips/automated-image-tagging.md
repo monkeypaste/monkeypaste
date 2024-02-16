@@ -8,10 +8,10 @@ Well *this* tip is for you then!
   </video>
 </p>
 
-As an example we'll use the [Image Annotator Plugin](https://www.github.com/monkeypaste/ImageAnnotator) available for download from the *Plugin Browser* to detect cats or dogs in images we copy and automatically tag them to cooresponding 'Cats' and 'Dogs' *Tag Collection*s.
+As an example we'll use the [Yolo Image Annotator Plugin](https://www.github.com/monkeypaste/YoloImageAnnotator) available for download from the *Plugin Browser* to detect cats or dogs in images we copy and automatically tag them to cooresponding 'Cats' and 'Dogs' *Tag Collection*s.
 
 :::info What is "Image Annotation"?
-The [Image Annotator Plugin](https://www.github.com/monkeypaste/ImageAnnotator) detects common objects in images and provides a name, box and score (between 0 and 1 of how sure it is about the name) for each object it detects. 
+The [Yolo Image Annotator Plugin](https://www.github.com/monkeypaste/YoloImageAnnotator) detects common objects in images and provides a name, box and score (between 0 and 1 of how sure it is about the name) for each object it detects. 
 :::
 
 :::tip Annotation Viewer
@@ -30,15 +30,15 @@ To see detailed information about *image annotations* **double-click** the analy
 Tags can be nested. If you added a 'Pets' tag and drag-and-dropped the 'Cats' and 'Dogs' tags we just made into it, then all the clips within them will become *indirectly* linked to 'Pets' and shown when 'Pets' is selected.
 :::
 
-## Adding the Image Annotator Plugin
+## Adding the Yolo Image Annotator Plugin
 1. Open the *Analyzer Sidebar* and click the 🧩 button to reveal the *Plugin Browser*.
-2. Select the *Browse* tab and search or scroll to the 'Image Annotator' plugin in the left-hand panel and select it.
+2. Select the *Browse* tab and search or scroll to the 'Yolo Image Annotator' plugin in the left-hand panel and select it.
 3. Now in the right-hand panel click the *Install* button.
 4. After a moment the plugin will be installed and ready for use.
 <p class="figure"><img src={require('/img/auto_tag_plugin_browser.png').default} /></p>
 
 :::danger Stay Updated
-*Image Annotator* has a few temperamental dependencies so its important to make sure your **OS is up-to-date**. Check the [Image Annotator Repo](https:/www.github.com/monkeypaste/ImageAnnotator) for more info or to report any issues.
+*Yolo Image Annotator* has a few temperamental dependencies so its important to make sure your **OS is up-to-date**. Check the [Yolo Image Annotator Repo](https:/www.github.com/monkeypaste/YoloImageAnnotator) for more info or to report any issues.
 :::
 ## Trigger Setup
 1. Switch to the *Triggers Sidebar* (the ⚡ button) and click the ➕ button on the top-right of the sidebar to show the *Create Trigger* menu.
@@ -50,11 +50,11 @@ Tags can be nested. If you added a 'Pets' tag and drag-and-dropped the 'Cats' an
 :::tip Integrated Help
 Most triggers, actions and their parameters have hints (little blue ℹ️ icons) you can hover over with more information about them.
 :::
-## Add the ImageAnnotator Action
-1. We need a way to run the 'Image Annotator' plugin we just installed. To do this we add an *Analyze* action to the 'Image Copied Trigger' by right-clicking the green circle on right in the *Action Designer* view and selecting *Add->Analyze* from the *Add Action* pop-menu.
+## Add the YoloImageAnnotator Action
+1. We need a way to run the 'Yolo Image Annotator' plugin we just installed. To do this we add an *Analyze* action to the 'Image Copied Trigger' by right-clicking the green circle on right in the *Action Designer* view and selecting *Add->Analyze* from the *Add Action* pop-menu.
 2. The new 'Analyze1' action will become selected and shown with an arrow pointing to it from the 'Image Copied Trigger'.
 3. Let's rename it to 'Analyze Image Objects' back in *Action Properties*.
-4. Now to use the Image Annotator, click the *Component Selector* for the **Analyzer** parameter and select *Image Annotator->Default Annotator*.
+4. Now to use the Yolo Image Annotator, click the *Component Selector* for the **Analyzer** parameter and select *Yolo Image Annotator->Default Annotator*.
 5. Finally we'll set the **Confidence** *parameter* to 0.5 using the slider. This will help filter out false-postives from annotator.
 <p class="figure narrow"><img src={require('/img/auto_tag_ann_props.png').default} /></p>
 :::tip Plugin Presets
@@ -62,7 +62,7 @@ Analyzer *parameters* are stored using presets so you can re-use certain configu
 :::
 
 ## Using Conditional Actions
-To recap, we setup a *Clip Added Trigger* so when any Image is **added** it will then be **analyzed** by the *Image Annotator* which (among other things) **outputs** a list of the objects it detected. We only care about output containing the *words* 'Cat' or 'Dog'. This is what *Conditional* actions are for! 
+To recap, we setup a *Clip Added Trigger* so when any Image is **added** it will then be **analyzed** by the *Yolo Image Annotator* which (among other things) **outputs** a list of the objects it detected. We only care about output containing the *words* 'Cat' or 'Dog'. This is what *Conditional* actions are for! 
 
 When the condition is **true**, execution continues. When the condition is **false**, no actions stemming from a *Condtional* action will be performed.
 1. Right-click the 'Analyze Image Objects' square in the *Action Designer* and select the *Add->Conditional* option and a new **Conditional** diamond will be added as a child to 'Analyze Image Objects'.
@@ -104,13 +104,13 @@ The **last row** of the example images will have some interesting results:
 2. The last image doesn't have any cats **or** dogs so *neither* **Conditional** actions were true they were both **false**.
 
 :::info Background
-The [Image Annotator Plugin](https://www.github.com/monkeypaste/ImageAnnotator) is a simple wrapper to [YoloV8](https://yolov8.com/#:~:text=What%20is%20YOLOv8%3F,as%20a%20command%20line%20interface.). With a *very* tiny model ( ~16mbs!) trained on **80** unique objects to keep  it fast and lightweight. 
+The [Yolo Image Annotator Plugin](https://www.github.com/monkeypaste/YoloImageAnnotator) is a simple wrapper to [YoloV8](https://yolov8.com/#:~:text=What%20is%20YOLOv8%3F,as%20a%20command%20line%20interface.). With a *very* tiny model ( ~16mbs!) trained on **80** unique objects to keep  it fast and lightweight. 
 
-If you want to add **MORE** objects (so it can find rabbits and octopi let's say) feel free to fork the [Image Annotator Plugin](https://www.github.com/monkeypaste/ImageAnnotator) repositiory and [make your own custom analyzer!!!🤓](../plugins/plugin-development.md)
+If you want to add **MORE** objects (so it can find rabbits and octopi let's say) feel free to fork the [Yolo Image Annotator Plugin](https://www.github.com/monkeypaste/YoloImageAnnotator) repositiory and [make your own custom analyzer!!!🤓](../plugins/plugin-development.md)
 :::
 
 :::tip
-To get a much detailed analysis you can use the [Computer Vision](https://www.github.com/monkeypaste/ComputerVision) plugin for the 'Analyze Image Objects' analyzer described. 
+To get a much detailed analysis you can use the [Azure Computer Vision](https://www.github.com/monkeypaste/AzureComputerVision) plugin for the 'Analyze Image Objects' analyzer described. 
 * Requires an [Azure Cognitive Services API key](https://azure.microsoft.com/en-us/free/ai-services/)
 :::
 

@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>சுருள் - to - திறந்திருக்கும்</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p allart = "மையம்"&gt; குரங்கிபேஸ்ட் &lt;ஸ்பான் கலர் = "சிவப்பு&gt; முழுமையாக ஒருங்கிணைந்த &lt;/span&gt; இழுவுடன் - மற்றும் - துளி &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>அதை இங்கே விடுங்கள்!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "மையம்"&gt; இந்த வழியில், குரங்குத் சுவையை அணுகலாம் &lt;br&gt; &lt;span color = "red"&gt; ஒரு கிளிக் இல்லாமல் &lt;/span&gt; அல்லது &lt;span color = "சிவப்பு"&gt; ஒரு கண் பேட்டிங் &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>என்னை இழுக்கவும்!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>சைகைகள் தனித்துவமாக இருக்க வேண்டும் மற்றும் ஒரு உள்ளீட்டு விசையை மட்டுமே கொண்டிருக்கலாம்.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; உள் &lt;/b&gt; அனைத்து குறுக்குவழிகளும் பயன்பாட்டிற்குள் வரையறுக்கப்பட்டுள்ளன. இது உண்மையில் ஒரு நோக்கம் கொண்ட விருப்பமல்ல, ஆனால் உலகளாவிய &lt;i&gt; ஒருநாள் &lt;/i&gt; ஐ உருவாக்க நீங்கள் விரும்பும் குறுக்குவழிகளைத் தனிப்பயனாக்க அனுமதிக்கலாம். &lt;/Li&gt;
-&lt;li&gt;
-&lt;b&gt; இயல்புநிலை &lt;/b&gt; அனைத்து உலகளாவிய குறுக்குவழிகளும் இயக்கப்பட்டுள்ளன. &lt;b&gt; பிரதான சாளரத்தைக் காண்பி/மறைக்கவும் &lt;/b&gt; குறுக்குவழி &lt;b&gt; தொப்பிகள் பூட்டுக்கு &lt;/b&gt; விசைக்கான ரூட்டிங் &lt;ஸ்பான் கலர் = "சிவப்பு"&gt; மேலெழுதல் &lt;/ஸ்பான்&gt; பயன்படுத்துகிறது. நீங்கள் எந்த நேரத்திலும் அந்த ரூட்டிங் அல்லது சைகையை மாற்றலாம். ஆனால் &lt;span color = "பச்சை"&gt; இதை முயற்சிக்கவும் &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;தலை&gt; &lt;/head&gt;
-&lt;உடல்&gt;
-&lt;H1&gt; உலகளாவிய குறுக்குவழி முறைகள் &lt;/H1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; செயலற்ற &lt;/b&gt; எந்தவொரு பயன்பாட்டிலும் ஒரு குறுக்குவழி குரங்குப் பேஸ்ட் கேட்கும். &lt;br&gt;
-*இது இப்போது லினக்ஸில் &lt;i&gt; மட்டும் &lt;/i&gt; விருப்பம்.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; முன் &lt;/b&gt; குறுக்குவழி &lt;b&gt; &lt;i&gt; முன் &lt;/i&gt; &lt;/b&gt; இது செயலில் உள்ள பயன்பாட்டால் கையாளப்படுகிறது. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; இடுகை &lt;/b&gt; குறுக்குவழி &lt;b&gt; &lt;i&gt; க்குப் பிறகு &lt;/i&gt; &lt;/b&gt; இது செயலில் உள்ள பயன்பாட்டால் கையாளப்படுகிறது. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; மேலெழுத &lt;/b&gt; ஒரு மேலெழுதும் குறுக்குவழியின் உள்ளீட்டு விசையை (அல்லாத மாற்றியமைக்கும் விசை) குரங்கிபேஸ்ட் கேட்கும்போது அது &lt;i&gt; மறை &lt;/i&gt; பயன்பாட்டு - நிலை உள்ளீட்டிலிருந்து அந்த விசை அழுத்தும். &lt;br&gt;
-செயலில் உள்ள பயன்பாட்டிற்கு மோதல்கள் இல்லாமல் குறுக்குவழி தூண்டப்படுவதற்கு இந்த விருப்பம் உத்தரவாதம் அளிக்கும்.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; பிரத்யேக மேலெழுத &lt;/b&gt; இது CAPS பூட்டு விசைக்காக வடிவமைக்கப்பட்ட ஒரு சிறப்பு வகை மேலெழுதும் பயன்முறையாகும். இது &lt;b&gt; ஒரு &lt;/b&gt; விசை (மாற்றியமில்லை) அதன் வேலைக்கு மட்டுமே அனுமதிக்கிறது. &lt;br&gt;
-இயல்பான மேலெழுதும் பயன்முறையில் தொப்பிகள் பூட்டு &lt;/i&gt; மற்ற விசைகளுடன் இணைந்து அழுத்தும்போது சிக்கியிருக்கலாம். &lt;br&gt;
-ஆகவே, மற்ற விசைகள் கீழே இருந்தாலும், ஒரு &lt;b&gt; ஹாட்கி &lt;/b&gt; குறுக்குவழி அழுத்தப்பட்டால் அது மேலெழுதப்பட்டு &lt;i&gt; சிக்கியிருப்பதைத் தடுக்கும் &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/உடல்&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>முடக்கவும்</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>இந்த பயனர் கணக்கு உள்நுழையும்போது ஏற்றவும், மற்ற பயனர்களுக்கு அல்ல.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; கிடைக்கக்கூடிய தொடர்புகளைப் பயன்படுத்துதல் (ஒரு ஃபெட்சர் சொருகி தேவைப்படுகிறது) இந்த ஆவணத்தின் அனைத்து நிகழ்வுகளுக்கும் இந்த புலம் பயன்படுத்தப்படும் அல்லது எந்தவொரு இடத்திலும் அது பின்னர் குறிப்பிடப்படும். &lt;/p&gt; &lt;p&gt; எனவே மின்னஞ்சல் முகவரியைத் தேர்ந்தெடுத்தால் இங்கே நீங்கள் தேர்ந்தெடுத்த தொடர்பின் மின்னஞ்சல் புலம் இந்த ஆவணத்தில் உள்ள அனைத்து நிகழ்வுகளுக்கும் பயன்படுத்தப்படும். &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = குறுகிய ஆண்டு &lt;br/&gt; yyyy = நீண்ட ஆண்டு &lt;br/&gt; m = மாதம் (1-12) &lt;br/&gt; மிமீ = மாதம் (01-12) &lt;br/&gt; mmm = மாத சுருக்கம் (ஜன, பிப்ரவரி .. . வார்த்தைகளில் வாரத்தின் நாள் (திங்கள், செவ்வாய் ... ஞாயிறு) &lt;br/&gt; E = வாரத்தின் குறுகிய நாள் வார்த்தைகளில் (திங்கள், செவ்வாய் ... சூரியன்) &lt;br/&gt; டி - ஆர்டினல் நாள் (1 வது, 2 வது, 3 வது, 21 வது, 22, 23, 23, 31 வது, 4 வது ...) &lt;br/&gt; எச் = மணிநேரம்/பி.எம் (0-12) &lt;br/&gt; hh = am/pm (00-12) &lt;br/ . a = am/pm மார்க்கர் &lt;br/&gt; p = a.m./p.m. மார்க்கர்</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>தற்போதைய தேதி மற்றும்/அல்லது நேரம் தேதிநேர வார்ப்புருக்கள் ஒட்டப்படும் போது மாற்றாக மாற்றப்படும்.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; இந்த வார்ப்புருவின் அனைத்து நிகழ்வுகளும் வழங்கப்பட்ட உரையைப் பயன்படுத்தும். &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; இந்த வார்ப்புருவின் அனைத்து நிகழ்வுகளும் வழங்கப்பட்ட உரையைப் பயன்படுத்தும். &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>சேர்ந்து முடிக்கவும்</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>கடைசியாக செயலில் உள்ள பயன்பாடு தெரியவில்லை. குரங்கு பேஸ்டுக்கு நோக்கம் கொண்ட பயன்பாட்டிற்கு மாறவும்.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ஒட்டவும்: &lt;em&gt; &lt;i class = "baste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>குறைக்கவும்</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>எதுவுமில்லை</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>தேர்ந்தெடுக்கப்பட்ட முன்னமைவுகள் மட்டுமே குறிப்பிட்ட பயன்பாட்டிற்கு பயன்படுத்தப்படும். குறிப்பிடப்படாதபோது, ​​&lt;em&gt; கிளிப்போர்டு பக்கப்பட்டி &lt;/em&gt; இல் காணப்படும் இயல்புநிலை முன்னமைவுகள் பயன்படுத்தப்படும்.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>பல குரங்கு சுவை அம்சங்கள் மற்ற பயன்பாடுகளுடன் தொடர்பு கொள்ள விசைப்பலகை ஆட்டோமேஷனைப் பயன்படுத்துகின்றன.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>வாசகர்கள்</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>நிராகரிக்கப்பட்ட பயன்பாடுகளிலிருந்து அனைத்து கிளிப்போர்டு கண்காணிப்பும் &lt;b&gt; புறக்கணிக்கப்படுகிறது &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>எழுத்தாளர்கள்</value>
@@ -1331,11 +1268,6 @@ follow the link to change
     <value>எல்லா அறிவிப்புகளையும் மீட்டமைக்க விரும்புகிறீர்களா?
 
 *இதை முடிக்காமல் விட கூடாது!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>குரங்கு பேஸ்ட் வெளிப்புற நிரலுக்கு ஒட்டும்போது கிளிப்போர்டை (மேலெழுதும்) அமைக்கிறது. இது வெளிப்புற பேஸ்டுக்குப் பிறகு கிளிப்போர்டின் நிலையை மீட்டெடுக்க &lt;b&gt; முயற்சி &lt;/b&gt;.
-
-மொத்த மறுசீரமைப்பிற்கு உத்தரவாதம் அளிக்க முடியாது மற்றும் தரவின் மூலத்தைப் பொறுத்து செயல்திறனைக் குறைக்கலாம் அல்லது குரங்குத் சுவையை செயலிழக்கச் செய்யலாம்.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>குரங்கு ஒட்டிய பின் கிளிப்போர்டை மீட்டமைக்கவும்</value>
@@ -2706,5 +2638,66 @@ furedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>திட்டங்களைப் பற்றி மேலும் அறிக</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>ஒட்டுக: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;கிடைக்கக்கூடிய தொடர்புகளைப் பயன்படுத்தி (ஒரு ஃபெட்சர் சொருகி தேவை) இந்த ஆவணம் முழுவதும் இந்த வார்ப்புருவின் அனைத்து நிகழ்வுகளுக்கும் இந்த புலம் பயன்படுத்தப்படும், அல்லது பின்னர் குறிப்பிடப்படும்.&lt;/p&gt;&lt;p&gt; எனவே, எடுத்துக்காட்டாக, இங்கே மின்னஞ்சல் முகவரியைத் தேர்ந்தெடுத்தால், நீங்கள் தேர்ந்தெடுக்கும் தொடர்பின் மின்னஞ்சல் புலம் இந்த ஆவணத்தில் உள்ள அனைத்து நிகழ்வுகளுக்கும் பயன்படுத்தப்படும்.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = குறுகிய ஆண்டு&lt;br/&gt;yyyy = நீண்ட ஆண்டு&lt;br/&gt;M = மாதம் (1-12)&lt;br/&gt;MM = மாதம் (01-12)&lt;br/&gt;MMM = மாதம் சுருக்கம் (ஜனவரி, பிப்ரவரி ... டிசம்பர்)&lt;br/&gt;MMMM = நீண்ட மாதம் (ஜனவரி, பிப்ரவரி ... டிசம்பர்)&lt;br/&gt;d = நாள் (1 - 31)&lt;br/&gt;DD = நாள் (01 - 31)&lt;br/&gt;ddd = வார்த்தைகளில் வாரத்தின் நாள் (திங்கள், செவ்வாய் ... ஞாயிற்றுக்கிழமை)&lt;br/&gt;E = சொற்களில் வாரத்தின் குறுகிய நாள் (திங்கள், செவ்வாய் ... சூரியன்)&lt;br/&gt;D - சாதாரண நாள் (1வது, 2வது, 3வது, 21வது, 22வது, 23வது, 31வது, 4வது...)&lt;br/&gt;h = AM / PM இல் மணி (0-12)&lt;br/&gt;hh = AM/PM இல் மணி (00-12)&lt;br/&gt;H = பகலில் மணி (0-23)&lt;br/&gt;HH = பகலில் மணி (00-23)&lt;br/&gt;மிமீ = நிமிடம்&lt;br/&gt;ss = இரண்டாவது&lt;br/&gt;SSS = மில்லி விநாடிகள்&lt;br/&gt;a = AM/PM மார்க்கர்&lt;br/&gt;P = a.m./p.m. குறிப்பான்</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;இந்த வார்ப்புருவின் அனைத்து நிகழ்வுகளும் வழங்கப்பட்ட உரையைப் பயன்படுத்தும்.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;இந்த வார்ப்புருவின் அனைத்து நிகழ்வுகளும் வழங்கப்பட்ட உரையைப் பயன்படுத்தும்.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>வெளிப்புற நிரலில் ஒட்டும்போது குரங்கு பேஸ்ட் கிளிப்போர்டை (மேலெழுதுகிறது) அமைக்கிறது. இது வெளிப்புற பேஸ்டுக்குப் பிறகு கிளிப்போர்டின் நிலையை மீட்டெடுக்க &lt;b&gt;முயற்சிக்கும்&lt;/b&gt; . 
+
+மொத்த மறுசீரமைப்புக்கு உத்தரவாதம் அளிக்க முடியாது மற்றும் தரவின் மூலத்தைப் பொறுத்து செயல்திறனைக் குறைக்கலாம் அல்லது செயலிழக்கலாம்.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>தேர்ந்தெடுக்கப்பட்ட முன்னமைவுகள் மட்டுமே குறிப்பிட்ட பயன்பாட்டிற்கு பயன்படுத்தப்படும். குறிப்பிடப்படாதபோது, &lt;em&gt;கிளிப்போர்டு பக்கப்பட்டியில்&lt;/em&gt; காணப்படும் இயல்புநிலை முன்னமைவுகள் பயன்படுத்தப்படும்.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>நிராகரிக்கப்பட்ட பயன்பாடுகளிலிருந்து அனைத்து கிளிப்போர்டு கண்காணிப்பும் &lt;b&gt;புறக்கணிக்கப்படும்&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;உள்&lt;/b&gt;அனைத்து குறுக்குவழிகளும் பயன்பாட்டிற்குள் வரையறுக்கப்பட்டுள்ளன. இது உண்மையில் ஒரு நோக்கம் கொண்ட விருப்பம் அல்ல, ஆனால்&lt;i&gt;நீங்கள் ஒரு நாள்&lt;/i&gt; உலகளாவியதாக மாற்ற விரும்பும் குறுக்குவழிகளைத் தனிப்பயனாக்க அனுமதிக்கலாம்.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;முன்னிருப்பு&lt;/b&gt; அனைத்து உலகளாவிய குறுக்குவழிகளும் இயக்கப்பட்டுள்ளன. &lt;b&gt;ஷோ / ஹைடு மெயின் விண்டோ&lt;/b&gt;குறுக்குவழி&lt;b&gt;கேப்ஸ் லாக்&lt;/b&gt; விசைக்கான&lt;span color="red"&gt;மேலதிக&lt;/span&gt;ரூட்டிங்கைப் பயன்படுத்துகிறது. நீங்கள் எந்த நேரத்திலும் அந்த ரூட்டிங் அல்லது சைகையை மாற்றலாம். ஆனால்&lt;span color="green"&gt;முயற்சி செய்து பாருங்கள்&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;உலகளாவிய குறுக்குவழி முறைகள்&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;செயலற்ற&lt;/b&gt; ஒரு குறுக்குவழி MonkeyPaste எந்த பயன்பாட்டிலும் கேட்கும்.&lt;br&gt;* இப்போதைக்கு லினக்ஸில் உள்ள &lt;i&gt;ஒரே&lt;/i&gt; வழி இதுதான்.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;முன்&lt;/b&gt; செயலில் உள்ள பயன்பாட்டால் &lt;b&gt;&lt;i&gt;கையாளப்படுவதற்கு முன்பு&lt;/i&gt;&lt;/b&gt; குறுக்குவழி செயல்படுத்தப்படும்.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;கம்பம்&lt;/b&gt; செயலில் உள்ள பயன்பாட்டால் கையாளப்பட்ட &lt;b&gt;&lt;i&gt;பிறகு&lt;/i&gt;&lt;/b&gt; குறுக்குவழி செயல்படுத்தப்படும்.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ஓவர்ரைடு&lt;/b&gt; ஓவர்ரைடு குறுக்குவழியின் உள்ளீட்டு விசையை (மாற்றியமைக்காத விசை) MonkeyPaste கேட்கும்போது, &lt;i&gt;அது அந்த&lt;/i&gt; விசையை பயன்பாட்டிலிருந்து மறைக்கும் - நிலை உள்ளீடு.&lt;br&gt;செயலில் உள்ள பயன்பாட்டிற்கு முரண்பாடுகள் இல்லாமல் குறுக்குவழி தூண்டப்படுவதை இந்த விருப்பம் உத்தரவாதம் அளிக்கும்.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;எக்ஸ்க்ளூசிவ் ஓவர்ரைடு&lt;/b&gt; இது கேப்ஸ் லாக் விசைக்காக வடிவமைக்கப்பட்ட ஒரு சிறப்பு வகை ஓவர்ரைடு பயன்முறையாகும். இது அதன் ஒதுக்கீட்டிற்கு &lt;b&gt;ஒரு&lt;/b&gt; விசையை (அல்லாத - மாற்றியை) மட்டுமே அனுமதிக்கிறது.&lt;br&gt;சாதாரண ஓவர்ரைடு பயன்முறையில், மற்ற விசைகளுடன் இணைந்து அழுத்தும்போது கேப்ஸ் லாக் &lt;i&gt;சிக்கிக்கொள்ளலாம்&lt;/i&gt; .&lt;br&gt;எனவே மற்ற விசைகள் கீழே இருந்தாலும், &lt;b&gt;ஹாட்கி&lt;/b&gt; குறுக்குவழியை அழுத்தினால், அது ஓவர்ரைடு செய்யப்பட்டு அது &lt;i&gt;சிக்குவதைத்&lt;/i&gt; தடுக்கும்.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste என்பது &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;இந்த வழியில், MonkeyPaste ஐ அணுகலாம்&lt;br&gt;&lt;span color="red"&gt;ஒரு கிளிக்&lt;/span&gt; அல்லது &lt;span color="red"&gt;கண் கூட பேட்டிங்&lt;/span&gt; இல்லாமல் &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

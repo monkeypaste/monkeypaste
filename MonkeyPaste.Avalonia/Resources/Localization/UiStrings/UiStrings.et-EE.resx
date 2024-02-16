@@ -166,14 +166,8 @@ Klipid vastavalt.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Kerige - kuni - avatud</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "keskus"&gt; ahv on &lt;span color = "punane&gt; täielikult integreeritud &lt;/span&gt; lohistamisega ja - tilk &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Laske see siia!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "keskus"&gt; Sel viisil pääseb ahvipastale &lt;br&gt; &lt;span color = "punane"&gt; ilma klõpsuta &lt;/span&gt; või isegi &lt;span color = "punane"&gt; Silma löömine &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Lohista mind!</value>
@@ -364,62 +358,14 @@ VÄLJASTAMISEKS.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Žestid peavad olema ainulaadsed ja võivad sisaldada ainult ühte sisendvõtit.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Sisemine &lt;/b&gt; Kõik otseteed on piiratud rakenduses. See pole tegelikult kavandatud võimalus, kuid võib lubada kohandada, milliseid otseteid kavatsete teha globaalseks &lt;i&gt; kunagi &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Vaikimisi &lt;/b&gt; Kõik globaalsed otseteed on lubatud. &lt;b&gt; show/peida peaakna &lt;/b&gt; otsetee kasutab &lt;span color = "punane"&gt; alistamine &lt;/span&gt; marsruutimine &lt;b&gt; CAPS Lock &lt;/b&gt; jaoks. Seda marsruuti või žesti saate igal ajal muuta. Aga &lt;span color = "roheline"&gt; proovige seda &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;Head&gt; &lt;/ Head&gt;
-&lt;keha&gt;
-&lt;h1&gt; globaalsed otseteede režiimid &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Passiivne &lt;/b&gt; otsetee ahvivaba kuulab igas rakenduses. &lt;br&gt;
-*See on praegu Linuxi suvand &lt;i&gt; ainult &lt;/i&gt;.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; otsetee käivitab &lt;b&gt; &lt;i&gt; enne &lt;/i&gt; &lt;/b&gt; seda haldab aktiivne rakendus. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; otsetee käivitab &lt;b&gt; &lt;i&gt; pärast &lt;/i&gt; &lt;/b&gt; seda haldab aktiivne rakendus. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; alistamine &lt;/b&gt; Kui Monkeypaste kuuleb alistamise otsetee sisendvõtit (mitte -modifikaatori klahvi), see on &lt;i&gt; peida &lt;/i&gt;, et klahv vajutage rakenduse - taseme sisend. &lt;br&gt; &lt;br&gt; &lt;br&gt;
-See suvand tagab, et otsetee käivitatakse ilma aktiivse rakendusega konfliktideta.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Eksklusiivne ületamine &lt;/b&gt; See on CAPS Lock -klahvi jaoks mõeldud spetsiaalne alistamise režiim. See võimaldab selle määramiseks ainult &lt;b&gt; ühte &lt;/b&gt; klahvi (mitte -modifikaator). &lt;br&gt;
-Normaalse alistamise režiimi korral võib CAPS lukk saada &lt;i&gt; kinni &lt;/i&gt;, kui vajutada koos teiste klahvidega. &lt;br&gt;
-Nii et ükskõik, millised muud klahvid on maas, kui a &lt;b&gt; hotkey &lt;/b&gt; otseteele vajutatakse, on see ülepaisutatud ja takistab seda &lt;i&gt; kinni &lt;/i&gt; kinni jäämist.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Keelama</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Laadige see kasutajakonto sisse logitud, mitte teiste kasutajate jaoks.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Kättesaadavate kontaktide kasutamine (nõuab Fetcheri pistikprogrammi) Seda välja kasutatakse selle malli kõigi juhtumite jaoks kogu selle dokumendi korral või mis tahes mis tahes sellele viidatakse sellele hilisemas. &lt;/p&gt; &lt;p&gt; Nii et näiteks kui valige e -posti aadress Seejärel kasutatakse valitud kontakti e -posti valdkonda kõigi selle dokumendi eksemplaride jaoks. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = lühike aasta &lt;br/&gt; yyyy = pikk aasta &lt;br/&gt; m = kuu (1-12) &lt;br/&gt; mm = kuu (01-12) &lt;br/&gt; mmm = kuu lühend (jaanuar, veebruar .. . Detsember) &lt;br/&gt; mmmm = pikk kuu (jaanuar, veebruar ... detsember) &lt;br/&gt; d = päev (1 - 31) &lt;br/&gt; dd = päev (01 - 31) &lt;br/&gt; ddd = Nädalapäev sõnades (esmaspäev, teisipäev ... pühapäev) &lt;br/&gt; e = lühikese nädala päev sõnades (esmaspäev, teisipäev ... päike) &lt;br/&gt; d - ordinaalne päev (1., 2., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; h = tund am/pm (0-12) &lt;br/&gt; hh = tund am/pm (00-12) &lt;br/ &gt; H = tund päevas (0-23) &lt;br/&gt; hh = tund päeval (00-23) &lt;br/&gt; mm = minut &lt;br/&gt; ss = sekund &lt;br/&gt; sss = milliseconds &lt;br/&gt; a = am/pm marker &lt;br/&gt; p = a.m./p.m. marker</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Praegune kuupäev ja/või kellaaeg asendatakse nende kleepimisel DateTime'i mallidega.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Selle malli kõik esinemised kasutavad esitatud teksti. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Selle malli kõik esinemised kasutavad esitatud teksti. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Lõpeta lisamine</value>
@@ -469,9 +415,6 @@ Nii et ükskõik, millised muud klahvid on maas, kui a &lt;b&gt; hotkey &lt;/b&g
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Viimane aktiivne rakendus teadmata. Lülitage kavandatud rakendusele ahvipasta juurde.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Kleebi: &lt;em&gt; &lt;i class = "pasta-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimeerima</value>
@@ -547,9 +490,6 @@ Lisage ja/või valige rakendus unikaalse koopiaga otsetee (näiteks konsool või
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Mitte ükski</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Määratud rakenduse jaoks kasutatakse ainult valitud eelseadeid. Määratlemata kasutatakse lõikelaua külgriba &lt;/em&gt; leitud vaikeseadet.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Paljud Monkeypasta funktsioonid kasutavad teiste rakendustega suhtlemiseks klaviatuuri automatiseerimist.
 
@@ -562,9 +502,6 @@ Nõuetekohase koostalitlusvõime tagamiseks salvestage siin selle rakenduse otse
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Lugejad</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Kogu lõikelaua jälgimine tagasilükatud rakendustest on &lt;b&gt; ignoreeritud &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Kirjanikud</value>
@@ -1331,11 +1268,6 @@ Seda ei saa olematuks teha!
     <value>Kas olete kindel, et soovite lähtestada kõik teatised?
 
 *Seda ei saa olematuks teha!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Ahvipasta seab lõikelaua (alistab) välisele programmile kleepimisel. See on &lt;b&gt; katse &lt;/b&gt; taastada lõikelaua seisund pärast välist pastat.
-
-Terve taastamist ei saa tagada ja see võib sõltuvalt andmete allikast vähendada jõudlust või isegi krahhi ahvivast.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Lähtestage lõikelaud pärast ahvi kleepimist</value>
@@ -2706,5 +2638,66 @@ tagasiside@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lisateavet plaanide kohta</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Kleebi: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Kasutades saadaolevaid kontakte (nõuab fetcheri pistikprogrammi), kasutatakse seda välja selle malli kõigi eksemplaride jaoks selles dokumendis või mis tahes, millele hiljem viidatakse.&lt;/p&gt;&lt;p&gt; Näiteks kui valite siin e-posti aadressi, kasutatakse teie valitud kontakti e-posti välja kõigi selle dokumendi eksemplaride jaoks.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = lühike aasta&lt;br/&gt;yyyy = pikk aasta&lt;br/&gt;M = kuu (1–12)&lt;br/&gt;MM = kuu (01-12)&lt;br/&gt;MMM = kuu lühend (jaan, veebr ... detsember)&lt;br/&gt;MMMM = pikk kuu (jaanuar, veebruar ... detsember)&lt;br/&gt;d = päev (1 - 31)&lt;br/&gt;DD = päev (01 - 31)&lt;br/&gt;ddd = nädalapäev sõnadega (esmaspäev, teisipäev ... Pühapäev)&lt;br/&gt;E = lühike nädalapäev sõnadega (E, T ... Päike)&lt;br/&gt;D - ordinaalpäev (1., 2., 3., 21., 22., 23., 31., 4....)&lt;br/&gt;h = tund (am/pm) (0–12)&lt;br/&gt;hh = tund tunnis am/pm (00-12)&lt;br/&gt;H = tund päevas (0–23)&lt;br/&gt;HH = tund päevas (00–23)&lt;br/&gt;mm = minut&lt;br/&gt;ss = teine&lt;br/&gt;SSS = millisekundid&lt;br/&gt;a = AM/PM marker&lt;br/&gt;p = a.m./p.m. marker</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Kõik selle malli esinemised kasutavad esitatud teksti.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Kõik selle malli esinemised kasutavad esitatud teksti.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste määrab välisesse programmi kleepimisel lõikelaua (alistab). See &lt;b&gt;üritab&lt;/b&gt; taastada lõikepuhvri oleku pärast välist kleepimist. 
+
+Täielikku taastamist ei saa garanteerida ja see võib sõltuvalt andmete allikast vähendada jõudlust või isegi MonkeyPaste krahhi.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Määratud rakenduse jaoks kasutatakse ainult valitud valmissätteid. Kui see on määramata, kasutatakse &lt;em&gt;lõikelaua külgribal&lt;/em&gt; leiduvaid vaikevalmissätteid.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Kõiki tagasilükatud rakenduste lõikepuhvri jälgimist &lt;b&gt;ignoreeritakse&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Sise&lt;/b&gt;Kõik otseteed on piiratud rakendusesiseselt. See pole tegelikult mõeldud valik, kuid võimaldab kohandada, milliseid otseteid kavatsete&lt;i&gt;ühel päeval&lt;/i&gt; globaalseks muuta.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Vaikimisi&lt;/b&gt; Kõik globaalsed otseteed on lubatud. &lt;b&gt;Peaakna kuvamise/peitmise&lt;/b&gt;otsetee&lt;span color="red"&gt;kasutab&lt;/span&gt;&lt;b&gt;suurtäheluku&lt;/b&gt; klahvi alistamist. Saate seda marsruuti või žesti igal ajal muuta. Aga&lt;span color="green"&gt;proovige seda&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Globaalsed otseteerežiimid&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passiivne&lt;/b&gt; Otsetee MonkeyPaste kuulab igas rakenduses.&lt;br&gt;*See on praegu &lt;i&gt;Linuxis ainus&lt;/i&gt; võimalus.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Eelnevalt&lt;/b&gt; Otsetee käivitub &lt;b&gt;&lt;i&gt;enne, kui&lt;/i&gt;&lt;/b&gt; aktiivne rakendus seda käsitleb.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Otsetee käivitub &lt;b&gt;&lt;i&gt;pärast seda&lt;/i&gt;&lt;/b&gt; , kui aktiivne rakendus seda käsitleb.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Alistada&lt;/b&gt; Kui MonkeyPaste kuuleb alistatud otsetee sisendvõtit (mitte-modifikaatori võtit), &lt;i&gt;peidab&lt;/i&gt; see klahvivajutuse rakenduse - taseme sisendist.&lt;br&gt;See valik tagab, et otsetee käivitatakse aktiivsele rakendusele ilma konfliktideta.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Eksklusiivne alistamine&lt;/b&gt; See on spetsiaalne alistamisrežiimi tüüp, mis on loodud Caps Lock klahvi jaoks. See võimaldab selle määramiseks ainult &lt;b&gt;ühte&lt;/b&gt; võtit (mitte modifikaatorit).&lt;br&gt;Tavalises alistamisrežiimis võib Caps Lock kinni &lt;i&gt;jääda&lt;/i&gt; , kui seda vajutada koos teiste klahvidega.&lt;br&gt;Nii et olenemata sellest, millised muud klahvid on maas, kui &lt;b&gt;kiirklahvi&lt;/b&gt; vajutatakse, alistatakse see ja välditakse selle &lt;i&gt;kinnijäämist&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste on &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Nii pääseb MonkeyPaste'ile juurde&lt;br&gt;&lt;span color="red"&gt;ilma klõpsuta&lt;/span&gt; või isegi &lt;span color="red"&gt;silma pilgutamata&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

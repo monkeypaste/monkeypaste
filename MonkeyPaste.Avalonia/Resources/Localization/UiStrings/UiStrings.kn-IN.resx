@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>ಸ್ಕ್ರಾಲ್ - ಗೆ - ತೆರೆಯಿರಿ</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; ಮಾಂಕೈಪಾಸ್ಟ್ &lt;ಸ್ಪ್ಯಾನ್ ಕಲರ್ = "ಕೆಂಪು&gt; ಸಂಪೂರ್ಣವಾಗಿ ಸಂಯೋಜಿಸಲ್ಪಟ್ಟಿದೆ &lt;/span&gt; ಡ್ರ್ಯಾಗ್‌ನೊಂದಿಗೆ - ಮತ್ತು - ಡ್ರಾಪ್ &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>ಅದನ್ನು ಇಲ್ಲಿ ಬಿಡಿ!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>. &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>ನನ್ನನ್ನು ಎಳೆಯಿರಿ!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>ಸನ್ನೆಗಳು ಅನನ್ಯವಾಗಿರಬೇಕು ಮತ್ತು ಕೇವಲ ಒಂದು ಇನ್ಪುಟ್ ಕೀಲಿಯನ್ನು ಹೊಂದಿರಬಹುದು.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; ಆಂತರಿಕ &lt;/b&gt; ಎಲ್ಲಾ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳು ಅಪ್ಲಿಕೇಶನ್‌ನೊಳಗೆ ಸೀಮಿತವಾಗಿವೆ. ಇದು ನಿಜವಾಗಿಯೂ ಉದ್ದೇಶಿತ ಆಯ್ಕೆಯಲ್ಲ ಆದರೆ ಜಾಗತಿಕ &lt;i&gt; ಒಂದು ದಿನ &lt;/i&gt; ಮಾಡಲು ನೀವು ಉದ್ದೇಶಿಸಿರುವ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ಕಸ್ಟಮೈಸ್ ಮಾಡಲು ಅನುಮತಿಸಬಹುದು. &lt;/Li&gt;
-&lt;li&gt;
-&lt;b&gt; ಡೀಫಾಲ್ಟ್ &lt;/b&gt; ಎಲ್ಲಾ ಜಾಗತಿಕ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ. &lt;b&gt; ಮುಖ್ಯ ವಿಂಡೋವನ್ನು ತೋರಿಸಿ/ಮರೆಮಾಡಿ &lt;/b&gt; ಶಾರ್ಟ್‌ಕಟ್ &lt;ಸ್ಪ್ಯಾನ್ ಬಣ್ಣ = "ಕೆಂಪು"&gt; ಅತಿಕ್ರಮಿಸಿ &lt;/span&gt; &lt;b&gt; ಕ್ಯಾಪ್ಸ್ ಲಾಕ್ &lt;/b&gt; ಕೀಲಿಗಾಗಿ ರೂಟಿಂಗ್ ಅನ್ನು ಬಳಸುತ್ತದೆ. ನೀವು ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ಆ ರೂಟಿಂಗ್ ಅಥವಾ ಗೆಸ್ಚರ್ ಅನ್ನು ಬದಲಾಯಿಸಬಹುದು. ಆದರೆ &lt;span color = "green"&gt; ಒಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ಉಲ್&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;ಹೆಡ್&gt; &lt;/ಹೆಡ್&gt;
-&lt;ದೇಹ&gt;
-&lt;h1&gt; ಜಾಗತಿಕ ಶಾರ್ಟ್‌ಕಟ್ ವಿಧಾನಗಳು &lt;/H1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; ನಿಷ್ಕ್ರಿಯ &lt;/b&gt; ಯಾವುದೇ ಅಪ್ಲಿಕೇಶನ್‌ನಲ್ಲಿ ಶಾರ್ಟ್‌ಕಟ್ ಮಾಂಕೈಪ್ಯಾಸ್ಟ್ ಕೇಳುತ್ತದೆ. &lt;br&gt;
-*ಇದು ಈಗ ಲಿನಕ್ಸ್‌ನಲ್ಲಿ &lt;i&gt; ಮಾತ್ರ &lt;/i&gt; ಆಯ್ಕೆಯಾಗಿದೆ.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ಪೂರ್ವ &lt;/b&gt; ಶಾರ್ಟ್‌ಕಟ್ &lt;/i&gt; &lt;/b&gt; ಮೊದಲು &lt;b&gt; &lt;i&gt; ಅನ್ನು ಕಾರ್ಯಗತಗೊಳಿಸುತ್ತದೆ. ಇದನ್ನು ಸಕ್ರಿಯ ಅಪ್ಲಿಕೇಶನ್‌ನಿಂದ ನಿರ್ವಹಿಸಲಾಗುತ್ತದೆ. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ಪೋಸ್ಟ್ &lt;/b&gt; ಶಾರ್ಟ್‌ಕಟ್ &lt;b&gt; &lt;i&gt; ನಂತರ &lt;/i&gt; &lt;/b&gt; ಅನ್ನು ಕಾರ್ಯಗತಗೊಳಿಸುತ್ತದೆ. ಇದನ್ನು ಸಕ್ರಿಯ ಅಪ್ಲಿಕೇಶನ್‌ನಿಂದ ನಿರ್ವಹಿಸಲಾಗುತ್ತದೆ. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ಅತಿಕ್ರಮಿಸಿ &lt;/b&gt; ಮೊಂಕೈಪಾಸ್ಟ್ ಅತಿಕ್ರಮಣ ಶಾರ್ಟ್‌ಕಟ್‌ನ ಇನ್‌ಪುಟ್ ಕೀ (ಮಾರ್ಪಡಕವಲ್ಲದ ಕೀ) ಅನ್ನು ಕೇಳಿದಾಗ ಅದು &lt;i&gt; ಮರೆಮಾಡುತ್ತದೆ &lt;/i&gt; ಅಪ್ಲಿಕೇಶನ್‌ನಿಂದ ಆ ಕೀ ಒತ್ತಿ - ಮಟ್ಟದ ಇನ್ಪುಟ್. &lt;br&gt;
-ಸಕ್ರಿಯ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಘರ್ಷಣೆಗಳಿಲ್ಲದೆ ಶಾರ್ಟ್‌ಕಟ್ ಅನ್ನು ಪ್ರಚೋದಿಸಲಾಗುತ್ತದೆ ಎಂದು ಈ ಆಯ್ಕೆಯು ಖಾತರಿಪಡಿಸುತ್ತದೆ.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ಎಕ್ಸ್‌ಕ್ಲೂಸಿವ್ ಓವರ್‌ರೈಡ್ &lt;/b&gt; ಇದು ಕ್ಯಾಪ್ಸ್ ಲಾಕ್ ಕೀಲಿಗಾಗಿ ವಿನ್ಯಾಸಗೊಳಿಸಲಾದ ವಿಶೇಷ ರೀತಿಯ ಅತಿಕ್ರಮಣ ಮೋಡ್ ಆಗಿದೆ. ಇದು &lt;b&gt; ಒಂದು &lt;/b&gt; ಕೀ (ಮಾರ್ಪಡಕವಲ್ಲದ) ಅನ್ನು ಅದರ ನಿಯೋಜನೆಗಾಗಿ ಮಾತ್ರ ಅನುಮತಿಸುತ್ತದೆ. &lt;br&gt;
-ಸಾಮಾನ್ಯ ಅತಿಕ್ರಮಣ ಮೋಡ್‌ನಲ್ಲಿ ಕ್ಯಾಪ್ಸ್ ಲಾಕ್ &lt;i&gt; ಇತರ ಕೀಲಿಗಳ ಸಂಯೋಜನೆಯೊಂದಿಗೆ ಒತ್ತಿದಾಗ &lt;i&gt; ಅಂಟಿಕೊಳ್ಳಬಹುದು. &lt;br&gt;
-ಆದ್ದರಿಂದ ಇತರ ಕೀಲಿಗಳು ಏನೇ ಇರಲಿ, ಎ &lt;b&gt; ಹಾಟ್‌ಕೀ &lt;/b&gt; ಶಾರ್ಟ್‌ಕಟ್ ಒತ್ತಿದರೆ ಅದನ್ನು ಅತಿಕ್ರಮಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಅದು &lt;i&gt; ಅಂಟಿಕೊಳ್ಳದಂತೆ ತಡೆಯುತ್ತದೆ &lt;/i&gt;
-&lt;/li&gt;
-&lt;/ಉಲ್&gt;
-&lt;/ದೇಹ&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>ನಿಷ್ಪಲಿತಿ</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>ಈ ಬಳಕೆದಾರ ಖಾತೆಯನ್ನು ಲಾಗ್ ಇನ್ ಮಾಡಿದಾಗ ಲೋಡ್ ಅಪ್ ಮಾಡಿ, ಇತರ ಬಳಕೆದಾರರಿಗಾಗಿ ಅಲ್ಲ.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; ಲಭ್ಯವಿರುವ ಸಂಪರ್ಕಗಳನ್ನು ಬಳಸುವುದು (ಫೆಚರ್ ಪ್ಲಗಿನ್ ಅಗತ್ಯವಿದೆ) ಈ ಕ್ಷೇತ್ರವನ್ನು ಈ ಡಾಕ್ಯುಮೆಂಟ್‌ನಾದ್ಯಂತ ಈ ಟೆಂಪ್ಲೇಟ್‌ನ ಎಲ್ಲಾ ನಿದರ್ಶನಗಳಿಗೆ ಬಳಸಲಾಗುತ್ತದೆ ಅಥವಾ ಯಾವುದನ್ನಾದರೂ ನಂತರ ಉಲ್ಲೇಖಿಸಲಾಗುತ್ತದೆ. &lt;/p&gt; &lt;p&gt; ಆದ್ದರಿಂದ ಉದಾಹರಣೆಗೆ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ಆರಿಸಿದರೆ ಉದಾಹರಣೆಗೆ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ಆಯ್ಕೆಮಾಡಿದರೆ ಇಲ್ಲಿ ನೀವು ಆಯ್ಕೆ ಮಾಡಿದ ಸಂಪರ್ಕದ ಇಮೇಲ್ ಕ್ಷೇತ್ರವನ್ನು ಈ ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿನ ಎಲ್ಲಾ ನಿದರ್ಶನಗಳಿಗೆ ಬಳಸಲಾಗುತ್ತದೆ. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = ಸಣ್ಣ ವರ್ಷ &lt;br/&gt; yyyy = ದೀರ್ಘ ವರ್ಷ &lt;br/&gt; m = month (1-12) &lt;br/&gt; mm = ತಿಂಗಳು (01-12) &lt;br/&gt; mmm = ತಿಂಗಳ ಸಂಕ್ಷೇಪಣ (ಜನವರಿ, ಫೆಬ್ರವರಿ .. . ವಾರದ ದಿನ ಪದಗಳಲ್ಲಿ (ಸೋಮವಾರ, ಮಂಗಳವಾರ ... ಭಾನುವಾರ) &lt;br/&gt; ಇ = ವಾರದ ಸಣ್ಣ ದಿನ ಪದಗಳಲ್ಲಿ (ಸೋಮ, ಮಂಗಳ ... ಸೂರ್ಯ) &lt;br/&gt; ಡಿ - ಆರ್ಡಿನಲ್ ದಿನ (1, 2 ನೇ, 3 ನೇ, 21 ನೇ, 22, 23 ನೇ, 31, 4 ನೇ ...) &gt; H = ದಿನದಲ್ಲಿ ಗಂಟೆ (0-23) &lt;br/&gt; HH = ದಿನದಲ್ಲಿ ಗಂಟೆ (00-23) A = AM/PM ಮಾರ್ಕರ್ &lt;br/&gt; p = a.m./p.m. ಗುರುತು</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>ಪ್ರಸ್ತುತ ದಿನಾಂಕ ಮತ್ತು/ಅಥವಾ ಸಮಯವನ್ನು ಅಂಟಿಸಿದಾಗ ಡೇಟೈಮ್ ಟೆಂಪ್ಲೆಟ್ಗಳಿಗೆ ಬದಲಿಸಲಾಗುತ್ತದೆ.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; ಈ ಟೆಂಪ್ಲೇಟ್‌ನ ಎಲ್ಲಾ ಘಟನೆಗಳು ಒದಗಿಸಿದ ಪಠ್ಯವನ್ನು ಬಳಸುತ್ತವೆ. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; ಈ ಟೆಂಪ್ಲೇಟ್‌ನ ಎಲ್ಲಾ ಘಟನೆಗಳು ಒದಗಿಸಿದ ಪಠ್ಯವನ್ನು ಬಳಸುತ್ತವೆ. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>ಸೇರಿಸುವುದನ್ನು ಮುಗಿಸಿ</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>ಕೊನೆಯ ಸಕ್ರಿಯ ಅಪ್ಲಿಕೇಶನ್ ತಿಳಿದಿಲ್ಲ. ಮಂಕಿ ಪೇಸ್ಟ್ಗೆ ಉದ್ದೇಶಿತ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಬದಲಾಯಿಸಿ.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ಅಂಟಿಸಿ: &lt;em&gt; &lt;i class = "ಪೇಸ್ಟ್-ಟೂಲ್ಟಿಪ್-ಸಫಿಕ್ಸ್"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>ಕಡಿಮೆ ಮಾಡು</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>ಯಾವುದೂ</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>ನಿರ್ದಿಷ್ಟಪಡಿಸಿದ ಅಪ್ಲಿಕೇಶನ್‌ಗಾಗಿ ಆಯ್ದ ಪೂರ್ವನಿಗದಿಗಳನ್ನು ಮಾತ್ರ ಬಳಸಲಾಗುತ್ತದೆ. ಅನಿರ್ದಿಷ್ಟಗೊಳಿಸದಿದ್ದಾಗ, &lt;em&gt; ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಸೈಡ್‌ಬಾರ್ &lt;/em&gt; ನಲ್ಲಿ ಕಂಡುಬರುವ ಡೀಫಾಲ್ಟ್ ಪೂರ್ವನಿಗದಿಗಳನ್ನು ಬಳಸಲಾಗುತ್ತದೆ.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>ಅನೇಕ ಮಾಂಕಿಪ್ಯಾಸ್ಟ್ ವೈಶಿಷ್ಟ್ಯಗಳು ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳೊಂದಿಗೆ ಸಂವಹನ ನಡೆಸಲು ಕೀಬೋರ್ಡ್ ಆಟೊಮೇಷನ್ ಅನ್ನು ಬಳಸುತ್ತವೆ.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>ಓದುಗ</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>ತಿರಸ್ಕರಿಸಿದ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಂದ ಎಲ್ಲಾ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಮಾನಿಟರಿಂಗ್ ಅನ್ನು &lt;b&gt; ನಿರ್ಲಕ್ಷಿಸಲಾಗುತ್ತದೆ &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>ಬರಹಗಾರ</value>
@@ -1331,11 +1268,6 @@
     <value>ಎಲ್ಲಾ ಅಧಿಸೂಚನೆಗಳನ್ನು ಮರುಹೊಂದಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?
 
 *ಇದನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗುವುದಿಲ್ಲ!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>ಬಾಹ್ಯ ಪ್ರೋಗ್ರಾಂಗೆ ಅಂಟಿಸುವಾಗ ಮಂಕಿ ಪೇಸ್ಟ್ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ (ಅತಿಕ್ರಮಣಗಳು) ಅನ್ನು ಹೊಂದಿಸುತ್ತದೆ. ಇದು ಬಾಹ್ಯ ಪೇಸ್ಟ್ ನಂತರ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನ ಸ್ಥಿತಿಯನ್ನು ಪುನಃಸ್ಥಾಪಿಸಲು &lt;b&gt; ಪ್ರಯತ್ನಿಸುತ್ತದೆ &lt;/b&gt;.
-
-ಒಟ್ಟು ಪುನಃಸ್ಥಾಪನೆಯನ್ನು ಖಾತರಿಪಡಿಸಲಾಗುವುದಿಲ್ಲ ಮತ್ತು ದತ್ತಾಂಶದ ಮೂಲವನ್ನು ಅವಲಂಬಿಸಿ ಕಾರ್ಯಕ್ಷಮತೆಯನ್ನು ಕಡಿಮೆ ಮಾಡಬಹುದು ಅಥವಾ ಕ್ರ್ಯಾಶ್ ಮಾಂಕೈಪಾಸ್ಟ್.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>ಮಂಕಿ ಅಂಟಿಸಿದ ನಂತರ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಅನ್ನು ಮರುಹೊಂದಿಸಿ</value>
@@ -2706,5 +2638,66 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ಯೋಜನೆಗಳ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>ಇದಕ್ಕೆ ಅಂಟಿಸಿ: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;ಲಭ್ಯವಿರುವ ಸಂಪರ್ಕಗಳನ್ನು ಬಳಸಿಕೊಂಡು (ಫೆಚರ್ ಪ್ಲಗಿನ್ ಅಗತ್ಯವಿದೆ) ಈ ಫೀಲ್ಡ್ ಅನ್ನು ಈ ದಾಖಲೆಯಾದ್ಯಂತ ಈ ಟೆಂಪ್ಲೇಟ್ ನ ಎಲ್ಲಾ ಸಂದರ್ಭಗಳಿಗೆ ಬಳಸಲಾಗುತ್ತದೆ ಅಥವಾ ನಂತರ ಉಲ್ಲೇಖಿಸಲಾಗುವ ಯಾವುದರಲ್ಲಾದರೂ.&lt;/p&gt;&lt;p&gt; ಆದ್ದರಿಂದ ಉದಾಹರಣೆಗೆ ಇಲ್ಲಿ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ಆಯ್ಕೆ ಮಾಡಿದರೆ, ನೀವು ಆಯ್ಕೆ ಮಾಡಿದ ಸಂಪರ್ಕದ ಇಮೇಲ್ ಕ್ಷೇತ್ರವನ್ನು ಈ ದಾಖಲೆಯಲ್ಲಿನ ಎಲ್ಲಾ ಸಂದರ್ಭಗಳಿಗೆ ಬಳಸಲಾಗುತ್ತದೆ.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = ಅಲ್ಪ ವರ್ಷ&lt;br/&gt;yyyy = ದೀರ್ಘ ವರ್ಷ&lt;br/&gt;M = ತಿಂಗಳು (1-12)&lt;br/&gt;ಮಿಮೀ = ತಿಂಗಳು (01-12)&lt;br/&gt;MMM = ತಿಂಗಳ ಸಂಕ್ಷಿಪ್ತ ರೂಪ (ಜನವರಿ, ಫೆಬ್ರವರಿ ... ಡಿಸೆಂಬರ್)&lt;br/&gt;MMMM = ದೀರ್ಘ ತಿಂಗಳು (ಜನವರಿ, ಫೆಬ್ರವರಿ ... ಡಿಸೆಂಬರ್)&lt;br/&gt;d = ದಿನ (1 - 31)&lt;br/&gt;DD = ದಿನ (01 - 31)&lt;br/&gt;ಡಿಡಿಡಿ = ಪದಗಳಲ್ಲಿ ವಾರದ ದಿನ (ಸೋಮವಾರ, ಮಂಗಳವಾರ ... ಭಾನುವಾರ)&lt;br/&gt;E = ಪದಗಳಲ್ಲಿ ವಾರದ ಸಣ್ಣ ದಿನ (ಸೋಮವಾರ, ಮಂಗಳವಾರ ... ಸೂರ್ಯ)&lt;br/&gt;ಡಿ - ಆರ್ಡಿನಲ್ ದಿನ (1 ನೇ, 2 ನೇ, 3 ನೇ, 21 ನೇ, 22 ನೇ, 23 ನೇ, 31 ನೇ, 4 ನೇ...)&lt;br/&gt;h = AM/PM ನಲ್ಲಿ ಗಂಟೆ (0-12)&lt;br/&gt;hh = AM/PM ನಲ್ಲಿ ಗಂಟೆ (00-12)&lt;br/&gt;H = ದಿನದಲ್ಲಿ ಒಂದು ಗಂಟೆ (0-23)&lt;br/&gt;HH = ದಿನದಲ್ಲಿ ಒಂದು ಗಂಟೆ (00-23)&lt;br/&gt;ಮಿಮೀ = ನಿಮಿಷ&lt;br/&gt;SS = ಸೆಕೆಂಡ್&lt;br/&gt;SSS = ಮಿಲಿಸೆಕೆಂಡುಗಳು&lt;br/&gt;a = AM/PM ಮಾರ್ಕರ್&lt;br/&gt;p = a.m./p.m. ಮಾರ್ಕರ್</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;ಈ ಟೆಂಪ್ಲೇಟ್ ನ ಎಲ್ಲಾ ಘಟನೆಗಳು ಒದಗಿಸಿದ ಪಠ್ಯವನ್ನು ಬಳಸುತ್ತವೆ.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;ಈ ಟೆಂಪ್ಲೇಟ್ ನ ಎಲ್ಲಾ ಘಟನೆಗಳು ಒದಗಿಸಿದ ಪಠ್ಯವನ್ನು ಬಳಸುತ್ತವೆ.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>ಬಾಹ್ಯ ಪ್ರೋಗ್ರಾಂಗೆ ಅಂಟಿಸುವಾಗ ಮಂಕಿ ಪೇಸ್ಟ್ ಕ್ಲಿಪ್ ಬೋರ್ಡ್ ಅನ್ನು ಹೊಂದಿಸುತ್ತದೆ (ಅತಿಕ್ರಮಣಗಳು). ಇದು ಬಾಹ್ಯ ಪೇಸ್ಟ್ ನಂತರ ಕ್ಲಿಪ್ ಬೋರ್ಡ್ ನ ಸ್ಥಿತಿಯನ್ನು ಪುನಃಸ್ಥಾಪಿಸಲು &lt;b&gt;ಪ್ರಯತ್ನಿಸುತ್ತದೆ&lt;/b&gt; . 
+
+ಒಟ್ಟು ಪುನಃಸ್ಥಾಪನೆಯನ್ನು ಖಾತರಿಪಡಿಸಲಾಗುವುದಿಲ್ಲ ಮತ್ತು ಡೇಟಾದ ಮೂಲವನ್ನು ಅವಲಂಬಿಸಿ ಕಾರ್ಯಕ್ಷಮತೆಯನ್ನು ಕಡಿಮೆ ಮಾಡಬಹುದು ಅಥವಾ ಮಂಕಿಪೇಸ್ಟ್ ಅನ್ನು ಕ್ರ್ಯಾಶ್ ಮಾಡಬಹುದು.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>ನಿರ್ದಿಷ್ಟಪಡಿಸಿದ ಅಪ್ಲಿಕೇಶನ್ ಗಾಗಿ ಆಯ್ಕೆಮಾಡಿದ ಪ್ರಿಸೆಟ್ ಗಳನ್ನು ಮಾತ್ರ ಬಳಸಲಾಗುತ್ತದೆ. ನಿರ್ದಿಷ್ಟಪಡಿಸದಿದ್ದಾಗ, &lt;em&gt;ಕ್ಲಿಪ್ ಬೋರ್ಡ್ ಸೈಡ್ ಬಾರ್&lt;/em&gt; ನಲ್ಲಿ ಕಂಡುಬರುವ ಡೀಫಾಲ್ಟ್ ಪೂರ್ವಸೆಟ್ ಗಳನ್ನು ಬಳಸಲಾಗುತ್ತದೆ.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>ತಿರಸ್ಕೃತ ಅಪ್ಲಿಕೇಶನ್ ಗಳಿಂದ ಎಲ್ಲಾ ಕ್ಲಿಪ್ ಬೋರ್ಡ್ ಮೇಲ್ವಿಚಾರಣೆಯನ್ನು &lt;b&gt;ನಿರ್ಲಕ್ಷಿಸಲಾಗುತ್ತದೆ&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;ಆಂತರಿಕ&lt;/b&gt;ಎಲ್ಲಾ ಶಾರ್ಟ್ ಕಟ್ ಗಳು ಅಪ್ಲಿಕೇಶನ್ ನೊಳಗೆ ಸೀಮಿತವಾಗಿವೆ. ಇದು ನಿಜವಾಗಿಯೂ ಉದ್ದೇಶಿತ ಆಯ್ಕೆಯಲ್ಲ ಆದರೆ&lt;i&gt;ಒಂದು ದಿನ&lt;/i&gt; ನೀವು ಜಾಗತಿಕವಾಗಿ ಮಾಡಲು ಬಯಸುವ ಶಾರ್ಟ್ ಕಟ್ ಗಳನ್ನು ಕಸ್ಟಮೈಸ್ ಮಾಡಲು ಅನುಮತಿಸುತ್ತದೆ.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;ಡೀಫಾಲ್ಟ್&lt;/b&gt; ಎಲ್ಲಾ ಜಾಗತಿಕ ಶಾರ್ಟ್ ಕಟ್ ಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ. &lt;b&gt;ತೋರಿಸು/ಮರೆಮಾಡು ಮುಖ್ಯ ವಿಂಡೋ&lt;/b&gt;ಶಾರ್ಟ್ ಕಟ್&lt;b&gt;Caps Lock&lt;/b&gt; ಕೀಲಿಗಾಗಿ&lt;span color="red"&gt;ಓವರ್ ರೈಡ್&lt;/span&gt;ರೂಟಿಂಗ್ ಅನ್ನು ಬಳಸುತ್ತದೆ. ನೀವು ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ಆ ರೂಟಿಂಗ್ ಅಥವಾ ಸನ್ನೆಯನ್ನು ಬದಲಾಯಿಸಬಹುದು. ಆದರೆ&lt;span color="green"&gt;ಅದನ್ನು ಒಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;ಜಾಗತಿಕ ಶಾರ್ಟ್ ಕಟ್ ಮೋಡ್ ಗಳು&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;ನಿಷ್ಕ್ರಿಯ&lt;/b&gt; ಶಾರ್ಟ್ ಕಟ್ ಮಂಕಿಪೇಸ್ಟ್ ಯಾವುದೇ ಅಪ್ಲಿಕೇಶನ್ ನಲ್ಲಿ ಕೇಳುತ್ತದೆ.&lt;br&gt;* ಸದ್ಯಕ್ಕೆ ಲಿನಕ್ಸ್ ನಲ್ಲಿ &lt;i&gt;ಇದೊಂದೇ&lt;/i&gt; ಆಯ್ಕೆಯಾಗಿದೆ.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ಪೂರ್ವ&lt;/b&gt; ಸಕ್ರಿಯ ಅಪ್ಲಿಕೇಶನ್ ನಿರ್ವಹಿಸುವ &lt;b&gt;&lt;i&gt;ಮೊದಲು&lt;/i&gt;&lt;/b&gt; ಶಾರ್ಟ್ ಕಟ್ ಕಾರ್ಯಗತಗೊಳ್ಳುತ್ತದೆ.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ಪೋಸ್ಟ್&lt;/b&gt; ಸಕ್ರಿಯ ಅಪ್ಲಿಕೇಶನ್ ನಿರ್ವಹಿಸಿದ &lt;b&gt;&lt;i&gt;ನಂತರ&lt;/i&gt;&lt;/b&gt; ಶಾರ್ಟ್ ಕಟ್ ಕಾರ್ಯಗತಗೊಳ್ಳುತ್ತದೆ.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ಅತಿಕ್ರಮಣ&lt;/b&gt; ಮಂಕಿಪೇಸ್ಟ್ ಓವರ್ ರೈಡ್ ಶಾರ್ಟ್ ಕಟ್ ನ ಇನ್ ಪುಟ್ ಕೀಲಿಯನ್ನು (ಮಾರ್ಪಡಿಸದ ಕೀಲಿ) ಕೇಳಿದಾಗ ಅದು ಆ ಕೀಲಿಯನ್ನು ಅಪ್ಲಿಕೇಶನ್ ಮಟ್ಟದ ಇನ್ ಪುಟ್ ನಿಂದ &lt;i&gt;ಮರೆಮಾಡುತ್ತದೆ&lt;/i&gt; .&lt;br&gt;ಸಕ್ರಿಯ ಅಪ್ಲಿಕೇಶನ್ ಗೆ ಸಂಘರ್ಷಗಳಿಲ್ಲದೆ ಶಾರ್ಟ್ ಕಟ್ ಅನ್ನು ಪ್ರಚೋದಿಸಲಾಗಿದೆ ಎಂದು ಈ ಆಯ್ಕೆಯು ಖಾತರಿಪಡಿಸುತ್ತದೆ.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ವಿಶೇಷ ಓವರ್ ರೈಡ್&lt;/b&gt; ಇದು ಕ್ಯಾಪ್ಸ್ ಲಾಕ್ ಕೀಗಾಗಿ ವಿನ್ಯಾಸಗೊಳಿಸಲಾದ ವಿಶೇಷ ರೀತಿಯ ಓವರ್ ರೈಡ್ ಮೋಡ್ ಆಗಿದೆ. ಇದು ಅದರ ನಿಯೋಜನೆಗೆ &lt;b&gt;ಕೇವಲ ಒಂದು&lt;/b&gt; ಕೀಲಿಯನ್ನು (ಮಾರ್ಪಡಿಸದ) ಮಾತ್ರ ಅನುಮತಿಸುತ್ತದೆ.&lt;br&gt;ಸಾಮಾನ್ಯ ಓವರ್ ರೈಡ್ ಮೋಡ್ ನಲ್ಲಿ ಇತರ ಕೀಲಿಗಳ ಸಂಯೋಜನೆಯಲ್ಲಿ ಒತ್ತಿದಾಗ Caps Lock &lt;i&gt;ಆನ್&lt;/i&gt; ಆಗಬಹುದು.&lt;br&gt;ಆದ್ದರಿಂದ ಇತರ ಯಾವುದೇ ಕೀಲಿಗಳು ಡೌನ್ ಆಗಿರಲಿ, &lt;b&gt;ಹಾಟ್ ಕೀ&lt;/b&gt; ಶಾರ್ಟ್ ಕಟ್ ಒತ್ತಿದರೆ ಅದು ಅತಿಕ್ರಮಿಸಲ್ಪಡುತ್ತದೆ ಮತ್ತು ಅದು &lt;i&gt;ಅಂಟಿಕೊಳ್ಳದಂತೆ&lt;/i&gt; ತಡೆಯುತ್ತದೆ.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;ಮಂಕಿಪೇಸ್ಟ್ ಆಗಿದೆ &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;ಈ ರೀತಿಯಾಗಿ, ಮಂಕಿಪೇಸ್ಟ್ ಅನ್ನು ಪ್ರವೇಶಿಸಬಹುದು&lt;br&gt;&lt;span color="red"&gt;ಒಂದು ಕ್ಲಿಕ್ ಮಾಡದೆ&lt;/span&gt; ಅಥವಾ &lt;span color="red"&gt;ಕಣ್ಣೆತ್ತಿಯೂ ನೋಡದೆ&lt;/span&gt; #x1F440&lt;/p&gt;</value>
   </data>
 </root>

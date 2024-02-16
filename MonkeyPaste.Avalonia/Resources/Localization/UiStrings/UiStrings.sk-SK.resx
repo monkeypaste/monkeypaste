@@ -166,14 +166,8 @@ klipy.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Posúvanie - na - Otvorte</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p zarovnajte = "center"&gt; monkeyPaste je &lt;span color = "red&gt; plne integrovaný &lt;/span&gt; s drag - a - drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Zložte to sem!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p zarovnávať = "Center"&gt; Týmto spôsobom je možné pristupovať k monkeyPaste &lt;br&gt; &lt;Span Color = "Red"&gt; bez kliknutia &lt;/pan&gt; alebo dokonca &lt;Span Color = "Red"&gt; odpaľovanie oka &lt;/pan&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Potiahni ma!</value>
@@ -364,62 +358,14 @@ Aktualizácia, aby ste sa vyhli.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Gestá musia byť jedinečné a môžu obsahovať iba jeden vstupný kľúč.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Interné &lt;/b&gt; Všetky skratky sú obmedzené na aplikáciu. Toto nie je v skutočnosti zamýšľaná možnosť, ale môže umožniť prispôsobiť, aké skratky máte v úmysle urobiť globálne &lt;i&gt; jedného dňa &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Predvolené &lt;/b&gt; sú povolené všetky globálne skratky. Skratka &lt;b&gt; show/skryť hlavné okno &lt;/b&gt; používa &lt;Span color = "red"&gt; prepísanie &lt;/span&gt; smerovanie pre tlačidlo &lt;b&gt; Caps Lock &lt;/b&gt;. Toto smerovanie alebo gesto môžete kedykoľvek zmeniť. Ale &lt;span color = "green"&gt; vyskúšať &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;Hig&gt; &lt;/umew&gt;
-&lt;Body&gt;
-&lt;h1&gt; Globálne režimy skratiek &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;B&gt; Pasívne &lt;/b&gt; Skratka MonkeyPaste bude počúvať v akejkoľvek aplikácii. &lt;br&gt;
-*Toto je iba možnosť &lt;/i&gt; v systéme Linux.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Pre &lt;/b&gt; skratka sa vykoná &lt;b&gt; &lt;i&gt; pred &lt;/i&gt; &lt;/b&gt; s ňou rieši aktívna aplikácia. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; skratka sa vykoná &lt;b&gt; &lt;i&gt; po &lt;/i&gt; &lt;/b&gt; s ňou rieši aktívna aplikácia. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; prepísať &lt;/b&gt; Keď monkeyPaste počuje vstupné tlačidlo (non - modifikátor) skratky s potlačením, bude skryť &lt;/i&gt; toto tlačidlo stlačte od aplikácie - úroveň vstupu. &lt;br&gt;
-Táto možnosť zaručí, že skratka sa spustí bez konfliktov aktívnej aplikácie.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;B&gt; Exkluzívne prepísanie &lt;/b&gt; Toto je špeciálny typ režimu potlačenia určený pre kľúčový kľúč CAPS. Pre jeho priradenie umožňuje iba jeden &lt;/b&gt; kľúč (non - modifikátor). &lt;br&gt;
-V normálnom režime prepísania sa môže zámok Caps Lock uviaznuť &lt;/i&gt;, keď sa stlačí v kombinácii s inými klávesmi. &lt;br&gt;
-Takže bez ohľadu na to, aké ďalšie kľúče sú dole, ak je stlačená skratka &lt;/b&gt; &lt;/b&gt;, bude to prepísané a zabránia tomu, aby sa uviazol &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/by&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Zakázať</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Načítajte sa, keď je tento používateľský účet prihlásený, nie pre ostatných používateľov.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Používanie dostupných kontaktov (vyžaduje doplnok Fetcher) Toto pole sa použije pre všetky inštancie tejto šablóny v tomto dokumente alebo v akomkoľvek, na čo sa bude odkazovať neskôr. &lt;/p&gt; &lt;p&gt; Tu sa tu použije e -mailové pole kontaktu, ktorý vyberiete, pre všetky inštancie v tomto dokumente. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>rr = krátky rok &lt;br/&gt; rrrr = dlhý rok &lt;br/&gt; m = mesiac (1-12) &lt;br/&gt; mm = mesiac (01-12) &lt;br/&gt; mmm = mesiac skratka (január, február .. . December) &lt;br/&gt; mmmm = dlhý mesiac (január, február ... december) &lt;br/&gt; d = deň (1 - 31) &lt;br/&gt; dd = deň (01 - 31) &lt;br/&gt; ddd = Deň týždňa slovami (pondelok, utorok ... nedeľa) &lt;br/&gt; e = krátky deň v týždni slovami (Mon, Ut ... slnko) &lt;br/&gt; d - Ordinal Day (1., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; h = hodina v AM/PM (0-12) &lt;br/&gt; HH = hodina v AM/PM (00-12) &lt;BR/ &gt; H = hodina v dennom (0-23) &lt;br/&gt; hh = hodina v dennom (00-23) &lt;br/&gt; mm = minúta &lt;br/&gt; ss = sekunda &lt;br/&gt; sss = miliseConds &lt;br/&gt; A = AM/PM Marker &lt;br/&gt; p = a.m./p.m. značka</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Aktuálny dátum a/alebo čas sa nahradia šablónou datetime, keď sú vložené.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Všetky výskyty tejto šablóny použijú poskytnutý text. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Všetky výskyty tejto šablóny použijú poskytnutý text. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Dokončiť prítomnosť</value>
@@ -469,9 +415,6 @@ Takže bez ohľadu na to, aké ďalšie kľúče sú dole, ak je stlačená skra
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Posledná aktívna aplikácia neznáma. Prepnite na zamýšľanú aplikáciu na opicu Paste.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Paste to: &lt;em&gt; &lt;i class = "paste-tooltip-Suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimalizovať</value>
@@ -547,9 +490,6 @@ Pridajte a/alebo vyberte aplikáciu pomocou jedinečnej skratky kópie (napríkl
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Žiadny</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Na zadanú aplikáciu sa použijú iba vybrané predvoľby. Po nešpecifikovaní sa použijú predvolené predvoľby, ktoré sa nachádzajú v bočnom paneli pre schránku &lt;em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Mnoho funkcií MonkeyPaste používa automatizáciu klávesnice na interakciu s inými aplikáciami.
 
@@ -562,9 +502,6 @@ Ak chcete zabezpečiť správnu interoperabilitu, zaznamenajte tu tieto skratky 
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Čitateľ</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Všetky monitorovanie schránky z odmietnutých aplikácií bude &lt;b&gt; ignorované &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Spisovatelia</value>
@@ -1331,11 +1268,6 @@ To nie je možné vrátiť späť!
     <value>Ste si istí, že chcete resetovať všetky upozornenia?
 
 *To nie je možné vrátiť späť!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste nastaví schránku (prepíše) pri vkladaní do externého programu. To sa pokúsi &lt;/b&gt; obnoviť stav schránky po externej paste.
-
-Celkové obnovenie nie je možné zaručiť a môže znížiť výkon alebo dokonca zlyhanie opíc v závislosti od zdroja údajov.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Resetovať schránku po vložení opice</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Dozviete sa viac o plánoch</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Prilepiť do: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Pri použití dostupných kontaktov (vyžaduje sa doplnok na získanie kreditu) sa toto pole použije pre všetky inštancie tejto šablóny v tomto dokumente alebo v akomkoľvek prípade, na ktorý sa bude neskôr odkazovať.&lt;/p&gt;&lt;p&gt; Napríklad, ak tu vyberiete e-mailovú adresu, e-mailové pole vybraného kontaktu sa použije pre všetky inštancie v tomto dokumente.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = krátky rok&lt;br/&gt;rrrr = dlhý rok&lt;br/&gt;M = mesiac (1-12)&lt;br/&gt;MM = mesiac (01-12)&lt;br/&gt;MMM = skratka mesiaca (január, február ... decembra)&lt;br/&gt;MMMM = dlhý mesiac (január, február ... decembra)&lt;br/&gt;d = deň (1 - 31)&lt;br/&gt;dd = deň (01 - 31)&lt;br/&gt;ddd = deň v týždni slovami (pondelok, utorok ... Nedeľa)&lt;br/&gt;E = krátky deň v týždni slovami (Po, Ut ... Slnko)&lt;br/&gt;D - Radový deň (1., 2., 3., 21., 22., 23., 31., 4...)&lt;br/&gt;h = hodina v dopoludnia/popoludní (0-12)&lt;br/&gt;hh = hodina v dopoludnia/popoludní (00-12)&lt;br/&gt;H = hodina za deň (0-23)&lt;br/&gt;HH = hodina za deň (00-23)&lt;br/&gt;mm = minúta&lt;br/&gt;ss = druhá&lt;br/&gt;SSS = milisekundy&lt;br/&gt;a = značka AM/PM&lt;br/&gt;p = značka a.m./p.m.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Všetky výskyty tejto šablóny budú používať poskytnutý text.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Všetky výskyty tejto šablóny budú používať poskytnutý text.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste nastaví schránku (prepíše) pri vkladaní do externého programu. Toto &lt;b&gt;sa pokúsi&lt;/b&gt; obnoviť stav schránky po externom prilepení. 
+
+Úplnú obnovu nie je možné zaručiť a môže znížiť výkon alebo dokonca zlyhať MonkeyPaste v závislosti od zdroja údajov.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Pre zadanú aplikáciu sa použijú iba vybrané predvoľby. Ak nie je zadaná, použijú sa predvolené predvoľby, ktoré sa nachádzajú v &lt;em&gt;postrannom paneli Schránky&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Všetko monitorovanie schránky z odmietnutých žiadostí bude &lt;b&gt;ignorované&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Vnútorný&lt;/b&gt;Všetky skratky sú obmedzené na aplikáciu v rámci aplikácie. Toto v skutočnosti nie je zamýšľaná možnosť, ale môže vám umožniť prispôsobiť, aké skratky chcete&lt;i&gt;jedného dňa&lt;/i&gt; urobiť globálnymi.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Predvolený&lt;/b&gt; Všetky globálne skratky sú povolené. Skratka&lt;b&gt;Zobraziť alebo skryť hlavné okno&lt;/b&gt;používa&lt;span color="red"&gt;prepísanie&lt;/span&gt;smerovania klávesu&lt;b&gt;Caps Lock&lt;/b&gt; . Toto smerovanie alebo gesto môžete kedykoľvek zmeniť. Ale&lt;span color="green"&gt;skúste to&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Režimy globálnych skratiek&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pasívny&lt;/b&gt; Skratka MonkeyPaste bude počúvať v každej aplikácii.&lt;br&gt;*Toto je zatiaľ &lt;i&gt;jediná&lt;/i&gt; možnosť v systéme Linux.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Skratka sa spustí &lt;b&gt;&lt;i&gt;skôr, ako&lt;/i&gt;&lt;/b&gt; ju spracuje aktívna aplikácia.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Stĺp&lt;/b&gt; Skratka sa spustí &lt;b&gt;&lt;i&gt;po&lt;/i&gt;&lt;/b&gt; spracovaní aktívnou aplikáciou.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Prepísať&lt;/b&gt; Keď MonkeyPaste počuje vstupný kľúč (nemodifikačný kľúč) prepísanej skratky, &lt;i&gt;skryje&lt;/i&gt; toto stlačenie klávesu pred vstupom aplikácie - úrovne.&lt;br&gt;Táto možnosť zaručí, že skratka sa spustí bez konfliktov s aktívnou aplikáciou.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Exkluzívna prepísanie&lt;/b&gt; Toto je špeciálny typ režimu prepísania určený pre kláves Caps Lock. Umožňuje iba &lt;b&gt;jeden&lt;/b&gt; kľúč (nemodifikátor) na jeho priradenie.&lt;br&gt;V normálnom režime prepísania sa kláves Caps Lock môže po stlačení v kombinácii s inými klávesmi &lt;i&gt;zaseknúť&lt;/i&gt; .&lt;br&gt;Takže bez ohľadu na to, aké ďalšie klávesy sú vypnuté, ak stlačíte &lt;b&gt;klávesovú&lt;/b&gt; skratku, bude prepísaná a zabráni jej &lt;i&gt;zaseknutiu&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste je &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Týmto spôsobom je MonkeyPaste prístupný&lt;br&gt;&lt;span color="red"&gt;bez kliknutia&lt;/span&gt; alebo dokonca &lt;span color="red"&gt;odpálenia oka&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

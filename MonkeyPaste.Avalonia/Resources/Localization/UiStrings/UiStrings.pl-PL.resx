@@ -166,14 +166,8 @@ odpowiednio klipy.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Przewiń - do - otwórz</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "Center"&gt; Monkeypaste to &lt;pan color = "czerwony&gt; w pełni zintegrowane &lt;/span&gt; z przeciągnięciem - i - upukiem &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Upuść to tutaj!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "Center"&gt; w ten sposób można uzyskać dostęp do małpy &lt;br&gt; &lt;pan color = "czerwony"&gt; bez kliknięcia &lt;/span&gt; lub nawet &lt;span color = "czerwony"&gt; mrugnięcie oka &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Pociągnij mnie!</value>
@@ -364,62 +358,14 @@ Uaktualnij, aby uniknąć.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Gesty muszą być unikalne i mogą zawierać tylko jeden klucz wejściowy.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Wewnętrzne &lt;/b&gt; Wszystkie skróty są ograniczone do aplikacji. To nie jest tak naprawdę zamierzona opcja, ale może pozwolić na dostosowanie skrótów, które zamierzasz uczynić globalnym &lt;i&gt; &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Domyślnie &lt;/b&gt; Włączono wszystkie globalne skróty. Krótkie okno show/hide główne &lt;/b&gt; używa &lt;pan color = "czerwony"&gt; Zastąpienie &lt;/pan&gt; routing dla klawisza klapów &lt;b&gt; caps &lt;/b&gt;. Możesz zmienić ten routing lub gest w dowolnym momencie. Ale &lt;span color = "zielony"&gt; daj mu próbę &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;Html&gt;
-&lt;Head&gt; &lt;/ead&gt;
-&lt;Body&gt;
-&lt;h1&gt; Globalne tryby skrótów &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Pasywny &lt;/b&gt; skrót od małpy będzie słuchać w dowolnej aplikacji. &lt;br&gt;
-*To jest na razie opcja &lt;i&gt; tylko &lt;/i&gt; w systemie Linux.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Pre &lt;/b&gt; skrót zostanie wykonany &lt;b&gt; &lt;i&gt; przed &lt;/i&gt; &lt;/b&gt; jest obsługiwany przez aktywną aplikację. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; skrót zostanie wykonany &lt;b&gt; &lt;i&gt; po &lt;/i&gt; &lt;/b&gt; jest obsługiwany przez aktywną aplikację. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Zastąpienie &lt;/b&gt; Gdy Monkeypaste słyszy klawisz wejściowy (klawisz nie modyfikatora) skrótu Zastąpienia Będzie &lt;i&gt; ukryje ten klawisz naciśnij z aplikacji - Wejście poziomu. &lt;br&gt;
-Ta opcja zagwarantuje, że skrót zostanie uruchomiony bez konfliktów aktywnej aplikacji.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Ekskluzywne zastąpienie &lt;/b&gt; Jest to specjalny rodzaj trybu zastępowania zaprojektowanego dla klucza blokady czapek. Umożliwia tylko jeden klawisz (non -modyfikator) dla jego przypisania. &lt;br&gt;
-W normalnym blokadzie czapek w trybie zastąpienia może zostać utknięte na &lt;/i&gt; po naciśnięciu w połączeniu z innymi klawiszami. &lt;br&gt;
-Więc bez względu na to, jakie inne klucze są w dół, jeśli skrót skrót &lt;/b&gt; zostanie naciśnięty, zostanie przesunięty i uniemożliwił mu utknięcie w &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Wyłączyć</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Załaduj, gdy to konto użytkownika jest zalogowane, a nie dla innych użytkowników.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Korzystanie z dostępnych kontaktów (wymaga wtyczki fetcher) To pole zostanie użyte dla wszystkich instancji tego szablonu w tym dokumencie lub w dowolnym odwołaniu do później. &lt;/p&gt; &lt;p&gt; Więc na przykład, jeśli wybierz adres e -mail Tutaj, wówczas pole e -mail wybranego kontaktu zostanie użyte dla wszystkich instancji w tym dokumencie. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = krótki rok &lt;br/&gt; trys = długi rok &lt;br/&gt; m = miesiąc (1-12) &lt;br/&gt; mm = miesiąc (01-12) &lt;br/&gt; mmm = skrót miesiąca (Jan, luty .. . Grudzień) &lt;br/&gt; mmmm = długi miesiąc (styczeń, luty ... grudzień) &lt;br/&gt; d = dzień (1 - 31) &lt;br/&gt; dd = dzień (01 - 31) &lt;br/&gt; ddd = Dzień tygodnia słowami (poniedziałek, wtorek ... niedziela) &lt;br/&gt; e = krótki dzień tygodnia słowami (pon, wt ... Słońce) &lt;br/&gt; d - Dzień Ordinal (1, 2, 2, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; h = godzina w AM/PM (0-12) &lt;br/&gt; hh = godzina w AM/PM (00-12) &lt;Br// &gt; H = godzina w dniu (0-23) &lt;br/&gt; hh = godzina w dniu (00-23) &lt;br/&gt; mm = minuta &lt;br/&gt; ss = drugi &lt;br/&gt; ss = milisekunds &lt;br/&gt; A = Marker AM/PM &lt;br/&gt; p = A.M./P.M. znacznik</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Obecna data i/lub godzina zostaną zastąpione szablonami DATETIME po wklejeniu.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Wszystkie zdarzenia tego szablonu będą używać dostarczonego tekstu. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Wszystkie zdarzenia tego szablonu będą używać dostarczonego tekstu. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Zakończyć dołączenie</value>
@@ -469,9 +415,6 @@ Więc bez względu na to, jakie inne klucze są w dół, jeśli skrót skrót &l
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Ostatnia aktywna aplikacja nieznana. Przełącz do zamierzonej aplikacji na pastę małp.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Wklej do: &lt;em&gt; &lt;i class = "wklej-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Zminimalizować</value>
@@ -547,9 +490,6 @@ Dodaj i/lub wybierz aplikację z unikalnym skrótem kopiowania (na przykład kon
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Nic</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Do określonej aplikacji zostaną użyte tylko wybrane ustawienia wstępne. Po nieokreślonym zostanie domyślne ustawienia wstępne znalezione na pasku bocznym &lt;em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Wiele funkcji Monkeypaste używa automatyzacji klawiatury do interakcji z innymi aplikacjami.
 
@@ -562,9 +502,6 @@ Aby zapewnić odpowiednią interoperacyjność, zapisz te skróty dla tej aplika
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Czytelnicy</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Wszystkie monitorowanie schowka z odrzuconych aplikacji będzie ignorowane &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Pisarze</value>
@@ -1331,11 +1268,6 @@ Tego nie da się cofnąć!
     <value>Czy na pewno chcesz zresetować wszystkie powiadomienia?
 
 *Tego nie da się cofnąć!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Paste Monkey ustawia schowek (zastępowanie) podczas wklejania do programu zewnętrznego. Spowoduje to, że &lt;/b&gt; przywróci stan schowka po zewnętrznej pascie.
-
-Całkowite przywrócenie nie można zagwarantować i może zmniejszyć wydajność, a nawet awarię małpy w zależności od źródła danych.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Zresetuj schowek po wklejeniu małpy</value>
@@ -2706,5 +2638,66 @@ Feedlaffack@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Dowiedz się więcej o planach</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Wklej do: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Korzystając z dostępnych kontaktów (wymaga wtyczki fetchera), to pole będzie używane we wszystkich wystąpieniach tego szablonu w tym dokumencie lub w dowolnych, do których będzie się odwoływać później.&lt;/p&gt;&lt;p&gt; Na przykład, jeśli w tym miejscu wybierzesz adres e-mail, pole adresu e-mail wybranego kontaktu będzie używane we wszystkich wystąpieniach w tym dokumencie.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = krótki rok&lt;br/&gt;rrrr = długi rok&lt;br/&gt;M = miesiąc (1-12)&lt;br/&gt;MM = miesiąc (01-12)&lt;br/&gt;MMM = skrót miesiąca (Jan, Feb ... Grudzień)&lt;br/&gt;MMMM = długi miesiąc (styczeń, luty ... grudzień)&lt;br/&gt;d = dzień (1 - 31)&lt;br/&gt;dd = dzień (01 - 31)&lt;br/&gt;ddd = słownie dzień tygodnia (poniedziałek, wtorek ... Niedziela)&lt;br/&gt;E = słownie krótki dzień tygodnia (pon., wt. ... Słońce)&lt;br/&gt;D - dzień porządkowy (1, 2, 3, 21, 22, 23, 31, 4...)&lt;br/&gt;h = godzina w godzinach porannych/po południu (0-12)&lt;br/&gt;hh = godzina w godzinach porannych/wieczornych (00-12)&lt;br/&gt;H = godzina w dniu (0-23)&lt;br/&gt;HH = godzina w dniu (00-23)&lt;br/&gt;mm = minuta&lt;br/&gt;ss = sekunda&lt;br/&gt;SSS = milisekundy&lt;br/&gt;a = znacznik AM/PM&lt;br/&gt;p = znacznik a.m./p.m.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Wszystkie wystąpienia tego szablonu będą używać dostarczonego tekstu.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Wszystkie wystąpienia tego szablonu będą używać dostarczonego tekstu.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste ustawia schowek (nadpisuje) podczas wklejania do zewnętrznego programu. Spowoduje to &lt;b&gt;próbę&lt;/b&gt; przywrócenia stanu schowka po zewnętrznym wklejeniu. 
+
+Całkowite przywrócenie nie może być zagwarantowane i może zmniejszyć wydajność, a nawet spowodować awarię MonkeyPaste w zależności od źródła danych.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Tylko wybrane ustawienia predefiniowane będą używane dla określonej aplikacji. Jeśli nie zostanie określony, zostaną użyte domyślne ustawienia predefiniowane znajdujące się na &lt;em&gt;pasku bocznym schowka&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Całe monitorowanie schowka z odrzuconych aplikacji zostanie &lt;b&gt;zignorowane&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Wewnętrzny&lt;/b&gt;Wszystkie skróty są ograniczone do aplikacji. Nie jest to tak naprawdę zamierzona opcja, ale może pozwolić na dostosowanie skrótów, które&lt;i&gt;zamierzasz kiedyś&lt;/i&gt; uczynić globalnymi.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Domyślny&lt;/b&gt; Wszystkie skróty globalne są włączone. Skrót&lt;b&gt;Pokaż/Ukryj okno główne&lt;/b&gt;używa routingu&lt;span color="red"&gt;zastępowania&lt;/span&gt;&lt;b&gt;Caps Lock&lt;/b&gt;. W każdej chwili możesz zmienić tę trasę lub gest. Ale&lt;span color="green"&gt;spróbuj&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Globalne tryby skrótów&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Bierny&lt;/b&gt; Skrót MonkeyPaste będzie nasłuchiwał w dowolnej aplikacji.&lt;br&gt;*Na razie jest to &lt;i&gt;jedyna&lt;/i&gt; opcja w systemie Linux.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Przed&lt;/b&gt; Skrót zostanie wykonany, &lt;b&gt;&lt;i&gt;zanim&lt;/i&gt;&lt;/b&gt; zostanie obsłużony przez aktywną aplikację.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Skrót zostanie wykonany &lt;b&gt;&lt;i&gt;po&lt;/i&gt;&lt;/b&gt; obsłużeniu go przez aktywną aplikację.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Zastąpić&lt;/b&gt; Gdy MonkeyPaste usłyszy wejściowy (bez modyfikatora) skrótu zastępczego, &lt;i&gt;ukryje&lt;/i&gt; naciśnięcie tego przed wejściem na poziomie aplikacji.&lt;br&gt;Ta opcja zagwarantuje, że skrót zostanie uruchomiony bez konfliktów z aktywną aplikacją.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Ekskluzywne nadpisanie&lt;/b&gt; Jest to specjalny typ trybu obejścia przeznaczony dla Caps Lock. Pozwala tylko &lt;b&gt;na jeden&lt;/b&gt; klucz (bez modyfikatora) do jego przypisania.&lt;br&gt;W normalnym trybie obejścia Caps Lock może &lt;i&gt;utknąć&lt;/i&gt; po naciśnięciu w połączeniu z innymi.&lt;br&gt;Więc bez względu na to, jakie inne są wciśnięte, jeśli skrót &lt;b&gt;klawiszowy&lt;/b&gt; zostanie naciśnięty, zostanie nadpisany i zapobiegnie &lt;i&gt;zablokowaniu&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste jest &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;W ten sposób można uzyskać dostęp do MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;bez kliknięcia,&lt;/span&gt; a nawet &lt;span color="red"&gt;mrugnięcia okiem&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

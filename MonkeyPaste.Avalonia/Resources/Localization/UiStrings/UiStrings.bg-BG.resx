@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Превъртане - до - отворено</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P Align = "Center"&gt; Monkeypaste е &lt;span color = "червен&gt; напълно интегриран &lt;/span&gt; с плъзгане - и - Drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Пуснете го тук!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P Align = "Center"&gt; По този начин Monkeypaste може да бъде достъпна &lt;br&gt; &lt;span color = "червено"&gt; без щракване &lt;/span&gt; или дори &lt;span color = "червено"&gt; ватиране на око &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Завлечи ме!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Жестовете трябва да са уникални и могат да съдържат само един ключ за въвеждане.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Вътрешни &lt;/b&gt; Всички преки пътища са ограничени до приложението. Това всъщност не е предназначение, но може да позволи да персонализирате какви преки пътища възнамерявате да направите глобален &lt;i&gt; някой ден &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; По подразбиране &lt;/b&gt; Всички глобални преки пътища са активирани. &lt;b&gt; Покажи/скрий основния прозорец &lt;/b&gt; пряк път използва &lt;span color = "red"&gt; отмяна &lt;/span&gt; маршрутизиране за ключа за заключване &lt;b&gt; капачки &lt;/b&gt;. Можете да промените този маршрут или жест по всяко време. Но &lt;span color = "зелен"&gt; опитайте &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;Html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;sody&gt;
-&lt;h1&gt; Глобални режими на пряк път &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Пасивен &lt;/b&gt; Приятен път ще слуша във всяко приложение. &lt;br&gt;
-*Това е опцията само &lt;i&gt; &lt;/i&gt; в Linux засега.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; пряк път ще изпълни &lt;b&gt; &lt;i&gt; преди &lt;/b&gt; Той се обработва от активното приложение. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt; пряк път ще изпълни &lt;b&gt; &lt;i&gt; след &lt;/i&gt; &lt;/b&gt; Той се обработва от активното приложение. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Отменете &lt;/b&gt; Когато Monkeypaste чуе ключа за въвеждане (не -модификатор) на преки за отмяна, той ще скрие &lt;/i&gt; този клавиш натиснете от приложението - вход на ниво. &lt;br&gt;
-Тази опция ще гарантира, че пряк път се задейства без конфликти към активното приложение.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Exclusive Override &lt;/b&gt; Това е специален тип режим на отмяна, предназначен за ключа за заключване на капачките. Той позволява само &lt;b&gt; един &lt;/b&gt; ключ (не -модификатор) за присвояването му. &lt;br&gt;
-В нормалния режим на отмяна на капачките заключването може да стане &lt;i&gt; stuck на &lt;/i&gt;, когато се натисне в комбинация с други клавиши. &lt;br&gt;
-Така че без значение какви други ключове са надолу, ако се натисне &lt;b&gt; hotkey &lt;/b&gt; пряк път, той ще бъде отменен и ще попречи да стане &lt;i&gt; stuck на &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Деактивиране</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Заредете, когато този потребителски акаунт е влязъл, а не за други потребители.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Използване на налични контакти (изисква приставка за извличане) Това поле ще бъде използвано за всички случаи на този шаблон в този документ или във всеки то ще бъде посочено по -късно. &lt;/p&gt; &lt;p&gt; Така например, ако изберете имейл адрес Тогава след това полето за имейл на избрания контакт ще бъде използвано за всички случаи в този документ. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = кратка година &lt;br/&gt; yyyy = дълга година &lt;br/&gt; m = месец (1-12) &lt;br/&gt; mm = месец (01-12) &lt;br/&gt; mmm = месец съкращение (ян, февруари .. . Dec) &lt;br/&gt; mmmm = дълъг месец (януари, февруари ... декември) &lt;br/&gt; d = ден (1 - 31) &lt;br/&gt; dd = ден (01 - 31) &lt;br/&gt; ddd = Ден на седмицата с думи (понеделник, вторник ... неделя) &lt;br/&gt; e = кратък ден от седмицата с думи (пн, вторник ... слънце) &lt;br/&gt; d - порядъчен ден (1 -ви, 2 -ри, 3-ти, 21-ви, 22-ри, 23-и, 31-ви, 4-ти ...) &lt;br/&gt; h = час в AM/PM (0-12) &lt;br/&gt; HH = час в AM/PM (00-12) &lt;BR/ &gt; H = час в ден (0-23) &lt;br/&gt; hh = час в ден (00-23) &lt;br/&gt; mm = минута &lt;br/&gt; ss = второ &lt;br/&gt; sss = milliseconds &lt;br/&gt; a = am/pm маркер &lt;br/&gt; p = a.m./p.m. Маркер</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Текущата дата и/или часа ще бъдат заменени с шаблони за дата, когато са поставени.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Всички появата на този шаблон ще използват предоставения текст. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Всички появата на този шаблон ще използват предоставения текст. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Завършете добавянето</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Последно активно приложение неизвестно. Преминете към предвиденото приложение към маймунската паста.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Поставете до: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Минимизиране</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Нито един</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>За посоченото приложение ще бъдат използвани само избраните предварително настройки. Когато са неуточнени, ще бъдат използвани предварително зададени настройки по подразбиране в страничната лента &lt;em&gt; Clipboard &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Много функции на Monkeypaste използват автоматизация на клавиатурата, за да взаимодействат с други приложения.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Читатели</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Всички мониторинг на клипборда от отхвърлени приложения ще бъдат &lt;b&gt; игнорирани &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Писатели</value>
@@ -1331,11 +1268,6 @@ Monkeypaste на устройството
     <value>Сигурни ли сте, че искате да нулирате всички известия?
 
 *Това не може да бъде отменено!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste задава клипборда (отменя), когато се поставя на външна програма. Това ще &lt;b&gt; опит &lt;/b&gt; да възстанови състоянието на клипборда след външна паста.
-
-Общото възстановяване не може да бъде гарантирано и може да намали производителността или дори да срине маймуната в зависимост от източника на данните.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Нулирайте клипборда след маймунско поставяне</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Научете повече за плановете</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Постави в: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Използване на наличните контакти (изисква fetcher плъгин) това поле ще се използва за всички екземпляри на този шаблон в този документ или във всеки от тях ще бъде посочен по-късно.&lt;/p&gt;&lt;p&gt; Така например, ако изберете имейл адрес тук, тогава имейл полето на контакта, който сте избрали, ще се използва за всички екземпляри в този документ.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = кратка година&lt;br/&gt;гггг = дълга година&lt;br/&gt;M = месец (1-12)&lt;br/&gt;MM = месец (01-12)&lt;br/&gt;MMM = месечно съкращение (Jan, Feb ... Дек)&lt;br/&gt;MMMM = дълъг месец (януари, февруари ... декември)&lt;br/&gt;d = ден (1 - 31)&lt;br/&gt;dd = ден (01 - 31)&lt;br/&gt;ddd = ден от седмицата в думи (понеделник, вторник ... неделя)&lt;br/&gt;E = кратък ден от седмицата в думи (Mon, Tue ... Слънце)&lt;br/&gt;D - Реден ден (1-ви, 2-ри, 3-ти, 21-ви, 22-ри, 23-ти, 31-ви, 4-ти...)&lt;br/&gt;h = час в am/pm (0-12)&lt;br/&gt;hh = час в am/pm (00-12)&lt;br/&gt;H = час в ден (0-23)&lt;br/&gt;HH = час в деня (00-23)&lt;br/&gt;mm = минута&lt;br/&gt;ss = секунда&lt;br/&gt;SSS = милисекунди&lt;br/&gt;a = AM/PM маркер&lt;br/&gt;p = маркер a.m./p.m.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Всички събития на този шаблон ще използват предоставения текст.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Всички събития на този шаблон ще използват предоставения текст.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste задава клипборда (замества) при поставяне във външна програма. Това ще &lt;b&gt;се опита&lt;/b&gt; да възстанови състоянието на клипборда след външно поставяне. 
+
+Пълното възстановяване не може да бъде гарантирано и може да намали производителността или дори да срине MonkeyPaste в зависимост от източника на данните.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Само избраните предварителни настройки ще се използват за указаното приложение. Когато не е посочено, ще се използват предварителните настройки по подразбиране, намерени в &lt;em&gt;страничната лента на клипборда&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Цялото наблюдение на клипборда от отхвърлени приложения ще бъде &lt;b&gt;игнорирано&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Вътрешния&lt;/b&gt;Всички преки пътища са ограничени до в рамките на приложението. Това всъщност не е предвидена опция, но може да позволи да персонализирате какви преки пътища възнамерявате да направите глобални&lt;i&gt;някой ден&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;По подразбиране&lt;/b&gt; Всички глобални преки пътища са разрешени. Прекият път&lt;b&gt;"Покажи/скрий главния прозорец&lt;/b&gt;" използва&lt;span color="red"&gt;заместващо&lt;/span&gt;маршрутизиране за клавиша&lt;b&gt;Caps Lock&lt;/b&gt; . Можете да промените този маршрут или жест по всяко време. Но&lt;span color="green"&gt;опитай&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Глобални режими на пряк път&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Пасивен&lt;/b&gt; Пряк път MonkeyPaste ще слуша за във всяко приложение.&lt;br&gt;* Това е &lt;i&gt;единствената&lt;/i&gt; опция за Linux засега.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Предварително&lt;/b&gt; Прекият път ще се изпълни, &lt;b&gt;&lt;i&gt;преди&lt;/i&gt;&lt;/b&gt; да бъде обработен от активното приложение.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Стълб&lt;/b&gt; Прекият път ще се изпълни, &lt;b&gt;&lt;i&gt;след като&lt;/i&gt;&lt;/b&gt; бъде обработен от активното приложение.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Замени&lt;/b&gt; Когато MonkeyPaste чуе входния клавиш (не - модифициращ клавиш) на прекия път за заместване, той ще &lt;i&gt;скрие&lt;/i&gt; натискането на клавиша от входа на ниво приложение.&lt;br&gt;Тази опция ще гарантира, че прекият път се задейства без конфликти с активното приложение.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Ексклузивно заместване&lt;/b&gt; Това е специален тип режим на заместване, предназначен за клавиша Caps Lock. Той позволява само &lt;b&gt;един&lt;/b&gt; ключ (не - модификатор) за неговото присвояване.&lt;br&gt;В нормален режим на заместване Caps Lock може да се &lt;i&gt;залепи&lt;/i&gt; при натискане в комбинация с други клавиши.&lt;br&gt;Така че, без значение какви други клавиши са надолу, ако се натисне &lt;b&gt;клавишна&lt;/b&gt; комбинация, тя ще бъде преодоляна и ще предотврати &lt;i&gt;залепването й&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste е &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;По този начин MonkeyPaste може да бъде достъпен&lt;br&gt;&lt;span color="red"&gt;без щракване&lt;/span&gt; или дори &lt;span color="red"&gt;удряне на око&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>التمرير - إلى - مفتوح</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; monkeypaste هو &lt;span color = "red&gt; متكامل تمامًا &lt;/span&gt; مع السحب - و - إسقاط &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>أسقطه هنا!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; بهذه الطريقة ، يمكن الوصول إلى monkeypaste &lt;br&gt; &lt;span color = "red"&gt; بدون نقرة &lt;/span&gt; أو حتى &lt;span color = "red" &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>جرني!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>يجب أن تكون الإيماءات فريدة من نوعها وقد تحتوي فقط على مفتاح إدخال واحد.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; داخلي &lt;/b&gt; تقتصر جميع الاختصارات على التطبيق. هذا ليس خيارًا مقصودًا حقًا ولكنه يمكن أن يسمح بتخصيص الاختصارات التي تنوي جعلها عالمية &lt;i&gt; يومًا ما &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; الافتراضي &lt;/b&gt; يتم تمكين جميع الاختصارات العالمية. يستخدم اختصار &lt;b&gt; show/hide main window &lt;/b&gt; &lt;span color = "red"&gt; تجاوز &lt;/span&gt; التوجيه لمفتاح &lt;b&gt; caps lock &lt;/b&gt;. يمكنك تغيير هذا التوجيه أو الإيماءة في أي وقت. لكن &lt;span color = "green"&gt; جربه &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt; أوضاع الاختصار العالمية &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; السلبي &lt;/b&gt; سيستمع Monkeypaste المختصرة في أي تطبيق. &lt;br&gt;
-*هذا هو خيار &lt;i&gt; فقط &lt;/i&gt; على Linux في الوقت الحالي.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; الاختصار pre &lt;/b&gt; سيتم تنفيذ &lt;b&gt; &lt;i&gt; قبل &lt;/i&gt; &lt;/b&gt; يتم التعامل معه بواسطة التطبيق النشط. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt; سيتم تنفيذ اختصار &lt;b&gt; &lt;i&gt; بعد &lt;/i&gt; &lt;/b&gt; يتم التعامل معه بواسطة التطبيق النشط. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; override &lt;/b&gt; عندما يسمع Monkeypaste مفتاح الإدخال (مفتاح المعدل غير المعدل) لاختصار التجاوز ، فإنه سيخفي &lt;/i&gt; هذا المفتاح يضغط من Application - مستوى الإدخال. &lt;br&gt;
-سيضمن هذا الخيار أن يتم تشغيل الاختصار دون تعارض مع التطبيق النشط.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Override الحصري &lt;/b&gt; هذا نوع خاص من وضع التجاوز المصمم لمفتاح قفل Caps. يسمح فقط &lt;b&gt; مفتاح واحد &lt;/b&gt; (غير مُعدِّل) لمهمته. &lt;br&gt;
-في وضع Caps Caps Mode العادي ، يمكن أن يصبح قفل &lt;i&gt; عالقًا على &lt;/i&gt; عند الضغط عليه مع مفاتيح أخرى. &lt;br&gt;
-لذلك بغض النظر عن مفاتيح أخرى ، إذا تم الضغط على مختصرة &lt;b&gt; hotkey &lt;/b&gt; ، فسيتم تجاوزه ومنعه من أن يصبح &lt;i&gt; عالقًا على &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>إبطال</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>قم بتحميل عند تسجيل الدخول إلى حساب المستخدم ، وليس للمستخدمين الآخرين.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; استخدام جهات الاتصال المتاحة (يتطلب مكونًا إضافيًا لـ Fotcher) سيتم استخدام هذا الحقل لجميع مثيلات هذا القالب عبر هذا المستند أو في أي سيتم الرجوع إليه لاحقًا. &lt;/p&gt; &lt;p&gt; لذلك على سبيل المثال إذا حدد عنوان البريد الإلكتروني هنا سيتم استخدام حقل البريد الإلكتروني لجهة الاتصال التي تحددها لجميع الحالات في هذا المستند. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = سنة قصيرة &lt;br/&gt; yyyy = long year &lt;br/&gt; m = month (1-12) &lt;br/&gt; mm = month (01-12) &lt;br/&gt; mmm = شهر الاختصار (يناير ، فبراير .. . يوم الأسبوع بالكلمات (الاثنين ، الثلاثاء ... الأحد) &lt;br/&gt; e = يوم قصير من الأسبوع بالكلمات (الاثنين ، الثلاثاء ... الشمس) &lt;br/&gt; د - يوم ترتيبي (الأول ، الثاني ، 3rd ، 21 ، 22 ، 23 ، 31 ، 4 ...) &lt;br/&gt; H = ساعة في AM/PM (0-12) &lt;br/&gt; hh = ساعة في AM/PM (00-12) &lt;br/ &gt; h = ساعة في اليوم (0-23) &lt;br/&gt; hh = ساعة في اليوم (00-23) &lt;br/&gt; mm = minate &lt;br/&gt; ss = second &lt;br/&gt; sss = milliseconds &lt;br/&gt; a = am/pm علامة &lt;br/&gt; p = amm/p.m. علامة</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>سيتم استبدال التاريخ و/أو الوقت الحالي لقوالب DateTime عند لصقها.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; ستستخدم جميع حالات هذا القالب النص المقدم. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; ستستخدم جميع حالات هذا القالب النص المقدم. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>الانتهاء من الإلحاق</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>آخر تطبيق نشط غير معروف. التبديل إلى التطبيق المقصود إلى معجون القرد.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>لصق إلى: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>تقليل</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>لا أحد</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>سيتم استخدام الإعدادات المسبقة المحددة فقط للتطبيق المحدد. عندما يكون غير محدد ، سيتم استخدام الإعدادات المسبقة الافتراضية الموجودة في الشريط الجانبي &lt;em&gt; الحافظة &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>تستخدم العديد من ميزات Monkeypaste أتمتة لوحة المفاتيح للتفاعل مع التطبيقات الأخرى.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>القراء</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>سيتم تجاهل جميع مراقبة الحافظة من التطبيقات المرفوضة &lt;b&gt; &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>الكتاب</value>
@@ -1331,11 +1268,6 @@ monkeypaste على الجهاز
     <value>هل أنت متأكد من أنك تريد إعادة تعيين جميع الإخطارات؟
 
 *هذا لا يمكن التراجع عنها!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>يقوم Monkey Paste بتعيين الحافظة (تجاوز) عند لصق برنامج خارجي. هذا سوف &lt;b&gt; محاولة &lt;/b&gt; لاستعادة حالة الحافظة بعد عجينة خارجية.
-
-لا يمكن ضمان ترميم إجمالي وقد يقلل من الأداء أو حتى تعطل Monkeypaste اعتمادًا على مصدر البيانات.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>إعادة تعيين الحافظة بعد لصق القرد</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>تعرف على المزيد حول الخطط</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>لصق إلى: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;باستخدام جهات الاتصال المتاحة (يتطلب مكونا إضافيا للجلب) ، سيتم استخدام هذا الحقل لجميع مثيلات هذا القالب عبر هذا المستند أو في أي منها سيتم الرجوع إليه لاحقا.&lt;/p&gt;&lt;p&gt; على سبيل المثال ، إذا حدد عنوان البريد الإلكتروني هنا ، استخدام حقل البريد الإلكتروني لجهة الاتصال التي تحددها لجميع الحالات في هذا المستند.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = سنة قصيرة&lt;br/&gt;yyyy = سنة طويلة&lt;br/&gt;م = الشهر (1-12)&lt;br/&gt;MM = الشهر (01-12)&lt;br/&gt;MMM = اختصار الشهر (يناير ، فبراير ... ديسمبر)&lt;br/&gt;MMMM = شهر طويل (يناير ، فبراير ... ديسمبر)&lt;br/&gt;د = اليوم (1 - 31)&lt;br/&gt;اليوم = اليوم (01 - 31)&lt;br/&gt;ddd = يوم من أيام الأسبوع بالكلمات (الاثنين والثلاثاء ... الأحد)&lt;br/&gt;E = يوم قصير من الأسبوع بالكلمات (الاثنين ، الثلاثاء ... شمس)&lt;br/&gt;د - اليوم الترتيبي (1 ، 2 ، 3 ، 21 ، 22 ، 23 ، 31 ، 4 ...)&lt;br/&gt;h = الساعة في صباحا / مساء (0-12)&lt;br/&gt;HH = ساعة في صباحا / مساء (00-12)&lt;br/&gt;H = ساعة في اليوم (0-23)&lt;br/&gt;HH = ساعة في اليوم (00-23)&lt;br/&gt;مم = دقيقة&lt;br/&gt;ss = الثانية&lt;br/&gt;SSS = ميلي ثانية&lt;br/&gt;أ = علامة صباحا / مساء&lt;br/&gt;p = صباحا / مساء علامة</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;ستستخدم جميع أحداث هذا القالب النص المقدم.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;ستستخدم جميع أحداث هذا القالب النص المقدم.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>يقوم Monkey Paste بتعيين الحافظة (التجاوزات) عند اللصق إلى برنامج خارجي. سيحاول &lt;b&gt;&lt;/b&gt; هذا استعادة حالة الحافظة بعد لصق خارجي. 
+
+لا يمكن ضمان الاستعادة الكاملة وقد تقلل من الأداء أو حتى تعطل MonkeyPaste اعتمادا على مصدر البيانات.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>سيتم استخدام الإعدادات المسبقة المحددة فقط للتطبيق المحدد. عند عدم التحديد ، سيتم استخدام الإعدادات المسبقة الافتراضية الموجودة في &lt;em&gt;الشريط الجانبي للحافظة&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>سيتم &lt;b&gt;تجاهل&lt;/b&gt; جميع مراقبة الحافظة من الطلبات المرفوضة.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;داخلي&lt;/b&gt;تقتصر جميع الاختصارات على داخل التطبيق. هذا ليس خيارا مقصودا حقا ولكنه يمكن أن يسمح بتخصيص الاختصارات التي تنوي جعلها عالمية&lt;i&gt;يوما ما&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;افتراضي&lt;/b&gt; يتم تمكين جميع الاختصارات العامة. يستخدم اختصار&lt;b&gt;إظهار/إخفاء النافذة الرئيسية&lt;/b&gt;توجيه&lt;span color="red"&gt;التجاوز&lt;/span&gt;لمفتاح&lt;b&gt;Caps Lock&lt;/b&gt; . يمكنك تغيير هذا التوجيه أو الإيماءة في أي وقت. لكن&lt;span color="green"&gt;جربها&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;أوضاع الاختصار العامة&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;السلبي&lt;/b&gt; اختصار سيستمع إليه MonkeyPaste في أي تطبيق.&lt;br&gt;* هذا هو الخيار &lt;i&gt;الوحيد&lt;/i&gt; على Linux في الوقت الحالي.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;قبل&lt;/b&gt; سيتم تنفيذ الاختصار &lt;b&gt;&lt;i&gt;قبل&lt;/i&gt;&lt;/b&gt; أن يتم التعامل معه بواسطة التطبيق النشط.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;منصب&lt;/b&gt; سيتم تنفيذ الاختصار &lt;b&gt;&lt;i&gt;بعد&lt;/i&gt;&lt;/b&gt; معالجته بواسطة التطبيق النشط.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;تجاوز&lt;/b&gt; عندما يسمع MonkeyPaste مفتاح الإدخال (مفتاح غير المعدل) لاختصار تجاوز ، فإنه &lt;i&gt;سيخفي&lt;/i&gt; ضغطة المفتاح هذه من إدخال مستوى التطبيق.&lt;br&gt;سيضمن هذا الخيار تشغيل الاختصار دون تعارض مع التطبيق النشط.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;تجاوز حصري&lt;/b&gt; هذا نوع خاص من وضع التجاوز مصمم لمفتاح Caps Lock. يسمح فقط بمفتاح &lt;b&gt;واحد&lt;/b&gt; (غير معدل) لتعيينه.&lt;br&gt;في وضع التجاوز العادي ، يمكن أن &lt;i&gt;يتعطل&lt;/i&gt; Caps Lock عند الضغط عليه مع مفاتيح أخرى.&lt;br&gt;لذلك بغض النظر عن المفاتيح الأخرى المعطلة ، إذا تم الضغط على اختصار &lt;b&gt;Hotkey&lt;/b&gt; ، تجاوزه ومنعه من &lt;i&gt;التعثر&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste هو &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;بهذه الطريقة ، يمكن الوصول إلى MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;بدون نقرة&lt;/span&gt; أو حتى &lt;span color="red"&gt;ضرب العين&lt;/span&gt; #x1F440&lt;/p&gt;</value>
   </data>
 </root>

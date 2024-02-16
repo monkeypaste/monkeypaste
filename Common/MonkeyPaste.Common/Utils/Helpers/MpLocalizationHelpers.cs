@@ -33,6 +33,9 @@ namespace MonkeyPaste.Common {
             var fil = new DirectoryInfo(dir).EnumerateFiles();
 
             foreach (var fi in fil) {
+                if (fi.Name.EndsWith(".Designer.cs")) {
+                    continue;
+                }
                 if (file_name_filter != default && !fi.Name.StartsWith(file_name_filter)) {
                     continue;
                 }

@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Әйләндерү - - ачык</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p тигезләү = "Centerзәк"&gt; Майкипаста &lt;Спанепас = "Кызыл&gt; Тулы (SPAD&gt; DRG белән тарту - / P&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Аны монда ташла!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p тигезләү = "Centerзәк"&gt; Шулай итеп, маймыл майы&gt; &lt;spand төс = "кызыл" / хәтта &lt;spand төс = "кызыл"&gt; күз &lt;/ span&gt; &amp; # x1f440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Мине тарт!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Ишарәләр уникаль булырга тиеш, бер керпе ачкычы гына булырга мөмкин.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; эчке &lt;/ b&gt; Барлык кыска юллар да гариза кысаларында чикләнгән. Бу чыннан да максатчан вариант түгел, ләкин глобаль &lt;i&gt; someday &lt;/ i&gt;. &lt;/ Li&gt; ясарга теләгән кыска юлларын көйләргә мөмкинлек бирә ала.
-&lt;li&gt;
-&lt;b&gt; Килешү &lt;/ b&gt; Барлык глобаль кыска юллар кушылган. &lt;B&gt; төп тәрәзәне күрсәтү / яшерү &lt;кыска төс куллана &lt;spand төс = &lt;b&gt; капка йозаклары &lt;/ b&gt; ачкычы. Сез бу маршрутны яки ишарәләрне теләсә кайсы вакытта үзгәртә аласыз. Ләкин &lt;span bepor = "яшел"&gt; аны сынап карагыз &lt;/ span&gt;
-&lt;/ li&gt;
-&lt;/ ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;баш&gt; &lt;/ баш&gt;
-&lt;тән&gt;
-&lt;H1&gt; Глобаль кыска юллар &lt;/ H1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Пассив &lt;/ B&gt; теләсә нинди кушымтада кыскача маймыллык тыңлаячак. &lt;br&gt;
-* Бу хәзер Linux'та &lt;/ i&gt; вариант кына.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; Алдан rew &lt;/ b&gt; кыска юл &lt;/ i&gt; элеккеге / / Б&gt; Ул актив куллану белән эшләнә. &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; Пост &lt;/ b&gt; кыска юл &lt;b&gt; белән башкарачак &lt;/ i&gt; &lt;/ b&gt; актив кушымта белән эшләнә. &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; office &lt;/ b&gt; маймылипаста беткәч, кыска юлның кертү ачкычын (MODIFEIER ачкычын) ишеткәч, &lt;i&gt; Хушманнан &lt;MUS&gt; Бу ачкычны кулланудан - дәрәҗә кертү. &lt;br&gt;
-Бу вариант кыска юл актив кулланучыга конфликтсыз башланыр.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; Эксклюзив кире кагу &lt;/ b&gt; Бу капка йозаклары өчен эшләнгән режимның махсус төре. Бу аның йөкләмә өчен &lt;b&gt; бер &lt;b&gt; ачкыч (ноп үтмәгән) рөхсәт итә. &lt;br&gt;
-Нормаль ерткыч режимда капка йозаклары &lt;mon&gt; башка ачкычлар белән берлектә басканда &lt;/ i&gt; тыгылган булырга мөмкин. &lt;br&gt;
-Шуңа күрә нинди ачкычлар төшсә, &lt;b&gt; төнге ноктасы &lt;/ b&gt; кыска юл булса да, ул җиңеләчәк һәм аны җиңәчәк һәм булырга тиеш &lt;/ i&gt;.
-&lt;/ li&gt;
-&lt;/ ul&gt;
-&lt;/ тән&gt;
-&lt;/ html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Сүндерү</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Бу кулланучы счеты башка кулланучылар өчен түгел, ә йөкләгез.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Кулланылган контактны куллану) Бу кыр бу шаблонның бу документ аша барлык очракларында кулланылачак, яисә ул соңрак алынган. &lt;/ p&gt; p&gt; Шулай итеп, электрон почта адресын сайлагыз Монда, сез сайлаган контактның электрон почта кыры бу документта барлык очракларда кулланылачак. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = кыска ел = озын ел = ай (1-12) &lt;br/&gt; mm = ай (01-12) &lt;br/&gt; mmm = айлык кыскарту (Ян, Фев .. . Декабрь) &lt;br/&gt; мммм = озын ай (февраль, февраль) &lt;br/&gt; d = көн (1 - 31) &lt;br/&gt; dd = Көн (01 - 31) &lt;br/&gt; ddd = Атна көне (дүшәмбе, сишәмбе ... Якшәмбе) &lt;br/&gt; e = Минем атнаның кыска көне 3нче, 22 нче, 4 нче, 4 нче ...) &lt;br/&gt; H = Сәгать (0-12) &lt;br / HH = Сәгать Ам / PM (00-12) &lt;BR / &gt; H = Сәгать (0-23) көндез (0-23) 2 сәгать A = AM / PM Маркер &lt;br/&gt; p = A. / әм. маркер</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Агымдагы датада һәм / яки вакыт ябык булганда даталы шаблоннар өчен алыштырылачак.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Бу шаблонның барлык сәхнәләре бирелгән текстны кулланачак. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Бу шаблонның барлык сәхнәләре бирелгән текстны кулланачак. &lt;/ p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Тәмамлау</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Соңгы актив кушымта билгесез. Маймыл пастасына ясалган кушымтага күчә.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Паст: &lt;em&gt; &lt;i класс = "паста-корал-су җибәрү"&gt; {0} &lt;/ i&gt; &lt;/ em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Минимальләштерү</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Юк</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Күрсәтелгән заявка өчен сайланган препарталар гына кулланылачак. Билгеләнмәгән вакытта, &lt;EM&gt; буфер тактасы янындагы такталар янындагы дефолтлы приборлар кулланылачак.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Күпчелек маймылипагы үзенчәлекләре башка кушымталар белән аралашу өчен клавиатура автоматизациясен кулланалар.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Укучылар</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Кире кагылган кушымталар мониторингы &lt;b&gt; игътибарсыз калачак &lt;/ b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Язучылар</value>
@@ -1331,11 +1268,6 @@ Changeзгәрешләр өчен сылтамага иярегез
     <value>Барлык хәбәрләрне яңадан урнаштырырга телисезме?
 
 * Моны кире кайтарып булмый!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Маймыл тышкы программага ябышканда буферны (өстәмәләр) куя. Бу &lt;b&gt; Тышкы пассажирдан соң буферның торышын торгызу өчен &lt;b&gt; омтылышы.
-
-Гомуми торгызылу гарантияләнә алмый һәм мәгълүмат чыганагына карап маймыл кейкипастаны киметә ала.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Маймыл көтүеннән соң буферны яңадан урнаштыру</value>
@@ -2706,5 +2638,66 @@ Changeзгәрешләр өчен сылтамага иярегез
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Планнар турында күбрәк белү</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Паст: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Булган контактларны кулланып (шпр.-флэш таләп итә) бу кыр шушы документ аша бу шаблийның барлык инҗирләре өчен яки аннан соң да искә алыначак.&lt;/p&gt;&lt;p&gt; Мәсәлән, монда электрон почта адресын сайласа, сайлаган контактның электрон кыры бу документтагы барлык очраклар өчен кулланылыр.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = кыска ел&lt;br/&gt;yyy = озын ел&lt;br/&gt;M = ае (1-12)&lt;br/&gt;MM = ае (01-12)&lt;br/&gt;MMM = ай аббревиатурасы (Ян, февраль... Декабрь)&lt;br/&gt;MMM = озын ай (гыйнвар, февраль... Декабрь)&lt;br/&gt;d = көн (1 — 31)&lt;br/&gt;dd = көн (01 — 31)&lt;br/&gt;ddd = атна көне сүз белән (дүшәмбе, сишәмбе... Якшәмбе)&lt;br/&gt;E = атнаның кыска көне сүз белән (Мон, Ту... Кояш)&lt;br/&gt;D - Ординал көне (1-нче, 2-нче, 3-нче, 21-нче, 22-нче, 23 нче, 31-нче, 4-нче...)&lt;br/&gt;h = сәгать сәгать / сәгатьтә (0-12)&lt;br/&gt;hh = сәгать сәгатьтә / сәгатьтә (00-12)&lt;br/&gt;H = сәгать (0-23)&lt;br/&gt;HH = сәгать (00-23)&lt;br/&gt;мм = минут&lt;br/&gt;ss = икенче&lt;br/&gt;SSS = миллисекондлар&lt;br/&gt;a = AM / PM маркеры&lt;br/&gt;p = a.m./ p.m. маркер</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Бу шаблийның барысы да китерелгән текстны кулланыр.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Бу шаблийның барысы да китерелгән текстны кулланыр.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Маймыл Паст тышкы программага үткәндә, клиптонны (пычрата) куя. Бу тышкы пастердан соң шкафның хәлен торгызырга &lt;b&gt;тырышачак&lt;/b&gt; . 
+
+Гомуми торгызуга гарантия бирелми һәм мәгълүмат чыганагына карап, спектакльне киметергә, хәтта һәлакәткә китерергә мөмкин.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Билгеләнгән гаризага сайланган пресретлар гына кулланылачак. Ачыклангач, &lt;em&gt;клип тактасында&lt;/em&gt; табылган да булмаган пресретлар кулланылачак.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Кире кагылмаган кушымталардан бөтен клип такта мониторингы &lt;b&gt;игътибарсыз&lt;/b&gt; калыр.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Эчке&lt;/b&gt;Барлык кысылулар да гариза эчендә генә чикләнә. Бу чыннан да билгеләнгән вариант түгел, ә дөнья&lt;i&gt;күләмендә&lt;/i&gt; нинди кысыйклар ясарга теләгәнне хәл итәргә мөмкинлек бирә ала.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Тәвәккәллек&lt;/b&gt; Бөтен глобаль кысылулар булыша. &lt;b&gt;Show / Яшерен төп тәрәзәнең&lt;/b&gt;кысышлары&lt;b&gt;Caps Lock&lt;/b&gt; ачкычы өчен&lt;span color="red"&gt;артык рацион&lt;/span&gt;кулланыла. Яки аллаһуның баласы бар, дип, ий Мухәммәд г-м, ошбу Коръәнне сиңа бирдек вәхий кылырбыз. Ләкин&lt;span color="green"&gt;аны берәр нәрсәгә бирергә тырышыгыз&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Глобаль кысыш режимнары&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Пассив&lt;/b&gt; МаймылПасте теләсә нинди кушымтада тыңлаячак.&lt;br&gt;*Бу Linuxда хәзер &lt;i&gt;бердәнбер&lt;/i&gt; вариант.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Пре&lt;/b&gt; Актив кушымта белән җайга &lt;b&gt;&lt;i&gt;салыныр алдыннан&lt;/i&gt;&lt;/b&gt; кысыла.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Пост&lt;/b&gt; Актив кушымта белән җайга &lt;b&gt;&lt;i&gt;салынгач&lt;/i&gt;&lt;/b&gt; , кыскартылыр.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Оверрид&lt;/b&gt; Маймыл Пастте артык катышманың керү ачкычын (булмаган модифидер ачкычын) ишеткәч, ул бу төп матбугатны кушымтадан &lt;i&gt;яшерәчәк&lt;/i&gt; - дәрәҗә кертү.&lt;br&gt;Бу вариант актив кушымтага каршылыксыз кысылырга гарантия бирәчәк.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Эксклюзив Оверрид&lt;/b&gt; Бу Caps Lock ачкычы өчен эшләнгән артык артык режимның махсус төре. Ул үз билгеләнүендә &lt;b&gt;бер&lt;/b&gt; ачкычка (модифиерга) гына рөхсәт итә.&lt;br&gt;Гадәттә артык артык режимда Caps Lock бүтән ачкычлар белән кушыла башлагач &lt;i&gt;, кала&lt;/i&gt; ала.&lt;br&gt;Шуңа күрә, нинди генә ачкычлар булмаса да, &lt;b&gt;Хотки&lt;/b&gt; төймәсе басылганда, аны мәсхәрәләнмәсләр һәм аны &lt;i&gt;калдырмаслар&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Маймыл Пасте &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Шулай итеп маймыл Пастега керергә мөмкин&lt;br&gt;Ул &lt;span color="red"&gt;җәннәтләрнең сезгә дә&lt;/span&gt; , &lt;span color="red"&gt;җәннәт нигъмәтләрен&lt;/span&gt; дә #x1F440&lt;/p&gt;</value>
   </data>
 </root>

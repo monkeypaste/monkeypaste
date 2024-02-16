@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>스크롤 - to- 열기</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; monkeypaste는 &lt;span color = "red&gt; 완전히 통합 된 &lt;/span&gt; drag- and -drop &lt;/p&gt;입니다.</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>여기로 떨어 뜨리십시오!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt;이 방법으로, monkeypaste에 액세스 할 수 있습니다 &lt;br&gt; &lt;span color = "red"&gt; 클릭없이 &lt;/span&gt; 또는 &lt;span color = "red"&gt; 눈을 타격 &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>나를 끌어!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>제스처는 독특해야하며 하나의 입력 키만 포함 할 수 있습니다.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; 내부 &lt;/b&gt; 모든 바로 가기는 응용 프로그램 내에서 제한됩니다. 이것은 실제로 의도 된 옵션은 아니지만 Global &lt;i&gt; 언젠가로 만들려고하는 바로 가기를 사용자 정의 할 수 있습니다. &lt;/li&gt;.
-&lt;li&gt;
-&lt;b&gt; 기본값 &lt;/b&gt; 모든 글로벌 단축키가 활성화되었습니다. &lt;b&gt; 표시 기본 창 &lt;/b&gt; 바로 가기는 &lt;b&gt; 캡 잠금 &lt;/b&gt; 키에 대한 &lt;span color = "red"&gt; 재정의 &lt;/span&gt; 라우팅을 사용합니다. 언제든지 라우팅이나 제스처를 변경할 수 있습니다. 그러나 &lt;span color = "green"&gt; 시도해보세요 &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;헤드&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;H1&gt; 글로벌 바로 가기 모드 &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Passive &lt;/b&gt; 바로 가기 원숭이가 모든 응용 프로그램에서들을 것입니다. &lt;br&gt;
-*이것은 현재 Linux의 &lt;i&gt; Only &lt;/i&gt; 옵션입니다.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; 바로 가기는 &lt;b&gt; &lt;i&gt; 전에 실행됩니다. &lt;/i&gt; &lt;/b&gt;는 활성 응용 프로그램에 의해 처리됩니다.
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; 바로 가기는 &lt;/i&gt; &lt;/b&gt; 후 &lt;b&gt; &lt;i&gt;을 실행합니다. 활성 응용 프로그램에 의해 처리됩니다. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; 재정의 &lt;/b&gt; MonkeyPaste는 재정의 단축키의 입력 키 (비 수정 키)를들을 때 응용 프로그램에서 그 키를 누른다 - 레벨 입력. &lt;br&gt;
-이 옵션은 바로 가기가 활성 응용 프로그램에 대한 충돌없이 트리거되도록 보장합니다.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; 독점 재정의 &lt;/b&gt; 이것은 캡스 잠금 키를 위해 설계된 특수 유형의 재정의 모드입니다. &lt;b&gt; one &lt;/b&gt; 키 (비 수정 자) 만 할당 할 수 있습니다. &lt;br&gt;
-정상 오버라이드 모드 모드에서 캡 잠금 장치는 다른 키와 함께 눌렀을 때 &lt;/i&gt;에 고정 될 수 있습니다. &lt;br&gt;
-따라서 다른 키가 줄어들 든 &lt;b&gt; hotkey &lt;/b&gt; 바로 가기가 누르면 상정되게하고 &lt;/i&gt;에 붙어있는 것을 방지합니다.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>장애를 입히다</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>이 사용자 계정이 다른 사용자가 아닌 로그인 될 때로드하십시오.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; 사용 가능한 연락처 사용 (Fetcher 플러그인 필요)이 필드는이 템플릿의 모든 인스턴스에 사용됩니다. 여기에서 선택한 연락처의 이메일 필드는이 문서의 모든 인스턴스에 사용됩니다. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = 짧은 해 &lt;br/&gt; yyyy = 긴 연도 &lt;br/&gt; m = Month (1-12) &lt;br/&gt; mm = mond (01-12) &lt;br/&gt; mmm = 월 약어 (1 월, 2 월 .. . Dec) &lt;br/&gt; mmmm = 긴 달 (1 월, 2 월 ... 말의 요일 (월요일, 화요일 ... 일요일) &lt;br/&gt; e = 말의 짧은 요일 (mon, tue ... sun) &lt;br/&gt; d- 서수의 날 (1, 2, 2 일, 3, 21, 22, 23, 31, 4th ...) &lt;br/&gt; h = 오전/pm (0-12) &lt;br/&gt; hh = am/pm (00-12) &lt;br/ &gt; h = 하루의 시간 (0-23) &lt;br/&gt; hh = 하루의 시간 (00-23) &lt;br/&gt; mm = ming &lt;br/&gt; ss = sss = sss = milliseconds &lt;br/&gt; a = am/pm 마커 &lt;br/&gt; p = a.m./p.m. 채점자</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>현재 날짜 및/또는 시간은 붙여 넣을 때 DateTime 템플릿으로 대체됩니다.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt;이 템플릿의 모든 발생은 제공된 텍스트를 사용합니다. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt;이 템플릿의 모든 발생은 제공된 텍스트를 사용합니다. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>추가 마무리</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>마지막으로 활성 앱을 알 수 없습니다. 의도 한 앱으로 Monkey Paste로 전환하십시오.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>붙여 넣기 : &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>최소화하십시오</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>없음</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>지정된 응용 프로그램에는 선택된 사전 설정 만 사용됩니다. 지정되지 않으면 &lt;em&gt; 클립 보드 사이드 바에있는 기본 사전 설정이 사용됩니다.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>많은 monkeypaste 기능은 키보드 자동화를 사용하여 다른 응용 프로그램과 상호 작용합니다.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>독자</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>거부 된 응용 프로그램의 모든 클립 보드 모니터링은 &lt;b&gt; 무시됩니다 &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>작가</value>
@@ -1331,11 +1268,6 @@
     <value>모든 알림을 재설정 하시겠습니까?
 
 *이 취소 할 수 없습니다!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>원숭이 페이스트는 외부 프로그램에 붙여 넣을 때 클립 보드 (재정의)를 설정합니다. 이것은 &lt;b&gt; &lt;/b&gt; 외부 페이스트 후 클립 보드 상태를 복원하려고 시도합니다.
-
-총 복원은 보장 될 수 없으며 데이터 소스에 따라 성능을 줄이거 나 충돌 원숭이를 줄일 수 있습니다.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>원숭이 붙여 넣기 후 클립 보드를 재설정하십시오</value>
@@ -2706,5 +2638,66 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>계획에 대해 자세히 알아보십시오</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>붙여넣기: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;사용 가능한 연락처(fetcher 플러그인 필요)를 사용하여 이 필드는 이 문서 전체에서 이 템플릿의 모든 인스턴스에 사용되거나 나중에 참조될 모든 인스턴스에 사용됩니다.&lt;/p&gt;&lt;p&gt; 예를 들어 여기에서 전자 메일 주소를 선택하면 선택한 연락처의 전자 메일 필드가 이 문서의 모든 인스턴스에 사용됩니다.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = 짧은 연도&lt;br/&gt;yyyy = 긴 연도&lt;br/&gt;M = 월(1-12)&lt;br/&gt;MM = 월(01-12)&lt;br/&gt;MMM = 월 약어 (Jan, Feb ... 12월)&lt;br/&gt;MMMM = 긴 달(1월, 2월 ... 12월)&lt;br/&gt;d = 일(1 - 31)&lt;br/&gt;dd = 일(01 - 31)&lt;br/&gt;ddd = 요일 (월요일, 화요일 ... 일요일)&lt;br/&gt;E = 단어의 짧은 요일 (Mon, Tue ... 일)&lt;br/&gt;D - 서수 (1일, 2일, 3일, 21일, 22일, 23일, 31일, 4일...)&lt;br/&gt;h = 오전/오후 시간(0-12)&lt;br/&gt;hh = 오전/오후 시간(00-12)&lt;br/&gt;H = 시간(0-23)&lt;br/&gt;HH = 시간(00-23)&lt;br/&gt;mm = 분&lt;br/&gt;ss = 초&lt;br/&gt;SSS = 밀리초&lt;br/&gt;a = AM/PM 마커&lt;br/&gt;p = 오전/오후 마커</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;이 템플릿의 모든 항목은 제공된 텍스트를 사용합니다.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;이 템플릿의 모든 항목은 제공된 텍스트를 사용합니다.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste는 외부 프로그램에 붙여넣을 때 클립보드(재정의)를 설정합니다. 이렇게 하면 외부 붙여넣기 후 클립보드의 상태를 복원 &lt;b&gt;하려고 시도&lt;/b&gt; 합니다. 
+
+전체 복원은 보장할 수 없으며 데이터 소스에 따라 성능이 저하되거나 MonkeyPaste가 충돌할 수도 있습니다.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>선택한 사전 설정만 지정된 응용 프로그램에 사용됩니다. 지정하지 않으면 &lt;em&gt;클립보드 사이드바&lt;/em&gt; 에 있는 기본 사전 설정이 사용됩니다.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>거부된 응용 프로그램의 모든 클립보드 모니터링은 &lt;b&gt;무시됩니다&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;내부&lt;/b&gt;모든 단축키는 응용 프로그램 내로 제한됩니다. 이것은 실제로 의도 된 옵션은 아니지만&lt;i&gt;언젠가&lt;/i&gt; 글로벌로 만들려는 바로 가기를 사용자 정의 할 수 있습니다.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;기본값&lt;/b&gt; 모든 전역 바로 가기를 사용할 수 있습니다. &lt;b&gt;기본 창 표시/숨기기&lt;/b&gt;단축키는&lt;b&gt;Caps Lock&lt;/b&gt; 키에 대한&lt;span color="red"&gt;재정의&lt;/span&gt;라우팅을 사용합니다. 라우팅이나 동작은 언제든지 변경할 수 있습니다. 하지만&lt;span color="green"&gt;한 번 시도해 보세요&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;글로벌 단축키 모드&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;수동태&lt;/b&gt; 바로 가기 MonkeyPaste는 모든 응용 프로그램에서 수신 대기합니다.&lt;br&gt;*이것은 현재 Linux에서 &lt;i&gt;유일한&lt;/i&gt; 옵션입니다.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;사전&lt;/b&gt; 바로 가기는 활성 응용 프로그램에서 처리 &lt;b&gt;&lt;i&gt;되기 전에&lt;/i&gt;&lt;/b&gt; 실행됩니다.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;올리기&lt;/b&gt; 바로 가기는 활성 응용 프로그램에서 처리 &lt;b&gt;&lt;i&gt;한 후&lt;/i&gt;&lt;/b&gt; 실행됩니다.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;재정의&lt;/b&gt; MonkeyPaste가 재정의 바로 가기의 입력 키 (비 수정 자 키)를 들으면 응용 프로그램 수준 입력에서 해당 키 누름을 &lt;i&gt;숨 깁니다&lt;/i&gt; .&lt;br&gt;이 옵션은 바로 가기가 활성 응용 프로그램에 충돌하지 않고 트리거되도록 보장합니다.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;배타적 재정의&lt;/b&gt; Caps Lock 키용으로 설계된 특별한 유형의 오버라이드 모드입니다. 할당에 &lt;b&gt;대해 하나의&lt;/b&gt; 키(수정자가 아님)만 허용합니다.&lt;br&gt;일반 오버라이드 모드에서 Caps Lock은 다른 키와 함께 누를 때 &lt;i&gt;고정&lt;/i&gt; 될 수 있습니다.&lt;br&gt;따라서 다른 키가 무엇이든 상관없이 단축키 &lt;b&gt;단축키&lt;/b&gt; 를 누르면 재정의되어 &lt;i&gt;고정&lt;/i&gt;되는 것을 방지합니다.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste는 &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;이렇게 하면 MonkeyPaste에 액세스할 수 있습니다&lt;br&gt;&lt;span color="red"&gt;클릭 한 번,&lt;/span&gt; &lt;span color="red"&gt;눈 하나 깜짝하지 않고&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

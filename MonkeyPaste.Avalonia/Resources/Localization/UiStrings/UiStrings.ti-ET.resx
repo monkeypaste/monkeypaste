@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>ስክሮል - ናብ - ክፉት</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P align="center"&gt;MonkeyPaste &lt;span color="red&gt;ምሉእ ብምሉእ ዝተዋሃሃደ&lt;/span&gt; ምስ ድራግ - and - Drop&lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>ኣብዚ ኣውድቕዎ!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P align="center"&gt;በዚ መንገዲ MonkeyPaste ክትረኽቦ ትኽእል ኢኻ&lt;br&gt; &lt;span color="red"&gt;ብዘይክሊክ&lt;/span&gt; ወይ ውን &lt;span color="red"&gt;batting an ey&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>ስሓበኒ!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>ምልክታት ፍሉይ ክኸውን ኣለዎን ሓደ ናይ ምእታው መፍትሕ ጥራይ ክሕዝ ይኽእል እዩ።</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;B&gt;Internal&lt;/b&gt;ኩሎም ኣቋራጭ መገዲ ኣብ ውሽጢ እቲ መተግበሪ ዝተሓጽረ እዩ። እዚ ናይ ብሓቂ ዝተሓሰበ ኣማራጺ ኣይኮነን ግን ከኣ ንዓለምለኻዊ&lt;i&gt;ሓደ መዓልቲ&lt;/i&gt; ክትሰርሕ እንታይ ኣቋራጭ መንገዲ ክትጥዕመካ ከም ዝሓሰብካ ክትጥዕመካ ከኽእለካ ይኽእል እዩ።
-&lt;li&gt;
-&lt;b&gt;default&lt;/b&gt; ኩሉ ዓለማዊ ኣቋራጭ መንገዲ ተኸፊቱ ኣሎ። እቲ&lt;b&gt;ምሕባእ ቀንዲ መስኮት&lt;/b&gt;ምሕባእ ን&lt;b&gt;CAPS Lock&lt;/b&gt; ቁልፊ&lt;b COLOR="RED"&gt;Override&lt;/ban&gt;routing ይጥቀም። ኣብ ዝኾነ እዋን ነቲ መስመር ወይ ምልክት ክትቅይሮ ትኽእል ኢኻ። ግን&lt;span color="Green"&gt;Trea ሓደ try&lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt;&lt;/head&gt;
-&lt;ኣካል&gt;
-&lt;H1&gt;ዓለምለኻዊ ኣቋራጭ ሞድታት&lt;/H1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt;passive&lt;/b&gt; ኣቋራጭ ኣህባይ ኣብ ዝኾነ ኣፕሊኬሽን ክሰምዕ እዩ።&lt;br&gt;
-*እዚ ንሕጂ ኣብ ሊኑክስ &lt;i&gt;only&lt;/i&gt; ዝብል ኣማራጺ እዩ።
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt;pre&lt;/b&gt; ኣቋራጭ መንገዲ &lt;b&gt;&lt;i&gt;ቅድሚ&lt;/i&gt;&lt;/b&gt; ክፍጽም እዩ ብንጡፍ መተግበሪ ይሕዞ።&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt;post&lt;/b&gt; ኣቋራጭ መንገዲ &lt;b&gt;&lt;i&gt;ድሕሪ&lt;/i&gt;&lt;/b&gt; ብንጡፍ መተግበሪ ይሕዝ።&lt;/li&gt;
-&lt;li&gt;
-&lt;B&gt;Override&lt;/b&gt; MonkeyPaste ናይ ሓደ ናይ ልዕሊ ዓቐን ምቁራጽ ኣቋራጭ መሳርሒ ምእታው (non - modifier key) ክሰምዕ ከሎ &lt;i&gt;hide&lt;/i&gt; እቲ መፍትሕ ካብ መተግበሪ - ደረጃ ምእታው ይጽውዖ።&lt;br&gt;
-እዚ ኣማራጺ እዚ ነቲ ኣቋራጭ መንገዲ ብዘይምህላው ምስቲ ንጡፍ መተግበሪ ከም ዝጅምር ውሕስነት ክህብ እዩ።
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt;ፍሉይ Override&lt;/b&gt; እዚ ንመፍትሕ መዕጸዊ ካፕስ ዝተዳለወ ፍሉይ ዓይነት ናይ ምግዳፍ ሞድ እዩ። ንመደቡ &lt;b&gt;one&lt;/b&gt; ቁልፊ (non - modifier) ​​ጥራይ እዩ ዘፍቅድ።&lt;br&gt;
-ኣብ ንቡር ናይ Override Mode Caps lock ምስ ካልኦት መፍትሕታት ተደሚሩ ምስ ተጸቕጠ ኣብ&lt;/i&gt; ተዓጽዩ ክኸውን ይኽእል እዩ።&lt;br&gt;
-ስለዚ ካልእ መፍትሕ ብዘየገድስ፡ ሓደ &lt;b&gt;hotkey&lt;/b&gt; ኣቋራጭ እንተተጸቒጡ፡ ካብ መጠን ንላዕሊ ክሽፍንን &lt;i&gt;stuck on&lt;/i&gt; ከይከውን ክኽልክልን እዩ።
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>ስንኩል</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>እዚ ናይ ተጠቃሚ ኣካውንት ምስ ዝኣቱ እምበር ንኻልኦት ተጠቀምቲ ኣይኮነን።</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt;ምብጻሕ ዝርከቡ ርክባት (Fetcher Plugin Requires Requires) እዚ ዓውዲ እዚ ንኹሉ ኣጋጣሚታት ናይዚ ቅጥዒ ኣብ መላእ እዚ ሰነድ ወይ ኣብ ዝኾነ ኣብ ዝኾነ ይኹን ኣብ ድሒሩ ዝውከስ ክኸውን እዩ።&lt;/p&gt;&lt;p&gt; ስለዚ ንኣብነት ኢመይል ኣድራሻ ምረጽ ኣብዚ ድሕሪኡ እቲ ዝመረጽካዮ ናይ ኢመይል ቦታ ንኹሉ ኣጋጣሚታት ኣብዚ ሰነድ ክውዕል እዩ።&lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>YY = ሓጺር ዓመት&lt;br/&gt;yyyy = ነዊሕ ዓመት&lt;br/&gt;m = ወርሒ (1-12)&lt;br/&gt;mm = ወርሒ (01-12)&lt;br/&gt;MMM = ወርሒ ኣሕጽሮተ ቃል (Jan, Feb .. .cc)&lt;br/&gt;MMMMM = ነዊሕ ወርሒ (ጥሪ፣ ለካቲት ... ታሕሳስ)&lt;br/&gt;d = መዓልቲ (1 - 31)&lt;br/&gt;dd = መዓልቲ (01 - 31)&lt;br/&gt;ddd = መዓልቲ ናይ ሰሙን ብቓላት (ሰኑይ፣ ሰሉስ ... ሰንበት)&lt;br/&gt;e = ሓጺር መዓልቲ ናይ ሰሙን ብቓላት (ሰኑይ፣ ሰሉስ ... ጸሓይ)&lt;br/&gt;d - ስርዓታዊ መዓልቲ (1ይ፣ 2ይ፣ 3ይ፣ 21፣ 22፣ 23ይ፣ 31፣ 4ይ...)&lt;br/&gt;h = ሰዓት ኣብ AM/PM (0-12)&lt;br/&gt;hh = ሰዓት ኣብ AM/PM (00-12)&lt;br/ &gt;H = ሰዓት ኣብ መዓልቲ (0-23)&lt;br/&gt;hh = ሰዓት ኣብ መዓልቲ (00-23)&lt;br/&gt;mm = ደቒቕ&lt;br/&gt;ss = ካልኣይ&lt;br/&gt;sss = ሚሊሰከንድ&lt;br/&gt; A = AM/PM ምልክት&lt;br/&gt;p = a.m./p.m. ማርከር</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>እቲ ናይ ሕጂ ዕለትን/ወይ ግዜን ምስ ዝለጠፉ ንናይ ዕለት ግዜ ቅጥዒታት ክትክእ እዩ።</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;P&gt;ኩሉ ተርእዮታት ናይዚ ቅጥዒ ነቲ ዝቐረበ ጽሑፍ ክጥቀመሉ እዩ።&lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;P&gt;ኩሉ ተርእዮታት ናይዚ ቅጥዒ ነቲ ዝቐረበ ጽሑፍ ክጥቀመሉ እዩ።&lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>ውድእ ውድእ 2019።</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>ናይ መወዳእታ ንጡፍ ኣፕ ዘይተፈልጠ። ናብቲ ዝተሓሰበ ኣፕ ናብ ሞንኪ ፓስተ ምቕያር።</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ምልጣፍ ናብ: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>ምጉዳል</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>ዋላ ሓደ</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>እቶም ዝተመርጹ ቅድመ-ምድላዋት ጥራይ እዮም ነቲ ዝተወሰነ መተግበሪ ዝውዕሉ። ኣብ ዘይተገልጸሉ እዋን፡ እቶም ኣብቲ &lt;em&gt;Clipboard Sidebar&lt;/em&gt; ዝርከቡ ነባሪ ቅድመ-ምድላዋት ክጥቀሙ እዮም።</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>ብዙሓት ናይ MonkeyPaste ባህርያት ምስ ካልኦት ኣፕሊኬሽናት ንምትእስሳር ናይ ቁልፊ ሰሌዳ ኣውቶማቲክ ይጥቀሙ።
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>ኣንበብቲ</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>ኩሉ ካብ ዝተነጽገ መመልከቲታት ክትትል ቅንጥብጣብ ሰሌዳ &lt;b&gt;ዕሸል&lt;/b&gt; ክኸውን እዩ።</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>ጸሓፍቲ</value>
@@ -1331,11 +1268,6 @@
     <value>ርግጸኛ ዲኻ ንኹሉ መፍለጢ ዳግማይ ክትሰርዖ ትደሊ?
 
 *እዚ ክግንዘብ ኣይክእልን እዩ!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>ሞንኪ ፓስተ ነቲ ቅንጥብጣብ ሰሌዳ (Overrides) ናብ ናይ ደገ ፕሮግራም ክትለጥፍ ከለኻ የቐምጦ። እዚ ድሕሪ ናይ ደገ ምልጣፍ ኩነታት ናይቲ ቅንጥብጣብ ሰሌዳ ንምምላስ &lt;b&gt;ማቱዕ&lt;/b&gt; ክኸውን እዩ።
-
-ጠቕላላ ምሕዳስ ውሕስነት ክወሃቦ ስለዘይክእል፡ ከከም ምንጪ ናይቲ ዳታ፡ ንኣፈጻጽማ ወይ ውን ክፈርስ ይኽእል ወይ ውን ክፈርስ ይኽእል እዩ።</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>ድሕሪ ምልጣፍ ኣህባይ ቅንጥብጣብ ሰሌዳ ዳግማይ ምትካል</value>
@@ -2706,5 +2638,66 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ብዛዕባ ውጥናት ዝያዳ ክትፈልጡ</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>ለቕላቕ ፦ &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;እዚ ዓውዲ እዚ በቲ ኽርከብ ዝከኣል ኣድራሻታት (ናይ ፈልቸር ፕላግ የድልዮ) ገይርካ ኣብ ኵሉ ኣጋጣሚታት ናይዚ ንድፊ እዚ ኣብ ብምሉኡ እዚ ሰነድ እዚ ወይ ኣብ ዝዀነ ይኹን ጸኒሑ ክጥቀስ ኢዩ።&lt;/p&gt;&lt;p&gt; ስለዚ ንኣብነት ኣብዚ ኢ-መይል ኣድራሻ እንተ መሪጽካ እቲ ዝመረጽካዮ ኣድራሻ ኢ-መይል ንዅሉ እቲ ኣብዚ ሰነድ እዚ ዘሎ ኣጋጣሚታት ክትጥቀመሉ ኢኻ።&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = ሓጺር ዓመት&lt;br/&gt;yyy = ነዊሕ ዓመት&lt;br/&gt;መ = ወርሒ (1-12)&lt;br/&gt;MM = ወርሒ (01-12)&lt;br/&gt;ኤም. ኤም. = ወርሒ ሕጽር ዝበለ (Jan, Feb ... ታሕ.&lt;br/&gt;MMMM = ነዊሕ ወርሒ (ጥሪ ለካቲት ... ታሕሳስ)&lt;br/&gt;d = መዓልቲ (1 - 31)&lt;br/&gt;dd = መዓልቲ (01 - 31)&lt;br/&gt;ddd = መዓልቲ እታ ሰሙን ብቓላት (ሰኑይ ሰሉስ ... ሰንበት)&lt;br/&gt;E = ሓጻር መዓልቲ እታ ሰሙን ብቓላት (Mon, Tue ... ጸሓይ)&lt;br/&gt;ዲ - ኦርዲናል መዓልቲ (1ይ 2ይ 3ይ መበል 21 መበል 22 መበል 23 መበል 31 4...)&lt;br/&gt;h = ሰዓት ኣብ ኣም/ምሸት (0-12)&lt;br/&gt;hh = ሰዓት ኣብ ኣም/ምሸት (00-12)&lt;br/&gt;H = ሰዓት ኣብ መዓልቲ (0-23)&lt;br/&gt;HH = ሰዓት ኣብ መዓልቲ (00-23)&lt;br/&gt;mm = ደቒቕ&lt;br/&gt;ss = ካልኣይ&lt;br/&gt;ኤስ. ኤስ. = ሚሊ ሰከንድ&lt;br/&gt;a = AM/PM ምልክት&lt;br/&gt;p = a.m. /p.m. ምልክት</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;ኵሉ እቲ ኣብዛ ንድፊ እዚኣ ዚፍጸም ነገራት ነቲ እተዋህበ ጽሑፍ ኪጥቀመሉ እዩ።&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;ኵሉ እቲ ኣብዛ ንድፊ እዚኣ ዚፍጸም ነገራት ነቲ እተዋህበ ጽሑፍ ኪጥቀመሉ እዩ።&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>ህበይ ፓስት ኣብ ግዳማዊ ፕሮግራም ክለኽዩ ኸለዉ ነቲ ክሊፕቦር (ልዕሊኡ) የቐምጥዎ ። እዚ ኸኣ ድሕሪ እቲ ደጋዊ መቐመጢ ዅነታት እቲ ክሊፕቦርድ ንምምላስ &lt;b&gt;ኪፍትን&lt;/b&gt; እዩ። 
+
+ጠቕላላ ምምላስ ውሕስነት ክወሃቦ ኣይክእልን ኢዩ ከከም ምንጪ ናይቲ ሓበሬታ ኸኣ ኣሳልጦ ክቕንስ ወይ እውን ከበላሽዎ ይኽእል ኢዩ።</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>ነቲ እተመርጸ ኣቐዲምካ ምድላው ጥራይ እዩ ኣብቲ እተወሰነ ኣወዓዕላ ኺውዕል ዚኽእል ። ብንጹር እንተ ዘይተገልጸ እቲ ኣብ &lt;em&gt;ክሊፕቦርድ ሳይድባር&lt;/em&gt; ዚርከብ ናይ ቀደም ኣሰራርሓ ኣብ ጥቕሚ ኺውዕል እዩ።</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>ኵሉ እቲ ኻብ እተነጽገ መመልከቲ ወረቐት ዚከታተል ክሊፕቦርድ &lt;b&gt;ዕሽሽ ኪበሃል&lt;/b&gt; እዩ።</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;ውሽጣዊ&lt;/b&gt;ኵሉ መተሓላለፊታት ኣብ ውሽጢ እቲ መመልከቲ ጥራይ እተሓጽረ እዩ። እዚ ብሓቂ እተሓስበ ኣማራጺ ዘይኰነስ&lt;i&gt;ሓደ መዓልቲ&lt;/i&gt; ዓለምለኻዊ ኽትገብሮ ዝሓሰብካዮ መተሓላለፊታት ንኽትለምዶ ኺፈቕደልካ ይኽእል እዩ።&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;ስሕተት&lt;/b&gt; ኵሉ ዓለምለኻዊ መተሓላለፊታት ኪኽተል ይኽእል እዩ ። እቲ&lt;b&gt;ቐንዲ መስኰት ዚርአ ምርኢት/ሕቡእ&lt;/b&gt;መተሓላለፊ ነቲ&lt;b&gt;ካፕስ ሎክ ዚብሃል&lt;/b&gt; መፍትሕ ሸለል&lt;span color="red"&gt;ይብለካ&lt;/span&gt;። ነዚ መገዲ እዚ ወይ ኣካላዊ ምንቅስቓስ እዚ ኣብ ዝዀነ ይኹን እዋን ክትልውጦ ትኽእል ኢኻ። ግናኸ&lt;span color="green"&gt;ፈትኖ&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;ዓለምለኻዊ ኣገባብ ሓጺር መገዲ&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;ዘይንቀሳቐስ&lt;/b&gt; ኣብ ዝዀነ ይኹን መመልከቲ ወረቐት ህበይ ክትሰምዕ እያ።&lt;br&gt;*ኣብዚ እዋን እዚ ኣብ ሊኑክስ እዚ &lt;i&gt;እንኮ&lt;/i&gt; ኣማራጺ ኢዩ።   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ቅድሚኡ&lt;/b&gt; ሓጺር መገዲ በቲ ንጡፍ &lt;b&gt;&lt;i&gt;ኣወዓዕላኡ ቕድሚ&lt;/i&gt;&lt;/b&gt; ምቍጽጻሩ እዩ ዚፍጸም።&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ፖስት&lt;/b&gt; ሓጺር መገዲ በቲ ንጡፍ &lt;b&gt;&lt;i&gt;ኣወዓዕላኡ ምስ&lt;/i&gt;&lt;/b&gt; ተታሕዘ እዩ ዚፍጸም።&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ዕሽሽ ተባሊዕካ&lt;/b&gt; ሞንኪፓስት መፍትሕ መእተዊ (መፍትሕ ዘይቅየር መፍትሕ) ምስ ሰምዐ ነቲ ቐንዲ ሓታሚት ማኪና ኻብቲ ኣወዓዕላኡ &lt;i&gt;ኺሓብኦ&lt;/i&gt; እዩ ።&lt;br&gt;እዚ ኣማራጺ እዚ እቲ መተሓላለፊ ብዘይ ግጭት ከም ዚለዓዓል ውሕስነት ኪህብ እዩ።   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ንበይኑ ምቍጽጻር&lt;/b&gt; እዚ ንመፍትሕ ካፕስ ሎክ ተባሂሉ እተነድፈ ፍሉይ ዓይነት ኣሰራርሓ እዩ። ነቲ እተመደበሉ ቦታ &lt;b&gt;ዚኸውን ሓደ&lt;/b&gt; መፍትሕ (ዘይቅየር) ጥራይ እዩ ዜፍቅድ ።&lt;br&gt;ካፕስ ሎክ ምስ ካልእ መፍትሕ ተተሓሒዙ ኽጽቀጥ ከሎ &lt;i&gt;ክዕጾ&lt;/i&gt; ይኽእል ኢዩ ።&lt;br&gt;ስለዚ ካልእ መፍትሕ እንታይ ምዃኑ ብዘየገድስ ሓንቲ &lt;b&gt;ሆትኪ እትበሃል&lt;/b&gt; መተሓላለፊ እንተ ድኣ ተጸቂጣ ዕሽሽ ትብሎ &lt;i&gt;ንኸይትጠብቕ&lt;/i&gt; ድማ ይዓግታ ።   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;ህበይ Paste &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;በዚ ኸምዚ ህበይ ፓስተር ክትረክብ ትኽእል ኢኻ&lt;br&gt;&lt;span color="red"&gt;ብዘይ ምጥዋቕ&lt;/span&gt; ወይ ዓይኒ &lt;span color="red"&gt;ብዘይ ምውቃዕ&lt;/span&gt; #x1F440&lt;/p&gt;</value>
   </data>
 </root>

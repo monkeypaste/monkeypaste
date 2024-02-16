@@ -166,14 +166,8 @@ clip tương ứng.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Cuộn - để - mở</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>nó</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Thả nó ở đây!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "centre"&gt; Cách này, có thể truy cập vào khỉ &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Kéo tôi!</value>
@@ -364,62 +358,14 @@ Nâng cấp để tránh.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Cử chỉ phải là duy nhất và chỉ có thể chứa một khóa đầu vào.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Nội bộ &lt;/b&gt; Tất cả các phím tắt được giới hạn trong ứng dụng. Đây không thực sự là một tùy chọn dự định nhưng có thể cho phép tùy chỉnh những phím tắt bạn định làm toàn cầu &lt;i&gt; một ngày nào đó &lt;/i&gt;. &lt;/Li&gt;
-&lt;li&gt;
-&lt;b&gt; Mặc định &lt;/b&gt; Tất cả các phím tắt toàn cầu được bật. &lt;b&gt; hiển thị/ẩn cửa sổ chính &lt;/b&gt; phím tắt sử dụng &lt;span color = "red"&gt; Ghi đè &lt;/span&gt; định tuyến cho khóa &lt;b&gt; caps khóa &lt;/b&gt;. Bạn có thể thay đổi định tuyến hoặc cử chỉ đó bất cứ lúc nào. Nhưng &lt;span color = "màu xanh lá cây"&gt; Hãy thử &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;Html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;Body&gt;
-&lt;H1&gt; Chế độ phím tắt toàn cầu &lt;/H1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; thụ động &lt;/b&gt; Một con khỉ phím tắt sẽ lắng nghe trong bất kỳ ứng dụng nào. &lt;br&gt;
-*Đây là tùy chọn &lt;i&gt; &lt;/i&gt; trên Linux bây giờ.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; phím tắt sẽ thực thi &lt;b&gt; &lt;i&gt; trước &lt;/i&gt; &lt;/b&gt; Nó được xử lý bởi ứng dụng hoạt động. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt; phím tắt sẽ thực thi &lt;b&gt; &lt;i&gt; sau &lt;/i&gt; &lt;/b&gt; Nó được xử lý bởi ứng dụng hoạt động. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Ghi đè &lt;/b&gt; Khi Khỉ Keypaste nghe khóa đầu vào (khóa không điều chỉnh) của phím tắt ghi đè, nó sẽ &lt;i&gt; ẩn &lt;/i&gt; phím đó nhấn từ đầu vào cấp ứng dụng. &lt;br&gt;
-Tùy chọn này sẽ đảm bảo phím tắt được kích hoạt mà không có xung đột với ứng dụng hoạt động.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Ghi đè độc quyền &lt;/b&gt; Đây là một loại chế độ ghi đè đặc biệt được thiết kế cho khóa khóa Caps. Nó chỉ cho phép &lt;b&gt; một &lt;/b&gt; phím (không sửa đổi) cho bài tập của nó. &lt;br&gt;
-Trong chế độ ghi đè bình thường, khóa Caps có thể trở thành &lt;i&gt; bị kẹt trên &lt;/i&gt; khi được nhấn kết hợp với các khóa khác. &lt;br&gt;
-Vì vậy, bất kể các phím khác là gì, nếu một phím tắt &lt;b&gt; hotkey &lt;/b&gt; được nhấn, nó sẽ bị ghi đè và ngăn không cho nó trở thành &lt;i&gt; bị kẹt trên &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/Body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Vô hiệu hóa</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Tải lên khi tài khoản người dùng này được đăng nhập, không phải cho người dùng khác.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Sử dụng các liên hệ có sẵn (yêu cầu plugin Fetcher) Trường này sẽ được sử dụng cho tất cả các trường hợp của mẫu này trên tài liệu này hoặc trong bất kỳ nó sẽ được tham chiếu sau. &lt;/P&gt; &lt;p&gt; Vì vậy, ví dụ nếu chọn địa chỉ email Tại đây, trường email của liên hệ bạn chọn sẽ được sử dụng cho tất cả các trường hợp trong tài liệu này. &lt;/P&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = năm ngắn &lt;br/&gt; yyyy = năm dài &lt;br/&gt; m = tháng (1-12) &lt;br/&gt; mm = tháng (01-12) &lt;br/&gt; MMM = Tháng viết tắt (Jan, Feb .. . Dec) &lt;br/&gt; mmmm = tháng dài (tháng 1, tháng 2 ... tháng 12) &lt;br/&gt; d = ngày (1 - 31) &lt;br/&gt; dd = ngày (01 - 31) &lt;br/&gt; ddd = Ngày trong tuần bằng lời nói (Thứ Hai, Thứ Ba ... Chủ nhật) &lt;br/&gt; E = Ngày ngắn trong tuần bằng lời nói (Thứ Hai, Tue ... Mặt trời) &lt;br/&gt; D - Ngày thứ tự (1, thứ 2, thứ 2, 3, 21, 22, 23, 31, 4th ...) &lt;br/&gt; h = giờ vào sáng/chiều (0-12) &gt; H = giờ trong ngày (0-23) &lt;br/&gt; hh = giờ trong ngày (00-23) &lt;br/&gt; mm = phút &lt;br/&gt; ss = thứ hai &lt;br/&gt; sss = miliseconds &lt;br/&gt; A = AM/pm điểm đánh dấu &lt;br/&gt; p = a.m./p.m. đánh dấu</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Ngày và/hoặc thời gian hiện tại sẽ được thay thế cho các mẫu DateTime khi chúng được dán.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Tất cả các sự cố của mẫu này sẽ sử dụng văn bản được cung cấp. &lt;/P&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Tất cả các sự cố của mẫu này sẽ sử dụng văn bản được cung cấp. &lt;/P&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Hoàn thành việc nối thêm</value>
@@ -469,9 +415,6 @@ Vì vậy, bất kể các phím khác là gì, nếu một phím tắt &lt;b&gt
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Ứng dụng hoạt động cuối cùng không xác định. Chuyển sang ứng dụng dự định sang dán khỉ.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Dán thành: &lt;em&gt; &lt;i class = "Paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Giảm thiểu</value>
@@ -547,9 +490,6 @@ Thêm và/hoặc chọn ứng dụng với phím tắt sao chép duy nhất (nh�
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Không có</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Chỉ các cài đặt trước được chọn sẽ được sử dụng cho ứng dụng được chỉ định. Khi không được xác định, các cài đặt trước mặc định được tìm thấy trong &lt;em&gt; thanh bên clipboard &lt;/em&gt; sẽ được sử dụng.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Nhiều tính năng khỉ sử dụng tự động hóa bàn phím để tương tác với các ứng dụng khác.
 
@@ -562,9 +502,6 @@ Một số ứng dụng (như một số bảng điều khiển hoặc shells ch
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Độc giả</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Tất cả các giám sát viên clipboard từ các ứng dụng bị từ chối sẽ được &lt;b&gt; bị bỏ qua &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Nhà văn</value>
@@ -1331,11 +1268,6 @@ Khôi phục tùy chọn mặc định?
     <value>Bạn có chắc là bạn muốn đặt lại tất cả các thông báo?
 
 *Điều này không thể được hoàn tác!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste đặt bảng tạm (ghi đè) khi dán vào một chương trình bên ngoài. Điều này sẽ &lt;b&gt; cố gắng &lt;/b&gt; để khôi phục trạng thái của clipboard sau khi dán bên ngoài.
-
-Tổng số phục hồi không thể được đảm bảo và có thể giảm hiệu suất hoặc thậm chí gặp sự cố khỉ tùy thuộc vào nguồn dữ liệu.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Đặt lại Clipboard sau khi dán khỉ</value>
@@ -2706,5 +2638,66 @@ Phản hồi@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Tìm hiểu thêm về các kế hoạch</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Dán vào: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Sử dụng các liên hệ có sẵn (yêu cầu plugin trình tải), trường này sẽ được sử dụng cho tất cả các trường hợp của mẫu này trên tài liệu này hoặc trong bất kỳ trường hợp nào sẽ được tham chiếu sau.&lt;/p&gt;&lt;p&gt; Vì vậy, ví dụ: nếu chọn địa chỉ email ở đây thì trường email của liên hệ bạn chọn sẽ được sử dụng cho tất cả các trường hợp trong tài liệu này.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = năm ngắn ngủi&lt;br/&gt;yyyy = năm dài&lt;br/&gt;M = tháng (1-12)&lt;br/&gt;MM = tháng (01-12)&lt;br/&gt;MMM = tháng viết tắt (Jan, Feb ... Tháng mười hai)&lt;br/&gt;MMMM = tháng dài (tháng Giêng, tháng Hai ... Tháng mười hai)&lt;br/&gt;d = ngày (1 - 31)&lt;br/&gt;đ = ngày (01 - 31)&lt;br/&gt;ddd = ngày trong tuần bằng từ (Thứ Hai, Thứ Ba ... Chủ nhật)&lt;br/&gt;E = ngày ngắn trong tuần bằng từ (Thứ Hai, Thứ Ba ... Mặt trời)&lt;br/&gt;D – Ngày thứ tự (mùng 1, 2, 3, 21, 22, 23, 31, 4...)&lt;br/&gt;h = giờ tính bằng sáng / chiều (0-12)&lt;br/&gt;HH = giờ tính bằng sáng / chiều (00-12)&lt;br/&gt;H = giờ trong ngày (0-23)&lt;br/&gt;HH = giờ trong ngày (00-23)&lt;br/&gt;mm = phút&lt;br/&gt;ss = giây&lt;br/&gt;SSS = mili giây&lt;br/&gt;a = điểm đánh dấu AM / PM&lt;br/&gt;p = điểm đánh dấu sáng / chiều</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Tất cả các lần xuất hiện của bản mẫu này sẽ sử dụng văn bản được cung cấp.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Tất cả các lần xuất hiện của bản mẫu này sẽ sử dụng văn bản được cung cấp.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste đặt clipboard (ghi đè) khi dán vào một chương trình bên ngoài. Điều này sẽ &lt;b&gt;cố gắng&lt;/b&gt; khôi phục trạng thái của bảng tạm sau khi dán bên ngoài. 
+
+Không thể đảm bảo khôi phục toàn bộ và có thể làm giảm hiệu suất hoặc thậm chí làm sập MonkeyPaste tùy thuộc vào nguồn dữ liệu.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Chỉ các cài đặt trước đã chọn sẽ được sử dụng cho ứng dụng được chỉ định. Khi không được chỉ định, các cài đặt trước mặc định được tìm thấy trong &lt;em&gt;Thanh bên Clipboard sẽ&lt;/em&gt; được sử dụng.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Tất cả giám sát clipboard từ các ứng dụng bị từ chối sẽ bị &lt;b&gt;bỏ qua&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Nội&lt;/b&gt;Tất cả các phím tắt được giới hạn trong ứng dụng. Đây không thực sự là một tùy chọn dự định nhưng có thể cho phép tùy chỉnh những phím tắt bạn dự định tạo toàn cầu&lt;i&gt;vào một ngày nào đó&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Mặc định&lt;/b&gt; Tất cả các phím tắt toàn cầu đều được bật. Phím tắt&lt;b&gt;Hiển thị/Ẩn Cửa sổ Chính&lt;/b&gt;sử dụng định tuyến&lt;span color="red"&gt;ghi đè&lt;/span&gt;cho phím&lt;b&gt;Caps Lock&lt;/b&gt; . Bạn có thể thay đổi định tuyến hoặc cử chỉ đó bất kỳ lúc nào. Nhưng&lt;span color="green"&gt;hãy thử&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Chế độ phím tắt toàn cầu&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Bị động&lt;/b&gt; Một phím tắt MonkeyPaste sẽ lắng nghe trong bất kỳ ứng dụng nào.&lt;br&gt;* Đây là tùy chọn &lt;i&gt;duy&lt;/i&gt; nhất trên Linux hiện tại.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Trước&lt;/b&gt; Phím tắt sẽ thực thi &lt;b&gt;&lt;i&gt;trước khi&lt;/i&gt;&lt;/b&gt; nó được xử lý bởi ứng dụng đang hoạt động.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Trụ&lt;/b&gt; Phím tắt sẽ thực thi &lt;b&gt;&lt;i&gt;sau khi&lt;/i&gt;&lt;/b&gt; nó được xử lý bởi ứng dụng đang hoạt động.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Ghi đè&lt;/b&gt; Khi MonkeyPaste nghe thấy phím đầu vào (phím không bổ trợ) của phím tắt ghi đè, nó sẽ &lt;i&gt;ẩn&lt;/i&gt; lần nhấn phím đó khỏi đầu vào cấp ứng dụng.&lt;br&gt;Tùy chọn này sẽ đảm bảo phím tắt được kích hoạt mà không có xung đột với ứng dụng đang hoạt động.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Ghi đè độc quyền&lt;/b&gt; Đây là một loại chế độ ghi đè đặc biệt được thiết kế cho phím Caps Lock. Nó chỉ cho phép &lt;b&gt;một&lt;/b&gt; khóa (không sửa đổi) cho nhiệm vụ của nó.&lt;br&gt;Ở chế độ ghi đè bình thường, Caps Lock có thể &lt;i&gt;bị kẹt khi&lt;/i&gt; nhấn kết hợp với các phím khác.&lt;br&gt;Vì vậy, bất kể phím nào khác bị hỏng, nếu nhấn phím tắt &lt;b&gt;Hotkey&lt;/b&gt; , nó sẽ bị ghi đè và ngăn không cho nó bị &lt;i&gt;kẹt&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste là &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Bằng cách này, MonkeyPaste có thể được truy cập&lt;br&gt;&lt;span color="red"&gt;mà không cần một cú nhấp chuột&lt;/span&gt; hoặc thậm chí &lt;span color="red"&gt;đập mắt&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

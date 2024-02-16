@@ -6,8 +6,9 @@
     <ApplicationVersionMajor>1</ApplicationVersionMajor>
     <ApplicationVersionMinor>0</ApplicationVersionMinor>
     <ApplicationVersionPatch>7</ApplicationVersionPatch>
+    <ApplicationVersionRevision>0</ApplicationVersionRevision>
     <!-- NOTE this app version MUST match MpThisAppInfo.ProductVersion and is used for mac bundle and ledgerizer only -->
-    <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch)</ApplicationVersion>
+    <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch).$(ApplicationVersionRevision)</ApplicationVersion>
    </PropertyGroup>
   
   <PropertyGroup>

@@ -166,14 +166,8 @@ Takmarkað við {0} og {1}
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Skrun - til - Opið</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "Center"&gt; MonkeyPaste er &lt;span color = "red&gt; fullkomlega samþætt &lt;/span&gt; með drag - og - drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Sendu það hér!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; Þannig er hægt að nálgast acepyaste &lt;br&gt; &lt;span color = "red"&gt; án þess &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Dragðu mig!</value>
@@ -364,62 +358,14 @@ Uppfærðu til að forðast.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Bendingar verða að vera einstök og geta aðeins innihaldið einn innsláttarlykil.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Innri &lt;/b&gt; Allir flýtileiðir eru takmarkaðir við umsóknina. Þetta er í raun ekki ætlaður valkostur en getur leyft að sérsníða hvaða flýtileiðir þú ætlar að gera alþjóðlegt &lt;i&gt; einhvern tíma &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Sjálfgefið &lt;/b&gt; Allar flýtileiðir á heimsvísu eru virkir. &lt;b&gt; sýna/fela aðalgluggann &lt;/b&gt; flýtileið notar &lt;span color = "red"&gt; hnekki &lt;/span&gt; beina fyrir &lt;b&gt; húfuralásinn &lt;/b&gt; takkann. Þú getur breytt þeirri leið eða látbragði hvenær sem er. En &lt;span color = "Green"&gt; Prófaðu það &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt; Global Shortcut stillingar &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; óvirkur &lt;/b&gt; flýtileiðir mun hlusta á í hvaða forriti sem er. &lt;br&gt;
-*Þetta er &lt;i&gt; aðeins &lt;/i&gt; valkosturinn á Linux í bili.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; flýtileið mun framkvæma &lt;b&gt; &lt;i&gt; áður &lt;/i&gt; &lt;/b&gt; það er meðhöndlað af virka forritinu. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; flýtileið mun framkvæma &lt;b&gt; &lt;i&gt; eftir &lt;/i&gt; &lt;/b&gt; það er meðhöndlað af virka forritinu. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; hnekkja &lt;/b&gt; þegar monkeypaste heyrir inntakslykilinn (Non -Modifier lykill) á hnekki flýtileið mun það &lt;i&gt; fela &lt;/i&gt; þessi lykill Ýttu frá forritinu - stig inntak. &lt;br&gt;
-Þessi valkostur tryggir að flýtileiðin er sett af stað án átaka við virka umsóknina.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Exclusive Override &lt;/b&gt; Þetta er sérstök gerð af hnekkingarstillingu sem er hönnuð fyrir Caps Lock takkann. Það leyfir aðeins &lt;b&gt; einn &lt;/b&gt; lykill (ekki - breytir) fyrir verkefni sitt. &lt;br&gt;
-Í venjulegu hnekkihamur getur læsing læsingar lent í &lt;/i&gt; þegar ýtt er á samsett með öðrum lyklum. &lt;br&gt;
-Svo það er sama hvaða aðrir lyklar eru niðri, ef ýtt er á &lt;b&gt; hotkey &lt;/b&gt; flýtileið verður það hnekkt og koma í veg fyrir að það festist &lt;i&gt; fast á &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Slökkva</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Hlaðið upp þegar þessi notendareikningur er skráður inn, ekki fyrir aðra notendur.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Notkun tiltækra tengiliða (krefst fetcher viðbótar) Þessi reitur verður notaður í öllum tilvikum þessa sniðmáts í þessu skjali eða í öllu því verður vísað til síðar. &lt;/p&gt; &lt;p&gt; Svo til dæmis ef valið er netfang Hér verður tölvupóstsvið tengiliðsins sem þú velur notaður í öllum tilvikum í þessu skjali. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = stutt ár &lt;br/&gt; yyyy = langt árið &lt;br/&gt; m = mánuður (1-12) &lt;br/&gt; mm = mánuður (01-12) &lt;br/&gt; mmm = mánuður skammstöfun (Jan, Feb .. . Dec) &lt;br/&gt; mmmm = langur mánuður (janúar, febrúar ... desember) &lt;br/&gt; d = dagur (1 - 31) &lt;br/&gt; dd = dagur (01 - 31) &lt;br/&gt; ddd = Dagur vikunnar í orðum (mánudagur, þriðjudagur ... sunnudagur) &lt;br/&gt; e = stuttur dagur vikunnar í orðum (mán, Þri ... sól) &lt;br/&gt; d - Venjulegur dagur (1., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; h = klukkustund í Am/PM (0-12) &lt;br/&gt; HH = klukkustund í Am/PM (00-12) &lt;Br/ &gt; H = klukkustund í dag (0-23) &lt;br/&gt; HH = klukkustund í dag (00-23) &lt;br/&gt; mm = mínúta &lt;br/&gt; ss = önnur &lt;br/&gt; sss = millisekúndur &lt;br/&gt; A = Am/PM merki &lt;br/&gt; p = a.m./p.m. Merki</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Núverandi dagsetning og/eða tíminn verður skipt út fyrir sniðmát datetime þegar þau eru límd.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Öll atburðir þessa sniðmáts munu nota textann sem fylgir. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Öll atburðir þessa sniðmáts munu nota textann sem fylgir. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Ljúktu viðauka</value>
@@ -469,9 +415,6 @@ Svo það er sama hvaða aðrir lyklar eru niðri, ef ýtt er á &lt;b&gt; hotke
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Síðasta virka appið óþekkt. Skiptu yfir í fyrirhugað app yfir í apa líma.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Límdu við: &lt;em&gt; &lt;i class = "pasta-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Lágmarka</value>
@@ -547,9 +490,6 @@ Bættu við og/eða veldu forritið með hinni einstöku afritun flýtileið (ei
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Enginn</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Aðeins valdar forstillingar verða notaðar við tilgreint forrit. Þegar ótilgreint verður sjálfgefnar forstillingar sem finnast í &lt;em&gt; klemmuspjaldinu &lt;/em&gt; notaðar.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Margir MonkeyPaste eiginleikar nota sjálfvirkni lyklaborðs til að hafa samskipti við önnur forrit.
 
@@ -562,9 +502,6 @@ Til að tryggja rétta samvirkni skaltu skrá þá flýtileiðir fyrir þá ums�
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Lesendur</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Allt eftirlit með klippuspjaldi frá hafnaðum umsóknum verður &lt;b&gt; hunsað &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Rithöfundar</value>
@@ -1331,11 +1268,6 @@ Endurheimta sjálfgefnar óskir?
     <value>Ertu viss um að þú viljir endurstilla allar tilkynningar?
 
 *Þetta er ekki hægt að afturkalla!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste setur klemmuspjaldið (hnekkir) þegar þú límist á ytra forrit. Þetta mun &lt;b&gt; tilraun &lt;/b&gt; að endurheimta ástand klemmuspjaldsins eftir ytri líma.
-
-Ekki er hægt að tryggja heildar endurreisn og getur dregið úr afköstum eða jafnvel hrun afköst eftir uppsprettu gagna.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Endurstilltu klemmuspjald eftir pípu apa</value>
@@ -2706,5 +2638,66 @@ endurgjöf@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lærðu meira um áætlanir</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Líma í: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Notkun tiltækra tengiliða (þarf að sækja íforrit) á þessi reitur að verða notaður fyrir öll tilfelli af þessu sniðmáti í þessu skjali eða í þeim tilvikum sem vísað verður í það síðar.&lt;/p&gt;&lt;p&gt; Svo til dæmis, ef veldu netfang hér, þá verður tölvupóstreitur tengiliðarins sem þú velur notaður í öllum tilvikum í þessu skjali.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = stutt ár&lt;br/&gt;yyyy = langt ár&lt;br/&gt;M = mánuður (1-12)&lt;br/&gt;MM = mánuður (01-12)&lt;br/&gt;MMM = mánaðar skammstöfun (jan, feb ... des.)&lt;br/&gt;MMMM = langur mánuður (janúar, febrúar ... desember)&lt;br/&gt;d = dagur (1-31)&lt;br/&gt;dd = dagur (01 - 31)&lt;br/&gt;ddd = dagur vikunnar í orðum (mánudagur, þriðjudagur ... Sunnudagur)&lt;br/&gt;E = stuttur dagur vikunnar í orðum (mán, þri ... Sun)&lt;br/&gt;D - Venjulegur dagur (1., 2., 3., 21., 22., 23., 31., 4....)&lt;br/&gt;klst. = klst. að morgni (0–12)&lt;br/&gt;klst. = klst. að morgni (00-12)&lt;br/&gt;H = klukkustund að degi til (0–23)&lt;br/&gt;HH = klukkustund á dag (00-23)&lt;br/&gt;mm = mínúta&lt;br/&gt;ss = sekúnda&lt;br/&gt;SSS = millisekúndur&lt;br/&gt;a = AM/PM merki&lt;br/&gt;p = a.m./p.m. merki</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Öll tilvik af þessu sniðmáti munu nota meðfylgjandi texta.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Öll tilvik af þessu sniðmáti munu nota meðfylgjandi texta.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste stillir klemmuspjaldið (hnekkir) þegar límt er í utanaðkomandi forrit. Þetta &lt;b&gt;reynir&lt;/b&gt; að endurheimta stöðu klippispjaldsins eftir utanaðkomandi líma. 
+
+Ekki er hægt að tryggja heildar endurheimt og getur dregið úr afköstum eða jafnvel hrunið MonkeyPaste eftir uppruna gagnanna.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Aðeins valdar forstillingar verða notaðar fyrir tilgreint forrit. Hvenær ótilgreinanlegur, the vanræksla forstilla stofna í &lt;em&gt;the Klemmuspjald Skenkur vilja&lt;/em&gt; vera notaður.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Allt eftirlit með klemmuspjaldi frá höfnuðum forritum verður &lt;b&gt;hunsað.&lt;/b&gt;</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Innri&lt;/b&gt;Allir flýtilyklar takmarkast við innan forritsins. This er ekki raunverulega óákveðinn greinir í ensku fyrirhugaður valkostur en geta leyfa til aðlaga hvaða smákaka þú ætla til gera alheims-&lt;i&gt;einhvern tíma&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Sjálfgefinn&lt;/b&gt; Allir víðværir flýtilyklar eru virkir. Flýtivísunin&lt;b&gt;Sýna/fela aðalglugga&lt;/b&gt;notar&lt;span color="red"&gt;hnekkingarbeiningu&lt;/span&gt;fyrir&lt;b&gt;hástafaláslykilinn&lt;/b&gt; . Þú getur breytt þeirri leið eða látbragði hvenær sem er. En&lt;span color="green"&gt;prófaðu&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Altækar flýtilyklastillingar&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Aðgerðalaus&lt;/b&gt; A smákaka MonkeyPaste mun hlusta eftir í hvaða forriti sem er.&lt;br&gt;* Þetta er &lt;i&gt;eini&lt;/i&gt; kosturinn á Linux í bili.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Flýtivísun verður keyrð &lt;b&gt;&lt;i&gt;áður en&lt;/i&gt;&lt;/b&gt; virka forritið sér um hana.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Stólpi&lt;/b&gt; Flýtivísun verður keyrð &lt;b&gt;&lt;i&gt;eftir meðhöndlun&lt;/i&gt;&lt;/b&gt; virka forritsins.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Hnekkja&lt;/b&gt; Þegar MonkeyPaste heyrir inntakstakkann (non - modifier lykill) á að hunsa flýtileið, mun það &lt;i&gt;fela&lt;/i&gt; þann lykil að ýta á frá forriti - stigi inntak.&lt;br&gt;Þessi valkostur tryggir að flýtivísunin verði ræst án þess að virk forrit rekist á.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Eingöngu hnekkt&lt;/b&gt; Þetta er sérstök gerð hnekkingarhams sem er hönnuð fyrir hástafalásinn. Það leyfir aðeins &lt;b&gt;einn&lt;/b&gt; lykil (ekki breyti) fyrir verkefni sitt.&lt;br&gt;Í venjulegum hnekkingarham festist hástafalás &lt;i&gt;þegar&lt;/i&gt; ýtt er á hann ásamt öðrum lyklum.&lt;br&gt;Svo neitun efni hvaða annar lokasteinn ert dúnn, ef &lt;b&gt;a Hotkey&lt;/b&gt; smákaka er þrýsta það vilja vera hnekkja og hindra það frá viðeigandi &lt;i&gt;fastur á&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste er &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Þannig er hægt að nálgast MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;án þess að smella&lt;/span&gt; eða jafnvel &lt;span color="red"&gt;batting auga&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

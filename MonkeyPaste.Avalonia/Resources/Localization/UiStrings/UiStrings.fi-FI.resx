@@ -166,14 +166,8 @@ Leikkeet.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Vieritä - to - auki</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P align = "Center"&gt; MonkeyPaste on &lt;span color = "punainen&gt; täysin integroitu &lt;/span&gt; Drag - ja - Drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Pudota se tänne!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P align = "Center"&gt; Tällä tavalla MonkeyPaste voidaan käyttää &lt;br&gt; &lt;span color = "punainen"&gt; ilman napsautusta &lt;/span&gt; tai jopa &lt;span color = "punainen"&gt; silmän lyöminen &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Vedä minua!</value>
@@ -364,62 +358,14 @@ Päivitys välttääkseen.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Eleiden on oltava ainutlaatuisia ja ne voivat sisältää vain yhden syöttöavaimen.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;Li&gt;
-&lt;b&gt; Sisäinen &lt;/b&gt; Kaikki pikakuvakkeet rajoittuvat sovellukseen. Tämä ei oikeastaan ​​ole tarkoitettu vaihtoehto, mutta voi sallia mukauttaa, mitä pikakuvakkeita aiot tehdä globaalista &lt;i&gt; joskus &lt;/i&gt;. &lt;/li&gt;
-&lt;Li&gt;
-&lt;b&gt; oletus &lt;/b&gt; Kaikki globaalit pikavalinnat ovat käytössä. &lt;b&gt; Näytä/piilota pääikkuna &lt;/b&gt; pikakuvake käyttää &lt;span color = "red"&gt; ohitus &lt;/span&gt; reititys &lt;b&gt; caps lukko &lt;/b&gt; -näppäimelle. Voit muuttaa sitä reititystä tai elettä milloin tahansa. Mutta &lt;span color = "vihreä"&gt; kokeile sitä kokeile &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/pää&gt;
-&lt;body&gt;
-&lt;H1&gt; Globaalit pikavalintatilat &lt;/h1&gt;
-&lt;ul&gt;
-&lt;Li&gt;
-&lt;b&gt; Passiivinen &lt;/b&gt; pikakuvakkeen monkepaste kuuntelee missä tahansa sovelluksessa. &lt;br&gt;
-*Tämä on vain &lt;/i&gt; -vaihtoehto Linuxissa.
-&lt;/li&gt;
-&lt;Li&gt;
-&lt;b&gt; pre &lt;/b&gt; pikakuvake suoritetaan &lt;b&gt; &lt;i&gt; ennen &lt;/i&gt; &lt;/b&gt; sitä käsittelee aktiivinen sovellus. &lt;/li&gt;
-&lt;Li&gt;
-&lt;b&gt; Post &lt;/b&gt; pikakuvake suoritetaan &lt;b&gt; &lt;i&gt; &lt;/i&gt; &lt;/b&gt; Aktiivinen sovellus käsittelee sitä. &lt;/li&gt;
-&lt;Li&gt;
-&lt;b&gt; ohitus &lt;/b&gt; Kun MonkeyPaste kuulee ohitusnäppäimen syöttöavaimen (ei -modifiointiavaimen), se &lt;i&gt; piilottaa &lt;/i&gt; -näppäimen painavan sovelluksen tason tulosta. &lt;br&gt;
-Tämä vaihtoehto takaa, että pikakuvake laukaistaan ​​ilman konflikteja aktiiviseen sovellukseen.
-&lt;/li&gt;
-&lt;Li&gt;
-&lt;B&gt; Yksinomainen ohitus &lt;/b&gt; Tämä on erityinen tyyppinen ohitustila, joka on suunniteltu CAPS -lukitusnäppäimelle. Se sallii vain yhden &lt;/b&gt; -näppäimen (ei -modifikaattorin). &lt;br&gt;
-Normaalissa ohitusmoodissa Caps -lukko voi tulla &lt;i&gt; jumissa &lt;/i&gt;, kun sitä painetaan yhdessä muiden avaimien kanssa. &lt;br&gt;
-Joten riippumatta siitä, mitkä muut avaimet ovat alhaalla, jos A &lt;b&gt; pikanäppäin &lt;/b&gt; pikakuvake on painettu, se ohittaa ja estää sen olevan jumissa &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Poista käytöstä</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Lataa, kun tämä käyttäjätili on kirjautunut sisään, ei muille käyttäjille.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Käytettävissä olevien yhteystietojen käyttäminen (vaatii Fetcher -laajennuksen) Tätä kenttää käytetään tämän mallin kaikkiin tapauksiin tämän asiakirjan välillä tai missä tahansa siihen viitataan myöhemmin. &lt;/p&gt; &lt;p&gt; Joten esimerkiksi jos valitse sähköpostiosoite Tässä sitten valitsemasi yhteystietokenttä käytetään kaikkiin tämän asiakirjan tapauksiin. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = lyhyt vuosi &lt;br/&gt; yyyy = pitkä vuosi &lt;br/&gt; m = kuukausi (1-12) &lt;br/&gt; mm = kuukausi (01-12) &lt;br/&gt; mmm = kuukauden lyhenne (tammikuu, helmikuu .. .. . DEC) &lt;br/&gt; mmmm = pitkä kuukausi (tammikuu, helmikuu ... joulukuu) &lt;br/&gt; d = päivä (1 - 31) &lt;br/&gt; dd = päivä (01 - 31) &lt;br/&gt; ddd = Viikonpäivä sanoin (maanantai, tiistai ... sunnuntai) &lt;br/&gt; e = viikon lyhyt päivä sanoina (ma, tiistaina ... aurinko) &lt;br/&gt; d - ordinaalipäivä (1., 2., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; h = tunti AM/PM: ssä (0-12) &lt;br/&gt; HH = tunti AM/PM: ssä (00-12) &lt;br/br/ &gt; H = tunti päivässä (0-23) &lt;br/&gt; hh = tunti päivässä (00-23) &lt;br/&gt; mm = minuutti &lt;br/&gt; ss = toinen &lt;br/&gt; sss = millisekunnit &lt;br/&gt; A = AM/PM -merkki &lt;br/&gt; p = A.M./P.M. merkintä</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Nykyinen päivämäärä ja/tai aika korvataan DateTime -malleissa, kun ne on liitetty.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Tämän mallin kaikki tapahtumat käyttävät toimitettua tekstiä. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Tämän mallin kaikki tapahtumat käyttävät toimitettua tekstiä. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Viimeistellä</value>
@@ -469,9 +415,6 @@ Joten riippumatta siitä, mitkä muut avaimet ovat alhaalla, jos A &lt;b&gt; pik
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Viimeinen aktiivinen sovellus tuntematon. Vaihda suunniteltuun sovellukseen apinapastaan.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Liitä: &lt;em&gt; &lt;i class = "liitä-hooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimoida</value>
@@ -547,9 +490,6 @@ Lisää ja/tai valitse sovellus ainutlaatuisella kopio -pikakuvakkeella (kuten e
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Ei mitään</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Vain valittuja esiasetuksia käytetään määritettyyn sovellukseen. Kun määrittelemätön, &lt;em&gt; leikepöydällä sivupalkista &lt;/em&gt; löydettyjä oletusasetuksia käytetään.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Monet monkepaste -ominaisuudet käyttävät näppäimistön automaatiota vuorovaikutuksessa muiden sovellusten kanssa.
 
@@ -562,9 +502,6 @@ Varmistaaksesi asianmukaisen yhteentoimivuuden tallentamalla nämä pikanäppäi
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Lukijat</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Kaikki leikepöydän valvonta hylätyistä sovelluksista on &lt;b&gt; huomiotta &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Kirjailijat</value>
@@ -1331,11 +1268,6 @@ Tätä ei voi peruuttaa!
     <value>Oletko varma, että haluat nollata kaikki ilmoitukset?
 
 *Tätä ei voi peruuttaa!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Apinapasta asettaa leikepöydän (ohittaa) liittämällä ulkoiseen ohjelmaan. Tämä yrittää &lt;/b&gt; leikepöydän tilan palauttamista ulkoisen tahnan jälkeen.
-
-Kokonaisten palauttamista ei voida taata, ja se voi vähentää suorituskykyä tai jopa kaatumis Monkeypasten tietojen lähteestä riippuen.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Palauta leikepöytä apinan liittämisen jälkeen</value>
@@ -2706,5 +2638,66 @@ palaute@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lisätietoja suunnitelmista</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Liitä: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Käytettävissä olevien yhteystietojen avulla (vaatii fetcher-laajennuksen) tätä kenttää käytetään kaikissa tämän mallin esiintymissä tässä asiakirjassa tai missä tahansa, johon siihen viitataan myöhemmin.&lt;/p&gt;&lt;p&gt; Jos esimerkiksi valitset sähköpostiosoitteen tässä, valitsemasi yhteyshenkilön sähköpostikenttää käytetään kaikissa tämän asiakirjan esiintymissä.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = lyhyt vuosi&lt;br/&gt;v = pitkä vuosi&lt;br/&gt;M = kuukausi (1-12)&lt;br/&gt;MM = kuukausi (01-12)&lt;br/&gt;MMM = kuukauden lyhenne (tammikuu, helmikuu ... Joulukuu)&lt;br/&gt;MMMM = pitkä kuukausi (tammikuu, helmikuu ... Joulukuu)&lt;br/&gt;d = päivä (1 - 31)&lt;br/&gt;dd = päivä (01 - 31)&lt;br/&gt;ddd = viikonpäivä sanoin (maanantai, tiistai ... sunnuntai)&lt;br/&gt;E = lyhyt viikonpäivä sanoin (ma, ti ... Aurinko)&lt;br/&gt;D - järjestyspäivä (1., 2., 3., 21., 22., 23., 31., 4.)&lt;br/&gt;h = tunti aamupäivällä (0-12)&lt;br/&gt;hh = tunti aamupäivällä (00-12)&lt;br/&gt;H = tunti päivässä (0-23)&lt;br/&gt;HH = tunti päivässä (00-23)&lt;br/&gt;mm = minuutti&lt;br/&gt;ss = sekunti&lt;br/&gt;SSS = millisekuntia&lt;br/&gt;a = AM/PM-merkki&lt;br/&gt;p = AM/PM-merkki</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Kaikissa tämän mallin esiintymissä käytetään annettua tekstiä.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Kaikissa tämän mallin esiintymissä käytetään annettua tekstiä.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste asettaa leikepöydän (ohittaa), kun liität ulkoiseen ohjelmaan. Tämä &lt;b&gt;yrittää&lt;/b&gt; palauttaa leikepöydän tilan ulkoisen liittämisen jälkeen. 
+
+Täydellistä palauttamista ei voida taata, ja se voi heikentää suorituskykyä tai jopa kaataa MonkeyPasten tietolähteestä riippuen.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Vain valittuja esiasetuksia käytetään määritetyssä sovelluksessa. Kun määritystä ei ole määritetty, käytetään &lt;em&gt;leikepöydän sivupalkista&lt;/em&gt; löytyviä oletusesiasetuksia.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Kaikki leikepöydän seuranta hylätyistä hakemuksista &lt;b&gt;ohitetaan&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Sisäinen&lt;/b&gt;Kaikki pikakuvakkeet rajoittuvat sovelluksen sisällä. Tämä ei oikeastaan ole tarkoitettu vaihtoehto, mutta sen avulla voidaan mukauttaa, mitä pikakuvakkeita aiot tehdä globaaleiksi&lt;i&gt;jonain päivänä&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Laiminlyönti&lt;/b&gt; Kaikki yleiset pikakuvakkeet ovat käytössä. &lt;b&gt;Näytä/piilota pääikkuna -pikakuvake&lt;/b&gt;käyttää&lt;b&gt;Caps Lock&lt;/b&gt; -näppäimen&lt;span color="red"&gt;ohitusreititystä&lt;/span&gt;. Voit muuttaa tätä reititystä tai elettä milloin tahansa. Mutta&lt;span color="green"&gt;kokeile sitä&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Globaalit pikavalintatilat&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passiivi&lt;/b&gt; Pikakuvake MonkeyPaste kuuntelee missä tahansa sovelluksessa.&lt;br&gt;*Tämä on &lt;i&gt;toistaiseksi ainoa&lt;/i&gt; vaihtoehto Linuxissa.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Edeltävä&lt;/b&gt; Pikakuvake suoritetaan, &lt;b&gt;&lt;i&gt;ennen kuin&lt;/i&gt;&lt;/b&gt; aktiivinen sovellus käsittelee sen.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Posti&lt;/b&gt; Pikakuvake suoritetaan &lt;b&gt;&lt;i&gt;, kun&lt;/i&gt;&lt;/b&gt; aktiivinen sovellus on käsitellyt sen.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Kumota&lt;/b&gt; Kun MonkeyPaste kuulee ohituspikanäppäimen syöttönäppäimen (ei-muuntonäppäimen), se &lt;i&gt;piilottaa&lt;/i&gt; kyseisen näppäimen painalluksen sovellustason syötteestä.&lt;br&gt;Tämä vaihtoehto takaa, että pikakuvake käynnistyy ilman ristiriitoja aktiivisen sovelluksen kanssa.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Yksinomainen ohitus&lt;/b&gt; Tämä on erityinen ohitustila, joka on suunniteltu Caps Lock -näppäimelle. Se sallii vain &lt;b&gt;yhden&lt;/b&gt; avaimen (ei-muuntimen) sen määrittämiseen.&lt;br&gt;Normaalissa ohitustilassa Caps Lock voi &lt;i&gt;juuttua päälle&lt;/i&gt; , kun sitä painetaan yhdessä muiden näppäinten kanssa.&lt;br&gt;Joten riippumatta siitä, mitkä muut näppäimet ovat alhaalla, jos &lt;b&gt;pikanäppäin-pikanäppäintä&lt;/b&gt; painetaan, se ohitetaan ja estää sitä &lt;i&gt;juuttumasta kiinni&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste on &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Tällä tavalla MonkeyPastaan pääsee&lt;br&gt;&lt;span color="red"&gt;ilman napsautusta&lt;/span&gt; tai edes &lt;span color="red"&gt;silmää räpäyttämättä&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

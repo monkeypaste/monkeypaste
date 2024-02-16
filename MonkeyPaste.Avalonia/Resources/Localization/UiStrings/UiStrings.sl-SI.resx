@@ -166,14 +166,8 @@ sponke.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Pomikanje - do - odprt</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "Center"&gt; MonkeyPaste je &lt;span color = "Red&gt; Popolnoma integrirano &lt;/span&gt; z vleko - in - spusti &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Spustite tukaj!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; Tako lahko dostopate do MonkeyPaste &lt;br&gt; &lt;span color = "rdeča"&gt; brez klika &lt;/span&gt; ali celo &lt;span color = "rdeča"&gt; Batting A Eye &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Povlecite me!</value>
@@ -364,62 +358,14 @@ Nadgradite, da se izognete.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Poteze morajo biti edinstvene in lahko vsebujejo samo en vhodni ključ.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; notranje &lt;/b&gt; Vse bližnjice so v aplikaciji omejene. To v resnici ni predvidena možnost, vendar lahko omogoči prilagoditev, katere bližnjice nameravate narediti globalno &lt;i&gt; nekega dne &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Privzeto &lt;/b&gt; Vse globalne bližnjice so omogočene. &lt;b&gt; Prikaži/skriva glavno okno &lt;/b&gt; bližnjica, ki uporablja &lt;span color = "rdeča"&gt; preglasi &lt;/span&gt; usmerjanje za tipko &lt;b&gt; Caps Lock &lt;/b&gt;. Kadar koli lahko spremenite to usmerjanje ali kretnjo. Toda &lt;span color = "zelena"&gt; poskusite &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;Html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt; Globalni načini bližnjice &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Pasivno &lt;/b&gt; A -bližnjica MonkeyPaste bo poslušal v kateri koli aplikaciji. &lt;br&gt;
-*To je za zdaj samo &lt;i&gt; &lt;/i&gt; možnost v Linuxu.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Pre &lt;/b&gt; bližnjica bo izvedla &lt;b&gt; &lt;i&gt; pred &lt;/i&gt; &lt;/b&gt; z njim se izvaja aktivna aplikacija. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; Bližnjica bo izvedla &lt;b&gt; &lt;i&gt; Po &lt;/i&gt; &lt;/b&gt; Z njim se izvaja aktivna aplikacija. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Preglasi se &lt;/b&gt; Ko MonkeyPaste sliši vhodno tipko (ne -modifikator tipka) preglasitvene bližnjice, bo &lt;i&gt; skrival &lt;/i&gt;, da tipko pritisne na aplikacijo - vhod na ravni. &lt;br&gt; &lt;br&gt;
-Ta možnost bo zagotovila, da se bližnjica sproži brez konfliktov aktivne aplikacije.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Ekskluzivno preglasitev &lt;/b&gt; To je posebna vrsta načina preglasitve, zasnovan za ključ za zaklepanje Caps. Omogoča samo &lt;b&gt; en &lt;/b&gt; tipko (ne - modifikator) za svojo dodelitev. &lt;br&gt;
-V običajnem preglašenem načinu se lahko zaklepa zaklep &lt;i&gt; obtiča na &lt;/i&gt;, ko pritisnete v kombinaciji z drugimi tipkami. &lt;br&gt;
-Torej, ne glede na to, kakšne druge tipke so spuščene, če je pritisnjena na bližnjico &lt;b&gt; hotkey &lt;/b&gt;, bo preglašena in preprečila, da bi se &lt;i&gt; zataknila na &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Onemogoči</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Naložite, ko je ta uporabniški račun prijavljen, ne za druge uporabnike.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Uporaba razpoložljivih stikov (zahteva vtičnik Fetcher) To polje bo uporabljeno za vse primere te predloge v tem dokumentu ali v katerem koli njem Tukaj bo e -poštno polje iz izbranega stika uporabljeno za vse primere v tem dokumentu. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = kratko leto &lt;br/&gt; yyyy = dolgo leto &lt;br/&gt; m = mesec (1-12) &lt;br/&gt; mm = mesec (01-12) &lt;br/&gt; mmm = mesečna okrajšava (januar, feb .. . Dec) &lt;br/&gt; mmmm = dolg mesec (januar, februar ... december) &lt;br/&gt; d = dan (1 - 31) &lt;br/&gt; dd = dan (01 - 31) &lt;br/&gt; ddd = Dan v tednu z besedami (ponedeljek, torek ... nedelja) &lt;br/&gt; e = kratek dan v tednu z besedami (pon, tue ... sonce) &lt;br/&gt; d - redni dan (1., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; h = ura v am/pm (0-12) &lt;br/&gt; hh = ura v AM/PM (00-12) &lt;Br/ &gt; H = ura v dnevu (0-23) &lt;br/&gt; hh = ura v dan (00-23) &lt;br/&gt; mm = minuta &lt;br/&gt; ss = drugi &lt;br/&gt; sss = milisekund &lt;br/&gt; A = AM/PM Marker &lt;br/&gt; P = A.M./P.M. marker</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Trenutni datum in/ali čas bosta nadomeščena za predloge DateTime, ko jih prilepijo.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Vse pojave te predloge bodo uporabile priloženo besedilo. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Vse pojave te predloge bodo uporabile priloženo besedilo. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Zaključek doda</value>
@@ -469,9 +415,6 @@ Torej, ne glede na to, kakšne druge tipke so spuščene, če je pritisnjena na 
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Zadnja aktivna aplikacija neznana. Preklopite na predvideno aplikacijo na opico.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Prilepite na: &lt;em&gt; &lt;i class = "Paste-Tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Zmanjšati</value>
@@ -547,9 +490,6 @@ Dodajte in/ali izberite aplikacijo z edinstveno bližnjico iz kopije (na primer 
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Nobenega</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Za določeno aplikacijo bodo uporabljene samo izbrane prednastavitve. Ko je nedoločen, bodo uporabljene privzete prednastavitve, ki jih najdemo v strani za odložitve &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Številne funkcije MonkeyPaste uporabljajo avtomatizacijo tipkovnice za interakcijo z drugimi aplikacijami.
 
@@ -562,9 +502,6 @@ Nekatere aplikacije (na primer nekatere konzole ali školjke) imajo lahko bližn
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Bralci</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Vse spremljanje odložij iz zavrnjenih vlog bo &lt;b&gt; prezrto &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Pisatelji</value>
@@ -1331,11 +1268,6 @@ Tega ni mogoče razveljaviti!
     <value>Ali ste prepričani, da želite ponastaviti vsa obvestila?
 
 *Tega ni mogoče razveljaviti!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Pasta nastavi odložišče (preglasi), ko prilepite na zunanji program. To bo &lt;b&gt; poskusil obnoviti stanje odložišča po zunanji pasti.
-
-Skupne obnove ni mogoče zagotoviti in lahko zmanjša zmogljivost ali celo zruši MonkeyPaste, odvisno od vira podatkov.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Ponastavi odložišče po opici</value>
@@ -2706,5 +2638,66 @@ Feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Preberite več o načrtih</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Prilepi na: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Z uporabo stikov, ki so na voljo (zahteva vtičnik za fetcher), bo to polje uporabljeno za vse primerke te predloge v tem dokumentu ali v katerem koli drugem dokumentu, na katerega se boste sklicevali pozneje.&lt;/p&gt;&lt;p&gt; Torej, na primer, če tukaj izberete e-poštni naslov, bo e-poštno polje stika, ki ga izberete, uporabljeno za vse primerke v tem dokumentu.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = kratko leto&lt;br/&gt;llll = dolgo leto&lt;br/&gt;M = mesec (1-12)&lt;br/&gt;MM = mesec (01-12)&lt;br/&gt;MMM = mesečna okrajšava (januar, februar ... December)&lt;br/&gt;MMMM = dolg mesec (januar, februar ... decembra)&lt;br/&gt;d = dan (1 - 31)&lt;br/&gt;dd = dan (01 - 31)&lt;br/&gt;ddd = dan v tednu z besedami (ponedeljek, torek ... nedelja)&lt;br/&gt;E = kratek dan v tednu z besedami (pon, tor ... Sonce)&lt;br/&gt;D - Ordinalni dan (1., 2., 3., 21., 22., 23., 31., 4....)&lt;br/&gt;h = ura v am/pm (0-12)&lt;br/&gt;hh = ura v am/pm (00-12)&lt;br/&gt;H = ura na dan (0-23)&lt;br/&gt;HH = ura na dan (00-23)&lt;br/&gt;mm = minuta&lt;br/&gt;ss = sekunda&lt;br/&gt;SSS = milisekunde&lt;br/&gt;a = oznaka AM/PM&lt;br/&gt;p = oznaka a.m./p.m.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Pri vseh dogodkih te predloge bo uporabljeno navedeno besedilo.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Pri vseh dogodkih te predloge bo uporabljeno navedeno besedilo.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste nastavi odložišče (preglasi) pri lepljenju v zunanji program. S tem boste &lt;b&gt;poskušali&lt;/b&gt; obnoviti stanje odložišča po zunanji pasti. 
+
+Popolne obnove ni mogoče zagotoviti in lahko zmanjša zmogljivost ali celo zruši MonkeyPaste, odvisno od vira podatkov.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Za določeno aplikacijo bodo uporabljene samo izbrane prednastavitve. Če to ni določeno, bodo uporabljene privzete prednastavitve, ki jih najdete v &lt;em&gt;stranski vrstici odložišča&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Vse spremljanje odložišča iz zavrnjenih aplikacij bo &lt;b&gt;prezrto&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Notranji&lt;/b&gt;Vse bližnjice so omejene na znotraj aplikacije. To v resnici ni predvidena možnost, vendar lahko omogoči, da prilagodite, katere bližnjice nameravate&lt;i&gt;nekega dne&lt;/i&gt; narediti globalno.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Privzeto&lt;/b&gt; Vse globalne bližnjice so omogočene. Bližnjica&lt;b&gt;Pokaži/skrij glavno okno&lt;/b&gt;uporablja&lt;span color="red"&gt;preglasitev&lt;/span&gt;usmerjanja za tipko&lt;b&gt;Caps Lock&lt;/b&gt; . To usmerjanje ali potezo lahko kadar koli spremenite. Ampak&lt;span color="green"&gt;poskusi&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Globalni načini bližnjic&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pasiven&lt;/b&gt; Bližnjica MonkeyPaste bo poslušala v kateri koli aplikaciji.&lt;br&gt;*To je &lt;i&gt;za zdaj edina&lt;/i&gt; možnost v Linuxu.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pred&lt;/b&gt; Bližnjica se bo izvajala, &lt;b&gt;&lt;i&gt;preden&lt;/i&gt;&lt;/b&gt; jo bo obravnavala aktivna aplikacija.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pošta&lt;/b&gt; Bližnjica se bo izvajala, &lt;b&gt;&lt;i&gt;ko&lt;/i&gt;&lt;/b&gt; jo bo obravnavala aktivna aplikacija.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Preglasiti&lt;/b&gt; Ko MonkeyPaste zasliši vhodno tipko (nemodifikacijski ključ) bližnjice za preglasitev, bo to tipko &lt;i&gt;skril&lt;/i&gt; pred vnosom na ravni aplikacije.&lt;br&gt;Ta možnost bo zagotovila, da se bližnjica sproži brez konfliktov z aktivno aplikacijo.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Ekskluzivna preglasitev&lt;/b&gt; To je posebna vrsta načina preglasitve, zasnovana za tipko Caps Lock. Omogoča samo &lt;b&gt;en&lt;/b&gt; ključ (ki ni modifikator) za njegovo dodelitev.&lt;br&gt;V običajnem načinu preglasitve se lahko Caps Lock &lt;i&gt;zatakne&lt;/i&gt; , ko ga pritisnete v kombinaciji z drugimi tipkami.&lt;br&gt;Torej, ne glede na to, katere druge tipke so navzdol, če pritisnete &lt;b&gt;bližnjico Hotkey&lt;/b&gt; , bo ta preglasila in preprečila, da bi se &lt;i&gt;zataknila&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste je &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Tako lahko dostopate do MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;brez klika&lt;/span&gt; ali celo &lt;span color="red"&gt;udarca z očesom&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

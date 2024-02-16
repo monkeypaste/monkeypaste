@@ -166,14 +166,8 @@ sırasıyla klipler.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Kaydırma - to - aç</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P hizası = "center"&gt; maymuncaste &lt;s span color = "kırmızı&gt; tamamen entegre &lt;/span&gt; sürükle - ve - damla &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Buraya bırak!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P holign = "center"&gt; bu şekilde, Monkeypaste'e erişilebilir &lt;br&gt; &lt;span color = "kırmızı"&gt; tıklamadan &lt;/span&gt; veya hatta &lt;span color = "kırmızı"&gt; göz atmak &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Beni sürükle!</value>
@@ -364,62 +358,14 @@ Kaçınmak için yükseltme.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Hareketler benzersiz olmalı ve yalnızca bir giriş anahtarı içerebilir.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; dahili &lt;/b&gt; Tüm kısayollar uygulama içinde sınırlıdır. Bu gerçekten amaçlanan bir seçenek değildir, ancak bir gün global &lt;i&gt;.
-&lt;li&gt;
-&lt;b&gt; Varsayılan &lt;/b&gt; Tüm küresel kısayollar etkinleştirilir. &lt;b&gt; Ana pencereyi göster/gizle &lt;/b&gt; kısayol, &lt;b&gt; kapak kilidi &lt;/b&gt; tuşu için &lt;s span color = "kırmızı"&gt; geçersiz kılma &lt;/span&gt; yönlendirme kullanır. Bu yönlendirmeyi veya jestleri istediğiniz zaman değiştirebilirsiniz. Ama &lt;Span Color = "Green"&gt; Bir deneyin &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;Head&gt; &lt;/ Head&gt;
-&lt;body&gt;
-&lt;h1&gt; Global Kısayol Modları &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Pasif &lt;/b&gt; Bir kısayol maymunkasta herhangi bir uygulamada dinleyecek. &lt;br&gt;
-*Bu, şimdilik Linux'ta sadece &lt;i&gt; &lt;i&gt; &lt;/i&gt; seçeneğidir.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; kısayolu &lt;b&gt; &lt;i&gt; &lt;/i&gt; &lt;/b&gt; önce aktif uygulama tarafından ele alınır. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; kısayol, aktif uygulama tarafından işlenir. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; geçersiz kılma &lt;/b&gt; Monkeypaste, geçersiz kılma kısayolunun giriş tuşunu (değiştirici olmayan anahtar) duyduğunda &lt;i&gt; Hakliye &lt;/i&gt; Uygulama - seviye girişinden tuş tuşuna basın. &lt;br&gt;
-Bu seçenek, kısayolun aktif uygulamada çatışmalar olmadan tetiklendiğini garanti edecektir.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Özel geçersiz kılma &lt;/b&gt; Bu, CAPS Kilit tuşu için tasarlanmış özel bir geçersiz kılma modu türüdür. Sadece &lt;b&gt; bir &lt;/b&gt; tuşuna (değiştirici olmayan) izin verir. &lt;br&gt;
-Normal geçersiz kılma modunda kapaklar, diğer tuşlarla birlikte basıldığında &lt;/i&gt; sıkışmış olabilir. &lt;br&gt;
-Yani diğer anahtarlar ne olursa olsun, bir &lt;b&gt; hotkey &lt;/b&gt; kısayol basılırsa geçersiz kılınır ve &lt;/i&gt; sıkışmış olmasını önler.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Devre dışı bırakmak</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Bu kullanıcı hesabı oturum açıldığında, diğer kullanıcılar için değil, yükleyin.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Mevcut kişileri kullanma (bir toplama eklentisi gerektirir) Bu alan, bu şablonun tüm örnekleri için bu belgede veya daha sonra referans verilecektir. Burada seçtiğiniz kişinin e -posta alanı bu belgedeki tüm örnekler için kullanılacaktır. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = kısa yıl &lt;br/&gt; yyyy = uzun yıl &lt;br/&gt; ay (1-12) &lt;br/&gt; mm = ay (01-12) &lt;br/&gt; mmm = ay kısaltma (Ocak, Şubat .. . Aralık) &lt;br/&gt; mmmm = uzun ay (Ocak, Şubat ... Aralık) &lt;br/&gt; d = gün (1 - 31) &lt;br/&gt; dd = gün (01 - 31) &lt;br/&gt; ddd = Kelimelerde Haftanın Günü (Pazartesi, Salı ... Pazar) &lt;br/&gt; E = Kelimelerde Haftanın Kısa Günü (Pzt, Sal ... Güneş) &lt;br/&gt; D - Sıralı Günü (1, 2., 3, 21, 22, 23, 31, 4. ...) &lt;br/&gt; H = saat/pm (0-12) &lt;br/&gt; HH = saat/pm (00-12) &gt; H = gün içinde saat (0-23) &lt;br/&gt; hh = gün içinde saat (00-23) &lt;br/&gt; mm = dakika &lt;br/&gt; ss = ikinci &lt;br/&gt; sss = milisaniye &lt;br/&gt; a = am/pm işaretleyici &lt;br/&gt; p = a.m./p.m. işaretleyici</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Mevcut tarih ve/veya saat, yapıştırıldıklarında DateTime şablonları için değiştirilecektir.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Bu şablonun tüm olayları sağlanan metni kullanacaktır. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Bu şablonun tüm olayları sağlanan metni kullanacaktır. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Eklemeyi bitir</value>
@@ -469,9 +415,6 @@ Yani diğer anahtarlar ne olursa olsun, bir &lt;b&gt; hotkey &lt;/b&gt; kısayol
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Son aktif uygulama bilinmiyor. Monkey macunu için amaçlanan uygulamaya geçin.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Yapıştır: &lt;em&gt; &lt;i class = "macun-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>küçültmek</value>
@@ -547,9 +490,6 @@ Bu özelliklerin düzgün çalışmasını sağlamak için benzersiz kopya kısa
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Hiçbiri</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Belirtilen uygulama için yalnızca seçilen ön ayarlar kullanılacaktır. Belirtilmediğinde, &lt;em&gt; pano kenar çubuğunda bulunan varsayılan ön ayarlar &lt;/em&gt; kullanılır.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Birçok Monkeycaste, diğer uygulamalarla etkileşim kurmak için klavye otomasyonu kullanır.
 
@@ -562,9 +502,6 @@ Uygun birlikte çalışabilirliği sağlamak için, bu uygulama için bu kısayo
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Okuyucular</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Reddedilen uygulamalardan gelen tüm pano izleme &lt;b&gt; Göz ardı edilecektir &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Yazarlar</value>
@@ -1331,11 +1268,6 @@ Bu geri alınamaz!
     <value>Tüm bildirimleri sıfırlamak istediğinizden emin misiniz?
 
 *Bu geri alınamaz!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste harici bir programa yapıştırılırken panoyu (geçersiz kılar) ayarlar. Bu, harici bir macundan sonra panonun durumunu geri yüklemek için &lt;b&gt; denemeyi &lt;/b&gt; dener.
-
-Toplam restorasyon garanti edilemez ve verilerin kaynağına bağlı olarak performansı azaltabilir ve hatta maymunkasta çarpabilir.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Maymun yapıştırdıktan sonra panoyu sıfırlayın</value>
@@ -2706,5 +2638,66 @@ beckback@monkeycaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Planlar hakkında daha fazla bilgi edinin</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Yapıştır: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Mevcut kişileri kullanarak (bir alıcı eklentisi gerektirir) bu alan, bu şablonun bu belgedeki tüm örnekleri için veya daha sonra başvurulacak herhangi bir örnek için kullanılacaktır.&lt;/p&gt;&lt;p&gt; Örneğin, burada e-posta adresini seçerseniz, seçtiğiniz kişinin e-posta alanı bu belgedeki tüm örnekler için kullanılacaktır.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = kısa yıl&lt;br/&gt;yyyy = uzun yıl&lt;br/&gt;M = ay (1-12)&lt;br/&gt;MM = ay (01-12)&lt;br/&gt;MMM = ay kısaltması (Ocak, Şubat ... Aralık)&lt;br/&gt;MMMM = uzun ay (Ocak, Şubat... Aralık)&lt;br/&gt;d = gün (1 - 31)&lt;br/&gt;dd = gün (01 - 31)&lt;br/&gt;ddd = kelimelerle haftanın günü (Pazartesi, Salı ... Pazar)&lt;br/&gt;E = kelimelerle haftanın kısa günü (Pzt, Sal ... Güneş)&lt;br/&gt;D - Sıra günü (1., 2., 3., 21., 22., 23., 31., 4...)&lt;br/&gt;h =/pm cinsinden saat (0-12)&lt;br/&gt;hh =/pm cinsinden saat (00-12)&lt;br/&gt;H = gündeki saat (0-23)&lt;br/&gt;HH = gün içindeki saat (00-23)&lt;br/&gt;mm = dakika&lt;br/&gt;ss = saniye&lt;br/&gt;SSS = milisaniye&lt;br/&gt;a =/PM işaretçisi&lt;br/&gt;p = a.m./p.m. işaretçisi</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Bu şablonun tüm oluşumları sağlanan metni kullanacaktır.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Bu şablonun tüm oluşumları sağlanan metni kullanacaktır.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste, harici bir programa yapıştırırken panoyu ayarlar (geçersiz kılar). Bu, harici bir yapıştırmadan sonra panonun durumunu geri yüklemeye &lt;b&gt;çalışacaktır&lt;/b&gt; . 
+
+Tam geri yükleme garanti edilemez ve verilerin kaynağına bağlı olarak performansı düşürebilir ve hatta MonkeyPaste'i çökertebilir.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Belirtilen uygulama için yalnızca seçilen ön ayarlar kullanılacaktır. Belirtilmediğinde, &lt;em&gt;Pano Kenar Çubuğu'nda&lt;/em&gt; bulunan varsayılan hazır ayarlar kullanılır.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Reddedilen başvurulardan gelen tüm pano izlemeleri &lt;b&gt;yok sayılacaktır&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Dahili&lt;/b&gt;Tüm kısayollar uygulama içinde sınırlıdır. Bu gerçekten amaçlanan bir seçenek değildir, ancak&lt;i&gt;bir gün&lt;/i&gt; küresel hale getirmeyi düşündüğünüz kısayolları özelleştirmenize izin verebilir.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Temerrüt&lt;/b&gt; Tüm genel kısayollar etkindir. &lt;b&gt;Ana Pencereyi Göster/Gizle&lt;/b&gt;kısayolu,&lt;b&gt;Caps Lock&lt;/b&gt; tuşu için&lt;span color="red"&gt;geçersiz kılma&lt;/span&gt;yönlendirmesini kullanır. Bu yönlendirmeyi veya hareketi istediğiniz zaman değiştirebilirsiniz. Ama&lt;span color="green"&gt;bir deneyin&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Genel Kısayol Modları&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pasif&lt;/b&gt; MonkeyPaste'in herhangi bir uygulamada dinleyeceği bir kısayol.&lt;br&gt;*Şimdilik Linux'taki &lt;i&gt;tek&lt;/i&gt; seçenek bu.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Öncesi&lt;/b&gt; Kısayol, etkin uygulama tarafından &lt;b&gt;&lt;i&gt;işlenmeden önce&lt;/i&gt;&lt;/b&gt; yürütülür.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Yayınla&lt;/b&gt; Kısayol, etkin uygulama tarafından &lt;b&gt;&lt;i&gt;işlendikten sonra&lt;/i&gt;&lt;/b&gt; yürütülür.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Geçersiz kılmak&lt;/b&gt; MonkeyPaste, bir geçersiz kılma kısayolunun giriş tuşunu (değiştirici olmayan tuş) duyduğunda, bu tuşa basılmasını uygulama düzeyinde girişten &lt;i&gt;gizleyecektir&lt;/i&gt; .&lt;br&gt;Bu seçenek, kısayolun etkin uygulamayla çakışma olmadan tetiklenmesini garanti eder.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Özel Geçersiz Kılma&lt;/b&gt; Bu, Caps Lock tuşu için tasarlanmış özel bir geçersiz kılma modu türüdür. Ataması için yalnızca &lt;b&gt;bir&lt;/b&gt; tuşa (değiştirici olmayan) izin verir.&lt;br&gt;Normal geçersiz kılma modunda, Caps Lock diğer tuşlarla birlikte basıldığında &lt;i&gt;takılı kalabilir&lt;/i&gt; .&lt;br&gt;Bu nedenle, diğer hangi tuşlar kapalı olursa olsun, bir &lt;b&gt;Kısayol Tuşu&lt;/b&gt; kısayoluna basılırsa geçersiz kılınır ve &lt;i&gt;takılıp kalmasını&lt;/i&gt; önler.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Bu şekilde MonkeyPaste'e erişilebilir&lt;br&gt;&lt;span color="red"&gt;bir tıklama olmadan&lt;/span&gt;, hatta &lt;span color="red"&gt;gözünü kırpmadan&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

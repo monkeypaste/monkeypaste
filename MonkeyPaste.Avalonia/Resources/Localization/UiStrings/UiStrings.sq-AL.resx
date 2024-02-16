@@ -166,14 +166,8 @@ Klipet përkatësisht.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Shkoni - për të - hapur</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "Center"&gt; MonkeyPaste është &lt;span color = "Red&gt; plotësisht i integruar &lt;/span&gt; me zvarritje - dhe - Drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Hidhni këtu!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "Center"&gt; Në këtë mënyrë, MonkeyPaste mund të arrihet &lt;br&gt; &lt;span color = "Red"&gt; pa një klikim &lt;/span&gt; apo edhe &lt;span color = "Red"&gt; duke mbushur një sy &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Më tërhiq!</value>
@@ -364,62 +358,14 @@ Përditësoni për të shmangur.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Gjestet duhet të jenë unike dhe mund të përmbajnë vetëm një çelës hyrëse.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; E brendshme &lt;/b&gt; Të gjitha shkurtoret janë të kufizuara brenda aplikimit. Ky nuk është me të vërtetë një mundësi e synuar, por mund të lejojë të rregulloni se çfarë shkurtoresh keni ndërmend të bëni një ditë &lt;/i&gt;. &lt;/li&gt;. &lt;/li&gt;.
-&lt;li&gt;
-&lt;b&gt; Default &lt;/b&gt; Të gjitha shkurtesat globale janë të aktivizuara. Shkurtorja e Shfaqjes/Fsheha e Shkurtër &lt;/b&gt; përdor &lt;span color = "Red"&gt; tejkalon kursin &lt;/span&gt; për tastin &lt;b&gt; Caps Lock &lt;/b&gt;. Ju mund ta ndryshoni atë kurs ose gjest në çdo kohë. Por &lt;span color = "jeshile"&gt; provojeni atë &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt; Mënyrat Global të Shkurtoreve &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; pasiv &lt;/b&gt; Një MonkeyPaste e Shkurtër do të dëgjojë në çdo kërkesë. &lt;br&gt;
-*Kjo është opsioni &lt;i&gt; vetëm &lt;/i&gt; në Linux tani për tani.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; para &lt;/b&gt; Shkurtorja do të ekzekutojë &lt;b&gt; &lt;i&gt; para &lt;/i&gt; &lt;/b&gt; ajo trajtohet nga aplikacioni aktiv. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; Shkurtorja do të ekzekutojë &lt;b&gt; &lt;i&gt; pasi &lt;/i&gt; &lt;/b&gt; trajtohet nga aplikacioni aktiv. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; tejkaloni &lt;/b&gt; Kur MonkeyPaste dëgjon çelësin e hyrjes (çelësin jo -modifikues) të një shkurtore të tejkaluar do të &lt;i&gt; fsheh &lt;/i&gt; atë shtypje të çelësit nga aplikacioni - input i nivelit. &lt;br&gt;
-Ky opsion do të garantojë shkurtoren është shkaktuar pa konflikte në aplikimin aktiv.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; tejkalimi ekskluziv &lt;/b&gt; Ky është një lloj i veçantë i modalitetit të tejkalimit të dizajnuar për çelësin e bllokimit të kapakëve. Ai vetëm lejon &lt;b&gt; një çelës &lt;/b&gt; (jo -modifikues) për caktimin e tij. &lt;br&gt;
-Në modalitetin normal të tejkalimit të kapakëve bllokimi mund të bëhet &lt;i&gt; i mbërthyer në &lt;/i&gt; kur shtypet në kombinim me çelësat e tjerë. &lt;br&gt;
-Pra, pa marrë parasysh se cilat çelësa të tjerë janë ulur, nëse shtypet një shkurtore &lt;b&gt; hotkey &lt;/b&gt;, ajo do të tejkalohet dhe do të parandalojë që ajo të bëhet &lt;i&gt; mbërthyer në &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Çaktivizoj</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Ngarkoni kur kjo llogari e përdoruesit është regjistruar, jo për përdoruesit e tjerë.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Përdorimi i kontakteve të disponueshme (kërkon një shtojcë fetcher) Kjo fushë do të përdoret për të gjitha rastet e këtij shablloni në të gjithë këtë dokument ose në çfarëdo që do të referohet më vonë. Këtu atëherë fusha e postës elektronike të kontaktit që zgjidhni do të përdoret për të gjitha rastet në këtë dokument. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = vit i shkurtër &lt;br/&gt; yyyy = vit i gjatë &lt;br/&gt; m = muaj (1-12) &lt;br/&gt; mm = muaj (01-12) &lt;br/&gt; mmm = shkurtim i muajit (Jan, Shkurt .. . Dhjetor) &lt;br/&gt; mmmm = muaj i gjatë (janar, shkurt ... dhjetor) &lt;br/&gt; d = ditë (1 - 31) &lt;br/&gt; dd = ditë (01 - 31) &lt;br/&gt; ddd = Dita e javës me fjalë (e hënë, e martë ... e diel) &lt;br/&gt; e = ditë e shkurtër e javës me fjalë (e hënë, e martë ... diell) &lt;br/&gt; d - dita e zakonshme (1, 2, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; h = orë në AM/PM (0-12) &lt;br/&gt; hh = orë në AM/PM (00-12) &lt;Br/ &gt; H = orë në ditë (0-23) &lt;br/&gt; hh = orë në ditë (00-23) &lt;br/&gt; mm = minutë &lt;br/&gt; ss = e dyta &lt;br/&gt; sss = milisekonda &lt;br/&gt; A = AM/PM MARKER &lt;br/&gt; p = a.m./p.m. shënues</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Data aktuale dhe/ose koha do të zëvendësohet për shabllonet e DateTime kur ato ngjiten.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Të gjitha ndodhjet e këtij shablloni do të përdorin tekstin e dhënë. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Të gjitha ndodhjet e këtij shablloni do të përdorin tekstin e dhënë. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Përfundoni Shtojcën</value>
@@ -469,9 +415,6 @@ Pra, pa marrë parasysh se cilat çelësa të tjerë janë ulur, nëse shtypet n
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Aplikacioni i fundit aktiv i panjohur. Kaloni në aplikacionin e synuar në pastën e majmunit.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Paste në: &lt;em&gt; &lt;i class = "paste-Tooltip-Suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimizoj</value>
@@ -547,9 +490,6 @@ Shtoni dhe/ose zgjidhni aplikacionin me shkurtoren unike të kopjimit (si një t
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Asnje</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Vetëm paravendosjet e zgjedhura do të përdoren për aplikacionin e specifikuar. Kur të papërcaktuara, do të përdoren paravendosjet e paracaktuara në shiritin anësor &lt;em&gt; clipboard &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Shumë karakteristika të MonkeyPaste përdorin automatizimin e tastierës për të bashkëvepruar me aplikacione të tjera.
 
@@ -562,9 +502,6 @@ Për të siguruar ndërveprimin e duhur, regjistroni ato shkurtore për atë kë
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Lexues</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Të gjitha monitorimet e klipit nga aplikacionet e refuzuara do të injorohen &lt;b&gt; &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Shkrimtarët</value>
@@ -1331,11 +1268,6 @@ Kjo nuk mund të zhbëhet!
     <value>A jeni i sigurt që doni të rivendosni të gjitha njoftimet?
 
 *Kjo nuk mund të zhbëhet!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Paste majmune vendos clipboard (tejkalon) kur ngjitet në një program të jashtëm. Kjo do të &lt;b&gt; përpjekje &lt;/b&gt; për të rivendosur gjendjen e clipboard pas një paste të jashtme.
-
-Restaurimi total nuk mund të garantohet dhe mund të zvogëlojë performancën ose madje edhe përplasjen e Monkeypaste në varësi të burimit të të dhënave.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Rivendosni clipboard pas ngjitjes së majmunit</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Mësoni më shumë rreth planeve</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Paste për: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Duke përdorur kontaktet në dispozicion (kërkon një plugin fetcher) kjo fushë do të përdoret për të gjitha instancat e këtij template në të gjithë këtë dokument ose në çdo gjë që do të referohet më vonë.&lt;/p&gt;&lt;p&gt; Pra, për shembull, nëse zgjidhni adresën e emailit këtu atëherë fusha e email-it e kontaktit që zgjidhni do të përdoret për të gjitha instancat në këtë dokument.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = vit i shkurtër&lt;br/&gt;yyyy = vit i gjatë&lt;br/&gt;M = muaj (1-12)&lt;br/&gt;MM = muaj (01-12)&lt;br/&gt;MMM = shkurtesa mujore (Jan, Feb ... Dec)&lt;br/&gt;MMMM = muaj i gjatë (janar, shkurt ... Dhjetor)&lt;br/&gt;d = ditë (1 - 31)&lt;br/&gt;dd = dita (01 - 31)&lt;br/&gt;ddd = dita e javës me fjalë (e hënë, e martë ... E diel)&lt;br/&gt;E = ditë e shkurtër e javës me fjalë (Mon, Tue ... Sun)&lt;br/&gt;D - Dita ordinale (1, 2, 3, 21, 22, 23, 31, 4...)&lt;br/&gt;h = orë në am/pm (0-12)&lt;br/&gt;hh = orë në am/pm (00-12)&lt;br/&gt;H = orë në ditë (0-23)&lt;br/&gt;HH = orë në ditë (00-23)&lt;br/&gt;mm = minutë&lt;br/&gt;ss = i dyti&lt;br/&gt;SSS = milisekonda&lt;br/&gt;a = shënues AM/PM&lt;br/&gt;p = shënues a.m./p.m.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Të gjitha ndodhitë e këtij template do të përdorin tekstin e dhënë.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Të gjitha ndodhitë e këtij template do të përdorin tekstin e dhënë.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste vendos tabelën (anashkalon) kur kalon në një program të jashtëm. Kjo do të &lt;b&gt;përpiqet&lt;/b&gt; të rivendosë gjendjen e dërrasës pas një paste të jashtme. 
+
+Restaurimi total nuk mund të garantohet dhe mund të zvogëlojë performancën apo edhe crash MonkeyPaste në varësi të burimit të të dhënave.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Vetëm presetet e zgjedhura do të përdoren për aplikimin e specifikuar. Kur nuk janë të përcaktuara, do të përdoren presetet e prezgjedhura që gjenden në &lt;em&gt;Sidebarin e Clipboard.&lt;/em&gt;</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Të gjitha monitorimet e tabelave nga aplikimet e refuzuara do të &lt;b&gt;shpërfillen&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Të brendshme&lt;/b&gt;Të gjitha shkurtesat janë të kufizuara brenda aplikimit. Kjo nuk është në të vërtetë një opsion i synuar, por mund të lejojë të personalizoni se çfarë shkurtesash keni ndërmend të bëni globale&lt;i&gt;një ditë&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Prezgjedhur&lt;/b&gt; Të gjitha shkurtesat globale janë mundësuar. Shkurtesa&lt;b&gt;Show/Hide Main Window&lt;/b&gt;përdor&lt;span color="red"&gt;override&lt;/span&gt;routing për çelësin&lt;b&gt;Caps Lock&lt;/b&gt; . Ju mund ta ndryshoni atë routje ose gjest në çdo kohë. Por&lt;span color="green"&gt;provoje.&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Modalitetet globale të shkurtimit&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pasiv&lt;/b&gt; Një shkurtesë MonkeyPaste do të dëgjojë për çdo aplikim.&lt;br&gt;*Ky është opsioni i &lt;i&gt;vetëm&lt;/i&gt; në Linux tani për tani.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Shortcut do të ekzekutohet &lt;b&gt;&lt;i&gt;para se&lt;/i&gt;&lt;/b&gt; të trajtohet nga aplikacioni aktiv.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Posta&lt;/b&gt; Shortcut do të ekzekutohet &lt;b&gt;&lt;i&gt;pasi&lt;/i&gt;&lt;/b&gt; të trajtohet nga aplikacioni aktiv.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Mbivendosje&lt;/b&gt; Kur MonkeyPaste të dëgjojë çelësin hyrës (çelësin jo modifikues) të një shkurtesë mbivendosje, ajo do ta &lt;i&gt;fshehë&lt;/i&gt; atë shtypje kyçe nga hyrja e nivelit të aplikimit.&lt;br&gt;Ky opsion do të garantojë se shkurtesa është shkaktuar pa konflikte në aplikimin aktiv.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Mbivendosje ekskluzive&lt;/b&gt; Ky është një lloj i veçantë i modes override projektuar për çelësin Caps Lock. Ajo lejon vetëm &lt;b&gt;një&lt;/b&gt; çelës (jo - modifikues) për caktimin e tij.&lt;br&gt;Në modalitetin normal të mbivendosjes Caps Lock mund të &lt;i&gt;ngecë kur&lt;/i&gt; shtypet në kombinim me çelësat e tjerë.&lt;br&gt;Pra, pavarësisht se çfarë çelësash të tjerë janë poshtë, nëse shtypet një shkurtesë &lt;b&gt;Hotkey&lt;/b&gt; , ajo do të anashkalohet dhe do ta pengojë atë të &lt;i&gt;ngecë&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste është &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Në këtë mënyrë, MonkeyPaste mund të aksesohet&lt;br&gt;&lt;span color="red"&gt;Pa një klikim&lt;/span&gt; apo edhe &lt;span color="red"&gt;duke rrahur një sy&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

@@ -166,14 +166,8 @@ Clips jeweils.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Scrollen - zu - Öffnen</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P Align = "Center"&gt; MonkeyPaste ist &lt;span color = "rot&gt; vollständig integriert &lt;/span&gt; mit Drag - und - Drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Lass es hier!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P Align = "Center"&gt; Auf diese Weise kann Monkeypaste auf &lt;br&gt; &lt;span color = "rot"&gt; ohne Klick &lt;/span&gt; oder sogar &lt;span color = "rot"&gt; zugegriffen werden. &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Zieh mich!</value>
@@ -364,62 +358,14 @@ Upgrade, um zu vermeiden.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Gesten müssen einzigartig sein und können nur einen Eingangstaste enthalten.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; interne &lt;/b&gt; Alle Verknüpfungen sind innerhalb der Anwendung begrenzt. Dies ist nicht wirklich eine beabsichtigte Option, kann aber ermöglichen, anpassen zu werden, welche Verknüpfungen Sie von einem Tages &lt;/i&gt; global &lt;i&gt; machen möchten. &lt;/Li&gt;
-&lt;li&gt;
-&lt;b&gt; Standard &lt;/b&gt; Alle globalen Verknüpfungen sind aktiviert. Das Hauptfenster &lt;B&gt; show/ausblenden. Sie können diese Routing oder Geste jederzeit ändern. Aber &lt;span color = "green"&gt; probieren Sie es aus &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;kopf&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt; Globale Verknüpfungsmodi &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Passiv &lt;/b&gt; Eine Abkürzung Monkeypaste wird in jeder Anwendung zuhören. &lt;br&gt;
-*Dies ist die &lt;i&gt; einzige &lt;/i&gt; Option auf Linux vorerst.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Pre &lt;/b&gt; Verknüpfung wird &lt;b&gt; &lt;i&gt; vor &lt;/i&gt; &lt;/b&gt; ausgeführt. Es wird von der aktiven Anwendung behandelt. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; Verknüpfung wird &lt;b&gt; &lt;i&gt; nach &lt;/i&gt; &lt;/b&gt; ausgeführt. Es wird von der aktiven Anwendung behandelt. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Überschreibung &lt;/b&gt; Wenn MonkeyPaste die Eingangstaste (nicht - Modifikator -Taste) einer Überschreibungsverknüpfung hört, wird &lt;i&gt; ausblenden &lt;/i&gt; die Taste von der Anwendung - Pegel -Eingabe drücken. &lt;br&gt;
-Diese Option garantiert, dass die Verknüpfung ohne Konflikte mit der aktiven Anwendung ausgelöst wird.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Exklusive Override &lt;/b&gt; Dies ist ein spezieller Typ von Override -Modus, der für die CAPS -Sperrenschlüssel entwickelt wurde. Es ermöglicht nur &lt;b&gt; einen &lt;/b&gt; Schlüssel (nicht - Modifikator) für seine Zuordnung. &lt;br&gt;
-Im normalen Überschreibungsmodus -Caps -Sperren kann bei der Drücke in Kombination mit anderen Tasten &lt;i&gt; auf &lt;/i&gt; festgehalten werden. &lt;br&gt;
-Egal, was andere Schlüssel nicht mehr sind, wenn eine &lt;b&gt; hotkey &lt;/b&gt; Verknüpfung gedrückt wird, wird er außer Kraft gesetzt und verhindern, dass er &lt;i&gt; auf &lt;/i&gt; festhält.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Deaktivieren</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Laden Sie, wenn dieses Benutzerkonto angemeldet ist, nicht für andere Benutzer.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Verwenden der verfügbaren Kontakte (erfordert ein Fetcher -Plugin). Dieses Feld wird für alle Instanzen dieser Vorlage in diesem Dokument oder in einem beliebigen Hinweis auf später verwiesen. Hier wird das E -Mail -Feld des Kontakts, den Sie auswählen, für alle Instanzen in diesem Dokument verwendet. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = kurzes Jahr &lt;br/&gt; yyyy = langes Jahr &lt;br/&gt; m = Monat (1-12) &lt;br/&gt; mm = Monat (01-12) &lt;br/&gt; mmm = Monat Abkürzung (Jan, Februar. . Dec) &lt;br/&gt; Mmmm = langer Monat (Januar, Februar ... Dezember) &lt;br/&gt; d = Tag (1 - 31) &lt;br/&gt; DD = DAY (01 - 31) &lt;br/&gt; ddd = Tag der Woche in Worten (Montag, Dienstag ... Sonntag) &lt;br/&gt; E = Kurzer Wochentag in Worten (Mon, Di ... Sonne) &lt;br/&gt; d - Ordinaler Tag (1., 2. 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; H = Stunde in AM/PM (0-12) &lt;br/&gt; HH = Stunde in AM/PM (00-12) &lt;Br/ &gt; H = Stunde im Tag (0-23) &lt;br/&gt; HH = Stunde im Tag (00-23) &lt;br/&gt; mm = Minute &lt;br/&gt; SS = Second &lt;br/&gt; SSS = Milliseconds &lt;br/&gt; a = am/pm Marker &lt;br/&gt; p = a.m./p.m. Marker</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Das aktuelle Datum und/oder die Uhrzeit werden bei der Einfügung durch Vorlagen für DateTime ersetzt.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Alle Voraussetzungen dieser Vorlage verwenden den angegebenen Text. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Alle Voraussetzungen dieser Vorlage verwenden den angegebenen Text. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Anhang beenden</value>
@@ -469,9 +415,6 @@ Egal, was andere Schlüssel nicht mehr sind, wenn eine &lt;b&gt; hotkey &lt;/b&g
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Letzte aktive App unbekannt. Wechseln Sie in die beabsichtigte App zu Affenpaste.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Einfügen in: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimieren</value>
@@ -547,9 +490,6 @@ Fügen Sie die App mit der eindeutigen Kopierverknüpfung (z. B. eine Konsole od
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Keiner</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Nur die ausgewählten Voreinstellungen werden für die angegebene Anwendung verwendet. Bei nicht spezifiziertem Standardvereinbarungen werden die in der &lt;em&gt; -Stabboard -Seitenleiste gefundenen Voreinstellungen verwendet.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Viele Monkeypaste -Funktionen verwenden die Tastaturautomatisierung, um mit anderen Anwendungen zu interagieren.
 
@@ -562,9 +502,6 @@ Um eine ordnungsgemäße Interoperabilität zu gewährleisten, zeichnen Sie dies
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Leser</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Alle Überwachung der Zwischenablage aus abgelehnten Anwendungen werden &lt;b&gt; ignoriert &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Schriftsteller</value>
@@ -1331,11 +1268,6 @@ Das kann nicht rückgängig gemacht werden!
     <value>Sind Sie sicher, dass Sie alle Benachrichtigungen zurücksetzen möchten?
 
 *Das kann nicht rückgängig gemacht werden!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Affenpaste legt die Zwischenablage (Überschreiung) beim Einfügen in ein externes Programm fest. Dies wird &lt;B&gt; versuchen, den Status der Zwischenablage nach einer externen Paste wiederherzustellen.
-
-Die Gesamtwiederherstellung kann nicht garantiert werden und kann je nach Datenquelle die Leistung oder sogar Crash -Monkeypaste verringern.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Setzen Sie die Zwischenablage nach Affeneinfachen zurück</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Erfahren Sie mehr über Pläne</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Einfügen in: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Bei Verwendung verfügbarer Kontakte (erfordert ein Fetcher-Plugin) wird dieses Feld für alle Instanzen dieser Vorlage in diesem Dokument oder in jedem Dokument verwendet, auf das später verwiesen wird.&lt;/p&gt;&lt;p&gt; Wenn Sie hier beispielsweise eine E-Mail-Adresse auswählen, wird das E-Mail-Feld des von Ihnen ausgewählten Kontakts für alle Instanzen in diesem Dokument verwendet.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = kurzes Jahr&lt;br/&gt;yyyy = langes Jahr&lt;br/&gt;M = Monat (1-12)&lt;br/&gt;MM = Monat (01-12)&lt;br/&gt;MMM = Monatskürzel (Jan, Feb ... Dez)&lt;br/&gt;MMMM = langer Monat (Januar, Februar ... Dezember)&lt;br/&gt;d = Tag (1 - 31)&lt;br/&gt;dd = Tag (01 - 31)&lt;br/&gt;ddd = Wochentag in Worten (Montag, Dienstag ... Sonntag)&lt;br/&gt;E = kurzer Wochentag in Worten (Mo, Di ... So)&lt;br/&gt;D - Ordinaltag (1., 2., 3., 21., 22., 23., 31., 4....)&lt;br/&gt;h = Stunde in am/pm (0-12)&lt;br/&gt;hh = Stunde in vormittags/nachmittags (00-12)&lt;br/&gt;H = Stunde am Tag (0-23)&lt;br/&gt;HH = Stunde am Tag (00-23)&lt;br/&gt;mm = Minute&lt;br/&gt;ss = Sekunde&lt;br/&gt;SSS = Millisekunden&lt;br/&gt;a = AM/PM-Markierung&lt;br/&gt;p = a.m./p.m. Markierung</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Für alle Vorkommen dieser Vorlage wird der bereitgestellte Text verwendet.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Für alle Vorkommen dieser Vorlage wird der bereitgestellte Text verwendet.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste legt die Zwischenablage (Überschreibungen) beim Einfügen in ein externes Programm fest. Dadurch &lt;b&gt;wird versucht&lt;/b&gt; , den Zustand der Zwischenablage nach einem externen Einfügen wiederherzustellen. 
+
+Eine vollständige Wiederherstellung kann nicht garantiert werden und kann je nach Quelle der Daten die Leistung beeinträchtigen oder MonkeyPaste sogar zum Absturz bringen.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Nur die ausgewählten Voreinstellungen werden für die angegebene Anwendung verwendet. Wenn nicht angegeben, werden die Standardvoreinstellungen in der &lt;em&gt;Seitenleiste der Zwischenablage&lt;/em&gt; verwendet.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Die Überwachung der Zwischenablage von abgelehnten Bewerbungen wird &lt;b&gt;ignoriert&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Intern&lt;/b&gt;Alle Verknüpfungen sind auf die Anwendung beschränkt. Dies ist nicht wirklich eine beabsichtigte Option, kann aber es ermöglichen, anzupassen, welche Verknüpfungen Sie&lt;i&gt;eines Tages&lt;/i&gt; global erstellen möchten.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Vorgabe&lt;/b&gt; Alle globalen Tastenkombinationen sind aktiviert. Die Verknüpfung "&lt;b&gt;Hauptfenster ein-/ausblenden&lt;/b&gt;" verwendet das&lt;span color="red"&gt;Überschreibungsrouting&lt;/span&gt;für die&lt;b&gt;Feststelltaste&lt;/b&gt; . Sie können diese Weiterleitung oder Geste jederzeit ändern. Aber&lt;span color="green"&gt;probieren Sie es aus&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Globale Shortcut-Modi&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passiv&lt;/b&gt; Eine Verknüpfung, auf die MonkeyPaste in jeder Anwendung lauscht.&lt;br&gt;*Dies ist vorerst die &lt;i&gt;einzige&lt;/i&gt; Option unter Linux.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Prä&lt;/b&gt; Die Verknüpfung wird ausgeführt &lt;b&gt;&lt;i&gt;, bevor&lt;/i&gt;&lt;/b&gt; sie von der aktiven Anwendung verarbeitet wird.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Bereitstellen&lt;/b&gt; Die Verknüpfung wird ausgeführt &lt;b&gt;&lt;i&gt;, nachdem&lt;/i&gt;&lt;/b&gt; sie von der aktiven Anwendung verarbeitet wurde.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Überschreiben&lt;/b&gt; Wenn MonkeyPaste die Eingabetaste (Nicht-Modifikatortaste) einer Überschreibungsverknüpfung hört, &lt;i&gt;blendet&lt;/i&gt; es diesen Tastendruck vor Eingaben auf Anwendungsebene aus.&lt;br&gt;Diese Option stellt sicher, dass die Verknüpfung ohne Konflikte mit der aktiven Anwendung ausgelöst wird.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Exklusives Override&lt;/b&gt; Dies ist eine spezielle Art von Überschreibungsmodus, der für die Feststelltaste entwickelt wurde. Es ist nur &lt;b&gt;eine&lt;/b&gt; Taste (Nicht-Modifikator) für die Zuweisung zulässig.&lt;br&gt;Im normalen Override-Modus kann die Feststelltaste &lt;i&gt;hängenbleiben&lt;/i&gt; , wenn sie in Kombination mit anderen Tasten gedrückt wird.&lt;br&gt;Unabhängig davon, welche anderen Tasten ausgefallen sind, wird eine &lt;b&gt;Hotkey-Tastenkombination&lt;/b&gt; überschrieben, wenn sie gedrückt wird, und verhindert, dass sie &lt;i&gt;hängen&lt;/i&gt; bleibt.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste ist &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Auf diese Weise kann auf MonkeyPaste zugegriffen werden&lt;br&gt;&lt;span color="red"&gt;ohne einen Klick&lt;/span&gt; oder gar &lt;span color="red"&gt;mit der Wimper zu zucken&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

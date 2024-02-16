@@ -166,14 +166,8 @@ rispettivamente clip.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Scorrimento - a - aperto</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P align = "Center"&gt; MonkeyPaste è &lt;span color = "rosso&gt; completamente integrato &lt;/span&gt; con trascinamento - e - drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Lascialo qui!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P align = "Center"&gt; In questo modo, è possibile accedere a MonkeyPaste &lt;br&gt; &lt;span color = "rosso"&gt; senza un clic &lt;/span&gt; o addirittura &lt;span color = "rosso"&gt; battuta un occhio &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Trascinami!</value>
@@ -364,62 +358,14 @@ Aggiornamento per evitare.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>I gesti devono essere unici e possono contenere solo una chiave di input.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Internal &lt;/b&gt; Tutte le scorciatoie sono limitate all'interno dell'applicazione. Questa non è in realtà un'opzione prevista ma può consentire di personalizzare quali scorciatoie intendi rendere globale &lt;i&gt; un giorno &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Predefinito &lt;/b&gt; Tutte le scorciatoie globali sono abilitate. La finestra principale &lt;b&gt; Show/Nascondi &lt;/b&gt; scorciatoia utilizza &lt;span color = "rosso"&gt; override &lt;/span&gt; routing per il tasto &lt;b&gt; bloccante dei tappi &lt;/b&gt;. Puoi modificare quel routing o il gesto in qualsiasi momento. Ma &lt;span color = "Green"&gt; provalo &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;dody&gt;
-&lt;h1&gt; Modalità di scelta rapida globale &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; passivo &lt;/b&gt; Un moncone di scelta rapida ascolterà in qualsiasi applicazione. &lt;br&gt;
-*Questa è l'opzione &lt;i&gt; solo &lt;/i&gt; su Linux per ora.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; scorciatoia eseguirà &lt;b&gt; &lt;i&gt; prima di &lt;/i&gt; &lt;/b&gt; è gestito dall'applicazione attiva. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; POST &lt;/b&gt; ShortCut eseguirà &lt;b&gt; &lt;i&gt; dopo &lt;/i&gt; &lt;/b&gt; è gestito dall'applicazione attiva. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; override &lt;/b&gt; Quando Monkeypaste sente il tasto di input (tasto non modificato) di un collegamento di sovraccarico, nasconderà &lt;i&gt; quel tasto premi dall'input di livello dell'applicazione. &lt;br&gt;
-Questa opzione garantirà che il collegamento viene attivato senza conflitti sull'applicazione attiva.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Override esclusiva &lt;/b&gt; Questo è un tipo speciale di modalità di override progettata per il tasto di blocco CAPS. Permette solo il tasto &lt;b&gt; uno &lt;/b&gt; (non - modificatore) per il suo incarico. &lt;br&gt;
-Nella normale modalità di sovraccarico, il blocco dei tappi può essere bloccato su &lt;/i&gt; quando viene premuto in combinazione con altri tasti. &lt;br&gt;
-Quindi, indipendentemente dalle altre chiavi, se viene premuto un taket di taglio &lt;b&gt; &lt;/b&gt; verrà sovrascritto e impedirà che si blocchi &lt;i&gt; bloccato su &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>disattivare</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Carica quando questo account utente viene effettuato, non per altri utenti.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Utilizzo dei contatti disponibili (richiede un plug -in Fetcher) Questo campo verrà utilizzato per tutte le istanze di questo modello su questo documento o in qualsiasi altro verrà fatto riferimento in seguito. &lt;/p&gt; &lt;p&gt; Quindi, ad esempio, se seleziona l'indirizzo e -mail Ecco quindi il campo e -mail del contatto che seleziona verrà utilizzato per tutte le istanze in questo documento. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = corto anno &lt;br/&gt; yyyy = lungo anno &lt;br/&gt; m = mese (1-12) &lt;br/&gt; mm = mese (01-12) &lt;br/&gt; mmm = Abbreviazione del mese (gennaio, febbraio .. . Dec) &lt;br/&gt; mmmm = lungo mese (gennaio, febbraio ... dicembre) &lt;br/&gt; d = day (1 - 31) &lt;br/&gt; dd = day (01 - 31) &lt;br/&gt; ddd = Giorno della settimana in parole (lunedì, martedì ... domenica) &lt;br/&gt; e = breve giorno della settimana in parole (lun, mar ... sole) &lt;br/&gt; d - giorno ordinale (1 °, 2 °, 3 °, 21 °, 22 °, 23 °, 31 °, 4 ° ...) &lt;br/&gt; H = ora in AM/PM (0-12) &lt;br/&gt; hh = ora in AM/PM (00-12) &lt;Br/ &gt; H = ora in giorno (0-23) &lt;br/&gt; hh = ora in giorno (00-23) &lt;br/&gt; mm = minuto &lt;br/&gt; ss = secondo &lt;br/&gt; sss = milliseconds &lt;br/&gt; A = marcatore AM/PM &lt;br/&gt; p = A.M./P.M. marcatore</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>La data e/o l'ora correnti saranno sostituiti con i modelli DateTime quando vengono incollati.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Tutti gli eventi di questo modello utilizzeranno il testo fornito. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Tutti gli eventi di questo modello utilizzeranno il testo fornito. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Finire l'avvio</value>
@@ -469,9 +415,6 @@ Quindi, indipendentemente dalle altre chiavi, se viene premuto un taket di tagli
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Ultima app attiva sconosciuta. Passa all'app prevista per la pasta di scimmia.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Incolla a: &lt;em&gt; &lt;i class = "pasta-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimizzare</value>
@@ -547,9 +490,6 @@ Aggiungi e/o seleziona l'app con il collegamento di copia univoco (come una cons
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Nessuno</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Verranno utilizzati solo i preset selezionati per l'applicazione specificata. Quando non specificati, verranno utilizzati i preset predefiniti presenti nella barra laterale &lt;em&gt; degli appunti &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Molte funzionalità di Monkeypaste utilizzano l'automazione della tastiera per interagire con altre applicazioni.
 
@@ -562,9 +502,6 @@ Per garantire una corretta interoperabilità, registrare questi collegamenti per
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Lettori</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Tutto il monitoraggio degli appunti da applicazioni rifiutate verrà &lt;b&gt; ignorato &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Scrittori</value>
@@ -1331,11 +1268,6 @@ Questo non può essere annullato!
     <value>Sei sicuro di voler ripristinare tutte le notifiche?
 
 *Questo non può essere annullato!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Incolla imposta gli appunti (sovrascrivi) quando si incolla a un programma esterno. Questo &lt;b&gt; tenterà &lt;/b&gt; di ripristinare lo stato degli appunti dopo una pasta esterna.
-
-Il ripristino totale non può essere garantito e può ridurre le prestazioni o persino un crash Monkeypaste a seconda della fonte dei dati.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Ripristina gli appunti dopo l'abbandono delle scimmie</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Ulteriori informazioni sui piani</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Incolla in: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Utilizzando i contatti disponibili (richiede un plug-in di recupero), questo campo verrà utilizzato per tutte le istanze di questo modello in questo documento o in qualsiasi in cui verrà fatto riferimento in seguito.&lt;/p&gt;&lt;p&gt; Quindi, ad esempio, se si seleziona l'indirizzo e-mail qui, il campo e-mail del contatto selezionato verrà utilizzato per tutte le istanze in questo documento.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = anno corto&lt;br/&gt;aaaa = anno lungo&lt;br/&gt;M = mese (1-12)&lt;br/&gt;MM = mese (01-12)&lt;br/&gt;MMM = abbreviazione del mese (gennaio, febbraio ... Dic)&lt;br/&gt;MMMM = mese lungo (gennaio, febbraio... Dicembre)&lt;br/&gt;d = giorno (1 - 31)&lt;br/&gt;gg = giorno (01 - 31)&lt;br/&gt;ddd = giorno della settimana in parole (lunedì, martedì ... Domenica)&lt;br/&gt;E = giorno corto della settimana in parole (lun, mar ... Sole)&lt;br/&gt;D - Giorno ordinale (1°, 2°, 3°, 21°, 22°, 23°, 31°, 4°...)&lt;br/&gt;h = ora in am/pm (0-12)&lt;br/&gt;HH = ora in am/pm (00-12)&lt;br/&gt;H = ora del giorno (0-23)&lt;br/&gt;HH = ora del giorno (00-23)&lt;br/&gt;mm = minuto&lt;br/&gt;ss = secondo&lt;br/&gt;SSS = millisecondi&lt;br/&gt;a = indicatore AM/PM&lt;br/&gt;p = marcatore a.m./p.m.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Tutte le occorrenze di questo modello utilizzeranno il testo fornito.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Tutte le occorrenze di questo modello utilizzeranno il testo fornito.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste imposta gli appunti (sostituzioni) quando si incolla in un programma esterno. Questo &lt;b&gt;tenterà&lt;/b&gt; di ripristinare lo stato degli appunti dopo un'operazione di incollaggio esterno. 
+
+Il ripristino totale non può essere garantito e può ridurre le prestazioni o addirittura arrestare in modo anomalo MonkeyPaste a seconda dell'origine dei dati.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Solo le preimpostazioni selezionate verranno utilizzate per l'applicazione specificata. Se non specificato, verranno utilizzati i predefiniti presenti nella &lt;em&gt;barra laterale degli Appunti&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Tutto il monitoraggio degli appunti delle applicazioni &lt;b&gt;rifiutate verrà ignorato&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Interno&lt;/b&gt;Tutte le scorciatoie sono limitate all'interno dell'applicazione. Questa non è davvero un'opzione prevista, ma può consentire di personalizzare le scorciatoie che intendi rendere globali&lt;i&gt;un giorno&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Default&lt;/b&gt; Tutte le scorciatoie globali sono abilitate. La scorciatoia&lt;b&gt;Mostra/Nascondi finestra principale&lt;/b&gt;utilizza l'instradamento&lt;span color="red"&gt;di sostituzione&lt;/span&gt;per il tasto&lt;b&gt;BLOC MAIUSC&lt;/b&gt; . È possibile modificare l'instradamento o il gesto in qualsiasi momento. Ma&lt;span color="green"&gt;provaci&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Modalità di scelta rapida globali&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passivo&lt;/b&gt; Una scorciatoia che MonkeyPaste ascolterà in qualsiasi applicazione.&lt;br&gt;*Questa è &lt;i&gt;l'unica&lt;/i&gt; opzione su Linux per ora.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Il collegamento verrà eseguito &lt;b&gt;&lt;i&gt;prima&lt;/i&gt;&lt;/b&gt; di essere gestito dall'applicazione attiva.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Inserisci&lt;/b&gt; Il collegamento verrà eseguito &lt;b&gt;&lt;i&gt;dopo&lt;/i&gt;&lt;/b&gt; essere stato gestito dall'applicazione attiva.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Prevalere&lt;/b&gt; Quando MonkeyPaste sente il tasto di input (tasto non modificatore) di una scorciatoia di override, &lt;i&gt;nasconderà&lt;/i&gt; la pressione di quel tasto dall'input a livello di applicazione.&lt;br&gt;Questa opzione garantirà che il collegamento venga attivato senza conflitti con l'applicazione attiva.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Override esclusivo&lt;/b&gt; Si tratta di un tipo speciale di modalità di override progettata per il tasto Blocco maiuscole. Consente &lt;b&gt;solo un&lt;/b&gt; tasto (non modificatore) per la sua assegnazione.&lt;br&gt;In modalità di override normale, il blocco maiuscole &lt;i&gt;può bloccarsi&lt;/i&gt; quando viene premuto in combinazione con altri tasti.&lt;br&gt;Quindi, indipendentemente da quali altri tasti siano premuti, se viene premuta una scorciatoia &lt;b&gt;da tastiera&lt;/b&gt; verrà ignorata e impedirà che si &lt;i&gt;blocchi&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste è &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;In questo modo, è possibile accedere a MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;senza un clic o addirittura battendo&lt;/span&gt; &lt;span color="red"&gt;ciglio&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

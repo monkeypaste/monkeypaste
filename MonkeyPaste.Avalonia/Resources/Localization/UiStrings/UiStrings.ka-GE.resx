@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>გადახვევა - to - გახსენით</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; monkeypaste არის &lt;span color = "red&gt; სრულად ინტეგრირებული &lt;/span&gt; drag - და - drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>ჩამოაგდეთ აქ!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "ცენტრი"&gt; ამ გზით, Monkeypasteast- ს შეგიძლიათ წვდომა &lt;br&gt; &lt;span ფერი = "წითელი"&gt; დაჭერის გარეშე &lt;/span&gt; ან თუნდაც &lt;span ფერი = "წითელი"&gt; თვალის დახუჭვა &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Ჩამითრიე!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>ჟესტები უნდა იყოს უნიკალური და შეიძლება შეიცავდეს მხოლოდ ერთ შეყვანის ღილაკს.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; შიდა &lt;/b&gt; ყველა მალსახმობი შემოიფარგლება მხოლოდ განაცხადის ფარგლებში. ეს ნამდვილად არ არის განკუთვნილი ვარიანტი, მაგრამ საშუალებას მისცემს შეცვალოს რა მალსახმობები აპირებთ გლობალური &lt;i&gt; ერთ დღეს &lt;/i&gt;. &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ნაგულისხმევი &lt;/b&gt; ჩართულია ყველა გლობალური მალსახმობი. &lt;b&gt; შოუ/დამალვა მთავარი ფანჯარა &lt;/b&gt; მალსახმობი იყენებს &lt;span color = "red"&gt; override &lt;/span&gt; მარშრუტიზაცია &lt;b&gt; caps ჩაკეტვისთვის &lt;/b&gt; გასაღებისთვის. თქვენ შეგიძლიათ შეცვალოთ ეს მარშრუტი ან ჟესტი ნებისმიერ დროს. მაგრამ &lt;span color = "green"&gt; სცადეთ ეს &lt;/pan&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;Tody&gt;
-&lt;h1&gt; გლობალური მალსახმობების რეჟიმები &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; პასიური
-*ეს არის &lt;i&gt; მხოლოდ &lt;/i&gt; ვარიანტი Linux- ზე.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; მალსახმობი შეასრულებს &lt;b&gt; &lt;i&gt; სანამ &lt;/i&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt; მალსახმობი შეასრულებს &lt;b&gt; &lt;i&gt; შემდეგ &lt;/i&gt; &lt;/b&gt; მას აქტიური აპლიკაციით.
-&lt;li&gt;
-&lt;b&gt; გადაჭარბებული &lt;/b&gt; როდესაც Monkeypaste ისმენს გადაფარვის მალსახმობის შეყვანის ღილაკს (არა - მოდიფიკატორის ღილაკს), ის &lt;i&gt; დამალავს &lt;/i&gt; რომ კლავიშის პრესა განაცხადისგან - დონის შეყვანა. &lt;br&gt;
-ეს ვარიანტი გარანტიას გაძლევთ, რომ მალსახმობი გამოწვეულია აქტიური განაცხადის კონფლიქტების გარეშე.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ექსკლუზიური გადაჭარბება &lt;/b&gt; ეს არის სპეციალური ტიპის გადახურვის რეჟიმი, რომელიც განკუთვნილია Caps Lock Key- ისთვის. ეს მხოლოდ საშუალებას აძლევს &lt;b&gt; ერთი &lt;/b&gt; კლავიშს (არა - მოდიფიკატორს) მისი დავალებისთვის. &lt;br&gt;
-ნორმალურ გადალახვა რეჟიმში ქუდების დაბლოკვა შეიძლება გახდეს &lt;/i&gt; &lt;/i&gt;, როდესაც დაჭერით სხვა კლავიშებთან ერთად.
-არ აქვს მნიშვნელობა რა სხვა გასაღებებია, თუ A &lt;b&gt; Hotkey &lt;/b&gt; მალსახმობი დაჭერით, ის გადაჭარბდება და თავიდან აიცილებს მას &lt;/i&gt; &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>გამორთვა</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>დატვირთეთ, როდესაც ამ მომხმარებლის ანგარიში შედის და არა სხვა მომხმარებლებისთვის.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; ხელმისაწვდომი კონტაქტების გამოყენებით (მოითხოვს Fetcher მოდულს) ეს ველი გამოყენებული იქნება ამ შაბლონის ყველა შემთხვევაში ამ დოკუმენტში, ან ნებისმიერში, მას მოგვიანებით მოიხსენიებთ. &lt;/p&gt; &lt;p&gt; მაგალითად, თუ აირჩიეთ ელ.ფოსტის მისამართი აქ შემდეგ თქვენს მიერ არჩეული კონტაქტის ელ.ფოსტის ველი გამოიყენება ამ დოკუმენტში ყველა ინსტანციისთვის. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = მოკლე წელი &lt;br/&gt; yyyy = გრძელი წელი &lt;br/&gt; m = თვე (1-12) &lt;br/&gt; mm = თვე (01-12) . დეკ) &lt;br/&gt; mmmm = გრძელი თვე (იანვარი, თებერვალი ... დეკემბერი) კვირის დღე სიტყვებით (ორშაბათი, სამშაბათი ... კვირა) &lt;br/&gt; E = კვირის მოკლე დღე სიტყვებით (ორშაბათს, მზე) მე -3, 21st, 22nd, 23-ე, 31-ე, მე -4 ...) &lt;br/&gt; H = საათი AM/PM- ში (0-12) &lt;br/&gt; HH = საათი AM/PM- ში (00-12) &lt;BR/ &gt; H = დღეში საათში (0-23) &lt;br/&gt; HH = დღეში საათში (00-23) A = AM/PM მარკერი &lt;br/&gt; P = A.M./P.M. ნიშანი</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>მიმდინარე თარიღი ან/და დრო შეიცვალა DateTime შაბლონებისთვის, როდესაც ისინი ჩასვით.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; ამ შაბლონის ყველა შემთხვევა გამოიყენებს მოცემულ ტექსტს. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; ამ შაბლონის ყველა შემთხვევა გამოიყენებს მოცემულ ტექსტს. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>დასრულების დასრულება</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>ბოლო აქტიური აპლიკაცია უცნობია. გადადით მიზნობრივი აპლიკაცია Monkey Paste- ში.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ჩასვით: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>შემცირება</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>არაფერი</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>მხოლოდ შერჩეული წინასწარ გამოყენებული იქნება მითითებული პროგრამისთვის. დაუზუსტებელი, გამოყენებული იქნება &lt;em&gt; ბუფერული გვერდითი ზოლში ნაპოვნი ნაგულისხმევი წინასწარ განსაზღვრული წინასწარ განსაზღვრული წინასწარ განსაზღვრა.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>MonkeyPaste- ის მრავალი მახასიათებელი იყენებს კლავიშების ავტომატიზაციას სხვა პროგრამებთან ურთიერთობისთვის.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>მკითხველი</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>ბუფერული პროგრამის ყველა მონიტორინგი იქნება &lt;b&gt; უგულებელყოფილი &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>მწერლები</value>
@@ -1331,11 +1268,6 @@ Monkeypaste მოწყობილობაზე
     <value>დარწმუნებული ხართ, რომ გსურთ ყველა შეტყობინების გადატვირთვა?
 
 *ეს არ შეიძლება გაუქმდეს!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste ადგენს ბუფერას (გადალახავს) გარე პროგრამის ჩასატარებლად. ეს შეეცდება &lt;/b&gt; აღადგინოს ბუფერული მდგომარეობა გარე პასტის შემდეგ.
-
-მთლიანი აღდგენა არ შეიძლება გარანტირებული იყოს და შეიძლება შეამციროს შესრულება ან თუნდაც ავარიის Monkeypaste, დამოკიდებულია მონაცემთა წყაროდან.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>გადატვირთეთ ბუფერული მაიმუნის ჩასმის შემდეგ</value>
@@ -2706,5 +2638,66 @@ Monkeypaste მოწყობილობაზე
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>შეიტყვეთ მეტი გეგმების შესახებ</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>ჩასვით: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;ხელმისაწვდომი კონტაქტების გამოყენებით (მოითხოვს fetcher მოდულს) ეს ველი გამოყენებული იქნება ამ შაბლონის ყველა შემთხვევისთვის ამ დოკუმენტის გასწვრივ ან ნებისმიერ შემთხვევაში ის მოგვიანებით იქნება მითითებული.&lt;/p&gt;&lt;p&gt; მაგალითად, თუ აქ აირჩიეთ ელ.ფოსტის მისამართი, მაშინ თქვენ მიერ არჩეული კონტაქტის ელ.ფოსტის ველი გამოყენებული იქნება ამ დოკუმენტის ყველა შემთხვევისთვის.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = მოკლე წელი&lt;br/&gt;yyyy = ხანგრძლივი წელი&lt;br/&gt;M = თვე (1-12)&lt;br/&gt;MM = თვე (01-12)&lt;br/&gt;MMM = თვის აბრევიატურა (იან, თებ ... დეკ)&lt;br/&gt;MMMM = გრძელი თვე (იანვარი, თებერვალი ... დეკემბერი)&lt;br/&gt;დ = დღე (1 - 31)&lt;br/&gt;dd = დღე (01 - 31)&lt;br/&gt;ddd = კვირის დღე სიტყვებით (ორშაბათი, სამშაბათი ... კვირა)&lt;br/&gt;E = კვირის მოკლე დღე სიტყვებით (Mon, Tue ... მზე)&lt;br/&gt;D - რიგითი დღე (1, მე -2, მე -3, 21-ე, 22-ე, 23-ე, 31-ე, მე -4...)&lt;br/&gt;სთ = საათი am/pm (0-12)&lt;br/&gt;hh = საათი am/pm (00-12)&lt;br/&gt;H = საათი დღეში (0-23)&lt;br/&gt;HH = დღეში საათი (00-23)&lt;br/&gt;მმ = წუთი&lt;br/&gt;ss = მეორე&lt;br/&gt;SSS = მილიწამები&lt;br/&gt;ა = AM/PM მარკერი&lt;br/&gt;გვ = a.m./p.m. მარკერი</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;ამ შაბლონის ყველა მოვლენა გამოიყენებს მოცემულ ტექსტს.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;ამ შაბლონის ყველა მოვლენა გამოიყენებს მოცემულ ტექსტს.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste ადგენს ბუფერს (overrides) გარე პროგრამაში ჩასმისას. ეს &lt;b&gt;შეეცდება&lt;/b&gt; აღადგინოს ბუფერის მდგომარეობა გარე პასტის შემდეგ. 
+
+მთლიანი რესტავრაცია არ შეიძლება გარანტირებული იყოს და შეიძლება შეამციროს შესრულება ან თუნდაც ავარია MonkeyPaste მონაცემების წყაროდან გამომდინარე.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>მითითებული პროგრამისთვის გამოყენებული იქნება მხოლოდ შერჩეული წინასწარ დაყენებები. დაუზუსტებლად, გამოყენებული იქნება ბუფერში ნაპოვნი ნაგულისხმევი წინასწარ დაყენებები &lt;em&gt;Sidebar&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>უარყოფილი პროგრამებიდან ყველა ბუფერული მონიტორინგი &lt;b&gt;იგნორირებული&lt;/b&gt; იქნება.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;შიდა&lt;/b&gt;ყველა მალსახმობი შემოიფარგლება აპლიკაციის ფარგლებში. ეს ნამდვილად არ არის განკუთვნილი ვარიანტი, მაგრამ საშუალებას მისცემს მოირგოთ რა მალსახმობები აპირებთ გლობალური&lt;i&gt;ოდესმე&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;დეფოლტი&lt;/b&gt; ჩართულია ყველა გლობალური მალსახმობი. &lt;b&gt;Show/Hide მთავარი ფანჯრის&lt;/b&gt;მალსახმობი იყენებს&lt;span color="red"&gt;Override&lt;/span&gt;routing&lt;b&gt;for Caps Lock&lt;/b&gt; გასაღები. თქვენ შეგიძლიათ შეცვალოთ ეს მარშრუტი ან ჟესტი ნებისმიერ დროს. მაგრამ&lt;span color="green"&gt;სცადე&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;მალსახმობის გლობალური რეჟიმები&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;პასიური&lt;/b&gt; მალსახმობი MonkeyPaste მოუსმენს ნებისმიერ აპლიკაციაში.&lt;br&gt;*ეს არის &lt;i&gt;ერთადერთი&lt;/i&gt; ვარიანტი Linux– ზე.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;წინა&lt;/b&gt; მალსახმობი შეასრულებს მანამ, &lt;b&gt;&lt;i&gt;სანამ&lt;/i&gt;&lt;/b&gt; მას აქტიური პროგრამა გაუმკლავდება.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ჩანაწერი&lt;/b&gt; მალსახმობი შეასრულებს &lt;b&gt;&lt;i&gt;მას შემდეგ, რაც&lt;/i&gt;&lt;/b&gt; მას აქტიური აპლიკაცია გაუმკლავდება.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;გადალახვა&lt;/b&gt; როდესაც MonkeyPaste ისმენს ზედმეტი მალსახმობის შეყვანის ღილაკს (არამოდიფიკატორი) ის &lt;i&gt;დამალავს&lt;/i&gt; ამ საკვანძო პრესას აპლიკაციის დონის შეყვანისგან.&lt;br&gt;ეს ვარიანტი გარანტიას მისცემს მალსახმობის გააქტიურებას აქტიური გამოყენების კონფლიქტების გარეშე.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ექსკლუზიური Override&lt;/b&gt; ეს არის სპეციალური ტიპის override რეჟიმი, რომელიც შექმნილია Caps Lock გასაღებისთვის. ის მხოლოდ &lt;b&gt;ერთ&lt;/b&gt; გასაღებს (არამოდიფიკატორს) აძლევს დავალებას.&lt;br&gt;ნორმალურ override რეჟიმში Caps Lock შეიძლება &lt;i&gt;მოხდეს&lt;/i&gt; , როდესაც დაჭერით სხვა კლავიშებთან ერთად.&lt;br&gt;ასე რომ, არ აქვს მნიშვნელობა რა სხვა გასაღებებია ქვემოთ, თუ &lt;b&gt;Hotkey&lt;/b&gt; მალსახმობი დაჭერით, ის გადატვირთული იქნება და ხელს &lt;i&gt;შეუშლის მას ჩარჩენას&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste არის &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;ამ გზით, MonkeyPaste- ზე წვდომა შესაძლებელია&lt;br&gt;&lt;span color="red"&gt;დაწკაპუნების&lt;/span&gt; გარეშე ან თუნდაც &lt;span color="red"&gt;თვალის დახუჭვის გარეშე&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

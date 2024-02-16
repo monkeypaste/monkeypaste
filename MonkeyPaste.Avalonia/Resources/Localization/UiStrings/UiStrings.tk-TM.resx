@@ -166,14 +166,8 @@ degişlilikde klip.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Aýlamak - Opt - Aç-açan</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p deňhumly = "MEDEP"</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Bu ýere taşlaň!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;plenebem, mydama mamempa passe maýkpasse girip bilersiňiz &lt;br&gt; sfera = "Bir sfera =" Gyzyl "&gt; ýa-da &lt;" Red "&gt; &amp; # x1F440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Meni süýräň!</value>
@@ -364,62 +358,14 @@ Gaça durmak üçin täzelenme.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Jestler özboluşly bolmaly we diňe bir giriş düwmesi bolup biler.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;UL&gt;
-&lt;li&gt;
-&lt;b&gt; Içerki &lt;/ b&gt; ciltmshli salgylanmalaryň hemmesi ulanylmada bilen çäklenýär. Bu hakykatdanam niýetlenen wariant däl, global &lt;I.
-&lt;li&gt;
-&lt;b&gt; Bellenen &lt;/ b&gt; BELL SÖVEGILER WE GEREK. &lt;B&gt; Show&gt; tomaşa etmek / gizlemek &lt;/ b&gt; "gyzyl"&gt; "gyzyl"&gt; "gyzyl" Islän wagtyňyz marşrut ýa-da yşaratlary üýtgedip bilersiňiz. Ýöne &lt;spany reňk = "ýaşyl"&gt; ony synap görüň &lt;/ span&gt; synap görüň
-&lt;/ li&gt;
-&lt;/ UL&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;kelle&gt; &lt;/ kelle&gt;
-&lt;beden&gt;
-&lt;h1&gt; global gysga gysga ýollar &lt;/ h1&gt;
-&lt;UL&gt;
-&lt;li&gt;
-&lt;b&gt; passiw &lt;/ b&gt; gysga ýolda gysga monkePaste islendik anketany diňlär. &lt;br&gt;
-* Bu, häzirlikçe Linux-da diňe &lt;/ i&gt; opsiýasy.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; öňünden &lt;/ b&gt; gysga möhleti &lt;b&gt; i&gt; &lt;i&gt; &lt;i&gt; &lt;i&gt; &lt;i&gt; &lt;/ b&gt; ýerine ýetiren &lt;/ i&gt; &lt;/ b&gt; ýerine ýetirer. &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; POPP
-&lt;li&gt;
-MaýmkePaste aradan çykmagyň giriş düwmesini (deňeşdirmek düwmesini (aňlatma düwmesi
-Bu opsiýa, gysga ýoldan işjeň programma üçin gapma-garşylygsyz ýüze çykýandygyny kepillendirer.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; Belli bir deverid &lt;/ b&gt; Bu "Caps gulpy" düwmesi üçin döredilen artykmaç tertip Diňe &lt;b&gt; bir &lt;/ b&gt; açary (birmeňzeş däl
-Adaty artykmaç re modeiminde CAPS Lock-de &lt;/ i&gt; başga düwmeler bilen bilelikde basylanda &lt;/ i.&gt;
-Şeýlelik bilen başga düwmeler aşak insilse-de, a &lt;b&gt; hotlikkey &lt;/ b&gt; gysga ýol basylsa-da, munuň artykmaç bolsa-da &lt;i&gt; Men -e ýapyşmagynyň öňüni alar.
-&lt;/ li&gt;
-&lt;/ UL&gt;
-&lt;/ beden&gt;
-&lt;/ html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Öçürmek</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Bu ulanyjy hasaby, beýleki ulanyjylar üçin hasaba alynmaň.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Elýeterli kontakt ulanyp (fetcher pluginini talap edýär) Bu meýdanyň hemme nyrhlary üçin bu ugurda ýa-da başga bir nagyşlar üçin bu ugurda bu ugurda ulanylar. &lt;/ p&gt; &lt;p&gt; E-poçta salgysyny saýlaň Ine, soňra kontaktyň e-poçta meýdany, bu resminamadaky ähli mysallar üçin saýlamalar üçin ulanylar. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = gysga ýyl &lt;br&gt; &lt;br/&gt; mm = aý (1-12) &lt;br/&gt; aý &lt;br/&gt; mmmm = Uzakly (ýanwar, fewral aýy) &lt;br/&gt; D. Sözleriň güni (duşenbe, sişenbe) &lt;br/&gt; 3-nji, 21-nji, 21-nji, 23-nji, 4-nji oktýabr, 4-nji ... &lt;0-12) &lt;0-12) &gt; H = günde sagat (0-23) A = A = AM / PM Marerer &lt;br/&gt; s = f = A./p.m. marker</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Häzirki senä we / ýa-da wagt düwmeleriň ýelmese seadadylaşdyrylan sauşnik şablonlar üçin çalşylar.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Bu şablanyň ähli gyralary berlen teksti ulanar. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Bu şablanyň ähli gyralary berlen teksti ulanar. &lt;/ p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Çykyşy tamamlaň</value>
@@ -469,9 +415,6 @@ Adaty artykmaç re modeiminde CAPS Lock-de &lt;/ i&gt; başga düwmeler bilen bi
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Iň soňky işjeň programma näbelli. Maýmynyň pasta üçin niýetlenen programmany geçiň.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Pasta: &lt;em&gt; &lt;Men synp = "klast =" pasta-0} / i&gt; &lt;/ em&gt; &lt;/ em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Kiçeltmek</value>
@@ -547,9 +490,6 @@ Adaty artykmaç re modeiminde CAPS Lock-de &lt;/ i&gt; başga düwmeler bilen bi
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Hiç</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Diňe saýlanan anketa üçin diňe saýlanan desga ulanylar. Belli däl, "em&gt;" -de görkezilen deslapky täze sowgatlar &lt;/ em&gt; ulanylar.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>"Maýmpast" aýratynlyklary, beýleki programmalar bilen gatnaşyk saklamak üçin klawiatura awtomatlaşdyrylmagy ulanýarlar.
 
@@ -562,9 +502,6 @@ Dogry sazlaşyk işini üpjün etmek üçin şu ýerde şol programmalar üçin 
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Okyjylar</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Regediledilen programmalardan ähli örtükli gözegçilik gözegçiligi &lt;b&gt; hasaba bermedik &lt;/ b&gt; e-b&gt; ýok eder.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Ýazyjylar</value>
@@ -1331,11 +1268,6 @@ Bu yzyna gaýtaryp bolmaz!
     <value>Thehli habarnamalary täzeden düzmek isleýändigiňize ynanýarsyňyzmy?
 
 * Muny yzyna gaýtaryp bolmaz!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Maýmyn goýy daşarky programma açylanda bu monyp panelini (artykmaç). Bu daşarky pastadan soň buferiň ýagdaýyny dikeltmek üçin &lt;b&gt; STOP&gt; synap görmek
-
-Jemi dikeltmek kepillendirilip bilinmez we maglumatlaryň çeşmä baglylykda öndürijilige ýa-da hatda hamyrmaý pürasyny azaldyp bilmez.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Maýmyn döränden soň bufer sumkasyny täzeden düzmek</value>
@@ -2706,5 +2638,66 @@ Feehlibes@monkePase.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Meýilnamalar barada has giňişleýin öwreniň</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Elýeterli kontaktlary ulanmak (fetcher plýonkasyny talap edýär) bu ugur bu resminamanyň ähli ýagdaýlary üçin ýa-da onuň soňsalgylanjak islendik ýerinde ulanylar.&lt;/p&gt;&lt;p&gt; Mysal üçin, eger bu ýerde e-poçta adresini saýlasaňyz, onda saýlan kontaktyňyzyň e-mail meýdançasy şu dokumentdäki ähli ýagdaýlar üçin ulanylar.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yý = gysga ýyl&lt;br/&gt;yyyy = uzyn ýyl&lt;br/&gt;M = aý (1-12)&lt;br/&gt;MM = aý (01-12)&lt;br/&gt;MMM = aý gysgaldylyşy (Jan, Fewral ... Dek.&lt;br/&gt;MMMM = uzyn aý (ýanwar, fewral ... Bitaraplyk)&lt;br/&gt;d = gün (1 - 31)&lt;br/&gt;dd = gün (01 - 31)&lt;br/&gt;ddd = hepdäniň güni sözler bilen (Duşenbe, Sişenbe ... Ýekşenbe)&lt;br/&gt;E = söz bilen hepdäniň gysga güni (Mon, Tue ... Gün)&lt;br/&gt;D - Ordinal gün (1-nji, 2-nji, 3-nji, 21-nji, 22-nji, 23-nji, 31-nji, 4-nji...)&lt;br/&gt;h = hour in am/pm (0-12)&lt;br/&gt;hh = hour in am/pm (00-12)&lt;br/&gt;H = gündizine sagat (0-23)&lt;br/&gt;HH = günde sagat (00-23)&lt;br/&gt;mm = minut&lt;br/&gt;ss = ikinji&lt;br/&gt;SSS = milisekund&lt;br/&gt;a = AM/PM markeri&lt;br/&gt;p = a.a./p.m. marker</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Bu şablonyň ähli ýüze çykmagy üpjün edilen teksti ulanar.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Bu şablonyň ähli ýüze çykmagy üpjün edilen teksti ulanar.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste klipboardy daşky programma ýazylanda (overrides) setirler. Bu daşarky pastadan soň klipiň ýagdaýyny &lt;b&gt;dikeltmäge synanyşar&lt;/b&gt; . 
+
+Umumy dikeldiş işlerine kepil geçip bolmaýar we maglumatlaryň çeşmesine baglylykda ýerine ýetirilişini, hatda heläkçilige uçramagy mümkin.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Görkezilen programma üçin diňe saýlanan öň bellenen ätiýaçlyklar peýdalanar. Bellenilmedik ýagdaýynda, &lt;em&gt;Klipboardyň Gapdal zolagynda&lt;/em&gt; tapyljak öň bellenen öňbellenen ler ulanylar.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Ret edilen programmalardan ähli klipboard monitoringine &lt;b&gt;üns berilmez&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Iç&lt;/b&gt;Ähli gysgaldylan ýollar diňe anketa içinde. Aslynda, bu maksadyna ýetmek däl-de,&lt;i&gt;bir gün&lt;/i&gt; bütindünýä haýsy gysgaldylan ýollaryňyzy üýtgetmäge mümkinçilik berip biler.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Öň Bellenen&lt;/b&gt; Global ähli gysgaldylan ýollar mümkindir. Açar&lt;b&gt;ymaratyny görkez/Gizle&lt;/b&gt;gysgaltmada&lt;b&gt;Caps Lock&lt;/b&gt; açarüçin&lt;span color="red"&gt;üstaşyr&lt;/span&gt;ugrukdyrma ulanylýar. Siz şol ýol ýa-da hereketi islendik wagt üýtgedip bilersiňiz. Ýöne&lt;span color="green"&gt;synap görüň,&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Global Gysgalyk Modleri&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pasylly&lt;/b&gt; MonkeyPaste gysgaltmasy islendik programmada diňlär.&lt;br&gt;*Bu häzirlikçe Linux-da &lt;i&gt;ýeke-täk&lt;/i&gt; usulydyr.   &lt;/li&gt;
+   &lt;li&gt;
+    Pre &lt;b&gt;&lt;/b&gt; Kysymdaky hereketli programma bilen &lt;b&gt;&lt;i&gt;işlenilmezden öň&lt;/i&gt;&lt;/b&gt; ýerine ýetiriler.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Syýa&lt;/b&gt; Kysymdaky hereketli programma &lt;b&gt;&lt;i&gt;çözülenden soň&lt;/i&gt;&lt;/b&gt; ýerine ýetiriler.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Ewez etmek&lt;/b&gt; MonkeyPaste geçmeli gysgaltmanyň giriş açaryny (non - modifier key) eşidende, ol şol esasy basseýni programmadan &lt;i&gt;gizlär&lt;/i&gt; – düzme-deň giriş.&lt;br&gt;Bu seçgi, hereketli programma çaknyşman, gysgaltmanyň ýüze çykmagyny kepillendirer.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Eksklýuziw ýatyr&lt;/b&gt; Bu Caps Lock açary üçin niýetlenen ýörite görnüşli override modydyr. Ol diňe &lt;b&gt;bir&lt;/b&gt; esasy (üýtgetmeýän) ýumuş üçin mümkinçilik berýär.&lt;br&gt;Adatça ýatyrma modunda Caps Lock beýleki açarlar bilen bilelikde basylanda &lt;i&gt;ýapyşyp&lt;/i&gt; biler.&lt;br&gt;Şonuň üçin başga açarlar nähili aşak düşse-de, &lt;b&gt;Hotkey&lt;/b&gt; gysgaltmasy basylsa, ol aşa köpeler we onuň &lt;i&gt;ýapyşmagynyň&lt;/i&gt; öňüni alar.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MaýmynPaste &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Şeýdip, MonkeyPaste girip bolýar&lt;br&gt;&lt;span color="red"&gt;basman&lt;/span&gt;, hatda &lt;span color="red"&gt;göz ýumman&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

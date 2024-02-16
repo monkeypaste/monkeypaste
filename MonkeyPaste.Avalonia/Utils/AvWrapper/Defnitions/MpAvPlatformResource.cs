@@ -1,8 +1,11 @@
 ﻿using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
+using System.IO;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlatformResource : MpIPlatformResource {
@@ -15,6 +18,17 @@ namespace MonkeyPaste.Avalonia {
                 result = value;
             } else if (Application.Current.Styles.TryGetResource(resourceKey, Application.Current.ActualThemeVariant, out object styleValue)) {
                 result = styleValue;
+            }
+            if (result == null && resourceKey.EndsWith("zip")) {
+                // handle dats
+                using (var stream = AssetLoader.Open(new Uri(resourceKey, UriKind.RelativeOrAbsolute))) {
+                    stream.Seek(0, SeekOrigin.Begin);
+
+                    using (var ms = new MemoryStream()) {
+                        stream.CopyTo(ms);
+                        return ms.ToArray();
+                    }
+                }
             }
             if (result is string resultStr) {
                 string trimmed = resultStr.Trim();

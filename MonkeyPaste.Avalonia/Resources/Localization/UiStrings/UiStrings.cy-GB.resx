@@ -166,14 +166,8 @@ clipiau yn y drefn honno.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Sgrolio - i - ar agor</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p alin = "Center"&gt; MonkeyPaste yw &lt;Span Color = "Red&gt; yn llawn integredig &lt;/span&gt; gyda llusgo - a - gollwng &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Gollyngwch ef yma!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p alin = "Center"&gt; Fel hyn, gellir cyrchu monkeyPaste &lt;br&gt; &lt;span lliw = "coch"&gt; heb glicio &lt;/span&gt; neu hyd yn oed &lt;span lliw = "coch"&gt; batio llygad &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Llusgwch fi!</value>
@@ -364,62 +358,14 @@ Uwchraddio i osgoi.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Rhaid i ystumiau fod yn unigryw a dim ond un allwedd fewnbwn y gallant eu cynnwys.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Mewnol &lt;/b&gt; Mae'r holl lwybrau byr wedi'u cyfyngu i o fewn y cais. Nid yw hwn yn opsiwn a fwriadwyd mewn gwirionedd ond gall ganiatáu addasu pa lwybrau byr rydych chi'n bwriadu eu gwneud yn fyd -eang &lt;i&gt; someday &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; diofyn &lt;/b&gt; Mae'r holl lwybrau byr byd -eang wedi'u galluogi. Mae'r llwybr byr &lt;b&gt; dangos/cuddio prif ffenestr &lt;/b&gt; yn defnyddio &lt;span lliw = "coch"&gt; diystyru &lt;/span&gt; llwybro ar gyfer yr allwedd clo &lt;b&gt; capiau &lt;/b&gt;. Gallwch chi newid yr llwybro neu'r ystum honno ar unrhyw adeg. Ond &lt;span lliw = "gwyrdd"&gt; rhowch gynnig arni &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/ head&gt;
-&lt;dody&gt;
-&lt;h1&gt; Moddau llwybr byr byd -eang &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; goddefol &lt;/b&gt; bydd monkeypaste llwybr byr yn gwrando amdano mewn unrhyw gais. &lt;br&gt;
-*Dyma'r opsiwn &lt;i&gt; yn unig &lt;/i&gt; ar Linux am y tro.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; cyn &lt;/b&gt; bydd y llwybr byr yn gweithredu &lt;b&gt; &lt;i&gt; cyn &lt;/i&gt; &lt;/b&gt; Mae'n cael ei drin gan y cymhwysiad gweithredol. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; Bydd y llwybr byr yn gweithredu &lt;b&gt; &lt;i&gt; ar ôl &lt;/i&gt; &lt;/b&gt; Mae'n cael ei drin gan y cymhwysiad gweithredol. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; diystyru &lt;/b&gt; Pan fydd monkeyPaste yn clywed yr allwedd fewnbwn (allwedd nad yw'n addasydd) llwybr byr gwrthod trywydd byr, bydd yn cuddio &lt;/i&gt; y wasg allweddol honno o fewnbwn lefel y cais. &lt;br&gt;
-Bydd yr opsiwn hwn yn gwarantu bod y llwybr byr yn cael ei sbarduno heb wrthdaro i'r cais gweithredol.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Diystyru unigryw &lt;/b&gt; Mae hwn yn fath arbennig o fodd diystyru a ddyluniwyd ar gyfer yr allwedd clo CAPS. Dim ond ar gyfer ei aseiniad y mae'n caniatáu &lt;b&gt; un &lt;/b&gt; allwedd (heb fod yn addasydd).
-Mewn modd diystyru arferol gall capiau capiau ddod yn &lt;i&gt; yn sownd ar &lt;/i&gt; wrth gael ei wasgu mewn cyfuniad ag allweddi eraill. &lt;br&gt;
-Felly ni waeth pa allweddi eraill sydd i lawr, os yw llwybr byr &lt;b&gt; hotkey &lt;/b&gt; yn cael ei wasgu, bydd yn cael ei ddiystyru a'i atal rhag dod yn &lt;i&gt; yn sownd ar &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Analluogasech</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Llwythwch i fyny pan fydd y cyfrif defnyddiwr hwn wedi mewngofnodi, nid ar gyfer defnyddwyr eraill.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Gan ddefnyddio'r cysylltiadau sydd ar gael (angen ategyn fetcher) bydd y maes hwn yn cael ei ddefnyddio ar gyfer pob achos o'r templed hwn ar draws y ddogfen hon neu mewn unrhyw un y cyfeirir ato yn ddiweddarach. &lt;/p&gt; &lt;p&gt; Felly er enghraifft os dewiswch gyfeiriad e -bost Yma yna bydd maes e -bost y cyswllt rydych chi'n ei ddewis yn cael ei ddefnyddio ar gyfer pob achos yn y ddogfen hon. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = blwyddyn fer &lt;br/&gt; yyyy = blwyddyn hir &lt;br/&gt; m = mis (1-12) &lt;br/&gt; mm = mis (01-12) &lt;br/&gt; mmm = talfyriad mis (Jan, Chwefror .. . Dec) &lt;br/&gt; mmmm = mis hir (Ionawr, Chwefror ... Rhagfyr) &lt;br/&gt; d = diwrnod (1 - 31) &lt;br/&gt; dd = diwrnod (01 - 31) &lt;br/&gt; ddd = Diwrnod yr Wythnos mewn Geiriau (dydd Llun, dydd Mawrth ... dydd Sul) &lt;br/&gt; e = diwrnod byr yr wythnos mewn geiriau (mon, maw ... haul) &lt;br/&gt; D - Diwrnod Ordinal (1af, 2il, 3ydd, 21ain, 22ain, 23ain, 31ain, 4ydd ...) &lt;br/&gt; h = awr yn am/pm (0-12) &lt;br/&gt; hh = awr yn am/pm (00-12) &lt;br/ &gt; H = awr yn y dydd (0-23) &lt;br/&gt; hh = awr yn y dydd (00-23) &lt;br/&gt; mm = munud &lt;br/&gt; ss = ail &lt;br/&gt; sss = miliseconds &lt;br/&gt; marciwr a = am/pm &lt;br/&gt; p = a.m./p.m. marciwr</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Bydd y dyddiad a/neu'r amser cyfredol yn cael ei amnewid yn lle templedi amser dyddiad pan gânt eu pastio.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Bydd holl ddiaredd y templed hwn yn defnyddio'r testun a ddarperir. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Bydd holl ddiaredd y templed hwn yn defnyddio'r testun a ddarperir. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Gorffen atodi</value>
@@ -469,9 +415,6 @@ Felly ni waeth pa allweddi eraill sydd i lawr, os yw llwybr byr &lt;b&gt; hotkey
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Ap Gweithredol Olaf Anhysbys. Newid i'r app a fwriadwyd i past mwnci.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Gludwch i: &lt;em&gt; &lt;i class = "past-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Gynfaleiddion</value>
@@ -547,9 +490,6 @@ Ychwanegwch a/neu ddewis yr ap gyda'r llwybr byr copi unigryw (fel consol neu gr
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Neb</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Dim ond y rhagosodiadau a ddewiswyd fydd yn cael eu defnyddio ar gyfer y cais penodedig. Pan fydd yn amhenodol, defnyddir y rhagosodiadau diofyn a geir yn y &lt;em&gt; clipboard SideBar &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Mae llawer o nodweddion MonkeyPaste yn defnyddio awtomeiddio bysellfwrdd i ryngweithio â chymwysiadau eraill.
 
@@ -562,9 +502,6 @@ Er mwyn sicrhau rhyngweithrededd cywir, cofnodwch y llwybrau byr hynny ar gyfer 
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Narllenwyr</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Bydd yr holl fonitro clipfwrdd o gymwysiadau a wrthodwyd yn cael ei anwybyddu &lt;b&gt; &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Ysgrifenwyr</value>
@@ -1331,11 +1268,6 @@ Ni ellir dadwneud hyn!
     <value>Ydych chi'n siŵr eich bod chi am ailosod yr holl hysbysiadau?
 
 *Ni ellir dadwneud hyn!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Mae past mwnci yn gosod y clipfwrdd (diystyru) wrth ei bastio i raglen allanol. Bydd hyn &lt;b&gt; yn ceisio &lt;/b&gt; i adfer cyflwr y clipfwrdd ar ôl past allanol.
-
-Ni ellir gwarantu adfer cyfanswm a gall leihau perfformiad neu hyd yn oed ddamwain monkeyPaste yn dibynnu ar ffynhonnell y data.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Ailosod clipfwrdd ar ôl pastio mwnci</value>
@@ -2706,5 +2638,66 @@ adborth@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Dysgu mwy am gynlluniau</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Gludwch i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Gan ddefnyddio cysylltiadau sydd ar gael (mae angen ategyn fetcher) bydd y maes hwn yn cael ei ddefnyddio ar gyfer pob achos o'r templed hwn ar draws y ddogfen hon neu mewn unrhyw un y cyfeirir ato yn ddiweddarach.&lt;/p&gt;&lt;p&gt; Felly, er enghraifft, os dewiswch gyfeiriad e-bost yma, bydd maes e-bost y cyswllt a ddewiswch yn cael ei ddefnyddio ar gyfer pob achos yn y ddogfen hon.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = blwyddyn fer&lt;br/&gt;yyyy = blwyddyn hir&lt;br/&gt;M = mis (1-12)&lt;br/&gt;MM = mis (01-12)&lt;br/&gt;MMM = byrfodd mis (Ionawr, Chwefror ... Rhagfyr)&lt;br/&gt;MMMM = mis hir (Ionawr, Chwefror ... Rhagfyr)&lt;br/&gt;d = diwrnod (1 - 31)&lt;br/&gt;dd = diwrnod (01 - 31)&lt;br/&gt;ddd = diwrnod yr wythnos mewn geiriau (Dydd Llun, Dydd Mawrth ... Dydd Sul)&lt;br/&gt;E = diwrnod byr o'r wythnos mewn geiriau (Llun, Maw ... Haul)&lt;br/&gt;D - Diwrnod arferol (1af, 2il, 3ydd, 21ain, 22ain, 23ain, 31ain, 4ydd...)&lt;br/&gt;h = hour in am/pm (0-12)&lt;br/&gt;hh = awr yn am/pm (00-12)&lt;br/&gt;H = awr yn y dydd (0-23)&lt;br/&gt;HH = awr yn y dydd (00-23)&lt;br/&gt;mm = munud&lt;br/&gt;SS = ail&lt;br/&gt;SSS = milieiliadau&lt;br/&gt;a = AC / PM marciwr&lt;br/&gt;p = a.m./p.m. marciwr</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Bydd holl achosion y templed hwn yn defnyddio'r testun a ddarparwyd.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Bydd holl achosion y templed hwn yn defnyddio'r testun a ddarparwyd.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Mae Monkey Paste yn gosod y clipfwrdd (overrides) wrth gludo i raglen allanol. Bydd hyn yn &lt;b&gt;ceisio&lt;/b&gt; adfer cyflwr y clipfwrdd ar ôl past allanol. 
+
+Ni ellir gwarantu adfer cyfanswm a gall leihau perfformiad neu hyd yn oed damwain MonkeyPaste yn dibynnu ar ffynhonnell y data.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Dim ond y chwiliadau a ragosodwyd dethol fydd yn cael eu defnyddio ar gyfer y cais penodedig. Pan na fydd yn cael ei nodi, bydd y chwiliadau rhagosodedig a geir yn y &lt;em&gt;bar ochr Clipfwrdd&lt;/em&gt; yn cael eu defnyddio.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Bydd holl fonitro clipfwrdd o geisiadau a wrthodwyd yn cael ei &lt;b&gt;anwybyddu&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Mewnol&lt;/b&gt;Mae'r holl lwybrau byr wedi'u cyfyngu i mewn i'r cais. Nid yw hyn yn opsiwn a fwriadwyd mewn gwirionedd ond gall ganiatáu i addasu pa lwybrau byr rydych chi'n bwriadu eu gwneud yn fyd-eang&lt;i&gt;ryw ddydd&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Rhagosodiad&lt;/b&gt; Mae'r holl lwybrau byr byd-eang wedi'u galluogi. Mae'r&lt;b&gt;llwybr byr Show / Hide Main Window&lt;/b&gt;yn defnyddio&lt;span color="red"&gt;llwybro override&lt;/span&gt;ar gyfer allwedd&lt;b&gt;Caps Lock&lt;/b&gt; . Gallwch newid y llwybr neu'r ystum hwn ar unrhyw adeg. Ond&lt;span color="green"&gt;rhowch gynnig arni&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Goddefol&lt;/b&gt; Bydd MonkeyPaste llwybr byr yn gwrando amdano mewn unrhyw gais.&lt;br&gt;* Dyma'r &lt;i&gt;unig&lt;/i&gt; opsiwn ar gyfer Linux ar hyn o bryd.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Cyn&lt;/b&gt; Bydd Shortcut yn gweithredu &lt;b&gt;&lt;i&gt;cyn&lt;/i&gt;&lt;/b&gt; iddo gael ei drin gan y cymhwysiad gweithredol.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Bydd Shortcut yn gweithredu &lt;b&gt;&lt;i&gt;ar ôl&lt;/i&gt;&lt;/b&gt; iddo gael ei drin gan y cymhwysiad gweithredol.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Diystyru&lt;/b&gt; Pan fydd MonkeyPaste yn clywed allwedd mewnbwn (nad yw'n - allwedd addasydd) llwybr byr gor-ddweud, bydd yn &lt;i&gt;cuddio'r&lt;/i&gt; wasg allweddol honno rhag mewnbwn lefel cais.&lt;br&gt;Bydd yr opsiwn hwn yn gwarantu bod y llwybr byr yn cael ei sbarduno heb wrthdaro i'r cymhwysiad gweithredol.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Override unigryw&lt;/b&gt; Mae hwn yn fath arbennig o ddull override a gynlluniwyd ar gyfer allwedd Caps Lock. Dim ond &lt;b&gt;un&lt;/b&gt; allwedd (heb fod yn addasydd) y mae'n ei ganiatáu ar gyfer ei aseiniad.&lt;br&gt;Yn y modd override arferol gall Caps Lock fynd yn &lt;i&gt;sownd pan&lt;/i&gt; gaiff ei wasgu ar y cyd ag allweddi eraill.&lt;br&gt;Felly ni waeth pa allweddi eraill i lawr, os yw llwybr byr &lt;b&gt;Hotkey&lt;/b&gt; yn cael ei wasgu, bydd yn cael ei drechu a'i atal rhag mynd &lt;i&gt;yn sownd ar&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Mae MonkeyPaste yn &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Fel hyn, gellir cyrchu MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;heb glicio&lt;/span&gt; neu hyd yn oed &lt;span color="red"&gt;batio llygad&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

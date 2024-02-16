@@ -166,14 +166,8 @@ attiecīgi klipi.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Ritiniet - līdz - atveriet</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "Center"&gt; pērtiķiem ir &lt;span color = "Red&gt; pilnībā integrēts &lt;/span&gt; ar vilkšanu un - Drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Nometiet to šeit!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;P align = "Center"&gt; šādā veidā, pērtiķiem var piekļūt &lt;br&gt; &lt;span color = "sarkans"&gt; bez klikšķa &lt;/span&gt; vai pat &lt;span color = "sarkans"&gt; vatē aci &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Velciet mani!</value>
@@ -364,62 +358,14 @@ Jauniniet, lai izvairītos.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Žestiem jābūt unikāliem, un tiem var būt tikai viena ievades atslēga.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Iekšējie &lt;/b&gt; Visi saīsnes ir ierobežoti ar pieteikuma ietvariem. Šī nav īsti paredzēta iespēja, bet var ļaut pielāgot to, kādus saīsnes jūs plānojat padarīt globālu &lt;i&gt; kādreiz &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; noklusējuma &lt;/b&gt; ir iespējoti visi globālie saīsnes. &lt;b&gt; parādīt/paslēpt galveno logu &lt;/b&gt; saīsne tiek izmantota &lt;span color = "sarkans"&gt; ignorēt &lt;/span&gt; taustiņu &lt;b&gt; caps bloķēt &lt;/b&gt;. Jūs varat mainīt šo maršrutēšanu vai žestu jebkurā laikā. Bet &lt;span color = "zaļš"&gt; Izmēģiniet &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;Head&gt; &lt;/Head&gt;
-&lt;Body&gt;
-&lt;h1&gt; Globālie saīsnes režīmi &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; pasīvi &lt;/b&gt; saīsnes pērtiķiem klausīsies jebkurā pieteikumā. &lt;br&gt;
-*Šī ir tikai &lt;i&gt; &lt;/i&gt; opcija Linux.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; saīsne izpildīs &lt;b&gt; &lt;i&gt; pirms &lt;/i&gt; &lt;/b&gt; to apstrādā ar aktīvo pieteikumu. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt; saīsne izpildīs &lt;b&gt; &lt;i&gt; pēc &lt;/i&gt; &lt;/b&gt; to apstrādā ar aktīvo pieteikumu. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ignorēt &lt;/b&gt; Kad Monkeypaste dzird pārmērīga saīsnes ievades atslēgu (nenodarbinātības taustiņu), tā &lt;i&gt; paslēpt &lt;/i&gt;, ka taustiņš nospiež no lietojumprogrammas - līmeņa ieejas. &lt;br&gt;
-Šī opcija garantēs, ka saīsne tiek aktivizēta bez konfliktiem ar aktīvo pieteikumu.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Ekskluzīvs ignorēšana &lt;/b&gt; Šis ir īpašs ignorēšanas režīma veids, kas paredzēts CAPS bloķēšanas atslēgai. Tas piešķir tikai &lt;b&gt; vienu &lt;/b&gt; atslēgu (nenodarbinātāju) tā piešķiršanai. &lt;br&gt;
-Parastā ignorēšanas režīmā Caps Lock var kļūt &lt;i&gt; iestrēdzis &lt;/i&gt;, kad to nospiež kombinācijā ar citām taustiņiem. &lt;br&gt;
-Tātad neatkarīgi no tā, kādas citas atslēgas ir uz leju, ja tiek nospiesta &lt;b&gt; hotkey &lt;/b&gt; saīsne, tas tiks ignorēts un neļaus tam kļūt &lt;i&gt; iestrēdzis &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Atspējot</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Ielādējiet, kad šis lietotāja konts ir pieteicies, nevis citiem lietotājiem.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Izmantojot pieejamos kontaktus (nepieciešams, lai atnestu spraudnis) Šis lauks tiks izmantots visiem šīs veidnes gadījumiem visā šajā dokumentā vai jebkurā gadījumā, uz kuru tas tiks norādīts vēlāk. &lt;/p&gt; &lt;p&gt; Tātad, piemēram, atlasiet e -pasta adresi, ja atlasiet e -pasta adresi Šeit jūsu izvēlētā kontakta e -pasta lauks tiks izmantots visiem šajā dokumentā. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = īss gads &lt;br/&gt; yigyy = garais gads &lt;br/&gt; m = mēnesis (1-12) &lt;br/&gt; mm = mēnesis (01-12) &lt;br/&gt; mmm = mēneša saīsinājums (janvāris, februāris .. . Dec) &lt;br/&gt; mmmm = ilgs mēnesis (janvāris, februāris ... decembris) &lt;br/&gt; d = diena (1 - 31) &lt;br/&gt; dd = diena (01 - 31) &lt;br/&gt; ddd = Nedēļas diena vārdos (pirmdiena, otrdiena ... svētdiena) &lt;br/&gt; e = īsa nedēļas diena vārdos (pirmdiena, otrā ... saule) &lt;br/&gt; D - Ordinālā diena (1., 2., 3., 21., 22., 23., 31., 4. ...) &lt;br/&gt; H = stunda am/pm (0-12) &lt;br/&gt; hh = stunda am/pm (00-12) &lt;br/ &gt; H = stunda dienā (0-23) &lt;br/&gt; HH = stunda dienā (00-23) &lt;br/&gt; mm = minūte &lt;br/&gt; ss = otrais &lt;br/&gt; sss = milisekundes &lt;br/&gt; a = am/pm marķieris &lt;br/&gt; p = a.m./p.m. marķieris</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Pašreizējais datums un/vai laiks tiks aizstāts ar datuma laika veidnēm, kad tās tiks ielīmētas.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Visos šīs veidnes gadījumos tiks izmantots sniegtais teksts. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Visos šīs veidnes gadījumos tiks izmantots sniegtais teksts. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Pabeigt pievienošanos</value>
@@ -469,9 +415,6 @@ Tātad neatkarīgi no tā, kādas citas atslēgas ir uz leju, ja tiek nospiesta 
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Pēdējā aktīvā lietotne nav zināma. Pārslēdzieties uz paredzēto lietotni uz pērtiķu pastu.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Ielīmēt to: &lt;em&gt; &lt;i class = "Paste-Tooltip-Suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Samazināt</value>
@@ -547,9 +490,6 @@ Pievienojiet un/vai atlasiet lietotni ar unikālo kopēšanas saīsni (piemēram
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Neviens</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Norādītajai lietojumprogrammai tiks izmantoti tikai atlasītie iestatījumi. Kad netiek noteikts, tiks izmantoti noklusējuma iepriekšējie iestatījumi, kas atrodami starpliktuvē sānjoslā &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Daudzas Monkeypaste funkcijas izmanto tastatūras automatizāciju, lai mijiedarbotos ar citām lietojumprogrammām.
 
@@ -562,9 +502,6 @@ Lai nodrošinātu pareizu savietojamību, reģistrējiet šos pieteikuma saīsne
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Lasītāji</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Visa starpliktuves uzraudzība no noraidītajām lietojumprogrammām tiks ignorēta &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Rakstnieki</value>
@@ -1331,11 +1268,6 @@ To nevar atsaukt!
     <value>Vai esat pārliecināts, ka vēlaties atiestatīt visus paziņojumus?
 
 *To nevar atsaukt!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Pērtiķu pastas, ielīmējot ārēju programmu, iestata starpliktuvi (ignorēšanu). Tas &lt;b&gt; mēģinās &lt;/b&gt; atjaunot starpliktuves stāvokli pēc ārējas pastas.
-
-Kopējo atjaunošanu nevar garantēt, un tas var samazināt veiktspēju vai pat avāriju pērtiķiem atkarībā no datu avota.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Atiestatīt starpliktuvi pēc pērtiķa ielīmēšanas</value>
@@ -2706,5 +2638,66 @@ ATBILDĪBA@monkepaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Uzziniet vairāk par plāniem</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Ielīmēt uz: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Izmantojot pieejamās kontaktpersonas (nepieciešams ienesuma spraudnis), šis lauks tiks izmantots visiem šīs veidnes gadījumiem visā šajā dokumentā vai jebkurā citā, uz kuru vēlāk tiks sniegta atsauce.&lt;/p&gt;&lt;p&gt; Tā, piemēram, ja šeit atlasiet e-pasta adresi, tad atlasītā kontaktpersonas e-pasta lauks tiks izmantots visiem šī dokumenta gadījumiem.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = īss gads&lt;br/&gt;gggg = garš gads&lt;br/&gt;M = mēnesis (1-12)&lt;br/&gt;MM = mēnesis (01-12)&lt;br/&gt;MMM = mēneša saīsinājums (Jan, Feb ... decembrī)&lt;br/&gt;MMMM = garais mēnesis (janvāris, februāris ... decembrī)&lt;br/&gt;d = diena (1 - 31)&lt;br/&gt;dd = diena (01 - 31)&lt;br/&gt;ddd = nedēļas diena vārdos (pirmdiena, otrdiena ... Svētdiena)&lt;br/&gt;E = īsa nedēļas diena vārdos (Mon, Tue ... Saule)&lt;br/&gt;D - Kārtas diena (1., 2., 3., 21., 22., 23., 31., 4.)&lt;br/&gt;h = stunda am/pm (0-12)&lt;br/&gt;hh = stunda am/pm (00-12)&lt;br/&gt;H = stunda dienā (0-23)&lt;br/&gt;HH = stunda dienā (00-23)&lt;br/&gt;mm = minūte&lt;br/&gt;ss = sekunde&lt;br/&gt;SSS = milisekundes&lt;br/&gt;a = AM/PM marķieris&lt;br/&gt;p = a.m./p.m. marķieris</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Visās šīs veidnes parādīšanās reizēs tiks izmantots norādītais teksts.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Visās šīs veidnes parādīšanās reizēs tiks izmantots norādītais teksts.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste iestata starpliktuvi (ignorē), ielīmējot ārējā programmā. Tas &lt;b&gt;mēģinās&lt;/b&gt; atjaunot starpliktuves stāvokli pēc ārējas ielīmēšanas. 
+
+Pilnīgu atjaunošanu nevar garantēt, un tā var samazināt veiktspēju vai pat avarēt MonkeyPaste atkarībā no datu avota.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Norādītajai lietojumprogrammai tiks izmantoti tikai atlasītie sākotnējie iestatījumi. Ja tas nav norādīts, tiks izmantoti &lt;em&gt;starpliktuves sānjoslā&lt;/em&gt; atrodamie noklusējuma iestatījumi.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Visa starpliktuves uzraudzība no noraidītajām lietojumprogrammām tiks &lt;b&gt;ignorēta&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Iekšējs&lt;/b&gt;Visi īsinājumtaustiņi ir pieejami tikai lietojumprogrammā. Tas nav īsti paredzēts risinājums, bet var ļaut pielāgot, kādus īsceļus jūs plānojat&lt;i&gt;kādreiz&lt;/i&gt; padarīt globālus.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Noklusējuma&lt;/b&gt; Visi globālie īsinājumtaustiņi ir iespējoti. &lt;b&gt;Saīsne Rādīt/paslēpt galveno logu&lt;/b&gt;izmanto maršrutēšanas&lt;span color="red"&gt;ignorēšanu&lt;/span&gt;&lt;b&gt;taustiņam Caps Lock&lt;/b&gt;. Šo maršrutēšanu vai žestu var mainīt jebkurā laikā. Bet&lt;span color="green"&gt;pamēģiniet&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Globālie īsceļu režīmi&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pasīvās&lt;/b&gt; Saīsne MonkeyPaste klausīsies jebkurā lietojumprogrammā.&lt;br&gt;*Šī pagaidām ir &lt;i&gt;vienīgā&lt;/i&gt; iespēja Linux.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Iepriekš&lt;/b&gt; Saīsne tiks izpildīta &lt;b&gt;&lt;i&gt;, pirms&lt;/i&gt;&lt;/b&gt; to apstrādās aktīvā lietojumprogramma.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Amats&lt;/b&gt; Saīsne tiks izpildīta &lt;b&gt;&lt;i&gt;pēc tam, kad&lt;/i&gt;&lt;/b&gt; to apstrādās aktīvā lietojumprogramma.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Ignorēt&lt;/b&gt; Kad MonkeyPaste dzird ignorējošās saīsnes ievades taustiņu (non - modifikatora taustiņu), tas &lt;i&gt;paslēps&lt;/i&gt; šo taustiņa nospiešanu no lietojumprogrammas līmeņa ievades.&lt;br&gt;Šī opcija garantēs, ka saīsne tiek aktivizēta bez konfliktiem ar aktīvo lietojumprogrammu.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Ekskluzīva ignorēšana&lt;/b&gt; Šis ir īpašs ignorēšanas režīma veids, kas paredzēts Caps Lock taustiņam. Tas ļauj piešķirt tikai &lt;b&gt;vienu&lt;/b&gt; atslēgu (ne - modifikatoru).&lt;br&gt;Normālā ignorēšanas režīmā Caps Lock var &lt;i&gt;iestrēgt&lt;/i&gt; , ja to nospiež kopā ar citiem taustiņiem.&lt;br&gt;Tāpēc neatkarīgi no tā, kādi citi taustiņi ir uz leju, ja tiek nospiests &lt;b&gt;Hotkey&lt;/b&gt; saīsne, tas tiks ignorēts un neļaus tam &lt;i&gt;iestrēgt&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste ir &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Tādā veidā var piekļūt MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;bez klikšķa&lt;/span&gt; vai pat &lt;span color="red"&gt;acs sišanas&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

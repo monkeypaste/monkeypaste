@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvSoundPlayerViewModel : MpAvViewModelBase {
         #region Private Variables
         private object _soundPlayerLock = new object();
-        const int MAX_WIN_SOUND_PATH_LEN = 128;
+        const int MAX_WIN_SOUND_PATH_LEN = 1;
         private Player _player;
 
         //private SoundPlayer _soundPlayer = null;

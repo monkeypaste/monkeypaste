@@ -166,14 +166,8 @@ klipp respektive.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Bläddra - till - öppen</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; monkeypaste är &lt;span color = "röd&gt; helt integrerad &lt;/span&gt; med drag - och - dropp &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Släpp det!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; på detta sätt kan monkeypasta nås &lt;br&gt; &lt;span color = "röd"&gt; utan klick &lt;/span&gt; eller till och med &lt;span color = "rött"&gt; batting ett öga &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Dra mig!</value>
@@ -364,62 +358,14 @@ Uppgradera för att undvika.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Gester måste vara unika och får bara innehålla en ingångsnyckel.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; intern &lt;/b&gt; Alla genvägar är begränsade till inom applikationen. Detta är egentligen inte ett avsett alternativ men kan tillåta att anpassa vilka genvägar du tänker göra Global &lt;i&gt; en dag &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Standard &lt;/b&gt; Alla globala genvägar är aktiverade. &lt;b&gt; show/dölj huvudfönstret &lt;/b&gt; genväg använder &lt;span color = "röd"&gt; åsidosättande &lt;/span&gt; routing för &lt;b&gt; caps -lås &lt;/b&gt; -tangenten. Du kan ändra den routing eller gest när som helst. Men &lt;span color = "green"&gt; prova &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt; Globala genvägslägen &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Passiv &lt;/b&gt; En genvägsmonkeypasta lyssnar på i alla applikationer. &lt;br&gt;
-*Detta är &lt;i&gt; enda &lt;/i&gt; -alternativet på Linux för nu.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; genväg kommer att köras &lt;b&gt; &lt;i&gt; före &lt;/i&gt; &lt;/b&gt; Det hanteras av den aktiva applikationen. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; genväg kommer att utföra &lt;b&gt; &lt;i&gt; efter &lt;/i&gt; &lt;/b&gt; Det hanteras av den aktiva applikationen. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; åsidosättande &lt;/b&gt; När monkeypasta hör ingångsnyckeln (icke -modifieringsnyckel) för en åsidosättande genväg kommer det &lt;i&gt; att dölja &lt;/i&gt; den tangentpressen från applikationsnivåinmatning. &lt;br&gt;
-Detta alternativ garanterar genvägen utlöses utan konflikter till den aktiva applikationen.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Exklusivt åsidosättande &lt;/b&gt; Detta är en speciell typ av åsidosättande läge utformat för Caps Lock -nyckeln. Det tillåter bara &lt;b&gt; en &lt;/b&gt; -nyckel (icke -modifierare) för sin uppgift. &lt;br&gt;
-I normalt överskridande lägeslås kan lås &lt;i&gt; fastnat på &lt;/i&gt; när du trycker på i kombination med andra nycklar. &lt;br&gt;
-Så oavsett vilka andra nycklar som är nere, om en &lt;b&gt; hotkey &lt;/b&gt; genväg trycks kommer det att åsidosättas och förhindra att den blir &lt;i&gt; fastnat på &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Inaktivera</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Ladda upp när detta användarkonto är inloggat, inte för andra användare.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; med tillgängliga kontakter (kräver en Fetcher -plugin) Detta fält kommer att användas för alla fall av denna mall över detta dokument eller i någon kommer det att hänvisas till senare. &lt;/p&gt; &lt;p&gt; så till exempel om du väljer e -postadress Här kommer e -postfältet för kontakten du väljer att användas i alla fall i detta dokument. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = kort år &lt;br/&gt; yyyy = långt år &lt;br/&gt; m = månad (1-12) &lt;br/&gt; mm = månad (01-12) &lt;br/&gt; mmm = månadsförkortning (Jan, februari .. . Dec) &lt;br/&gt; mmmm = lång månad (januari, februari ... december) &lt;br/&gt; d = dag (1 - 31) &lt;br/&gt; dd = dag (01 - 31) &lt;br/&gt; ddd = Veckodagen i ord (måndag, tisdag ... söndag) &lt;br/&gt; e = Kort veckodag i ord (mån, tis ... sol) &lt;br/&gt; d - ordinal dag (1: a, 2: a, 3: e, 21, 22: e, 23: e, 31, 4: e ...) &lt;br/&gt; h = timme i AM/PM (0-12) &lt;br/&gt; hh = timme i AM/PM (00-12) &lt;br/ &gt; H = timme i dag (0-23) &lt;br/&gt; hh = timme i dag (00-23) &lt;br/&gt; mm = minut &lt;br/&gt; ss = andra &lt;br/&gt; ss = millisekunder &lt;br/&gt; A = AM/PM -markör &lt;br/&gt; p = a.m./p.m. markör</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Det aktuella datumet och/eller tiden kommer att ersättas med DateTime -mallar när de klistras in.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Alla förekomster i denna mall kommer att använda den medföljande texten. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Alla förekomster i denna mall kommer att använda den medföljande texten. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Slutföra</value>
@@ -469,9 +415,6 @@ Så oavsett vilka andra nycklar som är nere, om en &lt;b&gt; hotkey &lt;/b&gt; 
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Senaste aktiva appen okänd. Byt till avsedd app till Monkey Paste.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Klistra in: &lt;em&gt; &lt;i class = "paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimera</value>
@@ -547,9 +490,6 @@ Lägg till och/eller välj appen med den unika kopieringsgenvägen (som en konso
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Ingen</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Endast de valda förinställningarna kommer att användas för den angivna applikationen. När den är ospecificerad kommer standardförinställningarna som finns i &lt;em&gt; urklippets sidofält &lt;/em&gt; att användas.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Många monkeypasta -funktioner använder tangentbordsautomation för att interagera med andra applikationer.
 
@@ -562,9 +502,6 @@ För att säkerställa korrekt interoperabilitet, registrera genvägarna för de
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Läsare</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>All urklippsövervakning från avvisade applikationer kommer att ignoreras &lt;b&gt; &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Författare</value>
@@ -1331,11 +1268,6 @@ Detta kan inte göras ogjort!
     <value>Är du säker på att du vill återställa alla aviseringar?
 
 *Detta kan inte göras ogjort!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste Ställer in urklipp (åsidosätter) när du klistrar in i ett externt program. Detta kommer att försöka &lt;/b&gt; att återställa urklippets tillstånd efter en yttre pasta.
-
-Total restaurering kan inte garanteras och kan minska prestanda eller till och med krascha monkeypasta beroende på källan till data.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Återställ urklipp efter apa klistra in</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lär dig mer om planer</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Klistra in i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Med hjälp av tillgängliga kontakter (kräver ett hämtningsplugin) kommer det här fältet att användas för alla instanser av den här mallen i det här dokumentet eller i alla som det kommer att refereras till senare.&lt;/p&gt;&lt;p&gt; Om du till exempel väljer e-postadress här kommer e-postfältet för den kontakt du väljer att användas för alla förekomster i det här dokumentet.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = kort år&lt;br/&gt;yyyy = långt år&lt;br/&gt;M = månad (1-12)&lt;br/&gt;MM = månad (01-12)&lt;br/&gt;MMM = månadsförkortning (jan, feb ... Dec)&lt;br/&gt;MMMM = lång månad (januari, februari ... december)&lt;br/&gt;d = dag (1 - 31)&lt;br/&gt;dd = dag (01 - 31)&lt;br/&gt;ddd = veckodag i ord (måndag, tisdag ... Söndag)&lt;br/&gt;E = kort veckodag i ord (mån, tis ... Sön)&lt;br/&gt;D - Ordningsdag (1:a, 2:a, 3:e, 21:a, 22:a, 23:e, 31:a, 4:e...)&lt;br/&gt;h = timme i am/pm (0-12)&lt;br/&gt;hh = timme i am/pm (00-12)&lt;br/&gt;H = timme på dagen (0-23)&lt;br/&gt;HH = timme på dagen (00-23)&lt;br/&gt;mm = minut&lt;br/&gt;ss = sekund&lt;br/&gt;SSS = millisekunder&lt;br/&gt;a = AM/PM-markör&lt;br/&gt;p = a.m./p.m. markör</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Alla förekomster av den här mallen kommer att använda den angivna texten.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Alla förekomster av den här mallen kommer att använda den angivna texten.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste ställer in urklipp (åsidosättningar) när du klistrar in i ett externt program. Detta kommer att &lt;b&gt;försöka&lt;/b&gt; återställa urklippets tillstånd efter en extern inklistring. 
+
+Total återställning kan inte garanteras och kan minska prestandan eller till och med krascha MonkeyPaste beroende på datakällan.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Endast de valda förinställningarna kommer att användas för det angivna programmet. När det är ospecificerat används de förinställningar som finns i &lt;em&gt;sidofältet i Urklipp&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>All urklippsövervakning från avvisade ansökningar &lt;b&gt;ignoreras&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Inre&lt;/b&gt;Alla genvägar är begränsade till i programmet. Detta är egentligen inte ett avsett alternativ men kan göra det möjligt att anpassa vilka genvägar du tänker göra globala&lt;i&gt;en dag&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Standard&lt;/b&gt; Alla globala genvägar är aktiverade. &lt;b&gt;Genvägen Visa/dölj huvudfönster&lt;/b&gt;använder&lt;span color="red"&gt;åsidosättningsroutning&lt;/span&gt;för&lt;b&gt;skiftlåstangenten&lt;/b&gt; . Du kan ändra rutten eller gesten när som helst. Men&lt;span color="green"&gt;ge det ett försök&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Globala genvägslägen&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passiv&lt;/b&gt; En genväg som MonkeyPaste kommer att lyssna efter i alla applikationer.&lt;br&gt;*Detta är det &lt;i&gt;enda&lt;/i&gt; alternativet på Linux för tillfället.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Genvägen körs &lt;b&gt;&lt;i&gt;innan&lt;/i&gt;&lt;/b&gt; den hanteras av det aktiva programmet.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Genvägen kommer att köras &lt;b&gt;&lt;i&gt;efter&lt;/i&gt;&lt;/b&gt; att den har hanterats av det aktiva programmet.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Åsidosätta&lt;/b&gt; När MonkeyPaste hör inmatningstangenten (icke-modifieringstangenten) för en genväg för åsidosättning, kommer den att &lt;i&gt;dölja&lt;/i&gt; den tangenttryckningen från inmatning på applikationsnivå.&lt;br&gt;Det här alternativet garanterar att genvägen utlöses utan konflikter med det aktiva programmet.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Exklusiv åsidosättning&lt;/b&gt; Detta är en speciell typ av åsidosättningsläge som är utformat för Caps Lock-tangenten. Den tillåter bara en nyckel (non - modifierare) för &lt;b&gt;tilldelningen&lt;/b&gt; .&lt;br&gt;I normalt åsidosättningsläge kan Caps Lock &lt;i&gt;fastna när&lt;/i&gt; det trycks ned i kombination med andra tangenter.&lt;br&gt;Så oavsett vilka andra tangenter som är nere, om en &lt;b&gt;snabbtangentsgenväg&lt;/b&gt; trycks in kommer den att åsidosättas och förhindra att den &lt;i&gt;fastnar&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste är &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;På så sätt kan MonkeyPaste nås&lt;br&gt;&lt;span color="red"&gt;utan ett klick&lt;/span&gt; eller ens &lt;span color="red"&gt;ett öga&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

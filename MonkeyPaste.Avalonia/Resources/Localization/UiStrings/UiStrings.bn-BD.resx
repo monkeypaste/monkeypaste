@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>স্ক্রোল - থেকে - খোলা</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;পি সারিবদ্ধ = "কেন্দ্র"&gt; মনকেপেস্ট হ'ল &lt;স্প্যান রঙ = "লাল&gt; সম্পূর্ণ সংহত &lt;/span&gt; ড্রাগের সাথে - এবং - ড্রপ &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>এখানে ফেলে দিন!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;পি প্রান্তিককরণ = "কেন্দ্র"&gt; এইভাবে, মনকেপেস্টে ক্লিক করুন &lt;br&gt; &lt;স্প্যান রঙ = "লাল"&gt; ক্লিক ছাড়াই &lt;/span&gt; বা এমনকি &lt;স্প্যান রঙ = "লাল"&gt; চোখের ব্যাটিং &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>আমাকে টান!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>অঙ্গভঙ্গিগুলি অবশ্যই অনন্য হতে পারে এবং কেবল একটি ইনপুট কী থাকতে পারে।</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; অভ্যন্তরীণ &lt;/b&gt; সমস্ত শর্টকাটগুলি অ্যাপ্লিকেশনটির মধ্যে সীমাবদ্ধ। এটি আসলে কোনও উদ্দেশ্যযুক্ত বিকল্প নয় তবে আপনি কী শর্টকাটগুলি গ্লোবাল &lt;i&gt; কোনও দিন &lt;/i&gt; তৈরি করতে চান তা কাস্টমাইজ করার অনুমতি দিতে পারে &lt;/li&gt; &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ডিফল্ট &lt;/b&gt; সমস্ত গ্লোবাল শর্টকাট সক্ষম করা আছে। &lt;b&gt; প্রধান উইন্ডোটি শো/লুকান/লুকান &lt;/b&gt; শর্টকাট &lt;স্প্যান রঙ = "লাল"&gt; ওভাররাইড &lt;/span&gt; &lt;b&gt; ক্যাপস লক &lt;/b&gt; কী জন্য রাউটিং ব্যবহার করে। আপনি যে কোনও সময় সেই রাউটিং বা অঙ্গভঙ্গি পরিবর্তন করতে পারেন। তবে &lt;স্প্যান রঙ = "সবুজ"&gt; এটি ব্যবহার করে দেখুন &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;এইচটিএমএল&gt;
-&lt;হেড&gt; &lt;/মাথা&gt;
-&lt;বডি&gt;
-&lt;h1&gt; গ্লোবাল শর্টকাট মোড &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; প্যাসিভ &lt;/b&gt; একটি শর্টকাট মনকেপেস্ট যে কোনও আবেদনে শুনবে &lt;br&gt; &lt;br&gt;
-*এটি আপাতত লিনাক্সে &lt;i&gt; কেবলমাত্র &lt;/i&gt; বিকল্প।
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; প্রাক &lt;/b&gt; শর্টকাট &lt;/i&gt; &lt;/b&gt; এর আগে &lt;b&gt; &lt;i&gt; কার্যকর করবে এটি সক্রিয় অ্যাপ্লিকেশন দ্বারা পরিচালিত হয় &lt;/&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; পোস্ট &lt;/b&gt; শর্টকাট &lt;/i&gt; &lt;/b&gt; এর পরে &lt;/i&gt; &lt;i&gt; কার্যকর করবে এটি সক্রিয় অ্যাপ্লিকেশন দ্বারা পরিচালিত হয় &lt;/&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ওভাররাইড &lt;/b&gt; যখন মোনকেপেস্ট একটি ওভাররাইড শর্টকাটের ইনপুট কী (নন - মডিফায়ার কী) শুনে এটি &lt;i&gt; লুকিয়ে থাকবে &lt;/i&gt; সেই কীটি অ্যাপ্লিকেশন থেকে টিপুন - স্তর ইনপুট &lt;&lt;br&gt; &lt;br&gt; &lt;br&gt;
-এই বিকল্পটি গ্যারান্টি দেবে যে শর্টকাটটি সক্রিয় অ্যাপ্লিকেশনটিতে দ্বন্দ্ব ছাড়াই ট্রিগার করা হয়েছে।
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; একচেটিয়া ওভাররাইড &lt;/b&gt; এটি ক্যাপস লক কীটির জন্য ডিজাইন করা একটি বিশেষ ধরণের ওভাররাইড মোড। এটি কেবল &lt;b&gt; ওয়ান &lt;/b&gt; কী (অ - সংশোধক) এর কার্যনির্বাহী জন্য অনুমতি দেয় &lt;br&gt; &lt;br&gt;
-সাধারণ ওভাররাইড মোডে ক্যাপস লক &lt;/i&gt; আটকে যেতে পারে &lt;/i&gt; অন্য কীগুলির সাথে সংমিশ্রণে চাপলে &lt;br&gt; &lt;br&gt;
-সুতরাং অন্যান্য কীগুলি কী ডাউন হোক না কেন, যদি একটি &lt;b&gt; হটকি &lt;/b&gt; শর্টকাট টিপানো হয় তবে এটি ওভাররাইডেন হবে এবং &lt;i&gt; আটকে &lt;/i&gt; এ আটকাতে বাধা দেবে।
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/দেহ&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>অক্ষম করুন</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>এই ব্যবহারকারী অ্যাকাউন্টটি লগ ইন করা হলে লোড আপ করুন, অন্য ব্যবহারকারীদের জন্য নয়।</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; উপলভ্য পরিচিতিগুলি ব্যবহার করে (একটি ফেচার প্লাগইন প্রয়োজন) এই ক্ষেত্রটি এই দস্তাবেজ জুড়ে এই টেমপ্লেটের সমস্ত দৃষ্টান্তের জন্য বা এটি পরে উল্লেখ করা হবে &lt;/&lt;/p&gt; &lt;p&gt; সুতরাং উদাহরণস্বরূপ যদি ইমেল ঠিকানা নির্বাচন করুন এখানে আপনি যে যোগাযোগটি নির্বাচন করেছেন তার ইমেল ক্ষেত্রটি এই দস্তাবেজের সমস্ত দৃষ্টান্তের জন্য ব্যবহার করা হবে &lt;/&lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = স্বল্প বছর &lt;br/&gt; yyyy = দীর্ঘ বছর &lt;br/&gt; এম = মাস (1-12) &lt;br/&gt; মিমি = মাস (01-12) &lt;br/&gt; মিমি = মাসের সংক্ষেপণ (জানু, ফেব্রুয়ারী .. । ডিসেম্বর) &lt;br/&gt; মিমিএম = দীর্ঘ মাস (জানুয়ারী, ফেব্রুয়ারি ... ডিসেম্বর) &lt;br/&gt; ডি = দিন (1 - 31) &lt;br/&gt; ডিডি = দিন (01 - 31) &lt;br/&gt; ডিডিডি = কথায় সপ্তাহের দিন (সোমবার, মঙ্গলবার ... রবিবার) &lt;br/&gt; ই = সপ্তাহের সংক্ষিপ্ত দিন শব্দের (সোমবার, মঙ্গল ... সূর্য) &lt;br/&gt; ডি - অর্ডিনাল ডে (1 ম, দ্বিতীয়, তৃতীয়, 21 তম, 22 তম, 23 তম, 31 তম, চতুর্থ ...) &lt;br/&gt; এইচ = ঘন্টা সময় এএম/পিএম (0-12) &lt;br/&gt; এইচ = ঘন্টা এএম/প্রধানমন্ত্রী (00-12) &lt;বিআর/ &gt; এইচ = দিনে ঘন্টা (0-23) &lt;br/&gt; এইচএইচ = দিনে ঘন্টা (00-23) &lt;br/&gt; মিমি = মিনিট &lt;br/&gt; এসএস = দ্বিতীয় &lt;br/&gt; এসএসএস = মিলিসেকেন্ডস &lt;br/&gt; এ = এএম/পিএম মার্কার &lt;br/&gt; পি = এ.এম./পি.এম. চিহ্নিতকারী</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>বর্তমান তারিখ এবং/অথবা সময়টি ডেটটাইম টেম্পলেটগুলি পেস্ট করার সময় প্রতিস্থাপন করা হবে।</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; এই টেমপ্লেটের সমস্ত ঘটনা প্রদত্ত পাঠ্য ব্যবহার করবে &lt;/&lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; এই টেমপ্লেটের সমস্ত ঘটনা প্রদত্ত পাঠ্য ব্যবহার করবে &lt;/&lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>যোগদান শেষ</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>সর্বশেষ সক্রিয় অ্যাপ্লিকেশন অজানা। বানরের পেস্টে ইন্টেন্ডেড অ্যাপে স্যুইচ করুন।</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>পেস্ট করুন: &lt;em&gt; &lt;i class = "পেস্ট-টুলটিপ-সাবফিক্স"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>ন্যূনতম</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>কিছুই না</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>কেবলমাত্র নির্বাচিত প্রিসেটগুলি নির্দিষ্ট অ্যাপ্লিকেশনটির জন্য ব্যবহৃত হবে। যখন অনির্ধারিত হয়, &lt;em&gt; ক্লিপবোর্ড সাইডবার &lt;/em&gt; তে পাওয়া ডিফল্ট প্রিসেটগুলি ব্যবহার করা হবে।</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>অনেক মনকেপেস্ট বৈশিষ্ট্য অন্যান্য অ্যাপ্লিকেশনগুলির সাথে ইন্টারঅ্যাক্ট করতে কীবোর্ড অটোমেশন ব্যবহার করে।
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>পাঠক</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>প্রত্যাখ্যানিত অ্যাপ্লিকেশনগুলি থেকে সমস্ত ক্লিপবোর্ড পর্যবেক্ষণ &lt;b&gt; উপেক্ষা করা হবে &lt;/b&gt;।</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>লেখক</value>
@@ -1331,11 +1268,6 @@
     <value>আপনি কি নিশ্চিত যে আপনি সমস্ত বিজ্ঞপ্তিগুলি পুনরায় সেট করতে চান?
 
 *এটা অসম্পূর্ণ থাকতে পারে না!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>কোনও বাহ্যিক প্রোগ্রামে আটকানোর সময় বানরের পেস্ট ক্লিপবোর্ড (ওভাররাইডস) সেট করে। এটি কোনও বাহ্যিক পেস্টের পরে ক্লিপবোর্ডের অবস্থা পুনরুদ্ধার করতে &lt;b&gt; চেষ্টা &lt;/b&gt; হবে।
-
-মোট পুনরুদ্ধারের গ্যারান্টি দেওয়া যায় না এবং ডেটার উত্সের উপর নির্ভর করে পারফরম্যান্স বা এমনকি ক্র্যাশ মনকেপেস্ট হ্রাস করতে পারে।</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>বানরের পেস্ট করার পরে ক্লিপবোর্ডটি পুনরায় সেট করুন</value>
@@ -2706,5 +2638,66 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>পরিকল্পনা সম্পর্কে আরও জানুন</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>পেস্ট করুন: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;উপলভ্য পরিচিতিগুলি ব্যবহার করে (একটি ফেচার প্লাগইন প্রয়োজন) এই ক্ষেত্রটি এই দস্তাবেজ জুড়ে এই টেমপ্লেটের সমস্ত উদাহরণের জন্য ব্যবহার করা হবে বা যে কোনও ক্ষেত্রে এটি পরে উল্লেখ করা হবে।&lt;/p&gt;&lt;p&gt; সুতরাং উদাহরণস্বরূপ, যদি এখানে ইমেল ঠিকানা নির্বাচন করা হয় তবে আপনার নির্বাচন করা পরিচিতির ইমেল ক্ষেত্রটি এই দস্তাবেজের সমস্ত দৃষ্টান্তের জন্য ব্যবহৃত হবে।&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>y = সংক্ষিপ্ত বছর&lt;br/&gt;yyyy = দীর্ঘ বছর&lt;br/&gt;এম = মাস (১-১২)&lt;br/&gt;এম এম = মাস (০১-১২)&lt;br/&gt;এমএমএম = মাস সংক্ষেপণ (জানুয়ারী, ফেব্রুয়ারী ... ডিসেম্বর)&lt;br/&gt;এমএমএমএম = দীর্ঘ মাস (জানুয়ারি, ফেব্রুয়ারি ... ডিসেম্বর)&lt;br/&gt;d = দিন (১ - ৩১)&lt;br/&gt;dd = দিন (01 - 31)&lt;br/&gt;ডিডিডি = কথায় কথায় সপ্তাহের দিন (সোমবার, মঙ্গলবার... রবিবার)&lt;br/&gt;E = কথায় কথায় সপ্তাহের ছোট দিন (সোম, মঙ্গল... সূর্য)&lt;br/&gt;ডি - অর্ডিনাল দিন (১ম, ২য়, ৩য়, ২১তম, ২২তম, ২৩তম, ৩১তম, ৪র্থ...)&lt;br/&gt;এইচ = এএম / পিএম ঘন্টা (0-12)&lt;br/&gt;এইচএইচ = এএম/পিএম ঘন্টা (00-12)&lt;br/&gt;H = দিনে ঘন্টা (0-23)&lt;br/&gt;HH = দিনে ঘন্টা (00-23)&lt;br/&gt;মিমি = মিনিট&lt;br/&gt;এসএস = সেকেন্ড&lt;br/&gt;SSS = মিলিসেকেন্ড&lt;br/&gt;a = AM/PM চিহ্নিতকারী&lt;br/&gt;পি = এএম / পিএম চিহ্নিতকারী</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;এই টেমপ্লেটের সমস্ত ঘটনা প্রদত্ত পাঠ্য ব্যবহার করবে।&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;এই টেমপ্লেটের সমস্ত ঘটনা প্রদত্ত পাঠ্য ব্যবহার করবে।&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>বানর পেস্ট একটি বাহ্যিক প্রোগ্রামে পেস্ট করার সময় ক্লিপবোর্ড (ওভাররাইড) সেট করে। এটি বাহ্যিক পেস্টের পরে ক্লিপবোর্ডের অবস্থা পুনরুদ্ধার করার &lt;b&gt;চেষ্টা&lt;/b&gt; করবে। 
+
+মোট পুনরুদ্ধারের গ্যারান্টি দেওয়া যায় না এবং ডেটার উত্সের উপর নির্ভর করে কর্মক্ষমতা হ্রাস করতে পারে বা এমনকি মাঙ্কিপেস্টকে ক্র্যাশ করতে পারে।</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>নির্দিষ্ট অ্যাপ্লিকেশনের জন্য কেবলমাত্র নির্বাচিত প্রিসেটগুলি ব্যবহার করা হবে। অনির্দিষ্ট করা হলে, &lt;em&gt;ক্লিপবোর্ড সাইডবারে&lt;/em&gt; খুঁজে পাওয়া ডিফল্ট প্রিসেটগুলি ব্যবহৃত হবে।</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>প্রত্যাখ্যাত অ্যাপ্লিকেশনগুলি থেকে সমস্ত ক্লিপবোর্ড পর্যবেক্ষণ &lt;b&gt;উপেক্ষা&lt;/b&gt; করা হবে।</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;অভ্যন্তরীণ&lt;/b&gt;সমস্ত শর্টকাট অ্যাপ্লিকেশনের মধ্যে সীমাবদ্ধ। এটি আসলে কোনও উদ্দেশ্যযুক্ত বিকল্প নয় তবে আপনি&lt;i&gt;কোনও দিন&lt;/i&gt; বিশ্বব্যাপী কী শর্টকাট তৈরি করতে চান তা কাস্টমাইজ করার অনুমতি দিতে পারে।&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;ডিফল্ট&lt;/b&gt; সমস্ত গ্লোবাল শর্টকাট সক্ষম আছে। &lt;b&gt;শো / হাইড মেইন উইন্ডো&lt;/b&gt;শর্টকাটটি&lt;b&gt;ক্যাপস লক&lt;/b&gt; কীটির জন্য&lt;span color="red"&gt;ওভাররাইড&lt;/span&gt;রাউটিং ব্যবহার করে। আপনি যে কোনও সময় সেই রাউটিং বা অঙ্গভঙ্গি পরিবর্তন করতে পারেন। তবে&lt;span color="green"&gt;একবার চেষ্টা করে দেখুন&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;গ্লোবাল শর্টকাট মোড&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;প্যাসিভ&lt;/b&gt; একটি শর্টকাট মাঙ্কিপেস্ট যে কোনও অ্যাপ্লিকেশনে শুনতে পাবে।&lt;br&gt;* আপাতত লিনাক্সে &lt;i&gt;এটাই একমাত্র&lt;/i&gt; অপশন।   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;প্রাক&lt;/b&gt; শর্টকাটটি সক্রিয় অ্যাপ্লিকেশন দ্বারা পরিচালিত হওয়ার &lt;b&gt;&lt;i&gt;আগে&lt;/i&gt;&lt;/b&gt; কার্যকর করা হবে।&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;পোস্ট&lt;/b&gt; সক্রিয় অ্যাপ্লিকেশন দ্বারা পরিচালিত হওয়ার &lt;b&gt;&lt;i&gt;পরে&lt;/i&gt;&lt;/b&gt; শর্টকাট কার্যকর হবে।&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ওভাররাইড&lt;/b&gt; যখন মাঙ্কিপেস্ট একটি ওভাররাইড শর্টকাটের ইনপুট কী (নন - মডিফায়ার কী) শুনবে তখন এটি অ্যাপ্লিকেশন - স্তরের ইনপুট থেকে সেই কী প্রেসটি &lt;i&gt;লুকিয়ে&lt;/i&gt; রাখবে।&lt;br&gt;এই বিকল্পটি গ্যারান্টি দেবে যে শর্টকাটটি সক্রিয় অ্যাপ্লিকেশনটিতে দ্বন্দ্ব ছাড়াই ট্রিগার করা হয়েছে।   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;এক্সক্লুসিভ ওভাররাইড&lt;/b&gt; এটি ক্যাপস লক কীটির জন্য ডিজাইন করা একটি বিশেষ ধরণের ওভাররাইড মোড। এটি তার অ্যাসাইনমেন্টের জন্য কেবল &lt;b&gt;একটি&lt;/b&gt; কী (অ - সংশোধক) অনুমতি দেয়।&lt;br&gt;সাধারণ ওভাররাইড মোডে অন্যান্য কীগুলির সাথে একত্রে চাপলে ক্যাপস লক &lt;i&gt;আটকে&lt;/i&gt; যেতে পারে।&lt;br&gt;সুতরাং অন্যান্য কীগুলি নীচে থাকুক না কেন, যদি কোনও &lt;b&gt;হটকি&lt;/b&gt; শর্টকাট চাপানো হয় তবে এটি ওভাররাইড হবে এবং এটি &lt;i&gt;আটকে&lt;/i&gt; যাওয়া থেকে রোধ করবে।   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;মাঙ্কিপেস্ট হল &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;এইভাবে, মাঙ্কিপেস্ট অ্যাক্সেস করা যেতে পারে&lt;br&gt;&lt;span color="red"&gt;একটি ক্লিক বা&lt;/span&gt; এমনকি একটি &lt;span color="red"&gt;চোখ ব্যাটিং&lt;/span&gt; ছাড়া এবং#x1F440&lt;/p&gt;</value>
   </data>
 </root>

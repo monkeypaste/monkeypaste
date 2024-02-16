@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Гүйлгэх - TO - нээлттэй</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p leign = "Төв"&gt; Monkeypaste нь &lt;splypaste нь &lt;splypaste = "Red&gt; REDANT &lt;/ SPAND &lt;/ PANDENT&gt; -ийг чирэх &lt;/ spand&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Энд хая!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p leign = "Төв"&gt; Энэ аргаар ламгай &lt;/ span &lt;specolet = "RAND COLDER =" RED SPAND = "RED"&gt; эсвэл &lt;RED "&gt; нүдэнд нэвтрэх боломжтой. &amp; # x1f440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Намайг чирээрэй!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Дохио зангаа нь өвөрмөц байх ёстой бөгөөд зөвхөн нэг оролтын түлхүүрийг агуулж болно.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;B&gt; Дотоод &lt;/ b&gt; Бүх товчлол нь аппликешн дотор хязгаарлагддаг. Энэ нь үнэхээр зорилтот сонголт биш боловч Globle &lt;i&gt; Sopled &lt;/ i&gt;. &lt;/ Li&gt;. &lt;/ Li&gt;
-&lt;li&gt;
-&lt;B&gt; Үндсэн утга &lt;/ b&gt; Бүх дэлхийн товчлолыг идэвхжүүлсэн байна. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color="red"&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. Та энэ чиглүүлэлт эсвэл зангалтыг хүссэн үедээ өөрчилж болно. Гэхдээ &lt;span өнгө = "Ногоон"&gt;&gt; Үүнийг туршиж үзээрэй &lt;/ span&gt;
-&lt;/ li&gt;
-&lt;/ ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;толгой&gt; &lt;/ толгой&gt;
-&lt;бие&gt; бие
-&lt;H1&gt; Global Bountcut горим &lt;/ h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Идэвхгүй &lt;/ B&gt; товчлол нь богиносгогч сармагчинг дурдана. &lt;br&gt;
-* Энэ бол &lt;i&gt; зөвхөн &lt;i&gt; &lt;/ i&gt; сонголтыг одоо linux дээр дарна уу.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;B&gt; Pre &lt;/ b&gt; товчлол нь &lt;b&gt; &lt;b&gt; &lt;&lt;&lt;&lt;i&gt; -ийг &lt;/ i&gt; &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&gt;
-&lt;li&gt;
-&lt;B&gt; POST &lt;/ B&gt; товчлол нь &lt;b&gt; &lt;&lt;i&gt; &lt;&lt;i&gt; &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/ b&gt; -ийг ажиллуулна. &lt;/ b&gt; &lt;&lt;/ b&gt;. &lt;/ li&gt;
-&lt;li&gt;
-Monkeypate товчлуурын товчлуурыг дарахад &lt;/ b&gt; нь &lt;/ b&gt; нь &lt;i&gt; surect (Insofifier) ​​нь &lt;i&gt; suff &lt;/ i&gt; програмыг дарахад &lt;/ i&gt; програмын даралт.
-Энэ сонголт нь товчлолыг идэвхтэй програмд ​​зөрчилдөөнгүйгээр өдөөн хатгасан болно.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;B&gt; Онцгой дарж &lt;/ B&gt; Энэ бол Caps Lock товчийг дарж бичих тусгай хэлбэр юм. Энэ нь зөвхөн &lt;B&gt; нэг &lt;&lt;/ B&gt; товчлуурыг даалгавраа хийх боломжийг олгодог. &lt;br&gt; &lt;br&gt;
-Энгийн давталтын горимын түгжээний цоож нь бусад түлхүүрүүдтэй хослуулсан тохиолдолд &lt;i&gt; дээр &lt;i&gt; дээр дарах боломжтой. &lt;br&gt; &lt;br&gt;
-Тиймээс бусад түлхүүрүүд ямар ч хамаагүй, хэрэв &lt;b&gt; hotkey &lt;/ b&gt; товчлол дарагдсан бөгөөд энэ нь &lt;i&gt; &lt;i&gt; гацахаас урьдчилан сэргийлэх болно.
-&lt;/ li&gt;
-&lt;/ ul&gt;
-&lt;/ бие&gt;
-&lt;/ html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Солих</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Энэ хэрэглэгчийн бүртгэлийг бусад хэрэглэгчдэд зориулагдаагүй тохиолдолд ачаалах үед ачаална уу.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Боломжтой холбоо барих хаягийг ашиглах (Fetcher Plugnate-ийг энэ баримтад эсвэл энэ загварыг ашиглахад шаардлагатай бүх загварыг ашиглана. Энд, дараа нь таны сонгосон харилцагчийн талбарыг энд оруулсан холбоо барих талбарт энэ баримт бичигт бүх тохиолдлуудад ашиглагдах болно. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>YY = Богино жил &lt;br/&gt; yyyy yyyy = londy = 'MM = СУРГУУЛЬ &lt;ТОГЛОЛТ (1-р сар) &lt;br/&gt; MM = СУРГУУЛЬ (012) &lt;bm/&gt; MM = СУРГУУЛЬ (1-р сар) &lt;br/&gt; mm = сар (1-р сар) &lt;br/&gt; MM = СУРГУУЛЬ (01-2) &lt;br/&gt; MM (1-р сар) &lt;br/&gt; mm = сар (1-р сар) &lt;br/&gt; MM = СУРГУУЛЬ (012) Байна. 12-р сар) &lt;br/&gt; mmmm = урт сар (1-р сар) &lt;br/&gt; D = 12-р сар (1-р сар) &lt;br/1-21-р сар (0 - 31) &lt;br/ 31) &lt;br/ 31) &lt;br/1 - 01 - 01) &lt;br/ 31-р сарууд Долоо хоногийн өдөр (Даваа, Мягмар, Мягмар, Мягмар гараг) &lt;bre, Tue ... SUN, TUE DOUNTER DOUNTON-д ҮНЭГҮЙ (Ням гараг) 3, 21-р, 22-р, 22-р 2, 23-р сар, 4-р сарын 4-ний өдөр. &gt; H = Өдөрт (0-23) &lt;br/&gt; hh =&gt; mm =&gt; &lt;br/&gt; ss = ss =&gt; ss = sss = sss = sss = mildiseconds = Millisecods = Milliseconds = Milliseconds = Millisecons &lt;brisecons &lt;briancons &lt;brisecons &lt;brisecons &lt;brisecons &lt;brisecons &lt;brisects &lt;briancons &lt;briancons &lt;briancoads &lt;brisecons &lt;brisecons &lt;briancons = ' A = = AM / PM MAPER &lt;br/&gt; P = A.M./P.A. Зиль</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Одоогийн огноо ба / эсвэл цаг хугацааг буулгах үед DateTime загварыг орлуулах болно.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Энэ загваруудын бүх тохиолдол нь өгсөн текстийг ашиглах болно. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Энэ загваруудын бүх тохиолдол нь өгсөн текстийг ашиглах болно. &lt;/ p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Дуусгах ажлыг дуусгах</value>
@@ -469,9 +415,6 @@ Monkeypate товчлуурын товчлуурыг дарахад &lt;/ b&gt; 
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Сүүлчийн идэвхтэй апп нь тодорхойгүй байна. Monkey Profte-д зориулагдсан програм руу шилжих.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>&lt;&lt;Em&gt; &lt;i &lt;eate = "lease-ate atch =" paste-ate office =&gt; {0} &lt;{{0} &lt;/} &lt;/}</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Төгс хаях</value>
@@ -547,9 +490,6 @@ Monkeypate товчлуурын товчлуурыг дарахад &lt;/ b&gt; 
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Хэн ч</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Зөвхөн сонгосон урьдчилан тохируулгыг заасан програмд ​​ашиглах болно. Тодорхойлогдоогүй, &lt;em&gt; Clipboard Dightbar &lt;&lt;em&gt; Clipboard &lt;&lt;/ em&gt; -ээс олддог.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Олон сармагчингууд нь бусад програмтай харилцахын тулд гар автоматжуулалтыг ашигладаг.
 
@@ -562,9 +502,6 @@ Monkeypate товчлуурын товчлуурыг дарахад &lt;/ b&gt; 
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Уовлагч</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Татгалзсан програмуудаас бүх үл тоомсорлох самбарын хяналт нь &lt;b&gt; үл тоомсорлох болно &lt;b&gt; үл тоомсорлох &lt;/ b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Тусгай бичигч</value>
@@ -1331,11 +1268,6 @@ Monkeypate товчлуурын товчлуурыг дарахад &lt;/ b&gt; 
     <value>Та бүх мэдэгдлийг дахин тохируулахыг хүсч байна уу?
 
 *Энэ буцаах боломжгүй!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste нь гадны хөтөлбөрт буулгахдаа санах ойг (хүчингүй болгох) багцыг тогтоодог. Энэ нь &lt;B&gt; оролдлого &lt;PRENT &lt;POMENT &lt;/ B&gt; АЖИЛЛАГААНЫ ТӨЛӨВЛӨГӨӨГИЙН ТӨЛӨВЛӨГӨӨГИЙН ТӨЛӨВЛӨГӨӨГ ЗӨВЛӨГӨӨ.
-
-Нийт сэргээн засварлах боломжгүй бөгөөд өгөгдлийн эх үүсвэрээс хамаарч гүйцэтгэлийг бууруулж, гүйцэтгэлийг бууруулж болзошгүй.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Сармагчингийн хажуугаар өнгөрсний дараа санах ойг дахин тохируулах</value>
@@ -2706,5 +2638,66 @@ FEEDBOWY@monkeypue.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Төлөвлөгөөний талаар илүү ихийг олж мэдэх</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>ᠨᠠᠭᠠᠯᠲᠠ ᠄ &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt; ᠃&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;ᠬᠡᠷᠡᠭᠯᠡᠵᠦ ᠪᠣᠯᠬᠤ ᠬᠠᠷᠢᠯᠴᠠᠬᠤ ᠬᠥᠮᠦᠨ ( ᠭᠠᠷᠭᠠᠵᠤ ᠠᠪᠬᠤ ᠮᠠᠰᠢᠨ ᠤ ᠬᠠᠪᠴᠢᠭᠤᠷ ᠬᠡᠷᠡᠭᠰᠡᠬᠦ ) ᠂ ᠡᠨᠡ ᠦᠰᠦᠭ ᠢ ᠲᠤᠰ ᠵᠣᠬᠢᠶᠠᠯ ᠤᠨ ᠳᠠᠩᠰᠠ ᠡᠪᠬᠡᠮᠡᠯ ᠳᠣᠲᠣᠷᠠᠬᠢ ᠡᠨᠡ ᠬᠡᠪ ᠵᠠᠭᠪᠤᠷ ᠤᠨ ᠠᠯᠢᠪᠠ ᠪᠣᠳᠠᠲᠤ ᠵᠢᠱᠢᠶ᠎ᠡ ᠳᠦ ᠬᠡᠷᠡᠭᠯᠡᠨ᠎ᠡ ᠂ ᠡᠰᠡᠭᠦᠯ᠎ᠡ ᠵᠢᠭᠠᠬᠠᠨ ᠤ ᠳᠠᠷᠠᠭ᠎ᠠ ᠡᠰᠢᠯᠡᠨ ᠬᠡᠷᠡᠭᠯᠡᠨ᠎ᠡ ᠃&lt;/p&gt;&lt;p&gt; ᠡᠶᠢᠮᠦ ᠡᠴᠡ ᠂ ᠵᠢᠱᠢᠶᠡᠯᠡᠪᠡᠯ ᠂ ᠬᠡᠷᠪᠡ ᠡᠨᠳᠡ ᠡᠯᠧᠺᠲ᠋ᠷᠣᠨ ᠰᠢᠤᠳᠠᠨ ᠤ ᠬᠠᠶᠢᠭ ᠢ ᠰᠣᠩᠭᠣᠪᠠᠯ ᠂ ᠲᠠᠨ ᠤ ᠰᠤᠩᠭᠤᠭᠰᠠᠨ ᠬᠠᠷᠢᠯᠴᠠᠬᠤ ᠬᠥᠮᠦᠨ ᠦ ᠡᠯᠧᠺᠲ᠋ᠷᠣᠨ ᠰᠢᠤᠳᠠᠨ ᠤ ᠦᠰᠦᠭ ᠦᠨ ᠬᠡᠰᠡᠭ ᠢ ᠲᠤᠰ ᠵᠣᠬᠢᠶᠠᠯ ᠤᠨ ᠳᠡᠰ ᠦᠨ ᠳᠣᠲᠣᠷᠠᠬᠢ ᠪᠤᠳᠠᠲᠤ ᠵᠢᠱᠢᠶ᠎ᠡ ᠳᠦ ᠬᠡᠷᠡᠭᠯᠡᠨ᠎ᠡ ᠃&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy ᠣᠬᠣᠷᠬᠠᠨ ᠵᠢᠯ᠃&lt;br/&gt;yy ᠤᠷᠲᠤ ᠵᠢᠯ᠃&lt;br/&gt;ᠮᠠ = ᠰᠠᠷ᠎ᠠ (1-12)&lt;br/&gt;MMt ᠰᠠᠷ᠎ᠠ (01-12)&lt;br/&gt;MMM= ᠰᠠᠷ᠎ᠠ ᠳᠤ ᠪᠢᠴᠢᠬᠦ (ᠵᠧᠨ᠂ ᠹᠧᠪ ᠁ 12 ᠰᠠᠷ᠎ᠠ )&lt;br/&gt;MMMM= ᠤᠷᠲᠤ ᠰᠠᠷᠠᠨ (1 ᠰᠠᠷ᠎ᠠ᠂ 2 ᠳ᠋ᠤᠭᠠᠷ ᠰᠠᠷ᠎ᠠ ...... 12 ᠰᠠᠷ᠎ᠠ )&lt;br/&gt;d= ᠲᠢᠶᠠᠨ (1-31)&lt;br/&gt;dd= ᠲᠢᠶᠠᠨ (01-31)&lt;br/&gt;ᠭᠠᠷᠠᠭ ᠤᠨ ᠬᠡᠳᠦᠨ ( ᠭᠠᠷᠠᠭ ᠤᠨ ᠨᠢᠭᠡᠨ ᠂ ᠭᠠᠷᠠᠭ ᠤᠨ ᠬᠣᠶᠠᠷ ᠤᠨ ...... ᠭᠠᠷᠠᠭ ᠤᠨ ᠡᠳᠦᠷ )&lt;br/&gt;E= ᠨᠢᠭᠡ ᠭᠠᠷᠠᠭ ᠤᠨ ᠳᠣᠲᠣᠷᠠᠬᠢ ᠣᠬᠣᠷ ᠡᠳᠦᠷ ( ᠭᠠᠷᠠᠭ ᠤᠨ ᠨᠢᠭᠡᠨ ᠂ ᠭᠠᠷᠠᠭ ᠤᠨ ᠬᠣᠶᠠᠷ ᠤᠨ ...... ᠭᠠᠷᠠᠭ ᠤᠨ ᠡᠳᠦᠷ )&lt;br/&gt;D̓ ᠳᠡᠰ ᠳᠠᠷᠠᠭᠠᠯᠠᠯ ᠤᠨ ᠬᠡᠳᠦᠨ ᠡᠳᠦᠷ (1 ᠤ ᠡᠳᠦᠷ᠂ 2 ᠤᠨ ᠡᠳᠦᠷ᠂ 3᠂ 21᠎ ᠤ ᠡᠳᠦᠷ᠂ 21᠎ ᠤ ᠡᠳᠦᠷ᠂ 22 ᠤᠨ ᠡᠳᠦᠷ᠂ 22 ᠤᠨ ᠡᠳᠦᠷ᠂ 23᠂ 23᠂ 31᠎ ᠤ ᠡᠳᠦᠷ᠂ 31᠎ ᠤ ᠡᠳᠦᠷ᠂ 4 ᠤ ᠡᠳᠦᠷ ᠁&lt;br/&gt;h= ᠴᠠᠭ ᠲᠤ ᠨᠢᠭᠡᠴᠢ ᠦᠳᠡ ᠶᠢᠨ ᠡᠮᠦᠨ᠎ᠡ / ᠦᠳᠡ ᠶᠢᠨ ᠬᠣᠶᠢᠨ᠎ᠠ (0-12)&lt;br/&gt;hh=ᠴᠠᠭ (ᠦᠳᠡ ᠶᠢᠨ ᠡᠮᠦᠨ᠎ᠡ /ᠦᠳᠡ ᠶᠢᠨ ᠬᠣᠶᠢᠨ᠎ᠠ)(00-12)&lt;br/&gt;H ᠨᠢᠭᠡ ᠡᠳᠦᠷ ᠦᠨ ᠳᠤᠮᠳᠠᠬᠢ ᠴᠠᠭ (0-23)&lt;br/&gt;HH ᠨᠢᠭᠡ ᠡᠳᠦᠷ ᠦᠨ ᠳᠣᠲᠣᠷᠠᠬᠢ ᠴᠠᠭ (00-23)&lt;br/&gt;ᠮᠢᠨᠦᠢᠲ᠋ ᠃&lt;br/&gt;s= ᠰᠧᠺᠦᠢᠨᠳ᠋᠃&lt;br/&gt;SSS ᠮᠢᠯᠢᠯᠢᠮᠧᠲ᠋ᠷ᠃&lt;br/&gt;AM/PM ᠲᠡᠮᠳᠡᠭ᠃&lt;br/&gt;p ᠦᠳᠡ ᠶᠢᠨ ᠡᠮᠦᠨ᠎ᠡ / ᠦᠳᠡ ᠶᠢᠨ ᠬᠣᠶᠢᠨ᠎ᠠ ᠲᠡᠮᠳᠡᠭᠯᠡᠯ᠃</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;ᠡᠨᠡ ᠬᠡᠪ ᠵᠠᠭᠪᠤᠷ ᠤᠨ ᠪᠤᠢ ᠪᠥᠬᠥᠢ ᠲᠣᠨᠣᠭ ᠲᠥᠰᠥᠪ ᠢ ᠪᠦᠷ ᠬᠠᠩᠭᠠᠭᠰᠠᠨ ᠪᠢᠴᠢᠭ᠌ ᠢ ᠬᠡᠷᠡᠭ᠍ᠯᠡᠨ᠎ᠡ ᠃&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;ᠡᠨᠡ ᠬᠡᠪ ᠵᠠᠭᠪᠤᠷ ᠤᠨ ᠪᠤᠢ ᠪᠥᠬᠥᠢ ᠲᠣᠨᠣᠭ ᠲᠥᠰᠥᠪ ᠢ ᠪᠦᠷ ᠬᠠᠩᠭᠠᠭᠰᠠᠨ ᠪᠢᠴᠢᠭ᠌ ᠢ ᠬᠡᠷᠡᠭ᠍ᠯᠡᠨ᠎ᠡ ᠃&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkkep Paste ᠨᠠᠭᠠᠯᠲᠠ ᠨᠢ ᠭᠠᠳᠠᠨᠠᠬᠢ ᠫᠷᠦᠭᠷᠠᠮ ᠨᠠᠭᠠᠬᠤ ᠦᠶ᠎ᠡ ᠳᠦ ᠨᠠᠭᠠᠯᠲᠠ ᠬᠠᠪᠲᠠᠰᠤ ( ᠪᠦᠷᠬᠦᠴᠡ ) ᠲᠣᠬᠢᠷᠠᠭᠤᠯᠤᠨ᠎ᠠ ᠃ ᠡᠨᠡ ᠨᠢ ᠭᠠᠳᠠᠨᠠᠬᠢ ᠨᠠᠭᠠᠯᠲᠠ ᠶᠢᠨ ᠳᠠᠷᠠᠭ᠎ᠠ ᠨᠠᠭᠠᠯᠲᠠ ᠬᠠᠪᠲᠠᠰᠤ ᠶᠢᠨ ᠪᠠᠶᠢᠳᠠᠯ ᠢᠶᠠᠨ ᠰᠡᠷᠭᠦᠭᠡᠬᠦ ᠪᠡᠷ &lt;b&gt;ᠲᠤᠷᠰᠢᠨ&lt;/b&gt; ᠎ᠠ ᠃ 
+
+ᠪᠦᠷᠢᠮᠦᠰᠦᠨ ᠰᠡᠷᠭᠦᠬᠦ ᠶᠢ ᠪᠠᠲᠤᠯᠠᠬᠤ ᠶᠢᠨ ᠠᠷᠭ᠎ᠠ ᠦᠭᠡᠶ ᠮᠥᠷᠲᠡᠭᠡᠨ ᠴᠢᠳᠠᠪᠬᠢ ᠶᠢ ᠪᠠᠭᠤᠷᠠᠭᠤᠯᠵᠤ ᠮᠡᠳᠡᠨ᠎ᠡ ᠂ ᠴᠢᠨᠠᠭᠰᠢᠯᠠᠪᠠᠯ ᠮᠧᠺᠧᠹᠧᠰᠲ᠋ᠧᠷ ᠰᠦᠢᠷᠡᠭᠦᠯᠵᠦ ᠂ ᠲᠣᠭ᠎ᠠ ᠪᠠᠷᠢᠮᠲᠠ ᠶᠢᠨ ᠢᠷᠡᠯᠲᠡ ᠪᠡᠷ ᠰᠢᠢᠳᠪᠦᠷᠢᠯᠡᠭᠳᠡᠨ᠎ᠡ ᠃</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>ᠵᠥᠪᠬᠡᠨ ᠰᠣᠩᠭᠣᠭᠰᠠᠨ ᠤᠷᠢᠳᠴᠢᠯᠠᠨ ᠲᠣᠬᠢᠷᠠᠭᠤᠯᠬᠤ ᠶᠢ ᠵᠢᠭᠠᠨ ᠲᠣᠭᠲᠠᠭᠠᠭᠰᠠᠨ ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠫᠷᠦᠭᠷᠠᠮ ᠳᠤ ᠬᠡᠷᠡᠭᠯᠡᠨ᠎ᠡ ᠃ ᠬᠡᠷᠪᠡ ᠵᠢᠭᠠᠨ ᠲᠣᠭᠲᠠᠭᠠᠭᠰᠠᠨ ᠦᠭᠡᠶ ᠪᠣᠯ &lt;em&gt;ᠬᠠᠪᠲᠠᠰᠤ ᠬᠠᠶᠢᠴᠢᠯᠠᠬᠤ ᠬᠠᠪᠲᠠᠰᠤᠨ ᠤ ᠬᠠᠵᠠᠭᠤ&lt;/em&gt; ᠳᠠᠬᠢ ᠳᠤᠪ ᠳᠤᠭᠤᠢ ᠪᠠᠷ ᠤᠷᠢᠳᠴᠢᠯᠠᠨ ᠮᠡᠳᠡᠷᠡᠬᠦ ᠶᠢ ᠬᠡᠷᠡᠭᠯᠡᠨ᠎ᠡ ᠃</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠫᠷᠦᠭᠷᠠᠮ ᠢ ᠲᠡᠪᠴᠢᠭᠰᠡᠨ ᠠᠯᠢᠪᠠ ᠨᠠᠭᠠᠯᠲᠠ ᠬᠠᠪᠲᠠᠰᠤ ᠶᠢ ᠬᠢᠨᠠᠨ ᠪᠠᠶᠢᠴᠠᠭᠠᠬᠤ ᠶᠢ ᠪᠦᠷ &lt;b&gt;ᠤᠮᠳᠤᠭᠠᠶᠢᠯᠠᠬᠤ ᠪᠣᠯᠣᠨ&lt;/b&gt;᠎ᠠ ᠃</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;ᠳᠣᠲᠣᠭᠠᠳᠤ᠃&lt;/b&gt;ᠪᠤᠶ ᠪᠦᠬᠦᠢ ᠲᠦᠷᠭᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶ᠋ᠢᠭ ᠨᠢ ᠵᠥᠪᠬᠡᠨ ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠫᠷᠦᠭᠷᠠᠮ ᠳᠣᠲᠣᠷ᠎ᠠ ᠬᠢᠵᠠᠭᠠᠷᠯᠠᠭᠳᠠᠨ᠎ᠠ ᠃ ᠡᠨᠡ ᠪᠣᠯ ᠵᠢᠩᠬᠢᠨᠢ ᠵᠢᠱᠢᠭᠰᠡᠨ ᠰᠤᠩᠭᠤᠯᠲᠠ ᠪᠢᠰᠢ ᠂ ᠭᠡᠪᠡᠴᠦ ᠲᠠᠨ ᠤ &lt;i&gt;ᠨᠢᠭᠡ ᠡᠳᠦᠷ&lt;/i&gt; ᠲᠡᠭᠦᠨ ᠢ ᠪᠦᠬᠦ ᠲᠠᠯ᠎ᠠ ᠶᠢᠨ ᠲᠦᠷᠭᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶᠢᠭ ᠪᠣᠯᠭᠠᠨ ᠲᠣᠬᠢᠷᠠᠭᠤᠯᠬᠤ ᠶᠢ ᠵᠥᠪᠰᠢᠶᠡᠷᠡᠵᠦ ᠪᠣᠯᠣᠨ᠎ᠠ ᠃&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;ᠪᠣᠯᠵᠣᠭ᠎ᠠ ᠠᠴᠠ ᠵᠥᠷᠢᠴᠡ&lt;/b&gt; ᠪᠤᠢ ᠪᠥᠬᠥ ᠲᠠᠯ᠎ᠠ ᠶᠢᠨ ᠲᠦᠷᠭᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶᠢᠭ ᠢ ᠴᠥᠮ ᠨᠢᠭᠡᠨᠲᠡ ᠠᠰᠢᠭᠯᠠᠵᠠᠢ ᠃  &lt;b&gt;ᠨᠢᠭᠤᠴᠠ ᠪᠡᠷ ᠬᠠᠳᠠᠭᠠᠯᠠᠬᠤ ᠭᠤᠤᠯ ᠴᠣᠩᠬᠤᠪᠴᠢ &lt;/b&gt; ᠶᠢᠨ ᠳᠦᠷᠬᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶᠢᠭ ᠨᠢ &lt;b&gt;ᠺᠠᠫᠰ Lock&lt;/b&gt; ᠲᠠᠷᠤᠭᠤᠯ &lt;span color="red"&gt;ᠢ ᠪᠦᠷᠭᠦᠭᠦ&lt;/span&gt; ᠵᠠᠮ ᠢ ᠬᠡᠷᠡᠬᠯᠡᠵᠡᠢ ᠃ ᠲᠠ ᠲᠤᠰ ᠱᠤᠭᠤᠮ ᠪᠤᠶᠤ ᠭᠠᠷ ᠤᠨ ᠳᠣᠬᠢᠶ᠎ᠠ ᠪᠠᠨ ᠬᠡᠵᠢᠶ᠎ᠡ ᠴᠦ ᠭᠡᠰᠡᠨ ᠥᠭᠡᠷᠡᠴᠢᠯᠡᠵᠦ ᠪᠣᠯᠣᠨ᠎ᠠ᠃ ᠭᠡᠪᠡᠴᠦ &lt;span color="green"&gt;ᠲᠤᠷᠰᠢᠵᠤ ᠦᠵᠡᠶ&lt;/span&gt;᠎ᠡ᠃
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;ᠪᠦᠬᠦ ᠲᠠᠯ᠎ᠠ ᠶᠢᠨ ᠲᠦᠷᠭᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶ᠋ᠢᠭ ᠤᠨ ᠵᠠᠭᠪᠤᠷ ᠃&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;ᠰᠠᠨᠠᠭᠠᠴᠢᠯᠠᠭᠠᠲᠤ ᠦᠭᠡᠢ&lt;/b&gt; ᠃ ᠲᠦᠷᠭᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶᠢᠭ ᠤᠨ ᠮᠧᠺᠧᠫᠠᠰᠲ᠋ᠧ ᠶᠠᠮᠠᠷᠪᠠ ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠫᠷᠤᠭ᠍ᠷᠠᠮ ᠳᠤ ᠲᠠᠩᠨᠠᠨ᠎ᠠ ᠃&lt;br&gt;ᠡᠨᠡ ᠪᠣᠯ ᠣᠳᠣᠬᠠᠨ ᠤ Linuf ᠳᠡᠭᠡᠷ᠎ᠡ &lt;i&gt;ᠭᠠᠷᠤᠭᠰᠠᠨ ᠴᠤᠷ ᠤᠨ ᠭᠠᠭᠴᠠ&lt;/i&gt; ᠰᠤᠩᠭᠤᠯᠲᠠ ᠪᠣᠯᠣᠨ᠎ᠠ ᠃   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ᠡᠮᠦᠨ᠎ᠡ&lt;/b&gt; ᠃ ᠲᠦᠷᠭᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶ᠋ᠢᠭ ᠢ ᠠᠵᠢᠯᠯᠠᠭ᠎ᠠ ᠶᠢᠨ ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠫᠷᠦᠭᠷᠠᠮ ᠢ ᠰᠢᠶᠳᠪᠦᠷᠢᠯᠡᠬᠦ &lt;b&gt;&lt;i&gt;ᠡᠴᠡ ᠡᠮᠦᠨ᠎ᠡ&lt;/i&gt;&lt;/b&gt; ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠦᠨ᠎ᠡ ᠃&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ᠨᠡᠶᠢᠲᠡᠯᠡᠨ&lt;/b&gt; ᠎ᠡ᠃ ᠲᠦᠷᠭᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶ᠋ᠢᠭ ᠢ ᠠᠵᠢᠯᠯᠠᠭ᠎ᠠ ᠶᠢᠨ ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠫᠷᠦᠭᠷᠠᠮ ᠢ ᠰᠢᠢᠳᠪᠦᠷᠢᠯᠡᠭᠰᠡᠨ &lt;b&gt;&lt;i&gt;ᠦ ᠳᠠᠷᠠᠭ᠎ᠠ ᠬᠡᠷᠡᠭᠵᠢᠭᠦᠯᠦᠨ&lt;/i&gt;&lt;/b&gt; ᠎ᠡ ᠃&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ᠪᠦᠷᠬᠦᠴᠡ᠃&lt;/b&gt; ᠮᠧᠨᠺᠧᠫᠠᠲ᠋ ᠢ ᠬᠠᠮᠤᠷᠴᠤ ᠲᠦᠷᠭᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶᠢᠭ ᠢ ᠬᠠᠮᠤᠷᠤᠭᠰᠠᠨ ᠣᠷᠣᠭᠤᠯᠬᠤ ᠳᠠᠷᠤᠭᠤᠯ ( ᠵᠠᠰᠠᠵᠤ ᠴᠢᠮᠡᠬᠦ ᠪᠤᠰᠤ ᠳᠠᠷᠤᠭᠤᠯ ) ᠢ ᠰᠣᠨᠣᠰᠬᠤ ᠦᠶ᠎ᠡ ᠳᠦ ᠂ ᠲᠡᠷᠡ ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠫᠷᠤᠭ᠍ᠷᠠᠮ ᠤᠨ ᠳᠡᠰ ᠡᠴᠡ &lt;i&gt;ᠳᠣᠲᠣᠷ᠎ᠠ&lt;/i&gt; ᠠᠴᠠ ᠲᠤᠰ ᠳᠠᠷᠤᠭᠤᠯ ᠢ ᠳᠠᠷᠤᠬᠤ ᠪᠣᠯᠣᠨ᠎ᠠ ᠃&lt;br&gt;ᠡᠨᠡ ᠰᠤᠩᠭᠤᠯᠲᠠ ᠨᠢ ᠠᠵᠢᠯᠯᠠᠭ᠎ᠠ ᠶᠢᠨ ᠬᠡᠷᠡᠭᠯᠡᠭᠡᠨ ᠦ ᠫᠷᠦᠭᠷᠠᠮ ᠯᠤᠭ᠎ᠠ ᠮᠥᠷᠭᠥᠯᠳᠥᠭᠡᠨ ᠡᠭᠦᠰᠬᠦ ᠦᠭᠡᠶ ᠪᠠᠶᠢᠳᠠᠯ ᠳᠣᠣᠷ᠎ᠠ ᠲᠦᠷᠭᠡᠨ ᠠᠷᠭ᠎ᠠ ᠮᠠᠶ᠋ᠢᠭ ᠢ ᠡᠭᠦᠰᠭᠡᠨ᠎ᠡ ᠃   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ᠭᠠᠭᠴᠠᠭᠠᠷ ᠪᠥᠷᠬᠥᠨ᠎&lt;/b&gt; ᠡ ᠃ ᠡᠨᠡ ᠪᠣᠯ ᠨᠢᠭᠡ ᠵᠦᠢᠯ ᠦᠨ ᠣᠨᠴᠠᠭᠠᠢ ᠲᠥᠷᠥᠯ ᠬᠡᠯᠪᠡᠷᠢ ᠶᠢᠨ ᠪᠦᠷᠬᠦᠴᠡ ᠶᠢᠨ ᠵᠠᠭᠪᠤᠷ ᠮᠥᠨ ᠂ ᠲᠤᠰᠬᠠᠢ᠌ᠯᠠᠨ Caaps Lock ᠳᠠᠷᠤᠭᠤᠯ ᠤᠨ ᠵᠢᠷᠤᠭ ᠲᠥᠯᠥᠪᠯᠡᠭᠡ ᠪᠣᠯᠣᠨ᠎ᠠ ᠃ ᠲᠡᠷᠡ ᠵᠥᠪᠬᠡᠨ &lt;b&gt;ᠨᠢᠭᠡ&lt;/b&gt; ᠲᠠᠷᠤᠭᠤᠯ ( ᠵᠠᠰᠠᠵᠤ ᠴᠢᠮᠡᠬᠦ ᠦᠭᠡᠢ ) ᠶᠢ ᠬᠤᠪᠢᠶᠠᠷᠢᠯᠠᠬᠤ ᠶᠢ ᠵᠥᠪᠰᠢᠶᠡᠷᠡᠨ᠎ᠡ ᠃&lt;br&gt;ᠬᠡᠪ ᠦᠨ ᠪᠦᠷᠬᠦᠴᠡ ᠶᠢᠨ ᠵᠠᠭᠪᠤᠷ ᠳᠣᠣᠷ᠎ᠠ ᠂ ᠪᠤᠰᠤᠳ ᠳᠠᠷᠤᠭᠤᠯ ᠲᠠᠢ ᠬᠠᠮᠲᠤ ᠳᠠᠷᠤᠬᠤ ᠦᠶ᠎ᠡ ᠳᠦ ᠂ ᠺᠠᠫᠰ Lock &lt;i&gt;ᠺᠠᠷᠲ᠋ ᠢᠶᠠᠨ ᠺᠠᠷᠲ ᠰᠠᠭᠤᠵᠤ ᠮᠡᠳᠡᠨ&lt;/i&gt; ᠎ᠡ ᠃&lt;br&gt;ᠡᠶᠢᠮᠦ ᠡᠴᠡ ᠪᠤᠰᠤᠳ ᠵᠠᠩᠭᠢᠯᠠᠭ᠎ᠠ ᠶᠢ ᠬᠠᠭᠠᠭᠰᠠᠨ ᠴᠤ ᠂ ᠬᠡᠷᠪᠡ ᠬᠠᠯᠠᠭᠤᠨ ᠳᠠᠷᠤᠭᠤᠯ ᠢ ᠳᠠᠷᠤᠬᠤ ᠳᠤ ᠬᠦᠷᠪᠡᠯ &lt;b&gt;᠂ ᠲᠡᠷᠡ&lt;/b&gt; ᠪᠦᠷ ᠲᠡᠭᠦᠨ ᠳᠦ &lt;i&gt;ᠬᠠᠰᠢᠭᠳᠠᠬᠤ&lt;/i&gt; ᠠᠴᠠ ᠰᠡᠷᠭᠡᠶᠢᠯᠡᠨ᠎ᠡ ᠃   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;ᠮᠧᠨᠺᠧᠫᠫᠠᠰᠲ᠋ᠧᠷ ᠪᠣᠯ ᠃ &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;ᠢᠩᠭᠢᠪᠡᠯ ᠮᠧᠨᠺᠧᠫᠠᠫᠠᠰᠲ᠋ᠧ ᠳᠦ ᠠᠶᠢᠯᠴᠢᠯᠠᠵᠤ ᠪᠣᠯᠣᠨ᠎ᠠ ᠃&lt;br&gt;&lt;span color="red"&gt;ᠥᠴᠥᠭᠡᠳᠦᠷ ᠤᠬᠢᠯᠠᠬᠤ ᠳᠠᠭᠤ ᠦᠭᠡᠢ&lt;/span&gt; ᠂ ᠴᠢᠨᠠᠭᠰᠢᠯᠠᠪᠠᠯ &lt;span color="red"&gt;ᠨᠢᠳᠦ ᠪᠡᠨ ᠠᠨᠢᠵᠤ&lt;/span&gt; #x1F440 ᠦᠭᠡᠢ ᠃&lt;/p&gt;</value>
   </data>
 </root>

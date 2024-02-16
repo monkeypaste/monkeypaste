@@ -166,14 +166,8 @@ Clips ຕາມລໍາດັບ.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>ເລື່ອນ - ໄປ - ເປີດ</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "ສູນກາງ"&gt; monkeypaste ແມ່ນ &lt;span ສີ = "ສີແດງ&gt; ປະສົມປະສານຢ່າງເຕັມທີ່ &lt;/ span&gt; ແລະ - ລົງ &lt;/ pop</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>ລົງມັນຢູ່ນີ້!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "ສູນກາງ"&gt; ວິທີນີ້, ResonPaste ສາມາດເຂົ້າເຖິງໄດ້ &lt;/ span) ຫຼືແມ້ກະທັ້ງ &lt;ສີແດງ "&gt; batting ຕາ &lt;/ span&gt; &amp; # x1f440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>ລາກຂ້ອຍ!</value>
@@ -364,62 +358,14 @@ Clips ຕາມລໍາດັບ.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>ທ່າທາງຕ້ອງມີຄວາມເປັນເອກະລັກສະເພາະແລະອາດຈະມີພຽງແຕ່ປຸ່ມປ້ອນຂໍ້ມູນເທົ່ານັ້ນ.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;UL&gt;
-&lt;li&gt;
-&lt;b&gt; ພາຍໃນ &lt;/ b&gt; ທາງລັດທັງຫມົດແມ່ນຖືກຈໍາກັດຢູ່ໃນໃບສະຫມັກ. ນີ້ບໍ່ແມ່ນຕົວເລືອກທີ່ມີຈຸດປະສົງແທ້ໆແຕ່ສາມາດອະນຸຍາດໃຫ້ປັບແຕ່ງວ່າທາງລັດໃດທີ່ທ່ານຕັ້ງໃຈເຮັດໃຫ້ໂລກ &lt;i&gt;. &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; ເລີ່ມຕົ້ນ &lt;/ b&gt; ລັດທັງຫມົດທົ່ວໂລກຖືກເປີດໃຊ້ງານ. The &lt;b&gt; ສະແດງ / ເຊື່ອງຫນ້າຕ່າງຫຼັກ &lt;/ b&gt; ທາງລັດ = "ສີແດງ"&gt; ROTINGS ທ່ານສາມາດປ່ຽນເສັ້ນທາງນັ້ນຫລືທ່າທາງໄດ້ທຸກເວລາ. ແຕ່ &lt;ສີ span = "ສີຂຽວ"&gt; ໃຫ້ມັນພະຍາຍາມ &lt;/ span&gt;
-&lt;/ li&gt;
-&lt;/ ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;Head&gt; &lt;/ Head&gt;&gt;
-&lt;ຮ່າງກາຍ&gt;
-&lt;h1&gt; ຮູບແບບການທໍາອິດຂອງໂລກ &lt;/ h1&gt;
-&lt;UL&gt;
-&lt;li&gt;
-&lt;b&gt; ຕົວຕັ້ງຕົວຕີ &lt;/ b&gt; monkeypaste ທາງລັດຈະຟັງໃນໂປແກຼມໃດກໍ່ໄດ້. &lt;br&gt;
-* ນີ້ແມ່ນ &lt;i&gt; ພຽງແຕ່ &lt;/ i&gt; ທາງເລືອກໃນ Linux ສໍາລັບດຽວນີ້.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/ b&gt; ລະຫັດທາງລັດຈະປະຕິບັດ &lt;b&gt; &lt;i&gt; ກ່ອນ &lt;/ b&gt; ມັນຖືກຈັດການໂດຍແອັບພລິເຄຊັນທີ່ມີການເຄື່ອນໄຫວ. &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/ b&gt; ລັດຈະປະຕິບັດ &lt;b&gt; &lt;i&gt; ຫຼັງຈາກ &lt;/ b&gt; ມັນຖືກຈັດການໂດຍແອັບພລິເຄຊັນທີ່ມີການເຄື່ອນໄຫວ. &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; override &lt;/ b&gt; ໃນເວລາທີ່ monkey ໄດ້ຟັງທີ່ຄີ (ບໍ່ແມ່ນ keypier key) ຂອງການປ້ອນຂໍ້ມູນທີ່ສໍາຄັນ.
-ຕົວເລືອກນີ້ຈະຮັບປະກັນໃຫ້ທາງລັດແມ່ນເກີດຂື້ນໂດຍບໍ່ຕ້ອງຂັດແຍ້ງກັບຄໍາຮ້ອງສະຫມັກທີ່ມີການເຄື່ອນໄຫວ.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; override ສະເພາະ &lt;/ b&gt; ນີ້ແມ່ນປະເພດພິເສດຂອງຮູບແບບການຄອບງໍາທີ່ຖືກອອກແບບມາສໍາລັບ Caps Lock Key. ມັນພຽງແຕ່ອະນຸຍາດໃຫ້ &lt;b&gt; ຫນຶ່ງ &lt;/ b&gt; ທີ່ສໍາຄັນ (ບໍ່ແມ່ນ - ຕົວປ່ຽນແປງ) ສໍາລັບການມອບຫມາຍຂອງມັນ. &lt;br&gt;
-ໃນຮູບແບບການລັອກແບບປົກກະຕິ CAYRIDE CAYS CAYSE ສາມາດກາຍເປັນ &lt;i&gt; ຕິດຢູ່ &lt;/ i&gt; ເມື່ອກົດເຂົ້າປະສົມກັບຄີອື່ນ. ລາຍການ
-ສະນັ້ນບໍ່ວ່າກະແຈອື່ນໆແມ່ນຫຍັງ, ຖ້າວ່າ &lt;b&gt; hotelkey ​​&lt;/ b&gt; ທາງລັດແລະປ້ອງກັນບໍ່ໃຫ້ມັນມາຈາກ &lt;/ i&gt;.
-&lt;/ li&gt;
-&lt;/ ul&gt;
-&lt;/ ຮ່າງກາຍ&gt;
-&lt;/ html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>ປິດການໃຊ້ງານ</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>ໂຫລດຂຶ້ນເມື່ອບັນຊີຜູ້ໃຊ້ນີ້ເຂົ້າສູ່ລະບົບ, ບໍ່ແມ່ນສໍາລັບຜູ້ໃຊ້ຄົນອື່ນ.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; ການນໍາໃຊ້ລາຍຊື່ຜູ້ຕິດຕໍ່ທີ່ມີຢູ່ (ຕ້ອງການໂປແກຼມ FIVERCER) ນີ້ຫຼັງຈາກນັ້ນພາກສະຫນາມ Email ຂອງຜູ້ຕິດຕໍ່ທ່ານເລືອກຈະຖືກນໍາໃຊ້ສໍາລັບທຸກກໍລະນີທີ່ຢູ່ໃນເອກະສານນີ້. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = ປີທີ່ຜ່ານມາ &lt;br/&gt; yyyy = ປີທີ່ຍາວກວ່າ &lt;br/&gt; mm = ເດືອນ = mmm = mmm = ເດືອນລະເດືອນ . CUR) &lt;br/&gt; mmmm = ເດືອນຍາວນານ (ເດືອນມັງກອນ, ເດືອນມັງກອນ) ມື້ຂອງອາທິດໃນຄໍາສັບ (ວັນຈັນ, ວັນອັງຄານ ... ຄັ້ງທີ 3, ວັນທີ 21, 19, ວັນທີ 4, ວັນທີ 4 ... ) &lt;br/&gt; (0-12 )/ &gt; h = ຊົ່ວໂມງໃນມື້ (0-23) &lt;br/&gt; ຊົ່ວໂມງໃນມື້ (00-to&gt; mm = ທີສອງ/&gt; ss = milliseconds &lt;br/&gt; A = AM / PM Marker &lt;br/&gt; P = A.m./p.m.m. ເຄື່ອງຫມາຍ</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>ວັນທີປະຈຸບັນແລະ / ຫຼືເວລາຈະຖືກທົດແທນສໍາລັບແມ່ແບບທີ່ກໍານົດໃນເວລາທີ່ພວກມັນຖືກວາງໄວ້.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; ການເກີດຂື້ນທັງຫມົດຂອງແມ່ແບບນີ້ຈະໃຊ້ຂໍ້ຄວາມທີ່ສະຫນອງໃຫ້. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; ການເກີດຂື້ນທັງຫມົດຂອງແມ່ແບບນີ້ຈະໃຊ້ຂໍ້ຄວາມທີ່ສະຫນອງໃຫ້. &lt;/ p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>ສໍາເລັດການເພີ່ມເຕີມ</value>
@@ -469,9 +415,6 @@ Clips ຕາມລໍາດັບ.</value>
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>app ທີ່ໃຊ້ງານສຸດທ້າຍທີ່ບໍ່ຮູ້ຈັກ. ປ່ຽນເປັນໂປແກຼມທີ່ມີຈຸດປະສົງໃຫ້ກັບລີງນໍາ.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ວາງໄປທີ່: &lt;ab&gt; i class = "PASTE-Tooltip-foundix"&gt; {0} &lt;/} &lt;/ em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>ຫຼຸດຜ່ອນ</value>
@@ -547,9 +490,6 @@ Clips ຕາມລໍາດັບ.</value>
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>ບໍ່ມີ</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>ພຽງແຕ່ presets ທີ່ຖືກຄັດເລືອກຈະຖືກນໍາໃຊ້ສໍາລັບຄໍາຮ້ອງສະຫມັກທີ່ລະບຸ. ໃນເວລາທີ່ບໍ່ໄດ້ລະບຸ, ການ presets ໃນຕອນຕົ້ນພົບໃນ &lt;em&gt; Clipboard Sidebar &lt;/ em&gt; ຈະຖືກນໍາໃຊ້.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>ຄຸນລັກສະນະ Monkey ຫຼາຍspasteໃຊ້ອັດຕະໂນມັດ keyboard ເພື່ອພົວພັນກັບການພົວພັນກັບແອັບພລິເຄຊັນອື່ນໆ.
 
@@ -562,9 +502,6 @@ Clips ຕາມລໍາດັບ.</value>
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>ຜູ້ຢິງອ່ານ</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>ການຕິດຕາມກວດກາ clipboard ທັງຫມົດຈາກການສະຫມັກທີ່ຖືກປະຕິເສດຈະເປັນ &lt;b&gt; ບໍ່ສົນໃຈ &lt;/ b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>ນັກຂຽນ</value>
@@ -1331,11 +1268,6 @@ monkeypaste ໃນອຸປະກອນ
     <value>ທ່ານແນ່ໃຈບໍ່ວ່າທ່ານຕ້ອງການທີ່ຈະປັບການແຈ້ງເຕືອນທັງຫມົດ?
 
 *ນີ້​ບໍ່​ສາ​ມາດ​ຍົກ​ເລີກ​ໄດ້!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste ກໍານົດຄລິບບອດ (overrides) ໃນເວລາທີ່ໄດ້ຮັບສ່ວນປະກອບພາຍນອກ. ນີ້ຈະ &lt;b&gt; ຄວາມພະຍາຍາມ &lt;/ b&gt; ເພື່ອຟື້ນຟູສະພາບຂອງ clipboard ຫຼັງຈາກທີ່ໃສ່ພາຍນອກ.
-
-ການຟື້ນຟູທັງຫມົດບໍ່ສາມາດຮັບປະກັນໄດ້ແລະອາດຈະຫຼຸດຜ່ອນການປະຕິບັດງານຫຼືແມ້ກະທັ້ງ monkey crash ໂດຍອີງຕາມແຫຼ່ງຂອງຂໍ້ມູນ.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>ຕັ້ງຄ່າ clipboard ຄືນໃຫມ່ຫຼັງຈາກການອະນຸຍາດ monkey</value>
@@ -2706,5 +2638,66 @@ monkeypaste ໃນອຸປະກອນ
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ຮຽນຮູ້ເພີ່ມເຕີມກ່ຽວກັບແຜນການ</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;ການນໍາໃຊ້ການຕິດຕໍ່ທີ່ມີຢູ່ (ຮຽກຮ້ອງplugin fetcher) ທົ່ງນານີ້ຈະຖືກນໍາໃຊ້ສໍາລັບທຸກກໍລະນີຂອງtemplate ນີ້ໃນເອກະສານນີ້ຫຼືໃນສິ່ງໃດກໍຕາມທີ່ມັນຈະໄດ້ຮັບການອ້າງອີງໃນເວລາຕໍ່ມາ.&lt;/p&gt;&lt;p&gt; ດັ່ງນັ້ນຕົວຢ່າງຖ້າເລືອກທີ່ຢູ່ອີເມວທີ່ນີ້ແລ້ວເຂດອີເມວຂອງຜູ້ຕິດຕໍ່ທີ່ທ່ານເລືອກຈະຖືກນໍາໃຊ້ສໍາລັບທຸກກໍລະນີໃນເອກະສານນີ້.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = ປີສັ້ນ&lt;br/&gt;yyyy = ປີຍາວ&lt;br/&gt;M = ເດືອນ (1-12)&lt;br/&gt;MM = ເດືອນ (01-12)&lt;br/&gt;MMM = ເດືອນ abbreviation (Jan, Feb ... Dec)&lt;br/&gt;MMMM = ເດືອນຍາວ (ມັງກອນ, ກຸມພາ ... ເດືອນທັນວາ)&lt;br/&gt;d = ມື້ (1 - 31)&lt;br/&gt;dd = ມື້ (01 - 31)&lt;br/&gt;ddd = ມື້ຂອງອາທິດໃນຄໍາສັບ (ວັນຈັນ, ອັງຄານ ... ວັນອາທິດ)&lt;br/&gt;E = ມື້ສັ້ນຂອງອາທິດເປັນຄໍາສັບ (Mon, Tue ... ດວງອາທິດ)&lt;br/&gt;D - ວັນພິທີການ (ທີ 1, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;br/&gt;h = ຊົ່ວໂມງໃນ am/pm (0-12)&lt;br/&gt;hh = ຊົ່ວໂມງໃນ am/pm (00-12)&lt;br/&gt;H = ຊົ່ວໂມງໃນມື້ (0-23)&lt;br/&gt;HH = ຊົ່ວໂມງໃນມື້ (00-23)&lt;br/&gt;mm = ນາທີ&lt;br/&gt;ss = ທີສອງ&lt;br/&gt;SSS = milliseconds&lt;br/&gt;a = ເຄື່ອງຫມາຍ AM/PM&lt;br/&gt;p = a.m./p.m. marker</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;ທັງຫມົດທີ່ເກີດຂຶ້ນຂອງtemplate ນີ້ຈະໃຊ້ຂໍ້ຄວາມທີ່ສະຫນອງໃຫ້.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;ທັງຫມົດທີ່ເກີດຂຶ້ນຂອງtemplate ນີ້ຈະໃຊ້ຂໍ້ຄວາມທີ່ສະຫນອງໃຫ້.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste ຕັ້ງຄລິບ (overrides) ເມື່ອໃສ່ໂປຣແກຣມພາຍນອກ. ນີ້ ຈະ &lt;b&gt;ພະ ຍາ ຍາມ&lt;/b&gt; ທີ່ ຈະ ຟື້ນ ຟູ ສະ ພາບ ຂອງ clipboard ຫຼັງ ຈາກ ທີ່ paste ພາຍ ນອກ . 
+
+ການ ຟື້ນ ຟູ ທັງ ຫມົດ ບໍ່ ສາ ມາດ ຮັບ ປະ ກັນ ໄດ້ ແລະ ອາດ ຈະ ຫຼຸດ ຜ່ອນ ການ ປະ ຕິ ບັດ ຫຼື ແມ່ນ ແຕ່ crash MonkeyPaste ຂຶ້ນ ຢູ່ ກັບ ແຫຼ່ງ ຂໍ້ ມູນ .</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>ສະເພາະກໍານົດທີ່ເລືອກໄວ້ເທົ່ານັ້ນທີ່ຈະຖືກນໍາໃຊ້ສໍາລັບຄໍາຮ້ອງສະຫມັກທີ່ລະບຸໄວ້. ເມື່ອບໍ່ລະບຸ, ການຕັ້ງຄ່າມາດຕະຖານທີ່ພົບໃນ &lt;em&gt;Clipboard Sidebar&lt;/em&gt; ຈະຖືກນໍາໃຊ້.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>ການກວດສອບclipboard ທັງຫມົດຈາກຄໍາຮ້ອງສະຫມັກທີ່ຖືກປະຕິເສດຈະຖືກເມີນເສີຍ.&lt;b&gt;&lt;/b&gt;</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;ພາຍໃນ&lt;/b&gt;ທາງສັ້ນທັງຫມົດແມ່ນຈໍາກັດຢູ່ພາຍໃນຄໍາຮ້ອງສະຫມັກ. ນີ້ບໍ່ແມ່ນທາງເລືອກທີ່ມີຈຸດປະສົງແທ້ໆແຕ່ສາມາດອະນຸຍາດໃຫ້ປັບແຕ່ງສິ່ງທີ່ທາງສັ້ນທີ່ທ່ານຕັ້ງໃຈຈະເຮັດໃຫ້ທົ່ວໂລກໃນມື້ຫນຶ່ງ.&lt;i&gt;&lt;/i&gt;&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;ຄ່າທໍານນວນ&lt;/b&gt; ທາງສັ້ນທັງຫມົດໃນທົ່ວໂລກແມ່ນສາມາດໃຊ້ໄດ້. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut&lt;span color="red"&gt;ໃຊ້override&lt;/span&gt;routing ສໍາລັບກະແຈ&lt;b&gt;Caps Lock&lt;/b&gt; . ທ່ານສາມາດປ່ຽນສາຍທາງຫຼືທ່າທາງນັ້ນໄດ້ທຸກເວລາ. &lt;span color="green"&gt;ແຕ່ໃຫ້ມັນລອງ&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passive&lt;/b&gt; A shortcut MonkeyPaste ຈະຮັບຟັງໃນຄໍາຮ້ອງສະຫມັກໃດໆ.&lt;br&gt;* &lt;i&gt;ນີ້ແມ່ນທາງເລືອກດຽວໃນ&lt;/i&gt; Linux ສໍາລັບຕອນນີ້.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Shortcut ຈະດໍາເນີນການກ່ອນທີ່ຈະໄດ້ຮັບການຈັດການໂດຍຄໍາຮ້ອງສະຫມັກທີ່ເຄື່ອນໄຫວ.&lt;b&gt;&lt;i&gt;&lt;/i&gt;&lt;/b&gt;&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Shortcut ຈະ ປະຕິບັດ &lt;b&gt;&lt;i&gt;ຫຼັງ ຈາກ&lt;/i&gt;&lt;/b&gt; ທີ່ ມັນ ໄດ້ ຮັບ ການ ຈັດການ ໂດຍ ການ ນໍາ ໃຊ້ ທີ່ ເຂັ້ມ ແຂງ .&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Override&lt;/b&gt; ເມື່ອ MonkeyPaste ໄດ້ ຍິນ ກະ ແຈ input (non - modifier key) ຂອງ ການ override shortcut ມັນ ຈະ &lt;i&gt;ເຊື່ອງ&lt;/i&gt; ການ ພິມ ທີ່ ສໍາ ຄັນ ນັ້ນ ຈາກ ການ ນໍາ ໃຊ້ - ການ ນໍາ ເຂົ້າ ລະ ດັບ .&lt;br&gt;ທາງ ເລືອກ ນີ້ ຈະ ຮັບ ປະ ກັນ ວ່າ ທາງ ສັ້ນ ຈະ ຖືກ ກໍ່ ໃຫ້ ເກີດ ຂຶ້ນ ໂດຍ ບໍ່ ມີ ຂໍ້ ຂັດ ແຍ່ງ ຕໍ່ ການ ນໍາ ໃຊ້ ທີ່ ເຂັ້ມ ແຂງ .   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Override ສະເພາະ&lt;/b&gt; ນີ້ແມ່ນຮູບແບບການ override ແບບພິເສດທີ່ອອກແບບມາສໍາລັບກະແຈ Caps Lock. ຊອບ ແວ ພຽງ ແຕ່ ອະ ນຸ ຍາດ ໃຫ້ ກະ ແຈ &lt;b&gt;ຫນຶ່ງ&lt;/b&gt; (ບໍ່ - ດັດ ແປງ ) ສໍາ ລັບ ການ ມອບ ຫມາຍ ຂອງ ຕົນ .&lt;br&gt;ໃນຮູບແບບ override ປົກກະຕິ Caps Lock ສາມາດຕິດຄ້າງໄດ້ເມື່ອກົດປະສົມປະສານກັບກະແຈອື່ນໆ.&lt;i&gt;&lt;/i&gt;&lt;br&gt;ສະ ນັ້ນ ບໍ່ ວ່າ ຈະ ມີ ກະ ແຈ ອື່ນ ໃດ ລົງ, ຖ້າ ຫາກ ວ່າ ທາງ ສັ້ນ &lt;b&gt;Hotkey&lt;/b&gt; ຖືກ ກົດ ມັນ ຈະ ຖືກ ລົບ ກວນ ແລະ ປ້ອງ ກັນ ບໍ່ ໃຫ້ ມັນ &lt;i&gt;ຕິດ ຢູ່.&lt;/i&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;ທາງນີ້, MonkeyPaste ສາມາດເຂົ້າເຖິງໄດ້&lt;br&gt;&lt;span color="red"&gt;ປາດສະຈາກການຄິກຫຼືແມ້ກະທັ້ງbatting&lt;/span&gt; &lt;span color="red"&gt;ຕາ&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

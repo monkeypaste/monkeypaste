@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>ସ୍କ୍ରୋଲ୍ - ଖୋଲନ୍ତୁ - ଖୋଲନ୍ତୁ |</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p ଆଲାଇନ୍ = "ସେଣ୍ଟର"&gt; MANKEPASTE ହେଉଛି &lt;Pan ରଙ୍ଗ = "ରେଡ୍&gt; ସମ୍ପୂର୍ଣ୍ଣ ରୂପେ - ଏବଂ - ଡ୍ରପ୍ &lt;/ p&gt; |</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>ଏହାକୁ ଏଠାରେ ଛାଡିଦିଅ!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p ଆଲାଇନ୍ = "ସେଣ୍ଟର"&gt; ଏହି ଉପାୟରେ, ମାଙ୍କଦିପାସେଟ୍ ଆକ୍ସେସ୍ ହୋଇପାରିବ - ଏକ କ୍ଲିକ୍ ବିନା 7 / LUD "କିମ୍ବା &lt;linux"&gt; | &amp; # x1f440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>ମୋତେ ଟାଣ!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>ଅଙ୍ଗଭଙ୍ଗୀ ନିଶ୍ଚୟ ଅନନ୍ୟ ହେବା ଏବଂ କେବଳ ଗୋଟିଏ ଇନପୁଟ୍ କୀ ଧାରଣ କରିପାରେ |</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; ଆଭ୍ୟନ୍ତରୀଣ &lt;/ b&gt; ସମସ୍ତ ସର୍ଟକଟ୍ ପ୍ରୟୋଗ ମଧ୍ୟରେ ସୀମିତ ଅଟେ | ଏହା ପ୍ରକୃତରେ ଏକ ଉଦ୍ଦିଷ୍ଟ ବିକଳ୍ପ ନୁହେଁ କିନ୍ତୁ ଆପଣ ଗ୍ଲୋବାଲ୍ &lt;I&gt; ଦିନେ &lt;/ i&gt; କରିବାକୁ ଇଚ୍ଛା କରୁଥିବା କଷ୍ଟୋମାଇଟକୁ ଅନୁମତି ଦେଇପାରନ୍ତି | &lt;/ li&gt; |
-&lt;li&gt;
-&lt;b&gt; ଡିଫଲ୍ଟ &lt;/ b&gt; ସମସ୍ତ ଗ୍ଲୋବାଲ୍ ସର୍ଟକଟ୍ ସକ୍ଷମ ହୋଇଛି | ମୁଖ୍ୟ ୱିଣ୍ଡୋ ଶୋ / ଲୁଚାନ୍ତୁ ସର୍ଟକଟ୍ ଦେଖାନ୍ତୁ &lt;spaceCut ବ୍ୟବହାର କରେ &lt;b&gt; କ୍ୟାପ୍ ଲକ୍ &lt;/ b&gt; କି &lt;/ b&gt; କି ପାଇଁ ନବଲିଖନ &lt;/ sp) | ଆପଣ ଯେକ time ଣସି ସମୟରେ ସେହି ରାଉଟିଙ୍ଗ୍ କିମ୍ବା ଅଙ୍ଗଭଙ୍ଗୀକୁ ପରିବର୍ତ୍ତନ କରିପାରିବେ | କିନ୍ତୁ &lt;ଧା ରଙ୍ଗ = "ସବୁଜ"&gt; ଏହାକୁ ଏକ ଚେଷ୍ଟା &lt;/ san&gt; ଦିଅ |
-&lt;/ li&gt;
-&lt;/ ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;ହେଡ୍&gt; &lt;/ SHAL&gt; |
-&lt;ଶରୀର&gt;
-&lt;h1&gt; ଗ୍ଲୋବାଲ୍ ସର୍ଟକଟ୍ ମୋଡ୍ &lt;/ h1&gt; |
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; ପାସାଇଭିଭ୍ &lt;/ b&gt; ଯେକ any ଣସି ପ୍ରୟୋଗରେ ଏକ ସର୍ଟକଟ୍ ମାଙ୍କଡ଼ପେଷ୍ଟ ଶୁଣିବ | &lt;br&gt;
-* ବର୍ତ୍ତମାନ ପାଇଁ ଲିନ୍ସରେ ଏହା ହେଉଛି &lt;I&gt; କେବଳ &lt;/ i&gt; ଅପ୍ସନ୍ |
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; ପ୍ରି &lt;/ b&gt; ସର୍ଟକଟ୍ &lt;b&gt; &lt;i&gt; ପୂର୍ବରୁ &lt;b&gt; &lt;i&gt; ପୂର୍ବରୁ &lt;b&gt; &lt;i&gt; ପୂର୍ବରୁ ଏକଜେକ୍ୟୁଟ୍ କରିବ &lt;/ i&gt; &lt;/ b&gt; ଏହା ସକ୍ରିୟ ପ୍ରୟୋଗ ଦ୍ୱାରା ପରିଚାଳିତ ହେବ | &lt;/ li&gt; |
-&lt;li&gt;
-&lt;b&gt; ପୋଷ୍ଟ &lt;/ b&gt; ସର୍ଟକଟ୍ &lt;/ i&gt; &lt;/ b&gt; ପରେ &lt;b&gt; &lt;i&gt; ଏକଜେକ୍ୟୁଟ୍ କରିବ &lt;/ i&gt; &lt;/ b&gt; ଏହା ସକ୍ରିୟ ପ୍ରୟୋଗ ଦ୍ୱାରା ପରିଚାଳିତ | &lt;/ li&gt; |
-&lt;li&gt;
-&lt;b&gt; ନବଲିଖନ &lt;/ b&gt; ଯେତେବେଳେ ଏକ ଓନକ୍ୱପେଷ୍ଟର ଏକଡ୍ୟୁଜ୍ କଟ୍ (ଅଣ-ମୋଡିଫାୟର୍ କି) କୁ ଅଧିକ ଶୁଣେ &lt;/ i&gt; ଲୁଚାଇବ ଯାହା ପ୍ରୟୋଗ - ସ୍ତର ଇନପୁଟ୍ | &lt;br&gt;
-ଏହି ବିକଳ୍ପ ସର୍ଟକଟ୍ ସକ୍ରିୟ ପ୍ରୟୋଗରେ ବିବାଦ ବିନା ବିବାଦ ବିନା ଟ୍ରିଗର ହୋଇଛି |
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; ଏକ୍ସକ୍ଲୁସିଭ୍ ଓଭରର୍ଡ୍ &lt;/ b&gt; ଏହା ହେଉଛି କ୍ୟାପ୍ସ ଲକ୍ ଚାବି ପାଇଁ ଡିଜାଇନ୍ ହୋଇଥିବା ଏକ ସ୍ୱତନ୍ତ୍ର ପ୍ରକାରର ଓଭରଲିଡ୍ ମୋଡ୍ | ଏହା କେବଳ &lt;b&gt; ଗୋଟିଏ &lt;/ b&gt; ଚାବି (ଅଣ-ମୋଡିଫାୟର୍) କୁ ଅନୁମତି ଦିଏ | &lt;br&gt;
-ସାଧାରଣ ଓଭରଡାଇଡ୍ ମୋଡ୍ ରେ କ୍ୟାପ୍ ଲକ୍ &lt;/ I&gt; ରେ ଷ୍ଟକ୍ ହୋଇପାରେ ଯେତେବେଳେ ଅନ୍ୟ ଚାବି ସହିତ ମିଳିତ ହୁଏ | &lt;br&gt;
-ତେଣୁ ଅନ୍ୟ କିଗୁଡ଼ିକ କ'ଣ ହେଉନା କାହିଁକି, ଯଦି ଏକ &lt;b&gt; Hotky &lt;/ b&gt; ସର୍ଟକଟ୍ ଦବାଗଲା, ଏହାକୁ ଅତିକ୍ରମ କରିବ ଏବଂ ଏହାକୁ &lt;/ i&gt; ଉପରେ ଅଟକାଇବ |
-&lt;/ li&gt;
-&lt;/ ul&gt;
-&lt;/ body&gt;
-&lt;/ html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>ଅକ୍ଷମ କରନ୍ତୁ |</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>ଯେତେବେଳେ ଏହି ଉପଭୋକ୍ତା ଆକାଉଣ୍ଟ୍ ଲଗ୍ ଇନ୍ ହୁଏ, ଅନ୍ୟ ଉପଭୋକ୍ତାଙ୍କ ପାଇଁ ନୁହେଁ, ଏହା ଲୋଡ୍ ହୁଏ, ଅନ୍ୟ ଉପଭୋକ୍ତାମାନଙ୍କ ପାଇଁ ନୁହେଁ |</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;P&gt; ଉପଲବ୍ଧ ସମ୍ପର୍କଗୁଡିକ ବ୍ୟବହାର କରି (ଏକ ଫେର୍ବେର୍ ପ୍ଲଗଇନ୍ ଆବଶ୍ୟକ କରେ) ଏହି କ୍ଷେତ୍ରଟି ପରବର୍ତ୍ତୀ ସମୟରେ ଏହି ଡକ୍ୟୁମେଣ୍ଟ୍ ପାଇଁ ରେ ରେଫରେନ୍ସ କରିବ | &lt;/ p&gt; &lt;p&gt; ତେଣୁ ଉଦାହରଣ ସ୍ୱରୂପ ଯଦି ଇମେଲ ଠିକଣା ଚୟନ କରିବେ | ତା'ପରେ ଏଠାରେ ଆପଣ ଚୟନ କରୁଥିବା ଯୋଗାଯୋଗ କ୍ଷେତ୍ରକୁ ଏହି ଡକ୍ୟୁମେଣ୍ଟରେ ସମସ୍ତ ଉଦାହରଣ ପାଇଁ ବ୍ୟବହାର କରାଯିବ ଯାହାକୁ ଏହି ଡକ୍ୟୁମେଣ୍ଟରେ ସମସ୍ତ ଉଦାହରଣ ପାଇଁ ବ୍ୟବହାର କରାଯିବ | &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = ସ୍ୱଳ୍ପ ବର୍ଷ &lt;br/&gt; yyyy = ମାସରେ &lt;/&gt; m = ମାସ (1-12) &lt;br/&gt; mm = ମାସ ସଂକ୍ଷିପ୍ତ (ଜାନ, ଫେବୃଆରୀ .. । ଡିସେମ୍ବର) &lt;br/&gt; mmmm = ଲମ୍ବା ମାସ (ଜାନୁଆରୀ, ଫେବୃଆରୀ ... ଡିସେମ୍ବର - &lt;&lt; &lt;&gt; dd = ଦିନ) &lt;br/&gt; DDD = | ଶବ୍ଦର ଦିନ (ସୋମବାର, ମଙ୍ଗଳବାର ... ରବିବାର) &lt;br/&gt; e = ର ଛୋଟ ଦିନ (ସୋମ, ମଙ୍ଗଳ ... 3, 21, 23, 23, 31, 31, 4S, 4TH ...) &lt;br /: AM / PM (00-12) &lt;Cl = &gt; H = ଦିନରେ ଘଣ୍ଟାରେ (0-23) &lt;br:/&gt; hh = ଘଣ୍ଟାରେ (00-23) &lt;br /&gt; MM = ମିନିଟ୍ &lt;br/&gt; MM = ଦ୍ୱିତୀୟ &lt;br/&gt; SSS = MLYSECHES &lt;br/&gt; | a = am / pm ମାର୍କର &lt;br/&gt; p = a.m./p.m | ମାର୍କର</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>ସାମ୍ପ୍ରତିକ ତାରିଖ ଏବଂ / କିମ୍ବା ସମୟ ପେଷ୍ଟ ହୋଇଥିବାବେଳେ ତାରିଖ ଟେମ୍ପଲେଟ୍ ପାଇଁ ବଦଳାଯିବ |</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>ଏହି ଟେମ୍ପଲେଟର ସମସ୍ତ ଘଟଣା ଦ୍ the ାରା ପ୍ରଦାନ କରାଯାଇଥିବା ପାଠ୍ୟକୁ ବ୍ୟବହାର କରିବ | &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>ଏହି ଟେମ୍ପଲେଟର ସମସ୍ତ ଘଟଣା ଦ୍ the ାରା ପ୍ରଦାନ କରାଯାଇଥିବା ପାଠ୍ୟକୁ ବ୍ୟବହାର କରିବ | &lt;/ p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>ପ୍ରୟୋଗ ସମାପ୍ତ କରନ୍ତୁ |</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>ଶେଷ ସକ୍ରିୟ ଆପ୍ ଅଜ୍ଞାତ | ମାଙ୍କଡ଼ ପେଷ୍ଟକୁ ଉଦ୍ଦିଷ୍ଟ ଆପ୍ କୁ ସୁଇଚ୍ କରନ୍ତୁ |</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ପେଷ୍ଟକୁ ପେଷ୍ଟ କରନ୍ତୁ: &lt;EM&gt; &lt;i କ୍ଲାସ୍ = "ପେଷ୍ଟ-ଟୁଲଟିପି-ସଫିକ୍ସ"&gt; {0} &lt;/ i&gt; &lt;/ EM&gt; |</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>କମ୍ କରନ୍ତୁ |</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>କିଛି ନୁହେଁ |</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>ନିର୍ଦ୍ଦିଷ୍ଟ ଆବେଦନ ପାଇଁ କେବଳ ମନୋନୀତ ପ୍ରିସେଟ୍ ବ୍ୟବହାର କରାଯିବ | ପୂର୍ବରୁ ନିର୍ଦ୍ଦିଷ୍ଟ ହୋଇଥିବାବେଳେ, &lt;em&gt; କ୍ଲିପବୋର୍ଡ ସାଇଡ୍ ବାର୍ ରେ ଡିଫଲ୍ଟ ପ୍ରେସର ମିଳିଲା &lt;/ em&gt; ବ୍ୟବହୃତ ହେବ |</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>ଅନେକ ମାଙ୍କଡ଼ପେଷ୍ଟ ବ features ଶିଷ୍ଟ୍ୟଗୁଡିକ ଅନ୍ୟ ପ୍ରୟୋଗଗୁଡ଼ିକ ସହିତ ଯୋଗାଯୋଗ କରିବାକୁ କୀବୋର୍ଡ୍ ସ୍ୱୟଂଚାଳିତ ବ୍ୟବହାର ବ୍ୟବହାର କରନ୍ତି |
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>ପାଠକଗଣ</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>ତ୍ରୁଟି ପକାଯାଇଥିବା ପ୍ରୟୋଗଗୁଡ଼ିକରୁ ସମସ୍ତ କ୍ଲିପବୋର୍ଡ ମନିଟରିଂ &lt;b&gt; ଅଣଦେଖା &lt;/ b&gt; କୁ ଅଣଦେଖା କରାଯିବ |</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>ଲେଖକମାନେ</value>
@@ -1331,11 +1268,6 @@
     <value>ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ସମସ୍ତ ବିଜ୍ଞପ୍ତିକୁ ପୁନ res ସେଟ୍ କରିବାକୁ ଚାହୁଁଛନ୍ତି?
 
 * ଏହା ପୂର୍ବବତ୍ ହୋଇପାରିବ ନାହିଁ!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>ଏକ ବାହ୍ୟ ପ୍ରୋଗ୍ରାମକୁ ପେଷ୍ଟ କରିବା ସମୟରେ ମାଙ୍କଡ଼ ପେଷ୍ଟଗୁଡିକ କ୍ଲିପବୋର୍ଡ (ଓଭରଗାର୍ଡ) ସେଟ୍ କରେ | ଏକ ବାହ୍ୟ ପେଷ୍ଟ ପରେ କ୍ଲିପବୋର୍ଡର ସ୍ଥିତିକୁ ପୁନ restore ସ୍ଥାପନ କରିବା ପାଇଁ ଏହା &lt;b&gt; ପ୍ରୟାସ &lt;/ b&gt; |
-
-ତଥ୍ୟର ଉତ୍ସ ଉପରେ ନିର୍ଭର କରି ସମ୍ପୂର୍ଣ୍ଣ ପୁନରୁଦ୍ଧାର ପାଇଁ ସମ୍ପୂର୍ଣ୍ଣ ପୁନରୁଦ୍ଧାର କିମ୍ବା କାର୍ଯ୍ୟଦକ୍ଷତାକୁ ହ୍ରାସ କରିପାରେ କିମ୍ବା ଏପରିକି କ୍ରାସ୍ ମାଙ୍କଡ଼ପେଷ୍ଟ ହୋଇପାରେ |</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>ମାଙ୍କଡ଼ ପେଷ୍ଟିଂ ପରେ କ୍ଲିପବୋର୍ଡ ପୁନ res ସେଟ୍ କରନ୍ତୁ |</value>
@@ -2706,5 +2638,66 @@ FANDUCE@ONKEYPASTET.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ଯୋଜନା ବିଷୟରେ ଅଧିକ ଜାଣନ୍ତୁ |</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>ପେଷ୍ଟ: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;ଉପଲବ୍ଧ ସମ୍ପର୍କଗୁଡିକ ବ୍ୟବହାର କରି (ଏକ ଫ୍ଲାଚର୍ ପ୍ଲଗଇନ୍ ଆବଶ୍ୟକ କରେ) ଏହି କ୍ଷେତ୍ର ଏହି ଦସ୍ତାବିଜରେ ଏହି ଟେମ୍ପଲେଟ୍ ର ସମସ୍ତ ଉଦାହରଣ ପାଇଁ ବ୍ୟବହୃତ ହେବ କିମ୍ବା ଏହା ପରେ ଉଲ୍ଲେଖ କରାଯିବ।&lt;/p&gt;&lt;p&gt; ତେଣୁ ଉଦାହରଣ ସ୍ୱରୂପ ଯଦି ଏଠାରେ ଇମେଲ୍ ଠିକଣା ଚୟନ କରନ୍ତୁ ତେବେ ଆପଣ ଚୟନ କରିଥିବା ସମ୍ପର୍କର ଇମେଲ୍ ଫିଲ୍ଡ ଏହି ଦସ୍ତାବିଜରେ ଥିବା ସମସ୍ତ ଉଦାହରଣ ପାଇଁ ବ୍ୟବହୃତ ହେବ।&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>y = କ୍ଷୁଦ୍ର ବର୍ଷ&lt;br/&gt;yyy = ଦୀର୍ଘ ବର୍ଷ&lt;br/&gt;M = ମାସ (1-12)&lt;br/&gt;MM = ମାସ (01-12)&lt;br/&gt;MMM = ମାସ ସଂକ୍ଷେପ (ଜାନୁଆରୀ, ଫେବୃଆରୀ ... ଡିସେମ୍ବର)&lt;br/&gt;MMMM = ଦୀର୍ଘ ମାସ (ଜାନୁଆରୀ, ଫେବୃଆରୀ ... ଡିସେମ୍ବର)&lt;br/&gt;d = ଦିନ (1 - 31)&lt;br/&gt;dd = ଦିନ (01 - 31)&lt;br/&gt;ddd = ଶବ୍ଦରେ ସପ୍ତାହର ଦିନ (ସୋମବାର, ମଙ୍ଗଳବାର ... ରବିବାର)&lt;br/&gt;ଇ = ଶବ୍ଦରେ ସପ୍ତାହର ସଂକ୍ଷିପ୍ତ ଦିନ (ମୋନ୍, ଟୁଇ ... ସୂର୍ଯ୍ୟ)&lt;br/&gt;ଡି - ଅର୍ଡିନାଲ ଦିନ (ପ୍ରଥମ, ଦ୍ବିତୀୟ, ତୃତୀୟ, ୨୧, ୨୨, ୨୩, ୩୧, ୪ର୍ଥ...)&lt;br/&gt;h = am/pm ରେ ଘଣ୍ଟା (0-12)&lt;br/&gt;hh = am/pm ରେ ଘଣ୍ଟା (00-12)&lt;br/&gt;H = ଦିନର ଘଣ୍ଟା (0-23)&lt;br/&gt;HH = ଦିନର ଘଣ୍ଟା (00-23)&lt;br/&gt;mm = ମିନିଟ୍&lt;br/&gt;ss = ଦ୍ୱିତୀୟ&lt;br/&gt;SSS = milliseconds&lt;br/&gt;a = AM/PM ମାର୍କର&lt;br/&gt;p = a.m./p.m. ମାର୍କର</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;ଏହି ଟେମ୍ପଲେଟ୍ ର ସମସ୍ତ ଘଟଣାପ୍ରଦାନ କରାଯାଇଥିବା ଟେକ୍ସଟ୍ ବ୍ୟବହାର କରିବ।&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;ଏହି ଟେମ୍ପଲେଟ୍ ର ସମସ୍ତ ଘଟଣାପ୍ରଦାନ କରାଯାଇଥିବା ଟେକ୍ସଟ୍ ବ୍ୟବହାର କରିବ।&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>ମଙ୍କି ପେଷ୍ଟ ଏକ ବାହ୍ୟ ପ୍ରୋଗ୍ରାମକୁ ପେଷ୍ଟ କରିବା ସମୟରେ କ୍ଲିପ୍ ବୋର୍ଡ (ଓଭରରାଇଡ୍) ସେଟ୍ କରେ। ଏହା ଏକ ବାହ୍ୟ ପେଷ୍ଟ ପରେ କ୍ଲିପ୍ ବୋର୍ଡର ଅବସ୍ଥା ପୁନରୁଦ୍ଧାର କରିବାକୁ &lt;b&gt;ଚେଷ୍ଟା&lt;/b&gt; କରିବ। 
+
+ସମୁଦାୟ ପୁନରୁଦ୍ଧାର ନିଶ୍ଚିତ ହୋଇପାରିବ ନାହିଁ ଏବଂ ଡାଟାର ଉତ୍ସ ଉପରେ ନିର୍ଭର କରି କାର୍ଯ୍ୟଦକ୍ଷତା ହ୍ରାସ କରିପାରେ କିମ୍ବା ଏପରିକି ମଙ୍କି ପେଷ୍ଟକୁ କ୍ରାସ୍ କରିପାରେ।</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>ନିର୍ଦ୍ଦିଷ୍ଟ ଆପ୍ଲିକେସନ୍ ପାଇଁ କେବଳ ଚୟନିତ ପ୍ରିସେଟ୍ ଗୁଡିକ ବ୍ୟବହାର ହେବ। ଅନିର୍ଦ୍ଦିଷ୍ଟ ହେଲେ, &lt;em&gt;କ୍ଲିପ୍ ବୋର୍ଡ ସାଇଡବାରରେ&lt;/em&gt; ଥିବା ଡିଫଲ୍ଟ ପ୍ରିସେଟ୍ ବ୍ୟବହାର ହେବ।</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>ପ୍ରତ୍ୟାଖ୍ୟାନ ହୋଇଥିବା ଆବେଦନରୁ ସମସ୍ତ କ୍ଲିପ୍ ବୋର୍ଡ &lt;b&gt;ମନିଟରିଂକୁ ଅଣଦେଖା&lt;/b&gt; କରାଯିବ।</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;ଆଭ୍ୟନ୍ତରୀଣ&lt;/b&gt;ସମସ୍ତ ସର୍ଟକଟ୍ ଆପ୍ଲିକେସନ୍ ମଧ୍ୟରେ ସୀମିତ ଅଟେ। ଏହା ପ୍ରକୃତରେ ଏକ ଉଦ୍ଦିଷ୍ଟ ବିକଳ୍ପ ନୁହେଁ କିନ୍ତୁ ଆପଣ କେଉଁ ସର୍ଟକଟ୍ଗୁଡ଼ିକୁ&lt;i&gt;ଦିନେ&lt;/i&gt; ବିଶ୍ୱସ୍ତରୀୟ କରିବାକୁ ଚାହୁଁଛନ୍ତି ତାହାକୁ କଷ୍ଟମାଇଜ୍ କରିବାକୁ ଅନୁମତି ଦେଇପାରେ।&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;ଡିଫଲ୍ଟ&lt;/b&gt; ସମସ୍ତ ବିଶ୍ୱସ୍ତରୀୟ ସର୍ଟକଟ୍ ସକ୍ଷମ ହୋଇଛି। &lt;b&gt;ସୋ/ହାଇଡ୍ ମେନ୍ ୱିଣ୍ଡୋ&lt;/b&gt;ସର୍ଟକଟ୍&lt;b&gt;କ୍ୟାପ୍ସ ଲକ୍&lt;/b&gt; କୀ ପାଇଁ&lt;span color="red"&gt;ଓଭରରାଇଡ୍&lt;/span&gt;ରାଉଟିଂ ବ୍ୟବହାର କରେ। ଆପଣ ଯେକୌଣସି ସମୟରେ ସେହି ରୁଟିଂ କିମ୍ବା ଇଶାରାକୁ ପରିବର୍ତ୍ତନ କରିପାରିବେ। କିନ୍ତୁ&lt;span color="green"&gt;ଏହାକୁ ଚେଷ୍ଟା କରନ୍ତୁ&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;ଗ୍ଲୋବାଲ୍ ସର୍ଟକଟ୍ ମୋଡ୍&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passive&lt;/b&gt; କୌଣସି ଆପ୍ଲିକେସନରେ ଏକ ସର୍ଟକଟ୍ ମଙ୍କି ପେଷ୍ଟ ଶୁଣିବ।&lt;br&gt;* ବର୍ତ୍ତମାନ ପାଇଁ ଲିନାକ୍ସରେ ଏହା &lt;i&gt;ଏକମାତ୍ର&lt;/i&gt; ବିକଳ୍ପ ।   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ପ୍ରି-ପୂର୍ବ&lt;/b&gt; ସକ୍ରିୟ ଆପ୍ଲିକେସନ୍ ଦ୍ୱାରା ପରିଚାଳନା କରିବା &lt;b&gt;&lt;i&gt;ପୂର୍ବରୁ&lt;/i&gt;&lt;/b&gt; ସର୍ଟକଟ୍ କାର୍ଯ୍ୟକାରୀ ହେବ।&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ପୋଷ୍ଟ&lt;/b&gt; ସକ୍ରିୟ ଆପ୍ଲିକେସନ୍ ଦ୍ୱାରା ପରିଚାଳିତ ହେବା &lt;b&gt;&lt;i&gt;ପରେ&lt;/i&gt;&lt;/b&gt; ସର୍ଟକଟ୍ କାର୍ଯ୍ୟକାରୀ ହେବ।&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Override&lt;/b&gt; ଯେତେବେଳେ ମଙ୍କିପେଷ୍ଟେ ଏକ ଓଭରରାଇଡ୍ ସର୍ଟକଟର ଇନପୁଟ୍ କୀ (ଅଣ - ସଂଶୋଧକ କୀ) ଶୁଣେ ସେତେବେଳେ ଏହା ସେହି କୀ ପ୍ରେସ୍କୁ ଆପ୍ଲିକେସନ୍ - ସ୍ତରୀୟ ଇନପୁଟ୍ ରୁ &lt;i&gt;ଲୁଚାଇ&lt;/i&gt; ରଖିବ।&lt;br&gt;ଏହି ବିକଳ୍ପ ସକ୍ରିୟ ଆପ୍ଲିକେସନକୁ ବିବାଦ ବିନା ସର୍ଟକଟ୍ ଆରମ୍ଭ ହେବାର ଗ୍ୟାରେଣ୍ଟି ଦେବ।   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Exclusive Override&lt;/b&gt; କ୍ୟାପ୍ସ ଲକ୍ କି ପାଇଁ ଡିଜାଇନ୍ କରାଯାଇଥିବା ଏହା ଏକ ସ୍ୱତନ୍ତ୍ର ପ୍ରକାରର ଓଭରରାଇଡ୍ ମୋଡ୍ । ଏହା କେବଳ ଏହାର ଦାୟିତ୍ୱ ପାଇଁ &lt;b&gt;ଗୋଟିଏ&lt;/b&gt; ଚାବି (ଅଣ - ସଂଶୋଧକ) ଅନୁମତି ଦିଏ ।&lt;br&gt;ସାଧାରଣ ଓଭରରାଇଡ୍ ମୋଡ୍ ରେ କ୍ୟାପ୍ସ ଲକ୍ ଅନ୍ୟ ଚାବି ସହିତ ମିଶି ଦବାଇଲେ &lt;i&gt;ଅଟକି&lt;/i&gt; ଯାଇପାରେ।&lt;br&gt;ତେଣୁ ଅନ୍ୟ ଚାବି ଯାହା ହେଉ ନା କାହିଁକି, ଯଦି &lt;b&gt;ହଟ୍କି&lt;/b&gt; ସର୍ଟକଟ୍ ଦବାଇ ଦିଆଯାଏ ତେବେ ଏହା ଅତ୍ୟଧିକ ଭାରସାମ୍ୟ ହରାଇବ ଏବଂ ଏହାକୁ &lt;i&gt;ଅଟକିଯିବାରୁ&lt;/i&gt; ରୋକିବ ।   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPast ହେଉଛି &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;ଏହି ଉପାୟରେ, ମାଙ୍କଡ଼ ପେଷ୍ଟକୁ ଆକସେସ୍ କରାଯାଇପାରିବ&lt;br&gt;&lt;span color="red"&gt;କ୍ଲିକ୍ ବିନା&lt;/span&gt; କିମ୍ବା &lt;span color="red"&gt;ଆଖି ରେ ବ୍ୟାଟିଂ&lt;/span&gt; କରି #x1F440&lt;/p&gt;</value>
   </data>
 </root>

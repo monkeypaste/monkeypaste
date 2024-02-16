@@ -166,14 +166,8 @@ respectiv clipuri.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Defilare - la - Deschide</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; Monkeypaste este &lt;span color = "roșu&gt; complet integrat &lt;/span&gt; cu drag - și - drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Aruncă -l aici!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; În acest fel, Monkeypaste poate fi accesat &lt;br&gt; &lt;span color = "roșu"&gt; fără un clic &lt;/span&gt; sau chiar &lt;span color = "roșu"&gt; Baterea unui ochi &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Trage-ma!</value>
@@ -364,62 +358,14 @@ Upgrade pentru a evita.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Gesturile trebuie să fie unice și pot conține o singură cheie de intrare.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; intern &lt;/b&gt; Toate comenzile rapide sunt limitate la aplicație. Aceasta nu este într -adevăr o opțiune prevăzută, dar poate permite personalizarea celor rapide pe care intenționați să le faceți Global &lt;i&gt; într -o zi &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; implicit &lt;/b&gt; Toate comenzile rapide globale sunt activate. &lt;b&gt; show/ascunde fereastra principală &lt;/b&gt; scurtarea folosește &lt;span color = "roșu"&gt; override &lt;/span&gt; rutarea pentru tasta &lt;b&gt; Caps Lock &lt;/b&gt;. Puteți modifica acea rutare sau gest în orice moment. Dar &lt;span color = "verde"&gt; încearcă să încerce &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;Html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;Dood&gt;
-&lt;H1&gt; Moduri de comenzi rapide globale &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;B&gt; Pasiv &lt;/b&gt; O scurtătură Monkeypaste va asculta în orice aplicație. &lt;br&gt;
-*Aceasta este opțiunea &lt;i&gt; doar &lt;/i&gt; pe Linux deocamdată.
-&lt;/li&gt;
-&lt;li&gt;
-O scurtătură de scurtătură &lt;b&gt; pre &lt;/b&gt; va executa &lt;b&gt; &lt;i&gt; înainte &lt;/i&gt; &lt;/b&gt; este gestionată de aplicația activă. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/b&gt; scurtătură va executa &lt;b&gt; &lt;i&gt; după &lt;/i&gt; &lt;/b&gt; Este gestionată de aplicația activă. &lt;/li&gt;
-&lt;li&gt;
-&lt;B&gt; Onulare &lt;/b&gt; Când MonkeyPaste aude cheia de intrare (tasta non -modificator) a unei comenzi rapide de anvergură, va ascunde &lt;/i&gt; acea tastă apăsată de la aplicație - nivel de intrare. &lt;br&gt;
-Această opțiune va garanta că scurtătura este declanșată fără conflicte pentru aplicația activă.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Override exclusiv &lt;/b&gt; Acesta este un tip special de mod de anulare proiectat pentru tasta CAPS Block. Permite doar &lt;b&gt; o cheie &lt;/b&gt; (non -modificator) pentru atribuirea sa. &lt;br&gt;
-În modul normal de înlocuire a capacelor, blocajul poate deveni &lt;i&gt; blocat pe &lt;/i&gt; atunci când este apăsat în combinație cu alte taste. &lt;br&gt;
-Deci, indiferent de ce alte taste sunt în scădere, dacă o scurtătură de tip hotkey &lt;/b&gt; este apăsată, va fi depășită și va împiedica să devină &lt;i&gt; blocată pe &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/prood&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Dezactiva</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Încărcați -vă când acest cont de utilizator este conectat, nu pentru alți utilizatori.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Utilizarea contactelor disponibile (necesită un plugin Fetcher) Acest câmp va fi utilizat pentru toate instanțele acestui șablon din acest document sau în orice acesta va fi referit mai târziu. &lt;/p&gt; &lt;p&gt; Deci, de exemplu, dacă selectați adresa de e -mail Aici, apoi câmpul de e -mail al contactului selectat va fi utilizat pentru toate instanțele din acest document. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = an scurt &lt;br/&gt; yyyy = an lung &lt;br/&gt; m = lună (1-12) &lt;br/&gt; mm = lună (01-12) &lt;br/&gt; mmm = luna prescurtare (ianuarie, februarie .. . Dec) &lt;br/&gt; mmmm = luna lungă (ianuarie, februarie ... decembrie) &lt;br/&gt; d = zi (1 - 31) &lt;br/&gt; dd = zi (01 - 31) &lt;br/&gt; ddd = Ziua săptămânii în cuvinte (luni, marți ... duminică) &lt;br/&gt; e = ziua scurtă a săptămânii în cuvinte (mon, tu ... soare) &lt;br/&gt; d - zi ordinală (prima, a 2 -a, 3, 21, 22, 23, 31, 4 ...) &lt;br/&gt; h = oră în AM/PM (0-12) &lt;br/&gt; hh = oră în AM/PM (00-12) &lt;Br/Br/ &gt; H = oră în zi (0-23) &lt;br/&gt; hh = oră în zi (00-23) &lt;br/&gt; mm = minut/br/&gt; ss = al doilea &lt;br/&gt; sss = miliseconds &lt;br/&gt; A = AM/PM Marker &lt;br/&gt; p = a.m./p.m. Marker</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Data și/sau ora curente vor fi înlocuite cu șabloanele de date de date atunci când sunt lipite.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Toate evenimentele acestui șablon vor folosi textul furnizat. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Toate evenimentele acestui șablon vor folosi textul furnizat. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Terminați apariția</value>
@@ -469,9 +415,6 @@ Deci, indiferent de ce alte taste sunt în scădere, dacă o scurtătură de tip
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Ultima aplicație activă necunoscută. Treceți la aplicația intenționată la pasta de maimuță.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Lipiți la: &lt;em&gt; &lt;i class = "paste-tooltip-sufix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimizați</value>
@@ -547,9 +490,6 @@ Adăugați și/sau selectați aplicația cu comanda rapidă de copiere unică (c
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Nici unul</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Doar presetările selectate vor fi utilizate pentru aplicația specificată. Atunci când nu sunt specificate, se vor folosi presetările implicite găsite în &lt;em&gt; clipboard lateral bara &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Multe caracteristici Monkeypaste folosesc automatizarea tastaturii pentru a interacționa cu alte aplicații.
 
@@ -562,9 +502,6 @@ Pentru a asigura o interoperabilitate adecvată, înregistrați aici comenzile r
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Cititori</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Toate monitorizarea clipboardului din aplicațiile respinse vor fi &lt;b&gt; ignorate &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Scriitori</value>
@@ -1331,11 +1268,6 @@ Acest lucru nu poate fi anulat!
     <value>Ești sigur că vrei să resetezi toate notificările?
 
 *Acest lucru nu poate fi anulat!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste stabilește clipboard -ul (înlocui) atunci când lipiți la un program extern. Acest lucru va încerca &lt;b&gt; &lt;/b&gt; să restaureze starea clipboardului după o pastă externă.
-
-Restaurarea totală nu poate fi garantată și poate reduce performanța sau chiar poate prăbuși Monkeypaste în funcție de sursa datelor.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Resetați clipboard după lipirea maimuței</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Aflați mai multe despre planuri</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Lipire în: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Folosind contactele disponibile (necesită un plugin fetcher), acest câmp va fi utilizat pentru toate instanțele acestui șablon din acest document sau în orice va fi menționat ulterior.&lt;/p&gt;&lt;p&gt; De exemplu, dacă selectați adresa de e-mail aici, atunci câmpul de e-mail al contactului pe care îl selectați va fi utilizat pentru toate instanțele din acest document.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>ay = an scurt&lt;br/&gt;aaaa = an lung&lt;br/&gt;M = lună (1-12)&lt;br/&gt;MM = lună (01-12)&lt;br/&gt;MMM = abrevierea lunii (ian, februarie ... Decembrie)&lt;br/&gt;MMMM = lună lungă (ianuarie, februarie ... decembrie)&lt;br/&gt;d = zi (1 - 31)&lt;br/&gt;zz = zi (01 - 31)&lt;br/&gt;ddd = ziua săptămânii în cuvinte (luni, marți ... Duminică)&lt;br/&gt;E = zi scurtă a săptămânii în cuvinte (luni, marți ... Soare)&lt;br/&gt;D - Ziua ordinală (1, 2, 3, 21, 22, 23, 31, 4...)&lt;br/&gt;h = oră în am/pm (0-12)&lt;br/&gt;hh = oră în am/pm (00-12)&lt;br/&gt;H = oră în zi (0-23)&lt;br/&gt;HH = oră din zi (00-23)&lt;br/&gt;mm = minut&lt;br/&gt;ss = al doilea&lt;br/&gt;SSS = milisecunde&lt;br/&gt;a = marcajul AM/PM&lt;br/&gt;p = a.m./p.m. marker</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Toate aparițiile acestui șablon vor utiliza textul furnizat.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Toate aparițiile acestui șablon vor utiliza textul furnizat.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste setează clipboardul (suprascrie) atunci când lipiți într-un program extern. Aceasta va &lt;b&gt;încerca&lt;/b&gt; să restabilească starea clipboard-ului după o lipire externă. 
+
+Restaurarea totală nu poate fi garantată și poate reduce performanța sau chiar bloca MonkeyPaste în funcție de sursa datelor.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Numai presetările selectate vor fi utilizate pentru aplicația specificată. Când nu este specificat, vor fi utilizate presetările implicite găsite în &lt;em&gt;bara laterală Clipboard&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Toate monitorizările clipboard-ului din aplicațiile &lt;b&gt;respinse vor fi ignorate&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Intern&lt;/b&gt;Toate comenzile rapide sunt limitate la cadrul aplicației. Aceasta nu este într-adevăr o opțiune intenționată, dar vă poate permite să personalizați ce comenzi rapide intenționați să faceți global&lt;i&gt;într-o zi&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Implicit&lt;/b&gt; Toate comenzile rapide globale sunt activate. Comanda rapidă&lt;b&gt;Afișare/Ascundere fereastră principală&lt;/b&gt;utilizează rutarea&lt;span color="red"&gt;suprascrierii&lt;/span&gt;pentru tasta&lt;b&gt;Caps Lock&lt;/b&gt; . Puteți modifica ruta sau gestul respectiv în orice moment. Dar&lt;span color="green"&gt;încearcă&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Moduri de comenzi rapide globale&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pasiv&lt;/b&gt; O comandă rapidă MonkeyPaste va asculta în orice aplicație.&lt;br&gt;*Aceasta este &lt;i&gt;singura&lt;/i&gt; opțiune pe Linux pentru moment.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Comanda rapidă se va executa &lt;b&gt;&lt;i&gt;înainte&lt;/i&gt;&lt;/b&gt; de a fi gestionată de aplicația activă.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Comanda rapidă se va executa &lt;b&gt;&lt;i&gt;după ce&lt;/i&gt;&lt;/b&gt; este gestionată de aplicația activă.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Suprascrie&lt;/b&gt; Când MonkeyPaste aude tasta de intrare (tasta non-modificator) a unei comenzi rapide suprascrise, va &lt;i&gt;ascunde&lt;/i&gt; apăsarea tastei de intrarea la nivel de aplicație.&lt;br&gt;Această opțiune va garanta că comanda rapidă este declanșată fără conflicte cu aplicația activă.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Suprascriere exclusivă&lt;/b&gt; Acesta este un tip special de mod de suprascriere conceput pentru tasta Caps Lock. Permite doar &lt;b&gt;o singură&lt;/b&gt; cheie (non-modificator) pentru atribuirea sa.&lt;br&gt;În modul normal de suprascriere, Caps Lock se poate &lt;i&gt;bloca&lt;/i&gt; atunci când este apăsat în combinație cu alte taste.&lt;br&gt;Deci, indiferent ce alte taste sunt oprite, &lt;b&gt;dacă este&lt;/b&gt; apăsată o comandă rapidă rapidă, aceasta va fi suprascrisă și va împiedica &lt;i&gt;blocarea&lt;/i&gt; acesteia.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste este &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;În acest fel, MonkeyPaste poate fi accesat&lt;br&gt;&lt;span color="red"&gt;fără un clic&lt;/span&gt; sau chiar &lt;span color="red"&gt;bătând un ochi&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

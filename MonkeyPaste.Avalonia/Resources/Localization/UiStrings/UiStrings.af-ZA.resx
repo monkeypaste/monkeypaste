@@ -166,14 +166,8 @@ snitte onderskeidelik.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Blaai - na - oop</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; apeypaste is &lt;span color = "rooi&gt; volledig geïntegreer &lt;/span&gt; met sleep - en - drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Laat val dit hier!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; Op hierdie manier kan toegang tot aapkaste verkry word &lt;br&gt; &lt;span color = "rooi"&gt; sonder 'n klik &lt;/span&gt; of selfs &lt;span color = "rooi"&gt; kolf 'n oog &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Sleep my!</value>
@@ -364,62 +358,14 @@ Opgradeer om te vermy.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Gedings moet uniek wees en mag slegs een invoertoets bevat.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Interne &lt;/b&gt; Alle kortpaaie is beperk tot binne die toepassing. Dit is nie regtig 'n beoogde opsie nie, maar kan toelaat om aan te pas watter kortpaaie u van plan is om wêreldwye &lt;i&gt; eendag te maak &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Standaard &lt;/b&gt; Alle globale kortpaaie is geaktiveer. Die &lt;b&gt; wys/verberg hoofvenster &lt;/b&gt; kortpad gebruik &lt;span color = "rooi"&gt; oorheers &lt;/span&gt; -roetering vir die &lt;b&gt; caps lock &lt;/b&gt; sleutel. U kan daardie routing of gebaar te eniger tyd verander. Maar &lt;spankleur = "groen"&gt; probeer dit &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;hoof&gt; &lt;/kop&gt;
-&lt;liggaam&gt;
-&lt;h1&gt; Globale kortpadmodusse &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Passief &lt;/b&gt; 'n Kortpad Monkeypaste sal in enige toepassing luister. &lt;br&gt;
-*Dit is die &lt;i&gt; slegs &lt;/i&gt; opsie op Linux vir nou.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; kortpad sal &lt;b&gt; &lt;i&gt; uitvoer voor &lt;/i&gt; &lt;/b&gt; Dit word deur die aktiewe toepassing hanteer. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; POST &lt;/b&gt; Kortpad sal &lt;b&gt; &lt;i&gt; uitvoer na &lt;/i&gt; &lt;/b&gt; word dit deur die aktiewe toepassing hanteer. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ignoreer &lt;/b&gt; Wanneer Monkeypaste die invoertoets (nie -wysigingsleutel) van 'n kortpad hoor, sal dit &lt;i&gt; verberg &lt;/i&gt; wat die sleutelpers van die toepassing - vlak invoer. &lt;br&gt;
-Hierdie opsie sal waarborg dat die kortpad geaktiveer word sonder konflik met die aktiewe aansoek.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Eksklusiewe oorheersing &lt;/b&gt; Dit is 'n spesiale tipe oorheersingsmodus wat ontwerp is vir die Caps Lock -sleutel. Dit laat slegs &lt;b&gt; een &lt;/b&gt; sleutel (nie - wysiger) vir die opdrag toe. &lt;br&gt;
-In die normale oorheersingsmodus kan Caps -slot &lt;i&gt; vas word op &lt;/i&gt; as dit in kombinasie met ander sleutels gedruk word. &lt;br&gt;
-Dit maak nie saak watter ander sleutels af is nie, as 'n &lt;b&gt; hotkey &lt;/b&gt; kortpad gedruk word, sal dit oorskry word en voorkom dat dit &lt;i&gt; vas word op &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Uitskakel</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Laai op wanneer hierdie gebruikersrekening aangemeld is, nie vir ander gebruikers nie.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Gebruik beskikbare kontakte (benodig 'n fetcher -inprop) Hierdie veld word gebruik vir alle gevalle van hierdie sjabloon oor hierdie dokument, of daar word later verwys. Hier sal die e -posveld van die kontak wat u kies, gebruik word vir alle gevalle in hierdie dokument. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = kort jaar &lt;br/&gt; yyyy = lang jaar &lt;br/&gt; m = maand (1-12) &lt;br/&gt; mm = maand (01-12) &lt;br/&gt; mmm = maand afkorting (Jan, Feb .. . Dec) &lt;br/&gt; mmmm = lang maand (Januarie, Februarie ... Desember) &lt;br/&gt; d = dag (1 - 31) &lt;br/&gt; dd = dag (01 - 31) &lt;br/&gt; ddd = Dag van die week in woorde (Maandag, Dinsdag ... Sondag) &lt;br/&gt; E = Kort dag van die week in woorde (Ma, Di ... Sun) &lt;br/&gt; D - Ordinale dag (1ste, 2de, 3de, 21ste, 22ste, 23ste, 31ste, 4de ...) &lt;br/&gt; h = uur in am/pm (0-12) &lt;br/&gt; hh = uur in am/pm (00-12) &lt;br/ &gt; H = uur in die dag (0-23) &lt;br/&gt; hh = uur in die dag (00-23) &lt;br/&gt; mm = minuut &lt;br/&gt; ss = tweede &lt;br/&gt; sss = millisekondes &lt;br/&gt; A = AM/PM -merker &lt;br/&gt; p = a.m./p.m. merker</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Die huidige datum en/of tyd sal vervang word met die datumsjablone wanneer dit geplak word.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Alle voorvalle van hierdie sjabloon sal die verskafde teks gebruik. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Alle voorvalle van hierdie sjabloon sal die verskafde teks gebruik. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Voltooi by</value>
@@ -469,9 +415,6 @@ Dit maak nie saak watter ander sleutels af is nie, as 'n &lt;b&gt; hotkey &lt;/b
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Laaste aktiewe app onbekend. Skakel oor na die beoogde app na aappasta.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Plak na: &lt;em&gt; &lt;i class = "plak-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Verminder</value>
@@ -547,9 +490,6 @@ Voeg die app by en/of kies die app met die unieke kortpad (soos 'n konsole of do
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Geen</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Slegs die geselekteerde voorafinstellings sal vir die gespesifiseerde toepassing gebruik word. As dit nie gespesifiseer is nie, sal die standaardvoorinstellings wat in die &lt;em&gt; clipboard sidebar &lt;/em&gt; gevind word, gebruik word.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Baie Monkeypaste -funksies gebruik sleutelbord -outomatisering om met ander toepassings te kommunikeer.
 
@@ -562,9 +502,6 @@ Teken die kortpaaie vir die toepassing hier om behoorlike interoperabiliteit te 
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Lesers</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Alle monitering van die knipbord van verwerpte toepassings sal &lt;b&gt; geïgnoreer word &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Skrywers</value>
@@ -1331,11 +1268,6 @@ Dit kan nie ongedaan gemaak word nie!
     <value>Is u seker dat u alle kennisgewings wil terugstel?
 
 *Dit kan nie ongedaan gemaak word nie!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste stel die knipbord (oorheers) in wanneer dit op 'n eksterne program geplak word. Dit sal &lt;b&gt; poog &lt;/b&gt; om die toestand van die knipbord na 'n eksterne pasta te herstel.
-
-Afhangend van die bron van die data, kan totale herstel nie gewaarborg word nie en kan die prestasie verminder of selfs ape -apteaste verminder.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Stel die knipbord terug na aapplak</value>
@@ -2706,5 +2638,66 @@ terugvoer@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lees meer oor planne</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Plak aan: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Met behulp van beskikbare kontakte (benodig 'n fetcher-inprop) sal hierdie veld gebruik word vir alle gevalle van hierdie sjabloon in hierdie dokument of in enige plek waarna later verwys sal word.&lt;/p&gt;&lt;p&gt; As u byvoorbeeld e-posadres hier kies, sal die e-posveld van die kontak wat u kies, vir alle gevalle in hierdie dokument gebruik word.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = kort jaar&lt;br/&gt;yyyy = lang jaar&lt;br/&gt;M = maand (1-12)&lt;br/&gt;MM = maand (01-12)&lt;br/&gt;MMM = maand afkorting (Jan, Feb ... Des)&lt;br/&gt;MMMM = lang maand (Januarie, Februarie ... Desember)&lt;br/&gt;d = dag (1 - 31)&lt;br/&gt;dd = dag (01 - 31)&lt;br/&gt;ddd = dag van die week in woorde (Maandag, Dinsdag ... Sondag)&lt;br/&gt;E = kort dag van die week in woorde (Ma, Di ... Son)&lt;br/&gt;D - Ordinale dag (1ste, 2de, 3de, 21ste, 22ste, 23ste, 31ste, 4de...)&lt;br/&gt;h = uur in am/pm (0-12)&lt;br/&gt;hh = uur in vm/nm (00-12)&lt;br/&gt;H = uur in dag (0-23)&lt;br/&gt;HH = uur in dag (00-23)&lt;br/&gt;mm = minuut&lt;br/&gt;ss = tweede&lt;br/&gt;SSS = millisekondes&lt;br/&gt;a = AM/PM merker&lt;br/&gt;p = a.m./p.m. merker</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Alle voorkomste van hierdie sjabloon sal die verskafde teks gebruik.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Alle voorkomste van hierdie sjabloon sal die verskafde teks gebruik.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste stel die knipbord (overrides) in wanneer dit op 'n eksterne program geplak word. Dit sal &lt;b&gt;probeer&lt;/b&gt; om die toestand van die knipbord te herstel na 'n eksterne pasta. 
+
+Totale herstel kan nie gewaarborg word nie en kan prestasie verminder of selfs MonkeyPaste ineenstort, afhangende van die bron van die data.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Slegs die geselekteerde voorafinstellings sal vir die gespesifiseerde toepassing gebruik word. As dit nie gespesifiseer word nie, sal die standaardvoorinstellings wat in die &lt;em&gt;Clipboard Sidebar&lt;/em&gt; gevind word, gebruik word.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Alle knipbordmonitering van afgekeurde toepassings sal &lt;b&gt;geïgnoreer&lt;/b&gt; word.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Interne&lt;/b&gt;Alle kortpaaie is beperk tot binne die toepassing. Dit is nie regtig 'n beoogde opsie nie, maar kan toelaat om aan te pas watter kortpaaie u&lt;i&gt;eendag&lt;/i&gt; wêreldwyd wil maak.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Verstek&lt;/b&gt; Alle globale kortpaaie is geaktiveer. Die Show&lt;b&gt;/ Hide Main Window-kortpad&lt;/b&gt;gebruik&lt;span color="red"&gt;oorheersende&lt;/span&gt;roetering vir die&lt;b&gt;Caps Lock-sleutel&lt;/b&gt; . U kan die roete of gebaar te eniger tyd verander. Maar&lt;span color="green"&gt;probeer dit&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Wêreldwye kortpadmodusse&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passiewe&lt;/b&gt; 'N Kortpad waarna MonkeyPaste in enige toepassing sal luister.&lt;br&gt;*Dit is vir eers die &lt;i&gt;enigste&lt;/i&gt; opsie op Linux.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Kortpad sal uitgevoer word &lt;b&gt;&lt;i&gt;voordat&lt;/i&gt;&lt;/b&gt; dit deur die aktiewe toepassing hanteer word.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Kortpad sal uitgevoer word &lt;b&gt;&lt;i&gt;nadat&lt;/i&gt;&lt;/b&gt; dit deur die aktiewe toepassing hanteer is.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Oorheers&lt;/b&gt; As MonkeyPaste die invoersleutel (nie -wysigersleutel) van 'n oorskrydende kortpad hoor, sal dit die sleuteldruk &lt;i&gt;verberg&lt;/i&gt; vir invoer op toepassingsvlak.&lt;br&gt;Hierdie opsie sal verseker dat die kortpad geaktiveer word sonder konflik met die aktiewe toepassing.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Eksklusiewe oorskryding&lt;/b&gt; Dit is 'n spesiale tipe ignoreermodus wat ontwerp is vir die Caps Lock-sleutel. Dit laat slegs &lt;b&gt;een&lt;/b&gt; sleutel (nie - wysiger) toe vir die toewysing daarvan.&lt;br&gt;In normale ignoreermodus kan Caps Lock &lt;i&gt;vassteek&lt;/i&gt; wanneer dit in kombinasie met ander sleutels gedruk word.&lt;br&gt;Dit maak nie saak watter ander sleutels af is nie, as 'n &lt;b&gt;Hotkey-kortpad&lt;/b&gt; ingedruk word, sal dit oorheers word en voorkom dat dit &lt;i&gt;vassteek&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Op hierdie manier kan MonkeyPaste verkry word&lt;br&gt;&lt;span color="red"&gt;sonder 'n klik&lt;/span&gt; of selfs &lt;span color="red"&gt;'n oog slaan&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

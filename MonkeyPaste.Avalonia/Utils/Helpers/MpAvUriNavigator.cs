@@ -43,6 +43,10 @@ namespace MonkeyPaste.Avalonia {
             if (uri == null) {
                 return;
             }
+            if (MpAvWindowManager.ActiveWindow != null) {
+                // disable topmost so opened window comes to top
+                MpAvWindowManager.ActiveWindow.Topmost = false;
+            }
             if (!ignoreScheme && uri.Scheme == Uri.UriSchemeFile) {
                 NavigateToPath(uri.LocalPath);
                 return;

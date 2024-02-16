@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>اسکرول - سے - کھلا</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "سینٹر"&gt; بندر ہے &lt;اسپین کلر = "ریڈ&gt; مکمل طور پر مربوط &lt;/span&gt; ڈریگ کے ساتھ - اور - ڈراپ &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>اسے یہاں چھوڑ دو!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p سیدھ = "سینٹر"&gt; اس طرح ، بندر کی قیمت تک رسائی حاصل کی جاسکتی ہے &lt;br&gt; &lt;اسپین رنگ = "سرخ"&gt; بغیر کلک کے &lt;/span&gt; یا یہاں تک کہ &lt;اسپین رنگ = "سرخ"&gt; آنکھ کی بیٹنگ &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>مجھے کھینچو!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>اشاروں کو منفرد ہونا چاہئے اور اس میں صرف ایک ان پٹ کلید ہوسکتی ہے۔</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; داخلی &lt;/b&gt; تمام شارٹ کٹ درخواست کے اندر ہی محدود ہیں۔ یہ واقعتا an ایک مطلوبہ آپشن نہیں ہے لیکن آپ کو عالمی &lt;i&gt; کسی دن &lt;/i&gt; بنانے کا ارادہ رکھنے والے شارٹ کٹ کو اپنی مرضی کے مطابق بنانے کی اجازت دے سکتا ہے۔ &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ڈیفالٹ &lt;/b&gt; تمام عالمی شارٹ کٹ فعال ہیں۔ &lt;b&gt; مین ونڈو کو دکھائیں/چھپائیں &lt;/b&gt; شارٹ کٹ میں &lt;اسپین کلر = "ریڈ"&gt; اوور رائڈ &lt;/اسپین&gt; &lt;b&gt; کیپس لاک &lt;/b&gt; کلید کے لئے روٹنگ کا استعمال کیا گیا ہے۔ آپ کسی بھی وقت اس روٹنگ یا اشارے کو تبدیل کرسکتے ہیں۔ لیکن &lt;اسپین رنگ = "گرین"&gt; اسے آزمائیں &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;ہیڈ&gt; &lt;/ہیڈ&gt;
-&lt;باڈی&gt;
-&lt;h1&gt; عالمی شارٹ کٹ طریقوں &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; غیر فعال &lt;/b&gt; ایک شارٹ کٹ بندر کسی بھی درخواست میں سن لے گا۔ &lt;br&gt;
-*یہ ابھی کے لئے لینکس پر &lt;/i&gt; صرف &lt;/i&gt; آپشن ہے۔
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; پری &lt;/b&gt; شارٹ کٹ &lt;b&gt; &lt;i&gt; اس سے پہلے &lt;/i&gt; &lt;/b&gt; اس کو فعال ایپلی کیشن کے ذریعہ سنبھال لیا جائے گا۔ &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; پوسٹ &lt;/b&gt; شارٹ کٹ &lt;b&gt; &lt;i&gt; کے بعد &lt;/i&gt; &lt;/b&gt; اس کو فعال ایپلی کیشن کے ذریعہ سنبھال لیا جائے گا۔ &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; اوور رائڈ &lt;/b&gt; جب مانکی پیسٹ ایک اوور رائڈ شارٹ کٹ کی ان پٹ کلید (غیر - ترمیم کنندہ کلید) سنتا ہے تو &lt;/i&gt; چھپائے گا &lt;/i&gt; اس کلیدی پریس سے درخواست - سطح کے ان پٹ۔ &lt;br&gt;
-یہ آپشن اس بات کی ضمانت دے گا کہ شارٹ کٹ کو فعال درخواست کے تنازعات کے بغیر متحرک کیا گیا ہے۔
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; خصوصی اوور رائڈ &lt;/b&gt; یہ ایک خاص قسم کا اوور رائڈ موڈ ہے جو کیپس لاک کی کے لئے ڈیزائن کیا گیا ہے۔ یہ صرف &lt;b&gt; ایک &lt;/b&gt; کلید (غیر - ترمیم کنندہ) کو اس کی تفویض کے لئے اجازت دیتا ہے۔ &lt;br&gt;
-عام اوور رائڈ موڈ میں کیپس لاک &lt;i&gt; &lt;/i&gt; پر پھنس سکتا ہے جب دوسری چابیاں کے ساتھ مل کر دبایا جاتا ہے۔ &lt;br&gt;
-لہذا اس سے کوئی فرق نہیں پڑتا ہے کہ دوسری چابیاں کیا ہیں ، اگر &lt;b&gt; ہاٹکی &lt;/b&gt; شارٹ کٹ دبایا جاتا ہے تو اسے ختم کردیا جائے گا اور اسے &lt;/i&gt; پر پھنس جانے سے روکتا ہے۔
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>غیر فعال</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>جب یہ صارف اکاؤنٹ لاگ ان ہوجائے تو لوڈ اپ اپ اپ کریں ، دوسرے صارفین کے لئے نہیں۔</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; دستیاب رابطوں کا استعمال کرتے ہوئے (فیچر پلگ ان کی ضرورت ہوتی ہے) اس فیلڈ کو اس دستاویز کے اس ٹیمپلیٹ کی تمام مثالوں کے لئے استعمال کیا جائے گا یا کسی بھی میں اس کا بعد میں حوالہ دیا جائے گا۔ &lt;/p&gt; &lt;p&gt; لہذا مثال کے طور پر اگر ای میل ایڈریس منتخب کریں تو یہاں پھر آپ کے منتخب کردہ رابطے کا ای میل فیلڈ اس دستاویز میں موجود تمام مثالوں کے لئے استعمال ہوگا۔ &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = مختصر سال &lt;br/&gt; yyyy = لمبا سال &lt;br/&gt; m = مہینہ (1-12) &lt;br/&gt; ملی میٹر = مہینہ (01-12) &lt;br/&gt; ایم ایم ایم = ماہ کا خلاصہ (جنوری ، فروری .. . دسمبر) &lt;br/&gt; ایم ایم ایم = طویل مہینہ (جنوری ، فروری ... دسمبر) &lt;br/&gt; ڈی = دن (1 - 31) &lt;br/&gt; ڈی ڈی = دن (01 - 31) الفاظ میں ہفتے کا دن (پیر ، منگل ... اتوار) &lt;br/&gt; ای = ہفتہ کا مختصر دن الفاظ میں (پیر ، منگل ... سن) &lt;br/&gt; ڈی - عام دن (پہلا ، دوسرا ، تیسرا ، 21 ویں ، 22 ویں ، 23 ویں ، 31 ویں ، چوتھا ...) &lt;br/&gt; h = AM/PM میں گھنٹہ (0-12) &gt; H = دن میں گھنٹہ (0-23) &lt;br/&gt; HH = دن میں گھنٹہ (00-23) A = am/pm مارکر &lt;br/&gt; p = a.m./p.m. مارکر</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>موجودہ تاریخ اور/یا وقت کو پیسٹ کیا جائے گا جب ڈیٹ ٹائم ٹیمپلیٹس کے لئے تبدیل کیا جائے گا۔</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; اس ٹیمپلیٹ کے تمام واقعات فراہم کردہ متن کو استعمال کریں گے۔ &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; اس ٹیمپلیٹ کے تمام واقعات فراہم کردہ متن کو استعمال کریں گے۔ &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>بڑھانا ختم کریں</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>آخری فعال ایپ نامعلوم۔ بندر پیسٹ پر مطلوبہ ایپ پر سوئچ کریں۔</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>چسپاں کریں</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>کم سے کم</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>کوئی نہیں</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>مخصوص ایپلی کیشن کے لئے صرف منتخب کردہ پریسٹس استعمال ہوں گے۔ جب غیر متعینہ طور پر ، &lt;em&gt; کلپ بورڈ سائڈبار &lt;/em&gt; میں پائے جانے والے پہلے سے طے شدہ پریسٹس استعمال ہوں گے۔</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>بہت ساری بندر کی خصوصیات دیگر ایپلی کیشنز کے ساتھ بات چیت کرنے کے لئے کی بورڈ آٹومیشن کا استعمال کرتی ہیں۔
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>قارئین</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>مسترد شدہ ایپلی کیشنز سے کلپ بورڈ کی تمام نگرانی &lt;b&gt; نظرانداز &lt;/b&gt; ہوگی۔</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>مصنفین</value>
@@ -1331,11 +1268,6 @@
     <value>کیا آپ واقعی تمام اطلاعات کو دوبارہ ترتیب دینا چاہتے ہیں؟
 
 *یہ کالعدم نہیں ہوسکتا!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>کسی بیرونی پروگرام میں چسپاں کرتے وقت بندر پیسٹ کلپ بورڈ (اوور رائڈس) کا تعین کرتا ہے۔ بیرونی پیسٹ کے بعد کلپ بورڈ کی حالت کو بحال کرنے کی &lt;b&gt; کوشش &lt;/b&gt; ہوگی۔
-
-کل بحالی کی ضمانت نہیں دی جاسکتی ہے اور اعداد و شمار کے منبع کے لحاظ سے کارکردگی یا یہاں تک کہ کریش مانکی پیسٹ کو بھی کم کرسکتا ہے۔</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>بندر کے پیسٹ کے بعد کلپ بورڈ کو دوبارہ ترتیب دیں</value>
@@ -2706,5 +2638,66 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>منصوبوں کے بارے میں مزید معلومات حاصل کریں</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>پیسٹ کریں: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;دستیاب رابطوں کا استعمال کرتے ہوئے (فیچر پلگ ان کی ضرورت ہوتی ہے) یہ فیلڈ اس دستاویز میں اس ٹیمپلیٹ کی تمام مثالوں کے لئے استعمال کی جائے گی یا کسی میں بھی بعد میں اس کا حوالہ دیا جائے گا۔&lt;/p&gt;&lt;p&gt; لہذا مثال کے طور پر اگر یہاں ای میل ایڈریس منتخب کریں تو آپ کے منتخب کردہ رابطے کا ای میل فیلڈ اس دستاویز میں تمام مثالوں کے لئے استعمال کیا جائے گا۔&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = مختصر سال&lt;br/&gt;yyyy = طویل سال&lt;br/&gt;ایم = مہینہ (1-12)&lt;br/&gt;ایم ایم = مہینہ (01-12)&lt;br/&gt;ایم ایم ایم = ماہ کا مخفف (جنوری، فروری ... دسمبر)&lt;br/&gt;ایم ایم ایم ایم = طویل مہینہ (جنوری، فروری ... دسمبر)&lt;br/&gt;دن = دن (1 - 31)&lt;br/&gt;ڈی ڈی = دن (01 - 31)&lt;br/&gt;ڈی ڈی ڈی = الفاظ میں ہفتے کا دن (پیر، منگل ... اتوار)&lt;br/&gt;ای = الفاظ میں ہفتے کا مختصر دن (مون، ٹو ... سورج)&lt;br/&gt;ڈی - آرڈینل دن (پہلا، دوسرا، تیسرا، 21 واں، 22 واں، 23 واں، 31 واں، چوتھا ...)&lt;br/&gt;ایچ = صبح / شام کا گھنٹہ (0-12)&lt;br/&gt;hh = صبح / شام کا گھنٹہ (00-12)&lt;br/&gt;H = دن میں گھنٹہ (0-23)&lt;br/&gt;ایچ ایچ = دن میں گھنٹہ (00-23)&lt;br/&gt;ملی میٹر = منٹ&lt;br/&gt;ایس ایس = دوسرا&lt;br/&gt;SSS = ملی سیکنڈ&lt;br/&gt;اے = اے ایم / پی ایم مارکر&lt;br/&gt;پی = اے ایم / پی ایم مارکر</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;اس ٹیمپلیٹ کے تمام واقعات فراہم کردہ متن کا استعمال کریں گے۔&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;اس ٹیمپلیٹ کے تمام واقعات فراہم کردہ متن کا استعمال کریں گے۔&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>بندر پیسٹ کسی بیرونی پروگرام میں چسپاں کرتے وقت کلپ بورڈ (اووررائڈ) سیٹ کرتا ہے۔ یہ بیرونی پیسٹ کے بعد کلپ بورڈ کی حالت کو بحال کرنے کی &lt;b&gt;کوشش&lt;/b&gt; کرے گا۔ 
+
+مکمل بحالی کی ضمانت نہیں دی جاسکتی ہے اور اعداد و شمار کے ماخذ پر منحصر کارکردگی کو کم کرسکتا ہے یا یہاں تک کہ منکی پیسٹ کو کریش کرسکتا ہے۔</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>مخصوص ایپلی کیشن کے لئے صرف منتخب پری سیٹ استعمال کیے جائیں گے۔ جب غیر واضح ہو تو ، &lt;em&gt;کلپ بورڈ سائیڈ بار&lt;/em&gt; میں پائے جانے والے ڈیفالٹ پری سیٹ استعمال کیے جائیں گے۔</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>مسترد شدہ درخواستوں سے تمام کلپ بورڈ کی نگرانی &lt;b&gt;کو نظر انداز کیا&lt;/b&gt; جائے گا۔</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;اندرونی&lt;/b&gt;تمام شارٹ کٹ ایپلی کیشن کے اندر تک محدود ہیں۔ یہ واقعی ایک مطلوبہ آپشن نہیں ہے لیکن اپنی مرضی کے مطابق اپنی مرضی کے مطابق کرنے کی اجازت دے سکتا ہے کہ آپ کسی دن کس شارٹ کٹ کو عالمی بنانے کا ارادہ رکھتے&lt;i&gt;ہیں&lt;/i&gt;۔&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;طے شدہ&lt;/b&gt; تمام عالمی شارٹ کٹس فعال ہیں۔ &lt;b&gt;شو / ہیڈ مین ونڈو&lt;/b&gt;شارٹ کٹ&lt;b&gt;کیپس لاک&lt;/b&gt; کلید کے لئے&lt;span color="red"&gt;اووررائڈ&lt;/span&gt;روٹنگ کا استعمال کرتا ہے۔ آپ کسی بھی وقت اس روٹنگ یا اشارے کو تبدیل کرسکتے ہیں۔ لیکن&lt;span color="green"&gt;اسے ایک کوشش کریں&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;گلوبل شارٹ کٹ موڈز&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;غیر فعال&lt;/b&gt; ایک شارٹ کٹ منکی پیسٹ کسی بھی ایپلی کیشن میں سنا جائے گا۔&lt;br&gt;*فی الحال لینکس پر یہ &lt;i&gt;واحد&lt;/i&gt; آپشن ہے۔   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;پری&lt;/b&gt; فعال ایپلی کیشن &lt;b&gt;&lt;i&gt;کے ذریعہ سنبھالنے سے پہلے&lt;/i&gt;&lt;/b&gt; شارٹ کٹ چل جائے گا۔&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ڈاک&lt;/b&gt; فعال ایپلی کیشن کے ذریعہ سنبھالنے کے &lt;b&gt;&lt;i&gt;بعد&lt;/i&gt;&lt;/b&gt; شارٹ کٹ چل جائے گا۔&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;زیر&lt;/b&gt; جب منکی پیسٹ کسی اووررائڈ شارٹ کٹ کی ان پٹ کلید (نان موڈیفائر کلید) سنتا ہے تو یہ اس کلیدی پریس کو ایپلی کیشن کی سطح کے ان پٹ سے &lt;i&gt;چھپا&lt;/i&gt; دے گا۔&lt;br&gt;یہ آپشن اس بات کی ضمانت دے گا کہ شارٹ کٹ فعال ایپلی کیشن میں تنازعات کے بغیر متحرک ہے۔   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Exclusive اوورride&lt;/b&gt; یہ ایک خاص قسم کا اووررائڈ موڈ ہے جو کیپس لاک کلید کے لئے ڈیزائن کیا گیا ہے۔ یہ اپنی تفویض کے لئے صرف &lt;b&gt;ایک&lt;/b&gt; کلید (غیر موڈیفائر) کی اجازت دیتا ہے۔&lt;br&gt;عام اووررائڈ موڈ میں دیگر چابیوں کے ساتھ مل کر &lt;i&gt;دبائے جانے پر&lt;/i&gt; کیپس لاک پھنس سکتا ہے۔&lt;br&gt;لہذا اس سے کوئی فرق نہیں پڑتا کہ دیگر چابیاں کیا ہیں ، اگر &lt;b&gt;ہاٹ کی&lt;/b&gt; شارٹ کٹ دبایا جاتا ہے تو یہ اوورریڈن ہوجائے گا اور اسے &lt;i&gt;پھنسنے&lt;/i&gt; سے روکے گا۔   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;منکی پیسٹ ہے &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;اس طرح ، منکی پیسٹ تک رسائی حاصل کی جاسکتی ہے۔&lt;br&gt;&lt;span color="red"&gt;ایک کلک کے بغیر&lt;/span&gt; یا یہاں تک کہ &lt;span color="red"&gt;آنکھ بند کیے&lt;/span&gt; بغیر اور #x1F440&lt;/p&gt;</value>
   </data>
 </root>

@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Скролувајте - до - отворено</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "Center"&gt; monkeypaste е &lt;span color = "црвена&gt; целосно интегрирана &lt;/span&gt; со влечење - и - капка &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Спуштете го овде!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; На овој начин, може да се пристапи до monkeypaste &lt;br&gt; &lt;span color = "црвена"&gt; без клик &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Повлечете ме!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Гестовите мора да бидат уникатни и може да содржат само еден влезен клуч.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-Внатрешни &lt;/b&gt; Сите кратенки се ограничени на апликацијата. Ова не е баш наменета опција, но може да овозможи да ги прилагодите какви кратенки имате намера да ги направите глобално &lt;i&gt; еден ден &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Стандардно &lt;/b&gt; Сите глобални кратенки се овозможени. Кратенката &lt;b&gt; Покажи/скриј го главниот прозорец &lt;/b&gt; користи &lt;Span Color = "Red"&gt; Преовладување &lt;/span&gt; рутирање за копчето &lt;b&gt; капачиња за заклучување &lt;/b&gt;. Можете да го промените тоа рутирање или гест во секое време. Но &lt;span color = "зелена"&gt; пробајте &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;Html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;Тело&gt;
-&lt;H1&gt; Глобални режими на кратенка &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; пасивна &lt;/b&gt; Кратенка што ќе слуша во која било апликација. &lt;br&gt;
-*Ова е само &lt;i&gt; само &lt;/i&gt; опцијата на Linux засега.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; пред &lt;/b&gt; кратенката ќе изврши &lt;b&gt; &lt;i&gt; пред &lt;/i&gt; &lt;/b&gt; се ракува со активната апликација. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Пост &lt;/b&gt; кратенка ќе изврши &lt;b&gt; &lt;i&gt; По &lt;/i&gt; &lt;/b&gt; се ракува со активната апликација. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; преовладува &lt;/b&gt; кога MonkeyPaste го слуша влегувањето на копчето (копчето што не е - модификатор) на кратенка за преголем начин, ќе го скрие &lt;/i&gt; тој клуч притиснете од апликација - влез на ниво. &lt;br&gt;
-Оваа опција ќе гарантира дека кратенката се активира без конфликти на активната апликација.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Ексклузивно надминување &lt;/b&gt; Ова е посебен вид режим на преголема намера дизајниран за копчето за заклучување на капачињата. Само што дозволува &lt;b&gt; еден &lt;/b&gt; клуч (не - модификатор) за неговата задача. &lt;br&gt;
-Во нормалниот режим на надминување, капаците за заклучување може да станат &lt;i&gt; заглавени на &lt;/i&gt; кога се притискаат во комбинација со други клучеви. &lt;br&gt;
-Значи, без оглед на тоа што се спуштаат другите клучеви, ако е притиснато кратенка &lt;/b&gt;, таа ќе биде претерана и ќе спречи да стане &lt;i&gt; заглавена на &lt;/i&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/тело&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Оневозможи</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Вчитајте се кога оваа корисничка сметка е најавена, а не за други корисници.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Користење на достапни контакти (бара додаток на Fetcher) Ова поле ќе се користи за сите примери на овој образец низ овој документ или во кој било ќе биде наведено подоцна. &lt;/p&gt; &lt;p&gt; Така, на пример, ако изберете адреса за е -пошта Тука тогаш полето за е -пошта на контакт што ќе го изберете ќе се користи за сите примери во овој документ. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = кратка година &lt;br/&gt; yyyy = долга година &lt;br/&gt; m = месец (1-12) &lt;br/&gt; mm = месец (01-12) &lt;br/&gt; mmm = месечна кратенка (јануари, февруари .. . Дек) &lt;br/&gt; mmmm = долг месец (јануари, февруари ... декември) &lt;br/&gt; d = ден (1 - 31) &lt;br/&gt; dd = ден (01 - 31) &lt;br/&gt; ddd = Ден на неделата со зборови (понеделник, вторник ... недела) &lt;br/&gt; e = краток ден во неделата со зборови (Пон, Втор ... Сонце) &lt;br/&gt; Д - Ден на редот (1 -ви, 2 -ри, 3-ти, 21-ви, 22-ри, 23-ти, 31-то, 4-ти ...) &lt;br/&gt; h = час во Ам/ПМ (0-12) &lt;br/&gt; hh = час во Ам/ПМ (00-12) &lt;Бр/Бр/ &gt; H = час во ден (0-23) &lt;br/&gt; hh = час во ден (00-23) &lt;br/&gt; mm = минута &lt;br/&gt; ss = втора &lt;br/&gt; sss = милисекунди &lt;br/&gt; A = AM/PM маркер &lt;br/&gt; p = a.m./p.m. маркер</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Тековниот датум и/или време ќе бидат заменети за шаблони за дата кога ќе бидат залепени.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Сите патеки на овој образец ќе го користат даден текст. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Сите патеки на овој образец ќе го користат даден текст. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Завршете ја додавањето</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Последна активна апликација непозната. Префрлете се на наменета апликација во паста од мајмуни.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Залепете на: &lt;em&gt; &lt;i class = "Paste-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Минимизирајте</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Ништо</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Само избраните поставки ќе се користат за одредена апликација. Кога е неодредено, ќе се користат стандардните поставки што се наоѓаат во страничната лента &lt;em&gt; клип -таблата &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Многу карактеристики на MonkeyPaste користат автоматизација на тастатурата за да комуницираат со други апликации.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Читатели</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Целиот мониторинг на таблата со отфрлени апликации ќе биде &lt;b&gt; игнориран &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Писатели</value>
@@ -1331,11 +1268,6 @@ Monkeypaste на уредот
     <value>Дали сте сигурни дека сакате да ги ресетирате сите известувања?
 
 *Тоа не може да се врати назад!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Пастата од мајмуни ја поставува таблата со исечоци (се надминува) кога се залепува во надворешна програма. Ова ќе се обиде &lt;/b&gt; да ја врати состојбата на таблата со исечоци по надворешна паста.
-
-Вкупната реставрација не може да се гарантира и може да ги намали перформансите или дури и да се сруши Monkeypaste во зависност од изворот на податоците.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Ресетирајте ја таблата со исечоци по залепувањето на мајмунот</value>
@@ -2706,5 +2638,66 @@ Monkeypaste на уредот
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Дознајте повеќе за плановите</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Паста на: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Користејќи ги достапните контакти (бара приклучок за фетиш) ова поле ќе се користи за сите случаи на овој шаблон низ овој документ или во било кој ќе биде референциран подоцна.&lt;/p&gt;&lt;p&gt; На пример, ако изберете email адреса тука тогаш полето на е-поштата на контактот што ќе го изберете ќе се користи за сите инстанци во овој документ.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>Yy = кратка година&lt;br/&gt;Yyyy = долга година&lt;br/&gt;М = месец (1-12)&lt;br/&gt;ММ = месец (01-12)&lt;br/&gt;MMM = месец кратенка (Jan, Feb ... Дек)&lt;br/&gt;ММММ = долг месец (јануари, февруари ... Декември)&lt;br/&gt;d = ден (1 - 31)&lt;br/&gt;dd = ден (01 - 31)&lt;br/&gt;ddd = ден од неделата со зборови (понеделник, вторник ... Недела)&lt;br/&gt;E = краток ден од неделата со зборови (Mon, Tue ... Сонце)&lt;br/&gt;D - Обичен ден (1-ви, 2-ри, 3-ти, 21-ви, 22-ри, 23-ти, 31-ви, 4-ти...)&lt;br/&gt;h = час во ам/pm (0-12)&lt;br/&gt;hh = час во ам/pm (00-12)&lt;br/&gt;H = час во денот (0-23)&lt;br/&gt;HH = час во денот (00-23)&lt;br/&gt;мм = минута&lt;br/&gt;ss = втор&lt;br/&gt;SSS = милисекунди&lt;br/&gt;a = AM/PM маркер&lt;br/&gt;p = a.m./p.m. маркер</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Сите појави на овој шаблон ќе го користат обезбедениот текст.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Сите појави на овој шаблон ќе го користат обезбедениот текст.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Мајмунската паста ја поставува клипбордата (преовладува) при поставување на надворешна програма. Ова ќе &lt;b&gt;се обиде&lt;/b&gt; да ја врати состојбата на клипбордот по надворешна паста. 
+
+Вкупната реставрација не може да се гарантира и може да ги намали перформансите, па дури и да се сруши MonkeyPaste во зависност од изворот на податоците.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Само избраните претпоставки ќе бидат користени за наведениот апликација. Кога се неодредени, ќе се користат подоцнежните претпоставки пронајдени во &lt;em&gt;страничната плоча на клипбордот&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Сите следбеници на клипбордот од отфрлени апликации ќе бидат &lt;b&gt;игнорирани&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Внатрешен&lt;/b&gt;Сите прекини се ограничени на апликацијата. Ова всушност не е наменета опција, но може да овозможи да се прилабочи кои прекини имате намера да направите глобален&lt;i&gt;некој ден&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Попладнево&lt;/b&gt; Сите глобални прекини се овозможени. &lt;b&gt;Прекинот show/Hide Main Window&lt;/b&gt;користи&lt;span color="red"&gt;преклопување&lt;/span&gt;на рутирањето за&lt;b&gt;Caps Lock&lt;/b&gt; клучот. Можете да го промените тоа рутирање или гест во секое време. Но&lt;span color="green"&gt;обиди се.&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Пасивен&lt;/b&gt; . Краток пат MonkeyPaste ќе слуша во било која апликација.&lt;br&gt;*Ова е &lt;i&gt;единствената&lt;/i&gt; опција на Linux засега.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Пре.&lt;/b&gt; Прекинот ќе се изврши &lt;b&gt;&lt;i&gt;пред&lt;/i&gt;&lt;/b&gt; да се справи со активната апликација.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Пост&lt;/b&gt; Прекинот ќе се изврши &lt;b&gt;&lt;i&gt;откако&lt;/i&gt;&lt;/b&gt; ќе се справи со активната апликација.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Превземи ја контролата.&lt;/b&gt; Кога MonkeyPaste го слушне влезниот клуч (non - модификатор клуч) на премостување на прекинот ќе го &lt;i&gt;скрие&lt;/i&gt; тој прес на клучот од апликацијата - влез на ниво.&lt;br&gt;Оваа опција ќе гарантира дека прекинот се активира без конфликти на активната апликација.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Ексклузивно презиме&lt;/b&gt; Ова е посебен тип на режим на премостување дизајниран за caps Lock клучот. Тоа дозволува само &lt;b&gt;еден&lt;/b&gt; клуч (не - модификатор) за неговата задача.&lt;br&gt;Во нормален режим caps Lock може да се &lt;i&gt;заглави&lt;/i&gt; кога е притиснат во комбинација со други клучеви.&lt;br&gt;Затоа без разлика на тоа кои други клучеви се спуштени, ако се притисне &lt;b&gt;hotkey&lt;/b&gt; shortcut ќе биде презадолжен и ќе спречи да &lt;i&gt;заглави&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Мајмунска паста е &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;На овој начин може да се пристапи до MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;без клик&lt;/span&gt;&lt;span color="red"&gt;, па дури&lt;/span&gt; ни око и #x1F440&lt;/p&gt;</value>
   </data>
 </root>

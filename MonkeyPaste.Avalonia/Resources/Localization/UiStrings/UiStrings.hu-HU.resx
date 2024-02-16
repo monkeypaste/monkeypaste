@@ -166,14 +166,8 @@ klipek.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Görgessen - to - nyitva</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; majompaszta &lt;span color = "piros&gt; teljesen integrált &lt;/span&gt; drag - and - csepp &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Dobd ide!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; Így a MonkyPaste elérhető &lt;br&gt; &lt;span color = "piros"&gt; kattintás nélkül &lt;/span&gt; vagy akár &lt;span color = "piros"&gt; szemet batting &lt;/span&gt; &amp;#x1f440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Húzz!</value>
@@ -364,62 +358,14 @@ Frissítse az elkerülést.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>A gesztusoknak egyedinek kell lenniük, és csak egy bemeneti kulcsot tartalmazhatnak.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Belső &lt;/b&gt; Az összes parancsikon az alkalmazáson belül korlátozódik. Ez valójában nem egy szándékos lehetőség, de lehetővé teszi a testreszabást, hogy milyen hivatkozásokat kíván tenni a globális &lt;i&gt; napi &lt;/i&gt; -nek. &lt;/li&gt;
-&lt;li&gt;
-&lt;B&gt; Alapértelmezés &lt;/b&gt; Az összes globális hivatkozás engedélyezve van. A &lt;b&gt; megmutatja/elrejti a főablakot &lt;/b&gt; parancsikon &lt;span color = "piros"&gt; felülbírálás &lt;/span&gt; útválasztást használ a &lt;b&gt; Caps Lock &lt;/b&gt; gombhoz. Bármikor megváltoztathatja ezt az útválasztást vagy gesztust. De a &lt;span color = "zöld"&gt; próbálkozzon &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;Head&gt; &lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt; Globális gyorsbillentyűi módok &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;B&gt; Passzív &lt;/b&gt; A mamutpaszta bármely alkalmazásban meghallgatja. &lt;br&gt;
-*Ez a &lt;i&gt; csak &lt;/i&gt; opció a Linuxon.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; A parancsikon &lt;b&gt; &lt;i&gt; előtti &lt;/i&gt; &lt;/b&gt; végrehajtja. Az aktív alkalmazás kezeli. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; Post &lt;/b&gt; A parancsikon &lt;b&gt; &lt;i&gt; után &lt;/i&gt; &lt;/b&gt; az aktív alkalmazás kezeli. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; felülbírálás &lt;/b&gt; Amikor a MonkeyPaste meghallja a felülbíráló parancsikon bemeneti kulcsát (nem módosító kulcs).
-Ez az opció garantálja a parancsikont konfliktusok nélkül az aktív alkalmazás számára.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;B&gt; Exkluzív felülbírálás &lt;/b&gt; Ez egy speciális felülbírálási mód, amelyet a CAPS zárkulcshoz terveztek. Csak a &lt;b&gt; egy &lt;/b&gt; gombot (nem módosító) engedélyezi annak hozzárendeléséhez. &lt;br&gt;
-Normál felülbírálási módban a sapkák zárolása &lt;i&gt; elakadhat &lt;/i&gt;
-Tehát függetlenül attól, hogy milyen más kulcsok vannak le, ha a &lt;b&gt; gyorsbillentyű &lt;/b&gt; parancsikont megnyomják, akkor felülbírálják, és megakadályozzák, hogy &lt;i&gt; elakadjon a &lt;/i&gt; -re.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/ Body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Letilt</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Töltse fel, amikor ezt a felhasználói fiókot bejelentkezik, nem más felhasználók számára.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; A rendelkezésre álló névjegyek használata (Fetcher plugin szükséges) Ezt a mezőt a sablon minden példányához használják a dokumentumon keresztül, vagy bármelyiken később hivatkozunk. Itt, akkor a kiválasztott kapcsolattartó e -mail mezőt a dokumentum minden példányához használják. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = rövid év &lt;br/&gt; yyyy = hosszú év &lt;br/&gt; m = hónap (1-12) &lt;br/&gt; mm = hónap (01-12) &lt;br/&gt; mmm = hónap rövidítés (január, február .. . DEC) &lt;br/&gt; mmmm = hosszú hónap (január, február ... december) &lt;br/&gt; d = nap (1 - 31) &lt;br/&gt; dd = nap (01 - 31) &lt;br/&gt; ddd = A hét napja szavakkal (hétfő, kedd ... vasárnap) &lt;br/&gt; e = a hét rövid napja szavakban (hétfő, kedd ... nap) 3., 21., 22., 23., 31., 4., 4.) &lt;br/&gt; H = óra AM/PM-ben (0-12) &lt;br/&gt; HH = óra AM/PM-ben (00-12) &lt;BR/ &gt; H = óra a napon (0-23) &lt;br/&gt; hh = óra a napon (00-23) &lt;br/&gt; mm = perc &lt;br/&gt; ss = második &lt;br/&gt; sss = milliszekundum &lt;br/&gt; A = AM/PM marker &lt;br/&gt; p = A.M./P.M. jelző</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Az aktuális dátumot és/vagy az időt helyettesítik a DateTime sablonok beillesztésekor.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Ennek a sablonnak az összes eseménye a megadott szöveget fogja használni. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Ennek a sablonnak az összes eseménye a megadott szöveget fogja használni. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Befejezi a mellékletet</value>
@@ -469,9 +415,6 @@ Tehát függetlenül attól, hogy milyen más kulcsok vannak le, ha a &lt;b&gt; 
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Utolsó aktív alkalmazás ismeretlen. Váltson a tervezett alkalmazásra a majompaszta felé.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Paste: &lt;em&gt; &lt;i class = "paste-toolTip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimalizál</value>
@@ -547,9 +490,6 @@ Hozzáadja és/vagy válassza ki az alkalmazást az egyedi másolási parancsiko
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Egyik sem</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>A megadott alkalmazáshoz csak a kiválasztott preseteket fogják használni. Ha nem meghatározták, akkor a &lt;em&gt; Clipboard Sidebar &lt;/em&gt; alapértelmezett előre beállításait használjuk.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Számos majompaste funkció a billentyűzet automatizálását használja más alkalmazásokkal való interakcióhoz.
 
@@ -562,9 +502,6 @@ A megfelelő interoperabilitás biztosítása érdekében rögzítse az alkalmaz
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Olvasók</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Az elutasított alkalmazásokból származó összes vágólap -megfigyelés &lt;b&gt; figyelmen kívül hagyja &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Írók</value>
@@ -1331,11 +1268,6 @@ Ezt nem lehet visszacsinálni!
     <value>Biztosan szeretné visszaállítani az összes értesítést?
 
 *Ezt nem lehet visszacsinálni!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>A majompaszta beállítja a vágólapot (felülbírálja), amikor egy külső programra beilleszt. Ez &lt;b&gt; megpróbálja &lt;/b&gt; a vágólap állapotának helyreállítását egy külső paszta után.
-
-A teljes helyreállítás nem garantálható, és az adatok forrásától függően csökkentheti a teljesítményt, vagy akár összeomlik a majompaszta.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Visszaállítja a vágólapot a majom beillesztése után</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Tudjon meg többet a tervekről</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Beillesztés: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;A rendelkezésre álló névjegyek használatával (amelyhez fetcher bővítmény szükséges) ez a mező lesz használva a sablon összes példányához ebben a dokumentumban, vagy bármely olyan példányban, amelyre később hivatkozni fogunk.&lt;/p&gt;&lt;p&gt; Tehát például, ha itt válassza ki az e-mail címet, akkor a kiválasztott kapcsolattartó e-mail mezőjét fogja használni a dokumentum összes példányához.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = rövid év&lt;br/&gt;yyyy = hosszú év&lt;br/&gt;M = hónap (1-12)&lt;br/&gt;MM = hónap (01-12)&lt;br/&gt;MMM = hónap rövidítése (január, február ... Dec)&lt;br/&gt;MMMM = hosszú hónap (január, február ... December)&lt;br/&gt;d = nap (1 - 31)&lt;br/&gt;dd = nap (01 - 31)&lt;br/&gt;ddd = a hét napja szavakkal (hétfő, kedd ... Vasárnap)&lt;br/&gt;E = a hét rövid napja szavakkal (hétfő, kedd ... Nap)&lt;br/&gt;D - Sorszám napja (1., 2., 3., 21., 22., 23., 31., 4. ...)&lt;br/&gt;h = óra dél/percben (0-12)&lt;br/&gt;HH = óra dél/percben (00-12)&lt;br/&gt;H = a nap órája (0-23)&lt;br/&gt;HH = óra a napban (00-23)&lt;br/&gt;mm = perc&lt;br/&gt;ss = másodperc&lt;br/&gt;SSS = ezredmásodperc&lt;br/&gt;a = AM/PM jelölő&lt;br/&gt;p = a.m./p.m. marker</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;A sablon minden előfordulása a megadott szöveget fogja használni.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;A sablon minden előfordulása a megadott szöveget fogja használni.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>A Monkey Paste beállítja a vágólapot (felülbírálja), amikor külső programba illeszti be. Ez &lt;b&gt;megpróbálja&lt;/b&gt; visszaállítani a vágólap állapotát egy külső beillesztés után. 
+
+A teljes helyreállítás nem garantálható, és az adatok forrásától függően csökkentheti a teljesítményt, vagy akár összeomolhat a MonkeyPaste szolgáltatással.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Csak a kiválasztott készletek lesznek használva a megadott alkalmazáshoz. Ha nincs megadva, a &lt;em&gt;vágólap oldalsávján&lt;/em&gt; található alapértelmezett készleteket használja a rendszer.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>A rendszer &lt;b&gt;figyelmen kívül hagyja&lt;/b&gt; az elutasított alkalmazások vágólapfigyelését.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Belső&lt;/b&gt;Minden parancsikon az alkalmazáson belülre korlátozódik. Ez nem igazán egy tervezett lehetőség, de lehetővé teszi, hogy testreszabja, milyen parancsikonokat kíván globálissá tenni&lt;i&gt;egy nap&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Alapértelmezett&lt;/b&gt; Minden globális parancsikon engedélyezve van. A&lt;b&gt;Főablak megjelenítése/elrejtése&lt;/b&gt;parancsikon&lt;span color="red"&gt;felülbírálási&lt;/span&gt;útválasztást használ a&lt;b&gt;Caps Lock&lt;/b&gt; billentyűhöz. Ezt az útválasztást vagy kézmozdulatot bármikor módosíthatja. De&lt;span color="green"&gt;próbáld ki&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Globális gyorsbillentyű módok&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passzív&lt;/b&gt; A MonkeyPaste parancsikon minden alkalmazásban figyelni fog.&lt;br&gt;*Jelenleg ez az &lt;i&gt;egyetlen&lt;/i&gt; lehetőség Linuxon.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Előtti&lt;/b&gt; A parancsikon végrehajtásra kerül, &lt;b&gt;&lt;i&gt;mielőtt&lt;/i&gt;&lt;/b&gt; az aktív alkalmazás kezelné.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Posta&lt;/b&gt; A parancsikon akkor kerül végrehajtásra, &lt;b&gt;&lt;i&gt;ha&lt;/i&gt;&lt;/b&gt; az aktív alkalmazás kezeli.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Átgázol&lt;/b&gt; Amikor a MonkeyPaste meghallja egy felülíró parancsikon beviteli gombját (nem módosító billentyű), &lt;i&gt;elrejti&lt;/i&gt; a billentyű lenyomását az alkalmazásszintű bemenet elől.&lt;br&gt;Ez az opció garantálja, hogy a parancsikon ütközés nélkül aktiválódik az aktív alkalmazással.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Exkluzív felülbírálás&lt;/b&gt; Ez egy speciális felülbírálási mód, amelyet a Caps Lock billentyűhöz terveztek. Csak &lt;b&gt;egy&lt;/b&gt; kulcsot (nem módosítót) engedélyez a hozzárendeléshez.&lt;br&gt;Normál felülbírálási módban a Caps Lock &lt;i&gt;beragadhat&lt;/i&gt; , ha más billentyűkkel együtt nyomja meg.&lt;br&gt;Tehát függetlenül attól, hogy milyen más billentyűk vannak lenyomva, ha megnyom egy &lt;b&gt;gyorsbillentyű&lt;/b&gt; parancsikont, az felülbírálódik, és megakadályozza, hogy &lt;i&gt;elakadjon&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;A MonkeyPaste &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Így a MonkeyPaste elérhető&lt;br&gt;&lt;span color="red"&gt;kattintás&lt;/span&gt; vagy &lt;span color="red"&gt;akár szemrebbenés&lt;/span&gt; nélkül &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

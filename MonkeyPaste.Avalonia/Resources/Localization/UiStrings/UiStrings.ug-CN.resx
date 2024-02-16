@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>سىيرىلما -</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p aligse = "مەركىزى"&gt; مايمۇنپاس &lt;/ smag&gt; drow&gt; - ۋە - تاشلاش &lt;/ p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>ئۇنى بۇ يەرگە تاشلاڭ!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p ILIV = "Centesposte زىيارەت قىلغىلى بولىدۇ &lt;br&gt; &lt;spo رەڭلىك =" RPLOG "&gt; نى چەكسىز &lt;/ sport =" Rang "&gt; كۆزنى يۇمۇپ ئاچقۇچە &lt;/ span&gt; &amp; # x1f440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>مېنى سۆرەپ!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>قولتۇقى چوقۇم ئۆزگىچە بولۇشى كېرەك, پەقەت بىرلا كىرگۈزۈش ئاچقۇچى بولۇشى مۇمكىن.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; ئىچكى &lt;/ b&gt; تېزلەتمىلەر پروگراممىدا چەكلىك. بۇ ھەقىقەتەن بىردەك تاللاش ئەمەس, ئەمما نېمىنى بېسىپ ھەممىنى ھەمجىرالغا بەرداشلىق بېرىشنى خالايدىغانلىقىڭىزنى خاسلاشتۇرالايدۇ, نېمىنى ھەددىدىن ئاشۇرۇپ ئاخىرلاشتۇرماقچى بولىسىز &lt;/ lo&gt;
-&lt;li&gt;
-&lt;B&gt; سۈكۈتتىكى &lt;/ b&gt; بارلىق بارلىق تېزلەتمىلەر قوزغىتىلىدۇ. &lt;B&gt; كۆرسىتىش / يوشۇرۇش ئاساسلىق كۆزنەك &lt;/ b&gt; تېز ئالاقە ھۆججەتلىرى &lt;b&gt; caps locling &lt;/ b&gt; ئۈچۈن قاپلىنىدۇ. ھەر قانداق ۋاقىتتا يول ياكى ئىشارەتنى ئۆزگەرتەلەيسىز. ئەمما &lt;spo color = "گىرىن"&gt; ئۇنى سىناپ بېقىڭ &lt;/ span&gt;
-&lt;/ li&gt;
-&lt;/ ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;prite&gt;
-&lt;head&gt; &lt;/ head&gt;
-&lt;body&gt;
-&lt;H1&gt; يەرشارى تېزلەتمە شەكلى &lt;/ h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;B&gt; پاسسىپ &lt;/ B&gt; تېزلەتمە مايمۇنلار ھەر قانداق پروگراممىدا ئاڭلايدۇ. &lt;br&gt;
-* بۇ &lt;i&gt; impux دىكى &lt;i&gt; لىنۇس تاللانمىسى.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; ئالدىن &lt;/ / u&gt; تېزلەتمىدە ئىجرا قىلىنىدۇ &lt;/ i&gt; &lt;/ i&gt; &lt;/ b&gt;) ئاكتىپ قوللىنىشيەرلىك ئارقىلىق بىر تەرەپ قىلىنىدۇ. &lt;/ li&gt;
-&lt;li&gt;
-&lt;B&gt; يازما &lt;/ b&gt; تېزلەتمىسى &lt;b&gt; i&gt; &lt;/ i&gt; &lt;/ b&gt; &lt;/ li&gt;
-&lt;li&gt;
-&lt;B&gt; Overteride &lt;/ B&gt; NO&gt; B&gt; قاچان تېزلەتمە كۇنۇپكىنى ئاڭلىغاندا &lt;i&gt; بۇ ئاچقۇچ &lt;/ i&gt; بۇ ئاچقۇچلۇق مەزمۇن - دەرىجىلىك كىرگۈزۈش - رەتلەش كىرگۈزۈش - رەتلەش.
-بۇ تاللاش تېزلىكتىكى ئاكتىپ قوللىنىشچان پروگراممىغا زىددىيەتلىك قوزغايدۇ.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;B&gt; مەخسۇس قاپارتقۇچ &lt;/ B&gt; بۇ Caps Lock كۇنۇپكىسى ئۈچۈن لايىھەلەنگەن ئالاھىدە تىپتىكى قاپاق. ئۇ پەقەت &lt;b&gt; بىرنى &lt;/ b&gt; كۇنۇپكىسىنى (MODIFIRIRIRE) غا يول قويىدۇ.
-نورمال قاپلاش ھالىتىدە دوپپا قۇلۇلىسى &lt;I&gt; نى&gt; غا ئايلىنىدۇ.
-شۇڭا باشقا كۇنۇپلار قانداق بولۇشىدىن قەتئىينەزەر, ئەگەر &lt;b&gt; hotky &lt;/ B&gt; تېزلەتكەن بولسا, ئۇنىڭ قاپلىنىشى توسالغۇ بولىدۇ ۋە ئۇنىڭ&gt; &lt;/ i_ / i_ / i&gt;.
-&lt;/ li&gt;
-&lt;/ ul&gt;
-&lt;/ body&gt;
-&lt;/ prtem</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>چەكلەش</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>بۇ ئىشلەتكۈچى ھېساباتىدىن كېيىن باشقا ئىشلەتكۈچىلەر تىزىملاتقاندا يۈكلىنىدۇ.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; بار بولغان ئالاقىسىنى ئىشلىتىش (ھامىلى قىستۇرما تەلەپ قىلىدۇ) بۇ ئويۇننىڭ بۇ قېلىپتىكىسى ياكى ھەر قانداق ۋاقىتتا پايدىلىنىدۇ. &lt;/ P&gt; &lt;P&gt; مەسىلەن ئېلېكترونلۇق خەت ئادرېسىنى تاللاڭ بۇ يەردە ئۇنداقتا سىز ئالاقىلىشىشنىڭ ئېلېكترونلۇق خەت مەيدانى بۇ ھۆججەتتىكى بارلىق ئەھۋاللارغا ئىشلىتىلىدۇ. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>YY = قىسقىچە يىل &lt;br/&gt; yyyy = ئۇزۇن يىل &lt;br//&gt; mm = mm = mm = mm = ئاي قىسقارتىش (1-ئاينىڭ 19-كۈنى) . DEM. &lt;br/&gt; mmm&gt; ئۇزۇن ئاي (1-ئايدىن باشلاپ) &lt;br/&gt; (1 - 31 - 31) &lt;br/&gt; DDD = ھەپتىلىك كۈنى (دۈشەنبە, سەيشەنبە ... يەكشەنبە) &lt;br/&gt;. 3-نومۇر 21-نومۇر, 22-چېسلا, 31-چېسلا ...) &lt;br/&gt; AM / HHM = سائەتتە HH / HG (00-12) &lt;br / &gt; H = سائەتتە سائەت (0-23) &lt;br/&gt; HH = mm = mm = mm = sss = SSS = CRSSCOMS &lt;br/&gt; A = AM / PM ماركىسىدىن تۆۋەنلەيدۇ. مارك</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>نۆۋەتتىكى چېسلا ۋە ياكى ۋاقىت چاپلانغان ۋاقىتتا ۋاقىت تېمىسىدا ۋاقىت چىقىرىۋېتىلىدۇ.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; بۇ قېلىپنىڭ بارلىق تولۇقلمارىلىرى تەمىنلەنگەن تېكىستنى ئىشلىتىدۇ. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; بۇ قېلىپنىڭ بارلىق تولۇقلمارىلىرى تەمىنلەنگەن تېكىستنى ئىشلىتىدۇ. &lt;/ p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>ئادرېسنى تاماملاڭ</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>ئاخىرقى ئاكتىپ ئەپنى نامەلۇم. مايمۇن چاپلاش ئۈچۈن كۆزلىگەن ئەپكە ئالماشتۇرۇڭ.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>چاپلاش: &lt;em&gt; &lt;i سىنىپ = "چاپلاش.</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>كىچىك</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>None</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>پەقەت تاللانغان نەشىرلار بەلگىلەنگەن ئىلتىماسقا ئىشلىتىلىدۇ. ئېنىقلانمىغاندىن كېيىن, &lt;em&gt; چاپلاش تاختىسىدا تېپىلغان سۈكۈتتىكى پرېزلار &lt;/ em&gt; ئىشلىتىلىدۇ.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>نۇرغۇنلىغان مايمۇنپاتېت ئىقتىدارلىرى كۇنۇپكا تاختىسى نەتىجىنى ئىشلىتىپ باشقا قوللىنىشچان پروگراممىلار بىلەن ئۆز-ئارا تەسىر كۆرسىتىش.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>ئوقۇرمەنلەر</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>رەت قىلىنغان پروگراممىلارنى نازارەت قىلىش پروگراممىلارنىڭ نازارەت قىلىشلىرى &lt;b&gt; سەل قالدى &lt;/ b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>يازغۇچىلار</value>
@@ -1331,11 +1268,6 @@
     <value>بارلىق ئۇقتۇرۇشلارنى ئەسلىگە كەلتۈرمەكچىمۇ?
 
 * بۇنى ئەمەلدىن قالدۇرغىلى بولمايدۇ!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>مايمۇن چاپلاق سىرتقى پروگراممىغا چاپلاشقاندا چاپلاش تاختىسىنى (قاپلاپ). بۇ &lt;b&gt; سىناپ بېقىڭ &lt;/ b&gt; سىرتقى چاپلاقتىن كېيىن چاپلاش تاختىسىنىڭ ھالىتىنى ئەسلىگە كەلتۈرۈش.
-
-ئومۇمىي ئەسلىگە كەلتۈرۈشكە كاپالەتلىك قىلىشقا بولمايدۇ, سانلىق مەلۇماتنىڭ مەنبەسىگە ئاساسەن ئىقتىدارنى ئازايتقىلى بولمايدۇ.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>مايمۇندىن كېيىن چاپلاش تاختىسىنى ئەسلىگە كەلتۈرۈڭ</value>
@@ -2706,5 +2638,66 @@ tempo@Monkepaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>پىلان ھەققىدىكى تەپسىلاتلار</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>چاپلاش: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;ئىشلىتىشكە بولىدىغان ئالاقىداش (fetcher قىستۇرمىسىنى تەلەپ قىلىدۇ) بۇ ساھە بۇ ھۆججەتتىكى ياكى ھەرقانداق بىر ھۆججەتتىكى بارلىق مىساللار ئۈچۈن كېيىن پايدىلىنىشقا بولىدۇ.&lt;/p&gt;&lt;p&gt; شۇڭا مەسىلەن، بۇ يەردە ئېلخەت ئادرېسىنى تاللىسىڭىز، ئۇنداقتا سىز تاللىغان ئالاقىداشنىڭ ئېلخەت ساھەسى بۇ ھۆججەتتىكى بارلىق مىساللار ئۈچۈن ئىشلىتىلىدۇ.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = قىسقا يىل&lt;br/&gt;yyyy = ئۇزۇن يىل&lt;br/&gt;م = ئاي (1-12)&lt;br/&gt;MM = ئاي (01- 12)&lt;br/&gt;MMM = ئاينىڭ قىسقارتىلمىسى (Jan, Feb ... دىۋى)&lt;br/&gt;MMMM = ئۇزۇن ئاي (يانۋار، فېۋرال ... 12- ئاي)&lt;br/&gt;d = كۈنى (1 - 31 )&lt;br/&gt;dd = كۈنى (01 - 31)&lt;br/&gt;ddd = خەتلىك ھەپتىنىڭ كۈنى (دۈشەنبە، سەيشەنبە ... يەكشەنبە)&lt;br/&gt;E = خەتلىك ھەپتىنىڭ قىسقىغىنە كۈنى (مون، تۇي ... قۇياش)&lt;br/&gt;D - ئوردىدا كۈنى (1-، 2-، 3-، 21-، 22-، 23-، 31-، 4-...)&lt;br/&gt;h = سائەت am/pm (0-12)&lt;br/&gt;hh = سائەتلىك am/pm (00-12)&lt;br/&gt;H = كۈندۈزدىكى سائەت (0-23)&lt;br/&gt;HH = بىر كۈندە سائەت (00-23)&lt;br/&gt;mm = مىنۇت&lt;br/&gt;ss = ئىككىنچى&lt;br/&gt;SSS = مىللىسېكونت&lt;br/&gt;a = AM/PM بەلگىسى&lt;br/&gt;p = a.m./p.m. بەلگىسى</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;بۇ قېلىپنىڭ بارلىق يۈز بېرىشى بىلەن تەمىنلەنگەن تېكىست ئىشلىتىلىدۇ.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;بۇ قېلىپنىڭ بارلىق يۈز بېرىشى بىلەن تەمىنلەنگەن تېكىست ئىشلىتىلىدۇ.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>مايمۇن چاپلىغاندا سىرتقى پروگرامما چاپلىغاندا قىستۇرما تاختا (overrides) نى قۇرىدۇ. بۇنداق &lt;b&gt;بولغاندا،&lt;/b&gt; سىرتقى چاپلاشتىن كېيىن قىسقۇچنىڭ ھالىتى ئەسلىگە كەلتۈرۈلىدۇ. 
+
+ئومۇمىي ئەسلىگە كەلتۈرۈشكە كاپالەتلىك قىلغىلى بولمايدۇ، سانلىق مەلۇماتنىڭ مەنبەسىگە قاراپ ئىقتىدارى تۆۋەنلەپ كېتىشى ياكى ھەتتا كاشىلا قىلىشىمۇ مۇمكىن.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>پەقەت بەلگىلەنگەن پروگراممىغا پەقەت تاللانغان ئالدىن بىكىتلەر ئىشلىتىلىدۇ. ئېنىقلانمىغاندا &lt;em&gt;، قىسقۇچ تاختىسى يانبالدىقىدىن&lt;/em&gt; تېپىلغان كۆڭۈلدىكى ئالدىنئالا بېكىتىشلەر ئىشلىتىلىدۇ.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>رەت قىلىنغان پروگراممىلارنىڭ بارلىق قىستۇرما تاختىسىنى &lt;b&gt;كۆزىتىشكە سەل قارىلىدۇ&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  ئىچكى &lt;b&gt;&lt;/b&gt;بارلىق قىسقا يوللار قوللىنىش دائىرىسىدە چەكلىنىدۇ. بۇ ئەمەلىيەتتە كۆزلىگەن تاللاش ئەمەس، ئەمما&lt;i&gt;سىز بىر كۈنلەردە&lt;/i&gt; يەر شارى خاراكتېرلىق قىلىپ ياساشنى مەقسەت قىلغان قايسى قىسقارتىلمىلارنى تەڭشەشكە يول قويالايدۇ.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;كۆڭۈلدىكى سۆز&lt;/b&gt; پۈتۈن يەر شارى قىسقا يوللىرىنى ئىشلىتىشكە بولىدۇ. &lt;b&gt;پروگرامما كۆرسىتىش/يوشۇرۇش ئاساسىي كۆزنەك&lt;/b&gt;قىسقارتمىسى&lt;b&gt;Caps Lock&lt;/b&gt; كۇنۇپكىسىنىڭ&lt;span color="red"&gt;چەكتىن ئېشىپ&lt;/span&gt;كېتىش كۆرسەتمىسىنى ئىشلىتىدۇ. سىز خالىغان ۋاقىتتا ئاشۇ يوللاش ياكى قول ئىشارىسىنى ئۆزگەرتەلەيسىز. لېكىن سىناپ&lt;span color="green"&gt;بېقىڭ&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;يەر شارى قىسقا يول ئەندىزىسى&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;پاسسىپ&lt;/b&gt; بىر قىسقا يول ئارقىلىق MonkeyPaste ھەر قانداق قوللىنىشچان پروگراممىدا ئاڭلاشقا باشلايدۇ.&lt;br&gt;*بۇ لىنۇكستا &lt;i&gt;ھازىرچە بىردىنبىر&lt;/i&gt; تاللاش.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ئالدىن&lt;/b&gt; ئاكتىپ قوللىنىشچان ئەپ بىر تەرەپ قىلىشتىن &lt;b&gt;&lt;i&gt;بۇرۇن&lt;/i&gt;&lt;/b&gt; تىزلەتمە ئىجرا قىلىنىدۇ.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;يازما يوللاش&lt;/b&gt; ئاكتىپ قوللىنىشچان پروگراممىنى بىر تەرەپ &lt;b&gt;&lt;i&gt;قىلغاندىن كېيىن&lt;/i&gt;&lt;/b&gt; قىسقارتىش ئىجرا قىلىنىدۇ.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;چەكتىن ئېشىپ كېتىش&lt;/b&gt; MonkeyPaste override shortcut نىڭ كىرگۈزۈش كۇنۇپكىسى (غەيرىي - ئۆزگەرتكۈزگۈچ ئاچقۇچ) نى ئاڭلىغاندا، شۇ كۇنۇپكىنى بېسىپ چىقىرىشنى قوللىنىشتىن &lt;i&gt;يوشۇرۇپ&lt;/i&gt; قويىدۇ - دەرىجە كىرگۈزۈش.&lt;br&gt;بۇ تاللانما ئاكتىپ قوللىنىشقا توقۇنۇشمىغان ئەھۋالدا قىسقا يولنىڭ قوزغىلىشىغا كاپالەتلىك قىلىدۇ.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ئالاھىدە چەكلىمە&lt;/b&gt; بۇ Caps Lock كۇنۇپكىسى ئۈچۈن لايىھەلەنگەن ئالاھىدە تۈردىكى چەكتىن ئېشىپ كېتىش ئەندىزىسى. پەقەت &lt;b&gt;بىر&lt;/b&gt; كۇنۇپكا (ئۆزگەرتكۈسىز - ئۆزگەرتكۈسىز) نى ئۆز تاپشۇرۇقى ئۈچۈنلا يول قويىدۇ.&lt;br&gt;نورمال چەكتىن ئېشىپ كېتىش ھالىتىدە Caps Lock باشقا كۇنۇپكىلار بىلەن بىرلىشىپ باسقاندا &lt;i&gt;قىسىلىپ&lt;/i&gt; قالالايدۇ.&lt;br&gt;شۇڭا، باشقا كونۇپكىلارنىڭ قانداق بولۇشىدىن قەتئىينەزەر، &lt;b&gt;Hotkey&lt;/b&gt; قىسقارتمىسىنى باسسا، چەكتىن ئېشىپ كېتىپ، &lt;i&gt;قىسىلىپ&lt;/i&gt; قېلىشىنىڭ ئالدىنى ئالىدۇ.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;مايمۇنPaste بولسا &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;بۇ ئارقىلىق مايمۇن پاستىسىنى زىيارەت قىلغىلى بولىدۇ&lt;br&gt;بىر &lt;span color="red"&gt;چىكىپمۇ قويماي&lt;/span&gt; ھەتتا &lt;span color="red"&gt;كۆزنى قاتۇرماي&lt;/span&gt; #x1F440&lt;/p&gt;</value>
   </data>
 </root>

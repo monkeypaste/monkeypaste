@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>גלול - ל - פתוח</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; monkeypaste הוא &lt;span color = "red&gt; משולב באופן מלא &lt;/span&gt; עם גרירה - ו- - drop &lt;/p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>זרוק את זה כאן!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align = "center"&gt; בדרך זו, ניתן לגשת ל- monkeypaste &lt;br&gt; &lt;span color = "red"&gt; ללא לחיצה &lt;/span&gt; או אפילו &lt;span color = "red"&gt; חבט עין &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>גרור אותי!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>מחוות חייבות להיות ייחודיות ויכולות להכיל רק מפתח קלט אחד.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; פנימי &lt;/b&gt; כל קיצורי הדרך מוגבלים בתוך היישום. זו לא באמת אפשרות מיועדת אבל יכולה לאפשר להתאים אישית את הקיצורים שאתה מתכוון להפוך את ה &lt;i&gt; גלובלי לדיון אחד &lt;/i&gt;. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; ברירת מחדל &lt;/b&gt; כל קיצורי הדרך הגלובליים מופעלים. &lt;b&gt; Show/הסתר את החלון הראשי &lt;/b&gt; קיצור דרך משתמש ב &lt;span color = "red"&gt; עקיפה &lt;/span&gt; ניתוב &lt;b&gt; מקש Lock &lt;/b&gt;. אתה יכול לשנות את הניתוב או המחווה בכל עת. אבל &lt;span color = "ירוק"&gt; נסה זאת &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;גוף&gt;
-&lt;H1&gt; מצבי קיצור דרך גלובליים &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; פסיבי &lt;/b&gt; קוצר קיצור של קיצור דרך יאזין בכל יישום. &lt;br&gt;
-*זו האפשרות &lt;i&gt; רק &lt;/i&gt; ב- Linux לעת עתה.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; pre &lt;/b&gt; קיצור דרך יבצע &lt;b&gt; &lt;i&gt; לפני &lt;/i&gt; &lt;/b&gt; הוא מטופל על ידי היישום הפעיל. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; פוסט &lt;/b&gt; קיצור דרך יבצע &lt;b&gt; &lt;i&gt; לאחר &lt;/i&gt; &lt;/b&gt; הוא מטופל על ידי היישום הפעיל. &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; עקיפה &lt;/b&gt; כאשר monkeypaste שומע את מקש הקלט (מקש לא - שינוי) של קיצור דרך עקיפה זה יסתר &lt;/i&gt; מקש זה מכניסה ליישום - קלט ברמה. &lt;br&gt;
-אפשרות זו תבטיח כי קיצור הדרך מופעל ללא קונפליקטים ליישום הפעיל.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; עקיפה בלעדית &lt;/b&gt; זהו סוג מיוחד של מצב עקיפה המיועד למפתח נעילת Caps. זה מאפשר רק &lt;b&gt; מקש אחד &lt;/b&gt; (לא -שינוי) למשימה שלו. &lt;br&gt;
-במנעול כובעים של מצב עקיפה רגיל יכול להיתקע ב &lt;i&gt; ב &lt;/i&gt; כאשר הוא נלחץ בשילוב עם מפתחות אחרים. &lt;br&gt;
-אז לא משנה אילו מפתחות אחרים יורדים, אם נלחץ על קיצור הדרך &lt;b&gt; &lt;/b&gt;.
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/body&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>השבתת</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>טען כאשר חשבון משתמש זה מחובר, לא למשתמשים אחרים.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; שימוש באנשי קשר זמינים (דורש תוסף Fetcher) שדה זה ישמש לכל המקרים של תבנית זו על פני מסמך זה או בכל אחד אז אז שדה הדואר האלקטרוני של ה- Contact You Select ישמש לכל המקרים במסמך זה. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>YY = שנה קצרה &lt;br/&gt; yyyy = שנה ארוכה &lt;br/&gt; m = חודש (1-12) &lt;br/&gt; mm = חודש (01-12) &lt;br/&gt; mmm = קיצור חודש (ינואר, פברואר .. . דצמבר) &lt;br/&gt; mmmm = חודש ארוך (ינואר, פברואר ... דצמבר) &lt;br/&gt; d = יום (1 ​​- 31) &lt;br/&gt; dd = יום (01 - 31) &lt;br/&gt; ddd = יום השבוע במילים (שני, שלישי ... יום ראשון) &lt;br/&gt; e = יום קצר בשבוע במילים (יום שני, יום שלישי ... שמש) &lt;br/&gt; D - יום רגיל (1, 2nd, 3, 21, 22nd, 23, 31, 4 ...) &lt;br/&gt; h = שעה בשעה/pm (0-12) &lt;br/&gt; hh = שעה בשעה/pm (00-12) &lt;br/ &gt; H = שעה ביום (0-23) &lt;br/&gt; hh = שעה ביום (00-23) &lt;br/&gt; mm = דקה &lt;br/&gt; ss = שני &lt;br/&gt; sss = אלפיות שניות &lt;br/&gt; A = AM/PM סמן &lt;br/&gt; p = a.m./p.m. סַמָן</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>התאריך ו/או השעה הנוכחיים יחליפו תבניות של תאריך תאריך כאשר הם מודבקים.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; כל ההופעות של תבנית זו ישתמשו בטקסט המסופק. &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; כל ההופעות של תבנית זו ישתמשו בטקסט המסופק. &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>לסיים את הוספת</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>אפליקציה פעילה אחרונה לא ידועה. עברו לאפליקציה המיועדת להדבק קופים.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>הדבק ל: &lt;em&gt; &lt;i class = "stee-tooltip-suffix"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>לְצַמְצֵם</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>אף אחד</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>רק קביעות מוגדרות מראש שנבחרו ישמשו ליישום שצוין. כאשר לא מוגדרים, ישמשו קביעות מוגדרות מראש המוגדרות כברירת מחדל בסרגל הצד &lt;em&gt; לוח הלוח &lt;/em&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>תכונות רבות של Monkeypaste משתמשות באוטומציה של מקלדת כדי לקיים אינטראקציה עם יישומים אחרים.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>קוראים</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>כל ניטור הלוח מהיישומים שנדחו יתעלם &lt;/b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>סופרים</value>
@@ -1331,11 +1268,6 @@ Monkeypaste במכשיר
     <value>האם אתה בטוח שאתה רוצה לאפס את כל ההודעות?
 
 *אי אפשר לבטל את זה!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>הדבק קוף מגדיר את הלוח (גובר) בעת הדבקה לתוכנית חיצונית. זה יאהב &lt;b&gt; ניסיון לשחזר את מצב הלוח לאחר משחה חיצונית.
-
-לא ניתן להבטיח שיקום מוחלט ועשוי להפחית את הביצועים או אפילו להתרסק על קוף קוף, תלוי במקור הנתונים.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>אפס את הלוח לאחר הדבקת קופים</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>למידע נוסף על תוכניות</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>הדבק אל: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;באמצעות אנשי קשר זמינים (דורש תוסף fetcher) שדה זה ישמש עבור כל המופעים של תבנית זו במסמך זה או בכל אחד מהם הוא יופנה מאוחר יותר.&lt;/p&gt;&lt;p&gt; כך, לדוגמה, אם תבחר כתובת דוא"ל כאן, שדה הדוא"ל של איש הקשר שתבחר ישמש עבור כל המופעים במסמך זה.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = שנה קצרה&lt;br/&gt;yyyy = שנה ארוכה&lt;br/&gt;M = חודש (1-12)&lt;br/&gt;MM = חודש (01-12)&lt;br/&gt;MMM = קיצור חודש (ינואר, פברואר ... דצמ')&lt;br/&gt;MMMM = חודש ארוך (ינואר, פברואר ... דצמבר)&lt;br/&gt;d = יום (1 - 31)&lt;br/&gt;DD = יום (01 - 31)&lt;br/&gt;ddd = יום בשבוע במילים (שני, שלישי ... יום ראשון)&lt;br/&gt;E = יום קצר בשבוע במילים (שני, שלישי ... א')&lt;br/&gt;D - יום רגיל (1, 2, 3, 21, 22, 23, 31, 4...)&lt;br/&gt;h = שעה בבוקר/בערב (0-12)&lt;br/&gt;hh = שעה בבוקר/בערב (00-12)&lt;br/&gt;H = שעה ביום (0-23)&lt;br/&gt;HH = שעה ביום (00-23)&lt;br/&gt;מ"מ = דקה&lt;br/&gt;SS = שנייה&lt;br/&gt;SSS = אלפיות שנייה&lt;br/&gt;a = סמן AM/PM&lt;br/&gt;p = סמן a.m./p.m.</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;כל המופעים של תבנית זו ישתמשו בטקסט שסופק.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;כל המופעים של תבנית זו ישתמשו בטקסט שסופק.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste מגדיר את הלוח (עוקף) בעת הדבקה לתוכנית חיצונית. פעולה זו &lt;b&gt;תנסה&lt;/b&gt; לשחזר את מצב הלוח לאחר הדבקה חיצונית. 
+
+לא ניתן להבטיח שחזור מלא והוא עלול לפגוע בביצועים או אפילו לקרוס את MonkeyPaste בהתאם למקור הנתונים.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>רק הקביעות המוגדרות מראש שנבחרו ישמשו ליישום שצוין. כשלא צוין, ייעשה שימוש בקביעות המוגדרות מראש של ברירת המחדל &lt;em&gt;שנמצאות בסרגל הצד של הלוח&lt;/em&gt; .</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>כל ניטור הלוח מבקשות שנדחו &lt;b&gt;יתעלם&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;פנימי&lt;/b&gt;כל קיצורי הדרך מוגבלים בתוך היישום. זו לא באמת אפשרות מיועדת, אבל יכולה לאפשר להתאים אישית את קיצורי הדרך שאתה מתכוון להפוך לגלובלי&lt;i&gt;יום אחד&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;ברירת מחדל&lt;/b&gt; כל קיצורי הדרך הכלליים מופעלים. קיצור הדרך '&lt;b&gt;הצג/הסתר חלון ראשי'&lt;/b&gt;משתמש&lt;span color="red"&gt;בניתוב עקיפה&lt;/span&gt;עבור מקש&lt;b&gt;Caps Lock&lt;/b&gt; . באפשרותך לשנות ניתוב או מחווה אלה בכל עת. אבל&lt;span color="green"&gt;נסה את זה&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;מצבי קיצור כלליים&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;סביל&lt;/b&gt; קיצור דרך MonkeyPaste יקשיב בכל יישום.&lt;br&gt;*זוהי האפשרות &lt;i&gt;היחידה&lt;/i&gt; בלינוקס לעת עתה.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;קדם&lt;/b&gt; קיצור הדרך יופעל &lt;b&gt;&lt;i&gt;לפני&lt;/i&gt;&lt;/b&gt; שהוא יטופל על-ידי היישום הפעיל.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;הצבה&lt;/b&gt; קיצור הדרך יופעל &lt;b&gt;&lt;i&gt;לאחר&lt;/i&gt;&lt;/b&gt; הטיפול בו על-ידי היישום הפעיל.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;לעקוף&lt;/b&gt; כאשר MonkeyPaste שומע את מקש הקלט (שאינו מקש צירוף) של קיצור דרך לדריסה, הוא &lt;i&gt;יסתיר&lt;/i&gt; את הלחיצה על מקש זה מיישום - קלט ברמה.&lt;br&gt;אפשרות זו תבטיח שקיצור הדרך יופעל ללא התנגשויות ביישום הפעיל.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;עקיפה בלעדית&lt;/b&gt; זהו סוג מיוחד של מצב דריסה המיועד למקש Caps Lock. זה מאפשר רק מפתח &lt;b&gt;אחד&lt;/b&gt; (לא - משנה) עבור המשימה שלה.&lt;br&gt;במצב דריסה רגיל, Caps Lock עלול &lt;i&gt;להיתקע בעת&lt;/i&gt; לחיצה בשילוב עם מקשים אחרים.&lt;br&gt;לכן, לא משנה אילו מקשים אחרים נמצאים למטה, אם לוחצים על &lt;b&gt;קיצור מקשים ישירים&lt;/b&gt; , הוא יידרס וימנע ממנו &lt;i&gt;להיתקע&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste הוא &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;בדרך זו, MonkeyPaste ניתן לגשת&lt;br&gt;בלי &lt;span color="red"&gt;קליק&lt;/span&gt; ואפילו בלי &lt;span color="red"&gt;להניד עפעף&lt;/span&gt; #x1F440&lt;/p&gt;</value>
   </data>
 </root>

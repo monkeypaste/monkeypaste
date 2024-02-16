@@ -6,6 +6,7 @@
   "guid": "26436e84-392e-4038-a99c-0abe92b843bd",
   "readmeUrl": "https://raw.githubusercontent.com/monkeypaste/TextToSpeech/master/README.md",
   "projectUrl": "https://github.com/monkeypaste/TextToSpeech",
+  "packageUrl": "https://github.com/monkeypaste/TextToSpeech/releases/download/v1.0.3.0/v1.0.3.0.zip",
   "iconUri": "https://raw.githubusercontent.com/monkeypaste/TextToSpeech/master/icon.png",
   "packageType": "Dll",
   "tags": "Kern, audio, toegankelijkheid, spraak, tekst"

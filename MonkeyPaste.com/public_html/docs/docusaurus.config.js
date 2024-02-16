@@ -6,7 +6,7 @@ const { themes } = require('prism-react-renderer');
 const lightTheme = themes.synthwave84;
 const darkTheme = themes.dracula;
 
-const local = false;
+const local = true;
 
 const siteUrl = local ?
   "https://localhost" :

@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Помичите се - отворите</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;п алигн = "Центер"&gt; Монкеипасте је &lt;спан цолор = "црвено&gt; потпуно интегрисано &lt;/ спан&gt; са превлачењем - и - пад &lt;/ п&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Баци га овде!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;п Алигн = "Центер"&gt; На овај начин се може приступити Монкеипасте &lt;бр&gt; &lt;спан цолор = "црвена"&gt; без кликача &lt;/ спан&gt; или чак &lt;спан цолор = "црвена"&gt; Баттинг аие &lt;/ спан&gt; &amp; # к1ф440 &lt;/ п&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Повуци ме!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Гестери морају бити јединствени и могу да садрже само један улазни кључ.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ул&gt;
-&lt;ли&gt;
-&lt;б&gt; Интерни &lt;/ б&gt; Све пречице су ограничене на у оквиру апликације. Ово није заиста предвиђена опција, али може омогућити прилагодити оно што пречице намеравате да направите глобални &lt;и&gt; једног дана &lt;/ и&gt;. &lt;/ ЛИ&gt;
-&lt;ли&gt;
-&lt;б&gt; Подразумевано &lt;/ б&gt; Све глобалне пречице су омогућене. &lt;Б&gt; СХОВ / СИДЕР ГЛОЧИНА ПРОЗОРА &lt;/ б&gt; Пречица користи &lt;спан цолор = "црвена"&gt; прегласавање &lt;/ спан&gt; усмјеравање за &lt;б&gt; ЦАПС БОЛЦК &lt;/ б&gt;. То време или гест можете променити у било које време. Али &lt;спан цолор = "зелена"&gt; дај пробај &lt;/ спан&gt;
-&lt;/ ли&gt;
-&lt;/ ул&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;хтмл&gt;
-&lt;глава&gt; &lt;/ хеад&gt;
-&lt;Боди&gt;
-&lt;Х1&gt; Глобални модови пречаца &lt;/ х1&gt;
-&lt;ул&gt;
-&lt;ли&gt;
-&lt;б&gt; Пасивно &lt;/ б&gt; пречица монкеупасте ће слушати у било којој апликацији. &lt;бр&gt;
-* Ово је само опција &lt;и&gt; само на Линуку.
-&lt;/ ли&gt;
-&lt;ли&gt;
-&lt;б&gt; Пре &lt;/ б&gt; пречица ће се извршити &lt;б&gt; &lt;и&gt; пре &lt;/ и&gt; &lt;/ б&gt; то се бави активним апликацијама. &lt;/ ли&gt;
-&lt;ли&gt;
-&lt;б&gt; Пост &lt;/ б&gt; пречица ће се извршити &lt;б&gt; &lt;и&gt; након &lt;/ и&gt; &lt;/ б&gt; рукује се активним апликацијама. &lt;/ ли&gt;
-&lt;ли&gt;
-&lt;б&gt; Прегласе &lt;/ б&gt; када монкеипасте чује кључ уноса (кључ не модифитера) прерачуна за прерачунску пречицу, то ће се &lt;и&gt; сакрити тај тастер за унос на нивоу апликације. &lt;бр&gt;
-Ова опција ће гарантовати пречицу се покреће без сукоба до активне примене.
-&lt;/ ли&gt;
-&lt;ли&gt;
-&lt;б&gt; Ексклузивно прегласавање Ово је посебна врста режим прегласа који је дизајниран за тастер за закључавање капица. Омогућује само &lt;б&gt; Један тастер (не-модификатор) за његов задатак. &lt;Бр&gt;
-У нормалном прегледу ЦАПС Лоцк Лоцк може постати &lt;и&gt; заглављен на &lt;/ и&gt; када се притисне у комбинацији са другим тастерима. &lt;Бр&gt;
-Дакле, без обзира на то које су остали кључеви спуштени, ако је притиснута пречица &lt;б&gt; &lt;/ б&gt; прекриваће се и спречи га да постане &lt;и&gt; заглављен на &lt;/ и&gt;.
-&lt;/ ли&gt;
-&lt;/ ул&gt;
-&lt;/ каросерија&gt;
-&lt;/ хтмл&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Онемогућити</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Учитајте се када се овај кориснички налог пријави, а не за остале кориснике.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;п&gt; Коришћење доступних контаката (захтева да се додатак ФЕТЦЕР) Ово поље ће се користити за све случајеве овог предлошка у овом документу или у било којем ће се наћи касније. &lt;/ п&gt; &lt;п&gt; тако, на пример, ако изаберете адресу е-поште Овде је поље е-поште контакта који одаберете користиће за све случајеве у овом документу. &lt;/ п&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>ии = кратка година &lt;бр /&gt; ГГГГ = ЛОНГ ИГЕ &lt;бр /&gt; М = месец (1-12) &lt;бр /&gt; мм = месец (01-12) &lt;бр /&gt; ммм = Месечна скраћеница (јан, фебруар .. . ДЕЦ) &lt;бр /&gt; Мммм = Лонг Месец (јануар, фебруар ... децембар) &lt;бр /&gt; Д = дан (1 - 31) &lt;бр /&gt; ДД = Дан (01 - 31) &lt;бр /&gt; ДДД = Дан у недељи у речима (понедељак, уторак ... недеља) &lt;бр /&gt; Е = кратак дан у недељи речима (пон, уто ... &lt;бр /&gt; Д - Редни дан (1., 2., 2.) 3., 21., 22., 23., 31., 4. ...) &lt;бр /&gt; Х = сат у АМ / ПМ (0-12) &lt;бр /&gt; ХХ = сат у АМ / ПМ (00-12) &lt;бр / бр / &gt; Х = сат у дану (0-23) &lt;бр /&gt; ХХ = сат у дану (00-23) &lt;бр /&gt; ММ = минут &lt;бр /&gt; СС = Други &lt;бр /&gt; ССС = МиллисеЦондс &lt;бр /&gt; А = АМ / ПМ маркер &lt;бр /&gt; п = а.м. / п.м. маркер</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Тренутни датум и / или време биће замењене предлозима ДатеТиме када су залепите.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;п&gt; Све се појаве овог шаблона користиће испоручени текст. &lt;/ п&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;п&gt; Све се појаве овог шаблона користиће испоручени текст. &lt;/ п&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Долазак на допис</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Последња активна апликација непозната. Пребаците се на предвиђену апликацију за мајмунске пасте.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Налепи на: &lt;ем&gt; &lt;и цласс = "пасте-тоолтип-суфикс"&gt; {0} &lt;/ и&gt; &lt;/ ем&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Умањити</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Ниједан</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>За наведену апликацију користиће се само одабрани подешеници. Када је неодређено, користиће се подразумевани поднепти који се налазе у бочној траци &lt;ЕМ&gt; међуспремника &lt;/ ЕМ&gt;.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Многе карактеристике монкеупасте користе аутоматизацију тастатуре да комуницирају са другим апликацијама.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Читаоци</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Сви мониторинг међуспремника од одбачених апликација биће &lt;Б&gt; игнорисани &lt;/ б&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Писци</value>
@@ -1331,11 +1268,6 @@
     <value>Јесте ли сигурни да желите да ресетујете све обавештења?
 
 *Ово се не може поништити!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Мајмунски паста поставља међуспремник (поништава) приликом лепљења на спољни програм. Ово ће &lt;б&gt; Покушај &lt;/ б&gt; да врати стање међуспремника након спољне пасте.
-
-Укупна рестаурација не може се загарантовати и може смањити перформансе или чак су падну мајмуна у зависности од извора података.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Ресетујте међуспремник након што је мајмун лепљење</value>
@@ -2706,5 +2638,66 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Сазнајте више о плановима</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Налепити на: &lt;em&gt; &lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Коришћење доступних контаката (захтева додатну компоненту за добављање) ово поље ће бити коришћено за све инстанце овог предлошка у овом документу или у било ком од њих на које ће касније бити упућено.&lt;/p&gt;&lt;p&gt; На пример, ако овде изаберете е-адресу, поље е-поште контакта које изаберете биће коришћено за све инстанце у овом документу.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = кратка година&lt;br/&gt;yyyy = дуга година&lt;br/&gt;М = месец (1-12)&lt;br/&gt;ММ = месец (01-12)&lt;br/&gt;МММ = скраћеница месеца (Јан, Феб ... Дец)&lt;br/&gt;ММММ = дуг месец (јануар, фебруар ... Децембар)&lt;br/&gt;д = дан (1 - 31)&lt;br/&gt;дд = дан (01 - 31)&lt;br/&gt;ддд = дан у недељи речима (понедељак, уторак ... Недеља)&lt;br/&gt;Е = кратак дан у недељи у речима (Мон, Туе ... Сунце)&lt;br/&gt;Д - Ординални дан (1, 2., 3.&lt;br/&gt;х = сат у ам/пм (0-12)&lt;br/&gt;хх = сат у ам/пм (00-12)&lt;br/&gt;Х = сат у дану (0-23)&lt;br/&gt;ХХ = сат у дану (00-23)&lt;br/&gt;мм = минут&lt;br/&gt;сс = сецонд&lt;br/&gt;ССС = милисекунде&lt;br/&gt;а = АМ/ПМ маркер&lt;br/&gt;п = а.м./п.м. означивач</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Све појаве овог предлошка ће користити наведени текст.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Све појаве овог предлошка ће користити наведени текст.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Мајмунска налепавање поставља оставу (замењује) приликом лепења у спољни програм. Ово ће &lt;b&gt;покушати&lt;/b&gt; да врати стање оставе у претходно стање након спољног лепка. 
+
+Укупна рестаурација не може бити загарантована и може смањити перформансе или чак срушити МонкеyПасте у зависности од извора података.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>За наведену апликацију биће коришћене само изабране поставке. Када нису одређене, користиће се подразумеване поставке &lt;em&gt;пронађене на бочној траци&lt;/em&gt; оставе.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Сви надзори оставе из одбијених апликација биће &lt;b&gt;занемарени&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Унутрашње&lt;/b&gt;Све пречице су ограничене на апликацију. Ово заправо није намењена опција, али може да дозволи прилагођавање пречица које намеравате да једног дана&lt;i&gt;учините глобалним&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Подразумевани&lt;/b&gt; Све глобалне пречице су омогућене. &lt;b&gt;Пречица "Прикажи/сакриј главни прозор&lt;/b&gt;"&lt;span color="red"&gt;користи замишавање&lt;/span&gt;производног поступка&lt;b&gt;за тастер Цапс Лоцк&lt;/b&gt; . Тај производни поступак или покрет можете да промените у било ком тренутку. Али&lt;span color="green"&gt;пробај&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Општи режими пречица&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Пасивни&lt;/b&gt; Пречица коју ће МонкеyПасте слушати у свакој апликацији.&lt;br&gt;*Ово је за &lt;i&gt;сада&lt;/i&gt; једина опција на Линуxу.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Унапред&lt;/b&gt; Пречица ће бити &lt;b&gt;&lt;i&gt;извршена&lt;/i&gt;&lt;/b&gt; пре него што је изврши активна апликација.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Поштански&lt;/b&gt; Пречица ће се &lt;b&gt;&lt;i&gt;извршити&lt;/i&gt;&lt;/b&gt; након што је изврши активна апликација.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Замените&lt;/b&gt; Када МонкеyПасте чује тастер за унос (не - кључ за измену) премошћавања пречице, он ће &lt;i&gt;сакрити ту&lt;/i&gt; тастерску штампу из апликације - унос нивоа.&lt;br&gt;Ова опција ће гарантовати да је пречица активирана без неусаглашености активне апликације.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Ексклузивно премошћавање&lt;/b&gt; Ово је посебан тип режима замене дизајниран за тастер Цапс Лоцк. Он дозвољава само &lt;b&gt;један&lt;/b&gt; кључ (не - модификатор) за његово додељивање.&lt;br&gt;У нормалном режиму замене Цапс Лоцк може да &lt;i&gt;се заглави када&lt;/i&gt; се притисне у комбинацији са другим тастерима.&lt;br&gt;Дакле, без обзира на то који су други тастери доле, &lt;b&gt;ако се притисне Хоткеy&lt;/b&gt; пречица биће премошћана и спречити да &lt;i&gt;се заглави&lt;/i&gt;.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;МонкеyПасте је &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;На овај начин се може приступити МонкеyПасте-у&lt;br&gt;&lt;span color="red"&gt;без клика&lt;/span&gt; или чак &lt;span color="red"&gt;ударања у око&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>स्क्रॉल - टू - ओपन</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p Align = "Center"&gt; Monkeypaste &lt;स्पैन कलर = "रेड&gt; पूरी तरह से एकीकृत &lt;/span&gt; ड्रैग के साथ - और - ड्रॉप &lt;/p&gt; है</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>इसे यहाँ छोड़ दो!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p Align = "Center"&gt; इस तरह से, Monkeypaste को एक्सेस किया जा सकता है &lt;br&gt; &lt;स्पैन कलर = "रेड"&gt; बिना क्लिक के &lt;/span&gt; या यहां तक ​​कि &lt;स्पैन कलर = "रेड"&gt; बैटिंग एक आंख &lt;/span&gt; &amp;#x1F440 &lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>मुझे खिचो!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>इशारों को अद्वितीय होना चाहिए और इसमें केवल एक इनपुट कुंजी हो सकती है।</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; आंतरिक &lt;/b&gt; सभी शॉर्टकट आवेदन के भीतर सीमित हैं। यह वास्तव में एक इच्छित विकल्प नहीं है, लेकिन यह अनुकूलित करने की अनुमति दे सकता है कि आप किस शॉर्टकट को वैश्विक बनाने का इरादा रखते हैं &lt;i&gt; किसी दिन &lt;/i&gt;। &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; डिफ़ॉल्ट &lt;/b&gt; सभी वैश्विक शॉर्टकट सक्षम हैं। &lt;b&gt; मुख्य विंडो दिखाने/छिपाएं आप किसी भी समय उस रूटिंग या इशारे को बदल सकते हैं। लेकिन &lt;स्पैन कलर = "ग्रीन"&gt; इसे आज़माएं &lt;/span&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;हेड&gt; &lt;/हेड&gt;
-&lt;शरीर&gt;
-&lt;h1&gt; ग्लोबल शॉर्टकट मोड &lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; पैसिव &lt;/b&gt; एक शॉर्टकट मंकेपास्ट किसी भी एप्लिकेशन में सुनेंगे। &lt;br&gt;
-*यह अभी के लिए लिनक्स पर &lt;i&gt; केवल &lt;/i&gt; विकल्प है।
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; प्री &lt;/b&gt; शॉर्टकट निष्पादित करेगा &lt;b&gt; &lt;i&gt; &lt;/i&gt; से पहले &lt;/i&gt; &lt;/b&gt; यह सक्रिय अनुप्रयोग द्वारा नियंत्रित किया जाता है। &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; पोस्ट &lt;/b&gt; शॉर्टकट निष्पादित करेगा &lt;b&gt; &lt;i&gt; के बाद &lt;/i&gt; &lt;/b&gt; यह सक्रिय अनुप्रयोग द्वारा नियंत्रित किया जाता है। &lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; override &lt;/b&gt; जब एक ओवरराइड शॉर्टकट के इनपुट कुंजी (गैर -संशोधक कुंजी) को सुनता है, तो यह &lt;/i&gt; छिपाने के लिए &lt;/i&gt; है।
-यह विकल्प गारंटी देगा कि शॉर्टकट सक्रिय आवेदन के लिए संघर्ष के बिना ट्रिगर किया गया है।
-&lt;/li&gt;
-&lt;li&gt;
-&lt;b&gt; एक्सक्लूसिव ओवरराइड &lt;/b&gt; यह एक विशेष प्रकार का ओवरराइड मोड है जो कैप लॉक कुंजी के लिए डिज़ाइन किया गया है। यह केवल अपने असाइनमेंट के लिए &lt;b&gt; एक &lt;/b&gt; कुंजी (गैर -संशोधक) की अनुमति देता है। &lt;br&gt;
-सामान्य ओवरराइड मोड में कैप्स लॉक हो सकता है &lt;i&gt; अन्य कुंजी के साथ संयोजन में दबाए जाने पर &lt;/i&gt; पर अटक गया।
-तो कोई फर्क नहीं पड़ता कि अन्य चाबियाँ क्या नीचे हैं, अगर एक &lt;b&gt; हॉटकी &lt;/b&gt; शॉर्टकट दबाया जाता है तो यह ओवररिडेन होगा और इसे &lt;i&gt; &lt;/i&gt; पर अटक जाने से रोक देगा।
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/शरीर&gt;
-&lt;/html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>अक्षम करना</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>जब यह उपयोगकर्ता खाता लॉग इन होता है, तो लोड करें, अन्य उपयोगकर्ताओं के लिए नहीं।</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; उपलब्ध संपर्कों का उपयोग करना (एक फ़ीचर प्लगइन की आवश्यकता है) इस फ़ील्ड का उपयोग इस दस्तावेज़ में इस टेम्पलेट के सभी उदाहरणों के लिए किया जाएगा या किसी भी समय बाद में संदर्भित किया जाएगा। &lt;/p&gt; &lt;p&gt; तो उदाहरण के लिए यदि ईमेल पते का चयन करें तो यहाँ तब आपके द्वारा चुने गए संपर्क का ईमेल फ़ील्ड इस दस्तावेज़ में सभी उदाहरणों के लिए उपयोग किया जाएगा। &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = लघु वर्ष &lt;br/&gt; yyyy = लंबा वर्ष &lt;br/&gt; m = माह (1-12) &lt;br/&gt; mm = माह (01-12) &lt;br/&gt; mmm = महीने का संक्षिप्त नाम (जन, फरवरी ।। । दिसंबर) &lt;br/&gt; mmmm = लंबा महीना (जनवरी, फरवरी ... दिसंबर) &lt;br/&gt; d = दिन (1 - 31) &lt;br/&gt; dd = day (01 - 31) &lt;br/&gt; ddd = शब्द में सप्ताह का दिन (सोमवार, मंगलवार ... रविवार) &lt;br/&gt; e = शब्द में सप्ताह का छोटा दिन (सोम, टीयू ... सूर्य) &lt;br/&gt; डी - ऑर्डिनल डे (1, 2, 2, 3, 21 वीं, 22 वीं, 23 वीं, 31 वीं, चौथी ...) &lt;br/&gt; एच = घंटे में एएम/पीएम (0-12) &lt;br/&gt; एचएच = घंटे में एएम/पीएम (00-12) &lt;ब्र/ &gt; एच = दिन में घंटे (0-23) &lt;br/&gt; एचएच = दिन में दिन (00-23) &lt;br/&gt; मिमी = मिनट &lt;br/&gt; एसएस = दूसरा &lt;br/&gt; एसएसएस = मिलीसेकंड &lt;br/&gt; a = am/pm मार्कर &lt;br/&gt; p = a.m./p.m। निशान</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>वर्तमान तिथि और/या समय को डेटाइम टेम्प्लेट के लिए प्रतिस्थापित किया जाएगा जब वे चिपकाए जाते हैं।</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; इस टेम्पलेट के सभी घटनाएं प्रदान किए गए पाठ का उपयोग करेंगे। &lt;/p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; इस टेम्पलेट के सभी घटनाएं प्रदान किए गए पाठ का उपयोग करेंगे। &lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>समाप्ति समाप्त करना</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>अंतिम सक्रिय ऐप अज्ञात। बंदर पेस्ट के लिए इच्छित ऐप पर स्विच करें।</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>पेस्ट करने के लिए: &lt;em&gt; &lt;i class = "पेस्ट-टूलटिप-स्फिक्स"&gt; {0} &lt;/i&gt; &lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>छोटा करना</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>कोई नहीं</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>निर्दिष्ट एप्लिकेशन के लिए केवल चयनित प्रीसेट का उपयोग किया जाएगा। अनिर्दिष्ट होने पर, &lt;em&gt; क्लिपबोर्ड साइडबार &lt;/em&gt; में पाए जाने वाले डिफ़ॉल्ट प्रीसेट का उपयोग किया जाएगा।</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>कई Monkeypaste सुविधाएँ अन्य अनुप्रयोगों के साथ बातचीत करने के लिए कीबोर्ड स्वचालन का उपयोग करती हैं।
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>पाठकों</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>अस्वीकृत अनुप्रयोगों से सभी क्लिपबोर्ड निगरानी &lt;b&gt; &lt;/b&gt; को अनदेखा कर दिया जाएगा।</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>लेखकों के</value>
@@ -1331,11 +1268,6 @@
     <value>क्या आप सुनिश्चित हैं कि आप सभी सूचनाओं को रीसेट करना चाहते हैं?
 
 *इसे असंपादित नहीं किया जा सकता है!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>एक बाहरी कार्यक्रम के लिए चिपकाने पर बंदर पेस्ट क्लिपबोर्ड (ओवरराइड्स) सेट करता है। यह बाहरी पेस्ट के बाद क्लिपबोर्ड की स्थिति को पुनर्स्थापित करने के लिए &lt;b&gt; प्रयास &lt;/b&gt; होगा।
-
-कुल बहाली की गारंटी नहीं दी जा सकती है और डेटा के स्रोत के आधार पर प्रदर्शन को कम कर सकता है या यहां तक ​​कि मंकीपास्ट को दुर्घटनाग्रस्त हो सकता है।</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>बंदर पेस्टिंग के बाद क्लिपबोर्ड रीसेट करें</value>
@@ -2706,5 +2638,66 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>योजनाओं के बारे में और जानें</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>पेस्ट करें: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;उपलब्ध संपर्कों का उपयोग करना (एक फ़ेचर प्लगइन की आवश्यकता है) इस फ़ील्ड का उपयोग इस दस्तावेज़ में इस टेम्पलेट के सभी आवृत्तियों के लिए किया जाएगा या किसी भी में इसे बाद में संदर्भित किया जाएगा।&lt;/p&gt;&lt;p&gt; इसलिए उदाहरण के लिए यदि यहां ईमेल पते का चयन करें तो आपके द्वारा चुने गए संपर्क की ईमेल फ़ील्ड का उपयोग इस दस्तावेज़ में सभी उदाहरणों के लिए किया जाएगा।&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = लघु वर्ष&lt;br/&gt;yyyy = लंबा वर्ष&lt;br/&gt;M = महीना (1-12)&lt;br/&gt;MM = महीना (01-12)&lt;br/&gt;एमएमएम = महीने का संक्षिप्त नाम (जनवरी, फरवरी ... दिसंबर)&lt;br/&gt;एमएमएमएम = लंबा महीना (जनवरी, फरवरी ... दिसंबर)&lt;br/&gt;d = दिन (1 - 31)&lt;br/&gt;डीडी = दिन (01 - 31)&lt;br/&gt;ddd = शब्दों में सप्ताह का दिन (सोमवार, मंगलवार ... रविवार)&lt;br/&gt;E = शब्दों में सप्ताह का छोटा दिन (सोम, मंगल... रवि)&lt;br/&gt;D - साधारण दिन (पहला, दूसरा, तीसरा, 21वां, 22वां, 23वां, 31वां, चौथा ...)&lt;br/&gt;h = am/pm में घंटा (0-12)&lt;br/&gt;hh = am/pm में घंटा (00-12)&lt;br/&gt;H = दिन में घंटा (0-23)&lt;br/&gt;HH = दिन में घंटा (00-23)&lt;br/&gt;मिमी = मिनट&lt;br/&gt;ss = सेकंड&lt;br/&gt;एसएसएस = मिलीसेकंड&lt;br/&gt;a = AM/PM मार्कर&lt;br/&gt;पी = एएम/पीएम मार्कर</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;इस टेम्पलेट की सभी घटनाएं प्रदान किए गए पाठ का उपयोग करेंगी।&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;इस टेम्पलेट की सभी घटनाएं प्रदान किए गए पाठ का उपयोग करेंगी।&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>बाहरी प्रोग्राम में चिपकाते समय मंकी पेस्ट क्लिपबोर्ड (ओवरराइड) सेट करता है। यह बाहरी पेस्ट के बाद क्लिपबोर्ड की स्थिति को पुनर्स्थापित करने का &lt;b&gt;प्रयास&lt;/b&gt; करेगा। 
+
+कुल बहाली की गारंटी नहीं दी जा सकती है और डेटा के स्रोत के आधार पर प्रदर्शन को कम कर सकता है या मंकीपेस्ट को क्रैश भी कर सकता है।</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>निर्दिष्ट एप्लिकेशन के लिए केवल चयनित प्रीसेट का उपयोग किया जाएगा। निर्दिष्ट न होने पर, &lt;em&gt;क्लिपबोर्ड साइडबार&lt;/em&gt; में पाए जाने वाले डिफ़ॉल्ट प्रीसेट का उपयोग किया जाएगा।</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>अस्वीकृत अनुप्रयोगों से सभी क्लिपबोर्ड निगरानी &lt;b&gt;को अनदेखा कर&lt;/b&gt; दिया जाएगा।</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;आंतरिक&lt;/b&gt;सभी शॉर्टकट एप्लिकेशन के भीतर तक सीमित हैं। यह वास्तव में एक इच्छित विकल्प नहीं है, लेकिन यह अनुकूलित करने की अनुमति दे सकता है कि आप&lt;i&gt;किसी दिन&lt;/i&gt; वैश्विक बनाने का इरादा रखते हैं।&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;चूक&lt;/b&gt; सभी वैश्विक शॉर्टकट सक्षम हैं। &lt;b&gt;दिखाएँ/मुख्य विंडो छुपाएँ&lt;/b&gt;शॉर्टकट&lt;b&gt;Caps लॉक&lt;/b&gt; कुंजी के लिए&lt;span color="red"&gt;ओवरराइड&lt;/span&gt;रूटिंग का उपयोग करता है। आप किसी भी समय उस रूटिंग या जेस्चर को बदल सकते हैं। लेकिन&lt;span color="green"&gt;इसे आजमाएं&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;ग्लोबल शॉर्टकट मोड&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;निष्क्रिय&lt;/b&gt; एक शॉर्टकट MonkeyPaste किसी भी एप्लिकेशन में सुनेगा।&lt;br&gt;* यह अभी के लिए लिनक्स पर &lt;i&gt;एकमात्र&lt;/i&gt; विकल्प है।   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;पूर्ववर्ती&lt;/b&gt; शॉर्टकट सक्रिय अनुप्रयोग द्वारा हैंडल किए जाने &lt;b&gt;&lt;i&gt;से पहले&lt;/i&gt;&lt;/b&gt; निष्पादित होगा।&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;के बाद&lt;/b&gt; शॉर्टकट सक्रिय अनुप्रयोग द्वारा हैंडल किए जाने के &lt;b&gt;&lt;i&gt;बाद&lt;/i&gt;&lt;/b&gt; निष्पादित होगा।&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ओवरराइड&lt;/b&gt; जब मंकीपेस्ट ओवरराइड शॉर्टकट की इनपुट कुंजी (गैर - संशोधक कुंजी) सुनता है, तो यह उस कुंजी प्रेस को एप्लिकेशन - स्तर इनपुट से &lt;i&gt;छिपा&lt;/i&gt; देगा।&lt;br&gt;यह विकल्प गारंटी देगा कि शॉर्टकट सक्रिय अनुप्रयोग के विरोध के बिना ट्रिगर किया गया है।   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;विशेष ओवरराइड&lt;/b&gt; यह एक विशेष प्रकार का ओवरराइड मोड है जिसे कैप्स लॉक कुंजी के लिए डिज़ाइन किया गया है। यह अपने असाइनमेंट के लिए केवल &lt;b&gt;एक&lt;/b&gt; कुंजी (गैर - संशोधक) की अनुमति देता है।&lt;br&gt;सामान्य ओवरराइड मोड में अन्य कुंजियों के संयोजन में दबाए जाने पर कैप्स लॉक &lt;i&gt;अटक&lt;/i&gt; सकता है।&lt;br&gt;तो कोई फर्क नहीं पड़ता कि अन्य कुंजियाँ नीचे हैं, यदि &lt;b&gt;हॉटकी&lt;/b&gt; शॉर्टकट दबाया जाता है तो यह ओवरराइड हो जाएगा और इसे &lt;i&gt;अटकने&lt;/i&gt; से रोक देगा।   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;मंकीपेस्ट है &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;इस तरह, मंकीपेस्ट को एक्सेस किया जा सकता है&lt;br&gt;एक &lt;span color="red"&gt;क्लिक के बिना&lt;/span&gt; या यहां तक कि &lt;span color="red"&gt;एक आँख बल्लेबाजी&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>

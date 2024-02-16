@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Айналдыру - ашық</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p Align = «center»&gt; Monkeyptaste - бұл &lt;span color = «Қызыл қызыл&gt; Толық біріктірілген &lt;/ span&gt; сүйреп апарыңыз - және - тамшы &lt;/ p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>ОСЫ ЖОҚ!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p Align = «Center»&gt; Осылайша, MonKeyptaste-ге &lt;/ span colour = «қызыл»&gt; «қызыл»&gt; немесе тіпті &lt;/ span colour = «қызыл»&gt; &amp; # x1f440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Мені сүйреңіз!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Қимылдар бірегей болуы керек және тек бір кіріс кілті болуы керек.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Ішкі &lt;/ b&gt; Барлық сілтемелер қосымшаның ішінде шектелген. Бұл шынымен жоспарланған опция емес, бірақ сіз жаһандық &lt;i&gt; бір кездегі &lt;/ i&gt; жасағыңыз келетінін баптауға мүмкіндік бере аласыз. &lt;/ Li&gt;
-&lt;li&gt;
-&lt;b&gt; Әдепкі &lt;/ b&gt; Барлық жаһандық төте жолдар қосылған. Негізгі терезе &lt;b&gt; Жасыру / Жасыру Негізгі терезені көрсету &lt;/ b&gt; сілтемені &lt;span colour = «Қызыл»&gt; ауыстыру &lt;/ span&gt; rendride &lt;/ span&gt; бағыттау &lt;/ b&gt; пернесі. Сіз бұл бағытты немесе қимылды кез келген уақытта өзгерте аласыз. Бірақ &lt;span color = «жасыл»&gt; Оны көріңіз &lt;/ span&gt;
-&lt;/ li&gt;
-&lt;/ ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;head&gt; &lt;/ head&gt;
-&lt;Дене&gt;
-&lt;H1&gt; Жаһандық төтедік режимдер &lt;/ h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; Пассивті &lt;/ b&gt; Төте жол MonkeyPtaste кез келген қолданбада тыңдайды. &lt;br&gt;
-* Бұл &lt;i&gt; тек &lt;i&gt; &lt;/ i&gt; опциясы.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; Алдын-ала &lt;/ b&gt; тіркесім &lt;b&gt; &lt;i&gt; &lt;/ i&gt; &lt;/ i&gt; &lt;/ i&gt; &lt;/ b&gt; белсенді қосымшамен өңделеді. &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/ b&gt; Төте жол &lt;b&gt; &lt;i&gt; &lt;/ i&gt; &lt;/ i&gt; over-ден кейін белсенді қосымшамен өңделеді. &lt;/ li&gt;
-&lt;li&gt;
-&lt;/ b-ді ауыстыру &lt;/ b&gt; Монкофониядан кейін қайта анықталған пернені естіледі.
-Бұл опция белсенді қосымшаның қайшылықтарынсыз іске қосылатынына кепілдік береді.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; Эксклюзивті қайта анықтау &lt;/ b&gt; Бұл Caps Lock пернесіне арналған қайта анықталған режимнің арнайы түрі. Ол тек &lt;b&gt; бір &lt;/ b&gt; пернесін (өзгертпелі емес) береді.
-Қалыпты ауыстыру режимінде Caps құлпы &lt;i&gt; &lt;/ i&gt; басқа түймелермен бірге басылған кезде &lt;/ i&gt; бола алады. &lt;br&gt;
-Егер басқа пернелердің қайсысы болмасын, егер &lt;b&gt; HotKey &lt;/ b&gt; тіркесімі басылса, ол ауыстырылып, оны ауыстырады және оның &lt;i&gt; &lt;/ i&gt; болмауы керек.
-&lt;/ li&gt;
-&lt;/ ul&gt;
-&lt;/ дене&gt;
-&lt;/ html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Ажырату</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Бұл тіркелгі басқа пайдаланушылар үшін емес, осы пайдаланушы тіркелгісі кірген кезде жүктеңіз.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; Қол жетімді контактілерді пайдалану (FECTUREL плагині қажет) Бұл өріс осы құжаттың барлық даналары үшін осы құжаттың барлық даналары үшін пайдаланылады немесе кез-келген жағдайда ол кейінірек сілтеме жасалады. &lt;/ p&gt; &lt;p&gt; Егер электрондық пошта мекенжайы таңдаңыз Мұнда сіз таңдаған контактінің электрондық поштасы осы құжаттағы барлық даналар үшін пайдаланылады. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = Қысқа жыл &lt;br/&gt; YYYY = жыл! . Апта күні (Дүйсенбі, сейсенбі ... жексенбі) &lt;br/&gt; e = Аптаның қысқа күні. 3, 21, 22N, 23, 31, 44, 4-ші ...) &lt;br/&gt; h = сағат (0-12) сағат (0-12) &lt;br/&gt; hh = сағ / сағат (00-12) &lt;br / &gt; H = тәулігіне (0-23), күніне сағат (0-23) &lt;br/&gt; MM = MOOLT = MOOLD &lt;br/&gt; SS = секундтық &lt;br/&gt; sss = sss = milliseconds &lt;br/&gt; A = AM / PM белгісі &lt;br/&gt; p = a.m./p.m. саудахана</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Ағымдағы күн және / немесе уақыт олар қойылған кезде DateTime шаблондары үшін ауыстырылады.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Осы шаблонның барлық орын алуы берілген мәтінді пайдаланады. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Осы шаблонның барлық орын алуы берілген мәтінді пайдаланады. &lt;/ p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Қосылуды аяқтаңыз</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Соңғы белсенді бағдарлама белгісіз. Маймыл пастасына арналған қосымшаға ауысыңыз.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Қою: &lt;em&gt; &lt;i сынып = «Паста-құралдар Тапсырысының жұрнағы»&gt; {0} &lt;/ i&gt; &lt;/ em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Кішірейту</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Ештеме</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Көрсетілген бағдарламада тек таңдалған алдын-ала орнатылады. Белгіленбеген кезде, әдепкі алдын-ала орнатылған принциптер &lt;em&gt; айырбастың буфера бүйірлік тақтасында &lt;/ em&gt; пайдаланылады.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Көптеген MonKeyptaste мүмкіндіктері басқа қосымшалармен өзара әрекеттесу үшін пернетақтаны автоматтандыруды пайдаланады.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>Оқырмандар</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Қабылданбаған қосымшалардан аралық сақтағыштың барлық бақылауы &lt;b&gt; еленбейді &lt;/ b&gt; болады.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Жазушылар</value>
@@ -1331,11 +1268,6 @@
     <value>Барлық хабарландыруларды қалпына келтіргіңіз келе ме?
 
 * Мұны болдырмауға болмайды!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Маймыл пастасы аралық сақтағышты сыртқы бағдарламаға қойған кезде орнатады (асырады). Бұл &lt;b&gt; әрекеті &lt;/ b&gt; Аралық сақтағыштың күйін сыртқы пастадан кейін қалпына келтіру үшін болады.
-
-Жалпы қалпына келтіруге кепілдік берілмейді және деректердің қайнар көзіне байланысты өнімділікті немесе тіпті маймылдарды азайтуы мүмкін.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Маймылдың жанып тұрғаннан кейін аралық сақтағышты қалпына келтіріңіз</value>
@@ -2706,5 +2638,66 @@ feedback@monkeyptaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Жоспарлар туралы көбірек біліңіз</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Қою: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;Қол жетімді контактілерді пайдалану (fetcher плагинін қажет етеді) бұл өріс осы құжаттағы үлгінің барлық нұсқалары үшін қолданылады немесе кейінірек сілтеме жасалатын болады.&lt;/p&gt;&lt;p&gt; Мысалы, осында электрондық пошта мекенжайын таңдасаңыз, таңдалған контактінің электрондық пошта өрісі осы құжаттағы барлық нұсқалар үшін пайдаланылады.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = қысқа жыл&lt;br/&gt;Yyyy = long year&lt;br/&gt;M = ай (1-12)&lt;br/&gt;MM = ай (01-12)&lt;br/&gt;MMM = ай қысқартуы (ян, ақпан ... Dec)&lt;br/&gt;MMMM = ұзақ ай (қаңтар, ақпан ... Желтоқсан)&lt;br/&gt;d = күн (1 – 31)&lt;br/&gt;dd = күн (01 - 31)&lt;br/&gt;dd = аптаның күні сөз түрінде (дүйсенбі, сейсенбі ... Жексенбі)&lt;br/&gt;Е = аптаның қысқа күні сөзбен (Мон, Туэ ... Күн)&lt;br/&gt;Д – Ординал күні (1-ші, 2-ші, 3-ші, 21-ші, 22-ші, 23-ші, 31-ші, 4-ші...)&lt;br/&gt;h = сағат ам/пм (0-12)&lt;br/&gt;hh = сағат ам/пм (00-12)&lt;br/&gt;Н = күндізгі сағат (0-23)&lt;br/&gt;HH = күндізгі сағат (00-23)&lt;br/&gt;mm = минут&lt;br/&gt;ss = екінші&lt;br/&gt;ССС = миллисекунд&lt;br/&gt;a = AM/PM маркері&lt;br/&gt;p = a.m./p.m. маркері</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;Бұл үлгінің барлық пайда болуы берілген мәтінді пайдаланады.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;Бұл үлгінің барлық пайда болуы берілген мәтінді пайдаланады.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Маймыл пастасы сыртқы бағдарламаға қою кезінде алмасу буферін (асыра сілтеу) орнатады. Бұл сыртқы пастадан кейін алмасу буферінің күйін қалпына келтіруге &lt;b&gt;әрекет&lt;/b&gt; жасайды. 
+
+Жалпы қалпына келтіруге кепілдік берілмеуі мүмкін және деректер көзіне байланысты өнімділікті төмендетуі немесе тіпті MonkeyPaste апатқа ұшырауы мүмкін.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Көрсетілген қолданба үшін таңдалған алдын ала жиындар ғана пайдаланылады. Анықталмаған кезде &lt;em&gt;аралық сақтағыш бүйір&lt;/em&gt; тақтасында табылған әдепкі алдын ала жиындар пайдаланылады.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Қабылданбаған бағдарламалардан алмасу буферінің барлық мониторингтері &lt;b&gt;назардан тыс қалмайды&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Ішкі&lt;/b&gt;Барлық пернелер тіркесімдері өтінім шегінде шектеледі. Бұл шын мәнінде болжанған параметр емес, ғаламдық пернелер тіркесімін бір&lt;i&gt;күнде&lt;/i&gt; жасауға ниетті пернелер тіркесімін реттеуге мүмкіндік береді.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Әдетті&lt;/b&gt; Барлық ғаламдық пернелер тіркесімдері қосылған. Негізгі&lt;b&gt;терезені көрсету/жасыру&lt;/b&gt;пернелер тіркесімі&lt;b&gt;Caps Lock&lt;/b&gt; пернесін&lt;span color="red"&gt;қайта бағыттауды&lt;/span&gt;пайдаланады. Сол бағыттауды немесе қимылды кез келген уақытта өзгертуге болады. Бірақ&lt;span color="green"&gt;оны сынап көріңіз&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Глобалдық пернелер тіркесімінің режимдері&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Пассив&lt;/b&gt; Пернелер тіркесімі MonkeyPaste кез келген қолданбада тыңдайды.&lt;br&gt;*Бұл қазір Linux-тағы &lt;i&gt;жалғыз&lt;/i&gt; нұсқа.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Алдын ала&lt;/b&gt; Пернелер тіркесімі белсенді қолданбамен &lt;b&gt;&lt;i&gt;өңделгенге дейін&lt;/i&gt;&lt;/b&gt; орындалады.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Пернелер тіркесімі белсенді қолданбамен &lt;b&gt;&lt;i&gt;өңделгеннен кейін&lt;/i&gt;&lt;/b&gt; орындалады.&lt;/li&gt;
+   &lt;li&gt;
+    Асыра &lt;b&gt;сілтеу&lt;/b&gt; MonkeyPaste үстеме пернелер тіркесімінің енгізу кілтін (түрлендіргіш пернесі) естігенде, ол пернелер тіркесімін қолданбадан &lt;i&gt;жасырады&lt;/i&gt; - деңгейді енгізу.&lt;br&gt;Бұл параметр белсенді қолданбаға қайшылықсыз пернелер тіркесімінің іске қосылуына кепілдік береді.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Эксклюзивті асыра сілтеу&lt;/b&gt; Бұл Caps Lock пернесі үшін арналған асыра сілтеу режимінің ерекше түрі. Ол тек &lt;b&gt;бір&lt;/b&gt; кілтке (модификаторға емес) оны тағайындауға мүмкіндік береді.&lt;br&gt;Қалыпты артық режимде Caps Lock басқа пернелермен үйлесімде басқанда &lt;i&gt;тұрып қалуы&lt;/i&gt; мүмкін.&lt;br&gt;Осылайша, қандай басқа пернелер төмен түссе де, егер &lt;b&gt;Hotkey&lt;/b&gt; пернелер тіркесімі басылса, ол артық болады және оның &lt;i&gt;тұрып қалуына&lt;/i&gt; жол бермейді.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Маймыл Пасте &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;Осылайша, MonkeyPaste-ке кіруге болады&lt;br&gt;&lt;span color="red"&gt;басусыз&lt;/span&gt; немесе тіпті &lt;span color="red"&gt;көзді батусыз&lt;/span&gt; #x1F440&lt;/p&gt;</value>
   </data>
 </root>

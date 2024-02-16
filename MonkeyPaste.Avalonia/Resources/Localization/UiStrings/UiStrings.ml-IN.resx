@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>സ്ക്രോൾ - to - തുറക്കുക</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p alnign = "സെന്റർ"&gt; മങ്കിപെസ്റ്റ് &lt;സ്പാൻ കളർ = "റെഡ്&gt; പൂർണ്ണമായും സംയോജിത &lt;/ സ്പാൻ&gt; ഡ്രാഗ് ഉപയോഗിച്ച് - ഡ്രോപ്പ് &lt;/ p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>അത് ഇവിടെ ഉപേക്ഷിക്കുക!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p alyn = "സെന്റർ"&gt; ഈ രീതിയിൽ, ഒരു ക്ലിക്ക് / സ്പാൻ കളർ = "റെഡ്"&gt; ഒരു ക്ലിക്ക് കൂടാതെ &lt;/ സ്പാൻ&gt; "" റെഡ് "&gt; ബാറ്റിംഗ് &lt;/ span&gt; &amp; # x1f440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>എന്നെ വലിച്ചിടുക!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>ആംഗ്യങ്ങൾ അദ്വിതീയമായിരിക്കണം കൂടാതെ ഒരു ഇൻപുട്ട് കീ മാത്രമേ അടങ്ങിയിട്ടുള്ളൂ.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; ആന്തരിക &lt;/ b&gt; എല്ലാ കുറുക്കുവഴികളും അപ്ലിക്കേഷനിൽ പരിമിതപ്പെടുത്തിയിരിക്കുന്നു. ഇത് ശരിക്കും ഉദ്ദേശിച്ച ഒരു ഓപ്ഷനല്ല, എന്നാൽ ആഗോള &lt;i&gt; ഒരു ദിവസം &lt;/ i&gt; നിർമ്മിക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്ന കുറുക്കുവഴികൾ ഇഷ്ടാനുസൃതമാക്കാൻ അനുവദിക്കുന്നതും ഇത് അനുവദിക്കാൻ അനുവദിക്കുന്നു. &lt;/ Li&gt;
-&lt;li&gt;
-&lt;b&gt; സ്ഥിരസ്ഥിതി &lt;/ b&gt; എല്ലാ ആഗോള കുറുക്കുവഴികളും പ്രവർത്തനക്ഷമമാക്കി. &lt;B&gt; പ്രധാന വിൻഡോ കാണിക്കുക / മറയ്ക്കുക &lt;/ b&gt; ഷോർട്ട്കട്ട് &lt;സ്പാൻ കളർ = "ചുവപ്പ്"&gt; അസാധുവാക്കുക &lt;/ span capt&gt; റൂട്ടിംഗ് &lt;/ b&gt; കീയ്ക്കായി &lt;/ span&gt; റൂട്ടിംഗ് &lt;/ b&gt; കീ. നിങ്ങൾക്ക് എപ്പോൾ വേണമെങ്കിലും ആ റൂട്ട് അല്ലെങ്കിൽ ആംഗ്യം മാറ്റാൻ കഴിയും. പക്ഷേ &lt;span നിറം = "പച്ച"&gt; ഇത് ഒരു ശ്രമം &lt;/ span&gt; നൽകുക
-&lt;/ li&gt;
-&lt;/ UL&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;HTML&gt;
-&lt;hade&gt; &lt;/ head&gt;
-&lt;ശരീരം&gt;
-&lt;h1&gt; ആഗോള കുറുക്കുവഴി മോഡുകൾ &lt;/ h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; നിഷ്ക്രിയ &lt;/ b&gt; ഒരു കുറുക്കുവഴി മങ്കിപാസ്റ്റ് ഏത് അപ്ലിക്കേഷനും കേൾക്കും. &lt;br&gt;
-* ഇത് ഇപ്പോൾ ലിനക്സിൽ &lt;i&gt; മാത്രം &lt;/ i&gt; ഓപ്ഷനാണ്.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; പ്രീ &lt;/ b&gt; കുറുക്കുവഴി &lt;/ i&gt; &lt;/ b&gt; ഇത് നിയന്ത്രിക്കും &lt;/ i&gt; / b&gt; ഇത് കൈകാര്യം ചെയ്യും. &lt;/ Li&gt;
-&lt;li&gt;
-&lt;b&gt; പോസ്റ്റ് &lt;/ b&gt; &lt;/ i&gt; &lt;/ b&gt; ന് ശേഷം &lt;b&gt; &lt;i&gt; ന് ശേഷം ഇത് നടപ്പിലാക്കും. &lt;/ Li&gt;
-&lt;li&gt;
-&lt;b&gt; അസാധുവാക്കുക &lt;/ b&gt; ഒരു ഓവർറൈഡ് കുറുക്കുവഴിയുടെ ഇൻപുട്ട് കീ (മോഡിഫയർ കീ) കേൾക്കുമ്പോൾ &lt;i&gt; i&gt; മറയ്ക്കാൻ &lt;i മറയ്ക്കുക - ലെവൽ ഇൻപുട്ടിൽ നിന്ന് ആ കീ അമർത്തുക. &lt;br&gt;
-സജീവ ആപ്ലിക്കേഷനുമായി പൊരുത്തക്കേടുകളില്ലാതെ കുറുക്കുവഴി പ്രവർത്തനക്ഷമമാക്കുമെന്ന് ഈ ഓപ്ഷൻ ഉറപ്പ് നൽകും.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; എക്സ്ക്ലൂസീവ് ഓവർറൈഡ് &lt;/ b&gt; ക്യാപ്സ് ലോക്ക് കീയ്ക്കായി രൂപകൽപ്പന ചെയ്ത ഒരു പ്രത്യേക തരം അസാധുവാക്കൽ മോഡിലാണ് ഇത്. ഇത് അതിന്റെ നിയമനത്തിനായി &lt;b&gt; ഒന്ന് &lt;/ b&gt; കീ (-മോഡിഫയർ) അനുവദിക്കുന്നു. &lt;br&gt;
-സാധാരണ ഓവർറൈഡ് മോഡ് ക്യാപ്സ് ലോക്ക് മറ്റ് കീകൾ ഉപയോഗിച്ച് സംയോജിപ്പിക്കുമ്പോൾ &lt;/ i&gt; ൽ അമർത്താൻ &lt;/ i&gt; ൽ ആകാം. &lt;br&gt;
-അതിനാൽ മറ്റ് താക്കോലുകൾ കുറച്ചാലും, ഒരു &lt;b&gt; ഹോട്ട്കീ &lt;/ b&gt; കുറുക്കുവഴി അമർത്തിയാൽ അത് അസാധുവാക്കുകയും അത് &lt;i&gt; സ്റ്റക്ക് ചെയ്യുകയും ചെയ്യും.
-&lt;/ li&gt;
-&lt;/ UL&gt;
-&lt;/ BOY&gt;
-&lt;/ HTML&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>പ്രവർത്തനരഹിതമാക്കുക</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>മറ്റ് ഉപയോക്താക്കൾക്ക് വേണ്ടിയല്ല ഈ ഉപയോക്തൃ അക്കൗണ്ട് ലോഗിൻ ചെയ്യുമ്പോൾ ലോഡുചെയ്യുക.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; ലഭ്യമായ കോൺടാക്റ്റുകൾ ഉപയോഗിക്കുന്നു (ഒരു ലഭ്യത പ്ലഗിൻ ആവശ്യമാണ്) ഈ ഫീൽഡ് ഈ പ്രമാണത്തിലുടനീളമുള്ള ഈ ടെംപ്ലേറ്റിനായി ഉപയോഗിക്കും. &lt;/ p&gt; &lt;p&gt; ഉദാഹരണത്തിന് ഇമെയിൽ വിലാസം തിരഞ്ഞെടുക്കുക ഇവിടെ നിങ്ങൾ തിരഞ്ഞെടുത്ത കോൺടാക്റ്റിന്റെ ഇമെയിൽ ഫീൽഡ് ഈ പ്രമാണത്തിലെ എല്ലാ ഉദാഹരണങ്ങൾക്കും ഉപയോഗിക്കും. &lt;/ P&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>YY = ഹ്രസ്വ വർഷം &lt;br/YY = ദൈർഘ്യമുള്ള വർഷം (1-12) &lt;br/&gt; മില്ലീമീറ്റർ (01-12) &lt;br/&gt; മിഎംഎം = മാസ ചുരുക്കെഴുത്ത് (ജനുവരി, ഫെബ്രുവരി .. . Dex) &lt;br/&gt; Mmmm = ദൈർഘ്യമേറിയ മാസം (ജനുവരി, ഫെബ്രുവരി ... ദിവസം) &lt;br/&gt; D = ദിവസം (1 - 31) ദിവസം (01 - 31) &lt;br/&gt; DDD = വാക്കുകളിൽ ആഴ്ചയിലെ ദിവസം (തിങ്കൾ, ചൊവ്വാഴ്ച ... ഞായർ) &lt;br/&gt; ഇ = ആഴ്ചയിലെ ആഴ്ചയിലെ ആഴ്ചയിലെ ഹ്രസ്വ ദിവസം) &lt;br/&gt; ഡി - ഓർഡിനൽ ദിവസം (1st, 2nd, 3RD, 21, 21, 22 &gt; H = ദിവസം (0-23) &lt;br/&gt; HH = ദിവസം (00-23) &lt;br/&gt; MM = നിമിഷം &lt;br/&gt; SS = സെക്കൻഡ് &lt;br/&gt; SSS = മില്ലിസെക്കൻഡുകൾ &lt;br/&gt; a = am / pm മാർക്കർ &lt;br/&gt; p = A.M./P.M. മാർക്കർ</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>നിലവിലെ തീയതിയും കൂടാതെ / അല്ലെങ്കിൽ സമയവും ഡേറ്റ്ടൈം ടെംപ്ലേറ്റുകൾക്ക് പകരമായി സജ്ജമാക്കും.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; ഈ ടെംപ്ലേറ്റിന്റെ എല്ലാ സംഭവങ്ങളും നൽകിയ വാചകം ഉപയോഗിക്കും. &lt;/ P&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; ഈ ടെംപ്ലേറ്റിന്റെ എല്ലാ സംഭവങ്ങളും നൽകിയ വാചകം ഉപയോഗിക്കും. &lt;/ P&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>മികച്ചത് പൂർത്തിയാക്കുക</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>അവസാന സജീവ അപ്ലിക്കേഷൻ അജ്ഞാതമാണ്. മങ്കി പേസ്റ്റിലേക്ക് ഉദ്ദേശിച്ച അപ്ലിക്കേഷനിലേക്ക് മാറുക.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ഒട്ടിക്കുക: &lt;em&gt; &lt;i trass = "ഒട്ടിക്കുക-ടൂൾടിപ്പ്-സഫിക്സ്"&gt; {0} &lt;/ i&gt; &lt;/ em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>ചെറുതാക്കുക</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>ഒന്നുമല്ലാത്തത്</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>നിർദ്ദിഷ്ട അപ്ലിക്കേഷനായി തിരഞ്ഞെടുത്ത പ്രീസെറ്റുകൾ മാത്രമേ ഉപയോഗിക്കൂ. വ്യക്തമാകുമ്പോൾ, &lt;em&gt; &gt;&gt; ക്ലിപ്പ്ബോർഡ് സൈഡ്ബാറിൽ &lt;/ em&gt; ൽ കണ്ടെത്തിയ സ്ഥിരസ്ഥിതി പ്രെസെറ്റുകൾ ഉപയോഗിക്കും.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>മറ്റ് ആപ്ലിക്കേഷനുകളുമായി സംവദിക്കാൻ നിരവധി മങ്കിപേസ്റ്റർ സവിശേഷതകൾ കീബോർഡ് ഓട്ടോമേഷൻ ഉപയോഗിക്കുന്നു.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>വായനക്കാരും</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>നിരസിച്ച ആപ്ലിക്കേഷനുകളിൽ നിന്നുള്ള എല്ലാ ക്ലിപ്പ്ബോർഡ് മോണിറ്ററിംഗും &lt;b&gt; അവഗണിച്ചു &lt;/ b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>എഴുത്തുകാർ</value>
@@ -1331,11 +1268,6 @@
     <value>എല്ലാ അറിയിപ്പുകളും പുന reset സജ്ജമാക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?
 
 *ഇത് പഴയപടിയാക്കാൻ കഴിയില്ല!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>ഒരു ബാഹ്യ പ്രോഗ്രാമിലേക്ക് ഒട്ടിക്കുമ്പോൾ കുരങ്ങൻ പേസ്റ്റ് ക്ലിപ്പ്ബോർഡ് (അസാധുവാക്കുന്നു) സജ്ജമാക്കുന്നു. ഒരു ബാഹ്യ പേസ്റ്റിനുശേഷം ക്ലിപ്പ്ബോർഡിന്റെ അവസ്ഥ പുന restore സ്ഥാപിക്കാൻ ഇത് &lt;b&gt; ശ്രമം &lt;/ b&gt; പുന restore സ്ഥാപിക്കാൻ ചെയ്യും.
-
-ആകെ പുന oration സ്ഥാപനം ഉറപ്പുനൽകാൻ കഴിയില്ല, കൂടാതെ ഡാറ്റയുടെ ഉറവിടത്തെ ആശ്രയിച്ച് പ്രകടനം കുറയ്ക്കുക അല്ലെങ്കിൽ ക്രാഷ് ചെയ്യുക.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>കുരങ്ങൻ കഴിഞ്ഞ് ക്ലിപ്പ്ബോർഡ് പുന reset സജ്ജമാക്കുക</value>
@@ -2706,5 +2638,66 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>പദ്ധതികളെക്കുറിച്ച് കൂടുതലറിയുക</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>പേസ്റ്റ് : &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;ലഭ്യമായ കോൺടാക്റ്റുകൾ ഉപയോഗിച്ച് (ഒരു ഫെറ്റർ പ്ലഗിൻ ആവശ്യമാണ്) ഈ ഡോക്യുമെന്റിലുടനീളം ഈ ടെംപ്ലേറ്റിന്റെ എല്ലാ സന്ദർഭങ്ങൾക്കും ഈ ഫീൽഡ് ഉപയോഗിക്കും അല്ലെങ്കിൽ ഏതെങ്കിലും ഒന്നിൽ ഇത് പിന്നീട് പരാമർശിക്കപ്പെടും.&lt;/p&gt;&lt;p&gt; ഉദാഹരണത്തിന് ഇവിടെ ഇമെയിൽ വിലാസം തിരഞ്ഞെടുക്കുകയാണെങ്കിൽ, നിങ്ങൾ തിരഞ്ഞെടുക്കുന്ന കോൺടാക്റ്റിന്റെ ഇമെയിൽ ഫീൽഡ് ഈ ഡോക്യുമെന്റിലെ എല്ലാ സന്ദർഭങ്ങൾക്കും ഉപയോഗിക്കും.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = ഹ്രസ്വ വർഷം&lt;br/&gt;yyyy = നീണ്ട വർഷം&lt;br/&gt;M = മാസം (1-12)&lt;br/&gt;MM = മാസം (01-12)&lt;br/&gt;MMM = മാസത്തിന്റെ ചുരുക്കെഴുത്ത് (ജനുവരി, ഫെബ്രുവരി ... ഡിസംബര് )&lt;br/&gt;MMMM = നീണ്ട മാസം (ജനുവരി, ഫെബ്രുവരി ... ഡിസംബര് )&lt;br/&gt;d = ദിവസം (1 - 31)&lt;br/&gt;dd = ദിവസം (01 - 31)&lt;br/&gt;ddd = വാക്കുകളിൽ ആഴ്ചയിലെ ദിവസം (തിങ്കൾ, ചൊവ്വാഴ്ച ... ഞായറാഴ്ച)&lt;br/&gt;E = വാക്കുകളിൽ ആഴ്ചയിലെ ഹ്രസ്വ ദിവസം (മോൺ, ചൊവ്വ ... സൂര്യൻ)&lt;br/&gt;D - ഓർഡിനൽ ദിവസം (1st, 2, 3rd, 21st, 22, 23, 31st, 4th...)&lt;br/&gt;h = am/pm (0-12)&lt;br/&gt;hh = am/pm -ൽ മണിക്കൂർ (00-12)&lt;br/&gt;H = ദിവസത്തിൽ മണിക്കൂർ (0-23)&lt;br/&gt;HH = ദിവസത്തിൽ മണിക്കൂർ (00-23)&lt;br/&gt;mm = മിനിറ്റ്&lt;br/&gt;ss = second&lt;br/&gt;SSS = milliseconds&lt;br/&gt;a = AM/PM മാർക്കർ&lt;br/&gt;p = a.m./p.m. മാർക്കർ</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;ഈ ടെംപ്ലേറ്റിന്റെ എല്ലാ സംഭവങ്ങളും നൽകിയ വാചകം ഉപയോഗിക്കും.&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;ഈ ടെംപ്ലേറ്റിന്റെ എല്ലാ സംഭവങ്ങളും നൽകിയ വാചകം ഉപയോഗിക്കും.&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>ഒരു ബാഹ്യ പ്രോഗ്രാമിലേക്ക് ഒട്ടിക്കുമ്പോൾ മങ്കി പേസ്റ്റ് ക്ലിപ്പ്ബോർഡ് (ഓവർറൈഡുകൾ) സജ്ജീകരിക്കുന്നു. ബാഹ്യ പേസ്റ്റിന് ശേഷം ക്ലിപ്പ്ബോർഡിന്റെ അവസ്ഥ പുനഃസ്ഥാപിക്കാൻ ഇത് &lt;b&gt;ശ്രമിക്കും&lt;/b&gt; . 
+
+മൊത്തത്തിലുള്ള പുനരുദ്ധാരണം ഉറപ്പുനൽകാൻ കഴിയില്ല, ഡാറ്റയുടെ ഉറവിടത്തെ ആശ്രയിച്ച് പ്രകടനം കുറയ്ക്കുകയോ മങ്കിപാസ്റ്റ് ക്രാഷ് ചെയ്യുകയോ ചെയ്യാം.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>നിർദ്ദിഷ്ട ആപ്ലിക്കേഷനായി തിരഞ്ഞെടുത്ത പ്രീസെറ്റുകൾ മാത്രമേ ഉപയോഗിക്കൂ. വ്യക്തമാക്കാത്തപ്പോൾ, &lt;em&gt;ക്ലിപ്ബോർഡ് സൈഡ്ബാറിൽ&lt;/em&gt; കാണപ്പെടുന്ന ഡിഫോൾട്ട് പ്രീസെറ്റുകൾ ഉപയോഗിക്കും.</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>നിരസിച്ച അപേക്ഷകളിൽ നിന്നുള്ള എല്ലാ ക്ലിപ്പ്ബോർഡ് നിരീക്ഷണവും &lt;b&gt;അവഗണിക്കപ്പെടും&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;ആന്തരികം&lt;/b&gt;എല്ലാ കുറുക്കുവഴികളും ആപ്ലിക്കേഷനിൽ മാത്രമായി പരിമിതപ്പെടുത്തിയിരിക്കുന്നു. ഇത് ശരിക്കും ഉദ്ദേശിച്ച ഓപ്ഷനല്ല, പക്ഷേ ഒരു&lt;i&gt;ദിവസം&lt;/i&gt; നിങ്ങൾ ആഗോളമാക്കാൻ ഉദ്ദേശിക്കുന്ന കുറുക്കുവഴികൾ ഇഷ്ടാനുസൃതമാക്കാൻ അനുവദിക്കും.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Default&lt;/b&gt; എല്ലാ ആഗോള കുറുക്കുവഴികളും പ്രാപ്തമാക്കിയിട്ടുണ്ട്. &lt;b&gt;ഷോ / ഹൈഡ് മെയിൻ വിൻഡോ&lt;/b&gt;കുറുക്കുവഴി&lt;b&gt;ക്യാപ്സ് ലോക്ക്&lt;/b&gt; കീയ്ക്കായി&lt;span color="red"&gt;ഓവർറൈഡ്&lt;/span&gt;റൂട്ടിംഗ് ഉപയോഗിക്കുന്നു. ഏത് സമയത്തും നിങ്ങൾക്ക് ആ റൂട്ടിംഗോ ആംഗ്യമോ മാറ്റാൻ കഴിയും. പക്ഷേ&lt;span color="green"&gt;ഒന്ന് ശ്രമിച്ചു നോക്കൂ&lt;/span&gt;.
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;ആഗോള കുറുക്കുവഴി മോഡുകൾ&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passive&lt;/b&gt; ഒരു കുറുക്കുവഴി മങ്കിപാസ്റ്റ് ഏത് ആപ്ലിക്കേഷനിലും കേൾക്കും.&lt;br&gt;* ഇത് ഇപ്പോൾ ലിനക്സിലെ &lt;i&gt;ഒരേയൊരു&lt;/i&gt; ഓപ്ഷനാണ്.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;പ്രീ&lt;/b&gt; സജീവ ആപ്ലിക്കേഷൻ കൈകാര്യം ചെയ്യുന്നതിന് &lt;b&gt;&lt;i&gt;മുമ്പ്&lt;/i&gt;&lt;/b&gt; കുറുക്കുവഴി നടപ്പിലാക്കും.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;പോസ്റ്റ്&lt;/b&gt; സജീവ ആപ്ലിക്കേഷൻ കൈകാര്യം ചെയ്ത &lt;b&gt;&lt;i&gt;ശേഷം&lt;/i&gt;&lt;/b&gt; കുറുക്കുവഴി നടപ്പാക്കും.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;മറികടക്കുക&lt;/b&gt; ഒരു ഓവർസൈഡ് കുറുക്കുവഴിയുടെ ഇൻപുട്ട് കീ (നോൺ-മോഡിഫൈയർ കീ) മങ്കിപാസ്റ്റ് കേൾക്കുമ്പോൾ അത് ആപ്ലിക്കേഷൻ ലെവൽ ഇൻപുട്ടിൽ നിന്ന് ആ കീ പ്രസ് &lt;i&gt;മറയ്ക്കും&lt;/i&gt; .&lt;br&gt;സജീവ ആപ്ലിക്കേഷനിലേക്ക് വൈരുദ്ധ്യങ്ങളില്ലാതെ കുറുക്കുവഴി ആരംഭിക്കുമെന്ന് ഈ ഓപ്ഷൻ ഉറപ്പുനൽകും.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Exclusive Override&lt;/b&gt; ക്യാപ്സ് ലോക്ക് കീയ്ക്കായി രൂപകൽപ്പന ചെയ്ത ഒരു പ്രത്യേക തരം ഓവർറൈഡ് മോഡാണിത്. അതിന്റെ നിയമനത്തിനായി &lt;b&gt;ഒരു&lt;/b&gt; കീ (നോൺ-മോഡിഫയർ) മാത്രമേ ഇത് അനുവദിക്കുന്നുള്ളൂ.&lt;br&gt;സാധാരണ ഓവർറൈഡ് മോഡിൽ മറ്റ് കീകളുമായി സംയോജിപ്പിച്ച് അമർത്തുമ്പോൾ ക്യാപ്സ് ലോക്ക് &lt;i&gt;കുടുങ്ങാൻ&lt;/i&gt; കഴിയും.&lt;br&gt;അതിനാൽ മറ്റ് താക്കോലുകൾ എന്തൊക്കെയാണെങ്കിലും, ഒരു &lt;b&gt;ഹോട്ട്കി&lt;/b&gt; കുറുക്കുവഴി അമർത്തിയാൽ അത് മറികടക്കുകയും അത് &lt;i&gt;കുടുങ്ങുന്നത്&lt;/i&gt; തടയുകയും ചെയ്യും.   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste ആണ് &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;ഈ രീതിയിൽ, മങ്കിപാസ്റ്റ് ആക്സസ് ചെയ്യാൻ കഴിയും&lt;br&gt;&lt;span color="red"&gt;ഒരു ക്ലിക്ക് പോലും ഇല്ലാതെ&lt;/span&gt; അല്ലെങ്കിൽ &lt;span color="red"&gt;ഒരു കണ്ണ് പോലും&lt;/span&gt; #x1F440&lt;/p&gt;</value>
   </data>
 </root>

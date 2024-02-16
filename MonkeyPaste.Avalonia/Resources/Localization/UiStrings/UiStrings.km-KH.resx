@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>រមូរ - ដើម្បី - បើក</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p តម្រឹម = "មជ្ឈមណ្ឌល"&gt; MonkeypeyS. &lt;span ពណ៌ = "ក្រហម&gt; រួមបញ្ចូលពេញលេញ &lt;/ span&gt; ជាមួយអូស - និង - ទម្លាក់ &lt;/ p&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>ទម្លាក់វានៅទីនេះ!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p តម្រឹម = "មជ្ឈមណ្ឌល"&gt; វិធីនេះ monkeysysypouse អាចចូលបាន &lt;br&gt; ពណ៌ខ្លី = "ក្រហម"&gt; ដោយគ្មានការចុច &lt;/ span &lt;sprorm ពណ៌ = # x1f440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>អូសខ្ញុំ!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>កាយវិការត្រូវតែមានតែមួយគត់ហើយអាចមានកូនសោបញ្ចូលតែមួយប៉ុណ្ណោះ។</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; ផ្លូវកាត់ផ្ទៃក្នុងទាំងអស់ត្រូវបានកំណត់ក្នុងកម្មវិធី។ នេះមិនមែនជាជំរើសដែលបានគ្រោងទុកទេប៉ុន្តែអាចអនុញ្ញាតឱ្យប្តូរតាមបំណងតើអ្នកមានបំណងធ្វើឱ្យសកលលោក &lt;i&gt; នៅថ្ងៃណាមួយ &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; ផ្លូវកាត់សកលទាំងអស់ត្រូវបានបើក។ ប៊ូតុង &lt;b&gt; បង្ហាញ / លាក់បង្អួចធំ &lt;/ b&gt; ប្រើ &lt;Span Color = "Red"&gt; បដិសេធ &lt;/ spand &lt;/ span&gt; បញ្ជូនសម្រាប់គ្រាប់ចុច &lt;b&gt; កូនសោ Lock Key ។ អ្នកអាចផ្លាស់ប្តូរការធ្វើដំណើរនោះឬកាយវិការនៅពេលណាមួយ។ ប៉ុន្តែ &lt;SPAN Color = "បៃតង" ផ្តល់ឱ្យវាសាកល្បង &lt;/ span&gt;
-&lt;/ li&gt;
-&lt;/ ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;HTML&gt;
-&lt;ក្បាល&gt; &lt;/ stest&gt;
-&lt;រាងកាយ&gt;
-&lt;h1&gt; របៀបផ្លូវកាត់សកល &lt;/ h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; អកម្ម &lt;/ b&gt; សត្វចម្លែកផ្លូវកាត់នឹងស្តាប់ក្នុងកម្មវិធីណាមួយ។ &lt;br&gt;
-* នេះគឺជាជំរើស &lt;i&gt; តែលើលីនុចសម្រាប់ពេលនេះ។
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; ផ្លូវកាត់ &lt;/ b&gt; នឹងប្រតិបត្តិ &lt;b&gt; &lt;1&gt; &lt;/ b&gt; មុន &lt;/ i&gt; &lt;/ b&gt; វាត្រូវបានគ្រប់គ្រងដោយពាក្យសុំសកម្ម។ &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; ផ្លូវកាត់ &lt;/ b&gt; នឹងប្រតិបត្តិ &lt;b&gt; &lt;b&gt; &lt;‧&gt; បន្ទាប់ពី &lt;/ i&gt; &lt;/ b&gt; វាត្រូវបានគ្រប់គ្រងដោយពាក្យសុំសកម្ម។ &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; បដិសេធ &lt;/ b&gt; នៅពេលដែល monkeypockech កូនសោបញ្ចូល (មិនកែប្រែគ្រាប់ចុចដែលមិនផ្លាស់ប្តូរ) នៃផ្លូវកាត់បដិសេធវានឹង &lt;i&gt; លាក់សារព័ត៌មានដ៏សំខាន់របស់នោះពីការបញ្ចូលកម្រិត។ &lt;br&gt;
-ជម្រើសនេះនឹងធានាថាផ្លូវកាត់ត្រូវបានបង្កឡើងដោយគ្មានទំនាស់ចំពោះកម្មវិធីសកម្ម។
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; ការបដិសេធផ្តាច់មុខ &lt;/ b&gt; នេះគឺជាប្រភេទពិសេសនៃរបៀបបដិសេធដែលត្រូវបានរចនាឡើងសម្រាប់គ្រាប់ចុច Caps Lock ។ វាអនុញ្ញាតឱ្យ &lt;b&gt; មួយ &lt;/ b&gt; key (មិនមែនអ្នកកែប្រែ) សម្រាប់កិច្ចការរបស់វា។ &lt;br&gt;
-នៅក្នុងរបៀបនៃការចាក់សោរបៀបនៃរបៀបបដិសេធធម្មតាអាចក្លាយជា &lt;i&gt; ជាប់នៅលើ &lt;/ i&gt; នៅពេលចុចបញ្ចូលគ្នាជាមួយគ្រាប់ចុចផ្សេងទៀត។ &lt;br&gt;
-ដូច្នេះមិនថាកូនសោផ្សេងទៀតធ្លាក់ចុះក៏ដោយប្រសិនបើ A &lt;/ b&gt; ហ្វុកស៍ &lt;/ b&gt; ផ្លូវកាត់ត្រូវបានចុចវានឹងត្រូវបានធ្វើឱ្យប្រសើរឡើងហើយរារាំងវាពីការក្លាយជា &lt;i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ជាប់នៅលើ &lt;/ i&gt; ។
-&lt;/ li&gt;
-&lt;/ ul&gt;
-&lt;/ រាងកាយ&gt;
-&lt;/ html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>ផ្លាស់ប្តូរ</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>ផ្ទុកឡើងនៅពេលដែលគណនីអ្នកប្រើនេះចូលមិនមែនសម្រាប់អ្នកប្រើប្រាស់ផ្សេងទៀតទេ។</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt; ការប្រើប្រាស់ទំនាក់ទំនងដែលមាន (តម្រូវឱ្យមានកម្មវិធីជំនួយការទទួលយក) វាលនេះនឹងត្រូវបានប្រើសម្រាប់គ្រប់គំរូនៃគំរូនេះនៅទូទាំងឯកសារនេះឬនៅក្នុងអ្វីដែលវានឹងត្រូវបានយោងនៅពេលក្រោយ។ &lt;/ p&gt; &lt;p&gt; ប្រសិនបើជ្រើសរើសអាសយដ្ឋានអ៊ីមែល នេះនៅទីនេះវាលអ៊ីម៉ែលនៃទំនាក់ទំនងដែលអ្នកជ្រើសរើសនឹងត្រូវបានប្រើសម្រាប់វត្ថុទាំងអស់នៅក្នុងឯកសារនេះ។ &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>ybr/&gt; ybr/&gt; ybr/&gt; ybryy = broma មួយឆ្នាំ &lt;br/&gt; m = ខែ (1-12 MM = ខែ (01-12 អក្សរកាត់ MMM = ខែ ab, ។ ខែធ្នូ) &lt;br/&gt; ខែ unture (មករាកុម្ភៈ ... ខែធ្នូ) &lt;br/&gt; D = ថ្ងៃ (3-13) &lt;br/&gt; DD = ថ្ងៃ (01 - 3) &lt;br/&gt; DDD = ថ្ងៃនៃសប្តាហ៍នៅក្នុងពាក្យ (ថ្ងៃច័ន្ទថ្ងៃអង្គារ ... ថ្ងៃអាទិត្យ) &lt;br/&gt; អ៊ី = ថ្ងៃខ្លីនៃសប្តាហ៍នៅក្នុងពាក្យ (ច័ន្ទ, True) &lt;br&gt; ទី 1 ទី 3 ទី 21 ថ្ងៃទី 22 ទី 23, ទី 4 ទី 4 ... ) &lt;br/&gt; H = ម៉ោងនៅ AM / PM (0-12) &lt;br /&gt; ម៉ោង (00-12) &lt;br / sm (00-12) &gt; ម៉ោង H = ម៉ោងក្នុងមួយថ្ងៃ (0-23) &lt;br/&gt; HH = ម៉ោងក្នុងមួយថ្ងៃ (00&gt; MM = នាទី &lt;br/&gt; អេសអេស = Milliseconds = MilliseConds = A = am សញ្ញាសម្គាល់សញ្ញាសម្គាល់ &lt;br/&gt; ទំ = a.m.m./p.m ។ សញ្ញាសម្គាល់</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>កាលបរិច្ឆេទបច្ចុប្បន្ននិង / ឬពេលវេលានឹងត្រូវបានជំនួសសម្រាប់គំរូ DETETINE នៅពេលពួកគេបានបិទភ្ជាប់។</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; ការកើតឡើងទាំងអស់នៃគំរូនេះនឹងប្រើអត្ថបទដែលបានផ្តល់។ &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; ការកើតឡើងទាំងអស់នៃគំរូនេះនឹងប្រើអត្ថបទដែលបានផ្តល់។ &lt;/ p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>បញ្ចប់ការបន្ថែម</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>មិនស្គាល់កម្មវិធីសកម្មចុងក្រោយ។ ប្តូរទៅកម្មវិធីដែលបានបម្រុងទុកដើម្បីបិទភ្ជាប់ស្វា។</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>បិទភ្ជាប់ទៅ: &lt;em&gt; &lt;1 ថ្នាក់ = "បិទភ្ជាប់ - ព័ត៌មានជំនួយ - បច្ច័យ"&gt; {0} &lt;/} &lt;/ em &lt;em &lt;/ em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>អត្ដសបអុ្លាក់តិច</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>ឥតមានអវីសោហ</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>មានតែ Pritets ដែលបានជ្រើសរើសប៉ុណ្ណោះដែលត្រូវបានប្រើសម្រាប់កម្មវិធីដែលបានបញ្ជាក់។ នៅពេលមិនបានបញ្ជាក់ឯកសារកំណត់ជាមុនត្រូវបានរកឃើញនៅក្នុងរបារចំហៀងបន្ទាត់ &lt;em&gt; ក្តារតម្បៀតខ្ទាស់ &lt;/ em&gt; នឹងត្រូវបានប្រើ។</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>លក្ខណៈពិសេសនៃព្រះសង្ឃជាច្រើនប្រើស្វ័យប្រវត្តិកម្មក្តារចុចដើម្បីធ្វើអន្តរកម្មជាមួយកម្មវិធីផ្សេងទៀត។
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>បុរសអត្ថវន៍</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>ការត្រួតពិនិត្យក្តារតម្បៀតខ្ទាស់ទាំងអស់ពីកម្មវិធីដែលបានច្រានចោលនឹងមាន &lt;b&gt; មិនអើពើ &lt;/ b&gt; ។</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>អ្នកសរសេរ</value>
@@ -1331,11 +1268,6 @@ monkeypeaste នៅលើឧបករណ៍
     <value>តើអ្នកពិតជាចង់កំណត់ការជូនដំណឹងទាំងអស់ឡើងវិញឬ?
 
 * នេះមិនអាចធ្វើវិញបានទេ!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>ស្វាបិទភ្ជាប់ឈុតក្តារតម្បៀតខ្ទាស់ (បដិសេធ) នៅពេលបិទភ្ជាប់ទៅកម្មវិធីខាងក្រៅ។ នេះនឹង &lt;b&gt; ការប៉ុនប៉ង &lt;/ b&gt; ដើម្បីស្តារស្ថានភាពនៃក្តារតម្បៀតខ្ទាស់បន្ទាប់ពីការបិទភ្ជាប់ខាងក្រៅ។
-
-ការស្ដារឡើងវិញនៃការស្ដារឡើងវិញទាំងស្រុងមិនអាចត្រូវបានធានាទេហើយអាចកាត់បន្ថយការសម្តែងឬសូម្បីតែការបុកសត្វព្រាបអាស្រ័យលើប្រភពទិន្នន័យ។</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>កំណត់ក្តារតម្បៀតខ្ទាស់បន្ទាប់ពីការបិទភ្ជាប់ស្វា</value>
@@ -2706,5 +2638,66 @@ feedback@monkeypales.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ស្វែងយល់បន្ថែមអំពីផែនការ</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;ការ ប្រើ ទំនាក់ទំនង ដែល មាន (តម្រូវ ឲ្យ មាន កម្មវិធី ជំនួយ fetcher) វាល នេះ នឹង ត្រូវ បាន ប្រើ សម្រាប់ គ្រប់ ករណី នៃ template នេះ នៅ ទូទាំង ឯកសារ នេះ ឬ នៅ ក្នុង ឯកសារ ណាមួយ ដែល វា នឹង ត្រូវ បាន យោង នៅ ពេល ក្រោយ ។&lt;/p&gt;&lt;p&gt; ដូច្នេះ ឧទាហរណ៍ ប្រសិន បើ ជ្រើស អាសយដ្ឋាន អ៊ីមែល នៅ ទីនេះ នោះ វាល អ៊ីមែល នៃ ទំនាក់ទំនង ដែល អ្នក ជ្រើស នឹង ត្រូវ បាន ប្រើ សម្រាប់ រាល់ ករណី នៅ ក្នុង ឯកសារ នេះ ។&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>y = ឆ្នាំខ្លី&lt;br/&gt;yyy = ឆ្នាំវែង&lt;br/&gt;M = ខែ (1-12)&lt;br/&gt;MM = ខែ (01-12)&lt;br/&gt;MMM = ខែ កាត់ (Jan, Feb ... Dec)&lt;br/&gt;MMMM = ខែវែង (មករា កុម្ភៈ ... ធ្នូ)&lt;br/&gt;d = ថ្ងៃ (1 - 31)&lt;br/&gt;dd = ថ្ងៃ (01 - 31)&lt;br/&gt;ddd = ថ្ងៃនៃសប្តាហ៍ក្នុងពាក្យ (ច័ន្ទ, ថ្ងៃអង្គារ ... ថ្ងៃអាទិត្យ)&lt;br/&gt;E = ថ្ងៃខ្លីនៃសប្តាហ៍ក្នុងពាក្យ (ម៉ន, ធូ ... ព្រះអាទិត្យ)&lt;br/&gt;ឃ - ថ្ងៃ អក អរឌីណាល់ (១, ទី ២, ទី ៣, ទី ២១, ទី ២២, ទី ២៣, ទី ៣១, ទី ៤...)&lt;br/&gt;h = ម៉ោងក្នុង am/pm (0-12)&lt;br/&gt;hh = ម៉ោងក្នុង am/pm (00-12)&lt;br/&gt;H = ម៉ោងក្នុងមួយថ្ងៃ (0-23)&lt;br/&gt;HH = ម៉ោងក្នុងមួយថ្ងៃ (00-23)&lt;br/&gt;មម = នាទី&lt;br/&gt;ss = វិនាទី&lt;br/&gt;SSS = មីល្លីវិនាទី&lt;br/&gt;a = AM/PM marker&lt;br/&gt;p = a.m./p.m. marker</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;រាល់ ការ កើត ឡើង នៃ ពុម្ព នេះ នឹង ប្រើ អត្ថបទ ដែល បាន ផ្ដល់ ឲ្យ ។&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;រាល់ ការ កើត ឡើង នៃ ពុម្ព នេះ នឹង ប្រើ អត្ថបទ ដែល បាន ផ្ដល់ ឲ្យ ។&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey Paste set the clipboard (overrides) ពេល ពន្លើស ទៅ កម្មវិធី ខាង ក្រៅ។ នេះ នឹង &lt;b&gt;ព្យាយាម&lt;/b&gt; ស្តារ ស្ថាន ភាព នៃ ផ្ទាំង បន្ទះ ក្តារ បន្ទាប់ ពី មាន ការ ឆ្លង កាត់ ខាង ក្រៅ ។ 
+
+ការ ស្តារ ឡើង វិញ សរុប មិន អាច ធានា បាន និង អាច កាត់ បន្ថយ ការ អនុវត្ត ឬ សូម្បី តែ ការ ធ្លាក់ ចុះ MonkeyPaste អាស្រ័យ លើ ប្រភព នៃ ទិន្នន័យ ។</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>មាន តែ សំណុំ ដែល បាន ជ្រើស ប៉ុណ្ណោះ ដែល នឹង ត្រូវ បាន ប្រើ សម្រាប់ កម្មវិធី ដែល បាន បញ្ជាក់ &amp; # 160; ។ ពេល មិន បាន បញ្ជាក់ កំណត់ លំនាំ ដើម ដែល បាន រក ឃើញ នៅ ក្នុង &lt;em&gt;Clipboard Sidebar&lt;/em&gt; នឹង ត្រូវ បាន ប្រើ ។</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>ការ ត្រួត ពិនិត្យ ក្តារ បន្ទះ បន្ទះ ទាំង អស់ ពី ពាក្យ ស្នើ សុំ ដែល បាន ច្រាន ចោល នឹង ត្រូវ &lt;b&gt;បាន មិន អើពើ&lt;/b&gt; ។</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;ខាងក្នុង&lt;/b&gt;គ្រប់ shortcut ទាំងអស់ ត្រូវ បាន កំណត់ ក្នុង កម្មវិធី &amp; # 160; ។ នេះ ពិត ជា មិន មែន ជា ជម្រើស ដែល មាន បំណង នោះ ទេ ប៉ុន្តែ អាច អនុញ្ញាត ឲ្យ ប្ដូរ តាម បំណង នូវ អ្វី ដែល ផ្លូវ កាត់ ដែល អ្នក មាន បំណង ធ្វើ នៅ ទូទាំង ពិភព លោក&lt;i&gt;នៅ ថ្ងៃ ណា មួយ&lt;/i&gt; ។&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;លំនាំដើម&lt;/b&gt; ខ្លីៗ សកល ទាំងអស់ ត្រូវ បាន អនុញ្ញាត &amp; # 160; ។ The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut ប្រើ&lt;span color="red"&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. អ្នក អាច ផ្លាស់ប្ដូរ ផ្លូវ ឬ កាយវិការ នោះ នៅ ពេល ណា ក៏ បាន ។ ប៉ុន្តែ&lt;span color="green"&gt;សូម សាកល្បង វា&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;របៀបកាត់តសកល&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;អកម្ម&lt;/b&gt; វីឡាកូនកាត់ MonkeyPaste នឹងស្តាប់នៅក្នុងកម្មវិធីណាមួយ។&lt;br&gt;*នេះ ជា ជម្រើស &lt;i&gt;តែ មួយ គត់&lt;/i&gt; នៅ លើ Linux សម្រាប់ ពេល នេះ។   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Shortcut នឹង អនុវត្ត &lt;b&gt;&lt;i&gt;មុន ពេល&lt;/i&gt;&lt;/b&gt; វា ត្រូវ បាន ដោះស្រាយ ដោយ កម្មវិធី សកម្ម &amp; # 160; ។&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Shortcut នឹង អនុវត្ត &lt;b&gt;&lt;i&gt;បន្ទាប់ ពី&lt;/i&gt;&lt;/b&gt; វា ត្រូវ បាន ដោះស្រាយ ដោយ កម្មវិធី សកម្ម &amp; # 160; ។&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;លើសពី&lt;/b&gt; នៅ ពេល ដែល MonkeyPaste ឮ គន្លឹះ បញ្ចូល (non - modifier key) នៃ shortcut override វា នឹង &lt;i&gt;លាក់&lt;/i&gt; ថា ចុច គន្លឹះ ពី កម្មវិធី - ការ បញ្ចូល កម្រិត ។&lt;br&gt;ជម្រើស នេះ នឹង ធានា ថា ផ្លូវ កាត់ ត្រូវ បាន បង្ក ឡើង ដោយ គ្មាន ជម្លោះ ចំពោះ កម្មវិធី សកម្ម &amp; # 160; ។   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ការ បដិសេធ ដាច់ ដោយ ឡែក&lt;/b&gt; នេះ គឺ ជា ប្រភេទ ពិសេស នៃ របៀប លើសលប់ ដែល បាន រចនា ឡើង សម្រាប់ គ្រាប់ ចុច Caps Lock ។ វា អនុញ្ញាត តែ កូនសោ &lt;b&gt;មួយ&lt;/b&gt; (non - កែប្រែ) សម្រាប់ ការ ចាត់ តាំង របស់ វា ប៉ុណ្ណោះ ។&lt;br&gt;ក្នុង របៀប លើសលប់ ធម្មតា Caps Lock អាច &lt;i&gt;ជាប់ នៅ ពេល&lt;/i&gt; ចុច រួម ជាមួយ គន្លឹះ ផ្សេង ទៀត &amp; # 160; ។&lt;br&gt;ដូច្នេះ មិន ថា កូន សោ ផ្សេង ទៀត ធ្លាក់ ចុះ យ៉ាង ណា ទេ ប្រសិន បើ ផ្លូវ កាត់ &lt;b&gt;Hotkey&lt;/b&gt; ត្រូវ បាន សង្កត់ វា នឹង ត្រូវ បាន បដិសេធ ហួស ហេតុ និង រា រាំង វា ពី ការ &lt;i&gt;ជាប់ ។&lt;/i&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;វិធីនេះ MonkeyPaste អាចចូលដំណើរការបាន&lt;br&gt;&lt;span color="red"&gt;ដោយគ្មានការចុចឬសូម្បីតែវាយភ្នែក&lt;/span&gt; &amp;#x1F440 &lt;span color="red"&gt;&lt;/span&gt;&lt;/p&gt;</value>
   </data>
 </root>

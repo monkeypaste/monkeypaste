@@ -166,14 +166,8 @@ mos ravishda kliplar.</value>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>O'RNATISH - Ochiq</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p alag = "markaz"&gt; Monkeypste - bu &lt;Span Colle = "Red&gt; Drag - va - tushirish &lt;/ p&gt; to'liq integratsiyalashgan</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>Bu erga tashlang!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p alag = "markaz"&gt; Monkeypastga kirish mumkin - &lt;SPAN Rang = "Rang"&gt; Hatto &lt;/ Span Rang = "qizil"&gt; Ko'z &lt;/ Span&gt; &amp; # x1f440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Meni sudrab tort!</value>
@@ -364,62 +358,14 @@ Oldini olish uchun yangilang.</value>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>Imo-ishoralar noyob bo'lishi kerak va faqat bitta kirish kalitini o'z ichiga olishi mumkin.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; ichki &lt;/ b&gt; Barcha yorliqlar ilova ichida cheklangan. Bu aslida mo'ljallangan variant emas, lekin siz qanday yorliqlarni sozlashingiz mumkin, siz global &lt;i&gt; Sam bir kun &lt;/ i&gt;. &lt;/ Li&gt;
-&lt;li&gt;
-&lt;b&gt; standart &lt;/ b&gt; Barcha global yorliqlar yoqilgan. &lt;B&gt; asosiy oynani ko'rsatish / yashirish &lt;/ b&gt; Qisqartirish &lt;"Rang"&gt; &lt;B&gt; Caps Lock &lt;/ b tugmachasini bekor qilish uchun. Siz har qanday vaqtda marshrut yoki imo-ishorani o'zgartirishingiz mumkin. Lekin &lt;Span Colle = "Yashil"&gt; uni sinab ko'ring &lt;/ Span&gt;
-&lt;/ li&gt;
-&lt;/ ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;boshim&gt; &lt;/ boshim&gt;
-&lt;tana&gt;
-&lt;h1&gt; global yorliq modes &lt;/ h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; passiv &lt;/ b&gt; yorliq maymunepaste har qanday dasturda tinglanadi. &lt;br&gt;
-* Bu endi Linux-da &lt;i&gt; faqat &lt;/ i&gt; optsiyasi.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; oldindan &lt;/ b&gt; yorliq &lt;b&gt; i&gt; oldin ishlaydi &lt;/ i&gt; b&gt; u faol dastur orqali amalga oshiriladi. &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; post &lt;/ b&gt; yorliq &lt;b&gt; i&gt; dan keyin &lt;w&gt; &lt;/ b&gt; u faol dastur orqali amalga oshiriladi. &lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; bekor qilish &lt;/ b&gt; Monkeyp pastligi Qisqartirish tugmachasini bekor qilish uchun kirish tugmachasini bekor qiladi.
-Ushbu parametr yorliqni faol dasturga ziddiyatsiz qabul qilmasdan boshšar ekanligiga kafolat beradi.
-&lt;/ li&gt;
-&lt;li&gt;
-&lt;b&gt; eksklyuziv bekor qilish &lt;/ b&gt; Bu Caps Lock tugmachasi uchun mo'ljallangan bekor qilish rejimining maxsus turi. Bu faqat o'zlashtirish uchun faqat &lt;b&gt; bitta &lt;/ ​​b&gt; tugmachasini (o'zgaruvchisiga) imkon beradi. &lt;br&gt;
-Oddiy foydalanish rejimida Caps Lock &lt;i&gt; boshqa kalitlar bilan biriktirilganda &lt;/ i&gt; yopishib qolishi mumkin. &lt;br&gt;
-Shunday qilib, boshqa tugmachalar nimadan qat'i nazar, agar a &lt;b&gt; b&gt; yorliq bossa, u bekor qilinadi va &lt;i&gt; yopishib qolishi mumkin &lt;/ i&gt;.
-&lt;/ li&gt;
-&lt;/ ul&gt;
-&lt;/ tanasi&gt;
-&lt;/ html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>O'chirmoq</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Ushbu foydalanuvchi hisobi boshqa foydalanuvchilar uchun emas, balki tizimga kirganda yuklang.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>Mavjud kontaktlar yordamida ushbu shablonning barcha holatlari uchun ishlatilishi mumkin. Ushbu hujjatda ushbu shablonning barcha holatlari uchun ishlatilishi mumkin. &lt;/ p&gt; &lt; Keyin siz tanlagan kontaktning elektron pochta maydoni ushbu hujjatdagi barcha instansiyalar uchun foydalaniladi. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>yy = qisqa yil &lt;br/&gt; C = Oy (1-12) &lt;br/&gt; 1-11-1. oylik (Yan, fevral .. &lt;br/&gt; DD = kun (01 - 31) (01 - 31) &lt;br/&gt; ddd = kun (01 - 31). Haftaning kunida (dushanba, seshanba ... yakshanba) &lt;br = Haftaning qisqa kuni (Sare ... Sun) &lt;br/&gt; Ord, 2-chi, 3-chi, 21-chi, 23-chi, 31-chi ...) &lt;br-11 soat soat (0-12) (00-12) &gt; H = kun davomida (0-23) &lt;br-__ 1 soat davomida (00-23) (00-23). A = Am / Pm Marker &lt;br/&gt; P = A.M./p.m. marker</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>Joriy sana va / yoki vaqtni ular to'xtatilganda ma'lumotlar uzatish uchun almashtiriladi.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt; Ushbu shablonning barcha holatlari taqdim etilgan matndan foydalanadi. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt; Ushbu shablonning barcha holatlari taqdim etilgan matndan foydalanadi. &lt;/ p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Qo'shilishni tugatish</value>
@@ -469,9 +415,6 @@ Shunday qilib, boshqa tugmachalar nimadan qat'i nazar, agar a &lt;b&gt; b&gt; yo
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>So'nggi faol ilova noma'lum. Taqdim etilgan ilovaga Monkey Paste-ga o'ting.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Pasting: &lt;em&gt; &lt;i sinf = "Pastee-Tooltip-Scouse"&gt; {0} &lt;/ i&gt; &lt;/ em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Kamaytirmoq</value>
@@ -547,9 +490,6 @@ Ushbu xususiyatlarni to'g'ri bajarilishini ta'minlash uchun noyob nusxadagi yorl
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>Hech biri</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Faqat tanlangan foydalanish uchun tanlangan foydalanish uchun ishlatiladi. Belgilanmaganda, &lt;em&gt; clipboard yonbarasida &lt;/ em&gt; topilsa, foydalaniladi.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>Ko'pgina maykeypaste, boshqa dasturlar bilan o'zaro aloqada bo'lgan klaviatura avtomatlashtirishdan foydalanadi.
 
@@ -562,9 +502,6 @@ To'g'ri interventatsiyani ta'minlash uchun ushbu ilova uchun ushbu yorliqlarni y
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>O'quvchilar</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>Rad etilgan arizalar tomonidan barcha pleyborlar monitoringi &lt;b&gt; e'tiborga olinmaydi &lt;/ b&gt;.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Yozuvchilar</value>
@@ -1331,11 +1268,6 @@ Bu bekor qilinmaydi!
     <value>Haqiqatan ham barcha xabarlarni qayta tiklamoqchimisiz?
 
 * Bu bekor qilinmaydi!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey pastasi tashqi dasturga o'tayotganda klipboard (bekor qilingan) ni o'rnatadi. Bu tashqi makondan keyin klipboard holatini tiklash uchun &lt;b&gt; urinish &lt;/ b&gt;
-
-Umumiy tiklash kafolatlanishi va ma'lumot manbaiga qarab ishlashni kamaytirishi mumkin emas.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>Maykey o'ralganidan keyin klipbordni qayta o'rnating</value>
@@ -2706,5 +2638,132 @@ Filbir@monkeypaste.com</value>
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Rejalar haqida ko'proq ma'lumot oling</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>Pasting: {0}</value>
+    <comment>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</comment>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>Mavjud kontaktlar yordamida ushbu soha ushbu hujjatda yoki boshqa biron bir joyda ushbu shablonning barcha holatlarida qo'llanilishi kerak.
+ Shunday qilib, masalan, agar siz bu erda elektron pochta manzilini tanlasangiz, siz tanlagan elektron pochta aloqasi ushbu hujjatdagi barcha instansiyalar uchun foydalaniladi.</value>
+    <comment>&lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;</comment>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = qisqa yil
+yyyy = uzoq yil
+M = oy (1-12)
+Mm = oy (01-12)
+Mmm = oy qisqartmasi (yanvar, fevral ... DEM)
+Mmmm = uzoq oy (yanvar, fevral ... dekabr)
+d = kun (1 - 31)
+dd = kun (01 - 31)
+DDD = Hafta kunida (dushanba, seshanba ... yakshanba)
+E = haftaning qisqa kunida (dona, tyust ... quyosh)
+D - tartibli kun (1, 2-chi, 3-chi, 22-chi, 23-, 31-chi ...)
+h = soat / soat soat (0-12)
+hh = soat / soat soat (00-12)
+H = kun davomida (0-23)
+Hh = kun davomida (00-23)
+mm = daqiqada
+ss = ikkinchi
+SSS = millisekunds
+A = AM / PM marker
+p = a.m./p.m. marker</value>
+    <comment>yy = short year&lt;br/&gt;yyyy = long year&lt;br/&gt;M = month (1-12)&lt;br/&gt;MM = month (01-12)&lt;br/&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;br/&gt;MMMM = long month (January, February ... December)&lt;br/&gt;d = day (1 - 31)&lt;br/&gt;dd = day (01 - 31)&lt;br/&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;br/&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;br/&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;br/&gt;h = hour in am/pm (0-12)&lt;br/&gt;hh = hour in am/pm (00-12)&lt;br/&gt;H = hour in day (0-23)&lt;br/&gt;HH = hour in day (00-23)&lt;br/&gt;mm = minute&lt;br/&gt;ss = second&lt;br/&gt;SSS = milliseconds&lt;br/&gt;a = AM/PM marker&lt;br/&gt;p = a.m./p.m. marker</comment>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>Ushbu shablonning barcha holatlari taqdim etilgan matndan foydalanadi.</value>
+    <comment>&lt;p&gt;All occurances of this template will use the provided text.&lt;/p&gt;</comment>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>Ushbu shablonning barcha holatlari taqdim etilgan matndan foydalanadi.</value>
+    <comment>&lt;p&gt;All occurances of this template will use the provided text.&lt;/p&gt;</comment>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>Monkey pastasi tashqi dasturga o'tayotganda klipboard (bekor qilingan) ni o'rnatadi. Bu tashqi pastadan keyin klipboard holatini tiklashga harakat qiladi.
+
+Umumiy tiklash kafolatlanishi va ma'lumot manbaiga qarab ishlashni kamaytirishi mumkin emas.</value>
+    <comment>Monkey Paste sets the clipboard (overrides) when pasting to an external program. This will &lt;b&gt;attempt&lt;/b&gt; to restore the state of the clipboard after an external paste. 
+
+Total restoration cannot be guaranteed and may reduce performance or even crash MonkeyPaste depending on the source of the data.</comment>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>Faqat tanlangan foydalanish uchun tanlangan foydalanish uchun ishlatiladi. Belgilanmaganda, Clipboard yon panelida topilgan standart belgilangan e'lonlar ishlatiladi.</value>
+    <comment>Only the selected presets will be used for the specified application. When unspecified, the default presets found in the &lt;em&gt;Clipboard Sidebar&lt;/em&gt; will be used.</comment>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>Rad etilgan talabnomalardan barcha pleyboard monitoringi e'tiborga olinmaydi.</value>
+    <comment>All clipboard monitoring from rejected applications will be &lt;b&gt;ignored&lt;/b&gt;.</comment>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>Ichki yorliqlar ilova ichida cheklangan. Bu aslida mo'ljallangan variant emas, lekin siz qanday yorliqlarni globaletay qilish niyatida bo'lishingizni rejalashtirishingiz mumkin.
+ 
+  Odatiy ravishda barcha global yorliqlar yoqilgan. TheShow / O'rta oynaning asosiy derazasshorttutni qulflash tugmachasi uchun ishlatish. Siz har qanday vaqtda marshrut yoki imo-ishorani o'zgartirishingiz mumkin. Butorat uni sinab ko'ring</value>
+    <comment>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;Default&lt;/b&gt; All global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color="red"&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color="green"&gt;give it a try&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</comment>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>Global yorliq rejimlari
+  
+   
+    Passiv maykaype har qanday qo'llanuvda tinglaydi.
+
+    * Bu endi Linux-dagi yagona variant.
+   
+   
+    Faol dastur orqali ishlov berishdan oldin olding old qismini bajaradi.
+   
+    Qisqadan keyin Faol dastur orqali ishlangandan keyin joylashtiring.
+   
+    Monkeyp pastligi qisqartirishning qisqartirilganligini (o'zgaruvchan tugmachasini) ko'rib chiqish tugmachasini tinglaydi, bu kalitdan foydalanish tugmachasini - darajadagi kirish tugmachasini yashiradi.
+
+    Ushbu parametr yorliqni faol dasturga ziddiyatsiz qabul qilmasdan boshšar ekanligiga kafolat beradi.
+   
+   
+    Eksklyuziv bekor qilish - bu Caps Lock tugmachasi uchun mo'ljallangan bekor qilish rejimining maxsus turi. Bu faqat bitta kalit (o'zgaruvchan bo'lmagan) uni tayinlash uchun ruxsat beradi.
+
+    Oddiy foydalanish rejimida Caps Lock boshqa kalitlar bilan birgalikda bosilganda yopishtirilishi mumkin.
+
+    Shunday qilib, boshqa tugmachalar nimadan qat'i nazar, agar hotchey yorliq bosilsa, u bekor qilinadi va uni yopishib olishiga yo'l qo'ymaydi.</value>
+    <comment>
+&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;Passive&lt;/b&gt; A shortcut MonkeyPaste will listen for in any application.&lt;br&gt;
+    *This is the &lt;i&gt;only&lt;/i&gt; option on Linux for now.
+   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Pre&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Post&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Override&lt;/b&gt; When MonkeyPaste hears the input key (non - modifier key) of an override shortcut it will &lt;i&gt;hide&lt;/i&gt; that key press from application - level input.&lt;br&gt;
+    This option will guarantee the shortcut is triggered without conflicts to the active application.
+   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Exclusive Override&lt;/b&gt; This is a special type of override mode designed for the Caps Lock key. It only allows &lt;b&gt;one&lt;/b&gt; key (non - modifier) for its assignment.&lt;br&gt;
+    In normal override mode Caps Lock can become &lt;i&gt;stuck on&lt;/i&gt; when pressed in combination with other keys.&lt;br&gt;
+    So no matter what other keys are down, if a &lt;b&gt;Hotkey&lt;/b&gt; shortcut is pressed it will be overriden and prevent it from becoming &lt;i&gt;stuck on&lt;/i&gt;.
+   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</comment>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>Monkeypaste bu</value>
+    <comment>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</comment>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>Shu tarzda, maymun pastkasiga kirish mumkin
+ bosish yoki hatto ko'zni urish yoki # x1f440</value>
+    <comment>&lt;p align="center"&gt;This way, MonkeyPaste can be accessed&lt;br&gt; &lt;span color="red"&gt;without a click&lt;/span&gt; or even &lt;span color="red"&gt;batting an eye&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</comment>
   </data>
 </root>

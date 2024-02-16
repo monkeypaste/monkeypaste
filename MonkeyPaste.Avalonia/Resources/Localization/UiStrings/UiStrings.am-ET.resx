@@ -166,14 +166,8 @@
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>ማሸብለል - ወደ - ይክፈቱ - ክፍት</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p lege = "ማእከል"&gt; asikeopase "&gt; rank &lt;ቀይ ቀለም =" ቀይ&gt; ሙሉ በሙሉ የተዋሃዱ &lt;/ p &gt;&gt;</value>
-  </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
     <value>እዚህ ጣል ያድርጉት!</value>
-  </data>
-  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p ምሰሶ = "ማእከል"&gt; onikeopase "&lt;&lt; &lt;&lt; &lt;&lt; &lt;ቀይ&gt; &gt;&gt; &lt;ቀይ ቀለም = &gt;&gt; &lt;ቀይ" &gt;&gt; &lt;ቀይ "&gt; አይን" &amp; # x1f440 &lt;/ p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>ጎትት!</value>
@@ -364,62 +358,14 @@
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
     <value>አካላዊ መግለጫዎች ልዩ መሆን አለባቸው እና አንድ የግቤት ቁልፍ ብቻ መያዝ አለባቸው.</value>
   </data>
-  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-&lt;li&gt;
-&lt;b&gt; ውስጣዊ &lt;/ b&gt; ሁሉም አቋራጮች በመተግበሪያው ውስጥ የተገደበ ናቸው. ይህ በእውነቱ የታሰበ አማራጭ አይደለም ነገር ግን ግሎባል &lt;i &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-&lt;li&gt;
-&lt;b&gt; ነባሪ &lt;/ b&gt; ሁሉም ዓለም አቀፍ አቋራጮች ነቅተዋል. &lt;B&gt; ዋና መስኮት / ደብቅ መስኮት / ደብቅ &lt;/ b&gt; አቋራጭ ይጠቀማል &lt;/ b&gt; CAPS COPT &lt;/ B&gt; ቁልፍን ይሻላል. ያንን ማዞሪያ ወይም የእጅ ምልክቱ በማንኛውም ጊዜ መለወጥ ይችላሉ. ግን &lt;pan ቀለም = "አረንጓዴ"&gt; ይሞክሩት &lt;/ span&gt;
-&lt;/ mi&gt;
-&lt;/ ul&gt;</value>
-  </data>
-  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;
-&lt;ጭንቅላት&gt; &lt;/ qu&gt;
-&lt;smound&gt;
-&lt;h1&gt; ዓለም አቀፍ አቋራጭ ሁነታዎች &lt;/ h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-አቋራጭ አቋራጭ &lt;/ b&gt; onicekeaseet በማንኛውም መተግበሪያ ውስጥ ያዳምጣል. &lt;br&gt;
-* ይህ &lt;i&gt; ብቻ &lt;/ i&gt; ሊኑክስን ለዛሬ.
-&lt;/ mi&gt;
-&lt;li&gt;
-&lt;b&gt; ቅድመ-/ B&gt; አቋራጭ &lt;b&gt; &lt;i &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-&lt;li&gt;
-&lt;b&gt; Plo ቼዝ &lt;/ b&gt; አቋራጭ ይከናወናል &lt;b&gt; &lt;i&gt; ከ &lt;/ i &gt;&gt;&gt;&gt; በኋላ በንቃት ትግበራ ይከናወናል. &lt;/ li&gt;
-&lt;li&gt;
-የ Scoikeastase የተሽከረከረው አቋራጭ የግብዓት ቁልፍን (ከ &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;&lt; &lt;i &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-ይህ አማራጭ አቋራጭ ወደ ንቁ ትግበራ የተወሳሰበ መሆኑን ያረጋግጣል.
-&lt;/ mi&gt;
-&lt;li&gt;
-&lt;B&gt; ልዩ የሚሽከረከረው ከ &lt;/ b&gt; ይህ ለ CAP Lock ቁልፍ የተነደፈ ልዩ ዓይነት የተሽከረከር ዓይነት ነው. It only allows &lt;b&gt;one&lt;/b&gt; key (non - modifier) ​​for its assignment.&lt;br&gt;
-በመደበኛ የ Screside ሞድ ሁኔታ CAPS LOCKE CPS COL COLD ሊሆን ይችላል &lt;/ i&gt; ከሌሎች ቁልፎች ጋር በማጣመር በ &lt;/ i&gt; ላይ ተጣብቋል. &lt;br&gt;
-ስለዚህ ምንም ሌሎች ቁልፎች ቢኖሩም አንድ &lt;b&gt; አቋራጭ ሲጫን ከተጫነ በኋላ ከልክ በላይ ይሆናል እናም &lt;i &gt;&gt; &lt;/ i&gt; ላይ እንዳይሆን ይከለክላል.
-&lt;/ mi&gt;
-&lt;/ ul&gt;
-&lt;/ የሰውነት&gt;
-&lt;/ html&gt;</value>
-  </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>አሰናክል</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>ይህ የተጠቃሚ መለያው በመለያ ሲገባ ለሌላ ተጠቃሚዎች ሳይሆን ይጫናል.</value>
   </data>
-  <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>የሚገኙ እውቂያዎችን በመጠቀም (የፍርድ ቤት ተሰኪዎችን ይፈልጋል) ይህ መስክ በዚህ ሰነድ ውስጥ ወይም በሌላ ሰነድ ውስጥ ለሚጠቀሱ ሁሉ ጥቅም ላይ ይውላል. &lt;/ p&gt; &lt;p&gt; ለምሳሌ ኢሜል አድራሻን ይምረጡ እርስዎ የሚከተሏቸው የኢሜል መስክ በዚህ ሰነድ ውስጥ ለሁሉም አጋጣሚዎች ጥቅም ላይ ይውላሉ. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>አይ = አጭር ዓመት &lt;br/&gt; yyyy/h/200) &lt;br/&gt; &lt;br/11 . የሳምንቱ ቀን በቃላት (ሰኞ, ማክሰኞ ... እሑድ). 3, 21 ኛው, 22 ኛ, 23 ኛ, 23 ቀን ... &gt; H = ሰዓት (0-23) ቀን (0-23) በ &lt;ኤ.ቢ.ኤል. = HH = HH = MM = SS = SS = SS = CRE = SSR = ሚሊሴኮንዶች A = AM / EM / PM Carker &lt;br/ti/h = p = am./p.m. ምልክት ማድረጊያ</value>
-  </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
     <value>የወቅቱ ቀን እና / ወይም ጊዜ ሲለቁ ለቀጣዩ ጊዜው አብነት ይተካሉ.</value>
-  </data>
-  <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>የዚህ አብነት ሁሉም መሠረቶች የተሰጠውን ጽሑፍ ይጠቀማሉ. &lt;/ p&gt;</value>
-  </data>
-  <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>የዚህ አብነት ሁሉም መሠረቶች የተሰጠውን ጽሑፍ ይጠቀማሉ. &lt;/ p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>ማቃጠል ጨርስ</value>
@@ -469,9 +415,6 @@
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>የመጨረሻው ንቁ መተግበሪያ አልታወቀም. ወደ የታቀደ መተግበሪያ ወደ ዝንጀሮ ይለቀሉት.</value>
-  </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ለጥፍ ወደ: &lt;ኤም&gt; &lt;እኔ ክፍል = "PAST- Sustry- Sharty-Stratix- ቅጥያ" {0} &lt;/ i&gt; &lt;EM&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>አሳንስ</value>
@@ -547,9 +490,6 @@
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>የለም</value>
   </data>
-  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>ለተጠቀሰው ትግበራ የተመረጡ ቅድመ-ቅምጦች ብቻ ያገለግላሉ. ካልተገለጸ ነባሪው ቅድመ-ቅምጦች በ &lt;ኤም ኤክስፒ&gt; Blipboard የጎን አሞሌ ውስጥ ይገኛሉ &lt;/ ኤም&gt; ጥቅም ላይ ይውላል.</value>
-  </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>ብዙ የ Zeocapase ባህሪዎች ከሌሎች መተግበሪያዎች ጋር ለመግባባት የቁልፍ ሰሌዳ አውቶማቲክ ይጠቀማሉ.
 
@@ -562,9 +502,6 @@
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
     <value>አንባቢዎች</value>
-  </data>
-  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>ተቀባይነት ካላቸው ትግበራዎች ሁሉም ቅንጥብ ሰሌዳዎች &lt;b&gt; ችላ ተብሏል &lt;/ b&gt; ን ችላ ተብሏል.</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>ጸሐፊዎች</value>
@@ -1331,11 +1268,6 @@
     <value>እርግጠኛ ነዎት ሁሉንም ማስታወቂያዎች ዳግም ማስጀመር ይፈልጋሉ?
 
 * ይህ ሊቀለበስ አይችልም!</value>
-  </data>
-  <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>ወደ ውጫዊ ፕሮግራም ሲታገሱ የጦጣ ፓስታ ክሊፕቦርድ (ተበላሽቷል) ያወጣል. ውጫዊ ፓስተር ከደረሰ በኋላ የቅንጥብ ሰሌዳውን ለማደስ የሚቻል &lt;b&gt; ሙከራ &lt;/ b&gt; ይሞክራል.
-
-ጠቅላላ ተሃድሶ ማቋቋም አይቻልም እና በውሂቡ ምንጭ ላይ በመመርኮዝ አፈፃፀምን አልፎ ተርፎም ድንገተኛነትን ሊቀንስ ይችላል.</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
     <value>ከዝንጀሮ ማገዶ በኋላ ቅንጥብ ሰሌዳውን ዳግም ያስጀምሩ</value>
@@ -2706,5 +2638,66 @@
   </data>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ስለ እቅዶች የበለጠ ይረዱ</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>paste ወደ &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;p&gt;የሚገኙ አገናኞችን በመጠቀም (fetcher plugin) ይህ መስክ በዚህ ሰነድ ላይ ለሁሉም አጋጣሚዎች ጥቅም ላይ ይውላል ወይም በማንኛውም ጊዜ በኋላ ላይ ይጠቀሳሉ.&lt;/p&gt;&lt;p&gt; ስለዚህ ለምሳሌ እዚህ የኢሜይል አድራሻን ከመረጡ የመረጣችሁት የኢሜይል አድራሻ በዚህ ሰነድ ውስጥ ለሁሉም አጋጣሚዎች ጥቅም ላይ ይውላል።&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>yy = አጭር ዓመት&lt;br/&gt;yyyy = ረጅም አመት&lt;br/&gt;መ = ወርሒ (1-12)&lt;br/&gt;ሚሜ = ወር (01-12)&lt;br/&gt;MM = የወር አህጽሮ (Jan, Feb ... Dec)&lt;br/&gt;MMMM = ረጅም ወር (ጥር, የካቲት ... ታህሳስ)&lt;br/&gt;d = ቀን (1 - 31)&lt;br/&gt;dd = ቀን (01 - 31)&lt;br/&gt;ddd = የሳምንቱ ቀን በቃላት (ሰኞ፣ ማክሰኞ ... እሁድ)&lt;br/&gt;E = የሳምንቱ አጭር ቀን በቃላት (Mon, Tue ... ፀሐይ)&lt;br/&gt;D - Ordinal ቀን (1ኛ, 2ኛ, 3ኛ, 21ኛ, 22ኛ, 23ኛ, 31ኛ, 4ኛ...)&lt;br/&gt;h = ሰዓት in am/pm (0-12)&lt;br/&gt;hh = ሰዓት in am/pm (00-12)&lt;br/&gt;H = ሰዓት ኣብ መዓልቲ (0-23)&lt;br/&gt;HH = ሰዓት በቀን (00-23)&lt;br/&gt;mm = ደቂቃ&lt;br/&gt;ss = ሁለተኛ&lt;br/&gt;SSS = ሚሊሰከንዶች&lt;br/&gt;a = AM/PM ምልክት&lt;br/&gt;p = a.m./p.m. ምልክት</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;p&gt;ይህ ንጥሎች በሙሉ በጽሑፉ ይጠቀማሉ።&lt;/p&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;p&gt;ይህ ንጥሎች በሙሉ በጽሑፉ ይጠቀማሉ።&lt;/p&gt;</value>
+  </data>
+  <data name="PrefResetClipboardHint" xml:space="preserve">
+    <value>የዝንጀሮ ፓስት ወደ ውጫዊ ፕሮግራም በሚለጥፍበት ጊዜ ክሊፕቦር (overovers) ያስቀምጠዋል። ይህም ከውጫዊ ማጣፈጫ በኋላ የክሊፕቦርዱን ሁኔታ ለመመለስ &lt;b&gt;ይሞከራል&lt;/b&gt; ። 
+
+ሙሉ በሙሉ መታደስ ዋስትና ሊሰጠው አይችልም እና አፈጻጸም ሊቀንስ አልፎ ተርፎም እንደ መረጃው ምንጭ MonkeyPaste ሊደመሰስ ይችላል.</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
+    <value>ለተወሰነው ማመልከቻ ጥቅም ላይ የሚውሉት የተመረጡት ቅድመ ዝግጅት ብቻ ናቸው። ሳይገለጽ ሲቀር &lt;em&gt;በክሊፕቦርድ ሲድባር&lt;/em&gt; ውስጥ የሚገኙት የቅድመ ዝግጅት ቅድመ-ቅዳሴዎች ጥቅም ላይ ይውላሉ።</value>
+  </data>
+  <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
+    <value>ከውድቅ መተግበሪያዎች ሁሉም ክሊፖች ክትትል &lt;b&gt;ችላ ይባላል&lt;/b&gt;.</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+ &lt;li&gt;
+  &lt;b&gt;ውስጣዊ&lt;/b&gt;ሁሉም አቋራጭ መንገድ በማመልከቻው ውስጥ ብቻ የተወሰነ ነው. ይህ የታሰበበት አማራጭ ባይሆንም&lt;i&gt;አንድ ቀን&lt;/i&gt; ዓለም አቀፍ ለማድረግ ያሰብከውን አቋራጭ መንገድ ማስተካከል ትችላለህ።&lt;/li&gt;
+ &lt;li&gt;
+  &lt;b&gt;በቅድሚያ&lt;/b&gt; ዓለም አቀፍ አቋራጭ አቋራጭ መንገዶችን በሙሉ ማመቻቸት ተቻለ። &lt;b&gt;ሾው/ሂድ ዋና ዊንዶውስ&lt;/b&gt;አቋራጭ ለ&lt;b&gt;ካፕስ ሎክ&lt;/b&gt; ቁልፍ&lt;span color="red"&gt;የoverride&lt;/span&gt;መንገድ ይጠቀማል። ይህን መንገድ ወይም አካላዊ መግለጫ በማንኛውም ጊዜ መለወጥ ትችላለህ። ግን&lt;span color="green"&gt;ይሞክሩት&lt;/span&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;html&gt;
+ &lt;head&gt;&lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;ዓለም አቀፍ አቋራጭ ዘዴዎች&lt;/h1&gt;
+  &lt;ul&gt;
+   &lt;li&gt;
+    &lt;b&gt;ፓሲቭ&lt;/b&gt; አቋራጭ መንኪፓስት በማንኛውም ማመልከቻ ያድምጡ.&lt;br&gt;*ይህ ለአሁኑ ሊኑክስ ላይ &lt;i&gt;ብቸኛው&lt;/i&gt; አማራጭ ነው.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ቅድመ -ቅድመ&lt;/b&gt; Shortcut መተግበሪያው ከመተግበሪያው &lt;b&gt;&lt;i&gt;ጋር ከመያያዙ በፊት&lt;/i&gt;&lt;/b&gt; ይፈፀማል.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;ፖስት&lt;/b&gt; Shortcut መተግበሪያው ከተያዘ &lt;b&gt;&lt;i&gt;በኋላ&lt;/i&gt;&lt;/b&gt; ይፈፀማል.&lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;አሻሽል&lt;/b&gt; መንኪፓስቴ የውስጡን ቁልፍ (የተሻሻለ ያልሆነ ቁልፍ) በሚሰማበት ጊዜ ቁልፍ ማተሚያውን ከመተግበሪያ ውሰጥ &lt;i&gt;ይደብቀዋል&lt;/i&gt; ።&lt;br&gt;ይህ አማራጭ ለአንቀሳቃሽ ማመልከቻው ምንም ግጭት ሳይኖር አቋራጭ መንገድ እንዲቀሰቅሱ ዋስትና ይሰጣል.   &lt;/li&gt;
+   &lt;li&gt;
+    &lt;b&gt;Exclusive Override&lt;/b&gt; ይህ ለ ካፕስ ሎክ ቁልፍ የተነደፈ ልዩ የoverride ዘዴ ነው. ለተመደበበት ቦታ &lt;b&gt;አንድ&lt;/b&gt; ቁልፍ (የማይለይ) ብቻ ይፈቅዳል ።&lt;br&gt;ካፕስ ሎክ ከሌሎች ቁልፎች ጋር ተቀናጅቶ በሚጫንበት ጊዜ &lt;i&gt;ሊጣበቅ&lt;/i&gt; ይችላል።&lt;br&gt;ስለዚህ ሌላ ቁልፍ ምንም ይሁን ምን &lt;b&gt;የሆትኪ&lt;/b&gt; አቋራጭ መንገድ ከተጫነ ተሻግሮ &lt;i&gt;እንዳይጣበቅ&lt;/i&gt; ይከላከላል።   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;እንጦጦ ፓስት (MonkeyPaste) &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag - and - Drop&lt;/p&gt;</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>&lt;p align="center"&gt;በዚህ መንገድ, MonkeyPaste ማግኘት ይቻላል&lt;br&gt;&lt;span color="red"&gt;ያለ መጫን&lt;/span&gt; ወይም &lt;span color="red"&gt;ደግሞ አይን ሳይደበዝዝ&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
 </root>
