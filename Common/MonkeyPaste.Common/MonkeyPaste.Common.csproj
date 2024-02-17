@@ -63,7 +63,7 @@
       <Pack>True</Pack>
     </None>
   </ItemGroup>
-  
+
   <!-- CUSTOM ATTRIBUTES-->
 
   <ItemGroup>
@@ -74,6 +74,9 @@
     <AssemblyAttribute Include="MonkeyPaste.Common.MpSolutionPathAttribute">
       <_Parameter1>$(SolutionPath)</_Parameter1>
     </AssemblyAttribute>
-</ItemGroup>
+    <AssemblyAttribute Include="MonkeyPaste.Common.MpAppVersionAttribute">
+      <_Parameter1>$(ApplicationVersion)</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 
 </Project>

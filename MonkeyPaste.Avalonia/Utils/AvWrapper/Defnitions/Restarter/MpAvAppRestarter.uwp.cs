@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
             "MonkeyPasteRestart";
 
         static string ExecProcessPath =>
-            !MpCommonHelpers.IsRunningAsStoreApp() ?
+            !MpPlatformHelpers.IsRunningAsStoreApp() ?
                 Mp.Services.PlatformInfo.ExecutingPath :
                 Environment.Is64BitOperatingSystem ?
                     Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.SystemX86), "cmd.exe") :
@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 string args = App.RESTART_ARG;
 
-                if (MpCommonHelpers.IsRunningAsStoreApp()) {
+                if (MpPlatformHelpers.IsRunningAsStoreApp()) {
                     string package_family_name = Package.Current.Id.FamilyName;
                     return $"/C \"start shell:AppsFolder\\{package_family_name}!App\" {args}";
                 }
@@ -47,8 +47,11 @@ namespace MonkeyPaste.Avalonia {
                     arguments: ExecProcessArgs);
 
                 TaskDefinition td = TaskService.Instance.NewTask();
+                td.Settings.DisallowStartIfOnBatteries = false;
+                td.Settings.StopIfGoingOnBatteries = false;
                 td.Triggers.Add(tt);
                 td.Actions.Add(ea);
+
 
                 TaskService.Instance.RootFolder.RegisterTaskDefinition(RestartTaskPath, td);
                 MpConsole.WriteLine($"Restart scheduled. Between {st} and {et}");

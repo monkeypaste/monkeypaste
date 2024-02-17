@@ -8,7 +8,7 @@ hide_table_of_contents: true
 
 <p class="dl-btn">
 <a class="fancy-hover" href="ms-windows-store://pdp/?productid=9MZRBMH3JT75"><img src={require('/img/download_win.png').default}/></a><br/>
-<span>Windows 10 (version 1809) and higher</span><br/>
+<span>Windows 10 (version 22H2 19045.4046) and higher</span><br/>
 </p>
 
 

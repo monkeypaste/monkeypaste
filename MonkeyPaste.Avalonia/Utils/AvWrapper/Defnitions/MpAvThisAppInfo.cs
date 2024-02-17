@@ -7,7 +7,6 @@ using Xamarin.Essentials;
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvThisAppInfo : MpIThisAppInfo {
-        public const string THIS_APP_VERSION = "1.0.7.0";
         // NOTE make sure Directory.build.props Application* props match these
         public string ThisAppCompanyName =>
             "Monkey LLC";
@@ -16,7 +15,8 @@ namespace MonkeyPaste.Avalonia {
             "MonkeyPaste";
         public string ThisAppProductVersion {
             get {
-                return THIS_APP_VERSION;
+                return MpPlatformHelpers.GetAppVersion().ToString();
+                //return THIS_APP_VERSION;
                 //#if WINDOWS && WAP
                 //                // from https://stackoverflow.com/a/62719001/105028
                 //                try {

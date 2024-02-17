@@ -93,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
 
         static string ActualEnumUiResxResourcePath =>
             Path.Combine(
-                MpCommonHelpers.GetSolutionDir(),
+                MpPlatformHelpers.GetSolutionDir(),
                 typeof(MpAvEnumUiStringResourceConverter).Assembly.GetName().Name,
                 "Resources",
                 "Localization",

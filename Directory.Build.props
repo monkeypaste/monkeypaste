@@ -5,9 +5,8 @@
     <ApplicationAuthor>Monkey LLC</ApplicationAuthor>
     <ApplicationVersionMajor>1</ApplicationVersionMajor>
     <ApplicationVersionMinor>0</ApplicationVersionMinor>
-    <ApplicationVersionPatch>7</ApplicationVersionPatch>
+    <ApplicationVersionPatch>9</ApplicationVersionPatch>
     <ApplicationVersionRevision>0</ApplicationVersionRevision>
-    <!-- NOTE this app version MUST match MpThisAppInfo.ProductVersion and is used for mac bundle and ledgerizer only -->
     <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch).$(ApplicationVersionRevision)</ApplicationVersion>
    </PropertyGroup>
   
@@ -47,7 +46,6 @@
 
   <PropertyGroup>
     <!-- DEFAULTS (MAYBE OVERRIDEN BY CONDITIONS) -->
-    <CefPlatformDir>cef\cef_win</CefPlatformDir>
     <IsDesktop>false</IsDesktop>
     <IsMobile>false</IsMobile>
     <DefaultPlatforms>AnyCPU;x64;x86</DefaultPlatforms>
@@ -78,8 +76,7 @@
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
     <UseCefNet>true</UseCefNet>
-    <TargetRuntimeIdentifiers>win-x64;win-x86</TargetRuntimeIdentifiers>
-    <CefPlatformRelDir>cef\cef_win</CefPlatformRelDir>
+    <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
     <PlatformShortName>uwp</PlatformShortName> 
     <StartupOutputType>WinExe</StartupOutputType>
     <BuildScriptsDir>$(BuildScriptsRootDir)\windows</BuildScriptsDir>
@@ -91,8 +88,7 @@
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <UseCefNet>true</UseCefNet>
-    <CefPlatformRelDir>cef\cef_linux</CefPlatformRelDir>
-    <PlatformShortName>x11</PlatformShortName>
+    <PlatformShortName>linux</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\linux</BuildScriptsDir>
   </PropertyGroup>
   
@@ -147,11 +143,6 @@
     <WebsiteRootDir>$(SolutionDir)\MonkeyPaste.com</WebsiteRootDir>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <CefNetLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.dll</CefNetLibDir>
-    <CefNetAvLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.Avalonia.dll</CefNetAvLibDir>
-    <CefPlatformDir>$(MainProjectDir)\$(CefPlatformRelDir)</CefPlatformDir>
-  </PropertyGroup>
   
   <PropertyGroup>
     <EditorSourceDir>$(UiProjectDir)\Resources\Editor</EditorSourceDir>
@@ -171,6 +162,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(UseCefNet)' == 'True'">
+    <CefPlatformDir>$(MainProjectDir)\cef\$(PlatformShortName)\$(Platform)</CefPlatformDir>
     <DefineConstants>$(DefineConstants);CEFNET_WV</DefineConstants>
   </PropertyGroup>
 

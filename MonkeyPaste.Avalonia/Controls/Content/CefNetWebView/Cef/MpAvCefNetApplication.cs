@@ -54,22 +54,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public static string CefFrameworkFolderName =>
-            $"cef_{_pinfo.OsShortName}";
-        public static string CefRootPath =>
-            Path.Combine(_pinfo.ExecutingDir, "cef");
-
-
-        public static string CefTempUpdateFolderPath =>
-            Path.Combine(CefRootPath, "temp");
-        public static string CefTempUpdateBackupFolderPath =>
-            Path.Combine(CefRootPath, "backup");
-
-        public static string CefTempUpdateBackupFrameworkPath =>
-            Path.Combine(CefTempUpdateBackupFolderPath, CefFrameworkFolderName);
-
         public static string CefFrameworkPath =>
-            Path.Combine(CefRootPath, CefFrameworkFolderName);
+            Path.Combine(_pinfo.ExecutingDir, "cef", _pinfo.OsShortName, _pinfo.PlatformName);
+        //MpPlatformHelpers.GetCefFrameworkDir();
+
         public static string CefReleasePath =>
             Path.Combine(CefFrameworkPath, "Release");
 

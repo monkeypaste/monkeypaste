@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         static string ExecProcessPath =>
-            !MpCommonHelpers.IsRunningAsStoreApp() ?
+            !MpPlatformHelpers.IsRunningAsStoreApp() ?
                 Mp.Services.PlatformInfo.ExecutingPath :
                 Environment.Is64BitOperatingSystem ?
                     Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.SystemX86), "cmd.exe") :
@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 string args = App.LOGIN_LOAD_ARG;
 
-                if (MpCommonHelpers.IsRunningAsStoreApp()) {
+                if (MpPlatformHelpers.IsRunningAsStoreApp()) {
                     string package_family_name = Package.Current.Id.FamilyName;
                     return $"/C \"start shell:AppsFolder\\{package_family_name}!App\" {args}";
                 }
@@ -51,6 +51,8 @@ namespace MonkeyPaste.Avalonia {
                     SetLoadOnLogin(false, true);
                     // Create a new task definition and assign properties
                     TaskDefinition td = TaskService.Instance.NewTask();
+                    td.Settings.DisallowStartIfOnBatteries = false;
+                    td.Settings.StopIfGoingOnBatteries = false;
                     td.RegistrationInfo.Description = $"Loads {Mp.Services.ThisAppInfo.ThisAppProductName} on login";
 
                     // Create a trigger that will fire the task at this time every other day

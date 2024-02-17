@@ -135,8 +135,8 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine("Core load complete");
             MpConsole.WriteLine($"App Version: '{Mp.Services.ThisAppInfo.ThisAppProductVersion}'", true);
             MpConsole.WriteLine($"Account Type: {MpAvAccountViewModel.Instance.AccountType} {MpAvAccountViewModel.Instance.BillingCycleType}");
-            MpConsole.WriteLine($"Local Storage Dir: '{MpCommonHelpers.GetStorageDir()}'");
-            MpConsole.WriteLine($"Package Cache Dir: '{MpCommonHelpers.GetStorageDir().LocalStoragePathToPackagePath()}'");
+            MpConsole.WriteLine($"Local Storage Dir: '{MpPlatformHelpers.GetStorageDir()}'");
+            MpConsole.WriteLine($"Package Cache Dir: '{MpPlatformHelpers.GetStorageDir().LocalStoragePathToPackagePath()}'");
 #if DEBUG
             MpConsole.WriteLine($"Pref Password: '{MpAvPrefViewModel.arg1}'");
             MpConsole.WriteLine($"Backup Pref Password: '{MpAvPrefViewModel.arg3}'");

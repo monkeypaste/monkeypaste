@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
         public static string SCRIPTS_ROOT_DIR =>
-            Path.Combine(MpCommonHelpers.GetSolutionDir(), "MonkeyPaste.Avalonia", "scripts");
+            Path.Combine(MpPlatformHelpers.GetSolutionDir(), "MonkeyPaste.Avalonia", "scripts");
         #endregion
 
         #region Interfaces

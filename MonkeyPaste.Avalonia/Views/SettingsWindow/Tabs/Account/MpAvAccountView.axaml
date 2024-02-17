@@ -67,7 +67,9 @@
         </local:MpAvSubscriptionView>
 
         <!--  NOTE BELOW IS FULL VIEW (DISABLED BY IsUserViewEnabled)  -->
-        <local:MpAvUserView Grid.Column="0"
+
+        <!--  UPGRADE INFO THING  -->
+        <!--<local:MpAvUserView Grid.Column="0"
                             IsVisible="{Binding IsUserViewEnabled, Source={x:Static local:MpAvAccountViewModel.Instance}}"
                             Classes.loginonly="{Binding IsLoginOnly, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
                             BorderThickness="0,0,1.5,0"
@@ -75,8 +77,7 @@
                             HorizontalContentAlignment="Center"
                             VerticalAlignment="Stretch"
                             VerticalContentAlignment="Top" />
-        <!--  UPGRADE INFO THING  -->
-        <TabControl x:Name="RightPaneTabControl"
+            <TabControl x:Name="RightPaneTabControl"
                     IsVisible="{Binding IsUserViewEnabled, Source={x:Static local:MpAvAccountViewModel.Instance}}"
                     TabStripPlacement="Bottom"
                     SelectedIndex="{Binding IsSubscriptionTabSelected, ConverterParameter=1|0, Mode=TwoWay, Converter={x:Static local:MpAvBoolToIntConverter.Instance}, Source={x:Static local:MpAvSubscriptionPurchaseViewModel.Instance}}"
@@ -87,7 +88,6 @@
                 <Thickness x:Key="TabItemMargin">0,0,0,0</Thickness>
             </TabControl.Resources>
 
-            <!--  WHATS NEW TAB  -->
 
             <TabItem>
                 <TabItem.Header>
@@ -111,8 +111,6 @@
 
             </TabItem>
 
-            <!--  SUBSCRIPTION TAB  -->
-
             <TabItem>
                 <TabItem.Header>
                     <Grid Classes="tab"
@@ -129,6 +127,6 @@
                                             VerticalAlignment="Stretch" />
             </TabItem>
 
-        </TabControl>
+        </TabControl>-->
     </Grid>
 </UserControl>

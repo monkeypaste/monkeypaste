@@ -5,7 +5,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Avalonia {
@@ -42,13 +41,28 @@ namespace MonkeyPaste.Avalonia {
 
         #region Info
 
+        public string PlatformName {
+            get {
+                bool is_64_bit = IntPtr.Size == 8;
+                if (RuntimeInformation.ProcessArchitecture == Architecture.Arm) {
+                    if (is_64_bit) {
+                        return "arm64";
+                    }
+                    return "arm";
+                }
+                if (is_64_bit) {
+                    return "x64";
+                }
+                return "x86";
+            }
+        }
         public virtual string OsShortName {
             get {
                 if (OperatingSystem.IsWindows()) {
-                    return "win";
+                    return "uwp";
                 }
                 if (OperatingSystem.IsLinux()) {
-                    return "x11";
+                    return "linux";
                 }
                 if (OperatingSystem.IsMacOS()) {
                     return "mac";
@@ -176,7 +190,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public virtual string ExecutingDir =>
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);//AppContext.BaseDirectory;
+            //Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            AppContext.BaseDirectory;
         public virtual string ExecutableName {
             get {
                 if (Environment.GetCommandLineArgs().Any()) {
@@ -201,7 +216,7 @@ namespace MonkeyPaste.Avalonia {
                     if (OperatingSystem.IsBrowser()) {
                         _storageDir = @"/tmp";
                     } else {
-                        _storageDir = MpCommonHelpers.GetStorageDir();
+                        _storageDir = MpPlatformHelpers.GetStorageDir();
                         if (!_storageDir.IsDirectory()) {
 
                             MpFileIo.CreateDirectory(_storageDir);

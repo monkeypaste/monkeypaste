@@ -258,7 +258,7 @@ namespace MonkeyPaste.Avalonia {
         private static string GetProjRootDir() {
 
             return Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
+                    MpPlatformHelpers.GetSolutionDir(),
                     typeof(MpAvEditorUiStringBuilder).Assembly.GetName().Name);
         }
         private static string GetRootDir(bool? forceRuntime = default) {

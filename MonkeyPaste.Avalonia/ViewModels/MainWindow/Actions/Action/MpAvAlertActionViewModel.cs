@@ -84,27 +84,27 @@ namespace MonkeyPaste.Avalonia {
                                     new MpParameterValueFormat() {
                                         isDefault = true,
                                         label = UiStrings.ActionAlertMonkeySound,
-                                        value ="MonkeySound"
+                                        value ="Monkey"
                                     },
                                     new MpParameterValueFormat() {
                                         label = UiStrings.ActionAlertTingSound,
-                                        value ="TingSound"
+                                        value ="Ting"
                                     },
                                     new MpParameterValueFormat() {
                                         label = UiStrings.ActionAlertChimeSound,
-                                        value ="ChimeSound"
+                                        value ="Chime"
                                     },
                                     new MpParameterValueFormat() {
                                         label = UiStrings.ActionAlertAlertSound,
-                                        value ="AlertSound"
+                                        value ="Alert"
                                     },
                                     new MpParameterValueFormat() {
                                         label = UiStrings.ActionAlertBlipSound,
-                                        value ="BlipSound"
+                                        value ="Blip"
                                     },
                                     new MpParameterValueFormat() {
                                         label = UiStrings.ActionAlertSonarSound,
-                                        value ="SonarSound"
+                                        value ="Sonar"
                                     },
                                 }
                             },
@@ -177,7 +177,7 @@ namespace MonkeyPaste.Avalonia {
                 if (ArgLookup.TryGetValue(SOUND_TYPE_PARAM_ID, out var param_vm)) {
                     return param_vm.CurrentValue;
                 }
-                return "MonkeySound";
+                return "Monkey";
             }
             set {
                 if (SoundResourceKey != value) {

@@ -60,7 +60,7 @@
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
-    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x64</AppxBundlePlatforms>
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
@@ -167,6 +167,12 @@
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Desktop\MonkeyPaste.Desktop.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <_CopyItems Include="$(MainTargetDir)cef\**\*.*" />
+  </ItemGroup>
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="@(_CopyItems)" DestinationFiles="@(_CopyItems->'$(TargetDir)\AppX\$(MainProjectName)\cef\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
   <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy OverwriteReadOnlyFiles="True" SkipUnchangedFiles="True" SourceFiles="$(TargetDatDir)\$(CoreOleGuid).zip" DestinationFolder="$(TargetDir)\AppX\$(MainProjectName)\dat" />
     <Copy OverwriteReadOnlyFiles="True" SkipUnchangedFiles="True" SourceFiles="$(TargetDatDir)\$(CoreAnnGuid).zip" DestinationFolder="$(TargetDir)\AppX\$(MainProjectName)\dat" />

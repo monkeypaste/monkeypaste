@@ -211,7 +211,7 @@ namespace MonkeyPaste.Avalonia {
 #if WINDOWS
         static FileStream? _lockFile;
         private static bool EnableSingleInstance() {
-            var dir = MpCommonHelpers.GetStorageDir();
+            var dir = MpPlatformHelpers.GetStorageDir();
             Directory.CreateDirectory(dir);
             try {
                 _lockFile = File.Open(Path.Combine(dir, ".lock"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);

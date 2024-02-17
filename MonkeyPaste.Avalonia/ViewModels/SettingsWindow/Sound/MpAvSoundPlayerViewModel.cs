@@ -5,12 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
 
+    public enum MpSoundType {
+        None = 0,
+        Monkey,
+        Ting,
+        Chime,
+        Alert,
+        Blip,
+        Sonar
+    }
     public enum MpSoundNotificationType {
         None = 0,
         Copy,
@@ -31,8 +39,21 @@ namespace MonkeyPaste.Avalonia {
         const int MAX_WIN_SOUND_PATH_LEN = 1;
         private Player _player;
 
+        private Dictionary<MpSoundNotificationType, MpSoundType> _soundNtfLookup = new() {
+            {MpSoundNotificationType.Copy,MpSoundType.Ting },
+            {MpSoundNotificationType.Paste,MpSoundType.Chime },
+            {MpSoundNotificationType.Error,MpSoundType.Alert },
+            {MpSoundNotificationType.AutoCopyOn,MpSoundType.Sonar },
+            {MpSoundNotificationType.AutoCopyOff,MpSoundType.Blip },
+            {MpSoundNotificationType.MousePasteOn,MpSoundType.Sonar },
+            {MpSoundNotificationType.MousePasteOff,MpSoundType.Blip },
+            {MpSoundNotificationType.AppendOn,MpSoundType.Sonar },
+            {MpSoundNotificationType.AppendOff,MpSoundType.Blip },
+            {MpSoundNotificationType.Loaded,MpSoundType.Monkey },
+        };
         //private SoundPlayer _soundPlayer = null;
-        private Dictionary<MpSoundNotificationType, string> _soundPathLookup = new Dictionary<MpSoundNotificationType, string>();
+        //private Dictionary<MpSoundNotificationType, string> _soundPathLookup = new Dictionary<MpSoundNotificationType, string>();
+        private Dictionary<MpSoundType, string> _soundFilePathLookup = new Dictionary<MpSoundType, string>();
         #endregion
 
         #region Statics
@@ -69,12 +90,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string SoundResourceDir =>
-            Mp.Services == null ||
-            Mp.Services.PlatformInfo == null ?
-                null :
-                Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "Assets", "Sounds");
-
-        public string SoundResourceBackupDir =>
             Mp.Services == null ||
             Mp.Services.PlatformInfo == null ?
                 null :
@@ -124,63 +139,32 @@ namespace MonkeyPaste.Avalonia {
                 _player = new Player();
                 await UpdateVolumeCommand.ExecuteAsync(null);
             }
+
             SelectedSoundGroup = (MpSoundGroupType)MpAvPrefViewModel.Instance.NotificationSoundGroupIdx;
-
-            _soundPathLookup.Clear();
-
-            for (int i = 0; i < Enum.GetNames(typeof(MpSoundNotificationType)).Length; i++) {
-                MpSoundNotificationType snt = (MpSoundNotificationType)i;
-                if (snt == MpSoundNotificationType.None) {
+            _soundFilePathLookup.Clear();
+            for (int i = 0; i < Enum.GetNames(typeof(MpSoundType)).Length; i++) {
+                MpSoundType st = (MpSoundType)i;
+                if (st == MpSoundType.None) {
                     continue;
                 }
-                // NOTE sounds are handled like other assets but are NOT avaloniaResources 
-                // because sound player only accepts file paths (stream's don't work on linux)
-                // Sounds have no build action and are copied to output directory so path is resolved here
-
-                string resource_key = $"{SelectedSoundGroup}{snt}Sound";
-                string sound_file_name = Mp.Services.PlatformResource.GetResource(resource_key) as string;
-                if (sound_file_name == null) {
+                string resource_key = $"{st}Sound";
+                string sound_uri_path = Mp.Services.PlatformResource.GetResource(resource_key) as string;
+                if (sound_uri_path == null) {
                     continue;
                 }
-                string sound_path = Path.Combine(SoundResourceDir, sound_file_name);
-
+                byte[] sound_bytes = await MpFileIo.ReadBytesFromUriAsync(sound_uri_path);
+                if (sound_bytes == null || sound_bytes.Length == 0) {
+                    continue;
+                }
+                if (!SoundResourceDir.IsDirectory()) {
+                    MpFileIo.CreateDirectory(SoundResourceDir);
+                }
+                string sound_path = Path.Combine(SoundResourceDir, $"{st}.wav");
                 if (!sound_path.IsFile()) {
-                    //error
-                    MpDebug.Break($"Sound load error. file not found '{sound_path}'");
-                    continue;
+                    MpFileIo.WriteByteArrayToFile(sound_path, sound_bytes);
                 }
-
-                if (sound_path.Length > MAX_WIN_SOUND_PATH_LEN &&
-                    OperatingSystem.IsWindows()) {
-                    // path too long for window due to MCI (windows) limitation.
-                    // substitute into storage dir on startup
-                    if (!SoundResourceBackupDir.IsDirectory()) {
-                        // this is intended for initial startup to fallback and store sounds in user storage
-                        if (MpFileIo.CreateDirectory(SoundResourceBackupDir)) {
-                            MpConsole.WriteLine($"Sound backup folder created successfully at '{SoundResourceBackupDir}'");
-                        } else {
-                            MpDebug.Break($"Sound load error. Cannot create backup dir '{SoundResourceBackupDir}'");
-                            continue;
-                        }
-                    }
-                    string backup_sound_path = Path.Combine(SoundResourceBackupDir, sound_file_name);
-                    if (backup_sound_path.Length > MAX_WIN_SOUND_PATH_LEN) {
-                        MpDebug.Break($"Sound load error. Backup is still too long.. path is '{backup_sound_path}' max length: {MAX_WIN_SOUND_PATH_LEN}");
-                        continue;
-                    }
-                    if (!backup_sound_path.IsFile()) {
-                        // initial create
-                        bool success = backup_sound_path == MpFileIo.CopyFileOrDirectory(sound_path, backup_sound_path, false);
-                        if (!success) {
-                            MpDebug.Break($"Sound load error. Cannot create backup to path '{backup_sound_path}'");
-                            continue;
-                        }
-                    }
-                    sound_path = backup_sound_path;
-                }
-
-                _soundPathLookup.Add(snt, sound_path);
-                MpConsole.WriteLine($"Initialized Sound: '{snt}' Path: '{sound_path}'");
+                _soundFilePathLookup.Add(st, sound_path);
+                MpConsole.WriteLine($"Initialized Sound: '{st}' Path: '{sound_path}'");
             }
 
             IsBusy = false;
@@ -257,21 +241,13 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PlayCustomSoundCommand => new MpAsyncCommand<object>(
             async (args) => {
-                if (args is not object[] argParts) {
+                if (args is not object[] argParts ||
+                    argParts[0] is not string sound_type_enum_key ||
+                    argParts[1] is not double norm_sound_vol ||
+                    !_soundFilePathLookup.TryGetValue(sound_type_enum_key.ToEnum<MpSoundType>(), out string sound_path) ||
+                    !sound_path.IsFile()) {
+                    MpConsole.WriteLine($"Error attempting to play custom sound '{args}'");
                     return;
-                }
-                string sound_path_or_key = argParts[0] as string;
-                double norm_sound_vol = (double)argParts[1];
-                string sound_path = sound_path_or_key;
-                if (!sound_path.IsFile()) {
-                    string sound_file_name = Mp.Services.PlatformResource.GetResource<string>(sound_path_or_key);
-                    if (sound_file_name == null ||
-                    _soundPathLookup.Values.FirstOrDefault(x => x.ToLowerInvariant().EndsWith(sound_file_name.ToLowerInvariant())) is not string lookup_path ||
-                    !lookup_path.IsFile()) {
-                        MpDebug.Break($"Error loading sound from arg '{sound_path_or_key}'");
-                        return;
-                    }
-                    sound_path = lookup_path;
                 }
                 await MpFifoAsyncQueue.WaitByConditionAsync(
                     lockObj: _soundPlayerLock,
@@ -287,16 +263,22 @@ namespace MonkeyPaste.Avalonia {
 
                 while (_player.Playing) {
                     await Task.Delay(100);
+                    if (!_player.Playing) {
+                        // give it a sec or this exception happens intermittently (windows):
+                        // Error executing MCI command 'Close All'. Error code: 288. Message: The specified device is now being closed.  Wait a few seconds, and then try again.
+                        await Task.Delay(1500);
+                    }
                 }
                 await UpdateVolumeCommand.ExecuteAsync(null);
 
             }, (args) => IsOsSupported);
         public ICommand PlaySoundNotificationCommand => new MpAsyncCommand<object>(
             async (args) => {
-
-                MpSoundNotificationType snt = (MpSoundNotificationType)args;
-                if (!_soundPathLookup.ContainsKey(snt)) {
-                    MpConsole.WriteLine($"Missing sound resource for ntf type: '{snt}'. Maybe intentional if path was too long, due to MCI (windows) limitation.");
+                if (args is not MpSoundNotificationType snt ||
+                    !_soundNtfLookup.TryGetValue(snt, out MpSoundType st) ||
+                    !_soundFilePathLookup.TryGetValue(st, out string sound_path) ||
+                    !sound_path.IsFile()) {
+                    MpConsole.WriteLine($"Error attempting to play sound ntf '{args}'");
                     return;
                 }
                 while (_player.Playing) {
@@ -305,12 +287,12 @@ namespace MonkeyPaste.Avalonia {
                     if (!_player.Playing) {
                         // give it a sec or this exception happens intermittently (windows):
                         // Error executing MCI command 'Close All'. Error code: 288. Message: The specified device is now being closed.  Wait a few seconds, and then try again.
-                        await Task.Delay(2000);
+                        await Task.Delay(1500);
                     }
                 }
                 try {
 
-                    await _player.Play(_soundPathLookup[snt]);
+                    await _player.Play(sound_path);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Exception playing sound '{snt}': ", ex);

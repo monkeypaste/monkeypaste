@@ -113,7 +113,7 @@ namespace Ledgerizer {
         #region Version Props
 
         const string VERSION_PHRASE = "Im the big T pot check me out";
-        static string VERSION => "1.0.7.0";
+        static string APP_VERSION => MpPlatformHelpers.GetAppVersion().ToString();
         #endregion
 
         #region General Props
@@ -811,7 +811,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
             var csv = raw_csv.ToTableFromCsv();
 
-            string prod_listing_dir_name = $"listing_product_{VERSION}";
+            string prod_listing_dir_name = $"listing_product_{APP_VERSION}";
             string prod_listing_dir_path =
                 Path.Combine(
                     GetListingDir(),
@@ -900,7 +900,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             // outputs path to listing file
 
             //GenEmptyLocalizedListings();
-            string listing_dir_name = $"listing_{plan_name}_{cycle_type}_{VERSION}";
+            string listing_dir_name = $"listing_{plan_name}_{cycle_type}_{APP_VERSION}";
 
             var ccl = MpLocalizationHelpers.FindCulturesInDirectory(GetListingDir(), "ListingStrings").Select(x => x.Name);
             var line1 = "Field,ID,Type (Type),default".Split(",").ToList();
@@ -966,7 +966,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         static string GetListingDir() {
 
             string listing_dir = Path.Combine(
-                MpCommonHelpers.GetSolutionDir(),
+                MpPlatformHelpers.GetSolutionDir(),
                 "MonkeyPaste.Avalonia",
                 "Resources",
                 "Localization",
@@ -1036,7 +1036,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             string root_pack_dir = MpLedgerConstants.PLUGIN_PACKAGES_DIR;
             string proj_dat_dir =
                 Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
+                    MpPlatformHelpers.GetSolutionDir(),
                     "MonkeyPaste.Avalonia",
                     "Assets",
                     "dat");
@@ -1067,7 +1067,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         static void MoveJsUiStrings() {
             foreach (string cc in WorkingCultures) {
                 string uistr_path = Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
+                    MpPlatformHelpers.GetSolutionDir(),
                     "MonkeyPaste.Avalonia",
                     "Resources",
                     "Localization",
@@ -1096,7 +1096,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
                 string js_uistr_path =
                     Path.Combine(
-                        MpCommonHelpers.GetSolutionDir(),
+                        MpPlatformHelpers.GetSolutionDir(),
                         "MonkeyPaste.Avalonia",
                         "Resources",
                         "Editor",
@@ -1434,7 +1434,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                         var culture_manifest = GetLocalizedManifest(plugin_name, cc);
                         if (ledger.manifests.FirstOrDefault(x => x.guid == culture_manifest.guid) is { } ledger_manifest) {
                             // use inv ledger packageUrl
-                            culture_manifest.publishedAppVersion = VERSION;
+                            culture_manifest.publishedAppVersion = APP_VERSION;
                             culture_manifest.packageUrl = ledger_manifest.packageUrl;
                         }
 
@@ -1499,7 +1499,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 foreach (string plugin_name in AllPluginNames) {
                     var mf = MpFileIo.ReadTextFromFile(Path.Combine(GetPluginProjDir(plugin_name), ManifestFileName)).DeserializeObject<MpManifestFormat>();
                     // set pub app version for all plugins
-                    mf.publishedAppVersion = VERSION;
+                    mf.publishedAppVersion = APP_VERSION;
                     mf.packageUrl = GetPluginPackageUri(plugin_name, !is_remote, !is_release);
                     mf.readmeUrl = GetPluginPropertyUri(plugin_name, "readme");
                     mf.projectUrl = GetPluginPropertyUri(plugin_name, "project");
@@ -1575,7 +1575,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
             string plugin_install_dir =
                 Path.Combine(
-                    MpCommonHelpers.GetStorageDir(),
+                    MpPlatformHelpers.GetStorageDir(),
                     "Plugins",
                     guid);
             string install_update_suffix = string.Empty;
@@ -1765,7 +1765,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         }
         static string GetPluginProjDir(string plugin_name) {
             return Path.Combine(
-                        MpCommonHelpers.GetSolutionDir(),
+                        MpPlatformHelpers.GetSolutionDir(),
                         "Plugins",
                         plugin_name);
         }

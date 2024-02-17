@@ -7,7 +7,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <Platforms>$(DefaultPlatforms)</Platforms>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-    <RuntimeIdentifiers>$(TargetRuntimeIdentifiers)</RuntimeIdentifiers>
+    <RuntimeIdentifier>$(TargetRuntimeIdentifiers)</RuntimeIdentifier>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>monkey.ico</ApplicationIcon>
     <Product>$(ApplicationName)</Product>
@@ -16,6 +16,9 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <!--<AssemblyName>$(ApplicationName)</AssemblyName>-->
     <!--<TargetName>$(ApplicationName)</TargetName>-->
+    
+    <!-- This remove extra runtime folders see https://stackoverflow.com/a/70144716/105028 -->
+    <!--<SelfContained>False</SelfContained>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
@@ -57,20 +60,48 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="$(BuildOs) == 'MAC'">
     <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
   </ItemGroup>
-
   
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
     <ProjectReference Include="..\_build\_build.csproj" />
   </ItemGroup>
 
+  <!--<ItemGroup Condition="$(UseCefNet) == 'True' And '$(Configuration)' == 'Debug'">
+    <Content Include="$(CefPlatformDir)\Debug\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>-->
+
+
+  <ItemGroup>
+    <None Remove="cef\**"/>
+  </ItemGroup>
   <ItemGroup Condition="$(UseCefNet) == 'True'">
+    <Content Include="$(CefPlatformDir)\Release\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+    <Content Include="$(CefPlatformDir)\Resources\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+    <Content Include="$(CefPlatformDir)\LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!--<ItemGroup>
     <Content Include="$(CefPlatformDir)\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
+  </ItemGroup>-->
+  
 
   <ItemGroup>
     <Reference Include="CefNet">

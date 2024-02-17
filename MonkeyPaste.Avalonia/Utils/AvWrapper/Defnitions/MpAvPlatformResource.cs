@@ -6,9 +6,14 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlatformResource : MpIPlatformResource {
+        string[] _binaryResourceExtensions = [
+            "zip",
+            "wav"
+            ];
         public object GetResource(string resourceKey) {
             if (string.IsNullOrEmpty(resourceKey)) {
                 return null;
@@ -19,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
             } else if (Application.Current.Styles.TryGetResource(resourceKey, Application.Current.ActualThemeVariant, out object styleValue)) {
                 result = styleValue;
             }
-            if (result == null && resourceKey.EndsWith("zip")) {
+            if (result == null && _binaryResourceExtensions.Contains(resourceKey.SplitNoEmpty(".").LastOrDefault())) {
                 // handle dats
                 using (var stream = AssetLoader.Open(new Uri(resourceKey, UriKind.RelativeOrAbsolute))) {
                     stream.Seek(0, SeekOrigin.Begin);

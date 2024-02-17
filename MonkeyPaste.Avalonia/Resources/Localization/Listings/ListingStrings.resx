@@ -325,7 +325,4 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Unlimited - Yearly</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Initial Release</value>
-  </data>
 </root>

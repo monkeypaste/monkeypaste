@@ -22,6 +22,7 @@ namespace MonkeyPaste.Common {
         bool IsTouchInputEnabled { get; }
         bool IsTraceEnabled { get; }
         string OsShortName { get; }
+        string PlatformName { get; }
 
         string EditorPath { get; }
         string TermsPath { get; }

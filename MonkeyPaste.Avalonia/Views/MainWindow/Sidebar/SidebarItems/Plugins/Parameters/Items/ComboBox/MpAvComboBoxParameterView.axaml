@@ -23,7 +23,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style Selector="ComboBox[IsDropDownOpen=true] ComboBoxItem"
+        <Style Selector="ComboBox[IsDropDownOpen=true].font-chooser ComboBoxItem"
                x:DataType="local:MpAvSingleEnumerableParameterViewModel">
             <Setter Property="MinWidth"
                     Value="250" />

@@ -217,7 +217,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Sync
         [JsonIgnore]
-        public string SyncCertFolderPath => Path.Combine(MpCommonHelpers.GetStorageDir(), "SyncCerts");
+        public string SyncCertFolderPath => Path.Combine(MpPlatformHelpers.GetStorageDir(), "SyncCerts");
         [JsonIgnore]
         public string SyncCaPath => Path.Combine(SyncCertFolderPath, @"MPCA.cert");
         [JsonIgnore]
@@ -384,7 +384,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsLoggingEnabled { get; set; }
 
         public bool LoadOnLogin { get; set; } = false;
-        public string LastLoadedVersion { get; set; } = MpAvThisAppInfo.THIS_APP_VERSION;
+        public string LastLoadedVersion { get; set; } = MpPlatformHelpers.GetAppVersion().ToString();
 
         #endregion
 

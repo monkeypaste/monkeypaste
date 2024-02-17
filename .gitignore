@@ -358,6 +358,7 @@ MigrationBackup/
 /WebTest
 /cefnet11
 /MonkeyPaste.Avalonia/dat
+/MonkeyPaste.Desktop/cef
 /MonkeyPaste.com/login/config.php
 /MonkeyPaste.com/accounts/config.php
 /legal_docs

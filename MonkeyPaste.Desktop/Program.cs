@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
             //bool success = MpFileIo.DeleteDirectory(Path.Combine(@"C:\Users\tkefauver\AppData\Local", "MonkeyPaste_DEBUG", "Plugins", "cf2ec03f-9edd-45e9-a605-2a2df71e03bd"));
             if (CLEAR_STORAGE) {
                 // NOTE use this when local storage folder won't go away
-                string path1 = MpCommonHelpers.GetStorageDir();
+                string path1 = MpPlatformHelpers.GetStorageDir();
                 bool success1 = MpFileIo.DeleteDirectory(path1);
                 Console.WriteLine($"Deleted '{path1}': {success1.ToTestResultLabel()}");
             }
