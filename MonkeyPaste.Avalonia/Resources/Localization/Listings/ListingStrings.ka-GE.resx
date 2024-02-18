@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>ეკრანის კადრები მხოლოდ მაგალითებია. ის, რაც დააინსტალირეთ, ითარგმნა ამ ენაზე.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>ამ გამოწერით მიიღებთ:
-● შეუზღუდავი სიმძლავრე
-● მოწყობილობის სინქრონიზაცია (ხელმისაწვდომობის საფუძველზე)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>შეუზღუდავი - ყოველთვიური</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>საწყისი გამოშვება</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>ამ გამოწერით მიიღებთ:
+● შეუზღუდავი სიმძლავრე</value>
   </data>
 </root>

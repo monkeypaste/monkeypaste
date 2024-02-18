@@ -238,11 +238,6 @@ Votre presse-papiers est toujours suivi ou stocké n'importe où au-delà de vot
   <data name="TranslationWarning" xml:space="preserve">
     <value>Les captures d'écran ne sont que des exemples. Ce que vous installez a été traduit dans cette langue.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Avec cet abonnement, vous recevrez:
-● Capacité illimitée
-● Synchronisation des appareils (sur disponibilité)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Illimité - mensuel</value>
   </data>
@@ -251,5 +246,9 @@ Votre presse-papiers est toujours suivi ou stocké n'importe où au-delà de vot
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Première version</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Avec cet abonnement, vous recevrez:
+● Capacité illimitée</value>
   </data>
 </root>

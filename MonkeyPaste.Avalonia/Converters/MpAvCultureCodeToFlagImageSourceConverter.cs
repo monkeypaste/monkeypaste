@@ -23,6 +23,9 @@ namespace MonkeyPaste.Avalonia {
             string flags_base_uri = Mp.Services.PlatformResource.GetResource<string>("FlagsBase");
             string source = $"{flags_base_uri}/{key.ToLowerInvariant()}.png";
             MpConsole.WriteLine($"{source}");
+            if (targetType == typeof(string)) {
+                return source;
+            }
             return MpAvIconSourceObjToBitmapConverter.Instance.Convert(source, typeof(Bitmap), parameter, culture);
         }
 

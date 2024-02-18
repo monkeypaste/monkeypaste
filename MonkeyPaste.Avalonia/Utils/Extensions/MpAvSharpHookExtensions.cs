@@ -236,6 +236,8 @@ namespace MonkeyPaste.Avalonia {
             if (lks == MpInputConstants.META_KEY_LITERAL.ToLower() ||
                 lks == MpInputConstants.WIN_META_KEY_LITERAL.ToLower() ||
                 lks == MpInputConstants.MAC_META_KEY_LITERAL.ToLower() ||
+                lks == MpInputConstants.WIN_META_KEY_DISPLAY_VALUE.ToLower() ||
+                lks == MpInputConstants.MAC_META_KEY_DISPLAY_VALUE.ToLower() ||
                 lks == MpInputConstants.LINUX_META_KEY_LITERAL.ToLower()) {
                 return KeyCode.VcLeftMeta;
             }

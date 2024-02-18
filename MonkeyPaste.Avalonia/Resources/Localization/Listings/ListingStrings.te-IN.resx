@@ -238,11 +238,6 @@ Stort 1,000 క్లిప్‌ల కంటెంట్ వరకు
   <data name="TranslationWarning" xml:space="preserve">
     <value>స్క్రీన్ షాట్లు ఉదాహరణలు మాత్రమే. మీరు ఇన్‌స్టాల్ చేసేది ఈ భాషకు అనువదించబడింది.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>ఈ సభ్యత్వంతో మీరు అందుకుంటారు:
-అపరిమిత సామర్థ్యం
-పరికర సమకాలీకరణ (లభ్యతపై)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>అపరిమిత - నెలవారీ</value>
   </data>
@@ -251,5 +246,9 @@ Stort 1,000 క్లిప్‌ల కంటెంట్ వరకు
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>ప్రారంభ విడుదల</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>ఈ సభ్యత్వంతో మీరు అందుకుంటారు:
+అపరిమిత సామర్థ్యం</value>
   </data>
 </root>

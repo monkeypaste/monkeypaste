@@ -35,16 +35,36 @@ Bu geri qaytarıla bilməz!`,
 	EditorRegExLabel: ` Müntəzəm ifadə`,
 	EditorReplaceAllLabel: `Hamısını əvəz edin`,
 	EditorReplaceLabel: `Əvəz etmək`,
-	EditorTemplateContactHint: `<p> Mövcud kontaktlardan istifadə etmək (bu sahə bu sahə bu sənəddəki bu şablonun bütün halları üçün istifadə ediləcək və ya sonradan istinad ediləcək. </ p> <p> Beləliklə, e-poçt ünvanı seçilməlidir Burada seçim etdiyiniz kontaktın e-poçt sahəsi bu sənəddəki bütün hallar üçün istifadə ediləcəkdir. </ p>`,
+	EditorTemplateContactHint: `Mövcud kontaktlardan istifadə etmək (bu sahə bu sahə bu sənəddəki bu şablon nümunələri üçün istifadə ediləcək və ya sonradan istinad ediləcək.
+ Beləliklə, məsələn, burada E-poçt ünvanı varsa, seçdiyiniz kontaktın e-poçt sahəsi bu sənəddəki bütün hallar üçün istifadə ediləcəkdir.`,
 	EditorTemplateContactName: `Əlaqə`,
-	EditorTemplateDateTimeCustomHint: `YY = qısa bir il <br/> YYYY = Uzun il <br/> m = ay (1-12) <br/> mm = ay (01-12) <br/> mmm = aylıq ixtisarlar (Yanvar, Fevral .. . Dekabr) Həftənin günü sözləri (Bazar ertəsi, Çərşənbə axşamı ... Bazar günü) <br/> e = sözlərdə (Mon, Tue ... Sun) <br/> d - Ordinal Günü (1, 2-ci, 3, 21, 22-ci, 22, 23-cü, 31, 31, 4-cü, 4-cü ...) <br/> h = saat AM / PM (0-12) / saat AM / PM > H = saatda (0-23) <br/> hh = gündə saat (00-23) <br/> mm = dəqiqə <br/> ss = ikinci A = AM / PM marker <br/> p = A.M./p.m. marker`,
+	EditorTemplateDateTimeCustomHint: `YY = qısa il
+yyyy = uzun il
+M = ay (1-12)
+Mm = ay (01-12)
+Mmm = ay ixtisar (yanvar, fev ... dekabr)
+Mmmm = uzun ay (yanvar, fevral ... Dekabr)
+d = gün (1 - 31)
+DD = gün (01 - 31)
+DDD = Həftənin günü sözlə (Bazar ertəsi, Çərşənbə axşamı ... Bazar günü)
+E = Həftənin qısa günü sözlərdə (Mon, Tue ... Sun)
+D - Ordinal Günü (1-ci, 2-ci, 3-cü, 21, 22-ci, 22, 23, 31, 4-cü ...)
+H = saat AM / PM (0-12)
+hh = saat AM / PM (00-12)
+H = Gündə saat (0-23)
+HH = Gündə saat (00-23)
+mm = dəqiqə
+ss = saniyə
+SSS = millisekunds
+A = AM / PM marker
+p = a.m./p.m. marker`,
 	EditorTemplateDateTimeCustomLabel: `Adlı`,
 	EditorTemplateDateTimeHint: `Cari tarix və / və ya vaxt yapışdırıldıqda doğma şablonları üçün əvəz ediləcəkdir.`,
 	EditorTemplateDateTimeName: `Tarix vaxt`,
-	EditorTemplateDynamicHint: `<p> Bu şablonun bütün yararları verilən mətni istifadə edəcəkdir. </ p>`,
+	EditorTemplateDynamicHint: `Bu şablonun bütün yararları verilən mətni istifadə edəcəkdir.`,
 	EditorTemplateDynamicName: `Dinamik`,
 	EditorTemplateEmptyPlaceholder: `{0} boşdur ...`,
-	EditorTemplateStaticHint: `<p> Bu şablonun bütün yararları verilən mətni istifadə edəcəkdir. </ p>`,
+	EditorTemplateStaticHint: `Bu şablonun bütün yararları verilən mətni istifadə edəcəkdir.`,
 	EditorTemplateStaticName: `Statik`,
 	EditorTemplateTeaserText: `Daha çox gələcək!`,
 	EditorWatermark: `Zəhmət olmasa, gözləyin...`,

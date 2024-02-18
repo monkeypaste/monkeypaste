@@ -1,0 +1,4 @@
+var _mp_deferred_parameter_command_request_format_8cs =
+[
+    [ "MonkeyPaste.Common.Plugin.MpDeferredParameterCommandRequestFormat", "class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_deferred_parameter_command_request_format.html", "class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_deferred_parameter_command_request_format" ]
+];

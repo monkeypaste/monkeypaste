@@ -1,0 +1,304 @@
+\doxysection{Mp\+Portable\+Data\+Formats.\+cs}
+\hypertarget{_mp_portable_data_formats_8cs_source}{}\label{_mp_portable_data_formats_8cs_source}\index{C:/Users/tkefauver/Source/Repos/MonkeyPaste/Common/MonkeyPaste.Common.Plugin/Data/MpPortableDataFormats.cs@{C:/Users/tkefauver/Source/Repos/MonkeyPaste/Common/MonkeyPaste.Common.Plugin/Data/MpPortableDataFormats.cs}}
+\mbox{\hyperlink{_mp_portable_data_formats_8cs}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00002}00002\ \textcolor{keyword}{using\ }System.Collections.Generic;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00004}00004\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin}{MonkeyPaste.Common.Plugin}}\ \{}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00007}00007\ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{static}\ \textcolor{keyword}{class\ }MpPortableDataFormats\ \{}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00008}00008\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#region\ Private\ Variables}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00010}00010\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}\ \textcolor{keyword}{static}\ MpIPlatformDataObjectRegistrar\ \_registrar;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00012}00012\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{string}[]\ \_defaultFormatNames\ =\ \textcolor{keyword}{new}\ \textcolor{keywordtype}{string}[]\ \{}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00014}00014\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ windows}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00016}00016\ \ \ \ \ \ \ \ \ \ \ \ \ Text,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00017}00017\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Rtf,}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00018}00018\ \ \ \ \ \ \ \ \ \ \ \ \ WinXaml,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00019}00019\ \ \ \ \ \ \ \ \ \ \ \ \ WinXamlPackage,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00020}00020\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Html,}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00021}00021\ \ \ \ \ \ \ \ \ \ \ \ \ Csv,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00022}00022\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Unicode,}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00023}00023\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//OemText,}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00024}00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//FileDrop,}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00025}00025\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//WinBitmap,}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00026}00026\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//WinDib,}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00027}00027\ \textcolor{preprocessor}{\#if\ MAC}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00028}00028\ \ \ \ \ \ \ \ \ \ \ \ \ MacRtf1,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00029}00029\ \ \ \ \ \ \ \ \ \ \ \ \ MacRtf2,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00030}00030\ \ \ \ \ \ \ \ \ \ \ \ \ MacText1,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00031}00031\ \ \ \ \ \ \ \ \ \ \ \ \ MacText2,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00032}00032\ \ \ \ \ \ \ \ \ \ \ \ \ MacText3,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00033}00033\ \ \ \ \ \ \ \ \ \ \ \ \ MacFiles2,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00034}00034\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ linux}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ MimeMozUrl,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ MimeGnomeFiles,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ MimeUriList,\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ avalonia}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ Rtf,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ Xhtml,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ Files,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ Image,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cef}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ Html,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00052}00052\ \ \ \ \ \ \ \ \ \ \ \ \ MimeText,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ MimeJson,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ CefAsciiUrl,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//CefUnicodeUrl,}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ internal}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00058}00058\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_SOURCE\_URI\_LIST\_FORMAT,\ \textcolor{comment}{//\ maps\ to\ LinuxUriList\ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_PARTIAL\_HANDLE\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_TITLE\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_ROI\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_ANNOTATION\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00063}00063\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_DELTA\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00064}00064\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_PARAMETER\_REQUEST\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_SEARCH\_CRITERIA\_ITEM\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00066}00066\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_TAG\_ITEM\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_TYPE\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00068}00068\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_ACTION\_ITEM\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00069}00069\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_PROCESS\_INFO\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00070}00070\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_FILE\_LIST\_FRAGMENT\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00071}00071\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_ID\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00072}00072\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_DATA\_OBJECT\_SOURCE\_TYPE\_FORMAT}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00073}00073\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00076}00076\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endregion}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00078}00078\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#region\ Constants}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00080}00080\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Windows\ Formats}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00081}00081\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinText\ =\ \textcolor{stringliteral}{"{}Text"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00082}00082\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinXaml\ =\ \textcolor{stringliteral}{"{}Xaml"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00083}00083\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinXamlPackage\ =\ \textcolor{stringliteral}{"{}XamlPackage"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00084}00084\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinUnicode\ =\ \textcolor{stringliteral}{"{}Unicode"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00085}00085\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinOEMText\ =\ \textcolor{stringliteral}{"{}OEMText"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00086}00086\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinFiles\ =\ \textcolor{stringliteral}{"{}Files"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00087}00087\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinImage\ =\ \textcolor{stringliteral}{"{}PNG"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00090}00090\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinCsv\ =\ \textcolor{stringliteral}{"{}CSV"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00091}00091\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinBitmap\ =\ \textcolor{stringliteral}{"{}Bitmap"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00092}00092\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinDib\ =\ \textcolor{stringliteral}{"{}DeviceIndependentBitmap"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00093}00093\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinRtf\ =\ \textcolor{stringliteral}{"{}Rich\ Text\ Format"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00094}00094\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinXhtml\ =\ \textcolor{stringliteral}{"{}HTML\ Format"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00095}00095\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ WinFileDrop\ =\ \textcolor{stringliteral}{"{}FileDrop"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00097}00097\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Mac\ Formats}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00098}00098\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacRtf1\ =\ \textcolor{stringliteral}{"{}public.rtf"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00099}00099\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacRtf2\ =\ \textcolor{stringliteral}{"{}com.apple.flat-\/rtfd"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00101}00101\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacText1\ =\ \textcolor{stringliteral}{"{}public.utf8-\/plain-\/text"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00102}00102\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacText2\ =\ \textcolor{stringliteral}{"{}public.utf16-\/external-\/plain-\/text"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00103}00103\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacText3\ =\ \textcolor{stringliteral}{"{}NSStringPboardType"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00105}00105\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacHtml1\ =\ \textcolor{stringliteral}{"{}public.html"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00106}00106\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacHtml2\ =\ \textcolor{stringliteral}{"{}Apple\ HTML\ pasteboard\ type"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00107}00107\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00108}00108\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacFiles1\ =\ \textcolor{stringliteral}{"{}public.file-\/url"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00109}00109\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacFiles2\ =\ \textcolor{stringliteral}{"{}NSFilenamesPboardType"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00111}00111\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacUrl\ =\ \textcolor{stringliteral}{"{}public.url"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00112}00112\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacUrl2\ =\ \textcolor{stringliteral}{"{}com.apple.webarchive"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00113}00113\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ this\ formats\ on\ dnd\ from\ chrome\ on\ mac\ with\ the\ toplevel\ domain\ url\ as\ the\ content}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00114}00114\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacUrl3\ =\ \textcolor{stringliteral}{"{}org.chromium.chromium-\/renderer-\/initiated-\/drag"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00116}00116\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacImage1\ =\ \textcolor{stringliteral}{"{}public.tiff"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00117}00117\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MacImage2\ =\ \textcolor{stringliteral}{"{}public.png"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00120}00120\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Avalonia\ Formats}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00123}00123\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Cef\ Formats}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00125}00125\ \ \ \ \ \ \ \ \ \textcolor{comment}{//public\ const\ string\ CefDragData\ =\ "{}CefDragData"{};}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00126}00126\ \ \ \ \ \ \ \ \ \textcolor{comment}{//public\ const\ string\ CefUnicodeUrl\ =\ "{}UniformResourceLocatorW"{};}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00127}00127\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ CefAsciiUrl\ =\ \textcolor{stringliteral}{"{}UniformResourceLocator"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00129}00129\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ mime\ formats}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00130}00130\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MimeHtml\ =\ \textcolor{stringliteral}{"{}text/html"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00131}00131\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MimeText\ =\ \textcolor{stringliteral}{"{}text/plain"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00132}00132\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MimeJson\ =\ \textcolor{stringliteral}{"{}application/json"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00134}00134\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MimeMozUrl\ =\ \textcolor{stringliteral}{"{}text/x-\/moz-\/url-\/priv"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00135}00135\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MimeUriList\ =\ \textcolor{stringliteral}{"{}text/uri-\/list"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00136}00136\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Linux\ (gnome)\ only}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00137}00137\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ MimeGnomeFiles\ =\ \textcolor{stringliteral}{"{}x-\/special/gnome-\/copied-\/files"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00139}00139\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Runtime\ formats}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00140}00140\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00141}00141\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ Text\ =}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00142}00142\ \textcolor{preprocessor}{\#if\ MAC}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00143}00143\ \ \ \ \ \ \ \ \ \ \ \ \ MacText1;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00144}00144\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00145}00145\ \ \ \ \ \ \ \ \ \ \ \ \ WinText;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00146}00146\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00148}00148\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ Text2\ =}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00149}00149\ \textcolor{preprocessor}{\#if\ WINDOWS}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00150}00150\ \ \ \ \ \ \ \ \ \ \ \ \ WinUnicode;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00151}00151\ \textcolor{preprocessor}{\#elif\ MAC}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00152}00152\ \ \ \ \ \ \ \ \ \ \ \ \ MacText2;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00153}00153\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00154}00154\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ Text3\ =}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00155}00155\ \textcolor{preprocessor}{\#if\ WINDOWS}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00156}00156\ \ \ \ \ \ \ \ \ \ \ \ \ WinOEMText;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00157}00157\ \textcolor{preprocessor}{\#elif\ MAC}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00158}00158\ \ \ \ \ \ \ \ \ \ \ \ \ MacText3;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00159}00159\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00160}00160\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00161}00161\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ Rtf\ =}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00162}00162\ \textcolor{preprocessor}{\#if\ WINDOWS}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ \ \ WinRtf;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00164}00164\ \textcolor{preprocessor}{\#elif\ MAC}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00165}00165\ \ \ \ \ \ \ \ \ \ \ \ \ MacRtf1;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00166}00166\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00167}00167\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ Image\ =}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00168}00168\ \textcolor{preprocessor}{\#if\ WINDOWS}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ \ \ WinImage;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00170}00170\ \textcolor{preprocessor}{\#elif\ MAC}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00171}00171\ \ \ \ \ \ \ \ \ \ \ \ \ MacImage1;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00172}00172\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00173}00173\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00174}00174\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ Image2\ =}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00175}00175\ \textcolor{preprocessor}{\#if\ WINDOWS}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00176}00176\ \ \ \ \ \ \ \ \ \ \ \ \ WinBitmap;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00177}00177\ \textcolor{preprocessor}{\#elif\ MAC}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00178}00178\ \ \ \ \ \ \ \ \ \ \ \ \ MacImage2;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00179}00179\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00180}00180\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00181}00181\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ Files\ =}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00182}00182\ \textcolor{preprocessor}{\#if\ WINDOWS}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00183}00183\ \ \ \ \ \ \ \ \ \ \ \ \ WinFiles;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00184}00184\ \textcolor{preprocessor}{\#elif\ MAC}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00185}00185\ \ \ \ \ \ \ \ \ \ \ \ \ MacFiles1;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00186}00186\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00187}00187\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ Csv\ =}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00188}00188\ \textcolor{preprocessor}{\#if\ WINDOWS}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ WinCsv;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00190}00190\ \textcolor{preprocessor}{\#elif\ MAC}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00191}00191\ \ \ \ \ \ \ \ \ \ \ \ \ WinCsv;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00192}00192\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00193}00193\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00194}00194\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ Html\ =}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00195}00195\ \textcolor{preprocessor}{\#if\ WINDOWS}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ \ \ MimeHtml;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00197}00197\ \textcolor{preprocessor}{\#elif\ MAC}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ MimeHtml;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00199}00199\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00200}00200\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ Xhtml\ =}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00201}00201\ \textcolor{preprocessor}{\#if\ WINDOWS}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00202}00202\ \ \ \ \ \ \ \ \ \ \ \ \ WinXhtml;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00203}00203\ \textcolor{preprocessor}{\#elif\ MAC}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00204}00204\ \ \ \ \ \ \ \ \ \ \ \ \ WinXhtml;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00205}00205\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00206}00206\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00207}00207\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ internal}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00208}00208\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00209}00209\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_SOURCE\_URI\_LIST\_FORMAT\ =\ MimeUriList;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00210}00210\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00211}00211\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_CONTENT\_ID\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Content"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00212}00212\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_CONTENT\_PARTIAL\_HANDLE\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Partial\ Content"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00213}00213\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_CONTENT\_TYPE\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Content\ Type"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00214}00214\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_CONTENT\_TITLE\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Content\ Title"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00215}00215\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_CONTENT\_ROI\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Content\ Roi"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00216}00216\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_CONTENT\_ANNOTATION\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Content\ Annotation"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00217}00217\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_CONTENT\_DELTA\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Quill\ Delta\ Json"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00218}00218\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00219}00219\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_PARAMETER\_REQUEST\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Parameter\ Request\ Format"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00220}00220\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_SEARCH\_CRITERIA\_ITEM\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Search\ Criteria\ Item"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00221}00221\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_TAG\_ITEM\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Tag\ Tile\ Item"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00222}00222\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_ACTION\_ITEM\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Action\ Item"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00223}00223\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_PARAMETER\_VALUE\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Parameter\ Value"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00224}00224\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_PROCESS\_INFO\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Process\ Info"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00225}00225\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_FILE\_LIST\_FRAGMENT\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ File\ List\ Fragment\ Format"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00226}00226\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_RTF\_TO\_HTML\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ RTF\ To\ HTML\ Content\ Type"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00227}00227\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_HTML\_TO\_RTF\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ HTML\ To\ RTF\ Content\ Type"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00228}00228\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00229}00229\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00230}00230\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ NOTE\ data\ object\ is\ not\ registered\ and\ only\ used\ to\ merge\ data\ objects}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00231}00231\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_DATA\_OBJECT\_SOURCE\_TYPE\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Data\ Object\ Source\ Type\ Format"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00232}00232\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ INTERNAL\_DATA\_OBJECT\_FORMAT\ =\ \textcolor{stringliteral}{"{}Mp\ Internal\ Data\ Object\ Format"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00233}00233\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00234}00234\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ PLACEHOLDER\_DATAOBJECT\_TEXT\ =\ \textcolor{stringliteral}{"{}3acaaed7-\/862d-\/47f5-\/8614-\/3259d40fce4d"{}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00235}00235\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endregion}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00236}00236\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00237}00237\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#region\ Statics}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00238}00238\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00239}00239\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{string}[]\ InternalFormats\ =\ \textcolor{keyword}{new}\ \textcolor{keywordtype}{string}[]\ \{}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00240}00240\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_SOURCE\_URI\_LIST\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00241}00241\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_ID\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00242}00242\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_PARTIAL\_HANDLE\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00243}00243\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_TITLE\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00244}00244\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_ROI\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00245}00245\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_ANNOTATION\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00246}00246\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_DELTA\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00247}00247\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_PARAMETER\_REQUEST\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00248}00248\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_SEARCH\_CRITERIA\_ITEM\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00249}00249\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_TAG\_ITEM\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00250}00250\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_DATA\_OBJECT\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00251}00251\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_CONTENT\_TYPE\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_ACTION\_ITEM\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00253}00253\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_PROCESS\_INFO\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00254}00254\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_PARAMETER\_VALUE\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00255}00255\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_FILE\_LIST\_FRAGMENT\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00256}00256\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_RTF\_TO\_HTML\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00257}00257\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_HTML\_TO\_RTF\_FORMAT,}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00258}00258\ \ \ \ \ \ \ \ \ \ \ \ \ INTERNAL\_DATA\_OBJECT\_SOURCE\_TYPE\_FORMAT}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00259}00259\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00260}00260\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endregion}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00261}00261\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00262}00262\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#region\ Properties}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00263}00263\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00264}00264\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{List<string>}}\ \_formatLookup\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{List<string>}}();}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00265}00265\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{static}\ \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{IEnumerable<string>}}\ RegisteredFormats\ =>}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00266}00266\ \ \ \ \ \ \ \ \ \ \ \ \ \_formatLookup;}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00267}00267\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00268}00268\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endregion}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00269}00269\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00270}00270\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#region\ Public\ Methods}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00271}00271\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00272}00272\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ Init(MpIPlatformDataObjectRegistrar\ \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{registrar}})\ \{}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00273}00273\ \ \ \ \ \ \ \ \ \ \ \ \ \_registrar\ =\ \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{registrar}};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00274}00274\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00275}00275\ \ \ \ \ \ \ \ \ \ \ \ \ \_formatLookup.Clear();}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00276}00276\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00277}00277\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{foreach}\ (\textcolor{keywordtype}{string}\ formatName\ \textcolor{keywordflow}{in}\ \_defaultFormatNames)\ \{}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00278}00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RegisterDataFormat(formatName);}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00279}00279\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00280}00280\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00281}00281\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00282}00282\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ RegisterDataFormat(\textcolor{keywordtype}{string}\ format)\ \{}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00283}00283\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_formatLookup.Contains(format))\ \{}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00284}00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00285}00285\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00286}00286\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ pretty\ sure\ registering\ is\ only\ needed\ for\ win32\ c++\ but\ just\ keeping\ it}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00287}00287\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id}\ =\ \_registrar\ ==\ \textcolor{keyword}{null}\ ?\ 0\ :\ \_registrar.RegisterFormat(format);}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00288}00288\ \ \ \ \ \ \ \ \ \ \ \ \ \_formatLookup.Add(format);}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00289}00289\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//MpConsole.WriteLine(\$"{}Successfully\ registered\ format\ name:'\{format\}'\ id:\{id\}"{});}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00290}00290\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00291}00291\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00292}00292\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ UnregisterDataFormat(\textcolor{keywordtype}{string}\ format)\ \{}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00293}00293\ \ \ \ \ \ \ \ \ \ \ \ \ \_formatLookup.Remove(format);}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00294}00294\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00295}00295\ }
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00296}00296\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endregion}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00297}00297\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_mp_portable_data_formats_8cs_source_l00298}00298\ \}}
+
+\end{DoxyCode}

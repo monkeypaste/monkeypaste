@@ -35,16 +35,36 @@ Ovo se ne može poništiti!`,
 	EditorRegExLabel: ` Redovni izraz`,
 	EditorReplaceAllLabel: `Zamijenite sve`,
 	EditorReplaceLabel: `Zamijeniti`,
-	EditorTemplateContactHint: `<p> Korištenje dostupnih kontakata (zahtijeva dodatak za dohvaćanje) Ovo polje će se koristiti za sve instance ovog predloška u ovom dokumentu ili u bilo kojem slučaju, referencirat će se kasnije. </ p> <p> tako na primjer ako odaberite adresu e-pošte Evo tada će se polje e-pošte kontakt odabrati za sve slučajeve u ovom dokumentu. </ p>`,
+	EditorTemplateContactHint: `Koristeći dostupne kontakte (zahtijeva dodatak za dohvat) Ovo polje će se koristiti za sve instance ovog predloška u ovom dokumentu ili u bilo kojem to će se naći kasnije.
+ Dakle, na primjer, ako odaberete adresu e-pošte Ovdje će se polje e-pošte kontakt u odabiru koristiti za sve instance u ovom dokumentu.`,
 	EditorTemplateContactName: `Kontakt`,
-	EditorTemplateDateTimeCustomHint: `yy = kratka godina <br/> yyyy = dugačka godina <br/> m = mjesec (1-12) <br/> mm = mjesec (01-12) <br/> mmm = mjesečna skraćenica (januar, februar .. . Dec) <br/> mmmm = dugi mjesec (januar, februar ... decembar) <br/> d = dan (1 - 31) <br/> dd = dan (01 - 31) <br/> ddd = Dan u sedmici riječi (ponedjeljak, utorak ... nedjelja) <br/> E = kratak dan u sedmici riječi (pon, utočište ... sunce) <br/> D - ordinalni dan (1., 2., 2., 3., 21., 22., 23., 31., 4. ...) <br/> H = sat u AM / PM (0-12) <br/> HH = sat / pm (00-12) <br / br / > H = sat u danu (0-23) <br/> HH = sat dnevno (00-23) <br/> mm = minuta <br/> ss = sekunda <br/> sss = milisekundi <br/> A = AM / PM marker <br/> p = a.m./p.m. marker`,
+	EditorTemplateDateTimeCustomHint: `yy = kratka godina
+yyyy = duga godina
+M = mjesec (1-12)
+Mm = mesec (01-12)
+MMM = mjesečna kratica (januar, feb ... dec)
+Mmmm = dugi mjesec (januar, februar ... decembar)
+D = dan (1 - 31)
+dd = dan (01 - 31)
+DDD = dan u sedmici riječi (ponedjeljak, utorak ... nedjelja)
+E = Kratki dan u sedmici riječi (pon, uto ... sunce)
+D - Redni dan (1., 2., 3., 21., 22., 23., 31., 4. ...)
+H = sat u am / pm (0-12)
+HH = sat u am / pm (00-12)
+H = sat u danu (0-23)
+HH = sat u danu (00-23)
+mm = minut
+ss = sekunda
+SSS = milisekundi
+A = AM / PM marker
+p = a.m./p.m. marker`,
 	EditorTemplateDateTimeCustomLabel: `Običaj`,
 	EditorTemplateDateTimeHint: `Trenutni datum i / ili vrijeme bit će supstituirani za predloške dateTime kada su zalijepili.`,
 	EditorTemplateDateTimeName: `Datum Vrijeme`,
-	EditorTemplateDynamicHint: `<p> Sva pojava ovog predloška koristit će navedeni tekst. </ p>`,
+	EditorTemplateDynamicHint: `Sva pojava ovog predloška koristit će navedeni tekst.`,
 	EditorTemplateDynamicName: `Dinamičan`,
 	EditorTemplateEmptyPlaceholder: `{0} je prazan ...`,
-	EditorTemplateStaticHint: `<p> Sva pojava ovog predloška koristit će navedeni tekst. </ p>`,
+	EditorTemplateStaticHint: `Sva pojava ovog predloška koristit će navedeni tekst.`,
 	EditorTemplateStaticName: `Statički`,
 	EditorTemplateTeaserText: `Više dolazi uskoro!`,
 	EditorWatermark: `Molimo pričekajte ...`,

@@ -238,11 +238,6 @@ Ang iyong clipboard ay kailanman sinusubaybayan o naka -imbak kahit saan lampas 
   <data name="TranslationWarning" xml:space="preserve">
     <value>Ang mga pag -shot ng screen ay mga halimbawa lamang. Ang na -install mo ay isinalin sa wikang ito.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Sa subscription na ito ay matatanggap mo:
-● Walang limitasyong kapasidad
-● Pag -sync ng aparato (sa pagkakaroon)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Walang limitasyong - Buwanang</value>
   </data>
@@ -251,5 +246,9 @@ Ang iyong clipboard ay kailanman sinusubaybayan o naka -imbak kahit saan lampas 
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Paunang Paglabas</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Sa subscription na ito ay matatanggap mo:
+● Walang limitasyong kapasidad</value>
   </data>
 </root>

@@ -238,11 +238,6 @@ Kei te tirotirohia to papamahi, ka penapena ranei i nga waahi katoa i tua atu i 
   <data name="TranslationWarning" xml:space="preserve">
     <value>Ko nga pupuhi mata ko nga tauira anake. Ko te mea kua whakauruhia e koe ki tenei reo.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Ma tenei ohaurunga ka whiwhi koe:
-● Te kaha kore mutunga
-● Pūrere Te Hanga (I te Atu)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Mutunga kore - ia marama</value>
   </data>
@@ -251,5 +246,9 @@ Kei te tirotirohia to papamahi, ka penapena ranei i nga waahi katoa i tua atu i 
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Te tuku tuatahi</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Ma tenei ohaurunga ka whiwhi koe:
+● Te kaha kore mutunga</value>
   </data>
 </root>

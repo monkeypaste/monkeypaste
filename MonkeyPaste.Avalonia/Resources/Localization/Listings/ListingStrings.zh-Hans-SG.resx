@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>屏幕截图只是示例。您安装的内容已转换为此语言。</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>通过此订阅，您将收到：
-●无限能力
-●设备同步（可用）</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>无限 - 每月</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>初始发行</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>通过此订阅，您将收到：
+●无限能力</value>
   </data>
 </root>

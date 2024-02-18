@@ -238,11 +238,6 @@ Din urklipp spåras eller lagras någonstans bortom din egen maskin. Period.</va
   <data name="TranslationWarning" xml:space="preserve">
     <value>Skärmbilder är bara exempel. Det du installerar har översatts till detta språk.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Med detta prenumeration får du:
-● Obegränsad kapacitet
-● device syncing (upon availability)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Obegränsat - varje månad</value>
   </data>
@@ -251,5 +246,9 @@ Din urklipp spåras eller lagras någonstans bortom din egen maskin. Period.</va
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Första frisläppande</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Med detta prenumeration får du:
+● Obegränsad kapacitet</value>
   </data>
 </root>

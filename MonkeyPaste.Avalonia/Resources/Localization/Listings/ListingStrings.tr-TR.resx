@@ -238,11 +238,6 @@ Panonunuz kendi makinenizin ötesinde herhangi bir yerde izlenir veya saklanır.
   <data name="TranslationWarning" xml:space="preserve">
     <value>Ekran görüntüleri sadece örneklerdir. Kurulduğunuz şey bu dile çevrildi.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Bu abonelikle:
-● Sınırsız kapasite
-● Cihaz senkronizasyonu (kullanılabilirlik üzerine)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Sınırsız - Aylık</value>
   </data>
@@ -251,5 +246,9 @@ Panonunuz kendi makinenizin ötesinde herhangi bir yerde izlenir veya saklanır.
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>İlk sürüm</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Bu abonelikle:
+● Sınırsız kapasite</value>
   </data>
 </root>

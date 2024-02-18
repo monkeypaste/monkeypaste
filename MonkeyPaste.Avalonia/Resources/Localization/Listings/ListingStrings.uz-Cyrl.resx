@@ -161,28 +161,28 @@ Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi 
     <value />
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value />
+    <value>● Gorizontal / vertikal sxemalar, ro'yxat / panjara va ko'prlik qo'llab-quvvatlash bilan oddiy va do'stona interfeys</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value />
+    <value>● Ishlash rejimi: nusxa ko'chirish klipboardga "almashtirish o'rniga '' qo'shing" ga aylanadi. Ikkala matnli va fayllar, to'liq mos kelmaydi</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value />
+    <value>● Firefox va xromlar (xrom, qirrali, jasur) ni kuchaytirgan murakkab klipni kuzatish, manbalar va foydalanish</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value />
+    <value>● To'liq - boy matnli (stol, ro'yxatlar, havolalar va boshqalar) topilgan holda topilgan / almashtirish va ta'kidlash bilan</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value />
+    <value>● Rasmlaringizni xavfsiz ma'lumotlar bazasida saqlang, har qanday vaqtda talab qiling - talab - va - tomchi!</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value />
+    <value>● Tez, delyamik o'yinchisidan tezkor va dinamik o'rash uchun kuchli matn</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value />
+    <value>● Maxsus avtomatlashtirish va harakatlar uchun stigger va harakat dizayneri</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value />
+    <value>● Ikkala format kliplar uchun plagin tizimidan foydalanish va kengaytirish yoki har qanday formatni klipboardga yozish / yozish</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
     <value>● O'rnatilgan - plagin brauzerida tobora ortib borayotgan jamoatchilik plaginlari kutubxonasi</value>
@@ -212,19 +212,19 @@ Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi 
     <value>● Xavfsiz, xavfsiz va xususiy mahalliy ma'lumotlar saqlanishi (ma'lumotlar yig'ish) har doim ixtiyoriy 2 - parolni himoya qilish va parollarni yoki veb-saytlarni kuzatuvchingiz bilan blokirovka qilish</value>
   </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value />
+    <value>● Keng tortishish - va - tomchini qo'llab-quvvatlash, maxsus global yorliqlar, marshrutlash va sichqoncha - bepul navigatsiya</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value />
+    <value>● Sichqoncha rejimlari: To'g'ri - Chape va chap tugmachani bosing - Auto-nusxani bosing</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
-    <value />
+    <value>Clipboard - bu o'rmon. Monkeypste - bu shoh! Ilovadan ilova qilish uchun, buni nusxalash va o't qo'yishdan oldin Monkeyp bilan hech qachon emas !! Brend - yangi, kesish qirrali pleyboard va analitik avtomatlashtirish vositalari !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
     <value />
   </data>
   <data name="TeaserCaption" xml:space="preserve">
-    <value />
+    <value>Monkeypaste namunasi harakatda!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
     <value />
@@ -233,23 +233,22 @@ Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi 
     <value />
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
-    <value />
+    <value>Bu tilda o'rnatildi. Ingliz tili faqat ushbu misollar uchun</value>
   </data>
   <data name="TranslationWarning" xml:space="preserve">
-    <value />
+    <value>Ekran kastlari faqat misoldir. Siz qaysi tilga tarjima qilingan.</value>
+  </data>
+  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
+    <value>Cheksiz - oylik</value>
+  </data>
+  <data name="UnlimitedYearlyTitle" xml:space="preserve">
+    <value>Cheksiz - Har yili</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Dastlabki reliz</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Ushbu obuna bilan siz olasiz:
-● unlimited capacity
-● device syncing (upon availability)</value>
-  </data>
-  <data name="UnlimitedMonthlyTitle" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UnlimitedYearlyTitle" xml:space="preserve">
-    <value />
-  </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value />
+● Cheksiz sig'im</value>
   </data>
 </root>

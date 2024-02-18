@@ -238,11 +238,6 @@ Clipboard của bạn được theo dõi hoặc lưu trữ ở bất cứ đâu 
   <data name="TranslationWarning" xml:space="preserve">
     <value>Ảnh chụp màn hình chỉ là ví dụ. Những gì bạn cài đặt đã được dịch sang ngôn ngữ này.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Với đăng ký này, bạn sẽ nhận được:
-● Công suất không giới hạn
-● Đồng bộ hóa thiết bị (khi có sẵn)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Không giới hạn - hàng tháng</value>
   </data>
@@ -251,5 +246,9 @@ Clipboard của bạn được theo dõi hoặc lưu trữ ở bất cứ đâu 
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Phát hành lần đầu</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Với đăng ký này, bạn sẽ nhận được:
+● Công suất không giới hạn</value>
   </data>
 </root>

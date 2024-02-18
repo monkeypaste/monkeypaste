@@ -5,12 +5,14 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -87,8 +89,8 @@ namespace MonkeyPaste.Avalonia {
             RootGrid = this.FindControl<Grid>("MainWindowContainerGrid");
 
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
-            sidebarSplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChangeBegin);
-            sidebarSplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChangeEnd);
+            //sidebarSplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChangeBegin);
+            //sidebarSplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChangeEnd);
             sidebarSplitter.DragDelta += SidebarSplitter_DragDelta;
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
@@ -371,6 +373,7 @@ namespace MonkeyPaste.Avalonia {
             UpdateSidebarGridsplitter();
             UpdateTitleLayout();
             UpdateEdgyTooltips();
+            ClampContentSizes();
             //UpdateResizerLayout();
             mwtg.InvalidateAll();
 
@@ -695,7 +698,10 @@ namespace MonkeyPaste.Avalonia {
 
                 ctrvm.ContainerBoundWidth = nctrcb_w;
                 ctrvm.ContainerBoundHeight = nctrcb_h;
-                if (!mwvm.IsMainWindowOrientationDragging) {
+                if (mwvm.IsMainWindowOrientationDragging) {
+                    ClampContentSizes();
+                } else {
+
                     UpdateClipTrayContainerSize(null);
                 }
                 return;
@@ -756,21 +762,28 @@ namespace MonkeyPaste.Avalonia {
             double tw = ctrvm.ContainerBoundWidth + sbicvm.ContainerBoundWidth;
             double th = ctrvm.ContainerBoundHeight + sbicvm.ContainerBoundHeight;
 
-            if (tw > mwvm.AvailableContentAndSidebarWidth) {
-                double w_diff = tw - mwvm.AvailableContentAndSidebarWidth;
-                double nctr_w = Math.Max(0, ctrvm.ContainerBoundWidth - (w_diff / 2));
-                double nsbic_w = Math.Max(0, sbicvm.ContainerBoundWidth - (w_diff / 2));
-                ctrvm.ContainerBoundWidth = nctr_w;
-                sbicvm.ContainerBoundWidth = nsbic_w;
-                if (ctrvm.ContainerBoundWidth <= 0) {
-                    // NOTE this only clamps when it becomes 0, which seems to be in 
-                    // orientation change w/ sidebar visible
-                    ctrvm.ContainerBoundWidth = MIN_TRAY_VAR_DIM_LENGTH;
-                    sbicvm.ContainerBoundWidth = tw - MIN_TRAY_VAR_DIM_LENGTH;
-                }
+            double w_diff = tw - mwvm.AvailableContentAndSidebarWidth;
+            if (w_diff > 0) {
+                // too big
+                //double nctr_w = Math.Max(0, ctrvm.ContainerBoundWidth - (w_diff / 2));
+                //double nsbic_w = Math.Max(0, sbicvm.ContainerBoundWidth - (w_diff / 2));
+                //ctrvm.ContainerBoundWidth = nctr_w;
+                //sbicvm.ContainerBoundWidth = nsbic_w;
+                //if (ctrvm.ContainerBoundWidth <= 0) {
+                //    // NOTE this only clamps when it becomes 0, which seems to be in 
+                //    // orientation change w/ sidebar visible
+                //    ctrvm.ContainerBoundWidth = MIN_TRAY_VAR_DIM_LENGTH;
+                //    sbicvm.ContainerBoundWidth = tw - MIN_TRAY_VAR_DIM_LENGTH;
+                //}
+
+                ctrvm.ContainerBoundWidth -= Math.Abs(w_diff);
+            } else if (w_diff < 0) {
+                // too small
+                ctrvm.ContainerBoundWidth += Math.Abs(w_diff);
             }
-            if (th > mwvm.AvailableContentAndSidebarHeight) {
-                double h_diff = th - mwvm.AvailableContentAndSidebarHeight;
+            double h_diff = th - mwvm.AvailableContentAndSidebarHeight;
+            if (h_diff > 0) {
+                // too big
                 double nctr_h = Math.Max(0, ctrvm.ContainerBoundHeight - (h_diff / 2));
                 double nsbic_h = Math.Max(0, sbicvm.ContainerBoundHeight - (h_diff / 2));
                 ctrvm.ContainerBoundHeight = nctr_h;
@@ -782,6 +795,10 @@ namespace MonkeyPaste.Avalonia {
                     ctrvm.ContainerBoundHeight = MIN_TRAY_VAR_DIM_LENGTH;
                     sbicvm.ContainerBoundHeight = th - MIN_TRAY_VAR_DIM_LENGTH;
                 }
+                //sbicvm.ContainerBoundHeight -= Math.Abs(h_diff);
+            } else if (h_diff < 0) {
+                // too small
+                sbicvm.ContainerBoundHeight += Math.Abs(h_diff);
             }
         }
         #endregion
@@ -796,10 +813,20 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.PinTraySizeChanged:
+                case MpMessageType.PinTrayResizeEnd:
+                case MpMessageType.SidebarItemSizeChanged:
+                case MpMessageType.SidebarItemSizeChangeEnd:
                 case MpMessageType.MainWindowOrientationChangeEnd:
-                    if (this.GetVisualDescendant<MpAvZoomFactorView>() is { } zfv) {
-                        zfv.UpdateMarkerPositions();
+                    if (msg == MpMessageType.MainWindowOrientationChangeEnd) {
+                        if (this.GetVisualDescendant<MpAvZoomFactorView>() is { } zfv) {
+                            zfv.UpdateMarkerPositions();
+                        }
                     }
+                    Dispatcher.UIThread.Post(async () => {
+                        await Task.Delay(300);
+                        MpAvMainView.Instance.ClampContentSizes();
+                    });
                     break;
             }
         }
@@ -807,10 +834,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Event Handlers
         private void SidebarSplitter_DragDelta(object sender, VectorEventArgs e) {
-            if (!e.Vector.X.IsNumber() || !e.Vector.Y.IsNumber()) {
-                MpDebug.Break();
-            }
-            UpdateClipTrayContainerSize(e.Vector.ToPortablePoint());
+            //if (!e.Vector.X.IsNumber() || !e.Vector.Y.IsNumber()) {
+            //    MpDebug.Break();
+            //}
+            //UpdateClipTrayContainerSize(e.Vector.ToPortablePoint());
+            ClampContentSizes();
         }
 
         #endregion

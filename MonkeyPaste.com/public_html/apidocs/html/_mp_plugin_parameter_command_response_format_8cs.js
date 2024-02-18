@@ -1,0 +1,4 @@
+var _mp_plugin_parameter_command_response_format_8cs =
+[
+    [ "MonkeyPaste.Common.Plugin.MpPluginParameterCommandResponseFormat", "class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_parameter_command_response_format.html", "class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_parameter_command_response_format" ]
+];

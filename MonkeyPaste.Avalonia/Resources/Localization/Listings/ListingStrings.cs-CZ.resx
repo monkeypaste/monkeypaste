@@ -238,11 +238,6 @@ Vaše schránka je vždy sledována nebo ukládána kdekoli za vlastní stroj. D
   <data name="TranslationWarning" xml:space="preserve">
     <value>Snímky obrazovky jsou pouze příklady. To, co instalujete, bylo přeloženo do tohoto jazyka.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>S tímto předplatným obdržíte:
-● Neomezená kapacita
-● Synnging zařízení (po dostupnosti)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Neomezené - měsíčně</value>
   </data>
@@ -251,5 +246,9 @@ Vaše schránka je vždy sledována nebo ukládána kdekoli za vlastní stroj. D
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>První vydání</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>S tímto předplatným obdržíte:
+● Neomezená kapacita</value>
   </data>
 </root>

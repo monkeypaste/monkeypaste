@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>स्क्रीन शॉट केवल उदाहरण हैं। आपके द्वारा स्थापित किए गए इस भाषा में अनुवाद किया गया है।</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>इस सदस्यता के साथ आपको प्राप्त होगा:
-● असीमित क्षमता
-● डिवाइस सिंकिंग (उपलब्धता पर)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>असीमित - मासिक</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>प्रारंभिक रिहाई</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>इस सदस्यता के साथ आपको प्राप्त होगा:
+● असीमित क्षमता</value>
   </data>
 </root>

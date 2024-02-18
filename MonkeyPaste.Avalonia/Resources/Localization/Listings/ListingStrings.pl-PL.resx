@@ -238,11 +238,6 @@ Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza w�
   <data name="TranslationWarning" xml:space="preserve">
     <value>Ujęcia ekranu są tylko przykładami. To, co instalujesz, zostało przetłumaczone na ten język.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Dzięki tej subskrypcji otrzymasz:
-● Nieograniczona pojemność
-● Synchronizacja urządzeń (po dostępności)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Nieograniczone - co miesiąc</value>
   </data>
@@ -251,5 +246,9 @@ Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza w�
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Pierwsze wydanie</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Dzięki tej subskrypcji otrzymasz:
+● Nieograniczona pojemność</value>
   </data>
 </root>

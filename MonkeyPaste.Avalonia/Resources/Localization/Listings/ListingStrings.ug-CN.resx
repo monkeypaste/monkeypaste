@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>ئېكران سۈرەتلىرى پەقەت مىسال. سىز قاچىلىغان بولغىنى بۇ تىلغا تەرجىمە قىلىنغان.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>سىز تاپشۇرۇۋالىدىغان بۇ مۇشتەرىلىك بىلەن:
-● چەكسىز ئىقتىدار
-● ئۈسكۈنە ماسقەدەملەش (ئىشلەتكىلى بولىدۇ)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>چەكلىمىسىز - ئايلىق</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>دەسلەپكى تارقىتىلدى</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>سىز تاپشۇرۇۋالىدىغان بۇ مۇشتەرىلىك بىلەن:
+● چەكسىز ئىقتىدار</value>
   </data>
 </root>

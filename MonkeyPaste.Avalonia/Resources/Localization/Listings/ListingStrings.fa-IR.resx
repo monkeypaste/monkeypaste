@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>عکس های صفحه فقط نمونه هستند. آنچه نصب می کنید به این زبان ترجمه شده است.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>با این اشتراک دریافت خواهید کرد:
-● ظرفیت نامحدود
-● همگام سازی دستگاه (در صورت در دسترس بودن)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>نامحدود - ماهانه</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>انتشار اولیه</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>با این اشتراک دریافت خواهید کرد:
+● ظرفیت نامحدود</value>
   </data>
 </root>

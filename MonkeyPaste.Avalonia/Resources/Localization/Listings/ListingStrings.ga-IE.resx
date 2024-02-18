@@ -238,11 +238,6 @@ Déantar do ghearrthaisce a rianú nó a stóráil riamh in áit ar bith thar do
   <data name="TranslationWarning" xml:space="preserve">
     <value>Is samplaí amháin iad seatanna scáileáin. Aistríodh an méid a shuiteáil tú go dtí an teanga seo.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Leis an síntiús seo gheobhaidh tú:
-● Cumas neamhtheoranta
-● Syncing feiste (ar infhaighteacht)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Unlimited - Míosúil</value>
   </data>
@@ -251,5 +246,9 @@ Déantar do ghearrthaisce a rianú nó a stóráil riamh in áit ar bith thar do
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Scaoileadh tosaigh</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Leis an síntiús seo gheobhaidh tú:
+● Cumas neamhtheoranta</value>
   </data>
 </root>

@@ -238,11 +238,6 @@ Thread ● 1000гә кадәр эчтәлек
   <data name="TranslationWarning" xml:space="preserve">
     <value>Экран төшерүләре мисаллар гына. Сез урнаштырган нәрсә бу телгә тәрҗемә ителгән.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Бу язылу белән сез кабул итәрсез:
-● Чикләнмәгән сыйдырышлык
-● Deайланма синхрары (барлыгы буенча)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Чикләнмәгән - ай саен</value>
   </data>
@@ -251,5 +246,9 @@ Thread ● 1000гә кадәр эчтәлек
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Башлангыч чыгарылыш</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Бу язылу белән сез кабул итәрсез:
+● Чикләнмәгән сыйдырышлык</value>
   </data>
 </root>

@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>Τα πλάνα οθόνης είναι μόνο παραδείγματα. Αυτό που εγκαταστήσετε έχει μεταφραστεί σε αυτήν τη γλώσσα.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Με αυτήν τη συνδρομή θα λάβετε:
-● Απεριόριστη χωρητικότητα
-● Συγχρονισμός συσκευών (μετά τη διαθεσιμότητα)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Απεριόριστο - μηνιαία</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Αρχική έκδοση</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Με αυτήν τη συνδρομή θα λάβετε:
+● Απεριόριστη χωρητικότητα</value>
   </data>
 </root>

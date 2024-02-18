@@ -238,11 +238,6 @@ Jūsų mainų sritis yra kada nors stebima ar saugoma bet kur už savo mašinos 
   <data name="TranslationWarning" xml:space="preserve">
     <value>Ekrano kadrai yra tik pavyzdžiai. Tai, ką įdiegėte, buvo išversta į šią kalbą.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Su šia prenumerata gausite:
-● Neribotas pajėgumas
-● Įrenginio sinchronizavimas (esant prieinamumui)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Neribotas - kas mėnesį</value>
   </data>
@@ -251,5 +246,9 @@ Jūsų mainų sritis yra kada nors stebima ar saugoma bet kur už savo mašinos 
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Pradinis išleidimas</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Su šia prenumerata gausite:
+● Neribotas pajėgumas</value>
   </data>
 </root>

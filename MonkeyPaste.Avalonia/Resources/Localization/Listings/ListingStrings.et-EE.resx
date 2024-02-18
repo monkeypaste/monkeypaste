@@ -238,11 +238,6 @@ Teie lõikelaua jälgitakse või hoitakse kunagi kuskil oma masinast kaugemale. 
   <data name="TranslationWarning" xml:space="preserve">
     <value>Ekraanipildid on ainult näited. See, mida te installite, on tõlgitud sellele keelele.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Selle tellimusega saate:
-● Piiramatu võimsus
-● Seadme sünkroonimine (saadavuse korral)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Piiramatu - igakuine</value>
   </data>
@@ -251,5 +246,9 @@ Teie lõikelaua jälgitakse või hoitakse kunagi kuskil oma masinast kaugemale. 
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Esialgne väljalase</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Selle tellimusega saate:
+● Piiramatu võimsus</value>
   </data>
 </root>

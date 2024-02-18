@@ -238,11 +238,6 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
   <data name="TranslationWarning" xml:space="preserve">
     <value>Ekran görüntüləri yalnız nümunələrdir. Quraşdırdığınız şey bu dilə tərcümə edilmişdir.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Bu abunə ilə alacaqsınız:
-● Limitsiz tutum
-● Cihaz sinxronizasiyası (mövcudluğu ilə)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Limitsiz - aylıq</value>
   </data>
@@ -251,5 +246,9 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>İlkin buraxılış</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Bu abunə ilə alacaqsınız:
+● Limitsiz tutum</value>
   </data>
 </root>

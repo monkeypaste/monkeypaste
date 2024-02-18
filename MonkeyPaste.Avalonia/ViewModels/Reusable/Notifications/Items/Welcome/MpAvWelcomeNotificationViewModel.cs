@@ -268,7 +268,12 @@ namespace MonkeyPaste.Avalonia {
             TranslationViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.Translation) {
                 NeedsSkip = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name == "en-US",
                 Caption = UiStrings.WelcomeTranslatedMessage,
-                Title = UiStrings.WelcomeTranslatedTitle
+                Title = UiStrings.WelcomeTranslatedTitle,
+                SplashIconSourceObj =
+                    MpAvCultureCodeToFlagImageSourceConverter.Instance
+                    .Convert(
+                        MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name,
+                        typeof(string), null, MpAvCurrentCultureViewModel.Instance.CurrentCulture)
             };
             #endregion
 

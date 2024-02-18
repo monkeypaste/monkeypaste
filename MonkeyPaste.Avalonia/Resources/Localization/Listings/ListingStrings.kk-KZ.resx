@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>Экранның суреттері тек мысалдар болып табылады. Сіз орнатқан нәрсе осы тілге аударылған.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Осы жазылыммен сіз мыналарды аласыз:
-● шексіз сыйымдылық
-● Құрылғыны синхрондау (қол жетімділігі бойынша)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Шексіз - ай сайын</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Бастапқы шығарылым</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Осы жазылыммен сіз мыналарды аласыз:
+● шексіз сыйымдылық</value>
   </data>
 </root>

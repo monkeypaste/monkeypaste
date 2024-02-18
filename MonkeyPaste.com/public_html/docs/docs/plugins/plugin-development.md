@@ -200,6 +200,11 @@ Check the *Remarks* sections on each project readme (also in the *Plugin Browser
 |[TextTranslator](https://github.com/monkeypaste/TextTranslator)|
 |[WebSearch](https://github.com/monkeypaste/WebSearch)|
 
+## API Documentation
+
+<p class="dl-btn">
+<a class="fancy-hover" href="https://www.monkeypaste.com/apidocs/html/index.html"><img class="no-zoom" src={require('/img/view_docs_btn.png').default}/></a><br/>
+</p>
 
 ## Feedback
 Feel free to raise an issue at https://github.com/monkeypaste/MonkeyPaste.Common.Plugin or check out the [Forum](https://monkeypaste.com/forum/index.php?board=3.0) 

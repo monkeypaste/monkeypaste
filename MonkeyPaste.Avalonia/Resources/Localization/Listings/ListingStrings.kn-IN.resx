@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>ಸ್ಕ್ರೀನ್ ಶಾಟ್‌ಗಳು ಉದಾಹರಣೆಗಳಾಗಿವೆ. ನೀವು ಸ್ಥಾಪಿಸುವುದನ್ನು ಈ ಭಾಷೆಗೆ ಅನುವಾದಿಸಲಾಗಿದೆ.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>ಈ ಚಂದಾದಾರಿಕೆಯೊಂದಿಗೆ ನೀವು ಸ್ವೀಕರಿಸುತ್ತೀರಿ:
-ಅನಿಯಮಿತ ಸಾಮರ್ಥ್ಯ
-● ಸಾಧನ ಸಿಂಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ (ಲಭ್ಯತೆಯ ನಂತರ)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>ಅನಿಯಮಿತ - ಮಾಸಿಕ</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>ಆರಂಭಿಕ ಬಿಡುಗಡೆ</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>ಈ ಚಂದಾದಾರಿಕೆಯೊಂದಿಗೆ ನೀವು ಸ್ವೀಕರಿಸುತ್ತೀರಿ:
+ಅನಿಯಮಿತ ಸಾಮರ್ಥ್ಯ</value>
   </data>
 </root>

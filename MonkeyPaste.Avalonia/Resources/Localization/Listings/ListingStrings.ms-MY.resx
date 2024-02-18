@@ -238,11 +238,6 @@ Papan klip anda pernah dikesan atau disimpan di mana -mana di luar mesin anda se
   <data name="TranslationWarning" xml:space="preserve">
     <value>Tembakan skrin hanya contoh. Apa yang anda pasang telah diterjemahkan ke bahasa ini.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Dengan langganan ini anda akan terima:
-● Kapasiti tanpa had
-● Penyegerakan peranti (apabila ketersediaan)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Tanpa Had - Bulanan</value>
   </data>
@@ -251,5 +246,9 @@ Papan klip anda pernah dikesan atau disimpan di mana -mana di luar mesin anda se
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Pelepasan awal</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Dengan langganan ini anda akan terima:
+● Kapasiti tanpa had</value>
   </data>
 </root>

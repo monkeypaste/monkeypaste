@@ -1,14 +1,13 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using MonkeyPaste.Common.Plugin;
 
 #if CEFNET_WV
-using CefNet;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -94,11 +93,11 @@ namespace MonkeyPaste.Avalonia {
 
                 //App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
-#if CEFNET_WV
-        .StartWithCefNetApplicationLifetime(App.Args);
-#else
+        //#if CEFNET_WV
+        //        .StartWithCefNetApplicationLifetime(App.Args);
+        //#else
         .StartWithClassicDesktopLifetime(App.Args);
-#endif
+                //#endif
                 // 
             }
             catch (Exception ex) {

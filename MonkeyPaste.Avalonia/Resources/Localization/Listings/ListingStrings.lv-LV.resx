@@ -238,11 +238,6 @@ Jūsu starpliktuvē kādreiz tiek izsekots vai glabāts jebkur ārpus jūsu maš
   <data name="TranslationWarning" xml:space="preserve">
     <value>Ekrānuzņēmumi ir tikai piemēri. Tas, ko jūs instalējat, ir tulkots šajā valodā.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Ar šo abonementu jūs saņemsiet:
-● Neierobežota ietilpība
-● Ierīces sinhronizēšana (pēc pieejamības)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Neierobežots - mēnesis</value>
   </data>
@@ -251,5 +246,9 @@ Jūsu starpliktuvē kādreiz tiek izsekots vai glabāts jebkur ārpus jūsu maš
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Sākotnējā atbrīvošana</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Ar šo abonementu jūs saņemsiet:
+● Neierobežota ietilpība</value>
   </data>
 </root>

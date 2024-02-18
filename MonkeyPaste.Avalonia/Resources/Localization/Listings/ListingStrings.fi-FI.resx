@@ -238,11 +238,6 @@ Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ul
   <data name="TranslationWarning" xml:space="preserve">
     <value>Näyttökuvat ovat vain esimerkkejä. Asennus on käännetty tälle kielelle.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Tällä tilauksella saat:
-● Rajoittamaton kapasiteetti
-● Laitteen synkronointi (saatavuuden yhteydessä)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Rajoittamaton - kuukausittain</value>
   </data>
@@ -251,5 +246,9 @@ Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ul
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Alkuperäinen julkaisu</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Tällä tilauksella saat:
+● Rajoittamaton kapasiteetti</value>
   </data>
 </root>

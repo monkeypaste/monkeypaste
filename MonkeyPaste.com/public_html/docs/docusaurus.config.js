@@ -6,7 +6,7 @@ const { themes } = require('prism-react-renderer');
 const lightTheme = themes.synthwave84;
 const darkTheme = themes.dracula;
 
-const local = true;
+const local = false;
 
 const siteUrl = local ?
   "https://localhost" :
@@ -94,7 +94,7 @@ const config = {
         maxHeadingLevel: 5,
       },
       zoom: {
-        selector: '.markdown img, img.zoom',
+        selector: '.markdown img:not(.no-zoom), img.zoom',
         background: {
           light: 'rgb(255, 255, 255)',
           dark: 'rgb(50, 50, 50)'
@@ -140,7 +140,7 @@ const config = {
           },
           {
             href: 'https://translate.google.com/translate?u=https%3A%2F%2Fwww.monkeypaste.com%2F',
-            label: 'Translate',
+            label: '🗺️ Translate',
             position: 'right',
           },
           {

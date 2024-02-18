@@ -238,11 +238,6 @@ Content સામગ્રીની 1000 ક્લિપ્સ સુધી
   <data name="TranslationWarning" xml:space="preserve">
     <value>સ્ક્રીન શોટ ફક્ત ઉદાહરણો છે. તમે જે ઇન્સ્ટોલ કરો છો તે આ ભાષામાં ભાષાંતર કરવામાં આવ્યું છે.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>આ સબ્સ્ક્રિપ્શન સાથે તમે પ્રાપ્ત કરશો:
-● અમર્યાદિત ક્ષમતા
-● ડિવાઇસ સિંકિંગ (ઉપલબ્ધતા પર)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>અમર્યાદિત - માસિક</value>
   </data>
@@ -251,5 +246,9 @@ Content સામગ્રીની 1000 ક્લિપ્સ સુધી
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>પ્રારંભિક પ્રકાશન</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>આ સબ્સ્ક્રિપ્શન સાથે તમે પ્રાપ્ત કરશો:
+● અમર્યાદિત ક્ષમતા</value>
   </data>
 </root>

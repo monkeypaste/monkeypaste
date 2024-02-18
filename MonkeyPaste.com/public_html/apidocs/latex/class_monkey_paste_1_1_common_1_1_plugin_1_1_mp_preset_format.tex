@@ -1,0 +1,123 @@
+\doxysection{Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Preset\+Format Class Reference}
+\hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format}{}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format}\index{MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}}
+
+
+A pre-\/defined preset allowing you to provided a unique name and/or icon for the preset and specific values for some or all plugin parameters. Any parameters not defined by the preset will use the parameters default value specified in the Mp\+Parameter\+Format. Pre-\/defined presets cannot be deleted but {\bfseries{can}} be reset back to its original state.  
+
+
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_a2583134a2fd5fb6c0336904bf5ca429a}{guid}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (required) RFC 4122 compliant 128-\/bit GUID (UUID) with only letters, numbers and hyphens \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_aeedf40db72ad6743548c896cad574993}{is\+Default}} = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{false}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em This can be ignored and is only used when {\bfseries{no}} pre-\/defined presets are created. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_af1d0d05f0c6bbeaf70a4d1719da5d436}{icon\+Uri}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (optional) A custom icon for this preset that is a uri (relative or absolute) to an image file (png,jpg, jpeg or bmp). When left empty the containing plugin\textquotesingle{}s icon will be used.~\newline
+ {\bfseries{Note\+:}} For best usability this should be an absolute uri \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_a2c43c61fe288fed46a4c4aea69e1149b}{label}} = string.\+Empty\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (optional) A pre-\/defined label for this preset. If left empty one will be generated using the plugins name and a unique number to discern from other pre-\/defined presets. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_a75df7e6eefb1ada648251a131536dd31}{description}} = string.\+Empty\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (optional) A short explaination of what specifically this preset provides \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{List}}$<$ \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_value_format}{Mp\+Preset\+Value\+Format}} $>$ \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_a743d72905b3a8ac914ef1bf87c5c6edd}{values}} = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{new}} \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{List}}$<$\mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_value_format}{Mp\+Preset\+Value\+Format}}$>$()\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em A list of param\+Id\textquotesingle{}s and the value for them. For multi-\/select parameters you can use a comma-\/separated string of the {\bfseries{values}} that each have a cooresponding Mp\+Parameter\+Value\+Format.\+value to link with it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A pre-\/defined preset allowing you to provided a unique name and/or icon for the preset and specific values for some or all plugin parameters. Any parameters not defined by the preset will use the parameters default value specified in the Mp\+Parameter\+Format. Pre-\/defined presets cannot be deleted but {\bfseries{can}} be reset back to its original state. 
+
+Definition at line \mbox{\hyperlink{_mp_preset_format_8cs_source_l00008}{8}} of file \mbox{\hyperlink{_mp_preset_format_8cs_source}{Mp\+Preset\+Format.\+cs}}.
+
+
+
+\doxysubsection{Property Documentation}
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_a75df7e6eefb1ada648251a131536dd31}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_a75df7e6eefb1ada648251a131536dd31} 
+\index{MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}!description@{description}}
+\index{description@{description}!MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}}
+\doxysubsubsection{\texorpdfstring{description}{description}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Preset\+Format.\+description = string.\+Empty\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(optional) A short explaination of what specifically this preset provides 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_preset_format_8cs_source_l00029}{29}} of file \mbox{\hyperlink{_mp_preset_format_8cs_source}{Mp\+Preset\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_a2583134a2fd5fb6c0336904bf5ca429a}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_a2583134a2fd5fb6c0336904bf5ca429a} 
+\index{MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}!guid@{guid}}
+\index{guid@{guid}!MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}}
+\doxysubsubsection{\texorpdfstring{guid}{guid}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Preset\+Format.\+guid\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(required) RFC 4122 compliant 128-\/bit GUID (UUID) with only letters, numbers and hyphens 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_preset_format_8cs_source_l00012}{12}} of file \mbox{\hyperlink{_mp_preset_format_8cs_source}{Mp\+Preset\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_af1d0d05f0c6bbeaf70a4d1719da5d436}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_af1d0d05f0c6bbeaf70a4d1719da5d436} 
+\index{MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}!iconUri@{iconUri}}
+\index{iconUri@{iconUri}!MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}}
+\doxysubsubsection{\texorpdfstring{iconUri}{iconUri}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Preset\+Format.\+icon\+Uri\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(optional) A custom icon for this preset that is a uri (relative or absolute) to an image file (png,jpg, jpeg or bmp). When left empty the containing plugin\textquotesingle{}s icon will be used.~\newline
+ {\bfseries{Note\+:}} For best usability this should be an absolute uri 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_preset_format_8cs_source_l00021}{21}} of file \mbox{\hyperlink{_mp_preset_format_8cs_source}{Mp\+Preset\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_aeedf40db72ad6743548c896cad574993}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_aeedf40db72ad6743548c896cad574993} 
+\index{MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}!isDefault@{isDefault}}
+\index{isDefault@{isDefault}!MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}}
+\doxysubsubsection{\texorpdfstring{isDefault}{isDefault}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Preset\+Format.\+is\+Default = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{false}}\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+This can be ignored and is only used when {\bfseries{no}} pre-\/defined presets are created. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_preset_format_8cs_source_l00016}{16}} of file \mbox{\hyperlink{_mp_preset_format_8cs_source}{Mp\+Preset\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_a2c43c61fe288fed46a4c4aea69e1149b}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_a2c43c61fe288fed46a4c4aea69e1149b} 
+\index{MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}!label@{label}}
+\index{label@{label}!MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}}
+\doxysubsubsection{\texorpdfstring{label}{label}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Preset\+Format.\+label = string.\+Empty\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(optional) A pre-\/defined label for this preset. If left empty one will be generated using the plugins name and a unique number to discern from other pre-\/defined presets. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_preset_format_8cs_source_l00025}{25}} of file \mbox{\hyperlink{_mp_preset_format_8cs_source}{Mp\+Preset\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_a743d72905b3a8ac914ef1bf87c5c6edd}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format_a743d72905b3a8ac914ef1bf87c5c6edd} 
+\index{MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}!values@{values}}
+\index{values@{values}!MonkeyPaste.Common.Plugin.MpPresetFormat@{MonkeyPaste.Common.Plugin.MpPresetFormat}}
+\doxysubsubsection{\texorpdfstring{values}{values}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{List}}$<$\mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_value_format}{Mp\+Preset\+Value\+Format}}$>$ Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Preset\+Format.\+values = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{new}} \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{List}}$<$\mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_value_format}{Mp\+Preset\+Value\+Format}}$>$()\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+A list of param\+Id\textquotesingle{}s and the value for them. For multi-\/select parameters you can use a comma-\/separated string of the {\bfseries{values}} that each have a cooresponding Mp\+Parameter\+Value\+Format.\+value to link with it. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_preset_format_8cs_source_l00033}{33}} of file \mbox{\hyperlink{_mp_preset_format_8cs_source}{Mp\+Preset\+Format.\+cs}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/tkefauver/\+Source/\+Repos/\+Monkey\+Paste/\+Common/\+Monkey\+Paste.\+Common.\+Plugin/\+Models/\+Preset/\mbox{\hyperlink{_mp_preset_format_8cs}{Mp\+Preset\+Format.\+cs}}\end{DoxyCompactItemize}

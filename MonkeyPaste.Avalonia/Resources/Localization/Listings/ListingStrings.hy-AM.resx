@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>Էկրանի կրակոցները միայն օրինակներ են: Այն, ինչ դուք տեղադրում եք, թարգմանվել է այս լեզվով:</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Այս բաժանորդագրությամբ դուք կստանաք.
-● Անսահմանափակ կարողություն
-● սարքի համաժամեցում (առկայությունից հետո)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Անսահմանափակ - ամսական</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Նախնական թողարկում</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Այս բաժանորդագրությամբ դուք կստանաք.
+● Անսահմանափակ կարողություն</value>
   </data>
 </root>

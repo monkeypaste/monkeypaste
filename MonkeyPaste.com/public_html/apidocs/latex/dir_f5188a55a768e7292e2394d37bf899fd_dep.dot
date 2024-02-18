@@ -1,0 +1,12 @@
+digraph "C:/Users/tkefauver/Source/Repos/MonkeyPaste/Common/MonkeyPaste.Common.Plugin/Models/Preset"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  compound=true
+  subgraph clusterdir_22305cb0964bbe63c21991dd2265ce48 {
+    graph [ bgcolor="#d5ebd8", pencolor="grey25", label="Models", fontname=Helvetica,fontsize=10 style="filled,dashed", URL="dir_22305cb0964bbe63c21991dd2265ce48.html",tooltip=""]
+  dir_f5188a55a768e7292e2394d37bf899fd [label="Preset", fillcolor="#d5ebd8", color="grey25", style="filled,bold", URL="dir_f5188a55a768e7292e2394d37bf899fd.html",tooltip=""];
+  }
+}

@@ -238,11 +238,6 @@ Clipboard -ul dvs. este urmărit sau păstrat oriunde dincolo de propria mașin�
   <data name="TranslationWarning" xml:space="preserve">
     <value>Fotografiile de ecran sunt doar exemple. Ceea ce instalați a fost tradus în această limbă.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Cu acest abonament veți primi:
-● Capacitate nelimitată
-● Sincronizarea dispozitivului (la disponibilitate)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Nelimitat - lunar</value>
   </data>
@@ -251,5 +246,9 @@ Clipboard -ul dvs. este urmărit sau păstrat oriunde dincolo de propria mașin�
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Eliberare inițială</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Cu acest abonament veți primi:
+● Capacitate nelimitată</value>
   </data>
 </root>

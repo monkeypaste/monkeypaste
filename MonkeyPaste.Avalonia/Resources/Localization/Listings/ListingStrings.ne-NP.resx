@@ -238,11 +238,6 @@ A सामग्रीको 1,000 क्लिपहरू सम्म
   <data name="TranslationWarning" xml:space="preserve">
     <value>स्क्रिन शटहरू मात्र उदाहरणहरू हुन्। तपाइँ स्थापना गर्नु भनेको यस भाषामा अनुवाद गरिएको छ।</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>यस सदस्यतासँग तपाईंले प्राप्त गर्नुहुनेछ:
-● असीमित क्षमता
-● उपकरण सिंक गर्दै (उपलब्धतामा)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>असीमित - मासिक</value>
   </data>
@@ -251,5 +246,9 @@ A सामग्रीको 1,000 क्लिपहरू सम्म
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>प्रारम्भिक रिलीज</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>यस सदस्यतासँग तपाईंले प्राप्त गर्नुहुनेछ:
+● असीमित क्षमता</value>
   </data>
 </root>

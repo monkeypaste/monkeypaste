@@ -87,6 +87,12 @@ function getEditorVisibleHeight() {
 	return getEditorContainerElement().getBoundingClientRect().height - frth - eth - tth;
 }
 
+function getEditorZoom() {
+	// returns normalized scale so 50% is 0.5
+	let zoom_prop_val = parseFloat(getElementComputedStyleProp(document.body, '--editorzoom').replace('%', '')) / 100;
+	return zoom_prop_val;
+}
+
 // #endregion Getters
 
 // #region Setters
@@ -104,7 +110,8 @@ function setEditorZoom(scale) {
 	}
 
 	let zoom_val = scale_val * 100;
-	setElementComputedStyleProp(document.body, '--editorzoom', zoom_val +'%');
+	setElementComputedStyleProp(document.body, '--editorzoom', zoom_val + '%');
+	updateAllElements();
 }
 function setEditorPlaceholderText(text) {
 	getEditorElement().setAttribute('data-placeholder', text);
@@ -204,6 +211,10 @@ function updateEditorSizesAndPositions() {
 	let et = eth + frth;
 	getEditorContainerElement().style.top = et + 'px';
 	let eh = wh - eth - tth - frth;
+
+	// scale eh to zoom factor
+	let zf = getEditorZoom()
+	eh = eh / zf; 
 	getEditorContainerElement().style.height = eh + 'px';
 }
 

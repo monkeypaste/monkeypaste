@@ -238,11 +238,6 @@ Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt 
   <data name="TranslationWarning" xml:space="preserve">
     <value>Dim ond enghreifftiau yw lluniau sgrin. Mae'r hyn rydych chi'n ei osod wedi'i gyfieithu i'r iaith hon.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Gyda'r tanysgrifiad hwn byddwch yn derbyn:
-● Capasiti diderfyn
-● Cydamseru dyfeisiau (ar gael)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Diderfyn - misol</value>
   </data>
@@ -251,5 +246,9 @@ Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt 
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Rhyddhau Cychwynnol</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Gyda'r tanysgrifiad hwn byddwch yn derbyn:
+● Capasiti diderfyn</value>
   </data>
 </root>

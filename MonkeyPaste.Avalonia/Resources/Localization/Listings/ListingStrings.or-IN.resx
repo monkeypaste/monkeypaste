@@ -238,11 +238,6 @@ U ଅସୀମିତ ଆବର୍ଜନା ଏବଂ ଅଭିଲେଖାଗା
   <data name="TranslationWarning" xml:space="preserve">
     <value>ସ୍କ୍ରିନ୍ ସଟ୍ଗୁଡ଼ିକ କେବଳ ଉଦାହରଣ | ଆପଣ ସଂସ୍ଥାପନ କରୁଥିବା କ'ଣ ସଂସ୍ଥାପନ ହୋଇଛି |</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>ଏହି ସଦସ୍ୟତା ସହିତ ଆପଣ ପାଇବେ:
-U ଅସୀମିତ କ୍ଷମତା |
-● ଉପକରଣ ସିଙ୍କିଂ (ଉପଲବ୍ଧତା ଉପରେ)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>ଅସୀମିତ - ମାସିକ |</value>
   </data>
@@ -251,5 +246,9 @@ U ଅସୀମିତ କ୍ଷମତା |
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>ପ୍ରାରମ୍ଭିକ ପ୍ରକାଶନ |</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>ଏହି ସଦସ୍ୟତା ସହିତ ଆପଣ ପାଇବେ:
+U ଅସୀମିତ କ୍ଷମତା |</value>
   </data>
 </root>

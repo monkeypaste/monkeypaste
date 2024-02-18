@@ -238,11 +238,6 @@ El vostre porta -retalls es fa un seguiment o emmagatzemat en qualsevol lloc mé
   <data name="TranslationWarning" xml:space="preserve">
     <value>Els trets de pantalla només són exemples. El que instal·leu s’ha traduït a aquest idioma.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Amb aquesta subscripció rebrà:
-● Capacitat il·limitada
-● Sincronització del dispositiu (després de la disponibilitat)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Il·limitat: mensual</value>
   </data>
@@ -251,5 +246,9 @@ El vostre porta -retalls es fa un seguiment o emmagatzemat en qualsevol lloc mé
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Versió inicial</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Amb aquesta subscripció rebrà:
+● Capacitat il·limitada</value>
   </data>
 </root>

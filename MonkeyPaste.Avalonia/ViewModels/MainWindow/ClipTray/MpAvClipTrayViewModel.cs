@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncCollectionObject,
         MpIPagingScrollViewerViewModel,
         MpIActionComponent,
-        MpIBoundSizeViewModel,
+        MpIAnimatedSizeViewModel,
         MpIContextMenuViewModel,
         MpIContentQueryPage,
         MpIProgressIndicatorViewModel {
@@ -339,7 +339,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIBoundSizeViewModel Implementation
+        #region MpIAnimatedSizeViewModel Implementation
         // NOTE this are NOT bound in xaml, bound in mw.UpdateContentLayout
         public double ContainerBoundWidth { get; set; }
         public double ContainerBoundHeight { get; set; }
@@ -352,6 +352,7 @@ namespace MonkeyPaste.Avalonia {
             get => ContainerBoundHeight;
             set => ContainerBoundHeight = value;
         }
+        public bool IsAnimating { get; set; }
         #endregion
 
         #region MpIPagingScrollViewer Implementation
@@ -1080,7 +1081,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return
                         MpAvMainWindowViewModel.Instance.MainWindowHeight -
-                        MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarHeight -
+                        //MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarHeight -
+                        MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength -
                         MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize;
 #endif
             }

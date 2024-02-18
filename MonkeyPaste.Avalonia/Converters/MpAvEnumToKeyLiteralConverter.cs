@@ -22,6 +22,11 @@ namespace MonkeyPaste.Avalonia {
                     kl2.FirstOrDefault() is string kl3) {
                     if (parameter is string paramStr && paramStr == "label") {
                         kl3 = kl3.ToProperCase();
+                        if (kl3 == MpInputConstants.META_KEY_LITERAL) {
+                            kl3 = MpInputConstants.META_KEY_DISPLAY_VALUE;
+                        }
+                        // TODO add other mac display values here
+
                     }
                     if (Regex.IsMatch(kl3, "D[0-9]")) {
                         // hide D on digits

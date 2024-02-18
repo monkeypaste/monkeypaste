@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>ስክሪን ሾት ኣብነታት ጥራይ እዮም። እቲ ትተኽሎ ናብዚ ቋንቋ እዚ ተተርጒሙ ኣሎ።</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>በዚ ምዝገባ እዚ ክትረኽቦ ኢኻ፤
-● ደረት ኣልቦ ዓቕሚ .
-● ናይ መሳርሒ ምትእስሳር (ኣብ ልዕሊ ምህላው)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>ደረት ኣልቦ - ወርሓዊ</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>ናይ መጀመርታ ምፍታሕ</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>በዚ ምዝገባ እዚ ክትረኽቦ ኢኻ፤
+● ደረት ኣልቦ ዓቕሚ .</value>
   </data>
 </root>

@@ -1,0 +1,410 @@
+\doxysection{Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format Class Reference}
+\hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format}{}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format}\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+
+
+The static model (or format) of an argument for a plugin that requires information and/or interaction from the host-\/application. Like an HTML form element, they can be hidden or visible and may have rules for acceptable valeus.  
+
+
+Inheritance diagram for Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_ac9bdfe874e0d97468a4eb26c0ad256bf}{param\+Id}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em When unset will fallback to a string representation of the parameter\textquotesingle{}s int index. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a12c192f9295fc754a9f19686417feefc}{label}} = string.\+Empty\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Used to identitify the value \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a9ed64efe5fa717d9b5941f7e1630dca8}{placeholder}} = string.\+Empty\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em The placeholder text for Mp\+Parameter\+Control\+Type.\+Text\+Box and Mp\+Parameter\+Control\+Type.\+Password\+Box control\+Type\textquotesingle{}s. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a5b473cab9ad98a2b92598760c51b938f}{description}} = string.\+Empty\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em A short hint to help user understand this parameters purpose or usage. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071b}{Mp\+Parameter\+Control\+Type}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a05a917bc376d8a1b129032ed68ad7e07}{control\+Type}} = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071bafbe16470e116e861d9fdf08f036ea22f}{Mp\+Parameter\+Control\+Type.\+Text\+Box}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Defaults to Mp\+Parameter\+Control\+Type.\+Text\+Box) The UI-\/element representing this parameters value \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_a50a5c947f33c161c94295d2160249481}{Mp\+Parameter\+Value\+Unit\+Type}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a0708214fca6fe9b5ef6ca64ce67f58e7}{unit\+Type}} = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_a50a5c947f33c161c94295d2160249481ab7ebbf7f254ef646928dd58f62383a85}{Mp\+Parameter\+Value\+Unit\+Type.\+Plain\+Text}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Defaults to Mp\+Parameter\+Value\+Unit\+Type.\+Plain\+Text) Instructs host application on how to prepare the value received during a plugin request.~\newline
+{\bfseries{Note\+:}}Some combinations of unit\+Type and control\+Type are not supported or currently limited to host-\/only behavior. See \href{https://www.monkeypaste.com/docs/plugins}{\texttt{ docs}} for more info. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a084290e774c55eaea654878e0303ffa5}{is\+Execute\+Parameter}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Default is false) When true, this parameter will only be presented to the user {\itshape directly} before a plugin request. is\+Execute\+Parameter is primarily useful for crediantial data so a plugins parameter form is less cluttred and only shows actionable items.~\newline
+~\newline
+{\bfseries{Note\+: }}is\+Execute\+Parameter is intended to be used in conjunction with is\+Shared\+Value but is not required. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a6e1d31b328339b34364832b112b041c0}{is\+Shared\+Value}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Default is false) When true the value becomes static across all Mp\+Preset\+Format\textquotesingle{}s \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a3f975812567df38c6812fed9f8839318}{is\+Value\+Deferred}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Default is false) Allows values to be determined at runtime. When true your plugin must implement Mp\+ISupport\+Deferred\+Value or Mp\+ISupport\+Deferred\+Value\+Async where you will receive this parameters param\+Id in the Mp\+Deferred\+Parameter\+Value\+Request\+Format request. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a3875d02cb73b99b400cbfee4b51c60fa}{is\+Visible}} = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{true}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Default is true) Determines if this parameters UI-\/element is hidden from the user or not \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_abcf8def2746aca8a3b314becd6efc4f1}{is\+Read\+Only}} = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{false}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Default is false) User interaction will be disabled when true and if control\+Type is Mp\+Parameter\+Control\+Type.\+Text\+Box the value will appear like a Text\+Block instead \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a60ea5cd02dc6a42f606f468cae224c8e}{is\+Required}} = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{false}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Default is false) When true and value is not provided the parameter form will invalidate before your plugin will receive a request \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a1f3d3df4dbe01e31b7cf8ca9372d62ef}{can\+Remember}} = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{false}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Default is false) Since values are stored (remembered) by default. A Use case for can\+Remember would be when this an is\+Execute\+Parameter and user may not want store their input for next time. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{int}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a599857e2727b23f0ed66b4c52f14afef}{max\+Length}} = int.\+Max\+Value\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Default is int.\+Max\+Value) Can be useful for Mp\+Parameter\+Control\+Type.\+Text\+Box controls for validation \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{int}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a6913a35def2f4533bb1bf24917aa625f}{min\+Length}} = 0\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Default is 0) Can be useful for Mp\+Parameter\+Control\+Type.\+Text\+Box controls for validation \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_adc0e73ce2363c716e1a7168fff5b04f7}{pattern}} = string.\+Empty\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em An optional regular expression compared to the string value you would receive from a request for validation. The regular expression must then result in a {\bfseries{match}} for this parameter to be valid. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a8aef7039f3e5639a67e76582f722e03a}{pattern\+Info}} = string.\+Empty\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Used in conjunction with pattern to provide information about why the input is not valid. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{double}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_af276dc9279a2d805acc1e6e3e812b748}{minimum}} = 0\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Default is 0) Used when control\+Type is Mp\+Parameter\+Control\+Type.\+Slider for the minimum threshold as a decimal value \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{double}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a8428d7ff073edaf8b60e966e3aab6c79}{maximum}} = 1\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Default is 1) Used when control\+Type is Mp\+Parameter\+Control\+Type.\+Slider for the maximum threshold as a decimal value \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{int}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_ab9efd3e15b6dbe644e268fd7e1bbca64}{precision}} = 2\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (Default is 2) Used when control\+Type is Mp\+Parameter\+Control\+Type.\+Slider and unit\+Type is Mp\+Parameter\+Value\+Unit\+Type.\+Decimal to clamp the values digits after the deciaml place. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_value_format}{Mp\+Parameter\+Value\+Format}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_ac5548616d06543368195de531f37ac02}{value}}\hspace{0.3cm}{\ttfamily  \mbox{[}set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em A container for single-\/value control\+Type\textquotesingle{}s default string representation ~\newline
+~\newline
+{\bfseries{Note\+: }}Only value or values can be defined {\bfseries{not both}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{List}}$<$ \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_value_format}{Mp\+Parameter\+Value\+Format}} $>$ \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_ab6aa5a99ff0802e533e945ace74f1a73}{values}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em A list of possible default values for this parameter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_csv_format_properties}{Mp\+Csv\+Format\+Properties}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_aa2e1ad4d2aa1486db0120771d4236bdd}{Csv\+Props}}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Used internally when decoding multi-\/value parameters. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{interface_monkey_paste_1_1_common_1_1_plugin_1_1_mp_i_paramter_value_provider}{Monkey\+Paste.\+Common.\+Plugin.\+Mp\+IParamter\+Value\+Provider}}}
+
+
+\doxysubsection{Detailed Description}
+The static model (or format) of an argument for a plugin that requires information and/or interaction from the host-\/application. Like an HTML form element, they can be hidden or visible and may have rules for acceptable valeus. 
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00009}{9}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+
+
+\doxysubsection{Property Documentation}
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a1f3d3df4dbe01e31b7cf8ca9372d62ef}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a1f3d3df4dbe01e31b7cf8ca9372d62ef} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!canRemember@{canRemember}}
+\index{canRemember@{canRemember}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{canRemember}{canRemember}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+can\+Remember = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{false}}\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Default is false) Since values are stored (remembered) by default. A Use case for can\+Remember would be when this an is\+Execute\+Parameter and user may not want store their input for next time. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00096}{96}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a05a917bc376d8a1b129032ed68ad7e07}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a05a917bc376d8a1b129032ed68ad7e07} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!controlType@{controlType}}
+\index{controlType@{controlType}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{controlType}{controlType}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071b}{Mp\+Parameter\+Control\+Type}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+control\+Type = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071bafbe16470e116e861d9fdf08f036ea22f}{Mp\+Parameter\+Control\+Type.\+Text\+Box}}\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Defaults to Mp\+Parameter\+Control\+Type.\+Text\+Box) The UI-\/element representing this parameters value 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00064}{64}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_aa2e1ad4d2aa1486db0120771d4236bdd}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_aa2e1ad4d2aa1486db0120771d4236bdd} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!CsvProps@{CsvProps}}
+\index{CsvProps@{CsvProps}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{CsvProps}{CsvProps}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_csv_format_properties}{Mp\+Csv\+Format\+Properties}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+Csv\+Props\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Used internally when decoding multi-\/value parameters. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00159}{159}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a5b473cab9ad98a2b92598760c51b938f}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a5b473cab9ad98a2b92598760c51b938f} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!description@{description}}
+\index{description@{description}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{description}{description}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+description = string.\+Empty\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+A short hint to help user understand this parameters purpose or usage. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00060}{60}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a084290e774c55eaea654878e0303ffa5}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a084290e774c55eaea654878e0303ffa5} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!isExecuteParameter@{isExecuteParameter}}
+\index{isExecuteParameter@{isExecuteParameter}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{isExecuteParameter}{isExecuteParameter}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+is\+Execute\+Parameter\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Default is false) When true, this parameter will only be presented to the user {\itshape directly} before a plugin request. is\+Execute\+Parameter is primarily useful for crediantial data so a plugins parameter form is less cluttred and only shows actionable items.~\newline
+~\newline
+{\bfseries{Note\+: }}is\+Execute\+Parameter is intended to be used in conjunction with is\+Shared\+Value but is not required. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00072}{72}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_abcf8def2746aca8a3b314becd6efc4f1}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_abcf8def2746aca8a3b314becd6efc4f1} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!isReadOnly@{isReadOnly}}
+\index{isReadOnly@{isReadOnly}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{isReadOnly}{isReadOnly}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+is\+Read\+Only = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{false}}\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Default is false) User interaction will be disabled when true and if control\+Type is Mp\+Parameter\+Control\+Type.\+Text\+Box the value will appear like a Text\+Block instead 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00088}{88}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a60ea5cd02dc6a42f606f468cae224c8e}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a60ea5cd02dc6a42f606f468cae224c8e} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!isRequired@{isRequired}}
+\index{isRequired@{isRequired}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{isRequired}{isRequired}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+is\+Required = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{false}}\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Default is false) When true and value is not provided the parameter form will invalidate before your plugin will receive a request 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00092}{92}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a6e1d31b328339b34364832b112b041c0}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a6e1d31b328339b34364832b112b041c0} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!isSharedValue@{isSharedValue}}
+\index{isSharedValue@{isSharedValue}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{isSharedValue}{isSharedValue}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+is\+Shared\+Value\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Default is false) When true the value becomes static across all Mp\+Preset\+Format\textquotesingle{}s 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00076}{76}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a3f975812567df38c6812fed9f8839318}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a3f975812567df38c6812fed9f8839318} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!isValueDeferred@{isValueDeferred}}
+\index{isValueDeferred@{isValueDeferred}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{isValueDeferred}{isValueDeferred}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+is\+Value\+Deferred\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Default is false) Allows values to be determined at runtime. When true your plugin must implement Mp\+ISupport\+Deferred\+Value or Mp\+ISupport\+Deferred\+Value\+Async where you will receive this parameters param\+Id in the Mp\+Deferred\+Parameter\+Value\+Request\+Format request. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00080}{80}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a3875d02cb73b99b400cbfee4b51c60fa}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a3875d02cb73b99b400cbfee4b51c60fa} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!isVisible@{isVisible}}
+\index{isVisible@{isVisible}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{isVisible}{isVisible}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+is\+Visible = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{true}}\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Default is true) Determines if this parameters UI-\/element is hidden from the user or not 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00084}{84}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a12c192f9295fc754a9f19686417feefc}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a12c192f9295fc754a9f19686417feefc} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!label@{label}}
+\index{label@{label}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{label}{label}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+label = string.\+Empty\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Used to identitify the value 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00052}{52}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a8428d7ff073edaf8b60e966e3aab6c79}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a8428d7ff073edaf8b60e966e3aab6c79} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!maximum@{maximum}}
+\index{maximum@{maximum}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{maximum}{maximum}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{double}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+maximum = 1\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Default is 1) Used when control\+Type is Mp\+Parameter\+Control\+Type.\+Slider for the maximum threshold as a decimal value 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00124}{124}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a599857e2727b23f0ed66b4c52f14afef}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a599857e2727b23f0ed66b4c52f14afef} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!maxLength@{maxLength}}
+\index{maxLength@{maxLength}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{maxLength}{maxLength}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{int}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+max\+Length = int.\+Max\+Value\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Default is int.\+Max\+Value) Can be useful for Mp\+Parameter\+Control\+Type.\+Text\+Box controls for validation 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00102}{102}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_af276dc9279a2d805acc1e6e3e812b748}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_af276dc9279a2d805acc1e6e3e812b748} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!minimum@{minimum}}
+\index{minimum@{minimum}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{minimum}{minimum}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{double}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+minimum = 0\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Default is 0) Used when control\+Type is Mp\+Parameter\+Control\+Type.\+Slider for the minimum threshold as a decimal value 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00120}{120}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a6913a35def2f4533bb1bf24917aa625f}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a6913a35def2f4533bb1bf24917aa625f} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!minLength@{minLength}}
+\index{minLength@{minLength}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{minLength}{minLength}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{int}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+min\+Length = 0\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Default is 0) Can be useful for Mp\+Parameter\+Control\+Type.\+Text\+Box controls for validation 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00106}{106}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_ac9bdfe874e0d97468a4eb26c0ad256bf}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_ac9bdfe874e0d97468a4eb26c0ad256bf} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!paramId@{paramId}}
+\index{paramId@{paramId}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{paramId}{paramId}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+param\+Id\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+When unset will fallback to a string representation of the parameter\textquotesingle{}s int index. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00034}{34}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_adc0e73ce2363c716e1a7168fff5b04f7}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_adc0e73ce2363c716e1a7168fff5b04f7} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!pattern@{pattern}}
+\index{pattern@{pattern}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{pattern}{pattern}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+pattern = string.\+Empty\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+An optional regular expression compared to the string value you would receive from a request for validation. The regular expression must then result in a {\bfseries{match}} for this parameter to be valid. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00110}{110}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a8aef7039f3e5639a67e76582f722e03a}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a8aef7039f3e5639a67e76582f722e03a} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!patternInfo@{patternInfo}}
+\index{patternInfo@{patternInfo}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{patternInfo}{patternInfo}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+pattern\+Info = string.\+Empty\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Used in conjunction with pattern to provide information about why the input is not valid. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00114}{114}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a9ed64efe5fa717d9b5941f7e1630dca8}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a9ed64efe5fa717d9b5941f7e1630dca8} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!placeholder@{placeholder}}
+\index{placeholder@{placeholder}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{placeholder}{placeholder}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+placeholder = string.\+Empty\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+The placeholder text for Mp\+Parameter\+Control\+Type.\+Text\+Box and Mp\+Parameter\+Control\+Type.\+Password\+Box control\+Type\textquotesingle{}s. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00056}{56}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_ab9efd3e15b6dbe644e268fd7e1bbca64}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_ab9efd3e15b6dbe644e268fd7e1bbca64} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!precision@{precision}}
+\index{precision@{precision}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{precision}{precision}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{int}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+precision = 2\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Default is 2) Used when control\+Type is Mp\+Parameter\+Control\+Type.\+Slider and unit\+Type is Mp\+Parameter\+Value\+Unit\+Type.\+Decimal to clamp the values digits after the deciaml place. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00128}{128}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a0708214fca6fe9b5ef6ca64ce67f58e7}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_a0708214fca6fe9b5ef6ca64ce67f58e7} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!unitType@{unitType}}
+\index{unitType@{unitType}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{unitType}{unitType}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_a50a5c947f33c161c94295d2160249481}{Mp\+Parameter\+Value\+Unit\+Type}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+unit\+Type = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_a50a5c947f33c161c94295d2160249481ab7ebbf7f254ef646928dd58f62383a85}{Mp\+Parameter\+Value\+Unit\+Type.\+Plain\+Text}}\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+(Defaults to Mp\+Parameter\+Value\+Unit\+Type.\+Plain\+Text) Instructs host application on how to prepare the value received during a plugin request.~\newline
+{\bfseries{Note\+:}}Some combinations of unit\+Type and control\+Type are not supported or currently limited to host-\/only behavior. See \href{https://www.monkeypaste.com/docs/plugins}{\texttt{ docs}} for more info. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00068}{68}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_ac5548616d06543368195de531f37ac02}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_ac5548616d06543368195de531f37ac02} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!value@{value}}
+\index{value@{value}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{value}{value}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_value_format}{Mp\+Parameter\+Value\+Format}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+value\hspace{0.3cm}{\ttfamily [set]}}
+
+
+
+A container for single-\/value control\+Type\textquotesingle{}s default string representation ~\newline
+~\newline
+{\bfseries{Note\+: }}Only value or values can be defined {\bfseries{not both}}. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00133}{133}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_ab6aa5a99ff0802e533e945ace74f1a73}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_format_ab6aa5a99ff0802e533e945ace74f1a73} 
+\index{MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}!values@{values}}
+\index{values@{values}!MonkeyPaste.Common.Plugin.MpParameterFormat@{MonkeyPaste.Common.Plugin.MpParameterFormat}}
+\doxysubsubsection{\texorpdfstring{values}{values}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{List}}$<$\mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_parameter_value_format}{Mp\+Parameter\+Value\+Format}}$>$ Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Parameter\+Format.\+values\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+A list of possible default values for this parameter. 
+
+
+
+Definition at line \mbox{\hyperlink{_mp_parameter_format_8cs_source_l00140}{140}} of file \mbox{\hyperlink{_mp_parameter_format_8cs_source}{Mp\+Parameter\+Format.\+cs}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/tkefauver/\+Source/\+Repos/\+Monkey\+Paste/\+Common/\+Monkey\+Paste.\+Common.\+Plugin/\+Models/\+Parameters/\mbox{\hyperlink{_mp_parameter_format_8cs}{Mp\+Parameter\+Format.\+cs}}\end{DoxyCompactItemize}

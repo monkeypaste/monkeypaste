@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System.Collections.Generic;
@@ -26,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIBoundSizeViewModel Implementation
+        #region MpIAnimatedSizeViewModel Implementation
 
         public double ContainerBoundWidth { get; set; }
         public double ContainerBoundHeight { get; set; }
@@ -152,18 +151,22 @@ namespace MonkeyPaste.Avalonia {
         }
         private void NotifySidebarSelectionChanging() {
             Dispatcher.UIThread.Post(async () => {
+                MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeBegin);
                 var sw = Stopwatch.StartNew();
                 while (!IsAnimating) {
                     // wait for anim to start
                     if (sw.ElapsedMilliseconds > 3_000) {
                         // time out, anim not significant size
-                        return;
+                        break;
                     }
                     await Task.Delay(100);
                 }
-
-                MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeBegin);
-                while (!IsAnimating) {
+                sw.Restart();
+                while (IsAnimating) {
+                    if (sw.ElapsedMilliseconds > 3_000) {
+                        // time out, anim not significant size
+                        break;
+                    }
                     // wait for anim to finish
                     await Task.Delay(100);
                 }
@@ -180,6 +183,7 @@ namespace MonkeyPaste.Avalonia {
 
                     if (SelectedItem != null) {
                         LastSelectedItem = SelectedItem;
+                        SelectedItem.OnPropertyChanged(nameof(SelectedItem.IsSelected));
                     }
                     NotifySidebarSelectionChanging();
 
@@ -310,7 +314,12 @@ namespace MonkeyPaste.Avalonia {
                     SelectedItem.DefaultSidebarWidth - SelectedItem.SidebarWidth : 0;
                 double dh = mwvm.IsHorizontalOrientation ?
                     0 : SelectedItem.DefaultSidebarHeight - SelectedItem.SidebarHeight;
-                mgs.ApplyDelta(new Vector(dw, dh));
+                //mgs.ApplyDelta(new Vector(dw, dh));
+                MpAvClipTrayViewModel.Instance.ContainerBoundWidth -= dw;
+                MpAvSidebarItemCollectionViewModel.Instance.ContainerBoundWidth += dw;
+
+                MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= dh;
+                MpAvSidebarItemCollectionViewModel.Instance.ContainerBoundHeight += dh;
             });
 
         #endregion

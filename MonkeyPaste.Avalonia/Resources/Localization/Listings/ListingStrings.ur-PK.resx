@@ -238,11 +238,6 @@ a 1000 تک مواد کے کلپس
   <data name="TranslationWarning" xml:space="preserve">
     <value>اسکرین شاٹس صرف مثال ہیں۔ آپ جو انسٹال کرتے ہیں اس کا ترجمہ اس زبان میں کیا گیا ہے۔</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>اس رکنیت کے ساتھ آپ کو ملے گا:
-lim لامحدود صلاحیت
-● آلہ کی مطابقت پذیری (دستیابی پر)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>لامحدود - ماہانہ</value>
   </data>
@@ -251,5 +246,9 @@ lim لامحدود صلاحیت
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>ابتدائی رہائی</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>اس رکنیت کے ساتھ آپ کو ملے گا:
+lim لامحدود صلاحیت</value>
   </data>
 </root>

@@ -238,11 +238,6 @@ Su portapapeles siempre se rastrea o almacena en cualquier lugar más allá de s
   <data name="TranslationWarning" xml:space="preserve">
     <value>Las capturas de pantalla son solo ejemplos. Lo que instala ha sido traducido a este idioma.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Con esta suscripción recibirá:
-● Capacidad ilimitada
-● Sincronización de dispositivos (tras disponibilidad)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Ilimitado - mensualmente</value>
   </data>
@@ -251,5 +246,9 @@ Su portapapeles siempre se rastrea o almacena en cualquier lugar más allá de s
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Versión inicial</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Con esta suscripción recibirá:
+● Capacidad ilimitada</value>
   </data>
 </root>

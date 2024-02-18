@@ -238,11 +238,6 @@ Klemmuspjaldið þitt er nokkru sinni rakið eða geymt hvar sem er handan eigin
   <data name="TranslationWarning" xml:space="preserve">
     <value>Skjámyndir eru aðeins dæmi. Það sem þú setur upp hefur verið þýtt á þetta tungumál.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Með þessari áskrift færðu:
-● Ótakmarkað afkastageta
-● Samstilling tæki (við framboð)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Ótakmarkað - mánaðarlega</value>
   </data>
@@ -251,5 +246,9 @@ Klemmuspjaldið þitt er nokkru sinni rakið eða geymt hvar sem er handan eigin
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Upphafleg útgáfa</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Með þessari áskrift færðu:
+● Ótakmarkað afkastageta</value>
   </data>
 </root>

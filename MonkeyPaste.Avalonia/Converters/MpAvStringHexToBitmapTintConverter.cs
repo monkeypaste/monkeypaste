@@ -42,6 +42,9 @@ namespace MonkeyPaste.Avalonia {
             if (!IS_DYNAMIC_TINT_ENABLED) {
                 return MpAvIconSourceObjToBitmapConverter.Instance.Convert(value, targetType, parameter, culture);
             }
+            if (parameter.ToStringOrEmpty() == "test") {
+
+            }
 
             object imgResourceObj = null;
             string hex = null;

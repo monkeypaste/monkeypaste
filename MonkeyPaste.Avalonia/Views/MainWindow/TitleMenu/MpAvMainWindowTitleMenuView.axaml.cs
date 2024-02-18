@@ -83,7 +83,6 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvMainWindowViewModel.Instance.MainWindowOrientationType != final_or) {
                 MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(final_or);
             }
-            MpAvMainView.Instance.ClampContentSizes();
         }
 
         #endregion

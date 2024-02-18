@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>צילומי מסך הם רק דוגמאות. מה שאתה מתקין תורגם לשפה זו.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>עם מנוי זה תקבל:
-● קיבולת בלתי מוגבלת
-● סנכרון מכשירים (עם זמינות)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>ללא הגבלה - חודשי</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>שיחרור ראשוני</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>עם מנוי זה תקבל:
+● קיבולת בלתי מוגבלת</value>
   </data>
 </root>

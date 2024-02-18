@@ -238,11 +238,6 @@ Il-clipboard tiegħek huwa dejjem traċċat jew maħżun kullimkien lil hinn mil
   <data name="TranslationWarning" xml:space="preserve">
     <value>L-iskrin tal-iskrin huma biss eżempji. Dak li tinstalla ġie tradott għal din il-lingwa.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>B'dan l-abbonament tirċievi:
-● Kapaċità bla limitu
-● Sinkronizzazzjoni tal-apparat (wara d-disponibbiltà)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Unlimited - kull xahar</value>
   </data>
@@ -251,5 +246,9 @@ Il-clipboard tiegħek huwa dejjem traċċat jew maħżun kullimkien lil hinn mil
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Rilaxx inizjali</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>B'dan l-abbonament tirċievi:
+● Kapaċità Unlimited</value>
   </data>
 </root>

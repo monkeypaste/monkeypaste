@@ -1,0 +1,115 @@
+\doxysection{Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Plugin\+Format Class Reference}
+\hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_format}{}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_format}\index{MonkeyPaste.Common.Plugin.MpPluginFormat@{MonkeyPaste.Common.Plugin.MpPluginFormat}}
+
+
+The extended runtime subclass of Mp\+Manifest\+Format containing.  
+
+
+Inheritance diagram for Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Plugin\+Format\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_format}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_analyzer_component}{Mp\+Analyzer\+Component}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_format_a887c7480a61f6a83d2ca928563f1b242}{analyzer}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_clipboard_component}{Mp\+Clipboard\+Component}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_format_ac5f6598be9d531734de53fc67c3e45c9}{ole\+Handler}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_contact_fetcher_format}{Mp\+Contact\+Fetcher\+Format}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_format_a75c1db823c493df5228e5caf10949131}{contact\+Fetcher}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties inherited from \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format}{Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Manifest\+Format}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a5880761faa4d739a681f31a8f53fcdc6}{title}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (required) The display name for this plugin. Cannot be more than 32 characters long \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a9e617ab85ec989fa357954455a09e1b3}{guid}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em (required) RFC 4122 compliant 128-\/bit GUID (UUID) with only letters, numbers and hyphens \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a5f1f379017c60fd859b8566f55d5db2d}{version}} = "{}1.\+0.\+0.\+0"{}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em The major, minor, build, revision info for this plugin. The default is "{}1.\+0.\+0.\+0"{}. It is only required when publishing your plugin for public use. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a24d89c0f8f9c51b7faf8d12fd28dff76}{description}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em A brief summary of what the plugin does. It cannot be more than 1024 characters. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a353989db84186463ed7e56b3923b4191}{author}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em You or or your businesses name. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_aa1334d367de9624d4c84d2e13d0e0dcf}{license\+Url}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em A link associated to this plugins license. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{bool}}? \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a9a478659e7a8f00946e1768b1b5dc8d2}{require\+License\+Acceptance}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em When $<$param\+Value$>$true$<$/param\+Value$>$, this plugin will {\bfseries{not install}} if user does not accept the optionally viewable license\+Url \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a92cd90a14e890f2f2a5b594a61765ed7}{donate\+Url}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em If you accept donations for this or other works you can provide a url to your donation portal here. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_ae920899166d208214585301c4ddcd225}{readme\+Url}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em A url to a Mark\+Down (.md), Html (.html) or plain text file with further details about this. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a7b53effa68ca949d15fcb070a39deb79}{project\+Url}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em A webpage about this project. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a8b48e85c9fb9c39ece9bc16b2459ca39}{package\+Url}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em A url to a zip compressed file (.zip) of this projects build output. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_aafa299afb854fe5fdf2abf5f8699456c}{tags}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Terms that describe this plugin for searching and group in comma separated param\+Value format (csv). It cannot be more than 1024 characters long. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a57c493bb8fe45f9471ea7dda9a9d3b80}{icon\+Uri}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em A uri (relative or absolute) to an image file (png,jpg, jpeg or bmp). ~\newline
+ {\bfseries{Note\+:}} For best usability this should be an absolute uri. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a7365acfd346455a2a29b036f088f652e}{published\+App\+Version}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em The version of \doxylink{namespace_monkey_paste}{Monkey\+Paste} this plugin was published with. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_aff25ff31969c8eea847438ddba486977}{Mp\+Plugin\+Package\+Type}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a55ba5c425a8e067801baa90ccc1a4ea3}{package\+Type}} = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_aff25ff31969c8eea847438ddba486977acae35aa858bf0981840ab6826b3e9ed0}{Mp\+Plugin\+Package\+Type.\+Dll}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em The default type is Mp\+Plugin\+Package\+Type.\+Dll. All other types are currently experimental. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{virtual}} \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_a522cfaa4b6862fd0455045a23543f633}{Mp\+Plugin\+Type}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a3559a82693d5b1496890090560a0db18}{plugin\+Type}} = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_a522cfaa4b6862fd0455045a23543f633adc45bce0f3f919525f258c2343bcf135}{Mp\+Plugin\+Type.\+Analyzer}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em A Mp\+Manifest\+Format can only be one type of plugin. See Mp\+Plugin\+Type for more info. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{List}}$<$ \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_dependency}{Mp\+Plugin\+Dependency}} $>$ \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_acfb88cebf2e42c71b13472be9bd926e5}{dependencies}} = \mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Any requirements that cannot be included in this plugins bundle to operate. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_a692b423e7a9e063802c1ba97d9eb5e7d}{Mp\+Plugin\+Debug\+Mode}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a6f3406028754f64e1f6a90ea7391ccc3}{debug\+Mode}} = \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_a692b423e7a9e063802c1ba97d9eb5e7da6adf97f83acf6453d4a6a4b1070f3754}{Mp\+Plugin\+Debug\+Mode.\+None}}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em When set to Mp\+Plugin\+Debug\+Mode.\+Debug, during startup the application will wait for you to attach a debugger to the main application process, called Monkey\+Paste\texorpdfstring{$\ast$}{*}~\newline
+~\newline
+ {\bfseries{Note\+:}} If you expierence {\bfseries{input lag}} (mouse and keyboard) on Windows while step-\/tracing. You can prevent this by setting debug\+Mode to Mp\+Plugin\+Debug\+Mode.\+Debug\+Local\+Input\+Only which will disable global input listening. THis will inhibit some application functionality but the lag will be gone. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format}{Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Manifest\+Format}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{override}} \mbox{\hyperlink{namespace_monkey_paste_1_1_common_1_1_plugin_ae31f606360411583bc5d16ce861c071ba4ee29ca12c7d126654bd0e5275de6135}{string}} \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format_a6b93e1e6998868d98c25897c18f76360}{To\+String}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The extended runtime subclass of Mp\+Manifest\+Format containing. 
+
+Definition at line \mbox{\hyperlink{_mp_plugin_format_8cs_source_l00005}{5}} of file \mbox{\hyperlink{_mp_plugin_format_8cs_source}{Mp\+Plugin\+Format.\+cs}}.
+
+
+
+\doxysubsection{Property Documentation}
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_format_a887c7480a61f6a83d2ca928563f1b242}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_format_a887c7480a61f6a83d2ca928563f1b242} 
+\index{MonkeyPaste.Common.Plugin.MpPluginFormat@{MonkeyPaste.Common.Plugin.MpPluginFormat}!analyzer@{analyzer}}
+\index{analyzer@{analyzer}!MonkeyPaste.Common.Plugin.MpPluginFormat@{MonkeyPaste.Common.Plugin.MpPluginFormat}}
+\doxysubsubsection{\texorpdfstring{analyzer}{analyzer}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_analyzer_component}{Mp\+Analyzer\+Component}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Plugin\+Format.\+analyzer\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line \mbox{\hyperlink{_mp_plugin_format_8cs_source_l00006}{6}} of file \mbox{\hyperlink{_mp_plugin_format_8cs_source}{Mp\+Plugin\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_format_a75c1db823c493df5228e5caf10949131}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_format_a75c1db823c493df5228e5caf10949131} 
+\index{MonkeyPaste.Common.Plugin.MpPluginFormat@{MonkeyPaste.Common.Plugin.MpPluginFormat}!contactFetcher@{contactFetcher}}
+\index{contactFetcher@{contactFetcher}!MonkeyPaste.Common.Plugin.MpPluginFormat@{MonkeyPaste.Common.Plugin.MpPluginFormat}}
+\doxysubsubsection{\texorpdfstring{contactFetcher}{contactFetcher}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_contact_fetcher_format}{Mp\+Contact\+Fetcher\+Format}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Plugin\+Format.\+contact\+Fetcher\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line \mbox{\hyperlink{_mp_plugin_format_8cs_source_l00008}{8}} of file \mbox{\hyperlink{_mp_plugin_format_8cs_source}{Mp\+Plugin\+Format.\+cs}}.
+
+\Hypertarget{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_format_ac5f6598be9d531734de53fc67c3e45c9}\label{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_plugin_format_ac5f6598be9d531734de53fc67c3e45c9} 
+\index{MonkeyPaste.Common.Plugin.MpPluginFormat@{MonkeyPaste.Common.Plugin.MpPluginFormat}!oleHandler@{oleHandler}}
+\index{oleHandler@{oleHandler}!MonkeyPaste.Common.Plugin.MpPluginFormat@{MonkeyPaste.Common.Plugin.MpPluginFormat}}
+\doxysubsubsection{\texorpdfstring{oleHandler}{oleHandler}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_clipboard_component}{Mp\+Clipboard\+Component}} Monkey\+Paste.\+Common.\+Plugin.\+Mp\+Plugin\+Format.\+ole\+Handler\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line \mbox{\hyperlink{_mp_plugin_format_8cs_source_l00007}{7}} of file \mbox{\hyperlink{_mp_plugin_format_8cs_source}{Mp\+Plugin\+Format.\+cs}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/tkefauver/\+Source/\+Repos/\+Monkey\+Paste/\+Common/\+Monkey\+Paste.\+Common.\+Plugin/\+Models/\+Plugin/\mbox{\hyperlink{_mp_plugin_format_8cs}{Mp\+Plugin\+Format.\+cs}}\end{DoxyCompactItemize}

@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>スクリーンショットは単なる例です。インストールするものはこの言語に翻訳されています。</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>このサブスクリプションを使用すると、以下を受け取ります。
-●無制限の容量
-●デバイスの同期（可用性）</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>無制限 - 毎月</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>初回リリース</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>このサブスクリプションを使用すると、以下を受け取ります。
+●無制限の容量</value>
   </data>
 </root>

@@ -238,11 +238,6 @@ Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din 
   <data name="TranslationWarning" xml:space="preserve">
     <value>Skjermbilder er bare eksempler. Det du installerer er oversatt til dette språket.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Med dette abonnementet vil du motta:
-● Ubegrenset kapasitet
-● Synkronisering av enheter (ved tilgjengelighet)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Ubegrenset - månedlig</value>
   </data>
@@ -251,5 +246,9 @@ Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din 
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Første utgivelse</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Med dette abonnementet vil du motta:
+● Ubegrenset kapasitet</value>
   </data>
 </root>

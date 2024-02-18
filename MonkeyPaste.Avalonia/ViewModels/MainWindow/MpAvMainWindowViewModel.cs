@@ -179,6 +179,12 @@ namespace MonkeyPaste.Avalonia {
             1.0d;
 #endif
 
+        public double MainWindowDefaultDesiredHorizontalHeight =>
+            320.0d;
+
+        public double MainWindowDefaultDesiredVerticalWidth =>
+            460.0d;
+
         public double MainWindowWidth { get; set; }
         public double MainWindowHeight { get; set; }
 
@@ -295,7 +301,10 @@ namespace MonkeyPaste.Avalonia {
                         return MainWindowScreen.WorkArea.Width;
                     case MpMainWindowOrientationType.Left:
                     case MpMainWindowOrientationType.Right:
-                        return MainWindowScreen.WorkArea.Width * MainWindowDefaultVerticalWidthRatio;
+                        double max_w = MainWindowScreen.WorkArea.Width;
+                        double min_w = max_w * MainWindowDefaultVerticalWidthRatio;
+                        double desired_w = MainWindowDefaultDesiredVerticalWidth;
+                        return Math.Clamp(desired_w, min_w, max_w);
                 }
                 return 0;
             }
@@ -306,7 +315,10 @@ namespace MonkeyPaste.Avalonia {
                 switch (MainWindowOrientationType) {
                     case MpMainWindowOrientationType.Top:
                     case MpMainWindowOrientationType.Bottom:
-                        return MainWindowScreen.WorkArea.Height * MainWindowDefaultHorizontalHeightRatio;
+                        double max_h = MainWindowScreen.WorkArea.Height;
+                        double min_h = max_h * MainWindowDefaultHorizontalHeightRatio;
+                        double desired_h = MainWindowDefaultDesiredHorizontalHeight;
+                        return Math.Clamp(desired_h, min_h, max_h);
                     case MpMainWindowOrientationType.Left:
                     case MpMainWindowOrientationType.Right:
                         return MainWindowScreen.WorkArea.Height;
@@ -857,7 +869,7 @@ namespace MonkeyPaste.Avalonia {
                         // startup case                        
                         if (MpAvPrefViewModel.Instance.MainWindowInitialHeight == 0) {
                             // initial setting
-                            MpAvPrefViewModel.Instance.MainWindowInitialHeight = MainWindowScreen.WorkArea.Height * MainWindowDefaultHorizontalHeightRatio;
+                            MpAvPrefViewModel.Instance.MainWindowInitialHeight = MainWindowDefaultHeight;
                         }
                         MainWindowHeight = MpAvPrefViewModel.Instance.MainWindowInitialHeight;
                     } else {
@@ -880,7 +892,7 @@ namespace MonkeyPaste.Avalonia {
                         // startup case                        
                         if (MpAvPrefViewModel.Instance.MainWindowInitialWidth == 0) {
                             // initial setting
-                            MpAvPrefViewModel.Instance.MainWindowInitialWidth = MainWindowScreen.WorkArea.Width * MainWindowDefaultVerticalWidthRatio;
+                            MpAvPrefViewModel.Instance.MainWindowInitialWidth = MainWindowDefaultWidth;
                         }
                         MainWindowWidth = MpAvPrefViewModel.Instance.MainWindowInitialWidth;
                     } else {
@@ -1511,11 +1523,13 @@ namespace MonkeyPaste.Avalonia {
                 SetMainWindowRect(MainWindowOpenedScreenRect);
                 MpConsole.WriteLine($"MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
 
-
+                // first pass adjusts grid definitions, most measuring dimensions aren't updated yet
                 MpAvMainView.Instance.UpdateContentLayout();
 
                 await Task.Delay(300);
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeEnd);
+                // second pass finishes change with the right measurements
+                MpAvMainView.Instance.UpdateContentLayout();
                 IsMainWindowOrientationChanging = false;
             });
 

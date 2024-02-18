@@ -238,11 +238,6 @@ Ihre Zwischenablage wird jemals überall über Ihren eigenen Maschine verfolgt o
   <data name="TranslationWarning" xml:space="preserve">
     <value>Screenshots sind nur Beispiele. Was Sie installieren, wurde in diese Sprache übersetzt.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Mit diesem Abonnement erhalten Sie:
-● Unbegrenzte Kapazität
-● Gerätesynchronisierung (bei Verfügbarkeit)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Unbegrenzt - monatlich</value>
   </data>
@@ -251,5 +246,9 @@ Ihre Zwischenablage wird jemals überall über Ihren eigenen Maschine verfolgt o
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Erstveröffentlichung</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Mit diesem Abonnement erhalten Sie:
+● Unbegrenzte Kapazität</value>
   </data>
 </root>

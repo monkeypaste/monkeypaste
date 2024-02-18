@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>스크린 샷은 예제입니다. 설치 한 내용은이 언어로 번역되었습니다.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>이 구독을 사용하면 다음을 받게됩니다.
-● 무제한 용량
-● 장치 동기화 (가용성시)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>무제한 - 월별</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>초판</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>이 구독을 사용하면 다음을 받게됩니다.
+● 무제한 용량</value>
   </data>
 </root>

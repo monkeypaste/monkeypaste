@@ -238,11 +238,6 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
   <data name="TranslationWarning" xml:space="preserve">
     <value>Screen shots are only examples. What you install has been translated to this language.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>With this subscription you will receive:
-● unlimited capacity
-● device syncing (upon availability)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Unlimited - Monthly</value>
   </data>
@@ -251,5 +246,9 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Initial Release</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>With this subscription you will receive:
+● unlimited capacity</value>
   </data>
 </root>

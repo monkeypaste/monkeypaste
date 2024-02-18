@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -315,8 +316,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpISidebarItemViewModel Implementation
 
-        private double _defaultSelectorColumnVarDimLength = 400;
-        //private double _defaultParameterColumnVarDimLength = 625;
+        private double _defaultSelectorColumnVarDimLength_horiz = 800;
+        private double _defaultSelectorColumnVarDimLength_vert = 400;
         public double DefaultSidebarWidth {
             get {
                 if (IsWindowOpen) {
@@ -325,13 +326,7 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
                     return MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
-                //double w = _defaultSelectorColumnVarDimLength;
-                ////if (SelectedTrigger != null) {
-                ////w += _defaultParameterColumnVarDimLength;
-                ////}
-                //return w;
-
-                return MpAvMainWindowViewModel.Instance.MainWindowWidth * 0.5;
+                return Math.Min(_defaultSelectorColumnVarDimLength_horiz, MpAvMainWindowViewModel.Instance.MainWindowWidth);
             }
         }
         public double DefaultSidebarHeight {
@@ -342,7 +337,7 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                     return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
                 }
-                double h = _defaultSelectorColumnVarDimLength;
+                double h = _defaultSelectorColumnVarDimLength_vert;
                 //if (SelectedItem != null) {
                 //    //h += _defaultParameterColumnVarDimLength;
                 //}
@@ -388,7 +383,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsWindowOpen) {
                     return Orientation.Horizontal;
                 }
-                if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItemWidth <= _defaultSelectorColumnVarDimLength * 2) {
+                if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItemWidth <= _defaultSelectorColumnVarDimLength_vert * 1.75) {
                     return Orientation.Vertical;
                 }
                 return Orientation.Horizontal;
@@ -633,6 +628,15 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.SidebarItemSizeChanged:
                     OnPropertyChanged(nameof(SidebarOrientation));
                     OnPropertyChanged(nameof(IsHorizontal));
+                    break;
+                case MpMessageType.SelectedSidebarItemChangeEnd:
+                    if (!IsSelected) {
+                        break;
+                    }
+                    Dispatcher.UIThread.Post(async () => {
+                        await Task.Delay(150);
+                        ResetDesignerViewCommand.Execute(null);
+                    });
                     break;
             }
         }

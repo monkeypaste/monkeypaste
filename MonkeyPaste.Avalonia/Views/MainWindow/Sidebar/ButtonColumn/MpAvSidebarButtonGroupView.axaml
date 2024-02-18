@@ -68,7 +68,7 @@
                     Value="{Binding $self.Bounds.Height}" />
         </Style>
 
-        <Style Selector="RadioButton.sidebarRadio PathIcon, RadioButton.sidebarRadio Image">
+        <Style Selector="RadioButton.sidebarRadio PathIcon, RadioButton.sidebarRadio Image, RadioButton.sidebarRadio Grid.inner-container">
             <Setter Property="HorizontalAlignment"
                     Value="Center" />
             <Setter Property="VerticalAlignment"
@@ -139,10 +139,13 @@
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarCollectionsToolTip}" />
             </ToolTip.Tip>
-            <Grid>
+            <Grid Classes="inner-container"
+                  ClipToBounds="False">
                 <PathIcon Data="{StaticResource BooksSvg}" />
 
-                <!--  BADGE  -->
+                <!--
+                    BADGE
+                -->
                 <Border Background="Red"
                         ClipToBounds="False"
                         Width="10"
@@ -152,7 +155,7 @@
                         BorderBrush="White"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left"
-                        RenderTransform="translateX(-30px) translateY(-15px)"
+                        RenderTransform="translateX(-5px) translateY(-5px)"
                         IsVisible="{Binding BadgeCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, Source={x:Static local:MpAvTagTrayViewModel.Instance}}">
                     <!--<Grid>
                     -->

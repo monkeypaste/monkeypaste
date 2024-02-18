@@ -1,0 +1,4 @@
+var _mp_i_support_deferred_parameter_command_8cs =
+[
+    [ "MonkeyPaste.Common.Plugin.MpISupportDeferredParameterCommand", "interface_monkey_paste_1_1_common_1_1_plugin_1_1_mp_i_support_deferred_parameter_command.html", "interface_monkey_paste_1_1_common_1_1_plugin_1_1_mp_i_support_deferred_parameter_command" ]
+];

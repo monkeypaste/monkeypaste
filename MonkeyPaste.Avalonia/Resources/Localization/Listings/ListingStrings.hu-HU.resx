@@ -238,11 +238,6 @@ A vágólapot valaha is nyomon követik vagy tárolják, bárhol a saját gépé
   <data name="TranslationWarning" xml:space="preserve">
     <value>A képernyőfelvételek csak példa. A telepítését a nyelvre lefordítottuk.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Ezzel az előfizetéssel megkapja:
-● Korlátlan kapacitás
-● Az eszköz szinkronizálása (a rendelkezésre állás alapján)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Korlátlan - havonta</value>
   </data>
@@ -251,5 +246,9 @@ A vágólapot valaha is nyomon követik vagy tárolják, bárhol a saját gépé
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Első kiadás</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Ezzel az előfizetéssel megkapja:
+● Korlátlan kapacitás</value>
   </data>
 </root>

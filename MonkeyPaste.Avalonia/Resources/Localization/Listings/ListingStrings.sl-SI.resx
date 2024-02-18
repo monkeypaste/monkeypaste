@@ -238,11 +238,6 @@ Odložišče je kdajkoli spremljano ali shranjeno kjer koli zunaj vašega stroja
   <data name="TranslationWarning" xml:space="preserve">
     <value>Zaslonski posnetki so le primeri. Kaj namestite, je prevedeno v ta jezik.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>S to naročnino boste prejeli:
-● Neomejena zmogljivost
-● Sinhronizacija naprave (ob razpoložljivosti)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Neomejeno - mesečno</value>
   </data>
@@ -251,5 +246,9 @@ Odložišče je kdajkoli spremljano ali shranjeno kjer koli zunaj vašega stroja
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Začetna izdaja</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>S to naročnino boste prejeli:
+● Neomejena zmogljivost</value>
   </data>
 </root>

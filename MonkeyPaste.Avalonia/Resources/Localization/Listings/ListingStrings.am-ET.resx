@@ -238,11 +238,6 @@ The እስከ 1,000 የሚሆኑ ክሊፖች
   <data name="TranslationWarning" xml:space="preserve">
     <value>የማያ ገጽ ጥይቶች ምሳሌዎች ብቻ ናቸው. የተጫነው ነገር ወደዚህ ቋንቋ ተተርጉሟል.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>በዚህ የደንበኝነት ምዝገባ ይቀበሉዎታል
-● ያልተገደበ አቅም
-● የመሣሪያ ማመሳሰል (ተገኝነት ላይ)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>ያልተገደበ - በየወሩ</value>
   </data>
@@ -251,5 +246,9 @@ The እስከ 1,000 የሚሆኑ ክሊፖች
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>የመጀመሪያ ልቀት</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>በዚህ የደንበኝነት ምዝገባ ይቀበሉዎታል
+● ያልተገደበ አቅም</value>
   </data>
 </root>

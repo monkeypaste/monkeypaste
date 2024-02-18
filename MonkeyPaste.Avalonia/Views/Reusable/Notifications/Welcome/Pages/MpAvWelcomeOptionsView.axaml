@@ -163,6 +163,18 @@
                     Value="Uniform" />
         </Style>
 
+        <Style Selector="Image.splash.translation">
+            <Setter Property="Width"
+                    Value="80" />
+            <Setter Property="Height"
+                    Value="55" />
+            <Setter Property="Margin"
+                    Value="0,0,0,20" />
+            <Setter Property="RenderTransform"
+                    Value="scale(50.0)" />
+            <Setter Property="Effect"
+                    Value="drop-shadow(0 0 11 white)" />
+        </Style>
         <Style Selector="Image.splash.greeting">
             <Setter Property="Width"
                     Value="200" />
@@ -237,7 +249,8 @@
                Classes="splash fadeIn"
                Classes.greeting="{Binding WelcomePageType, ConverterParameter=Greeting, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
                Classes.dbpassword="{Binding WelcomePageType, ConverterParameter=DbPassword, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
-               Source="{Binding SplashIconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}"
+               Classes.translation="{Binding WelcomePageType, ConverterParameter=Translation, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+               Source="{Binding SplashIconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                IsVisible="{Binding SplashIconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
 
         <!--  CAPTION  -->

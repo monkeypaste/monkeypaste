@@ -238,11 +238,6 @@ Dit udklipsholder spores eller gemmes nogensinde overalt ud over din egen maskin
   <data name="TranslationWarning" xml:space="preserve">
     <value>Skærmbilleder er kun eksempler. Hvad du installerer er blevet oversat til dette sprog.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Med dette abonnement vil du modtage:
-● Ubegrænset kapacitet
-● Synkronisering af enheder (efter tilgængelighed)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Ubegrænset - månedligt</value>
   </data>
@@ -251,5 +246,9 @@ Dit udklipsholder spores eller gemmes nogensinde overalt ud over din egen maskin
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Første udgivelse</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Med dette abonnement vil du modtage:
+● Ubegrænset kapacitet</value>
   </data>
 </root>

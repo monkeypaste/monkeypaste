@@ -238,11 +238,6 @@ Vaš se međuspremnik ikada prati ili pohranjuje bilo gdje izvan vašeg vlastito
   <data name="TranslationWarning" xml:space="preserve">
     <value>Snimke zaslona su samo primjeri. Ono što instalirate prevedeno je na ovaj jezik.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Uz ovu pretplatu dobit ćete:
-● Neograničeni kapacitet
-● Sinkronizacija uređaja (nakon dostupnosti)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Neograničeno - mjesečno</value>
   </data>
@@ -251,5 +246,9 @@ Vaš se međuspremnik ikada prati ili pohranjuje bilo gdje izvan vašeg vlastito
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Prvo izdanje</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Uz ovu pretplatu dobit ćete:
+● Neograničeni kapacitet</value>
   </data>
 </root>

@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>ภาพหน้าจอเป็นตัวอย่างเท่านั้น สิ่งที่คุณติดตั้งได้รับการแปลเป็นภาษานี้</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>ด้วยการสมัครรับข้อมูลนี้คุณจะได้รับ:
-●กำลังการผลิตไม่ จำกัด
-●การซิงค์อุปกรณ์ (ตามความพร้อม)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>ไม่ จำกัด - รายเดือน</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>การเปิดตัวครั้งแรก</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>ด้วยการสมัครรับข้อมูลนี้คุณจะได้รับ:
+●กำลังการผลิตไม่ จำกัด</value>
   </data>
 </root>

@@ -1,0 +1,4 @@
+var interface_monkey_paste_1_1_common_1_1_plugin_1_1_mp_i_support_headless_clipboard_component_format =
+[
+    [ "GetFormats", "interface_monkey_paste_1_1_common_1_1_plugin_1_1_mp_i_support_headless_clipboard_component_format.html#a977c444abc8cc791da2e104f15879bf4", null ]
+];

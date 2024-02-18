@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>ការបាញ់លើអេក្រង់គឺជាឧទាហរណ៍តែមួយគត់។ អ្វីដែលអ្នកបានដំឡើងត្រូវបានបកប្រែទៅភាសានេះ។</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>ជាមួយនឹងការជាវនេះអ្នកនឹងទទួលបាន:
-●សមត្ថភាពគ្មានដែនកំណត់
-●ការធ្វើសមកាលកម្មឧបករណ៍ (លើភាពអាចរកបាន)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>គ្មានដែនកំណត់ - ប្រចាំខែ</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>ចេញផ្សាយ​ដំបូង</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>ជាមួយនឹងការជាវនេះអ្នកនឹងទទួលបាន:
+●សមត្ថភាពគ្មានដែនកំណត់</value>
   </data>
 </root>

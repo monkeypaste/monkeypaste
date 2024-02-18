@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>Снимки экрана - только примеры. То, что вы установили, было переведено на этот язык.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>С этой подпиской вы получите:
-● Неограниченная емкость
-● Синхронизация устройства (при наличии)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Неограниченное - ежемесячно</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Изначальный выпуск</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>С этой подпиской вы получите:
+● Неограниченная емкость</value>
   </data>
 </root>

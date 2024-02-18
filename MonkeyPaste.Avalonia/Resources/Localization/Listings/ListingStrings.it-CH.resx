@@ -238,11 +238,6 @@ Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Peri
   <data name="TranslationWarning" xml:space="preserve">
     <value>Le schermate sono solo esempi. Ciò che installi è stato tradotto in questa lingua.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Con questo abbonamento riceverai:
-● Capacità illimitata
-● Sincronizzazione del dispositivo (su disponibilità)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Unlimited - Monthly</value>
   </data>
@@ -251,5 +246,9 @@ Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Peri
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Versione iniziale</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Con questo abbonamento riceverai:
+● Capacità illimitata</value>
   </data>
 </root>

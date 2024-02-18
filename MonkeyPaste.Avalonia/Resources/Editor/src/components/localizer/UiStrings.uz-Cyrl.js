@@ -35,16 +35,36 @@ Bu bekor qilinmaydi!`,
 	EditorRegExLabel: ` Muntazam ifoda`,
 	EditorReplaceAllLabel: `Barchasini almashtiring`,
 	EditorReplaceLabel: `Almashtirmoq`,
-	EditorTemplateContactHint: `Mavjud kontaktlar yordamida ushbu shablonning barcha holatlari uchun ishlatilishi mumkin. Ushbu hujjatda ushbu shablonning barcha holatlari uchun ishlatilishi mumkin. </ p> < Keyin siz tanlagan kontaktning elektron pochta maydoni ushbu hujjatdagi barcha instansiyalar uchun foydalaniladi. </ p>`,
+	EditorTemplateContactHint: `Mavjud kontaktlar yordamida ushbu soha ushbu hujjatda yoki boshqa biron bir joyda ushbu shablonning barcha holatlarida qo'llanilishi kerak.
+ Shunday qilib, masalan, agar siz bu erda elektron pochta manzilini tanlasangiz, siz tanlagan elektron pochta aloqasi ushbu hujjatdagi barcha instansiyalar uchun foydalaniladi.`,
 	EditorTemplateContactName: `Aloqa`,
-	EditorTemplateDateTimeCustomHint: `yy = qisqa yil <br/> C = Oy (1-12) <br/> 1-11-1. oylik (Yan, fevral .. <br/> DD = kun (01 - 31) (01 - 31) <br/> ddd = kun (01 - 31). Haftaning kunida (dushanba, seshanba ... yakshanba) <br = Haftaning qisqa kuni (Sare ... Sun) <br/> Ord, 2-chi, 3-chi, 21-chi, 23-chi, 31-chi ...) <br-11 soat soat (0-12) (00-12) > H = kun davomida (0-23) <br-__ 1 soat davomida (00-23) (00-23). A = Am / Pm Marker <br/> P = A.M./p.m. marker`,
+	EditorTemplateDateTimeCustomHint: `yy = qisqa yil
+yyyy = uzoq yil
+M = oy (1-12)
+Mm = oy (01-12)
+Mmm = oy qisqartmasi (yanvar, fevral ... DEM)
+Mmmm = uzoq oy (yanvar, fevral ... dekabr)
+d = kun (1 - 31)
+dd = kun (01 - 31)
+DDD = Hafta kunida (dushanba, seshanba ... yakshanba)
+E = haftaning qisqa kunida (dona, tyust ... quyosh)
+D - tartibli kun (1, 2-chi, 3-chi, 22-chi, 23-, 31-chi ...)
+h = soat / soat soat (0-12)
+hh = soat / soat soat (00-12)
+H = kun davomida (0-23)
+Hh = kun davomida (00-23)
+mm = daqiqada
+ss = ikkinchi
+SSS = millisekunds
+A = AM / PM marker
+p = a.m./p.m. marker`,
 	EditorTemplateDateTimeCustomLabel: `Odat`,
 	EditorTemplateDateTimeHint: `Joriy sana va / yoki vaqtni ular to'xtatilganda ma'lumotlar uzatish uchun almashtiriladi.`,
 	EditorTemplateDateTimeName: `Sana vaqti`,
-	EditorTemplateDynamicHint: `<p> Ushbu shablonning barcha holatlari taqdim etilgan matndan foydalanadi. </ p>`,
+	EditorTemplateDynamicHint: `Ushbu shablonning barcha holatlari taqdim etilgan matndan foydalanadi.`,
 	EditorTemplateDynamicName: `Dinamik`,
 	EditorTemplateEmptyPlaceholder: `{0} bo'sh ...`,
-	EditorTemplateStaticHint: `<p> Ushbu shablonning barcha holatlari taqdim etilgan matndan foydalanadi. </ p>`,
+	EditorTemplateStaticHint: `Ushbu shablonning barcha holatlari taqdim etilgan matndan foydalanadi.`,
 	EditorTemplateStaticName: `Statik`,
 	EditorTemplateTeaserText: `Tez orada yana keladi!`,
 	EditorWatermark: `Iltimos kuting...`,

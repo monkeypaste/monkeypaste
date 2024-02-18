@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>Дэлгэцийн зурагнууд нь зөвхөн жишээ юм. Энэ хэл дээр суурилуулсан зүйл нь энэ хэл рүү орчуулагдсан.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Энэ захиалгыг та хүлээн авах болно:
-● Хязгааргүй хүчин чадал
-● Төхөөрөмжийн синхрончлох (бэлэн бол)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Хязгааргүй - Сар бүр</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Анхны хувилбар</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Энэ захиалгыг та хүлээн авах болно:
+● Хязгааргүй хүчин чадал</value>
   </data>
 </root>

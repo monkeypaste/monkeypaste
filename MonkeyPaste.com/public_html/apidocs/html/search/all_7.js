@@ -1,0 +1,8 @@
+var searchData=
+[
+  ['getformat_0',['GetFormat',['../interface_monkey_paste_1_1_common_1_1_plugin_1_1_mp_i_support_headless_analyzer_format.html#a9be3a47ddc45bb95d48b894373d28207',1,'MonkeyPaste::Common::Plugin::MpISupportHeadlessAnalyzerFormat']]],
+  ['getformats_1',['GetFormats',['../interface_monkey_paste_1_1_common_1_1_plugin_1_1_mp_i_support_headless_clipboard_component_format.html#a977c444abc8cc791da2e104f15879bf4',1,'MonkeyPaste::Common::Plugin::MpISupportHeadlessClipboardComponentFormat']]],
+  ['getplaintext_2',['GetPlainText',['../interface_monkey_paste_1_1_common_1_1_plugin_1_1_mp_i_plain_text_compatible.html#a3dcb6b2fa40c9a07cd90711c9625c8f0',1,'MonkeyPaste.Common.Plugin.MpIPlainTextCompatible.GetPlainText()'],['../class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_annotation_node_format.html#ab2860f9d1306fad3ac2875bb1fa1d821',1,'MonkeyPaste.Common.Plugin.MpAnnotationNodeFormat.GetPlainText()']]],
+  ['globalsuppressions_2ecs_3',['GlobalSuppressions.cs',['../_global_suppressions_8cs.html',1,'']]],
+  ['guid_4',['guid',['../interface_monkey_paste_1_1_common_1_1_plugin_1_1_mp_i_contact.html#a1162d6d955620bfa50e9b52f1a2c2745',1,'MonkeyPaste.Common.Plugin.MpIContact.guid'],['../class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_annotation_node_format.html#a89e2ec0cf1e961f03653f41a7135595e',1,'MonkeyPaste.Common.Plugin.MpAnnotationNodeFormat.guid'],['../class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_manifest_format.html#a9e617ab85ec989fa357954455a09e1b3',1,'MonkeyPaste.Common.Plugin.MpManifestFormat.guid'],['../class_monkey_paste_1_1_common_1_1_plugin_1_1_mp_preset_format.html#a2583134a2fd5fb6c0336904bf5ca429a',1,'MonkeyPaste.Common.Plugin.MpPresetFormat.guid']]]
+];

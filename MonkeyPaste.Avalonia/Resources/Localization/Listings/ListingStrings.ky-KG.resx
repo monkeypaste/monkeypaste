@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>Экран кадрлары гана мисал. Сиз орноткон нерсе ушул тилке которулган.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Бул жазылуу менен сиз аласыз:
-● Чексиз кубаттуулук
-● Түзмөк шайкештештирүү (бар болсо)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Чексиз - Ай сайын</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Биринчи чыгарылыш</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Бул жазылуу менен сиз аласыз:
+● Чексиз кубаттуулук</value>
   </data>
 </root>

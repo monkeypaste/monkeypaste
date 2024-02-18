@@ -238,11 +238,6 @@ U knipbord word ooit opgespoor of gestoor op enige plek buite u eie masjien. Per
   <data name="TranslationWarning" xml:space="preserve">
     <value>Skermskote is slegs voorbeelde. Wat u installeer, is in hierdie taal vertaal.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Met hierdie intekening sal u ontvang:
-● Onbeperkte kapasiteit
-● Synchronisasie van toestelle (by beskikbaarheid)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Onbeperk - maandeliks</value>
   </data>
@@ -251,5 +246,9 @@ U knipbord word ooit opgespoor of gestoor op enige plek buite u eie masjien. Per
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Aanvanklike vrystelling</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Met hierdie intekening sal u ontvang:
+● Onbeperkte kapasiteit</value>
   </data>
 </root>

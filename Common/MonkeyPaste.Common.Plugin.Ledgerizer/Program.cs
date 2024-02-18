@@ -80,28 +80,28 @@ namespace Ledgerizer {
         static IEnumerable<string> GetAllNeutralResxPaths() {
             return
             [
-                //Path.Combine(
-                //    MpCommonHelpers.GetSolutionDir(),
-                //    "MonkeyPaste.Avalonia",
-                //    "Resources",
-                //    "Localization",
-                //    "Listings",
-                //    "ListingStrings.resx"),
-                //Path.Combine(
-                //    MpCommonHelpers.GetSolutionDir(),
-                //    "MonkeyPaste.Avalonia",
-                //    "Resources",
-                //    "Localization",
-                //    "Enums",
-                //    "EnumUiStrings.resx"),
-                //Path.Combine(
-                //    MpCommonHelpers.GetSolutionDir(),
-                //    "MonkeyPaste.Avalonia",
-                //    "Resources",
-                //    "Localization",
-                //    "UiStrings",
-                //    "UiStrings.resx"),
-                .. WorkingPluginNames.Select(x =>
+                Path.Combine(
+                    MpPlatformHelpers.GetSolutionDir(),
+                    "MonkeyPaste.Avalonia",
+                    "Resources",
+                    "Localization",
+                    "Listings",
+                    "ListingStrings.resx"),
+                Path.Combine(
+                    MpPlatformHelpers.GetSolutionDir(),
+                    "MonkeyPaste.Avalonia",
+                    "Resources",
+                    "Localization",
+                    "Enums",
+                    "EnumUiStrings.resx"),
+                Path.Combine(
+                    MpPlatformHelpers.GetSolutionDir(),
+                    "MonkeyPaste.Avalonia",
+                    "Resources",
+                    "Localization",
+                    "UiStrings",
+                    "UiStrings.resx"),
+            .. WorkingPluginNames.Select(x =>
                     Path.Combine(
                         GetPluginProjDir(x),
                         "Resources",
@@ -111,8 +111,6 @@ namespace Ledgerizer {
         #endregion
 
         #region Version Props
-
-        const string VERSION_PHRASE = "Im the big T pot check me out";
         static string APP_VERSION => MpPlatformHelpers.GetAppVersion().ToString();
         #endregion
 
@@ -149,20 +147,20 @@ namespace Ledgerizer {
         static MpLedgerizerFlags LEDGERIZER_FLAGS =
             //MpLedgerizerFlags.TRANSLATE_RESX |
             //MpLedgerizerFlags.GEN_EMPTY_RESX
-            //MpLedgerizerFlags.GEN_ADDON_LISTING |
+            MpLedgerizerFlags.GEN_ADDON_LISTING |
             //MpLedgerizerFlags.GEN_PROD_LISTING |
             //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
             //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
             //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
-            MpLedgerizerFlags.DO_LOCAL_INDEX |
-            MpLedgerizerFlags.DO_REMOTE_INDEX |
-            MpLedgerizerFlags.DO_LOCAL_LEDGER |
-            MpLedgerizerFlags.DO_REMOTE_LEDGER |
+            //MpLedgerizerFlags.DO_LOCAL_INDEX |
+            //MpLedgerizerFlags.DO_REMOTE_INDEX |
+            //MpLedgerizerFlags.DO_LOCAL_LEDGER |
+            //MpLedgerizerFlags.DO_REMOTE_LEDGER |
             //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
             //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT
-            //MpLedgerizerFlags.MOVE_JS_UISTRINGS
+            //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
             //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
             // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
             //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES

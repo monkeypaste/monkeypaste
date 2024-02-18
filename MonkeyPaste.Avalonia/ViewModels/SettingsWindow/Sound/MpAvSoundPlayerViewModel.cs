@@ -234,7 +234,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAvPrefViewModel.Instance.NotificationSoundVolume :
                         (double)args;
 
-                byte volume = (byte)((double)byte.MaxValue * new_norm_volue);
+                byte volume = (byte)(100d * new_norm_volue);
                 await _player.SetVolume(volume);
 
             }, (args) => IsOsSupported);

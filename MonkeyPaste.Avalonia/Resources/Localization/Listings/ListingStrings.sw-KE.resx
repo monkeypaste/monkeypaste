@@ -238,11 +238,6 @@ Clipboard yako inafuatiliwa au kuhifadhiwa mahali popote zaidi ya mashine yako m
   <data name="TranslationWarning" xml:space="preserve">
     <value>Shots za skrini ni mifano tu. Unachosanikisha kimetafsiriwa kwa lugha hii.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Na usajili huu utapokea:
-● Uwezo usio na kikomo
-● Usawazishaji wa kifaa (juu ya kupatikana)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Isiyo na kikomo - kila mwezi</value>
   </data>
@@ -251,5 +246,9 @@ Clipboard yako inafuatiliwa au kuhifadhiwa mahali popote zaidi ya mashine yako m
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Kutolewa kwa awali</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Na usajili huu utapokea:
+● Uwezo usio na kikomo</value>
   </data>
 </root>

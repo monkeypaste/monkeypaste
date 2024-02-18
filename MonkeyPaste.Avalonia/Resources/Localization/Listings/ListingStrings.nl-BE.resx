@@ -238,11 +238,6 @@ Uw klembord wordt ooit bijgehouden of opgeslagen overal voorbij uw eigen machine
   <data name="TranslationWarning" xml:space="preserve">
     <value>Schermafbeeldingen zijn slechts voorbeelden. Wat u installeert is vertaald naar deze taal.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Met dit abonnement ontvangt u:
-● Onbeperkte capaciteit
-● Synchronisatie van apparaten (bij beschikbaarheid)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Onbeperkt - maandelijks</value>
   </data>
@@ -251,5 +246,9 @@ Uw klembord wordt ooit bijgehouden of opgeslagen overal voorbij uw eigen machine
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Eerste uitgave</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Met dit abonnement ontvangt u:
+● Onbeperkte capaciteit</value>
   </data>
 </root>

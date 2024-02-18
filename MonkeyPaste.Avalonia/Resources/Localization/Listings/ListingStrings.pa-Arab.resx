@@ -238,11 +238,6 @@ Atimpate ਸਮੱਗਰੀ ਦੇ 1000 ਕਲਿੱਪਾਂ
   <data name="TranslationWarning" xml:space="preserve">
     <value>ਸਕ੍ਰੀਨ ਸ਼ਾਟ ਸਿਰਫ ਉਦਾਹਰਣ ਹਨ. ਜੋ ਤੁਸੀਂ ਸਥਾਪਿਤ ਕਰਦੇ ਹੋ ਉਹ ਭਾਸ਼ਾ ਇਸ ਭਾਸ਼ਾ ਵਿੱਚ ਅਨੁਵਾਦ ਕੀਤਾ ਗਿਆ ਹੈ.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>ਇਸ ਗਾਹਕੀ ਦੇ ਨਾਲ ਤੁਸੀਂ ਪ੍ਰਾਪਤ ਕਰੋਗੇ:
-● ਅਸੀਮਤ ਸਮਰੱਥਾ
-● ਡਿਵਾਈਸ ਸਿੰਚਿੰਗ (ਉਪਲਬਧਤਾ ਉੱਤੇ)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>ਅਸੀਮਤ - ਮਾਸਿਕ</value>
   </data>
@@ -251,5 +246,9 @@ Atimpate ਸਮੱਗਰੀ ਦੇ 1000 ਕਲਿੱਪਾਂ
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>ਸ਼ੁਰੂਆਤੀ ਰਿਹਾਈ</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>ਇਸ ਗਾਹਕੀ ਦੇ ਨਾਲ ਤੁਸੀਂ ਪ੍ਰਾਪਤ ਕਰੋਗੇ:
+● ਅਸੀਮਤ ਸਮਰੱਥਾ</value>
   </data>
 </root>

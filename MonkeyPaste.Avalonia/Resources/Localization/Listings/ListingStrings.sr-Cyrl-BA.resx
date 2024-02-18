@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>Снимке заслона су само примери. Оно што инсталирате преведено је на овај језик.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>Помоћу ове претплате ћете добити:
-● Неограничени капацитет
-● Синхронизација уређаја (на расположивости)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>Неограничено - месечно</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>Иницијално издање</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>Помоћу ове претплате ћете добити:
+● Неограничени капацитет</value>
   </data>
 </root>

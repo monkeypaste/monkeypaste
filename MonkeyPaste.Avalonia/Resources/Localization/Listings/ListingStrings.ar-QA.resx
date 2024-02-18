@@ -238,11 +238,6 @@
   <data name="TranslationWarning" xml:space="preserve">
     <value>لقطات الشاشة هي أمثلة فقط. ما قمت بتثبيته قد ترجم إلى هذه اللغة.</value>
   </data>
-  <data name="UnlimitedDescription" xml:space="preserve">
-    <value>مع هذا الاشتراك ستتلقى:
-● سعة غير محدودة
-● مزامنة الجهاز (عند التوفر)</value>
-  </data>
   <data name="UnlimitedMonthlyTitle" xml:space="preserve">
     <value>غير محدود - شهريًا</value>
   </data>
@@ -251,5 +246,9 @@
   </data>
   <data name="WhatsNew" xml:space="preserve">
     <value>الإصدار الأولي</value>
+  </data>
+  <data name="UnlimitedDescription" xml:space="preserve">
+    <value>مع هذا الاشتراك ستتلقى:
+● سعة غير محدودة</value>
   </data>
 </root>
