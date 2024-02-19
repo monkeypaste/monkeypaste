@@ -2700,4 +2700,200 @@ Volledig herstel kan niet worden gegarandeerd en kan de prestaties verminderen o
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Op deze manier kan MonkeyPaste worden benaderd&lt;br&gt;&lt;span color="red"&gt;zonder een klik&lt;/span&gt; of zelfs maar &lt;span color="red"&gt;met de ogen te knipperen&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Annotatie</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klonen</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Gegevensobject</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Inpluggen</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Lezer</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Onbekende fout</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>auteur</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Duplicate plugin guid '{0}' gedetecteerd voor deze plug -ins:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Fix door de plug -in GUID te wijzigen of duplicaten te verwijderen. Anders worden alle bijbehorende plug -ins genegeerd.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Duplicate plug -in preset guid '{0}' gedetecteerd voor deze plug -ins en presets:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} Preset (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} preset (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Fix door unieke vooraf ingestelde gids te bieden of duplicaten te verwijderen. Anders worden alle bijbehorende plug -ins genegeerd.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Redacteur kleur</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Weet u zeker dat u alle {0} item (s) permanent wilt verwijderen?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Selecteer map</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Selecteer Map Watch Watch Watch</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Plug -infout. Plugin '{0}' is '{1}' type maar geen '{1}' formaat gevonden</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Foutuitvoer Actie '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Waarde mag alleen nummers bevatten of '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Waarde moet van {0} zijn tot {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Moet een hex (6 of 8 cijfer) string zijn, beginnend met '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Klembord '{0}' moet uniek zijn.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Bestaat al voor</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Formaat</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Namen van klembordlezer/schrijver -indeling moeten uniek zijn. Reader Duplicates:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Namen van klembordlezer/schrijver -indeling moeten uniek zijn. Schrijver duplicaten:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Klembordindeling Guids moeten uniek zijn. Duplicate formaten en gids:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Plug-infout: alle velden van plug-in '{0}' moeten uniek zijn voor handler '{1}'.{2}paramName '{3}' heeft meerdere vermeldingen</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Plug -infout, geen invariant manifest gevonden</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' kan geen voorinstellingen hebben zonder ten minste 1 parameter verstrekt</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Niet -gelabelde param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Plugin parameter IDS ({0}) moet worden gedefinieerd. Plugin '{1}' heeft de volgende parameters met ontbrekende paramid's: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Dubbele paramid '{0}' gedetecteerd (alles moet uniek zijn). {1} labels: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Vooraf ingestelde GUID is vereist. Het werd niet gevonden of verkeerd opmaak voor '{0}' in plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Kan parameter niet vinden met paramid '{0}' waarnaar wordt verwezen door preset '{1}' voor plugin '{2}'. Parameter kan zijn gewijzigd of zijn verwijderd, update vooraf ingestelde paramValue of verwijder deze.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Kan gedeelde waardeparameters niet in voorinstellingen instellen. Paramid '{0}' in preset '{1}' voor plugin '{2}' moet worden verwijderd of paramValue kan worden opgegeven in de parameterdefinitie -sectie.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Voorinstellingen moeten unieke gids hebben. Duplicate preset guid '{0}' werd gedetecteerd in plugin '{1}' voor presets: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Plug -in parsingfout, op pad '{0}' null, waarschijnlijk fout parsing json. Het negeren van plug -in</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Plug -in titelfout, op pad '{0}' moet 'titel' eigenschap hebben met niet meer dan {1} tekens. Het negeren van plug -in</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Plugin Guid-fout, op pad '{0}' met titel '{1}' moet een eigenschap 'Guid' hebben, RFC 4122 conform 128-bit Guid (UUID) met alleen letters, nummers en koppeltekens. Plug -in negeren.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Plug -in Beschrijving Fout, op pad '{0}' Beschrijving mag niet meer zijn dan {1} tekens. Het negeren van plug -in</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Plugin -tags Fout, op pad '{0}' tags mogen niet meer zijn dan {1} tekens. Het negeren van plug -in</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Voeg debugger toe aan '{0}' of annuleren om door te gaan.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Wachten op debugger</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Fout het downloaden van plug -in. Probeer het later opnieuw.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plug -in bijgewerkt</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Weet u zeker dat u alle items van {0} wilt herstellen?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Zoekcriteria 'Untitled'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Zoekcriteria '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' bevat gedeelde waarden. Wil je die ook resetten?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

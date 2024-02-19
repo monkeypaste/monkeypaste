@@ -1766,7 +1766,7 @@ Lõikelaua kuulamine on: {0}</value>
     <value>Päästik</value>
   </data>
   <data name="TriggerRemoveActionText" xml:space="preserve">
-    <value>Kas soovite eemaldada kõik alamtoimingud {0} jaoks? (Vastasel juhul on nad vanemad</value>
+    <value>Kas soovite eemaldada kõik toimingu „{0}” alamtoimingud? (Muidu vanemaks need uuesti '{1}')</value>
     <comment>Action Name, Action Name</comment>
   </data>
   <data name="TriggerRemoveActionTitle" xml:space="preserve">
@@ -2699,5 +2699,201 @@ Täielikku taastamist ei saa garanteerida ja see võib sõltuvalt andmete allika
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Nii pääseb MonkeyPaste'ile juurde&lt;br&gt;&lt;span color="red"&gt;ilma klõpsuta&lt;/span&gt; või isegi &lt;span color="red"&gt;silma pilgutamata&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Annotatsioon</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Kloon</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Andmeobjekt</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Sisse panema</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Lugeja</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Tundmatu viga</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Kirjanik</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Nende pistikprogrammide jaoks tuvastatud duplikaatne pistikprogramm '{0}':</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Parandage, vahetades pistikprogrammi või eemaldades duplikaadid. Muidu ignoreeritakse kõiki seotud pistikprogramme.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Nende pistikprogrammide ja eelseadete jaoks tuvastatud duplikaadi pistikprogrammi eelseade giid '{0}':</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Pistikprogramm: {0} {1} eelseade (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Pistikprogramm: {0} {1} eelseade (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Parandage, pakkudes ainulaadseid eelseatud juhiseid või eemaldades duplikaadid. Muidu ignoreeritakse kõiki seotud pistikprogramme.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Redigeerija värv</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Kas olete kindel, et soovite kõik {0} üksused püsivalt kustutada?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Valige kaust</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Valige käekella kaust</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Pistikprogrammi viga. Pistikprogramm '{0}' on '{1}' tüüp, kuid ei leitud '{1}'</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Viga toimingu '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Väärtus peab sisaldama ainult numbreid või '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Väärtus peab olema {0} kuni {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Peab olema heks (6 või 8 numbrit) string, mis algab '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Lõikelaud '{0}' peab olema ainulaadne.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>On juba olemas</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Formaat</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tüüp</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Lõikelaua lugeja/kirjanike vormingu nimed peavad olema ainulaadsed. Lugeja duplikaadid:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Lõikelaua lugeja/kirjanike vormingu nimed peavad olema ainulaadsed. Kirjanik duplikaadid:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Lõikelaua vormingu juhendid peavad olema ainulaadsed. Duplikaatvormingud ja juhendid:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Pistikprogrammi tõrge: kõigil pistikprogrammidel {0} 'peavad olema käitleja' {1} 'jaoks ainulaadsed. {2} ParamName' {3} 'on mitu kirjet</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Pistikprogrammi viga, invariantset manifesti ei leitud</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Pistikprogramm '{0}' ei saa olla eelseadeid ilma vähemalt ühe parameetrita</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Märgistamata param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Pistikprogrammi parameetri ID -d ({0}) tuleb määratleda. Pistikprogrammil {1} ​​'on järgmised parameetrid puuduvate parameetritega: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Duplikaat paramiRID '{0}' tuvastatud (kõik peavad olema ainulaadsed). {1} sildid: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Vajalik on eelseadet. See ei leitud ega vale vormingut '{0}' pistikprogrammist {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Parameetrit ei leia parameetrit koos PlumiT '{1}' viidatud parameetriga '{0}' pistikprogrammi '{2}' jaoks. Võimalik, et parameeter on muutunud või eemaldatud, värskendage eelseade paramValue või eemaldage see.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Eelseadetes ei saa jagatud väärtuse parameetreid määrata. Plugina '{2}' eelseadistuses '{1}' olev ParamId '{0}' tuleb eemaldada või paramValue saab määrata parameetri määratluse jaotises.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Eelseadistustel peavad olema ainulaadsed juhised. Pluginas '{1}' tuvastati eelseadete juhendi "{0}" duplikaat: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Pistikprogrammi parsimisviga, tee ääres '{0}' null, tõenäoliselt tõrge JSON -i parsimine. Plugina ignoreerimine</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Pistikprogrammi pealkirjaviga, saidil Path '{0}' peab olema atribuut 'pealkiri', mis pole rohkem kui {1} tähemärgid. Plugina ignoreerimine</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Plugin guid error teel '{0}' pealkirjaga '{1}' peab olema atribuut 'guid', RFC 4122-ga ühilduv 128-bitine GUID (UUID), mis sisaldab ainult tähti, numbreid ja sidekriipse. Pistikprogrammi ignoreerimine.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Pistikprogrammi kirjeldusviga, tee ääres '{0}' Kirjeldus ei tohi olla rohkem kui {1} tähemärgid. Plugina ignoreerimine</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Pistikprogrammi siltide tõrge, saidil Path '{0}' ei tohi olla rohkem kui {1} tähemärgid. Plugina ignoreerimine</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Jätkumiseks lisage silur jaotisse '{0}' või Tühista.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Ootab silurit</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Viga plugina allalaadimisel. Palun proovi hiljem uuesti.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Pistikprogramm värskendatud</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Kas olete kindel, et soovite taastada kõik {0} üksused?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Otsingukriteeriumid „pealkirjata”</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Otsingukriteeriumid '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' sisaldab jagatud väärtusi. Kas soovite ka neid lähtestada?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

@@ -516,8 +516,11 @@ namespace MonkeyPaste.Avalonia {
         private async Task EmptyOrRestoreAllTrashedItemsAsync(bool isRestore) {
             var confirm_result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                     title: UiStrings.CommonConfirmLabel,
-                    message: $"Are you sure you want to {(isRestore ? "restore" : "permanently delete")} all {TrashedCopyItemIds.Count} item(s)?",
-                    iconResourceObj: "WarningImage");
+                    //message: $"Are you sure you want to {(isRestore ? "restore" : "permanently delete")} all {TrashedCopyItemIds.Count} item(s)?",
+                    message: isRestore ?
+                        UiStrings.RestoreTrashNtfText.Format(TrashedCopyItemIds.Count) :
+                        UiStrings.EmptyTrashNtfText.Format(TrashedCopyItemIds.Count),
+                    iconResourceObj: "WarningImage"); ;
 
             if (!confirm_result) {
                 // canceled empty trash

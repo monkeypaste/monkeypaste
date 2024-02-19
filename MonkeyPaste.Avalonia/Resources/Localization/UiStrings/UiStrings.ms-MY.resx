@@ -2700,4 +2700,200 @@ Pemulihan total tidak boleh dijamin dan boleh mengurangkan prestasi atau bahkan 
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Dengan cara ini, MonkeyPaste boleh diakses&lt;br&gt;&lt;span color="red"&gt;tanpa klik&lt;/span&gt; atau &lt;span color="red"&gt;memukul mata&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Anotasi</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klon</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Objek data</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Pasangkan</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Pembaca</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Ralat tidak diketahui</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Penulis</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Plugin Guid '{0}' Duplicate untuk plugin ini:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Betulkan dengan menukar panduan plugin atau mengeluarkan pendua. Jika tidak semua plugin yang berkaitan akan diabaikan.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Plugin Preset Guid '{0}' Duplicate Plugin untuk plugin dan pratetap ini:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} Preset (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} Preset (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Betulkan dengan menyediakan panduan pratetap yang unik atau mengeluarkan pendua. Jika tidak semua plugin yang berkaitan akan diabaikan.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Warna editor</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Adakah anda pasti mahu memadam semua item {0} secara kekal?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Pilih folder</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Pilih Folder Watch</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Ralat plugin. Plugin '{0}' adalah '{1}' jenis tetapi tidak '{1}' format yang dijumpai</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Ralat melakukan tindakan '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Nilai mesti mengandungi hanya nombor atau '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Nilai mesti dari {0} hingga {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Mesti rentetan hex (6 atau 8 digit) bermula dengan '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Clipboard '{0}' mestilah unik.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Sudah ada</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Jenis</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Nama format pembaca/penulis clipboard mestilah unik. Pembaca Duplikat:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Nama format pembaca/penulis clipboard mestilah unik. Penulis Duplikat:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Panduan format papan klip mesti unik. Format &amp; Panduan Duplikat:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Ralat Plugin: All Plugin '{0}' medan mesti unik untuk pengendali '{1}'. {2} paramname '{3}' mempunyai beberapa penyertaan</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Ralat plugin, tidak ada manifes invarian yang dijumpai</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' tidak boleh mempunyai pratetap tanpa sekurang -kurangnya 1 parameter yang disediakan</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param tidak berlabel #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ID Parameter Plugin ({0}) mesti ditakrifkan. Plugin '{1}' mempunyai parameter berikut dengan paramid yang hilang: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Duplikat paramid '{0}' dikesan (semua mesti unik). {1} Labels: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Preset GUID diperlukan. Ia tidak dijumpai atau format yang salah untuk '{0}' dalam plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Tidak dapat mencari parameter dengan paramid '{0}' yang dirujuk oleh pratetap '{1}' untuk plugin '{2}'. Parameter mungkin telah berubah atau telah dikeluarkan, mengemas kini paramvalue pratetap atau mengeluarkannya.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Tidak dapat menetapkan parameter nilai bersama dalam pratetap. Paramid '{0}' dalam pratetap '{1}' untuk plugin '{2}' perlu dikeluarkan atau paramvalue boleh ditentukan dalam bahagian definisi parameter.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Pratetap mesti mempunyai panduan yang unik. Duplicate Preset Guid '{0}' dikesan dalam plugin '{1}' untuk pratetap: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Ralat parsing plugin, pada path '{0}' null, kemungkinan ralat parsing json. Mengabaikan plugin</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Ralat Tajuk Plugin, di Path '{0}' mesti mempunyai 'Tajuk' harta dengan tidak lebih daripada {1} aksara. Mengabaikan plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Ralat Guid Plugin, di Path '{0}' dengan tajuk '{1}' mesti mempunyai harta 'GUID', RFC 4122 mematuhi 128-bit GUID (UUID) dengan hanya huruf, nombor dan tanda hubung. Mengabaikan plugin.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Ralat Penerangan Plugin, pada Path '{0}' Keterangan mestilah tidak lebih daripada {1} aksara. Mengabaikan plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Ralat Tag Plugin, pada Tag Path '{0}' mestilah tidak lebih daripada {1} aksara. Mengabaikan plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Lampirkan debugger ke '{0}' atau batalkan untuk meneruskan.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Menunggu debugger</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Ralat memuat turun plugin. Sila cuba sebentar lagi.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plugin dikemas kini</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Adakah anda pasti mahu memulihkan semua item {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Kriteria cari 'untitled'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Kriteria cari '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' mengandungi nilai bersama. Adakah anda ingin menetapkan semula mereka juga?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

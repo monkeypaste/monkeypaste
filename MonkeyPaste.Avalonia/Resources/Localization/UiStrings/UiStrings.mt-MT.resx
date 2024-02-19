@@ -2700,4 +2700,200 @@ Ir-restawr totali ma jistax jiġi garantit u jista 'jnaqqas il-prestazzjoni jew 
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;B'dan il-mod, MonkeyPaste jista 'jiġi aċċessat&lt;br&gt;&lt;span color="red"&gt;mingħajr klikk&lt;/span&gt; jew saħansitra &lt;span color="red"&gt;batting għajn&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Annotazzjoni</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klonu</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Oġġett tad-dejta</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Plugin</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Qarrej</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Żball mhux magħruf</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Kittieb</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>GUID tal-plugin duplikat "{0}" misjub għal dawn il-plugins:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Waħħal billi tbiddel il-guid tal-plugin jew tneħħi d-duplikati. Inkella l-plugins kollha assoċjati jiġu injorati.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Plugin Duplikat Preset Guid '{0}' misjuba għal dawn il-plugins u presets:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} preset (i): # {2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} preset (i): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Waħħal billi tipprovdi GUIDs uniċi ssettjati minn qabel jew tneħħi d-duplikati. Inkella l-plugins kollha assoċjati jiġu injorati.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Kulur tal-Editur</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Int żgur li trid tħassar b'mod permanenti l-oġġett kollu {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Agħżel Folder</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Agħżel Watch Folder</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Żball tal-plugin. Plugin '{0}' huwa tip '{1}' imma l-ebda format '{1}' misjub</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Żball li jwettaq azzjoni "{0}": {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Il-valur għandu jkun fih biss numri jew '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Il-valur għandu jkun minn {0} sa {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Trid tkun sekwenza hex (6 jew 8 ċifri) li tibda b '"#"</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Clipboard "{0}" għandu jkun uniku.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Diġà jeżisti għal</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Ismijiet tal-Format tal-Qarrej / Kittieb Clipboard għandhom ikunu uniċi. Qarrej duplikati:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Ismijiet tal-Format tal-Qarrej / Kittieb Clipboard għandhom ikunu uniċi. Kittieb duplikati:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Guids tal-format tal-clipboard għandhom ikunu uniċi. Formati u Guids duplikati:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Żball tal-plugin: L-oqsma kollha tal-plugin '{0}' għandhom ikunu uniċi għal handler '{1}'. {2} paramname '{3}' għandu entrati multipli</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Żball tal-plugin, ma nstab l-ebda manifest invariant</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' ma jistax ikollu presets mingħajr mill-inqas 1 parametru pprovdut</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param mhux immarkat # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>IDs tal-parametru tal-plugin ({0}) għandhom jiġu definiti. Plugin '{1}' għandu l-parametri li ġejjin b'paramidi nieqsa: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Paramid duplikat '{0}' misjub (kollha għandhom ikunu uniċi). {1} Tikketti: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>GUID issettjat minn qabel huwa meħtieġ. Ma nstabx jew format ħażin għal '{0}' fil-plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Ma jistax isib parametru bil-paramidu "{0}" referenzjat minn preset "{1}" għall-plugin "{2}". Il-parametru jista 'jinbidel jew tneħħa, aġġorna l-paramvalue issettjat minn qabel jew neħħih.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Ma jistgħux jistabbilixxu parametri ta 'valur maqsum fil-presets. Paramid "{0}" fil-preset "{1}" għall-plugin "{2}" jeħtieġ li jitneħħa jew ParamValue jista 'jiġi speċifikat fit-taqsima tad-definizzjoni tal-parametru.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Il-presets għandu jkollhom gwida uniċi. GUID PRESETT DUPLIKAT "{0}" ġie skopert fil-plugin "{1}" għall-presets: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Żball ta 'parsing tal-plugin, fil-passaġġ "{0}" null, x'aktarx żball ta' parsing json. Injorat plugin</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Żball tat-titlu tal-plugin, fil-passaġġ "{0}" għandu jkollu propjetà "titolu" b'aktar minn karattri {1}. Injorat plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Żball tal-gwid tal-plugin, fil-passaġġ "{0}" bit-titlu "{1}" għandu jkollu proprjetà "guid", RFC 4122 GUID konformi 128-bit (UUID) b'ittri, numri u sfaċċati biss. Injorat plugin.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Żball ta 'Deskrizzjoni tal-Plugin, fil-passaġġ "{0}" Deskrizzjoni m'għandhiex tkun aktar minn karattri {1}. Injorat plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>It-tikketti tat-tikketti tal-plugin, fil-passaġġ '{0}' it-tikketti m'għandhomx ikunu aktar minn karattri {1}. Injorat plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Waħħal il-debugger ma '' {0} 'jew tikkanċella biex tkompli.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Stennija għal Debugger</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Tniżżil ta 'żball ta' plugin. Jekk jogħġbok erġa 'pprova aktar tard.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plugin aġġornat</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Int żgur li trid tirrestawra l-oġġett kollu {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Fittex il-kriterji 'Untitled'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Kriterji ta 'tfittxija "{0}"</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>"{0}" fih valuri maqsuma. Tixtieq tirrisettja dawk ukoll?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

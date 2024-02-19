@@ -70,28 +70,36 @@
     <value>ئاساسىي - يىل</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>كۆپەيتىلگەن</value>
@@ -127,19 +135,24 @@
     <value>قۇرۇلدى - تەرەققىي قىلىۋاتقان جەمئىيەتتە - چەمبىرەكنىڭ يۇقىرى دەرىجىلىك باشقۇرغۇچىسى</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste چاپلاش تاختىسى دېرىكتورى, باشقا بولمىغاندەك ئاپتوماتىك ۋە ئىشلەپچىقىرىش ئىقتىدارى. چاپلاش تاختىڭىزنى ئېكىسكۇرسىيە قىلىش ۋە خىزمەت ئېقىمىڭىزنىڭ باشلانغان قىسمىغا توغرىلاڭ,
@@ -158,40 +171,41 @@
 چاپلاش تاختىسى سىزنىڭ ھەر قانداق جايدا ئىزچىل ئىز قوغلاپ ياكى ساقلىنىدۇ. دەۋر.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>Your ئاددىي ۋە دوستلۇق كۆرۈنمە يۈزى ھەم گورىزونتال / تىك ئورۇنلاشتۇرۇش, تىزىملىك ​​/ تور كۆرۈش ۋە كۆپ خىل - نازارەت قىلىش</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● قوشۇش ھالىتى: كۆچۈرۈش تاختىسىدا «ئالماشتۇرۇش» نىڭ ئورنىغا «ئالماشتۇرۇش» غا ئايلىنىدۇ. ھەر ئىككى تېكىست ۋە ھۆججەتلەر تولۇق خاسلاشتۇرغىلى بولىدۇ</value>
+    <value>● خاسلاشتۇرغۇچ: توغرا - چاپلاش - چاپلاش ۋە سول - ئاپتوماتىك چېكىڭ - ئاپتوماتىك</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● ھەددىدىن زىيادە ۋە خىروم ۋە خىروم (چەينەك, قىرغاق) نى كۈچەيتىلگەن, مەنبە ۋە ئىشلىتىش</value>
+    <value>● قوشۇش ھالىتى: كۆچۈرۈش تاختىسىدا «ئالماشتۇرۇش» نىڭ ئورنىغا «ئالماشتۇرۇش» غا ئايلىنىدۇ. ھەر ئىككى تېكىست ۋە ھۆججەتلەر تولۇق خاسلاشتۇرغىلى بولىدۇ</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● تولۇق - باي تېكىست (ئۈستەل, تىزىملىك, ئۇلىنىشلار, ئۇلىنىشلار قاتارلىقلارنى) ئالاھىدە ئالاھىدە قىستۇرما تەھرىرلەش</value>
+    <value>● ھەددىدىن زىيادە ۋە خىروم ۋە خىروم (چەينەك, قىرغاق) نى كۈچەيتىلگەن, مەنبە ۋە ئىشلىتىش</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● رەسىملىرىڭىزنى بىخەتەر ساندانغا ساقلاڭ, ھۆججەت سۈپىتىدە ئىشلىتىشكە تەييارلاندى - سۆرەپ ئېلىش ۋە - ئېھتىياجغا ئاساسەن ئېھتىياجغا تەييار!</value>
+    <value>● تولۇق - باي تېكىست (ئۈستەل, تىزىملىك, ئۇلىنىشلار, ئۇلىنىشلار قاتارلىقلارنى) ئالاھىدە ئالاھىدە قىستۇرما تەھرىرلەش</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● ئېقىمىڭىزدىكى تېز, ھەرىكەتچان ئوت-چۆپلەر</value>
+    <value>● رەسىملىرىڭىزنى بىخەتەر ساندانغا ساقلاڭ, ھۆججەت سۈپىتىدە ئىشلىتىشكە تەييارلاندى - سۆرەپ ئېلىش ۋە - ئېھتىياجغا ئاساسەن ئېھتىياجغا تەييار!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● قوزغاتقۇچ ۋە ھەرىكەت لايىھىلىگۈچىسى ۋە ھەرىكەتنى توختىتىش</value>
+    <value>● ئېقىمىڭىزدىكى تېز, ھەرىكەتچان ئوت-چۆپلەر</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● ئىككى خىل تەھلىل قىلىش ياكى چاپلاش جەدۋىلى ياكى ئوقۇش / ئوقۇش / ئوقۇش تاختىسىنى ئوقۇش / يېزىش</value>
+    <value>● قوزغاتقۇچ ۋە ھەرىكەت لايىھىلىگۈچىسى ۋە ھەرىكەتنى توختىتىش</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Plused - قۇرۇلغان جەمئىيەتتە - قىستۇرما كۈتۈپخانىدا</value>
+    <value>● ئىككى خىل تەھلىل قىلىش ياكى چاپلاش جەدۋىلى ياكى ئوقۇش / ئوقۇش / ئوقۇش تاختىسىنى ئوقۇش / يېزىش</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● ھەرپ-بەلگىلەر بىلەن ياكى ھەر قانداق نەرسىنى قوزغاش ۋە قولنى يۆتكەش ۋە ئىشلىتىش ياكى ئىشلىتىش</value>
+    <value>● Plused - قۇرۇلغان جەمئىيەتتە - قىستۇرما كۈتۈپخانىدا</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● تېخىمۇ كۆپ سۇپىلار ۋە ئىقتىدارلار پات يېقىندا كېلىدۇ! بىز پەقەت توپلاشقا ئېرىشتۇق 🎉</value>
+    <value>● ھەرپ-بەلگىلەر بىلەن ياكى ھەر قانداق نەرسىنى قوزغاش ۋە قولنى يۆتكەش ۋە ئىشلىتىش ياكى ئىشلىتىش</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● يورۇتۇش ۋە قاراڭغۇ تېمىلار پۈتۈنلەي ھەرىكەتچان بولۇپ, خالىغان رەڭنى ئىشلىتىڭ</value>
@@ -208,29 +222,29 @@
   <data name="StoreFeature6" xml:space="preserve">
     <value>● خەتكۈچ دەرىخىڭىزنى تەشكىللەپ قايتا-قايتا سۈزگۈچ ھاسىل قىلىڭ</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>FOR بىخەتەر, بىخەتەر ۋە شەخسىي يەرلىك ئۇچۇر ساقلاش (سانلىق مەلۇمات توپلىمى يوق) ھەمىشە ئىختىيارى 2 - ئامىل مەخپىيلەشتۈرۈشنى قوغداش ۋە ئاسانلا چەكلەش</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● كەڭ سۆرەش - ۋە - تاشلاش, يەرشارى تېزلەتمىسى, RARGE ساقلاش ۋە مائۇس - ھەقسىز يول باشلاش</value>
+    <value>● كۆرۈنۈشتە تور ئەپ, توربابلار, ھەتتا ئالاھىدە بەتلەرنى ئاسانلا توسۇش</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● خاسلاشتۇرغۇچ: توغرا - چاپلاش - چاپلاش ۋە سول - ئاپتوماتىك چېكىڭ - ئاپتوماتىك</value>
+    <value>● كەڭ سۆرەش - ۋە - تاشلاش, يەرشارى تېزلەتمىسى, RARGE ساقلاش ۋە مائۇس - ھەقسىز يول باشلاش</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>چاپلاش تاختىسى جاڭگال. Monkeypaste پادىشاھ! ئەپتىن App غا سەكرەش, بۇنى كۆپەيتىش ۋە مايمۇنپسې بىلەن ئەزەلدىن ئوخشاش ئەمەسلىكىنى, بۇنى ھەرگىز ياقتۇرماسلىق !! بىر ماركا - يېڭى, كېسىشمە چاپلاش تاختىسى ۋە تەھلىلچى ئاپتوموبىل قوراللىرى !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Moneypaste نىڭ ئۈلگىسى!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>بۇ تىلدا ئورنىتىلدى. ئىنگلىز تىلى پەقەت بۇ مىساللار ئۈچۈندۇر</value>
@@ -250,5 +264,11 @@
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>سىز تاپشۇرۇۋالىدىغان بۇ مۇشتەرىلىك بىلەن:
 ● چەكسىز ئىقتىدار</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>The بىخەتەرلىك, بىخەتەر ۋە شەخسىي يەرلىك سانلىق مەلۇمات ساقلاش (سانلىق مەلۇمات توپلاش) ھەمىشە 2-تاللاش بىلەن شىفىرلىنىدۇ</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● تېخىمۇ كۆپ سۇپىلار ۋە ئىقتىدارلار پات يېقىندا كېلىدۇ! بىز پەقەت توپلاشقا ئېرىشتۇق 🎉</value>
   </data>
 </root>

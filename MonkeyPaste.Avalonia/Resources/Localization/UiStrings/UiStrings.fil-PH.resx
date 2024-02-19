@@ -2700,4 +2700,200 @@ Ang kabuuang pagpapanumbalik ay hindi maaaring garantisadong at maaaring mabawas
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Sa ganitong paraan, maaaring ma access ang MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;walang click&lt;/span&gt; o &lt;span color="red"&gt;kahit batting isang mata&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Anotasyon</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Clone</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Object ng data</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Isaksak</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Mambabasa</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Hindi kilalang error</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Manunulat</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Duplicate Plugin Guid '{0}' nakita para sa mga plugin na ito:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Ayusin sa pamamagitan ng pagbabago ng gabay ng plugin o pag -alis ng mga duplicate. Kung hindi man ang lahat ng mga nauugnay na plugin ay hindi papansinin.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Duplicate plugin preset guid '{0}' nakita para sa mga plugin at preset na ito:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} preset (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} preset (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Ayusin sa pamamagitan ng pagbibigay ng mga natatanging preset na gabay o pag -alis ng mga duplicate. Kung hindi man ang lahat ng mga nauugnay na plugin ay hindi papansinin.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Kulay ng editor</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Sigurado ka bang gusto mong permanenteng tanggalin ang lahat ng {0} (mga) item?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Pumili ng polder</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Piliin ang folder ng Watch</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Error sa plugin. Plugin '{0}' ay '{1}' type ngunit walang '{1}' format na natagpuan</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Error na gumaganap ng aksyon '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Ang halaga ay dapat maglaman lamang ng mga numero o '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Ang halaga ay dapat na mula sa {0} hanggang {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Dapat maging isang hex (6 o 8 digit) string na nagsisimula sa '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Ang clipboard '{0}' ay dapat na natatangi.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Mayroon na para sa</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>I -type</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Ang clipboard reader/mga pangalan ng format ng manunulat ay dapat na natatangi. Duplicate ng mambabasa:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Ang clipboard reader/mga pangalan ng format ng manunulat ay dapat na natatangi. Duplicates ng manunulat:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Ang mga gabay sa format ng clipboard ay dapat na natatangi. Duplicate Format &amp; Guids:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Error sa Plugin: Ang lahat ng mga patlang na plugin '{0}' ay dapat na natatangi para sa handler '{1}'. {2} paramname '{3}' ay may maraming mga entry</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Error sa plugin, walang nahanap na manifest na nahanap</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Ang plugin '{0}' ay hindi maaaring magkaroon ng mga preset nang hindi bababa sa 1 parameter na ibinigay</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Unlabeled param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Ang mga plugin na parameter ng plugin ({0}) ay dapat na tinukoy. Ang plugin '{1}' ay may mga sumusunod na mga parameter na may nawawalang paramid: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Duplicate paramid '{0}' nakita (lahat ay dapat na natatangi). {1} label: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Kinakailangan ang preset na gabay. Hindi ito natagpuan o maling format para sa '{0}' sa plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Hindi mahanap ang parameter na may paramid '{0}' na na -refer sa pamamagitan ng preset '{1}' para sa plugin '{2}'. Maaaring magbago o tinanggal ang parameter, i -update ang preset na paramvalue o alisin ito.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Hindi maaaring itakda ang mga ibinahaging mga parameter ng halaga sa mga preset. Ang Paramid '{0}' sa preset '{1}' para sa plugin '{2}' ay kailangang alisin o ang ParamValue ay maaaring matukoy sa seksyon ng Kahulugan ng Parameter.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Ang mga preset ay dapat magkaroon ng natatanging mga gabay. Ang dobleng preset na gabay na '{0}' ay napansin sa plugin '{1}' para sa mga preset: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Error sa pag -parse ng plugin, sa landas '{0}' null, malamang na error sa pag -parse ng json. Hindi papansin ang plugin</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Ang error sa pamagat ng plugin, sa landas na '{0}' ay dapat magkaroon ng 'pamagat' na pag -aari na hindi hihigit sa mga character na {1}. Hindi papansin ang plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Ang error sa gabay ng plugin, sa landas na '{0}' na may pamagat na '{1}' ay dapat magkaroon ng isang 'gabay' na pag-aari, RFC 4122 sumusunod na 128-bit guid (UUID) na may lamang mga titik, numero at hyphens. Hindi papansin ang plugin.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Error sa paglalarawan ng plugin, sa landas na '{0}' ay dapat na hindi hihigit sa mga character na {1}. Hindi papansin ang plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Ang error sa mga tag ng plugin, sa landas na '{0}' ay dapat na hindi hihigit sa mga character na {1}. Hindi papansin ang plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Ikabit ang debugger sa '{0}' o kanselahin upang magpatuloy.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Naghihintay para sa debugger</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Error sa pag -download ng plugin. Subukang muli mamaya.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Nai -update ang plugin</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Sigurado ka bang gusto mong ibalik ang lahat ng {0} (mga) item?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Mga Pamantayan sa Paghahanap 'Untitled'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Pamantayan sa paghahanap '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>Ang '{0}' ay naglalaman ng mga ibinahaging halaga. Nais mo bang i -reset ang mga iyon?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

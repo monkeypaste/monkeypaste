@@ -70,28 +70,36 @@
     <value>ძირითადი - ყოველწლიურად</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>ასლი</value>
@@ -127,19 +135,24 @@
     <value>ჩაშენებული - მოდულების ბრაუზერში, მუდმივად მზარდი საზოგადოებით - მოდული ბიბლიოთეკა</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste არის ბუფერული მენეჯერი, ავტომატიზაცია და პროდუქტიულობის ინსტრუმენტი, როგორც სხვა. თქვენი ბუფერის გაძლიერება თქვენი სამუშაო ნაკადის გამდიდრებულ და ორგანიზებულ ნაწილში,
@@ -158,40 +171,41 @@
 თქვენი ბუფერული დაფა ოდესმე თვალყურს ადევნებს ან ინახება სადმე თქვენი საკუთარი აპარატის მიღმა. პერიოდი.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● მარტივი და მეგობრული ინტერფეისი, როგორც ჰორიზონტალური/ვერტიკალური განლაგებით, სია/ქსელის ხედით და მრავალ - მონიტორის მხარდაჭერით</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● დანართის რეჟიმი: კოპირება ხდება "დამატება" ნაცვლად "შეცვალოს" ბუფერზე. როგორც ტექსტი, ასევე ფაილები, სრულად დააკონფიგურიროთ</value>
+    <value>● მაუსის რეჟიმები: მარჯვნივ - დააჭირეთ პასტა და მარცხენა - დააჭირეთ ავტო - ასლი</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● დახვეწილი კლიპის თვალყურის დევნება, წყაროები და გამოყენება Firefox- ისა და Chromium– ის დაფუძნებული ბრაუზერების გაძლიერებული მხარდაჭერით (Chrome, Edge, მამაცი)</value>
+    <value>● დანართის რეჟიმი: კოპირება ხდება "დამატება" ნაცვლად "შეცვალოს" ბუფერზე. როგორც ტექსტი, ასევე ფაილები, სრულად დააკონფიგურიროთ</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● სრულად - გამორჩეული კლიპის რედაქტორი მდიდარი ტექსტით (მაგიდები, სიები, ბმულები და ა.შ.) იპოვნეთ/ჩანაცვლებით და ხაზგასმით</value>
+    <value>● დახვეწილი კლიპის თვალყურის დევნება, წყაროები და გამოყენება Firefox- ისა და Chromium– ის დაფუძნებული ბრაუზერების გაძლიერებული მხარდაჭერით (Chrome, Edge, მამაცი)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● შეინახეთ თქვენი სურათები უსაფრთხო მონაცემთა ბაზაში, მზადაა გამოიყენოთ როგორც ფაილები ნებისმიერ დროს - მოთხოვნა უბრალოდ გადაიტანეთ - და - ჩამოაგდეს!</value>
+    <value>● სრულად - გამორჩეული კლიპის რედაქტორი მდიდარი ტექსტით (მაგიდები, სიები, ბმულები და ა.შ.) იპოვნეთ/ჩანაცვლებით და ხაზგასმით</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● ძლიერი ტექსტური შაბლონი სწრაფი, დინამიური ჩასადებისთვის თქვენი Snippet კოლექციიდან</value>
+    <value>● შეინახეთ თქვენი სურათები უსაფრთხო მონაცემთა ბაზაში, მზადაა გამოიყენოთ როგორც ფაილები ნებისმიერ დროს - მოთხოვნა უბრალოდ გადაიტანეთ - და - ჩამოაგდეს!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● გამოიწვევს და სამოქმედო დიზაინერი საბაჟო ავტომატიზაციისა და მოქმედების მიჯაჭვულისთვის</value>
+    <value>● ძლიერი ტექსტური შაბლონი სწრაფი, დინამიური ჩასადებისთვის თქვენი Snippet კოლექციიდან</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● მარტივი გამოსაყენებელი და გახანგრძლივება მოდულის სისტემა, როგორც კლიპების ანალიზისთვის, ან წაიკითხეთ/დაწერეთ ნებისმიერი ფორმატი თქვენს ბუფერზე</value>
+    <value>● გამოიწვევს და სამოქმედო დიზაინერი საბაჟო ავტომატიზაციისა და მოქმედების მიჯაჭვულისთვის</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● აშენებული - მოდულების ბრაუზერში, მუდმივად მზარდი საზოგადოებით - მოდული ბიბლიოთეკა</value>
+    <value>● მარტივი გამოსაყენებელი და გახანგრძლივება მოდულის სისტემა, როგორც კლიპების ანალიზისთვის, ან წაიკითხეთ/დაწერეთ ნებისმიერი ფორმატი თქვენს ბუფერზე</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● ავტომატიზაცია ყველაფერი მოდულის წინასწარ განსაზღვრით, აურიეთ და გამოიყენეთ თქვენი ნებისმიერი AI მოთხოვნა ან ბრძანება მარტივად</value>
+    <value>● აშენებული - მოდულების ბრაუზერში, მუდმივად მზარდი საზოგადოებით - მოდული ბიბლიოთეკა</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● უფრო მეტი პლატფორმა და მახასიათებლები მალე! ჩვენ უბრალოდ დავიწყეთ მიღებები 🎉</value>
+    <value>● ავტომატიზაცია ყველაფერი მოდულის წინასწარ განსაზღვრით, აურიეთ და გამოიყენეთ თქვენი ნებისმიერი AI მოთხოვნა ან ბრძანება მარტივად</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● ორივე მსუბუქი და მუქი თემები მთლიანად დინამიურია, გამოიყენეთ თქვენთვის სასურველი ნებისმიერი ფერი</value>
@@ -208,29 +222,29 @@
   <data name="StoreFeature6" xml:space="preserve">
     <value>● მოაწყვეთ თქვენი კლიპები ტეგის ხეებში და შექმენით რეანიმაციული ფილტრები</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● უსაფრთხო, უსაფრთხო და კერძო ადგილობრივი მონაცემთა შენახვა (მონაცემთა შეგროვება არ არის) ყოველთვის დაშიფრულია არჩევითი 2 - ფაქტორ პაროლის დაცვით და ადვილად დაბლოკოს პროგრამები ან ვებსაიტები თქვენი ტრეკერისგან</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● ვრცელი გადაადგილება - და - Drop მხარდაჭერა, საბაჟო გლობალური მალსახმობები, მარშრუტიზაცია და მაუსი - უფასო ნავიგაცია</value>
+    <value>● მარტივად დაბლოკეთ გარკვეული პროგრამები, ვებსაიტები და თუნდაც კონკრეტული ვებ - გვერდები ბუფერული თვალყურის დევნიდან</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● მაუსის რეჟიმები: მარჯვნივ - დააჭირეთ პასტა და მარცხენა - დააჭირეთ ავტო - ასლი</value>
+    <value>● ვრცელი გადაადგილება - და - Drop მხარდაჭერა, საბაჟო გლობალური მალსახმობები, მარშრუტიზაცია და მაუსი - უფასო ნავიგაცია</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>ბუფერული ჯუნგლებია. Monkeypaste არის მეფე! აპლიკაციიდან აპლიკაციამდე გადასვლა, ამ კოპირება და ჩასმა, როგორც არასდროს, Monkeypaste- თან ერთად !! ბრენდი - ახალი, Cutting Edge Clipboard და ანალიტიკური ავტომატიზაციის ინსტრუმენტი !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Monkeypaste- ის ნიმუში მოქმედებაში!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>დამონტაჟებულია ამ ენაზე. ინგლისური მხოლოდ ამ მაგალითებისთვის არის</value>
@@ -250,5 +264,11 @@
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>ამ გამოწერით მიიღებთ:
 ● შეუზღუდავი სიმძლავრე</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● უსაფრთხო, უსაფრთხო და კერძო ადგილობრივი მონაცემთა შენახვა (მონაცემთა შეგროვება არ არის) ყოველთვის დაშიფრულია არჩევითი 2 - ფაქტორ პაროლის დაცვით</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● უფრო მეტი პლატფორმა და მახასიათებლები მალე! ჩვენ უბრალოდ დავიწყეთ მიღებები 🎉</value>
   </data>
 </root>

@@ -519,7 +519,7 @@
     <value>ସର୍ଟକଟ୍</value>
   </data>
   <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
-    <value>'{1}' ରୁ ଆପଣ ମଧ୍ୟ ଏହାକୁ ଅପସାରଣ କରିବାକୁ ମଧ୍ୟ ପସନ୍ଦ କରିବେ କି?</value>
+    <value>'{1}' ରୁ ଆପଣ ମଧ୍ୟ {0} ଏହାକୁ ଅପସାରଣ କରିବାକୁ ମଧ୍ୟ ପସନ୍ଦ କରିବେ କି?</value>
     <comment>Number, Application Name</comment>
   </data>
   <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
@@ -550,7 +550,7 @@
     <value>ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ସମସ୍ତ ସର୍ଟକଟ୍ ପୁନ res ସେଟ୍ କରିବାକୁ ଚାହୁଁଛନ୍ତି? ସମସ୍ତ କଷ୍ଟମ୍ ସର୍ଟକଟ୍ ଅପସାରିତ ହେବ |</value>
   </data>
   <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
-    <value>ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ଆପଣଙ୍କର ସର୍ଟକଟ୍ ରାଉଟିଙ୍ଗ୍ ପ୍ରୋଫାଇଲ୍ ପରିବର୍ତ୍ତନ କରିବାକୁ ଚାହୁଁଛନ୍ତି '{0 "' |</value>
+    <value>ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ଆପଣଙ୍କର ସର୍ଟକଟ୍ ରାଉଟିଙ୍ଗ୍ ପ୍ରୋଫାଇଲ୍ ପରିବର୍ତ୍ତନ କରିବାକୁ ଚାହୁଁଛନ୍ତି '{0} "' |</value>
   </data>
   <data name="TagDefaultAllLabel" xml:space="preserve">
     <value>ସମସ୍ତ</value>
@@ -741,11 +741,11 @@
     <value>ଖାତା ବଦଳାଗଲା |</value>
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
-    <value>ଆପଣଙ୍କର ସଦସ୍ୟତା ବର୍ତ୍ତମାନ {2} ବିଷୟବସ୍ତୁ ଏବଂ {3} ବିଷୟବସ୍ତୁ ଏବଂ {3} ଟ୍ରାଶ୍ ଷ୍ଟୋରେଜ୍ ସହିତ |
+    <value>ଆପଣଙ୍କର ସଦସ୍ୟତା ବର୍ତ୍ତମାନ {0}/{1} ବିଷୟବସ୍ତୁ ଏବଂ {2} ବିଷୟବସ୍ତୁ ଏବଂ {3} ଟ୍ରାଶ୍ ଷ୍ଟୋରେଜ୍ ସହିତ |
 କିନ୍ତୁ ବ୍ୟସ୍ତ ହୁଅନ୍ତୁ ନାହିଁ, ଡାଉନଗ୍ରେଡିଂ ପରେ କ data ଣସି ତଥ୍ୟ ହଜିଯାଏ ନାହିଁ | କେବଳ ନୂତନ କ୍ଲିପ୍ ମୂଲ୍ୟାଙ୍କନ କରାଯିବ |</value>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
-    <value>ଅଭିନନ୍ଦନ! ଆପଣଙ୍କର ସଦସ୍ୟତା ବର୍ତ୍ତମାନ {2} ବିଷୟବସ୍ତୁ ଏବଂ {3} ବିଷୟବସ୍ତୁ ଏବଂ {3} ଟ୍ରାଶ୍ ଷ୍ଟୋରେଜ୍ ସହିତ |</value>
+    <value>ଅଭିନନ୍ଦନ! ଆପଣଙ୍କର ସଦସ୍ୟତା ବର୍ତ୍ତମାନ {0}/{1} ବିଷୟବସ୍ତୁ ଏବଂ {2} ବିଷୟବସ୍ତୁ ଏବଂ {3} ଟ୍ରାଶ୍ ଷ୍ଟୋରେଜ୍ ସହିତ |</value>
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapBlockHint1" xml:space="preserve">
@@ -1126,7 +1126,7 @@
     <comment>Plugin Name, File Path</comment>
   </data>
   <data name="PluginErrManifestText" xml:space="preserve">
-    <value>ପ୍ଲଗଇନ୍ ମନିଫେଷ୍ଟ୍ '{0 ": {1}</value>
+    <value>ପ୍ଲଗଇନ୍ ମନିଫେଷ୍ଟ୍ '{0}' ପାର୍ସ କରିବାରେ ତ୍ରୁଟି: {1}</value>
     <comment>File Path, Error Details</comment>
   </data>
   <data name="PluginErrMissingManifest" xml:space="preserve">
@@ -1142,7 +1142,7 @@
     <comment>Folder Path</comment>
   </data>
   <data name="PluginLoaderBackupErrorText" xml:space="preserve">
-    <value>'{0' କୁ '{1}' କୁ ବ୍ୟାକିଂ କରିବାରେ ତ୍ରୁଟି | ବିବରଣୀ: '{2}'</value>
+    <value>'{0}' ରୁ '{1}' ବ୍ୟାକଅପ୍ କରିବାରେ ତ୍ରୁଟି | ବିବରଣୀ: '{2}'</value>
     <comment>Folder Path, Folder Path, Error Details</comment>
   </data>
   <data name="PrefAutoSearchHint" xml:space="preserve">
@@ -1433,7 +1433,7 @@
     <value>ରଙ୍ଗ</value>
   </data>
   <data name="CommonManageLabel2" xml:space="preserve">
-    <value>'{0' 'ପରିଚାଳନା କରନ୍ତୁ ...</value>
+    <value>'{0}' ପରିଚାଳନା କରନ୍ତୁ ...</value>
     <comment>Plugin name</comment>
   </data>
   <data name="CommonOpenLabel" xml:space="preserve">
@@ -2097,7 +2097,7 @@
     <comment>Number</comment>
   </data>
   <data name="TimeSpanYears" xml:space="preserve">
-    <value>{0 ବର୍ଷ ପୂର୍ବେ</value>
+    <value>{0} ବର୍ଷ ପୂର୍ବେ |</value>
     <comment>Number</comment>
   </data>
   <data name="SearchSimpleAnnotationLabel" xml:space="preserve">
@@ -2208,7 +2208,7 @@
     <comment>Action Name</comment>
   </data>
   <data name="ParamComponentPickerDefaultLabel" xml:space="preserve">
-    <value>A {0 clok ...</value>
+    <value>ଏକ {0} ବାଛ ...</value>
     <comment>Parameter Label</comment>
   </data>
   <data name="ParamComponentPickerEmptyLabel" xml:space="preserve">
@@ -2265,11 +2265,11 @@
     <comment>Action Name</comment>
   </data>
   <data name="ActionAnalyzeValidation2" xml:space="preserve">
-    <value>ACTALS '{0 "ପାଇଁ ଆନାଲିଜର୍ ମିଳିଲା ନାହିଁ |</value>
+    <value>କ୍ରିୟା ପାଇଁ ବିଶ୍ଳେଷକ '{0}' ମିଳିଲା ନାହିଁ |</value>
     <comment>ActionName</comment>
   </data>
   <data name="ActionAnalyzeValidation3" xml:space="preserve">
-    <value>ପିତାମାତା '{1}' ଫିଲ୍ଟରଗୁଡ଼ିକ '{1 1}' ପ୍ରକାର ବିଷୟବସ୍ତୁ ଏବଂ ଆନାଲିଜର '{2 {{2}' | ଏହା '{3}' ପ୍ରତିପୁଅ ପାଇଁ କେବେବି କାର୍ଯ୍ୟକାରୀ କରିବ ନାହିଁ |</value>
+    <value>ପ୍ୟାରେଣ୍ଟ୍ '{0}' ଫିଲ୍ଟର୍ କେବଳ '{1}' ଟାଇପ୍ ବିଷୟବସ୍ତୁ ଏବଂ ଆନାଲିଜର୍ '{2}' ପାଇଁ କେବେ ବି ଏକଜେକ୍ୟୁଟ୍ ହେବ ନାହିଁ କାରଣ ଏହା '{3}' ପ୍ରକାର ଇନପୁଟ୍ କୁ ସମର୍ଥନ କରେନାହିଁ |</value>
     <comment>Action Label, Analyzer Preset Name, Content Type</comment>
   </data>
   <data name="ActionClassifyValidation1" xml:space="preserve">
@@ -2277,7 +2277,7 @@
     <comment>Collection Name</comment>
   </data>
   <data name="ActionClassifyValidation2" xml:space="preserve">
-    <value>ଶ୍ରେଣୀକରଣ ପାଇଁ ଟ୍ୟାଗ୍ '{0' ମିଳିଲା ନାହିଁ |</value>
+    <value>କ୍ଲାସିଫାୟର୍ '{0}' ପାଇଁ ଟ୍ୟାଗ୍ ମିଳିଲା ନାହିଁ |</value>
     <comment>Collection Name</comment>
   </data>
   <data name="ActionConditionalValidation1" xml:space="preserve">
@@ -2288,7 +2288,7 @@
     <comment>Action Name</comment>
   </data>
   <data name="ActionContentTaggedValidation2" xml:space="preserve">
-    <value>କ୍ଲିପ୍ ଟ୍ୟାଗ୍ ହୋଇଥିବା ଟ୍ରିଗର '{0' ମିଳିଲା ନାହିଁ |</value>
+    <value>କ୍ଲିପ୍ ଟ୍ୟାଗ୍ ହୋଇଥିବା ଟ୍ରିଗର ପାଇଁ ଟ୍ୟାଗ୍ '{0}' ମିଳିଲା ନାହିଁ |</value>
     <comment>Action Name</comment>
   </data>
   <data name="ActionFileSystemChangedValidation1" xml:space="preserve">
@@ -2296,11 +2296,11 @@
     <comment>Action Name</comment>
   </data>
   <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
-    <value>ଟ୍ରିଗର '{1}' ପାଇଁ ଫେଲ୍ଡ୍ '{0 "ଦେଖନ୍ତୁ |</value>
+    <value>ଫୋଲ୍ଡର୍ '{0}' ଟ୍ରିଗର ପାଇଁ ମିଳିଲା ନାହିଁ '{1}' ଦେଖନ୍ତୁ |</value>
     <comment>Folder Path, Action Name</comment>
   </data>
   <data name="ActionFileWriterValidation1" xml:space="preserve">
-    <value>କାର୍ଯ୍ୟ ପାଇଁ ଫାଇଲ ଲେଖକ ପଥ '{0' 'ସେଟ୍ ହୋଇନାହିଁ |</value>
+    <value>କାର୍ଯ୍ୟ ପାଇଁ ଫାଇଲ୍ ରାଇଟର୍ ପଥ '{0}' ସେଟ୍ ହୋଇନାହିଁ |</value>
     <comment>Action Name</comment>
   </data>
   <data name="ActionFileWriterValidation2" xml:space="preserve">
@@ -2353,7 +2353,7 @@
     <value>ବର୍ତ୍ତମାନ ଅଦ୍ୟତନ କରନ୍ତୁ |</value>
   </data>
   <data name="NtfResetSharedValueText" xml:space="preserve">
-    <value>'{0]' ଅଂଶୀଦାର ମୂଲ୍ୟ ଧାରଣ କରେ | ଆପଣ କ'ଣ ପୁନ res ସେଟ୍ କରିବାକୁ ଚାହୁଁଛନ୍ତି?</value>
+    <value>'{0}' ଅଂଶୀଦାର ମୂଲ୍ୟ ଧାରଣ କରେ | ଆପଣ କ’ଣ ପୁନ reset ସେଟ୍ କରିବାକୁ ଚାହାଁନ୍ତି?</value>
     <comment>Preset Name</comment>
   </data>
   <data name="PrefClearSearchesButtonText" xml:space="preserve">
@@ -2387,11 +2387,11 @@
     <value>ନିର୍ଦ୍ଦେଶ</value>
   </data>
   <data name="ActionAppCommandValidation1" xml:space="preserve">
-    <value>ପ୍ରୟୋଗ କମାଣ୍ଡ '0}' ପାଇଁ କ cownommail ଣସି ନିର୍ଦ୍ଦେଶ ଚୟନ କରାଯାଇ ନାହିଁ |</value>
+    <value>ପ୍ରୟୋଗ ନିର୍ଦ୍ଦେଶ '{0}' ପାଇଁ କ command ଣସି ନିର୍ଦ୍ଦେଶ ଚୟନ ହୋଇନାହିଁ |</value>
     <comment>Action Name</comment>
   </data>
   <data name="ActionAppCommandValidation2" xml:space="preserve">
-    <value>ପ୍ରୟୋଗ ନିର୍ଦ୍ଦେଶ '{0] ମିଳିଲା ନାହିଁ |</value>
+    <value>ଆବେଦନ କମାଣ୍ଡ ପାଇଁ କମାଣ୍ଡ '{0}' ମିଳିଲା ନାହିଁ |</value>
     <comment>Action Name</comment>
   </data>
   <data name="CommonSelectedText" xml:space="preserve">
@@ -2699,5 +2699,201 @@ FANDUCE@ONKEYPASTET.com</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;ଏହି ଉପାୟରେ, ମାଙ୍କଡ଼ ପେଷ୍ଟକୁ ଆକସେସ୍ କରାଯାଇପାରିବ&lt;br&gt;&lt;span color="red"&gt;କ୍ଲିକ୍ ବିନା&lt;/span&gt; କିମ୍ବା &lt;span color="red"&gt;ଆଖି ରେ ବ୍ୟାଟିଂ&lt;/span&gt; କରି #x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>ଟିପ୍ପଣୀ</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>କ୍ଲୋନ</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>ଡାଟା ବସ୍ତୁ |</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>ଲଗାଇବା</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>ପାଠକ</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>ଅଜ୍ଞାତ ତ୍ରୁଟି |</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>ଲେଖକ</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>ନକଲ ପ୍ଲଗଇନ୍ GUID '{0}' ଏହି ପ୍ଲଗଇନଗୁଡ଼ିକ ପାଇଁ ଚିହ୍ନଟ:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ GUID ପରିବର୍ତ୍ତନ କିମ୍ବା ନକଲ ଅପସାରଣ କରିବା ଦ୍ୱାରା ଫିକ୍ କରନ୍ତୁ | ଅନ୍ୟଥା ସମସ୍ତ ସମ୍ପୃକ୍ତ ପ୍ଲଗଇନ୍ ଅଣଦେଖା କରାଯିବ |</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>ନକଲ ପ୍ଲଗଇନ୍ ପ୍ରେଟିସ୍ GUID '{0}' ଏହି ପ୍ଲଗଇନ୍ ଏବଂ ପ୍ରିସେପ୍ସର ପାଇଁ ଚିହ୍ନଟ:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍: {0} {1} ପ୍ରିସେଟ୍ (ଗୁଡିକ): # {2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍: {0} {1} ପ୍ରିସେଟ୍ (ଗୁଡିକ): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>ଅନନ୍ୟ ପ୍ରିସେଟ୍ ସୁଇଡ୍ ପ୍ରଦାନ କରି ଫିକ୍ କରନ୍ତୁ କିମ୍ବା ନକଲ ଅପସାରଣ କରି | ଅନ୍ୟଥା ସମସ୍ତ ସମ୍ପୃକ୍ତ ପ୍ଲଗଇନ୍ ଅଣଦେଖା କରାଯିବ |</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>ସମ୍ପାଦକ ରଙ୍ଗ</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ସମସ୍ତ {0} ଆଇଟମ୍ (ଗୁଡିକ) ଡିଲିଟ୍ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>ଫୋଲ୍ଡର ଚୟନ କରନ୍ତୁ |</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>ଦେଖିବାକୁ ଦେଖନ୍ତୁ |</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ତ୍ରୁଟି | ପ୍ଲଗଇନ୍ '{0}' ହେଉଛି '{1}' ପ୍ରକାର କିନ୍ତୁ କ'ଣସି '{1}' ଫର୍ମାଟ୍ ମିଳିଲା ନାହିଁ |</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>କାର୍ଯ୍ୟ '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>ମୂଲ୍ୟ କେବଳ ସଂଖ୍ୟା କିମ୍ବା '{0}' ଧାରଣ କରିବା ଜରୁରୀ |</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>ମୂଲ୍ୟ ନିଶ୍ଚିତ ଭାବରେ {0} ରୁ {1} |</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' ସହିତ ଆରମ୍ଭ ହୋଇଥିବା ଏକ ହେକ୍ସ (6 କିମ୍ବା 8 ଅଙ୍କ) ଷ୍ଟ୍ରିଙ୍ଗ୍ ହେବା ଜରୁରୀ |</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>କ୍ଲିପବୋର୍ଡ '{0}' ନିଶ୍ଚିତ ଭାବରେ ଅନନ୍ୟ ହେବା ଆବଶ୍ୟକ |</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>ପୂର୍ବରୁ ବିଦ୍ୟମାନ ଅଛି |</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>ଫର୍ମାଟ୍</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>ଟାଇପ୍ କରନ୍ତୁ |</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>କ୍ଲିପବୋର୍ଡ ରିଡର୍ / ରାଇଟର୍ ଫର୍ମାଟ୍ ନାମଗୁଡିକ ଅନନ୍ୟ ହେବା ଜରୁରୀ | ପାଠକ ନକଲ:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>କ୍ଲିପବୋର୍ଡ ରିଡର୍ / ରାଇଟର୍ ଫର୍ମାଟ୍ ନାମଗୁଡିକ ଅନନ୍ୟ ହେବା ଜରୁରୀ | ଲେଖକ ନକଲ:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>କ୍ଲିପବୋର୍ଡ ଫର୍ମାଟ୍ GUID ଗୁଡିକ ଅନନ୍ୟ ହେବା ଜରୁରୀ | ନକଲ ଫର୍ମାଟ୍ ଏବଂ GUID ଗୁଡିକ:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ତ୍ରୁଟି: ହ୍ୟାଣ୍ଡଲର୍ '{1}' ପାଇଁ ସମସ୍ତ ପ୍ଲଗଇନ୍ '{0}' କ୍ଷେତ୍ରଗୁଡିକ ଅନନ୍ୟ ହେବା ଆବଶ୍ୟକ | {2} paramName '{3}' ରେ ଏକାଧିକ ଏଣ୍ଟ୍ରି ଅଛି |</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ତ୍ରୁଟି, କ no ଣସି ଅନାବଶ୍ୟକ ମନିଫେଷ୍ଟ୍ ମିଳିଲା ନାହିଁ |</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ '{0}' ଅତି କମରେ 1 ପାରାମିଟର ବିନା ପ୍ରସାରଣ କରିପାରିବ ନାହିଁ |</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>ଅଣସଂରକ୍ଷିତ ପାରାମ # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ପାରାମିଟର ID ({0}) ନିଶ୍ଚିତ ହେବା ଜରୁରୀ | ପ୍ଲଗଇନ୍ '{1}' ରେ ନିଖୋଜ ପାରମାଡ୍ଙ୍କ ସହିତ ନିମ୍ନଲିଖିତ ପାରାମିଟର ଅଛି: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>ନକଲ paramId '{0}' ଚିହ୍ନଟ ହୋଇଛି (ସମସ୍ତ ଅନନ୍ୟ ହେବା ଆବଶ୍ୟକ) {1} ଲେବଲ୍: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>ପ୍ରିସେଟ୍ ଗାଇଡ୍ ଆବଶ୍ୟକ | ପ୍ଲଗଇନ୍ {1} ରେ '{0}' ପାଇଁ ଏହା ମିଳିଲା କିମ୍ବା ଭୁଲ ଫର୍ମାଟ୍ ନଥିଲା |</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ '{2}' ପାଇଁ ପ୍ରିସେଟ୍ '{1}' ଦ୍ୱାରା ସୂଚିତ paramId '{0}' ସହିତ ପାରାମିଟର ଖୋଜି ପାରିବ ନାହିଁ | ପାରାମିଟର ହୁଏତ ବଦଳି ଯାଇଛି କିମ୍ବା ଅପସାରିତ ହୋଇଛି, ପ୍ରିସେଟ୍ ପାରାମ ଭାଲ୍ୟୁ ଅପଡେଟ୍ କରନ୍ତୁ କିମ୍ବା ଏହାକୁ ଅପସାରଣ କରନ୍ତୁ |</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>ପ୍ରେସେଟ୍ ରେ ଅଂଶୀଦାର ମୂଲ୍ୟ ପାରାମିଟର ସେଟ୍ କରିପାରିବେ ନାହିଁ। ପ୍ଲଗଇନ୍ '{2}' ପାଇଁ ପ୍ରିସେଟ୍ '{1}'ରେ ପାରାମିଡ୍ '{0}' ଅପସାରଣ କରିବା ଆବଶ୍ୟକ କିମ୍ବା ପାରାମିଟର ସଂଜ୍ଞା ବିଭାଗରେ ପାରାମ୍ଭାଲ୍ୟୁ ନିର୍ଦ୍ଦିଷ୍ଟ କରାଯାଇପାରିବ।</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ପ୍ରିସେଟ୍ ଗୁଡିକରେ ଅନନ୍ୟ ଗାଇଡ୍ ରହିବା ଜରୁରୀ | ପ୍ରିସେଟ୍ ପାଇଁ ପ୍ଲଗଇନ୍ '{1}' ରେ ନକଲ ପ୍ରିସେଟ୍ ଗାଇଡ୍ '{0}' ଚିହ୍ନଟ ହେଲା: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ତ୍ରୁଟି, ପଥ '{0}' nols, ସମ୍ଭବତ J ଜୋନ୍ ପାର୍ସ କରିବା | ପ୍ଲଗଇନ୍ କୁ ଅଣଦେଖା କରିବା |</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ଟାଇଟଲ୍ ତ୍ରୁଟି, '{0}' ପଥରେ {1} ଅକ୍ଷରରୁ ଅଧିକ ନଥିବା 'ଟାଇଟଲ୍' ଗୁଣ ଥିବା ଆବଶ୍ୟକ | ପ୍ଲଗଇନକୁ ଅଣଦେଖା |</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ଗାଇଡ୍ ତ୍ରୁଟି, ଟାଇଟଲ୍ '{1}' ସହିତ '{0}' ପଥରେ ଏକ 'ଗାଇଡ୍' ସମ୍ପତ୍ତି ଥିବା ଆବଶ୍ୟକ, RFC 4122 ଅନୁରୂପ 128-ବିଟ୍ GUID (UUID) କେବଳ ଅକ୍ଷର, ସଂଖ୍ୟା ଏବଂ ହାଇଫେନ୍ ସହିତ | ପ୍ଲଗଇନକୁ ଅଣଦେଖା |</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ବର୍ଣ୍ଣନା ତ୍ରୁଟି, ପାଥ୍ '{0}' ବର୍ଣ୍ଣନା {1} ଅକ୍ଷରଠାରୁ ଅଧିକ ହେବା ଆବଶ୍ୟକ | ପ୍ଲଗଇନ୍ କୁ ଅଣଦେଖା କରିବା |</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ଟ୍ୟାଗ୍ ତ୍ରୁଟି, ରାସ୍ତାରେ '{0}' ଟ୍ୟାଗ୍ ଗୁଡିକ {1} ଅକ୍ଷରଠାରୁ ଅଧିକ ହେବା ଆବଶ୍ୟକ | ପ୍ଲଗଇନ୍ କୁ ଅଣଦେଖା କରିବା |</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>'{0}' କୁ '{0}' କିମ୍ବା ବାତିଲ କରିବାକୁ |</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>ଡିବଗ୍ ପାଇଁ ଅପେକ୍ଷା କରିଛି |</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ଡାଉନଲୋଡ୍ କରିବାରେ ତ୍ରୁଟି | ଦୟାକରି ପରେ ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ |</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ଅଦ୍ୟତନ ହୋଇଛି |</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ସମସ୍ତ {0} ଆଇଟମ୍ (ଗୁଡିକ) ପୁନ restore ସ୍ଥାପନ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>ମାନଦଣ୍ଡ '</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>ମାନଦଣ୍ଡ ଖୋଜ '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' ଅଂଶୀଦାର ମୂଲ୍ୟ ଧାରଣ କରେ | ଆପଣ ସେଗୁଡିକୁ ପୁନ res ସେଟ୍ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

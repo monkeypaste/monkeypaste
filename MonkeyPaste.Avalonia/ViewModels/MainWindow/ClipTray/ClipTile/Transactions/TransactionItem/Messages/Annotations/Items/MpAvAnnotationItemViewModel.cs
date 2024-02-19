@@ -1,5 +1,4 @@
 ﻿using Avalonia.Threading;
-using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -48,7 +47,8 @@ namespace MonkeyPaste.Avalonia {
 
         public string PlainText {
             get {
-                return "TEST Annotation";
+                // return "TEST Annotation";
+                return Body;
             }
         }
         #endregion

@@ -70,28 +70,36 @@
     <value>មូលដ្ឋាន - ប្រចាំឆ្នាំ</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>ការចម្លង</value>
@@ -127,19 +135,24 @@
     <value>បង្កើតឡើង - នៅក្នុងកម្មវិធីរុករកកម្មវិធីជំនួយដែលមានសហគមន៍រីកលូតលាស់ដែលមិនធ្លាប់មានដែលមិនធ្លាប់មាន</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypey គឺជាអ្នកគ្រប់គ្រងឃ្លីបស្វ័យប្រវត្តិកម្មស្វ័យប្រវត្តិកម្មនិងឧបករណ៍ផលិតភាពដូចជាមិនមានផ្សេងទៀត។ ការលើកកម្ពស់ក្តារតម្បៀតខ្ទាស់របស់អ្នកទៅជាផ្នែកមួយដែលសំបូរទៅដោយលំហូរការងាររបស់អ្នក
@@ -158,40 +171,41 @@
 ក្តារតម្បៀតខ្ទាស់របស់អ្នកត្រូវបានតាមដានឬរក្សាទុកគ្រប់ទីកន្លែងលើសពីម៉ាស៊ីនផ្ទាល់ខ្លួនរបស់អ្នក។ រយៈពេល។</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>interface ចំណុចប្រទាក់សាមញ្ញនិងងាយស្រួលជាមួយទាំងប្លង់ផ្ដេក / បញ្ឈរបញ្ជី / ក្រឡាចត្រង្គទិដ្ឋភាពនិងការគាំទ្រពហុ</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>●បន្ថែមរបៀបបន្ថែម: ការចំលងភ្ជាប់មកហើយជំនួសឱ្យ 'ជំនួស' នៅលើក្តារតម្បៀតខ្ទាស់។ ទាំងអត្ថបទនិងឯកសារអាចប្ដូរតាមបំណងបានពេញលេញ</value>
+    <value>●របៀបកណ្តុរតាមលក្ខណៈនីមួយៗ: ចុចខាងស្តាំ - ចុចបិទភ្ជាប់ហើយខាងឆ្វេង - ចុចលើការថតចម្លងអូតូ</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>ការតាមដានឃ្លីបឈុតស្មុគស្មាញដែលមានប្រភពនិងការប្រើប្រាស់ជាមួយនឹងការគាំទ្រដែលបានធ្វើឱ្យប្រសើរឡើងសម្រាប់កម្មវិធីរុករក Firefox និង Chromium (Chrome, Edge, ក្លាហាន)</value>
+    <value>●បន្ថែមរបៀបបន្ថែម: ការចំលងភ្ជាប់មកហើយជំនួសឱ្យ 'ជំនួស' នៅលើក្តារតម្បៀតខ្ទាស់។ ទាំងអត្ថបទនិងឯកសារអាចប្ដូរតាមបំណងបានពេញលេញ</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>addip កម្មវិធីកែសំរួលឈុតឈុតដែលមានលក្ខណៈពេញលេញជាមួយនឹងអត្ថបទសម្បូរបែប (តារាងបញ្ជីតំណភ្ជាប់។ ល។ ) ដែលមាន / រកមើលនិងរំលេច</value>
+    <value>ការតាមដានឃ្លីបឈុតស្មុគស្មាញដែលមានប្រភពនិងការប្រើប្រាស់ជាមួយនឹងការគាំទ្រដែលបានធ្វើឱ្យប្រសើរឡើងសម្រាប់កម្មវិធីរុករក Firefox និង Chromium (Chrome, Edge, ក្លាហាន)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>●រក្សាទុករូបភាពរបស់អ្នកនៅក្នុងមូលដ្ឋានទិន្នន័យដែលមានសុវត្ថិភាពដែលត្រៀមប្រើជាឯកសារគ្រប់ពេលវេលានៅគ្រប់ពេលវេលានៅលើតម្រូវការគ្រាន់តែអូស - និងទម្លាក់!</value>
+    <value>addip កម្មវិធីកែសំរួលឈុតឈុតដែលមានលក្ខណៈពេញលេញជាមួយនឹងអត្ថបទសម្បូរបែប (តារាងបញ្ជីតំណភ្ជាប់។ ល។ ) ដែលមាន / រកមើលនិងរំលេច</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>●ពុម្ពគំរូដែលមានអនុភាពសម្រាប់ការបិទភ្ជាប់រហ័សនិងស្វាហាប់ពីការប្រមូលអត្ថបទរបស់អ្នក</value>
+    <value>●រក្សាទុករូបភាពរបស់អ្នកនៅក្នុងមូលដ្ឋានទិន្នន័យដែលមានសុវត្ថិភាពដែលត្រៀមប្រើជាឯកសារគ្រប់ពេលវេលានៅគ្រប់ពេលវេលានៅលើតម្រូវការគ្រាន់តែអូស - និងទម្លាក់!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>best អ្នករចនាម៉ូដកេះនិងសកម្មភាពសម្រាប់ស្វ័យប្រវត្តិកម្មផ្ទាល់ខ្លួននិងខ្សែសង្វាក់សកម្មភាព</value>
+    <value>●ពុម្ពគំរូដែលមានអនុភាពសម្រាប់ការបិទភ្ជាប់រហ័សនិងស្វាហាប់ពីការប្រមូលអត្ថបទរបស់អ្នក</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>●ប្រើសាមញ្ញក្នុងការប្រើប្រាស់និងពង្រីកប្រព័ន្ធជំនួយសម្រាប់ការវិភាគ CLIPs ឬអាន / សរសេរទំរង់ណាមួយទៅក្ដារតម្បៀតខ្ទាស់របស់អ្នក</value>
+    <value>best អ្នករចនាម៉ូដកេះនិងសកម្មភាពសម្រាប់ស្វ័យប្រវត្តិកម្មផ្ទាល់ខ្លួននិងខ្សែសង្វាក់សកម្មភាព</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>●ភ្ជាប់ - ក្នុងកម្មវិធីរុករកកម្មវិធីជំនួយដែលមានសហគមន៍រីកលូតលាស់ដែលមិនធ្លាប់មានដែលមិនធ្លាប់មាន</value>
+    <value>●ប្រើសាមញ្ញក្នុងការប្រើប្រាស់និងពង្រីកប្រព័ន្ធជំនួយសម្រាប់ការវិភាគ CLIPs ឬអាន / សរសេរទំរង់ណាមួយទៅក្ដារតម្បៀតខ្ទាស់របស់អ្នក</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>●ស្វ័យគុណអ្វីគ្រប់យ៉ាងដែលមាន Plugin Preset, Stash, Stash និងប្រើប្រអប់បញ្ចូលឬពាក្យបញ្ជា AI របស់អ្នកដែលមានភាពងាយស្រួលរបស់អ្នក</value>
+    <value>●ភ្ជាប់ - ក្នុងកម្មវិធីរុករកកម្មវិធីជំនួយដែលមានសហគមន៍រីកលូតលាស់ដែលមិនធ្លាប់មានដែលមិនធ្លាប់មាន</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>●វេទិកាថែមទៀតនិងលក្ខណៈពិសេសដែលនឹងមកដល់ឆាប់ៗនេះ! យើងទើបតែបានចាប់ផ្តើម🎉</value>
+    <value>●ស្វ័យគុណអ្វីគ្រប់យ៉ាងដែលមាន Plugin Preset, Stash, Stash និងប្រើប្រអប់បញ្ចូលឬពាក្យបញ្ជា AI របស់អ្នកដែលមានភាពងាយស្រួលរបស់អ្នក</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>●ស្បែកស្រាលនិងស្បែកងងឹតទាំងពីរមានភាពរឹងមាំទាំងស្រុងប្រើពណ៌ណាមួយដែលអ្នកចង់បាន</value>
@@ -208,29 +222,29 @@
   <data name="StoreFeature6" xml:space="preserve">
     <value>●រៀបចំឈុតរបស់អ្នកនៅក្នុងស្លាកដើមឈើនិងបង្កើតតម្រងដែលអាចដោះស្រាយបាន</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>ការផ្ទុកទិន្នន័យក្នុងស្រុកមានសុវត្ថិភាពនិងឯកជន (មិនមានការប្រមូលទិន្នន័យ) ដែលបានអ៊ិនគ្រីបជានិច្ចជាមួយស្រេចចិត្ត 2 - កត្តាការពារពាក្យសម្ងាត់ការពារនិងរារាំងកម្មវិធីឬគេហទំព័រពីកម្មវិធីតាមដានរបស់អ្នក</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>●អូសយ៉ាងទូលំទូលាយ - និង - ទម្លាក់ការគាំទ្រផ្លូវកាត់សកលផ្ទាល់ខ្លួនការបញ្ជូនបន្តនិងកណ្តុរ - ការរុករកដោយឥតគិតថ្លៃ</value>
+    <value>●រារាំងកម្មវិធីគេហទំព័រនិងគេហទំព័រជាក់លាក់យ៉ាងងាយស្រួលពីការតាមដានឃ្លីបឃ្លីប</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>●របៀបកណ្តុរតាមលក្ខណៈនីមួយៗ: ចុចខាងស្តាំ - ចុចបិទភ្ជាប់ហើយខាងឆ្វេង - ចុចលើការថតចម្លងអូតូ</value>
+    <value>●អូសយ៉ាងទូលំទូលាយ - និង - ទម្លាក់ការគាំទ្រផ្លូវកាត់សកលផ្ទាល់ខ្លួនការបញ្ជូនបន្តនិងកណ្តុរ - ការរុករកដោយឥតគិតថ្លៃ</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>ក្តារតម្បៀតខ្ទាស់គឺជាព្រៃ។ monkeypousey គឺជាស្តេច! បញ្ចោញពីកម្មវិធីទៅកម្មវិធីមួយដែលចម្លងវានិងការបិទភ្ជាប់ដែលមិនធ្លាប់មានពីមុនមកជាមួយ monkeysyyyyysyyysyyyysyyysyyysyyysyyysyyyysyyyyyysy !! យីហោមួយ - ថ្មី, គែម, ឃ្លីបឃ្លីបនិងឧបករណ៍ស្វ័យប្រវត្តិកម្មរបស់ឧបករណ៍ស្វ័យប្រវត្តិកម្ម !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>គំរូនៃ monkeypaxe នៅក្នុងសកម្មភាព!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>បានដំឡើងក្នុងភាសានេះ។ ភាសាអង់គ្លេសគឺសម្រាប់តែឧទាហរណ៍ទាំងនេះប៉ុណ្ណោះ</value>
@@ -250,5 +264,11 @@
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>ជាមួយនឹងការជាវនេះអ្នកនឹងទទួលបាន:
 ●សមត្ថភាពគ្មានដែនកំណត់</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>●ការផ្ទុកទិន្នន័យក្នុងស្រុកមានសុវត្ថិភាពនិងឯកជន (មិនមានការប្រមូលទិន្នន័យ) តែងតែអ៊ិនគ្រីបជាមួយស្រេចចិត្ត 2 - កត្តាការពារលេខសំងាត់</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>●វេទិកាថែមទៀតនិងលក្ខណៈពិសេសដែលនឹងមកដល់ឆាប់ៗនេះ! យើងទើបតែបានចាប់ផ្តើម🎉</value>
   </data>
 </root>

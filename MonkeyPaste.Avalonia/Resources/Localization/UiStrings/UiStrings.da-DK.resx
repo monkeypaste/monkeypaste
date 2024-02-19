@@ -2700,4 +2700,200 @@ Total gendannelse kan ikke garanteres og kan reducere ydeevnen eller endda gå n
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;På denne måde kan du få adgang til MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;uden et klik&lt;/span&gt; eller endda &lt;span color="red"&gt;slå et øje&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Annotation</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klon</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Dataobjekt</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Plugin</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Læser</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Ukendt fejl</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Forfatter</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Duplikat plugin guid '{0}' detekteret for disse plugins:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Fix ved at ændre pluginvejledning eller fjerne duplikater. Ellers ignoreres alle tilknyttede plugins.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Dupliceret plugin forudindstillet Guid '{0}' Detekteret for disse plugins og forudindstillinger:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} forudindstillet (r): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} forudindstillet (r): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Fix ved at tilvejebringe unikke forudindstillede guider eller fjerne duplikater. Ellers ignoreres alle tilknyttede plugins.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Redaktørens farve</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Er du sikker på, at du vil slette alle {0} element (r) permanent?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Vælg mappe</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Vælg Watch -mappe</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Plugin -fejl. Plugin '{0}' er '{1}' type, men ingen '{1}' format fundet</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Fejl udførelse af handling '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Værdi skal kun indeholde tal eller '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Værdi skal være fra {0} til {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Skal være en hex (6 eller 8 cifret) streng, der starter med '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Clipboard '{0}' skal være unik.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Eksisterer allerede for</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Clipboard Reader/Writer -formatnavne skal være unikke. Læser duplikerer:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Clipboard Reader/Writer -formatnavne skal være unikke. Forfatter duplikerer:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>CLIPBOARD -format -guider skal være unikke. Duplikatformater og guider:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Plugin -fejl: Alle plugin '{0}' felter skal være unikke for handler '{1}'. {2} paramname '{3}' har flere poster</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Plugin -fejl, ingen ufravigelig manifest fundet</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' kan ikke have forudindstillinger uden mindst 1 parameter leveret</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Umærket param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Plugin -parameter -id'er ({0}) skal defineres. Plugin '{1}' har følgende parametre med manglende paramid: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Duplikat paramid '{0}' detekteret (alle skal være unikke). {1} etiketter: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Forudindstillet GUID er påkrævet. Det blev ikke fundet eller forkert format for '{0}' i plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Kan ikke finde parameter med paramid '{0}' henvist til af forudindstillet '{1}' til plugin '{2}'. Parameter kan have ændret eller blevet fjernet, opdatere forudindstillet paramvalue eller fjerne den.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Kan ikke indstille delte værdiparametre i forudindstillinger. Paramid '{0}' i forudindstillet '{1}' til plugin '{2}' skal fjernes, eller paramvalue kan specificeres i afsnittet om parameterdefinition.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Forudindstillinger skal have unikke guider. Dupliceret forudindstillet Guid '{0}' blev detekteret i plugin '{1}' for forudindstillinger: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Plugin -parsingfejl, ved sti '{0}' null, sandsynligvis fejl parsing JSON. Ignorerer plugin</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Plugin -titelfejl, ved sti '{0}' skal have 'titel' egenskab med ikke mere end {1} tegn. Ignorerer plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Plugin Guid-fejl, på sti '{0}' med titel '{1}' skal have en 'GUID' egenskab, RFC 4122-kompatibel 128-bit Guid (UUID) med kun bogstaver, tal og bindestreger. Ignorerer plugin.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Plugin Beskrivelse Fejl ved sti '{0}' Beskrivelse må ikke være mere end {1} tegn. Ignorerer plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Plugin -tags -fejl ved sti '{0}' tags må ikke være mere end {1} tegn. Ignorerer plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Vedhæft debugger til '{0}' eller annullering for at fortsætte.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Venter på debugger</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Fejl ved download af plugin. Prøv igen senere.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plugin opdateret</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Er du sikker på, at du vil gendanne alle {0} vare (r)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Søgekriterier 'Untitled'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Søgekriterier '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' indeholder delte værdier. Vil du også nulstille dem?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

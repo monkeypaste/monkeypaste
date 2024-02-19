@@ -66,7 +66,7 @@
   </data>
   <data name="AccountFreeDescription" xml:space="preserve">
     <value>مەزمۇن ۋە ئەخلەت
-{0 {{1 {1 {1}
+{0} {1}
 قىستۇرما ئايرىم-ئايرىم.</value>
   </data>
   <data name="AccountStandardDescription" xml:space="preserve">
@@ -519,7 +519,7 @@
     <value>تېزلەتمىلەر</value>
   </data>
   <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
-    <value>سىزمۇ «{1} دىن« {1} »دىن چىقىرىۋېتىشنى خالامسىز?</value>
+    <value>سىزمۇ «{0} دىن« {1} »دىن چىقىرىۋېتىشنى خالامسىز?</value>
     <comment>Number, Application Name</comment>
   </data>
   <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
@@ -708,7 +708,7 @@
     <value>ھەرگىز بولمايدۇ</value>
   </data>
   <data name="AccountFreeTrialLabel" xml:space="preserve">
-    <value>ھەقسىز {0 سائەت سىنىقى</value>
+    <value>ھەقسىز {0} سائەت سىنىقى</value>
   </data>
   <data name="AccountPurchaseErrorCaption" xml:space="preserve">
     <value>بىر مەسىلە كۆرۈلدى
@@ -741,11 +741,11 @@
     <value>ھېسابات ئۆزگەرتىلدى</value>
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
-    <value>مۇشتەرىلىكىڭىز ھازىر {0 {1 {2 {3} مەزمۇن ۋە {3}.
+    <value>مۇشتەرىلىكىڭىز ھازىر {0} {1} {2} {3} مەزمۇن ۋە {3}3}.
 ئەمما ئەنسىرىمەڭ, چۈشۈرۈلگەندىن كېيىن ھېچقانداق سانلىق مەلۇمات يوقاپ كەتمەيدۇ. پەقەت يېڭى قىسقۇچلار باھالىنىدۇ.</value>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
-    <value>مۇبارەك بولسۇن! مۇشتەرىلىكىڭىز ھازىر {0 {1 {2 {3} مەزمۇن ۋە {3}.</value>
+    <value>مۇبارەك بولسۇن! مۇشتەرىلىكىڭىز ھازىر {0} / {1} بولۇپ ، {2} مەزمۇن ۋە {3} ئەخلەت ساندۇقى بار.</value>
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapBlockHint1" xml:space="preserve">
@@ -901,8 +901,8 @@
     <value>پارول</value>
   </data>
   <data name="AccountExistingLoginText" xml:space="preserve">
-    <value>مۇشتەرىلىكىڭىز
-ھازىر {0 {1 {1}.</value>
+    <value>سىزنىڭ مۇشتەرى بولۇشىڭىز 
+ھازىر {0}/{1} بېكىتىلدى.</value>
   </data>
   <data name="AccountExistingLoginTitle" xml:space="preserve">
     <value>ھېسابات تېپىلدى</value>
@@ -1122,7 +1122,7 @@
     <comment>Error Details</comment>
   </data>
   <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
-    <value>قىستۇرما {0 }لمىنىڭ چىرىغى ياكى نامۇۋاپىق مۇندەرىجە قۇرۇلمىسى ئورنىتىشتا خاتالىق. نامايىش قىلىش «{1} 'ئەمما تېپىلمىدى.</value>
+    <value>قىستۇرما '{0}' قاچىلاشتا خاتالىق ياكى مۇندەرىجە قۇرۇلمىسى خاتا. Manifest '{1}' دە مەۋجۇت بولۇشى كېرەك ، ئەمما تېپىلمىدى.</value>
     <comment>Plugin Name, File Path</comment>
   </data>
   <data name="PluginErrManifestText" xml:space="preserve">
@@ -2269,7 +2269,7 @@
     <comment>ActionName</comment>
   </data>
   <data name="ActionAnalyzeValidation3" xml:space="preserve">
-    <value>ئاتا-ئانىلار '{0}' سۈزگۈچ پەقەت «{1} 'ۋە تەھلىل قىلغۇچىنىڭ مەزمۇنى»</value>
+    <value>ئاتا-ئانىلار '{0}' سۈزگۈچ پەقەت '{1}' تىپىدىكى مەزمۇن ۋە ئانالىزچى '{2}' ئۈچۈن ھەرگىز ئىجرا قىلمايدۇ ، چۈنكى ئۇ '{3}' كىرگۈزۈشنى قوللىمايدۇ.</value>
     <comment>Action Label, Analyzer Preset Name, Content Type</comment>
   </data>
   <data name="ActionClassifyValidation1" xml:space="preserve">
@@ -2699,5 +2699,201 @@ tempo@Monkepaste.com</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;بۇ ئارقىلىق مايمۇن پاستىسىنى زىيارەت قىلغىلى بولىدۇ&lt;br&gt;بىر &lt;span color="red"&gt;چىكىپمۇ قويماي&lt;/span&gt; ھەتتا &lt;span color="red"&gt;كۆزنى قاتۇرماي&lt;/span&gt; #x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>ئىزاھات</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Clone</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>سانلىق مەلۇمات ئوبيېكتى</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>قىستۇرما</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Reader</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>نامەلۇم خاتالىق</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>يازغۇچى</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>تەكرار قىستۇرما گىتنگىۋىۋى {0} 'بۇ قىستۇرمىلارنى بايقىدى:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>قىستۇرما گىدۋىنى ئۆزگەرتىش ياكى كۆپەيتىش ئارقىلىق ئوڭشاڭ. بولمىسا پۈتكۈل خەلقئارالىق قىستۇرمىلارغا پەرۋا قىلىنمايدۇ.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>بۇ قىستۇرمىلار ۋە ئالدىن بەلگىلەش ئۈچۈن كۆپەيتىلگەن قىستۇرما ئالدىن بەلگىلەش قوللانمىسى '{0}':</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>قىستۇرما: {0} {1} ئالدىنئالا ()): # {2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>قىستۇرما: {0} {1} ئالدىنئالا ()): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>ئۆزى ئۆزگىچە ئالدىن مەلۇمات بېرىش ياكى تەكرارلاش ئارقىلىق تۈزىتىش. بولمىسا پۈتكۈل خەلقئارالىق قىستۇرمىلارغا پەرۋا قىلىنمايدۇ.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>تەھرىرلەۋاتىدۇ</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>بارلىق {0} تۈر (لەر) نى مەڭگۈلۈك ئۆچۈرمەكچىمۇ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>ھۆججەت قىسقۇچنى تاللاڭ</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>ھۆججەت قىسقۇچنى تاللاڭ</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>قىستۇرما خاتالىق. قىستۇرما '{0}'} '{1 {1}' تىپى, ئەمما ياق '{1}' فورماتى تېپىلمىدى</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>ھەرىكەتنى ئىجرا قىلىش '{0}': {1} {2} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>قىممىتى چوقۇم پەقەت سان ياكى '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>قىممىتى چوقۇم {0} دىن {1} گىچە بولۇشى كېرەك</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>چوقۇم «#» (# »دىن باشلىنىدىغان ئالتە ياكى 6 خانىلىق) تىزمىسى بولۇشى كېرەك.</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>چاپلاش تاختىسى '{0}' ئۆزگىچە بولۇشى كېرەك.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>ئاللىبۇرۇن مەۋجۇت</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>فورماتى</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>تىپى</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>چاپلاش تاختىسى ئوقۇرمەن / يازغۇچى فورماتى چوقۇم ئۆزگىچە بولۇشى كېرەك. Reader كۆپەيتىلگەن نۇسخىسى:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>چاپلاش تاختىسى ئوقۇرمەن / يازغۇچى فورماتى چوقۇم ئۆزگىچە بولۇشى كېرەك. يازغۇچى كۆپەيتىلگەن نۇسخىسى:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>چاپلاش تاختىسى فورماتىنى ئۆزگىچە بولۇشى كېرەك. تەكرار فورمات ۋە يېتەكچى:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>قىستۇرما خاتالىقى: بارلىق قىستۇرمىلار '{0}' بۆلەكلىرى چوقۇم بىر تەرەپ قىلغۇچ '{1}' غا خاس بولۇشى كېرەك. {2} paramName '{3}' نىڭ كۆپ تۈرلىرى بار.</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>قىستۇرما خاتالىقى, ئۆزگەردى</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>قىستۇرما '{0}' تەمىنلەنمەيدۇ</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>ناتونۇش پارام # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>قىستۇرما پارامېتىر id ({0}) چوقۇم ئېنىقلىنىشى كېرەك. قىستۇرما '{1}' پارامېتىرى يوقاپ كەتكەن تۆۋەندىكى پارامېتىرلار بار: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>كۆپەيتىلگەن پارامات «{0} 'بايقالدى (ھەممىسى ئۆزگىچە بولۇشى كېرەك). {1} {1 {1}} {2} {1}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Prepetse guid تەلەپ قىلىنىدۇ. قىستۇرمىسى {1} دىكى '{0}' نىڭ تېپىلمىغان ياكى خاتا فورماتى تېپىلمىدى.</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Plugin '{2}' ئۈچۈن Preset '{1}' پايدىلانغان paramId '{0}' پارامېتىرنى تاپالمىدى. پارامېتىر ئۆزگەرتىلگەن ياكى چىقىرىۋېتىلگەن بولۇشى مۇمكىن ، ئالدىن بېكىتىلگەن پارامېتىرنى يېڭىلاڭ ياكى ئۆچۈرۈۋېتىڭ.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>ئالدىن بەلگىلەشتە ئورتاق قىممەت پارامېتىرلىرىنى تەڭشىگىلى بولمايدۇ. قىستۇرما '{2}' نىڭ ئالدىن بېكىتىلگەن '{1}' دىكى ParamId '{0}' نى چىقىرىۋېتىش كېرەك ياكى پارامېتىر ئېنىقلىما بۆلىكىدە paramValue نى بەلگىلىگىلى بولىدۇ.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ئالدىن بەلگىلەشتە چوقۇم ئۆزگىچە يېتەكچى بولۇشى كېرەك. ئالدىن بەلگىلەش قوللانمىسى '{0}' قىستۇرما '{1}' قىستۇرمىسىدا بايقالدى: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>قىستۇرما تەھدىد بۇزۇشتا خاتالىق, «{0} '] NSON نى ساقلاپ قېلىشتا خاتالىق كۆرۈلدى. قىستۇرما</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>قىستۇرما ماۋزۇ خاتالىقى ، '{0}' يولىدا چوقۇم {1} ھەرپتىن ئېشىپ كەتمەسلىكى كېرەك. قىستۇرمىغا پەرۋا قىلماسلىق</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>قىستۇرما يېتەكچى خاتالىقى ، «{1}» ماۋزۇسىدىكى «{0}» يولىدا چوقۇم «يېتەكچى» خاسلىقى بولۇشى كېرەك ، RFC 4122 ماس كېلىدىغان 128 bit لىق GUID (UUID) پەقەت ھەرپ ، سان ۋە ھەرپلەر بار. قىستۇرمىغا پەرۋا قىلماسلىق.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>قىستۇرما چۈشەندۈرۈشى خاتالىق, «{0} '}'s}'s}'s {1} ھەرپتىن ئېشىپ كەتمەسلىكى كېرەك. قىستۇرما</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>قىستۇرما خەتكۈچلىرى خاتالاش, «{0}'s {0 '}'s چوقۇم {1} ھەرپتىن ئېشىپ كەتمەسلىكى كېرەك. قىستۇرما</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>«{0}» ياكى داۋاملاشتۇرۇش ئۈچۈن ھەل قىلىڭ.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>ھەل قىلغۇچنى ساقلاش</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>قىستۇرما چۈشۈرۈشتە خاتالىق. كېيىن قايتا سىناڭ.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>قىستۇرما يېڭىلاندى</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>بارلىق {0} تۈرنى ئەسلىگە كەلتۈرمەكچىمۇ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>ئىزدەش ئۆلچىمى '.</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>ئىزدەش ئۆلچىمى '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' بار. بۇلارنىمۇ ئەسلىگە كەلتۈرمەكچىمۇ?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

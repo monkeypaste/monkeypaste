@@ -2700,4 +2700,200 @@ Popolne obnove ni mogoče zagotoviti in lahko zmanjša zmogljivost ali celo zru�
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Tako lahko dostopate do MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;brez klika&lt;/span&gt; ali celo &lt;span color="red"&gt;udarca z očesom&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Opombe</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klon</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Podatkovni objekt</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Vključiti</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Bralec</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Neznana napaka</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Pisatelj</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Podvojeni vtičnik GUID '{0}' zaznan za te vtičnike:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Popravite s spreminjanjem GUID -a vtičnika ali odstranjevanjem dvojnikov. V nasprotnem primeru bodo vsi povezani vtičniki prezrti.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Podvojeni prednastavljeni GUID '{0}', zaznan za te vtičnike in prednastavitve:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Vtičnik: {0} {1} prednastavitev: #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Vtičnik: {0} {1} prednastavitev: {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Popravite tako, da zagotovite edinstvene prednastavljene GUID ali odstranjevanje dvojnikov. V nasprotnem primeru bodo vsi povezani vtičniki prezrti.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Barva urejevalnika</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Ali ste prepričani, da želite trajno izbrisati vse elemente {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Izberite mapo</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Izberite mapo Watch</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Napaka vtičnika. Vtičnik '{0}' je tip '{1}', vendar ne najdena oblika '{1}'</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Napaka pri izvajanju dejanja '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Vrednost mora vsebovati samo številke ali '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Vrednost mora biti od {0} do {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Mora biti šestnajsti (6 ali 8 -mestni) niz, začenši z '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Odložišče '{0}' mora biti edinstveno.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Že obstaja za</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Imena bralnikov/pisatelja za odložišče morajo biti edinstvena. Bralnik podvoji:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Imena bralnikov/pisatelja za odložišče morajo biti edinstvena. Podvoji pisatelja:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Guidi za oblikovanje odložij morajo biti edinstveni. Podvojeni formati in Guidi:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Napaka vtičnika: vsa polja vtičnika '{0}' morajo biti edinstvena za upravljavec '{1}'. {2} paramname '{3}' ima več vnosov</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Napaka vtičnika, invariant manifesta najdemo</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Vtičnik '{0}' ne more imeti prednastavitev brez vsaj 1 parametra</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Neoznačen param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ID -ji parametra vtičnika ({0}) morajo biti definirani. Vtičnik '{1}' ima naslednje parametre z manjkajočimi paramidi: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Podvojena paramida '{0}' zaznana (vsi morajo biti edinstveni). {1} nalepke: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Potreben je prednastavljeni GUID. Ni bilo mogoče najti ali napačne oblike za '{0}' v vtičniku {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Parametra s paramidom '{0}' ni mogoče najti za prednastavitev '{1}' za vtičnik '{2}'. Parameter se je lahko spremenil ali odstranil, posodobil prednastavljeno ParamValue ali ga odstranite.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>V prednastavitvah ni mogoče nastaviti parametrov skupne vrednosti. Paramid '{0}' v prednastavitvi '{1}' za vtičnik '{2}' je treba odstraniti ali pa je mogoče določiti v razdelku Definicija parametra.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Prednastavitve morajo imeti edinstvene GUID. Podvojena prednastavljena GUID '{0}' je bila zaznana v Plugin '{1}' za prednastavitve: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Napaka v razčlenjevanju vtičnika, na poti '{0}' null, verjetno napaka razčlenitev json. Ignoriranje vtičnika</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Napaka naslova vtičnika, na poti '{0}' mora imeti lastnost 'naslov' z znaki več kot {1}. Ignoriranje vtičnika</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Napaka vtičnika, na poti '{0}' z naslovom '{1}' mora imeti lastnost 'GUID', RFC 4122, ki je skladen z 128-bitnim GUID (UUID), samo s črkami, številkami in vezaji. Ignoriranje vtičnika.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Napaka vtičnika opis, na poti '{0}' opis ne sme biti več kot {1} znaki. Ignoriranje vtičnika</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Napaka oznak vtičnikov na poti '{0}' oznake ne smejo biti nič več kot {1} znaki. Ignoriranje vtičnika</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Priložite odpravljanje napak na '{0}' ali prekličite, da nadaljujete.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Čakanje na odpravljanje napak</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Napaka pri prenašanju vtičnika. Prosim poskusite kasneje.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Vtičnik posodobljen</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Ali ste prepričani, da želite obnoviti vse elemente {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Merila iskanja "brez naslova"</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Merila za iskanje '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' vsebuje skupne vrednosti. Bi jih radi ponastavili tudi?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

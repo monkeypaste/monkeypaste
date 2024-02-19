@@ -70,28 +70,36 @@
     <value>Themelore - vjetore</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopjoj</value>
@@ -127,19 +135,24 @@
     <value>Ndërtuar - në Shfletuesin e Plugin me një komunitet gjithnjë në rritje - Biblioteka e Shtojcave të Shtojcave</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste është një menaxher i klipit, automatizimi dhe mjeti i produktivitetit si askush tjetër. Përmirësimi i clipboard tuaj në një pjesë të pasuruar dhe të organizuar të rrjedhës suaj të punës,
@@ -158,40 +171,41 @@ Unë gjithashtu dua që ju të ndjeheni rehat duke e përdorur atë. Kështu që
 Clipboard juaj është ndjekur ose ruajtur ndonjëherë diku përtej makinës suaj. Periudhë</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>Inter Ndërfaqja e thjeshtë dhe miqësore me të dy paraqitjet horizontale/vertikale, pamjen e listës/rrjetit dhe mbështetjen e monitorimit të shumëfishtë</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>Mode Modaliteti i Shtojcës: Kopjimi bëhet 'Shto në' në vend të 'Replace' në Clipboard. Si tekst ashtu edhe skedarë, plotësisht të personalizueshëm</value>
+    <value>Modes Mode të personalizuara të miut: Djathtas - Klikoni Paste dhe Majtas - Klikoni Auto - Kopjoni</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>Ndjekja e sofistikuar e klipit, burimet dhe përdorimi me mbështetje të zgjeruar për shfletuesit e bazuar në Firefox dhe Chromium (Chrome, Edge, Brave)</value>
+    <value>Mode Modaliteti i Shtojcës: Kopjimi bëhet 'Shto në' në vend të 'Replace' në Clipboard. Si tekst ashtu edhe skedarë, plotësisht të personalizueshëm</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● plotësisht - Redaktori i Klipit i paraqitur me tekst të pasur (tabela, lista, lidhje, etj.) Me Gjeni/Zëvendësoni dhe Thekson</value>
+    <value>Ndjekja e sofistikuar e klipit, burimet dhe përdorimi me mbështetje të zgjeruar për shfletuesit e bazuar në Firefox dhe Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Ruani imazhet tuaja në bazën e të dhënave të sigurta, të gatshme për t'u përdorur si skedarë në çdo kohë në - Kërkoni vetëm zvarritje - dhe - Drop!</value>
+    <value>● plotësisht - Redaktori i Klipit i paraqitur me tekst të pasur (tabela, lista, lidhje, etj.) Me Gjeni/Zëvendësoni dhe Thekson</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>Tem Templating Tekst i fuqishëm për ngjitjen e shpejtë, dinamike nga koleksioni juaj i copëzave</value>
+    <value>● Ruani imazhet tuaja në bazën e të dhënave të sigurta, të gatshme për t'u përdorur si skedarë në çdo kohë në - Kërkoni vetëm zvarritje - dhe - Drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Dizajneri i Trigger &amp; Action për automatizimin me porosi dhe zinxhirin e veprimit</value>
+    <value>Tem Templating Tekst i fuqishëm për ngjitjen e shpejtë, dinamike nga koleksioni juaj i copëzave</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● E thjeshtë për t’u përdorur dhe zgjatur sistemin e shtojcave për të dyja analizat e klipeve ose lexoni/shkruani ndonjë format në clipboard tuaj</value>
+    <value>● Dizajneri i Trigger &amp; Action për automatizimin me porosi dhe zinxhirin e veprimit</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Ndërtuar - në Shfletuesin e Shtojcave me një Komunitet Gjithmonë - në rritje - Biblioteka e Shtojcave të Shtojcave</value>
+    <value>● E thjeshtë për t’u përdorur dhe zgjatur sistemin e shtojcave për të dyja analizat e klipeve ose lexoni/shkruani ndonjë format në clipboard tuaj</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatizoni gjithçka me paracaktimet e shtojcave, nxirrni dhe përdorni ndonjë nga udhëzimet ose komandat tuaja të AI me lehtësi</value>
+    <value>● Ndërtuar - në Shfletuesin e Shtojcave me një Komunitet Gjithmonë - në rritje - Biblioteka e Shtojcave të Shtojcave</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Më shumë platforma dhe karakteristika që vijnë së shpejti! Ne thjesht po fillojmë</value>
+    <value>● Automatizoni gjithçka me paracaktimet e shtojcave, nxirrni dhe përdorni ndonjë nga udhëzimet ose komandat tuaja të AI me lehtësi</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Të dy temat e lehta dhe të errëta janë plotësisht dinamike, përdorni çdo ngjyrë që dëshironi</value>
@@ -208,29 +222,29 @@ Clipboard juaj është ndjekur ose ruajtur ndonjëherë diku përtej makinës su
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organizoni klipet tuaja në pemët e etiketave dhe krijoni filtra të ringjallshëm</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>Storage Ruajtja e të dhënave lokale e sigurt, e sigurt dhe private lokale (pa mbledhjen e të dhënave) gjithmonë e koduar me mbrojtje me fjalëkalim 2 - faktor dhe bllokoni lehtësisht aplikacionet ose faqet e internetit nga gjurmuesi juaj</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Zvarritje e gjerë - dhe - Mbështetje për të rënë, shkurtore globale me porosi, kurs dhe miun - navigim falas</value>
+    <value>● Bllokoni lehtësisht aplikacione, faqe në internet dhe madje edhe faqe specifike në internet nga ndjekja e clipboard</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>Modes Mode të personalizuara të miut: Djathtas - Klikoni Paste dhe Majtas - Klikoni Auto - Kopjoni</value>
+    <value>● Zvarritje e gjerë - dhe - Mbështetje për të rënë, shkurtore globale me porosi, kurs dhe miun - navigim falas</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard është një xhungël. Monkeypaste është mbreti! Lëvizni nga aplikacioni në aplikacion, duke kopjuar këtë dhe ngjitur atë si kurrë më parë me Monkeypaste !! Një markë - Clipboard i ri, prerje dhe mjet automatizimi analitik !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Shembull i Monkeypaste në veprim!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Instaluar në këtë gjuhë. Anglishtja është vetëm për këto shembuj</value>
@@ -250,5 +264,11 @@ Clipboard juaj është ndjekur ose ruajtur ndonjëherë diku përtej makinës su
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Me këtë pajtim do të merrni:
 ● Kapaciteti i pakufizuar</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>Storage Ruajtja lokale e sigurt, e sigurt dhe private lokale e të dhënave (pa mbledhjen e të dhënave) gjithmonë e koduar me mbrojtje me fjalëkalim 2 - Faktor - Faktor</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Më shumë platforma dhe karakteristika që vijnë së shpejti! Ne thjesht po fillojmë</value>
   </data>
 </root>

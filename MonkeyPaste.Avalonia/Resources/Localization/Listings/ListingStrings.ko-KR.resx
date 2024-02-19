@@ -70,28 +70,36 @@
     <value>기본 - 매년</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>복사</value>
@@ -127,19 +135,24 @@
     <value>구축 - 영원히 성장하는 커뮤니티가있는 플러그인 브라우저에서 - 구동 플러그인 라이브러리</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste는 클립 보드 관리자, 자동화 및 생산성 도구입니다. 클립 보드를 워크 플로의 풍부하고 정리 된 부분으로 향상시킵니다.
@@ -158,40 +171,41 @@
 클립 보드는 자신의 컴퓨터 너머의 어느 곳에서나 추적되거나 저장됩니다. 기간.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● 수평/수직 레이아웃, 목록/그리드보기 및 다중 모니터 지원과 함께 간단하고 친숙한 인터페이스</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● 추가 모드 : 복사는 클립 보드에서 '교체'대신 '추가'가됩니다. 텍스트와 파일, 완전히 사용자 정의 할 수 있습니다</value>
+    <value>● 사용자 정의 마우스 모드 : 오른쪽 오른쪽 - 붙여 넣기 및 왼쪽을 클릭하고 자동 복사를 클릭합니다.</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Firefox 및 Chromium- 기반 브라우저 (Chrome, Edge, Brave)에 대한 지원이 향상된 정교한 클립 추적, 소스 및 사용법</value>
+    <value>● 추가 모드 : 복사는 클립 보드에서 '교체'대신 '추가'가됩니다. 텍스트와 파일, 완전히 사용자 정의 할 수 있습니다</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● 완전 - Rich Text (테이블, 목록, 링크 등)가있는 기능이있는 클립 편집기 찾기/교체 및 강조 표시</value>
+    <value>● Firefox 및 Chromium- 기반 브라우저 (Chrome, Edge, Brave)에 대한 지원이 향상된 정교한 클립 추적, 소스 및 사용법</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● 이미지를 보안 데이터베이스에 저장하고 언제든지 파일로 사용할 준비가되어 있습니다.</value>
+    <value>● 완전 - Rich Text (테이블, 목록, 링크 등)가있는 기능이있는 클립 편집기 찾기/교체 및 강조 표시</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● 스 니펫 컬렉션에서 빠르고 역동적 인 붙여 넣기를위한 강력한 텍스트 템플릿</value>
+    <value>● 이미지를 보안 데이터베이스에 저장하고 언제든지 파일로 사용할 준비가되어 있습니다.</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● 맞춤형 자동화 및 액션 체인을위한 트리거 및 액션 디자이너</value>
+    <value>● 스 니펫 컬렉션에서 빠르고 역동적 인 붙여 넣기를위한 강력한 텍스트 템플릿</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● 클립 분석 또는 클립 보드에 형식을 읽거나 쓰는 데 사용하기 쉬운 플러그인 시스템.</value>
+    <value>● 맞춤형 자동화 및 액션 체인을위한 트리거 및 액션 디자이너</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● 구축 - 계속 성장하는 커뮤니티가있는 플러그인 브라우저에서 - 구동 플러그인 라이브러리</value>
+    <value>● 클립 분석 또는 클립 보드에 형식을 읽거나 쓰는 데 사용하기 쉬운 플러그인 시스템.</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● 플러그인 사전 설정으로 모든 내용을 자동화하고, AI 프롬프트 또는 명령을 쉽게 사용하여 보관하고 사용하십시오.</value>
+    <value>● 구축 - 계속 성장하는 커뮤니티가있는 플러그인 브라우저에서 - 구동 플러그인 라이브러리</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● 더 많은 플랫폼과 기능이 곧 제공됩니다! 우리는 방금 시작하고 있습니다</value>
+    <value>● 플러그인 사전 설정으로 모든 내용을 자동화하고, AI 프롬프트 또는 명령을 쉽게 사용하여 보관하고 사용하십시오.</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Light &amp; Dark 테마는 모두 완전히 역동적이며 원하는 색상을 사용하십시오.</value>
@@ -208,29 +222,29 @@
   <data name="StoreFeature6" xml:space="preserve">
     <value>● 태그 트리에서 클립을 구성하고 재현 가능한 필터를 만듭니다.</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● 안전하고 안전하며 개인 로컬 데이터 스토리지 (데이터 수집 없음) 항상 옵션으로 암호화되어 2 팩터 암호 보호 및 추적기에서 앱 또는 웹 사이트를 쉽게 차단합니다.</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● 광범위한 드래그 및 - 드롭 지원, 맞춤형 글로벌 단축키, 라우팅 및 마우스 - 무료 내비게이션</value>
+    <value>● 클립 보드 추적에서 특정 앱, 웹 사이트 및 특정 웹 페이지를 쉽게 차단합니다.</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● 사용자 정의 마우스 모드 : 오른쪽 오른쪽 - 붙여 넣기 및 왼쪽을 클릭하고 자동 복사를 클릭합니다.</value>
+    <value>● 광범위한 드래그 및 - 드롭 지원, 맞춤형 글로벌 단축키, 라우팅 및 마우스 - 무료 내비게이션</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>클립 보드는 정글입니다. Monkeypaste는 왕입니다! 앱에서 앱으로 스윙하고, 이것을 복사하고 monkeypaste와 함께 전에는 그와 같이 붙여 넣기 !! 브랜드 - 새롭고 최첨단 클립 보드 및 분석 자동화 도구 !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>행동중인 원숭이의 샘플!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>이 언어로 설치되었습니다. 영어는이 예제에만 해당됩니다</value>
@@ -250,5 +264,11 @@
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>이 구독을 사용하면 다음을 받게됩니다.
 ● 무제한 용량</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● 안전하고 안전하며 개인 로컬 데이터 스토리지 (데이터 수집 없음) 항상 옵션으로 암호화됩니다.</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● 더 많은 플랫폼과 기능이 곧 제공됩니다! 우리는 방금 시작하고 있습니다</value>
   </data>
 </root>

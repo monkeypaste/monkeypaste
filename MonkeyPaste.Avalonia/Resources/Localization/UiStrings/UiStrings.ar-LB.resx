@@ -2700,4 +2700,200 @@ feedback@monkeypaste.com</value>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;بهذه الطريقة ، يمكن الوصول إلى MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;بدون نقرة&lt;/span&gt; أو حتى &lt;span color="red"&gt;ضرب العين&lt;/span&gt; #x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>حاشية. ملاحظة</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>استنساخ</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>كائن البيانات</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>توصيل في</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>قارئ</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>خطأ غير معروف</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>كاتب</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>المكونات المكوّنة المكررة "{0}" التي تم اكتشافها لهذه المكونات الإضافية:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>إصلاح عن طريق تغيير Plugin GUID أو إزالة التكرارات. وإلا سيتم تجاهل جميع الإضافات المرتبطة.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>المكوّن الإضافي المكرر المسبق.</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>البرنامج المساعد: {0} {1} preset (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>البرنامج المساعد: {0} {1} preset (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>إصلاح من خلال توفير GUIDS فريدة من نوعها أو إزالة التكرارات. وإلا سيتم تجاهل جميع الإضافات المرتبطة.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>لون المحرر</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد حذف جميع العناصر (0}؟</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>اختر مجلد</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>حدد مجلد مشاهدة</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>خطأ إضافي. البرنامج المساعد '{0}' هو نوع {1} 'ولكن لا يوجد' {1} 'تنسيق</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>خطأ في إجراء الإجراء '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>يجب أن تحتوي القيمة على أرقام فقط أو "{0} '</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>يجب أن تكون القيمة من {0} إلى {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>يجب أن تكون سلسلة سداسية (6 أو 8 أرقام) تبدأ بـ "#"</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>يجب أن تكون الحافظة '{0}' فريدة من نوعها.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>موجود بالفعل ل</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>شكل</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>يكتب</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>يجب أن تكون أسماء تنسيق القارئ/الكاتب فريدة من نوعها. القارئ يكرر:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>يجب أن تكون أسماء تنسيق القارئ/الكاتب فريدة من نوعها. الكاتب يكرر:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>يجب أن يكون تنسيق الحافظة فريدة من نوعها. التنسيقات المكررة و GUIDS:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>خطأ البرنامج المساعد: يجب أن تكون جميع الحقول المكوّن الإضافي '{0}' فريدة من نوعها للمعالج '{1}'. {2} paramname '{3}' لها إدخالات متعددة</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>خطأ إضافي ، لم يتم العثور على بيان ثابت</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>لا يمكن أن يكون المكوّن الإضافي '{0}' مسبقًا دون تقديم معلمة واحدة على الأقل</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param #{0} غير المسماة</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>يجب تحديد معرفات المعلمة البرنامج المساعد ({0}). المكون الإضافي '{1}' يحتوي على المعلمات التالية مع المفقودين المفقودين: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>المكررة المكررة '{0}' المكتشفة (يجب أن يكون كل شيء فريدًا). ​​{1} الملصقات: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>مطلوب GUID الإعداد المسبق. لم يتم العثور عليه أو تنسيق خاطئ لـ '{0}' في البرنامج المساعد {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>لا يمكن العثور على المعلمة مع Paramid '{0}' المشار إليها بواسطة الإعداد المسبق "{1} 'للمكون الإضافي' {2} '. قد تكون المعلمة قد تغيرت أو تمت إزالتها ، أو تحديث PRAMVALUE أو إزالته.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>لا يمكن تعيين معلمات القيمة المشتركة في الإعدادات المسبقة. يجب إزالة الباراميد '{0}' في الإعداد المسبق "{1} 'للمكون الإضافي {2}' أو يمكن تحديد paramValue في قسم تعريف المعلمة.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>يجب أن يكون لدى الإعدادات المسبقة Guids فريدة من نوعها. تم اكتشاف GUID PRESET DIDET المكررة في البرنامج المساعد "{1}" للإعداد المسبق: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>خطأ في تحليل البرنامج المساعد ، في Path '{0}' NULL ، من المحتمل أن يكون هناك خطأ في تحليل JSON. تجاهل البرنامج المساعد</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>يجب أن يكون خطأ العنوان المكون الإضافي ، على PATH '{0}' خاصية "title" مع ما لا يزيد عن {1}. تجاهل البرنامج المساعد</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>يجب أن يكون لخطأ GUID Plugin ، في المسار '{0}' مع العنوان '{1}' خاصية 'GUID' ، RFC 4122 متوافقة مع 128 بت (UUID) مع الحروف والأرقام والوصلات فقط. تجاهل البرنامج المساعد.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>يجب أن يكون الوصف الوصف في PATH '{0}' أكثر من أحرف {1}. تجاهل البرنامج المساعد</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>خطأ علامات البرنامج المساعد ، في المسار يجب أن لا تزيد علامات "المسار" {0} 'من أحرف {1}. تجاهل البرنامج المساعد</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>قم بإرفاق DEPUGGER بـ '{0}' أو إلغاء للمتابعة.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>في انتظار تصحيح الأخطاء</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>خطأ تنزيل البرنامج المساعد. الرجاء معاودة المحاولة في وقت لاحق.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>تم تحديث البرنامج المساعد</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد استعادة جميع العناصر (0}؟</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>معايير البحث "بلا عنوان"</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>معايير البحث '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>يحتوي '{0}' على قيم مشتركة. هل ترغب في إعادة ضبط هؤلاء أيضًا؟</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

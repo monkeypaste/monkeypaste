@@ -535,10 +535,10 @@
     <value>అప్లికేషన్ మార్గాన్ని ఎంచుకోండి</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
-    <value>మీరు {0 for కోసం అనుకూల సత్వరమార్గాలను తొలగించాలనుకుంటున్నారా?</value>
+    <value>మీరు {0} for కోసం అనుకూల సత్వరమార్గాలను తొలగించాలనుకుంటున్నారా?</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
-    <value>మీరు {0 for కోసం కస్టమ్ ఫార్మాట్లను తొలగించాలనుకుంటున్నారా?</value>
+    <value>మీరు {0} for కోసం కస్టమ్ ఫార్మాట్లను తొలగించాలనుకుంటున్నారా?</value>
   </data>
   <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
     <value>ఈ అనువర్తనం కోసం కేటాయించిన క్లిప్‌బోర్డ్ ఫార్మాట్‌లు లేవు. కట్/కాపీ ద్వారా లేదా లాగడానికి ప్రయత్నించడం ద్వారా దాని నుండి డేటా చదవబడదు - మరియు - మంకీపాస్ట్‌లోకి వదలండి</value>
@@ -800,11 +800,11 @@
     <comment>Application Name</comment>
   </data>
   <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
-    <value>మీ {0 for కోసం చెల్లింపు
-చందా గడువు {1}
+    <value>మీ {0} కోసం చెల్లింపు
+సభ్యత్వం గడువు {1}
 మరియు స్వీకరించబడలేదు.
 
-దయచేసి మీ నవీకరించండి
+దయచేసి మీ అప్‌డేట్ చేయండి
 చెల్లింపు సమాచారం.</value>
   </data>
   <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
@@ -901,8 +901,8 @@
     <value>పాస్వర్డ్</value>
   </data>
   <data name="AccountExistingLoginText" xml:space="preserve">
-    <value>మీ చందా
-ఇప్పుడు {0}/{1 to కు సెట్ చేయండి.</value>
+    <value>మీ సభ్యత్వం
+ఇప్పుడు {0}/{1}కి సెట్ చేయబడింది.</value>
   </data>
   <data name="AccountExistingLoginTitle" xml:space="preserve">
     <value>ఖాతా కనుగొనబడింది</value>
@@ -2430,7 +2430,7 @@
     <value>పెండింగ్‌లో ఉంది</value>
   </data>
   <data name="PluginUpdatedNtfText" xml:space="preserve">
-    <value>{0} విజయవంతంగా {1 to కు నవీకరించబడింది</value>
+    <value>{0} విజయవంతంగా {1}కి నవీకరించబడింది</value>
     <comment>Plugin Title, Plugin Version</comment>
   </data>
   <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
@@ -2699,5 +2699,201 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;ఈ విధంగా, మంకీపేస్ట్ ను యాక్సెస్ చేయవచ్చు&lt;br&gt;&lt;span color="red"&gt;ఒక్క క్లిక్ లేదా&lt;/span&gt; &lt;span color="red"&gt;కంటిని కూడా బ్యాటింగ్&lt;/span&gt; చేయకుండా &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>ఉల్లేఖనం</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>క్లోన్</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>డేటా ఆబ్జెక్ట్</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>అనుసంధానించు</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>రీడర్</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>గుర్తించలేని పొరపాటు</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>రచయిత</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>ఈ ప్లగిన్ల కోసం నకిలీ ప్లగ్ఇన్ గైడ్ '{0}' కనుగొనబడింది:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>ప్లగిన్ గైడ్ మార్చడం ద్వారా లేదా నకిలీలను తొలగించడం ద్వారా పరిష్కరించండి. లేకపోతే అన్ని అనుబంధ ప్లగిన్‌లు విస్మరించబడతాయి.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>ఈ ప్లగిన్లు మరియు ప్రీసెట్లు కోసం నకిలీ ప్లగిన్ ప్రీసెట్ గైడ్ '{0}' కనుగొనబడింది:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>ప్లగిన్: {0} {1} ప్రీసెట్ (లు): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>ప్లగిన్: {0} {1} ప్రీసెట్ (లు): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>ప్రత్యేకమైన ప్రీసెట్ GUID లను అందించడం ద్వారా లేదా నకిలీలను తొలగించడం ద్వారా పరిష్కరించండి. లేకపోతే అన్ని అనుబంధ ప్లగిన్‌లు విస్మరించబడతాయి.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>ఎడిటర్ రంగు</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>మీరు ఖచ్చితంగా అన్ని {0} అంశం (ల) ను శాశ్వతంగా తొలగించాలనుకుంటున్నారా?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>ఫోల్డర్ ఎంచుకోండి</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>వాచ్ ఫోల్డర్ ఎంచుకోండి</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>ప్లగిన్ లోపం. ప్లగ్ఇన్ '{0}' '{1}' రకం కానీ '{1}' ఫార్మాట్ కనుగొనబడలేదు</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>'{0}' చర్యను ప్రదర్శించడంలో లోపం: {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>విలువలో సంఖ్యలు లేదా '{0}' మాత్రమే ఉండాలి</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>విలువ తప్పనిసరిగా {0} నుండి {1} వరకు ఉండాలి</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' తో ప్రారంభమయ్యే హెక్స్ (6 లేదా 8 అంకె) స్ట్రింగ్ అయి ఉండాలి</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>క్లిప్‌బోర్డ్ '{0}' ప్రత్యేకంగా ఉండాలి.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>ఇప్పటికే ఉంది</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>ఫార్మాట్</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>రకం</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>క్లిప్‌బోర్డ్ రీడర్/రైటర్ ఫార్మాట్ పేర్లు ప్రత్యేకంగా ఉండాలి. రీడర్ నకిలీలు:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>క్లిప్‌బోర్డ్ రీడర్/రైటర్ ఫార్మాట్ పేర్లు ప్రత్యేకంగా ఉండాలి. రచయిత నకిలీలు:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>క్లిప్‌బోర్డ్ ఫార్మాట్ GUID లు ప్రత్యేకంగా ఉండాలి. నకిలీ ఫార్మాట్లు &amp; GUID లు:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>ప్లగిన్ లోపం: అన్ని ప్లగ్ఇన్ '{0}' ఫీల్డ్‌లు హ్యాండ్లర్ '{1}' కోసం ప్రత్యేకంగా ఉండాలి. {2} పారామ్ నేమ్ '{3}' బహుళ ఎంట్రీలను కలిగి ఉంది</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>ప్లగిన్ లోపం, మార్పులేని మానిఫెస్ట్ కనుగొనబడలేదు</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>ప్లగ్ఇన్ '{0}' కనీసం 1 పరామితి లేకుండా ప్రీసెట్లు ఉండకూడదు</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>లేబుల్ చేయని పారామ్ #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ప్లగిన్ పారామితి ID లు ({0}) తప్పనిసరిగా నిర్వచించబడాలి. ప్లగ్ఇన్ '{1}' కింది పారామితులను కలిగి ఉంది పారామిడ్లు: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>నకిలీ పారామిడ్ '{0}' కనుగొనబడింది (అన్నీ ప్రత్యేకంగా ఉండాలి). {1} లేబుల్స్: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>ప్రీసెట్ గైడ్ అవసరం. ప్లగిన్ {1}లో '{0}' కోసం ఇది కనుగొనబడలేదు లేదా తప్పు ఫార్మాట్</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>ప్లగిన్ '{2}' కోసం ప్రీసెట్ '{1}' చేత సూచించబడిన పారామిడ్ '{0}' తో పరామితిని కనుగొనలేకపోయాము. పరామితి మారి ఉండవచ్చు లేదా తొలగించబడి ఉండవచ్చు, ప్రీసెట్ పారామాల్యూను నవీకరించండి లేదా తీసివేయండి.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>భాగస్వామ్య విలువ పారామితులను ప్రీసెట్స్‌లో సెట్ చేయలేరు. ప్లగ్ఇట్ '{0}' ప్లగ్ఇన్ '{1}' ప్లగిన్ కోసం {1} '' {2} 'తొలగించాల్సిన అవసరం ఉంది లేదా పారామాల్యూ పారామితి నిర్వచనం విభాగంలో పేర్కొనవచ్చు.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ప్రీసెట్లు తప్పనిసరిగా ప్రత్యేకమైన మార్గదర్శకాలను కలిగి ఉండాలి. ప్రీసెట్లు కోసం నకిలీ ప్రీసెట్ గైడ్ '{0}' ప్లగిన్ '{1}' లో కనుగొనబడింది: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>ప్లగ్ఇన్ పార్సింగ్ లోపం, మార్గం వద్ద '{0}' శూన్యమైనది, JSON ను అన్వయించడం లోపం. ప్లగిన్‌ను విస్మరిస్తున్నారు</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>ప్లగ్ఇన్ శీర్షిక లోపం, '{0}' మార్గం వద్ద {1} అక్షరాల కంటే ఎక్కువ 'టైటిల్' ఆస్తి ఉండాలి. ప్లగిన్‌ను విస్మరిస్తున్నారు</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>ప్లగ్ఇన్ గైడ్ లోపం, '{0}' అనే శీర్షికతో '{1}' తో తప్పనిసరిగా 'GUID' ఆస్తి, RFC 4122 కంప్లైంట్ 128-బిట్ గైడ్ (UUID) అక్షరాలు, సంఖ్యలు మరియు హైఫన్‌లతో మాత్రమే ఉండాలి. ప్లగిన్‌ను విస్మరిస్తున్నారు.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>ప్లగిన్ వివరణ లోపం, మార్గం వద్ద '{0}' వివరణ {1} అక్షరాల కంటే ఎక్కువ ఉండకూడదు. ప్లగిన్‌ను విస్మరిస్తున్నారు</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>ప్లగ్ఇన్ ట్యాగ్స్ లోపం, '{0}' ట్యాగ్‌లు {1} అక్షరాల కంటే ఎక్కువ ఉండకూడదు. ప్లగిన్‌ను విస్మరిస్తున్నారు</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>డీబగ్గర్ను '{0}' కు అటాచ్ చేయండి లేదా కొనసాగించడానికి రద్దు చేయండి.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>డీబగ్గర్ కోసం వేచి ఉంది</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>ప్లగ్ఇన్ను డౌన్‌లోడ్ చేయడంలో లోపం. దయచేసి తర్వాత మళ్లీ ప్రయత్నించండి.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>ప్లగిన్ నవీకరించబడింది</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>మీరు ఖచ్చితంగా అన్ని {0} అంశం (ల) ను పునరుద్ధరించాలనుకుంటున్నారా?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>శోధన ప్రమాణం 'పేరులేనిది'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>శోధన ప్రమాణాలు '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' భాగస్వామ్య విలువలను కలిగి ఉంటుంది. మీరు వాటిని కూడా రీసెట్ చేయాలనుకుంటున్నారా?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

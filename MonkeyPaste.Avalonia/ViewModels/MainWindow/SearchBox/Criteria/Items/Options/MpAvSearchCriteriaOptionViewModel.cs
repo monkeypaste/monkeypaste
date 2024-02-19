@@ -393,13 +393,15 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (UnitType.HasUnsignedNumeric()) {
-                string non_numeric_msg = "Value must contain only numbers or '.-'";
+                //string non_numeric_msg = "Value must contain only numbers or '.-'";
+                string non_numeric_msg = UiStrings.InvalidCriteria1.Format(".,");
                 var notNumRegEx = MpRegEx.RegExLookup[MpRegExType.Is_NOT_Number];
 
 
                 Tuple<double, double> value_range = UnitType.GetNumericBounds();
 
-                string out_of_range_msg = $"Value must be from {value_range.Item1} to {value_range.Item2}";
+                //string out_of_range_msg = $"Value must be from {value_range.Item1} to {value_range.Item2}";
+                string out_of_range_msg = UiStrings.InvalidCriteria2.Format(value_range.Item1, value_range.Item2);
                 if (FilterValue.HasMultiValue()) {
                     // multi-paramValue 
                     var is_not_number_idxs = Values.Where(x => notNumRegEx.IsMatch(x)).Select(x => Values.IndexOf(x)).ToList();
@@ -419,7 +421,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                         catch (Exception ex) {
                             MpConsole.WriteTraceLine($"Error converting values '{Value}'.", ex);
-                            ValidationText = "Unknown error";
+                            ValidationText = UiStrings.CommonUnknownError;
                         }
                     }
                 } else {
@@ -438,14 +440,13 @@ namespace MonkeyPaste.Avalonia {
                         }
                         catch (Exception ex) {
                             MpConsole.WriteTraceLine($"Error converting values '{Value}'.", ex);
-                            ValidationText = "Unknown error";
+                            ValidationText = UiStrings.CommonUnknownError;
                         }
                     }
                 }
             } else if (UnitType.HasFlag(MpSearchCriteriaUnitFlags.Hex)) {
-                string invalid_hex_msg = "Must be a hex (6 or 8 paramValue) string starting with '#'";
                 if (!Value.IsStringHexColor()) {
-                    ValidationText = invalid_hex_msg;
+                    ValidationText = UiStrings.InvalidCriteria3;
                 }
             }
 

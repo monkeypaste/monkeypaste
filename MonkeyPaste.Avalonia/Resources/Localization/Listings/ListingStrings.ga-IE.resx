@@ -70,28 +70,36 @@
     <value>Bunúsach - Bliantúil</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>cóip</value>
@@ -127,19 +135,24 @@
     <value>Tógtha - I mbrabhsálaí plugin le leabharlann forlíontáin atá ag fás i gcónaí</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Is bainisteoir gearrthaisce, uirlis uathoibrithe agus táirgiúlachta é Monkeypaste mar aon cheann eile. Feabhas a chur ar do ghearrthaisce i gcuid shaibhrithe agus eagraithe de do shreabhadh oibre,
@@ -158,40 +171,41 @@ Ba mhaith liom freisin go mbraithfeá compordach é a úsáid. Mar sin geallaim 
 Déantar do ghearrthaisce a rianú nó a stóráil riamh in áit ar bith thar do mheaisín féin. Tréimhse.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Comhéadan simplí agus cairdiúil le leagan amach cothrománach/ingearach, radharc liosta/greille agus tacaíocht il -mhonatóireachta</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Mód an chlóis: Éiríonn cóipeáil 'Cuir le' in ionad 'in ionad' ar an ghearrthaisce. Téacs agus comhaid araon, atá inoiriúnaithe go hiomlán</value>
+    <value>● Modhanna Luiche Saincheaptha: Ceart - Cliceáil Greamaigh agus Clé - Cliceáil Auto - Cóip</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Gearrthóg sofaisticiúil, foinsí agus úsáid le tacaíocht fheabhsaithe do bhrabhsálaithe Firefox agus Cróimiam (Chrome, Edge, Brave)</value>
+    <value>● Mód an chlóis: Éiríonn cóipeáil 'Cuir le' in ionad 'in ionad' ar an ghearrthaisce. Téacs agus comhaid araon, atá inoiriúnaithe go hiomlán</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Eagarthóir gearrthóg le feiceáil go hiomlán le téacs saibhir (táblaí, liostaí, naisc, etc.) le aimsithe/athsholáthar agus aird a tharraingt ar</value>
+    <value>● Gearrthóg sofaisticiúil, foinsí agus úsáid le tacaíocht fheabhsaithe do bhrabhsálaithe Firefox agus Cróimiam (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Déan do chuid íomhánna a stóráil sa bhunachar sonraí slán, réidh le húsáid mar chomhaid ag am ar bith - an t -éileamh ach tarraing - agus - titim!</value>
+    <value>● Eagarthóir gearrthóg le feiceáil go hiomlán le téacs saibhir (táblaí, liostaí, naisc, etc.) le aimsithe/athsholáthar agus aird a tharraingt ar</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Teimpléad téacs cumhachtach le haghaidh pasting tapa, dinimiciúil ó do bhailiúchán snippet</value>
+    <value>● Déan do chuid íomhánna a stóráil sa bhunachar sonraí slán, réidh le húsáid mar chomhaid ag am ar bith - an t -éileamh ach tarraing - agus - titim!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Dearthóir Trigger &amp; Gníomhaíochta le haghaidh uathoibrithe saincheaptha agus slabhrú gnímh</value>
+    <value>● Teimpléad téacs cumhachtach le haghaidh pasting tapa, dinimiciúil ó do bhailiúchán snippet</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Simplí le húsáid agus le córas breiseáin a úsáid chun gearrthóga a anailísiú nó aon fhormáid a léamh/a scríobh chuig do ghearrthaisce</value>
+    <value>● Dearthóir Trigger &amp; Gníomhaíochta le haghaidh uathoibrithe saincheaptha agus slabhrú gnímh</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Tógtha - I mbrabhsálaí breiseáin le leabharlann forlíontáin atá ag fás i gcónaí -</value>
+    <value>● Simplí le húsáid agus le córas breiseáin a úsáid chun gearrthóga a anailísiú nó aon fhormáid a léamh/a scríobh chuig do ghearrthaisce</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Gach rud a uathoibriú le réamhshocruithe breiseáin, stash agus bain úsáid as aon cheann de do chuid leideanna nó orduithe gan stró</value>
+    <value>● Tógtha - I mbrabhsálaí breiseáin le leabharlann forlíontáin atá ag fás i gcónaí -</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Níos mó ardáin agus gnéithe ag teacht go luath! Táimid díreach tar éis tús a chur le gettings 🎉</value>
+    <value>● Gach rud a uathoibriú le réamhshocruithe breiseáin, stash agus bain úsáid as aon cheann de do chuid leideanna nó orduithe gan stró</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Tá téamaí éadroma agus dorcha araon dinimiciúil, bain úsáid as aon dath atá uait</value>
@@ -208,29 +222,29 @@ Déantar do ghearrthaisce a rianú nó a stóráil riamh in áit ar bith thar do
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Do ghearrthóga a eagrú i gcrainn chlib agus scagairí in -athsheachadta a chruthú</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Stóráil sonraí áitiúla sábháilte, slán agus príobháideacha (gan bailiú sonraí) a chriptiú i gcónaí le cosaint roghnach 2 fachtóir agus apps nó láithreáin ghréasáin a bhlocáil go héasca ó do lorgaire</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Tarraingt fairsing - agus - Tacaíocht titim, aicearraí saincheaptha domhanda, ródú agus luch - nascleanúint saor in aisce</value>
+    <value>● Apps áirithe, láithreáin ghréasáin agus fiú leathanaigh ghréasáin ar leith a bhlocáil go héasca ó rianú gearrthaisce</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Modhanna Luiche Saincheaptha: Ceart - Cliceáil Greamaigh agus Clé - Cliceáil Auto - Cóip</value>
+    <value>● Tarraingt fairsing - agus - Tacaíocht titim, aicearraí saincheaptha domhanda, ródú agus luch - nascleanúint saor in aisce</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Is jungle an gearrthaisce. Is é Monkeypaste an Rí! Swing ó app go app, é seo a chóipeáil agus a ghreamú mar nach raibh riamh roimhe seo le monkeypaste !! Branda - gearrthaisce nua, ceannródaíoch agus uirlis uathoibrithe anailíseach !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Sampla de mhonagáin i ngníomh!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Suiteáilte sa teanga seo. Níl i gceist leis an mBéarla ach do na samplaí seo</value>
@@ -250,5 +264,11 @@ Déantar do ghearrthaisce a rianú nó a stóráil riamh in áit ar bith thar do
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Leis an síntiús seo gheobhaidh tú:
 ● Cumas neamhtheoranta</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● stóráil sonraí áitiúla sábháilte, slán agus príobháideacha (gan bailiú sonraí) criptithe i gcónaí le cosaint roghnach 2 - fachtóir pasfhocal</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Níos mó ardáin agus gnéithe ag teacht go luath! Táimid díreach tar éis tús a chur le gettings 🎉</value>
   </data>
 </root>

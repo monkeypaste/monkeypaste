@@ -363,7 +363,6 @@ namespace MonkeyPaste.Avalonia {
         private static MpAvClipboardHandlerCollectionViewModel _instance;
         public static MpAvClipboardHandlerCollectionViewModel Instance => _instance ?? (_instance = new MpAvClipboardHandlerCollectionViewModel());
 
-
         public MpAvClipboardHandlerCollectionViewModel() : base(null) {
             PropertyChanged += MpClipboardHandlerCollectionViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
@@ -535,16 +534,27 @@ namespace MonkeyPaste.Avalonia {
                     var loaded_hf = loaded_hi.Items.FirstOrDefault(x => x.FormatGuid == dupGuid_group.Key);
 
                     var sb = new StringBuilder();
-                    sb.AppendLine($"Clipboard 'formatGuid' must be unique. ");
-                    sb.AppendLine($"'formatGuid': ");
+                    //sb.AppendLine($"Clipboard 'formatGuid' must be unique. ");
+                    //sb.AppendLine($"'formatGuid': ");
+                    //sb.AppendLine(dupGuid_group.Key);
+                    //sb.AppendLine($"Already exists for");
+                    //sb.AppendLine("Plugin:");
+                    //sb.AppendLine($"{loaded_hi.PluginFormat.title}");
+                    //sb.AppendLine("Format:");
+                    //sb.AppendLine($"{loaded_hf.ClipboardPluginFormat.formatName}");
+                    //sb.AppendLine("Type:");
+                    //sb.AppendLine($"{(loaded_hf.IsReader ? "Reader" : "Writer")}");
+
+                    sb.AppendLine(UiStrings.InvalidFormatGuidEx1.Format(UiStrings.CommonFormatGuidLabel));
+                    sb.AppendLine($"'{UiStrings.CommonFormatGuidLabel}': ");
                     sb.AppendLine(dupGuid_group.Key);
-                    sb.AppendLine($"Already exists for");
-                    sb.AppendLine("Plugin:");
+                    sb.AppendLine(UiStrings.InvalidFormatGuidEx2);
+                    sb.AppendLine($"{UiStrings.CommonPluginLabel}:");
                     sb.AppendLine($"{loaded_hi.PluginFormat.title}");
-                    sb.AppendLine("Format:");
+                    sb.AppendLine($"{UiStrings.InvalidFormatGuidEx3}:");
                     sb.AppendLine($"{loaded_hf.ClipboardPluginFormat.formatName}");
-                    sb.AppendLine("Type:");
-                    sb.AppendLine($"{(loaded_hf.IsReader ? "Reader" : "Writer")}");
+                    sb.AppendLine($"{UiStrings.InvalidFormatGuidEx4}:");
+                    sb.AppendLine($"{(loaded_hf.IsReader ? UiStrings.CommonReaderLabel : UiStrings.CommonWriterLabel)}");
                     error_notifications.Add(MpPluginLoader.CreateInvalidPluginNotification(sb.ToString(), hivm.PluginFormat));
                 }
             }

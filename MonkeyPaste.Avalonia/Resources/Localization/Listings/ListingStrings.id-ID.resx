@@ -70,28 +70,36 @@
     <value>Dasar - Tahunan</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>menyalin</value>
@@ -127,19 +135,24 @@
     <value>Built - in plugin browser dengan komunitas yang terus berkembang - perpustakaan plugin yang digerakkan</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste adalah manajer clipboard, otomatisasi dan alat produktivitas tidak seperti yang lain. Meningkatkan clipboard Anda menjadi bagian alur kerja yang diperkaya dan terorganisir
@@ -158,40 +171,41 @@ Saya juga ingin Anda merasa nyaman menggunakannya. Jadi saya meyakinkan Anda, se
 Clipboard Anda pernah dilacak atau disimpan di mana pun di luar mesin Anda sendiri. Periode.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Antarmuka sederhana dan ramah dengan tata letak horizontal/vertikal, daftar/tampilan grid dan multi -monitor dukungan</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Mode Tambahkan: Menyalin menjadi 'Tambahkan ke' alih -alih 'ganti' pada clipboard. Baik teks dan file, sepenuhnya dapat disesuaikan</value>
+    <value>● Mode Mouse Kustom: Kanan - Klik Tempel dan Kiri - Klik Auto - Salin</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Pelacakan klip, sumber, dan penggunaan yang canggih dengan peningkatan dukungan untuk browser berbasis Firefox dan Chromium (Chrome, Edge, Brave)</value>
+    <value>● Mode Tambahkan: Menyalin menjadi 'Tambahkan ke' alih -alih 'ganti' pada clipboard. Baik teks dan file, sepenuhnya dapat disesuaikan</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Sepenuhnya - Editor klip unggulan dengan teks kaya (tabel, daftar, tautan, dll.) Dengan Find/Replace and Sorote</value>
+    <value>● Pelacakan klip, sumber, dan penggunaan yang canggih dengan peningkatan dukungan untuk browser berbasis Firefox dan Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Simpan gambar Anda di database yang aman, siap digunakan sebagai file kapan saja - permintaan cukup seret - dan - drop!</value>
+    <value>● Sepenuhnya - Editor klip unggulan dengan teks kaya (tabel, daftar, tautan, dll.) Dengan Find/Replace and Sorote</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Teks yang kuat Templating untuk pemasangan yang cepat dan dinamis dari koleksi cuplikan Anda</value>
+    <value>● Simpan gambar Anda di database yang aman, siap digunakan sebagai file kapan saja - permintaan cukup seret - dan - drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Perancang pemicu &amp; tindakan untuk otomatisasi khusus dan rantai tindakan</value>
+    <value>● Teks yang kuat Templating untuk pemasangan yang cepat dan dinamis dari koleksi cuplikan Anda</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Sederhana untuk digunakan dan memperluas sistem plugin untuk menganalisis klip atau membaca/menulis format apa pun ke clipboard Anda</value>
+    <value>● Perancang pemicu &amp; tindakan untuk otomatisasi khusus dan rantai tindakan</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Dibangun - Browser Plugin dengan Komunitas yang Berkembang - Perpustakaan Plugin yang Digerakkan</value>
+    <value>● Sederhana untuk digunakan dan memperluas sistem plugin untuk menganalisis klip atau membaca/menulis format apa pun ke clipboard Anda</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Otomatiskan semuanya dengan preset plugin, simpanan dan gunakan petunjuk atau perintah AI Anda dengan mudah</value>
+    <value>● Dibangun - Browser Plugin dengan Komunitas yang Berkembang - Perpustakaan Plugin yang Digerakkan</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Lebih banyak platform dan fitur segera hadir! Kami baru saja memulai 🎉</value>
+    <value>● Otomatiskan semuanya dengan preset plugin, simpanan dan gunakan petunjuk atau perintah AI Anda dengan mudah</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Kedua tema terang &amp; gelap benar -benar dinamis, gunakan warna apa pun yang Anda inginkan</value>
@@ -208,29 +222,29 @@ Clipboard Anda pernah dilacak atau disimpan di mana pun di luar mesin Anda sendi
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Atur klip Anda di pohon tag dan buat filter yang dapat diresus</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Penyimpanan data lokal yang aman, aman dan pribadi (tidak ada pengumpulan data) selalu dienkripsi dengan perlindungan kata sandi 2 - faktor opsional dan dengan mudah memblokir aplikasi atau situs web dari pelacak Anda</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Drag yang luas - dan - Jatuhkan dukungan, pintasan global khusus, perutean dan mouse - navigasi gratis</value>
+    <value>● Mudah memblokir aplikasi, situs web, dan bahkan halaman web tertentu dari pelacakan clipboard</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Mode Mouse Kustom: Kanan - Klik Tempel dan Kiri - Klik Auto - Salin</value>
+    <value>● Drag yang luas - dan - Jatuhkan dukungan, pintasan global khusus, perutean dan mouse - navigasi gratis</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard adalah hutan. Monkeypaste adalah raja! Berayun dari aplikasi ke aplikasi, menyalin ini dan menempel yang belum pernah terjadi sebelumnya dengan monkeypaste !! Sebuah merek - clipboard baru yang canggih dan alat otomatisasi analitik !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Contoh monkeypaste beraksi!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Diinstal dalam bahasa ini. Bahasa Inggris hanya untuk contoh -contoh ini</value>
@@ -250,5 +264,11 @@ Clipboard Anda pernah dilacak atau disimpan di mana pun di luar mesin Anda sendi
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Dengan langganan ini Anda akan menerima:
 ● Kapasitas tidak terbatas</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Penyimpanan data lokal yang aman, aman dan pribadi (tidak ada pengumpulan data) selalu dienkripsi dengan perlindungan kata sandi 2 - faktor opsional</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Lebih banyak platform dan fitur segera hadir! Kami baru saja memulai 🎉</value>
   </data>
 </root>

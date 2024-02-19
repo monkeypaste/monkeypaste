@@ -70,28 +70,36 @@
     <value>Əsas - illik</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>surətini çıxarmaq</value>
@@ -127,19 +135,24 @@
     <value>İnkişaf etmiş - həmişəlik böyüyən bir cəmiyyət - pluginlərin idarə olunan kitabxanası olan plugin brauzerində</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeySaste, digərləri kimi bir panoya meneceri, avtomatlaşdırma və məhsuldarlıq vasitəsidir. Panoya işləmə axınınızın zənginləşdirilmiş və mütəşəkkil bir hissəsinə keçin,
@@ -158,40 +171,41 @@ Mən əvvəlki proqramçıyam və hər kəsin meymundan istifadə edə bilməyə
 Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır. Dövr.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Həm üfüqi / şaquli düzenlər, siyahı / grid görünüşü və çox - monitor dəstəyi ilə sadə və mehriban interfeys</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Əlavə etmə rejimi: Kopyalama panoya 'dəyişdirin' yerinə 'əlavə' olur. Həm mətn, həm də fayl, tam özelleştirilebilir</value>
+    <value>● Xüsusi siçan rejimləri: sağ - pastanı və sola vurun - Auto - Kopyalayın</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Firefox və xrom əsaslı brauzerlər (xrom, kənar, cəsarətli) üçün inkişaf etmiş dəstək və inkişaf etmiş dəstəyi ilə mürəkkəb klip izləmə, mənbələr və istifadə</value>
+    <value>● Əlavə etmə rejimi: Kopyalama panoya 'dəyişdirin' yerinə 'əlavə' olur. Həm mətn, həm də fayl, tam özelleştirilebilir</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Tamamilə - tapıntı / dəyişdirmək və vurğulamaqla zəngin mətn (masalar, siyahılar, linklər və s.) Olan tam xüsusiyyətli klip redaktoru</value>
+    <value>● Firefox və xrom əsaslı brauzerlər (xrom, kənar, cəsarətli) üçün inkişaf etmiş dəstək və inkişaf etmiş dəstəyi ilə mürəkkəb klip izləmə, mənbələr və istifadə</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Şəkillərinizi etibarlı verilənlər bazasına saxlayın, istənilən vaxt fayl kimi istifadə etməyə hazırsınız - tələb edin - və - Drop!</value>
+    <value>● Tamamilə - tapıntı / dəyişdirmək və vurğulamaqla zəngin mətn (masalar, siyahılar, linklər və s.) Olan tam xüsusiyyətli klip redaktoru</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>Sürətli, dinamik yapon üçün güclü, dinamik yapon üçün güclü mətn şablonu</value>
+    <value>● Şəkillərinizi etibarlı verilənlər bazasına saxlayın, istənilən vaxt fayl kimi istifadə etməyə hazırsınız - tələb edin - və - Drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Xüsusi avtomatlaşdırma və hərəkət zəncirləri üçün tetik və hərəkət dizayneri</value>
+    <value>Sürətli, dinamik yapon üçün güclü, dinamik yapon üçün güclü mətn şablonu</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Həm təhlil etmək üçün plugin sistemini istifadə etmək və silmək üçün sadə, həm də panoya hər hansı bir format oxumaq / yazmaq / yazmaq</value>
+    <value>● Xüsusi avtomatlaşdırma və hərəkət zəncirləri üçün tetik və hərəkət dizayneri</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● İnkişaf etmiş - həmişəlik böyüyən bir cəmiyyət - pluginlərin idarə olunan kitabxanası olan plugin brauzerində</value>
+    <value>● Həm təhlil etmək üçün plugin sistemini istifadə etmək və silmək üçün sadə, həm də panoya hər hansı bir format oxumaq / yazmaq / yazmaq</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Hər şeyi plugin hafızası ilə avtomatlaşdırın, atın və AI təkliflərinizdən və ya əmrlərinizi asanlıqla istifadə edin</value>
+    <value>● İnkişaf etmiş - həmişəlik böyüyən bir cəmiyyət - pluginlərin idarə olunan kitabxanası olan plugin brauzerində</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Daha çox platforma və xüsusiyyətlər tezliklə! Biz yalnız gettings 🎉 başlamışıq</value>
+    <value>● Hər şeyi plugin hafızası ilə avtomatlaşdırın, atın və AI təkliflərinizdən və ya əmrlərinizi asanlıqla istifadə edin</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Həm yüngül, həm də tünd mövzular tamamilə dinamikdir, istədiyiniz rəngdən istifadə edin</value>
@@ -208,29 +222,29 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Kliplərinizi etiket ağaclarında təşkil edin və reysləşdirilə bilən filtrlər yaradın</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Təhlükəsiz, təhlükəsiz və özəl yerli məlumatların saxlanması (Məlumat toplusu yoxdur) həmişə isteğe bağlı 2 ilə şifrələndi - Faktor parol qorunması və tracker-dən tətbiqləri və ya veb saytları asanlıqla bloklayın</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Geniş sürükləmə - və - Drop dəstəyi, xüsusi qlobal qısa yollar, marşrutlaşdırma və siçan - pulsuz naviqasiya</value>
+    <value>● Asanlıqla müəyyən tətbiqləri, veb saytları və hətta xüsusi veb səhifələrini panoya izləmədən bloklayın</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Xüsusi siçan rejimləri: sağ - pastanı və sola vurun - Auto - Kopyalayın</value>
+    <value>● Geniş sürükləmə - və - Drop dəstəyi, xüsusi qlobal qısa yollar, marşrutlaşdırma və siçan - pulsuz naviqasiya</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Panoya bir cəngəllikdir. Monkeytaste padşahdır! App-dən tətbiqə, bu və yapışdırmaqdan əvvəl Monkeyte ilə heç vaxt olmadığını kopyalayın! Bir marka - yeni, qabaqcıl panoya və analitik avtomatlaşdırma vasitəsi !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Fəaliyyətdə Monkeysaste nümunəsi!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Bu dildə quraşdırılmışdır. İngilis dili yalnız bu nümunələr üçündür</value>
@@ -250,5 +264,11 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Bu abunə ilə alacaqsınız:
 ● Limitsiz tutum</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Təhlükəsiz, etibarlı və özəl yerli məlumatların saxlanması (Məlumat toplusu yoxdur) həmişə isteğe bağlı 2 ilə şifrələnmişdir - Faktor parol qorunması</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Daha çox platforma və xüsusiyyətlər tezliklə! Biz yalnız gettings 🎉 başlamışıq</value>
   </data>
 </root>

@@ -70,28 +70,36 @@
     <value>Osnovno - godišnje</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopirati</value>
@@ -127,19 +135,24 @@
     <value>Izgrađeno - u pregledniku dodataka s vječno rastućom zajednicom - vođena biblioteka dodataka</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste je upravitelj međuspremnika, alat za automatizaciju i produktivnost kao nijedan drugi. Poboljšanje međuspremnika u obogaćeni i organizirani dio vašeg tijeka rada,
@@ -158,40 +171,41 @@ Također želim da se osjećate ugodno koristeći ga. Stoga vas uvjeravam kao je
 Vaš se međuspremnik ikada prati ili pohranjuje bilo gdje izvan vašeg vlastitog stroja. Razdoblje.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Jednostavno i prijateljsko sučelje s horizontalnim/vertikalnim izgledima, popisom/prikazom rešetke i podrškom za multi -monitor</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Način dodavanja: Kopiranje postaje 'Dodaj u' umjesto 'Zamijeni' u međuspremnik. I tekst i datoteke, potpuno prilagodljivi</value>
+    <value>● Prilagođeni načini miša: desno - kliknite Zalijepi i lijevo - kliknite auto - kopiraj</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Sofisticirano praćenje isječaka, izvori i upotreba s pojačanom podrškom za preglednike temeljene na Firefoxu i kromu (Chrome, Edge, Hrabri)</value>
+    <value>● Način dodavanja: Kopiranje postaje 'Dodaj u' umjesto 'Zamijeni' u međuspremnik. I tekst i datoteke, potpuno prilagodljivi</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Potpuno - istaknuti uređivač isječaka s bogatim tekstom (tablice, popisi, veze itd.) Sa pronalaženjem/zamjenom i isticanjem</value>
+    <value>● Sofisticirano praćenje isječaka, izvori i upotreba s pojačanom podrškom za preglednike temeljene na Firefoxu i kromu (Chrome, Edge, Hrabri)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Spremite svoje slike u sigurnu bazu podataka, spremne za upotrebu kao datoteke bilo kada na - potražite samo povucite - i - pad!</value>
+    <value>● Potpuno - istaknuti uređivač isječaka s bogatim tekstom (tablice, popisi, veze itd.) Sa pronalaženjem/zamjenom i isticanjem</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Snažan Text Templant za brzo, dinamično lijepljenje iz vaše kolekcije za isječak</value>
+    <value>● Spremite svoje slike u sigurnu bazu podataka, spremne za upotrebu kao datoteke bilo kada na - potražite samo povucite - i - pad!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Dizajner Trigger &amp; Action za prilagođene automatizacije i vezanje radnji</value>
+    <value>● Snažan Text Templant za brzo, dinamično lijepljenje iz vaše kolekcije za isječak</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Jednostavan za upotrebu i proširenje sustava dodatka za analizu isječaka ili za čitanje/pisanje bilo kojeg formata u svoj međuspremnik</value>
+    <value>● Dizajner Trigger &amp; Action za prilagođene automatizacije i vezanje radnji</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Izgrađeno - u pregledniku dodataka s vječno rastućom zajednicom - vođena biblioteka dodataka</value>
+    <value>● Jednostavan za upotrebu i proširenje sustava dodatka za analizu isječaka ili za čitanje/pisanje bilo kojeg formata u svoj međuspremnik</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Sve automatizirajte sve s unaprijed postavljenim dodacima, spremite se i s lakoćom koristite bilo koji od svojih AI upita ili naredbi</value>
+    <value>● Izgrađeno - u pregledniku dodataka s vječno rastućom zajednicom - vođena biblioteka dodataka</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Više platformi i značajki stiže uskoro! Tek smo započeli 🎉</value>
+    <value>● Sve automatizirajte sve s unaprijed postavljenim dodacima, spremite se i s lakoćom koristite bilo koji od svojih AI upita ili naredbi</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Obje svjetlosne i tamne teme potpuno su dinamične, koristite bilo koju boju koju želite</value>
@@ -208,29 +222,29 @@ Vaš se međuspremnik ikada prati ili pohranjuje bilo gdje izvan vašeg vlastito
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organizirajte svoje isječke u stablima s oznakama i stvorite filtre za ponovne uporabe</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Sigurna, sigurna i privatna lokalna pohrana podataka (bez prikupljanja podataka) uvijek je šifrirana s opcionalnom 2 - Zaštita od faktora i lako blokirajte aplikacije ili web stranice s vašeg tracker -a</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Opsežno povlačenje - i - Drop podrška, prilagođeni globalni prečaci, usmjeravanje i miš - besplatna navigacija</value>
+    <value>● Jednostavno blokirajte određene aplikacije, web stranice, pa čak i određene web stranice iz praćenja međuspremnika</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Prilagođeni načini miša: desno - kliknite Zalijepi i lijevo - kliknite auto - kopiraj</value>
+    <value>● Opsežno povlačenje - i - Drop podrška, prilagođeni globalni prečaci, usmjeravanje i miš - besplatna navigacija</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Međuspremnik je džungla. Monkeypaste je kralj! Zamahnite od aplikacije do aplikacije, kopirate i zalijepite kao nikad do sada s monkeypaste !! Marka - Nova, vrhunska međuspremnika i analitički alat za automatizaciju !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Uzorak monkeypaste u akciji!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Instaliran na ovaj jezik. Engleski je samo za ove primjere</value>
@@ -250,5 +264,11 @@ Vaš se međuspremnik ikada prati ili pohranjuje bilo gdje izvan vašeg vlastito
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Uz ovu pretplatu dobit ćete:
 ● Neograničeni kapacitet</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Sigurno, sigurno i privatno lokalno pohranjivanje podataka (bez prikupljanja podataka) uvijek je šifrirano s opcionalnom zaštitom od 2 - faktorska lozinka</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Više platformi i značajki stiže uskoro! Tek smo započeli 🎉</value>
   </data>
 </root>

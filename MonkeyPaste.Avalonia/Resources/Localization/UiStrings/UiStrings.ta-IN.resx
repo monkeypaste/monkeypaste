@@ -66,7 +66,7 @@
   </data>
   <data name="AccountFreeDescription" xml:space="preserve">
     <value>உள்ளடக்கம் மற்றும் குப்பை
-{0} மற்றும் {1 bot க்கு வரையறுக்கப்பட்டுள்ளது
+{0} மற்றும் {1} bot க்கு வரையறுக்கப்பட்டுள்ளது
 முறையே கிளிப்புகள்.</value>
   </data>
   <data name="AccountStandardDescription" xml:space="preserve">
@@ -535,10 +535,10 @@
     <value>பயன்பாட்டு பாதையைத் தேர்ந்தெடுக்கவும்</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
-    <value>{0 for க்கான தனிப்பயன் குறுக்குவழிகளை அகற்ற விரும்புகிறீர்களா?</value>
+    <value>{0} for க்கான தனிப்பயன் குறுக்குவழிகளை அகற்ற விரும்புகிறீர்களா?</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
-    <value>{0 for க்கான தனிப்பயன் வடிவங்களை அகற்ற விரும்புகிறீர்களா?</value>
+    <value>{0} for க்கான தனிப்பயன் வடிவங்களை அகற்ற விரும்புகிறீர்களா?</value>
   </data>
   <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
     <value>இந்த பயன்பாட்டிற்கு ஒதுக்கப்பட்ட கிளிப்போர்டு வடிவங்கள் எதுவும் இல்லை. வெட்டு/நகல் வழியாகவோ அல்லது இழுக்க முயற்சிக்கவும் எந்த தரவும் படிக்காது - மற்றும் - குரங்குத் சுவையில் விடுங்கள்</value>
@@ -902,7 +902,7 @@ follow the link to change
   </data>
   <data name="AccountExistingLoginText" xml:space="preserve">
     <value>உங்கள் சந்தா
-இப்போது {0}/{1 to ஆக அமைக்கவும்.</value>
+இப்போது {0}/{1} என அமைக்கப்பட்டுள்ளது.</value>
   </data>
   <data name="AccountExistingLoginTitle" xml:space="preserve">
     <value>கணக்கு காணப்பட்டது</value>
@@ -1582,7 +1582,7 @@ follow the link to change
     <value>விண்ணப்பிக்க உரை அல்லது கோப்புகளை நகலெடுக்கவும்.</value>
   </data>
   <data name="AppendActivateTitle" xml:space="preserve">
-    <value>Applation 0} {1} பயன்முறை செயல்படுத்தப்பட்டது</value>
+    <value>சேர் {0} {1} பயன்முறை செயல்படுத்தப்பட்டது</value>
     <comment>Append Type, Manual or empty</comment>
   </data>
   <data name="AppendAfterNtfText" xml:space="preserve">
@@ -2317,7 +2317,7 @@ follow the link to change
     <value>இந்த பகுப்பாய்வு உள்ளமைவை மீட்டெடுக்கவும்</value>
   </data>
   <data name="ChangeLogWindowTitle" xml:space="preserve">
-    <value>{0 the பதிவை மாற்றவும்</value>
+    <value>{0} பதிவை மாற்றவும்</value>
     <comment>App Version</comment>
   </data>
   <data name="CommonConnectionFailedText" xml:space="preserve">
@@ -2430,7 +2430,7 @@ follow the link to change
     <value>நிலுவையில் உள்ளது</value>
   </data>
   <data name="PluginUpdatedNtfText" xml:space="preserve">
-    <value>{0} வெற்றிகரமாக {1 to க்கு புதுப்பிக்கப்பட்டது</value>
+    <value>{0} வெற்றிகரமாக {1} க்கு புதுப்பிக்கப்பட்டது</value>
     <comment>Plugin Title, Plugin Version</comment>
   </data>
   <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
@@ -2699,5 +2699,201 @@ furedback@monkeypaste.com</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;இந்த வழியில், MonkeyPaste ஐ அணுகலாம்&lt;br&gt;&lt;span color="red"&gt;ஒரு கிளிக்&lt;/span&gt; அல்லது &lt;span color="red"&gt;கண் கூட பேட்டிங்&lt;/span&gt; இல்லாமல் &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>சிறுகுறி</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>குளோன்</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>தரவு பொருள்</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>சொருகு</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>வாசகர்</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>அறியப்படாத பிழை</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>எழுத்தாளர்</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>இந்த செருகுநிரல்களுக்கு கண்டறியப்பட்ட நகல் சொருகி கை. {0} ':</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>சொருகி வழிகாட்டலை மாற்றுவதன் மூலம் அல்லது நகல்களை அகற்றுவதன் மூலம் சரிசெய்யவும். இல்லையெனில் தொடர்புடைய அனைத்து செருகுநிரல்களும் புறக்கணிக்கப்படும்.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>இந்த செருகுநிரல்களுக்கும் முன்னமைவுகளுக்கும் கண்டறியப்பட்ட நகல் சொருகி முன்னமைவு வழிகாட்டுதல் '{0}':</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>சொருகி: {0} {1} முன்னமைக்கப்பட்ட (கள்): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>சொருகி: {0} {1} முன்னமைக்கப்பட்ட (கள்): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>தனித்துவமான முன்னமைக்கப்பட்ட கய்ட்களை வழங்குவதன் மூலம் அல்லது நகல்களை அகற்றுவதன் மூலம் சரிசெய்யவும். இல்லையெனில் தொடர்புடைய அனைத்து செருகுநிரல்களும் புறக்கணிக்கப்படும்.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>ஆசிரியர் நிறம்</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>எல்லா {0} உருப்படி (களை) நிரந்தரமாக நீக்க விரும்புகிறீர்களா?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>கோப்புறையைத் தேர்ந்தெடுக்கவும்</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>வாட்ச் கோப்புறையைத் தேர்ந்தெடுக்கவும்</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>சொருகி பிழை. சொருகி '{0}' என்பது '{1}' வகை ஆனால் '{1}' வடிவம் இல்லை</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>செயலைச் செய்வதில் பிழை '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>மதிப்பில் எண்கள் அல்லது '{0}' மட்டுமே இருக்க வேண்டும்</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>மதிப்பு {0} முதல் {1} வரை இருக்க வேண்டும்</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' உடன் தொடங்கி ஒரு ஹெக்ஸ் (6 அல்லது 8 இலக்க) சரமாக இருக்க வேண்டும்</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>கிளிப்போர்டு '{0}' தனித்துவமாக இருக்க வேண்டும்.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>ஏற்கனவே உள்ளது</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>வடிவம்</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>தட்டச்சு செய்க</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>கிளிப்போர்டு ரீடர்/எழுத்தாளர் வடிவமைப்பு பெயர்கள் தனித்துவமாக இருக்க வேண்டும். வாசகர் நகல்கள்:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>கிளிப்போர்டு ரீடர்/எழுத்தாளர் வடிவமைப்பு பெயர்கள் தனித்துவமாக இருக்க வேண்டும். எழுத்தாளர் நகல்கள்:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>கிளிப்போர்டு வடிவமைப்பு GUID கள் தனித்துவமாக இருக்க வேண்டும். நகல் வடிவங்கள் மற்றும் கயிட்ஸ்:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>சொருகி பிழை: அனைத்து சொருகி '{0}' புலங்களும் கையாளுபவருக்கு தனித்துவமாக இருக்க வேண்டும் '{1}'. {2} paramname '{3}' பல உள்ளீடுகளைக் கொண்டுள்ளது</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>சொருகி பிழை, மாறாத வெளிப்பாடு எதுவும் கிடைக்கவில்லை</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>சொருகி '{0}' குறைந்தது 1 அளவுரு இல்லாமல் முன்னமைவுகளை வைத்திருக்க முடியாது</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>பெயரிடப்படாத பரம் #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>சொருகி அளவுரு ஐடிகள் ({0}) வரையறுக்கப்பட வேண்டும். சொருகி '{1}' காணாமல் போன பாராமிட்: {2} உடன் பின்வரும் அளவுருக்களைக் கொண்டுள்ளது</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>நகல் அளவு '{0}' கண்டறியப்பட்டது (அனைத்தும் தனித்துவமாக இருக்க வேண்டும்). {1} லேபிள்கள்: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>முன்னமைக்கப்பட்ட வழிகாட்டி தேவை. சொருகி {1} இல் '{0}' க்கு இது காணப்படவில்லை அல்லது தவறான வடிவம்</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>சொருகி '{2}' க்கு முன்னமைக்கப்பட்ட '{1}' ஆல் குறிப்பிடப்பட்ட பாரமிட் '{0}' உடன் அளவுருவைக் கண்டுபிடிக்க முடியவில்லை. அளவுரு மாற்றப்பட்டிருக்கலாம் அல்லது அகற்றப்பட்டிருக்கலாம், முன்னமைக்கப்பட்ட அளவுரு புதுப்பிப்பு அல்லது அதை அகற்றலாம்.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>முன்னமைவுகளில் பகிரப்பட்ட மதிப்பு அளவுருக்களை அமைக்க முடியாது. Pramid '{0}' முன்னமைக்கப்பட்ட '{1}' சொருகி '{2}' க்கான {1} 'அகற்றப்பட வேண்டும் அல்லது அளவுரு வரையறை பிரிவில் பாரம்வாலூவைக் குறிப்பிடலாம்.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>முன்னமைவுகளில் தனித்துவமான GUID கள் இருக்க வேண்டும். முன்னமைவுகளுக்கு '{1}' சொருகி முன்னமைவு வழிகாட்டுதல் '{0}' கண்டறியப்பட்டது: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>சொருகி பாகுபடுத்தும் பிழை, பாதையில் '{0}' பூஜ்யமானது, JSON ஐ பாகுபடுத்தும் பிழை. சொருகி புறக்கணித்தல்</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>சொருகி தலைப்பு பிழை, பாதையில் '{0}' {1} எழுத்துகளுக்கு மேல் இல்லாத 'தலைப்பு' சொத்து இருக்க வேண்டும். சொருகி புறக்கணித்தல்</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>சொருகி வழிகாட்டல் பிழை, '{0}' என்ற தலைப்பில் '{1}' என்ற தலைப்பில் ஒரு 'கைஸ்' சொத்து இருக்க வேண்டும், RFC 4122 இணக்கமான 128-பிட் கைஸ் (UUID) கடிதங்கள், எண்கள் மற்றும் ஹைபன்கள் மட்டுமே. சொருகி புறக்கணித்தல்.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>சொருகி விளக்கம் பிழை, பாதையில் '{0}' விளக்கம் {1} எழுத்துக்களை விட அதிகமாக இருக்கக்கூடாது. சொருகி புறக்கணித்தல்</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>சொருகி குறிச்சொற்கள் பிழை, பாதையில் '{0}' குறிச்சொற்கள் {1} எழுத்துக்களை விட அதிகமாக இருக்கக்கூடாது. சொருகி புறக்கணித்தல்</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>பிழைத்திருத்தியை '{0}' உடன் இணைக்கவும் அல்லது தொடர ரத்துசெய்.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>பிழைத்திருத்தத்திற்காக காத்திருக்கிறது</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>சொருகி பதிவிறக்குவதில் பிழை. தயவுசெய்து பின்னர் மீண்டும் முயற்சிக்கவும்.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>சொருகி புதுப்பிக்கப்பட்டது</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>எல்லா {0} உருப்படி (களை) மீட்டெடுக்க விரும்புகிறீர்களா?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>'பெயரிடப்படாதது'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>தேடல் அளவுகோல்கள் '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' பகிரப்பட்ட மதிப்புகளைக் கொண்டுள்ளது. அவற்றையும் மீட்டமைக்க விரும்புகிறீர்களா?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

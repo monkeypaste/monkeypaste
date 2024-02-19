@@ -2700,4 +2700,200 @@ Không thể đảm bảo khôi phục toàn bộ và có thể làm giảm hi�
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Bằng cách này, MonkeyPaste có thể được truy cập&lt;br&gt;&lt;span color="red"&gt;mà không cần một cú nhấp chuột&lt;/span&gt; hoặc thậm chí &lt;span color="red"&gt;đập mắt&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Chú thích</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Dòng vô tính</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Đối tượng dữ liệu</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Cắm vào</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Người đọc</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Lỗi không rõ</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>nhà văn</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Guid plugin trùng lặp '{0}' được phát hiện cho các plugin sau:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Khắc phục bằng cách thay đổi plugin guid hoặc loại bỏ các bản sao. Nếu không, tất cả các plugin liên quan sẽ bị bỏ qua.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Guid plugin sao chép GUID '{0}' được phát hiện cho các plugin và cài đặt trước này:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} đặt trước (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} đặt trước (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Khắc phục bằng cách cung cấp các hướng dẫn đặt trước độc đáo hoặc loại bỏ các bản sao. Nếu không, tất cả các plugin liên quan sẽ bị bỏ qua.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Màu sắc biên tập</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn xóa vĩnh viễn tất cả (các) mục {0} không?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Chọn thư mục</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Chọn thư mục xem</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Lỗi plugin. Plugin '{0}' là '{1}' loại nhưng không có '{1}' định dạng</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Lỗi khi thực hiện hành động '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Giá trị chỉ chứa số hoặc '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Giá trị phải từ {0} đến {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Phải là chuỗi hex (6 hoặc 8 chữ số) bắt đầu bằng '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Clipboard '{0}' phải là duy nhất.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Đã tồn tại cho</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Định dạng</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Kiểu</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Tên người đọc/người đọc clipboard phải là duy nhất. Người đọc trùng lặp:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Tên người đọc/người đọc clipboard phải là duy nhất. Người viết trùng lặp:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Hướng dẫn định dạng clipboard phải là duy nhất. Định dạng &amp; Guids trùng lặp:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Lỗi plugin: tất cả các trường plugin '{0}' phải là duy nhất cho trình xử lý '{1}'. {2} paramName '{3}' có nhiều mục</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Lỗi plugin, không tìm thấy biểu hiện bất biến</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' không thể có cài đặt trước mà không có ít nhất 1 tham số được cung cấp</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Thông số không được gắn nhãn #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ID tham số plugin ({0}) phải được xác định. Plugin '{1}' có các tham số sau bị thiếu paramid's: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Sao chép paramid '{0}' được phát hiện (tất cả phải là duy nhất). {1} Nhãn: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Guid đặt trước là bắt buộc. Nó không được tìm thấy hoặc định dạng sai cho '{0}' trong plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Không thể tìm thấy tham số với paramid '{0}' được tham chiếu bởi preset '{1}' cho plugin '{2}'. Tham số có thể đã thay đổi hoặc đã bị xóa, cập nhật paramvalue đặt trước hoặc xóa nó.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Không thể đặt tham số giá trị được chia sẻ trong các cài đặt trước. Paramid '{0}' trong preset '{1}' cho plugin '{2}' cần được xóa hoặc paramValue có thể được chỉ định trong phần định nghĩa tham số.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Cài đặt trước phải có hướng dẫn độc đáo. Sao chép GUID GUID '{0}' đã được phát hiện trong plugin '{1}' cho các cài đặt trước: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Lỗi phân tích cú pháp plugin, tại đường dẫn '{0}' null, có thể là lỗi phân tích lỗi JSON. Bỏ qua plugin</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Lỗi tiêu đề plugin, tại đường dẫn '{0}' phải có thuộc tính 'Tiêu đề' không quá {1} ký tự. Bỏ qua plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Lỗi guid plugin, tại đường dẫn '{0}' với tiêu đề '{1}' phải có thuộc tính 'guid', RFC 4122 Guid (UUID) tuân thủ RFC 4122 chỉ bằng các chữ cái, số và dấu gạch nối. Bỏ qua plugin.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Plugin Lỗi mô tả, tại đường dẫn '{0}' Mô tả phải không nhiều hơn {1} ký tự. Bỏ qua plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Thẻ plugin Lỗi, tại đường dẫn '{0}' Thẻ phải không nhiều hơn {1} ký tự. Bỏ qua plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Đính kèm trình gỡ lỗi vào '{0}' hoặc hủy để tiếp tục.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Chờ đợi để xử lý lỗi</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Lỗi tải plugin. Vui lòng thử lại sau.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plugin được cập nhật</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Bạn có chắc là bạn muốn khôi phục tất cả (các) mục {0} không?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Tiêu chí tìm kiếm 'không có tiêu đề'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Tiêu chí tìm kiếm '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' chứa các giá trị được chia sẻ. Bạn có muốn thiết lập lại những thứ đó không?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

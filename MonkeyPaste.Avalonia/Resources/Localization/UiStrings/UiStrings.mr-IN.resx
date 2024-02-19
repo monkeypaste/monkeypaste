@@ -1697,7 +1697,7 @@
     <value>स्थिर</value>
   </data>
   <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
-    <value>{0 reach रिक्त आहे ...</value>
+    <value>{0} रिक्त आहे...</value>
     <comment>Template Name</comment>
   </data>
   <data name="EditorTemplateTeaserText" xml:space="preserve">
@@ -2699,5 +2699,201 @@
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;अशा प्रकारे, मंकीपेस्टमध्ये प्रवेश केला जाऊ शकतो&lt;br&gt;&lt;span color="red"&gt;एका क्लिकशिवाय&lt;/span&gt; किंवा &lt;span color="red"&gt;डोळा न लावता&lt;/span&gt; #x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>भाष्य</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>क्लोन</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>डेटा ऑब्जेक्ट</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>प्लगइन</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>वाचक</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>अज्ञात त्रुटी</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>लेखक</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>या प्लगइनसाठी डुप्लिकेट प्लगइन जीआयडी '{0}' आढळले:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>प्लगइन जीआयडी बदलून किंवा डुप्लिकेट काढून टाकून निराकरण करा. अन्यथा सर्व संबंधित प्लगइनकडे दुर्लक्ष केले जाईल.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>या प्लगइन आणि प्रीसेटसाठी डुप्लिकेट प्लगइन प्रीसेट गाईड '{0}' आढळले:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>प्लगइन: {0} {1} प्रीसेट (एस): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>प्लगइन: {0} {1} प्रीसेट (एस): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>अद्वितीय प्रीसेट मार्गदर्शक प्रदान करून किंवा डुप्लिकेट्स काढून निराकरण करा. अन्यथा सर्व संबंधित प्लगइनकडे दुर्लक्ष केले जाईल.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>संपादक रंग</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>आपणास खात्री आहे की आपण सर्व {0} आयटम कायमचे हटवू इच्छिता?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>फोल्डर निवडा</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>वॉच फोल्डर निवडा</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>प्लगइन त्रुटी. प्लगइन '{0}' '{1}' प्रकार आहे परंतु नाही '{1}' स्वरूप आढळले</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>{0} 'कृती करत त्रुटी: {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>मूल्यामध्ये केवळ संख्या किंवा '{0}' असणे आवश्यक आहे</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>मूल्य {0} ते {1} पर्यंत असणे आवश्यक आहे</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' ने प्रारंभ होणारी हेक्स (6 किंवा 8 अंकी) स्ट्रिंग असणे आवश्यक आहे</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>क्लिपबोर्ड '{0}' अद्वितीय असणे आवश्यक आहे.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>आधीच अस्तित्त्वात आहे</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>स्वरूप</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>प्रकार</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>क्लिपबोर्ड रीडर/लेखक स्वरूपन नावे अद्वितीय असणे आवश्यक आहे. वाचक डुप्लिकेट्स:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>क्लिपबोर्ड रीडर/लेखक स्वरूपन नावे अद्वितीय असणे आवश्यक आहे. लेखक डुप्लिकेट्स:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>क्लिपबोर्ड स्वरूप जीआयडी अद्वितीय असणे आवश्यक आहे. डुप्लिकेट स्वरूप आणि मार्गदर्शक:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>प्लगइन त्रुटी: हँडलर '{1}' साठी सर्व प्लगइन '{0}' फील्ड्स अद्वितीय असणे आवश्यक आहे. {2} पॅरामनेम '{3}' मध्ये एकाधिक नोंदी आहेत</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>प्लगइन त्रुटी, कोणताही आक्रमक मॅनिफेस्ट आढळला नाही</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>प्लगइन '{0}' मध्ये कमीतकमी 1 पॅरामीटरशिवाय प्रीसेट असू शकत नाहीत</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>लेबल केलेले परम #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>प्लगइन पॅरामीटर आयडी ({0}) परिभाषित करणे आवश्यक आहे. प्लगइन '{1}' मध्ये गहाळ पॅरामिडचे खालील पॅरामीटर्स आहेत: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>डुप्लिकेट पॅरामिड '{0}' आढळले (सर्व अद्वितीय असणे आवश्यक आहे). {1} लेबले: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>प्रीसेट मार्गदर्शक आवश्यक आहे. हे प्लगइन {1} मध्ये '{0}' साठी सापडले किंवा चुकीचे स्वरूप नव्हते</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>प्लगइन '{2}' साठी प्रीसेट '{1}' द्वारे संदर्भित पॅरामिड '{0}' सह पॅरामीटर शोधू शकत नाही. पॅरामीटर बदलले असेल किंवा काढले गेले असेल, प्रीसेट परमवॅल्यू अद्यतनित करा किंवा ते काढा.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>प्रीसेटमध्ये सामायिक मूल्य पॅरामीटर्स सेट करू शकत नाही. प्लगइनसाठी '{0}' प्लगइन '{1}' प्लगइन '{2}' काढण्याची आवश्यकता आहे किंवा पॅरामीटर परिभाषा विभागात पॅरामाव्हल्यू निर्दिष्ट करणे आवश्यक आहे.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>प्रीसेटमध्ये अद्वितीय मार्गदर्शक असणे आवश्यक आहे. प्रीसेटसाठी डुप्लिकेट प्रीसेट मार्गदर्शक '{0}' प्लगइन '{1}' मध्ये आढळले: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>प्लगइन पार्सिंग त्रुटी, पथ '{0}' शून्य, संभाव्य त्रुटी जेएसओएन विश्लेषित करते. प्लगइनकडे दुर्लक्ष करणे</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>प्लगइन शीर्षक त्रुटी, पथ '{0}' मध्ये 'शीर्षक' मालमत्ता असणे आवश्यक आहे {1} वर्णांपेक्षा जास्त नाही. प्लगइनकडे दुर्लक्ष करणे</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>प्लगइन जीआयडी त्रुटी, '{1}' च्या पथ '{0}' वर ​​'{1}' मध्ये 'जीआयडी' प्रॉपर्टी, आरएफसी 4122 अनुरूप 128-बिट जीआयडी (यूयूआयडी) फक्त अक्षरे, संख्या आणि हायफनसह असणे आवश्यक आहे. प्लगइनकडे दुर्लक्ष करणे.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>प्लगइन वर्णन त्रुटी, मार्गावर '{0}' वर्णन {1} वर्णांपेक्षा जास्त नसावे. प्लगइनकडे दुर्लक्ष करणे</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>प्लगइन टॅग त्रुटी, पथ '{0}' टॅगवर {1} वर्णांपेक्षा जास्त नसावे. प्लगइनकडे दुर्लक्ष करणे</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>डीबगर '{0}' वर ​​जोडा किंवा सुरू ठेवण्यासाठी रद्द करा.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>डीबगरची वाट पहात आहे</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>प्लगइन डाउनलोड करणे त्रुटी. कृपया पुन्हा प्रयत्न करा.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>प्लगइन अद्यतनित केले</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>आपणास खात्री आहे की आपण सर्व {0} आयटम पुनर्संचयित करू इच्छिता?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>शोध निकष 'अशीर्षकांकित'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>शोध निकष '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' मध्ये सामायिक मूल्ये आहेत. आपण ते देखील रीसेट करू इच्छिता?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

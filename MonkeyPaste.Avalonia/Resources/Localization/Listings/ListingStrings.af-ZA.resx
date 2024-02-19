@@ -70,28 +70,36 @@
     <value>Basies - Jaarliks</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopieër</value>
@@ -127,19 +135,24 @@
     <value>Gebou - in plugin -blaaier met 'n steeds groeiende gemeenskap - gedrewe biblioteek met plugins</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste is 'n klembordbestuurder, outomatisering en produktiwiteitsinstrument soos geen ander nie. Verbeter u knipbord in 'n verrykte en georganiseerde deel van u werkvloei,
@@ -158,40 +171,41 @@ Ek wil ook hê dat u gemaklik moet voel om dit te gebruik. Dus kan ek u verseker
 U knipbord word ooit opgespoor of gestoor op enige plek buite u eie masjien. Periode.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Eenvoudige en vriendelike koppelvlak met beide horisontale/vertikale uitlegte, lys/netwerk en multi - monitorondersteuning</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Append -modus: kopiëring word 'Voeg by' in plaas van 'vervang' op die knipbord. Beide teks en lêers, volledig aanpasbaar</value>
+    <value>● Aangepaste muismodusse: regs - klik op Plak en links - klik Auto - kopie</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Gesofistikeerde klemopsporing, bronne en gebruik met verbeterde ondersteuning vir Firefox en Chromium -gebaseerde blaaiers (Chrome, Edge, Brave)</value>
+    <value>● Append -modus: kopiëring word 'Voeg by' in plaas van 'vervang' op die knipbord. Beide teks en lêers, volledig aanpasbaar</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Ten volle - verskynsel -clip -redakteur met ryk teks (tabelle, lyste, skakels, ens.) Met vind/vervang en uitlig</value>
+    <value>● Gesofistikeerde klemopsporing, bronne en gebruik met verbeterde ondersteuning vir Firefox en Chromium -gebaseerde blaaiers (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Stoor u prente in die veilige databasis, gereed om as lêers enige tyd op te gebruik - Demand Sleep - en - Drop!</value>
+    <value>● Ten volle - verskynsel -clip -redakteur met ryk teks (tabelle, lyste, skakels, ens.) Met vind/vervang en uitlig</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Kragtige teksvorming vir vinnige, dinamiese plak uit u brokkieversameling</value>
+    <value>● Stoor u prente in die veilige databasis, gereed om as lêers enige tyd op te gebruik - Demand Sleep - en - Drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action Designer vir pasgemaakte outomatisering en aksieketting</value>
+    <value>● Kragtige teksvorming vir vinnige, dinamiese plak uit u brokkieversameling</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Eenvoudig om in die pluginstelsel te gebruik en uit te brei om beide snitte te ontleed of om enige formaat op u knipbord te lees/skryf</value>
+    <value>● Trigger &amp; Action Designer vir pasgemaakte outomatisering en aksieketting</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Gebou - in plugin -blaaier met 'n steeds groeiende gemeenskap - aangedrewe biblioteek met plugins</value>
+    <value>● Eenvoudig om in die pluginstelsel te gebruik en uit te brei om beide snitte te ontleed of om enige formaat op u knipbord te lees/skryf</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Outomatiseer alles met voorafinstellings van plugin, stash en gebruik u AI -aanwysings of opdragte met gemak</value>
+    <value>● Gebou - in plugin -blaaier met 'n steeds groeiende gemeenskap - aangedrewe biblioteek met plugins</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Meer platforms en funksies kom binnekort! Ons is net begin begin 🎉</value>
+    <value>● Outomatiseer alles met voorafinstellings van plugin, stash en gebruik u AI -aanwysings of opdragte met gemak</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Beide ligte en donker temas is heeltemal dinamies, gebruik enige kleur wat u wil hê</value>
@@ -208,29 +222,29 @@ U knipbord word ooit opgespoor of gestoor op enige plek buite u eie masjien. Per
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organiseer u snitte in tagbome en skep resensbare filters</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Veilige, veilige en privaat plaaslike databerging (geen data -insameling) altyd geïnkripteer met opsionele 2 - Faktor -wagwoordbeskerming en blokkeer maklik programme of webwerwe vanaf u spoorsnyer</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Uitgebreide sleep - en - dropondersteuning, pasgemaakte wêreldkortpaaie, routing en muis - gratis navigasie</value>
+    <value>● Blokkeer sekere programme, webwerwe en selfs spesifieke webbladsye maklik vanaf die opsporing van knipbord</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Aangepaste muismodusse: regs - klik op Plak en links - klik Auto - kopie</value>
+    <value>● Uitgebreide sleep - en - dropondersteuning, pasgemaakte wêreldkortpaaie, routing en muis - gratis navigasie</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Die knipbord is 'n oerwoud. Monkeypaste is die koning! Swaai van app na app, kopieer dit en plak dit soos nog nooit tevore met Monkeypaste nie !! 'N Brand - nuwe, vooraanstaande knipbord en analitiese outomatiseringsinstrument !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Voorbeeld van Monkeypaste in aksie!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>In hierdie taal geïnstalleer. Engels is slegs vir hierdie voorbeelde</value>
@@ -250,5 +264,11 @@ U knipbord word ooit opgespoor of gestoor op enige plek buite u eie masjien. Per
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Met hierdie intekening sal u ontvang:
 ● Onbeperkte kapasiteit</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Veilige, veilige en private plaaslike databerging (geen data-insameling) altyd geïnkripteer met opsionele 2 - faktor wagwoordbeskerming</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Meer platforms en funksies kom binnekort! Ons is net begin begin 🎉</value>
   </data>
 </root>

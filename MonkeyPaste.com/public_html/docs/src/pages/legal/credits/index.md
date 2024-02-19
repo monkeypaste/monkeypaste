@@ -68,5 +68,6 @@
 <a href="https://github.com/vmware/clarity-assets?ref=svgrepo.com" target="_blank">Vmware</a> in MIT License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a><br/>
 <a href="https://github.com/vscode-icons/vscode-icons?ref=svgrepo.com" target="_blank">Vscode Icons</a> in MIT License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a><br/>
 <a href="https://github.com/twbs/icons?ref=svgrepo.com" target="_blank">Bootstrap</a> in MIT License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a><br/>
+<a href="https://github.com/bytedance/IconPark?ref=svgrepo.com" target="_blank">Iconpark</a> in MIT License via <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a><br/>
 ## Everything Else
 Thomas Kefauver via Monkey LLC.

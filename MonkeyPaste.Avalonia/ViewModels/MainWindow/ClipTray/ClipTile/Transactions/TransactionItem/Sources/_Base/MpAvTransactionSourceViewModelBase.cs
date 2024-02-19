@@ -18,7 +18,8 @@ namespace MonkeyPaste.Avalonia {
 
         public string PlainText {
             get {
-                return "TEST source";
+                //return "TEST source";
+                return LabelText;
             }
         }
         #endregion

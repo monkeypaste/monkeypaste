@@ -263,7 +263,7 @@ namespace MonkeyPaste.Avalonia {
                 //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
                 var selectedDir = await Mp.Services.NativePathDialog
-                        .ShowFolderDialogAsync($"Select Folder", FileSystemPath);
+                        .ShowFolderDialogAsync(UiStrings.FileWriterChooserWindowTitle, FileSystemPath);
 
                 //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
 

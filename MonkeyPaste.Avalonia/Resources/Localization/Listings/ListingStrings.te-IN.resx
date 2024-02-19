@@ -70,28 +70,36 @@ Stort 1,000 క్లిప్‌ల కంటెంట్ వరకు
     <value>ప్రాథమిక - వార్షిక</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>కాపీ</value>
@@ -127,19 +135,24 @@ Stort 1,000 క్లిప్‌ల కంటెంట్ వరకు
     <value>నిర్మించబడింది - ప్లగిన్ బ్రౌజర్‌లో ఎప్పటికప్పుడు పెరుగుతున్న కమ్యూనిటీ - ప్లగిన్‌ల నడిచే లైబ్రరీ</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>మంకీపాస్ట్ అనేది క్లిప్‌బోర్డ్ మేనేజర్, ఆటోమేషన్ మరియు ఉత్పాదకత సాధనం. మీ క్లిప్‌బోర్డ్‌ను మీ వర్క్‌ఫ్లో సుసంపన్నమైన మరియు వ్యవస్థీకృత భాగంగా మెరుగుపరుస్తుంది,
@@ -158,40 +171,41 @@ Stort 1,000 క్లిప్‌ల కంటెంట్ వరకు
 మీ క్లిప్‌బోర్డ్ మీ స్వంత మెషీన్‌కు మించి ఎక్కడైనా ట్రాక్ చేయబడుతుంది లేదా నిల్వ చేయబడుతుంది. కాలం.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>క్షితిజ సమాంతర/నిలువు లేఅవుట్లు, జాబితా/గ్రిడ్ వీక్షణ మరియు మల్టీ - మానిటర్ మద్దతు రెండింటితో సరళమైన మరియు స్నేహపూర్వక ఇంటర్ఫేస్</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>Mode అనుబంధ మోడ్: కాపీ చేయడం క్లిప్‌బోర్డ్‌లో 'రీప్లేస్' కు బదులుగా 'జోడించు' అవుతుంది. టెక్స్ట్ మరియు ఫైల్స్ రెండూ, పూర్తిగా అనుకూలీకరించదగినవి</value>
+    <value>Custom కస్టమ్ మౌస్ మోడ్‌లు: కుడి - పేస్ట్ మరియు ఎడమ క్లిక్ చేయండి - ఆటో క్లిక్ చేయండి - కాపీ</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>Fire ఫైర్‌ఫాక్స్ మరియు క్రోమియం - ఆధారిత బ్రౌజర్‌లకు మెరుగైన మద్దతుతో అధునాతన క్లిప్ ట్రాకింగ్, మూలాలు మరియు ఉపయోగం (క్రోమ్, అంచు, ధైర్యవంతుడు)</value>
+    <value>Mode అనుబంధ మోడ్: కాపీ చేయడం క్లిప్‌బోర్డ్‌లో 'రీప్లేస్' కు బదులుగా 'జోడించు' అవుతుంది. టెక్స్ట్ మరియు ఫైల్స్ రెండూ, పూర్తిగా అనుకూలీకరించదగినవి</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● పూర్తిగా - రిచ్ టెక్స్ట్ (పట్టికలు, జాబితాలు, లింక్‌లు మొదలైనవి) తో ఫీచర్ చేసిన క్లిప్ ఎడిటర్ కనుగొనండి/భర్తీ చేయండి మరియు హైలైటింగ్</value>
+    <value>Fire ఫైర్‌ఫాక్స్ మరియు క్రోమియం - ఆధారిత బ్రౌజర్‌లకు మెరుగైన మద్దతుతో అధునాతన క్లిప్ ట్రాకింగ్, మూలాలు మరియు ఉపయోగం (క్రోమ్, అంచు, ధైర్యవంతుడు)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>Times మీ చిత్రాలను సురక్షిత డేటాబేస్లో నిల్వ చేయండి, ఎప్పుడైనా ఫైళ్ళగా ఉపయోగించడానికి సిద్ధంగా ఉంది - డిమాండ్ లాగండి - మరియు - డ్రాప్!</value>
+    <value>● పూర్తిగా - రిచ్ టెక్స్ట్ (పట్టికలు, జాబితాలు, లింక్‌లు మొదలైనవి) తో ఫీచర్ చేసిన క్లిప్ ఎడిటర్ కనుగొనండి/భర్తీ చేయండి మరియు హైలైటింగ్</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>Sn మీ స్నిప్పెట్ సేకరణ నుండి శీఘ్ర, డైనమిక్ పేస్ట్ కోసం శక్తివంతమైన టెక్స్ట్ టెంప్లేటింగ్</value>
+    <value>Times మీ చిత్రాలను సురక్షిత డేటాబేస్లో నిల్వ చేయండి, ఎప్పుడైనా ఫైళ్ళగా ఉపయోగించడానికి సిద్ధంగా ఉంది - డిమాండ్ లాగండి - మరియు - డ్రాప్!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>Custom కస్టమ్ ఆటోమేషన్స్ మరియు యాక్షన్ చైనింగ్ కోసం ట్రిగ్గర్ &amp; యాక్షన్ డిజైనర్</value>
+    <value>Sn మీ స్నిప్పెట్ సేకరణ నుండి శీఘ్ర, డైనమిక్ పేస్ట్ కోసం శక్తివంతమైన టెక్స్ట్ టెంప్లేటింగ్</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>Clips క్లిప్‌లను విశ్లేషించడం కోసం ప్లగిన్ వ్యవస్థను ఉపయోగించడం మరియు విస్తరించడం చాలా సులభం లేదా మీ క్లిప్‌బోర్డ్‌కు ఏదైనా ఫార్మాట్ చదవడం/వ్రాయడం</value>
+    <value>Custom కస్టమ్ ఆటోమేషన్స్ మరియు యాక్షన్ చైనింగ్ కోసం ట్రిగ్గర్ &amp; యాక్షన్ డిజైనర్</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● నిర్మించబడింది - ప్లగిన్ బ్రౌజర్‌లో ఎప్పటికప్పుడు పెరుగుతున్న కమ్యూనిటీ - ప్లగిన్‌ల ఆధారిత లైబ్రరీ</value>
+    <value>Clips క్లిప్‌లను విశ్లేషించడం కోసం ప్లగిన్ వ్యవస్థను ఉపయోగించడం మరియు విస్తరించడం చాలా సులభం లేదా మీ క్లిప్‌బోర్డ్‌కు ఏదైనా ఫార్మాట్ చదవడం/వ్రాయడం</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>Pl ప్లగ్ఇన్ ప్రీసెట్‌లతో ప్రతిదీ ఆటోమేట్ చేయండి, మీ AI ప్రాంప్ట్‌లు లేదా ఆదేశాలను సులభంగా ఉపయోగించుకోండి మరియు ఉపయోగించండి</value>
+    <value>● నిర్మించబడింది - ప్లగిన్ బ్రౌజర్‌లో ఎప్పటికప్పుడు పెరుగుతున్న కమ్యూనిటీ - ప్లగిన్‌ల ఆధారిత లైబ్రరీ</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>ప్లాట్‌ఫారమ్‌లు మరియు లక్షణాలు త్వరలో రాబోతున్నాయి! మేము ఇప్పుడే ప్రారంభించాము</value>
+    <value>Pl ప్లగ్ఇన్ ప్రీసెట్‌లతో ప్రతిదీ ఆటోమేట్ చేయండి, మీ AI ప్రాంప్ట్‌లు లేదా ఆదేశాలను సులభంగా ఉపయోగించుకోండి మరియు ఉపయోగించండి</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>Light లైట్ &amp; డార్క్ థీమ్స్ రెండూ పూర్తిగా డైనమిక్, మీకు కావలసిన రంగును ఉపయోగించండి</value>
@@ -208,29 +222,29 @@ Stort 1,000 క్లిప్‌ల కంటెంట్ వరకు
   <data name="StoreFeature6" xml:space="preserve">
     <value>Cle మీ క్లిప్‌లను ట్యాగ్ చెట్లలో నిర్వహించండి మరియు పునరుత్థానం చేయగల ఫిల్టర్లను సృష్టించండి</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>Safe సురక్షితమైన, సురక్షితమైన మరియు ప్రైవేట్ స్థానిక డేటా నిల్వ (డేటా సేకరణ లేదు) ఎల్లప్పుడూ ఐచ్ఛిక 2 తో గుప్తీకరించబడుతుంది - కారకం పాస్‌వర్డ్ రక్షణ మరియు మీ ట్రాకర్ నుండి అనువర్తనాలు లేదా వెబ్‌సైట్‌లను సులభంగా నిరోధించండి</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● విస్తృతమైన డ్రాగ్ - మరియు - డ్రాప్ సపోర్ట్, కస్టమ్ గ్లోబల్ సత్వరమార్గాలు, రౌటింగ్ మరియు మౌస్ - ఉచిత నావిగేషన్</value>
+    <value>Applip క్లిప్‌బోర్డ్ ట్రాకింగ్ నుండి కొన్ని అనువర్తనాలు, వెబ్‌సైట్‌లు మరియు నిర్దిష్ట వెబ్ పేజీలను కూడా సులభంగా బ్లాక్ చేయండి</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>Custom కస్టమ్ మౌస్ మోడ్‌లు: కుడి - పేస్ట్ మరియు ఎడమ క్లిక్ చేయండి - ఆటో క్లిక్ చేయండి - కాపీ</value>
+    <value>● విస్తృతమైన డ్రాగ్ - మరియు - డ్రాప్ సపోర్ట్, కస్టమ్ గ్లోబల్ సత్వరమార్గాలు, రౌటింగ్ మరియు మౌస్ - ఉచిత నావిగేషన్</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>క్లిప్‌బోర్డ్ ఒక అడవి. మంకీపాస్ట్ రాజు! అనువర్తనం నుండి అనువర్తనానికి స్వింగ్, దీన్ని కాపీ చేయడం మరియు మంకీపేస్ట్‌తో మునుపెన్నడూ లేని విధంగా అతికించడం !! ఒక బ్రాండ్ - క్రొత్త, కట్టింగ్ ఎడ్జ్ క్లిప్‌బోర్డ్ మరియు విశ్లేషణాత్మక ఆటోమేషన్ సాధనం !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>చర్యలో మంకీపేస్ట్ యొక్క నమూనా!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>ఈ భాషలో వ్యవస్థాపించబడింది. ఇంగ్లీష్ ఈ ఉదాహరణలకు మాత్రమే</value>
@@ -250,5 +264,11 @@ Stort 1,000 క్లిప్‌ల కంటెంట్ వరకు
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>ఈ సభ్యత్వంతో మీరు అందుకుంటారు:
 అపరిమిత సామర్థ్యం</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>Safe సురక్షితమైన, సురక్షితమైన మరియు ప్రైవేట్ స్థానిక డేటా నిల్వ (డేటా సేకరణ లేదు) ఎల్లప్పుడూ ఐచ్ఛిక 2 తో గుప్తీకరించబడుతుంది - కారకం పాస్‌వర్డ్ రక్షణ</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>ప్లాట్‌ఫారమ్‌లు మరియు లక్షణాలు త్వరలో రాబోతున్నాయి! మేము ఇప్పుడే ప్రారంభించాము</value>
   </data>
 </root>

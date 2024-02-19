@@ -220,9 +220,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSelected {
             get => _isSelected;
             set {
-                if (CopyItemTitle == "Text 333") {
-
-                }
                 if (_isSelected != value) {
                     // NOTE always triggering prop change when selecting
                     // to update LastSelectedDateTime to ensure

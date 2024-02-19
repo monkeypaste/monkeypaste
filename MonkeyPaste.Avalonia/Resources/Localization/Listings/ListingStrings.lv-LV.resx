@@ -70,28 +70,36 @@
     <value>Pamata - gadā</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopija</value>
@@ -127,19 +135,24 @@
     <value>Uzbūvēts - spraudņu pārlūkprogrammā ar vienmēr augošu kopienu - spraudņu bibliotēku, kas vadīta</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste ir starpliktuves pārvaldnieks, automatizācijas un produktivitātes rīks kā neviens cits. Starpliktuves uzlabošana bagātinātā un organizētā darbplūsmas daļā,
@@ -158,40 +171,41 @@ Es arī vēlos, lai jūs justos ērti, izmantojot to. Tāpēc es jums kā vienī
 Jūsu starpliktuvē kādreiz tiek izsekots vai glabāts jebkur ārpus jūsu mašīnas. Periods.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Vienkārša un draudzīga saskarne ar gan horizontāliem, gan vertikāliem izkārtojumiem, saraksta/režģa skatu un vairāku - monitora atbalstu</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Pievienot režīmu: Kopēšana kļūst par “pievienošanu”, nevis “nomainiet” starpliktuvē. Gan teksts, gan faili, pilnībā pielāgojami</value>
+    <value>● Pielāgoti peles režīmi: labajā pusē - noklikšķiniet uz Ielīmēt un kreisi - noklikšķiniet uz Auto - kopēt</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Sarežģīta klipu izsekošana, avoti un lietošana ar pastiprinātu atbalstu Firefox un Chromium balstītām pārlūkprogrammām (hroms, mala, drosmīgs)</value>
+    <value>● Pievienot režīmu: Kopēšana kļūst par “pievienošanu”, nevis “nomainiet” starpliktuvē. Gan teksts, gan faili, pilnībā pielāgojami</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Pilnībā - piedāvātais klipu redaktors ar bagātīgu tekstu (tabulas, saraksti, saites utt.) Ar Atrodi/aizstāšanu un izcelšanu</value>
+    <value>● Sarežģīta klipu izsekošana, avoti un lietošana ar pastiprinātu atbalstu Firefox un Chromium balstītām pārlūkprogrammām (hroms, mala, drosmīgs)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Saglabājiet savus attēlus drošā datu bāzē, kas ir gatava lietošanai kā failiem jebkurā laikā - pieprasiet, vienkārši velciet - un - Drop!</value>
+    <value>● Pilnībā - piedāvātais klipu redaktors ar bagātīgu tekstu (tabulas, saraksti, saites utt.) Ar Atrodi/aizstāšanu un izcelšanu</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Jaudīga teksta veidne ātrai, dinamiskai ielīmēšanai no jūsu fragmentu kolekcijas</value>
+    <value>● Saglabājiet savus attēlus drošā datu bāzē, kas ir gatava lietošanai kā failiem jebkurā laikā - pieprasiet, vienkārši velciet - un - Drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action Designer pielāgotām automatizācijām un darbības ķēdi</value>
+    <value>● Jaudīga teksta veidne ātrai, dinamiskai ielīmēšanai no jūsu fragmentu kolekcijas</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Vienkārši lietojama un paplašina spraudņu sistēmu gan klipu analīzei, gan arī par starpliktuves formātu lasiet/rakstiet jebkuru formātu</value>
+    <value>● Trigger &amp; Action Designer pielāgotām automatizācijām un darbības ķēdi</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● iebūvēts - spraudņu pārlūkprogrammā ar vienmēr augošu kopienu - vadītu spraudņu bibliotēku</value>
+    <value>● Vienkārši lietojama un paplašina spraudņu sistēmu gan klipu analīzei, gan arī par starpliktuves formātu lasiet/rakstiet jebkuru formātu</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatizējiet visu ar spraudņa iepriekšējiem iestatījumiem, atliciniet un viegli izmantojiet jebkuru no jūsu AI uzvednēm vai komandām</value>
+    <value>● iebūvēts - spraudņu pārlūkprogrammā ar vienmēr augošu kopienu - vadītu spraudņu bibliotēku</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Drīzumā parādīsies vairāk platformu un funkciju! Mēs tikai sākam sākt 🎉</value>
+    <value>● Automatizējiet visu ar spraudņa iepriekšējiem iestatījumiem, atliciniet un viegli izmantojiet jebkuru no jūsu AI uzvednēm vai komandām</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Gan gaismas, gan tumšās tēmas ir pilnīgi dinamiskas, izmantojiet jebkuru vēlamo krāsu</value>
@@ -208,29 +222,29 @@ Jūsu starpliktuvē kādreiz tiek izsekots vai glabāts jebkur ārpus jūsu maš
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Sakārtojiet klipus tagu kokos un izveidojiet atkārtoti lietojamus filtrus</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Droša, droša un privāta vietējā datu glabāšana (bez datu vākšanas) vienmēr ir šifrēta ar izvēles 2 - faktoru paroles aizsardzību un viegli bloķēt lietotnes vai vietnes no jūsu izsekotāja</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Plašs vilkšanas un nometnes atbalsts, pielāgoti globālie saīsnes, maršrutēšana un pele - bezmaksas navigācija</value>
+    <value>● Viegli bloķēt noteiktas lietotnes, vietnes un pat īpašas tīmekļa lapas no starpliktuves izsekošanas</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Pielāgoti peles režīmi: labajā pusē - noklikšķiniet uz Ielīmēt un kreisi - noklikšķiniet uz Auto - kopēt</value>
+    <value>● Plašs vilkšanas un nometnes atbalsts, pielāgoti globālie saīsnes, maršrutēšana un pele - bezmaksas navigācija</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Starpliktuvē ir džungļi. Monkeypaste ir karalis! Pārejiet no lietotnes uz lietotni, kopējot to un ielīmējot to kā vēl nekad ar pērtiķiem !! Zīmols - jauns, progresīvas starpliktuves un analītiskās automatizācijas rīks !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Monkeypaste paraugs darbībā!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Instalēts šajā valodā. Angļu valoda ir paredzēta tikai šiem piemēriem</value>
@@ -250,5 +264,11 @@ Jūsu starpliktuvē kādreiz tiek izsekots vai glabāts jebkur ārpus jūsu maš
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Ar šo abonementu jūs saņemsiet:
 ● Neierobežota ietilpība</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Droša, droša un privāta vietējā datu glabāšana (bez datu vākšanas) vienmēr šifrēja ar izvēles 2 - faktoru paroles aizsardzību</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Drīzumā parādīsies vairāk platformu un funkciju! Mēs tikai sākam sākt 🎉</value>
   </data>
 </root>

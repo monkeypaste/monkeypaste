@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,7 +20,8 @@ namespace MonkeyPaste.Avalonia {
 
         public string PlainText {
             get {
-                return "TEST message";
+                //return "TEST message";
+                return Body;
             }
         }
         #endregion

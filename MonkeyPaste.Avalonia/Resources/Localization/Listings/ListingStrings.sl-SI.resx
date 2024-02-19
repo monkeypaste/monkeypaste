@@ -70,28 +70,36 @@
     <value>Osnovno - letno</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopirati</value>
@@ -127,19 +135,24 @@
     <value>Vgrajen - v brskalniku vtičnikov z vedno rastočo skupnostjo - gnana knjižnica vtičnikov</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste je upravitelj odložišč, orodje za avtomatizacijo in produktivnost kot nobeno drugo. Izboljšanje odložišča v obogateni in organiziran del vašega delovnega toka,
@@ -158,40 +171,41 @@ Prav tako želim, da se počutite udobno z uporabo. Zato vam zagotavljam, da ste
 Odložišče je kdajkoli spremljano ali shranjeno kjer koli zunaj vašega stroja. Obdobje.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Preprost in prijazen vmesnik tako z vodoravnimi/navpičnimi postavitvami, seznamom/omrežjem in večkratno podporo za spremljanje</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Dodatni način: Kopiranje postane "dodaj v" namesto "zamenjajte" na odložišču. Tako besedilo kot datoteke, popolnoma prilagodljive</value>
+    <value>● Načini miške po meri: desno - kliknite Prilepo in levo - AUTO - Kopirajte</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Prefinjeno sledenje sponka, viri in uporaba z izboljšano podporo za brskalnike na osnovi Firefox in krom (Chrome, Edge, Brave)</value>
+    <value>● Dodatni način: Kopiranje postane "dodaj v" namesto "zamenjajte" na odložišču. Tako besedilo kot datoteke, popolnoma prilagodljive</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Popolnoma - predstavljen urejevalnik posnetkov z bogatim besedilom (tabele, seznami, povezave itd.) Z FIED/zamenjavo in poudarjanjem</value>
+    <value>● Prefinjeno sledenje sponka, viri in uporaba z izboljšano podporo za brskalnike na osnovi Firefox in krom (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Slike shranite v varno bazo podatkov, pripravljene za uporabo kot datoteke kadar koli vklopljen - povpraševanje samo povlecite - in - spustite!</value>
+    <value>● Popolnoma - predstavljen urejevalnik posnetkov z bogatim besedilom (tabele, seznami, povezave itd.) Z FIED/zamenjavo in poudarjanjem</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Zmogljivo besedilo za hitro, dinamično lepljenje iz vaše zbirke Skipeta</value>
+    <value>● Slike shranite v varno bazo podatkov, pripravljene za uporabo kot datoteke kadar koli vklopljen - povpraševanje samo povlecite - in - spustite!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action Designer za avtomatizacije po meri in verigo akcij</value>
+    <value>● Zmogljivo besedilo za hitro, dinamično lepljenje iz vaše zbirke Skipeta</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Preprost sistem za uporabo in razširitev vtičnikov za analizo posnetkov ali branje/pisanje katere koli oblike v odložišče</value>
+    <value>● Trigger &amp; Action Designer za avtomatizacije po meri in verigo akcij</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Vgrajen - v brskalniku vtičnikov z vedno večjo skupnostjo - Genty Library of Plugins</value>
+    <value>● Preprost sistem za uporabo in razširitev vtičnikov za analizo posnetkov ali branje/pisanje katere koli oblike v odložišče</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Avtomatizirajte vse s prednastavitvami vtičnikov, zamašite in z lahkoto uporabite svoje pozive ali ukaze AI</value>
+    <value>● Vgrajen - v brskalniku vtičnikov z vedno večjo skupnostjo - Genty Library of Plugins</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Kmalu prihaja več platform in funkcij! Pravkar smo začeli 🎉</value>
+    <value>● Avtomatizirajte vse s prednastavitvami vtičnikov, zamašite in z lahkoto uporabite svoje pozive ali ukaze AI</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Tako svetlo in temne teme sta popolnoma dinamični, uporabite katero koli barvo, ki jo želite</value>
@@ -208,29 +222,29 @@ Odložišče je kdajkoli spremljano ali shranjeno kjer koli zunaj vašega stroja
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organizirajte svoje posnetke v oznakah in ustvarite filtre za oživitev</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Varno, varno in zasebno lokalno shranjevanje podatkov (brez zbiranja podatkov) je vedno šifrirano z izbirno zaščito gesla za 2 - faktor in enostavno blokirati aplikacije ali spletna mesta s svojega sledilca</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Obsežna vleka - in - spusti podporo, globalne bližnjice po meri, usmerjanje in miško - brezplačna navigacija</value>
+    <value>● Z lahkoto blokirajte nekatere aplikacije, spletna mesta in celo posebne spletne strani s sledenja odložišča</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Načini miške po meri: desno - kliknite Prilepo in levo - AUTO - Kopirajte</value>
+    <value>● Obsežna vleka - in - spusti podporo, globalne bližnjice po meri, usmerjanje in miško - brezplačna navigacija</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Odložišče je džungla. MonkeyPaste je kralj! Nihajte iz aplikacije do aplikacije, kopirate to in prilepite, kot še nikoli prej z MonkeyPaste !! Blagovna znamka - novo, vrhunsko odložišče in analitično orodje za avtomatizacijo !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Vzorec MonkeyPaste v akciji!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Nameščen v tem jeziku. Angleščina je samo za te primere</value>
@@ -250,5 +264,11 @@ Odložišče je kdajkoli spremljano ali shranjeno kjer koli zunaj vašega stroja
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>S to naročnino boste prejeli:
 ● Neomejena zmogljivost</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Varno, varno in zasebno lokalno shranjevanje podatkov (brez zbiranja podatkov) vedno šifrirano z izbirno zaščito gesla za 2 - faktor</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Kmalu prihaja več platform in funkcij! Pravkar smo začeli 🎉</value>
   </data>
 </root>

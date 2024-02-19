@@ -2700,4 +2700,200 @@ Visiškas atkūrimas negali būti garantuotas ir gali sumažinti našumą arba n
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Tokiu būdu galima pasiekti "MonkeyPaste"&lt;br&gt;&lt;span color="red"&gt;be paspaudimo&lt;/span&gt; ar net &lt;span color="red"&gt;akių užmetimo&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Anotacija</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klonas</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Duomenų objektas</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Prijungti</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Skaitytojas</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Nežinoma klaida</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Rašytojas</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Šiems papildiniams aptiktas „Papildin GUID '{0}“ kopija:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Pataisykite keičiant papildinio GUID arba pašalindami dublikatus. Priešingu atveju visi susiję papildiniai bus ignoruojami.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Šių papildinių ir išankstinių nustatymų, aptiktų „Papildine Preset GUID“, „{0}“:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Papildinys: {0} {1} iš anksto nustatytas (-ai): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Papildinys: {0} {1} iš anksto nustatytas (-ai): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Pataisykite pateikdami unikalius iš anksto nustatytus GUID arba pašalindami dublikatus. Priešingu atveju visi susiję papildiniai bus ignoruojami.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Redaktoriaus spalva</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Ar tikrai norite visam laikui ištrinti visą {0} elementą (-us)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Pasirinkite aplanką</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Pasirinkite „Watch“ aplanką</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Papildinio klaida. Papildinys '{0}' yra '{1}' tipas, bet ne '{1}' formatas rastas</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Klaida atliekant veiksmą '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Reikšme turi būti tik skaičiai arba '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Reikšmė turi būti nuo {0} iki {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Turi būti šešiakampė (6 arba 8 skaitmenų) eilutė, pradedant nuo „#“</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Iškarpinė '{0}' turi būti unikali.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Jau egzistuoja</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Formatas</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tipas</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Karpinės srities skaitytuvo/rašytojo formato pavadinimai turi būti unikalūs. Skaitytojo dublikatai:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Karpinės srities skaitytuvo/rašytojo formato pavadinimai turi būti unikalūs. Rašytojo dublikatai:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Mainų srities formato GUID turi būti unikalūs. Dublikatų formatai ir GUIDS:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Papildinio klaida: visi papildiniai '{0}' laukai turi būti unikalūs, jei „Handler“ '{1}'. {2} ParamName '{3}' turi kelis įrašus</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Papildinio klaida, nerasta invariant manifestas</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Įskiepio '{0}'</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Nepaženklintas param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Papildinio parametrų ID ({0}) turi būti apibrėžti. Papildinys '{1}' turi šiuos parametrus su trūkstamais paramidais: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>DUBLIKATINIS PARAMID '{0}' aptiktas (visi turi būti unikalūs). {1} etiketės: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Reikia iš anksto nustatyti GUID. „{0}“ jis nebuvo rastas ar neteisingas formatas papildinyje {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Nepavyko rasti parametro su paramId '{0}', nurodytą iš anksto nustatyto įskiepio '{2}' '{1}'. Parametras gali būti pakeistas arba pašalintas, atnaujinkite iš anksto nustatytą paramValue arba pašalinkite jį.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Išankstiniuose nustatymuose negalima nustatyti bendrinamų verčių parametrų. Įskiepio „{2}“ išankstinio nustatymo „{1}“ „ParamId“ „{0}“ turi būti pašalintas arba parametro apibrėžimo skiltyje galima nurodyti „paramValue“.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Išankstiniai nustatymai turi turėti unikalias GUID. Iš anksto nustatytas GUID '{0}' dublikatas buvo aptiktas iš anksto nustatytuose papildiniuose '{1}': {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Papildinio analizės klaida, esant kelią '{0}' NULL, tikėtina, kad klaidų analizė JSON. Ignoruojamas papildinys</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Papildinio pavadinimo klaida, esant keliui '{0}', turi turėti „pavadinimo“ ypatybę, turinčią ne daugiau kaip {1} simbolius. Ignoruojamas papildinys</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Papildinio GUID klaida, esant kelią '{0}' su pavadinimu '{1}', turi turėti „Guid“ nuosavybę, RFC 4122 suderinamas su 128 bitų GUID (UUID) tik su raidėmis, numeriais ir brūkšneliais. Ignoruojamas papildinys.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Papildinio aprašymo klaida, esant kelią '{0}' Aprašymas turi būti ne daugiau kaip {1} simboliai. Ignoruojamas papildinys</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Papildinių žymų klaida, „Path '{0}'“ žymos turi būti ne daugiau kaip {1} simboliai. Ignoruojamas papildinys</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Pridėkite derinimo įrenginį prie '{0}' arba atšaukite, kad galėtumėte tęsti.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Laukia derinimo</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Klaida atsisiunčiant papildinį. Pabandykite dar kartą vėliau.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Papildinys atnaujintas</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Ar tikrai norite atkurti visus {0} elementus (-us)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Paieškos kriterijai 'be pavadinimo'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Paieškos kriterijai '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' yra bendros vertės. Ar norėtumėte juos iš naujo nustatyti?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

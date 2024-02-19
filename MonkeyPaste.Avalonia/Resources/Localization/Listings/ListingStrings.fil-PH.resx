@@ -70,28 +70,36 @@
     <value>Pangunahing - taun -taon</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopya</value>
@@ -127,19 +135,24 @@
     <value>Itinayo - Sa Plugin Browser na may kailanman - Lumalagong Komunidad - hinimok na library ng mga plugin</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Ang Monkeypaste ay isang clipboard manager, automation at tool ng pagiging produktibo tulad ng walang iba. Pagpapahusay ng iyong clipboard sa isang enriched at organisadong bahagi ng iyong daloy ng trabaho,
@@ -158,40 +171,41 @@ Nais ko ring komportable ka sa paggamit nito. Kaya't sinisiguro ko sa iyo, bilan
 Ang iyong clipboard ay kailanman sinusubaybayan o naka -imbak kahit saan lampas sa iyong sariling makina. Panahon</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Simple at palakaibigan na interface na may parehong pahalang/patayong layout, listahan/view ng grid at suporta ng multi -monitor</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Mode ng Append: Ang pagkopya ay nagiging 'idagdag sa' sa halip na 'palitan' sa clipboard. Parehong teksto at mga file, ganap na napapasadyang</value>
+    <value>● Mga mode ng pasadyang mouse: kanan - i -click ang i -paste at kaliwa - i -click ang Auto - Kopyahin</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Sopistikadong pagsubaybay sa clip, mga mapagkukunan at paggamit na may pinahusay na suporta para sa mga browser na batay sa firefox at chromium (Chrome, Edge, Brave)</value>
+    <value>● Mode ng Append: Ang pagkopya ay nagiging 'idagdag sa' sa halip na 'palitan' sa clipboard. Parehong teksto at mga file, ganap na napapasadyang</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Ganap - itinampok na clip editor na may mayaman na teksto (mga talahanayan, listahan, mga link, atbp.) Na may Find/Palitan at Pag -highlight</value>
+    <value>● Sopistikadong pagsubaybay sa clip, mga mapagkukunan at paggamit na may pinahusay na suporta para sa mga browser na batay sa firefox at chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Itago ang iyong mga imahe sa ligtas na database, handa nang gamitin bilang mga file anumang oras sa - demand na i -drag lamang - at - drop!</value>
+    <value>● Ganap - itinampok na clip editor na may mayaman na teksto (mga talahanayan, listahan, mga link, atbp.) Na may Find/Palitan at Pag -highlight</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Malakas na templating ng teksto para sa mabilis, pabago -bagong pag -paste mula sa iyong koleksyon ng snippet</value>
+    <value>● Itago ang iyong mga imahe sa ligtas na database, handa nang gamitin bilang mga file anumang oras sa - demand na i -drag lamang - at - drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Pag -trigger at taga -disenyo ng aksyon para sa mga pasadyang automation at pag -aalaga ng aksyon</value>
+    <value>● Malakas na templating ng teksto para sa mabilis, pabago -bagong pag -paste mula sa iyong koleksyon ng snippet</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Simpleng gamitin at pahabain ang plugin system para sa parehong pagsusuri ng mga clip o basahin/isulat ang anumang format sa iyong clipboard</value>
+    <value>● Pag -trigger at taga -disenyo ng aksyon para sa mga pasadyang automation at pag -aalaga ng aksyon</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Itinayo - sa Plugin Browser na may kailanman - Lumalagong Komunidad - hinimok na library ng mga plugin</value>
+    <value>● Simpleng gamitin at pahabain ang plugin system para sa parehong pagsusuri ng mga clip o basahin/isulat ang anumang format sa iyong clipboard</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● I -automate ang lahat na may mga preset ng plugin, itapon at gamitin ang iyong alinman sa iyong mga senyas o utos ng AI nang madali</value>
+    <value>● Itinayo - sa Plugin Browser na may kailanman - Lumalagong Komunidad - hinimok na library ng mga plugin</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Higit pang mga platform at tampok na paparating! Nagsimula lang kami 🎉</value>
+    <value>● I -automate ang lahat na may mga preset ng plugin, itapon at gamitin ang iyong alinman sa iyong mga senyas o utos ng AI nang madali</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Ang parehong ilaw at madilim na mga tema ay ganap na pabago -bago, gumamit ng anumang kulay na nais mo</value>
@@ -208,29 +222,29 @@ Ang iyong clipboard ay kailanman sinusubaybayan o naka -imbak kahit saan lampas 
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Ayusin ang iyong mga clip sa mga puno ng tag at lumikha ng mga resusable filter</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Ligtas, ligtas at pribadong lokal na imbakan ng data (walang koleksyon ng data) palaging naka -encrypt na may opsyonal na 2 - proteksyon ng factor ng password at madaling i -block ang mga app o website mula sa iyong tracker</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● malawak na pag -drag - at - drop suporta, pasadyang pandaigdigang mga shortcut, ruta at mouse - libreng nabigasyon</value>
+    <value>● Madaling i -block ang ilang mga app, website at kahit na mga tukoy na web page mula sa pagsubaybay sa clipboard</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Mga mode ng pasadyang mouse: kanan - i -click ang i -paste at kaliwa - i -click ang Auto - Kopyahin</value>
+    <value>● malawak na pag -drag - at - drop suporta, pasadyang pandaigdigang mga shortcut, ruta at mouse - libreng nabigasyon</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Ang clipboard ay isang gubat. Ang Monkeypaste ay ang hari! Swing mula sa app hanggang sa app, pagkopya nito at pag -paste na tulad ng hindi pa bago sa Monkeypaste !! Isang tatak - bago, pagputol ng clipboard ng gilid at tool ng analytic automation !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Halimbawang Monkeypaste sa Aksyon!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Naka -install sa wikang ito. Ang Ingles ay para lamang sa mga halimbawang ito</value>
@@ -250,5 +264,11 @@ Ang iyong clipboard ay kailanman sinusubaybayan o naka -imbak kahit saan lampas 
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Sa subscription na ito ay matatanggap mo:
 ● Walang limitasyong kapasidad</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Ligtas, ligtas at pribadong lokal na imbakan ng data (walang koleksyon ng data) na laging naka -encrypt na may opsyonal na 2 - proteksyon ng password ng kadahilanan</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Higit pang mga platform at tampok na paparating! Nagsimula lang kami 🎉</value>
   </data>
 </root>

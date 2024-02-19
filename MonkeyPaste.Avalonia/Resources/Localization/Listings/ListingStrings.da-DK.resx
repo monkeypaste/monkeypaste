@@ -70,28 +70,36 @@
     <value>Grundlæggende - årligt</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopi</value>
@@ -127,19 +135,24 @@
     <value>Bygget - i pluginbrowser med et nogensinde voksende samfundsdrevet bibliotek med plugins</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste er en clipboard manager, automatisering og produktivitetsværktøj som ingen anden. Forbedring af dit udklipsholder til en beriget og organiseret del af din arbejdsgang,
@@ -158,40 +171,41 @@ Jeg vil også have dig til at føle dig godt tilpas med at bruge det. Så jeg ka
 Dit udklipsholder spores eller gemmes nogensinde overalt ud over din egen maskine. Periode.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Enkel og venlig grænseflade med både vandrette/lodrette layouts, liste/gittervisning og multi - Monitor support</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Tilføj tilstand: Kopiering bliver 'Tilføj til' i stedet for 'Udskift' på udklipsholderen. Både tekst og filer, fuldt tilpasselige</value>
+    <value>● Brugerdefinerede musetilstande: Højre - Klik på Indsæt og venstre - Klik på Auto - Kopi</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Sofistikeret klipsporing, kilder og brug med forbedret støtte til Firefox og Chromium -baserede browsere (krom, kant, modig)</value>
+    <value>● Tilføj tilstand: Kopiering bliver 'Tilføj til' i stedet for 'Udskift' på udklipsholderen. Både tekst og filer, fuldt tilpasselige</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Fuldt - Featured Clip Editor med rig tekst (tabeller, lister, links osv.) Med Find/Udskift og fremhævning</value>
+    <value>● Sofistikeret klipsporing, kilder og brug med forbedret støtte til Firefox og Chromium -baserede browsere (krom, kant, modig)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Opbevar dine billeder i den sikre database, klar til brug som filer når som helst på - efterspørgsel bare træk - og - slip!</value>
+    <value>● Fuldt - Featured Clip Editor med rig tekst (tabeller, lister, links osv.) Med Find/Udskift og fremhævning</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Kraftig teksttempler til hurtig, dynamisk indsats fra din uddragskollektion</value>
+    <value>● Opbevar dine billeder i den sikre database, klar til brug som filer når som helst på - efterspørgsel bare træk - og - slip!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action Designer til brugerdefinerede automatiseringer og handlingskæde</value>
+    <value>● Kraftig teksttempler til hurtig, dynamisk indsats fra din uddragskollektion</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Enkelt at bruge og udvide plugin -systemet til både analyse af klip eller læse/skrive ethvert format til dit udklipsholder</value>
+    <value>● Trigger &amp; Action Designer til brugerdefinerede automatiseringer og handlingskæde</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Bygget - i plugin -browser med et nogensinde voksende samfundsdrevet bibliotek med plugins</value>
+    <value>● Enkelt at bruge og udvide plugin -systemet til både analyse af klip eller læse/skrive ethvert format til dit udklipsholder</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatiser alt med plugin -forudindstillinger, stash og brug dine nogen af ​​dine AI -prompter eller kommandoer let</value>
+    <value>● Bygget - i plugin -browser med et nogensinde voksende samfundsdrevet bibliotek med plugins</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Flere platforme og funktioner, der snart kommer! Vi er bare ved at få startet 🎉</value>
+    <value>● Automatiser alt med plugin -forudindstillinger, stash og brug dine nogen af ​​dine AI -prompter eller kommandoer let</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Både lette og mørke temaer er helt dynamiske, brug enhver farve, du ønsker</value>
@@ -208,29 +222,29 @@ Dit udklipsholder spores eller gemmes nogensinde overalt ud over din egen maskin
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organiser dine klip i tagtræer og opret genanvendelige filtre</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Sikker, sikker og privat lokal datalagring (ingen dataindsamling) krypteret altid med valgfri 2 - Faktoradgangskodebeskyttelse og let blokering af apps eller websteder fra din tracker</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Omfattende træk - og - Drop support, brugerdefinerede globale genveje, routing og mus - Gratis navigation</value>
+    <value>● Bloker let visse apps, websteder og endda specifikke websider fra clipboard -sporing</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Brugerdefinerede musetilstande: Højre - Klik på Indsæt og venstre - Klik på Auto - Kopi</value>
+    <value>● Omfattende træk - og - Drop support, brugerdefinerede globale genveje, routing og mus - Gratis navigation</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Klippebordet er en jungle. Monkeypaste er kongen! Sving fra app til app, kopiering af dette og indsat det som aldrig før med abeypaste !! Et brand - nyt, banebrydende clipboard og analytisk automatiseringsværktøj !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Eksempel på abeypaste i aktion!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Installeret på dette sprog. Engelsk er kun til disse eksempler</value>
@@ -250,5 +264,11 @@ Dit udklipsholder spores eller gemmes nogensinde overalt ud over din egen maskin
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Med dette abonnement vil du modtage:
 ● Ubegrænset kapacitet</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Sikker, sikker og privat lokal datalagring (ingen dataindsamling) krypteret altid med valgfri 2 - Faktoradgangskodebeskyttelse</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Flere platforme og funktioner, der snart kommer! Vi er bare ved at få startet 🎉</value>
   </data>
 </root>

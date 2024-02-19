@@ -684,7 +684,7 @@
     <value>የይለፍ ቃሎች ተመሳሳይ አይደሉም.</value>
   </data>
   <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
-    <value>የይለፍ ቃል ቢያንስ 0} ቁምፊዎች መሆን አለበት.</value>
+    <value>የይለፍ ቃል ቢያንስ {0} ቁምፊዎች መሆን አለበት.</value>
   </data>
   <data name="CommonRememberLabel" xml:space="preserve">
     <value>ያስታውሱ?</value>
@@ -796,7 +796,7 @@
     <comment>Parameter Label, number</comment>
   </data>
   <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
-    <value>ወደ &lt;&lt; &lt;&lt; &lt;0}&gt; ይለጥፉ</value>
+    <value>ወደ &lt;&lt; &lt;&lt; &lt;{0}&gt; ይለጥፉ</value>
     <comment>Application Name</comment>
   </data>
   <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
@@ -1122,7 +1122,7 @@
     <comment>Error Details</comment>
   </data>
   <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
-    <value>ተሰኪ {0} 'ብልሹ ወይም ተገቢ ያልሆነ የማውጫ መዋቅር ላይ ስህተት. {1 {{} 'መኖር አለበት, ግን አልተገኘም.</value>
+    <value>ስህተት መጫን ፕለጊን '{0}' ብልሹ ወይም ተገቢ ያልሆነ የዳይሬክተሪ መዋቅር. '{1}' ላይ በግልጽ መታየት ቢኖርበትም አልተገኘም።</value>
     <comment>Plugin Name, File Path</comment>
   </data>
   <data name="PluginErrManifestText" xml:space="preserve">
@@ -2699,5 +2699,201 @@
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;በዚህ መንገድ, MonkeyPaste ማግኘት ይቻላል&lt;br&gt;&lt;span color="red"&gt;ያለ መጫን&lt;/span&gt; ወይም &lt;span color="red"&gt;ደግሞ አይን ሳይደበዝዝ&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>ማብራሪያ</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>ክሎይን</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>የውሂብ ነገር</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>መሰካት</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>አንባቢ</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>ያልታወቀ ስህተት</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>ጸሐፊ</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>የተባዙ ተሰኪዎች {0} 'ለእነዚህ ተሰኪዎች ተገኝቷል</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>በተለዋዋጭ ተሰኪ በተለዋዋጭ ተሰኪዎች ወይም አርሰ-ወለሎች ያስወግዱ. ያለበለዚያ ሁሉም ተጓዳኝ ተሰኪዎች ችላ ይላሉ.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>የተባዙ ፕለጊን ፕፖዚን መመሪያ መመሪያ {0</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>ተሰኪ: {0} {1} ቅድመ-ቅምጥ (ቶች): # {2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>ተሰኪ: {0} {1} ቅድመ-ቅምጥ (ቶች): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>ልዩ ቅድመ ቅድመ ሁኔታ መመሪያዎችን በማቅረብ ወይም የተባዙ ብዜቶችን በማስወገድ ላይ. ያለበለዚያ ሁሉም ተጓዳኝ ተሰኪዎች ችላ ይላሉ.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>አርታኢ ቀለም</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ሁሉንም {0} ንጥል (ቶች) በቋሚነት ሊሰርዙ ይፈልጋሉ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>አቃፊ ይምረጡ</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>የእጅ ማህቀሩን ይምረጡ</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>ተሰኪ ስህተት. ተሰኪ '{0}' {1} ዓይነት ግን አይደለም.</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>እርምጃ ማከናወን ስህተት '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>ዋጋ ቁጥሮችን ወይም '{0}' ን ብቻ መያዝ አለበት</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>እሴት ከ {0} እስከ {1} መሆን አለበት</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>ከ '#' ጀምሮ ሄክስ (6 ወይም 8 አሃዝ) ሕብረቁምፊ መሆን አለበት</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>ቅንጥብ ሰሌዳ '{0} ልዩ መሆን አለበት.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>አስቀድሞ አለ</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>ቅርጸት</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>ዓይነት</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>የቅንጥብ ሰሌዳ አንባቢ / ጸሐፊ ቅርጸት ስሞች ልዩ መሆን አለባቸው. አንባቢ የሆኑት</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>የቅንጥብ ሰሌዳ አንባቢ / ጸሐፊ ቅርጸት ስሞች ልዩ መሆን አለባቸው. ጸሐፊ የተባዛ</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>የ Clipboard Set ቅርጸት መመሪያዎች ልዩ መሆን አለባቸው. የተባዙ ቅርፀቶች እና ጉዴታዎች</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>ተሰኪው ስህተት: - ሁሉም ተሰኪ {0} መስኮች ለተቆጣጣሪው ልዩ መሆን አለባቸው '{1}' {2} '}' {3} 'በርካታ ግቤቶች አሉት</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>ተሰኪ ስህተት, የሽርሽር መገለጫ አልተገኘም</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>ተሰኪ '{0}' ያልታሰበ ቅድመ-ቅምጥ ማቅረብ አይችሉም</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>ያልተገለጸ ፓራም # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ተሰኪ ግቤት መታወቂያ መታወቂያ ({0}) መገለፅ አለበት. ተሰኪ '{1}' የጎደለው ፓራሚድ ጋር የሚከተሉትን መለኪያዎች አሉት- {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>የተባዛበት ፓራሚድ '{0} ተገኝቷል (ሁሉም ልዩ መሆን አለበት). {1} መለያዎች: {1} {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>የቅድመ ዝግጅት መመሪያ ያስፈልጋል. በሰፋሚ {1} ውስጥ '{0}' አልተገኘም ወይም የተሳሳተ ቅርጸት አልተገኘም</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>በ PORMID '{0} ጋር ግቤት ማግኘት አልተቻለም' {1} '{2}' {2} ' መለኪያ የተለወጠው ወይም የተወገዱ, የቀደመውን ቅድመ-ሁኔታ ወይም ያስወግዱት.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>በቅድመ-ቅጥር ውስጥ የተጋራ እሴት መለኪያዎች ማዘጋጀት አልተቻለም. {0} 'ቅድመ-}' {1} '{1}' {1} '{1}' {1} '{2} የመነሻ ወይም የእኩልነት መወገድ አለባቸው.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ቅድመ-ቅምጦች ልዩ ግልገሎች ሊኖራቸው ይገባል. የተባዛ የቀደመ መመሪያ መመሪያ '{0}' ለቅድመ-ቅምጦች 'በፕኪሊን' {1} ተገኝቷል: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Plakin ይተላለፋል, በመንገድ '{0}' NAL '{0 {0 {0 {0} ተሰኪን ችላ ማለት</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>ተሰኪ ርዕስ ስህተት, በመንገድ '{0}' ከ {1} ቁምፊዎች ያልበለጠ የርዕስ ንብረት ንብረት ሊኖረው ይገባል. ተሰኪን ችላ ማለት</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>ተሰኪንግግግግግግግግ Shation ስህተት, በመንገድ '{0 {{0} ጋር' በርዕስ '{1}' ጋር '{gue's Ar RFC 412228-Buide (UUUD) ሊኖር ይገባል. ተሰኪን ችላ ማለት.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>ተሰኪ መግለጫ ስህተት, በመንገድ '{0}' መግለጫ ከ {1} ቁምፊዎች በላይ መሆን የለበትም. ተሰኪን ችላ ማለት</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>ተሰኪ መለያዎች ስህተቶች, በመንገድ '{0}' መለያዎች ከ {1} ቁምፊዎች በላይ መሆን የለባቸውም. ተሰኪን ችላ ማለት</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Argerger ወደ '{0}' ወይም ለመቀጠል ይቅርን ያያይዙ.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>አራተኛውን በመጠበቅ ላይ</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>ተሰኪ ማውረድ ስህተት. እባክዎ ቆየት ብለው ይሞክሩ.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>ተሰኪ ዘምኗል</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>እርግጠኛ ነዎት ሁሉንም {0} ንጥል (ቶች) መመለስ ይፈልጋሉ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>የፍለጋ መስፈርቶች 'ላልተያዙ'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>የፍለጋ መስፈርቶች '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0} የጋራ እሴቶችን ይ contains ል. እንዲሁም እነዚህን እንደገና ማስጀመር ይፈልጋሉ?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

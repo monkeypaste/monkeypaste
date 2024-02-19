@@ -70,28 +70,36 @@
     <value>Msingi - kila mwaka</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Nakala</value>
@@ -127,19 +135,24 @@
     <value>Imejengwa - katika kivinjari cha programu -jalizi na jamii inayokua - maktaba inayoendeshwa ya programu -jalizi</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste ni meneja wa clipboard, zana ya automatisering na tija kama hakuna mwingine. Kuongeza clipboard yako kuwa sehemu yenye utajiri na iliyopangwa ya utiririshaji wako,
@@ -158,40 +171,41 @@ Pia nataka ujisikie vizuri kuitumia. Kwa hivyo ninakuhakikishia, kama nguvu peke
 Clipboard yako inafuatiliwa au kuhifadhiwa mahali popote zaidi ya mashine yako mwenyewe. Kipindi.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Maingiliano rahisi na ya kirafiki na mpangilio wa usawa/wima, orodha/mtazamo wa gridi ya taifa na msaada wa kufuatilia anuwai</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Njia ya Append: kunakili inakuwa 'ongeza kwa' badala ya 'badala' kwenye clipboard. Nakala zote mbili na faili, zinazoweza kuboreshwa kikamilifu</value>
+    <value>● Njia za Panya za Kitamaduni: Kulia - Bonyeza Bandika na Kushoto - Bonyeza Auto - Nakili</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Ufuatiliaji wa klipu ya kisasa, vyanzo na utumiaji kwa msaada ulioimarishwa wa vivinjari vya Firefox na Chromium (Chrome, Edge, Jasiri)</value>
+    <value>● Njia ya Append: kunakili inakuwa 'ongeza kwa' badala ya 'badala' kwenye clipboard. Nakala zote mbili na faili, zinazoweza kuboreshwa kikamilifu</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Mhariri wa kipande cha picha kamili - na maandishi tajiri (meza, orodha, viungo, nk) na kupata/kubadilisha na kuonyesha</value>
+    <value>● Ufuatiliaji wa klipu ya kisasa, vyanzo na utumiaji kwa msaada ulioimarishwa wa vivinjari vya Firefox na Chromium (Chrome, Edge, Jasiri)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Hifadhi picha zako kwenye hifadhidata salama, tayari kutumia kama faili wakati wowote - mahitaji tu Drag - na - kushuka!</value>
+    <value>● Mhariri wa kipande cha picha kamili - na maandishi tajiri (meza, orodha, viungo, nk) na kupata/kubadilisha na kuonyesha</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Maombi ya maandishi yenye nguvu kwa uchungaji wa haraka, wenye nguvu kutoka kwa mkusanyiko wako wa snippet</value>
+    <value>● Hifadhi picha zako kwenye hifadhidata salama, tayari kutumia kama faili wakati wowote - mahitaji tu Drag - na - kushuka!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Mbuni wa Kitendo cha Automations Forodha na Unyonyaji wa Kitendo</value>
+    <value>● Maombi ya maandishi yenye nguvu kwa uchungaji wa haraka, wenye nguvu kutoka kwa mkusanyiko wako wa snippet</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Rahisi kutumia na kupanua mfumo wa programu -jalizi kwa kuchambua sehemu zote mbili au kusoma/kuandika muundo wowote kwenye ubao wako wa clipboard</value>
+    <value>● Trigger &amp; Mbuni wa Kitendo cha Automations Forodha na Unyonyaji wa Kitendo</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Imejengwa - katika kivinjari cha programu -jalizi na jamii inayokua - maktaba inayoendeshwa ya programu -jalizi</value>
+    <value>● Rahisi kutumia na kupanua mfumo wa programu -jalizi kwa kuchambua sehemu zote mbili au kusoma/kuandika muundo wowote kwenye ubao wako wa clipboard</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Ondoa kila kitu na vifaa vya programu -jalizi, stash na utumie yoyote ya ai yako ya AI au amri kwa urahisi</value>
+    <value>● Imejengwa - katika kivinjari cha programu -jalizi na jamii inayokua - maktaba inayoendeshwa ya programu -jalizi</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Majukwaa zaidi na huduma zinakuja hivi karibuni! Tunaanza tu 🎉</value>
+    <value>● Ondoa kila kitu na vifaa vya programu -jalizi, stash na utumie yoyote ya ai yako ya AI au amri kwa urahisi</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Mada zote mbili na za giza zina nguvu kabisa, tumia rangi yoyote unayotaka</value>
@@ -208,29 +222,29 @@ Clipboard yako inafuatiliwa au kuhifadhiwa mahali popote zaidi ya mashine yako m
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Panga sehemu zako kwenye miti ya lebo na uunda vichungi vinavyoweza kusongeshwa</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Hifadhi salama, salama na ya kibinafsi (hakuna mkusanyiko wa data) kila wakati husimbwa na hiari 2 - Factor Nenosiri ulinzi na programu za kuzuia kwa urahisi au tovuti kutoka kwa tracker yako</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Drag kubwa - na - msaada wa kuacha, njia za mkato za ulimwengu, njia na panya - urambazaji wa bure</value>
+    <value>● Zuia kwa urahisi programu fulani, wavuti na hata kurasa maalum za wavuti kutoka kwa ufuatiliaji wa clipboard</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Njia za Panya za Kitamaduni: Kulia - Bonyeza Bandika na Kushoto - Bonyeza Auto - Nakili</value>
+    <value>● Drag kubwa - na - msaada wa kuacha, njia za mkato za ulimwengu, njia na panya - urambazaji wa bure</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard ni msitu. Monkeypaste ndiye mfalme! Swing kutoka kwa programu hadi programu, kunakili hii na kubandika kama hapo awali na Monkeypaste !! Chapa - mpya, ya kukata clipboard na zana ya uchanganuzi wa vifaa !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Mfano wa Monkeypaste katika hatua!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Imewekwa katika lugha hii. Kiingereza ni kwa mifano hii tu</value>
@@ -250,5 +264,11 @@ Clipboard yako inafuatiliwa au kuhifadhiwa mahali popote zaidi ya mashine yako m
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Na usajili huu utapokea:
 ● Uwezo usio na kikomo</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Hifadhi salama, salama na ya kibinafsi (hakuna mkusanyiko wa data) kila wakati husimbwa na hiari 2 - Factor Nenosiri ulinzi</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Majukwaa zaidi na huduma zinakuja hivi karibuni! Tunaanza tu 🎉</value>
   </data>
 </root>

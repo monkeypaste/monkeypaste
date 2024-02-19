@@ -2700,4 +2700,200 @@ A teljes helyreállítás nem garantálható, és az adatok forrásától függ�
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Így a MonkeyPaste elérhető&lt;br&gt;&lt;span color="red"&gt;kattintás&lt;/span&gt; vagy &lt;span color="red"&gt;akár szemrebbenés&lt;/span&gt; nélkül &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Megjegyzés</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klón</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Adatbőr</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Csatlakoztat</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Olvasó</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Ismeretlen hiba</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Író</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>A beépülő modulok duplázott plugin guid '{0}' detektálva:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Javítsa meg a plugin GUID megváltoztatásával vagy a másolatok eltávolításával. Ellenkező esetben az összes kapcsolódó bővítményt figyelmen kívül hagyják.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Másolatú plugin preset guid '{0}' detektálva ezekhez a pluginekhez és az előre beállított beállításokhoz:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} Preset (S): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} Preset (S): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Javítsa meg az egyedi előre beállított GUID -ok megadásával vagy a másolatok eltávolításával. Ellenkező esetben az összes kapcsolódó bővítményt figyelmen kívül hagyják.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Szerkesztő szín</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Biztosan szeretné véglegesen törölni az összes {0} tételt?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Mappa kiválasztása</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Válassza az óra mappát</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Plugin hiba. A '{0}' plugin '{1}' típus, de nem a '{1}' formátum található</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Hiba a '{0}' művelet végrehajtása: {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Az értéknek csak számokat vagy '{0}' tartalmaznia kell</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Az értéknek {0} -tól {1} ​​-ig kell lennie</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Hex (6 vagy 8 számjegyű) karakterláncnak kell lennie, kezdve a '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>A '{0}' vágólapnak egyedinek kell lennie.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Már létezik</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Formátum</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>típus</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>A Clipboard Reader/Writer formátumú neveknek egyedinek kell lennie. Olvasó másolatai:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>A Clipboard Reader/Writer formátumú neveknek egyedinek kell lennie. Az író másolatok:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>A vágólap formátumú útmutatóknak egyedinek kell lenniük. Másolatú formátumok és útmutatók:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Beépülő modul hibája: A(z) "{0}" beépülő modul minden mezőjének egyedinek kell lennie a(z) "{1}" kezelő számára.{2}ParamName "{3}" több bejegyzést tartalmaz</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Plugin hiba, nem talált invariáns manifeszt</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>A '{0}' plugin nem rendelkezhet előre beállításokkal legalább 1 paraméter nélkül</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Unlaced param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Meg kell határozni a plugin paraméter -azonosítókat ({0}). A '{1}' plugin a következő paraméterekkel rendelkezik, hiányzó paramidok: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Duplikált paramid '{0}' detektált (mindegyiknek egyedinek kell lennie). {1} címkék: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Előre beállított GUID szükséges. Nem találták meg, vagy nem volt rossz formátum a '{0}' -hez a {1} pluginban</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Nem található paraméter a '{0}' paramid paramid segítségével, amelyet az '{1}' preset hivatkozik a '{2}' pluginhoz. Lehet, hogy a paraméter megváltozhat vagy eltávolított, frissítheti az előre beállított paramValue -t vagy eltávolította azt.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Nem lehet beállítani a megosztott értékparamétereket az előre beállításokba. A '{0}' paramid '{1}' beállításban a '{2}' pluginhez el kell távolítani, vagy a paramValue meg lehet határozni a paraméter -meghatározási szakaszban.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Az előre beállításoknak egyedi útmutatókkal kell rendelkezniük. Az előre beállított guid '{0}' másolatát a '{1}' pluginban észlelték az előre beállításokhoz: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>A plugin elemzési hiba, a '{0}' null elérési útján, valószínűleg hiba a JSON elemzését. A plugin figyelmen kívül hagyása</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>A plugin cím hiba, a '{0}' elérési útnál kell lennie, hogy „cím” tulajdonsággal rendelkezzen, legfeljebb {1} karakterekkel. A plugin figyelmen kívül hagyása</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Plugin GUID hiba, a '{0}' elérési útnál, az '{1}' címmel rendelkeznie kell egy „GUID” tulajdonsággal, RFC 4122 kompatibilis 128 bites GUID (UUID), csak betűkkel, számokkal és kötőjelekkel. A plugin figyelmen kívül hagyása.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Plugin Leírás Hiba, a '{0}' elérési útnál a leírásnak nem lehet több, mint a {1} karakterek. A plugin figyelmen kívül hagyása</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>A plugin címkék hibája, a '{0}' utcában a címkéknek nem lehet több, mint a {1} karakterek. A plugin figyelmen kívül hagyása</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Csatlakoztassa a hibakeresőt a '{0}' -hez, vagy törölje a folytatást.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Várakozás a hibakeresőre</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Hiba a plugin letöltése. Kérlek, próbáld újra később.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>A plugin frissítve</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Biztos benne, hogy vissza akarja állítani az összes {0} tételt?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>A „Untitled” keresési kritériumok</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Keresési kritériumok '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>A '{0}' megosztott értékeket tartalmaz. Szeretné visszaállítani ezeket is?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

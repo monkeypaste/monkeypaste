@@ -753,7 +753,7 @@
 од '{0}' да додаде повеќе.</value>
   </data>
   <data name="NtfCapBlockHint2" xml:space="preserve">
-    <value>MAX '{0}' складирање е {1.</value>
+    <value>MAX '{0}' складирање е {1}.</value>
     <comment>Account Type, Storage Count</comment>
   </data>
   <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
@@ -767,7 +767,7 @@
     <value>Постигнат содржина и капацитет на ѓубре!</value>
   </data>
   <data name="NtfCapContentMaxStorageText" xml:space="preserve">
-    <value>MAX '{0}' складирање е {1.</value>
+    <value>MAX '{0}' складирање е {1}.</value>
   </data>
   <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
     <value>Постигнат капацитет на содржина!</value>
@@ -778,7 +778,7 @@
 Мени за опции погоре.</value>
   </data>
   <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
-    <value>Максимално складирање на ѓубре е {0.</value>
+    <value>Максимално складирање на ѓубре е {0}.</value>
   </data>
   <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
     <value>Запален капацитет на ѓубре!</value>
@@ -902,7 +902,7 @@ Monkeypaste на уредот
   </data>
   <data name="AccountExistingLoginText" xml:space="preserve">
     <value>Вашата претплата е
-Сега поставете на {0}/{1.</value>
+сега е поставено на {0}/{1}.</value>
   </data>
   <data name="AccountExistingLoginTitle" xml:space="preserve">
     <value>Пронајдена сметка</value>
@@ -2699,5 +2699,201 @@ Monkeypaste на уредот
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;На овој начин може да се пристапи до MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;без клик&lt;/span&gt;&lt;span color="red"&gt;, па дури&lt;/span&gt; ни око и #x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Прибелешка</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Клон</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Предмет на податоци</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Вклучи, поврзи</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Читач</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Непозната грешка</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Писател</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Дупликат додаток на приклучокот '{0}' откриен за овие додатоци:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Поправете со промена на упатството за приклучок или отстранување на дупликатите. Во спротивно, сите придружни додатоци ќе бидат игнорирани.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Откриен двојна приклучок за додаток „{0}“ откриен за овие додатоци и претходно поставени:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Приклучок: {0} {1} претходно наместено (и): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Приклучок: {0} {1} претходно наместено (и): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Поправете со обезбедување на уникатни претходно поставени упатства или отстранување на дупликати. Во спротивно, сите придружни додатоци ќе бидат игнорирани.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Боја на уредникот</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Дали сте сигурни дека сакате трајно да ги избришете сите {0} ставка (и)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Изберете папка</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Изберете папка за гледање</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Грешка во приклучокот. Приклучок '{0}' е '{1}' тип, но не е пронајден формат '{1}'</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Грешка во извршувањето на дејството '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Вредноста мора да содржи само броеви или '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Вредноста мора да биде од {0} до {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Мора да биде хексадецимална низа (6 или 8 цифри) почнувајќи со „#“</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Клипборд '{0}' мора да биде уникатен.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Веќе постои за</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Формат</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Имињата на формат на читач/писател на клипчиња мора да бидат уникатни. Дупликати на читателот:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Имињата на формат на читач/писател на клипчиња мора да бидат уникатни. Дупликати на писателот:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Упатствата за формат на таблата мора да бидат уникатни. Дупликат формати и упатства:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Грешка во приклучокот: Сите полиња на додаток '{0}' мора да бидат уникатни за управувачот '{1}'. {2} ParamName '{3}' има повеќе записи</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Грешка во приклучокот, не е пронајдена непроменлива манифестација</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Приклучокот '{0}' не може да има претходно поставување без најмалку 1 параметар даден</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Без ознака парам #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ИД на параметрите за додаток ({0}) мора да бидат дефинирани. Приклучокот '{1}' ги има следниве параметри со исчезнати парамиди: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Дупликат Парамид '{0}' откриени (сите мора да бидат уникатни). {1} етикети: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Потребно е претходно наместено упатство. Не беше пронајден или погрешен формат за '{0}' во приклучокот {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Не можам да најдам параметар со парамида '{0}' упатени со претходно поставените '{1}' за додаток '{2}'. Параметарот може да се смени или е отстранет, ажурирајте го претходно поставениот парамвал или отстранете го.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Не може да ги постави параметрите на заедничка вредност во претходно поставените. Paramid '{0}' во претходно поставениот '{1}' за додаток '{2}' треба да се отстрани или парамејството може да се наведе во делот за дефинирање на параметарот.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Претставите мора да имаат уникатни упатства. Дупликат претходно наместениот Guid '{0}' беше откриен во приклучокот '{1}' за претходно поставените страни: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Грешка во приклучокот за парсирање, на патеката '{0}' NULL, најверојатно грешки во парсирање на JSON. Игнорирање на приклучокот</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Грешка во насловот на приклучокот, на патеката '{0}' мора да има својство на насловот без карактеристики од {1}. Игнорирање на приклучокот</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Грешка во приклучокот на приклучокот, на патеката '{0}' со наслов '{1}' мора да има својство на 'GUID', RFC 4122 во согласност со 128-битни GUID (UUID) со само букви, броеви и цртички. Игнорирање на приклучокот.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Грешка во описот на приклучокот, на патеката '{0}' Описот не смее да биде повеќе од {1} знаци. Игнорирање на приклучокот</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Грешка во ознаките на приклучоците, на ознаките на патеката '{0}' не смеат да бидат повеќе од {1} знаци. Игнорирање на приклучокот</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Прикачете дебагер на '{0}' или откажете за да продолжите.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Чекајќи дебагер</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Приклучок за преземање на грешки. Ве молиме, обидете се повторно подоцна.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Ажуриран приклучок</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Дали сте сигурни дека сакате да ги вратите сите {0} ставка (и)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Критериуми за пребарување „Untitled“</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Критериуми за пребарување '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' содржи споделени вредности. Дали сакате да ги ресетирате и тие?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

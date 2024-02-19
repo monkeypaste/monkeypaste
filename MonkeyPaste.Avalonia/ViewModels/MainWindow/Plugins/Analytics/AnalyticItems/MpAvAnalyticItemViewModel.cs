@@ -988,14 +988,12 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand DuplicatePresetCommand => new MpAsyncCommand<object>(
                 async (args) => {
-                    IsBusy = true;
-
-                    var aipvm = args as MpAvAnalyticItemPresetViewModel;
-                    if (aipvm == null) {
-                        throw new Exception("DuplicatedPresetCommand must have preset as argument");
+                    if (args is not MpAvAnalyticItemPresetViewModel aipvm) {
+                        return;
                     }
+                    IsBusy = true;
                     var p_to_clone = aipvm.Preset;
-                    p_to_clone.Label += " - Clone";
+                    p_to_clone.Label += $" - {UiStrings.CommonCloneLabel}";
                     p_to_clone.SortOrderIdx = Items.Count;
                     p_to_clone.IsModelReadOnly = false;
                     var dp = await aipvm.Preset.CloneDbModelAsync();

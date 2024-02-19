@@ -2700,4 +2700,200 @@ feedble@monkeypaste.com</value>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Με αυτόν τον τρόπο, μπορείτε να έχετε πρόσβαση στο MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;χωρίς κλικ&lt;/span&gt; ή ακόμα και &lt;span color="red"&gt;χτύπημα ενός ματιού&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Σχόλιο</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Κλώνος</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Αντικείμενο δεδομένων</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Συνδέω</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Αναγνώστης</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Αγνωστο σφάλμα</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Συγγραφέας</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Διπλό plugin guid '{0}' ανιχνεύθηκε για αυτά τα plugins:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Επιδιόρθωση αλλάζοντας το Guid Plugin ή αφαιρώντας αντίγραφα. Διαφορετικά, όλα τα σχετικά plugins θα αγνοηθούν.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Διπλό plugin preset guid '{0}' ανιχνεύθηκε για αυτά τα plugins και προεπιλογές:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} preset (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} preset (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Επιδιόρθωση παρέχοντας μοναδικές προκαθορισμένες οδηγίες ή αφαιρώντας αντίγραφα. Διαφορετικά, όλα τα σχετικά plugins θα αγνοηθούν.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Επεξεργαστής</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να διαγράψετε μόνιμα όλα {0} αντικείμενα;</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Επιλέξτε φάκελο</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Επιλέξτε Φάκελο Παρακολούθησης</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Σφάλμα plugin. Plugin '{0}' είναι '{1}' Τύπος αλλά όχι '{1}' βρέθηκε μορφή</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Σφάλμα εκτέλεσης δράσης '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Η τιμή πρέπει να περιέχει μόνο αριθμούς ή '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Η τιμή πρέπει να είναι από {0} έως {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Πρέπει να είναι ένα hex (6 ή 8 ψηφίο) συμβολοσειρά ξεκινώντας με '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Πρόχειρο '{0}' πρέπει να είναι μοναδικό.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Υπάρχει ήδη για</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Μορφή</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Τύπος</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Τα ονόματα μορφοποίησης αναγνώστη/συγγραφέα πρέπει να είναι μοναδικά. Ο αναγνώστης αντιγράφει:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Τα ονόματα μορφοποίησης αναγνώστη/συγγραφέα πρέπει να είναι μοναδικά. Ο συγγραφέας διπλώνει:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Οι οδηγίες μορφής πρόχειρου πρέπει να είναι μοναδικές. Διπλές μορφές και οδηγίες:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Σφάλμα plugin: Όλα τα plugin '{0}' Τα πεδία πρέπει να είναι μοναδικά για τον χειριστή '{1}'. {2} paramName '{3}' έχει πολλαπλές καταχωρήσεις</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Σφάλμα plugin, δεν βρέθηκε αμετάβλητο δηλωτικό</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' δεν μπορεί να έχει προεπιλογές χωρίς τουλάχιστον 1 παράμετρο που παρέχεται</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Μη επισημασμένο param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Τα αναγνωριστικά παραμέτρων ({0}) πρέπει να οριστούν. Το plugin '{1}' έχει τις ακόλουθες παραμέτρους με λείπουν paramid's: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Dupplicate paramid '{0}' ανιχνεύθηκε (όλα πρέπει να είναι μοναδικά) {1} ετικέτες: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Απαιτείται προκαθορισμένη GUID. Δεν βρέθηκε ή λανθασμένη μορφή για '{0}' στο plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Δεν είναι δυνατή η εύρεση παραμέτρου με paramid '{0}' που αναφέρεται από την προεπιλογή '{1}' για plugin '{2}'. Η παράμετρος μπορεί να έχει αλλάξει ή να απομακρυνθεί, να ενημερώσει την προεπιλογή paramvalue ή να την αφαιρέσει.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Δεν είναι δυνατή η ρύθμιση παραμέτρων κοινής αξίας σε προεπιλογές. Paramid '{0}' σε προεπιλογή '{1}' για plugin '{2}' πρέπει να αφαιρεθεί ή paramValue μπορεί να καθοριστεί στην ενότητα ορισμού παραμέτρων.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Οι προεπιλογές πρέπει να έχουν μοναδικές οδηγίες. Το Dupplicate Preset Guid '{0}' ανιχνεύθηκε στο plugin '{1}' για προεπιλογές: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Σφάλμα ανάλυσης plugin, στη διαδρομή '{0}' null, πιθανό σφάλμα αναλύοντας το JSON. Αγνοώντας το plugin</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Σφάλμα τίτλου Plugin, στο Path '{0}' πρέπει να έχει ιδιότητα τίτλου "τίτλου" με όχι περισσότερο από {1} χαρακτήρες. Αγνοώντας το plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Σφάλμα Guid Guid, στο Path '{0}' με τον τίτλο '{1}' πρέπει να έχει μια ιδιότητα 'guid', RFC 4122 Compliant 128-bit guid (UUID) με μόνο γράμματα, αριθμούς και παύλες. Αγνοώντας το plugin.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Περιγραφή Περιγραφή Σφάλμα, στη διαδρομή '{0}' Περιγραφή δεν πρέπει να υπερβαίνει τους χαρακτήρες {1}. Αγνοώντας το plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Σφάλμα ετικετών plugin, στη διαδρομή '{0}' Οι ετικέτες δεν πρέπει να υπερβαίνουν τους χαρακτήρες {1}. Αγνοώντας το plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Επισυνάψτε το Debugger στο '{0}' ή ακυρώστε για να συνεχίσετε.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Περιμένοντας το Debugger</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Λήψη σφαλμάτων Plugin. Παρακαλώ δοκιμάστε ξανά αργότερα.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Ενημερώθηκε το πρόσθετο</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλα τα στοιχεία {0};</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Κριτήρια αναζήτησης «Untitled»</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Κριτήρια αναζήτησης {0} '</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' περιέχει κοινές τιμές. Θα θέλατε να επαναφέρετε και αυτά;</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

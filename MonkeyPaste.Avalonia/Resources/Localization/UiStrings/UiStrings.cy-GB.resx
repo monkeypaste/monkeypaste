@@ -2700,4 +2700,200 @@ Ni ellir gwarantu adfer cyfanswm a gall leihau perfformiad neu hyd yn oed damwai
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Fel hyn, gellir cyrchu MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;heb glicio&lt;/span&gt; neu hyd yn oed &lt;span color="red"&gt;batio llygad&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Anodiadau</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Cloniwyd</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Gwrthrych data</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Ategyn</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Darllenydd</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Gwall anhysbys</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Ysgrifennwr</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Canllaw ategyn dyblyg '{0}' wedi'i ganfod ar gyfer yr ategion hyn:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Trwsiwch trwy newid GUID ategyn neu dynnu dyblygu. Fel arall, anwybyddir yr holl ategion cysylltiedig.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Rhagosodiad ategyn dyblyg '{0}' Wedi'i ganfod ar gyfer yr ategion a'r rhagosodiadau hyn:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Ategyn: {0} {1} Rhagosodiad (au): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Ategyn: {0} {1} Rhagosodiad (au): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Trwsio trwy ddarparu canllawiau rhagosodedig unigryw neu gael gwared ar ddyblygiadau. Fel arall, anwybyddir yr holl ategion cysylltiedig.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Lliw golygydd</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am ddileu'r holl eitem (au) {0} yn barhaol?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Dewiswch Ffolder</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Dewiswch Ffolder Gwylio</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Gwall ategyn. Ategyn '{0}' yw teip '{1}' ond dim fformat '{1}' wedi'i ddarganfod</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Gwall Perfformio Gweithredu '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Rhaid i werth gynnwys rhifau yn unig neu '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Rhaid i'r gwerth fod o {0} i {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Rhaid bod yn llinyn hecs (6 neu 8 digid) gan ddechrau gyda '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Rhaid i glipfwrdd '{0}' fod yn unigryw.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Eisoes yn bodoli ar gyfer</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Fformation</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Theipia</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Rhaid i enwau fformat darllenydd/ysgrifennwr clipfwrdd fod yn unigryw. Darllenydd yn dyblygu:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Rhaid i enwau fformat darllenydd/ysgrifennwr clipfwrdd fod yn unigryw. Mae'r awdur yn dyblygu:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Rhaid i Guids Fformat Clipfwrdd fod yn unigryw. Fformatau a Guids Dyblyg:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Gwall ategyn: Rhaid i bob ategyn '{0}' fod yn unigryw ar gyfer triniwr '{1}'. {2} paramname '{3}' Mae ganddo sawl cofnod</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Gwall ategyn, ni ddarganfuwyd maniffest invariant</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Ni all ategyn '{0}' gael rhagosodiadau heb o leiaf 1 paramedr a ddarperir</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param heb ei labelu #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Rhaid diffinio IDau paramedr ategyn ({0}). Mae gan ategyn '{1}' y paramedrau canlynol gyda Paramid's ar goll: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Paramid dyblyg '{0}' wedi'i ganfod (rhaid i bob un fod yn unigryw). {1} labeli: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Mae angen GUID rhagosodedig. Ni ddaethpwyd o hyd iddo nac yn fformat anghywir ar gyfer '{0}' yn ategyn {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Methu dod o hyd i baramedr gyda paramid '{0}' cyfeiriwyd at ragosodiad '{1}' ar gyfer ategyn '{2}'. Efallai bod y paramedr wedi newid neu gael ei dynnu, diweddaru paramvalue rhagosodedig neu ei dynnu.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Ni all osod paramedrau gwerth a rennir mewn rhagosodiadau. Mae angen dileu paramid '{0}' yn rhagosodiad '{1}' ar gyfer ategyn '{2}' neu gellir nodi paramvalue yn yr adran diffiniad paramedr.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Rhaid i ragosodiadau fod â guidau unigryw. Canfuwyd rhagosodiad dyblyg '{0}' mewn ategyn '{1}' ar gyfer rhagosodiadau: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Gwall dosrannu ategyn, yn y llwybr '{0}' null, gwall tebygol yn dosrannu json. Anwybyddu ategyn</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Gwall teitl ategyn, yn y llwybr '{0}' Rhaid bod ag eiddo 'teitl' heb ddim mwy na nodau {1}. Anwybyddu ategyn</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Gwall Guid Plugin, ar y llwybr '{0}' Gyda theitl '{1}' Rhaid bod ag eiddo 'Guid', RFC 4122 GUID 128-bit sy'n cydymffurfio (UUID) gyda dim ond llythrennau, rhifau a chysylltnodau. Anwybyddu ategyn.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Gwall Disgrifiad ategyn, yn y llwybr '{0}' Rhaid i'r disgrifiad fod yn ddim mwy na nodau {1}. Anwybyddu ategyn</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Gwall tagiau ategyn, yn y llwybr '{0}' Rhaid i dagiau fod yn ddim mwy na nodau {1}. Anwybyddu ategyn</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Atodwch ddadfygiwr i '{0}' neu ganslo i barhau.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Aros am ddadfygiwr</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Gwall yn lawrlwytho ategyn. Rho gynnig Arni eto'n hwyrach.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Ategyn wedi'i ddiweddaru</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Ydych chi'n siŵr eich bod chi am adfer pob eitem (au) {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Meini prawf chwilio 'heb deitl'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Meini prawf chwilio '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>Mae '{0}' yn cynnwys gwerthoedd a rennir. Hoffech chi ailosod y rheini hefyd?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

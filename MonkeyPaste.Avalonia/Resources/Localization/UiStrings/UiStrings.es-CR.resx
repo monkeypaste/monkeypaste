@@ -2700,4 +2700,200 @@ No se puede garantizar la restauración total y puede reducir el rendimiento o i
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;De esta manera, se puede acceder a MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;sin un clic&lt;/span&gt; o incluso &lt;span color="red"&gt;pestañeando&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Anotación</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Clon</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Objeto de datos</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Enchufar</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Lector</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Error desconocido</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Escritor</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Duplicado complemento Guid '{0}' detectado para estos complementos:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Solucione cambiando el complemento GUID o eliminando los duplicados. De lo contrario, todos los complementos asociados serán ignorados.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Duplicado complemento Preset Guid '{0}' detectado para estos complementos y preajustes:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} preet (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} preet (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Arregle proporcionando GUID preestablecidos únicos o eliminando duplicados. De lo contrario, todos los complementos asociados serán ignorados.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Color del editor</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>¿Estás seguro de que quieres eliminar permanentemente todos los elementos {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Seleccione la carpeta</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Seleccione la carpeta de reloj</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Error de complemento. Plugin '{0}' es el tipo '{1}' de tipo pero no se encontró el formato '{1}'</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Error al realizar la acción '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>El valor debe contener solo números o '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>El valor debe ser de {0} a {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Debe ser una cadena hexadecimal (6 u 8 dígitos) que comience con '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>El portapapeles '{0}' debe ser único.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Ya existe para</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Formato</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Los nombres de formato de lector/escritor de portapapeles deben ser únicos. Lector duplicados:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Los nombres de formato de lector/escritor de portapapeles deben ser únicos. Escritor duplicados:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>El formato de portapapeles GUID debe ser únicos. Formatos y guías duplicados:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Error del complemento: todos los campos de complemento {0} 'deben ser únicos para el controlador' {1} '. {2} paramName' {3} 'tiene múltiples entradas</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Error de complemento, no se encontró un manifiesto invariante</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' no puede tener preajuste sin al menos 1 parámetro proporcionado</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param no etiquetado #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Se deben definir las ID de parámetro del complemento ({0}). Plugin '{1}' tiene los siguientes parámetros con los parámetros faltantes: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Duplicate ParamId '{0}' detectado (todos deben ser únicos). {1} Etiquetas: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Se requiere preajuste de GUID. No se encontró o no se encontró formato incorrecto para '{0}' en el complemento {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>No se puede encontrar el parámetro con ParamID '{0}' referenciado por Preset '{1}' para complementar {2} '. El parámetro puede haber cambiado o eliminado, actualizar el PARAMVALUE PRERESTO o eliminarlo.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>No se puede establecer parámetros de valor compartido en presets. Paramid '{0}' en preet '{1}' para complementar {2} 'debe eliminarse o ParamValue se puede especificar en la sección Definición de parámetros.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Los presets deben tener GUID únicos. Duplicado Preset Guid '{0}' se detectó en el complemento {1} 'para preajuste: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Error de análisis de complementos, en ruta '{0}' NULL, probable error de error JSON. Ignorando el complemento</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Error de título del complemento, en la ruta '{0}' debe tener la propiedad 'Título' con no más de {1} caracteres. Ignorando el complemento</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Error de guía del complemento, en la ruta '{0}' con el título '{1}' debe tener una propiedad 'GUID', RFC 4122 Cumplante de 128 bits GUID (UUID) con solo letras, números y guiones. Ignorando el complemento.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Error de descripción del complemento, en la ruta '{0}' Descripción no debe ser más de {1} caracteres. Ignorando el complemento</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Error de etiquetas de complemento, en la ruta '{0}' Las etiquetas no deben ser más que {1} caracteres. Ignorando el complemento</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Adjunte el depurador a '{0}' o cancele para continuar.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Esperando el depurador</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Error de descarga del complemento. Por favor, inténtelo de nuevo más tarde.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Complemento actualizado</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>¿Estás seguro de que quieres restaurar todos los elementos {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Criterios de búsqueda 'sin título'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Criterios de búsqueda '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' contiene valores compartidos. ¿Te gustaría restablecerlos también?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

@@ -70,28 +70,36 @@
     <value>Bàsic - Anual</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>còpia</value>
@@ -127,19 +135,24 @@
     <value>Construït: en el navegador de plugins amb una comunitat en creixement - Biblioteca de plugins impulsada</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste és un gestor de porta -retalls, una eina d'automatització i productivitat com cap altra. Millora del porta -retalls en una part enriquida i organitzada del vostre flux de treball,
@@ -158,40 +171,41 @@ També vull que us sentiu còmode fent -lo servir. Així que us asseguro, com a 
 El vostre porta -retalls es fa un seguiment o emmagatzemat en qualsevol lloc més enllà de la vostra pròpia màquina. Període.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Interfície senzilla i amable amb els dissenys horitzontals/verticals, la vista/vista de la graella i el suport multi - monitor</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Mode append: la còpia es converteix en "Afegir a" en lloc de "substituir" al porta -retalls. Tant els textos com els fitxers, completament personalitzables</value>
+    <value>● Modes de ratolí personalitzats: a la dreta - feu clic a Paste i a l'esquerra - feu clic a Auto - Copia</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Seguiment de clips sofisticats, fonts i ús amb un suport millorat per als navegadors basats en Firefox i Chromium (Chrome, Edge, Brave)</value>
+    <value>● Mode append: la còpia es converteix en "Afegir a" en lloc de "substituir" al porta -retalls. Tant els textos com els fitxers, completament personalitzables</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Totalment: editor de clips destacat amb text ric (taules, llistes, enllaços, etc.) amb cerca/substitució i ressalt</value>
+    <value>● Seguiment de clips sofisticats, fonts i ús amb un suport millorat per als navegadors basats en Firefox i Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Emmagatzemeu les vostres imatges a la base de dades segura, a punt per utilitzar -les com a fitxers en qualsevol moment. Demaneu només arrossegar - i - deixar -ho anar!</value>
+    <value>● Totalment: editor de clips destacat amb text ric (taules, llistes, enllaços, etc.) amb cerca/substitució i ressalt</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Potent plantilla de text per a enganxar ràpid i dinàmic de la col·lecció de fragments</value>
+    <value>● Emmagatzemeu les vostres imatges a la base de dades segura, a punt per utilitzar -les com a fitxers en qualsevol moment. Demaneu només arrossegar - i - deixar -ho anar!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Descriptor i dissenyador d’acció per a automatitzacions personalitzades i encadenament d’acció</value>
+    <value>● Potent plantilla de text per a enganxar ràpid i dinàmic de la col·lecció de fragments</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Simple d'utilitzar i ampliar el sistema de complements per analitzar clips o llegir/escriure qualsevol format al porta -retalls</value>
+    <value>● Descriptor i dissenyador d’acció per a automatitzacions personalitzades i encadenament d’acció</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Construït: en el navegador de plugins amb una comunitat en creixement - Biblioteca de plugins impulsada</value>
+    <value>● Simple d'utilitzar i ampliar el sistema de complements per analitzar clips o llegir/escriure qualsevol format al porta -retalls</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatitzeu -ho tot amb els presets de plugin, poseu -vos i utilitzeu qualsevol de les vostres indicacions o ordres de IA amb facilitat</value>
+    <value>● Construït: en el navegador de plugins amb una comunitat en creixement - Biblioteca de plugins impulsada</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Més plataformes i funcions properament! Acabem de començar 🎉</value>
+    <value>● Automatitzeu -ho tot amb els presets de plugin, poseu -vos i utilitzeu qualsevol de les vostres indicacions o ordres de IA amb facilitat</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Els temes lleugers i foscos són completament dinàmics, utilitzeu qualsevol color que vulgueu</value>
@@ -208,29 +222,29 @@ El vostre porta -retalls es fa un seguiment o emmagatzemat en qualsevol lloc mé
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organitzeu els clips en arbres d'etiquetes i creeu filtres resusibles</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Emmagatzematge de dades local segur, segur i privat (sense recollida de dades) sempre xifrat amb opcional 2: protecció de contrasenya de factor i bloquejar fàcilment aplicacions o llocs web del vostre rastrejador</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Extensament d’arrossegament i - dipòsit, dreceres globals personalitzades, encaminament i ratolí - Navegació gratuïta</value>
+    <value>● Bloquejar fàcilment determinades aplicacions, llocs web i fins i tot pàgines web específiques del seguiment de porta -retalls</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Modes de ratolí personalitzats: a la dreta - feu clic a Paste i a l'esquerra - feu clic a Auto - Copia</value>
+    <value>● Extensament d’arrossegament i - dipòsit, dreceres globals personalitzades, encaminament i ratolí - Navegació gratuïta</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>El porta -retalls és una selva. Monkeypaste és el rei! Swing des de l'aplicació a l'aplicació, copiant això i enganxant això com mai abans amb Monkeypaste !! Una marca: porta -retalls de retallada i eina d’automatització analítica nova !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Mostra de Monkeypaste en acció!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Instal·lat en aquest idioma. L’anglès només és per a aquests exemples</value>
@@ -250,5 +264,11 @@ El vostre porta -retalls es fa un seguiment o emmagatzemat en qualsevol lloc mé
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Amb aquesta subscripció rebrà:
 ● Capacitat il·limitada</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Emmagatzematge de dades local segur, segur i privat (sense recollida de dades) sempre xifrat amb protecció de contrasenya de 2 - factor de factor opcional</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Més plataformes i funcions properament! Acabem de començar 🎉</value>
   </data>
 </root>

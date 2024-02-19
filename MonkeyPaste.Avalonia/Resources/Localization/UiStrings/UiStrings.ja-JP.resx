@@ -2700,4 +2700,200 @@ feedback@monkeypaste.com</value>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;このようにして、MonkeyPasteにアクセスできます&lt;br&gt;&lt;span color="red"&gt;クリックしたり、&lt;/span&gt;&lt;span color="red"&gt;目を打ったり&lt;/span&gt;することなく&amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>注釈</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>クローン</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>データオブジェクト</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>プラグイン</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>読者</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>不明なエラー</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>作家</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>これらのプラグインで検出されたプラグインGUID '{0}' '</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>プラグインGUIDを変更したり、複製を削除したりして修正します。それ以外の場合、関連するすべてのプラグインは無視されます。</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>これらのプラグインとプリセットに対して検出されたプラグインプリセットGUID '{0}' '</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>プラグイン：{0} {1}プリセット：＃{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>プラグイン：{0} {1} preset（s）：{2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>一意のプリセットガイドを提供するか、重複を削除して修正します。それ以外の場合、関連するすべてのプラグインは無視されます。</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>編集者の色</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>すべての{0}アイテムを永続的に削除する必要がありますか？</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>フォルダーを選択</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>[フォルダーを監視]を選択します</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>プラグインエラー。 Plugin '{0}'は '{1}'タイプですが '{1}'形式が見つかりました</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>アクションの実行エラー '{0}'：{1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>値には数値または「{0}」のみを含める必要があります</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>値は{0}から{1}まででなければなりません</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>「＃」で始まる16進（6桁または8桁）の文字列でなければなりません</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Clipboard '{0}'は一意でなければなりません。</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>すでに存在します</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>フォーマット</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>タイプ</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>クリップボードリーダー/ライター形式名は一意でなければなりません。読者の複製：</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>クリップボードリーダー/ライター形式名は一意でなければなりません。作家の複製：</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>クリップボード形式のガイドは一意でなければなりません。複製フォーマットとガイド：</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>プラグインのエラー：すべてのプラグイン '{0}'フィールドは、ハンドラー '{1}'。{2} paramname '{3}'には複数のエントリに一意でなければなりません</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>プラグインエラー、不変マニフェストは見つかりませんでした</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>プラグイン '{0}'は、少なくとも1つのパラメーターが提供されなければプリセットを持つことができません</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>ラベルのないparam＃{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>プラグインパラメーターID（{0}）を定義する必要があります。プラグイン '{1}'には、パラマイドが欠落している次のパラメーターがあります。{2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>duplicate paramid '{0}'は検出されました（すべてが一意でなければなりません）。{1}ラベル：{1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>プリセットガイドが必要です。プラグインの「{0}」のフォーマット{1}は見つかりませんでした</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>PALAMID '{0}'がpragin '{2}'のpreset '{1}'で参照されるパラメーターを見つけることができません。パラメーターが変更されたか、削除されたか、プリセットパラメージを更新するか、削除した場合があります。</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>プリセットに共有値パラメーターを設定できません。 Paramid '{0}' in preset '{1}' for plugin '{2}'を削除する必要があります。または、パラメーター定義セクションでパラメージを指定する必要があります。</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>プリセットには一意のガイドが必要です。プリセットのプラグイン '{1}'で複製されたプリセットGUID '{0}'が検出されました：{2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>PATH '{0}' nullでのプラグインの解析エラーは、JSONを解析する可能性があります。プラグインを無視します</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Path '{0}'でのプラグインタイトルエラーは、{1}文字以下の「タイトル」プロパティを持っている必要があります。プラグインを無視します</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>プラグインGUIDエラー、TITLE '{1}'を使用したPath '{0}' '{1}'には、「GUID」プロパティが必要です。RFC4122準拠128ビットGUID（UUID）のみの文字、数字、およびハイフンが必要です。プラグインを無視します。</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>プラグインの説明エラー、Path '{0}'の説明は、{1}文字以下でなければなりません。プラグインを無視します</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>プラグインタグエラー、パス '{0}'タグは{1}文字以下でなければなりません。プラグインを無視します</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>デバッガーを「{0}」に添付するか、キャンセルして続行します。</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>デバッガーを待っています</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>プラグインのダウンロードエラー。後でもう一度やり直してください。</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>プラグインが更新されました</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>すべての{0}アイテムを復元したいですか？</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>検索基準「無題」</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>検索基準 '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}'には共有値が含まれています。それらもリセットしませんか？</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

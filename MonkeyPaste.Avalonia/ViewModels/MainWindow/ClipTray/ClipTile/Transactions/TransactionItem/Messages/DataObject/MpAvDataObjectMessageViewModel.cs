@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
 
         public override object IconResourceObj => "ClipboardImage";
 
-        public override string LabelText => "DataObject";
+        public override string LabelText => UiStrings.CommonDataObjectLabel;
         #region View Models
 
         public ObservableCollection<MpAvTransactionMessageViewModelBase> Items { get; set; } = new ObservableCollection<MpAvTransactionMessageViewModelBase>();

@@ -753,7 +753,7 @@
 '{0}' - დან მეტი დამატებით.</value>
   </data>
   <data name="NtfCapBlockHint2" xml:space="preserve">
-    <value>მაქსიმალური '{0}' შენახვა არის {1.</value>
+    <value>მაქსიმალური '{0}' შენახვა არის {1}.</value>
     <comment>Account Type, Storage Count</comment>
   </data>
   <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
@@ -767,7 +767,7 @@
     <value>შინაარსი და ნაგვის სიმძლავრე მიაღწია!</value>
   </data>
   <data name="NtfCapContentMaxStorageText" xml:space="preserve">
-    <value>მაქსიმალური '{0}' შენახვა არის {1.</value>
+    <value>მაქსიმალური '{0}' შენახვა არის {1}.</value>
   </data>
   <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
     <value>შინაარსის სიმძლავრე მიაღწია!</value>
@@ -2699,5 +2699,201 @@ Monkeypaste მოწყობილობაზე
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;ამ გზით, MonkeyPaste- ზე წვდომა შესაძლებელია&lt;br&gt;&lt;span color="red"&gt;დაწკაპუნების&lt;/span&gt; გარეშე ან თუნდაც &lt;span color="red"&gt;თვალის დახუჭვის გარეშე&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Ანოტაცია</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>კლონი</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>მონაცემთა ობიექტი</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Ჩართვა შეერთება</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>მკითხველი</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Უცნობი შეცდომა</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>მწერალი ქალი</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>ამ დანამატებისთვის გამოვლენილი დანამატის სახელმძღვანელო '{0}':</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>დააფიქსირეთ მოდული სახელმძღვანელო შეცვლით ან დუბლიკატების ამოღებით. წინააღმდეგ შემთხვევაში, ყველა ასოცირებული დანამატი უგულებელყოფილი იქნება.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>ამ დანამატებისა და წინასწარ განსაზღვრული დანამატის წინასწარ განსაზღვრული დანამატის წინასწარ განსაზღვრა '{0}':</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>მოდული: {0} {1} წინასწარ (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>მოდული: {0} {1} წინასწარ (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>დააფიქსირეთ უნიკალური წინასწარ გიდების მიწოდებით ან დუბლიკატების ამოღებით. წინააღმდეგ შემთხვევაში, ყველა ასოცირებული დანამატი უგულებელყოფილი იქნება.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>რედაქტორის ფერი</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ მუდმივად წაშალოთ ყველა {0} პუნქტი (ებ) ი?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>აირჩიეთ საქაღალდე</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>აირჩიეთ Watch Folder</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>დანამატის შეცდომა. მოდული '{0}' არის '{1}' ტიპი, მაგრამ არა '{1}' ფორმატი</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>შეცდომის შესრულება მოქმედების '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>მნიშვნელობა უნდა შეიცავდეს მხოლოდ ციფრებს ან '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>მნიშვნელობა უნდა იყოს {0} - დან {1} - მდე</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>უნდა იყოს hex (6 ან 8 ციფრი) სტრიქონი, რომელიც იწყება "#"</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>ბუფერში '{0}' უნდა იყოს უნიკალური.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>უკვე არსებობს</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>ფორმატი</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>ტიპი</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>ბუფერული მკითხველი/მწერლის ფორმატის სახელები უნდა იყოს უნიკალური. მკითხველის დუბლიკატები:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>ბუფერული მკითხველი/მწერლის ფორმატის სახელები უნდა იყოს უნიკალური. მწერლის დუბლიკატები:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>ბუფერული ფორმატის სახელმძღვანელო უნდა იყოს უნიკალური. დუბლიკატი ფორმატები და სახელმძღვანელოები:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>დანამატის შეცდომა: ყველა მოდული '{0}' ველები უნდა იყოს უნიკალური გამტარებლისთვის '{1}'. {2} paramname '{3}' აქვს მრავალჯერადი ჩანაწერი</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>დანამატის შეცდომა, შეუცვლელი მანიფესტი არ არის ნაპოვნი</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>დანამატი '{0}' არ შეიძლება ჰქონდეს წინასწარ განსაზღვრა მინიმუმ 1 პარამეტრის გარეშე</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Unlabeled Param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>უნდა განისაზღვროს მოდულის პარამეტრის IDS ({0}). დანამატს '{1}' აქვს შემდეგი პარამეტრები დაკარგული პარამიდით: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>დუბლიკატი პარამიდი '{0}' გამოვლენილი (ყველა უნდა იყოს უნიკალური). {1} ეტიკეტები: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>წინასწარ განსაზღვრული სახელმძღვანელო საჭიროა. ეს არ იყო ნაპოვნი ან არასწორი ფორმატი '{0}' მოდულში {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>პარამეტრის პოვნა ვერ იპოვნეთ პარამიდით '{0}', რომელიც მითითებულია წინასწარ '{1}' მოდულის '{2}'. პარამეტრი შეიძლება შეიცვალოს ან მოიხსნა, განაახლეთ წინასწარ განლაგებული paramvalue ან ამოიღეთ იგი.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>ვერ დააწესეთ საერთო ღირებულების პარამეტრები წინასწარ. Paramid '{0}' წინასწარ '{1}' მოდულისთვის '{2}' უნდა ამოიღოთ ან პარამეტრის დაზუსტება შესაძლებელია პარამეტრის განსაზღვრის განყოფილებაში.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>წინასწარ უნდა ჰქონდეს უნიკალური სახელმძღვანელო. დუბლიკატი წინასწარ განსაზღვრული სახელმძღვანელო '{0}' დაფიქსირდა მოდულში '{1}' წინასწარ: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>დანამატის გაანალიზების შეცდომა, ბილიკზე '{0}' null, სავარაუდოდ, შეცდომების გაანალიზება JSON. მოდულის უგულებელყოფა</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>დანამატის სათაურის შეცდომა, ბილიკზე '{0}' უნდა ჰქონდეს 'სათაური' ქონება, არაუმეტეს {1} სიმბოლოებით. მოდულის უგულებელყოფა</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>დანამატის სახელმძღვანელო შეცდომა, ბილიკზე '{0}' სათაურით '{1}' უნდა ჰქონდეს 'GUID' საკუთრება, RFC 4122 შესაბამისობა 128-ბიტიანი GUID (UUID) მხოლოდ ასოებით, ნომრებით და ჰიპებით. მოდულის უგულებელყოფა.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>დანამატის აღწერა შეცდომა, ბილიკზე '{0}' აღწერა უნდა იყოს არაუმეტეს {1} სიმბოლო. მოდულის უგულებელყოფა</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>დანამატის ტეგების შეცდომა, ბილიკზე '{0}' ტეგები უნდა იყოს არაუმეტეს {1} სიმბოლო. მოდულის უგულებელყოფა</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>მიამაგრეთ debugger '{0}' ან გააუქმეთ გასაგრძელებლად.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>დებიუგის მოლოდინში</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>შეცდომის ჩამოტვირთვა მოდული. Გთხოვთ სცადოთ მოგვიანებით.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>მოდული განახლებულია</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ აღადგინოთ ყველა {0} პუნქტი (ებ) ი?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>ძიების კრიტერიუმები 'Untitled'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>ძიების კრიტერიუმები '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' შეიცავს საერთო მნიშვნელობებს. გსურთ აღადგინოთ ისინი?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

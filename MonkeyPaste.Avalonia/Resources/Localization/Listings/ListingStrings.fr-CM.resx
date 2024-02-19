@@ -70,28 +70,36 @@
     <value>Basique - annuel</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copie</value>
@@ -127,19 +135,24 @@
     <value>Construit - dans le navigateur de plugin avec une bibliothèque de plugins en pleine communauté en pleine croissance</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste est un gestionnaire de presse-papiers, l'outil d'automatisation et de productivité comme aucun autre. Améliorer votre presse-papiers en une partie enrichie et organisée de votre flux de travail,
@@ -158,40 +171,41 @@ Je veux aussi que vous vous sentiez à l'aise de l'utiliser. Je vous assure donc
 Votre presse-papiers est toujours suivi ou stocké n'importe où au-delà de votre propre machine. Période.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Interface simple et conviviale avec les dispositions horizontales / verticales, la vue de liste / grille et le support multi-moniteur</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Mode d'ajout: la copie devient «ajouter à» au lieu de «remplacer» dans le presse-papiers. Texte et fichiers, entièrement personnalisables</value>
+    <value>● Modes de souris personnalisés: à droite - Cliquez sur coller et à gauche - Cliquez sur Auto - Copiez</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Suivi des clips sophistiqués, sources et utilisation avec un support amélioré pour les navigateurs basés sur Firefox et Chromium (Chrome, Edge, Brave)</value>
+    <value>● Mode d'ajout: la copie devient «ajouter à» au lieu de «remplacer» dans le presse-papiers. Texte et fichiers, entièrement personnalisables</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Entièrement - éditeur de clip vedette avec texte riche (tables, listes, liens, etc.) avec trouver / remplacer et mettre en surbrillance</value>
+    <value>● Suivi des clips sophistiqués, sources et utilisation avec un support amélioré pour les navigateurs basés sur Firefox et Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Stockez vos images dans la base de données sécurisée, prête à l'emploi comme fichiers à tout moment - demandez simplement glisser - et - déposez!</value>
+    <value>● Entièrement - éditeur de clip vedette avec texte riche (tables, listes, liens, etc.) avec trouver / remplacer et mettre en surbrillance</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Memplage de texte puissant pour une collation rapide et dynamique de votre collection d'extraits</value>
+    <value>● Stockez vos images dans la base de données sécurisée, prête à l'emploi comme fichiers à tout moment - demandez simplement glisser - et - déposez!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Concepteur de déclenchement et d'action pour les automations personnalisées et le chaînage d'action</value>
+    <value>● Memplage de texte puissant pour une collation rapide et dynamique de votre collection d'extraits</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Simple à utiliser et à étendre le système de plugin pour analyser les clips ou lire / écrire n'importe quel format dans votre presse-papiers</value>
+    <value>● Concepteur de déclenchement et d'action pour les automations personnalisées et le chaînage d'action</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Construit - dans le navigateur de plugin avec une communauté de plugins en pleine communauté en pleine croissance</value>
+    <value>● Simple à utiliser et à étendre le système de plugin pour analyser les clips ou lire / écrire n'importe quel format dans votre presse-papiers</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatiser tout avec des préréglages de plugin, cacher et utiliser vos invites ou commandes AI avec facilité</value>
+    <value>● Construit - dans le navigateur de plugin avec une communauté de plugins en pleine communauté en pleine croissance</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Plus de plates-formes et de fonctionnalités à venir bientôt! Nous commençons juste à commencer 🎉</value>
+    <value>● Automatiser tout avec des préréglages de plugin, cacher et utiliser vos invites ou commandes AI avec facilité</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Les thèmes clairs et sombres sont complètement dynamiques, utilisez toutes les couleurs que vous souhaitez</value>
@@ -208,29 +222,29 @@ Votre presse-papiers est toujours suivi ou stocké n'importe où au-delà de vot
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organisez vos clips dans les arbres de balises et créez des filtres RESUSable</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Stockage de données local sécurisé, sécurisé et privé (pas de collecte de données) toujours cryptée avec une protection en option à 2 facteurs et bloquer facilement les applications ou les sites Web de votre tracker</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Dragnement étendu - et - support de dépression, raccourcis mondiaux personnalisés, routage et souris - navigation gratuite</value>
+    <value>● Bloquer facilement certaines applications, sites Web et même des pages Web spécifiques du suivi du presse-papiers</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Modes de souris personnalisés: à droite - Cliquez sur coller et à gauche - Cliquez sur Auto - Copiez</value>
+    <value>● Dragnement étendu - et - support de dépression, raccourcis mondiaux personnalisés, routage et souris - navigation gratuite</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Le presse-papiers est une jungle. Monkeypaste est le roi! Passer de l'application à l'application, copiant ceci et coller cela comme jamais auparavant avec MonkeyPaste !! Une marque - un nouvel outil d'automatisation du presse-papiers et analytique de pointe !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Échantillon de Monkeypaste en action!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Installé dans cette langue. L'anglais est uniquement pour ces exemples</value>
@@ -250,5 +264,11 @@ Votre presse-papiers est toujours suivi ou stocké n'importe où au-delà de vot
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Avec cet abonnement, vous recevrez:
 ● Capacité illimitée</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Stockage de données local sécurisé, sécurisé et privé (pas de collecte de données) toujours cryptée avec une protection en option de mot de passe à 2 facteurs</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Plus de plates-formes et de fonctionnalités à venir bientôt! Nous commençons juste à commencer 🎉</value>
   </data>
 </root>

@@ -2700,4 +2700,200 @@
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;በዚ ኸምዚ ህበይ ፓስተር ክትረክብ ትኽእል ኢኻ&lt;br&gt;&lt;span color="red"&gt;ብዘይ ምጥዋቕ&lt;/span&gt; ወይ ዓይኒ &lt;span color="red"&gt;ብዘይ ምውቃዕ&lt;/span&gt; #x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>መግለጺ</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>ክሎን .</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>ዳታ ኦብጀክት</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>ፕላግ-ኢን .</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>ኣንባቢ</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>ዘይፍለጥ ጌጋ</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>ጸሓፊ</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>ተደጋጋሚ ፕላግ-ኢን ጓይድ '{0}' ነዞም ፕላጊናት ዝተረኸበ:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>ፕላግ-ኢን ጓይድ ብምቕያር ወይ ድፕሊኬት ብምእላይ ኣዐርዮ። እንተዘይኮይኑ ኩሎም ተዛመድቲ ፕላጊናት ዕሽሽ ክበሃሉ እዮም።</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>ተደጋጋሚ ፕላግ-ኢን ቅድመ-ምድላው guid '{0}' ነዞም ፕላጊናትን ቅድመ-ምድላዋትን ዝተረኸበ:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>ፕላግ-ኢን: {0} {1}ቅድመ-ምድላው(s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>ፕላግ-ኢን: {0} {1}ቅድመ-ምድላው(s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>ፍሉይ ቅድመ-ተኸታታሊ ጓይድስ ብምቕራብ ወይ ድፕሊኬት ብምእላይ ምእራም። እንተዘይኮይኑ ኩሎም ተዛመድቲ ፕላጊናት ዕሽሽ ክበሃሉ እዮም።</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>ሕብሪ ኣርታዒ</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>ርግጸኛ ዲኻ ንኹሉ {0} item(s) ብሓዋሩ ክትድምስሶ ትደሊ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>ፎልደር ምረጽ .</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>ናይ ሰዓት ማህደር ምረጽ</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>ፕላግ-ኢን ጌጋ። ፕላግ-ኢን '{0}' '{1}' ዝብል ዓይነት ኮይኑ ግን '{1}' ቅርጺ ኣይተረኽበን።</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>ጌጋ ምፍጻም ስጉምቲ '{0}':{1}{2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>ዋጋ ቁጽሪ ጥራይ ክሕዝ ኣለዎ ወይ '{0}'።</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>ዋጋ ካብ {0} ክሳብ {1} ክኸውን ኣለዎ ።</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>ብ '#' ዝጅምር ሄክስ (6 ወይ 8 ዲጂት) ሕብረ ቃላት ክኸውን ኣለዎ።</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>clipboard '{0}' ፍሉይ ክኸውን ኣለዎ።</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>ድሮ ን</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>ፎርማት .</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>ዓይነት</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>clipboard reader/writer format names been unique ክኸውን ኣለዎ። ኣንበብቲ ምድግጋም:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>clipboard reader/writer format names been unique ክኸውን ኣለዎ። ጸሓፊ ምድግጋም:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>ቅንጥብጣብ ሰሌዳ ቅርጺ ጓይድ ፍሉይ ክኸውን ኣለዎ። ድፕሊኬት ፎርማት &amp; ጓይድስ:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>ጌጋ ፕላግ-ኢን: ኩሎም ፕላግ-ኢን '{0}' ዝበሃሉ ዓውድታት ንሓድሕዶም '{1}' ፍሉያት ክኾኑ ኣለዎም።{2}paramname '{3}' ብዙሓት መእተዊታት ኣለዉዎ።</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>ፕላግ-ኢን ጌጋ፣ ዘይልወጥ ማኒፌስት ኣይተረኽበን።</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>ፕላግ-ኢን '{0}' እንተወሓደ 1 መለክዒ ብዘይ ወሓደ ቅድመ-ምድላዋት ክህልዉ ኣይክእሉን</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>ዘይተለጠፈ ፓራም #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ፕላግ-ኢን መለክዒ መለለዪታት ({0}) ክግለጹ ኣለዎም። ፕላግ-ኢን '{1}' እዞም ዝስዕቡ መለክዒታት ምስ ዝጎደለ ፓራሚድ ኣለዎ: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>ተደጋጋሚ ፓራሚድ '{0}' ተረኺቡ (ኩሉ ፍሉይ ክኸውን ኣለዎ)።{1}ምልክት:{1}{2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>ቅድመ-ምድላው ጓይድ የድሊ። ኣብ ፕላግ-ኢን {1} ን '{0}' ኣይተረኽበን ወይ ጌጋ ቅርጺ ኣይተረኽበን።</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>ብፓራሚድ '{0}' ብቅድመ-ቅድሚት '{1}' ዝተወከሰ ፓራሜትር ንፕላግ-ኢን '{2}' ክረክብ ኣይክእልን። መለክዒ ተቐይሩ ወይ ተኣልዩ ክኸውን ይኽእል እዩ፣ ቅድሚ ሕጂ ParamValue update update ።</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>ኣብ ቅድመ-ምድላዋት ዝተኻፈለ ዋጋ መለክዒታት ከቐምጥ ኣይክእልን። ፓራሚድ '{0}' ኣብ ቅድመ-ምድላው '{1}' ንፕላግኢን '{2}' ምእላይ የድልዮ ወይ ኣብ ክፍሊ ትርጉም መለክዒ ፓራምቫሉ ክግለጽ ይኽእል።</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ቅድመ-ምድላዋት ፍሉይ ጓይድ ክህልዎም ኣለዎ። ድፕሊኬት ቅድመ-ምድላው guid '{0}' ኣብ ፕላግ-ኢን '{1}' ንቅድመ-ምድላው ተረኺቡ: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>ስሕተት ምትንታን ፕላግ-ኢን፡ ኣብ መንገዲ '{0}' null፡ ምናልባት ጌጋ ምጽናዕ ንJSON. ንፕላግ-ኢን ሸለል ምባል</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>ጌጋ ኣርእስቲ ፕላግ-ኢን፡ ኣብ መንገዲ '{0}' ካብ {1} ፊደላት ዘይበዝሕ 'Title' ዝብል ንብረት ክህልዎ ኣለዎ። ንፕላግ-ኢን ሸለል ምባል</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>ፕላግ-ኢን ጓይድ ጌጋ፡ ኣብ መንገዲ '{0}' ምስ ኣርእስቲ '{1}' 'መጓሰ' ንብረት ክህልዎ ኣለዎ፡ RFC 4122 ዝሰማማዕ 128-bit guid (UUID) ፊደላት ጥራይ፡ ቁጽርታትን ሂፊንን ዘለዎ። ንፕላግ-ኢን ሸለል ምባል።</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>ጌጋ መግለጺ ጌጋ፡ ኣብ መንገዲ '{0}' መግለጺ ካብ {1} ፊደላት ንላዕሊ ክኸውን የብሉን። ንፕላግ-ኢን ሸለል ምባል</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>ስሕተት ፕላግ-ኢን tags, ኣብ መንገዲ '{0}' tags ካብ {1} ፊደላት ንላዕሊ ክኸውን የብሉን። ንፕላግ-ኢን ሸለል ምባል</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>ንደባገር ኣብ '{0}' ኣተሓሕዞ ወይ ድማ ንኽቕጽል ስርዝ ግበር።</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>ንዲባገር ምጽባይ</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>ጌጋ ምውራድ ፕላግ-ኢን. በጃኻ ድሒርካ ደጊምካ ፈትን።</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>ፕላግ-ኢን ዝተመሓየሸ</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>ርግጸኛ ዲኻ ንኹሉ {0} ዝብል ኣቕሓ(ታት) ክትመልሶ ትደሊ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>መዐቀኒታት ምድላይ 'ዘይተለጠፈ።</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>ናይ ምድላይ መዐቀኒ '{0}'።</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' ናይ ሓባር ክብርታት ዝሓዘ እዩ። ነቶም ውን ዳግማይ ክትሰርዖም ትደሊ ዶ?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

@@ -70,28 +70,36 @@
     <value>Vuosittainen</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopio</value>
@@ -127,19 +135,24 @@
     <value>Rakennettu - Laajennusselain, jolla on jatkuvasti kasvava yhteisö - ohjaava laajennuskirjasto</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste on leikepöydän hallinta-, automaatio- ja tuottavuustyökalu kuin mikään muu. Leikepöydän parantaminen rikastettuun ja järjestäytyneeseen osaan työnkulkuasi,
@@ -158,40 +171,41 @@ Haluan myös sinun olevan mukava käyttää sitä. Joten vakuutan teille, että 
 Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ulkopuolella. Ajanjakso.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Yksinkertainen ja ystävällinen käyttöliittymä sekä vaakasuuntaisten/pystysuuntaisten asettelujen, luettelon/ruudukonäkymän että monivalvonnan tuen kanssa</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Liite -tila: Kopioinnista tulee 'Lisää' leikepöydän "korvaamisen sijaan". Sekä teksti että tiedostot, täysin muokattavissa</value>
+    <value>● Mukautetut hiiren tilat: Oikea - Napsauta liitä ja vasemmalla - Napsauta AUTO - Kopioi</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Hienostunut leikkeiden seuranta, lähteet ja käyttö parannetulla tuella Firefox- ja Chromium -pohjaisille selaimille (Chrome, Edge, Brave)</value>
+    <value>● Liite -tila: Kopioinnista tulee 'Lisää' leikepöydän "korvaamisen sijaan". Sekä teksti että tiedostot, täysin muokattavissa</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Täysin - esitelty leikeeditori rikkaalla tekstillä (taulukot, luettelot, linkit jne.) Löydä/korvaa ja korostamalla</value>
+    <value>● Hienostunut leikkeiden seuranta, lähteet ja käyttö parannetulla tuella Firefox- ja Chromium -pohjaisille selaimille (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Tallenna kuvat suojattuun tietokantaan, valmiina tiedostoina milloin tahansa - Kysyntä vain vedä - ja - pudota!</value>
+    <value>● Täysin - esitelty leikeeditori rikkaalla tekstillä (taulukot, luettelot, linkit jne.) Löydä/korvaa ja korostamalla</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Tehokas tekstin malli nopeaa, dynaamista liittämistä katkelmakokoelmastasi</value>
+    <value>● Tallenna kuvat suojattuun tietokantaan, valmiina tiedostoina milloin tahansa - Kysyntä vain vedä - ja - pudota!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action Designer räätälöityjen automaatioiden ja toimintojen ketjuttamiseksi</value>
+    <value>● Tehokas tekstin malli nopeaa, dynaamista liittämistä katkelmakokoelmastasi</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Helppokäyttöinen ja laajennusta laajennusjärjestelmä molemmille leikkeille tai lue/kirjoita mitä tahansa muotoa leikepöydällesi</value>
+    <value>● Trigger &amp; Action Designer räätälöityjen automaatioiden ja toimintojen ketjuttamiseksi</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Rakennettu - Plugin -selaimessa, jolla on jatkuvasti kasvava yhteisö - ohjaavan laajennuskirjaston</value>
+    <value>● Helppokäyttöinen ja laajennusta laajennusjärjestelmä molemmille leikkeille tai lue/kirjoita mitä tahansa muotoa leikepöydällesi</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatisoi kaikki laajennuksen esiasetuksella, stash ja käytä mitä tahansa AI -kehotustasi tai komentoasi helposti</value>
+    <value>● Rakennettu - Plugin -selaimessa, jolla on jatkuvasti kasvava yhteisö - ohjaavan laajennuskirjaston</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Lisää alustoja ja ominaisuuksia tulossa pian! Olemme juuri aloittamassa 🎉</value>
+    <value>● Automatisoi kaikki laajennuksen esiasetuksella, stash ja käytä mitä tahansa AI -kehotustasi tai komentoasi helposti</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Sekä vaaleat että tummat teemat ovat täysin dynaamisia, käytä mitä tahansa haluamaasi väriä</value>
@@ -208,29 +222,29 @@ Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ul
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Järjestä leikkeet tunnistepuissa ja luo uudelleen käytettäviä suodattimia</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Turvallinen, suojattu ja yksityinen paikallinen tietojen tallennus (ei tiedonkeruu) salattu aina valinnaisella 2 - tekijä salasanasuojaus ja estä helposti sovellukset tai verkkosivustot Trackerilta</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Laaja veto - ja - pudota tuki, räätälöityjä globaaleja pikanäppäimiä, reititystä ja hiiriä - ilmainen navigointi</value>
+    <value>● Estä helposti tietyt sovellukset, verkkosivustot ja jopa tietyt verkkosivut leikepöydän seurannasta</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Mukautetut hiiren tilat: Oikea - Napsauta liitä ja vasemmalla - Napsauta AUTO - Kopioi</value>
+    <value>● Laaja veto - ja - pudota tuki, räätälöityjä globaaleja pikanäppäimiä, reititystä ja hiiriä - ilmainen navigointi</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Leikepöytä on viidakko. Monkepaste on kuningas! Käännä sovelluksesta sovellukseen, kopioimalla tämä ja liittämällä, joka ei ole koskaan ennen Monkeypasten kanssa !! Tuotemerkki - uusi, huippuluokan leikepöytä ja analyyttinen automaatiotyökalu !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Näyte Monkeypasten toiminnasta!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Asennettu tähän kieleen. Englanti on tarkoitettu vain näille esimerkeille</value>
@@ -250,5 +264,11 @@ Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ul
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Tällä tilauksella saat:
 ● Rajoittamaton kapasiteetti</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Turvallinen, suojattu ja yksityinen paikallinen tietojen tallennus (ei tiedonkeruu) aina salattu valinnaisella 2 - tekijä salasanan suojaus</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Lisää alustoja ja ominaisuuksia tulossa pian! Olemme juuri aloittamassa 🎉</value>
   </data>
 </root>

@@ -2304,7 +2304,7 @@ monkeypeaste នៅលើឧបករណ៍
     <comment>Action Name</comment>
   </data>
   <data name="ActionFileWriterValidation2" xml:space="preserve">
-    <value>ផ្លូវឯកសារ Wile '{0}' រកមិនឃើញ 'រកមិនឃើញ' រកមិនឃើញទេ។</value>
+    <value>File Writer Path '{0}' សម្រាប់ '{1}' រកមិនឃើញទេ។</value>
     <comment>File Path, Action Name</comment>
   </data>
   <data name="LoaderTaskbarLabel" xml:space="preserve">
@@ -2699,5 +2699,201 @@ feedback@monkeypales.com</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;វិធីនេះ MonkeyPaste អាចចូលដំណើរការបាន&lt;br&gt;&lt;span color="red"&gt;ដោយគ្មានការចុចឬសូម្បីតែវាយភ្នែក&lt;/span&gt; &amp;#x1F440 &lt;span color="red"&gt;&lt;/span&gt;&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>ការបិឃាដ</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>ក្លេតុក</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>វត្ថុទិន្នន័យ</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>ទីាការ</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>អ្នកអាន</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>កំហុសមិនស្គាល់</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>អ្នកនិបន្ធ</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>បានរកឃើញកម្មវិធីជំនួយរបស់កម្មវិធីជំនួយ '{0}' បានរកឃើញសម្រាប់កម្មវិធីជំនួយទាំងនេះ:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>ជួសជុលដោយការផ្លាស់ប្តូរការណែនាំជំនួយឬយកស្ទួនស្ទួនចេញ។ បើមិនដូច្នោះទេកម្មវិធីជំនួយដែលជាប់ទាក់ទងទាំងអស់នឹងត្រូវបានមិនអើពើ។</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>មគ្គុទេសព្រីនប៊ែនណាត់ BEDT BIDID '{0}' បានរកឃើញសម្រាប់កម្មវិធីជំនួយទាំងនេះនិង Presett:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>កម្មវិធីជំនួយ: {0} {1} កំណត់ជាមុន: # {2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>កម្មវិធីជំនួយ: {0} {1} កំណត់ជាមុន (S): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>ជួសជុលដោយផ្តល់នូវគោលការណ៍ណែនាំដែលបានកំណត់ជាមុនឬយកស្ទួនស្ទួនចេញ។ បើមិនដូច្នោះទេកម្មវិធីជំនួយដែលជាប់ទាក់ទងទាំងអស់នឹងត្រូវបានមិនអើពើ។</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>ពណ៌កម្មវិធីនិពន្ធ</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់លុបធាតុទាំងអស់ {0} ជាអចិន្ត្រៃយ៍វិញឬ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>ជ្រើសរើសថតឯកសារ</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>ជ្រើសរើសថតឃ្លាំមើល</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>កំហុសកម្មវិធីជំនួយ។ កម្មវិធីជំនួយ '{0}' គឺជាប្រភេទ '{1}' ប៉ុន្តែរកមិនឃើញទ្រង់ទ្រាយ '{1}'</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>កំហុសក្នុងការធ្វើសកម្មភាព '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>តម្លៃត្រូវតែមានតែលេខឬ '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>តម្លៃត្រូវតែមានពី {0} ទៅ {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>ត្រូវតែជាខ្សែអក្សរ Hex (6 ឬ 8 ខ្ទង់) ដែលចាប់ផ្តើមដោយ '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>ក្តារតម្បៀតខ្ទាស់ '{0}' ត្រូវតែមានតែមួយ។</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>មានរួចហើយសម្រាប់</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>រតង់រតាយ</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>បុម្ពអកសរ</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>ឈ្មោះអ្នកអានឃ្លីប / ទំរង់ឈ្មោះរបស់អ្នកនិពន្ធត្រូវតែមានតែមួយគត់។ ស្ទួនអ្នកអាន:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>ឈ្មោះអ្នកអានឃ្លីប / ទំរង់ឈ្មោះរបស់អ្នកនិពន្ធត្រូវតែមានតែមួយគត់។ អ្នកនិពន្ធស្ទួន:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>ការណែនាំទ្រង់ទ្រាយទំរង់ឃ្លីបត្រូវតែមានតែមួយគត់។ ទម្រង់បែបបទស្ទួននិងការណែនាំ:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>កំហុសកម្មវិធីជំនួយ: កម្មវិធីជំនួយ '{0} ត្រូវតែមានតែមួយគត់សម្រាប់អ្នកដោះស្រាយ' {1} '។ {2}' ។ {3} '{3}' មានធាតុច្រើន</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>កំហុសកម្មវិធីជំនួយគ្មានការរកឃើញដែលបានរកឃើញទេ</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>កម្មវិធីជំនួយ '{0}' មិនអាចកំណត់ជាមុនដោយមិនចាំបាច់មានប៉ារ៉ាម៉ែត្រយ៉ាងហោចណាស់ 1 ទេ</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param ដែលមិនមានតំណភ្ជាប់ # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>លេខសម្គាល់ប៉ារ៉ាម៉ែត្រប៉ារ៉ាម៉ែត្រកម្មវិធីជំនួយ ({0}) ត្រូវតែកំណត់។ កម្មវិធីជំនួយ '{1}' មានប៉ារ៉ាម៉ែត្រដូចខាងក្រោមដែលមាន paramid បាត់: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>បានរកឃើញ Pasamid '{0}' បានរកឃើញ (ទាំងអស់ត្រូវតែមានតែមួយគត់) ។ {1} ស្លាក: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>មគិតកំណត់ជាមុនត្រូវបានទាមទារ។ វាមិនត្រូវបានរកឃើញឬទ្រង់ទ្រាយខុសសម្រាប់ '{0}' ក្នុងកម្មវិធីជំនួយ {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>មិនអាចរកឃើញប៉ារ៉ាម៉ែត្រដែលមាន paramated '{0}' ដែលបានយោងដោយកំណត់ជាមុន '{1}' សម្រាប់កម្មវិធីជំនួយ '{2}' ។ ប៉ារ៉ាម៉ែត្រប្រហែលជាបានផ្លាស់ប្តូរឬត្រូវបានដកចេញធ្វើឱ្យទាន់សម័យ paramvalue ឬយកវាចេញ។</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>មិនអាចកំណត់ប៉ារ៉ាម៉ែត្រតម្លៃដែលបានចែករំលែកនៅក្នុង Pritet បានទេ។ PARAMID '{0}' ក្នុងកំណត់ជាមុន '{1}' ត្រូវការកម្មវិធីជំនួយ '{2}' ត្រូវការលុបចោលឬ ParamValue អាចត្រូវបានបញ្ជាក់ក្នុងផ្នែកអង្គនកម្មប៉ារ៉ាម៉ែត្រ។</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Pretets ត្រូវតែមានការណែនាំពិសេស។ គន្លឹះនៃការស្ទួន) {0} 'ត្រូវបានរកឃើញក្នុងកម្មវិធីជំនួយ' {1} 'សម្រាប់ Pritets: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>កំហុសក្នុងការញែក PURUSIN ក្នុងផ្លូវ '{0}' មោឃៈកំហុសដែលទំនងបានញែក JSON ។ ការមិនអើពើកម្មវិធីជំនួយ</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>កំហុសចំណងជើងកម្មវិធីជំនួយ, នៅផ្លូវ '{0}' ត្រូវតែមានលក្ខណសម្បត្តិ "ចំណងជើង 'ដែលមិនមានច្រើនជាងតួអក្សរ {1} តួអក្សរ។ ការមិនអើពើកម្មវិធីជំនួយ</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>កំហុសនៃការណែនាំកម្មវិធីជំនួយ នៅផ្លូវ '{0}' ដែលមានចំណងជើង '{1}' ត្រូវតែមានលក្ខណៈសម្បត្តិ 'guid', RFC 4122 អនុលោមតាម GUID 128 ប៊ីត (UUID) ដែលមានអក្សរ លេខ និងសហសញ្ញាប៉ុណ្ណោះ។ មិនអើពើកម្មវិធីជំនួយ។</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>កំហុសកម្មវិធីជំនួយកំហុស, នៅផ្លូវ '{0}' ការពិពណ៌នាត្រូវតែមិនលើសពីតួអក្សរ {1} តួអក្សរ។ ការមិនអើពើកម្មវិធីជំនួយ</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>កំហុសរបស់កម្មវិធីជំនួយ, នៅស្លាកផ្លូវ '{0} ត្រូវតែមិនលើសពីតួអក្សរ {1} តួអក្សរ។ ការមិនអើពើកម្មវិធីជំនួយ</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>ភ្ជាប់កម្មវិធីបំបាត់កំហុសទៅ '{0}' ឬបោះបង់ដើម្បីបន្ត។</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>កំពុងរង់ចាំអ្នកបំបាត់កំហុស</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>កំហុសក្នុងការទាញយកកម្មវិធីជំនួយ។ សូម​ព្យាយាម​ម្តង​ទៀត​នៅ​ពេល​ក្រោយ។</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>កម្មវិធីជំនួយបានធ្វើឱ្យទាន់សម័យ</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>តើអ្នកពិតជាចង់ស្តារធាតុ {0} ទាំងអស់ឬ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>ស្វែងរកលក្ខណៈវិនិច្ឆ័យ 'គ្មានចំណងជើង'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>ស្វែងរកលក្ខណៈវិនិច្ឆ័យ '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' មានតំលៃដែលបានចែករំលែក។ តើអ្នកចង់កំណត់អ្នកទាំងនោះផងដែរឬទេ?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

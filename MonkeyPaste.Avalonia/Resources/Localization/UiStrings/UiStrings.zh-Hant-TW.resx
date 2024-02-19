@@ -2700,4 +2700,200 @@ feathback@monkeypaste.com</value>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;這樣，就可以訪問 MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;沒有咔噠聲&lt;/span&gt;，甚至沒有&lt;span color="red"&gt;眨眼&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>注解</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>克隆</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>数据对象</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>插入</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>读者</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>未知错误</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>作家</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>针对这些插件检测到的重复插件GUID'{0}'：</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>通过更改插件GUID或删除重复项来修复。否则，所有关联的插件将被忽略。</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>针对这些插件和预设检测到的重复插件预设guid'{0}'：</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>插件：{0} {1} Preset（S）：＃{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>插件：{0} {1}预设（S）：{2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>通过提供独特的预设指导或删除重复项来解决。否则，所有关联的插件将被忽略。</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>编辑颜色</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>您确定要永久删除所有{0}项目吗？</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>选择文件夹</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>选择“观看”文件夹</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>插件错误。插件'{0}'是'{1}'type，但找不到'{1}'格式</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>错误执行操作'{0}'：{1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>值必须仅包含数字或'{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>值必须从{0}到{1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>必须是以“＃”开头的十六进制（6或8位）字符串</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>剪贴板'{0}'必须是唯一的。</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>已经存在</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>格式</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>剪贴板读取器/作家格式必须是唯一的。读者重复：</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>剪贴板读取器/作家格式必须是唯一的。作家重复：</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>剪贴板格式GUID必须是唯一的。重复格式和指南：</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>插件错误：所有插件'{0}'字段对于处理程序'{1}'。{2} paramname'{3}'都有多个条目</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>插件错误，找不到不变清单</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>插件'{0}'没有至少1个参数没有预设</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>未标记的参数＃{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>必须定义插件参数ID（{0}）。插件'{1}'具有以下参数，缺少paramid的参数：{2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>检测到重复的paramid'{0}'（全部都是唯一的）。{1}标签：{1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>需要預設引導。插件 {1} 中未找到「{0}」或格式錯誤</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>找不到外掛程式「{2}」的預設「{1}」所引用的 paramId「{0}」的參數。參數可能已變更或已刪除，請更新預設的 paramValue 或將其刪除。</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>无法在预设中设置共享值参数。插入'{1}'中的paramid'{0}'需要在参数定义部分中删除插件'{2}'或ParamValue。</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>预设必须具有独特的指导。在插件'{1}'中检测到重复的预设guid'{0}'用于预设：{2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>插件解析错误，在路径'{0}'null，可能错误解析JSON。忽略插件</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>插件标题错误，在路径'{0}'必须具有“标题”属性，不超过{1}字符。忽略插件</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>插件GUID错误，在路径'{0}'带标题'{1}'必须具有'guid'属性，RFC 4122符合128位GUID（UUID），只有字母，数字和连字符。忽略插件。</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>插件描述错误，在路径'{0}'描述中必须不超过{1}字符。忽略插件</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>插件标签错误，在路径'{0}'标签上必须不超过{1}字符。忽略插件</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>将调试器附加到“ {0}”或取消以继续。</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>等待调试器</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>错误下载插件。请稍后再试。</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>插件更新</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>您确定要还原所有{0}项目吗？</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>搜索标准“无标题”</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>搜索条件'{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}'包含共享值。您是否也想重置这些？</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

@@ -70,28 +70,36 @@
     <value>መሰረታዊ - ዓመት ዓመት</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>ቅዳሕ</value>
@@ -127,19 +135,24 @@
     <value>ዝተሃንጸ - ኣብ ፕላግ-ኢን ብራውዘር ምስ ኩሉ ግዜ ዝዓቢ ማሕበረሰብ - ዝምራሕ ቤተ መጻሕፍቲ ፕላጊናት</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste ናይ ቅንጥብጣብ ሰሌዳ ማናጀር፣ ኣውቶማቲክን ኣፍራይነትን መሳርሒ ኮይኑ ከም ካልእ ኣይኮነን። ቅንጥብጣብ ሰሌዳኻ ናብ ሓደ ዝሃብተመን ዝተወደበን ክፋል ዋሕዚ ስራሕካ ምዕባይ፣
@@ -158,40 +171,41 @@
 ቅንጥብጣብ ሰሌዳኻ ካብ ናይ ገዛእ ርእስኻ ማሽን ወጻኢ ኣብ ዝኾነ ቦታ ይከታተሎ ወይ ይኽዘን። ግዘ.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● ቀሊልን ምሕዝነታውን መተሓላለፊ ምስ ክልቲኡ ልኡል/ቀጥታዊ ኣቀማምጣ፣ ዝርዝር/ግሪድ ቪውን ማልቲ - ሞኒተርን ደገፍ</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● ምውሳኽ ሞድ፡ ምቕዳሕ ኣብ ክንዲ ኣብቲ ቅንጥብጣብ ሰሌዳ 'ምትካእ' 'add to' ይኸውን። ክልቲኡ ጽሑፍን ፋይላትን፡ ምሉእ ብምሉእ ብዝጥዕመካ መንገዲ</value>
+    <value>● Custom Mouse Modes: Right - Paste ጠውቕ እሞ ጸጋም - Auto ዝብል ጠውቕ - Copy</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● ዝተራቐቐ ናይ ክሊፕ ምክትታል፣ ምንጭታትን ኣጠቓቕማን ብዝተዓጻጸፈ ደገፍ ንፋየርፎክስን ክሮሚየምን - መሰረት ዝገበረ መርበብ ሓበሬታ (ክሮም፣ ወሰን፣ ተባዓት)</value>
+    <value>● ምውሳኽ ሞድ፡ ምቕዳሕ ኣብ ክንዲ ኣብቲ ቅንጥብጣብ ሰሌዳ 'ምትካእ' 'add to' ይኸውን። ክልቲኡ ጽሑፍን ፋይላትን፡ ምሉእ ብምሉእ ብዝጥዕመካ መንገዲ</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● ምሉእ ብምሉእ - ፍሉይ ዝኾነ ክሊፕ ኤዲተር ምስ ሃብታም ጽሑፍ (ሰንጠረዥ፡ ዝርዝር፡ መላግቦታት ወዘተ) ምስ Find/replace and signinging</value>
+    <value>● ዝተራቐቐ ናይ ክሊፕ ምክትታል፣ ምንጭታትን ኣጠቓቕማን ብዝተዓጻጸፈ ደገፍ ንፋየርፎክስን ክሮሚየምን - መሰረት ዝገበረ መርበብ ሓበሬታ (ክሮም፣ ወሰን፣ ተባዓት)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● ምስልታትካ ኣብቲ ውሑስ ዳታቤዝ ኣቐምጦ፣ ኣብ ዝኾነ እዋን ከም ፋይላት ንኽትጥቀመሉ ድሉው - Demand just drag - and - drop!</value>
+    <value>● ምሉእ ብምሉእ - ፍሉይ ዝኾነ ክሊፕ ኤዲተር ምስ ሃብታም ጽሑፍ (ሰንጠረዥ፡ ዝርዝር፡ መላግቦታት ወዘተ) ምስ Find/replace and signinging</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● ሓያል ጽሑፍ templating ንቕልጡፍን ዳይናሚክን ምልጣፍ ካብ ቁንጣሮ ቁንጣሮ እኩብ</value>
+    <value>● ምስልታትካ ኣብቲ ውሑስ ዳታቤዝ ኣቐምጦ፣ ኣብ ዝኾነ እዋን ከም ፋይላት ንኽትጥቀመሉ ድሉው - Demand just drag - and - drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● ትሪግር &amp; ኣክሽን ዲዛይነር ንብሕታዊ ኣውቶማቲክን ኣክሽን ሰንሰለትን</value>
+    <value>● ሓያል ጽሑፍ templating ንቕልጡፍን ዳይናሚክን ምልጣፍ ካብ ቁንጣሮ ቁንጣሮ እኩብ</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● ንኽልቲኡ ክሊፓት ንምትንታን ወይ ዝኾነ ቅርጺ ናብ ቅንጥብጣብ ሰሌዳኻ ንባብ/ምጽሓፍ ቀሊል ንኣጠቓቕማን ንምንዋሕን ቀሊል ስርዓት ፕላግ-ኢን</value>
+    <value>● ትሪግር &amp; ኣክሽን ዲዛይነር ንብሕታዊ ኣውቶማቲክን ኣክሽን ሰንሰለትን</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● ዝተሃንጸ - ኣብ ፕላግ-ኢን ብራውዘር ምስ ወትሩ - እናዓበየ ዝኸይድ ዘሎ ማሕበረሰብ - ዝዝወር ቤተ መጻሕፍቲ ፕላግኢናት</value>
+    <value>● ንኽልቲኡ ክሊፓት ንምትንታን ወይ ዝኾነ ቅርጺ ናብ ቅንጥብጣብ ሰሌዳኻ ንባብ/ምጽሓፍ ቀሊል ንኣጠቓቕማን ንምንዋሕን ቀሊል ስርዓት ፕላግ-ኢን</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● ንኹሉ ብፕላግኢን ቅድመ-ምድላዋት፡ ስታሽ ጌርካ ንዝኾነ ናይ AI ምልክትካ ወይ ትእዛዛትካ ብቐሊሉ ተጠቐም</value>
+    <value>● ዝተሃንጸ - ኣብ ፕላግ-ኢን ብራውዘር ምስ ወትሩ - እናዓበየ ዝኸይድ ዘሎ ማሕበረሰብ - ዝዝወር ቤተ መጻሕፍቲ ፕላግኢናት</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● ኣብ ቀረባ እዋን ዝያዳ መድረኻትን ባህርያትን! ንሕና ጥራይ ኢና ንጅምር ዘለና 🎉</value>
+    <value>● ንኹሉ ብፕላግኢን ቅድመ-ምድላዋት፡ ስታሽ ጌርካ ንዝኾነ ናይ AI ምልክትካ ወይ ትእዛዛትካ ብቐሊሉ ተጠቐም</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● ክልቲኦም Light &amp; Dark themes ምሉእ ብምሉእ ዳይናሚክ እዮም፣ ዝደለኻዮ ሕብሪ ተጠቐም</value>
@@ -208,29 +222,29 @@
   <data name="StoreFeature6" xml:space="preserve">
     <value>● ክሊፓታትካ ኣብ መለለዪ ኣግራብ ምውዳብን ዳግማይ ክጥቀማሉ ዝኽእሉ መጽረዪታት ምፍጣርን .</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● ውሑስ፣ ውሑስን ናይ ብሕቲን ናይ ከባቢ መኽዘን ዳታ መኽዘን (እኩብ መረዳእታ የለን) ኩሉ ግዜ ብኣማራጺ 2 - ረቛሒ ምክልኻል ምልክት ቃልን ብቐሊሉ ካብ መከታተሊኻ ኣፕስ ወይ ዌብሳይት ምዕጋትን</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● ሰፊሕ ስሕበት - ከምኡውን - ናይ ድሮፕ ደገፍ፣ ብሕታዊ ዓለማዊ ኣቋራጭ መንገዲ፣ መስመርን ማውስን - ነጻ ምምራሕ</value>
+    <value>● ንገለ ኣፕስ፣ ዌብሳይታትን ዋላ ፍሉያት ገጻት መርበብ ሓበሬታን ካብ ቅንጥብጣብ ሰሌዳ ምክትታል ብቐሊሉ ምዕጋት</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Custom Mouse Modes: Right - Paste ጠውቕ እሞ ጸጋም - Auto ዝብል ጠውቕ - Copy</value>
+    <value>● ሰፊሕ ስሕበት - ከምኡውን - ናይ ድሮፕ ደገፍ፣ ብሕታዊ ዓለማዊ ኣቋራጭ መንገዲ፣ መስመርን ማውስን - ነጻ ምምራሕ</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>እቲ ቅንጥብጣብ ሰሌዳ ጫካ እዩ። ሞንኪፓስቲ ንጉስ እዩ! ካብ ኣፕ ናብ ኣፕ ምውጥዋጥ፡ ነዚ ምቕዳሕን ምልጣፍን ከምቲ ቅድሚ ሕጂ ምስ MonkeyPaste!! ሓደ ምልክት - ሓድሽ፣ መቑረፂ ወሰን ቅንጥብጣብ ሰሌዳን ትንተናዊ ኣውቶማቲክ መሳርሒን!!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>ናሙና ናይ MonkeyPaste ብተግባር!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>ኣብዚ ቋንቋ ዝተተኽለ። እንግሊዝኛ ነዞም ኣብነታት ጥራይ ’ ዩ።</value>
@@ -250,5 +264,11 @@
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>በዚ ምዝገባ እዚ ክትረኽቦ ኢኻ፤
 ● ደረት ኣልቦ ዓቕሚ .</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● ውሑስ፣ ውሑስን ናይ ውልቂን ናይ ከባቢ መኽዘን ዳታ (No Data Collection) ኩሉ ግዜ ብኣማራጺ 2 - ረቛሒ ምክልኻል ምልክት ምልክት</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● ኣብ ቀረባ እዋን ዝያዳ መድረኻትን ባህርያትን! ንሕና ጥራይ ኢና ንጅምር ዘለና 🎉</value>
   </data>
 </root>

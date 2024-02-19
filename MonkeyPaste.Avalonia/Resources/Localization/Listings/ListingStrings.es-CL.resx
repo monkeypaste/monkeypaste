@@ -70,28 +70,36 @@
     <value>Básico - Anual</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Copiar</value>
@@ -127,19 +135,24 @@
     <value>BROWSER BRIGURADO - EN CULTIMINES CON UNA COMUNIDAD ESTUDA - COMUNITY - Biblioteca de complementos impulsados</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkyPaste es un administrador de portapapeles, una herramienta de automatización y productividad como ninguna otra. Mejorar su portapapeles en una parte enriquecida y organizada de su flujo de trabajo,
@@ -158,40 +171,41 @@ También quiero que te sientas cómodo usándolo. Así que te aseguro, como la �
 Su portapapeles siempre se rastrea o almacena en cualquier lugar más allá de su propia máquina. Período.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Interfaz simple y amigable con diseños horizontales/verticales, vista de lista/cuadrícula y soporte de monitoreo múltiple</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Modo de agregado: la copia se convierte en 'agregar' en lugar de 'reemplazar' en el portapapeles. Tanto el texto como los archivos, totalmente personalizable</value>
+    <value>● Modos de mouse personalizados: a la derecha: haga clic en Pegar e izquierda - Haga clic en Automático - Copiar</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Seguimiento, fuentes y uso de clip sofisticados con un mayor soporte para los navegadores basados ​​en Firefox y Chromium (Chrome, Edge, Brave)</value>
+    <value>● Modo de agregado: la copia se convierte en 'agregar' en lugar de 'reemplazar' en el portapapeles. Tanto el texto como los archivos, totalmente personalizable</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Completamente: editor de clips destacado con texto enriquecido (tablas, listas, enlaces, etc.) con buscar/reemplazar y resaltar</value>
+    <value>● Seguimiento, fuentes y uso de clip sofisticados con un mayor soporte para los navegadores basados ​​en Firefox y Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Almacene sus imágenes en la base de datos segura, listas para usar como archivos en cualquier momento: demanda simplemente arrastre - y - ¡solte!</value>
+    <value>● Completamente: editor de clips destacado con texto enriquecido (tablas, listas, enlaces, etc.) con buscar/reemplazar y resaltar</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Potentes plantillas de texto para un pegado rápido y dinámico de su colección de fragmentos</value>
+    <value>● Almacene sus imágenes en la base de datos segura, listas para usar como archivos en cualquier momento: demanda simplemente arrastre - y - ¡solte!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Diseñador de activación y acción para automatizaciones personalizadas y encadenamiento de acción</value>
+    <value>● Potentes plantillas de texto para un pegado rápido y dinámico de su colección de fragmentos</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Sistema de complemento fácil de usar y extender para analizar clips o leer/escribir cualquier formato en su portapapeles</value>
+    <value>● Diseñador de activación y acción para automatizaciones personalizadas y encadenamiento de acción</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Built, en el navegador de complementos con una biblioteca de complementos de la comunidad cada vez más en crecimiento.</value>
+    <value>● Sistema de complemento fácil de usar y extender para analizar clips o leer/escribir cualquier formato en su portapapeles</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatice todo con presets de complementos, esconde y use sus indicaciones o comandos de AI con facilidad</value>
+    <value>● Built, en el navegador de complementos con una biblioteca de complementos de la comunidad cada vez más en crecimiento.</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Más plataformas y características próximamente! Solo somos consejos iniciados 🎉</value>
+    <value>● Automatice todo con presets de complementos, esconde y use sus indicaciones o comandos de AI con facilidad</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Tanto los temas ligeros como los oscuros son completamente dinámicos, use cualquier color que desee</value>
@@ -208,29 +222,29 @@ Su portapapeles siempre se rastrea o almacena en cualquier lugar más allá de s
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organice sus clips en árboles de etiqueta y cree filtros resutables</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Almacenamiento de datos local seguro, seguro y privado (sin recopilación de datos) siempre encriptado con protección de contraseña opcional de 2 y bloquea fácilmente aplicaciones o sitios web desde su rastreador</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Extensa resistencia de arrastre - y - Soporte, atajos globales personalizados, enrutamiento y mouse - Navegación gratuita</value>
+    <value>● Bloquear fácilmente ciertas aplicaciones, sitios web e incluso páginas web específicas del seguimiento del portapapeles</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Modos de mouse personalizados: a la derecha: haga clic en Pegar e izquierda - Haga clic en Automático - Copiar</value>
+    <value>● Extensa resistencia de arrastre - y - Soporte, atajos globales personalizados, enrutamiento y mouse - Navegación gratuita</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>El portapapeles es una jungla. ¡Monkipaste es el rey! ¡Gire de la aplicación a la aplicación, copiando esto y pegando eso como nunca antes con MonkyyPaste! ¡Una marca: la nueva herramienta de automatización analítica y portapapeles de vanguardia!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>¡Muestra de monje en acción!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Instalado en este idioma. El inglés es solo para estos ejemplos</value>
@@ -250,5 +264,11 @@ Su portapapeles siempre se rastrea o almacena en cualquier lugar más allá de s
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Con esta suscripción recibirá:
 ● Capacidad ilimitada</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Almacenamiento de datos local seguro, seguro y privado (sin recopilación de datos) siempre encriptado con protección de contraseña de 2 factores opcional</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Más plataformas y características próximamente! Solo somos consejos iniciados 🎉</value>
   </data>
 </root>

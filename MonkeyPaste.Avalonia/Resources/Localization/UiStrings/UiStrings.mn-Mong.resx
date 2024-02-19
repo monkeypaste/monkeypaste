@@ -290,7 +290,7 @@
     <value>{0} x x {1} px</value>
   </data>
   <data name="ClipTileDetailDimText" xml:space="preserve">
-    <value>{0&gt; cars | {1} мөрүүд</value>
+    <value>{0} cars | {1} мөрүүд</value>
   </data>
   <data name="ClipTileDetailUsage" xml:space="preserve">
     <value>{0} хуулбар | {1} пастерууд</value>
@@ -550,7 +550,7 @@
     <value>Та бүх товчлолыг дахин тохируулахыг хүсч байна уу? Бүх Тусгай товчлолуудыг арилгах болно.</value>
   </data>
   <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
-    <value>Та товчлуурын чиглүүлэлтийн чиглэлийг өөрчлөхийг хүсч байгаа гэдэгт итгэлтэй байна уу?</value>
+    <value>Та товчлуурын чиглүүлэлтийн чиглэлийг өөрчлөхийг {0} хүсч байгаа гэдэгт итгэлтэй байна уу?</value>
   </data>
   <data name="TagDefaultAllLabel" xml:space="preserve">
     <value>Бүгд</value>
@@ -2699,5 +2699,201 @@ FEEDBOWY@monkeypue.com</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;ᠢᠩᠭᠢᠪᠡᠯ ᠮᠧᠨᠺᠧᠫᠠᠫᠠᠰᠲ᠋ᠧ ᠳᠦ ᠠᠶᠢᠯᠴᠢᠯᠠᠵᠤ ᠪᠣᠯᠣᠨ᠎ᠠ ᠃&lt;br&gt;&lt;span color="red"&gt;ᠥᠴᠥᠭᠡᠳᠦᠷ ᠤᠬᠢᠯᠠᠬᠤ ᠳᠠᠭᠤ ᠦᠭᠡᠢ&lt;/span&gt; ᠂ ᠴᠢᠨᠠᠭᠰᠢᠯᠠᠪᠠᠯ &lt;span color="red"&gt;ᠨᠢᠳᠦ ᠪᠡᠨ ᠠᠨᠢᠵᠤ&lt;/span&gt; #x1F440 ᠦᠭᠡᠢ ᠃&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Сарчилтдол</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Кааран</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Нууцийн обао</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Залгах</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Уншигч</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Үл мэдэгдэх алдаа</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Зохиолч</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Эдгээр залгаасыг хуулбарласан Plugin Guid '{0}' Эдгээр залгаасыг илрүүлсэн:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Plugin Guide-г өөрчлөх эсвэл хуулбарыг арилгах замаар засах. Үгүй бол бүх холбогдох нэмэлт өргөтгөлүүдийг үл тоомсорлох болно.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Эдгээр залгаасууд болон урьдчилан тохируулгууд дээр давхардсан залгаасын урьдчилан тохируулсан гарын авлага '{0}' илэрсэн:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} {1} preset (ууд): # {2 {2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} {1} preset (ууд): {2 {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Давтагдашгүй проектурын заавар эсвэл хуулбарыг арилгах замаар засах. Үгүй бол бүх холбогдох нэмэлт өргөтгөлүүдийг үл тоомсорлох болно.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Програмад өнгө</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Та бүх {0} зүйлийг бүрмөсөн устгахыг хүсч байна уу?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Хавтас сонгох</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Үзэх фолдерыг сонгоно уу</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Plugin алдаа. Plugin '{0}' нь 'бол' {1 {1} 'төрөл боловч' {1 {1} 'формат олдсонгүй</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>'{0 {0}' үйлдлийг гүйцэтгэх явцад алдаа гарлаа: {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Утга нь зөвхөн тоо эсвэл '{0}' агуулсан байх ёстой</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Утга нь {0} -ээс {1} -ээс байх ёстой</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' -Аас эхэлсэн hex (6 эсвэл 8 оронтой) мөр байх ёстой.</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Clipboard '{0}' нь өвөрмөц байх ёстой.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Аль хэдийн байгаа</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Хэлбэр хэмжээ</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Маяг</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Clipboard уншигч / зохиолч форматын нэр нь өвөрмөц байх ёстой. Уншигчийн хуулбар:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Clipboard уншигч / зохиолч форматын нэр нь өвөрмөц байх ёстой. Зохиолч давхардсан:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Clipboard форматын удирдамж нь өвөрмөц байх ёстой. Formats &amp; Guids-ийг хуулбарлах:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Plugin алдаа: Бүх Plugin '{0} {0 {1}' талбарууд нь "{1} Paramname '{2} paramname' {3} {3} '{3}' {3} '{3}' {3} 'нь олон оруулгуудтай байх ёстой</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>PLUBIN ERRORT, INVERIANTIANT MANIFER олдсонгүй</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Pluglin '{0}' нь дор хаяж 1 параметргүйгээр урьдчилан тохируулах боломжгүй</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Unlaited Param # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Plugin Parameter ID ({0}) -ийг тодорхойлох ёстой. Pluglin '{1}' 'Алга болсон парамидын дараах параметрүүдтэй: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Давхардсан парамид '{0}' илэрсэн (бүгд өвөрмөц байх ёстой). {1} нь {1} {1} {1 {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Урьдчилан тохируулсан хөтөч шаардлагатай. {1} залгаас дахь '{0}'-ын формат олдсонгүй эсвэл буруу форматтай байна</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Paramid '{0 {0}' {1} {1} {1} {1} {2} '{{2}'. Параметр өөрчлөгдсөн эсвэл хасагдсан эсвэл хасагдсан, Prestet Paramvalue-г шинэчилнэ үү.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Урьдчилан тохируулалт дотор хуваалцсан утгын параметрүүдийг тохируулах боломжгүй. '{2}' залгаасын урьдчилан тохируулсан '{1}' доторх ParamId '{0}'-г хасах шаардлагатай эсвэл параметрийн тодорхойлолтын хэсэгт paramValue-г зааж өгч болно.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Урьдчилан бэлтгэх нь өвөрмөц удирдамжтай байх ёстой. Prongin '{{0 {{0}' -ийг Prongin '{1}}' Хүснэгтэнд илэрсэн: {1} {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Plugin Parsing Apront нь '{0 {0}' NULL, JSON-ийг задлах магадлалтай. Залгаасыг үл тоомсорлох</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Plugin гарчгийн алдаа, зам дээр '{0}' '{1} тэмдэгтээс илүүгүй байх ёстой. Залгаасыг үл тоомсорлох</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>'{1}' гарчигтай '{0}' зам дээрх залгаасын хөтөчийн алдаа нь зөвхөн үсэг, тоо, зураас бүхий RFC 4122-д нийцсэн 128 битийн GUID (UUID) 'guid' шинж чанартай байх ёстой. Залгаасыг үл тоомсорлож байна.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Plugin тайлбарын алдаа, зам дээр '{0}' Тайлбар дээр {1} тэмдэгтээс илүүгүй байх ёстой. Залгаасыг үл тоомсорлох</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Plugin шошго алдаа, зам дээр '{0}' Шошго нь {1} тэмдэгтээс илүүгүй байх ёстой. Залгаасыг үл тоомсорлох</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Дебагерыг '{0}' хавсаргана уу.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Дебаггер хүлээж байна</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Plugin татаж авахад алдаа гарлаа. Дараа дахин оролдож үзнэ үү.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plugin шинэчлэгдсэн</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Та бүх {0} зүйлийг сэргээхийг хүсч байгаа гэдэгт итгэлтэй байна уу?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Хайлтын шалгуурыг хайх '</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Хайх шалгуур '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' нь хуваалцсан утгыг агуулдаг. Та эдгээрийг бас дахин тохируулахыг хүсч байна уу?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

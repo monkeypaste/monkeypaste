@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public override string LabelText => "Annotation";
+        public override string LabelText => UiStrings.CommonAnnLabel;
 
         #region State
         public override bool IsAnyBusy =>

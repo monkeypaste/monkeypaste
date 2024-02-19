@@ -70,28 +70,36 @@
     <value>Podstawowe - roczne</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Kopiuj</value>
@@ -127,19 +135,24 @@
     <value>Zbudowany - w przeglądarce wtyczki z wiecznie rozwijającą się społecznością wtycznymi wtyczkami</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste to menedżer schowka, narzędzie automatyzacji i produktywności jak żaden inny. Ulepszanie schowka w wzbogaconą i zorganizowaną część przepływu pracy,
@@ -158,40 +171,41 @@ Chcę też, żebyś czuł się komfortowo, używając go. Zapewniam więc, że j
 Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza własną maszyną. Okres.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Prosty i przyjazny interfejs z zarówno układami poziomymi/pionowymi, widokiem listy/siatką i obsługą wielu monitor</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Tryb dołączania: Kopiowanie staje się „Dodaj do” zamiast „Wymień” w schowku. Zarówno tekst, jak i pliki, w pełni konfigurowalne</value>
+    <value>● niestandardowe tryby myszy: Kliknij wklej i lewy - kliknij Auto - Kopiuj</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Wyrafinowane śledzenie klipsów, źródła i użycie z zwiększonym wsparciem dla przeglądarek Firefox i chromu (Chrome, Edge, Brave)</value>
+    <value>● Tryb dołączania: Kopiowanie staje się „Dodaj do” zamiast „Wymień” w schowku. Zarówno tekst, jak i pliki, w pełni konfigurowalne</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● W pełni - wyróżniony edytor klipów z bogatym tekstem (tabele, listy, linki itp.)</value>
+    <value>● Wyrafinowane śledzenie klipsów, źródła i użycie z zwiększonym wsparciem dla przeglądarek Firefox i chromu (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Przechowuj swoje obrazy w bezpiecznej bazie danych, gotowe do użycia jako pliki w dowolnym momencie - żądaj po prostu przeciągnij - i - upuść!</value>
+    <value>● W pełni - wyróżniony edytor klipów z bogatym tekstem (tabele, listy, linki itp.)</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Potężne szablony tekstu dla szybkiego, dynamicznego wklejania z kolekcji fragmentów</value>
+    <value>● Przechowuj swoje obrazy w bezpiecznej bazie danych, gotowe do użycia jako pliki w dowolnym momencie - żądaj po prostu przeciągnij - i - upuść!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Projektant wyzwalający i akcji w celu automatyzacji niestandardowych i łączenia akcji</value>
+    <value>● Potężne szablony tekstu dla szybkiego, dynamicznego wklejania z kolekcji fragmentów</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Prosty w obsłudze i rozszerzenie systemu wtyczek zarówno do analizy klipów lub odczytu/zapisu dowolnego formatu do schowka</value>
+    <value>● Projektant wyzwalający i akcji w celu automatyzacji niestandardowych i łączenia akcji</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Zbudowany - w przeglądarce wtyczki z wiecznie rozwijającą się społecznością wtyczkową</value>
+    <value>● Prosty w obsłudze i rozszerzenie systemu wtyczek zarówno do analizy klipów lub odczytu/zapisu dowolnego formatu do schowka</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Zautomatyzuj wszystko za pomocą ustawień wtyczek, z łatwością zapasuj i użyj dowolnej monitu lub poleceń AI</value>
+    <value>● Zbudowany - w przeglądarce wtyczki z wiecznie rozwijającą się społecznością wtyczkową</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Wkrótce pojawi się więcej platform i funkcji! Po prostu zaczęliśmy 🎉</value>
+    <value>● Zautomatyzuj wszystko za pomocą ustawień wtyczek, z łatwością zapasuj i użyj dowolnej monitu lub poleceń AI</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Zarówno światło, jak i ciemne motywy są całkowicie dynamiczne, użyj dowolnego koloru</value>
@@ -208,29 +222,29 @@ Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza w�
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Zorganizuj klipy w drzewach tagów i utwórz filtry</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Bezpieczne, bezpieczne i prywatne przechowywanie danych lokalnych (bez gromadzenia danych) zawsze szyfrowane opcjonalnie 2 - Współczynnik ochrony hasła i łatwo blokuj aplikacje lub strony internetowe z trackera</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Obsługa rozległa - i - upuszcza, niestandardowe globalne skróty, routing i mysz - bezpłatna nawigacja</value>
+    <value>● Łatwo zablokować niektóre aplikacje, strony internetowe, a nawet określone strony internetowe z śledzenia schowka</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● niestandardowe tryby myszy: Kliknij wklej i lewy - kliknij Auto - Kopiuj</value>
+    <value>● Obsługa rozległa - i - upuszcza, niestandardowe globalne skróty, routing i mysz - bezpłatna nawigacja</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Schowek to dżungla. Małpa jest królem! Huśtaj się z aplikacji, kopiując to i wklejając, jak nigdy dotąd z małpą !! Marka - nowe, najnowocześniejsze narzędzie do automatyzacji schowka i analitycznej !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Próbka małpy w akcji!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Zainstalowane w tym języku. Angielski jest tylko dla tych przykładów</value>
@@ -250,5 +264,11 @@ Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza w�
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Dzięki tej subskrypcji otrzymasz:
 ● Nieograniczona pojemność</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Bezpieczne, bezpieczne i prywatne przechowywanie danych lokalnych (bez gromadzenia danych) zawsze szyfrowane z opcjonalną 2 - czynnik ochrona hasła</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Wkrótce pojawi się więcej platform i funkcji! Po prostu zaczęliśmy 🎉</value>
   </data>
 </root>

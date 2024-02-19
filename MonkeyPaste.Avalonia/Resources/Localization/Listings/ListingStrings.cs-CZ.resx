@@ -70,28 +70,36 @@
     <value>Základní - ročně</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopírovat</value>
@@ -127,19 +135,24 @@
     <value>Postaveno - v prohlížeči pluginů s vždy - rostoucí komunitou - řízená knihovna pluginů</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste je správce schránky, nástroj pro automatizaci a produktivitu jako žádný jiný. Vylepšení schránky na obohacenou a organizovanou část vašeho pracovního postupu,
@@ -158,40 +171,41 @@ Chci také, abyste se používali pohodlně. Ujišťuji vás tedy, že jste jedi
 Vaše schránka je vždy sledována nebo ukládána kdekoli za vlastní stroj. Doba.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Jednoduché a přátelské rozhraní s horizontálním/vertikálním rozvržením, zobrazením seznamu/mřížky a podporou více monitorů</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Append režim: Kopírování se stává „přidat“ místo „vyměnit“ ve schránce. Text i soubory, plně přizpůsobitelné</value>
+    <value>● Vlastní režimy myši: Vpravo - Klikněte na Paste a Left - Klikněte na Auto AUTO - KOPIE</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Sofistikované sledování klipů, zdroje a použití s ​​vylepšenou podporou prohlížečů založených na Firefoxu a chromu (Chrome, Edge, Brave)</value>
+    <value>● Append režim: Kopírování se stává „přidat“ místo „vyměnit“ ve schránce. Text i soubory, plně přizpůsobitelné</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Plně - doporučený editor klipů s bohatým textem (tabulky, seznamy, odkazy atd.) S nálezem/nahrazením a zvýrazněním</value>
+    <value>● Sofistikované sledování klipů, zdroje a použití s ​​vylepšenou podporou prohlížečů založených na Firefoxu a chromu (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Uložte své obrázky do zabezpečené databáze, připravené k použití jako soubory kdykoli - poptávka Just Drag - a - Drop!</value>
+    <value>● Plně - doporučený editor klipů s bohatým textem (tabulky, seznamy, odkazy atd.) S nálezem/nahrazením a zvýrazněním</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Výkonné textové šablony pro rychlé, dynamické pastviny z vaší sbírky úryvků</value>
+    <value>● Uložte své obrázky do zabezpečené databáze, připravené k použití jako soubory kdykoli - poptávka Just Drag - a - Drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action Designer pro vlastní automatizace a akční řetězení</value>
+    <value>● Výkonné textové šablony pro rychlé, dynamické pastviny z vaší sbírky úryvků</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Jednoduché použití a rozšíření systému pluginů pro analýzu klipů nebo čtení/zapisování jakéhokoli formátu do vaší schránky</value>
+    <value>● Trigger &amp; Action Designer pro vlastní automatizace a akční řetězení</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Postaveno - v prohlížeči pluginů s vždy - rostoucí komunitou - řízenou knihovnou pluginů</value>
+    <value>● Jednoduché použití a rozšíření systému pluginů pro analýzu klipů nebo čtení/zapisování jakéhokoli formátu do vaší schránky</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatizujte vše pomocí předvoleb pluginů, skrýš a snadno použijte své pokyny nebo příkazy AI</value>
+    <value>● Postaveno - v prohlížeči pluginů s vždy - rostoucí komunitou - řízenou knihovnou pluginů</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Brzy přichází více platforem a funkcí! Právě jsme začali</value>
+    <value>● Automatizujte vše pomocí předvoleb pluginů, skrýš a snadno použijte své pokyny nebo příkazy AI</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Obě světlá i tmavá témata jsou zcela dynamická, použijte jakoukoli barvu, kterou chcete</value>
@@ -208,29 +222,29 @@ Vaše schránka je vždy sledována nebo ukládána kdekoli za vlastní stroj. D
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Uspořádejte klipy ve stromech značek a vytvořte resusužitelné filtry</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Bezpečné, bezpečné a soukromé místní ukládání dat (bez sběru dat) vždy šifrované s volitelným 2 - faktorovým heslem ochranou a snadno blokujte aplikace nebo webové stránky z vašeho sledování</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Rozsáhlý tah - a - podpora drop, vlastní globální zkratky, směrování a myši - navigace zdarma</value>
+    <value>● Snadno blokujte určité aplikace, webové stránky a dokonce i konkrétní webové stránky ze sledování schránky</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Vlastní režimy myši: Vpravo - Klikněte na Paste a Left - Klikněte na Auto AUTO - KOPIE</value>
+    <value>● Rozsáhlý tah - a - podpora drop, vlastní globální zkratky, směrování a myši - navigace zdarma</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Služba je džungle. Monkeypaste je král! Swing z aplikace k aplikaci, kopírování a vkládání jako nikdy předtím s MonkeyPaste !! Značka - nová, špičková schránka a nástroj pro analytickou automatizaci !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Ukázka MonkeyPaste v akci!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Nainstalováno v tomto jazyce. Angličtina je pouze pro tyto příklady</value>
@@ -250,5 +264,11 @@ Vaše schránka je vždy sledována nebo ukládána kdekoli za vlastní stroj. D
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>S tímto předplatným obdržíte:
 ● Neomezená kapacita</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Bezpečné, bezpečné a soukromé místní ukládání dat (bez sběru dat) vždy šifrované s volitelným 2 - Ochrana hesla faktoru</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Brzy přichází více platforem a funkcí! Právě jsme začali</value>
   </data>
 </root>

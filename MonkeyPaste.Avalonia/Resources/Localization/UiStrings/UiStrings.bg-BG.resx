@@ -2700,4 +2700,200 @@ feedback@monkeypaste.com</value>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;По този начин MonkeyPaste може да бъде достъпен&lt;br&gt;&lt;span color="red"&gt;без щракване&lt;/span&gt; или дори &lt;span color="red"&gt;удряне на око&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Анотация</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Клонинг</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Обект на данни</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Плъгин</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Читател</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Неизвестна грешка</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Писател</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Дублиращ плъгин Guid '{0}' Открит за тези плъгини:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Поправете чрез промяна на GUID за приставки или премахване на дубликати. В противен случай всички асоциирани плъгини ще бъдат игнорирани.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Дублирани приставки предварително зададени Guid '{0}' Открит за тези приставки и предварително зададени настройки:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Плъгин: {0} {1} предварително зададени (и): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Плъгин: {0} {1} предварително зададени (и): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Поправете чрез предоставяне на уникални предварително зададени Guids или премахване на дубликати. В противен случай всички асоциирани плъгини ще бъдат игнорирани.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Цвят на редактора</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Сигурни ли сте, че искате постоянно да изтриете всички {0} елемент (и)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Изберете папка</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Изберете Папка за гледане</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Грешка в приставката. Plugin '{0}' е '{1}' тип, но не е намерен '{1}' формат</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Грешка в изпълнение на действие '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Стойността трябва да съдържа само числа или '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Стойността трябва да е от {0} до {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Трябва да е шестнадесетична (6 или 8 цифрена) низ, започваща с '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Клипборд '{0}' трябва да е уникален.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Вече съществува за</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Формат</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Имената на четеца на клипборда/писател формат трябва да са уникални. Читател дубликати:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Имената на четеца на клипборда/писател формат трябва да са уникални. Писател дубликати:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Форматът на клипборда Guids трябва да е уникален. Дублирани формати и Guids:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Грешка в приставката: всички полета на приставката '{0}' трябва да са уникални за манипулатор '{1}'. {2} paramname '{3}' има множество записи</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Грешка в приставката, не е намерен инвариант</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Плъгин '{0}' не може да има предварително зададени настройки без поне 1 параметър</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Незареден парам #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Идентификационните идентификатори на параметъра на приставката ({0}) трябва да бъдат дефинирани. Плъгин '{1}' има следните параметри с липсващ Paramid's: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Дублиращ парамид '{0}' открит (всички трябва да са уникални). {1} етикети: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Необходимо е предварително зададено GUID. Той не е намерен или грешен формат за '{0}' в плъгин {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Не мога да намеря параметър с paramid '{0}', посочен от предварително зададен '{1}' за приставка '{2}'. Параметърът може да се е променил или премахнат, да актуализира предварително зададена paramvalue или да го премахнете.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Не може да зададе параметри на споделена стойност в предварително зададени настройки. Paramid '{0}' в предварително зададен '{1}' за плъгин '{2}' трябва да бъде премахнат или paramvalue може да бъде посочен в раздела за дефиниция на параметъра.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Предварителните настройки трябва да имат уникални Guids. Дублиране на предварително зададен Guid '{0}' беше открит в плъгин '{1}' за предварително зададени настройки: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Грешка в анализа на приставката, по пътя '{0}' null, вероятно грешка при анализиране на json. Игнориране на плъгин</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Грешка в заглавието на плъгина, на път '{0}' трябва да има 'заглавие' свойство с не повече от {1} символи. Игнориране на плъгин</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Грешка в приставката, на пътя '{0}' със заглавие '{1}' трябва да има свойство „Guid“, RFC 4122 съвместим 128-битов Guid (UUID) само с букви, цифри и тире. Игнориране на плъгин.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Грешка в описанието на приставката, на пътя '{0}' Описание трябва да е не повече от {1} символи. Игнориране на плъгин</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Грешка в маркерите за приставки, при маркерите на пътя '{0}' трябва да са не повече от {1} символи. Игнориране на плъгин</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Прикачете отстраняването на грешки към '{0}' или отменете, за да продължите.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>В очакване на отстраняване на грешки</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Грешка за изтегляне на плъгин. Моля, опитайте отново по-късно.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Приставка актуализирана</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Сигурни ли сте, че искате да възстановите всички {0} елементи (и)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Критерии за търсене „без заглавие“</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Критерии за търсене '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' съдържа споделени стойности. Искате ли да нулирате и тези?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

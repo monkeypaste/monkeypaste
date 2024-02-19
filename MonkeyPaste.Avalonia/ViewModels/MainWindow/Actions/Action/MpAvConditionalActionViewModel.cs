@@ -364,7 +364,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine(CompareData);
                 MpConsole.WriteTraceLine(ex);
 
-                ValidationText = $"Error performing action '{FullName}': {ex.Message}";
+                ValidationText = UiStrings.InvalidCondEx.Format(FullName, ex.Message);
                 ShowValidationNotification();
             }
             return null;

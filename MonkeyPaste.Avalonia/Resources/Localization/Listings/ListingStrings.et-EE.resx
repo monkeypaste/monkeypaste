@@ -70,28 +70,36 @@
     <value>Põhiline - igal aastal</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>koopia</value>
@@ -127,19 +135,24 @@
     <value>Ehitatud - pistikprogrammide brauseris, millel on pidevalt kasvav kogukond - juhitud pistikprogrammide raamatukogu</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste on lõikelauahaldur, automatiseerimise ja tootlikkuse tööriist nagu ükski teine. Lõikelaua täiustamine rikastatud ja organiseeritud osaks teie töövoogudest
@@ -158,40 +171,41 @@ Samuti tahan, et tunneksite end selle kasutamisel mugavalt. Nii et ma kinnitan t
 Teie lõikelaua jälgitakse või hoitakse kunagi kuskil oma masinast kaugemale. Periood.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>Z</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Lisage režiim: kopeerimine saab lõikelauale asendamise asemel „lisa”. Nii tekst kui ka failid, mis on täielikult kohandatav</value>
+    <value>● Kohandatud hiirerežiimid: paremal - klõpsake nuppu Kleebi ja vasakul - klõpsake automaatne koopia</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Keerukas klipi jälgimine, allikad ja kasutamine koos Firefoxi ja kroomipõhiste brauserite täiendava toega (Chrome, Edge, Brave)</value>
+    <value>● Lisage režiim: kopeerimine saab lõikelauale asendamise asemel „lisa”. Nii tekst kui ka failid, mis on täielikult kohandatav</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Täielikult - rikkaliku tekstiga (tabelid, nimekirjad, lingid jne) koos leidmise/asendamise ja esiletõstmise abil.</value>
+    <value>● Keerukas klipi jälgimine, allikad ja kasutamine koos Firefoxi ja kroomipõhiste brauserite täiendava toega (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Salvestage oma pildid turvalisesse andmebaasi, mis on kasutamiseks igal ajal kasutamiseks valmis - nõudke lihtsalt lohistage - ja - tilk!</value>
+    <value>● Täielikult - rikkaliku tekstiga (tabelid, nimekirjad, lingid jne) koos leidmise/asendamise ja esiletõstmise abil.</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Võimas tekstimallid kiireks, dünaamiliseks kleepimiseks teie katkendikogust</value>
+    <value>● Salvestage oma pildid turvalisesse andmebaasi, mis on kasutamiseks igal ajal kasutamiseks valmis - nõudke lihtsalt lohistage - ja - tilk!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>Kte</value>
+    <value>● Võimas tekstimallid kiireks, dünaamiliseks kleepimiseks teie katkendikogust</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Lihtne kasutada ja laiendada pistikprogrammisüsteemi nii klambrite analüüsimiseks kui ka lugemiseks/kirjutamiseks oma lõikelauale</value>
+    <value>Kte</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Ehitatud - pistikprogrammide brauseris, millel on pidevalt kasvav kogukond - juhitud pistikprogrammide raamatukogu</value>
+    <value>● Lihtne kasutada ja laiendada pistikprogrammisüsteemi nii klambrite analüüsimiseks kui ka lugemiseks/kirjutamiseks oma lõikelauale</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatiseerige kõike pistikprogrammi eelseadetega, täpige ja kasutage oma AI -d</value>
+    <value>● Ehitatud - pistikprogrammide brauseris, millel on pidevalt kasvav kogukond - juhitud pistikprogrammide raamatukogu</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Rohkem platvorme ja funktsioone tulevad varsti! Me lihtsalt saame alguse 🎉</value>
+    <value>● Automatiseerige kõike pistikprogrammi eelseadetega, täpige ja kasutage oma AI -d</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Mõlemad kerged ja tumedad teemad on täiesti dünaamilised, kasutage mis tahes värvi, mida soovite</value>
@@ -208,29 +222,29 @@ Teie lõikelaua jälgitakse või hoitakse kunagi kuskil oma masinast kaugemale. 
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Korraldage klambrid sildipuudes ja looge tagastatavad filtrid</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Turvaline, turvaline ja privaatne kohalik andmete salvestus (andmete kogumine puudub) krüptitakse alati valikulise 2 - faktori parooli kaitsega ja blokeerige hõlpsalt teie jälgija rakendused või veebisaidid</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● ulatuslik lohistamine - ja - languse tugi, kohandatud globaalsed otseteed, marsruutimine ja hiire - tasuta navigeerimine</value>
+    <value>● Blokeerige hõlpsalt teatud rakendused, veebisaidid ja isegi konkreetsed veebilehed lõikelaua jälgimisest</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Kohandatud hiirerežiimid: paremal - klõpsake nuppu Kleebi ja vasakul - klõpsake automaatne koopia</value>
+    <value>● ulatuslik lohistamine - ja - languse tugi, kohandatud globaalsed otseteed, marsruutimine ja hiire - tasuta navigeerimine</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Lõikelaud on džungel. Monkeypaste on kuningas! Kiikuke rakendusest rakenduseni, kopeerides selle ja kleepides, nagu kunagi varem ahveypastaga !! Bränd - uus tipptasemel lõikelaud ja analüütiline automatiseerimise tööriist !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Ahvivast näidis tegevuses!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Sellesse keeles installitud. Inglise keel on ainult nende näidete jaoks</value>
@@ -250,5 +264,11 @@ Teie lõikelaua jälgitakse või hoitakse kunagi kuskil oma masinast kaugemale. 
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Selle tellimusega saate:
 ● Piiramatu võimsus</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Turvaline, turvaline ja privaatne kohalik andmete salvestus (andmete kogumine puudub) on alati krüptitud valikulise 2 - faktori paroolide kaitsega</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Rohkem platvorme ja funktsioone tulevad varsti! Me lihtsalt saame alguse 🎉</value>
   </data>
 </root>

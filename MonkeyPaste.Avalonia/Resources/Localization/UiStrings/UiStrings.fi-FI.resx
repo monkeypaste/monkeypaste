@@ -2700,4 +2700,200 @@ Täydellistä palauttamista ei voida taata, ja se voi heikentää suorituskykyä
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Tällä tavalla MonkeyPastaan pääsee&lt;br&gt;&lt;span color="red"&gt;ilman napsautusta&lt;/span&gt; tai edes &lt;span color="red"&gt;silmää räpäyttämättä&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Merkintä</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klooni</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Dataobjekti</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Kytkeä</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Lukija</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Tuntematon virhe</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Kirjailija</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Kaksoiskappale Guid '{0}' näille laajennuksille:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Korjaa muuttamalla laajennusohjeita tai poistamalla kaksoiskappaleet. Muuten kaikki liittyvät laajennukset jätetään huomiotta.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Kaksoiskappale laajennus esiasetettu GUID '{0}' havaittu näille laajennuksille ja esiasetukselle:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} esiase (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} esiase (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Korjaa tarjoamalla ainutlaatuisia esiasetettuja GUID -ohjeita tai poistamalla kaksoiskappaleet. Muuten kaikki liittyvät laajennukset jätetään huomiotta.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Toimittajan väri</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Haluatko varmasti poistaa kaikki {0} kohteet?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Valitse kansio</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Valitse Watch -kansio</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Laajennusvirhe. Plugin '{0}' on '{1}' tyyppi, mutta ei '{1}' Löydetty muoto</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Virheen suorittaminen toiminto '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Arvon on sisällettävä vain numeroita tai '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Arvon on oltava {0} - {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>On oltava heksa (6 tai 8 -numeroinen) merkkijono alkaen '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Leikepöydän '{0}' on oltava ainutlaatuinen.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>On jo olemassa</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Muoto</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tyyppi</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Leikepöydän lukijan/kirjailijan muodon nimien on oltava ainutlaatuisia. Lukijan kaksoiskappaleet:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Leikepöydän lukijan/kirjailijan muodon nimien on oltava ainutlaatuisia. Kirjailija Kopiot:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Leikepöydän muodon GUIDS: n on oltava ainutlaatuisia. Kaksoismuodot ja GUIDS:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Laajennusvirhe: Kaikkien laajennusten '{0}' -kenttien on oltava ainutlaatuisia käsittelijälle '{1}'. {2} paramname '{3}' on useita merkintöjä</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Laajennusvirhe, ei invariantti -manifesti löytynyt</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' ei voi olla esiasetuksia ilman vähintään yhtä parametria</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Leimaamaton param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Plugin -parametritunnukset ({0}) on määritettävä. Plugin '{1}' on seuraavat parametrit puuttuvilla ParamID: llä: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Kaksoiskappale paramid '{0}' havaittu (kaikkien on oltava ainutlaatuisia). {1} tarrat: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Esiasetettu GUID vaaditaan. Sitä ei löytynyt tai väärää muotoa '{0}' laajennuksessa {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Parametria ei löydy paramid '{0}', jonka viitataan esiasetettuna '{1}' laajennukselle '{2}'. Parametri on saattanut muuttua tai poistettu, päivitä esiasetettu puolueellisuus tai poista se.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Esiasetuksissa ei voida asettaa jaettuja arvoparametreja. Paramid '{0}' esiasetuksessa '{1}' laajennukselle '{2}' on poistettava tai parametrimääritysosassa voidaan määrittää parametrimääritysosassa.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Esiasetuksissa on oltava ainutlaatuiset GUIDS. Duplikate esiasetettu GUID '{0}' havaittiin laajennuksessa '{1}' esiasetuksista: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Laajennuksen jäsentämisvirhe, polulla '{0}' NULL, todennäköisesti virheen jäsentäminen JSON. Sivuuttaa laajennus</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Laajennuksen otsikkovirhe, polulla '{0}' on oltava 'otsikko' -ominaisuus, jolla ei ole enempää kuin {1} merkkejä. Sivuuttaa laajennus</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Plugin GUID -virhe, polulla '{0}' otsikolla '{1}' on oltava 'GUID' -ominaisuus, RFC 4122 -yhteensopiva 128-bittinen GUID (UUID), jossa on vain kirjaimia, numeroita ja tavoitettavia. Laajennuksen huomiotta jättäminen.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Laajennuskuvausvirhe, polulla '{0}' Kuvauksen on oltava enempää kuin {1} merkkejä. Sivuuttaa laajennus</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Laajennustunnisteiden virhe, polulla '{0}' tunnisteiden on oltava enempää kuin {1} merkkejä. Sivuuttaa laajennus</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Liitä virheenkorjaus '{0}' tai peruuta jatkaaksesi.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Odottaa virheenkorjausta</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Virhe Latauslaajennus. Yritä uudelleen myöhemmin.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Laajennus päivitetty</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Oletko varma, että haluat palauttaa kaikki {0} kohteet?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Hakukriteerit 'nimettömät'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Hakukriteerit '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' sisältää jaettuja arvoja. Haluatko myös nollata ne?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

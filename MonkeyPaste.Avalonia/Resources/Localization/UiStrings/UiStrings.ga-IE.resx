@@ -792,7 +792,7 @@ roghchlár roghanna thuas.</value>
     <comment>Parameter Label, number</comment>
   </data>
   <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
-    <value>Ní féidir ach carachtar {1} a bheith {1}</value>
+    <value>{0} Ní féidir ach carachtar {1} a bheith {1}</value>
     <comment>Parameter Label, number</comment>
   </data>
   <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
@@ -2699,5 +2699,201 @@ Ní féidir athchóiriú iomlán a ráthú agus d'fhéadfadh sé feidhmíocht a 
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Ar an mbealach seo, is féidir rochtain a fháil ar MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;gan cliceáil&lt;/span&gt; nó fiú &lt;span color="red"&gt;batting súil&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Anótáil</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Clón</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Réad sonraí</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Plugáil isteach</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Léitheoir</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Earráid anaithnid</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Údar</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Breiseán Breiseán Dúblach '{0}' a aimsíodh do na forlíontáin seo:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Deisigh trí ghuí breiseáin a athrú nó dúblaigh a bhaint. Seachas sin déanfar neamhaird ar na forlíontáin ghaolmhara go léir.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Breiseán Presset Pregin Guid '{0}' a aimsíodh le haghaidh na mbreiseán agus na réamhshocruithe seo:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Breiseán: {0} {1} réamhshocrú (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Breiseán: {0} {1} réamhshocrú (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Deisigh trí threoir uathúla réamhshocraithe a sholáthar nó dúbailt a bhaint. Seachas sin déanfar neamhaird ar na forlíontáin ghaolmhara go léir.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Dath eagarthóir</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat na {0} mír go léir a scriosadh go buan?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Roghnaigh Fillteán</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Roghnaigh Fillteán Watch</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Earráid Plugin. Plugin '{0}' is é '{1}' cineál ach níl formáid '{1}' aimsithe</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Earráid ag feidhmiú gníomh '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Ní mór ach uimhreacha nó '{0}' a bheith i luach</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Caithfidh luach a bheith ó {0} go {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Caithfidh teaghrán heicsidheachúlach (6 nó 8 dhigit) a bheith ag tosú le '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Ní mór go mbeadh gearrthaisce '{0}' uathúil.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Tá sé ann cheana féin</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Formáil</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tíopáil</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Ní mór go mbeadh ainmneacha formáide léitheora/scríbhneora. Dúbailt Léitheoir:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Ní mór go mbeadh ainmneacha formáide léitheora/scríbhneora. Dúbailt scríbhneora:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Ní mór go mbeadh Guids Formáidí Clipboard uathúil. Formáidí agus Guids dúblacha:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Earráid Breiseán: Caithfidh gach réimse breiseán '{0}' a bheith uathúil don láimhseálaí '{1}'.{2}Tá iliomad iontrálacha ag paramName '{3}'</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Earráid Plugin, ní bhfuarthas aon léiriú dofheicthe</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Ní féidir réamhshocruithe a bheith ag plugin '{0}' gan 1 pharaiméadar ar a laghad a sholáthar</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param #{0} neamh -lipéadaithe</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Ní mór ids paraiméadair plugin ({0}) a shainiú. Tá na paraiméadair seo a leanas ag Plugin '{1}' le paraimid atá ar iarraidh: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Paramid dúblach '{0}' braite (caithfidh gach duine a bheith uathúil). {1} lipéid: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Teastaíonn GUID réamhshocraithe. Níor aimsíodh é nó níor aimsíodh formáid mícheart é le haghaidh '{0}' i mbreiseán {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Ní féidir paraiméadar a aimsiú le paraimid '{0}' arna dtagairt ag réamhshocrú '{1}' le haghaidh plugin '{2}'. D'fhéadfadh an paraiméadar a bheith athraithe nó a bhaint, nuashonrú a dhéanamh ar pharamvalue réamhshocraithe nó é a bhaint.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Ní féidir paraiméadair luacha chomhroinnte a shocrú i réamhshocruithe. Ní mór paramid '{0}' in réamhshocrú '{1}' le haghaidh plugin '{2}' a bhaint nó is féidir paramvalue a shonrú sa rannóg sainmhínithe paraiméadair.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Ní mór go mbeadh treoir uathúla ag réamhshocruithe. Braitheadh ​​Dúblach réamhshocraithe '{0}' i mbreiseán '{1}' le haghaidh réamhshocruithe: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Earráid pharsála plugin, ag an gcosán '{0}' null, earráid is dócha a pharsálann JSON. Breiseán neamhaird</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Ní mór go mbeadh maoin 'teidil' ag an mbreiseán ar theideal, ag an gcosán '{0}' gan níos mó ná {1} carachtair. Breiseán neamhaird</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Breiseán GUID Earráid, ag an gcosán '{0}' le teideal '{1}' Ní mór maoin 'GUID' a bheith acu, RFC 4122 Guid comhlíontach 128-giotán (UUID) gan ach litreacha, uimhreacha agus fleiscín. Ag déanamh neamhaird ar an mbreiseán.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Breiseán Cur síos Earráid, ag an gcosán '{0}' Ní mór go mbeadh an tuairisc níos mó ná {1} carachtair. Breiseán neamhaird</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Earráid na gclibeanna breiseáin, ag an gcosán '{0}' ní mór go mbeadh clibeanna níos mó ná {1} carachtair. Breiseán neamhaird</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Ceangail dífhabhtóir le '{0}' nó cuir ar ceal é chun leanúint ar aghaidh.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Ag fanacht le dífhabhtóir</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Earráid a íoslódáil breiseán. Bain triail eile as níos déanaí.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Breiseán Nuashonraithe</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>An bhfuil tú cinnte gur mhaith leat na {0} mír go léir a aischur?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Critéir Chuardaigh 'Untitled'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Critéir Cuardaigh '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>Tá luachanna comhroinnte i '{0}'. Ar mhaith leat iad siúd a athshocrú chomh maith?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

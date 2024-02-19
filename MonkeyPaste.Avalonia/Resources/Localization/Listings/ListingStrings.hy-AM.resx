@@ -70,28 +70,36 @@
     <value>Հիմնական - տարեկան</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>պատճեն</value>
@@ -127,19 +135,24 @@
     <value>Ներկառուցված - plugin զննարկիչով `մշտապես աճող համայնքային ծրագրերից -</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkepaste- ը Clipboard Manager, ավտոմատացման եւ արտադրողականության գործիք է, ինչպես ոչ ոք: Ձեր Clipboard- ի ուժեղացումը ձեր աշխատանքային հոսքի հարստացված եւ կազմակերպված մասի մեջ,
@@ -158,40 +171,41 @@
 Ձեր clipboard- ը երբեւէ հետեւում կամ պահվում է ձեր սեփական մեքենայից դուրս ցանկացած վայրում: Ժամանակաշրջան.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Պարզ եւ ընկերական ինտերֆեյս ինչպես հորիզոնական / ուղղահայաց դասավորություններով, ցուցակով / ցանցային տեսարանով եւ բազմաֆունկցիոնալ աջակցությամբ</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Հավելվածի ռեժիմ. Պատճենումը դառնում է «Ավելացնել« փոխարինել »փոխարեն« փոխարինելու »վրա: Թե տեքստը, եւ թե ֆայլերը, լիովին կարգավորելի</value>
+    <value>Մկնիկի հարմարեցված ռեժիմներ. Աջ - կտտացրեք մածուկ եւ ձախ - կտտացրեք Auto - Պատճենեք</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Տեսահոլովակի հետեւում, աղբյուրներ եւ օգտագործումներ Firefox- ի եւ Chromium- ի վրա հիմնված զննարկիչների համար (քրոմ, եզր, համարձակ)</value>
+    <value>● Հավելվածի ռեժիմ. Պատճենումը դառնում է «Ավելացնել« փոխարինել »փոխարեն« փոխարինելու »վրա: Թե տեքստը, եւ թե ֆայլերը, լիովին կարգավորելի</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Ամբողջությամբ ներկայացված տեսահոլովակի խմբագիր `հարուստ տեքստով (սեղաններ, ցուցակներ, հղումներ եւ այլն)` գտած / փոխարինող եւ ընդգծելով</value>
+    <value>● Տեսահոլովակի հետեւում, աղբյուրներ եւ օգտագործումներ Firefox- ի եւ Chromium- ի վրա հիմնված զննարկիչների համար (քրոմ, եզր, համարձակ)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Ձեր պատկերները պահեք անվտանգ տվյալների բազայում, պատրաստ է օգտագործել որպես ֆայլեր ցանկացած պահի - պահանջարկ պարզապես քաշել - եւ - կաթիլ:</value>
+    <value>● Ամբողջությամբ ներկայացված տեսահոլովակի խմբագիր `հարուստ տեքստով (սեղաններ, ցուցակներ, հղումներ եւ այլն)` գտած / փոխարինող եւ ընդգծելով</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Հզոր տեքստի ձեւավորում արագ, դինամիկ տեղադրման համար ձեր Snippet հավաքածուից</value>
+    <value>● Ձեր պատկերները պահեք անվտանգ տվյալների բազայում, պատրաստ է օգտագործել որպես ֆայլեր ցանկացած պահի - պահանջարկ պարզապես քաշել - եւ - կաթիլ:</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Ձգման եւ գործողությունների դիզայներ `մաքսային ավտոմատացման եւ գործողությունների ցանցի համար</value>
+    <value>● Հզոր տեքստի ձեւավորում արագ, դինամիկ տեղադրման համար ձեր Snippet հավաքածուից</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Պարզ օգտագործման եւ ընդլայնելու համար plugin համակարգը եւ տեսահոլովակների վերլուծության համար կամ կարդացեք / գրեք ձեր ստեղնաշարի վրա ցանկացած ձեւաչափ</value>
+    <value>● Ձգման եւ գործողությունների դիզայներ `մաքսային ավտոմատացման եւ գործողությունների ցանցի համար</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Ներկառուցված - plugin զննարկիչով `մշտապես աճող համայնքային ծրագրերից -</value>
+    <value>● Պարզ օգտագործման եւ ընդլայնելու համար plugin համակարգը եւ տեսահոլովակների վերլուծության համար կամ կարդացեք / գրեք ձեր ստեղնաշարի վրա ցանկացած ձեւաչափ</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Ավտոմատացրեք ամեն ինչ plugin- ի նախադրյալներով, Stash- ով եւ հեշտությամբ օգտագործեք ձեր AI հուշումներից կամ հրամաններ</value>
+    <value>● Ներկառուցված - plugin զննարկիչով `մշտապես աճող համայնքային ծրագրերից -</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Շուտով ավելի շատ պլատֆորմներ եւ առանձնահատկություններ: Մենք պարզապես սկսվել ենք</value>
+    <value>● Ավտոմատացրեք ամեն ինչ plugin- ի նախադրյալներով, Stash- ով եւ հեշտությամբ օգտագործեք ձեր AI հուշումներից կամ հրամաններ</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Թե թեթեւ եւ մութ թեմաները լիովին դինամիկ են, օգտագործեք ձեր ուզած ցանկացած գույնը</value>
@@ -208,29 +222,29 @@
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Կազմակերպեք ձեր տեսահոլովակները պիտակի ծառերով եւ ստեղծեք վերաբաշխելի ֆիլտրեր</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Ապահով, անվտանգ եւ մասնավոր տեղական տվյալների պահպանում (տվյալների հավաքագրում) միշտ կոդավորված է ընտրովի 2-Factor գաղտնաբառի պաշտպանությամբ եւ հեշտությամբ արգելափակեք ծրագրերը կամ կայքերը ձեր որոնիչից</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Ընդարձակ քաշել - եւ - Drop աջակցություն, հարմարեցված գլոբալ դյուրանցումներ, երթուղղում եւ մկնիկ - անվճար նավարկություն</value>
+    <value>● Հեշտությամբ արգելափակեք որոշակի ծրագրեր, կայքեր եւ նույնիսկ հատուկ վեբ էջեր `clipboard- ի հետեւից</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>Մկնիկի հարմարեցված ռեժիմներ. Աջ - կտտացրեք մածուկ եւ ձախ - կտտացրեք Auto - Պատճենեք</value>
+    <value>● Ընդարձակ քաշել - եւ - Drop աջակցություն, հարմարեցված գլոբալ դյուրանցումներ, երթուղղում եւ մկնիկ - անվճար նավարկություն</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard- ը ջունգլիներ է: Monkepaste- ը թագավորն է: Օրհնեք հավելվածից հավելված, պատճենելով սա եւ տեղադրեք այն, ինչը նման է երբեք Monkepaste- ով: Ապրանքանիշ - նոր, կտրող եզրային ստեղնաշարի եւ վերլուծական ավտոմատացման գործիք !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Գործողության մեջ Monkepaste- ի նմուշը:</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Տեղադրված այս լեզվով: Անգլերենը միայն այս օրինակների համար է</value>
@@ -250,5 +264,11 @@
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Այս բաժանորդագրությամբ դուք կստանաք.
 ● Անսահմանափակ կարողություն</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Ապահով, անվտանգ եւ մասնավոր տեղական տվյալների պահպանում (տվյալների հավաքագրում) միշտ կոդավորված է կամընտիր 2-րդ ֆակտորային գաղտնաբառի պաշտպանությամբ</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Շուտով ավելի շատ պլատֆորմներ եւ առանձնահատկություններ: Մենք պարզապես սկսվել ենք</value>
   </data>
 </root>

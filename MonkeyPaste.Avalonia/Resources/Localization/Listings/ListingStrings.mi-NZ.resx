@@ -70,28 +70,36 @@
     <value>Taketake - tau</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>whakaahua</value>
@@ -127,19 +135,24 @@
     <value>Hanga - i roto i te kaitirotiro mono me tetahi hapori e tipu haere ana - i peia e te whare pukapuka o nga pragins</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Ko te Monkeypaste tetahi kaiwhakahaere topātuhi, automation me te taputapu hua kaore i rite ki tetahi atu. Te whakarei ake i to topenga ki te whakauru me te whakarite i to waahanga mahi,
@@ -158,40 +171,41 @@ Kei te hiahia hoki ahau kia pai koe ki te whakamahi i te reira. Na ko taku pono 
 Kei te tirotirohia to papamahi, ka penapena ranei i nga waahi katoa i tua atu i to ake miihini. Wā.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Ko te atanga ngawari me te whakahoahoa me nga tahora whakaata / poutū, raarangi / Tirohanga me te maha - Tautoko Aroturuki</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Tāpirihia te Aratau: Te kape ka 'Tāpiri ki' hei 'whakakapi' i runga i te topenga. E rua nga tuhinga me nga konae, ka taea te whakarite</value>
+    <value>● Nga Taarua Momo Momo Ritenga: Tika - Paatohia te whakapiri me te maui - Paatohia te Aunoa - Tārua</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● He aroturuki topenga maamaa, nga puna me te whakamahi me te tautoko whakarei mo te Firefox me te chromium - chrome, te taha, maia)</value>
+    <value>● Tāpirihia te Aratau: Te kape ka 'Tāpiri ki' hei 'whakakapi' i runga i te topenga. E rua nga tuhinga me nga konae, ka taea te whakarite</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Katoa - te Kaitito Clip e whakaatu ana me te tuhinga whai kiko (tepu, raarangi, hono, me etahi atu) me te whakakapi</value>
+    <value>● He aroturuki topenga maamaa, nga puna me te whakamahi me te tautoko whakarei mo te Firefox me te chromium - chrome, te taha, maia)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● rokiroki o au whakaahua i roto i te papaa rahinga haumaru, kua rite ki te whakamahi i nga konae i nga wa katoa - tono kia toia noa - me - maturuturu!</value>
+    <value>● Katoa - te Kaitito Clip e whakaatu ana me te tuhinga whai kiko (tepu, raarangi, hono, me etahi atu) me te whakakapi</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Te tohu i te tuhinga roa mo te tere tere, hihiri mai i to kohinga Snippet</value>
+    <value>● rokiroki o au whakaahua i roto i te papaa rahinga haumaru, kua rite ki te whakamahi i nga konae i nga wa katoa - tono kia toia noa - me - maturuturu!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Turiti me te kaihoahoa mahi mo nga miihini me nga mahi mahi mahi</value>
+    <value>● Te tohu i te tuhinga roa mo te tere tere, hihiri mai i to kohinga Snippet</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● ngawari ki te whakamahi me te whakawhānui i te punaha mono mo nga topenga tātari e rua ranei te panui / tuhi i tetahi whakatakotoranga ki to papamahi</value>
+    <value>● Turiti me te kaihoahoa mahi mo nga miihini me nga mahi mahi mahi</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Hangaia - i roto i te kaitirotiro mono me tetahi hapori e tipu haere ana - i peia e te whare pukapuka o nga pragins</value>
+    <value>● ngawari ki te whakamahi me te whakawhānui i te punaha mono mo nga topenga tātari e rua ranei te panui / tuhi i tetahi whakatakotoranga ki to papamahi</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Aukuhia nga mea katoa me nga pou mono, ka mau me te whakamahi i tetahi o nga akiaki AI, i nga whakahau ranei me te ngawari</value>
+    <value>● Hangaia - i roto i te kaitirotiro mono me tetahi hapori e tipu haere ana - i peia e te whare pukapuka o nga pragins</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● He maha atu nga waahanga me nga waahanga e haere mai ana! Ko matou noa nga tiimatanga 🎉</value>
+    <value>● Aukuhia nga mea katoa me nga pou mono, ka mau me te whakamahi i tetahi o nga akiaki AI, i nga whakahau ranei me te ngawari</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● E rua nga rama me nga kaupapa pouri e tino hihiri ana, whakamahia tetahi tae e hiahia ana koe</value>
@@ -208,29 +222,29 @@ Kei te tirotirohia to papamahi, ka penapena ranei i nga waahi katoa i tua atu i 
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Whakaritehia o topenga ki nga rakau tohu me te waihanga i nga whiriwhiringa retus</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Te rokiroki haumaru, haumaru me te motuhake (kaore he kohinga raraunga) ka whakamutua i nga wa katoa o te tiakitanga 2</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● He nui te toia - me te - maturuturu tautoko, poto poto te ao, te whakahaere me te kiore - whakatere koreutu</value>
+    <value>● He ngawari ki te aukati i etahi taupānga, paetukutuku me nga whaarangi paetukutuku motuhake mai i te aroturuki i te papa</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Nga Taarua Momo Momo Ritenga: Tika - Paatohia te whakapiri me te maui - Paatohia te Aunoa - Tārua</value>
+    <value>● He nui te toia - me te - maturuturu tautoko, poto poto te ao, te whakahaere me te kiore - whakatere koreutu</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Ko te paparahi he ngahere. Ko Monkeypaste te Kingi! Swanging mai i te taupānga ki te taupānga, te kape i tenei me te whakaputa i tera penei me te Monkeypaste !! He waitohu - he hou, he tapahi i te topātuhi mata me te taputapu aunoa !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Tauira o Monkeypaste i te mahi!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Tāuta i tēnei reo. Ko te reo Ingarihi anake mo enei tauira</value>
@@ -250,5 +264,11 @@ Kei te tirotirohia to papamahi, ka penapena ranei i nga waahi katoa i tua atu i 
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Ma tenei ohaurunga ka whiwhi koe:
 ● Te kaha kore mutunga</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Te rokiroki haumaru, haumaru me te motuhake (kaore he kohinga raraunga) ka whakamutua i te wahanga 2 - Tiaki Kupuhipa Factor</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● He maha atu nga waahanga me nga waahanga e haere mai ana! Ko matou noa nga tiimatanga 🎉</value>
   </data>
 </root>

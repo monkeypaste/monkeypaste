@@ -70,28 +70,36 @@
     <value>Bażiku - kull sena</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopja</value>
@@ -127,19 +135,24 @@
     <value>Mibni - fil-plugin browser b'komunità dejjem tikber - librerija mmexxija mill-plugins</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste huwa maniġer tal-clipboard, awtomazzjoni u għodda ta 'produttività bħal ħadd ieħor. Titjib il-clipboard tiegħek f'parti arrikkita u organizzata mill-fluss tax-xogħol tiegħek,
@@ -158,40 +171,41 @@ Irrid ukoll li tħossok komdu tużah. Allura nassigurak, bħala l-unika forza wa
 Il-clipboard tiegħek huwa dejjem traċċat jew maħżun kullimkien lil hinn mill-magna tiegħek stess. Perjodu.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Interfaċċa sempliċi u ta 'ħbiberija kemm ma' tqassim orizzontali / vertikali, lista / veduta tal-grilja u appoġġ multi-monitoraġġ</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Modalità Append: L-ikkupjar isir 'żid ma' 'minflok' ibdel 'fuq il-clipboard. Kemm test kif ukoll fajls, kompletament customizable</value>
+    <value>● Modi tal-maws tad-dwana: lemin - ikklikkja pejst u xellug - ikklikkja Auto - Kopja</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Traċċar tal-klipp sofistikat, sorsi u użu b'appoġġ imtejjeb għall-browsers ibbażati fuq il-firefox u l-kromju (Chrome, Edge, Brave)</value>
+    <value>● Modalità Append: L-ikkupjar isir 'żid ma' 'minflok' ibdel 'fuq il-clipboard. Kemm test kif ukoll fajls, kompletament customizable</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● kompletament - editur tal-klipp dehru b'test għani (tabelli, listi, links, eċċ.) B'SESS / SOSTITUR</value>
+    <value>● Traċċar tal-klipp sofistikat, sorsi u użu b'appoġġ imtejjeb għall-browsers ibbażati fuq il-firefox u l-kromju (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Aħżen l-immaġini tiegħek fid-database sigura, lesta biex tużah bħala fajls f'kull ħin - talba biss drag - u - qatra!</value>
+    <value>● kompletament - editur tal-klipp dehru b'test għani (tabelli, listi, links, eċċ.) B'SESS / SOSTITUR</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Templating ta 'test qawwi għal twaħħal malajr u dinamiku mill-kollezzjoni tas-snippet tiegħek</value>
+    <value>● Aħżen l-immaġini tiegħek fid-database sigura, lesta biex tużah bħala fajls f'kull ħin - talba biss drag - u - qatra!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action Designer għal Automations Custom u Action Chaining</value>
+    <value>● Templating ta 'test qawwi għal twaħħal malajr u dinamiku mill-kollezzjoni tas-snippet tiegħek</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Sempliċi biex tuża u testendi s-sistema tal-plugin kemm għall-analiżi tal-klipps jew aqra / tikteb kwalunkwe format fil-clipboard tiegħek</value>
+    <value>● Trigger &amp; Action Designer għal Automations Custom u Action Chaining</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Mibni - fil-browser tal-plugin ma 'librerija mmexxija mill-komunità dejjem tikber</value>
+    <value>● Sempliċi biex tuża u testendi s-sistema tal-plugin kemm għall-analiżi tal-klipps jew aqra / tikteb kwalunkwe format fil-clipboard tiegħek</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Awtomatizza kollox bi presets tal-plugin, stash u uża kwalunkwe tqanq jew kmandi tiegħek bl-AI tiegħek bil-ħeffa</value>
+    <value>● Mibni - fil-browser tal-plugin ma 'librerija mmexxija mill-komunità dejjem tikber</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Aktar pjattaformi u karatteristiċi dalwaqt! Aħna biss bdew gettings 🎉</value>
+    <value>● Awtomatizza kollox bi presets tal-plugin, stash u uża kwalunkwe tqanq jew kmandi tiegħek bl-AI tiegħek bil-ħeffa</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Iż-żewġ temi ħfief u skuri huma kompletament dinamiċi, uża kwalunkwe kulur li trid</value>
@@ -208,29 +222,29 @@ Il-clipboard tiegħek huwa dejjem traċċat jew maħżun kullimkien lil hinn mil
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organizza l-klipps tiegħek fis-siġar tat-tikketta u toħloq filtri li jistgħu jerġgħu jinżammu</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Ħażna ta 'dejta lokali sikura, sigura u privata (l-ebda ġbir ta' data) Dejjem kriptat bi protezzjoni fakultattiva ta '2 - fattur tal-password u faċilment jimblokka apps jew websajts mill-tracker tiegħek</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Drag estensiv - u - Qatra ta 'Appoġġ, Shortcuts Globali Custom, Rotta u Ġurdien - Navigazzjoni Ħieles</value>
+    <value>● Imblokka faċilment ċerti apps, websajts u anke paġni tal-web speċifiċi minn traċċar tal-clipboard</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Modi tal-maws tad-dwana: lemin - ikklikkja pejst u xellug - ikklikkja Auto - Kopja</value>
+    <value>● Drag estensiv - u - Qatra ta 'Appoġġ, Shortcuts Globali Custom, Rotta u Ġurdien - Navigazzjoni Ħieles</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Il-clipboard huwa ġungla. Monkeypaste huwa r-re! Tbandal mill-app għall-app, tikkopja dan u twaħħal dak li qatt qabel ma 'MonkeyPaste !! A marka - clipboard ġdid, avvanzat u għodda ta 'awtomazzjoni analitika !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Kampjun ta 'MonkeyPaste fl-Azzjoni!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Installat f’din il-lingwa. L-Ingliż huwa biss għal dawn l-eżempji</value>
@@ -250,5 +264,11 @@ Il-clipboard tiegħek huwa dejjem traċċat jew maħżun kullimkien lil hinn mil
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>B'dan l-abbonament tirċievi:
 ● Kapaċità Unlimited</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Ħażna ta 'dejta lokali sikura, sigura u privata (l-ebda ġbir ta' data) dejjem kriptat bi protezzjoni fakultattiva ta '2 - fattur tal-password</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Aktar pjattaformi u karatteristiċi dalwaqt! Aħna biss bdew gettings 🎉</value>
   </data>
 </root>

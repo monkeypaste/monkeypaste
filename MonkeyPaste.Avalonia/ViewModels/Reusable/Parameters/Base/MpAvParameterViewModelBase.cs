@@ -532,7 +532,8 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (Parent is MpIParameterHostViewModel) {
-                    throw new Exception("Error, param format should not be set for plugin parameters");
+                    MpDebug.Break("Error, param format should not be set for plugin parameters");
+                    return;
                 }
                 if (_paramFormat != value) {
                     _paramFormat = value;

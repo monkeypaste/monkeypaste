@@ -2269,7 +2269,7 @@ Sehemu zako zote?!
     <comment>ActionName</comment>
   </data>
   <data name="ActionAnalyzeValidation3" xml:space="preserve">
-    <value>Vichungi vya mzazi '{0}' tu kwa '1}' aina ya yaliyomo na uchambuzi '</value>
+    <value>Vichujio vya mzazi vya '{0}' vya maudhui ya aina ya '{1}' pekee na kichanganuzi '{2}' hakitawahi kutekeleza kwa sababu hakitumii '{3}' aina ya ingizo.</value>
     <comment>Action Label, Analyzer Preset Name, Content Type</comment>
   </data>
   <data name="ActionClassifyValidation1" xml:space="preserve">
@@ -2699,5 +2699,201 @@ Marejesho ya jumla hayawezi kuhakikishiwa na inaweza kupunguza utendaji au hata 
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Kwa njia hii, MonkeyPaste inaweza kupatikana&lt;br&gt;&lt;span color="red"&gt;bila kubofya&lt;/span&gt; au hata &lt;span color="red"&gt;kupiga jicho na #x1F440&lt;/span&gt;&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Maelezo</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Clone</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Kitu cha data</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Chomeka</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Msomaji</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Kosa lisilojulikana</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Mwandishi</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Nakala mbili za programu -jalizi '{0}' zilizogunduliwa kwa programu hizi:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Rekebisha kwa kubadilisha GUID ya programu -jalizi au kuondoa nakala. Vinginevyo programu -jalizi zote zinazohusiana zitapuuzwa.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Nakala mbili za plugin preset '{0}' hugunduliwa kwa programu hizi na vifaa vya plugins:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} Preset (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} Preset (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Rekebisha kwa kutoa mwongozo wa kipekee wa kuweka au kuondoa nakala. Vinginevyo programu -jalizi zote zinazohusiana zitapuuzwa.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Rangi ya Mhariri</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Je! Una uhakika unataka kufuta kabisa bidhaa zote {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Chagua folda</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Chagua folda ya Tazama</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Kosa la programu -jalizi. Plugin '{0}' ni '{1}' aina lakini hakuna '{1}' kupatikana</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Kosa Kufanya Kitendo '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Thamani lazima iwe na nambari tu au '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Thamani lazima kutoka {0} hadi {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Lazima iwe kamba ya hex (6 au 8) inayoanza na '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Clipboard '{0}' lazima iwe ya kipekee.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Tayari ipo kwa</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Muundo</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Aina</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Majina ya usomaji wa clipboard/mwandishi lazima iwe ya kipekee. Marudio ya wasomaji:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Majina ya usomaji wa clipboard/mwandishi lazima iwe ya kipekee. Marudio ya mwandishi:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Miongozo ya muundo wa clipboard lazima iwe ya kipekee. Fomati mbili na Guids:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Kosa la programu -jalizi: Sehemu zote za programu -jalizi '{0} lazima ziwe za kipekee kwa Handler' {1} '. {2} ParamName' {3} 'ina viingilio vingi</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Kosa la programu -jalizi, hakuna dhahiri dhahiri inayopatikana</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' haiwezi kuwa na vifaa bila angalau 1 param iliyotolewa</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param isiyo na kipimo #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Vitambulisho vya parameta ya programu -jalizi ({0}) lazima vielezwe. Plugin '{1}' ina vigezo vifuatavyo na Paramid's iliyokosekana: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Nakala mbili za paramid '{0}' zilizogunduliwa (zote lazima ziwe za kipekee). {1} lebo: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>GUID ya Preset inahitajika. Haikupatikana au muundo mbaya wa '{0}' katika programu -jalizi {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Haiwezi kupata param na paramid '{0}' iliyorejelewa na preset '{1}' kwa programu -jalizi '{2}'. Parameta inaweza kuwa imebadilika au iliondolewa, sasisha paramvalue ya kuweka au kuiondoa.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Haiwezi kuweka vigezo vya thamani vilivyoshirikiwa katika vifaa. Paramid '{0}' katika preset '{1}' kwa programu -jalizi '{2}' inahitaji kuondolewa au paramValue inaweza kutajwa katika sehemu ya ufafanuzi wa parameta.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Presets lazima ziwe na GUID za kipekee. Nakala mbili za preset '{0}' ziligunduliwa katika programu -jalizi '{1}' kwa presets: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Kosa la kupandisha programu -jalizi, kwa njia '{0}' null, uwezekano wa kosa la kumweka JSON. Kupuuza programu -jalizi</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Kosa la kichwa cha programu -jalizi, katika njia '{0}' lazima iwe na mali ya 'kichwa' na sio zaidi ya wahusika {1}. Kupuuza programu -jalizi</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Kosa la programu-jalizi, katika njia '{0}' na kichwa '{1}' lazima iwe na mali ya 'GUID', RFC 4122 inayolingana na GUID ya 128-bit (UUID) na herufi tu, nambari na hyphens. Kupuuza programu -jalizi.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Maelezo ya maelezo ya programu -jalizi, katika njia '{0}' Maelezo lazima iwe sio zaidi ya wahusika {1}. Kupuuza programu -jalizi</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Kosa la vitambulisho vya programu -jalizi, kwenye njia za '{0}' lazima ziwe sio zaidi ya wahusika {1}. Kupuuza programu -jalizi</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Ambatisha Debugger kwa '{0}' au ughairi kuendelea.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Kusubiri debugger</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Hitilafu kupakua programu -jalizi. Tafadhali jaribu tena baadae.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plugin imesasishwa</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Je! Una uhakika unataka kurejesha bidhaa zote {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Vigezo vya tafuta 'visivyo na kichwa'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Vigezo vya utaftaji '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' ina maadili ya pamoja. Je! Ungependa kuweka upya hizo pia?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

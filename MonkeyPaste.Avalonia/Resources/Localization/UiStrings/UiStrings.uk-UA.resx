@@ -2700,4 +2700,200 @@
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Таким чином, можна отримати доступ до MonkeyPaste&lt;br&gt;не &lt;span color="red"&gt;клацнувши&lt;/span&gt; і навіть &lt;span color="red"&gt;не моргнувши оком&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Анотація</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Клон</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Об'єкт даних</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Підключати</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Читач</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Невідома помилка</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Письменник</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Дублікат плагіну Guid '{0}', виявлений для цих плагінів:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Виправте, змінюючи GUID PLUGIN або видалення дублікатів. Інакше всі пов'язані плагіни будуть ігноровані.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Дублікат плагіна заздалегідь Guid '{0}', виявлений для цих плагінів та пресетів:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Плагін: {0} {1} preset (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Плагін: {0} {1} preset (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Виправити, надаючи унікальні попередньо встановлені GID або видалення дублікатів. Інакше всі пов'язані плагіни будуть ігноровані.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Колір редактора</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Ви впевнені, що хочете назавжди видалити всі {0} елементи (и)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Виберіть папку</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Виберіть папку Watch</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Помилка плагіна. Плагін '{0}' є '{1}' типу, але не знайдено формат '{1}'</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Помилка виконання дії '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Значення повинно містити лише числа або '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Значення повинно бути від {0} до {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Повинен бути шестигранний (6 або 8 -цифровий) рядок, починаючи з "#"</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Буфер обміну '{0}' повинен бути унікальним.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Вже існує для</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Формат</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Імена формату читання буфера обміну/письменника повинні бути унікальними. Читачі дублікати:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Імена формату читання буфера обміну/письменника повинні бути унікальними. Думки письменника:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Guids формату буфера повинен бути унікальним. Дублікат форматів та GUID:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Помилка плагіну: Всі поля плагіну '{0}' повинні бути унікальними для обробника '{1}'. {2} Парамнакам '{3}' має кілька записів</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Помилка плагіна, не знайдено інваріантного маніфесту</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Плагін '{0}' не може мати попередні встановлення без принаймні 1 параметра, що надається</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Не маркований параметр #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Ідентифікатори параметрів плагіна ({0}) повинні бути визначені. Плагін '{1}' має такі параметри з відсутнім парамідом: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Дублікат Парамід '{0}' виявлено (все повинно бути унікальним). {1} мітки: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Потрібна попередньо встановлена ​​GUID. Він не був знайдений або неправильний формат для '{0}' у плагіні {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Не вдається знайти параметр з Paramid '{0}', на який посилаються на попередньо встановлений '{1}' для плагіна '{2}'. Параметр, можливо, змінився або був видалений, оновити попередньо встановлене парамовик або видалити його.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Неможливо встановити параметри спільного значення на попередніхетах. Парамід '{0}' у попередньому встановленні '{1}' для плагіна '{2}' потрібно видалити або парамфалум може бути вказаний у розділі визначення параметрів.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>У пресетах повинні бути унікальні Guids. Дублікат PRESET GUID '{0}' був виявлений у плагіні '{1}' для пресетів: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Помилка розбору плагінів, на шляху '{0}' null, ймовірно, помилка розбору json. Ігнорування плагіна</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Помилка заголовка плагіна, на шляху '{0}', повинна мати властивість 'заголовок' без більше, ніж {1} символів. Ігнорування плагіна</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Помилка Guid Plugin, на шляху '{0}' з заголовком '{1}' повинен мати властивість 'Guid', RFC 4122, що відповідає 128-бітному Guid (UUID) лише з літерами, цифрами та дефісами. Ігнорування плагіна.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Помилка опису плагіна, на шляху '{0}' Опис повинен бути не більше, ніж {1} символів. Ігнорування плагіна</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Помилка тегів плагінів, на тегах Path '{0}' повинен бути не більше, ніж {1} символів. Ігнорування плагіна</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Додайте налагоджувач до '{0}' або скасувати, щоб продовжити.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Чекаючи налагоджувача</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Помилка завантаження плагіна. Будь-ласка спробуйте пізніше.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Плагін оновлений</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Ви впевнені, що хочете відновити всі {0} елементи (и)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Критерії пошуку "без назви"</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Критерії пошуку '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' містить спільні значення. Чи хотіли б ви також скинути їх?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

@@ -70,28 +70,36 @@
     <value>Cơ bản - hàng năm</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>sao chép</value>
@@ -127,19 +135,24 @@
     <value>Được xây dựng - trong trình duyệt plugin với một cộng đồng phát triển ngày càng tăng - Thư viện plugin điều khiển</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste là một người quản lý bảng tạm, công cụ tự động hóa và năng suất không giống ai. Nâng cao bảng tạm của bạn thành một phần được làm giàu và có tổ chức trong quy trình làm việc của bạn,
@@ -158,40 +171,41 @@ Tôi cũng muốn bạn cảm thấy thoải mái khi sử dụng nó. Vì vậy
 Clipboard của bạn được theo dõi hoặc lưu trữ ở bất cứ đâu ngoài máy của riêng bạn. Giai đoạn.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Giao diện đơn giản và thân thiện với cả bố cục ngang/dọc, danh sách/chế độ xem lưới và hỗ trợ Multi -</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Chế độ nối tiếp: Sao chép trở thành 'Thêm vào' thay vì 'thay thế' trên bảng tạm. Cả văn bản và tệp, hoàn toàn có thể tùy chỉnh</value>
+    <value>● Chế độ chuột tùy chỉnh: Phải - Nhấp vào Dán và Trái - Nhấp vào Tự động - Sao chép</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Theo dõi clip tinh vi, nguồn và sử dụng với hỗ trợ nâng cao cho các trình duyệt dựa trên Firefox và Chromium (Chrome, Edge, Brave)</value>
+    <value>● Chế độ nối tiếp: Sao chép trở thành 'Thêm vào' thay vì 'thay thế' trên bảng tạm. Cả văn bản và tệp, hoàn toàn có thể tùy chỉnh</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Trình chỉnh sửa clip đầy đủ - nổi bật với văn bản phong phú (bảng, danh sách, liên kết, v.v.) với tìm/thay thế và làm nổi bật</value>
+    <value>● Theo dõi clip tinh vi, nguồn và sử dụng với hỗ trợ nâng cao cho các trình duyệt dựa trên Firefox và Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Lưu trữ hình ảnh của bạn trong cơ sở dữ liệu an toàn, sẵn sàng sử dụng làm tệp bất cứ lúc nào - Yêu cầu chỉ kéo - và - thả!</value>
+    <value>● Trình chỉnh sửa clip đầy đủ - nổi bật với văn bản phong phú (bảng, danh sách, liên kết, v.v.) với tìm/thay thế và làm nổi bật</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Templating văn bản mạnh mẽ để dán nhanh, năng động từ bộ sưu tập đoạn trích của bạn</value>
+    <value>● Lưu trữ hình ảnh của bạn trong cơ sở dữ liệu an toàn, sẵn sàng sử dụng làm tệp bất cứ lúc nào - Yêu cầu chỉ kéo - và - thả!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trình kích hoạt &amp; thiết kế hành động cho tự động hóa và chuỗi hành động tùy chỉnh</value>
+    <value>● Templating văn bản mạnh mẽ để dán nhanh, năng động từ bộ sưu tập đoạn trích của bạn</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Đơn giản để sử dụng và mở rộng hệ thống plugin cho cả hai clip phân tích hoặc đọc/viết bất kỳ định dạng nào vào bảng tạm của bạn</value>
+    <value>● Trình kích hoạt &amp; thiết kế hành động cho tự động hóa và chuỗi hành động tùy chỉnh</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Được xây dựng - trong trình duyệt plugin với một cộng đồng phát triển ngày càng tăng - thư viện plugin điều khiển</value>
+    <value>● Đơn giản để sử dụng và mở rộng hệ thống plugin cho cả hai clip phân tích hoặc đọc/viết bất kỳ định dạng nào vào bảng tạm của bạn</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Tự động hóa mọi thứ bằng các cài đặt trước plugin, stash và sử dụng bất kỳ lời nhắc hoặc lệnh AI nào của bạn</value>
+    <value>● Được xây dựng - trong trình duyệt plugin với một cộng đồng phát triển ngày càng tăng - thư viện plugin điều khiển</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Nhiều nền tảng và tính năng sắp ra mắt! Chúng tôi vừa mới bắt đầu 🎉</value>
+    <value>● Tự động hóa mọi thứ bằng các cài đặt trước plugin, stash và sử dụng bất kỳ lời nhắc hoặc lệnh AI nào của bạn</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Cả hai chủ đề ánh sáng &amp; tối hoàn toàn năng động, hãy sử dụng bất kỳ màu nào bạn muốn</value>
@@ -208,29 +222,29 @@ Clipboard của bạn được theo dõi hoặc lưu trữ ở bất cứ đâu 
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Tổ chức các clip của bạn trong cây thẻ và tạo các bộ lọc có thể thay đổi</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Lưu trữ dữ liệu cục bộ an toàn, an toàn và riêng tư (không thu thập dữ liệu) luôn được mã hóa bằng bảo vệ mật khẩu 2 - yếu tố tùy chọn và dễ dàng chặn các ứng dụng hoặc trang web khỏi trình theo dõi của bạn</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>Is</value>
+    <value>● Dễ dàng chặn một số ứng dụng, trang web và thậm chí các trang web cụ thể từ theo dõi bảng tạm</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Chế độ chuột tùy chỉnh: Phải - Nhấp vào Dán và Trái - Nhấp vào Tự động - Sao chép</value>
+    <value>Is</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard là một rừng rậm. Monkeypaste là Vua! Swing từ ứng dụng này sang ứng dụng khác, sao chép điều này và dán mà chưa từng có với khỉ !! Một thương hiệu - mới, clipboard tiên tiến và công cụ tự động hóa phân tích !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Mẫu khỉ trong hành động!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Được cài đặt trong ngôn ngữ này. Tiếng Anh chỉ dành cho những ví dụ này</value>
@@ -250,5 +264,11 @@ Clipboard của bạn được theo dõi hoặc lưu trữ ở bất cứ đâu 
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Với đăng ký này, bạn sẽ nhận được:
 ● Công suất không giới hạn</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Lưu trữ dữ liệu cục bộ an toàn, an toàn và riêng tư (không thu thập dữ liệu) luôn được mã hóa bằng bảo vệ mật khẩu 2 - yếu tố tùy chọn</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Nhiều nền tảng và tính năng sắp ra mắt! Chúng tôi vừa mới bắt đầu 🎉</value>
   </data>
 </root>

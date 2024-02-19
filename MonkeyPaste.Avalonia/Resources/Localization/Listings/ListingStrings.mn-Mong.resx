@@ -70,28 +70,36 @@
     <value>Үндсэн - Жилийн</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>хуулах</value>
@@ -127,19 +135,24 @@
     <value>Баригдсан - Plugin хөтөч дээр хэзээ нэгэн цагт - Өсөн нэмэгдэж буй нийгэмлэг - Нэмэлт өргөтгөлүүд</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypasoute бол санах ой, автоматжуулалтын менежер, бусад шигээ автоматжуулалт, бүтээмжийн хэрэгсэл юм. Таны CLIPBORD-ийг баяжуулсан, ажлын урсгалынхаа зохион байгуулалттай хэсэг болгон сайжруулах,
@@ -158,40 +171,41 @@
 Таны Clipboard нь хэзээ ч өөрийн машинаас гадна хаа сайгүй хадгалагдаж, хадгалагддаг. Хугацаа.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Хэвтээ / босоо / босоо байрлалтай энгийн, найрсаг интерфейс, жагсаалт / грэйт харах, олон</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Хавсралт горим: Хуулбарлах горим: Хуулбарлах нь санах ой дээр "солих" болно. Текст ба файлууд хоёулаа бүрэн тохируулж болно</value>
+    <value>● Хулганы Custom Mode Modes: Зөв - Буулгах - Clocke дээр дарна уу</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Firefox болон Chromox болон Chromium-ийн сайжруулсан тусламж, эх үүсвэр, хэрэглээ, хэрэглээ, хэрэглээ, хэрэглээ, ашиглах.</value>
+    <value>● Хавсралт горим: Хуулбарлах горим: Хуулбарлах нь санах ой дээр "солих" болно. Текст ба файлууд хоёулаа бүрэн тохируулж болно</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Бүрэн - RECING текстийг (хүснэгт, жагсаалт, холбоос,</value>
+    <value>● Firefox болон Chromox болон Chromium-ийн сайжруулсан тусламж, эх үүсвэр, хэрэглээ, хэрэглээ, хэрэглээ, хэрэглээ, ашиглах.</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Зургуудыг найдвартай мэдээллийн санд хадгалахад бэлэн байгаа бөгөөд одоо хүссэн үедээ ашиглахад бэлэн байна.</value>
+    <value>● Бүрэн - RECING текстийг (хүснэгт, жагсаалт, холбоос,</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Түргэн текстийг хурдан, динамик буулгаж, таны SnipetPE-ийн цуглуулгад</value>
+    <value>● Зургуудыг найдвартай мэдээллийн санд хадгалахад бэлэн байгаа бөгөөд одоо хүссэн үедээ ашиглахад бэлэн байна.</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Захиалгат автоматжуулалт, үйл ажиллагааны гинжийг өдөөх, үйл ажиллагааны дизайнер</value>
+    <value>● Түргэн текстийг хурдан, динамик буулгаж, таны SnipetPE-ийн цуглуулгад</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Plugin системийг ашиглах, өргөтгөлийн системийг ашиглах, өргөтгөх / бичих</value>
+    <value>● Захиалгат автоматжуулалт, үйл ажиллагааны гинжийг өдөөх, үйл ажиллагааны дизайнер</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Баригдсан - Plugin хөтөч дээр хэзээ нэгэн цагт - Өсөн нэмэгдэж буй нийгэмлэг - Нэмэгдсэн номын сан</value>
+    <value>● Plugin системийг ашиглах, өргөтгөлийн системийг ашиглах, өргөтгөх / бичих</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Plugin Prestes-той бүх зүйлийг автоматжуулах, stash болон AI-ийн зааврыг хялбархан ашиглаарай</value>
+    <value>● Баригдсан - Plugin хөтөч дээр хэзээ нэгэн цагт - Өсөн нэмэгдэж буй нийгэмлэг - Нэмэгдсэн номын сан</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Илүү олон платформууд, удахгүй гарах шинж чанарууд! Бид зүгээр л gettings эхэлсэн байна 🎉</value>
+    <value>● Plugin Prestes-той бүх зүйлийг автоматжуулах, stash болон AI-ийн зааврыг хялбархан ашиглаарай</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Гэрэл ба харанхуй сэдэв хоёулаа бүрэн динамик бөгөөд хүссэн өнгийг ашиглана уу</value>
@@ -208,29 +222,29 @@
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Тэмдэглэгээ бүхий модыг цэгцлэж, нөөцлөх боломжтой шүүлтүүр үүсгэх</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Аюулгүй, найдвартай, найдвартай, хувийн мэдээллийн сан (өгөгдөлгүй, хувийн мэдээлэл) заавал 2-р сонголтыг шифрлээрэй.</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Өргөтгөсөн дэр - ба - дусаах, - Drop Dock Shote, Custom Bolections, RILLE GLAY BONELDINGSED, REALE BONELDSINGORS, ​​READINGORDOUNTORS, LOLDENTORD, REALEDINGSORDSEDS</value>
+    <value>● Тодорхой програм, вэбсайтуудыг хялбар хаах, бүр хаах</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Хулганы Custom Mode Modes: Зөв - Буулгах - Clocke дээр дарна уу</value>
+    <value>● Өргөтгөсөн дэр - ба - дусаах, - Drop Dock Shote, Custom Bolections, RILLE GLAY BONELDINGSED, REALE BONELDSINGORS, ​​READINGORDOUNTORS, LOLDENTORD, REALEDINGSORDSEDS</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Санах самбар нь ширэнгэн ой юм. Monkeypaste нь хаан юм! Апп-аас апп-аас апп руу шилжиж, энэ нь урьд өмнө хэзээ ч монкераастай хэзээ ч хийж байгаагүй юм шиг хуулж, буулгах болно !! Брэнд - Шинэ, зүсэлтийн самбар самбар, аналитик автоматжуулалтын автоматжуулалтын хэрэгсэл !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Монкекастын дээжийг үйлдэхэд хүргэдэг!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Энэ хэл дээр суулгасан. Англи хэл нь зөвхөн эдгээр жишээнүүдэд зориулагдсан болно</value>
@@ -250,5 +264,11 @@
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Энэ захиалгыг та хүлээн авах болно:
 ● Хязгааргүй хүчин чадал</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Аюулгүй, найдвартай, найдвартай, хувийн мэдээллийн сан (өгөгдөл цуглуулах) Нэмэлт 2-ыг заавал шифрлэнэ</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Илүү олон платформууд, удахгүй гарах шинж чанарууд! Бид зүгээр л gettings эхэлсэн байна 🎉</value>
   </data>
 </root>

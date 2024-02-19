@@ -599,9 +599,12 @@ namespace MonkeyPaste.Avalonia {
                         new Binding() {
                             Source = this,
                             Path = nameof(CurrentTagName),
-                            StringFormat = "Search Criteria '{0}'",
-                            TargetNullValue = "Search Criteria 'Untitled'",
-                            FallbackValue = "Search Criteria 'Untitled'",
+                            //StringFormat = "Search Criteria '{0}'",
+                            //TargetNullValue = "Search Criteria 'Untitled'",
+                            //FallbackValue = "Search Criteria 'Untitled'",
+                            StringFormat = UiStrings.SearchCriteriaWindowTitleFormat,
+                            TargetNullValue = UiStrings.SearchCriteriaWindowFallbackTitle,
+                            FallbackValue = UiStrings.SearchCriteriaWindowFallbackTitle,
                             Converter = MpAvStringToWindowTitleConverter.Instance
                         });
                     _criteriaWindow.Show();

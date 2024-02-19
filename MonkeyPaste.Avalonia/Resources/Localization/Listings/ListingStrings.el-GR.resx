@@ -70,28 +70,36 @@
     <value>Βασικά - ετήσια</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>αντίγραφο</value>
@@ -127,19 +135,24 @@
     <value>Χτισμένο - στο πρόγραμμα περιήγησης με μια βούτυρο με μια γενική κοινότητα</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Το MonkeyPaste είναι ένα εργαλείο διαχείρισης, αυτοματισμού και παραγωγικότητας, όπως κανένα άλλο. Ενισχύοντας το πρόχειρο σε ένα εμπλουτισμένο και οργανωμένο μέρος της ροής εργασίας σας,
@@ -158,40 +171,41 @@
 Το πρόχειρο σας παρακολουθείται ποτέ ή αποθηκεύεται οπουδήποτε πέρα ​​από το δικό σας μηχάνημα. Περίοδος.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Απλή και φιλική διεπαφή τόσο με οριζόντιες/κατακόρυφες διατάξεις, προβολή λίστας/πλέγματος και υποστήριξη πολλαπλών παρακολούθησης</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Λειτουργία προσάρτησης: Η αντιγραφή γίνεται «προσθήκη στο« αντί να «αντικαταστήσει» στο πρόχειρο. Τόσο κείμενο όσο και αρχεία, πλήρως προσαρμόσιμα</value>
+    <value>● Προσαρμοσμένες λειτουργίες ποντικιού: Δεξιά - Κάντε κλικ στην επιλογή Paste and Left - Κάντε κλικ στο Auto - Copy</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Εξελιγμένη παρακολούθηση κλιπ, πηγές και χρήση με βελτιωμένη υποστήριξη για προγράμματα περιήγησης Firefox και χρωμίου (Chrome, Edge, Brave)</value>
+    <value>● Λειτουργία προσάρτησης: Η αντιγραφή γίνεται «προσθήκη στο« αντί να «αντικαταστήσει» στο πρόχειρο. Τόσο κείμενο όσο και αρχεία, πλήρως προσαρμόσιμα</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Πλήρως - Προτεινόμενος επεξεργαστής κλιπ με πλούσιο κείμενο (πίνακες, λίστες, συνδέσμους κ.λπ.) με εύρεση/αντικατάσταση και επισήμανση</value>
+    <value>● Εξελιγμένη παρακολούθηση κλιπ, πηγές και χρήση με βελτιωμένη υποστήριξη για προγράμματα περιήγησης Firefox και χρωμίου (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Αποθηκεύστε τις εικόνες σας στη βάση δεδομένων Secure, έτοιμη να χρησιμοποιήσετε ως αρχεία οποτεδήποτε - DEAMK JOST DRAG - και - DROP!</value>
+    <value>● Πλήρως - Προτεινόμενος επεξεργαστής κλιπ με πλούσιο κείμενο (πίνακες, λίστες, συνδέσμους κ.λπ.) με εύρεση/αντικατάσταση και επισήμανση</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Ισχυρό πρότυπο κειμένου για γρήγορη, δυναμική επικόλληση από τη συλλογή απόσπασμα σας</value>
+    <value>● Αποθηκεύστε τις εικόνες σας στη βάση δεδομένων Secure, έτοιμη να χρησιμοποιήσετε ως αρχεία οποτεδήποτε - DEAMK JOST DRAG - και - DROP!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Σχεδιαστής Trigger &amp; Action για προσαρμοσμένες αυτοματισμοί και αλυσίδα δράσης</value>
+    <value>● Ισχυρό πρότυπο κειμένου για γρήγορη, δυναμική επικόλληση από τη συλλογή απόσπασμα σας</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Απλό στη χρήση και επέκταση του συστήματος plugin τόσο για την ανάλυση κλιπ είτε για ανάγνωση/γράψτε οποιαδήποτε μορφή στο πρόχειρο σας</value>
+    <value>● Σχεδιαστής Trigger &amp; Action για προσαρμοσμένες αυτοματισμοί και αλυσίδα δράσης</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Χτισμένο - στο πρόγραμμα περιήγησης με μια βούτυρο με μια βούτυρο που αναπτύσσεται - οδηγούμενη από την κοινότητα της κοινότητας</value>
+    <value>● Απλό στη χρήση και επέκταση του συστήματος plugin τόσο για την ανάλυση κλιπ είτε για ανάγνωση/γράψτε οποιαδήποτε μορφή στο πρόχειρο σας</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Αυτοματοποιήστε τα πάντα με προεπιλογές plugin, stash και χρησιμοποιήστε σας με ευκολία οποιαδήποτε από τις προτροπές ή τις εντολές σας AI</value>
+    <value>● Χτισμένο - στο πρόγραμμα περιήγησης με μια βούτυρο με μια βούτυρο που αναπτύσσεται - οδηγούμενη από την κοινότητα της κοινότητας</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Περισσότερες πλατφόρμες και χαρακτηριστικά έρχονται σύντομα! Μόλις ξεκίνησαν οι gettings 🎉</value>
+    <value>● Αυτοματοποιήστε τα πάντα με προεπιλογές plugin, stash και χρησιμοποιήστε σας με ευκολία οποιαδήποτε από τις προτροπές ή τις εντολές σας AI</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Τόσο τα ελαφριά και σκοτεινά θέματα είναι εντελώς δυναμικά, χρησιμοποιήστε οποιοδήποτε χρώμα θέλετε</value>
@@ -208,29 +222,29 @@
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Οργανώστε τα κλιπ σας σε δέντρα ετικετών και δημιουργήστε επαναληπτικά φίλτρα</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Ασφαλής, ασφαλής και ιδιωτική τοπική αποθήκευση δεδομένων (χωρίς συλλογή δεδομένων) πάντα κρυπτογραφημένη με προαιρετική προστασία κωδικού πρόσβασης 2 - Παράγοντας και μπλοκάρει εύκολα εφαρμογές ή ιστότοπους από τον ιχνηλάτη σας</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Εκτεταμένη οπισθέλκουσα - και - Υποστήριξη πτώσης, προσαρμοσμένες παγκόσμιες συντομεύσεις, δρομολόγηση και ποντίκι - δωρεάν πλοήγηση</value>
+    <value>● Εύκολα μπλοκάρει ορισμένες εφαρμογές, ιστότοπους και ακόμη και συγκεκριμένες ιστοσελίδες από την παρακολούθηση του πρόχειρου</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Προσαρμοσμένες λειτουργίες ποντικιού: Δεξιά - Κάντε κλικ στην επιλογή Paste and Left - Κάντε κλικ στο Auto - Copy</value>
+    <value>● Εκτεταμένη οπισθέλκουσα - και - Υποστήριξη πτώσης, προσαρμοσμένες παγκόσμιες συντομεύσεις, δρομολόγηση και ποντίκι - δωρεάν πλοήγηση</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Το πρόχειρο είναι μια ζούγκλα. Το Monkeypaste είναι ο βασιλιάς! Swing από εφαρμογή στην εφαρμογή, αντιγράφοντας αυτό και επικόλληση που όπως ποτέ άλλοτε με MonkeyPaste !! Ένα εμπορικό σήμα - νέο, κορυφαίο σκάφος και εργαλείο αναλυτικής αυτοματοποίησης !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Δείγμα Monkeypaste σε δράση!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Εγκατεστημένο σε αυτήν τη γλώσσα. Τα αγγλικά είναι μόνο για αυτά τα παραδείγματα</value>
@@ -250,5 +264,11 @@
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Με αυτήν τη συνδρομή θα λάβετε:
 ● Απεριόριστη χωρητικότητα</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Ασφαλής, ασφαλής και ιδιωτική τοπική αποθήκευση δεδομένων (χωρίς συλλογή δεδομένων) πάντα κρυπτογραφημένη με προαιρετική προστασία κωδικού πρόσβασης 2 - Παράγοντας</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Περισσότερες πλατφόρμες και χαρακτηριστικά έρχονται σύντομα! Μόλις ξεκίνησαν οι gettings 🎉</value>
   </data>
 </root>

@@ -65,9 +65,9 @@
     <value>ನಿಮ್ಮ ಅಸ್ತಿತ್ವದಲ್ಲಿರುವ ಖಾತೆಯನ್ನು ಮರುಸ್ಥಾಪಿಸಿ ...</value>
   </data>
   <data name="AccountFreeDescription" xml:space="preserve">
-    <value>ವಿಷಯ ಮತ್ತು ಕಸ
-{0} ಮತ್ತು {1 to ಗೆ ಸೀಮಿತವಾಗಿದೆ
-ಕ್ಲಿಪ್‌ಗಳು ಕ್ರಮವಾಗಿ.</value>
+    <value>ವಿಷಯ ಮತ್ತು ಅನುಪಯುಕ್ತ ಇವೆ
+{0} ಮತ್ತು {1} ಗೆ ಸೀಮಿತವಾಗಿದೆ
+ಕ್ರಮವಾಗಿ ಕ್ಲಿಪ್ಗಳು.</value>
   </data>
   <data name="AccountStandardDescription" xml:space="preserve">
     <value>{2} ವಿಷಯದ ತುಣುಕುಗಳು ಮತ್ತು ಅನಿಯಮಿತ ಕಸದ ಸಂಗ್ರಹವನ್ನು ಅನುಮತಿಸುತ್ತದೆ.</value>
@@ -535,10 +535,10 @@
     <value>ಅಪ್ಲಿಕೇಶನ್ ಮಾರ್ಗವನ್ನು ಆಯ್ಕೆಮಾಡಿ</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
-    <value>{0 for ಗೆ ಕಸ್ಟಮ್ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ತೆಗೆದುಹಾಕಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</value>
+    <value>{0} for ಗೆ ಕಸ್ಟಮ್ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ತೆಗೆದುಹಾಕಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
-    <value>{0 for ಗೆ ಕಸ್ಟಮ್ ಸ್ವರೂಪಗಳನ್ನು ತೆಗೆದುಹಾಕಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</value>
+    <value>{0} for ಗೆ ಕಸ್ಟಮ್ ಸ್ವರೂಪಗಳನ್ನು ತೆಗೆದುಹಾಕಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</value>
   </data>
   <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
     <value>ಈ ಅಪ್ಲಿಕೇಶನ್‌ಗಾಗಿ ನಿಯೋಜಿಸಲಾದ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಸ್ವರೂಪಗಳಿಲ್ಲ. ಕಟ್/ನಕಲು ಅಥವಾ ಡ್ರ್ಯಾಗ್ ಅನ್ನು ಪ್ರಯತ್ನಿಸುವ ಮೂಲಕ ಯಾವುದೇ ಡೇಟಾವನ್ನು ಓದಲಾಗುವುದಿಲ್ಲ - ಮತ್ತು - ಮಾಂಕೈಪೇಸ್ಟ್‌ಗೆ ಬಿಡಿ</value>
@@ -800,7 +800,7 @@
     <comment>Application Name</comment>
   </data>
   <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
-    <value>ನಿಮ್ಮ {0 for ಗಾಗಿ ಪಾವತಿ
+    <value>ನಿಮ್ಮ {0} for ಗಾಗಿ ಪಾವತಿ
 ಚಂದಾದಾರಿಕೆ {1}
 ಮತ್ತು ಸ್ವೀಕರಿಸಲಾಗಿಲ್ಲ.
 
@@ -902,7 +902,7 @@
   </data>
   <data name="AccountExistingLoginText" xml:space="preserve">
     <value>ನಿಮ್ಮ ಚಂದಾದಾರಿಕೆ
-ಈಗ {0}/{1 to ಗೆ ಹೊಂದಿಸಲಾಗಿದೆ.</value>
+ಈಗ {0}/{1} ಗೆ ಹೊಂದಿಸಲಾಗಿದೆ.</value>
   </data>
   <data name="AccountExistingLoginTitle" xml:space="preserve">
     <value>ಖಾತೆ ಕಂಡುಬಂದಿದೆ</value>
@@ -2172,7 +2172,7 @@
     <value>ಮಾಂಕೈಪೇಸ್ಟ್‌ನಂತೆ?</value>
   </data>
   <data name="AnalyzerCannotExecuteMessage" xml:space="preserve">
-    <value>{0 type ಪ್ರಕಾರದ (ಗಳ) ಇನ್ಪುಟ್ ಅನ್ನು ಮಾತ್ರ ಸ್ವೀಕರಿಸುತ್ತದೆ: {1}</value>
+    <value>{0} ಪ್ರಕಾರದ(ಗಳ) ಇನ್‌ಪುಟ್ ಅನ್ನು ಮಾತ್ರ ಸ್ವೀಕರಿಸುತ್ತದೆ: {1}</value>
     <comment>Plugin Name, Media Formats</comment>
   </data>
   <data name="AppModeToggleLeftClickCopyHint" xml:space="preserve">
@@ -2269,7 +2269,7 @@
     <comment>ActionName</comment>
   </data>
   <data name="ActionAnalyzeValidation3" xml:space="preserve">
-    <value>ಪೋಷಕರು '{1}' ಟೈಪ್ ವಿಷಯ ಮತ್ತು ವಿಶ್ಲೇಷಕ '{2}' ಗಾಗಿ ಮಾತ್ರ ಫಿಲ್ಟರ್‌ಗಳು ಎಂದಿಗೂ ಕಾರ್ಯಗತಗೊಳ್ಳುವುದಿಲ್ಲ ಏಕೆಂದರೆ ಅದು '{3}' ಪ್ರಕಾರದ ಇನ್ಪುಟ್ ಅನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ</value>
+    <value>ಪೋಷಕ '{0}' ಫಿಲ್ಟರ್‌ಗಳು '{1}' ಪ್ರಕಾರದ ವಿಷಯಕ್ಕೆ ಮಾತ್ರ ಮತ್ತು ವಿಶ್ಲೇಷಕ '{2}' ಎಂದಿಗೂ ಕಾರ್ಯಗತಗೊಳ್ಳುವುದಿಲ್ಲ ಏಕೆಂದರೆ ಇದು '{3}' ಪ್ರಕಾರದ ಇನ್‌ಪುಟ್ ಅನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ</value>
     <comment>Action Label, Analyzer Preset Name, Content Type</comment>
   </data>
   <data name="ActionClassifyValidation1" xml:space="preserve">
@@ -2430,7 +2430,7 @@
     <value>ಬಾಕಿ ಉಳಿದಿದೆ</value>
   </data>
   <data name="PluginUpdatedNtfText" xml:space="preserve">
-    <value>{0} ಅನ್ನು {1 to ಗೆ ಯಶಸ್ವಿಯಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ</value>
+    <value>{0} ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ {1} ಗೆ ನವೀಕರಿಸಲಾಗಿದೆ</value>
     <comment>Plugin Title, Plugin Version</comment>
   </data>
   <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
@@ -2699,5 +2699,201 @@
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;ಈ ರೀತಿಯಾಗಿ, ಮಂಕಿಪೇಸ್ಟ್ ಅನ್ನು ಪ್ರವೇಶಿಸಬಹುದು&lt;br&gt;&lt;span color="red"&gt;ಒಂದು ಕ್ಲಿಕ್ ಮಾಡದೆ&lt;/span&gt; ಅಥವಾ &lt;span color="red"&gt;ಕಣ್ಣೆತ್ತಿಯೂ ನೋಡದೆ&lt;/span&gt; #x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>ಟಿಪ್ಪಣಿ</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>ತದ್ರೂಪಿ</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>ದತ್ತಾಂಶಗಳ ವಸ್ತು</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>ಚಿರತೆ</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>ಓದುಗ</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>ಅಜ್ಞಾತ ದೋಷ</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>ಬರಹಗಾರ</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>ಈ ಪ್ಲಗ್‌ಇನ್‌ಗಳಿಗಾಗಿ ಪತ್ತೆಯಾದ ಪ್ಲಗಿನ್ GUID '{0}' ಪತ್ತೆಯಾಗಿದೆ:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ಗೈಡ್ ಅನ್ನು ಬದಲಾಯಿಸುವ ಮೂಲಕ ಅಥವಾ ನಕಲುಗಳನ್ನು ತೆಗೆದುಹಾಕುವ ಮೂಲಕ ಸರಿಪಡಿಸಿ. ಇಲ್ಲದಿದ್ದರೆ ಎಲ್ಲಾ ಸಂಬಂಧಿತ ಪ್ಲಗ್‌ಇನ್‌ಗಳನ್ನು ನಿರ್ಲಕ್ಷಿಸಲಾಗುತ್ತದೆ.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>ಈ ಪ್ಲಗ್‌ಇನ್‌ಗಳು ಮತ್ತು ಪೂರ್ವನಿಗದಿಗಳಿಗಾಗಿ ಪತ್ತೆಯಾದ GUID '{0}' ಅನ್ನು ನಕಲಿ ಪ್ಲಗಿನ್ ಮೊದಲೇ ನಿಗದಿಪಡಿಸಲಾಗಿದೆ:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್: {0} {1} ಪೂರ್ವಭಾವಿ (ಗಳು): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್: {0} {1} ಪೂರ್ವಭಾವಿ (ಗಳು): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>ಅನನ್ಯ ಮೊದಲೇ ಮಾರ್ಗದರ್ಶಿಗಳನ್ನು ಒದಗಿಸುವ ಮೂಲಕ ಅಥವಾ ನಕಲುಗಳನ್ನು ತೆಗೆದುಹಾಕುವ ಮೂಲಕ ಸರಿಪಡಿಸಿ. ಇಲ್ಲದಿದ್ದರೆ ಎಲ್ಲಾ ಸಂಬಂಧಿತ ಪ್ಲಗ್‌ಇನ್‌ಗಳನ್ನು ನಿರ್ಲಕ್ಷಿಸಲಾಗುತ್ತದೆ.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>ಸಂಪಾದಕ ಬಣ್ಣ</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>ನೀವು ಎಲ್ಲಾ {0} ಐಟಂ (ಗಳನ್ನು) ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಲು ಬಯಸುತ್ತೀರಾ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>ಫೋಲ್ಡರ್ ಆಯ್ಕೆಮಾಡಿ</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>ವಾಚ್ ಫೋಲ್ಡರ್ ಆಯ್ಕೆಮಾಡಿ</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ದೋಷ. ಪ್ಲಗಿನ್ '{0}' '{1}' ಪ್ರಕಾರ ಆದರೆ '{1}' ಸ್ವರೂಪ ಕಂಡುಬಂದಿಲ್ಲ</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>ಕ್ರಿಯೆಯನ್ನು ನಿರ್ವಹಿಸುವಲ್ಲಿ '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>ಮೌಲ್ಯವು ಕೇವಲ ಸಂಖ್ಯೆಗಳನ್ನು ಹೊಂದಿರಬೇಕು ಅಥವಾ '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>ಮೌಲ್ಯವು {0} ನಿಂದ {1} ವರೆಗೆ ಇರಬೇಕು</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' ನಿಂದ ಪ್ರಾರಂಭವಾಗುವ ಹೆಕ್ಸ್ (6 ಅಥವಾ 8 ಅಂಕಿಯ) ಸ್ಟ್ರಿಂಗ್ ಆಗಿರಬೇಕು</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ '{0}' ಅನನ್ಯವಾಗಿರಬೇಕು.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>ಈಗಾಗಲೇ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>ಸ್ವರೂಪ</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>ಮಾದರಿ</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ರೀಡರ್/ಬರಹಗಾರ ಸ್ವರೂಪದ ಹೆಸರುಗಳು ಅನನ್ಯವಾಗಿರಬೇಕು. ಓದುಗರ ನಕಲುಗಳು:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ರೀಡರ್/ಬರಹಗಾರ ಸ್ವರೂಪದ ಹೆಸರುಗಳು ಅನನ್ಯವಾಗಿರಬೇಕು. ಬರಹಗಾರ ನಕಲುಗಳು:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಫಾರ್ಮ್ಯಾಟ್ ಮಾರ್ಗದರ್ಶಿಗಳು ಅನನ್ಯವಾಗಿರಬೇಕು. ನಕಲಿ ಸ್ವರೂಪಗಳು ಮತ್ತು ಮಾರ್ಗದರ್ಶಿಗಳು:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ದೋಷ: ಎಲ್ಲಾ ಪ್ಲಗಿನ್ '{0}' ಕ್ಷೇತ್ರಗಳು ಹ್ಯಾಂಡ್ಲರ್‌ಗೆ ಅನನ್ಯವಾಗಿರಬೇಕು '{1}'. {2} ಪ್ಯಾರಾಮನೇಮ್ '{3}' ಬಹು ನಮೂದುಗಳನ್ನು ಹೊಂದಿದೆ</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ದೋಷ, ಯಾವುದೇ ಅಸ್ಥಿರ ಮ್ಯಾನಿಫೆಸ್ಟ್ ಕಂಡುಬಂದಿಲ್ಲ</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ '{0}' ಕನಿಷ್ಠ 1 ನಿಯತಾಂಕಗಳನ್ನು ಒದಗಿಸದೆ ಪೂರ್ವನಿಗದಿಗಳನ್ನು ಹೊಂದಲು ಸಾಧ್ಯವಿಲ್ಲ</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>ಲೇಬಲ್ ಮಾಡದ ಪ್ಯಾರಮ್ #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ಪ್ಯಾರಾಮೀಟರ್ ಐಡಿಗಳನ್ನು ({0}) ವ್ಯಾಖ್ಯಾನಿಸಬೇಕು. ಪ್ಲಗಿನ್ '{1}' ಕಾಣೆಯಾದ ಪ್ಯಾರಾಮಿಡ್‌ನೊಂದಿಗೆ ಈ ಕೆಳಗಿನ ನಿಯತಾಂಕಗಳನ್ನು ಹೊಂದಿದೆ: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>ನಕಲಿ ಪ್ಯಾರಾಮಿಡ್ '{0}' ಪತ್ತೆಯಾಗಿದೆ (ಎಲ್ಲವೂ ಅನನ್ಯವಾಗಿರಬೇಕು). {1} ಲೇಬಲ್‌ಗಳು: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>ಪೂರ್ವನಿರ್ಧರಿತ ಮಾರ್ಗದರ್ಶಿ ಅಗತ್ಯವಿದೆ. ಇದು ಕಂಡುಬಂದಿಲ್ಲ ಅಥವಾ ಪ್ಲಗಿನ್‌ನಲ್ಲಿ '{0}' ಫಾರ್ಮ್ಯಾಟ್‌ನಲ್ಲಿ ತಪ್ಪಾಗಿದೆ {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>ಪ್ಯಾರಾಮಿಡ್ '{0}' ಪ್ಲಗಿನ್ '{2}' ಗಾಗಿ ಮೊದಲೇ '{1}' ನಿಂದ ಉಲ್ಲೇಖಿಸಲಾಗಿದೆ. ನಿಯತಾಂಕವು ಬದಲಾಗಿರಬಹುದು ಅಥವಾ ತೆಗೆದುಹಾಕಲಾಗಿದೆ, ಮೊದಲೇ ನಿಗದಿಪಡಿಸಿದ ಪ್ಯಾರಾಮಾಲ್ಯೂ ಅಥವಾ ತೆಗೆದುಹಾಕಿ.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>ಪೂರ್ವನಿಗದಿಗಳಲ್ಲಿ ಹಂಚಿದ ಮೌಲ್ಯ ನಿಯತಾಂಕಗಳನ್ನು ಹೊಂದಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ಪ್ಲಗಿನ್ '{2}' ಗಾಗಿ '{1}' ನಲ್ಲಿ ಮೊದಲೇ '{0}' ಪ್ಯಾರಾಮಿಡ್ ಅನ್ನು ತೆಗೆದುಹಾಕಬೇಕಾಗುತ್ತದೆ ಅಥವಾ ಪ್ಯಾರಾಮೀಟರ್ ವ್ಯಾಖ್ಯಾನ ವಿಭಾಗದಲ್ಲಿ ಪ್ಯಾರಾಮೌಲ್ಯೂ ಅನ್ನು ನಿರ್ದಿಷ್ಟಪಡಿಸಬಹುದು.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ಪೂರ್ವನಿಗದಿಗಳು ಅನನ್ಯ ಮಾರ್ಗದರ್ಶಿಗಳನ್ನು ಹೊಂದಿರಬೇಕು. ಪೂರ್ವನಿಗದಿಗಳಿಗಾಗಿ '{1}' ಪ್ಲಗಿನ್ ನಲ್ಲಿ ನಕಲಿ ಮೊದಲೇ GUID '{0}' ಪತ್ತೆಯಾಗಿದೆ: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ಪಾರ್ಸಿಂಗ್ ದೋಷ, ಹಾದಿಯಲ್ಲಿ '{0}' ಶೂನ್ಯ, JSON ಅನ್ನು ಪಾರ್ಸಿಂಗ್ ಮಾಡುವ ದೋಷ. ಪ್ಲಗಿನ್ ಅನ್ನು ನಿರ್ಲಕ್ಷಿಸಲಾಗುತ್ತಿದೆ</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ಶೀರ್ಷಿಕೆ ದೋಷ, ಪಥದಲ್ಲಿ '{0}' {1} ಅಕ್ಷರಗಳಿಗಿಂತ ಹೆಚ್ಚಿಲ್ಲದ 'ಶೀರ್ಷಿಕೆ' ಆಸ್ತಿಯನ್ನು ಹೊಂದಿರಬೇಕು. ಪ್ಲಗಿನ್ ಅನ್ನು ನಿರ್ಲಕ್ಷಿಸಲಾಗುತ್ತಿದೆ</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ಗೈಡ್ ದೋಷ, '{1}' ಶೀರ್ಷಿಕೆಯೊಂದಿಗೆ '{0}' ಹಾದಿಯಲ್ಲಿ 'GUID' ಆಸ್ತಿ, RFC 4122 ಕಂಪ್ಲೈಂಟ್ 128-BIT GUID (UUID) ಅನ್ನು ಕೇವಲ ಅಕ್ಷರಗಳು, ಸಂಖ್ಯೆಗಳು ಮತ್ತು ಹೈಫನ್‌ಗಳೊಂದಿಗೆ ಹೊಂದಿರಬೇಕು. ಪ್ಲಗಿನ್ ಅನ್ನು ನಿರ್ಲಕ್ಷಿಸಲಾಗುತ್ತಿದೆ.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ವಿವರಣೆ ದೋಷ, ಹಾದಿಯಲ್ಲಿ '{0}' ವಿವರಣೆಯು {1} ಅಕ್ಷರಗಳಿಗಿಂತ ಹೆಚ್ಚಿರಬಾರದು. ಪ್ಲಗಿನ್ ಅನ್ನು ನಿರ್ಲಕ್ಷಿಸಲಾಗುತ್ತಿದೆ</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ಟ್ಯಾಗ್‌ಗಳ ದೋಷ, ಹಾದಿಯಲ್ಲಿ '{0}' ಟ್ಯಾಗ್‌ಗಳು {1} ಅಕ್ಷರಗಳಿಗಿಂತ ಹೆಚ್ಚಿರಬಾರದು. ಪ್ಲಗಿನ್ ಅನ್ನು ನಿರ್ಲಕ್ಷಿಸಲಾಗುತ್ತಿದೆ</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>ಡೀಬಗರ್ ಅನ್ನು '{0}' ಗೆ ಲಗತ್ತಿಸಿ ಅಥವಾ ಮುಂದುವರಿಸಲು ರದ್ದುಗೊಳಿಸಿ.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>ಡೀಬಗರ್‌ಗಾಗಿ ಕಾಯಲಾಗುತ್ತಿದೆ</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ದೋಷ. ದಯವಿಟ್ಟು ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ನವೀಕರಿಸಲಾಗಿದೆ</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>ನೀವು ಎಲ್ಲಾ {0} ಐಟಂ (ಗಳನ್ನು) ಪುನಃಸ್ಥಾಪಿಸಲು ಬಯಸುತ್ತೀರಾ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>ಮಾನದಂಡಗಳನ್ನು ಹುಡುಕಿ 'ಶೀರ್ಷಿಕೆರಹಿತ'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>ಮಾನದಂಡಗಳನ್ನು ಹುಡುಕಿ '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' ಹಂಚಿದ ಮೌಲ್ಯಗಳನ್ನು ಒಳಗೊಂಡಿದೆ. ನೀವು ಅದನ್ನು ಮರುಹೊಂದಿಸಲು ಬಯಸುವಿರಾ?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

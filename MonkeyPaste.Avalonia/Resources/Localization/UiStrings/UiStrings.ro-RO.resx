@@ -2700,4 +2700,200 @@ Restaurarea totală nu poate fi garantată și poate reduce performanța sau chi
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;În acest fel, MonkeyPaste poate fi accesat&lt;br&gt;&lt;span color="red"&gt;fără un clic&lt;/span&gt; sau chiar &lt;span color="red"&gt;bătând un ochi&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Adnotare</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Clonă</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Obiect de date</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Conecteaza</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Cititor</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Eroare necunoscută</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Scriitor</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Ghid de plugin duplicat '{0}' detectat pentru aceste pluginuri:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Remediați schimbând plugin -ul GUID sau eliminarea duplicatelor. În caz contrar, toate pluginurile asociate vor fi ignorate.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Duplicate plugin presetate Guid '{0}' detectat pentru aceste pluginuri și presetări:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} presetare (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} presetare (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Remediați oferind ghiduri prestabilite unice sau eliminarea duplicatelor. În caz contrar, toate pluginurile asociate vor fi ignorate.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Culoarea editorului</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Sigur doriți să ștergeți definitiv toate cele {0} articole?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Selectați folder</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Selectați folderul Watch</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Eroare plugin. Plugin '{0}' este '{1}', dar nu este găsit formatul '{1}'</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Eroare la efectuarea acțiunii '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Valoarea trebuie să conțină doar numere sau „{0}”</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Valoarea trebuie să fie de la {0} la {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Trebuie să fie un șir hex (6 sau 8 cifre) începând cu „#”</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Clipboard '{0}' trebuie să fie unic.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Există deja pentru</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Numele de format Clipboard Reader/Writer trebuie să fie unice. Dupliciile cititorului:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Numele de format Clipboard Reader/Writer trebuie să fie unice. Scriitor duplică:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Ghidurile de format clipboard trebuie să fie unice. Formate și ghiduri duplicate:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Eroare plugin: toate câmpurile plugin '{0}' trebuie să fie unice pentru handler '{1}'. {2} paramName '{3}' are mai multe intrări</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Eroare de plugin, nu a fost găsit niciun manifest invariabil</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' nu poate avea presetări fără cel puțin 1 parametru furnizat</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param nemarcat #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ID -urile parametrului plugin ({0}) trebuie definite. Plugin '{1}' are următorii parametri cu ParamID care lipsesc: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Duplicat paramID '{0}' detectat (toate trebuie să fie unice). {1} etichete: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Ghidul presetat este necesar. Nu a fost găsit sau format greșit pentru „{0}” în plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Nu pot găsi parametrul cu ParamID '{0}' la care se face referire de presetare '{1}' pentru plugin '{2}'. Parametrul s -ar fi putut schimba sau a fost eliminat, actualizați ParamValue presetat sau eliminați -l.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Nu se poate seta parametrii de valoare partajați în presetări. ParamID '{0}' în presetare '{1}' pentru plugin '{2}' trebuie eliminat sau ParamValue poate fi specificat în secțiunea Definiție a parametrilor.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Presetările trebuie să aibă ghiduri unice. Duplicat presetat Guid '{0}' a fost detectat în plugin '{1}' pentru presetări: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Eroare de analiză a pluginului, la calea '{0}' null, probabil eroarea de analiză JSON. Ignorarea pluginului</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Eroare de titlu a pluginului, la calea '{0}' trebuie să aibă proprietate „title” cu nu mai mult decât {1} caractere. Ignorarea pluginului</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Eroare de ghid plugin, la calea '{0}' cu titlul '{1}' trebuie să aibă o proprietate 'GUID', RFC 4122 compatibilă pe 128 de biți GUID (UUID) cu doar litere, numere și cratime. Ignorarea pluginului.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Descrierea pluginului Eroare, la calea '{0}' Descrierea nu trebuie să fie mai mult decât {1} caractere. Ignorarea pluginului</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Eșecul de etichete plugin, la etichetele de cale '{0}' nu trebuie să fie mai mult decât {1} caractere. Ignorarea pluginului</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Atașați debuggerul la „{0}” sau anulați pentru a continua.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Așteptând debugger</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Eroare la descărcarea pluginului. Vă rugăm să încercați din nou mai târziu.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plugin actualizat</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Sigur doriți să restaurați toate cele {0} articole?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Criterii de căutare „fără titlu”</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Criterii de căutare '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' conține valori partajate. Doriți să le resetați și pe acestea?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

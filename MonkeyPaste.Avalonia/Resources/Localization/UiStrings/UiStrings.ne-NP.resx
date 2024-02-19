@@ -70,7 +70,7 @@
 क्रमशः क्लिपहरू।</value>
   </data>
   <data name="AccountStandardDescription" xml:space="preserve">
-    <value>{2 2}} सामग्री र असीमित रद्दीटोकरी भण्डारण को लागी अनुमति दिन्छ।</value>
+    <value>{2} सामग्री र असीमित रद्दीटोकरी भण्डारण को लागी अनुमति दिन्छ।</value>
     <comment>Number</comment>
   </data>
   <data name="AccountUnlimitedDescription" xml:space="preserve">
@@ -519,7 +519,7 @@
     <value>सर्टकटहरू</value>
   </data>
   <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
-    <value>के तपाईं पनि {1} '{1}' {1} क्लिपहरू हटाउन चाहानुहुन्छ?</value>
+    <value>{0} के तपाईं पनि '{1}' क्लिपहरू हटाउन चाहानुहुन्छ?</value>
     <comment>Number, Application Name</comment>
   </data>
   <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
@@ -535,10 +535,10 @@
     <value>आवेदन मार्ग चयन गर्नुहोस्</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
-    <value>के तपाइँ निश्चित हुनुहुन्छ कि तपाइँ {0 0} को अनुकूल सर्टकटहरू हटाउन चाहानुहुन्छ?</value>
+    <value>के तपाइँ निश्चित हुनुहुन्छ कि तपाइँ {0} को अनुकूल सर्टकटहरू हटाउन चाहानुहुन्छ?</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
-    <value>के तपाइँ on को लागि अनुकूलन ढाँचाहरू हटाउन निश्चित हुनुहुन्छ?</value>
+    <value>के तपाइँ {0} को लागि अनुकूलन ढाँचाहरू हटाउन निश्चित हुनुहुन्छ?</value>
   </data>
   <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
     <value>यस अनुप्रयोगको लागि कुनै तोकिएको क्लिपबोर्ड ढाँचाहरू छैनन्। कुनै डाटा यसबाट यसबाट पढ्ने छैन / प्रतिलिपि वा ड्र्याग वा प्रयास गर्नुहोस्</value>
@@ -720,10 +720,10 @@
 के तपाई फेरि प्रयास गर्न चाहानुहुन्छ?</value>
   </data>
   <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
-    <value>तपाईंको खाता सफलतापूर्वक गरिएको छ
-अपग्रेड गर्न:
+    <value>तपाईको खाता सफलतापूर्वक सम्पन्न भएको छ
+मा अपग्रेड गरियो:
 
- {0} / {1 1}</value>
+ {0}/{1}</value>
   </data>
   <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
     <value>सफल खरीद गर्नुहोस्!</value>
@@ -741,11 +741,11 @@
     <value>खाता परिवर्तन भयो</value>
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
-    <value>तपाईंको सदस्यता अब {0} / {1} {2} सामग्री र {{}} रद्दीटोकरी भण्डारण हो।
+    <value>तपाईंको सदस्यता अब {0} / {1} {2} सामग्री र {3} रद्दीटोकरी भण्डारण हो।
 तर चिन्ता नलिनुहोस्, डाउनग्रेडिंग पछि कुनै डाटा हराएन। केवल नयाँ क्लिपहरू मूल्यांकन गरिनेछ।</value>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
-    <value>बधाई! तपाईंको सदस्यता अब {0} / {1} {2} सामग्री र {{}} रद्दीटोकरी भण्डारण हो।</value>
+    <value>बधाई! तपाईंको सदस्यता अब {0} / {1} {2} सामग्री र {3} रद्दीटोकरी भण्डारण हो।</value>
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapBlockHint1" xml:space="preserve">
@@ -800,7 +800,7 @@
     <comment>Application Name</comment>
   </data>
   <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
-    <value>तपाईंको {0 0} को लागि भुक्तानी
+    <value>तपाईंको {0} को लागि भुक्तानी
 सदस्यता {1} छ}
 र प्राप्त भएको छैन।
 
@@ -901,8 +901,8 @@
     <value>संकेत शब्द</value>
   </data>
   <data name="AccountExistingLoginText" xml:space="preserve">
-    <value>तपाईंको सदस्यता हो
-अब {0 0} / 1} सेट गर्नुहोस्।</value>
+    <value>तपाईंको सदस्यता छ
+अब {0}/{1} मा सेट गरियो।</value>
   </data>
   <data name="AccountExistingLoginTitle" xml:space="preserve">
     <value>खाता फेला पर्यो</value>
@@ -1122,7 +1122,7 @@
     <comment>Error Details</comment>
   </data>
   <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
-    <value>प्लगइन '}' भ्रष्ट वा अनुचित डाइरेक्टरी संरचना स्थापना गर्दा त्रुटि। प्रकट गर्नु पर्ने '{1}' '}' तर फेला परेन।</value>
+    <value>प्लगइन '{0}' भ्रष्ट वा अनुचित डाइरेक्टरी संरचना स्थापना गर्दा त्रुटि। Manifest '{1}' मा अवस्थित हुनुपर्छ तर फेला परेन।</value>
     <comment>Plugin Name, File Path</comment>
   </data>
   <data name="PluginErrManifestText" xml:space="preserve">
@@ -1138,7 +1138,7 @@
     <comment>Plugin Name</comment>
   </data>
   <data name="PluginErrStagingText" xml:space="preserve">
-    <value>ट्र्याक डीआईयरमा प्लगइन स्टेजिन '{0 {'} '</value>
+    <value>temp dir '{0}' मा प्लगइन स्टेजिङमा त्रुटि</value>
     <comment>Folder Path</comment>
   </data>
   <data name="PluginLoaderBackupErrorText" xml:space="preserve">
@@ -1747,7 +1747,7 @@
     <comment>Content Title</comment>
   </data>
   <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
-    <value>'{0 0}' विश्लेषक चलाउनुहोस्</value>
+    <value>'{0}' विश्लेषक चलाउनुहोस्</value>
     <comment>Plugin Name</comment>
   </data>
   <data name="ShortcutRunTriggerTitle" xml:space="preserve">
@@ -2265,11 +2265,11 @@
     <comment>Action Name</comment>
   </data>
   <data name="ActionAnalyzeValidation2" xml:space="preserve">
-    <value>कार्यको लागि विश्लेषक '9} 'फेला परेन</value>
+    <value>कार्य '{0}' को लागि विश्लेषक फेला परेन</value>
     <comment>ActionName</comment>
   </data>
   <data name="ActionAnalyzeValidation3" xml:space="preserve">
-    <value>अभिभावक '99} '}' {1} 'प्रकारका फाइलहरू र विश्लेषक' {2} '}' कहिले कार्यान्वयन गर्दैन किनकि यो इनपुटको प्रकारलाई समर्थन गर्दैन</value>
+    <value>'{1}' प्रकारको सामग्री र विश्लेषक '{2}' को लागि मात्र अभिभावक '{0}' फिल्टरहरू कहिल्यै कार्यान्वयन हुँदैन किनभने यसले '{3}' प्रकारको इनपुटलाई समर्थन गर्दैन।</value>
     <comment>Action Label, Analyzer Preset Name, Content Type</comment>
   </data>
   <data name="ActionClassifyValidation1" xml:space="preserve">
@@ -2296,7 +2296,7 @@
     <comment>Action Name</comment>
   </data>
   <data name="ActionFileSystemChangedValidation2" xml:space="preserve">
-    <value>हेर्नुहोस् फोल्डर '{0}' ट्रिगर '{1 {' को लागी फेला परेन</value>
+    <value>ट्रिगर '{1}' को लागि फोल्डर हेर्नुहोस् '{0}' फेला परेन</value>
     <comment>Folder Path, Action Name</comment>
   </data>
   <data name="ActionFileWriterValidation1" xml:space="preserve">
@@ -2430,7 +2430,7 @@
     <value>फैसला बांकी राखेको</value>
   </data>
   <data name="PluginUpdatedNtfText" xml:space="preserve">
-    <value>{0} सफलतापूर्वक {1 1} अपडेट गरिएको थियो</value>
+    <value>{0} सफलतापूर्वक {1} मा अद्यावधिक गरियो</value>
     <comment>Plugin Title, Plugin Version</comment>
   </data>
   <data name="PluginBrowserCoreInstallBtnTooltip" xml:space="preserve">
@@ -2618,7 +2618,7 @@
     <value>क्लिपबोर्ड श्रोता सक्षम</value>
   </data>
   <data name="ActionCondLastOutputUnavailableInvalidText" xml:space="preserve">
-    <value>अभिभावक कार्य '9} '' इनपुट सम्पत्ति प्रकार 'अन्तिम आउटपुट' समर्थन गर्दैन '</value>
+    <value>अभिभावक कार्य '{0}' ले इनपुट गुण प्रकार 'अन्तिम आउटपुट' समर्थन गर्दैन</value>
     <comment>Action Label</comment>
   </data>
   <data name="ShortcutInternalName" xml:space="preserve">
@@ -2699,5 +2699,201 @@
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;यस तरिकाले, मंकीपेस्ट पहुँच गर्न सकिन्छ&lt;br&gt;&lt;span color="red"&gt;एक क्लिक बिना&lt;/span&gt; वा &lt;span color="red"&gt;यहाँ सम्म कि एक आँखा र&lt;/span&gt; #x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>अ En ्गता</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>उद्घाटन</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>डाटा वस्तु</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>जोड्नु</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>पढने व्यक्ति</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>अज्ञात त्रुटि</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>लेखक</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>नक्कल प्लगइन डाईड '{0}' यी प्लगइनहरूको लागि पत्ता लगाइयो:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>प्लगइन गाईड वा नक्कल हटाउने द्वारा फिक्स गर्नुहोस्। अन्यथा सबै सम्बद्ध प्लगइनहरूलाई बेवास्ता गरिनेछ।</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>नक्कल प्लगइन प्रिमिन '9 {0} '{0}' यी प्लगइनहरू र प्रेसेटहरूको लागि पत्ता लगाइयो:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>प्लगइन: {0} {1}प्रिसेट(हरू): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>प्लगइन: {0} {1}पूर्वसेट(हरू): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>अद्वितीय प्रिसेट प्रोजेक्टहरू प्रदान गरेर वा नक्कल डुबकीहरू हटाउँदै फिक्स गर्नुहोस्। अन्यथा सबै सम्बद्ध प्लगइनहरूलाई बेवास्ता गरिनेछ।</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>सम्पादक रंग</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>के तपाईं पक्का हुनुहुन्छ कि तपाईं स्थायी रूपमा सबै {0} वस्तु (हरू) मेटाउन चाहनुहुन्छ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>फोल्डर चयन गर्नुहोस्</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>हेर्नुहोस् फोल्डर चयन गर्नुहोस्</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>प्लगइन त्रुटि। प्लगइन '{0}' '{1}'} '}' {1} '}'}} फेला पर्यो</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>त्रुटि प्रदर्शन गर्दै '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>मानमा केवल संख्यामा मात्र वा '{0}' हुनुपर्दछ</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>मान {0} देखि {1} सम्म हुनुपर्छ</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' को साथ सुरू गरिरहेको हेक्स (or वा digit अंकको हुनुपर्दछ</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>क्लिपबोर्ड '{0}' अद्वितीय हुनुपर्दछ।</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>पहिले नै अवस्थित छ</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>पुस्तकको आकार</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>वर्गीकरण गर्नु</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>क्लिपबोर्ड पाठक / लेखक ढाँचा नामहरू अद्वितीय हुनुपर्दछ। पाठक नक्कल:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>क्लिपबोर्ड पाठक / लेखक ढाँचा नामहरू अद्वितीय हुनुपर्दछ। लेखक नक्कल:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>क्लिपबोर्ड ढाँचा निर्देशकहरू अद्वितीय हुनुपर्दछ। डुप्लिकेट ढाँचा र prides:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>प्लगइन त्रुटि: सबै प्लगइन '{0}' फिल्डहरू ह्यान्डलर '{1}' को लागि अद्वितीय हुनुपर्छ।{2} paramName '{3}' मा धेरै प्रविष्टिहरू छन्।</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>प्लगइन त्रुटि, कुनै आक्रमणत्मक म्याद फेला परेन</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>प्लगइन '{0}' मा कम्तिमा १ प्यारामिटर प्रदान नगरी प्रिसेट हुन सक्दैन</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>अवैध प्याराम # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>प्लगइन प्यारामिटर आईडी ({0}) परिभाषित गर्नै पर्छ। प्लगइन '{1}' छ 'हराइरहेको प्यारामिडसँगको प्यारामिटरहरू छन्: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>नक्कल प्यारामिड '{0}' पत्ता लगाईयो (सबै अद्वितीय हुनुपर्दछ)। {1} लेबल: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>प्रिसेट गाइड आवश्यक छ। प्लगइन {1} मा '{0}' को लागि यो फेला परेन वा गलत ढाँचा</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>प्यारामिडरको साथ प्यारामिटर फेला पार्न सक्दैन {0 0} '{0}' {1} '{1}' {2 2} '{2}'। प्यारामिटर परिवर्तन भएको हुन सक्छ वा हटाइएको थियो, अपडेट गर्नुहोस् प्रिसेट प्याराम्ब्ललवंश वा यसलाई हटाउनुहोस्।</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>प्रिसेटहरूमा साझा मान प्यारामिटरहरू सेट गर्न सकिँदैन। प्लगइन '{2}' को लागि प्रिसेट '{1}' मा ParamId '{0}' हटाउन आवश्यक छ वा paramValue प्यारामिटर परिभाषा खण्डमा निर्दिष्ट गर्न सकिन्छ।</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>प्रिसेटहरूमा अद्वितीय गाइडहरू हुनुपर्छ। प्रिसेटहरूको लागि प्लगइन '{1}' मा नक्कल प्रिसेट गाइड '{0}' पत्ता लाग्यो: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>प्लगइन पार्सन त्रुटि, पथ '{0}' शून्य, सम्भवतः JOSS parsing त्रुटि। प्लगइनलाई बेवास्ता गर्दै</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>प्लगइन शीर्षक त्रुटि, पथ '{0}'} 'मा' शीर्षक 'सम्पत्ति छैन {1} वर्णहरू प्लगइनलाई बेवास्ता गर्दै</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>प्लगइन गाइड त्रुटि, पथ '{0}' मा शीर्षक '{1}' सँग 'गाइड' गुण हुनुपर्छ, RFC 4122 अनुरूप 128-बिट GUID (UUID) अक्षरहरू, संख्याहरू र हाइफनहरूसँग मात्र। प्लगइन बेवास्ता गर्दै।</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>प्लगइन विवरण त्रुटि, पथ '{0}' वर्णन मा {1} वर्णहरू भन्दा बढि हुनु पर्छ। प्लगइनलाई बेवास्ता गर्दै</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>प्लगइन ट्याग त्रुटिहरू, पथ '{0}' 'ट्यागहरू {1} वर्णहरू भन्दा बढी हुनु हुँदैन। प्लगइनलाई बेवास्ता गर्दै</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>'{0}' मा डिबगर संलग्न गर्नुहोस् वा जारी राख्न रद्द गर्नुहोस्।</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>डिबगरको लागि प्रतिक्षा गर्दै</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>प्लगइन डाउनलोड गर्दै। फेरी प्रयास गर्नु होला।</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>प्लगइन अपडेट गरियो</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>के तपाइँ निश्चित हुनुहुन्छ कि तपाइँ सबै {0} वस्तु(हरू) पुनर्स्थापना गर्न चाहनुहुन्छ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>मापदण्ड 'अप्रकाशित' खोज्नुहोस् '</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>मापदण्ड '{0}' खोज्नुहोस्</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' साझा मानहरू समावेश गर्दछ। के तपाइँ तीसँग रिसेट गर्न चाहानुहुन्छ?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

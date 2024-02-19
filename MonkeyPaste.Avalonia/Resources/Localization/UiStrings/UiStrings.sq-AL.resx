@@ -70,7 +70,7 @@ i kufizuar në {0} dhe {1}
 Klipet përkatësisht.</value>
   </data>
   <data name="AccountStandardDescription" xml:space="preserve">
-    <value>Lejon deri në {2 clips klipe të përmbajtjes dhe ruajtje të pakufizuar të plehrave.</value>
+    <value>Lejon deri në {2} clips klipe të përmbajtjes dhe ruajtje të pakufizuar të plehrave.</value>
     <comment>Number</comment>
   </data>
   <data name="AccountUnlimitedDescription" xml:space="preserve">
@@ -753,7 +753,7 @@ Por mos u shqetësoni, asnjë të dhënë nuk humbet pas zbritjes. Vetëm klipet
 Nga '{0}' për të shtuar më shumë.</value>
   </data>
   <data name="NtfCapBlockHint2" xml:space="preserve">
-    <value>MAX '{0}' Ruajtja është {1.</value>
+    <value>MAX '{0}' Ruajtja është {1}.</value>
     <comment>Account Type, Storage Count</comment>
   </data>
   <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
@@ -767,7 +767,7 @@ Nga '{0}' për të shtuar më shumë.</value>
     <value>Kapaciteti i përmbajtjes dhe plehrave të arritur!</value>
   </data>
   <data name="NtfCapContentMaxStorageText" xml:space="preserve">
-    <value>MAX '{0}' Ruajtja është {1.</value>
+    <value>MAX '{0}' Ruajtja është {1}.</value>
   </data>
   <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
     <value>Kapaciteti i përmbajtjes i arritur!</value>
@@ -902,7 +902,7 @@ Fjalëkalimi juaj.</value>
   </data>
   <data name="AccountExistingLoginText" xml:space="preserve">
     <value>Abonimi juaj është
-tani vendoset te {0}/{1.</value>
+tani është caktuar në {0}/{1}.</value>
   </data>
   <data name="AccountExistingLoginTitle" xml:space="preserve">
     <value>Llogaria e gjetur</value>
@@ -2699,5 +2699,201 @@ Restaurimi total nuk mund të garantohet dhe mund të zvogëlojë performancën 
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Në këtë mënyrë, MonkeyPaste mund të aksesohet&lt;br&gt;&lt;span color="red"&gt;Pa një klikim&lt;/span&gt; apo edhe &lt;span color="red"&gt;duke rrahur një sy&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Shënim</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klon</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Objekt i të dhënave</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Prizë</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Lexues</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Gabim i panjohur</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Shkrimtar</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Dublikate Guid Plugin '{0}' zbuluar për këto shtojca:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Fiksoni duke ndryshuar udhëzimin e shtojcave ose duke hequr kopjimet. Përndryshe të gjitha shtojcat e shoqëruara do të injorohen.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Dublikate e paracaktuar e shtojcave udhëzues '{0}' zbuluar për këto shtojca dhe paracaktime:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Shtojca: {0} {1} paravendosur (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Shtojca: {0} {1} paravendosur (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Fiksoni duke siguruar udhëzime unike të paracaktuar ose duke hequr kopje. Përndryshe të gjitha shtojcat e shoqëruara do të injorohen.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Ngjyra e redaktorit</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>A jeni i sigurt që doni të fshini përgjithmonë të gjitha {0} Artikujt (et)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Zgjidhni dosjen</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Zgjidhni dosjen e shikimit</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Gabim në plugin. Shtojcë '{0}' është '{1}' tipi por jo forma '{1}' u gjet</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Gabim në kryerjen e veprimit '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Vlera duhet të përmbajë vetëm numra ose '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Vlera duhet të jetë nga {0} në {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Duhet të jetë një varg hex (6 ose 8 shifror) duke filluar me '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Clipboard '{0}' duhet të jetë unik.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Tashmë ekziston për</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Lloj</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Emrat e lexuesit/shkrimtarit të Clipboard duhet të jenë unike. Kopjimet e lexuesit:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Emrat e lexuesit/shkrimtarit të Clipboard duhet të jenë unike. Kopjimet e shkrimtarëve:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Udhëzimet e formatit të clipboard duhet të jenë unike. Format e kopjuara dhe udhëzimet:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Gabim i pluginit: Të gjitha fushat e plugin '{0}' duhet të jenë unike për mbajtësin '{1}'. {2} paramName '{3}' ka shënime të shumta</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Gabim në plugin, nuk u gjet asnjë manifest i pandryshueshëm</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' nuk mund të ketë paracaktime pa të paktën 1 parametër të dhënë</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param i pa munduar #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Duhet të përcaktohen ID -të e parametrit të pluginit ({0}). Plugin '{1}' ka parametrat e mëposhtëm me paramidin që mungon: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Dublikate paramid '{0}' zbuluar (të gjitha duhet të jenë unike). {1} etiketat: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Kërkohet udhëzimi i paracaktuar. Nuk u gjet ose format i gabuar për '{0}' në plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Nuk mund të gjeni parametër me paramid '{0}' referuar nga paracaktimi '{1}' për shtojcën '{2}'. Parametri mund të ketë ndryshuar ose është hequr, azhurnoni paramvalue të paracaktuar ose hiqeni atë.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Nuk mund të vendosë parametrat e vlerës së përbashkët në paravendosjet. Paramid '{0}' në paracaktim '{1}' për plugin '{2}' duhet të hiqet ose paramvalue mund të specifikohet në seksionin e përcaktimit të parametrave.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Paravendosjet duhet të kenë udhëzime unike. Dublikoni udhëzimin e paracaktuar '{0}' u zbulua në shtojcë '{1}' për paracaktimet: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Gabim i analizimit të pluginit, në shtegun '{0}' null, gabimi i mundshëm duke analizuar JSON. Injorimi i shtojcës</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Gabim i titullit të pluginit, në shtegun '{0}' duhet të ketë pronë 'Titulli' me jo më shumë se karaktere {1. Injorimi i shtojcës</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Gabim i Udhëzimit të Pluginit, në rrugën '{0}' me titullin '{1}' duhet të ketë një pronë 'GUID', RFC 4122 Guid 128-bit në përputhje (UUID) me vetëm shkronja, numra dhe hyfens. Duke injoruar shtojcën.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Gabim i përshkrimit të pluginit, në rrugën '{0}' Përshkrimi duhet të jetë jo më shumë se karaktere {1}. Injorimi i shtojcës</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Gabim në etiketat e shtojcave, në shtegun '{0}' Etiketat duhet të jenë jo më shumë se karakteret {1}. Injorimi i shtojcës</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Bashkangjitni debugger në '{0}' ose anuloni për të vazhduar.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Duke pritur për debugger</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Gabim në shkarkimin e shtojcës. Ju lutemi provoni përsëri më vonë.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Përditësuar shtojca</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>A jeni i sigurt që doni të rivendosni të gjitha {0} artikullin (et)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Kriteret e Kërkimit 'Untitled'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Kriteret e Kërkimit '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' përmban vlera të përbashkëta. Dëshironi të rivendosni ato gjithashtu?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

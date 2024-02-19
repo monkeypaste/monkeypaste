@@ -2069,7 +2069,7 @@
     <value>1 ঘন্টা আগে</value>
   </data>
   <data name="TimeSpanHours" xml:space="preserve">
-    <value>ঘন্টা} ঘন্টা আগে</value>
+    <value>{0} ঘন্টা আগে</value>
     <comment>Number</comment>
   </data>
   <data name="TimeSpanJustNow" xml:space="preserve">
@@ -2699,5 +2699,201 @@
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;এইভাবে, মাঙ্কিপেস্ট অ্যাক্সেস করা যেতে পারে&lt;br&gt;&lt;span color="red"&gt;একটি ক্লিক বা&lt;/span&gt; এমনকি একটি &lt;span color="red"&gt;চোখ ব্যাটিং&lt;/span&gt; ছাড়া এবং#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>টীকা</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>ক্লোন</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>ডেটা অবজেক্ট</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>প্লাগ লাগানো</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>পাঠক</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>অজানা ত্রুটি</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>লেখক</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>ডুপ্লিকেট প্লাগইন গুইড '{0}' এই প্লাগইনগুলির জন্য সনাক্ত করা হয়েছে:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>প্লাগইন গুইড পরিবর্তন করে বা সদৃশগুলি সরিয়ে দিয়ে ঠিক করুন। অন্যথায় সমস্ত সম্পর্কিত প্লাগইন উপেক্ষা করা হবে।</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>এই প্লাগইনগুলি এবং প্রিসেটগুলির জন্য সনাক্ত করা প্লাগইন প্রিসেট গাইড '{0}'</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>প্লাগইন: {0} {1} প্রিসেট (গুলি): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>প্লাগইন: {0} {1} প্রিসেট (গুলি): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>অনন্য প্রিসেট গাইড সরবরাহ করে বা সদৃশ অপসারণ করে ঠিক করুন। অন্যথায় সমস্ত সম্পর্কিত প্লাগইন উপেক্ষা করা হবে।</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>সম্পাদক রঙ</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>আপনি কি নিশ্চিত যে আপনি সমস্ত {0} আইটেম (গুলি) স্থায়ীভাবে মুছতে চান?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>ফোল্ডার নির্বাচন করুন</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>ফোল্ডারটি দেখুন নির্বাচন করুন</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>প্লাগইন ত্রুটি। প্লাগইন '{0}' হ'ল '{1}' টাইপ তবে কোনও '{1}' ফর্ম্যাট পাওয়া যায় নি</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>ক্রিয়া '{0}' সম্পাদন করতে ত্রুটি: {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>মানটিতে কেবল সংখ্যা বা '{0}' থাকতে হবে</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>মান অবশ্যই {0} থেকে {1} হতে হবে</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' দিয়ে শুরু হওয়া একটি হেক্স (6 বা 8 ডিজিট) স্ট্রিং হতে হবে</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>ক্লিপবোর্ড '{0}' অবশ্যই অনন্য হতে হবে।</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>ইতিমধ্যে বিদ্যমান</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>ফর্ম্যাট</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>প্রকার</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>ক্লিপবোর্ড পাঠক/লেখক ফর্ম্যাট নামগুলি অবশ্যই অনন্য হতে হবে। পাঠক সদৃশ:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>ক্লিপবোর্ড পাঠক/লেখক ফর্ম্যাট নামগুলি অবশ্যই অনন্য হতে হবে। লেখক সদৃশ:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>ক্লিপবোর্ড ফর্ম্যাট জিইউডগুলি অবশ্যই অনন্য হতে হবে। সদৃশ ফর্ম্যাট এবং জিইউডস:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>প্লাগইন ত্রুটি: সমস্ত প্লাগইন '{0}' ক্ষেত্রগুলি হ্যান্ডলার '{1}' এর জন্য অবশ্যই অনন্য হতে হবে {2} প্যারামনাম '{3}' এর একাধিক এন্ট্রি রয়েছে</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>প্লাগইন ত্রুটি, কোনও আক্রমণাত্মক ম্যানিফেস্ট পাওয়া যায় নি</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>প্লাগইন '{0}' কমপক্ষে 1 প্যারামিটার সরবরাহ করা ছাড়া প্রিসেট থাকতে পারে না</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>লেবেলযুক্ত পরম #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>প্লাগইন প্যারামিটার আইডি ({0}) অবশ্যই সংজ্ঞায়িত করতে হবে। প্লাগইন '{1}' এর অনুপস্থিত প্যারামিডের সাথে নিম্নলিখিত পরামিতি রয়েছে: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>সদৃশ প্যারামিড '{0}' সনাক্ত করা হয়েছে (সমস্ত অবশ্যই অনন্য হতে হবে) {1} লেবেল: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>প্রিসেট জিইউড প্রয়োজন। এটি প্লাগইন {1} এ '{0}' এর জন্য পাওয়া বা ভুল ফর্ম্যাটটি পাওয়া যায় নি</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>প্লাগইন '{2}' এর জন্য প্রিসেট '{1}' দ্বারা রেফারেন্সযুক্ত প্যারামিড '{0}' দিয়ে প্যারামিটারটি খুঁজে পাচ্ছেন না। প্যারামিটারটি পরিবর্তিত হতে পারে বা সরানো হয়েছে, প্রিসেট প্যারামভ্যালু আপডেট করুন বা এটি সরান।</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>প্রিসেটগুলিতে ভাগ করা মান পরামিতি সেট করতে পারে না। প্লাগইন '{2}' এর জন্য প্রিসেট '{1}' তে প্যারামিড '{0}' অপসারণ করা দরকার বা প্যারামভ্যালু প্যারামিটার সংজ্ঞা বিভাগে নির্দিষ্ট করা যেতে পারে।</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>প্রিসেটগুলির অবশ্যই অনন্য গাইড থাকতে হবে। ডুপ্লিকেট প্রিসেট গুইড '{0}' প্রিসেটগুলির জন্য প্লাগইন '{1}' তে সনাক্ত করা হয়েছিল: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>প্লাগইন পার্সিং ত্রুটি, পাথ '{0}' নাল, সম্ভবত ত্রুটি json পার্সিং। প্লাগইন উপেক্ষা</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>প্লাগইন শিরোনাম ত্রুটি, পাথ '{0}' এর অবশ্যই 'শিরোনাম' সম্পত্তি থাকতে হবে {1} অক্ষরের চেয়ে বেশি কিছু নেই। প্লাগইন উপেক্ষা</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>প্লাগইন গাইড ত্রুটি, '{0}' শিরোনামে '{1}' এর একটি 'গাইড' সম্পত্তি থাকতে হবে, আরএফসি 4122 কমপ্লায়্যান্ট 128-বিট গাইড (ইউইআইডি) কেবল অক্ষর, সংখ্যা এবং হাইফেন সহ অবশ্যই। প্লাগইন উপেক্ষা।</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>প্লাগইন বিবরণ ত্রুটি, পাথ '{0}' বিবরণে অবশ্যই {1} অক্ষরের চেয়ে বেশি কিছু হতে হবে না। প্লাগইন উপেক্ষা</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>প্লাগইন ট্যাগ্স ত্রুটি, পাথ '{0}' ট্যাগগুলিতে অবশ্যই {1} অক্ষরের চেয়ে বেশি কিছু হতে হবে না। প্লাগইন উপেক্ষা</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>'{0}' এর সাথে ডিবাগার সংযুক্ত করুন বা চালিয়ে যেতে বাতিল করুন।</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>ডিবাগারের জন্য অপেক্ষা করছি</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>প্লাগইন ডাউনলোড করতে ত্রুটি। অনুগ্রহ করে একটু পরে আবার চেষ্টা করুন.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>প্লাগইন আপডেট হয়েছে</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>আপনি কি নিশ্চিত যে আপনি সমস্ত {0} আইটেম পুনরুদ্ধার করতে চান?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>'শিরোনামহীন' অনুসন্ধান মানদণ্ড</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>মানদণ্ড '{0}' অনুসন্ধান করুন</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' এর ভাগ করা মান রয়েছে। আপনি কি সেগুলি পুনরায় সেট করতে চান?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

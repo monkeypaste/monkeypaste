@@ -2700,4 +2700,200 @@ A restauração total não pode ser garantida e pode reduzir o desempenho ou at�
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Desta forma, MonkeyPaste pode ser acessado&lt;br&gt;&lt;span color="red"&gt;sem um clique&lt;/span&gt; ou mesmo &lt;span color="red"&gt;batendo um olho&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Anotação</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Clone</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Objeto de dados</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Plugar</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Leitor</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Erro desconhecido</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Escritor</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Plug -in duplicado GUID '{0}' detectado para esses plugins:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Corrija alterando o plug -in GUID ou removendo duplicatas. Caso contrário, todos os plugins associados serão ignorados.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Plugin duplicado predefinido GUID '{0}' detectado para esses plugins e predefinições:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} predefinição (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} predefinição (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Corrija fornecendo guids predefinidos exclusivos ou removendo duplicatas. Caso contrário, todos os plugins associados serão ignorados.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Cor do editor</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Tem certeza de que deseja excluir permanentemente todos os {0} item (s)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Selecione a pasta</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Selecione a pasta de observação</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Erro do plug -in. Plugin '{0}' é '{1}' tipo, mas não '{1}' formato encontrado</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Erro a execução de ação '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>O valor deve conter apenas números ou '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>O valor deve ser de {0} a {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Deve ser uma string hexadecimal (6 ou 8 dígitos) começando com '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>CLIPBOARD '{0}' deve ser exclusivo.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Já existe para</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Formatar</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Os nomes de formato de leitor/escritor da área de transferência devem ser únicos. Duplicações de leitores:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Os nomes de formato de leitor/escritor da área de transferência devem ser únicos. Duplicações do escritor:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>O formato da área de transferência GUIDS deve ser único. Formatos e Guids duplicados:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Erro do plug -in: todos os campos do plugin '{0}' devem ser únicos para o manipulador '{1}'. {2} paramname '{3}' possui várias entradas</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Erro do plug -in, nenhum manifesto invariante encontrado</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' não pode ter predefinições sem pelo menos 1 parâmetro fornecido</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param não marcado #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>O parâmetro IDS do plugin ({0}) deve ser definido. Plugin '{1}' possui os seguintes parâmetros com o Paramid ausente: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Duplicar paramid '{0}' detectado (todos devem ser únicos). {1} rótulos: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>O GUID predefinido é necessário. Não foi encontrado ou formato errado para '{0}' no plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Não é possível encontrar o parâmetro com o paramid '{0}' referenciado por predefinição '{1}' para plugin '{2}'. O parâmetro pode ter alterado ou foi removido, atualize o paramvalue predefinido ou remova -o.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Não é possível definir parâmetros de valor compartilhado em predefinições. Paramid '{0}' em predefinição '{1}' para plugin '{2}' precisa ser removido ou o paramvalue pode ser especificado na seção de definição de parâmetros.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Predefinições devem ter GUIDs únicos. Duplicate Preset GUID '{0}' foi detectado no plugin '{1}' para predefinições: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Erro de análise do plug -in, no caminho '{0}' nulo, provável que analise o JSON. Ignorando o plug -in</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Erro do título do plug -in, no caminho '{0}' deve ter 'title' propriedade com não mais que {1} caracteres. Ignorando o plug -in</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Erro do plug-in, no caminho '{0}' com o título '{1}' deve ter uma propriedade 'GUID', RFC 4122 Compatível de 128 bits GUID (UUID) com apenas letras, números e hífens. Ignorando o plug -in.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Erro de descrição do plug -in, no caminho '{0}' Descrição não deve ser mais do que {1} caracteres. Ignorando o plug -in</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>O erro do plug -in tags, no caminho '{0}' tags não deve ser mais do que {1} caracteres. Ignorando o plug -in</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Anexe o depurador a '{0}' ou cancele para continuar.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Esperando pelo depurador</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Erro do download do plugin. Por favor, tente novamente mais tarde.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plug -in atualizado</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Tem certeza de que deseja restaurar todos os {0} item (s)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Critérios de pesquisa 'sem título'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Critérios de pesquisa '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' contém valores compartilhados. Você gostaria de redefini -los também?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

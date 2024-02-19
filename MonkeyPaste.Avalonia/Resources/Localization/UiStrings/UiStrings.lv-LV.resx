@@ -2700,4 +2700,200 @@ Pilnīgu atjaunošanu nevar garantēt, un tā var samazināt veiktspēju vai pat
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Tādā veidā var piekļūt MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;bez klikšķa&lt;/span&gt; vai pat &lt;span color="red"&gt;acs sišanas&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Anotācija</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klons</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Datu objekts</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Iespraust</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Lasītājs</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Nezināma kļūda</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>rakstnieks</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Šiem spraudņiem atklāts spraudņa guid dublikāts “{0}”:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Labojiet, mainot spraudņa GUID vai noņemot dublikātus. Pretējā gadījumā visi saistītie spraudņi tiks ignorēti.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Dublikāta spraudņa iepriekš iestatīts Guid '{0}', kas noteikts šiem spraudņiem un iepriekšējiem iestatījumiem:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Spraudnis: {0} {1} Preset (S): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Spraudnis: {0} {1} Preset (S): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Labot, nodrošinot unikālas iepriekš iestatītas GUID vai noņemot dublikātus. Pretējā gadījumā visi saistītie spraudņi tiks ignorēti.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Redaktora krāsa</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties neatgriezeniski izdzēst visu {0} vienumu (-us)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Atlasīt mapi</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Atlasiet Watch Mape</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Spraudņa kļūda. Spraudnis '{0}' ir '{1}' tips, bet nav atrodams '{1}' formāts</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Kļūda, veicot darbību '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Vērtībā jābūt tikai skaitļiem vai '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Vērtībai jābūt no {0} līdz {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Jābūt heksa (6 vai 8 ciparu) virknei, sākot ar '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Starpliktuvē '{0}' jābūt unikālai.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Jau pastāv</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Formāts</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Ierakstīt</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Starpliktuves lasītāja/rakstnieka formāta nosaukumiem jābūt unikāliem. Lasītājs dublē:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Starpliktuves lasītāja/rakstnieka formāta nosaukumiem jābūt unikāliem. Rakstnieks dublikāti:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Starpliktuves formāta Guids jābūt unikālām. Dublikātu formāti un GUIDS:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Spraudņa kļūda: visiem spraudņiem '{0}' Laukiem jābūt unikāliem, ja apstrādātājam '{1}'. {2} paramname '{3}' ir vairāki ieraksti</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Spraudņa kļūda, nav atrasts nemainīgs manifests</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Spraudnis '{0}' nevar būt iestatījumiem, ja vismaz 1 parametrs ir sniegts</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>NEKLĒDZĒTS PARAM #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Ir jādefinē spraudņa parametra ID ({0}). Spraudnim '{1}' ir šādi parametri ar trūkstošo paramidu: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Dublikāts paramid '{0}' '' 'visiem jābūt unikāliem). {1} etiķetes: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Nepieciešams iepriekš iestatīts GUID. Tas nebija atrasts vai nepareizs formāts “{0} 'spraudnī {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Nevar atrast parametru ar paramidu “{0} ', uz kuru atsaucas preset' {1} 'spraudnim' {2} '. Parametrs, iespējams, ir mainījies vai tika noņemts, atjauniniet iepriekš iestatīto paramvalu vai noņemt to.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Nevar iestatīt kopīgas vērtības parametrus iepriekšējos iestatījumos. Paramid '{0}' Iepriekšējā '{1}' spraudnim '{2}' ir jānoņem vai paramvalu var norādīt sadaļā Parametru definīcija.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Iepriekšējiem iestatījumiem jābūt unikālām guidiem. PRESETS PRESET GUID '{0}' tika atklāts spraudnī '{1}', lai iegūtu iestatījumus: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Spraudņu parsēšanas kļūda, pa ceļu '{0}' nulle, iespējams, kļūdu parsēšana JSON. Ignorējot spraudni</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Spraudņa nosaukuma kļūda, pa ceļam “{0} 'jābūt īpašumam“ Title ”, kurām nav vairāk kā {1} rakstzīmēm. Ignorējot spraudni</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Spraudņa guid kļūda, pa ceļam '{0}' ar nosaukumu '{1}' jābūt “GUID 'īpašumam, RFC 4122 atbilstošai 128 bitu GUID (UUID) ar tikai burtiem, skaitļiem un defisēm. Ignorējot spraudni.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Spraudņa apraksta kļūda, pie ceļa '{0}' aprakstam jābūt ne vairāk kā {1} rakstzīmēm. Ignorējot spraudni</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Spraudņu tagu kļūda, pa ceļu '{0}' tagiem jābūt ne vairāk kā {1} rakstzīmēm. Ignorējot spraudni</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Pievienojiet atkļūdotāju “{0}” vai atcelt, lai turpinātu.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Gaida atkļūdotāju</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Kļūdas lejupielāde spraudnis. Lūdzu, pamēģiniet vēlreiz vēlāk.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Spraudnis atjaunināts</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Vai esat pārliecināts, ka vēlaties atjaunot visu {0} vienumu (-us)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Meklēšanas kritēriji "Bez nosaukuma"</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Meklēšanas kritēriji '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' satur kopīgas vērtības. Vai vēlaties tos atiestatīt arī?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

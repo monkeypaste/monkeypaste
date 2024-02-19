@@ -66,7 +66,7 @@
   </data>
   <data name="AccountFreeDescription" xml:space="preserve">
     <value>Мазмун жана таштанды
-менен (0} жана {1} менен чектелген
+{0} жана {1} менен чектелген
 тиешелүүлүгүнө жараша клиптер.</value>
   </data>
   <data name="AccountStandardDescription" xml:space="preserve">
@@ -741,11 +741,11 @@
     <value>Эсеп өзгөрдү</value>
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
-    <value>Сиздин жазылууңуз азыр {2} менен {2} менен {2} менен {3} таштанды сактагыч.
+    <value>Сиздин жазылууңуз азыр {0} менен {1} менен {2} менен {3} таштанды сактагыч.
 Бирок кабатыр болбоңуз, төмөндөтүлгөндөн кийин эч кандай маалымат жоголгон жок. Жаңы клиптер гана бааланат.</value>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
-    <value>Куттуктайбыз! Сиздин жазылууңуз азыр {2} менен {2} менен {2} менен {3} таштанды сактагыч.</value>
+    <value>Куттуктайбыз! Сиздин жазылууңуз азыр {0} менен {1} менен {2} менен {3} таштанды сактагыч.</value>
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapBlockHint1" xml:space="preserve">
@@ -1142,7 +1142,7 @@
     <comment>Folder Path</comment>
   </data>
   <data name="PluginLoaderBackupErrorText" xml:space="preserve">
-    <value>'{0}' чейин '{0}' чейин ката кетти. Толук маалымат: '{2}'</value>
+    <value>'{0}' камдык көчүрмөсүн '{1}'ге сактоодо ката кетти. Чоо-жайы: '{2}'</value>
     <comment>Folder Path, Folder Path, Error Details</comment>
   </data>
   <data name="PrefAutoSearchHint" xml:space="preserve">
@@ -2086,7 +2086,7 @@
     <value>Өткөн ай</value>
   </data>
   <data name="TimeSpanMonths" xml:space="preserve">
-    <value>{0 ай мурун</value>
+    <value>{0} ай мурун</value>
     <comment>Number</comment>
   </data>
   <data name="TimeSpanWeekLast" xml:space="preserve">
@@ -2269,7 +2269,7 @@
     <comment>ActionName</comment>
   </data>
   <data name="ActionAnalyzeValidation3" xml:space="preserve">
-    <value>Ата-энеси '{0}' '' '' '' '' '' '' '' {2 {анализаторунун "{анализи" {2} "" "" "" "{3 {3} '' ''</value>
+    <value>Ата-эненин '{0}' чыпкалары '{1}' түрүндөгү мазмун үчүн гана жана '{2}' анализатору эч качан иштебейт, анткени ал '{3}' киргизүү түрүн колдобойт</value>
     <comment>Action Label, Analyzer Preset Name, Content Type</comment>
   </data>
   <data name="ActionClassifyValidation1" xml:space="preserve">
@@ -2699,5 +2699,201 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Бул жол менен MonkeyPaste-ге кирүүгө болот&lt;br&gt;&lt;span color="red"&gt;чыкылдатуусуз&lt;/span&gt;, атүгүл &lt;span color="red"&gt;көз жарышынсыз&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Аннотация</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Клон</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Берилмелер объектиси</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Плагин</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Окурман</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Белгисиз ката</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Жазуучу</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>"{0}" дубликаты '{0}' бул плагиндер үчүн аныкталды:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Плагиндун тууралыгын өзгөртүү же көчүрмөлөрдү алып салуу менен оңдоо. Болбосо, бардык байланышкан плагиндерди четке кагууга болбойт.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>"{0}" нурлаштыруу үчүн орнотуу</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Плагин: {0}} {1} Претет (лер): # {2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Плагин: {0}} {1} Алдын ала орнотулган (лар): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Уникалдуу гейшилдиктерди берүү же көчүрмөлөрдү алып салуу менен оңдоо. Болбосо, бардык байланышкан плагиндерди четке кагууга болбойт.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Редактор түсү</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Баарын {0} нерсени (лордун) биротоло жок кылгыңыз келеби?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Папка тандоо</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Watch Папкасын тандаңыз</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Плагин катасы. Плагин '{0}' '' '' '' '' '' '' '' '' '' '' '' '' '' {1} 'форматы табылган</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>"{0} 'аракетин аткаруу үчүн ката: {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Мааниде гана сандарды же '{0}' камтылышы керек</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Мааниси {0} чейин {1} болушу керек</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' Менен башталган hex (6 же 8 орундуу) сап болушу керек</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Алмашуу буфери '{0}' уникалдуу болушу керек.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Буга чейин бар</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Формат</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Түрү</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Алмашуу буферинин окурман / жазуучу форматындагы аталыштар уникалдуу болушу керек. Окурман кайталанат:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Алмашуу буферинин окурман / жазуучу форматындагы аталыштар уникалдуу болушу керек. Жазуучу кайталанат:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Алмашуу буферинин форматында Гуидс уникалдуу болушу керек. Форматтын форматтары жана акциялар:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Плагин катасы: Бардык плагин "{0}" талаалары "{1} 'үчүн уникалдуу болушу керек. {2} парамманы' {3} 'бир нече жазуулар бар</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Плагин катасы, эч кандай инварианттын көрүнүшү табылган жок</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Плагин '{0}' жок дегенде 1 параметрсиз эле алдын-ала чегерилиши мүмкүн эмес</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>UNLABELEL PARAM # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Плагин параметр IDS ({0}) аныкталышы керек. Плагин '{1}' Disced Paramid менен төмөнкү параметрлер бар: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>"{0}" көчүрмө (бардыгы уникалдуу болушу керек). {1} {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Алдын ала орнотулган мыйзам талап кылынат. '{0}' үчүн plugin {1} үчүн табылган жок же туура эмес формат табылган жок</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>'{2}' плагини үчүн '{1}' алдын ала орнотулган '{0}' paramId менен параметр табылбай жатат. Параметр өзгөргөн же өчүрүлгөн болушу мүмкүн, алдын ала коюлган paramValue жаңыртыңыз же аны алып салыңыз.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Алдын ала орнотууларда бөлүшүлгөн маани параметрлерин коюу мүмкүн эмес. '{2}' плагини үчүн алдын ала коюлган '{1}' параметриндеги '{0}' ParamId алынып салынышы керек же paramValue параметрин аныктоо бөлүмүндө көрсөтүлүшү мүмкүн.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Орнотулган уникалдуу гейддер болушу керек. "{0}" Плагинде "{1}" температурасында орнотулган жана Plugin '{2 {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Plugin талдоо катасы, '{0}' нөлүндө, кыязы, JSON менен байланышкан ката. Плагинге көңүл бурбоо</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>'{0}' деген аталыш катасы: '{0}' '' аталышы 'мүлкү болушу керек, {1} символу жок. Плагинге көңүл бурбоо</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>'{0} {0} {0}' аталышында Плагиндин жаңылыктары, '{1}' '' Guide 'Мүлк, RFC 4122) 128 бит 411-б. Плагинге көңүл бурбоо.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Плагин сүрөттөө катасы, '{0}' Сыпаттама {1} символдон ашпашы керек. Плагинге көңүл бурбоо</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Plugin Tags катасы, '{0}' Тегдеринен {1} символдон ашпашы керек. Плагинге көңүл бурбоо</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Улантуу үчүн '{0}' үчүн мүчүлүштүктөрдү ({0} 'же жокко чыгаруу үчүн).</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Мүчүлүштүктөрдү күтүү</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Плагин жүктөөдө ката кетти. Сураныч, кийинчерээк аракет кылып көрүңүз.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Плугин жаңыртылды</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Баарын {0} пунктун (лерин) калыбына келтиргиси келеби?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Издөө критерийлери 'Untitled'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>"{0}" издөө критерийлери</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' Бөлүшүлгөн маанилерди камтыйт. Ошондой эле сиздерди баштапкы абалга келтиргиңиз келеби?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

@@ -2269,7 +2269,7 @@ Všechny vaše klipy?!
     <comment>ActionName</comment>
   </data>
   <data name="ActionAnalyzeValidation3" xml:space="preserve">
-    <value>Filtry mateřského '{0}' pouze pro obsah a analyzátor typu '{1}' {2} '</value>
+    <value>Nadřazené filtry „{0}“ pouze pro obsah typu „{1}“ a analyzátor „{2}“ se nikdy nespustí, protože nepodporuje vstup typu „{3}“</value>
     <comment>Action Label, Analyzer Preset Name, Content Type</comment>
   </data>
   <data name="ActionClassifyValidation1" xml:space="preserve">
@@ -2699,5 +2699,201 @@ zpětná vazba@monkeypaste.com</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Tímto způsobem lze přistupovat k MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;bez kliknutí&lt;/span&gt; nebo &lt;span color="red"&gt;dokonce mrknutí oka&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Anotace</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klon</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Datový objekt</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Zapojit</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Čtenář</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Neznámá chyba</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Spisovatel</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Duplicitní plugin Guid '{0}' Detekované pro tyto pluginy:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Opravte změnou GUID plugin nebo odstraněním duplikátů. Jinak budou ignorovány všechny přidružené pluginy.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Duplicitní plugin předvolba GUID '{0}' Detekované pro tyto pluginy a předvolby:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} Předvolba: #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} Předvolba: {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Oprava poskytnutím jedinečných přednastavených GUID nebo odstraněním duplikátů. Jinak budou ignorovány všechny přidružené pluginy.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Barva editoru</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Jste si jisti, že chcete trvale smazat všechny {0} položky?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Vybrat složku</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Vyberte složku Sledování</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Chyba pluginu. Plugin '{0}' je typ '{1}', ale ne '{1}' Formát nalezen</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Akce pro provádění chyby '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Hodnota musí obsahovat pouze čísla nebo '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Hodnota musí být od {0} do {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Musí to být hex (6 nebo 8 číslic) řetězec počínaje '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Služba '{0}' musí být jedinečná.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Již existuje</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Formát</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Názvy formátu čtečky schránky/spisovatele musí být jedinečné. Čtenář duplikáty:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Názvy formátu čtečky schránky/spisovatele musí být jedinečné. Spisovatel duplikáty:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Guids formátu schránky musí být jedinečné. Duplicitní formáty a Guids:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Chyba pluginu: Všechna pole Plugin '{0}' musí být pro handler '{1}'. {2} ParamName '{3}'</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Chyba pluginu, nalezen žádný invariantní manifest</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' nemůže mít předvolby bez poskytnuty alespoň 1 parametr</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Unbeled param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Musí být definováno ID parametrů pluginu ({0}). Plugin '{1}' má následující parametry s chybějícími parametry: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Duplikát Paramid '{0}' detekován (vše musí být jedinečné). {1} Labels: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Je vyžadován předvolba GUID. Nebyl nalezen ani nesprávný formát pro '{0}' v pluginu {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Nelze najít parametr s Paramid '{0}' odkazovaný na předvolbu '{1}' pro plugin '{2}'. Parametr se mohl změnit nebo byl odstraněn, aktualizovat předvolbu ParamValue nebo jej odstranit.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Nelze nastavit parametry sdílené hodnoty v předvolbách. ParamId '{0}' v předvolbě '{1}' pro plugin '{2}' je třeba odstranit nebo v části Definice parametru lze zadat parametr.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Předvolby musí mít jedinečné GUID. Duplicitní předvolba GUID '{0}' byl detekován v pluginu '{1}' pro předvolby: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Chyba parsingu pluginu, na cestě '{0}' null, pravděpodobně chyba analýza JSON. Ignorování pluginu</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Chyba názvu pluginu, na cestě '{0}' musí mít vlastnost 'title' s ne více než {1} znaky. Ignorování pluginu</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Chyba plugin Guid, na cestě '{0}' s názvem '{1}' Musí mít vlastnost 'GUID', RFC 4122 kompatibilní s 128bitovými GUID (UUID) s pouze písmeny, čísly a spojovníkem. Ignorování pluginu.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Chyba popisu pluginu, na cestě '{0}' Popis nesmí být více než {1} znaky. Ignorování pluginu</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Chyba tagů pluginů, na značkách Path '{0}' nesmí být více než {1} znaky. Ignorování pluginu</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Pokračujte debugger k '{0}' nebo zrušit.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Čekání na debugger</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Plugin pro stahování chyb. Prosím zkuste to znovu později.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Aktualizován plugin</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Jste si jisti, že chcete obnovit všechny položky {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Hledat kritéria „bez názvu“</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Vyhledávání kritérií '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' obsahuje sdílené hodnoty. Chtěli byste je také resetovat?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

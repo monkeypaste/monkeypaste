@@ -70,28 +70,36 @@
     <value>Grunn - Árlega</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Afritaðu</value>
@@ -127,19 +135,24 @@
     <value>Innbyggt - Í viðbótarvafra með sífellt vaxandi samfélagi - Driven Library of Plugins</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste er klemmuspjaldastjóri, sjálfvirkni og framleiðni tól eins og enginn annar. Auka klemmuspjaldið þitt í auðgaðan og skipulagðan hluta af vinnuflæðinu þínu,
@@ -158,40 +171,41 @@ Auður gildi og merking sem þú átt skilið að hafa tiltækt innan seilingar.
 Klemmuspjaldið þitt er nokkru sinni rakið eða geymt hvar sem er handan eigin vélar. Tímabil.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>I</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Bætið við stillingu: Afritun verður 'Bæta við' í stað þess að 'skipta um' á klemmuspjaldinu. Bæði texti og skrár, að fullu sérhannaðar</value>
+    <value>● Sérsniðin músastillingar: Hægri - Smelltu á Límu og vinstri - Smelltu á Auto - Afritaðu</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Háþróuð klemmuspor, heimildir og notkun með auknum stuðningi við Firefox og Chromium byggða vafra (Chrome, Edge, Brave)</value>
+    <value>● Bætið við stillingu: Afritun verður 'Bæta við' í stað þess að 'skipta um' á klemmuspjaldinu. Bæði texti og skrár, að fullu sérhannaðar</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>I</value>
+    <value>● Háþróuð klemmuspor, heimildir og notkun með auknum stuðningi við Firefox og Chromium byggða vafra (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Geymið myndirnar þínar í öruggum gagnagrunni, tilbúin til notkunar sem skrár hvenær sem er - eftirspurn bara dragið - og - slepptu!</value>
+    <value>I</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● öflugur texti sniðmát fyrir skjótan, kraftmikla líma úr snippet safninu</value>
+    <value>● Geymið myndirnar þínar í öruggum gagnagrunni, tilbúin til notkunar sem skrár hvenær sem er - eftirspurn bara dragið - og - slepptu!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action Designer fyrir sérsniðna sjálfvirkni og aðgerðakeðju</value>
+    <value>● öflugur texti sniðmát fyrir skjótan, kraftmikla líma úr snippet safninu</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Einfalt í notkun og lengja viðbótarkerfi til að greina bæði úrklippur eða lesa/skrifa hvaða snið sem er á klemmuspjaldið þitt</value>
+    <value>● Trigger &amp; Action Designer fyrir sérsniðna sjálfvirkni og aðgerðakeðju</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Innbyggt - Í viðbótarvafra með sífellt vaxandi samfélagi - Drifið bókasafn af viðbótum</value>
+    <value>● Einfalt í notkun og lengja viðbótarkerfi til að greina bæði úrklippur eða lesa/skrifa hvaða snið sem er á klemmuspjaldið þitt</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Sjálfvirku allt með forstillingum fyrir viðbót, stash og notaðu hvaða AI leiðbeiningar eða skipanir þínar eru auðveldlega</value>
+    <value>● Innbyggt - Í viðbótarvafra með sífellt vaxandi samfélagi - Drifið bókasafn af viðbótum</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Fleiri pallar og eiginleikar koma fljótlega! Við erum bara að hefja byrjað 🎉</value>
+    <value>● Sjálfvirku allt með forstillingum fyrir viðbót, stash og notaðu hvaða AI leiðbeiningar eða skipanir þínar eru auðveldlega</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Bæði ljós og dökk þemu eru fullkomlega kraftmikil, notaðu hvaða lit sem þú vilt</value>
@@ -208,29 +222,29 @@ Klemmuspjaldið þitt er nokkru sinni rakið eða geymt hvar sem er handan eigin
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Skipuleggðu úrklippurnar þínar í merkjatrjám og búðu til resusable síur</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Örugg, örugg og einkarekin staðbundin gagnageymsla (engin gagnaöflun) alltaf dulkóðuð með valfrjálsri 2 - Factor lykilorðsvernd og auðveldlega loka fyrir forrit eða vefsíður frá rekja spor einhvers</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>I</value>
+    <value>● Lokaðu auðveldlega á ákveðin forrit, vefsíður og jafnvel sérstakar vefsíður frá rekja spor einhvers</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Sérsniðin músastillingar: Hægri - Smelltu á Límu og vinstri - Smelltu á Auto - Afritaðu</value>
+    <value>I</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Klemmuspjaldið er frumskógur. Monkeysta er konungur! Sveifla frá appi til app, afrita þetta og líma það eins og aldrei áður með MonkeyPaste !! Vörumerki - Nýtt, fremsta klemmuspjald og greinandi sjálfvirkni tól !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Sýnishorn af monkeypaste í aðgerð!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Sett upp á þessu tungumáli. Enska er aðeins fyrir þessi dæmi</value>
@@ -250,5 +264,11 @@ Klemmuspjaldið þitt er nokkru sinni rakið eða geymt hvar sem er handan eigin
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Með þessari áskrift færðu:
 ● Ótakmarkað afkastageta</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Örugg, örugg og einkarekin staðbundin gagnageymsla (engin gagnaöflun) dulkóðuð alltaf með valfrjálsri 2 - þáttar lykilorðsvernd</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Fleiri pallar og eiginleikar koma fljótlega! Við erum bara að hefja byrjað 🎉</value>
   </data>
 </root>

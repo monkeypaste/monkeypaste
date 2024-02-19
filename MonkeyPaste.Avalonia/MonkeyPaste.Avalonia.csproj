@@ -361,6 +361,7 @@
     <None Remove="Assets\Images\brainwhite.png" />
     <None Remove="Assets\Images\bringToFront.png" />
     <None Remove="Assets\Images\brush.png" />
+    <None Remove="Assets\Images\bug.png" />
     <None Remove="Assets\Images\bullseye.png" />
     <None Remove="Assets\Images\burger.png" />
     <None Remove="Assets\Images\butterfly.png" />
@@ -784,6 +785,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\brush.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\bug.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\cef.png">

@@ -1,7 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <sys:String x:Key="FlagsBase">avares://MonkeyPaste.Avalonia/Assets/Images/Flags</sys:String>
+    <sys:String x:Key="BugImage">avares://MonkeyPaste.Avalonia/Assets/Images/bug.png</sys:String>
     <sys:String x:Key="LogImage">avares://MonkeyPaste.Avalonia/Assets/Images/log.png</sys:String>
     <sys:String x:Key="BooksImage">avares://MonkeyPaste.Avalonia/Assets/Images/books.png</sys:String>
     <sys:String x:Key="RobotArmColorImage">avares://MonkeyPaste.Avalonia/Assets/Images/robotarmcolor.png</sys:String>
@@ -173,4 +173,8 @@
     <sys:String x:Key="BurlapTextureImage">avares://MonkeyPaste.Avalonia/Assets/Images/burlap.png</sys:String>
     <sys:String x:Key="ColorsImage">avares://MonkeyPaste.Avalonia/Assets/Images/colors.png</sys:String>
     <sys:String x:Key="CogColorImage">avares://MonkeyPaste.Avalonia/Assets/Images/cogcolor.png</sys:String>
+
+    <!--  FLAGS PREFIX  -->
+
+    <sys:String x:Key="FlagsBase">avares://MonkeyPaste.Avalonia/Assets/Images/Flags</sys:String>
 </ResourceDictionary>

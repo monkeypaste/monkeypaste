@@ -280,7 +280,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SelectFileSystemPathCommand => new MpAsyncCommand(
             async () => {
                 var selectedDir = await Mp.Services.NativePathDialog
-                        .ShowFolderDialogAsync($"Select Watch Folder", FolderPath);
+                        .ShowFolderDialogAsync(UiStrings.FolderWatcherChooserWindowTitle, FolderPath);
 
                 // remove old watcher
                 bool wasEnabled = IsEnabled;

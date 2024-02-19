@@ -2700,4 +2700,200 @@ feedback@monkeypaste.com</value>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;בדרך זו, MonkeyPaste ניתן לגשת&lt;br&gt;בלי &lt;span color="red"&gt;קליק&lt;/span&gt; ואפילו בלי &lt;span color="red"&gt;להניד עפעף&lt;/span&gt; #x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>ביאור</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>שיבוט</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>אובייקט נתונים</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>חיבור</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>קוֹרֵא</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>שגיאה לא ידועה</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>סוֹפֵר</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>כפול תוסף מדריך '{0}' זוהה עבור תוספים אלה:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>תקן על ידי שינוי מדריך תוסף או הסרת כפילויות. אחרת יתעלמו מכל התוספים המשויכים.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>כפול Plugin Presed Prieid '{0}' זוהה עבור תוספים ומגדירים מוגדרים מראש:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>תוסף: {0} {1} מראש (ים): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>תוסף: {0} {1} מראש (ים): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>תקן על ידי מתן מדריכים מוגדרים מראש או הסרת כפילויות. אחרת יתעלמו מכל התוספים המשויכים.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>צבע עורך</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>האם אתה בטוח שברצונך למחוק לצמיתות את כל {0} הפריטים?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>בחר תיקייה</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>בחר תיקיית צפה</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>שגיאת תוסף. Plugin '{0}' הוא '{1}' 'סוג אבל לא' {1} 'נמצא בתבנית</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>שגיאה ביצוע פעולה '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>הערך חייב להכיל רק מספרים או '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>הערך חייב להיות מ- {0} ל- {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>חייב להיות מחרוזת משושה (6 או 8 ספרות) החל מ- '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>על הלוח '{0}' חייב להיות ייחודי.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>כבר קיים עבור</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>פוּרמָט</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>סוּג</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>שמות פורמט של קורא לוח/סופר חייבים להיות ייחודיים. כפילויות קוראים:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>שמות פורמט של קורא לוח/סופר חייבים להיות ייחודיים. כפילויות סופרות:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>מדריכי פורמט הלוח חייבים להיות ייחודיים. פורמטים וכדורים כפולים:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>שגיאת תוסף: כל שדות התוסף '{0}' חייבים להיות ייחודיים עבור מטפל '{1}'. {2} paramname '{3}' יש מספר ערכים</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>שגיאת תוסף, לא נמצא שום מנגן בלתי פוסק</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>תוסף '{0}' לא יכול לקבל קביעות מוגדרות מראש ללא לפחות פרמטר אחד מסופק</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>פרם #{0} ללא תווית {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>יש להגדיר מזהי פרמטר תוסף ({0}). Plugin '{1}' יש את הפרמטרים הבאים עם חסרים של פרמיד: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>כפול paramid '{0}' זוהה (הכל חייב להיות ייחודי). {1} תוויות: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>יש צורך בהנחיה מוגדרת מראש. זה לא נמצא או פורמט שגוי עבור '{0}' בתוסף {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>לא ניתן למצוא פרמטר עם paramID '{0}' שהוזכר על ידי מראש '{1}' עבור Plugin '{2}'. הפרמטר אולי השתנה או הוסר, עדכן את ParamValue מראש או הסר אותו.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>לא ניתן להגדיר פרמטרים של ערך משותף בהגדרות קביעות מוגדרות מראש. PARAMID '{0}' בקביעה מוגדרת מראש '{1}' לתוסף '{2}' יש להסיר או ניתן לציין את ParamValue בסעיף הגדרת הפרמטר.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>קביעות מוגדרות מראש חייבות להיות בעלות מדריכים ייחודיים. כפולים מוגדרים מראש מדויקים '{0}' התגלה בתוסף '{1}' עבור קביעות מוגדרות מראש: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>שגיאת ניתוח תוסף, בנתיב '{0}' null, ככל הנראה שגיאה בניתוח JSON. התעלמות מתוסף</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>שגיאת כותרת תוסף, בנתיב '{0}' חייבת להיות בעלי כותרת 'כותרת' ללא תווים יותר מ- {1}. התעלמות מתוסף</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>שגיאת מדריך תוסף, בנתיב '{0}' עם כותרת '{1}' חייבת להיות בעלי נכס 'מדריך', RFC 4122 תואם 128 סיביות מדריך (UUID) עם אותיות, מספרים ומקפים בלבד. התעלמות מתוסף.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>שגיאת תיאור תוסף, בנתיב '{0}' התיאור חייב להיות לא יותר מ- {1} תווים. התעלמות מתוסף</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>שגיאת תגיות תוספים, בנתיב '{0}' תגים חייבים להיות לא יותר מ- {1} תווים. התעלמות מתוסף</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>צרף באגים ל- '{0}' או לבטל כדי להמשיך.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>מחכה לניפוי באגים</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>שגיאה בהורדת תוסף. בבקשה נסה שוב מאוחר יותר.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>עודכן תוסף</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>האם אתה בטוח שברצונך לשחזר את כל {0} הפריטים?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>קריטריוני חיפוש 'ללא כותרת'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>קריטריוני חיפוש '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' מכיל ערכים משותפים. האם תרצה לאפס גם את אלה?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

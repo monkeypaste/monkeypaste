@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Statics
+        #region Properties
 
         static string PLUGIN_INFO_URL =>
             $"{MpServerConstants.PLUGINS_BASE_URL}/plugin-info-check.php";
@@ -52,10 +52,6 @@ namespace MonkeyPaste.Avalonia {
         public static string CoreAnnotatorGuid => "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31";
         public static string CoreAnnotatorDefaultPresetGuid => "a9fa2fbf-025d-4ced-a23b-234085b5ac5f";
 
-
-        #endregion
-
-        #region Properties
         public static List<string> UpdatedPluginGuids { get; set; } = [];
         public static ObservableCollection<string> UninstalledPluginGuids { get; set; } = [];
         public static ObservableCollection<MpRuntimePlugin> Plugins { get; } = new();
@@ -86,6 +82,8 @@ namespace MonkeyPaste.Avalonia {
 
         public static async Task InitAsync() {
             IsLoaded = false;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+
             MpStartupCleaner.UnloadAll();
             FinishPluginUpdates();
 
@@ -104,43 +102,12 @@ namespace MonkeyPaste.Avalonia {
             bool success = await LoadPluginAsync(manifestPath);
             return success;
         }
-        public static string CreatePluginBackup(string guid, out string original_dir) {
-            original_dir = null;
-            if (PluginManifestLookup.All(x => x.Value.guid != guid)) {
-                // not found
-                return null;
-            }
-            var plugin_kvp = PluginManifestLookup.FirstOrDefault(x => x.Value.guid == guid);
-            original_dir = plugin_kvp.Key;
-
-            string backup_path = null;
-            if (original_dir.IsFile()) {
-                // delete plugin folder
-                string dir_to_backup = Path.GetDirectoryName(original_dir);
-                backup_path = Path.Combine(PluginBackupDir, Path.GetFileName(dir_to_backup));
-                if (backup_path.IsFileOrDirectory()) {
-                    if (!MpFileIo.DeleteFileOrDirectory(backup_path)) {
-                        throw new Exception($"Error deleting existing backup dir '{backup_path}'");
-                    }
-                }
-                try {
-                    MpFileIo.CopyDirectory(dir_to_backup, backup_path);
-                }
-                catch (Exception ex) {
-                    Mp.Services.NotificationBuilder.ShowNotificationAsync(
-                        notificationType: MpNotificationType.FileIoWarning,
-                        body: string.Format(UiStrings.PluginLoaderBackupErrorText, dir_to_backup, backup_path, ex.Message)).FireAndForgetSafeAsync();
-                    backup_path = null;
-                }
-            }
-            return backup_path;
-        }
 
         public static async Task<bool> InstallPluginAsync(string plugin_guid, string packageUrl, bool silentInstall, MpICancelableProgressIndicatorViewModel cpivm) {
             try {
                 string install_dir = await DownloadAndExtractPluginToDirAsync(plugin_guid, packageUrl, PluginRootDir, cpivm);
                 if (install_dir == null) {
-                    throw new MpUserNotifiedException($"Error downloading plugin. Please try again later.");
+                    throw new MpUserNotifiedException(UiStrings.PluginInstallEx1);
                 }
                 if (FindInvariantManifestPaths(install_dir) is not { } inv_manifests ||
                     ResolveLocalizedManifestPath(inv_manifests.FirstOrDefault()) is not string manifest_path) {
@@ -379,9 +346,9 @@ namespace MonkeyPaste.Avalonia {
                             bool? cancel_debug_result = null;
                             Dispatcher.UIThread.Post(async () => {
                                 cancel_debug_result = await Mp.Services.PlatformMessageBox.ShowBusyMessageBoxAsync(
-                                    title: "Waiting for debugger",
-                                    message: $"Attach debugger to '{Path.GetFileName(Mp.Services.PlatformInfo.ExecutingPath)}' or cancel to continue",
-                                    iconResourceObj: "LadyBugImage",
+                                    title: UiStrings.NtfWaitForDebuggerTitle,
+                                    message: string.Format(UiStrings.NtfWaitForDebuggerText, Path.GetFileName(Mp.Services.PlatformInfo.ExecutingPath)),
+                                    iconResourceObj: "BugImage",
                                     cancel_token_arg: cts.Token,
                                     can_user_cancel: true);
                             });
@@ -492,23 +459,28 @@ namespace MonkeyPaste.Avalonia {
         }
         private static bool ValidatePluginManifest(MpRuntimePlugin plugin, string manifestPath) {
             if (plugin == null) {
-                throw new MpUserNotifiedException($"Plugin parsing error, at path '{manifestPath}' null, likely error parsing json. Ignoring plugin");
+                //throw new MpUserNotifiedException($"Plugin parsing error, at path '{manifestPath}' null, likely error parsing json. Ignoring plugin");
+                throw new MpUserNotifiedException(string.Format(UiStrings.InvalidPluginEx1, manifestPath));
             }
             // validate TITLE
             if (string.IsNullOrWhiteSpace(plugin.title) || plugin.title.Length > MAX_TITLE_LENGTH) {
-                throw new MpUserNotifiedException($"Plugin title error, at path '{manifestPath}' must have 'title' property with no more than {MAX_TITLE_LENGTH} characters. Ignoring plugin");
+                //throw new MpUserNotifiedException($"Plugin title error, at path '{manifestPath}' must have 'title' property with no more than {MAX_TITLE_LENGTH} characters. Ignoring plugin");
+                throw new MpUserNotifiedException(string.Format(UiStrings.InvalidPluginEx2, manifestPath, MAX_TITLE_LENGTH));
             }
             // validate GUID
             if (!MpRegEx.RegExLookup[MpRegExType.Guid].IsMatch(plugin.guid.ToStringOrEmpty())) {
-                throw new MpUserNotifiedException($"Plugin guid error, at path '{manifestPath}' with Title '{plugin.title}' must have a 'guid' property, RFC 4122 compliant 128-bit GUID (UUID) with only letters, numbers and hyphens.. Ignoring plugin");
+                //throw new MpUserNotifiedException($"Plugin guid error, at path '{manifestPath}' with Title '{plugin.title}' must have a 'guid' property, RFC 4122 compliant 128-bit GUID (UUID) with only letters, numbers and hyphens.. Ignoring plugin");
+                throw new MpUserNotifiedException(string.Format(UiStrings.InvalidPluginEx3, manifestPath, plugin.title));
             }
             // validate DESCRIPTION
             if (!string.IsNullOrEmpty(plugin.description) && plugin.description.Length > MAX_DESCRIPTION_LENGTH) {
-                throw new MpUserNotifiedException($"Plugin description error, at path '{manifestPath}' description must be no more than {MAX_DESCRIPTION_LENGTH} characters. Ignoring plugin");
+                //throw new MpUserNotifiedException($"Plugin description error, at path '{manifestPath}' description must be no more than {MAX_DESCRIPTION_LENGTH} characters. Ignoring plugin");
+                throw new MpUserNotifiedException(string.Format(UiStrings.InvalidPluginEx4, MAX_DESCRIPTION_LENGTH));
             }
             // validate TAGS
             if (!string.IsNullOrEmpty(plugin.tags) && plugin.tags.Length > MAX_TAGS_LENGTH) {
-                throw new MpUserNotifiedException($"Plugin tags error, at path '{manifestPath}' tags must be no more than {MAX_TAGS_LENGTH} characters. Ignoring plugin");
+                //throw new MpUserNotifiedException($"Plugin tags error, at path '{manifestPath}' tags must be no more than {MAX_TAGS_LENGTH} characters. Ignoring plugin");
+                throw new MpUserNotifiedException(string.Format(UiStrings.InvalidPluginEx5, manifestPath, MAX_TAGS_LENGTH));
             }
             return true;
         }
@@ -554,10 +526,12 @@ namespace MonkeyPaste.Avalonia {
 
                     // Show list of duplicate plugins, fix just opens plugin folder, retry will re-initialize
                     var sb = new StringBuilder();
-                    sb.AppendLine($"Duplicate plugin guid '{ig}' detected for these plugins:");
+                    //sb.AppendLine($"Duplicate plugin guid '{ig}' detected for these plugins:");
+                    sb.AppendLine(string.Format(UiStrings.DupPluginGuid1, ig));
                     toRemove.ForEach(x => sb.AppendLine(x.Value.title));
                     sb.AppendLine();
-                    sb.AppendLine($"Fix by changing plugin guid or removing duplicates. Otherwise all associated plugins will be ignored.");
+                    //sb.AppendLine($"Fix by changing plugin guid or removing duplicates. Otherwise all associated plugins will be ignored.");
+                    sb.AppendLine(UiStrings.DupPluginGuid2);
                     var to_remove_min_refs = toRemove.Select(x => (x.Value.guid, x.Value.RootDirectory)).ToList();
                     toRemove = null;
                     bool can_continue = await ShowInterPluginInvalidationAsync(to_remove_min_refs, sb.ToString());
@@ -586,16 +560,22 @@ namespace MonkeyPaste.Avalonia {
                         }
                         // Show list of duplicate plugins, fix just opens plugin folder, retry will re-initialize
                         var sb = new StringBuilder();
-                        sb.AppendLine($"Duplicate plugin preset guid '{preset.guid}' detected for these plugins and presets:");
-                        sb.AppendLine($"Plugin: {plugin.title} {Environment.NewLine}Preset(s): {(string.IsNullOrEmpty(preset.label) ? $"Preset #{presetHost.presets.IndexOf(preset)}" : preset.label)}");
+                        //sb.AppendLine($"Duplicate plugin preset guid '{preset.guid}' detected for these plugins and presets:");
+                        sb.AppendLine(string.Format(UiStrings.DupPresetGuid1, preset.guid));
+                        //sb.AppendLine($"Plugin: {plugin.title} {Environment.NewLine}Preset(s): {(string.IsNullOrEmpty(preset.label) ? $"Preset #{presetHost.presets.IndexOf(preset)}" : preset.label)}");
+                        if (string.IsNullOrEmpty(preset.label)) {
+                            sb.AppendLine(string.Format(UiStrings.DupPresetGuid21, plugin.title, Environment.NewLine, presetHost.presets.IndexOf(preset)));
+                        } else {
+                            sb.AppendLine(string.Format(UiStrings.DupPresetGuid22, plugin.title, Environment.NewLine, preset.label));
+                        }
                         foreach (var dup_preset_plugin in dup_preset_guid_plugins) {
                             sb.AppendLine();
                             var dup_presets = dup_preset_plugin.PresetHosts.Where(x => x.presets != null).SelectMany(x => x.presets).Where(x => x.guid == preset.guid);
-                            sb.AppendLine($"Plugin: {dup_preset_plugin.title} {Environment.NewLine}Preset(s): {string.Join(", ", dup_presets.Select((x, idx) => string.IsNullOrEmpty(x.label) ? $"Preset #{idx}" : x.label))}");
+                            sb.AppendLine($"{UiStrings.CommonPluginLabel} {dup_preset_plugin.title} {Environment.NewLine}{UiStrings.CommonPresetLabel} {string.Join(", ", dup_presets.Select((x, idx) => string.IsNullOrEmpty(x.label) ? $"{UiStrings.CommonPresetLabel} #{idx}" : x.label))}");
                         }
 
                         sb.AppendLine();
-                        sb.AppendLine($"Fix by providing unique preset guids or removing duplicates. Otherwise all associated plugins will be ignored.");
+                        sb.AppendLine(UiStrings.DupPresetGuid3);
                         List<(string guid, string RootDirectory)> to_remove_min_refs = [(plugin.guid, plugin.RootDirectory)];
                         to_remove_min_refs.AddRange(dup_preset_guid_plugins.Select(x => (x.guid, x.RootDirectory)));
 
@@ -729,21 +709,25 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
             if (has_presets && !has_params) {
-                throw new MpUserNotifiedException($"Plugin '{plugin_label}' cannot have presets without at least 1 parameter provided");
+                //throw new MpUserNotifiedException($"Plugin '{plugin_label}' cannot have presets without at least 1 parameter provided");
+                throw new MpUserNotifiedException(string.Format(UiStrings.InvalidParamEx1, plugin_label));
             }
 
             // MISSING PARAMID's
             var missing_paramids = host.parameters.Where(x => string.IsNullOrEmpty(x.paramId));
             if (missing_paramids.Any()) {
-                string missing_param_labels = string.Join(",", missing_paramids.Select(x => string.IsNullOrEmpty(x.label) ? $"Unlabeled param #{host.parameters.IndexOf(x)}" : x.label));
-                string missing_param_ids_msg = $"Plugin parameter ids (paramId) must be defined. Plugin '{plugin_label}' has the following parameters with missing paramId's: {missing_param_labels}";
+                //string missing_param_labels = string.Join(",", missing_paramids.Select(x => string.IsNullOrEmpty(x.label) ? $"Unlabeled param #{host.parameters.IndexOf(x)}" : x.label));
+                string missing_param_labels = string.Join(",", missing_paramids.Select(x => string.IsNullOrEmpty(x.label) ? $"{UiStrings.InvalidParamEx21.Format()}" : x.label));
+                //string missing_param_ids_msg = $"Plugin parameter ids (paramId) must be defined. Plugin '{plugin_label}' has the following parameters with missing paramId's: {missing_param_labels}";
+                string missing_param_ids_msg = UiStrings.InvalidParamEx3.Format(UiStrings.CommonParamIdLabel, plugin_label, missing_param_labels);
                 throw new MpUserNotifiedException(missing_param_ids_msg);
             }
 
             // DUP PARAMID
             var dup_paramid_groups = host.parameters.GroupBy(x => x.paramId).Where(x => x.Count() > 1);
             foreach (var dup_param_id_grp in dup_paramid_groups) {
-                string dup_param_ids_msg = $"Duplicate paramId '{dup_param_id_grp.Key}' detected (all must be unique).{Environment.NewLine}Labels:{Environment.NewLine}{string.Join(Environment.NewLine, dup_param_id_grp.Select(x => x.label))}";
+                //string dup_param_ids_msg = $"Duplicate paramId '{dup_param_id_grp.Key}' detected (all must be unique).{Environment.NewLine}Labels:{Environment.NewLine}{string.Join(Environment.NewLine, dup_param_id_grp.Select(x => x.label))}";
+                string dup_param_ids_msg = UiStrings.InvalidParamEx4.Format(dup_param_id_grp.Key, Environment.NewLine, string.Join(Environment.NewLine, dup_param_id_grp.Select(x => x.label)));
                 throw new MpUserNotifiedException(dup_param_ids_msg);
             }
 
@@ -751,30 +735,34 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
             foreach (var preset in host.presets) {
-                string preset_label = string.IsNullOrWhiteSpace(preset.label) ? $"Preset #{host.presets.IndexOf(preset)}" : preset.label;
+                string preset_label = string.IsNullOrWhiteSpace(preset.label) ? $"{UiStrings.CommonPresetLabel} #{host.presets.IndexOf(preset)}" : preset.label;
 
                 // MISSING PRESET GUID
                 if (!MpRegEx.RegExLookup[MpRegExType.Guid].IsMatch(preset.guid.ToStringOrEmpty())) {
-                    throw new MpUserNotifiedException($"Preset guid is required. It was not found or wrong format for '{preset_label}' in Plugin {plugin_label}");
+                    //throw new MpUserNotifiedException($"Preset guid is required. It was not found or wrong format for '{preset_label}' in Plugin {plugin_label}");
+                    throw new MpUserNotifiedException(UiStrings.InvalidParamEx5.Format(preset_label, plugin_label));
                 }
                 // NO PARAMID MATCHES
                 var preset_param_vals_with_no_param_match =
                     preset.values.Where(x => host.parameters.All(y => y.paramId != x.paramId));
                 foreach (var preset_param_val_with_no_param_match in preset_param_vals_with_no_param_match) {
-                    throw new MpUserNotifiedException($"Cannot find parameter with paramId '{preset_param_val_with_no_param_match.paramId}' referenced by Preset '{preset_label}' for Plugin '{plugin_label}'. Parameter may have changed or was removed, update preset paramValue or remove it.");
+                    //throw new MpUserNotifiedException($"Cannot find parameter with paramId '{preset_param_val_with_no_param_match.paramId}' referenced by Preset '{preset_label}' for Plugin '{plugin_label}'. Parameter may have changed or was removed, update preset paramValue or remove it.");
+                    throw new MpUserNotifiedException(UiStrings.InvalidParamEx6.Format(preset_param_val_with_no_param_match.paramId, preset_label, plugin_label));
                 }
 
                 // SHARED VALUE PARAM IN PRESET
                 var preset_vals_for_persistent_params =
                     preset.values.Where(x => host.parameters.FirstOrDefault(y => x.paramId == y.paramId).isSharedValue);
                 foreach (var preset_val_for_persistent_params in preset_vals_for_persistent_params) {
-                    throw new MpUserNotifiedException($"Cannot set shared value parameters in Presets. ParamId '{preset_val_for_persistent_params.paramId}' in Preset '{preset_label}' for Plugin '{plugin_label}' needs to be removed or paramValue can be specified in the parameter definition section.");
+                    //throw new MpUserNotifiedException($"Cannot set shared value parameters in Presets. ParamId '{preset_val_for_persistent_params.paramId}' in Preset '{preset_label}' for Plugin '{plugin_label}' needs to be removed or paramValue can be specified in the parameter definition section.");
+                    throw new MpUserNotifiedException(UiStrings.InvalidParamEx7.Format(preset_val_for_persistent_params.paramId, preset_label, plugin_label));
                 }
             }
             // DUPLICATE PRESET GUIDS
             var dup_preset_groups = host.presets.GroupBy(x => x.guid).Where(x => x.Count() > 1);
             foreach (var dup_preset_group in dup_preset_groups) {
-                throw new MpUserNotifiedException($"Presets must have unique guids. Duplicate preset guid '{dup_preset_group}' was detected in plugin '{plugin_label}' for presets: {string.Join(", ", dup_preset_group.Select((x, idx) => string.IsNullOrEmpty(x.label) ? $"Preset #{idx}" : x.label))}");
+                //throw new MpUserNotifiedException($"Presets must have unique guids. Duplicate preset guid '{dup_preset_group}' was detected in plugin '{plugin_label}' for presets: {string.Join(", ", dup_preset_group.Select((x, idx) => string.IsNullOrEmpty(x.label) ? $"Preset #{idx}" : x.label))}");
+                throw new MpUserNotifiedException(UiStrings.InvalidParamEx8.Format(dup_preset_group, plugin_label, string.Join(", ", dup_preset_group.Select((x, idx) => string.IsNullOrEmpty(x.label) ? $"{UiStrings.CommonPresetLabel} #{idx}" : x.label))));
             }
 
             return true;
@@ -783,7 +771,8 @@ namespace MonkeyPaste.Avalonia {
         private static bool ValidatePluginComponents(MpRuntimePlugin plugin) {
             if ((plugin.pluginType == MpPluginType.Analyzer && plugin.analyzer == null) ||
                 (plugin.pluginType == MpPluginType.Clipboard && plugin.oleHandler == null)) {
-                throw new MpUserNotifiedException($"Plugin error. Plugin '{plugin.title}' is '{plugin.pluginType}' type but no '{plugin.pluginType}' format found");
+                //throw new MpUserNotifiedException($"Plugin error. Plugin '{plugin.title}' is '{plugin.pluginType}' type but no '{plugin.pluginType}' format found");
+                throw new MpUserNotifiedException(UiStrings.InvalidCompEx1.Format(plugin.title, plugin.pluginType));
             }
             bool are_all_components_valid = plugin.PresetHosts.All(x => ValidateParametersAndPresets(x, plugin.title));
             return are_all_components_valid;
@@ -895,7 +884,7 @@ namespace MonkeyPaste.Avalonia {
                 if (inv_manifest_path.IsFile()) {
                     return inv_manifest_path;
                 }
-                throw new FileNotFoundException("Plugin error, no invariant manifest found");
+                throw new FileNotFoundException(UiStrings.InvalidManifestEx1);
             }
             return some_manifest_path;
         }

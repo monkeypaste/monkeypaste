@@ -70,7 +70,7 @@
 کلیپ ها به ترتیب.</value>
   </data>
   <data name="AccountStandardDescription" xml:space="preserve">
-    <value>به کلیپ های محتوا و ذخیره زباله نامحدود اجازه می دهد.</value>
+    <value>به کلیپ های محتوا و {2} ذخیره زباله نامحدود اجازه می دهد.</value>
     <comment>Number</comment>
   </data>
   <data name="AccountUnlimitedDescription" xml:space="preserve">
@@ -519,7 +519,7 @@
     <value>میانبرها</value>
   </data>
   <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
-    <value>آیا می خواهید کلیپ های {0 را از "{1}" حذف کنید</value>
+    <value>آیا می خواهید کلیپ های {0} را از "{1}" حذف کنید</value>
     <comment>Number, Application Name</comment>
   </data>
   <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
@@ -684,7 +684,7 @@
     <value>رمزهای ورود مطابقت ندارند.</value>
   </data>
   <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
-    <value>رمز عبور باید حداقل نویسه های 0 {باشد.</value>
+    <value>رمز عبور باید حداقل نویسه های{0} باشد.</value>
   </data>
   <data name="CommonRememberLabel" xml:space="preserve">
     <value>یاد آوردن؟</value>
@@ -708,7 +708,7 @@
     <value>هرگز</value>
   </data>
   <data name="AccountFreeTrialLabel" xml:space="preserve">
-    <value>آزمایش روزانه 0 {</value>
+    <value>آزمایش روزانه  h__{0}</value>
   </data>
   <data name="AccountPurchaseErrorCaption" xml:space="preserve">
     <value>مشکلی برای انجام وجود داشت
@@ -741,11 +741,11 @@
     <value>حساب تغییر کرد</value>
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
-    <value>اشتراک شما اکنون {0}/{1} با محتوای {2} و 3 {} ذخیره زباله است.
+    <value>اشتراک شما اکنون {0}/{1} با محتوای {2} و{3} ذخیره زباله است.
 اما نگران نباشید ، پس از پایین آمدن هیچ داده ای از بین نمی رود. فقط کلیپ های جدید ارزیابی می شوند.</value>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
-    <value>تبریک می گویم! اشتراک شما اکنون {0}/{1} با محتوای {2} و 3 {} ذخیره زباله است.</value>
+    <value>تبریک می گویم! اشتراک شما اکنون {0}/{1} با محتوای {2} و {3} ذخیره زباله است.</value>
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapBlockHint1" xml:space="preserve">
@@ -788,7 +788,7 @@
     <comment>Parameter Label</comment>
   </data>
   <data name="ParameterInvalidLengthCaption" xml:space="preserve">
-    <value>{0} باید حداقل {1 شخصیت باشد</value>
+    <value>{0} باید حداقل {1} شخصیت باشد</value>
     <comment>Parameter Label, number</comment>
   </data>
   <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
@@ -801,7 +801,7 @@
   </data>
   <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
     <value>پرداخت برای {0} شما
-اشتراک به دلیل 1 {
+{1}اشتراک به دلیل 
 و دریافت نشده است
 
 لطفا خود را به روز کنید
@@ -809,25 +809,25 @@
   </data>
   <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
     <value>پرداخت برای {0} شما
-اشتراک به دلیل 1 {
-و دریافت نشده است
+سررسید اشتراک {1}
+و دریافت نشده است.
 
 لطفا به
-اینترنت در دستگاه
-با اشتراک خود و
-برای ادامه کار دوباره راه اندازی کنید
-با استفاده از برنامه {0} خود.</value>
+اینترنت روی دستگاه
+با اشتراک شما و
+برای ادامه راه اندازی مجدد
+با استفاده از طرح {0} خود.</value>
   </data>
   <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
     <value>پرداخت برای {0} شما
-اشتراک به دلیل 1 {
-و دریافت نشده است
+سررسید اشتراک {1}
+و دریافت نشده است.
 
-لطفا باز یا راه اندازی مجدد کنید
-میمون روی دستگاه
-با اشتراک خود در
-استفاده از خود را ادامه دهید
-{0} طرح.</value>
+لطفا باز کنید یا راه اندازی مجدد کنید
+MonkeyPaste روی دستگاه
+با اشتراک شما در
+به استفاده از خود ادامه دهید
+طرح {0}.</value>
   </data>
   <data name="AccountExpiredNtfTitle" xml:space="preserve">
     <value>حساب منقضی شد</value>
@@ -2269,7 +2269,7 @@
     <comment>ActionName</comment>
   </data>
   <data name="ActionAnalyzeValidation3" xml:space="preserve">
-    <value>پدر و مادر '{0}' فقط فیلترهای "{1}" نوع محتوای و آنالایزر "{2}" هرگز اجرا نمی شود زیرا از نوع ورودی "{3" پشتیبانی نمی کند</value>
+    <value>فیلترهای والد «{0}» فقط برای محتوای نوع «{1}» و تحلیلگر «{2}» هرگز اجرا نمی‌شود زیرا از نوع ورودی «{3}» پشتیبانی نمی‌کند.</value>
     <comment>Action Label, Analyzer Preset Name, Content Type</comment>
   </data>
   <data name="ActionClassifyValidation1" xml:space="preserve">
@@ -2699,5 +2699,201 @@
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;به این ترتیب، MonkeyPaste می تواند قابل دسترسی باشد&lt;br&gt;&lt;span color="red"&gt;بدون یک کلیک&lt;/span&gt; و یا حتی &lt;span color="red"&gt;ضربه زدن به چشم&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>حاشیه نویسی</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>شبیه</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>هدف داده</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>پژمان</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>خواننده</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>خطای ناشناخته</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>نویسنده</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>افزونه تکراری GUID '{0}' برای این افزونه ها شناسایی شده است:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>با تغییر GUID افزونه یا حذف نسخه های تکراری ، رفع کنید. در غیر این صورت همه افزونه های مرتبط نادیده گرفته می شوند.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>افزونه تکراری از پیش تعیین شده GUID '{0}' برای این افزونه ها و پیش تنظیم شده شناسایی شده است:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>افزونه: {0} {1} از پیش تعیین شده (ها): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>افزونه: {0} {1} از پیش تعیین شده (ها): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>با ارائه راهنماهای از پیش تعیین شده منحصر به فرد یا حذف نسخه های تکراری ، رفع کنید. در غیر این صورت همه افزونه های مرتبط نادیده گرفته می شوند.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>رنگ ویرایشگر</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید به طور دائم همه موارد {0} را حذف کنید؟</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>پوشه را انتخاب کنید</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>پوشه Watch را انتخاب کنید</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>خطای پلاگین افزونه '{0}' IS '{1}' نوع اما no '{1}' یافت شد</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>خطا در حال انجام عمل '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>مقدار فقط باید شامل اعداد یا '{0}' باشد</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>مقدار باید از {0} تا {1} باشد</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>باید یک رشته hex (6 یا 8 رقمی) باشد که از "#" شروع می شود</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>کلیپ بورد '{0}' باید منحصر به فرد باشد.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>در حال حاضر برای</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>قالب</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>نوع</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Clipboard Reader/Writer Format باید بی نظیر باشد. نسخه های خواننده:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Clipboard Reader/Writer Format باید بی نظیر باشد. کپی نویسنده:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>راهنماهای فرمت کلیپ بورد باید منحصر به فرد باشند. قالب ها و راهنماهای تکراری:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>خطای افزونه: تمام زمینه های افزونه '{0}' باید برای کنترل کننده '{1}' بی نظیر باشد. {2} paramname '{3}'</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>خطای افزونه ، هیچ مانیفست ثابت یافت نشده است</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>افزونه '{0}' بدون حداقل 1 پارامتر ارائه نمی شود</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>پارامتر بدون برچسب #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>شناسه های پارامتر افزونه ({0}) باید تعریف شود. افزونه '{1}' پارامترهای زیر را با Paramid's گمشده دارد: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>تکراری paramid '{0}' شناسایی شده (همه باید منحصر به فرد باشند). {1} برچسب ها: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>راهنمای پیش تعیین شده لازم است. برای "{0}" در افزونه {1} یافت نشد یا اشتباه یافت نشد</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>پارامتر را با paramid '{0}' ارجاع شده توسط pretet '{1}' برای افزونه '{2}' پیدا کنید. پارامتر ممکن است تغییر کرده یا حذف شده باشد ، از پیش تنظیم شده از پیش والای به روز کنید یا آن را حذف کنید.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>نمی توان پارامترهای ارزش مشترک را در پیش تنظیم تنظیم کرد. PARAMID '{0}' در پیش تنظیم '{1}' برای افزونه '{2}' باید حذف شود یا paramvalue در بخش تعریف پارامتر مشخص شود.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>از پیش تنظیم شده باید راهنماهای منحصر به فرد داشته باشد. Duplication Premet Guid '{0}' در افزونه '{1}' برای پیش تنظیم شده شناسایی شد: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>خطای تجزیه پلاگین ، در مسیر '{0}' تهی ، احتمالاً خطای تجزیه JSON. نادیده گرفتن افزونه</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>خطای عنوان افزونه، در مسیر "{0}" باید دارای ویژگی "title" با حداکثر {1} کاراکتر باشد. نادیده گرفتن افزونه</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>خطای راهنمای افزونه ، در مسیر "{0}" با عنوان "{1}" باید دارای یک ویژگی "GUID" ، RFC 4122 GUID 128 بیتی سازگار (UUID) با فقط حروف ، اعداد و hyphens باشد. نادیده گرفتن افزونه.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>خطای توضیحات افزونه، در مسیر "{0}" توضیحات نباید بیشتر از {1} کاراکتر باشد. نادیده گرفتن افزونه</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>خطای برچسب‌های افزونه، در مسیر "{0}" برچسب‌ها نباید بیشتر از {1} کاراکتر باشند. نادیده گرفتن افزونه</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>اشکال زدایی را به "{0}" وصل کنید یا برای ادامه آن لغو کنید.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>منتظر اشکال زدایی</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>افزونه بارگیری خطا. لطفا بعداً دوباره امتحان کنید.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>افزونه به روز شده</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید همه موارد {0} را بازیابی کنید؟</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>معیارهای جستجو "Untitled"</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>معیارهای جستجو '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' حاوی مقادیر مشترک است. آیا دوست دارید آن را دوباره تنظیم کنید؟</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

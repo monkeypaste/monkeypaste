@@ -2,7 +2,6 @@
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -28,25 +27,8 @@ namespace MonkeyPaste.Avalonia {
         public override MpHeadlessComponent ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
-                    _actionComponentFormat = new MpHeadlessComponent() {
-                        parameters = new List<MpParameterFormat>() {
-                            new MpParameterFormat() {
-                                label = "Directory",
-                                controlType = MpParameterControlType.DirectoryChooser,
-                                unitType = MpParameterValueUnitType.FileSystemPath,
-                                isRequired = true,
-                                paramId = "1",
-                                description = "The directory where input content will be written."
-                            },
-                            new MpParameterFormat() {
-                                label = "Custom Name",
-                                controlType = MpParameterControlType.TextBox,
-                                unitType = MpParameterValueUnitType.PlainTextContentQuery,
-                                isRequired = false,
-                                paramId = "2",
-                                description = "When left blank, the content will use its title as the file name."
-                            },
-                        }
+                    _actionComponentFormat = new() {
+                        parameters = []
                     };
                 }
                 return _actionComponentFormat;

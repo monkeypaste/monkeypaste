@@ -70,28 +70,36 @@
     <value>Grunnleggende - årlig</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopiere</value>
@@ -127,19 +135,24 @@
     <value>Bygget - i plugin -nettleser med et stadig - voksende fellesskap - drevet bibliotek med plugins</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste er en utklippsbehandler, automatisering og produktivitetsverktøy som ingen andre. Forbedre utklippstavlen til en beriket og organisert del av arbeidsflyten din,
@@ -158,40 +171,41 @@ Jeg vil også at du skal føle deg komfortabel med å bruke det. Så jeg forsikr
 Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din egen maskin. Periode.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Enkelt og vennlig grensesnitt med både horisontale/vertikale oppsett, liste/rutenett og multi - Monitor -støtte</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Append Mode: Kopiering blir 'tillegg til' i stedet for 'erstatt' på utklippstavlen. Både tekst og filer, fullstendig tilpasses</value>
+    <value>● Tilpasset musemodus: Høyre - Klikk på Paste og venstre - Klikk på Auto - Kopier</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Sofistikert klippsporing, kilder og bruk med forbedret støtte for Firefox og krom - baserte nettlesere (krom, kant, modig)</value>
+    <value>● Append Mode: Kopiering blir 'tillegg til' i stedet for 'erstatt' på utklippstavlen. Både tekst og filer, fullstendig tilpasses</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Fullt - Utvalgt klippeditor med rik tekst (tabeller, lister, lenker osv.) Med å finne/erstatte og utheve</value>
+    <value>● Sofistikert klippsporing, kilder og bruk med forbedret støtte for Firefox og krom - baserte nettlesere (krom, kant, modig)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Lagre bildene dine i den sikre databasen, klare til bruk som filer når som helst på - etterspørsel bare dra - og - slipp!</value>
+    <value>● Fullt - Utvalgt klippeditor med rik tekst (tabeller, lister, lenker osv.) Med å finne/erstatte og utheve</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Kraftig tekststempling for rask, dynamisk liming fra utdraget</value>
+    <value>● Lagre bildene dine i den sikre databasen, klare til bruk som filer når som helst på - etterspørsel bare dra - og - slipp!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action Designer for tilpassede automatiseringer og handlingskjeding</value>
+    <value>● Kraftig tekststempling for rask, dynamisk liming fra utdraget</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Enkelt å bruke og utvide plugin -systemet for både å analysere klipp eller lese/skrive ethvert format til utklippstavlen</value>
+    <value>● Trigger &amp; Action Designer for tilpassede automatiseringer og handlingskjeding</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Bygget - i plugin -nettleser med et stadig - voksende fellesskap - Drevet bibliotek med plugins</value>
+    <value>● Enkelt å bruke og utvide plugin -systemet for både å analysere klipp eller lese/skrive ethvert format til utklippstavlen</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatiser alt med forhåndsinnstillinger for plugin, stash og bruk noen av AI -spørsmålene eller kommandoene dine med letthet</value>
+    <value>● Bygget - i plugin -nettleser med et stadig - voksende fellesskap - Drevet bibliotek med plugins</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Flere plattformer og funksjoner kommer snart! Vi er bare startet 🎉</value>
+    <value>● Automatiser alt med forhåndsinnstillinger for plugin, stash og bruk noen av AI -spørsmålene eller kommandoene dine med letthet</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Både lyse og mørke temaer er helt dynamiske, bruk hvilken som helst farge du vil ha</value>
@@ -208,29 +222,29 @@ Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din 
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organiser klippene dine i tagrær og lag resusable filtre</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Sikker, sikker og privat lokal datalagring (ingen datainnsamling) alltid kryptert med valgfri 2 - Faktor passordbeskyttelse og enkelt blokkere apper eller nettsteder fra trackeren din</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Omfattende drag - og - drop support, tilpassede globale snarveier, ruting og mus - gratis navigasjon</value>
+    <value>● Blokker enkelt visse apper, nettsteder og til og med spesifikke websider fra utklippstavlesporing</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Tilpasset musemodus: Høyre - Klikk på Paste og venstre - Klikk på Auto - Kopier</value>
+    <value>● Omfattende drag - og - drop support, tilpassede globale snarveier, ruting og mus - gratis navigasjon</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Utklippstavlen er en jungel. Monkeypaste er kongen! Sving fra app til app, kopiere dette og lim inn det som aldri før med MonkeyPaste !! Et helt nytt, ny, banebrytende utklippstavle og analytisk automatiseringsverktøy !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Eksempel på MonkeyPaste i aksjon!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Installert på dette språket. Engelsk er bare for disse eksemplene</value>
@@ -250,5 +264,11 @@ Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din 
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Med dette abonnementet vil du motta:
 ● Ubegrenset kapasitet</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Sikker, sikker og privat lokal datalagring (ingen datainnsamling) alltid kryptert med valgfri 2 - Faktor passordbeskyttelse</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Flere plattformer og funksjoner kommer snart! Vi er bare startet 🎉</value>
   </data>
 </root>

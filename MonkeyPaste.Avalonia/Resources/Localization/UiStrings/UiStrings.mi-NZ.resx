@@ -519,7 +519,7 @@ Hei whakarite i te whakahoahoa tika, ka tuhia e enei poto poto mo taua tono i ko
     <value>Pokatata</value>
   </data>
   <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
-    <value>Kei te hiahia ano koe ki te tango i nga waahanga katoa katoa o te '0}' {1} '</value>
+    <value>Kei te hiahia ano koe ki te tango i nga waahanga katoa katoa o te '{0}' {1} '</value>
     <comment>Number, Application Name</comment>
   </data>
   <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
@@ -741,16 +741,16 @@ Whakapaihia ki:
     <value>Kua hurihia te kaute</value>
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
-    <value>Ko to ohaurunga ko [0} / {1} me te {2} me te penapena rokiroki.
+    <value>Ko to ohaurunga ko {0} / {1} me te {2} me te {3} penapena rokiroki.
 Engari kaua e manukanuka, kaore he raraunga e ngaro i muri i te heke iho. Ko nga topenga hou ka arotakehia.</value>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
-    <value>Mihi Ko to ohaurunga ko [0} / {1} me te {2} me te penapena rokiroki.</value>
+    <value>Mihi Ko to ohaurunga ko {0} / {1} me te {2} me te {3} penapena rokiroki.</value>
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapBlockHint1" xml:space="preserve">
     <value>Paru, kaore ranei i tetahi mea
-Tuhinga ka whai mai.</value>
+Tuhinga {0} ka whai mai.</value>
   </data>
   <data name="NtfCapBlockHint2" xml:space="preserve">
     <value>Max '{0}' Ko te rokiroki ko te {1}.</value>
@@ -901,8 +901,8 @@ Tō kupuhipa.</value>
     <value>Kupu whakataha</value>
   </data>
   <data name="AccountExistingLoginText" xml:space="preserve">
-    <value>Ko to ohaurunga ko
-Inaianei whakaturia ki te [0}.</value>
+    <value>Ko to ohaurunga
+kua tautuhia inaianei ki {0}/{1}.</value>
   </data>
   <data name="AccountExistingLoginTitle" xml:space="preserve">
     <value>Ka kitea te kaute</value>
@@ -2086,7 +2086,7 @@ FAKATOKANGA: Ka mahia e te kaihoroi poto te kore he whakauru kia kore ai e taea 
     <value>I tērā marama</value>
   </data>
   <data name="TimeSpanMonths" xml:space="preserve">
-    <value>{0 quare i mua</value>
+    <value>{0} marama ki muri</value>
     <comment>Number</comment>
   </data>
   <data name="TimeSpanWeekLast" xml:space="preserve">
@@ -2269,7 +2269,7 @@ Katoa o toake ?!
     <comment>ActionName</comment>
   </data>
   <data name="ActionAnalyzeValidation3" xml:space="preserve">
-    <value>Matua '{0}' inster anake mo te '{1}' momo tohu me te tātari '{2}' e kore e whiua na te mea kaore i te tautokohia te '</value>
+    <value>Ko nga whiriwhiringa matua '{0}' anake mo '{1}' momo ihirangi me te kaitātari '{2}' e kore e mahia na te mea kaore i te tautoko i te momo whakaurunga '{3}'</value>
     <comment>Action Label, Analyzer Preset Name, Content Type</comment>
   </data>
   <data name="ActionClassifyValidation1" xml:space="preserve">
@@ -2699,5 +2699,201 @@ Kāore e taea te whakaū i te whakaoratanga katoa, ā, ka whakaiti rānei i te m
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Mā tēnei, ka taea te uru atu ki MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;kaore he pāwhiri, he&lt;/span&gt; &lt;span color="red"&gt;patu rānei i te whatu&lt;/span&gt; me te #x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Ānae</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Kōporo</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Ahanoa raraunga</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Uruora</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Kaikōrero pukapuka</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Hapa Kaore e mohiotia</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Kaituhi</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Tapahia te mono i te Guid '{0}' i kitea mo enei mono:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Whakatika ma te whakarereke i te kono mono te tango i nga taarua ranei. Ki te kore e warewarehia nga momu honohono katoa.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Kua kitea te aratohu tatūkē mono-takirua '{0}' mo enei monomai me nga tatūkē:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Mono: {0} {1} prest (# {{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Mono: {0} {1} (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Whakatika ma te whakarato i nga tohu taapiri ahurei ranei te tango i nga taarua. Ki te kore e warewarehia nga momu honohono katoa.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Tae Whakautu</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Kei te tino hiahia koe ki te muku tūturu {0} tūemi(ng)?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Tīpakohia Kōpaki</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Tīpakohia Mata Kōpaki Kōpaki</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Hapa mono. Plugin '{0}' te momo '{1}' engari kaore e kitea he whakatakotoranga '{1}'</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Te Hapa Te Mahi Mahi '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Ko te uara me whakauru noa nga nama, '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Ko te uara me ahu mai i te {0} ki te {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Me waiho he hex (6, 8 ranei) te aho ka tiimata me te '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Ko te Clipboard '{0}' Me noho motuhake.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Kei te noho kē</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Whakatakotoranga</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tuhinga</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Me noho motuhake nga ingoa a te kaipupuri korero / kaituhi kaituhi. Reader Tapahia:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Me noho motuhake nga ingoa a te kaipupuri korero / kaituhi kaituhi. Tāpirihia nga kaituhi:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Me noho motuhake nga tohu taapiri Clipboard. Nga taarua me nga tohu:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Hapa mono: Ko nga mara katoa '{0}' me ahurei mo te kai-a-ringa '{1}'. {2} 'Paramname' {3} 'He maha nga urunga</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Ko te hapa mono, kaore i kitea he kitea</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' kaore e taea te whai i te iti rawa o te 1 taapiri e whakaratohia ana</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Ko nga ID tohu mono ({0}) me tautuhi. Plugin '{1}' Kei a ia nga tohu e whai ake nei me te ngaro o te Paramid: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>I kitea te paramId takirua '{0}' (me ahurei katoa).{1}Tapanga:{1}{2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Kei te hiahiatia te GUID CUID. Kaore i kitea, kaore ranei i kitea, he mea he ranei mo te '{0}' i roto i te mono {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Kaore e kitea he taatai ​​me te paramid '{0}' i tohutoro '{1}' mo te plgin '{2}'. Kua rereke pea te Parameter, kua nekehia ranei, whakahou i te STARST paramvalue, tango ranei.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Kaore e taea te whakarite i nga tohu uara kua tohatoha i nga whakaaturanga. Paramid '{0}' i mua i te tatūkē '{1}' mo te plgin '{{2}' me tango, he paramvalue ranei ka tohua i roto i te waahanga tohu tohu.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Me whiwhi nga kaiarahi ahurei. Whakahaahia te Tapahia te Guid '{0}' i kitea i roto i te mono '{1}' mo nga Preses: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Ko te hapa o te mononi mo te mono, i te huarahi '{0}' e kore e hapa te hapa a Json. Kei te warewarehia te mono</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Ko te hapa taitara a Plugin, i te huarahi '{0}' me 'taitara' nga taonga kaore e nui ake i te {1} pūāhua. Kei te warewarehia te mono</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Ko te hapa o te miihini mo te plugin, i te ara '{0}' me te taitara '{1}' Me whai taonga 'Guid's. Te aukati i te mono.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Ko te whakamaoritanga mo te mononi, i te huarahi '{0}' kia kaua e neke atu i te {1} pūāhua. Kei te warewarehia te mono</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Ko te hapa o nga mononi mono, i te huarahi '{0}' nga tohu kia kaua e neke atu i te {1} pūāhua. Kei te warewarehia te mono</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Whakapirihia te debugger ki te '{0}' me te whakakore ranei kia haere tonu.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Tatari mo te kaituku</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>He hapa te tango i te mono. Tena koa ngana ano i muri mai.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Mono kua whakahoutia</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Kei te tino hiahia koe ki te whakaora i nga {0} mea katoa?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Paearu Paearu 'Kaore i te'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Paearu Rapu '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' Kei roto i nga uara tahi. Kei te hiahia koe ki te tautuhi ano i te hunga?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

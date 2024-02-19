@@ -1138,7 +1138,7 @@ Məsələn, Qırmızı (# FF0000) axtarış müddətidirsə və qara (# 000000) 
     <comment>Plugin Name</comment>
   </data>
   <data name="PluginErrStagingText" xml:space="preserve">
-    <value>TEMP Dir-ı Temp Dir-ı üçün Plugin'i Səhv etdirmə Səhvləri</value>
+    <value>Plugini müvəqqəti '{0}' qovluğuna təyin edərkən xəta baş verdi</value>
     <comment>Folder Path</comment>
   </data>
   <data name="PluginLoaderBackupErrorText" xml:space="preserve">
@@ -2765,5 +2765,201 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>Bu yolla, MonkeySaste əldə edilə bilər
  Bir klik olmadan və ya hətta bir göz və # x1f440</value>
     <comment>&lt;p align="center"&gt;This way, MonkeyPaste can be accessed&lt;br&gt; &lt;span color="red"&gt;without a click&lt;/span&gt; or even &lt;span color="red"&gt;batting an eye&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</comment>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Annotasiya</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klon</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Məlumat obyekti</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Plugin</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Oxucu</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Naməlum səhv</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Yazıçı</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Bu plaginlər üçün '{0}' dublikat plugin GUID:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Plugin GUID-u dəyişdirərək və ya dublikatları çıxarın. Əks təqdirdə bütün əlaqəli pluginlər nəzərə alınmayacaqdır.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Dublikat plugin əvvəlcədən təyin edilmiş GUID '{0}' bu plaginlər və hafızası üçün aşkar edildi:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} Əvvəlcədən (lər): # {2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} əvvəlcədən təyin edilmiş (lər): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Unikal əvvəlcədən gözvaqlar vermək və ya dublikatları çıxarmaqla düzəldin. Əks təqdirdə bütün əlaqəli pluginlər nəzərə alınmayacaqdır.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Redaktoru</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Bütün {0} element (lər) silmək istədiyinizə əminsiniz?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Qovluq seçin</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>İzləmə qovluğunu seçin</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Plugin səhvi. Plugin '{0}' '{1}' tipli, lakin '{1}' formatı tapıldı</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>'{0}' hərəkəti etmək səhvdir: {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Dəyər yalnız nömrələr və ya '{0}' olmalıdır</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Dəyər {0} {1} -ə qədər olmalıdır</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' İlə başlayan bir hex (6 və ya 8 rəqəmli) simli olmalıdır</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Panoya '{0}' unikal olmalıdır.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Artıq mövcuddur</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Panoya oxucu / yazıçı format adları unikal olmalıdır. Oxucu dublikatları:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Panoya oxucu / yazıçı format adları unikal olmalıdır. Yazıçı dublikat:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Panoya formatlı guids unikal olmalıdır. Dublikat formatları və Guids:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Plugin xətası: Bütün plugin '{0}' sahələri, işləyənlərin '{1}' üçün unikal olmalıdır. {2} paramname '{3}' çox giriş var</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Plugin səhvi, heç bir invariant bir təzahür tapılmadı</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' ən azı 1 parametr olmadan hafızası ola bilməz</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Unbleed Param # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Plugin parametrləri şəxsiyyət vəsiqələri ({0}) müəyyənləşdirilməlidir. Plugin '{1}', itkin Paramidin aşağıdakı parametrləri var: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Dublikat Paramid '{0}' aşkar edildi (hamısı unikal olmalıdır). {1} etiket: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Əvvəlcədən bələdçi tələb olunur. '{0}' üçün {1} 'üçün səhv format tapılmadı</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>'{2}' Plugin üçün '{1}' Əvvəlcədən təyin edilmiş '{0}' parametri ilə istinad edilən parametri tapmaq mümkün deyil. Parametr dəyişdirilmiş və ya silinmiş ola bilər, əvvəlcədən təyin edilmiş paramValue-u yeniləyin və ya silin.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Paylaşılan dəyər parametrlərini hafızada təyin edə bilməz. Paramid '{0}' Plugin '{1}' üçün '{1}' üçün '{2}' çıxarılması və ya paramvalılar parametr tərifi bölməsində göstərilə bilər.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Hazırlıqların özünəməxsus bələdləri olmalıdır. Dublikat əvvəlcədən təyin edilmiş GUID '{0}' Plugin'də hafızası üçün '{1}' də aşkar edildi: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Plugin analizi səhv, '{0}' null, JSON-ı təhlil etmək ehtimalı var. Pluginə məhəl qoymamaq</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Plugin başlığı səhv, '{0}' yolunda {1} simvoldan çox 'başlıq' əmlakı olmalıdır. Pluginə məhəl qoymamaq</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>'{1}' Başlığı ilə '{0}' yolunda olan plagin bələdçi xətası yalnız hərflər, rəqəmlər və tirelərdən ibarət RFC 4122 uyğun 128 bitlik GUID (UUID) 'hid' xüsusiyyətinə malik olmalıdır. Pluginə məhəl qoyulmur.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Plugin Təsviri Səhv, Yolda '{0}' təsviri {1} simvoldan çox olmamalıdır. Pluginə məhəl qoymamaq</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Plugin etiketləri səhv, '{0}' Yolda {1} simvoldan çox olmamalıdır. Pluginə məhəl qoymamaq</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Debugger'i '{0}' və ya davam etmək üçün ləğv edin.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Debugger gözləyir</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Səhv yükləmə plugin. Zəhmət olmasa bir az sonra yenə cəhd edin.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plugin yeniləndi</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Bütün {0} maddələri (lər) bərpa etmək istədiyinizə əminsiniz?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Axtarış meyarları 'Adsız'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Axtarış meyarları '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' paylaşılan dəyərləri ehtiva edir. Bunları da yenidən qurmaq istərdinizmi?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

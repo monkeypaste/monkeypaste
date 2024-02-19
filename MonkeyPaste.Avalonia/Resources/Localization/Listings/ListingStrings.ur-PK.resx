@@ -70,28 +70,36 @@ a 1000 تک مواد کے کلپس
     <value>بنیادی - سالانہ</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>کاپی</value>
@@ -127,19 +135,24 @@ a 1000 تک مواد کے کلپس
     <value>بلٹ - پلگ ان براؤزر میں ایک ہمیشہ کے ساتھ - بڑھتی ہوئی کمیونٹی - پلگ ان کی کارفرما لائبریری</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>مونکی پیسٹ ایک کلپ بورڈ مینیجر ، آٹومیشن اور پروڈکٹیوٹی ٹول ہے جیسے کوئی اور نہیں۔ اپنے کلپ بورڈ کو اپنے ورک فلو کے افزودہ اور منظم حصے میں بڑھانا ،
@@ -158,40 +171,41 @@ a 1000 تک مواد کے کلپس
 آپ کا کلپ بورڈ کبھی بھی آپ کی اپنی مشین سے باہر کہیں بھی ٹریک یا ذخیرہ کیا جاتا ہے۔ مدت</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>افقی/عمودی ترتیب ، فہرست/گرڈ ویو اور ملٹی - مانیٹر سپورٹ دونوں کے ساتھ آسان اور دوستانہ انٹرفیس</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● ضمیمہ موڈ: کاپی کلپ بورڈ پر 'تبدیل کریں' کے بجائے 'شامل' ہوجاتی ہے۔ متن اور فائلیں ، مکمل طور پر حسب ضرورت</value>
+    <value>● کسٹم ماؤس کے طریقوں: دائیں - پیسٹ اور بائیں پر کلک کریں - آٹو پر کلک کریں - کاپی کریں</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● نفیس کلپ سے باخبر رہنے ، فائر فاکس اور کرومیم - پر مبنی براؤزرز (کروم ، ایج ، بہادر) کے لئے بہتر مدد کے ساتھ ذرائع اور استعمال کا استعمال</value>
+    <value>● ضمیمہ موڈ: کاپی کلپ بورڈ پر 'تبدیل کریں' کے بجائے 'شامل' ہوجاتی ہے۔ متن اور فائلیں ، مکمل طور پر حسب ضرورت</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● مکمل طور پر - بھرپور متن (ٹیبلز ، فہرستیں ، لنکس ، وغیرہ) کے ساتھ نمایاں کلپ ایڈیٹر تلاش کریں/تبدیل کریں اور اجاگر کریں اور اجاگر کریں۔</value>
+    <value>● نفیس کلپ سے باخبر رہنے ، فائر فاکس اور کرومیم - پر مبنی براؤزرز (کروم ، ایج ، بہادر) کے لئے بہتر مدد کے ساتھ ذرائع اور استعمال کا استعمال</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>your اپنی تصاویر کو محفوظ ڈیٹا بیس میں اسٹور کریں ، کسی بھی وقت فائلوں کے طور پر استعمال کرنے کے لئے تیار ہوں - مطالبہ صرف ڈریگ - اور - ڈراپ!</value>
+    <value>● مکمل طور پر - بھرپور متن (ٹیبلز ، فہرستیں ، لنکس ، وغیرہ) کے ساتھ نمایاں کلپ ایڈیٹر تلاش کریں/تبدیل کریں اور اجاگر کریں اور اجاگر کریں۔</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>spective آپ کے ٹکڑوں کے ذخیرے سے فوری ، متحرک چسپاں کرنے کے لئے طاقتور ٹیکسٹ ٹیمپلیٹنگ</value>
+    <value>your اپنی تصاویر کو محفوظ ڈیٹا بیس میں اسٹور کریں ، کسی بھی وقت فائلوں کے طور پر استعمال کرنے کے لئے تیار ہوں - مطالبہ صرف ڈریگ - اور - ڈراپ!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>must کسٹم آٹومیشنز اور ایکشن چیننگ کے لئے ٹرگر اور ایکشن ڈیزائنر</value>
+    <value>spective آپ کے ٹکڑوں کے ذخیرے سے فوری ، متحرک چسپاں کرنے کے لئے طاقتور ٹیکسٹ ٹیمپلیٹنگ</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>clips تجزیہ کرنے والے کلپس کے لئے پلگ ان سسٹم کو استعمال کرنے اور اس میں توسیع کرنا آسان ہے یا اپنے کلپ بورڈ میں کوئی فارمیٹ پڑھیں/لکھیں</value>
+    <value>must کسٹم آٹومیشنز اور ایکشن چیننگ کے لئے ٹرگر اور ایکشن ڈیزائنر</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>built تعمیر - پلگ ان براؤزر میں ایک ہمیشہ کے ساتھ - بڑھتی ہوئی کمیونٹی - پلگ ان کی کارفرما لائبریری</value>
+    <value>clips تجزیہ کرنے والے کلپس کے لئے پلگ ان سسٹم کو استعمال کرنے اور اس میں توسیع کرنا آسان ہے یا اپنے کلپ بورڈ میں کوئی فارمیٹ پڑھیں/لکھیں</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>plug پلگ ان پریسٹس کے ساتھ ہر چیز کو خود کار بنائیں ، اسٹش کریں اور اپنے AI کے کسی بھی اشارے یا کمانڈ کو آسانی کے ساتھ استعمال کریں</value>
+    <value>built تعمیر - پلگ ان براؤزر میں ایک ہمیشہ کے ساتھ - بڑھتی ہوئی کمیونٹی - پلگ ان کی کارفرما لائبریری</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● جلد ہی مزید پلیٹ فارم اور خصوصیات آرہے ہیں! ہم ابھی شروع ہوئے ہیں 🎉</value>
+    <value>plug پلگ ان پریسٹس کے ساتھ ہر چیز کو خود کار بنائیں ، اسٹش کریں اور اپنے AI کے کسی بھی اشارے یا کمانڈ کو آسانی کے ساتھ استعمال کریں</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>light ہلکے اور سیاہ تھیم دونوں مکمل طور پر متحرک ہیں ، آپ جس رنگ کی خواہش کا استعمال کریں</value>
@@ -208,29 +222,29 @@ a 1000 تک مواد کے کلپس
   <data name="StoreFeature6" xml:space="preserve">
     <value>tag اپنے کلپس کو ٹیگ کے درختوں میں منظم کریں اور دوبارہ قابل فلٹر بنائیں</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● محفوظ ، محفوظ اور نجی مقامی ڈیٹا اسٹوریج (کوئی ڈیٹا اکٹھا نہیں) ہمیشہ اختیاری 2 کے ساتھ خفیہ کردہ۔</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● وسیع ڈریگ - اور - ڈراپ سپورٹ ، کسٹم گلوبل شارٹ کٹ ، روٹنگ اور ماؤس - مفت نیویگیشن</value>
+    <value>cleplabboard کلپ بورڈ سے باخبر رہنے سے کچھ ایپس ، ویب سائٹوں اور یہاں تک کہ مخصوص ویب صفحات کو آسانی سے روکیں</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● کسٹم ماؤس کے طریقوں: دائیں - پیسٹ اور بائیں پر کلک کریں - آٹو پر کلک کریں - کاپی کریں</value>
+    <value>● وسیع ڈریگ - اور - ڈراپ سپورٹ ، کسٹم گلوبل شارٹ کٹ ، روٹنگ اور ماؤس - مفت نیویگیشن</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>کلپ بورڈ ایک جنگل ہے۔ بندر پیسٹ بادشاہ ہے! ایپ سے ایپ میں سوئنگ ، اس کی کاپی کرنا اور اس طرح چسپاں کرنا جیسے پہلے کبھی نہیں مانکی پیسٹ کے ساتھ !! ایک برانڈ - نیا ، جدید کلپ بورڈ اور تجزیاتی آٹومیشن ٹول !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>ایکشن میں بندر کی قیمت کا نمونہ!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>اس زبان میں نصب ہے۔ انگریزی صرف ان مثالوں کے لئے ہے</value>
@@ -250,5 +264,11 @@ a 1000 تک مواد کے کلپس
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>اس رکنیت کے ساتھ آپ کو ملے گا:
 lim لامحدود صلاحیت</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● محفوظ ، محفوظ اور نجی مقامی ڈیٹا اسٹوریج (کوئی ڈیٹا اکٹھا نہیں) ہمیشہ اختیاری 2 کے ساتھ خفیہ کردہ - عنصر پاس ورڈ کی حفاظت</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● جلد ہی مزید پلیٹ فارم اور خصوصیات آرہے ہیں! ہم ابھی شروع ہوئے ہیں 🎉</value>
   </data>
 </root>

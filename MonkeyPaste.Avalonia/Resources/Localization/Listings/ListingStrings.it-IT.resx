@@ -70,28 +70,36 @@
     <value>BASIC - annuale</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copia</value>
@@ -127,19 +135,24 @@
     <value>Costruito - In browser di plug -in con una comunità in sempre più in crescita - Biblioteca di plugin guidata</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste è un gestore degli appunti, l'automazione e lo strumento di produttività come nessun altro. Migliorare gli appunti in una parte arricchita e organizzata del flusso di lavoro,
@@ -158,40 +171,41 @@ Voglio anche che tu ti senta a tuo agio a usarlo. Quindi ti assicuro, come l'uni
 Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Periodo.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Interfaccia semplice e amichevole con layout orizzontale/verticale, vista elenco/griglia e supporto multi -monitor</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Modalità aggiunta: la copia diventa "Aggiungi a" invece di "Sostituisci" negli appunti. Sia testo che file, completamente personalizzabili</value>
+    <value>● Modalità del mouse personalizzate: destro: fare clic su Incolla e sinistra - Fare clic su Auto - Copia</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Tracciamento di clip sofisticato, fonti e utilizzo con supporto migliorato per browser a base di Firefox e Chromium (Chrome, Edge, Brave)</value>
+    <value>● Modalità aggiunta: la copia diventa "Aggiungi a" invece di "Sostituisci" negli appunti. Sia testo che file, completamente personalizzabili</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Completamente - Editor di clip in primo piano con testo ricco (tabelle, elenchi, collegamenti, ecc.) Con ricerca/sostituzione e evidenziazione</value>
+    <value>● Tracciamento di clip sofisticato, fonti e utilizzo con supporto migliorato per browser a base di Firefox e Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Conservare le immagini nel database sicuro, pronti per l'uso come file in qualsiasi momento - richiedi semplicemente trascina - e - lascia cadere!</value>
+    <value>● Completamente - Editor di clip in primo piano con testo ricco (tabelle, elenchi, collegamenti, ecc.) Con ricerca/sostituzione e evidenziazione</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Potente modello di testo per incollaggio rapido e dinamico dalla collezione di snippet</value>
+    <value>● Conservare le immagini nel database sicuro, pronti per l'uso come file in qualsiasi momento - richiedi semplicemente trascina - e - lascia cadere!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action Designer per automazione personalizzate e incapaci d'azione</value>
+    <value>● Potente modello di testo per incollaggio rapido e dinamico dalla collezione di snippet</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Semplice da usare ed estendere il sistema di plug -in sia per l'analisi delle clip o per leggere/scrivere qualsiasi formato negli appunti</value>
+    <value>● Trigger &amp; Action Designer per automazione personalizzate e incapaci d'azione</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Costruito - Nel browser di plug -in con una comunità di plugin sempre in crescita -</value>
+    <value>● Semplice da usare ed estendere il sistema di plug -in sia per l'analisi delle clip o per leggere/scrivere qualsiasi formato negli appunti</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatizza tutto con preset di plug -in, riforniti e usa facilmente una delle istruzioni o dei comandi dell'IA</value>
+    <value>● Costruito - Nel browser di plug -in con una comunità di plugin sempre in crescita -</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Più piattaforme e funzionalità in arrivo! Stiamo appena iniziando 🎉</value>
+    <value>● Automatizza tutto con preset di plug -in, riforniti e usa facilmente una delle istruzioni o dei comandi dell'IA</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Sia i temi leggeri che quelli scuri sono completamente dinamici, usa qualsiasi colore desiderato</value>
@@ -208,29 +222,29 @@ Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Peri
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organizza le clip in tag alberi e crea filtri risusabili</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Archiviazione dati locale sicura, sicura e privata (nessuna raccolta di dati) sempre crittografata con protezione da password a 2 - fattore facilmente bloccato e bloccare facilmente le app o i siti Web dal tracker</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Ampia supporto di resistenza - e - drop, scorciatoie globali personalizzate, routing e mouse - Navigazione gratuita</value>
+    <value>● Bloccare facilmente alcune app, siti Web e persino pagine Web specifiche dal monitoraggio degli appunti</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Modalità del mouse personalizzate: destro: fare clic su Incolla e sinistra - Fare clic su Auto - Copia</value>
+    <value>● Ampia supporto di resistenza - e - drop, scorciatoie globali personalizzate, routing e mouse - Navigazione gratuita</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Lo Appuntante è una giungla. Monkeypaste è il re! Swing da app a app, copiando questo e incollando che non prima con Monkeypaste !! Un marchio - Nuovo strumento di appunti e automazione analitica !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Esempio di Monkeypaste in azione!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Installato in questa lingua. L'inglese è solo per questi esempi</value>
@@ -250,5 +264,11 @@ Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Peri
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Con questo abbonamento riceverai:
 ● Capacità illimitata</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Archiviazione dati locale sicura, sicura e privata (nessuna raccolta di dati) sempre crittografata con protezione da password a 2 - fattore facoltativo</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Più piattaforme e funzionalità in arrivo! Stiamo appena iniziando 🎉</value>
   </data>
 </root>

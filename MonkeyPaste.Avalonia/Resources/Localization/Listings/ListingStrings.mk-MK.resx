@@ -70,28 +70,36 @@
     <value>Основно - годишно</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>копија</value>
@@ -127,19 +135,24 @@
     <value>Изграден - во прелистувач на приклучоци со постојано - растечка заедница - управувана библиотека на додатоци</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>MonkeyPaste е менаџер на таблата со клип, алатка за автоматизација и продуктивност како никој друг. Подобрување на вашата таблата со исечоци во збогатен и организиран дел од вашиот работен тек,
@@ -158,40 +171,41 @@
 Вашата таблата со исечоци некогаш се следи или се чува каде било над вашата сопствена машина. Период.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Едноставен и пријателски интерфејс и со хоризонтални/вертикални распоред, преглед на список/мрежа и поддршка за монитори</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Додадете режим: Копирањето станува „Додај во“ наместо „Заменете“ на таблата со исечоци. И текст и датотеки, целосно прилагодливи</value>
+    <value>● Прилагодени режими на глувчето: десно - кликнете на залепеност и лево - кликнете на Auto - Копирајте</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Софистицирано следење на клипот, извори и употреба со подобрена поддршка за прелистувачи засновани на Firefox и Chromium (Chrome, Edge, Brave)</value>
+    <value>● Додадете режим: Копирањето станува „Додај во“ наместо „Заменете“ на таблата со исечоци. И текст и датотеки, целосно прилагодливи</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Целосно - Изграден уредник на клип со богат текст (табели, списоци, врски, итн.) Со пронаоѓање/замена и истакнување</value>
+    <value>● Софистицирано следење на клипот, извори и употреба со подобрена поддршка за прелистувачи засновани на Firefox и Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Чувајте ги вашите слики во безбедна база на податоци, подготвени за употреба како датотеки во секое време - побарувачка само влечење - и - испуштете!</value>
+    <value>● Целосно - Изграден уредник на клип со богат текст (табели, списоци, врски, итн.) Со пронаоѓање/замена и истакнување</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Моќен текст зачудувачки за брзо, динамично залепување од вашата колекција на Snippet</value>
+    <value>● Чувајте ги вашите слики во безбедна база на податоци, подготвени за употреба како датотеки во секое време - побарувачка само влечење - и - испуштете!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Дизајнер на активирање и акција за сопствени автоматизации и синџир на акција</value>
+    <value>● Моќен текст зачудувачки за брзо, динамично залепување од вашата колекција на Snippet</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Едноставен за употреба и проширување на системот за додатоци и за анализирање на клипови или за читање/напишување на кој било формат на вашата табла за клип</value>
+    <value>● Дизајнер на активирање и акција за сопствени автоматизации и синџир на акција</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Изграден - во прелистувач на приклучоци со постојано - растечка заедница - управувана библиотека на додатоци</value>
+    <value>● Едноставен за употреба и проширување на системот за додатоци и за анализирање на клипови или за читање/напишување на кој било формат на вашата табла за клип</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Автоматизирајте сè со претходно поставување на додатоци, заштитете и користете ги сите ваши инструкции или команди за АИ со леснотија</value>
+    <value>● Изграден - во прелистувач на приклучоци со постојано - растечка заедница - управувана библиотека на додатоци</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Повеќе платформи и карактеристики наскоро! Само што започнавме со добивање</value>
+    <value>● Автоматизирајте сè со претходно поставување на додатоци, заштитете и користете ги сите ваши инструкции или команди за АИ со леснотија</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● И светлината и темните теми се целосно динамични, користете која било боја што ја сакате</value>
@@ -208,29 +222,29 @@
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Организирајте ги клиповите во дрвјата со ознаки и креирајте филтри за преобразување</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Безбедно, безбедно и приватно складирање на локални податоци (без прибирање податоци) секогаш шифрирано со избор 2 - Заштита на лозинка за фактори и лесно блокирајте апликации или веб -страници од вашиот Tracker</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Широко влечење - и - Поддршка за паѓање, сопствени глобални кратенки, рутирање и глувче - бесплатна навигација</value>
+    <value>● Лесно блокирајте одредени апликации, веб -страници, па дури и специфични веб -страници од следење на таблата со исечоци</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Прилагодени режими на глувчето: десно - кликнете на залепеност и лево - кликнете на Auto - Копирајте</value>
+    <value>● Широко влечење - и - Поддршка за паѓање, сопствени глобални кратенки, рутирање и глувче - бесплатна навигација</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Клипборд е џунгла. Monkeypaste е кралот! Заматете од апликација до апликација, копирајќи го ова и залепувајќи го тоа како никогаш досега со Monkeypaste !! Бренд - нова, најсовремена табла за клип и алатка за аналитичка автоматизација !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Примерок на MonkeyPaste во акција!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Инсталиран на овој јазик. Англискиот е само за овие примери</value>
@@ -250,5 +264,11 @@
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Со оваа претплата ќе ја добиете:
 ● Неограничен капацитет</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Безбедно, безбедно и приватно складирање на локални податоци (без прибирање на податоци) секогаш шифрирано со избор 2 - Заштита на лозинка на факторот</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Повеќе платформи и карактеристики наскоро! Само што започнавме со добивање</value>
   </data>
 </root>

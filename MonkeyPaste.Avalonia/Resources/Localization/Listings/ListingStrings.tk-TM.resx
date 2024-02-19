@@ -70,28 +70,36 @@
     <value>Esasy - ýyl</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>göçürmek</value>
@@ -127,19 +135,24 @@
     <value>Gurlan - Her gezek popin brauzerde - ösýän jemgyýetde - pluginleriň kitaphanasy bilen sürtüň</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Maýmaýfase başga hiç kim ýaly laýyk oturgyç we öndürijilik guraldyr. Paneli güýçlendirmek we iş meýdanyňyzyň baýlaşdyrylan we guramaçylykly bölegine güýçlendirmek,
@@ -158,40 +171,41 @@ Men öňküsi ýaly agzalýan şol programmist, her kimiň maýynjadan peýdalan
 SÖ .GI BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLANOK Döwür.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Gorizontal / dikligine we dikligine, sanaw / Grid görnüşleri, sanaw / Grid görnüşli we multion</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>Id R defold tertibi: Göçürmek, "çalyşmagyň" ýerine 'çalyşmak' ýerine 'goşmak' 'goşmak' 'goşuň. Tekst we faýllaryň ikisi-de doly sazlap boljakdyr</value>
+    <value>● Adaty syçan modies: Dogry</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>Colefox we Chroom üçin güýçlendirilen gözleg, çeşmeleri, çeşmeleri, brauzerleri, brauzerleri üçin güýçlendirilen goldaw bilen (hrom, gyrasy, batyr)</value>
+    <value>Id R defold tertibi: Göçürmek, "çalyşmagyň" ýerine 'çalyşmak' ýerine 'goşmak' 'goşmak' 'goşuň. Tekst we faýllaryň ikisi-de doly sazlap boljakdyr</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Doly reňklemek / çalşyk we tapawutlandyrmak bilen baý tekst bilen döredilen kesilen redaktor (tablisalar, sanawlar, baglanyşyklar, we ş.m.) bilen tapawutlanandygyny görüň</value>
+    <value>Colefox we Chroom üçin güýçlendirilen gözleg, çeşmeleri, çeşmeleri, brauzerleri, brauzerleri üçin güýçlendirilen goldaw bilen (hrom, gyrasy, batyr)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>In The Howpsuzlyk ýerleriňizi ygtybarly maglumat bazasynda saklaň - islendik wagt dowam eden faýl hökmünde ulanmaga taýyn - IFORE Süýreşmek üçin faýl hökmünde ulanmaga taýyn - Dişdiriň we - Drop!</value>
+    <value>● Doly reňklemek / çalşyk we tapawutlandyrmak bilen baý tekst bilen döredilen kesilen redaktor (tablisalar, sanawlar, baglanyşyklar, we ş.m.) bilen tapawutlanandygyny görüň</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>Benpet Collectoluňyzdan çalt, dinamiki çingigeşleýin çökdüriji pasport</value>
+    <value>In The Howpsuzlyk ýerleriňizi ygtybarly maglumat bazasynda saklaň - islendik wagt dowam eden faýl hökmünde ulanmaga taýyn - IFORE Süýreşmek üçin faýl hökmünde ulanmaga taýyn - Dişdiriň we - Drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>ACörite awtoulaglar we hereketleri ýa-da hereketi zaýalanmak üçin trigger we hereket dizaýneri</value>
+    <value>Benpet Collectoluňyzdan çalt, dinamiki çingigeşleýin çökdüriji pasport</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● seljerýän klipleri seljerýän ýa-da seljermek ýa-da ýazmak üçin plugin ulgamyny ulanyň ýa-da ýazmak / ýazyň</value>
+    <value>ACörite awtoulaglar we hereketleri ýa-da hereketi zaýalanmak üçin trigger we hereket dizaýneri</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>Internasy - baky bolan pop saz brauziýasynda - ösdürip ýetişdirmek boýunça köpeldi</value>
+    <value>● seljerýän klipleri seljerýän ýa-da seljermek ýa-da ýazmak üçin plugin ulgamyny ulanyň ýa-da ýazmak / ýazyň</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● PRUGIN bally, plugin täzelikleri bilen awtomatiki usulda we AI-laryňyzyň ýa-da buýruklaryňyzyň haýsydyr birini ulanýan zatlaryňyzy ulanyň</value>
+    <value>Internasy - baky bolan pop saz brauziýasynda - ösdürip ýetişdirmek boýunça köpeldi</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>Basym ýakyn wagtda gidýän has köp platformalar we aýratynlyklar! Biz ýaňy başlaýarys</value>
+    <value>● PRUGIN bally, plugin täzelikleri bilen awtomatiki usulda we AI-laryňyzyň ýa-da buýruklaryňyzyň haýsydyr birini ulanýan zatlaryňyzy ulanyň</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Iki ýagtylyk we garaňky mowzuklar doly dinamiki, isleýän islendik reňkiňizi ulanyň</value>
@@ -208,29 +222,29 @@ SÖ .GI BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN 
   <data name="StoreFeature6" xml:space="preserve">
     <value>Clipleriňizi agaçlary belligi belläň we üýtgedilen süzgüçleri dörediň</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Howpsuz, ygtybarly we hususy ýerli maglumatlary saklamak (maglumat ýygnamak ýok</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Giňişleýin süýräp, goldaw, dinde blobal gysga ýollar, multiplamak we syçan - mugt nawigasiýa</value>
+    <value>The Käbir programmalary, web sahypalaryny, web sahypalaryny we hatda belli bir web sahypasyndan başga bir web sahypalaryny ýapyň</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Adaty syçan modies: Dogry</value>
+    <value>● Giňişleýin süýräp, goldaw, dinde blobal gysga ýollar, multiplamak we syçan - mugt nawigasiýa</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Paneli jeňňeldir. Maýmpasta patyşa! Programmadan programmadan göçürmek, bu monalpasta-da hiç haçan basseýklemek we hiç haçan biperwaýlygy göçürmek !! Marka - Täze, kesmek banky we analitiki enjam guraly !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Hereketde maýmpastyň nusgasy!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Bu dilde oturdyldy. Iňlis diňe bu mysallar üçin</value>
@@ -250,5 +264,11 @@ SÖ .GI BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN 
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Bu abunalygy bilen alarsyňyz:
 ● Çäklendirilmedik kuwwat</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Howpsuz, ygtybarly we hususy ýerli maglumatlary saklamak (maglumat ýygnamak ýok) elmydama 2 - faktor paroly goramak</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>Basym ýakyn wagtda gidýän has köp platformalar we aýratynlyklar! Biz ýaňy başlaýarys</value>
   </data>
 </root>

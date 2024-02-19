@@ -1138,7 +1138,7 @@ Per exemple, si el vermell (#FF0000) és el terme de cerca i el negre (#000000) 
     <comment>Plugin Name</comment>
   </data>
   <data name="PluginErrStagingText" xml:space="preserve">
-    <value>Error de posada en escena</value>
+    <value>S'ha produït un error en instal·lar el connector al directori temporal '{0}'</value>
     <comment>Folder Path</comment>
   </data>
   <data name="PluginLoaderBackupErrorText" xml:space="preserve">
@@ -2699,5 +2699,201 @@ La restauració total no es pot garantir i pot reduir el rendiment o fins i tot 
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;D'aquesta manera, es pot accedir a MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;sense un clic&lt;/span&gt; ni tan sols &lt;span color="red"&gt;batent un ull&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Anotació</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Clon</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Objecte de dades objecte</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Connectar</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Lector</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Error desconegut</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Escriptor</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Duplicat el connector de plugin '{0}' detectat per a aquests plugins:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Corregiu canviant el guia del complement o eliminant els duplicats. En cas contrari, s’ignoraran tots els plugins associats.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Duplicat el connector PRESET GUID '{0}' detectat per a aquests plugins i presets:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} Preset (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} Preset (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Corregiu proporcionant orientals preestablerts únics o eliminant duplicats. En cas contrari, s’ignoraran tots els plugins associats.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Color de l'editor</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Esteu segur que voleu suprimir de forma permanent tots els articles {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Seleccioneu la carpeta</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Seleccioneu la carpeta de vigilància</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Error de plugin. Plugin '{0}' és '{1}' Tipus però no es troba el format '{1}'</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Error Realitzant Action '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>El valor ha de contenir només números o "{0}"</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>El valor ha de ser de {0} a {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Ha de ser una cadena hex (6 o 8 dígits) que comença amb "#"</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Clipboard '{0}' ha de ser únic.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Ja existeix per a</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tipus</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Els noms del format de lector/escriptor de retalls han de ser únics. Duplicats del lector:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Els noms del format de lector/escriptor de retalls han de ser únics. Duplicats de l'escriptor:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Les Guies del format de porta -retalls han de ser únics. Formats i orientació duplicats:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Error del plugin: tots els camps del connector '{0}' han de ser únics per a Handler '{1}'. {2} paramname '{3}' té diverses entrades</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Error del plugin, no es troba cap manifest invariant</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' no pot tenir presets sense almenys 1 paràmetre previst</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Param no etiquetat #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>S'han de definir els paràmetres del complement ({0}). Plugin '{1}' té els paràmetres següents amb paramid que falta: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Duplicat paramid '{0}' detectat (tot ha de ser únic). {1} etiquetes: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Es requereix un guia preestablert. No es va trobar ni un format equivocat per a '{0}' al plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>No es pot trobar el paràmetre amb paramid '{0}' a què es fa referència per Preset '{1}' per al plugin '{2}'. El paràmetre pot haver canviat o eliminar, actualitzar el paramvalue o eliminar -lo.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>No es pot definir els paràmetres de valor compartit en els presets. Paramid '{0}' a Preset '{1}' Per al plugin '{2}' cal eliminar o es pot especificar paramValue a la secció de definició de paràmetres.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Els presets han de tenir orientals únics. Es va detectar el guid preestablert "{0} 'en plugin' {1} 'per a presets: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Error de l'analització del complement, a la ruta '{0}' nul, probablement l'error analitzant JSON. Ignorant el connector</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Error del títol del complement, a la ruta '{0}' ha de tenir la propietat 'title' amb més que {1} caràcters. Ignorant el connector</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Error de Guid del complement, a la ruta '{0}' amb el títol '{1}' ha de tenir una propietat 'guid', RFC 4122 GUID compatible amb 128 bits (UUID) amb només lletres, números i hiphens. Ignorant el plugin.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Error de descripció del plugin, a la ruta '{0}' Descripció no ha de ser més que {1} caràcters. Ignorant el connector</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Error de les etiquetes del complement, a la ruta '{0}' Les etiquetes no han de ser més que {1} caràcters. Ignorant el connector</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Adjunteu el depurador a "{0} o cancel·leu per continuar.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Esperant el depurador</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Error de descàrrega del connector. Siusplau, intenta-ho més tard.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plugin actualitzat</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Esteu segur que voleu restaurar tots els articles {0}?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Criteris de cerca "sense títol"</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Criteris de cerca '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' conté valors compartits. Voleu restablir -los també?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

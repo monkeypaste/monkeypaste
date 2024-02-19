@@ -70,28 +70,36 @@
     <value>BASIC - anual</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copie</value>
@@ -127,19 +135,24 @@
     <value>Construit - în browserul de pluginuri cu o comunitate în creștere - Biblioteca de pluginuri conduse</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste este un manager de clipboard, un instrument de automatizare și productivitate ca niciun altul. Îmbunătățirea clipboard -ului într -o parte îmbogățită și organizată din fluxul dvs. de lucru,
@@ -158,40 +171,41 @@ De asemenea, vreau să vă simțiți confortabil folosindu -l. Așa că vă asig
 Clipboard -ul dvs. este urmărit sau păstrat oriunde dincolo de propria mașină. Perioadă.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Interfață simplă și prietenoasă atât cu machete orizontale/verticale, vizualizare lista/grilă și asistență multi -monitor</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Modul de anexare: copierea devine „Adăugare la„ în loc să „înlocuiți” pe clipboard. Atât text, cât și fișiere, complet personalizabil</value>
+    <value>● Moduri personalizate ale mouse -ului: dreapta - Faceți clic pe Lipire și la stânga - Faceți clic pe Auto - Copiați</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Urmărirea sofisticată a clipurilor, sursele și utilizarea cu suport îmbunătățit pentru browserele pe bază de Firefox și Chrom (Chrome, Edge, Brave)</value>
+    <value>● Modul de anexare: copierea devine „Adăugare la„ în loc să „înlocuiți” pe clipboard. Atât text, cât și fișiere, complet personalizabil</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● În totalitate - editor de clipuri prezentat cu text bogat (tabele, liste, link -uri etc.) cu găsiți/înlocuiți și evidențiați</value>
+    <value>● Urmărirea sofisticată a clipurilor, sursele și utilizarea cu suport îmbunătățit pentru browserele pe bază de Firefox și Chrom (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Stocați -vă imaginile în baza de date sigură, gata de utilizare ca fișiere oricând pe - cereți doar trageți - și - Drop!</value>
+    <value>● În totalitate - editor de clipuri prezentat cu text bogat (tabele, liste, link -uri etc.) cu găsiți/înlocuiți și evidențiați</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Șablon de text puternic pentru lipirea rapidă și dinamică din colecția dvs. de fragmente</value>
+    <value>● Stocați -vă imaginile în baza de date sigură, gata de utilizare ca fișiere oricând pe - cereți doar trageți - și - Drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action Designer pentru automatizări personalizate și înlănțuire de acțiune</value>
+    <value>● Șablon de text puternic pentru lipirea rapidă și dinamică din colecția dvs. de fragmente</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Simplu de utilizat și extins sistemul de pluginuri atât pentru analizarea clipurilor sau pentru a citi/scrie orice format în clipboard</value>
+    <value>● Trigger &amp; Action Designer pentru automatizări personalizate și înlănțuire de acțiune</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Construit - în browserul de pluginuri cu o comunitate în creștere - Biblioteca de pluginuri conduse</value>
+    <value>● Simplu de utilizat și extins sistemul de pluginuri atât pentru analizarea clipurilor sau pentru a citi/scrie orice format în clipboard</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>Log</value>
+    <value>● Construit - în browserul de pluginuri cu o comunitate în creștere - Biblioteca de pluginuri conduse</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Mai multe platforme și funcții în curând! Suntem doar getsings a început 🎉</value>
+    <value>Log</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Atât temele deschise și întunecate sunt complet dinamice, utilizați orice culoare doriți</value>
@@ -208,29 +222,29 @@ Clipboard -ul dvs. este urmărit sau păstrat oriunde dincolo de propria mașin�
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organizați -vă clipurile în arbori de etichete și creați filtre resuzabile</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Stocare de date locale sigure, sigure și private (fără colectare de date) criptate întotdeauna cu protecție opțională cu 2 - factor de parolă și blochează cu ușurință aplicații sau site -uri web de pe tracker</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>.000</value>
+    <value>● Blocați cu ușurință anumite aplicații, site -uri web și chiar pagini web specifice de la urmărirea clipboard</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Moduri personalizate ale mouse -ului: dreapta - Faceți clic pe Lipire și la stânga - Faceți clic pe Auto - Copiați</value>
+    <value>.000</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard -ul este o junglă. Monkeypaste este regele! Swing de la aplicație în aplicație, copierea acestui lucru și lipirea asta ca niciodată cu Monkeypaste !! Un brand - instrument nou, clipboard de ultimă oră și automatizare analitică !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Eșantion de Monkeypaste în acțiune!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Instalat în această limbă. Engleza este doar pentru aceste exemple</value>
@@ -250,5 +264,11 @@ Clipboard -ul dvs. este urmărit sau păstrat oriunde dincolo de propria mașin�
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Cu acest abonament veți primi:
 ● Capacitate nelimitată</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Stocare de date locale sigure, sigure și private (fără colectare</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Mai multe platforme și funcții în curând! Suntem doar getsings a început 🎉</value>
   </data>
 </root>

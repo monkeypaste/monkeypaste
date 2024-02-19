@@ -648,10 +648,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-
             IsRestoringEnabled = true;
-
-
 
             var enabled_triggers =
             Items

@@ -2700,4 +2700,200 @@ Potpuna obnova ne može biti zajamčena i može smanjiti performanse ili čak sr
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Na taj se način može pristupiti MonkeyPasteu&lt;br&gt;&lt;span color="red"&gt;bez klika&lt;/span&gt; ili čak &lt;span color="red"&gt;udaranja okom&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Napomena</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klon</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Objekt podataka</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Uključiti</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Čitač</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Nepoznata pogreška</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Pisac</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>DUPLICATE PUDIN GUID '{0}' otkriven za ove dodatke:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Popravite promjenom dodataka ili uklanjanjem duplikata. Inače će se svi pridruženi dodaci zanemariti.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>DUPLICATE PUDIN PREDUČENJE GUID '{0}' za ove dodatke i unaprijed postavljene:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Dodatak: {0} {1} unaprijed postavljen (i): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Dodatak: {0} {1} unaprijed postavljen (i): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Popravite pružanjem jedinstvenih unaprijed postavljenih Guida ili uklanjanjem duplikata. Inače će se svi pridruženi dodaci zanemariti.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Boja urednika</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Jeste li sigurni da želite trajno izbrisati sve {0} stavke?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Odaberite mapu</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Odaberite mapu za gledanje</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Pogreška dodatka. Dodatak '{0}' je "{1} ', ali nije pronađen format' {1} '</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Pogreška Izvođenje radnje '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Vrijednost mora sadržavati samo brojeve ili '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Vrijednost mora biti od {0} do {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Mora biti šesterokutni (6 ili 8 znamenkasti) niz počevši od '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Udruživanje '{0}' mora biti jedinstven.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Već postoji za</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Nazivi čitatelja/pisca čitača/pisca moraju biti jedinstveni. Čitač duplikati:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Nazivi čitatelja/pisca čitača/pisca moraju biti jedinstveni. Pisac duplicira:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Guidi formata međuspremnika moraju biti jedinstveni. Duplikatni formati i Guidi:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Pogreška dodatka: svi dodatak '{0}' polja moraju biti jedinstvena za Handler '{1}'. {2} paramName '{3}' ima više unosa</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Pogreška dodatka, nije pronađena invarijantna manifest</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Dodatak '{0}' ne može imati unaprijed postavljeno bez najmanje 1 parametra</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Neznatni param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ID -ovi parametara dodatka ({0}) moraju biti definirani. Dodatak '{1}' ima sljedeće parametre s nedostajućim paramerima: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Detektirani duplikat ParamId '{0}' (svi moraju biti jedinstveni). {1} naljepnice: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Potreban je unaprijed GUID. Nije pronađen ili pogrešan format za '{0}' u dodatku {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Ne može pronaći parametar s paramId '{0}' na koju se referencira unaprijed '{1}' za dodatak '{2}'. Parametar je možda promijenjen ili uklonjen, ažurirajte unaprijed postavljenu ParamValue ili ga uklonite.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Ne mogu postaviti parametre zajedničke vrijednosti u unaprijed postavljenim postavkama. PAMAMID '{0}' U unaprijed postavljenom '{1}' za dodatak '{2}' treba ukloniti ili se paramValue može odrediti u odjeljku definicije parametra.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Pretpostavljene postavke moraju imati jedinstvene upute. Duplikat unaprijed GUID '{0}' otkriven je u dodatku '{1}' za unaprijed postavljene: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Pogreška raščlanjivanja dodatka, na putu '{0}' null, vjerojatno raščlanjivanje pogreške JSON. Zanemarivanje dodatka</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Pogreška naslova dodatka, na putu '{0}' mora imati svojstvo 'naslov' s ne više od {1} znakova. Zanemarivanje dodatka</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Pogreška dodatka GUID, na putu '{0}' s naslovom '{1}' mora imati svojstvo 'GUID', RFC 4122 kompatibilan 128-bitni GUID (UUID) sa samo slovima, brojevima i crticom. Zanemarivanje dodatka.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Opis dodatka, na putu '{0}' Opis ne smije biti više od {1} znakova. Zanemarivanje dodatka</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Pogreška oznaka dodataka, na putu '{0}' Oznake ne smiju biti više od {1} znakova. Zanemarivanje dodatka</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Priložite uklanjanje pogrešaka na '{0}' ili otkažite da biste nastavili.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Čekajući za uklanjanje pogrešaka</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Pogreška u preuzimanje dodatka. Molimo pokušajte ponovo kasnije.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Ažurirano dodatak</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Jeste li sigurni da želite vratiti sve {0} stavke?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Kriteriji za pretraživanje "UNTRED"</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Kriteriji za pretraživanje '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' sadrži zajedničke vrijednosti. Želite li ih resetirati?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

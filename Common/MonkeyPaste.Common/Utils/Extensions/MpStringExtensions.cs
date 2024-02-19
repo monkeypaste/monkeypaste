@@ -295,6 +295,9 @@ namespace MonkeyPaste.Common {
         public static bool IsStringNullOrEmpty(this string str) {
             return string.IsNullOrEmpty(str);
         }
+        public static string Format(this string str, params object[] paramObjs) {
+            return string.Format(str, paramObjs);
+        }
 
         public static bool IsStringNullOrWhiteSpace(this string str) {
             return string.IsNullOrWhiteSpace(str);

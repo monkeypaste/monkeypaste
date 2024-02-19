@@ -123,8 +123,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string ManageLabel => $"{Title} Preset Manager";
-
         public string ItemBackgroundHexColor {
             get {
                 if (IsSelected) {
@@ -560,7 +558,8 @@ namespace MonkeyPaste.Avalonia {
                     // ntf w/ yes/no/cancel to reset shared values
                     var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
                         title: UiStrings.CommonConfirmLabel,
-                        message: $"'{aipvm.Label}' contains shared values. Would you like to reset those as well?",
+                        //message: $"'{aipvm.Label}' contains shared values. Would you like to reset those as well?",
+                        message: UiStrings.SharedValNtfText.Format(aipvm.Label),
                         iconResourceObj: "QuestionMarkImage");
                     if (result.IsNull()) {
                         // cancel
@@ -661,14 +660,14 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand DuplicatePresetCommand => new MpAsyncCommand<object>(
             async (args) => {
+                if (args is not MpAvClipboardFormatPresetViewModel aipvm) {
+                    return;
+                }
                 IsBusy = true;
 
-                var aipvm = args as MpAvClipboardFormatPresetViewModel;
-                if (aipvm == null) {
-                    throw new Exception("DuplicatedPresetCommand must have preset as argument");
-                }
+
                 var p_to_clone = aipvm.Preset;
-                p_to_clone.Label += " - Clone";
+                p_to_clone.Label += $" - {UiStrings.CommonCloneLabel}";
                 p_to_clone.SortOrderIdx = Items.Count;
                 p_to_clone.IsModelReadOnly = false;
                 var dp = await aipvm.Preset.CloneDbModelAsync(

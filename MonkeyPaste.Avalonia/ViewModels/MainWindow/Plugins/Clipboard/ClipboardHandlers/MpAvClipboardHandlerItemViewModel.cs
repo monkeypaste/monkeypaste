@@ -261,7 +261,8 @@ namespace MonkeyPaste.Avalonia {
                 var dupNames = PluginFormat.oleHandler.readers.GroupBy(x => x.formatName).Where(x => x.Count() > 1);
                 if (dupNames.Count() > 0) {
                     var sb = new StringBuilder();
-                    sb.AppendLine($"Clipboard reader/writer format names must be unique. Reader duplicates:");
+                    //sb.AppendLine($"Clipboard reader/writer format names must be unique. Reader duplicates:");
+                    sb.AppendLine(UiStrings.InvalidHandlerEx1);
                     dupNames.ForEach(x => sb.AppendLine(x.Key));
                     string test = sb.ToString();
                     error_notifications.Add(MpPluginLoader.CreateInvalidPluginNotification(sb.ToString(), PluginFormat));
@@ -272,7 +273,8 @@ namespace MonkeyPaste.Avalonia {
                 var dupNames = PluginFormat.oleHandler.writers.GroupBy(x => x.formatName).Where(x => x.Count() > 1);
                 if (dupNames.Count() > 0) {
                     var sb = new StringBuilder();
-                    sb.AppendLine($"Clipboard reader/writer format names must be unique. Writer duplicates:");
+                    //sb.AppendLine($"Clipboard reader/writer format names must be unique. Writer duplicates:");
+                    sb.AppendLine(UiStrings.InvalidHandlerEx2);
                     dupNames.ForEach(x => sb.AppendLine(x.Key));
                     error_notifications.Add(MpPluginLoader.CreateInvalidPluginNotification(sb.ToString(), PluginFormat));
                 }
@@ -288,7 +290,8 @@ namespace MonkeyPaste.Avalonia {
             if (dupGuids.Count() > 0) {
                 foreach (var dupGuid_group in dupGuids) {
                     var sb = new StringBuilder();
-                    sb.AppendLine($"Clipboard format guids must be unique. Duplicate formats & guids:");
+                    //sb.AppendLine($"Clipboard format guids must be unique. Duplicate formats & guids:");
+                    sb.AppendLine(UiStrings.InvalidHandlerEx3);
                     dupGuid_group.ForEach(x => sb.AppendLine($"'{x.displayName}': {x.formatGuid}"));
                     error_notifications.Add(MpPluginLoader.CreateInvalidPluginNotification(sb.ToString(), PluginFormat));
                 }
@@ -302,9 +305,14 @@ namespace MonkeyPaste.Avalonia {
                     }
                     // TODO each notification type should probably have a pop up link to help...
                     // In this case more info should be given about paramName falling back to label, etc.
-                    string msg = $"plugin error: all plugin 'paramName' fields must be unique for handler '{handler.displayName}'." + Environment.NewLine;
-                    //msg += $" '{string.Join(" and ", paramNameGroup.Key.Select(x => $"'{x}'"))}'";
-                    msg += $"paramName '{paramNameGroup.Key}' has multiple entries";
+                    //string msg = $"plugin error: all plugin 'paramName' fields must be unique for handler '{handler.displayName}'." + Environment.NewLine;
+                    //msg += $"paramName '{paramNameGroup.Key}' has multiple entries";
+                    //string msg = $"Plugin Error: All plugin '{0}' fields must be unique for handler '{1}'.{2}paramName '{3}' has multiple entries";
+                    string msg = UiStrings.InvalidHandlerEx4.Format(
+                        UiStrings.CommonParamNameLabel,
+                        handler.displayName,
+                        Environment.NewLine,
+                        paramNameGroup.Key);
                     error_notifications.Add(MpPluginLoader.CreateInvalidPluginNotification(msg, PluginFormat));
                 }
             }

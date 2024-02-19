@@ -2269,7 +2269,7 @@ monkeypaste ໃນອຸປະກອນ
     <comment>ActionName</comment>
   </data>
   <data name="ActionAnalyzeValidation3" xml:space="preserve">
-    <value>"{0 {0} 'ຕົວກອງພຽງແຕ່ສໍາລັບ' {{1} '</value>
+    <value>ຕົວກັ່ນຕອງ '{0}' ຂອງພໍ່ແມ່ເທົ່ານັ້ນສຳລັບເນື້ອຫາປະເພດ '{1}' ແລະຕົວວິເຄາະ '{2}' ຈະບໍ່ຖືກປະຕິບັດເນື່ອງຈາກມັນບໍ່ຮອງຮັບການປ້ອນຂໍ້ມູນປະເພດ '{3}'</value>
     <comment>Action Label, Analyzer Preset Name, Content Type</comment>
   </data>
   <data name="ActionClassifyValidation1" xml:space="preserve">
@@ -2699,5 +2699,201 @@ monkeypaste ໃນອຸປະກອນ
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;ທາງນີ້, MonkeyPaste ສາມາດເຂົ້າເຖິງໄດ້&lt;br&gt;&lt;span color="red"&gt;ປາດສະຈາກການຄິກຫຼືແມ້ກະທັ້ງbatting&lt;/span&gt; &lt;span color="red"&gt;ຕາ&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>ຄໍາບັນທຶກ</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Clone</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>ຈຸດປະສົງຂໍ້ມູນ</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>ປັນກອິນ</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>ຜູ້ອ່ານ</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>ຂໍ້ຜິດພາດທີ່ບໍ່ຮູ້ຈັກ</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>ນັກຂຽນ</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>duplicate plugin Guid '{0}' ກວດພົບສໍາລັບ plugins ເຫຼົ່ານີ້:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>ແກ້ໄຂໂດຍການປ່ຽນໂປແກຼມ PLUMB GOID ຫຼືກໍາຈັດຊໍ້າຊ້ອນ. ຖ້າບໍ່ດັ່ງນັ້ນປັ plugins ທີ່ກ່ຽວຂ້ອງທັງຫມົດຈະຖືກລະເລີຍ.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>GUID PLUID PLUID '{0} ໄດ້ຖືກກວດພົບສໍາລັບປັ ins ກອິນແລະ presets ເຫຼົ່ານີ້:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>ປັ plugin: {0} {1} preset (s): # {2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} preset (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>ແກ້ໄຂໂດຍການໃຫ້ຂໍ້ມູນລ່ວງຫນ້າຫຼືກໍາຈັດການຊໍ້າຊ້ອນ. ຖ້າບໍ່ດັ່ງນັ້ນປັ plugins ທີ່ກ່ຽວຂ້ອງທັງຫມົດຈະຖືກລະເລີຍ.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>ສີຂອງບັນນາທິການ</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>ທ່ານແນ່ໃຈບໍ່ວ່າທ່ານຕ້ອງການລຶບລາຍການ {0} ຖາວອນທັງຫມົດ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>ເລືອກ Folder</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>ເລືອກ Watch Folder</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>ຂໍ້ຜິດພາດຂອງ plugin. plugin '{0}' ແມ່ນ '{{1}' ປະເພດ 'ແຕ່ບໍ່ພົບຮູບແບບ'}</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>ຄວາມຜິດພາດໃນການປະຕິບັດການກະທໍາ '{0}': {1}} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>ມູນຄ່າຕ້ອງມີພຽງແຕ່ຕົວເລກຫຼື '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>ມູນຄ່າຕ້ອງໄດ້ມາຈາກ {0} ໃຫ້ {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>ຕ້ອງເປັນສາຍ STEX (6 ຫຼື 8 ຕົວເລກ) ເລີ່ມຕົ້ນດ້ວຍ '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>clipboard '{0}' ຕ້ອງເປັນເອກະລັກສະເພາະ.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>ມີຢູ່ແລ້ວສໍາລັບ</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>ຮູບແບບ</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>ປະເພດ</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>ຊື່ຮູບແບບ Clipboard / ນັກຂຽນຕ້ອງມີເອກະລັກສະເພາະ. ຄວາມຊໍ້າຊ້ອນ Reader:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>ຊື່ຮູບແບບ Clipboard / ນັກຂຽນຕ້ອງມີເອກະລັກສະເພາະ. ນັກຂຽນຊໍ້າຊ້ອນ:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>ການຄາດເດົາຮູບແບບຂອງ Clipboard ຕ້ອງເປັນເອກະລັກສະເພາະ. ຮູບແບບທີ່ຊ້ໍາຊ້ອນ &amp; GuidS:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>ຂໍ້ຜິດພາດຂອງປລັກອິນ: ຊ່ອງຂໍ້ມູນ plugin '{0}' ທັງໝົດຕ້ອງເປັນເອກະລັກສະເພາະສຳລັບຕົວຈັດການ '{1}'.{2}paramName '{3}' ມີຫຼາຍລາຍການ</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>ELCCIN ERROR, ບໍ່ພົບສະມາຊິກທີ່ແປກປະຫຼາດ</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>plugin '{0}' ບໍ່ສາມາດ presets ໄດ້ໂດຍບໍ່ມີການສະຫນອງຢ່າງຫນ້ອຍ 1 ພາລາມິເຕີ</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>ການ param ທີ່ບໍ່ໄດ້ຮັບການຮັກສາ # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ຕ້ອງໄດ້ກໍານົດຕົວຢ່າງ ({0}) ຕ້ອງຖືກກໍານົດໄວ້. Plugin '{{1}' ມີຕົວກໍານົດດັ່ງຕໍ່ໄປນີ້ທີ່ຂາດພາສີ: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>{0 {0 {0 {0} 'ຖືກກວດພົບ (ທຸກຢ່າງຕ້ອງເປັນເອກະລັກ). {1} ປ້າຍ:} labels:} {2} {2} {2}}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>ຕ້ອງມີຄວາມຈໍາເປັນຕ້ອງມີ preset. ມັນບໍ່ໄດ້ຖືກພົບເຫັນຫຼືຮູບແບບທີ່ບໍ່ຖືກຕ້ອງສໍາລັບ '{0}' ໃນ Plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>ບໍ່ສາມາດຊອກຫາພາລາມິເຕີໄດ້ກັບ paramid '{0}' ອ້າງອີງໂດຍ preset '{1 {1}' ສໍາລັບ plugin '{2}'. ພາລາມິເຕີອາດຈະມີການປ່ຽນແປງຫຼືຖືກໂຍກຍ້າຍ, ປັບປຸງ preset paramvalue ຫຼືເອົາມັນອອກ.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>ບໍ່ສາມາດກໍານົດຕົວກໍານົດທີ່ໄດ້ແບ່ງປັນໃນ presets. Paramid '{0}' ໃນ preset '{1}' ສໍາລັບ Plugin 'ສໍາລັບ Plugin' ສໍາລັບໂປແກຼມ Plugin '{2}' ຕ້ອງຖືກກໍານົດໄວ້ໃນພາກສ່ວນຄໍານິຍາມ.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>presets ຕ້ອງມີຄວາມກົດດັນທີ່ເປັນເອກະລັກ. {0 {0 {0} 'ຖືກກວດພົບໃນປັ in plugin' {1} 'ສໍາລັບ presets: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Plugin ແຍກຄວາມຜິດພາດ, ຢູ່ໃນເສັ້ນທາງ '{0}' null, ອາດຈະຜິດພາດໃນການແຍກຄວາມຜິດພາດຂອງ JSON. ບໍ່ສົນໃຈ plugin</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>ຂໍ້ຜິດພາດຂອງຫົວຂໍ້ Plugin, ໃນເສັ້ນທາງ '{0}' ຕ້ອງມີຄຸນສົມບັດ 'ຫົວຂໍ້' ທີ່ບໍ່ມີຫຼາຍກ່ວາ {1} ຕົວອັກສອນ. ບໍ່ສົນໃຈ plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>ຂໍ້ຜິດພາດຂອງ Plugin Guid, ໃນເສັ້ນທາງ '{0}' ດ້ວຍຫົວຂໍ້ '{1}' ຕ້ອງມີ 'GROID' ຕ້ອງມີ "RFC 'rip' ບໍ່ສົນໃຈ plugin.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>ຄໍາອະທິບາຍກ່ຽວກັບປັກ plugin ອກ plugin, ຢູ່ໃນເສັ້ນທາງ '{0} ລາຍລະອຽດຕ້ອງບໍ່ເກີນ {1} ຕົວອັກສອນ. ບໍ່ສົນໃຈ plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>ແທັກ Plugin ທີ່ຜິດພາດ, ຢູ່ໃນເສັ້ນທາງ '{0}' tags ຕ້ອງບໍ່ເກີນ {1} ຕົວອັກສອນ. ບໍ່ສົນໃຈ plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>ແນບ debugger ກັບ '{0}' ຫຼືຍົກເລີກເພື່ອສືບຕໍ່.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>ລໍຖ້າ debugger</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>ຂໍ້ຜິດພາດໃນການດາວໂຫລດປັ plugin ກອິນ. ກະລຸນາລອງໃຫມ່ໃນພາຍຫຼັງ.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>ປັ plugined ອັບເດດ</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>ທ່ານແນ່ໃຈບໍ່ວ່າທ່ານຕ້ອງການຟື້ນຟູສິນຄ້າ {0} ທັງຫມົດ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>ປັນຍາຄົ້ນຫາ 'ທີ່ບໍ່ມີຊື່'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>descatenctia develia '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' ມີຄຸນຄ່າທີ່ໃຊ້ຮ່ວມກັນ. ທ່ານຕ້ອງການຕັ້ງຄ່າເຫຼົ່ານັ້ນເຊັ່ນກັນບໍ?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

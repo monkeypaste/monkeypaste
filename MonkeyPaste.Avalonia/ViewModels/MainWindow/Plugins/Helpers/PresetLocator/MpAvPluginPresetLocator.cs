@@ -30,13 +30,11 @@ namespace MonkeyPaste.Avalonia {
                     // hide clipboard since its like 30 msgs
                     Mp.Services.NotificationBuilder.ShowMessageAsync(
                     msgType: MpNotificationType.PluginUpdated,
-                    title: $"Plugin Updated",
+                    title: UiStrings.PluginUpdatedNtfTitle,
                     iconSourceObj: ivm.IconBase64,
                     body: presetHost.PluginFormat.title)
                     .FireAndForgetSafeAsync();
                 }
-
-
 
                 db_presets = await CreateOrUpdatePresetsAsync(presetHost, db_presets);
 

@@ -836,14 +836,14 @@
     <value>નૉૅધ</value>
   </data>
   <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
-    <value>માઇક્રોસ .ફ્ટ સ્ટોર ટાયરને મંજૂરી આપતું નથી
+    <value>માઇક્રોસોફ્ટ સ્ટોર ટાયરને મંજૂરી આપતું નથી
 સબ્સ્ક્રિપ્શન એડન્સમાં ફેરફાર.
 
-તમારે તમારા રદ કરવું આવશ્યક છે
-{0}/{1 yourself તમારી જાતને યોજના બનાવો
-અથવા તમે બંને માટે ચાર્જ લેવામાં આવશે.
+તમારે તમારું રદ કરવું પડશે
+{0}/{1} જાતે પ્લાન કરો
+અથવા તમારી પાસેથી બંને માટે શુલ્ક લેવામાં આવશે.
 
-શું તમે હવે તે કરવા માંગો છો?</value>
+શું તમે હવે તે કરવા જવા માંગો છો?</value>
   </data>
   <data name="AccountResetPasswordCaption" xml:space="preserve">
     <value>તમારો પાસવર્ડ ફરીથી સેટ કરવામાં આવ્યો છે.
@@ -1697,7 +1697,7 @@
     <value>સ્થિર</value>
   </data>
   <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
-    <value>{0 empty ખાલી છે ...</value>
+    <value>{0} ખાલી છે...</value>
     <comment>Template Name</comment>
   </data>
   <data name="EditorTemplateTeaserText" xml:space="preserve">
@@ -2328,7 +2328,7 @@
     <comment>Help Topic</comment>
   </data>
   <data name="NtfUpToDateText" xml:space="preserve">
-    <value>{0 ext એ નવીનતમ સંસ્કરણ છે</value>
+    <value>{0} નવીનતમ સંસ્કરણ છે</value>
     <comment>App Version</comment>
   </data>
   <data name="NtfUpToDateTitle" xml:space="preserve">
@@ -2699,5 +2699,201 @@
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;આ રીતે, મંકીપેસ્ટ એક્સેસ કરી શકાય છે&lt;br&gt;&lt;span color="red"&gt;એક પણ ક્લિક કર્યા વિના&lt;/span&gt; અથવા &lt;span color="red"&gt;તો આંખ&lt;/span&gt; અને #x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>નોંધણી</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>ક્લોન</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>આંકડા</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>માં નાખો</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>વાચકો</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>અજાણ્યા ભૂલ</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>લેખક</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>આ પ્લગઈનો માટે ડુપ્લિકેટ પ્લગઇન ગાઇડ '{0}' મળી:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>પ્લગઇન ગિડ બદલીને અથવા ડુપ્લિકેટ્સને દૂર કરીને ઠીક કરો. અન્યથા બધા સંકળાયેલ પ્લગઈનોને અવગણવામાં આવશે.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>ડુપ્લિકેટ પ્લગઇન પ્રીસેટ ગાઇડ '{0}' આ પ્લગઈનો અને પ્રીસેટ્સ માટે મળી:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>પ્લગઇન: {0} {1} પ્રીસેટ (ઓ): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>પ્લગઇન: {0} {1} પ્રીસેટ (ઓ): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>અનન્ય પ્રીસેટ ગિડ પ્રદાન કરીને અથવા ડુપ્લિકેટ્સને દૂર કરીને ઠીક કરો. અન્યથા બધા સંકળાયેલ પ્લગઈનોને અવગણવામાં આવશે.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>સંપાદક રંગ</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>શું તમે ખરેખર બધા {0} આઇટમ (ઓ) ને કાયમી ધોરણે કા delete ી નાખવા માંગો છો?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>ફોલ્ડર પસંદ કરો</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>જુઓ ફોલ્ડર પસંદ કરો</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>પ્લગઇન ભૂલ. પ્લગઇન '{0}' છે '{1}' પ્રકાર પરંતુ કોઈ '{1}' ફોર્મેટ મળી</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>ક્રિયા કરવામાં ભૂલ '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>મૂલ્યમાં ફક્ત સંખ્યાઓ અથવા '{0}' હોવા આવશ્યક છે</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>મૂલ્ય {0} થી {1} હોવું આવશ્યક છે</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' થી શરૂ થતાં હેક્સ (6 અથવા 8 અંક) શબ્દમાળા હોવા જોઈએ</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>ક્લિપબોર્ડ '{0}' અનન્ય હોવું આવશ્યક છે.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>પહેલેથી જ અસ્તિત્વમાં છે</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>અનુરોધ</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>પ્રકાર</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>ક્લિપબોર્ડ રીડર/લેખક ફોર્મેટ નામો અનન્ય હોવા જોઈએ. રીડર ડુપ્લિકેટ્સ:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>ક્લિપબોર્ડ રીડર/લેખક ફોર્મેટ નામો અનન્ય હોવા જોઈએ. લેખક ડુપ્લિકેટ્સ:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>ક્લિપબોર્ડ ફોર્મેટ ગિડ અનન્ય હોવા જોઈએ. ડુપ્લિકેટ ફોર્મેટ્સ અને ગાઇડ:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>પ્લગઇન ભૂલ: બધા પ્લગઇન '{0}' ફીલ્ડ્સ હેન્ડલર માટે અનન્ય હોવા આવશ્યક છે '{1}'. {2} પરમનામ '{3}' બહુવિધ પ્રવેશો છે</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>પ્લગઇન ભૂલ, કોઈ આક્રમક મેનિફેસ્ટ મળી નથી</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>પ્લગઇન '{0}' ઓછામાં ઓછા 1 પરિમાણો વિના પ્રીસેટ્સ હોઈ શકતું નથી</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>લેબલ્ડ પરમ #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>પ્લગઇન પરિમાણ ID ({0}) વ્યાખ્યાયિત કરવું આવશ્યક છે. પ્લગઇન '{1}' માં ગુમ થયેલ પેરામિડ સાથે નીચેના પરિમાણો છે: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>ડુપ્લિકેટ પેરામિડ '{0}' શોધી કા (્યું (બધા અનન્ય હોવા જોઈએ). {1} લેબલ્સ: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>પ્રીસેટ ગાઇડ જરૂરી છે. તે પ્લગઇન {1} માં '{0}' માટે મળ્યું નથી અથવા ખોટું ફોર્મેટ નથી</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>પેરામિડ '{0}' સાથે પરિમાણ શોધી શકાતું નથી 'પ્લગઇન' {2} 'માટે પ્રીસેટ' {1} 'દ્વારા સંદર્ભિત. પરિમાણ બદલાયું છે અથવા દૂર થયું છે, પ્રીસેટ પેરામવલ્યુને અપડેટ કરો અથવા તેને દૂર કરો.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>પ્રીસેટ્સમાં વહેંચાયેલ મૂલ્ય પરિમાણો સેટ કરી શકતા નથી. પેરામિડ '{0}' પ્રીસેટમાં '{1}' પ્લગઇન માટે '{2}' ને દૂર કરવાની જરૂર છે અથવા પરિમાણ વ્યાખ્યા વિભાગમાં પેરામવ al લ્યુનો ઉલ્લેખ કરી શકાય છે.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>પ્રીસેટ્સમાં અનન્ય જી.આઈ.ડી. હોવા આવશ્યક છે. ડુપ્લિકેટ પ્રીસેટ ગાઇડ '{0}' પ્રીસેટ્સ માટે પ્લગઇનમાં '{1}' મળી: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>પ્લગઇન પાર્સિંગ ભૂલ, પાથ '{0}' નલ પર, સંભવિત ભૂલ જેએસઓનને પાર્સિંગ કરવામાં આવે છે. અવગણીને</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>પ્લગઇન શીર્ષક ભૂલ, પાથ પર '{0}' પાસે 'શીર્ષક' મિલકત હોવી આવશ્યક છે જેમાં {1} અક્ષરો નથી. અવગણીને</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>પ્લગઇન ગાઇડ ભૂલ, શીર્ષક સાથે પાથ '{0}' '{1}' પાસે 'ગાઇડ' પ્રોપર્ટી હોવી આવશ્યક છે, આરએફસી 4122 સુસંગત 128-બીટ જીઆઈડી (યુયુઆઈડી) ફક્ત અક્ષરો, સંખ્યાઓ અને હાઇફન્સ સાથે હોવી જોઈએ. પ્લગઇનને અવગણી.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>પ્લગઇન વર્ણન ભૂલ, પાથ પર '{0}' વર્ણન {1} અક્ષરો કરતાં વધુ હોવું જોઈએ નહીં. અવગણીને</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>પ્લગઇન ટ s ગ્સ ભૂલ, પાથ પર '{0}' ટ s ગ્સ {1} અક્ષરો કરતાં વધુ હોવી જોઈએ નહીં. અવગણીને</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>ડિબગરને '{0}' પર જોડો અથવા ચાલુ રાખવા માટે રદ કરો.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>ડિબગરની રાહ જોવી</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>પ્લગઇન ડાઉનલોડ કરવામાં ભૂલ. પછીથી ફરી પ્રયત્ન કરો.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>પ્લગઇન અપડેટ</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>શું તમે ખરેખર {0} આઇટમ (ઓ) ને પુનર્સ્થાપિત કરવા માંગો છો?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>શોધ માપદંડ 'શીર્ષક વિનાનું'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>શોધ માપદંડ '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' માં વહેંચાયેલ મૂલ્યો શામેલ છે. શું તમે તેને ફરીથી સેટ કરવા માંગો છો?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

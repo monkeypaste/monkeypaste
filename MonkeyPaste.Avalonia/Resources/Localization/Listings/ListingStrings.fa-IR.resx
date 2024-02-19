@@ -70,28 +70,36 @@
     <value>اساسی - سالانه</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>کپی 🀄</value>
@@ -127,19 +135,24 @@
     <value>ساخته شده - در مرورگر پلاگین با یک جامعه در حال رشد - کتابخانه پلاگین رانده شده</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste یک مدیر کلیپ بورد ، اتوماسیون و ابزار بهره وری مانند هیچ کس دیگری نیست. کلیپ بورد خود را به یک قسمت غنی شده و سازمان یافته از گردش کار خود تبدیل کنید ،
@@ -158,40 +171,41 @@
 کلیپ بورد شما تا کنون در هر مکانی فراتر از دستگاه شخصی خود ردیابی یا ذخیره می شود. دوره زمانی.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● رابط ساده و دوستانه با هر دو طرح افقی/عمودی ، نمای لیست/شبکه ​​و پشتیبانی چند منظوره</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>mode حالت ضمیمه: کپی کردن به جای "جایگزینی" در کلیپ بورد "اضافه" می شود. هم متن و هم فایلها ، کاملاً قابل تنظیم</value>
+    <value>mode حالت های ماوس سفارشی: راست - روی خمیر و سمت چپ کلیک کنید - روی خودکار کلیک کنید - کپی کنید</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● ردیابی کلیپ پیشرفته ، منابع و استفاده با پشتیبانی پیشرفته از مرورگرهای مبتنی بر Firefox و Chromium (کروم ، لبه ، شجاع)</value>
+    <value>mode حالت ضمیمه: کپی کردن به جای "جایگزینی" در کلیپ بورد "اضافه" می شود. هم متن و هم فایلها ، کاملاً قابل تنظیم</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● کامل - ویرایشگر کلیپ برجسته با متن غنی (جداول ، لیست ها ، پیوندها و غیره) با یافتن/جایگزینی و برجسته</value>
+    <value>● ردیابی کلیپ پیشرفته ، منابع و استفاده با پشتیبانی پیشرفته از مرورگرهای مبتنی بر Firefox و Chromium (کروم ، لبه ، شجاع)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>تصاویر خود را در پایگاه داده ایمن ذخیره کنید ، آماده استفاده به عنوان پرونده ها در هر زمان - تقاضا فقط بکشید - و - رها کنید!</value>
+    <value>● کامل - ویرایشگر کلیپ برجسته با متن غنی (جداول ، لیست ها ، پیوندها و غیره) با یافتن/جایگزینی و برجسته</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>templating متن قدرتمند برای چسباندن سریع و پویا از مجموعه قطعه قطعه خود</value>
+    <value>تصاویر خود را در پایگاه داده ایمن ذخیره کنید ، آماده استفاده به عنوان پرونده ها در هر زمان - تقاضا فقط بکشید - و - رها کنید!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● طراح ماشه و اکشن برای اتوماسیون های سفارشی و زنجیره عمل</value>
+    <value>templating متن قدرتمند برای چسباندن سریع و پویا از مجموعه قطعه قطعه خود</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● ساده برای استفاده و گسترش سیستم افزونه برای هر دو تجزیه و تحلیل کلیپ یا خواندن/نوشتن هر قالب در کلیپ بورد خود</value>
+    <value>● طراح ماشه و اکشن برای اتوماسیون های سفارشی و زنجیره عمل</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● ساخته شده - در مرورگر پلاگین با یک جامعه در حال رشد - کتابخانه پلاگین رانده شده</value>
+    <value>● ساده برای استفاده و گسترش سیستم افزونه برای هر دو تجزیه و تحلیل کلیپ یا خواندن/نوشتن هر قالب در کلیپ بورد خود</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>your همه چیز را با پیش تنظیم های افزونه خودکار کنید ، Stash کنید و از هر یک از دستورالعمل ها یا دستورات هوش مصنوعی خود با سهولت استفاده کنید</value>
+    <value>● ساخته شده - در مرورگر پلاگین با یک جامعه در حال رشد - کتابخانه پلاگین رانده شده</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● سیستم عامل ها و ویژگی های بیشتر به زودی! ما فقط شروع شده ایم</value>
+    <value>your همه چیز را با پیش تنظیم های افزونه خودکار کنید ، Stash کنید و از هر یک از دستورالعمل ها یا دستورات هوش مصنوعی خود با سهولت استفاده کنید</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● هر دو موضوع سبک و تیره کاملاً پویا هستند ، از هر رنگی که می خواهید استفاده کنید</value>
@@ -208,29 +222,29 @@
   <data name="StoreFeature6" xml:space="preserve">
     <value>clips خود را در درختان برچسب سازماندهی کرده و فیلترهای قابل رزوفی ایجاد کنید</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>ذخیره سازی داده های محلی ایمن ، ایمن و خصوصی (بدون جمع آوری داده) همیشه با محافظت از رمز عبور 2 - فاکتور رمزگذاری شده و به راحتی برنامه ها یا وب سایت ها را از ردیاب خود مسدود می کند</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● کشیدن گسترده - و - پشتیبانی از قطره ، میانبرهای جهانی سفارشی ، مسیریابی و ماوس - ناوبری رایگان</value>
+    <value>● به راحتی برنامه ها ، وب سایت ها و حتی صفحات وب خاص را از ردیابی کلیپ بورد مسدود کنید</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>mode حالت های ماوس سفارشی: راست - روی خمیر و سمت چپ کلیک کنید - روی خودکار کلیک کنید - کپی کنید</value>
+    <value>● کشیدن گسترده - و - پشتیبانی از قطره ، میانبرهای جهانی سفارشی ، مسیریابی و ماوس - ناوبری رایگان</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>کلیپ بورد یک جنگل است. Monkeypaste پادشاه است! چرخش از برنامه به برنامه ، کپی کردن از این و چسباندن آن مانند هرگز با Monkeypaste !! یک برند - کلیپ بورد جدید ، برش و ابزار اتوماسیون تحلیلی !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>نمونه میمون در عمل!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>نصب شده در این زبان. انگلیسی فقط برای این مثالها است</value>
@@ -250,5 +264,11 @@
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>با این اشتراک دریافت خواهید کرد:
 ● ظرفیت نامحدود</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>ذخیره سازی داده های محلی ایمن ، ایمن و خصوصی (بدون جمع آوری داده ها) همیشه با محافظت از رمز عبور 2 - فاکتور رمزگذاری می شود</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● سیستم عامل ها و ویژگی های بیشتر به زودی! ما فقط شروع شده ایم</value>
   </data>
 </root>

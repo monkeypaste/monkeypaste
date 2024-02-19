@@ -70,28 +70,36 @@
     <value>Pagrindinis - kasmet</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopijuoti</value>
@@ -127,19 +135,24 @@
     <value>Sukurtas - papildinio naršyklėje su augančia bendruomene - varoma papildinių biblioteka</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>„MonkeYPaste“ yra mainų srities tvarkyklė, automatikos ir produktyvumo įrankis, kaip niekas kitas. Patobulinkite mainų sritį į praturtintą ir organizuojančią jūsų darbo eigos dalį,
@@ -158,40 +171,41 @@ Aš taip pat noriu, kad jaustumėtės patogiai naudodamiesi tuo. Taigi patikinu 
 Jūsų mainų sritis yra kada nors stebima ar saugoma bet kur už savo mašinos už savo mašinos. Laikotarpis.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Paprasta ir draugiška sąsaja tiek su horizontaliais/vertikaliais išdėstymais, sąrašo/tinklelio vaizdu ir daugialypė dalis - monitoriaus palaikymas</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Priedo režimas: kopijavimas tampa „pridėti į“, o ne „pakeisti“ mainų srityje. Tiek tekstas, tiek failai, visiškai pritaikyti</value>
+    <value>● Pasirinktiniai pelių režimai: dešinė</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Sudėtingas spaustukų stebėjimas, šaltiniai ir naudojimas su patobulinta „Firefox“ ir „Chromio“ naršyklių palaikymu („Chrome“, „Edge“, „Brave“)</value>
+    <value>● Priedo režimas: kopijavimas tampa „pridėti į“, o ne „pakeisti“ mainų srityje. Tiek tekstas, tiek failai, visiškai pritaikyti</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Visiškai - rodomas klipo redaktorius su turtingu tekstu (lentelėmis, sąrašais, nuorodomis ir kt</value>
+    <value>● Sudėtingas spaustukų stebėjimas, šaltiniai ir naudojimas su patobulinta „Firefox“ ir „Chromio“ naršyklių palaikymu („Chrome“, „Edge“, „Brave“)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Saugokite savo vaizdus saugioje duomenų bazėje, paruoštą naudoti kaip failus bet kuriuo metu - paklausa tiesiog vilkite - ir - Drop!</value>
+    <value>● Visiškai - rodomas klipo redaktorius su turtingu tekstu (lentelėmis, sąrašais, nuorodomis ir kt</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Galingas teksto šablonas, skirtas greitam, dinamiškam įklijavimui iš jūsų fragmentų kolekcijos</value>
+    <value>● Saugokite savo vaizdus saugioje duomenų bazėje, paruoštą naudoti kaip failus bet kuriuo metu - paklausa tiesiog vilkite - ir - Drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● „Trigger &amp; Action Designer“, skirtas pasirinktinėms automatizmams ir veiksmo grandinėlėms</value>
+    <value>● Galingas teksto šablonas, skirtas greitam, dinamiškam įklijavimui iš jūsų fragmentų kolekcijos</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Paprasta naudoti ir išplėsti papildinių sistemą, skirtą analizuoti spaustukus arba skaityti/rašyti bet kokį formatą savo mainų srityje</value>
+    <value>● „Trigger &amp; Action Designer“, skirtas pasirinktinėms automatizmams ir veiksmo grandinėlėms</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Sukurtas - papildinių naršyklėje su vis augančia bendruomene - varoma papildinių biblioteka</value>
+    <value>● Paprasta naudoti ir išplėsti papildinių sistemą, skirtą analizuoti spaustukus arba skaityti/rašyti bet kokį formatą savo mainų srityje</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>M</value>
+    <value>● Sukurtas - papildinių naršyklėje su vis augančia bendruomene - varoma papildinių biblioteka</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Netrukus pasirodys daugiau platformų ir funkcijų! Mes tiesiog pradedame 🎉</value>
+    <value>M</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Tiek šviesios, tiek tamsios temos yra visiškai dinamiškos, naudokite bet kokią norimą spalvą</value>
@@ -208,29 +222,29 @@ Jūsų mainų sritis yra kada nors stebima ar saugoma bet kur už savo mašinos 
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Sutvarkykite savo spaustukus į „Tag Tree“ ir sukurkite atnaujinamus filtrus</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Saugus, saugus ir privatus vietinis duomenų saugojimas (nėra duomenų rinkimo) visada užšifruota su pasirenkama 2 faktoriaus slaptažodžio apsauga ir lengvai užblokuokite programas ar svetaines iš jūsų „Tracker“</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>T</value>
+    <value>● Lengvai užblokuokite tam tikras programas, svetaines ir net konkrečius tinklalapius iš mainų srities stebėjimo</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Pasirinktiniai pelių režimai: dešinė</value>
+    <value>T</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Mainų sritis yra džiunglės. Monkeypaste yra karalius! Pasisukite iš programos į programą, nukopijuokite tai ir įklijuokite, kaip niekad anksčiau su „MonkeYPaste“ !! Prekės ženklas - naujas, pažangiausias mainų sritis ir analitinis automatizavimo įrankis !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Monkeypaste pavyzdys veikia!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Įdiegta šia kalba. Anglų kalba skirta tik šiems pavyzdžiams</value>
@@ -250,5 +264,11 @@ Jūsų mainų sritis yra kada nors stebima ar saugoma bet kur už savo mašinos 
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Su šia prenumerata gausite:
 ● Neribotas pajėgumas</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Saugus, saugus ir privatus vietinis duomenų saugojimas (nėra duomenų rinkimo) visada užšifruota su pasirinktine 2 - faktoriaus slaptažodžio apsauga</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Netrukus pasirodys daugiau platformų ir funkcijų! Mes tiesiog pradedame 🎉</value>
   </data>
 </root>

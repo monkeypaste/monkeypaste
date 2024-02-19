@@ -70,7 +70,7 @@
 degişlilikde klip.</value>
   </data>
   <data name="AccountStandardDescription" xml:space="preserve">
-    <value>Mazmuny we çäkli hapa ammaryna} 2} kliplerine rugsat berýär.</value>
+    <value>Mazmuny we çäkli hapa ammaryna} {2} kliplerine rugsat berýär.</value>
     <comment>Number</comment>
   </data>
   <data name="AccountUnlimitedDescription" xml:space="preserve">
@@ -200,7 +200,7 @@ degişlilikde klip.</value>
     <value>Gurmak</value>
   </data>
   <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
-    <value>'{0 0}' we ähli sowgatlaryny we gysga ýollary aýyrmak isleýändigiňize ynanýarsyňyzmy?</value>
+    <value>'{0}' we ähli sowgatlaryny we gysga ýollary aýyrmak isleýändigiňize ynanýarsyňyzmy?</value>
     <comment>Plugin Title</comment>
   </data>
   <data name="PluginBrowserUninstallLabel" xml:space="preserve">
@@ -589,7 +589,7 @@ Dogry sazlaşyk işini üpjün etmek üçin şu ýerde şol programmalar üçin 
     <value>Global Global</value>
   </data>
   <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
-    <value>Bu kombinasiýa halas edilse, '{0 0}' bilen gapma-garşy gapma-garşylyklar bilen üzňüler.</value>
+    <value>Bu kombinasiýa halas edilse, '{0}' bilen gapma-garşy gapma-garşylyklar bilen üzňüler.</value>
     <comment>Shortcut Display Name</comment>
   </data>
   <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
@@ -741,11 +741,11 @@ Againene synanyşmak isleýärsiňizmi?</value>
     <value>Hasap üýtgedildi</value>
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
-    <value>Abunalygyňyz häzirki wagtda {0} / {1 {1 {Mazmuny we {3
+    <value>Abunalygyňyz häzirki wagtda {0} / {1} {2} Mazmuny we {3}
 Ýöne alada etme, göz öňüne getirilenden soň hiç hili maglumat ýitirilmeýär. Diňe täze klipler size baha berler.</value>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
-    <value>Gutlaýarys! Abunalygyňyz häzirki wagtda {0} / {1 {1 {Mazmuny we {3</value>
+    <value>Gutlaýarys! Abunalygyňyz häzirki wagtda {0} / {1} {2} Mazmuny we {3}</value>
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapBlockHint1" xml:space="preserve">
@@ -901,8 +901,8 @@ Parolyňyz</value>
     <value>Parol</value>
   </data>
   <data name="AccountExistingLoginText" xml:space="preserve">
-    <value>Abunalygyňyz
-Indi {0} / {1-e düzüldi.</value>
+    <value>Siziň abunalygyňyz
+indi {0} / {1} set düzüldi.</value>
   </data>
   <data name="AccountExistingLoginTitle" xml:space="preserve">
     <value>Hasap tapyldy</value>
@@ -1766,7 +1766,7 @@ Klip tagtasynyň diňleýjisi: {0}</value>
     <value>Trigger</value>
   </data>
   <data name="TriggerRemoveActionText" xml:space="preserve">
-    <value>Thehli sub-de aýyrmak isleýärsiňizmi - '{0}' üçin hereketleriňiz? .</value>
+    <value>'{0}' üçin ähli kiçi amallary aýyrmak isleýärsiňizmi? (Otherwiseogsam, '{1}' ene-atasy bolar)</value>
     <comment>Action Name, Action Name</comment>
   </data>
   <data name="TriggerRemoveActionTitle" xml:space="preserve">
@@ -2261,7 +2261,7 @@ Clipleriňiz?!
     <value>Üns berme</value>
   </data>
   <data name="ActionAnalyzeValidation1" xml:space="preserve">
-    <value>Hiç bir hereket üçin hiç bir seljer tarapyndan saýlanan seljer ýok '} 0</value>
+    <value>'{0}' hereketi üçin analizator saýlanmady</value>
     <comment>Action Name</comment>
   </data>
   <data name="ActionAnalyzeValidation2" xml:space="preserve">
@@ -2269,7 +2269,7 @@ Clipleriňiz?!
     <comment>ActionName</comment>
   </data>
   <data name="ActionAnalyzeValidation3" xml:space="preserve">
-    <value>Ene-atanyň "{1" {1} '}'-analizator '{2}' säwlikleri '</value>
+    <value>Ene-atanyň '{0}' süzgüçleri diňe '{1}' görnüşli mazmun we analizator '{2}' filtrleri hiç haçan ýerine ýetirmez, sebäbi '{3}' giriş görnüşini goldamaýar.</value>
     <comment>Action Label, Analyzer Preset Name, Content Type</comment>
   </data>
   <data name="ActionClassifyValidation1" xml:space="preserve">
@@ -2304,7 +2304,7 @@ Clipleriňiz?!
     <comment>Action Name</comment>
   </data>
   <data name="ActionFileWriterValidation2" xml:space="preserve">
-    <value>Faýl ýazyjy ýoly '{1}' üçin '{1}' tapylmady</value>
+    <value>'{1}' üçin faýl ýazyjy ýoly '{0}' tapylmady.</value>
     <comment>File Path, Action Name</comment>
   </data>
   <data name="LoaderTaskbarLabel" xml:space="preserve">
@@ -2401,9 +2401,9 @@ Clipleriňiz?!
     <value>Täzeden başla</value>
   </data>
   <data name="PluginUpdateErrorText" xml:space="preserve">
-    <value>"Ч 0 {0}" diýen mesele bardy. Täzelenmäni tamamlamak üçin '{0}' ýene-de täzeden başlamaly we "ähli sazlamalaryň hemmesi dikelmezligini gaýtalamagy we gurmaly bolarsyňyz.
+    <value>'{0}' täzelenmek meselesi ýüze çykdy. Täzelenmäni tamamlamak üçin täzeden başlamaly we '{0}' täzeden gurmaly bolarsyňyz (ähli sazlamalaryňyzyň dikeldilmeginden gorkmaň).
 
-Indi täzeden başlap, täzelenmäni täzeden açyp bilersiňiz - guruň, soňra äsgermezlik ediň we täzeläň ýa-da täzeledi we wersiýasyny ýapyň we wersiýasyny ulanmagy dowam etdiriňmi?</value>
+Indi täzeden başlap, täzeden gurmak arkaly täzelenmäni tamamlap, muny äsgermezlik edip, soň täzeläp ýa-da täzelenmäni bilelikde ýatyryp, '{1} version' wersiýasyny ulanmagy dowam etdirip bilersiňiz?</value>
   </data>
   <data name="PluginUpdateErrorTitle" xml:space="preserve">
     <value>Säwligi täzeläň</value>
@@ -2699,5 +2699,201 @@ Umumy dikeldiş işlerine kepil geçip bolmaýar we maglumatlaryň çeşmesine b
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Şeýdip, MonkeyPaste girip bolýar&lt;br&gt;&lt;span color="red"&gt;basman&lt;/span&gt;, hatda &lt;span color="red"&gt;göz ýumman&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Düşündiriş</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klaýun</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Maglumat obýekti</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Plugin</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Okyjy</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Näbelli säwlik</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Ýazyjy</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Bu pluginler üçin tapylan plugin gollanmasy '{0}':</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Plugin modelini üýtgetmek ýa-da dublikatlary aýyrmak bilen düzediň. Otherwiseogsam, baglanyşykly pluginleriň hemmesi hasaba alynmaz.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Bu pluginler we deslapky bellikler üçin kesgitlenen plugin deslapky görkezmesi '{0}':</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>PLURIN: {0} {1} {1} gözegçilikde (S): # {2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} pret (} gözegçilik): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Üýtgeýän gollamalary bermek ýa-da dublikatlary aýyrmak bilen düzediň. Otherwiseogsam, baglanyşykly pluginleriň hemmesi hasaba alynmaz.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Redaktor reňki</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Hemmesi {0} elementi hemişelik pozmak isleýändigiňize ynanýarsyňyzmy?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Betbagtçylygy saýlaň</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Wenetrişany saýlaň</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Plugin ýalňyşlygy. Plugin '{0}' '{1}' görnüşidir, ýöne '{1}' formaty tapylmady</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Hereketi ýerine ýetirmekde säwlik '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Bahanyň diňe sanlary ýa-da '{0}' bolmaly</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Bahasy {0}--a {1} bolmaly</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' -Dan başlap, "6 ýa-da 6 ýa-da 8 ýa-da 8 ýa-da 8 belgisi) setir bolmaly</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>"Ч" paneli '{0}' üýtgeşik bolmaly.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Eýýäm bar</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Görnüşi</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>"Clipboy Reader / ýazyjy format atlary özboluşly bolmaly. Okyjy dublikatlar:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>"Clipboy Reader / ýazyjy format atlary özboluşly bolmaly. Writerazyjy dublikatlar:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Clip paneli formaty guids özboluşly bolmaly. Dublikat formatlary we mujpleri:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Plugin ýalňyşlygy: plugin {0} 'ähli plugin meýdanlary' {1} 'işleýji üçin özboluşly bolmaly. {2} paramName' {3} 'birnäçe ýazgy bar</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Plugin ýalňyşlygy, hiç hili baha bermeýän görkezme ýok</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' iň azyndan 1 parametrden ejir çekip bilmeýär</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Tarapyndan gadagan edilmedik param # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Plugin parametr ID-sini ({0}) kesgitlenmeli. Plagin '{1}' peramid efirde aşakdaky parametrleri bar: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Paramdat "{0} 'tapyldy (hemmesi üýtgeşik bolmaly). {1} bellik: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Öňünden kesgitlenen gollanma talap edilýär. Plugin {1} in-de '{0}' üçin ýalňyş format tapylmady</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Peramid '{1}' {2} 'üçin parametr' {0} 'bilen parametr tapyp bilmeýärsiňiz,'} ' Parametr üýtgewsiz bolup biler ýa-da aýryldy ýa-da aýryldy</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Öňünden kesgitlenen baha parametrlerini düzüp bolmaýar. “{2}” plugin üçin deslapky “{1}” -de ParamId '{0}' aýrylmaly ýa-da parametr kesgitlemek bölüminde paramValue görkezilip bilner.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Deslapky gollanmalar bolmaly. Öňünden kesgitlenen gollanma '{0}' deslapky bellikler üçin '{1}' plugininde tapyldy: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>PLUIN SÖ .GI ALMAK: "{0} 'pyçakda, jsony derňemek ähtimallygy. Plugini äsgermezlik etmek</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Plugin adynyň ýalňyşlygy, '{0}' ýolunda {1} simwoly bolmadyk 'titul' häsiýeti bolmaly. Plagini äsgermezlik etmek</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>PLugin görkeziş ýalňyşlygy, '{0}' -da '{0}' bilen '{1}' bilen '{1} " Plugini äsgermezlik etmek.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Plugin beýany, "{0}" düşündirişinde plugin's Revice roragish ýalňyşlygy "{1} nyşan däl. Plugini äsgermezlik etmek</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Plugin Bellikler "{0}" belliklerinde {1} nyşandan köp bolmaly däl. Plugini äsgermezlik etmek</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Düzedişçige '{0}' -a '{0}' ýa-da dowam etmek üçin elatyryň.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Düzedişe garaşmak</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Plugini göçürip almakda säwlik. Gaýrat ediň biraz wagtdan gaýtadan synanyşyň.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plugin täzelendi</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>{0} elementi (}) ähli {0} elementi dikeltmek isleýändigiňize ynanýarsyňyzmy?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Gözleg ölçegleri 'kepillendirilýär'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Gözleg ölçegleri '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}'-de umumy bahalary öz içine alýar. Bulary täzeden düzmek isleýärsiňizmi?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

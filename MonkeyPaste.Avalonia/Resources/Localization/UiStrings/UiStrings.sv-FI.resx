@@ -2700,4 +2700,200 @@ Total återställning kan inte garanteras och kan minska prestandan eller till o
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;På så sätt kan MonkeyPaste nås&lt;br&gt;&lt;span color="red"&gt;utan ett klick&lt;/span&gt; eller ens &lt;span color="red"&gt;ett öga&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Anteckning</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klona</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Dataobjekt</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Plugin</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Läsare</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Okänt fel</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Författare</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Duplicate Plugin Guid '{0}' Upptäckt för dessa plugins:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Fix genom att ändra plugin Guid eller ta bort duplikat. Annars ignoreras alla tillhörande plugins.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Duplikat plugin förinställd guid '{0}' upptäckt för dessa plugins och förinställningar:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} förinställd (er): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Plugin: {0} {1} förinställd (er): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Fix genom att tillhandahålla unika förinställda GUID eller ta bort duplikat. Annars ignoreras alla tillhörande plugins.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Redaktörsfärg</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort alla {0} objekt permanent?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Välj mapp</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Välj Titta på mappen</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Plugin -fel. Plugin '{0}' är '{1}' typ men nej '{1}' format hittades</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Fel att utföra åtgärd '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Värdet måste bara innehålla siffror eller '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Värdet måste vara från {0} till {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Måste vara en hex (6 eller 8 -siffrig) sträng som börjar med '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Urklipp '{0}' måste vara unikt.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Redan finns för</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Formatera</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Urklippsläsare/författarformatnamn måste vara unika. Läsaren duplicerar:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Urklippsläsare/författarformatnamn måste vara unika. Författare duplicates:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Urklippsformat GUID måste vara unika. Duplikatformat &amp; GUIDS:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Plugin -fel: alla plugin '{0}' fält måste vara unika för hanterare '{1}'. {2} paramName '{3}' har flera poster</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Plugin -fel, inget invariant manifest hittades</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' kan inte ha förinställningar utan minst 1 parameter tillhandahållen</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Omärkta param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Plugin -parameter -ID ({0}) måste definieras. Plugin '{1}' har följande parametrar med saknade paramid: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Duplicate paramid '{0}' upptäckt (allt måste vara unikt). {1} etiketter: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Förinställd GUID krävs. Det hittades inte eller fel format för '{0}' in plugin {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Kan inte hitta parameter med paramid '{0}' refererad av förinställd '{1}' för plugin '{2}'. Parameter kan ha ändrats eller tagits bort, uppdatera förinställd paramValue eller ta bort den.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Det går inte att ställa in delade värdeparametrar i förinställningar. Paramid '{0}' i förinställd '{1}' för plugin '{2}' måste tas bort eller paramValue kan anges i avsnittet Parameter Definition.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Förinställningar måste ha unika GUID. Duplikat förinställningsguid '{0}' upptäcktes i plugin '{1}' för förinställningar: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Plugin parsing -fel, vid sökvägen '{0}' null, troligt fel parsing json. Ignorera plugin</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Plugin -titelfel, vid sökvägen '{0}' måste ha 'titel' egenskap med inte mer än {1} tecken. Ignorera plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Plugin Guid Error, vid sökvägen '{0}' med titel '{1}' måste ha en 'GUID' egenskap, RFC 4122 Compliant 128-bitars GUID (UUID) med endast bokstäver, siffror och bindestreck. Ignorera plugin.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Plugin Beskrivning Fel, vid sökvägen '{0}' Beskrivning måste inte vara mer än {1} tecken. Ignorera plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Plugin -taggarfel, på sökvägen '{0}' taggar måste inte vara mer än {1} tecken. Ignorera plugin</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Bifoga felsökare till '{0}' eller avbryt för att fortsätta.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Väntar på felsökare</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Fel nedladdning av plugin. Vänligen försök igen senare.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Plugin uppdaterad</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Är du säker på att du vill återställa alla {0} objekt?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Sökkriterier 'Untitled'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Sökkriterier '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' innehåller delade värden. Vill du också återställa dem?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

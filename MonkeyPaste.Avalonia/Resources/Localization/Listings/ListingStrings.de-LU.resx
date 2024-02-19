@@ -70,28 +70,36 @@
     <value>Basic - jährlich</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Kopieren</value>
@@ -127,19 +135,24 @@
     <value>Gebaut - im Plugin -Browser mit einer immer wachsenden Community - angetriebene Bibliothek von Plugins</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste ist wie kein anderer ein Instrument für Zwischenablement -Manager, Automatisierung und Produktivität. Verbessern Sie Ihre Zwischenablage zu einem angereicherten und organisierten Teil Ihres Workflows,
@@ -158,40 +171,41 @@ Ich möchte auch, dass Sie sich wohl fühlen. Ich versichere Ihnen, dass Sie die
 Ihre Zwischenablage wird jemals überall über Ihren eigenen Maschine verfolgt oder gespeichert. Zeitraum.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
-    <value>Ur</value>
+    <value>● Einfache und benutzerfreundliche Benutzeroberfläche mit horizontalen / vertikalen Layouts, Listen-/Rasteransicht und Multi-Monitor-Unterstützung</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Anhangsmodus: Das Kopieren wird in der Zwischenablage "Anstelle" anstelle von "ersetzen". Sowohl Text als auch Dateien, vollständig anpassbar</value>
+    <value>● Benutzerdefinierte Mausmodi: Recht - Klicken Sie auf Einfügen und links - Klicken Sie auf Automatisch - Kopieren Sie kopieren</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>Ur</value>
+    <value>● Anhangsmodus: Das Kopieren wird in der Zwischenablage "Anstelle" anstelle von "ersetzen". Sowohl Text als auch Dateien, vollständig anpassbar</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Voller Clip -Editor mit reichem Text (Tabellen, Listen, Links usw.) mit Find/Ersetzen und Hervorhebung</value>
+    <value>● Ausgefeiltes Clip-Tracking, Quellen und Nutzung mit erweiterter Unterstützung für Firefox- und Chromium-basierte Browser (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Speichern Sie Ihre Bilder in der sicheren Datenbank und bereit, jederzeit als Dateien zu verwenden. Nach Bedarf ziehen Sie einfach - und - Drop!</value>
+    <value>● Voller Clip -Editor mit reichem Text (Tabellen, Listen, Links usw.) mit Find/Ersetzen und Hervorhebung</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● leistungsstarke Textvorlagen für ein schnelles, dynamisches Einfügen aus Ihrer Snippet -Sammlung</value>
+    <value>● Speichern Sie Ihre Bilder in der sicheren Datenbank und bereit, jederzeit als Dateien zu verwenden. Nach Bedarf ziehen Sie einfach - und - Drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger- und Action -Designer für benutzerdefinierte Automatisierungen und Aktionsketten</value>
+    <value>● leistungsstarke Textvorlagen für ein schnelles, dynamisches Einfügen aus Ihrer Snippet -Sammlung</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Einfach zu verwenden und zu erweitern, um das Plugin -System sowohl für die Analyse von Clips zu analysieren oder ein beliebiges Format in Ihre Zwischenablage zu lesen/zu schreiben</value>
+    <value>● Trigger- und Action -Designer für benutzerdefinierte Automatisierungen und Aktionsketten</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>Ur</value>
+    <value>● Einfach zu verwenden und zu erweitern, um das Plugin -System sowohl für die Analyse von Clips zu analysieren oder ein beliebiges Format in Ihre Zwischenablage zu lesen/zu schreiben</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatisieren Sie alles mit Plugin -Voreinstellungen, verstauen und verwenden</value>
+    <value>● Eingebauter Plugin-Browser mit einer ständig wachsenden Community-gesteuerten Plugin-Bibliothek</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Weitere Plattformen und Funktionen kommen in Kürze! Wir werden gerade erst anfangen 🎉</value>
+    <value>● Automatisieren Sie alles mit Plugin -Voreinstellungen, verstauen und verwenden</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Sowohl helle als auch dunkle Themen sind vollständig dynamisch. Verwenden Sie jede gewünschte Farbe</value>
@@ -208,29 +222,29 @@ Ihre Zwischenablage wird jemals überall über Ihren eigenen Maschine verfolgt o
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Organisieren Sie Ihre Clips in Tagbäumen und erstellen Sie wiederbelebbare Filter</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Sichere, sichere und private lokale Datenspeicherung (keine Datenerfassung) immer mit optionalem 2 -Faktor -Kennwortschutz und einfacher Blockierung von Apps oder Websites von Ihrem Tracker einfach blockieren</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Umfangreiche Ziehen - und - Drop -Support, benutzerdefinierte globale Verknüpfungen, Routing und Maus - kostenlose Navigation</value>
+    <value>● Blockieren Sie einfach bestimmte Apps, Websites und sogar bestimmte Webseiten von der Zwischenablementverfolgung</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Benutzerdefinierte Mausmodi: Recht - Klicken Sie auf Einfügen und links - Klicken Sie auf Automatisch - Kopieren Sie kopieren</value>
+    <value>● Umfangreiche Ziehen - und - Drop -Support, benutzerdefinierte globale Verknüpfungen, Routing und Maus - kostenlose Navigation</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Die Zwischenablage ist ein Dschungel. Monkeypaste ist der König! Schwingen Sie von App zu App, kopieren Sie dies und das Einfügen wie nie zuvor mit Monkeypaste !! Eine Marke - neue, modernste Klemme und analytisches Automatisierungswerkzeug !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Probe von Monkeypaste in Aktion!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>In dieser Sprache installiert. Englisch ist nur für diese Beispiele</value>
@@ -250,5 +264,11 @@ Ihre Zwischenablage wird jemals überall über Ihren eigenen Maschine verfolgt o
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Mit diesem Abonnement erhalten Sie:
 ● Unbegrenzte Kapazität</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Sichere und private lokale Datenspeicherung (keine Datenerfassung) immer verschlüsselt mit optionalem 2-Faktor-Passwortschutz</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Weitere Plattformen und Funktionen kommen in Kürze! Wir werden gerade erst anfangen 🎉</value>
   </data>
 </root>

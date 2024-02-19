@@ -70,28 +70,36 @@
     <value>Asas - tahunan</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>salinan</value>
@@ -127,19 +135,24 @@
     <value>Dibina - Penyemak Imbas Plugin Dengan Komuniti Pernah - Perpustakaan Plugin yang Didorong</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypaste adalah pengurus klip, alat automasi dan produktiviti seperti yang lain. Meningkatkan papan klip anda ke bahagian aliran kerja anda yang diperkaya dan teratur,
@@ -158,40 +171,41 @@ Saya juga mahu anda berasa selesa menggunakannya. Oleh itu, saya memberi jaminan
 Papan klip anda pernah dikesan atau disimpan di mana -mana di luar mesin anda sendiri. Tempoh.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Antara muka yang mudah dan mesra dengan kedua -dua susun atur mendatar/menegak, paparan senarai/grid dan sokongan pelbagai pemantauan</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Mod tambahan: Menyalin menjadi 'Tambah ke' bukannya 'Ganti' pada papan klip. Kedua -dua teks dan fail, disesuaikan sepenuhnya</value>
+    <value>● Mod tetikus tersuai: Kanan - Klik Tampal dan Kiri - Klik Auto - Salin</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Penjejakan klip, sumber dan penggunaan yang canggih dengan sokongan yang dipertingkatkan untuk penyemak imbas berasaskan Firefox dan kromium (Chrome, Edge, Brave)</value>
+    <value>● Mod tambahan: Menyalin menjadi 'Tambah ke' bukannya 'Ganti' pada papan klip. Kedua -dua teks dan fail, disesuaikan sepenuhnya</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Sepenuhnya - Editor klip yang dipaparkan dengan teks yang kaya (jadual, senarai, pautan, dll) dengan mencari/menggantikan dan menonjol</value>
+    <value>● Penjejakan klip, sumber dan penggunaan yang canggih dengan sokongan yang dipertingkatkan untuk penyemak imbas berasaskan Firefox dan kromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Simpan imej anda dalam pangkalan data yang selamat, bersedia untuk digunakan sebagai fail pada bila -bila masa - permintaan hanya seret - dan - drop!</value>
+    <value>● Sepenuhnya - Editor klip yang dipaparkan dengan teks yang kaya (jadual, senarai, pautan, dll) dengan mencari/menggantikan dan menonjol</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Templat teks yang kuat untuk pemisahan cepat dan dinamik dari koleksi coretan anda</value>
+    <value>● Simpan imej anda dalam pangkalan data yang selamat, bersedia untuk digunakan sebagai fail pada bila -bila masa - permintaan hanya seret - dan - drop!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Pencetus &amp; Pereka Tindakan untuk Automasi Custom dan Tindakan Berlanjakan</value>
+    <value>● Templat teks yang kuat untuk pemisahan cepat dan dinamik dari koleksi coretan anda</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Ringkas untuk digunakan dan memperluaskan sistem plugin untuk menganalisis klip atau membaca/menulis sebarang format ke papan klip anda</value>
+    <value>● Pencetus &amp; Pereka Tindakan untuk Automasi Custom dan Tindakan Berlanjakan</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Dibina - Penyemak imbas plugin dengan komuniti yang pernah berkembang - Perpustakaan plugin yang didorong</value>
+    <value>● Ringkas untuk digunakan dan memperluaskan sistem plugin untuk menganalisis klip atau membaca/menulis sebarang format ke papan klip anda</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatikkan segala -galanya dengan pratetap plugin, simpan dan gunakan mana -mana AI anda yang meminta atau arahan</value>
+    <value>● Dibina - Penyemak imbas plugin dengan komuniti yang pernah berkembang - Perpustakaan plugin yang didorong</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Lebih banyak platform dan ciri yang akan datang! Kami baru sahaja bermula 🎉</value>
+    <value>● Automatikkan segala -galanya dengan pratetap plugin, simpan dan gunakan mana -mana AI anda yang meminta atau arahan</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Kedua -dua tema cahaya &amp; gelap benar -benar dinamik, gunakan warna yang anda mahukan</value>
@@ -208,29 +222,29 @@ Papan klip anda pernah dikesan atau disimpan di mana -mana di luar mesin anda se
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Susun klip anda di pokok tag dan buat penapis yang boleh ditempah</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Penyimpanan data tempatan yang selamat, selamat dan peribadi (tiada pengumpulan data) selalu disulitkan dengan pilihan 2 - faktor perlindungan kata laluan dan mudah menyekat aplikasi atau laman web dari pelacak anda</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Sokongan seretan yang luas - dan - drop sokongan, pintasan global tersuai, penghalaan dan tetikus - navigasi percuma</value>
+    <value>● Mudah menyekat aplikasi, laman web dan laman web tertentu dari penjejakan papan klip</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Mod tetikus tersuai: Kanan - Klik Tampal dan Kiri - Klik Auto - Salin</value>
+    <value>● Sokongan seretan yang luas - dan - drop sokongan, pintasan global tersuai, penghalaan dan tetikus - navigasi percuma</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Papan klip adalah hutan. Monkeypaste adalah raja! Swing dari aplikasi ke aplikasi, menyalin ini dan menampal yang tidak pernah seperti sebelumnya dengan Monkeypaste !! A jenama - clipboard baru, canggih dan alat automasi analitik !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Contoh monkeypaste dalam tindakan!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Dipasang dalam bahasa ini. Bahasa Inggeris hanya untuk contoh ini</value>
@@ -250,5 +264,11 @@ Papan klip anda pernah dikesan atau disimpan di mana -mana di luar mesin anda se
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Dengan langganan ini anda akan terima:
 ● Kapasiti tanpa had</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Penyimpanan data tempatan yang selamat, selamat dan peribadi (tiada pengumpulan data) selalu disulitkan dengan pilihan 2 - faktor perlindungan kata laluan</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Lebih banyak platform dan ciri yang akan datang! Kami baru sahaja bermula 🎉</value>
   </data>
 </root>

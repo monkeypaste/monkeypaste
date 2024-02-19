@@ -729,7 +729,7 @@ namespace MonkeyPaste.Avalonia {
                                 string result_hex = await Mp.Services.CustomColorChooserMenuAsync
                                     .ShowCustomColorMenuAsync(
                                         selectedColor: hex,
-                                        title: "Editor color");
+                                        title: UiStrings.EditorColorChooserTitle);
 
                                 if (string.IsNullOrEmpty(result_hex)) {
                                     return;

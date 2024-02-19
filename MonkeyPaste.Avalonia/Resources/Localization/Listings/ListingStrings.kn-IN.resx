@@ -70,28 +70,36 @@
     <value>ಮೂಲ - ವಾರ್ಷಿಕ</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>ನಕಲು</value>
@@ -127,19 +135,24 @@
     <value>ನಿರ್ಮಿಸಲಾಗಿದೆ - ಎಂದೆಂದಿಗೂ ಬೆಳೆಯುತ್ತಿರುವ ಸಮುದಾಯದೊಂದಿಗೆ ಪ್ಲಗಿನ್ ಬ್ರೌಸರ್‌ನಲ್ಲಿ - ಪ್ಲಗಿನ್‌ಗಳ ಚಾಲಿತ ಗ್ರಂಥಾಲಯ</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>ಮಾಂಕೈಪಾಸ್ಟ್ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಮ್ಯಾನೇಜರ್, ಯಾಂತ್ರೀಕೃತಗೊಂಡ ಮತ್ತು ಉತ್ಪಾದಕತೆಯ ಸಾಧನವಾಗಿದ್ದು, ಇತರರಂತೆ ಉತ್ಪಾದಕತೆ ಸಾಧನವಾಗಿದೆ. ನಿಮ್ಮ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಅನ್ನು ನಿಮ್ಮ ಕೆಲಸದ ಹರಿವಿನ ಸಮೃದ್ಧ ಮತ್ತು ಸಂಘಟಿತ ಭಾಗವಾಗಿ ಹೆಚ್ಚಿಸುವುದು,
@@ -158,40 +171,41 @@
 ನಿಮ್ಮ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಅನ್ನು ನಿಮ್ಮ ಸ್ವಂತ ಯಂತ್ರವನ್ನು ಮೀರಿ ಎಲ್ಲಿಯಾದರೂ ಟ್ರ್ಯಾಕ್ ಮಾಡಲಾಗಿದೆ ಅಥವಾ ಸಂಗ್ರಹಿಸಲಾಗಿದೆ. ಅವಧಿ.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>Haid ಸಮತಲ/ಲಂಬ ವಿನ್ಯಾಸಗಳು, ಪಟ್ಟಿ/ಗ್ರಿಡ್ ವೀಕ್ಷಣೆ ಮತ್ತು ಮಲ್ಟಿ - ಮಾನಿಟರ್ ಬೆಂಬಲದೊಂದಿಗೆ ಸರಳ ಮತ್ತು ಸ್ನೇಹಪರ ಇಂಟರ್ಫೇಸ್</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>Mode ಸೇರ್ಪಡೆ ಮೋಡ್: ನಕಲಿಸುವುದು ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಲ್ಲಿ 'ಬದಲಾಯಿಸು' ಬದಲಿಗೆ 'ಗೆ' ಸೇರಿಸಿ. ಪಠ್ಯ ಮತ್ತು ಫೈಲ್‌ಗಳು, ಸಂಪೂರ್ಣವಾಗಿ ಗ್ರಾಹಕೀಯಗೊಳಿಸಬಲ್ಲವು</value>
+    <value>● ಕಸ್ಟಮ್ ಮೌಸ್ ಮೋಡ್‌ಗಳು: ಬಲ - ಅಂಟಿಸಿ ಮತ್ತು ಎಡ ಕ್ಲಿಕ್ ಮಾಡಿ - ಸ್ವಯಂ ಕ್ಲಿಕ್ ಮಾಡಿ - ನಕಲು ಮಾಡಿ</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>Fire ಫೈರ್‌ಫಾಕ್ಸ್ ಮತ್ತು ಕ್ರೋಮಿಯಂ ಆಧಾರಿತ ಬ್ರೌಸರ್‌ಗಳಿಗೆ (ಕ್ರೋಮ್, ಎಡ್ಜ್, ಬ್ರೇವ್) ವರ್ಧಿತ ಬೆಂಬಲದೊಂದಿಗೆ ಅತ್ಯಾಧುನಿಕ ಕ್ಲಿಪ್ ಟ್ರ್ಯಾಕಿಂಗ್, ಮೂಲಗಳು ಮತ್ತು ಬಳಕೆ</value>
+    <value>Mode ಸೇರ್ಪಡೆ ಮೋಡ್: ನಕಲಿಸುವುದು ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಲ್ಲಿ 'ಬದಲಾಯಿಸು' ಬದಲಿಗೆ 'ಗೆ' ಸೇರಿಸಿ. ಪಠ್ಯ ಮತ್ತು ಫೈಲ್‌ಗಳು, ಸಂಪೂರ್ಣವಾಗಿ ಗ್ರಾಹಕೀಯಗೊಳಿಸಬಲ್ಲವು</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● ಸಂಪೂರ್ಣವಾಗಿ - ಶ್ರೀಮಂತ ಪಠ್ಯದೊಂದಿಗೆ (ಕೋಷ್ಟಕಗಳು, ಪಟ್ಟಿಗಳು, ಲಿಂಕ್‌ಗಳು, ಇತ್ಯಾದಿ) ವೈಶಿಷ್ಟ್ಯಗೊಳಿಸಿದ ಕ್ಲಿಪ್ ಸಂಪಾದಕವನ್ನು ಹುಡುಕಿ/ಬದಲಾಯಿಸಿ ಮತ್ತು ಹೈಲೈಟ್ ಮಾಡುವುದರೊಂದಿಗೆ</value>
+    <value>Fire ಫೈರ್‌ಫಾಕ್ಸ್ ಮತ್ತು ಕ್ರೋಮಿಯಂ ಆಧಾರಿತ ಬ್ರೌಸರ್‌ಗಳಿಗೆ (ಕ್ರೋಮ್, ಎಡ್ಜ್, ಬ್ರೇವ್) ವರ್ಧಿತ ಬೆಂಬಲದೊಂದಿಗೆ ಅತ್ಯಾಧುನಿಕ ಕ್ಲಿಪ್ ಟ್ರ್ಯಾಕಿಂಗ್, ಮೂಲಗಳು ಮತ್ತು ಬಳಕೆ</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>Date ನಿಮ್ಮ ಚಿತ್ರಗಳನ್ನು ಸುರಕ್ಷಿತ ಡೇಟಾಬೇಸ್‌ನಲ್ಲಿ ಸಂಗ್ರಹಿಸಿ, ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ಫೈಲ್‌ಗಳಾಗಿ ಬಳಸಲು ಸಿದ್ಧವಾಗಿದೆ - ಬೇಡಿಕೆ ಡ್ರ್ಯಾಗ್ - ಮತ್ತು - ಡ್ರಾಪ್!</value>
+    <value>● ಸಂಪೂರ್ಣವಾಗಿ - ಶ್ರೀಮಂತ ಪಠ್ಯದೊಂದಿಗೆ (ಕೋಷ್ಟಕಗಳು, ಪಟ್ಟಿಗಳು, ಲಿಂಕ್‌ಗಳು, ಇತ್ಯಾದಿ) ವೈಶಿಷ್ಟ್ಯಗೊಳಿಸಿದ ಕ್ಲಿಪ್ ಸಂಪಾದಕವನ್ನು ಹುಡುಕಿ/ಬದಲಾಯಿಸಿ ಮತ್ತು ಹೈಲೈಟ್ ಮಾಡುವುದರೊಂದಿಗೆ</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>Your ನಿಮ್ಮ ತುಣುಕು ಸಂಗ್ರಹದಿಂದ ತ್ವರಿತ, ಕ್ರಿಯಾತ್ಮಕ ಅಂಟಿಸುವಿಕೆಗಾಗಿ ಶಕ್ತಿಯುತ ಪಠ್ಯ ಟೆಂಪ್ಲೇಟಿಂಗ್</value>
+    <value>Date ನಿಮ್ಮ ಚಿತ್ರಗಳನ್ನು ಸುರಕ್ಷಿತ ಡೇಟಾಬೇಸ್‌ನಲ್ಲಿ ಸಂಗ್ರಹಿಸಿ, ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ಫೈಲ್‌ಗಳಾಗಿ ಬಳಸಲು ಸಿದ್ಧವಾಗಿದೆ - ಬೇಡಿಕೆ ಡ್ರ್ಯಾಗ್ - ಮತ್ತು - ಡ್ರಾಪ್!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>Cost ಕಸ್ಟಮ್ ಆಟೊಮೇಷನ್ಸ್ ಮತ್ತು ಆಕ್ಷನ್ ಚೈನಿಂಗ್‌ಗಾಗಿ ಪ್ರಚೋದಕ ಮತ್ತು ಆಕ್ಷನ್ ಡಿಸೈನರ್</value>
+    <value>Your ನಿಮ್ಮ ತುಣುಕು ಸಂಗ್ರಹದಿಂದ ತ್ವರಿತ, ಕ್ರಿಯಾತ್ಮಕ ಅಂಟಿಸುವಿಕೆಗಾಗಿ ಶಕ್ತಿಯುತ ಪಠ್ಯ ಟೆಂಪ್ಲೇಟಿಂಗ್</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>Cl ಕ್ಲಿಪ್‌ಗಳನ್ನು ವಿಶ್ಲೇಷಿಸಲು ಪ್ಲಗಿನ್ ಸಿಸ್ಟಮ್ ಅನ್ನು ಬಳಸಲು ಮತ್ತು ವಿಸ್ತರಿಸಲು ಸರಳವಾಗಿದೆ ಅಥವಾ ನಿಮ್ಮ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ಯಾವುದೇ ಸ್ವರೂಪವನ್ನು ಓದಲು/ಬರೆಯಿರಿ</value>
+    <value>Cost ಕಸ್ಟಮ್ ಆಟೊಮೇಷನ್ಸ್ ಮತ್ತು ಆಕ್ಷನ್ ಚೈನಿಂಗ್‌ಗಾಗಿ ಪ್ರಚೋದಕ ಮತ್ತು ಆಕ್ಷನ್ ಡಿಸೈನರ್</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● ನಿರ್ಮಿಸಲಾಗಿದೆ - ಎಂದೆಂದಿಗೂ ಬೆಳೆಯುತ್ತಿರುವ ಸಮುದಾಯದೊಂದಿಗೆ ಪ್ಲಗಿನ್ ಬ್ರೌಸರ್‌ನಲ್ಲಿ - ಪ್ಲಗಿನ್‌ಗಳ ಚಾಲಿತ ಗ್ರಂಥಾಲಯ</value>
+    <value>Cl ಕ್ಲಿಪ್‌ಗಳನ್ನು ವಿಶ್ಲೇಷಿಸಲು ಪ್ಲಗಿನ್ ಸಿಸ್ಟಮ್ ಅನ್ನು ಬಳಸಲು ಮತ್ತು ವಿಸ್ತರಿಸಲು ಸರಳವಾಗಿದೆ ಅಥವಾ ನಿಮ್ಮ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ಯಾವುದೇ ಸ್ವರೂಪವನ್ನು ಓದಲು/ಬರೆಯಿರಿ</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>The ಪ್ಲಗಿನ್ ಪೂರ್ವನಿಗದಿಗಳೊಂದಿಗೆ ಎಲ್ಲವನ್ನೂ ಸ್ವಯಂಚಾಲಿತಗೊಳಿಸಿ, ನಿಮ್ಮ ಯಾವುದೇ AI ಪ್ರಾಂಪ್ಟ್‌ಗಳನ್ನು ಅಥವಾ ಆಜ್ಞೆಗಳನ್ನು ಸುಲಭವಾಗಿ ಇರಿಸಿ ಮತ್ತು ಬಳಸಿ</value>
+    <value>● ನಿರ್ಮಿಸಲಾಗಿದೆ - ಎಂದೆಂದಿಗೂ ಬೆಳೆಯುತ್ತಿರುವ ಸಮುದಾಯದೊಂದಿಗೆ ಪ್ಲಗಿನ್ ಬ್ರೌಸರ್‌ನಲ್ಲಿ - ಪ್ಲಗಿನ್‌ಗಳ ಚಾಲಿತ ಗ್ರಂಥಾಲಯ</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>Platform ಹೆಚ್ಚಿನ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್‌ಗಳು ಮತ್ತು ವೈಶಿಷ್ಟ್ಯಗಳು ಶೀಘ್ರದಲ್ಲೇ ಬರಲಿವೆ! ನಾವು ಪ್ರಾರಂಭಿಸುತ್ತಿದ್ದೇವೆ</value>
+    <value>The ಪ್ಲಗಿನ್ ಪೂರ್ವನಿಗದಿಗಳೊಂದಿಗೆ ಎಲ್ಲವನ್ನೂ ಸ್ವಯಂಚಾಲಿತಗೊಳಿಸಿ, ನಿಮ್ಮ ಯಾವುದೇ AI ಪ್ರಾಂಪ್ಟ್‌ಗಳನ್ನು ಅಥವಾ ಆಜ್ಞೆಗಳನ್ನು ಸುಲಭವಾಗಿ ಇರಿಸಿ ಮತ್ತು ಬಳಸಿ</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>High ಬೆಳಕು ಮತ್ತು ಗಾ dark ವಾದ ವಿಷಯಗಳು ಸಂಪೂರ್ಣವಾಗಿ ಕ್ರಿಯಾತ್ಮಕವಾಗಿವೆ, ನಿಮಗೆ ಬೇಕಾದ ಯಾವುದೇ ಬಣ್ಣವನ್ನು ಬಳಸಿ</value>
@@ -208,29 +222,29 @@
   <data name="StoreFeature6" xml:space="preserve">
     <value>The ನಿಮ್ಮ ಕ್ಲಿಪ್‌ಗಳನ್ನು ಟ್ಯಾಗ್ ಮರಗಳಲ್ಲಿ ಸಂಘಟಿಸಿ ಮತ್ತು ಮರುಹೊಂದಿಸಬಹುದಾದ ಫಿಲ್ಟರ್‌ಗಳನ್ನು ರಚಿಸಿ</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● ಸುರಕ್ಷಿತ, ಸುರಕ್ಷಿತ ಮತ್ತು ಖಾಸಗಿ ಸ್ಥಳೀಯ ಡೇಟಾ ಸಂಗ್ರಹಣೆ (ಡೇಟಾ ಸಂಗ್ರಹವಿಲ್ಲ) ಯಾವಾಗಲೂ ಐಚ್ al ಿಕ 2 - ಫ್ಯಾಕ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ರಕ್ಷಣೆ ಮತ್ತು ನಿಮ್ಮ ಟ್ರ್ಯಾಕರ್‌ನಿಂದ ಅಪ್ಲಿಕೇಶನ್‌ಗಳು ಅಥವಾ ವೆಬ್‌ಸೈಟ್‌ಗಳನ್ನು ಸುಲಭವಾಗಿ ನಿರ್ಬಂಧಿಸಿ</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● ವ್ಯಾಪಕವಾದ ಡ್ರ್ಯಾಗ್ - ಮತ್ತು - ಡ್ರಾಪ್ ಬೆಂಬಲ, ಕಸ್ಟಮ್ ಗ್ಲೋಬಲ್ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳು, ರೂಟಿಂಗ್ ಮತ್ತು ಮೌಸ್ - ಉಚಿತ ನ್ಯಾವಿಗೇಷನ್</value>
+    <value>Cl ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಟ್ರ್ಯಾಕಿಂಗ್‌ನಿಂದ ಕೆಲವು ಅಪ್ಲಿಕೇಶನ್‌ಗಳು, ವೆಬ್‌ಸೈಟ್‌ಗಳು ಮತ್ತು ನಿರ್ದಿಷ್ಟ ವೆಬ್ ಪುಟಗಳನ್ನು ಸುಲಭವಾಗಿ ನಿರ್ಬಂಧಿಸಿ</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● ಕಸ್ಟಮ್ ಮೌಸ್ ಮೋಡ್‌ಗಳು: ಬಲ - ಅಂಟಿಸಿ ಮತ್ತು ಎಡ ಕ್ಲಿಕ್ ಮಾಡಿ - ಸ್ವಯಂ ಕ್ಲಿಕ್ ಮಾಡಿ - ನಕಲು ಮಾಡಿ</value>
+    <value>● ವ್ಯಾಪಕವಾದ ಡ್ರ್ಯಾಗ್ - ಮತ್ತು - ಡ್ರಾಪ್ ಬೆಂಬಲ, ಕಸ್ಟಮ್ ಗ್ಲೋಬಲ್ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳು, ರೂಟಿಂಗ್ ಮತ್ತು ಮೌಸ್ - ಉಚಿತ ನ್ಯಾವಿಗೇಷನ್</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಒಂದು ಕಾಡು. ಮಂಕೈಪಾಸ್ಟ್ ರಾಜ! ಅಪ್ಲಿಕೇಶನ್‌ನಿಂದ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಸ್ವಿಂಗ್ ಮಾಡಿ, ಇದನ್ನು ನಕಲಿಸಿ ಮತ್ತು ಮಾಂಕೈಪೇಸ್ಟ್‌ನೊಂದಿಗೆ ಹಿಂದೆಂದಿಗಿಂತಲೂ ಅಂಟಿಕೊಳ್ಳುವುದು !! ಒಂದು ಬ್ರ್ಯಾಂಡ್ - ಹೊಸ, ಅತ್ಯಾಧುನಿಕ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಮತ್ತು ವಿಶ್ಲೇಷಣಾತ್ಮಕ ಯಾಂತ್ರೀಕೃತಗೊಂಡ ಸಾಧನ !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>ಕ್ರಿಯೆಯಲ್ಲಿ ಮಾಂಕೈಪೇಸ್ಟ್‌ನ ಮಾದರಿ!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>ಈ ಭಾಷೆಯಲ್ಲಿ ಸ್ಥಾಪಿಸಲಾಗಿದೆ. ಇಂಗ್ಲಿಷ್ ಈ ಉದಾಹರಣೆಗಳಿಗೆ ಮಾತ್ರ</value>
@@ -250,5 +264,11 @@
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>ಈ ಚಂದಾದಾರಿಕೆಯೊಂದಿಗೆ ನೀವು ಸ್ವೀಕರಿಸುತ್ತೀರಿ:
 ಅನಿಯಮಿತ ಸಾಮರ್ಥ್ಯ</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>Safe ಸುರಕ್ಷಿತ, ಸುರಕ್ಷಿತ ಮತ್ತು ಖಾಸಗಿ ಸ್ಥಳೀಯ ಡೇಟಾ ಸಂಗ್ರಹಣೆ (ಡೇಟಾ ಸಂಗ್ರಹವಿಲ್ಲ) ಯಾವಾಗಲೂ ಐಚ್ al ಿಕ 2 ನೊಂದಿಗೆ ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡಲಾಗಿದೆ - ಫ್ಯಾಕ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ರಕ್ಷಣೆ</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>Platform ಹೆಚ್ಚಿನ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್‌ಗಳು ಮತ್ತು ವೈಶಿಷ್ಟ್ಯಗಳು ಶೀಘ್ರದಲ್ಲೇ ಬರಲಿವೆ! ನಾವು ಪ್ರಾರಂಭಿಸುತ್ತಿದ್ದೇವೆ</value>
   </data>
 </root>

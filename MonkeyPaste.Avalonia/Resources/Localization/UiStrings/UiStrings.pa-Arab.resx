@@ -281,7 +281,7 @@
     <value>ਟੈਕਸਟ</value>
   </data>
   <data name="ClipTileDetailCreated" xml:space="preserve">
-    <value>ਨਕਲ} 0}</value>
+    <value>ਨਕਲ {0}</value>
   </data>
   <data name="ClipTileDetailDimFiles" xml:space="preserve">
     <value>{0} ਫਾਈਲਾਂ | {1} ਐਮਬੀਐਸ</value>
@@ -293,7 +293,7 @@
     <value>{0} ਅੱਖਰ | {1} ਲਾਈਨਾਂ</value>
   </data>
   <data name="ClipTileDetailUsage" xml:space="preserve">
-    <value>} 0} ਕਾਪੀਆਂ | {1} ਪੇਸਟ</value>
+    <value>{0} ਕਾਪੀਆਂ | {1} ਪੇਸਟ</value>
   </data>
   <data name="ActionMoveLabel" xml:space="preserve">
     <value>ਮੂਵ</value>
@@ -589,7 +589,7 @@
     <value>ਗਲੋਬਲ</value>
   </data>
   <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
-    <value>ਜੇ ਇਸ ਨੂੰ ਸੰਭਾਲਿਆ ਗਿਆ ਤਾਂ ਇਹ ਸੰਜੋਗ ਜਿਸ ਨੂੰ ਬਚਾ ਲਿਆ ਜਾਵੇਗਾ.</value>
+    <value>ਜੇ ਇਸ ਨੂੰ ਸੰਭਾਲਿਆ ਗਿਆ ਤਾਂ {0} ਇਹ ਸੰਜੋਗ ਜਿਸ ਨੂੰ ਬਚਾ ਲਿਆ ਜਾਵੇਗਾ.</value>
     <comment>Shortcut Display Name</comment>
   </data>
   <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
@@ -741,11 +741,11 @@
     <value>ਖਾਤਾ ਬਦਲਿਆ</value>
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
-    <value>ਤੁਹਾਡੀ ਗਾਹਕੀ ਹੁਣ {0} /} ਸਮੱਗਰੀ ਅਤੇ {3} ਰੱਦੀ ਭੰਡਾਰਨ ਦੇ ਨਾਲ ਹੁਣ.
+    <value>ਤੁਹਾਡੀ ਗਾਹਕੀ ਹੁਣ {0} /{1} ਸਮੱਗਰੀ {2} ਅਤੇ {3} ਰੱਦੀ ਭੰਡਾਰਨ ਦੇ ਨਾਲ ਹੁਣ.
 ਪਰ ਚਿੰਤਾ ਨਾ ਕਰੋ, ਡਾ down ਨਗਰੇਡਿੰਗ ਤੋਂ ਬਾਅਦ ਕੋਈ ਵੀ ਡਾਟਾ ਗੁੰਮ ਨਹੀਂ ਹੁੰਦਾ. ਸਿਰਫ ਨਵੇਂ ਕਲਿੱਪਾਂ ਦਾ ਮੁਲਾਂਕਣ ਕੀਤਾ ਜਾਵੇਗਾ.</value>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
-    <value>ਵਧਾਈਆਂ! ਤੁਹਾਡੀ ਗਾਹਕੀ ਹੁਣ {0} /} ਸਮੱਗਰੀ ਅਤੇ {3} ਰੱਦੀ ਭੰਡਾਰਨ ਦੇ ਨਾਲ ਹੁਣ.</value>
+    <value>ਵਧਾਈਆਂ! ਤੁਹਾਡੀ ਗਾਹਕੀ ਹੁਣ {0} /{1}} ਸਮੱਗਰੀ {2} ਅਤੇ {3} ਰੱਦੀ ਭੰਡਾਰਨ ਦੇ ਨਾਲ ਹੁਣ.</value>
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapBlockHint1" xml:space="preserve">
@@ -778,7 +778,7 @@
 ਉੱਪਰ ਦਿੱਤੇ ਵਿਕਲਪ ਮੀਨੂ.</value>
   </data>
   <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
-    <value>ਮੈਕਸ ਰੱਦੀ ਦੀ ਸਟੋਰੇਜ} 0} ਹੈ.</value>
+    <value>ਮੈਕਸ ਰੱਦੀ ਦੀ ਸਟੋਰੇਜ} {0} ਹੈ.</value>
   </data>
   <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
     <value>ਰੱਦੀ ਦੀ ਸਮਰੱਥਾ ਪਹੁੰਚ ਗਈ!</value>
@@ -801,33 +801,33 @@
   </data>
   <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
     <value>ਤੁਹਾਡੇ {0} ਲਈ ਭੁਗਤਾਨ
-ਗਾਹਕੀ was 1} ਸੀ
-ਅਤੇ ਪ੍ਰਾਪਤ ਨਹੀਂ ਹੋਇਆ ਹੈ.
+ਗਾਹਕੀ ਬਕਾਇਆ ਸੀ {1}
+ਅਤੇ ਪ੍ਰਾਪਤ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ।
 
-ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਅਪਡੇਟ ਕਰੋ
-ਭੁਗਤਾਨ ਦੀ ਜਾਣਕਾਰੀ.</value>
+ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਅੱਪਡੇਟ ਕਰੋ
+ਭੁਗਤਾਨ ਜਾਣਕਾਰੀ.</value>
   </data>
   <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
     <value>ਤੁਹਾਡੇ {0} ਲਈ ਭੁਗਤਾਨ
-ਗਾਹਕੀ was 1} ਸੀ
-ਅਤੇ ਪ੍ਰਾਪਤ ਨਹੀਂ ਹੋਇਆ ਹੈ.
+ਗਾਹਕੀ ਬਕਾਇਆ ਸੀ {1}
+ਅਤੇ ਪ੍ਰਾਪਤ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ।
 
 ਕਿਰਪਾ ਕਰਕੇ ਨਾਲ ਜੁੜੋ
 ਡਿਵਾਈਸ ਤੇ ਇੰਟਰਨੈਟ
-ਤੁਹਾਡੀ ਗਾਹਕੀ ਦੇ ਨਾਲ ਅਤੇ
+ਤੁਹਾਡੀ ਗਾਹਕੀ ਨਾਲ ਅਤੇ
 ਜਾਰੀ ਰੱਖਣ ਲਈ ਮੁੜ ਚਾਲੂ ਕਰੋ
-ਆਪਣੀ {0} ਯੋਜਨਾ ਦੀ ਵਰਤੋਂ ਕਰਨਾ.</value>
+ਤੁਹਾਡੀ {0} ਯੋਜਨਾ ਦੀ ਵਰਤੋਂ ਕਰਦੇ ਹੋਏ।</value>
   </data>
   <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
     <value>ਤੁਹਾਡੇ {0} ਲਈ ਭੁਗਤਾਨ
-ਗਾਹਕੀ was 1} ਸੀ
-ਅਤੇ ਪ੍ਰਾਪਤ ਨਹੀਂ ਹੋਇਆ ਹੈ.
+ਗਾਹਕੀ ਬਕਾਇਆ ਸੀ {1}
+ਅਤੇ ਪ੍ਰਾਪਤ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ।
 
 ਕਿਰਪਾ ਕਰਕੇ ਖੋਲ੍ਹੋ ਜਾਂ ਮੁੜ ਚਾਲੂ ਕਰੋ
-ਡਿਵਾਈਸ ਤੇ ਬਾਂਦਰਪੀਸੇਟ
+ਡਿਵਾਈਸ 'ਤੇ ਬਾਂਦਰ ਪੇਸਟ
 ਤੁਹਾਡੀ ਗਾਹਕੀ ਦੇ ਨਾਲ
-ਆਪਣੇ ਵਰਤ ਕੇ ਜਾਰੀ ਰੱਖੋ
-} 0} ਯੋਜਨਾ.</value>
+ਤੁਹਾਡੀ ਵਰਤੋਂ ਜਾਰੀ ਰੱਖੋ
+{0} ਯੋਜਨਾ।</value>
   </data>
   <data name="AccountExpiredNtfTitle" xml:space="preserve">
     <value>ਖਾਤਾ ਖਤਮ ਹੋ ਗਿਆ</value>
@@ -1134,7 +1134,7 @@
     <comment>Serial Number</comment>
   </data>
   <data name="PluginErrNtfTitle" xml:space="preserve">
-    <value>} 0} ਗਲਤੀ</value>
+    <value>{0} ਗਲਤੀ</value>
     <comment>Plugin Name</comment>
   </data>
   <data name="PluginErrStagingText" xml:space="preserve">
@@ -2086,7 +2086,7 @@
     <value>ਪਿਛਲਾ ਮਹੀਨਾ</value>
   </data>
   <data name="TimeSpanMonths" xml:space="preserve">
-    <value>} 0} ਮਹੀਨੇ ਪਹਿਲਾਂ</value>
+    <value>{0} ਮਹੀਨੇ ਪਹਿਲਾਂ</value>
     <comment>Number</comment>
   </data>
   <data name="TimeSpanWeekLast" xml:space="preserve">
@@ -2300,7 +2300,7 @@
     <comment>Folder Path, Action Name</comment>
   </data>
   <data name="ActionFileWriterValidation1" xml:space="preserve">
-    <value>ਕਾਰਵਾਈ ਲਈ ਫਾਈਲ ਰਾਈਟਰ ਮਾਰਗ ਨਿਰਧਾਰਤ ਨਹੀਂ ਕੀਤਾ ਗਿਆ</value>
+    <value>ਐਕਸ਼ਨ '{0}' ਲਈ ਫਾਈਲ ਰਾਈਟਰ ਪਾਥ ਸੈੱਟ ਨਹੀਂ ਹੈ</value>
     <comment>Action Name</comment>
   </data>
   <data name="ActionFileWriterValidation2" xml:space="preserve">
@@ -2317,7 +2317,7 @@
     <value>ਇਸ ਵਿਸ਼ਲੇਸ਼ਣ ਦੀ ਸੰਰਚਨਾ ਨੂੰ ਮੁੜ ਪ੍ਰਾਪਤ ਕਰੋ</value>
   </data>
   <data name="ChangeLogWindowTitle" xml:space="preserve">
-    <value>} 0} ਲਾਗ ਬਦਲੋ</value>
+    <value>{0} ਲੌਗ ਬਦਲੋ</value>
     <comment>App Version</comment>
   </data>
   <data name="CommonConnectionFailedText" xml:space="preserve">
@@ -2765,5 +2765,201 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>ਇਸ ਤਰੀਕੇ ਨਾਲ, ਮੋਨਕੇਪਾਸਟ ਨੂੰ ਐਕਸੈਸ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ
  ਬਿਨਾਂ ਕਲਿੱਕ ਕੀਤੇ ਜਾਂ ਇੱਥੋਂ ਤੱਕ ਕਿ ਅੱਖਾਂ ਨੂੰ ਬੱਲੇਬਾਜ਼ੀ ਅਤੇ # x1f440</value>
     <comment>&lt;p align="center"&gt;This way, MonkeyPaste can be accessed&lt;br&gt; &lt;span color="red"&gt;without a click&lt;/span&gt; or even &lt;span color="red"&gt;batting an eye&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</comment>
+  </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>ਐਨੋਟੇਸ਼ਨ</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>ਕਲੋਨ</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>ਡਾਟਾ ਇਕਾਈ</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>ਪਾਠਕ</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>ਅਣਜਾਣ ਗਲਤੀ</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>ਲੇਖਕ</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>ਡੁਪਲਿਕੇਟ ਪਲੱਗਇਨ ਗਾਈਡ '{0}' ਇਨ੍ਹਾਂ ਪਲੱਗਇਨਾਂ ਲਈ ਖੋਜਿਆ ਗਿਆ:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਦੇ ਪੜਾਅ ਜਾਂ ਡੁਪਲਿਕੇਟ ਹਟਾ ਕੇ ਫਿਕਸ ਕਰੋ. ਨਹੀਂ ਤਾਂ ਸਾਰੇ ਸੰਬੰਧਿਤ ਪਲੱਗਇਨਾਂ ਨੂੰ ਨਜ਼ਰ ਅੰਦਾਜ਼ ਕਰ ਦਿੱਤਾ ਜਾਵੇਗਾ.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>ਡੁਪਲਿਕੇਟ ਪਲੱਗਇਨ ਪ੍ਰੀਸੈਟ ਗਾਈਡ '{0}' ਇਨ੍ਹਾਂ ਪਲੱਗਇਨਾਂ ਅਤੇ ਪ੍ਰੀਸੈਟਾਂ ਲਈ ਖੋਜ ਕੀਤੀ ਗਈ:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ: {0} {1}ਪ੍ਰੀਸੈੱਟ: #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ: {0} {1} {1} ਪ੍ਰੀਸੈੱਟ (ਜ਼): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>ਵਿਲੱਖਣ ਪ੍ਰੀਸੈੱਟ GUNS ਦੁਆਰਾ ਹੱਲ ਕਰਨ ਦੁਆਰਾ ਜਾਂ ਡੁਪਲਿਕੇਟ ਹਟਾਉਣ ਨਾਲ ਠੀਕ ਕਰੋ. ਨਹੀਂ ਤਾਂ ਸਾਰੇ ਸੰਬੰਧਿਤ ਪਲੱਗਇਨਾਂ ਨੂੰ ਨਜ਼ਰ ਅੰਦਾਜ਼ ਕਰ ਦਿੱਤਾ ਜਾਵੇਗਾ.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>ਸੰਪਾਦਕ ਰੰਗ</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ {0} ਨੂੰ ਪੱਕੇ ਤੌਰ 'ਤੇ ਪੱਕੇ ਤੌਰ' ਤੇ ਪੱਕੇ ਤੌਰ 'ਤੇ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>ਫੋਲਡਰ ਚੁਣੋ</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>ਵਾਚ ਫੋਲਡਰ ਚੁਣੋ</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਗਲਤੀ. ਪਲੱਗਇਨ '{0}' '{1}' ਟਾਈਪ ਹੈ ਪਰ ਕੋਈ '{1}' ਫਾਰਮੈਟ ਨਹੀਂ ਮਿਲਿਆ</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>ਐਕਸ਼ਨ '{0}' ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ: {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>ਮੁੱਲ ਵਿੱਚ ਸਿਰਫ ਨੰਬਰ ਜਾਂ '{0}' ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>ਮੁੱਲ {0} ਤੋਂ {1} ਹੋਣਾ ਲਾਜ਼ਮੀ ਹੈ</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' ਨਾਲ ਸ਼ੁਰੂ ਹੋਣ ਵਾਲੀ ਇਕ ਹੇਕਸ (6 ਜਾਂ 8 ਅੰਕ) ਸਟਰਿੰਗ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>ਕਲਿੱਪਬੋਰਡ '{0}' ਵਿਲੱਖਣ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>ਫਾਰਮੈਟ</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>ਕਿਸਮ</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>ਕਲਿੱਪਬੋਰਡ ਰੀਡਰ / ਲੇਖਕ ਫਾਰਮੈਟ ਦੇ ਨਾਮ ਵਿਲੱਖਣ ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ. ਪਾਠਕ ਡੁਪਲਿਕੇਟਸ:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>ਕਲਿੱਪਬੋਰਡ ਰੀਡਰ / ਲੇਖਕ ਫਾਰਮੈਟ ਦੇ ਨਾਮ ਵਿਲੱਖਣ ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ. ਲੇਖਕ ਡੁਪਲਿਕੇਟਸ:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>ਕਲਿੱਪਬੋਰਡ ਫਾਰਮੈਟ GUDs ਵਿਲੱਖਣ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ. ਡੁਪਲਿਕੇਟ ਫਾਰਮੈਟ ਅਤੇ ਜੀਏਡੀਜ਼:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਗਲਤੀ: ਸਾਰੇ ਪਲੱਗਇਨ '{0}' ਖੇਤਰ ਹੈਂਡਲਰ '{1}' ਲਈ ਵਿਲੱਖਣ ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ।{2}paramName '{3}' ਵਿੱਚ ਕਈ ਐਂਟਰੀਆਂ ਹਨ</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਐਰਰ, ਕੋਈ ਵੀ ਹਮਲਾ ਨਹੀਂ ਕੀਤਾ ਗਿਆ</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ '{0}' ਬਿਨਾਂ ਘੱਟੋ ਘੱਟ 1 ਪੈਰਾਮੀਟਰ ਦੇ ਬਿਨਾਂ ਪ੍ਰੀਸੈਟ ਨਹੀਂ ਹੋ ਸਕਦੇ</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>ਨਾਜਾਇਜ਼ ਪਰਮ # {0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਪੈਰਾਮੀਟਰਡ ਆਈਡੀ ({0}) ਨੂੰ ਪਰਿਭਾਸ਼ਤ ਕਰਨਾ ਲਾਜ਼ਮੀ ਹੈ. ਪਲੱਗਇਨ '{1}' ਦੇ ਗੁੰਮ ਹੋਏ ਅਰਜੀਡ ਦੇ ਨਾਲ ਹੇਠ ਦਿੱਤੇ ਮੁੱਲ ਹਨ: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>ਡੁਪਲਿਕੇਟ ਪੈਰਾਮਿਡ '{0}' ਖੋਜਿਆ ਗਿਆ (ਸਭ ਵਿਲੱਖਣ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ). {1} {1 {{2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>ਪ੍ਰੀਸੈਟ ਗਾਈਡ ਦੀ ਲੋੜ ਹੈ. ਪਲੱਗਇਨ {1} ਵਿੱਚ '{0}' ਲਈ ਇਹ ਨਹੀਂ ਮਿਲਿਆ ਜਾਂ ਗਲਤ ਫਾਰਮੈਟ</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ '{2}' ਲਈ ਪਰਮਿਡ '{0}' ਨੂੰ ਪ੍ਰੀਸੈੱਟ '{1}' ਨਾਲ ਪ੍ਰੈਕਟ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ. ਪੈਰਾਮੀਟਰ ਹੋ ਸਕਦਾ ਹੈ ਜਾਂ ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ, ਪ੍ਰੀਸੈੱਟ ਪੈਰਾਵਵੈਲਯੂ ਨੂੰ ਅਪਡੇਟ ਕਰਦਾ ਹੈ ਜਾਂ ਇਸ ਨੂੰ ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>ਪ੍ਰੀਸੈਟਸ ਵਿੱਚ ਸਾਂਝੇ ਮੁੱਲ ਮਾਪਦੰਡ ਨੂੰ ਸੈੱਟ ਨਹੀਂ ਕਰ ਸਕਦਾ. ਪਲੱਗਇਨ '{2}' ਲਈ ਅਰਜੀਡ '{0}' ਪਲੱਗਇਨ '{1}' ਲਈ PREACT '{1}' ਨੂੰ ਹਟਾਉਣ ਜਾਂ ਪੈਰਾਮੀਟਰ ਦੀ ਪਰਿਭਾਸ਼ਾ ਵਿੱਚ ਦਿੱਤਾ ਜਾ ਸਕਦਾ ਹੈ.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ਪ੍ਰੀਸੈਟਸ ਦੇ ਵਿਲੱਖਣ GNDS ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ. ਡੁਪਲਿਕੇਟ ਪ੍ਰੀਸੈਟ ਗਾਈਡ '{0}' ਪ੍ਰੀਸੈਟਾਂ ਲਈ ਪਲੱਗਇਨ '{1}' ਵਿੱਚ ਖੋਜਿਆ ਗਿਆ: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਪਾਰਸਿੰਗ ਗਲਤੀ, ਮਾਰਗ '{0}' null, ਜੋ ਜੇਐਸਐਨ ਪਾਰ ਕਰਨ ਵਾਲੀ ਗਲਤੀ ਹੈ. ਪਲੱਗਇਨ ਨੂੰ ਅਣਡਿੱਠ ਕਰਨਾ</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਟਾਈਟਲ ਗਲਤੀ, ਰਸਤੇ '{0}' ਤੇ {1} ਅੱਖਰਾਂ ਤੋਂ ਵੱਧ ਦੇ ਨਾਲ 'ਟਾਇਟਲ' ਪ੍ਰਾਪਰਟੀ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ. ਪਲੱਗਇਨ ਨੂੰ ਅਣਡਿੱਠ ਕਰਨਾ</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਸੇਓ ਐਰਰ ਗਲਤੀ, {1} 'ਸਿਰਲੇਖ' {0} 'ਨੂੰ' {0} 'ਨੂੰ ਸਿਰਫ "ਮਨਜ਼ੂਰ' ਵਿਸ਼ੇਸ਼ਤਾ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ, ਜਿਸ ਵਿਚ ਸਿਰਫ ਅੱਖਰਾਂ, ਨੰਬਰ ਅਤੇ ਹਾਇਫਨ ਨਾਲ 18-ਬਿੱਟ ਜੀ (ਯੂਯੂਡੀ) ਦੀ ਪਾਲਣਾ ਕਰਨੀ ਚਾਹੀਦੀ ਹੈ. ਪਲੱਗਇਨ ਨੂੰ ਨਜ਼ਰਅੰਦਾਜ਼ ਕਰਨਾ.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਵਰਣਨ ਗਲਤੀ, ਮਾਰਗ '{0}' ਵਰਣਨ {1} ਅੱਖਰਾਂ ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ। ਪਲੱਗਇਨ ਨੂੰ ਅਣਡਿੱਠ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਟੈਗਸ ਗਲਤੀ, ਮਾਰਗ '{0}' ਟੈਗਸ ਤੇ ਟੈਗ {1} ਅੱਖਰਾਂ ਤੋਂ ਵੱਧ ਨਹੀਂ ਹੋਣੇ ਚਾਹੀਦੇ. ਪਲੱਗਇਨ ਨੂੰ ਅਣਡਿੱਠ ਕਰਨਾ</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>ਜਾਰੀ ਰੱਖਣ ਲਈ '{0}' ਜਾਂ ਰੱਦ ਕਰਨ ਲਈ ਰੱਦ ਕਰੋ.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>ਡੀਬੱਗਰ ਦੀ ਉਡੀਕ ਕਰ ਰਿਹਾ ਹੈ</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਡਾ download ਨਲੋਡ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ. ਬਾਅਦ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ ਜੀ.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਅਪਡੇਟ ਕੀਤੀ ਗਈ</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ {0} ਆਈਟਮਾਂ ਨੂੰ ਬਹਾਲ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>ਖੋਜ ਮਾਪਦੰਡ 'ਬਿਨਾਂ ਸਿਰਲੇਖ'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>ਖੋਜ ਮਾਪਦੰਡ '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' ਨੇ ਸ਼ੇਅਰ ਕੀਤੇ ਮੁੱਲ ਹਨ. ਕੀ ਤੁਸੀਂ ਉਨ੍ਹਾਂ ਨੂੰ ਰੀਸੈਟ ਕਰਨਾ ਚਾਹੋਗੇ?</value>
+    <comment>Preset Name</comment>
   </data>
 </root>

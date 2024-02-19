@@ -70,28 +70,36 @@
     <value>基本 - 毎年</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>コピー</value>
@@ -127,19 +135,24 @@
     <value>ビルド - これまでにないコミュニティを備えたプラグインブラウザ - プラグインのライブラリ</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Monkeypasteは、クリップボードマネージャー、オートメーション、生産性ツールと他に類を見ないものです。クリップボードをワークフローの豊かで整理した部分に強化し、
@@ -158,40 +171,41 @@
 クリップボードは、自分のマシンを越えてどこにでも追跡または保管されています。期間。</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>●水平/垂直レイアウト、リスト/グリッドビュー、マルチモニターサポートの両方を備えたシンプルでフレンドリーなインターフェイス</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>●モードの追加：クリップボードの「交換」の代わりにコピーが「追加」になります。テキストとファイルの両方、完全にカスタマイズ可能</value>
+    <value>●カスタムマウスモード：右 - 貼り付けと左をクリック -  [自動]をクリック - コピー</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>●FirefoxおよびChromiumベースのブラウザ（Chrome、Edge、Brave）のサポートを強化した洗練されたクリップトラッキング、ソース、および使用法</value>
+    <value>●モードの追加：クリップボードの「交換」の代わりにコピーが「追加」になります。テキストとファイルの両方、完全にカスタマイズ可能</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>●完全 - 豊富なテキスト（テーブル、リスト、リンクなど）を備えた注目のクリップエディター検索/交換と強調表示</value>
+    <value>●FirefoxおよびChromiumベースのブラウザ（Chrome、Edge、Brave）のサポートを強化した洗練されたクリップトラッキング、ソース、および使用法</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>●画像を安全なデータベースに保存し、いつでもファイルとして使用する準備ができています - 需要だけでドラッグと - ドロップ！</value>
+    <value>●完全 - 豊富なテキスト（テーブル、リスト、リンクなど）を備えた注目のクリップエディター検索/交換と強調表示</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>●スニペットコレクションからの迅速でダイナミックな貼り付けのための強力なテキストテンプレート</value>
+    <value>●画像を安全なデータベースに保存し、いつでもファイルとして使用する準備ができています - 需要だけでドラッグと - ドロップ！</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>●カスタム自動化とアクションチェーンのトリガー＆アクションデザイナー</value>
+    <value>●スニペットコレクションからの迅速でダイナミックな貼り付けのための強力なテキストテンプレート</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>●クリップを分析するか、クリップボードに任意のフォーマットを読み取り/書き込むためのプラグインシステムを使用して拡張できます</value>
+    <value>●カスタム自動化とアクションチェーンのトリガー＆アクションデザイナー</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>●ビルド - これまでにないコミュニティを備えたプラグインブラウザ - プラグインのライブラリ</value>
+    <value>●クリップを分析するか、クリップボードに任意のフォーマットを読み取り/書き込むためのプラグインシステムを使用して拡張できます</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>●プラグインプリセットですべてを自動化し、AIプロンプトまたはコマンドを簡単に使用して使用します</value>
+    <value>●ビルド - これまでにないコミュニティを備えたプラグインブラウザ - プラグインのライブラリ</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>●近日公開予定のプラットフォームと機能が増えます！私たちはちょうど始め始めました🎉</value>
+    <value>●プラグインプリセットですべてを自動化し、AIプロンプトまたはコマンドを簡単に使用して使用します</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>●明るいテーマと暗いテーマの両方が完全に動的で、必要な色を使用してください</value>
@@ -208,29 +222,29 @@
   <data name="StoreFeature6" xml:space="preserve">
     <value>●タグツリーでクリップを整理し、再利用可能なフィルターを作成します</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>●セーフ、セキュリティ、プライベートのローカルデータストレージ（データ収集なし）オプションの2つのファクターパスワード保護で常に暗号化され、トラッカーからアプリまたはWebサイトを簡単にブロックする</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>●大規模なドラッグと - ドロップサポート、カスタムグローバルショートカット、ルーティング、マウス - 無料ナビゲーション</value>
+    <value>●Clipboardトラッキングから特定のアプリ、Webサイト、さらには特定のWebページを簡単にブロックする</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>●カスタムマウスモード：右 - 貼り付けと左をクリック -  [自動]をクリック - コピー</value>
+    <value>●大規模なドラッグと - ドロップサポート、カスタムグローバルショートカット、ルーティング、マウス - 無料ナビゲーション</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>クリップボードはジャングルです。 Monkeypasteは王です！アプリからアプリにスイングし、これをコピーし、Monkeypasteでこれまでにないように貼り付ける!!ブランド - 新しい最先端のクリップボードと分析オートメーションツール!!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>動作中のMonkeypasteのサンプル！</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>この言語にインストールされています。英語はこれらの例のみです</value>
@@ -250,5 +264,11 @@
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>このサブスクリプションを使用すると、以下を受け取ります。
 ●無制限の容量</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>●セーフ、セキュア、プライベートのローカルデータストレージ（データ収集なし）常にオプションの2で暗号化されています - ファクターパスワード保護</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>●近日公開予定のプラットフォームと機能が増えます！私たちはちょうど始め始めました🎉</value>
   </data>
 </root>

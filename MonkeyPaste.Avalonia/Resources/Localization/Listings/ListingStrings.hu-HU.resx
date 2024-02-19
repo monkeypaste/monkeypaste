@@ -70,28 +70,36 @@
     <value>Alap - évente</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>másolat</value>
@@ -127,19 +135,24 @@
     <value>Beépített - Plugin böngészőben, egyre növekvő közösséggel - meghajtott beépülő modul</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>A MonkeyPaste egy vágólapkezelő, automatizálási és termelékenységi eszköz, mint senki más. A vágólap fejlesztése a munkafolyamat dúsított és szervezett részévé,
@@ -158,40 +171,41 @@ Azt is szeretném, ha jól érezheti magát. Tehát biztosíthatom Önöket, hog
 A vágólapot valaha is nyomon követik vagy tárolják, bárhol a saját gépén túl. Időszak.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Egyszerű és barátságos interfész mind vízszintes/függőleges elrendezésekkel, lista/rács nézet és multi -monitor támogatás</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Függelék mód: A másolás „hozzáadása” helyett a vágólapon történő „csere” helyett. Mind a szöveg, mind a fájlok, teljesen testreszabható</value>
+    <value>● Egyéni egér üzemmódok: Jobbra - kattintson a beillesztés és a bal oldali elemzés - Kattintson az Auto - másolás gombra</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Kifinomult klipkövetés, források és használat fokozott támogatással a Firefox és a króm alapú böngészők számára (króm, él, bátor)</value>
+    <value>● Függelék mód: A másolás „hozzáadása” helyett a vágólapon történő „csere” helyett. Mind a szöveg, mind a fájlok, teljesen testreszabható</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Teljesen - kiemelt klip -szerkesztő gazdag szöveggel (táblázatok, listák, linkek stb.) Find/csere és kiemeléssel</value>
+    <value>● Kifinomult klipkövetés, források és használat fokozott támogatással a Firefox és a króm alapú böngészők számára (króm, él, bátor)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Tárolja a képeit a biztonságos adatbázisban, készen áll a fájlokként történő használatra - KÖVETKEZŐ DRAG - ÉS - DROP!</value>
+    <value>● Teljesen - kiemelt klip -szerkesztő gazdag szöveggel (táblázatok, listák, linkek stb.) Find/csere és kiemeléssel</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Nagy teljesítményű szöveges sablon a gyors, dinamikus beillesztéshez a részletgyűjteményéből</value>
+    <value>● Tárolja a képeit a biztonságos adatbázisban, készen áll a fájlokként történő használatra - KÖVETKEZŐ DRAG - ÉS - DROP!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Trigger &amp; Action Designer az egyéni automatizáláshoz és az akció láncolásahoz</value>
+    <value>● Nagy teljesítményű szöveges sablon a gyors, dinamikus beillesztéshez a részletgyűjteményéből</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● Egyszerűen használható és kiterjeszti a plugin rendszert mind a klipek elemzésére, vagy bármilyen formátumot olvasni/írni a vágólapra</value>
+    <value>● Trigger &amp; Action Designer az egyéni automatizáláshoz és az akció láncolásahoz</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Beépített - Plugin böngészőben, örökké növekvő közösséggel - meghajtott beépülő modul</value>
+    <value>● Egyszerűen használható és kiterjeszti a plugin rendszert mind a klipek elemzésére, vagy bármilyen formátumot olvasni/írni a vágólapra</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Automatizálja mindent a plugin preset -ekkel, botlódjon és könnyedén használja az AI -utasításokat vagy parancsokat</value>
+    <value>● Beépített - Plugin böngészőben, örökké növekvő közösséggel - meghajtott beépülő modul</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● További platformok és funkciók hamarosan! Csak a Gettings elindultak 🎉</value>
+    <value>● Automatizálja mindent a plugin preset -ekkel, botlódjon és könnyedén használja az AI -utasításokat vagy parancsokat</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Mind a világos, mind a sötét témák teljesen dinamikusak, használj bármilyen színt, amire vágyik</value>
@@ -208,29 +222,29 @@ A vágólapot valaha is nyomon követik vagy tárolják, bárhol a saját gépé
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Rendszeresítse meg klipeit címkefákban, és hozzon létre rezisztens szűrőket</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Biztonságos, biztonságos és privát helyi adattárolás (nincs adatgyűjtés) mindig titkosítva az opcionális 2 -vel - Faktor jelszó védelme, és könnyen blokkolja az alkalmazásokat vagy webhelyeket a nyomkövetőből</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Széles körű húzás - és - csepp támogatás, egyedi globális hivatkozások, útválasztás és egér - Ingyenes navigáció</value>
+    <value>● Könnyen blokkolja egyes alkalmazásokat, webhelyeket és akár a Weboldalakat is a vágólapok követéséből</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Egyéni egér üzemmódok: Jobbra - kattintson a beillesztés és a bal oldali elemzés - Kattintson az Auto - másolás gombra</value>
+    <value>● Széles körű húzás - és - csepp támogatás, egyedi globális hivatkozások, útválasztás és egér - Ingyenes navigáció</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>A vágólap egy dzsungel. A majomító a király! Swing az alkalmazástól az alkalmazásig, másolva ezt, és beilleszteni, mint még soha nem a MonkeyPaste -val !! Márka - új, élvonalbeli vágólap és analitikus automatizálási eszköz !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Munkaminta a majompaszta akcióban!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Telepítve erre a nyelvre. Az angol csak ezekre a példákra vonatkozik</value>
@@ -250,5 +264,11 @@ A vágólapot valaha is nyomon követik vagy tárolják, bárhol a saját gépé
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Ezzel az előfizetéssel megkapja:
 ● Korlátlan kapacitás</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Biztonságos, biztonságos és privát helyi adattárolás (nincs adatgyűjtés), mindig az opcionális 2 -es titkosítva - Faktor jelszó védelme</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● További platformok és funkciók hamarosan! Csak a Gettings elindultak 🎉</value>
   </data>
 </root>

@@ -35,6 +35,31 @@ namespace Ledgerizer {
         RELEASE = 1L << 21,
     }
     internal class Program {
+
+        static MpLedgerizerFlags LEDGERIZER_FLAGS =
+            //MpLedgerizerFlags.TRANSLATE_RESX |
+            //MpLedgerizerFlags.GEN_EMPTY_RESX
+            //MpLedgerizerFlags.GEN_ADDON_LISTING |
+            MpLedgerizerFlags.GEN_PROD_LISTING |
+            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
+            //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
+            //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
+            //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
+            //MpLedgerizerFlags.DO_LOCAL_INDEX |
+            //MpLedgerizerFlags.DO_REMOTE_INDEX |
+            //MpLedgerizerFlags.DO_LOCAL_LEDGER |
+            //MpLedgerizerFlags.DO_REMOTE_LEDGER |
+            //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+            //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT
+            //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
+            //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
+            // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
+            //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
+            //MpLedgerizerFlags.DEBUG |
+            MpLedgerizerFlags.RELEASE
+            ;
+
         #region Localizer Props
 
         static GoogleLiteTextTranslatorPlugin _Translator = new GoogleLiteTextTranslatorPlugin();
@@ -87,25 +112,25 @@ namespace Ledgerizer {
                     "Localization",
                     "Listings",
                     "ListingStrings.resx"),
-                Path.Combine(
-                    MpPlatformHelpers.GetSolutionDir(),
-                    "MonkeyPaste.Avalonia",
-                    "Resources",
-                    "Localization",
-                    "Enums",
-                    "EnumUiStrings.resx"),
-                Path.Combine(
-                    MpPlatformHelpers.GetSolutionDir(),
-                    "MonkeyPaste.Avalonia",
-                    "Resources",
-                    "Localization",
-                    "UiStrings",
-                    "UiStrings.resx"),
-            .. WorkingPluginNames.Select(x =>
-                    Path.Combine(
-                        GetPluginProjDir(x),
-                        "Resources",
-                        "Resources.resx")),
+                //Path.Combine(
+                //    MpPlatformHelpers.GetSolutionDir(),
+                //    "MonkeyPaste.Avalonia",
+                //    "Resources",
+                //    "Localization",
+                //    "Enums",
+                //    "EnumUiStrings.resx"),
+                //Path.Combine(
+                //    MpPlatformHelpers.GetSolutionDir(),
+                //    "MonkeyPaste.Avalonia",
+                //    "Resources",
+                //    "Localization",
+                //    "UiStrings",
+                //    "UiStrings.resx"),
+            //.. WorkingPluginNames.Select(x =>
+            //        Path.Combine(
+            //            GetPluginProjDir(x),
+            //            "Resources",
+            //            "Resources.resx")),
             ];
         }
         #endregion
@@ -144,29 +169,6 @@ namespace Ledgerizer {
             "YoloImageAnnotator",
         ];
 
-        static MpLedgerizerFlags LEDGERIZER_FLAGS =
-            //MpLedgerizerFlags.TRANSLATE_RESX |
-            //MpLedgerizerFlags.GEN_EMPTY_RESX
-            MpLedgerizerFlags.GEN_ADDON_LISTING |
-            //MpLedgerizerFlags.GEN_PROD_LISTING |
-            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
-            //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
-            //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
-            //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
-            //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
-            //MpLedgerizerFlags.DO_LOCAL_INDEX |
-            //MpLedgerizerFlags.DO_REMOTE_INDEX |
-            //MpLedgerizerFlags.DO_LOCAL_LEDGER |
-            //MpLedgerizerFlags.DO_REMOTE_LEDGER |
-            //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
-            //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT
-            //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
-            //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
-            // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
-            //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
-            //MpLedgerizerFlags.DEBUG |
-            MpLedgerizerFlags.RELEASE
-            ;
 
         static bool DO_LOCAL_PACKAGING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
 
@@ -309,6 +311,30 @@ namespace Ledgerizer {
         }
 
         #region Listing
+        static void DoSwap() {
+            string inv_listing_path =
+                    Path.Combine(
+                        GetListingDir(),
+                        $"ListingStrings.resx");
+            MpDebug.Assert(inv_listing_path.IsFile(), $"Error listing for inv not found: '{inv_listing_path}'");
+            var inv_listing_lookup = MpResxTools.ReadResxFromPath(inv_listing_path);
+            var ccl = MpLocalizationHelpers.FindCulturesInDirectory(GetListingDir(), "ListingStrings").Select(x => x.Name);
+            var listing_paths = new List<string>() { inv_listing_path };
+            listing_paths.AddRange(ccl.Select(x => Path.Combine(
+                        GetListingDir(),
+                        $"ListingStrings.{x}.resx")));
+            foreach (string lp in listing_paths) {
+                var source_lplu = MpResxTools.ReadResxFromPath(lp);
+                var target_lplu = MpResxTools.ReadResxFromPath(lp);
+                for (int i = 8; i <= 20; i++) {
+                    string source_key = $"StoreFeature{i}";
+                    string target_key = i == 20 ? "StoreFeature8" : $"StoreFeature{i + 1}";
+                    var source_kvp = source_lplu[source_key];
+                    target_lplu[target_key] = source_kvp;
+                }
+                MpResxTools.WriteResxToPath(lp, target_lplu);
+            }
+        }
         static void GenProdListing() {
             MpConsole.WriteLine($"Generating Product Listings...STARTED", true);
             // (short) translation prefix fields:
@@ -765,6 +791,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 (321,"StoreFeature17"),
                 (322,"StoreFeature18"),
                 (323,"StoreFeature19"),
+                (324,"StoreFeature20"),
                 (347,"SearchTerm1"),
                 (348,"SearchTerm2"),
                 (349,"SearchTerm3"),
@@ -830,6 +857,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             MpDebug.Assert(inv_listing_path.IsFile(), $"Error listing for inv not found: '{inv_listing_path}'");
             var inv_listing_lookup = MpResxTools.ReadResxFromPath(inv_listing_path);
             var ccl = MpLocalizationHelpers.FindCulturesInDirectory(GetListingDir(), "ListingStrings").Select(x => x.Name);
+            int max_feature_len = 200;
             foreach (string cc in ccl) {
                 string local_listing_path =
                     Path.Combine(
@@ -844,18 +872,18 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                         new_cell_val = cc;
                     } else if (field_kvpl.FirstOrDefault(x => x.Item1 == r) is { } field_kvp &&
                         !field_kvp.IsDefault()) {
-                        string row_key = field_kvp.Item2;
-                        if (listing_lookup.TryGetValue(row_key, out var listing_kvp)) {
+                        string row_key = field_kvp.Item2;//
+                        if (inv_listing_lookup.TryGetValue(row_key, out var inv_listing_kvp) &&
+                            inv_listing_kvp.comment == "@Invariant") {
+                            // when invariant, pass neutral value
+                            new_cell_val = inv_listing_kvp.value;
+                        } else if (listing_lookup.TryGetValue(row_key, out var listing_kvp)) {
                             // use translated text
                             new_cell_val = listing_kvp.value;
-                        } else if (inv_listing_lookup.TryGetValue(row_key, out var inv_listing_kvp)) {
-                            // use inv text
-                            new_cell_val = inv_listing_kvp.value;
                         } else {
                             // huh?!?
                             throw new KeyNotFoundException(row_key);
                         }
-
 
                         if (cc != "en-US") {
                             // add translation warning prefix
@@ -869,6 +897,9 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                         if (rel_path_keys.Any(x => x == row_key)) {
                             // format relative uri
                             new_cell_val = string.Format(new_cell_val, prod_listing_dir_name);
+                        }
+                        if (row_key.StartsWith("StoreFeature") && new_cell_val.Length > max_feature_len) {
+                            MpDebug.Break();
                         }
                     }
                     csv[r].Add(new_cell_val.ToCsvCell());
@@ -1181,8 +1212,8 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         static async Task TranslateAllResxAsync(string neutral_resx_path) {
             foreach (string cc in WorkingCultures) {
                 var sw = Stopwatch.StartNew();
-                //await TranslateResxOneLinersAsync(neutral_resx_path, cc);
-                await TranslateResxHtmlAsync(neutral_resx_path, cc);
+                await TranslateResxOneLinersAsync(neutral_resx_path, cc);
+                //await TranslateResxHtmlAsync(neutral_resx_path, cc);
             }
         }
 
@@ -1237,19 +1268,27 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         static async Task TranslateResxOneLinersAsync(string neutral_resx_path, string cc) {
             var translator = new GoogleLiteTextTranslatorPlugin();
             int max_len = 5000;
-
+            // load neutral resx
             var neutral_resx_lookup = MpResxTools.ReadResxFromPath(neutral_resx_path);
-
+            // create/load trans resx
             string trans_resx_path = GetLocalizedPathFromNeutral(neutral_resx_path, cc);
             if (!trans_resx_path.IsFile()) {
-                MpResxTools.WriteResxToPath(trans_resx_path, neutral_resx_lookup.ToDictionary(x => x.Key, x => (string.Empty, string.Empty)));
+                MpResxTools.WriteResxToPath(trans_resx_path, neutral_resx_lookup.ToDictionary(x => x.Key, x => (string.Empty, x.Value.comment)));
             }
             var trans_resx_lookup = MpResxTools.ReadResxFromPath(trans_resx_path);
-            var empty_trans_resx_lookup = trans_resx_lookup.Where(x => x.Value.value.IsNullOrEmpty() && !neutral_resx_lookup[x.Key].value.IsNullOrEmpty());
+            // add missing keys
+            neutral_resx_lookup
+                .Where(x => !trans_resx_lookup.ContainsKey(x.Key))
+                .ForEach(x => trans_resx_lookup.Add(x.Key, (string.Empty, x.Value.comment)));
+
             // write invariants
             neutral_resx_lookup
-                .Where(x => x.Value.comment == "@Invariant" && empty_trans_resx_lookup.Any(y => y.Key == x.Key))
+                .Where(x => x.Value.comment == "@Invariant")
                 .ForEach(x => trans_resx_lookup[x.Key] = x.Value);
+
+            MpResxTools.WriteResxToPath(trans_resx_path, trans_resx_lookup);
+            MpConsole.WriteLine(trans_resx_path);
+            return;
 
             // get non-empty neutral single line keys that aren't html, invariant or have localized data
             var neutral_single_line_kvps =

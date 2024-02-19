@@ -2700,4 +2700,200 @@ Ekki er hægt að tryggja heildar endurheimt og getur dregið úr afköstum eða
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;Þannig er hægt að nálgast MonkeyPaste&lt;br&gt;&lt;span color="red"&gt;án þess að smella&lt;/span&gt; eða jafnvel &lt;span color="red"&gt;batting auga&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>Athugasemd</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>Klón</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>Gagnahlut</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>Stinga inn</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>Lesandi</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>Óþekkt villa</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>Rithöfundur</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>Afrit viðbót GUID '{0}' greind fyrir þessar viðbætur:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>Lagaðu með því að breyta leiðbeiningum eða fjarlægja afrit. Annars verður hunsað öll tengd viðbætur.</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>Afrit fyrirfram forstillt Guid '{0}' greind fyrir þessar viðbætur og forstillingar:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>Plugin: {0} {1} forstillt (s): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>Viðbót: {0} {1} forstillt (s): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>Lagaðu með því að útvega einstaka forstillta leiðbeiningar eða fjarlægja afrit. Annars verður hunsað öll tengd viðbætur.</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>Ritstjóralitur</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>Ertu viss um að þú viljir eyða öllum {0} hlutunum varanlega?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>Veldu möppu</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>Veldu Watch möppu</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>Villa við viðbót. Plugin '{0}' er '{1}' gerð en engin '{1}' snið fannst</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>Villa við að framkvæma aðgerð '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>Gildi verður aðeins að innihalda tölur eða '{0}'</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>Gildi verður að vera frá {0} til {1}</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>Verður að vera hex (6 eða 8 stafa) strengur sem byrjar með '#'</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>Klemmuspjald '{0}' verður að vera einstakt.</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>Er þegar til fyrir</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>Gerð</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>Nöfn klemmuspjalds/rithöfundar sniði verða að vera einstök. Afrit af lesanda:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>Nöfn klemmuspjalds/rithöfundar sniði verða að vera einstök. Rithöfundur afrit:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>Leiðbeiningar klemmuspjalds verða að vera einstök. Afrit snið og leiðbeiningar:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>Villa við viðbótarvillur: Allir plötu '{0}' reitir verða að vera einstök fyrir stjórnanda '{1}'. {2} paramname '{3}' hefur margar færslur</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>Viðbótarvilla, engin óbreytanleg birtist</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>Plugin '{0}' getur ekki haft forstillingar án að minnsta kosti 1 breytu</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>Ómerkt param #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>Skilgreina þarf að skilgreina IDS Pivetin Parameter ({0}). Plugin '{1}' er með eftirfarandi breytur með Paramid's Vantar: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>Afrit paramid '{0}' greint (allt verður að vera einstakt). {1} merki: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>Forstillt GUID er krafist. Það fannst ekki eða rangt snið fyrir '{0}' í viðbót {1}</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>Get ekki fundið breytu með paramid '{0}' sem vísað er til með forstilltu '{1}' fyrir viðbót '{2}'. Færibreytur kann að hafa breyst eða var fjarlægt, uppfært forstillt paramvalue eða fjarlægð það.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>Get ekki stillt sameiginlega gildi breytur í forstillingum. Paramid '{0}' í forstillingu '{1}' fyrir viðbótar '{2}' þarf að fjarlægja eða hægt er að tilgreina paramvalue í hlutanum Definition Definition.</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Forstillingar verða að hafa einstaka leiðsögn. Afrit forstillt GUID '{0}' fannst í viðbót '{1}' fyrir forstillingar: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>Pluge Parsing villa, á slóð '{0}' null, líklega villa að flokka JSON. Hunsa viðbót</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>Villa við titilstillingu, á slóð '{0}' verður að hafa 'titil' eign með ekki meira en {1} stafi. Hunsa viðbót</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>Villa við leiðbeiningar, á slóð '{0}' með titli '{1}' verður að hafa 'GUID' eign, RFC 4122 samhæft 128 bita GUID (UUID) með aðeins stöfum, tölum og bandstriki. Hunsa viðbót.</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>Villa við viðbótar lýsingu, á slóð '{0}' Lýsing má ekki vera meira en {1} stafir. Hunsa viðbót</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>Villa við viðbótarmerki, á slóð '{0}' merkjum mega ekki vera meira en {1} stafir. Hunsa viðbót</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>Festu kembiforrit við '{0}' eða hætta við að halda áfram.</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>Bíð eftir kembiforriti</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>Villa við að hlaða niður viðbót. Vinsamlegast reyndu aftur síðar.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>Viðbót uppfærð</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>Ertu viss um að þú viljir endurheimta alla {0} hlutinn?</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>Leitarviðmið „Untitled“</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>Leitarviðmið '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' inniheldur sameiginleg gildi. Viltu endurstilla þá líka?</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

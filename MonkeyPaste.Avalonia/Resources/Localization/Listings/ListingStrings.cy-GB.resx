@@ -70,28 +70,36 @@
     <value>Sylfaenol - blynyddol</value>
   </data>
   <data name="logo1080x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1080x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo150x150" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_150x150.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo1920x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_1920x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo300x300" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_300x300.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo71x71" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_71x71.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="logo720x1080" xml:space="preserve">
-    <value />
+    <value>{0}/StoreLogo_720x1080.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="OverrideLogosForWin10" xml:space="preserve">
-    <value />
+    <value>True</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm1" xml:space="preserve">
-    <value />
+    <value>clipboard manager</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copïan</value>
@@ -127,19 +135,24 @@
     <value>Wedi'i adeiladu - mewn porwr ategion gyda llyfrgell o ategion sy'n cael ei yrru gan gymuned sy'n tyfu erioed</value>
   </data>
   <data name="ssSrc1" xml:space="preserve">
-    <value />
+    <value>{0}/ss1.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc2" xml:space="preserve">
-    <value />
+    <value>{0}/ss2.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc3" xml:space="preserve">
-    <value />
+    <value>{0}/ss3.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc4" xml:space="preserve">
-    <value />
+    <value>{0}/ss4.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="ssSrc5" xml:space="preserve">
-    <value />
+    <value>{0}/ss5.png</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreDescription" xml:space="preserve">
     <value>Mae MonkeyPaste yn rheolwr clipfwrdd, offeryn awtomeiddio a chynhyrchedd fel dim arall. Gwella'ch clipfwrdd i mewn i ran gyfoethog a threfnus o'ch llif gwaith,
@@ -158,40 +171,41 @@ Rwyf hefyd eisiau ichi deimlo'n gyffyrddus yn ei ddefnyddio. Felly fe'ch sicrhaf
 Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt i'ch peiriant eich hun. Cyfnod.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
-    <value />
+    <value>Thomas Kefauver</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="StoreFeature1" xml:space="preserve">
     <value>● Rhyngwyneb syml a chyfeillgar gyda chynlluniau llorweddol/fertigol, golwg rhestr/grid a chefnogaeth aml -fonitro</value>
   </data>
   <data name="StoreFeature10" xml:space="preserve">
-    <value>● Modd atodi: daw copïo yn 'ychwanegu at' yn lle 'disodli' ar y clipfwrdd. Testun a ffeiliau, yn gwbl addasadwy</value>
+    <value>● Moddau Llygoden Custom: Dde - Cliciwch Gludo a Chwith - Cliciwch Auto - Copi</value>
   </data>
   <data name="StoreFeature11" xml:space="preserve">
-    <value>● Olrhain clipiau soffistigedig, ffynonellau a defnydd gyda chefnogaeth well i borwyr Firefox a Chromium (Chrome, Edge, Brave)</value>
+    <value>● Modd atodi: daw copïo yn 'ychwanegu at' yn lle 'disodli' ar y clipfwrdd. Testun a ffeiliau, yn gwbl addasadwy</value>
   </data>
   <data name="StoreFeature12" xml:space="preserve">
-    <value>● Llawn - Golygydd Clip dan sylw gyda Thestun Cyfoethog (Tablau, Rhestrau, Dolenni, ac ati) gyda Find/Amnewid ac Uchafbwynt</value>
+    <value>● Olrhain clipiau soffistigedig, ffynonellau a defnydd gyda chefnogaeth well i borwyr Firefox a Chromium (Chrome, Edge, Brave)</value>
   </data>
   <data name="StoreFeature13" xml:space="preserve">
-    <value>● Storiwch eich delweddau yn y gronfa ddata ddiogel, yn barod i'w defnyddio fel ffeiliau unrhyw bryd ymlaen - mynnu dim ond llusgo - a - gollwng!</value>
+    <value>● Llawn - Golygydd Clip dan sylw gyda Thestun Cyfoethog (Tablau, Rhestrau, Dolenni, ac ati) gyda Find/Amnewid ac Uchafbwynt</value>
   </data>
   <data name="StoreFeature14" xml:space="preserve">
-    <value>● Templed testun pwerus ar gyfer pastio cyflym, deinamig o'ch casgliad pytiau</value>
+    <value>● Storiwch eich delweddau yn y gronfa ddata ddiogel, yn barod i'w defnyddio fel ffeiliau unrhyw bryd ymlaen - mynnu dim ond llusgo - a - gollwng!</value>
   </data>
   <data name="StoreFeature15" xml:space="preserve">
-    <value>● Dylunydd Sbardun a Gweithredu ar gyfer Awtomegion Custom a Chadwyn Gweithredu</value>
+    <value>● Templed testun pwerus ar gyfer pastio cyflym, deinamig o'ch casgliad pytiau</value>
   </data>
   <data name="StoreFeature16" xml:space="preserve">
-    <value>● System ategyn Syml i'w defnyddio ac ymestyn ar gyfer dadansoddi clipiau neu ddarllen/ysgrifennu unrhyw fformat i'ch clipfwrdd</value>
+    <value>● Dylunydd Sbardun a Gweithredu ar gyfer Awtomegion Custom a Chadwyn Gweithredu</value>
   </data>
   <data name="StoreFeature17" xml:space="preserve">
-    <value>● Adeiladu - mewn porwr ategion gyda llyfrgell o ategion sy'n cael ei yrru gan gymuned sy'n tyfu erioed</value>
+    <value>● System ategyn Syml i'w defnyddio ac ymestyn ar gyfer dadansoddi clipiau neu ddarllen/ysgrifennu unrhyw fformat i'ch clipfwrdd</value>
   </data>
   <data name="StoreFeature18" xml:space="preserve">
-    <value>● Awtomeiddio popeth gyda rhagosodiadau ategyn, stashio a defnyddio'ch unrhyw beth o'ch awgrymiadau neu orchmynion AI yn rhwydd</value>
+    <value>● Adeiladu - mewn porwr ategion gyda llyfrgell o ategion sy'n cael ei yrru gan gymuned sy'n tyfu erioed</value>
   </data>
   <data name="StoreFeature19" xml:space="preserve">
-    <value>● Mwy o lwyfannau a nodweddion yn dod yn fuan! Rydyn ni'n cychwyn 🎉</value>
+    <value>● Awtomeiddio popeth gyda rhagosodiadau ategyn, stashio a defnyddio'ch unrhyw beth o'ch awgrymiadau neu orchmynion AI yn rhwydd</value>
   </data>
   <data name="StoreFeature2" xml:space="preserve">
     <value>● Mae themâu ysgafn a thywyll yn hollol ddeinamig, defnyddiwch unrhyw liw rydych chi ei eisiau</value>
@@ -208,29 +222,29 @@ Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt 
   <data name="StoreFeature6" xml:space="preserve">
     <value>● Trefnwch eich clipiau mewn coed tagiau a chreu hidlwyr y gellir eu defnyddio</value>
   </data>
-  <data name="StoreFeature7" xml:space="preserve">
-    <value>● Storio data lleol diogel, diogel a phreifat (dim casglu data) bob amser wedi'i amgryptio â diogelu cyfrinair dewisol 2 - Ffactor a rhwystro apiau neu wefannau yn hawdd o'ch traciwr</value>
-  </data>
   <data name="StoreFeature8" xml:space="preserve">
-    <value>● Llusgo helaeth - a - Gollwng cefnogaeth, llwybrau byr byd -eang arferol, llwybro a llygoden - llywio am ddim</value>
+    <value>● Yn hawdd rhwystro rhai apiau, gwefannau a hyd yn oed tudalennau gwe penodol o olrhain clipfwrdd</value>
   </data>
   <data name="StoreFeature9" xml:space="preserve">
-    <value>● Moddau Llygoden Custom: Dde - Cliciwch Gludo a Chwith - Cliciwch Auto - Copi</value>
+    <value>● Llusgo helaeth - a - Gollwng cefnogaeth, llwybrau byr byd -eang arferol, llwybro a llygoden - llywio am ddim</value>
   </data>
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Jyngl yw'r clipfwrdd. MonkeyPaste yw'r brenin! Swing o app i app, copïo hwn a gludo hynny fel erioed o'r blaen gyda monkeyPaste !! Clipfwrdd Brand - Newydd, Cutting Edge ac Offeryn Awtomeiddio Dadansoddol !!!</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value />
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Sampl o MonkeyPaste ar waith!</value>
   </data>
   <data name="TeaserSrc" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TrailerToPlayAtTopOfListing" xml:space="preserve">
-    <value />
+    <value>{0}/teaser.mp4</value>
+    <comment>@Invariant</comment>
   </data>
   <data name="TranslationShortWarning" xml:space="preserve">
     <value>Wedi'i osod yn yr iaith hon. Mae'r Saesneg yn unig ar gyfer yr enghreifftiau hyn</value>
@@ -250,5 +264,11 @@ Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt 
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Gyda'r tanysgrifiad hwn byddwch yn derbyn:
 ● Capasiti diderfyn</value>
+  </data>
+  <data name="StoreFeature7" xml:space="preserve">
+    <value>● Storio data lleol diogel, diogel a phreifat (dim casglu data) bob amser wedi'i amgryptio â diogelu cyfrinair dewisol 2 - ffactor</value>
+  </data>
+  <data name="StoreFeature20" xml:space="preserve">
+    <value>● Mwy o lwyfannau a nodweddion yn dod yn fuan! Rydyn ni'n cychwyn 🎉</value>
   </data>
 </root>

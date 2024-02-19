@@ -2700,4 +2700,200 @@
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;اس طرح ، منکی پیسٹ تک رسائی حاصل کی جاسکتی ہے۔&lt;br&gt;&lt;span color="red"&gt;ایک کلک کے بغیر&lt;/span&gt; یا یہاں تک کہ &lt;span color="red"&gt;آنکھ بند کیے&lt;/span&gt; بغیر اور #x1F440&lt;/p&gt;</value>
   </data>
+  <data name="CommonAnnLabel" xml:space="preserve">
+    <value>تشریح</value>
+  </data>
+  <data name="CommonCloneLabel" xml:space="preserve">
+    <value>کلون</value>
+  </data>
+  <data name="CommonDataObjectLabel" xml:space="preserve">
+    <value>ڈیٹا آبجیکٹ</value>
+  </data>
+  <data name="CommonFormatGuidLabel" xml:space="preserve">
+    <value>formatGuid</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamIdLabel" xml:space="preserve">
+    <value>paramId</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonParamNameLabel" xml:space="preserve">
+    <value>paramName</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="CommonPluginLabel" xml:space="preserve">
+    <value>رابطہ بحال کرو</value>
+  </data>
+  <data name="CommonReaderLabel" xml:space="preserve">
+    <value>پڑھنے والے</value>
+  </data>
+  <data name="CommonUnknownError" xml:space="preserve">
+    <value>نامعلوم خامی</value>
+  </data>
+  <data name="CommonWriterLabel" xml:space="preserve">
+    <value>مصنف</value>
+  </data>
+  <data name="DupPluginGuid1" xml:space="preserve">
+    <value>ان پلگ ان کے لئے ڈپلیکیٹ پلگ ان گائڈ '{0}' کا پتہ چلا:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPluginGuid2" xml:space="preserve">
+    <value>پلگ ان گائیڈ کو تبدیل کرکے یا نقلیں ختم کرکے ٹھیک کریں۔ بصورت دیگر تمام وابستہ پلگ ان کو نظرانداز کردیا جائے گا۔</value>
+  </data>
+  <data name="DupPresetGuid1" xml:space="preserve">
+    <value>ان پلگ ان اور پیش سیٹوں کے لئے ڈپلیکیٹ پلگ ان پریسیٹ گڈ '{0}' کا پتہ چلا:</value>
+    <comment>Guid</comment>
+  </data>
+  <data name="DupPresetGuid21" xml:space="preserve">
+    <value>پلگ ان: {0} {1} پیش سیٹ (زبانیں): #{2}</value>
+    <comment>Plugin Name, Line Break, Preset Number</comment>
+  </data>
+  <data name="DupPresetGuid22" xml:space="preserve">
+    <value>پلگ ان: {0} {1} پیش سیٹ (زبانیں): {2}</value>
+    <comment>Plugin Name, Line Break, Preset Name</comment>
+  </data>
+  <data name="DupPresetGuid3" xml:space="preserve">
+    <value>منفرد پیش سیٹ گائڈز فراہم کرکے یا نقلیں ختم کرکے ٹھیک کریں۔ بصورت دیگر تمام وابستہ پلگ ان کو نظرانداز کردیا جائے گا۔</value>
+  </data>
+  <data name="EditorColorChooserTitle" xml:space="preserve">
+    <value>ایڈیٹر کا رنگ</value>
+  </data>
+  <data name="EmptyTrashNtfText" xml:space="preserve">
+    <value>کیا آپ واقعی تمام {0} آئٹم (زبانیں) کو مستقل طور پر حذف کرنا چاہتے ہیں؟</value>
+    <comment>Number</comment>
+  </data>
+  <data name="FileWriterChooserWindowTitle" xml:space="preserve">
+    <value>فولڈر منتخب کریں</value>
+  </data>
+  <data name="FolderWatcherChooserWindowTitle" xml:space="preserve">
+    <value>دیکھیں فولڈر کو منتخب کریں</value>
+  </data>
+  <data name="InvalidCompEx1" xml:space="preserve">
+    <value>پلگ ان کی خرابی پلگ ان '{0}' '{1}' قسم ہے لیکن نہیں '{1}' فارمیٹ ملا ہے</value>
+    <comment>Plugin Name, Plugin Type</comment>
+  </data>
+  <data name="InvalidCondEx" xml:space="preserve">
+    <value>کارروائی کرنے میں غلطی '{0}': {1} {2}</value>
+    <comment>Action Name, Line Break, Exception Message</comment>
+  </data>
+  <data name="InvalidCriteria1" xml:space="preserve">
+    <value>قدر میں صرف نمبر یا '{0}' ہونا ضروری ہے</value>
+    <comment>Valid Punctuation</comment>
+  </data>
+  <data name="InvalidCriteria2" xml:space="preserve">
+    <value>قدر {0} سے {1} سے ہونی چاہئے</value>
+    <comment>Number, Number</comment>
+  </data>
+  <data name="InvalidCriteria3" xml:space="preserve">
+    <value>'#' کے ساتھ شروع ہونے والا ہیکس (6 یا 8 ہندسہ) تار ہونا چاہئے</value>
+  </data>
+  <data name="InvalidFormatGuidEx1" xml:space="preserve">
+    <value>کلپ بورڈ '{0}' منفرد ہونا چاہئے۔</value>
+    <comment>formatGuid Variable Name</comment>
+  </data>
+  <data name="InvalidFormatGuidEx2" xml:space="preserve">
+    <value>پہلے ہی موجود ہے</value>
+  </data>
+  <data name="InvalidFormatGuidEx3" xml:space="preserve">
+    <value>شکل</value>
+  </data>
+  <data name="InvalidFormatGuidEx4" xml:space="preserve">
+    <value>قسم</value>
+  </data>
+  <data name="InvalidHandlerEx1" xml:space="preserve">
+    <value>کلپ بورڈ ریڈر/مصنف کی شکل کے نام منفرد ہونے چاہئیں۔ قارئین کی نقلیں:</value>
+  </data>
+  <data name="InvalidHandlerEx2" xml:space="preserve">
+    <value>کلپ بورڈ ریڈر/مصنف کی شکل کے نام منفرد ہونے چاہئیں۔ مصنف کی نقلیں:</value>
+  </data>
+  <data name="InvalidHandlerEx3" xml:space="preserve">
+    <value>کلپ بورڈ فارمیٹ گائڈز منفرد ہونا چاہئے۔ ڈپلیکیٹ فارمیٹس اور گائڈز:</value>
+  </data>
+  <data name="InvalidHandlerEx4" xml:space="preserve">
+    <value>پلگ ان کی خرابی: تمام پلگ ان '{0}' فیلڈز کو ہینڈلر '{1}' کے لئے منفرد ہونا چاہئے۔ {2} پیرام نام '{3}' میں متعدد اندراجات ہیں۔</value>
+    <comment>ParamName Variable Name, Clipboard Format, Line Break, Parameter Name</comment>
+  </data>
+  <data name="InvalidManifestEx1" xml:space="preserve">
+    <value>پلگ ان کی خرابی ، کوئی حملہ آور مینی فیسٹ نہیں ملا</value>
+  </data>
+  <data name="InvalidParamEx1" xml:space="preserve">
+    <value>پلگ ان '{0}' میں کم از کم 1 پیرامیٹر فراہم کیے بغیر پریسیٹس نہیں ہوسکتی ہیں</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx21" xml:space="preserve">
+    <value>غیر لیبلڈ پیرم #{0}</value>
+    <comment>Number</comment>
+  </data>
+  <data name="InvalidParamEx3" xml:space="preserve">
+    <value>پلگ ان پیرامیٹر IDs ({0}) کی وضاحت کی جانی چاہئے۔ پلگ ان '{1}' میں مندرجہ ذیل پیرامیٹرز ہیں جن میں گمشدہ پیرامڈ ہیں: {2}</value>
+    <comment>Parameter Variable Name, Plugin Name, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx4" xml:space="preserve">
+    <value>ڈپلیکیٹ پیرامڈ '{0}' کا پتہ چلا (سب کو انوکھا ہونا چاہئے)۔ {1} لیبل: {1} {2}</value>
+    <comment>Parameter Id, Line Break, Parameter Labels</comment>
+  </data>
+  <data name="InvalidParamEx5" xml:space="preserve">
+    <value>پیش سیٹ GID کی ضرورت ہے۔ پلگ ان {1} میں '{0}' کے لئے یہ نہیں ملا یا غلط فارمیٹ نہیں ملا تھا</value>
+    <comment>Preset Label, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx6" xml:space="preserve">
+    <value>پلگ ان '{2}' کے لیے پیش سیٹ '{1}' کے ذریعے حوالہ کردہ paramId '{0}' کے ساتھ پیرامیٹر نہیں مل سکتا۔ ہو سکتا ہے پیرامیٹر تبدیل ہو گیا ہو یا ہٹا دیا گیا ہو، پری سیٹ paramValue کو اپ ڈیٹ کریں یا اسے ہٹا دیں۔</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx7" xml:space="preserve">
+    <value>پریسیٹس میں مشترکہ قدر کے پیرامیٹرز کو مقرر نہیں کرسکتے ہیں۔ پیرامڈ '{0}' میں پریسیٹ '{1}' پلگ ان '{2}' کے لئے '{2}' کو ختم کرنے کی ضرورت ہے یا پیرامیٹر کی تعریف کے حصے میں پیرامولیو کی وضاحت کی جاسکتی ہے۔</value>
+    <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>پریسیٹس کے پاس انوکھا گائڈ ہونا ضروری ہے۔ ڈپلیکیٹ پریسیٹ گائڈ '{0}' کا پتہ لگانے کے لئے پلگ ان '{1}' میں پایا گیا: {2}</value>
+    <comment>Preset Name, Plugin Name, Preset Names</comment>
+  </data>
+  <data name="InvalidPluginEx1" xml:space="preserve">
+    <value>پلگ ان پارسنگ کی خرابی ، راستے پر '{0}' null ، JSON کی تجزیہ کرنے میں ممکنہ غلطی۔ پلگ ان کو نظرانداز کرنا</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="InvalidPluginEx2" xml:space="preserve">
+    <value>پلگ ان ٹائٹل کی خرابی ، راستے پر '{0}' میں 'عنوان' پراپرٹی ہونی چاہئے جس میں {1} حروف سے زیادہ نہیں ہے۔ پلگ ان کو نظرانداز کرنا</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx3" xml:space="preserve">
+    <value>پلگ ان گائڈ غلطی ، '{0}' کے عنوان کے ساتھ '{1}' کے ساتھ 'GID' پراپرٹی ہونا ضروری ہے ، RFC 4122 کے مطابق 128 بٹ GID (UUID) جس میں صرف حرف ، نمبر اور ہائفنز ہیں۔ پلگ ان کو نظرانداز کرنا۔</value>
+    <comment>File Path, Plugin Name</comment>
+  </data>
+  <data name="InvalidPluginEx4" xml:space="preserve">
+    <value>پلگ ان کی تفصیل کی خرابی ، راستے پر '{0}' تفصیل {1} حروف سے زیادہ نہیں ہونا چاہئے۔ پلگ ان کو نظرانداز کرنا</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="InvalidPluginEx5" xml:space="preserve">
+    <value>پلگ ان ٹیگس کی خرابی ، راستے پر '{0}' ٹیگز {1} حروف سے زیادہ نہیں ہونا چاہئے۔ پلگ ان کو نظرانداز کرنا</value>
+    <comment>File Path, Number</comment>
+  </data>
+  <data name="NtfWaitForDebuggerText" xml:space="preserve">
+    <value>ڈیبگر کو '{0}' سے منسلک کریں یا جاری رکھنے کے لئے منسوخ کریں۔</value>
+    <comment>File Name</comment>
+  </data>
+  <data name="NtfWaitForDebuggerTitle" xml:space="preserve">
+    <value>ڈیبگر کا انتظار ہے</value>
+  </data>
+  <data name="PluginInstallEx1" xml:space="preserve">
+    <value>پلگ ان ڈاؤن لوڈ کرنے میں خرابی۔ براہ کرم کچھ دیر بعد کوشش کریں.</value>
+  </data>
+  <data name="PluginUpdateNtfTitle" xml:space="preserve">
+    <value>پلگ ان تازہ کاری</value>
+  </data>
+  <data name="RestoreTrashNtfText" xml:space="preserve">
+    <value>کیا آپ کو یقین ہے کہ آپ تمام {0} آئٹم (زبانیں) بحال کرنا چاہتے ہیں؟</value>
+    <comment>Number</comment>
+  </data>
+  <data name="SearchCriteriaWindowFallbackTitle" xml:space="preserve">
+    <value>تلاش کے معیار 'بلا عنوان'</value>
+  </data>
+  <data name="SearchCriteriaWindowTitleFormat" xml:space="preserve">
+    <value>تلاش کے معیار '{0}'</value>
+    <comment>Collection Name</comment>
+  </data>
+  <data name="SharedValNtfText" xml:space="preserve">
+    <value>'{0}' میں مشترکہ اقدار شامل ہیں۔ کیا آپ ان کو بھی دوبارہ ترتیب دینا چاہیں گے؟</value>
+    <comment>Preset Name</comment>
+  </data>
 </root>

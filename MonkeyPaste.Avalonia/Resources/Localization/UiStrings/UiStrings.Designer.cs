@@ -2387,6 +2387,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Annotation.
+        /// </summary>
+        public static string CommonAnnLabel {
+            get {
+                return ResourceManager.GetString("CommonAnnLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application.
         /// </summary>
         public static string CommonApplicationLabel {
@@ -2441,6 +2450,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clone.
+        /// </summary>
+        public static string CommonCloneLabel {
+            get {
+                return ResourceManager.GetString("CommonCloneLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Color.
         /// </summary>
         public static string CommonColorHeader {
@@ -2491,6 +2509,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonCutOpLabel {
             get {
                 return ResourceManager.GetString("CommonCutOpLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data Object.
+        /// </summary>
+        public static string CommonDataObjectLabel {
+            get {
+                return ResourceManager.GetString("CommonDataObjectLabel", resourceCulture);
             }
         }
         
@@ -2612,6 +2639,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to formatGuid.
+        /// </summary>
+        public static string CommonFormatGuidLabel {
+            get {
+                return ResourceManager.GetString("CommonFormatGuidLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage....
         /// </summary>
         public static string CommonManageHeader {
@@ -2711,6 +2747,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to paramId.
+        /// </summary>
+        public static string CommonParamIdLabel {
+            get {
+                return ResourceManager.GetString("CommonParamIdLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to paramName.
+        /// </summary>
+        public static string CommonParamNameLabel {
+            get {
+                return ResourceManager.GetString("CommonParamNameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paste.
         /// </summary>
         public static string CommonPasteOpLabel {
@@ -2738,11 +2792,29 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plugin.
+        /// </summary>
+        public static string CommonPluginLabel {
+            get {
+                return ResourceManager.GetString("CommonPluginLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preset.
         /// </summary>
         public static string CommonPresetLabel {
             get {
                 return ResourceManager.GetString("CommonPresetLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reader.
+        /// </summary>
+        public static string CommonReaderLabel {
+            get {
+                return ResourceManager.GetString("CommonReaderLabel", resourceCulture);
             }
         }
         
@@ -2918,6 +2990,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown Error.
+        /// </summary>
+        public static string CommonUnknownError {
+            get {
+                return ResourceManager.GetString("CommonUnknownError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown error occured..
         /// </summary>
         public static string CommonUnknownErrorText {
@@ -2959,6 +3040,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonWriteLabel {
             get {
                 return ResourceManager.GetString("CommonWriteLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Writer.
+        /// </summary>
+        public static string CommonWriterLabel {
+            get {
+                return ResourceManager.GetString("CommonWriterLabel", resourceCulture);
             }
         }
         
@@ -3040,6 +3130,60 @@ namespace MonkeyPaste.Avalonia {
         public static string DropWidgetMouseModeToolTip {
             get {
                 return ResourceManager.GetString("DropWidgetMouseModeToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate plugin guid &apos;{0}&apos; detected for these plugins:.
+        /// </summary>
+        public static string DupPluginGuid1 {
+            get {
+                return ResourceManager.GetString("DupPluginGuid1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix by changing plugin guid or removing duplicates. Otherwise all associated plugins will be ignored..
+        /// </summary>
+        public static string DupPluginGuid2 {
+            get {
+                return ResourceManager.GetString("DupPluginGuid2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate plugin preset guid &apos;{0}&apos; detected for these plugins and presets:.
+        /// </summary>
+        public static string DupPresetGuid1 {
+            get {
+                return ResourceManager.GetString("DupPresetGuid1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin: {0} {1}Preset(s): #{2}.
+        /// </summary>
+        public static string DupPresetGuid21 {
+            get {
+                return ResourceManager.GetString("DupPresetGuid21", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin: {0} {1}Preset(s): {2}.
+        /// </summary>
+        public static string DupPresetGuid22 {
+            get {
+                return ResourceManager.GetString("DupPresetGuid22", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix by providing unique preset guids or removing duplicates. Otherwise all associated plugins will be ignored..
+        /// </summary>
+        public static string DupPresetGuid3 {
+            get {
+                return ResourceManager.GetString("DupPresetGuid3", resourceCulture);
             }
         }
         
@@ -3148,6 +3292,15 @@ namespace MonkeyPaste.Avalonia {
         public static string EditorClipboardFormatsLabel {
             get {
                 return ResourceManager.GetString("EditorClipboardFormatsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Editor Color.
+        /// </summary>
+        public static string EditorColorChooserTitle {
+            get {
+                return ResourceManager.GetString("EditorColorChooserTitle", resourceCulture);
             }
         }
         
@@ -3487,11 +3640,290 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to permanently delete all {0} item(s)?.
+        /// </summary>
+        public static string EmptyTrashNtfText {
+            get {
+                return ResourceManager.GetString("EmptyTrashNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Folder.
+        /// </summary>
+        public static string FileWriterChooserWindowTitle {
+            get {
+                return ResourceManager.GetString("FileWriterChooserWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Watch Folder.
+        /// </summary>
+        public static string FolderWatcherChooserWindowTitle {
+            get {
+                return ResourceManager.GetString("FolderWatcherChooserWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} - Help.
         /// </summary>
         public static string HelpWindowTitle {
             get {
                 return ResourceManager.GetString("HelpWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin error. Plugin &apos;{0}&apos; is &apos;{1}&apos; type but no &apos;{1}&apos; format found.
+        /// </summary>
+        public static string InvalidCompEx1 {
+            get {
+                return ResourceManager.GetString("InvalidCompEx1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error performing action &apos;{0}&apos;:{1}{2}.
+        /// </summary>
+        public static string InvalidCondEx {
+            get {
+                return ResourceManager.GetString("InvalidCondEx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value must contain only numbers or &apos;{0}&apos;.
+        /// </summary>
+        public static string InvalidCriteria1 {
+            get {
+                return ResourceManager.GetString("InvalidCriteria1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value must be from {0} to {1}.
+        /// </summary>
+        public static string InvalidCriteria2 {
+            get {
+                return ResourceManager.GetString("InvalidCriteria2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be a hex (6 or 8 digit) string starting with &apos;#&apos;.
+        /// </summary>
+        public static string InvalidCriteria3 {
+            get {
+                return ResourceManager.GetString("InvalidCriteria3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard &apos;{0}&apos; must be unique..
+        /// </summary>
+        public static string InvalidFormatGuidEx1 {
+            get {
+                return ResourceManager.GetString("InvalidFormatGuidEx1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Already exists for.
+        /// </summary>
+        public static string InvalidFormatGuidEx2 {
+            get {
+                return ResourceManager.GetString("InvalidFormatGuidEx2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Format.
+        /// </summary>
+        public static string InvalidFormatGuidEx3 {
+            get {
+                return ResourceManager.GetString("InvalidFormatGuidEx3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string InvalidFormatGuidEx4 {
+            get {
+                return ResourceManager.GetString("InvalidFormatGuidEx4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard reader/writer format names must be unique. Reader duplicates:.
+        /// </summary>
+        public static string InvalidHandlerEx1 {
+            get {
+                return ResourceManager.GetString("InvalidHandlerEx1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard reader/writer format names must be unique. Writer duplicates:.
+        /// </summary>
+        public static string InvalidHandlerEx2 {
+            get {
+                return ResourceManager.GetString("InvalidHandlerEx2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard format guids must be unique. Duplicate formats &amp; guids:.
+        /// </summary>
+        public static string InvalidHandlerEx3 {
+            get {
+                return ResourceManager.GetString("InvalidHandlerEx3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin Error: All plugin &apos;{0}&apos; fields must be unique for handler &apos;{1}&apos;.{2}paramName &apos;{3}&apos; has multiple entries.
+        /// </summary>
+        public static string InvalidHandlerEx4 {
+            get {
+                return ResourceManager.GetString("InvalidHandlerEx4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin error, no invariant manifest found.
+        /// </summary>
+        public static string InvalidManifestEx1 {
+            get {
+                return ResourceManager.GetString("InvalidManifestEx1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin &apos;{0}&apos; cannot have presets without at least 1 parameter provided.
+        /// </summary>
+        public static string InvalidParamEx1 {
+            get {
+                return ResourceManager.GetString("InvalidParamEx1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlabeled param #{0}.
+        /// </summary>
+        public static string InvalidParamEx21 {
+            get {
+                return ResourceManager.GetString("InvalidParamEx21", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string InvalidParamEx22 {
+            get {
+                return ResourceManager.GetString("InvalidParamEx22", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin parameter ids ({0}) must be defined. Plugin &apos;{1}&apos; has the following parameters with missing paramId&apos;s: {2}.
+        /// </summary>
+        public static string InvalidParamEx3 {
+            get {
+                return ResourceManager.GetString("InvalidParamEx3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate paramId &apos;{0}&apos; detected (all must be unique).{1}Labels:{1}{2}.
+        /// </summary>
+        public static string InvalidParamEx4 {
+            get {
+                return ResourceManager.GetString("InvalidParamEx4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preset guid is required. It was not found or wrong format for &apos;{0}&apos; in Plugin {1}.
+        /// </summary>
+        public static string InvalidParamEx5 {
+            get {
+                return ResourceManager.GetString("InvalidParamEx5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find parameter with paramId &apos;{0}&apos; referenced by Preset &apos;{1}&apos; for Plugin &apos;{2}&apos;. Parameter may have changed or was removed, update preset paramValue or remove it..
+        /// </summary>
+        public static string InvalidParamEx6 {
+            get {
+                return ResourceManager.GetString("InvalidParamEx6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot set shared value parameters in Presets. ParamId &apos;{0}&apos; in Preset &apos;{1}&apos; for Plugin &apos;{2}&apos; needs to be removed or paramValue can be specified in the parameter definition section..
+        /// </summary>
+        public static string InvalidParamEx7 {
+            get {
+                return ResourceManager.GetString("InvalidParamEx7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Presets must have unique guids. Duplicate preset guid &apos;{0}&apos; was detected in plugin &apos;{1}&apos; for presets: {2}.
+        /// </summary>
+        public static string InvalidParamEx8 {
+            get {
+                return ResourceManager.GetString("InvalidParamEx8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin parsing error, at path &apos;{0}&apos; null, likely error parsing json. Ignoring plugin.
+        /// </summary>
+        public static string InvalidPluginEx1 {
+            get {
+                return ResourceManager.GetString("InvalidPluginEx1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin title error, at path &apos;{0}&apos; must have &apos;title&apos; property with no more than {1} characters. Ignoring plugin.
+        /// </summary>
+        public static string InvalidPluginEx2 {
+            get {
+                return ResourceManager.GetString("InvalidPluginEx2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin guid error, at path &apos;{0}&apos; with Title &apos;{1}&apos; must have a &apos;guid&apos; property, RFC 4122 compliant 128-bit GUID (UUID) with only letters, numbers and hyphens. Ignoring plugin..
+        /// </summary>
+        public static string InvalidPluginEx3 {
+            get {
+                return ResourceManager.GetString("InvalidPluginEx3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin description error, at path &apos;{0}&apos; description must be no more than {1} characters. Ignoring plugin.
+        /// </summary>
+        public static string InvalidPluginEx4 {
+            get {
+                return ResourceManager.GetString("InvalidPluginEx4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin tags error, at path &apos;{0}&apos; tags must be no more than {1} characters. Ignoring plugin.
+        /// </summary>
+        public static string InvalidPluginEx5 {
+            get {
+                return ResourceManager.GetString("InvalidPluginEx5", resourceCulture);
             }
         }
         
@@ -4212,6 +4644,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attach debugger to &apos;{0}&apos; or cancel to continue..
+        /// </summary>
+        public static string NtfWaitForDebuggerText {
+            get {
+                return ResourceManager.GetString("NtfWaitForDebuggerText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for debugger.
+        /// </summary>
+        public static string NtfWaitForDebuggerTitle {
+            get {
+                return ResourceManager.GetString("NtfWaitForDebuggerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pick a {0}....
         /// </summary>
         public static string ParamComponentPickerDefaultLabel {
@@ -4536,6 +4986,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error downloading plugin. Please try again later..
+        /// </summary>
+        public static string PluginInstallEx1 {
+            get {
+                return ResourceManager.GetString("PluginInstallEx1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error backing up &apos;{0}&apos; to &apos;{1}&apos;. Details: &apos;{2}&apos;.
         /// </summary>
         public static string PluginLoaderBackupErrorText {
@@ -4633,6 +5092,15 @@ namespace MonkeyPaste.Avalonia {
         public static string PluginUpdateErrorTitle {
             get {
                 return ResourceManager.GetString("PluginUpdateErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin Updated.
+        /// </summary>
+        public static string PluginUpdateNtfTitle {
+            get {
+                return ResourceManager.GetString("PluginUpdateNtfTitle", resourceCulture);
             }
         }
         
@@ -5512,6 +5980,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to restore all {0} item(s)?.
+        /// </summary>
+        public static string RestoreTrashNtfText {
+            get {
+                return ResourceManager.GetString("RestoreTrashNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search in &apos;{0}&apos;.
         /// </summary>
         public static string SearchButtonTooltip {
@@ -5600,6 +6077,24 @@ namespace MonkeyPaste.Avalonia {
         public static string SearchCriteriaRemoveRowTooltip {
             get {
                 return ResourceManager.GetString("SearchCriteriaRemoveRowTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Criteria &apos;Untitled&apos;.
+        /// </summary>
+        public static string SearchCriteriaWindowFallbackTitle {
+            get {
+                return ResourceManager.GetString("SearchCriteriaWindowFallbackTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Criteria &apos;{0}&apos;.
+        /// </summary>
+        public static string SearchCriteriaWindowTitleFormat {
+            get {
+                return ResourceManager.GetString("SearchCriteriaWindowTitleFormat", resourceCulture);
             }
         }
         
@@ -6163,6 +6658,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; contains shared values. Would you like to reset those as well?.
+        /// </summary>
+        public static string SharedValNtfText {
+            get {
+                return ResourceManager.GetString("SharedValNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This combination conflicts with &apos;{0}&apos; which will be cleared if saved..
         /// </summary>
         public static string ShortcutAssignDuplicateWarning {
@@ -6326,11 +6830,11 @@ namespace MonkeyPaste.Avalonia {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;ul&gt;
-        ///	&lt;li&gt;
-        ///		&lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
-        ///	&lt;li&gt;
-        ///		&lt;b&gt;Default&lt;/b&gt; All global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color=&quot;red&quot;&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color=&quot;green&quot;&gt;give it a try&lt;/span&gt;
-        ///	&lt;/li&gt;
+        /// &lt;li&gt;
+        ///  &lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
+        /// &lt;li&gt;
+        ///  &lt;b&gt;Default&lt;/b&gt; All global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color=&quot;red&quot;&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color=&quot;green&quot;&gt;give it a try&lt;/span&gt;
+        /// &lt;/li&gt;
         ///&lt;/ul&gt;.
         /// </summary>
         public static string ShortcutRoutingProfileTypeHint {
@@ -6340,21 +6844,22 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;html&gt;
-        ///	&lt;head&gt;&lt;/head&gt;
-        ///	&lt;body&gt;
-        ///		&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;
-        ///		&lt;ul&gt;
-        ///			&lt;li&gt;
-        ///				&lt;b&gt;Passive&lt;/b&gt; A shortcut MonkeyPaste will listen for in any application.&lt;br&gt;
-        ///				*This is the &lt;i&gt;only&lt;/i&gt; option on Linux for now.
-        ///			&lt;/li&gt;
-        ///			&lt;li&gt;
-        ///				&lt;b&gt;Pre&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
-        ///			&lt;li&gt;
-        ///				&lt;b&gt;Post&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
-        ///			&lt;li&gt;
-        ///				&lt;b&gt;Override&lt;/b&gt; When MonkeyPaste hears  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to 
+        ///&lt;html&gt;
+        /// &lt;head&gt;&lt;/head&gt;
+        /// &lt;body&gt;
+        ///  &lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;
+        ///  &lt;ul&gt;
+        ///   &lt;li&gt;
+        ///    &lt;b&gt;Passive&lt;/b&gt; A shortcut MonkeyPaste will listen for in any application.&lt;br&gt;
+        ///    *This is the &lt;i&gt;only&lt;/i&gt; option on Linux for now.
+        ///   &lt;/li&gt;
+        ///   &lt;li&gt;
+        ///    &lt;b&gt;Pre&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
+        ///   &lt;li&gt;
+        ///    &lt;b&gt;Post&lt;/b&gt; Shortcut will execute &lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt; it is handled by the active application.&lt;/li&gt;
+        ///   &lt;li&gt;
+        ///    &lt;b&gt;Override&lt;/b&gt; When MonkeyPaste hear [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ShortcutRoutingTypeHint {
             get {
