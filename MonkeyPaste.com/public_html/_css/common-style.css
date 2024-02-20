@@ -2,11 +2,12 @@
     margin: 0px;
     padding: 0px;
 }
+
 body {
     font-family: 'Segoe UI';
     -webkit-font-smoothing: antialiased;
     --headerbgcolor: rgb(34, 153, 40);
-    --mainbgcolor:  rgb(147, 175, 107);
+    --mainbgcolor: rgb(147, 175, 107);
     --headercolor: white;
     --buttonbgcolor: olive;
     --buttoncolor: palegoldenrod;
@@ -16,6 +17,7 @@ body {
     --footercolor: var(--logolightcolor);
     --footerbgcolor: var(--logodarkcolor);
 }
+
 h1 {
     font-size: 4rem;
 }
@@ -33,4 +35,9 @@ footer {
     color: var(--footercolor);
     background: linear-gradient(180deg, dimgray, var(--footerbgcolor) 10.71%);
 }
+
+.hidden {
+    display: none;
+}
+
 /*#endregion*/
