@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Popolnoma - predstavljen urejevalnik posnetkov z iskanjem/zamenjavo, bogato besedilo (tabele, sezname, povezave itd.)</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Varno, varno in zasebno lokalno shranjevanje podatkov z neobvezno zaščito gesla za faktor</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Vgrajen - v brskalniku vtičnikov z vedno rastočo skupnostjo - gnana knjižnica vtičnikov</value>
   </data>
@@ -270,5 +267,11 @@ Odložišče je kdajkoli spremljano ali shranjeno kjer koli zunaj vašega stroja
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Kmalu prihaja več platform in funkcij! Pravkar smo začeli 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Osvetlitev hitrega iskanja in poudarjanja, samo začnite tipkati!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Shranite posnetke besedila, slike in datotek z vsemi svojimi viri (aplikacija, spletno mesto, čas in še veliko več) samodejno</value>
   </data>
 </root>

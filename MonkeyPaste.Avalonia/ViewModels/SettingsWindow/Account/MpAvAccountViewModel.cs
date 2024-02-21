@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics 
 
-        static string PRIVACY_POLICY_URL = $"{MpServerConstants.LEGAL_BASE_URL}/privacy.html";
+        static string PRIVACY_POLICY_URL = $"{MpServerConstants.LEGAL_BASE_URL}/privacy/index.html";
 
         static string PING_URL = $"{MpServerConstants.ACCOUNTS_BASE_URL}/ping.php";
         static string SUBSCRIBE_URL = $"{MpServerConstants.ACCOUNTS_BASE_URL}/subscribe.php";

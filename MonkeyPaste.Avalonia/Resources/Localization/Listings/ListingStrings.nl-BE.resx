@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Volledig - Featured Clip Editor met Find/vervang, Rich Text (Tables, Lists, Links, etc.) Tekst Templating voor snel, dynamisch plakken uit uw snippet -collectie</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Veilige, veilige en private lokale gegevensopslag met optionele 2 - factor wachtwoordbeveiliging</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Gebouwd - in plug -in browser met een steeds groeiende community - aangedreven bibliotheek met plug -ins</value>
   </data>
@@ -270,5 +267,11 @@ Uw klembord wordt ooit bijgehouden of opgeslagen overal voorbij uw eigen machine
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Binnenkort meer platforms en functies! We zijn gewoon GetTings begonnen 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Snel zoeken en markeren verlichten, begin met typen!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Bewaar tekst-, afbeeldings- en bestandsclips met al zijn bron (de app, website, tijd en nog veel meer) informatie automatisch</value>
   </data>
 </root>

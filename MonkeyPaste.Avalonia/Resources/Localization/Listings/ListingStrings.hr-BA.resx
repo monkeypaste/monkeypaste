@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Potpuno - istaknuti uređivač isječaka s pronalaženjem/zamjena, Rich Text (tablice, popisi, veze itd.) Tekst Text za brzo, dinamično lijepljenje iz vaše kolekcije za isječak</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Sigurna, sigurna i privatna lokalna pohrana podataka s opcionalnom zaštitom od 2 - faktorska lozinka</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Izgrađeno - u pregledniku dodataka s vječno rastućom zajednicom - vođena biblioteka dodataka</value>
   </data>
@@ -270,5 +267,11 @@ Vaš se međuspremnik ikada prati ili pohranjuje bilo gdje izvan vašeg vlastito
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Više platformi i značajki stiže uskoro! Tek smo započeli 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Osvjetljenje brzo pretraživanje i isticanje, samo počnite tipkati!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Pohranite tekst, slike i datoteke s svim njegovim izvorima (aplikaciju, web mjesto, vrijeme i još mnogo toga) automatski</value>
   </data>
 </root>

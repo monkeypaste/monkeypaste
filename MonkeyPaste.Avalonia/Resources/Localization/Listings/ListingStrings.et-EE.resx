@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Täielikult - esitletud klambriredaktor koos leidmise/asendamise, rikkaliku tekstiga (tabelid, nimekirjad, lingid jne) tekstimallid, et teie katkendikogust kiireks, dünaamiliseks kleepimiseks</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Ohutu, turvaline ja privaatne kohalik andmete salvestamine koos valikulise 2 - faktori paroolide kaitsega</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Ehitatud - pistikprogrammide brauseris, millel on pidevalt kasvav kogukond - juhitud pistikprogrammide raamatukogu</value>
   </data>
@@ -270,5 +267,11 @@ Teie lõikelaua jälgitakse või hoitakse kunagi kuskil oma masinast kaugemale. 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Rohkem platvorme ja funktsioone tulevad varsti! Me lihtsalt saame alguse 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Kiire otsimine ja esiletõstmine, lihtsalt hakake tippima!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Salvestage teksti-, pildi- ja failiklippe kogu selle allikaga (rakendus, veebisait, aeg ja palju muud) automaatselt</value>
   </data>
 </root>

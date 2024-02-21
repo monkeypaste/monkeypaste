@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Vollständig - vorgestellter Clip -Editor mit Find/Ersatz, reichhaltigem Text (Tabellen, Listen, Links usw.) Textvorlagen für schnelle, dynamische Einfügen von Ihrer Snippet -Sammlung aus</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Sichere, sichere und private lokale Datenspeicherung mit optionalem 2 - Faktorenkennwortschutz</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Gebaut - im Plugin -Browser mit einer immer wachsenden Community - angetriebene Bibliothek von Plugins</value>
   </data>
@@ -270,5 +267,11 @@ Ihre Zwischenablage wird jemals überall über Ihren eigenen Maschine verfolgt o
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Weitere Plattformen und Funktionen kommen in Kürze! Wir werden gerade erst anfangen 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Leuchten Sie schnelle Suche und Hervorhebung, beginnen Sie einfach mit dem Tippen!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Speichern Sie automatisch Text-, Bild- und Dateiclips mit der gesamten Quelle (App, Website, Zeit und vielem mehr).</value>
   </data>
 </root>

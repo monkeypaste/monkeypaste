@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Լրիվ - Featured Clip Editor- ը `գտած / փոխարինող, հարուստ տեքստով (սեղաններ, ցուցակներ, հղումներ եւ այլն) Տեքստը` ձեր Snippet հավաքածուից արագ, դինամիկ տեղադրման համար</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Ապահով, անվտանգ եւ մասնավոր տեղական տվյալների պահպանում `կամընտիր 2-րդ ֆակտորային գաղտնաբառի պաշտպանությամբ</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Ներկառուցված - plugin զննարկիչով `մշտապես աճող համայնքային ծրագրերից -</value>
   </data>
@@ -270,5 +267,11 @@
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Շուտով ավելի շատ պլատֆորմներ եւ առանձնահատկություններ: Մենք պարզապես սկսվել ենք</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Արագ որոնում եւ կարեւորում, պարզապես սկսեք մուտքագրել:</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Պահպանեք տեքստը, պատկերը եւ ֆայլի տեսահոլովակները դրա բոլոր աղբյուրներով (հավելված, կայք, ժամանակ, ժամանակ եւ շատ ավելին) տեղեկատվություն</value>
   </data>
 </root>

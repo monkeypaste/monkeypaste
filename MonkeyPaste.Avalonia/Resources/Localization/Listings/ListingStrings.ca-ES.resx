@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>EDITOR DE CLIP COMPLETAT completament amb cerca/substitució, text ric (taules, llistes, enllaços, etc.) Plantilització de text per enganxar ràpid i dinàmic de la col·lecció de fragments</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Emmagatzematge de dades local segur, segur i privat amb opcional 2: protecció de contrasenya del factor</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Construït: en el navegador de plugins amb una comunitat en creixement - Biblioteca de plugins impulsada</value>
   </data>
@@ -270,5 +267,11 @@ El vostre porta -retalls es fa un seguiment o emmagatzemat en qualsevol lloc mé
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Més plataformes i funcions properament! Acabem de començar 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Il·luminació de cerca ràpida i destacada, només comenceu a escriure!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Emmagatzemeu els clips de text, imatge i fitxers amb tota la seva font (l'aplicació, el lloc web, el temps i molt més) informació automàticament</value>
   </data>
 </root>

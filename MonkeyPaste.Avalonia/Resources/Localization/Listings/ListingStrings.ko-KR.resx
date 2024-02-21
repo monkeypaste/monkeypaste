@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>완전 - Find/Replace, Rich Text (테이블, 목록, 링크 등)가 포함 된 기능이있는 클립 편집기, 스 니펫 컬렉션에서 빠르고 역동적 인 붙여 넣기를위한 텍스트 템플릿</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>옵션이있는 안전하고 안전하며 개인 로컬 데이터 저장소 2- 팩터 암호 보호</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>구축 - 영원히 성장하는 커뮤니티가있는 플러그인 브라우저에서 - 구동 플러그인 라이브러리</value>
   </data>
@@ -270,5 +267,11 @@
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● 더 많은 플랫폼과 기능이 곧 제공됩니다! 우리는 방금 시작하고 있습니다</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>빠른 검색 및 강조 표시를 조명하고 타이핑을 시작하십시오!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>모든 소스 (앱, 웹 사이트, 시간 등) 정보가 포함 된 텍스트, 이미지 및 파일 클립 저장 정보</value>
   </data>
 </root>

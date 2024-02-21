@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Doly - "Picipet Collect" -iň çalt, çaltlyk synagyndan çalt, baý tekste, baý tekst (tablisalar, sanawlar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar we we ş.m.) Tekstiň tekst şazury</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>IEST GOWY, Howpsuz we hususy ýerli maglumatlary goramak</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Gurlan - Her gezek popin brauzerde - ösýän jemgyýetde - pluginleriň kitaphanasy bilen sürtüň</value>
   </data>
@@ -270,5 +267,11 @@ SÖ .GI BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>Basym ýakyn wagtda gidýän has köp platformalar we aýratynlyklar! Biz ýaňy başlaýarys</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Çalt gözlemek we bellemek, diňe ýazyp başlaň!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Teklipi saklaň, surat we faýl klipleri (programma, web sahypasy, wagtym we köp) salgysy awtomatiki usulda</value>
   </data>
 </root>

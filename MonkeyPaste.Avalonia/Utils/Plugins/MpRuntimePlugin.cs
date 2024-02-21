@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public async Task<object> IssueRequestAsync(string methodName, string typeName, MpMessageRequestFormatBase req, bool sync_only = false) {
+        private async Task<object> IssueRequestAsync(string methodName, string typeName, MpMessageRequestFormatBase req, bool sync_only = false) {
             if (req != null && req.culture == null) {
                 // always proivde current culture in every request
                 req.culture = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name;
@@ -86,21 +86,24 @@ namespace MonkeyPaste.Avalonia {
             }
             foreach (var comp in Components) {
                 if (!comp.GetType().IsClassSubclassOfOrImplements(onType) ||
-                     comp.GetType().GetMethod(methodName) is not { } mi) {
+                     comp.GetType().GetMethod(methodName) is not { } mi ||
+                     MpAvPluginAssemblyHelpers.GetPluginContext(guid) is not { } pc) {
                     continue;
                 }
                 // NOTE this prevents exception since unload has NO args
                 // NOTE2 this presumes all other components have ONE req arg
-
-                object[] args = mi.GetParameters().Length == 0 ? null : new[] { req };
-                object result = null;
-                if (methodName.EndsWith("Async")) {
-                    dynamic task = mi.Invoke(comp, args);
-                    result = await task;
-                } else {
-                    result = mi.Invoke(comp, args);
+                using (pc) {
+                    object[] args = mi.GetParameters().Length == 0 ? null : new[] { req };
+                    object result = null;
+                    if (methodName.EndsWith("Async")) {
+                        dynamic task = mi.Invoke(comp, args);
+                        result = await task;
+                    } else {
+                        result = mi.Invoke(comp, args);
+                    }
+                    return result;
                 }
-                return result;
+
             }
             if (!methodName.EndsWith("Async") && !sync_only) {
                 // re issue async

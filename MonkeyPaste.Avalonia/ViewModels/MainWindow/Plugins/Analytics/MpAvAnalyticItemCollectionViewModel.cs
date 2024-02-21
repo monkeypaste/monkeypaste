@@ -73,9 +73,12 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = true;
 
-            //await RemoveAnalyzerReferencesAsync(aivm, false);
+            //
             bool success = await MpPluginLoader.BeginUpdatePluginAsync(plugin_guid, package_url, cpivm);
+            if (success) {
+                success = await AddOrReplaceAnalyzerViewModelByGuidAsync(plugin_guid);
 
+            }
             IsBusy = false;
             return success;
         }
@@ -265,13 +268,7 @@ namespace MonkeyPaste.Avalonia {
                 MpPluginLoader.PluginManifestLookup.Where(x => x.Value.analyzer != null).Select(x => x.Value.guid);
 
             foreach (var analyzer_guid in analyzer_guids) {
-                var paivm = await CreateAnalyticItemViewModelAsync(analyzer_guid);
-                if (paivm.PluginFormat == null) {
-                    // internal error/invalid issue with plugin, ignore it
-                    await MpPluginLoader.DetachPluginByGuidAsync(analyzer_guid);
-                    continue;
-                }
-                Items.Add(paivm);
+                await AddOrReplaceAnalyzerViewModelByGuidAsync(analyzer_guid);
             }
 
             while (Items.Any(x => x.IsBusy)) {
@@ -362,16 +359,31 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private async Task<bool> AddOrReplaceAnalyzerViewModelByGuidAsync(string analyzer_guid) {
+            if (Items.FirstOrDefault(x => x.PluginGuid == analyzer_guid) is { } aivm) {
+                // shouldn't really happen
+                await RemoveAnalyzerReferencesAsync(aivm, false);
+            }
+            var paivm = await CreateAnalyticItemViewModelAsync(analyzer_guid);
+            if (paivm.PluginFormat == null) {
+                // internal error/invalid issue with plugin, ignore it
+                await MpPluginLoader.DetachPluginByGuidAsync(analyzer_guid);
+                return false;
+            }
+            Items.Add(paivm);
+            return true;
+        }
         private async Task<MpAvAnalyticItemViewModel> CreateAnalyticItemViewModelAsync(string plugin_guid) {
             MpAvAnalyticItemViewModel aivm = new MpAvAnalyticItemViewModel(this);
-
             await aivm.InitializeAsync(plugin_guid);
             return aivm;
         }
 
         private async Task RemoveAnalyzerReferencesAsync(MpAvAnalyticItemViewModel aivm, bool deletePresets) {
             // NOTE since async calling method needs to null aivm param after this
-
+            if (aivm == null) {
+                return;
+            }
             var preset_ids = aivm.Items.Select(x => x.AnalyticItemPresetId).ToList();
 
             while (aivm.IsBusy) {

@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Entièrement - Éditeur de clip avec Find / Remplace, Rich Text (tableaux, listes, liens, etc.) Texte de texte pour une collation rapide et dynamique de votre collection d'extraits</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Stockage de données local sécurisé, sécurisé et privé avec une protection en option 2 - Facteur de mot de passe</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Construit - dans le navigateur de plugin avec une bibliothèque de plugins en pleine communauté en pleine croissance</value>
   </data>
@@ -270,5 +267,11 @@ Votre presse-papiers est toujours suivi ou stocké n'importe où au-delà de vot
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Plus de plates-formes et de fonctionnalités à venir bientôt! Nous commençons juste à commencer 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Éclairage de la recherche et de la mise en évidence rapides, commencez simplement à taper!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Stocker le texte, l'image et les clips de fichiers avec toutes ses informations sur la source (application, site Web, temps et bien plus)</value>
   </data>
 </root>

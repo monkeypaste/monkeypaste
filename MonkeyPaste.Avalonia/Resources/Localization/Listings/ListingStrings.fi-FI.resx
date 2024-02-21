@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Täysin - esitelty Clip Editor, jossa on Find/Korvaa, rikas teksti (taulukot, luettelot, linkit jne.) Tekstin mallintaminen nopeaan, dynaamiseen liittämiseen katkelmakokoelmastasi</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Turvallinen, turvallinen ja yksityinen paikallinen tietojen tallennus valinnaisella 2 - tekijä salasanan suojaus</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Rakennettu - Laajennusselain, jolla on jatkuvasti kasvava yhteisö - ohjaava laajennuskirjasto</value>
   </data>
@@ -270,5 +267,11 @@ Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ul
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Lisää alustoja ja ominaisuuksia tulossa pian! Olemme juuri aloittamassa 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Valaistus nopea haku ja korostaminen, aloita vain kirjoittaminen!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Tallenna teksti-, kuva- ja tiedostoleikkeet kaikki lähteensä (sovellus, verkkosivusto, aika ja paljon muuta) tietoja automaattisesti</value>
   </data>
 </root>

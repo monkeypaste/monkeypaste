@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Целосно - Изграден уредник на клип со пронаоѓање/замена, богат текст (табели, списоци, врски и сл.)</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Безбедно, безбедно и приватно локално складирање на податоци со опционално 2 - Заштита на лозинка на факторот</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Изграден - во прелистувач на приклучоци со постојано - растечка заедница - управувана библиотека на додатоци</value>
   </data>
@@ -270,5 +267,11 @@
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Повеќе платформи и карактеристики наскоро! Само што започнавме со добивање</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Осветлување брзо пребарување и истакнување, само започнете да пишувате!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Чувајте ги клиповите за текст, слика и датотеки со сите свои извори (апликација, веб -страница, време и многу повеќе) автоматски</value>
   </data>
 </root>

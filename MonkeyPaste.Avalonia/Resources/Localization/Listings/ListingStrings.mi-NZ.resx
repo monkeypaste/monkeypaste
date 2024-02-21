@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Katoa - Whakawhitinga Clip Whakaatu me te rapu / whakakapi, raarangi, raarangi, Hononga, me etahi atu)</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Haumaru, Haumaru Haumaru me te Taura Whiri me te Wahanga Motuhake me te Waitohu 2 - Tiaki Kupuhipa Factor</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Hanga - i roto i te kaitirotiro mono me tetahi hapori e tipu haere ana - i peia e te whare pukapuka o nga pragins</value>
   </data>
@@ -270,5 +267,11 @@ Kei te tirotirohia to papamahi, ka penapena ranei i nga waahi katoa i tua atu i 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● He maha atu nga waahanga me nga waahanga e haere mai ana! Ko matou noa nga tiimatanga 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Ma te rama tere tere me te miramira, ka tiimata noa te pato!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Rokiroki kuputuhi, te ahua me nga konae konae me te katoa o ona puna (te taupānga, te paetukutuku, te waa, me te maha atu) korero aunoa</value>
   </data>
 </root>

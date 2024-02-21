@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -90,6 +91,8 @@ namespace MonkeyPaste.Avalonia {
                 return _items;
             }
         }
+        public IEnumerable<MpAvWelcomeOptionGroupViewModel> VisibleItems =>
+            Items.Where(x => !x.NeedsSkip);
 
         public MpAvWelcomeOptionItemViewModel HoverItem =>
             CurOptGroupViewModel == null || CurOptGroupViewModel.Items == null ?
@@ -139,12 +142,16 @@ namespace MonkeyPaste.Avalonia {
         public MpWelcomePageType CurPageType { get; set; } = MpWelcomePageType.Greeting;
 
         public bool CanSelectPrevious =>
-            (int)CurPageType > 0;
+            //(int)CurPageType > 0;
+            CurOptGroupViewModel != VisibleItems.First();
         public bool CanSelectNext =>
-            (int)CurPageType + 1 < typeof(MpWelcomePageType).Length();
+            //(int)CurPageType + 1 < typeof(MpWelcomePageType).Length();
+
+            CurOptGroupViewModel != VisibleItems.Last();
 
         public bool CanFinish =>
-            (int)CurPageType + 1 >= typeof(MpWelcomePageType).Length();
+            //(int)CurPageType + 1 >= typeof(MpWelcomePageType).Length();
+            CurOptGroupViewModel == VisibleItems.Last();
         #endregion
 
         #region Appearance
@@ -384,6 +391,7 @@ namespace MonkeyPaste.Avalonia {
                 SplashIconSourceObj = "ShieldImage",
                 Title = UiStrings.WelcomeDbPasswordTitle,
                 Caption = UiStrings.WelcomeDbPasswordCaption,
+                NeedsSkip = true
             };
             #endregion
 

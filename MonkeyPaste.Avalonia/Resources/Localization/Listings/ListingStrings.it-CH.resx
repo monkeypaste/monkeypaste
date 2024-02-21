@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Completamente - Editor di clip in primo piano con Find/Sostituisci, Rich Testo (tabelle, elenchi, collegamenti, ecc.) Modello di testo per incollaggio rapido e dinamico dalla collezione di snippet</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Archiviazione dati locale sicura, sicura e privata con protezione da password 2 - fattore facoltativo</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Costruito - In browser di plug -in con una comunità in sempre più in crescita - Biblioteca di plugin guidata</value>
   </data>
@@ -270,5 +267,11 @@ Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Peri
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Più piattaforme e funzionalità in arrivo! Stiamo appena iniziando 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Illuminazione di ricerca e evidenziazione rapida, inizia a digitare!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Memorizza le informazioni di testo, immagini e file con tutte le sue informazioni di origine (l'app, sito Web, tempo e molto altro) automaticamente</value>
   </data>
 </root>

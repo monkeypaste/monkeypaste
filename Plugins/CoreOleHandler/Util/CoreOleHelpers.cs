@@ -1,7 +1,10 @@
-﻿using Avalonia.Input.Platform;
+﻿using Avalonia;
+using Avalonia.Input.Platform;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using System;
+using System.Collections.Generic;
 
 namespace CoreOleHandler {
     public static class CoreOleHelpers {
@@ -12,6 +15,9 @@ namespace CoreOleHandler {
                 if (_clipboardRef == null) {
                     if (MpAvCommonTools.Services != null) {
                         _clipboardRef = MpAvCommonTools.Services.DeviceClipboard;
+                    }
+                    if (_clipboardRef == null && Application.Current.GetMainTopLevel() is { } tl) {
+                        _clipboardRef = tl.Clipboard;
                     }
                 }
                 return _clipboardRef;

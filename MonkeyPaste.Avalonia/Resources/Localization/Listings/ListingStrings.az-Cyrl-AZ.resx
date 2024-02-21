@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Tamamilə - For, Zəngin Mətn (Masalar, Siyahılar, Links, Links və s.) Sürətli, dinamik yastığı üçün mətn şablonu olan, zəngin mətni (masalar, siyahılar və s.) Olan xüsusiyyətli klip redaktoru</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Könüllü 2 ilə təhlükəsiz, təhlükəsiz və özəl yerli məlumat saxlama - Faktor parol qorunması</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>İnkişaf etmiş - həmişəlik böyüyən bir cəmiyyət - pluginlərin idarə olunan kitabxanası olan plugin brauzerində</value>
   </data>
@@ -270,5 +267,11 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Daha çox platforma və xüsusiyyətlər tezliklə! Biz yalnız gettings 🎉 başlamışıq</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Sürətli axtarış və işıqlandırmanın işıqlandırılması, yalnız yazmağa başlayın!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Mətn, şəkil və fayl klipləri bütün mənbəyi (tətbiq, veb, vaxt, vaxt və daha çox) məlumat avtomatik olaraq</value>
   </data>
 </root>

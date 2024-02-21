@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>מלא - עורך קליפ מוצג עם למצוא/החלף, טקסט עשיר (טבלאות, רשימות, קישורים וכו ') תבנית טקסט להדבקה מהירה ודינאמית מאוסף הקטע שלך</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>אחסון נתונים מקומי בטוח, מאובטח ופרטי עם אופציונלי 2 - הגנה על סיסמא</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>נבנה - בדפדפן תוסף עם קהילה הולכת וגדלה - ספריית תוספים מונעת</value>
   </data>
@@ -270,5 +267,11 @@
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● עוד פלטפורמות ותכונות בקרוב! אנחנו רק מתחילים 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>תאורת חיפוש מהיר והדגשה, פשוט התחל להקליד!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>אחסן קטעי טקסט, תמונה וקבצים עם כל המקור שלו (האפליקציה, האתר, הזמן ועוד הרבה) באופן אוטומטי</value>
   </data>
 </root>

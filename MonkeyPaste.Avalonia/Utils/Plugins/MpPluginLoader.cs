@@ -134,20 +134,20 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public static async Task<bool> DeletePluginByGuidAsync(string plugin_guid, bool needs_restart = true) {
-            // NOTE this won't work with LoadFrom, maybe this can be used to load into sep domain then unload then delete
             // https://stackoverflow.com/a/62018508/105028
             if (!PluginGuidLookup.TryGetValue(plugin_guid, out var plugin)) {
                 return true;
             }
             bool success = await DetachPluginByGuidAsync(plugin_guid);
-
-            AddPluginToDeleteList(plugin);
-            plugin = null;
+            // TODO should attempt to delete plugin folders here (still doesn't work w/ plugin nuget)
 
             //if (success) {
-            //    bool test = MpStartupCleaner.UnloadAll(false);
-            //    MpConsole.WriteLine($"Plugin '{plugin_guid}' delete was {test.ToTestResultLabel()}");
+            //    needs_restart = false;
+            //} else {
+            //    AddPluginToDeleteList(plugin);
             //}
+            AddPluginToDeleteList(plugin);
+
             if (success && needs_restart) {
                 // NOTE this won't return if they choose restart
                 await Mp.Services.PlatformMessageBox.ShowRestartNowOrLaterMessageBoxAsync(
@@ -159,6 +159,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static async Task<bool> BeginUpdatePluginAsync(string plugin_guid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm) {
+            bool success = await DetachPluginByGuidAsync(plugin_guid);
+            if (success) {
+                success = await InstallPluginAsync(plugin_guid, packageUrl, false, cpivm);
+                if (success) {
+                    return true;
+                }
+            }
             string plugin_update_dir = await DownloadAndExtractPluginToDirAsync(plugin_guid, packageUrl, PluginUpdatesDir, cpivm);
             if (!plugin_update_dir.IsDirectory()) {
                 // update failed, only returns if no restart
@@ -451,11 +458,16 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
             bool success = Plugins.Remove(plugin);
-            await plugin.UnloadAsync();
-            plugin = null;
+            if (success) {
+                success = MpAvPluginAssemblyHelpers.UnloadPlugin(plugin.guid);
+
+            }
+            await Task.Delay(1);
+            //await plugin.UnloadAsync();
+            //plugin = null;
 
             // NOTE always returning true for now since unload/update happens passively
-            return true;
+            return success;
         }
         private static bool ValidatePluginManifest(MpRuntimePlugin plugin, string manifestPath) {
             if (plugin == null) {

@@ -90,6 +90,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIClipboardMonitor ClipboardMonitor { get; set; }
 
         public MpIExternalPasteHandler ExternalPasteHandler { get; set; }
+        public MpIHtml2Rtf Html2Rtf { get; set; }
 
         public MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
 
@@ -138,6 +139,7 @@ namespace MonkeyPaste.Avalonia {
             DbInfo = new MpAvDbInfo();
             await MpAvPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
+            Html2Rtf = new MpAvHtml2RtfWrapper();
             DefaultDataCreator = new MpAvDefaultDataCreator();
             UserAgentProvider = MpAvPlainHtmlConverter.Instance;
             SslInfo = MpAvPrefViewModel.Instance;
@@ -196,5 +198,19 @@ namespace MonkeyPaste.Avalonia {
 
 
         #endregion
+    }
+
+    public class MpAvHtml2RtfWrapper : MpIHtml2Rtf {
+        public string RtfToHtml(string rtf) {
+            return rtf.RtfToHtml();
+        }
+
+        public string HtmlToRtf(string html) {
+            return html.HtmlToRtf();
+        }
+
+        public string HtmlFragmentToRtf(string html) {
+            return html.ToRtfFromHtmlFragment();
+        }
     }
 }

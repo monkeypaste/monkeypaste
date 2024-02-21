@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Find/Opplated、Rich Text（テーブル、リスト、リンクなど）テキストテンプレートのためのテキストのテキストを備えた機能 - スニペットコレクションからの迅速なダイナミックな貼り付けを備えた機能</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>オプションの2つのファクターパスワード保護を備えた安全で安全なプライベートローカルデータストレージ</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>ビルド - これまでにないコミュニティを備えたプラグインブラウザ - プラグインのライブラリ</value>
   </data>
@@ -270,5 +267,11 @@
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>●近日公開予定のプラットフォームと機能が増えます！私たちはちょうど始め始めました🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>照明速い検索と強調表示、タイピングを開始してください！</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>すべてのソース（アプリ、Webサイト、時間など）の情報を自動的に保存するテキスト、画像、およびファイルクリップを保存します</value>
   </data>
 </root>

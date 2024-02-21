@@ -75,32 +75,32 @@ namespace MonkeyPaste.Common {
             string forceNamePrefix = "",
             string forceExt = "",
             bool overwrite = false) {
-            if (!string.IsNullOrEmpty(forcePath)) {
-                // parse full path and override parts
-                forceDir = Path.GetDirectoryName(forcePath);
-                forceNamePrefix = Path.GetFileNameWithoutExtension(forcePath);
-                forceExt = Path.GetExtension(forcePath);
-            }
-            // NOTE overwrite msgbox only shows up if not temporary
-            // NOTE2 csv is too annoying to discern (probably all are) need to check before and force/convert
-            forceExt = string.IsNullOrEmpty(forceExt) ? forceExt : forceExt.Replace(".", string.Empty);
-
-            if (string.IsNullOrEmpty(forceExt)) {
-                // when ext is not given infer from content
-                forceExt = MpCommonTools.Services.StringTools.DetectStringFileExt(fileData);
-            } else {
-                if (forceExt.ToLowerInvariant().Equals("rtf")) {
-                    fileData = MpCommonTools.Services.StringTools.ToRichText(fileData);
-                } else if (forceExt.ToLowerInvariant().Equals("txt")) {
-                    fileData = MpCommonTools.Services.StringTools.ToPlainText(fileData);
-                } else if (forceExt.ToLowerInvariant().Equals("csv")) {
-                    fileData = MpCommonTools.Services.StringTools.ToCsv(fileData);
-                } else if (forceExt.ToLowerInvariant().Equals("html")) {
-                    fileData = MpCommonTools.Services.StringTools.ToHtml(fileData);
-                }
-            }
 
             try {
+                if (!string.IsNullOrEmpty(forcePath)) {
+                    // parse full path and override parts
+                    forceDir = Path.GetDirectoryName(forcePath);
+                    forceNamePrefix = Path.GetFileNameWithoutExtension(forcePath);
+                    forceExt = Path.GetExtension(forcePath);
+                }
+                // NOTE overwrite msgbox only shows up if not temporary
+                // NOTE2 csv is too annoying to discern (probably all are) need to check before and force/convert
+                forceExt = string.IsNullOrEmpty(forceExt) ? forceExt : forceExt.Replace(".", string.Empty);
+
+                if (string.IsNullOrEmpty(forceExt)) {
+                    // when ext is not given infer from content
+                    forceExt = MpCommonTools.Services.StringTools.DetectStringFileExt(fileData);
+                } else {
+                    if (forceExt.ToLowerInvariant().Equals("rtf")) {
+                        fileData = MpCommonTools.Services.StringTools.ToRichText(fileData);
+                    } else if (forceExt.ToLowerInvariant().Equals("txt")) {
+                        fileData = MpCommonTools.Services.StringTools.ToPlainText(fileData);
+                    } else if (forceExt.ToLowerInvariant().Equals("csv")) {
+                        fileData = MpCommonTools.Services.StringTools.ToCsv(fileData);
+                    } else if (forceExt.ToLowerInvariant().Equals("html")) {
+                        fileData = MpCommonTools.Services.StringTools.ToHtml(fileData);
+                    }
+                }
                 string tfp;
                 if (fileData.IsFileOrDirectory()) {
                     tfp = fileData;

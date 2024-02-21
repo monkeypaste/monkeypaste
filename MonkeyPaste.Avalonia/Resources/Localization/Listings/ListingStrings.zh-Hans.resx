@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>完全 - 具有查找/替换，丰富的文本（表，列表，链接等）的特色剪辑编辑器，以获取摘要集合的快速，动态粘贴的文本</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>可选2-因子密码保护安全，安全和私人本地数据存储</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>在插件浏览器中构建，并带有一个不断增长的社区 - 驱动的插件库</value>
   </data>
@@ -270,5 +267,11 @@
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>●即将推出更多平台和功能！我们只是开始开始🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>照明快速搜索和突出显示，只需开始输入即可！</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>将其所有源（应用程序，网站，时间等）自动存储文本，图像和文件剪辑</value>
   </data>
 </root>

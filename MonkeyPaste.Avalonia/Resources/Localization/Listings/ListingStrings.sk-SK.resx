@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Plne - odobelý editor klipov s vyhľadávaním/nahradením, bohatým textom (tabuľky, zoznamy, odkazy atď.) Text TEXT pre rýchle a dynamické vkladanie z vašej kolekcie úryvkov</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Bezpečné, bezpečné a súkromné ​​miestne ukladanie údajov s voliteľným 2 - Ochrana hesla faktor</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Postavený - v prehliadači doplnkov so stále rastúcou komunitou - riadenou knižnicou doplnkov</value>
   </data>
@@ -270,5 +267,11 @@ Vaša schránka je vždy sledovaná alebo uložená kdekoľvek za váš vlastný
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Viac platforiem a funkcií už čoskoro! Práve sme začali 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Osvetlenie rýchleho vyhľadávania a zvýraznenia, začnite písať!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Uložte textové, obrazové a súborové klipy so všetkým svojim zdrojom (aplikácia, webová stránka, čas a oveľa viac) automaticky</value>
   </data>
 </root>

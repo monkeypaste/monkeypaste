@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Fuldt - Featured Clip Editor med Find/Erstat, rig tekst (tabeller, lister, links osv.) Teksttemel til hurtig, dynamisk indsats fra din uddragssamling</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Sikker, sikker og privat lokal datalagring med valgfri 2 - Faktoradgangskodebeskyttelse</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Bygget - i pluginbrowser med et nogensinde voksende samfundsdrevet bibliotek med plugins</value>
   </data>
@@ -270,5 +267,11 @@ Dit udklipsholder spores eller gemmes nogensinde overalt ud over din egen maskin
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Flere platforme og funktioner, der snart kommer! Vi er bare ved at få startet 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Belysning af hurtig søgning og fremhævning, start bare med at skrive!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Opbevar tekst, image og filklip med al sin kilde (appen, webstedet, tid og meget mere) oplysninger automatisk</value>
   </data>
 </root>

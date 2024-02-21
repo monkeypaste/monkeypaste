@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Plně - doporučený editor klipy s nálezem/výměnou, bohatým textem (tabulky, seznamy, odkazy atd.) Textové templing pro rychlé, dynamické vkládání z vaší kolekcí úryvků</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Bezpečné, bezpečné a soukromé ukládání místních dat s volitelným 2 - Ochrana hesla faktoru</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Postaveno - v prohlížeči pluginů s vždy - rostoucí komunitou - řízená knihovna pluginů</value>
   </data>
@@ -270,5 +267,11 @@ Vaše schránka je vždy sledována nebo ukládána kdekoli za vlastní stroj. D
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Brzy přichází více platforem a funkcí! Právě jsme začali</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Osvětlení rychlé vyhledávání a zvýraznění, stačí začněte psát!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Automaticky automaticky ukládejte text, obrázek a souborové klipy se všemi jeho zdroji (aplikace, web, čas a mnoho dalšího)</value>
   </data>
 </root>

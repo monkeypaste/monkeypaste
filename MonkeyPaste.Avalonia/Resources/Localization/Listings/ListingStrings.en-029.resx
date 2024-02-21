@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Fully - featured clip editor with find/replace, rich text (tables, lists, links, etc.) text templating for quick, dynamic pasting from your snippet collection</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Safe, secure and private local data storage with optional 2 - factor password protection</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Built - in plugin browser with an ever - growing community - driven library of plugins</value>
   </data>
@@ -270,5 +267,11 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● More platforms and features coming soon! We're just gettings started 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Lighting fast search and highlighting, just start typing!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Store text, image and file clips with all of its source (the app, website, time, and much more) information automatically</value>
   </data>
 </root>

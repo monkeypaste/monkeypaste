@@ -50,7 +50,9 @@ namespace CoreOleHandler {
                             case CoreOleParamType.RICHTEXTFORMAT_R_TOHTML: {
                                     if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT) &&
                                         data is string rtf &&
-                                        rtf.RtfToHtml() is string html) {
+                                        MpAvCommonTools.Services != null &&
+                                        MpAvCommonTools.Services.Html2Rtf != null &&
+                                        MpAvCommonTools.Services.Html2Rtf.RtfToHtml(rtf) is string html) {
                                         convData = new() {
                                             { MpPortableDataFormats.Html, html },
                                             { MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT, true } };
@@ -82,7 +84,9 @@ namespace CoreOleHandler {
                             case CoreOleParamType.HTMLFORMAT_R_TORTF: {
                                     if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT) &&
                                         data is string html_str &&
-                                        html_str.ToRtfFromHtmlFragment() is string rtf) {
+                                        MpAvCommonTools.Services != null &&
+                                        MpAvCommonTools.Services.Html2Rtf != null &&
+                                        MpAvCommonTools.Services.Html2Rtf.HtmlFragmentToRtf(html_str) is string rtf) {
                                         convData = new() {
                                             { MpPortableDataFormats.Rtf, rtf },
                                             { MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT, true } };
@@ -114,7 +118,9 @@ namespace CoreOleHandler {
                             case CoreOleParamType.TEXTHTML_R_TORTF: {
                                     if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT) &&
                                         data is string html_str &&
-                                        html_str.HtmlToRtf() is string rtf) {
+                                        MpAvCommonTools.Services != null &&
+                                        MpAvCommonTools.Services.Html2Rtf != null &&
+                                        MpAvCommonTools.Services.Html2Rtf.RtfToHtml(html_str) is string rtf) {
                                         convData = new() {
                                             { MpPortableDataFormats.Rtf, rtf },
                                             { MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT, true } };

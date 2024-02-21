@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Editor de clip totalmente destinado con Find/Reemplazar, texto enriquecido (tablas, listas, enlaces, etc.) Plantilla de texto para un pegado rápido y dinámico desde su colección de fragmentos</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Almacenamiento de datos local seguro, seguro y privado con protección de contraseña de 2 factores opcional</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>BROWSER BRIGURADO - EN CULTIMINES CON UNA COMUNIDAD ESTUDA - COMUNITY - Biblioteca de complementos impulsados</value>
   </data>
@@ -270,5 +267,11 @@ Su portapapeles siempre se rastrea o almacena en cualquier lugar más allá de s
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Más plataformas y características próximamente! Solo somos consejos iniciados 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Iluminación de búsqueda rápida y resaltado, ¡simplemente comience a escribir!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Almacenar texto, imagen y clips de archivos con toda su información (la aplicación, sitio web, tiempo y mucho más) información automáticamente</value>
   </data>
 </root>

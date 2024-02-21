@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Pilnībā - piedāvātais klipu redaktors ar atrašanu/aizstāšanu, bagātīgu tekstu (tabulas, saraksti, saites utt</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Droša, droša un privāta vietējā datu glabāšana ar izvēles 2 - koeficienta paroles aizsardzību</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Uzbūvēts - spraudņu pārlūkprogrammā ar vienmēr augošu kopienu - spraudņu bibliotēku, kas vadīta</value>
   </data>
@@ -270,5 +267,11 @@ Jūsu starpliktuvē kādreiz tiek izsekots vai glabāts jebkur ārpus jūsu maš
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Drīzumā parādīsies vairāk platformu un funkciju! Mēs tikai sākam sākt 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Ātra meklēšana un izcelšana, vienkārši sāciet rakstīt!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Uzglabājiet tekstu, attēlu un failu klipus ar visu tā avotu (lietotni, vietni, laiku un daudz ko citu) automātiski</value>
   </data>
 </root>

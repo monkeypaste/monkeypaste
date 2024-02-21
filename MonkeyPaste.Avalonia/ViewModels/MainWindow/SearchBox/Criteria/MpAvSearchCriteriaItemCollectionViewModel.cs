@@ -550,23 +550,27 @@ namespace MonkeyPaste.Avalonia {
                     queryTagId = tagId;
                 }
 
+
                 // NOTE since query takes have no linked content
                 // but are the selected tag treat search as from
                 // all until selected tag is changed
                 InitializeAsync(queryTagId, false).FireAndForgetSafeAsync(this);
-            }//,
-            //(args) => {
-            //    if (IsPendingQuery) {
-            //        return false;
-            //    }
-            //    if (args is int tagId) {
-            //        if (tagId == QueryTagId) {
-            //            return false;
-            //        }
-            //    }
-            //    return true;
-            //}
-            );
+            },
+            (args) => {
+                if (args is int tagId) {
+                    if (tagId == QueryTagId) {
+                        return false;
+                    }
+                    if (IsPendingQuery && MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == tagId) is { } ttvm &&
+                        ttvm.TagType != MpTagType.Query) {
+                        // when there's a pending query only discard if selected tag is a query tag
+                        return false;
+                    }
+                } else if (IsPendingQuery) {
+                    return false;
+                }
+                return true;
+            });
 
         public ICommand ExpandCriteriaFromDragEnterCommand => new MpCommand(
             () => {

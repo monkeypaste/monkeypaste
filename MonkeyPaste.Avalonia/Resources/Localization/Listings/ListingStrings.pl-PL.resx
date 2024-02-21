@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>W pełni - wyróżniony edytor klipów z Find/Replain, Rich Tekst (tabele, listy, linki itp.) Szablony tekstu dla szybkiego, dynamicznego wklejania z kolekcji fragmentu</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Bezpieczne, bezpieczne i prywatne przechowywanie danych lokalnych z opcjonalną 2 - czynnik ochrona hasła</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Zbudowany - w przeglądarce wtyczki z wiecznie rozwijającą się społecznością wtycznymi wtyczkami</value>
   </data>
@@ -270,5 +267,11 @@ Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza w�
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Wkrótce pojawi się więcej platform i funkcji! Po prostu zaczęliśmy 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Szybkie wyszukiwanie i podświetlenie oświetlenia, po prostu zacznij pisać!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Przechowuj klipy tekstowe, obrazu i plików ze wszystkimi jego źródłem (aplikacja, strona internetowa, czas i wiele więcej) automatycznie</value>
   </data>
 </root>

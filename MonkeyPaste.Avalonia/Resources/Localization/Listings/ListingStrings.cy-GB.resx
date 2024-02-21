@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Golygydd clip llawn - dan sylw gyda Find/Amnewid, testun cyfoethog (tablau, rhestrau, dolenni, ac ati) testun yn templedi ar gyfer pastio cyflym, deinamig o'ch casgliad pytiau</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Storio data lleol diogel, diogel a phreifat gyda diogelu cyfrinair dewisol 2 - Ffactor</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Wedi'i adeiladu - mewn porwr ategion gyda llyfrgell o ategion sy'n cael ei yrru gan gymuned sy'n tyfu erioed</value>
   </data>
@@ -270,5 +267,11 @@ Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Mwy o lwyfannau a nodweddion yn dod yn fuan! Rydyn ni'n cychwyn 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Goleuo Chwilio ac Uchafbwynt Cyflym, Dechreuwch deipio!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Storio clipiau testun, delwedd a ffeiliau gyda'i holl wybodaeth ffynhonnell (yr ap, gwefan, amser, a llawer mwy) yn awtomatig</value>
   </data>
 </root>

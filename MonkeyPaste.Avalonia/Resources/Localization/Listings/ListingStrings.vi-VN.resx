@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Trình chỉnh sửa clip đầy đủ - đặc trưng với Find/thay thế, văn bản phong phú (bảng, danh sách, liên kết, v.v.) Templating văn bản để dán nhanh, năng động từ bộ sưu tập đoạn trích của bạn</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Lưu trữ dữ liệu cục bộ an toàn, an toàn và riêng tư với bảo vệ mật khẩu 2 - yếu tố tùy chọn</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Được xây dựng - trong trình duyệt plugin với một cộng đồng phát triển ngày càng tăng - Thư viện plugin điều khiển</value>
   </data>
@@ -270,5 +267,11 @@ Clipboard của bạn được theo dõi hoặc lưu trữ ở bất cứ đâu 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Nhiều nền tảng và tính năng sắp ra mắt! Chúng tôi vừa mới bắt đầu 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Ánh sáng tìm kiếm nhanh và làm nổi bật, chỉ cần bắt đầu gõ!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Lưu trữ văn bản, hình ảnh và clip tệp với tất cả các nguồn của nó (ứng dụng, trang web, thời gian và nhiều hơn nữa) thông tin</value>
   </data>
 </root>

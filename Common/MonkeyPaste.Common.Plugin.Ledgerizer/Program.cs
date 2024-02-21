@@ -51,7 +51,7 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.DO_LOCAL_LEDGER |
             //MpLedgerizerFlags.DO_REMOTE_LEDGER |
             //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
-            //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT
+            //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
             //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
             //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
             // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
@@ -142,17 +142,17 @@ namespace Ledgerizer {
         #region General Props
 
         static string[] WorkingPluginNames => [
-            "AzureComputerVision",
-            "AzureTextTranslator",
-            "ChatGpt",
+            //"AzureComputerVision",
+            //"AzureTextTranslator",
+            //"ChatGpt",
             "CoreAnnotator",
             "CoreOleHandler",
-            "FileConverter",
-            "GoogleLiteTextTranslator",
-            "QrCoder",
-            "TextToSpeech",
-            "WebSearch",
-            "YoloImageAnnotator",
+            //"FileConverter",
+            //"GoogleLiteTextTranslator",
+            //"QrCoder",
+            //"TextToSpeech",
+            //"WebSearch",
+            //"YoloImageAnnotator",
         ];
 
         static string[] AllPluginNames => [
@@ -326,9 +326,9 @@ namespace Ledgerizer {
             foreach (string lp in listing_paths) {
                 var source_lplu = MpResxTools.ReadResxFromPath(lp);
                 var target_lplu = MpResxTools.ReadResxFromPath(lp);
-                for (int i = 8; i <= 20; i++) {
-                    string source_key = $"StoreFeature{i}";
-                    string target_key = i == 20 ? "StoreFeature8" : $"StoreFeature{i + 1}";
+                for (int i = 1; i <= 6; i++) {
+                    string source_key = $"ssSrc{i}";
+                    string target_key = i == 4 ? "ssSrc1" : $"ssSrc{i + 1}";
                     var source_kvp = source_lplu[source_key];
                     target_lplu[target_key] = source_kvp;
                 }
@@ -755,16 +755,18 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 (3,"StoreTitle"),
                 (7,"StoreShortDescription"),
                 (8,"StoreDevStudio"),
-                (11,"ssSrc1"),
-                (12,"ssSrc2"),
-                (13,"ssSrc3"),
-                (14,"ssSrc4"),
-                (15,"ssSrc5"),
-                (41,"ssCaption1"),
-                (42,"ssCaption2"),
-                (43,"ssCaption3"),
-                (44,"ssCaption4"),
-                (45,"ssCaption5"),
+                (11,"ssSrc4"),
+                (12,"ssSrc6"),
+                (13,"ssSrc1"),
+                (14,"ssSrc2"),
+                (15,"ssSrc3"),
+                (16,"ssSrc5"),
+                (41,"ssCaption4"),
+                (42,"ssCaption6"),
+                (43,"ssCaption1"),
+                (44,"ssCaption2"),
+                (45,"ssCaption3"),
+                (46,"ssCaption5"),
                 (291,"logo720x1080"),
                 (292,"logo1080x1080"),
                 (293,"logo300x300"),

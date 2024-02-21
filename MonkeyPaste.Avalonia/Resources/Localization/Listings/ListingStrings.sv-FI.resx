@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Helt - Featured Clip Editor med Find/Replay, Rich Text (tabeller, listor, länkar, etc.) Text Mallande för snabb, dynamisk klistra från din utdragskollektion</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Säker, säker och privat lokal datalagring med valfritt 2 - Faktorlösenordsskydd</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Byggd - i plugin -webbläsare med ett ständigt växande samhälle - Driven Library of Plugins</value>
   </data>
@@ -270,5 +267,11 @@ Din urklipp spåras eller lagras någonstans bortom din egen maskin. Period.</va
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Fler plattformar och funktioner kommer snart! Vi kommer bara igång 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Belysning snabb sökning och markering, börja bara skriva!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Förvara text, bild och filklipp med alla dess källa (appen, webbplatsen, tiden och mycket mer) information automatiskt</value>
   </data>
 </root>

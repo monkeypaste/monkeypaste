@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Tamamen - Bul/Değiştir, Zengin Metin (Tablolar, Listeler, Bağlantılar, vb.)</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>İsteğe bağlı 2 - Faktör Parola Koruması ile Güvenli, Güvenli ve Özel Yerel Veri Depolama</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Yahudi - Eklenti -Büyüyen Topluluk - Tahrik Kütüphanesi ile Eklenti Tarayıcısı</value>
   </data>
@@ -270,5 +267,11 @@ Panonunuz kendi makinenizin ötesinde herhangi bir yerde izlenir veya saklanır.
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Yakında daha fazla platform ve özellik geliyor! Sadece başlıyoruz 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Hızlı arama ve vurgulama, yazmaya başlayın!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Metin, resim ve dosya kliplerini tüm kaynağıyla (uygulama, web sitesi, zaman ve çok daha fazlası) otomatik olarak saklayın</value>
   </data>
 </root>

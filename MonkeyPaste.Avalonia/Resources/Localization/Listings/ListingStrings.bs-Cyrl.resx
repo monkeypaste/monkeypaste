@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Potpuno - Istaknuti uređivač snimka sa pronalaženjem / zamenom, bogatom tekstu (tablice, liste, linkove itd.) Tekst Predložak za brzo, dinamično zalijepivanje iz vaše kolekcije isjeckanja</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Sigurna, sigurna i privatna lokalna pohranjivanje podataka s opcionalnim 2 - Faktor zaštite lozinke</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Izgrađen - u dodatku sa čekićem sa ikad - rastuća zajednica - pogonjena biblioteka dodataka</value>
   </data>
@@ -270,5 +267,11 @@ Vaš međuspremnik se ikad prati ili pohranjuje bilo gdje izvan vlastite mašine
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Uskoro više platformi i funkcija! Mi smo samo gotovini 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Rasvjeta brza pretraga i isticanje, samo počnite kucati!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Spremite klipove teksta, slike i datoteke sa svim svojim izvorom (aplikacija, web lokacija, vrijeme i još mnogo više) informacijama automatski</value>
   </data>
 </root>

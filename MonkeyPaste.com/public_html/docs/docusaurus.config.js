@@ -1,78 +1,73 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
-require('dotenv').config();
+require("dotenv").config();
 
-const { themes } = require('prism-react-renderer');
+const { themes } = require("prism-react-renderer");
 const lightTheme = themes.synthwave84;
 const darkTheme = themes.dracula;
 
 const local = false;
 
-const siteUrl = local ?
-  "https://localhost" :
-  "https://monkeypaste.com";
+const siteUrl = local ? "https://localhost" : "https://monkeypaste.com";
 
-const baseUrl = local ?
-  "/docs/build" :
-  "/";
+const baseUrl = local ? "/docs/build" : "/";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'MonkeyPaste',
-  staticDirectories: ['static'],
-  tagline: 'Clipboard Evolved.',
-  favicon: 'img/favicon.ico',
+  title: "MonkeyPaste",
+  staticDirectories: ["static"],
+  tagline: "Clipboard Evolved.",
+  favicon: "img/favicon.ico",
   url: siteUrl,
   baseUrl: baseUrl,
-  organizationName: 'Monkey LLC',
-  projectName: 'MonkeyPaste',
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
+  organizationName: "Monkey LLC",
+  projectName: "MonkeyPaste",
+  onBrokenLinks: "throw",
+  onBrokenMarkdownLinks: "throw",
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: "en",
+    locales: ["en"],
   },
 
   presets: [
     [
-      'classic',
+      "classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/monkeypaste/monkeypaste-docs/tree/main/'
+          sidebarPath: require.resolve("./sidebars.js"),
+          editUrl: "https://github.com/monkeypaste/monkeypaste-docs/tree/main/",
         },
         // blog: {
         //   showReadingTime: true,
         // },
         pages: {
-          path: 'src/pages',
-          routeBasePath: '',
-          include: ['**/*.{js,jsx,ts,tsx,md,mdx}'],
+          path: "src/pages",
+          routeBasePath: "",
+          include: ["**/*.{js,jsx,ts,tsx,md,mdx}"],
           exclude: [
-            '**/_*.{js,jsx,ts,tsx,md,mdx}',
-            '**/_*/**',
-            '**/*.test.{js,jsx,ts,tsx}',
-            '**/__tests__/**',
+            "**/_*.{js,jsx,ts,tsx,md,mdx}",
+            "**/_*/**",
+            "**/*.test.{js,jsx,ts,tsx}",
+            "**/__tests__/**",
           ],
-          mdxPageComponent: '@theme/MDXPage',
+          mdxPageComponent: "@theme/MDXPage",
           // remarkPlugins: [require('./my-remark-plugin')],
           rehypePlugins: [],
           beforeDefaultRemarkPlugins: [],
           beforeDefaultRehypePlugins: [],
         },
         theme: {
-          customCss:
-            [
-              require.resolve('./src/css/content-styles.css'),
-              require.resolve('./src/css/custom.css'),
-              require.resolve('./src/css/help-style.css'),
-              require.resolve('./src/css/app-update-style.css'),
-            ]
+          customCss: [
+            require.resolve("./src/css/content-styles.css"),
+            require.resolve("./src/css/custom.css"),
+            require.resolve("./src/css/help-style.css"),
+            require.resolve("./src/css/app-update-style.css"),
+          ],
         },
       }),
     ],
@@ -82,11 +77,11 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       announcementBar: {
-        id: 'under_constuction',
+        id: "under_constuction",
         content:
-          'MonkeyPaste is <b>brand new</b>! Check back often for more updates!!!',
-        backgroundColor: 'gold',
-        textColor: '#000000',
+          "MonkeyPaste is <b>brand new</b>! Check back often for more updates!!!",
+        backgroundColor: "gold",
+        textColor: "#000000",
         isCloseable: true,
       },
       tableOfContents: {
@@ -94,84 +89,84 @@ const config = {
         maxHeadingLevel: 5,
       },
       zoom: {
-        selector: '.markdown img:not(.no-zoom), img.zoom',
+        selector: ".markdown img:not(.no-zoom), img.zoom",
         background: {
-          light: 'rgb(255, 255, 255)',
-          dark: 'rgb(50, 50, 50)'
+          light: "rgb(255, 255, 255)",
+          dark: "rgb(50, 50, 50)",
         },
         config: {
           // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
-        }
+        },
       },
-      image: 'img/monkeypaste-social-card.jpg',
+      image: "img/monkeypaste-social-card.jpg",
       prism: {
         theme: lightTheme,
         darkTheme: darkTheme,
-        additionalLanguages: ['csharp'],
+        additionalLanguages: ["csharp"],
       },
       navbar: {
-        title: 'MonkeyPaste',
+        title: "MonkeyPaste",
         logo: {
-          alt: 'MonkeyPaste',
-          src: 'img/logo.svg',
+          alt: "MonkeyPaste",
+          src: "img/logo.svg",
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Docs',
+            type: "docSidebar",
+            sidebarId: "tutorialSidebar",
+            position: "left",
+            label: "Docs",
           },
           // { to: '/blog', label: 'Blog', position: 'left' },
           {
-            to: 'https://www.monkeypaste.com/forum',
-            label: 'Forum',
-            cposition: 'left'
+            to: "https://www.monkeypaste.com/forum",
+            label: "Forum",
+            cposition: "left",
           },
           {
-            to: '/about',
-            label: 'About',
-            position: 'left'
+            to: "/about",
+            label: "About",
+            position: "left",
           },
           {
-            to: '/download',
-            label: 'Download',
-            position: 'right'
+            to: "/download",
+            label: "Download",
+            position: "right",
           },
           {
-            href: 'https://translate.google.com/translate?u=https%3A%2F%2Fwww.monkeypaste.com%2F',
-            label: '🗺️ Translate',
-            position: 'right',
+            href: "https://translate.google.com/translate?u=https%3A%2F%2Fwww.monkeypaste.com%2F",
+            label: "🗺️ Translate",
+            position: "right",
           },
           {
-            href: 'https://github.com/monkeypaste',
-            label: 'GitHub',
-            position: 'right',
+            href: "https://github.com/monkeypaste",
+            label: "GitHub",
+            position: "right",
           },
         ],
       },
       footer: {
-        style: 'dark',
+        style: "dark",
         links: [
           {
-            title: 'Docs',
+            title: "Docs",
             items: [
               {
-                label: 'Welcome',
-                to: '/docs/welcome',
+                label: "Welcome",
+                to: "/docs/welcome",
               },
             ],
           },
           {
-            title: 'Community',
+            title: "Community",
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/monkeypaste',
+                label: "Stack Overflow",
+                href: "https://stackoverflow.com/questions/tagged/monkeypaste",
               },
               {
-                to: 'https://www.monkeypaste.com/forum',
-                label: 'Forum'
+                to: "https://www.monkeypaste.com/forum",
+                label: "Forum",
               },
               // {
               //   label: 'Discord',
@@ -184,40 +179,40 @@ const config = {
             ],
           },
           {
-            title: 'More',
+            title: "More",
             items: [
               // {
               //   to: '/blog',
               //   label: 'Blog',
               // },
               {
-                to: '/about',
-                label: 'About'
+                to: "/about",
+                label: "About",
               },
               {
-                to: '/download',
-                label: 'Download'
+                to: "/download",
+                label: "Download",
               },
               {
-                label: 'GitHub',
-                href: 'https://github.com/monkeypaste',
+                label: "GitHub",
+                href: "https://github.com/monkeypaste",
               },
             ],
           },
           {
-            title: 'Legal',
+            title: "Legal",
             items: [
               {
-                to: '/legal/privacy',
-                label: 'Privacy',
+                to: "/legal/privacy",
+                label: "Privacy",
               },
               {
-                to: '/legal/terms',
-                label: 'Terms',
+                to: "/legal/terms",
+                label: "Terms",
               },
               {
-                to: '/legal/credits',
-                label: 'Credits',
+                to: "/legal/credits",
+                label: "Credits",
               },
             ],
           },
@@ -228,9 +223,9 @@ const config = {
   markdown: {
     mermaid: true,
   },
-  themes: ['@docusaurus/theme-mermaid'],
+  themes: ["@docusaurus/theme-mermaid"],
   plugins: [
-    'image-zoom',
+    "image-zoom",
     [
       require.resolve("@cmfcmf/docusaurus-search-local"),
       {

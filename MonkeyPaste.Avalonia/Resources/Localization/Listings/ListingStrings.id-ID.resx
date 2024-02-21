@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Sepenuhnya - editor klip unggulan dengan find/ganti, teks kaya (tabel, daftar, tautan, dll.) Templating teks untuk pemasangan yang cepat dan dinamis dari koleksi cuplikan Anda</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Penyimpanan data lokal yang aman, aman dan pribadi dengan opsional 2 - Perlindungan Kata Sandi Faktor</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Built - in plugin browser dengan komunitas yang terus berkembang - perpustakaan plugin yang digerakkan</value>
   </data>
@@ -270,5 +267,11 @@ Clipboard Anda pernah dilacak atau disimpan di mana pun di luar mesin Anda sendi
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Lebih banyak platform dan fitur segera hadir! Kami baru saja memulai 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Pencarian pencarian dan sorotan cepat, mulailah mengetik!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Menyimpan teks, gambar, dan klip file dengan semua sumbernya (aplikasi, situs web, waktu, dan banyak lagi) informasi secara otomatis</value>
   </data>
 </root>

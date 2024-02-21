@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Fullt - Utvalgt Clip Editor med Find/erstatt, rik tekst (tabeller, lister, lenker, etc.) Teksttemplering for rask, dynamisk liming fra utdraget</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Sikker, sikker og privat lokal datalagring med valgfri 2 - Faktor passordbeskyttelse</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Bygget - i plugin -nettleser med et stadig - voksende fellesskap - drevet bibliotek med plugins</value>
   </data>
@@ -270,5 +267,11 @@ Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Flere plattformer og funksjoner kommer snart! Vi er bare startet 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Belysning Rask søk ​​og utheving, bare begynn å skrive!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Lagre tekst, bilde og filklipp med all sin kilde (appen, nettstedet, tiden og mye mer) informasjon automatisk</value>
   </data>
 </root>

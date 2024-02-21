@@ -128,9 +128,6 @@
   <data name="ssCaption3" xml:space="preserve">
     <value>Teljesen - kiemelt klip -szerkesztő a keresés/csere, a gazdag szöveg (táblázatok, listák, linkek stb.) Szöveg sablonja a gyors, dinamikus beillesztéshez a részletek gyűjteményéből</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Biztonságos, biztonságos és privát helyi adattárolás az opcionális 2 -vel - Faktor jelszóvédelem</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Beépített - Plugin böngészőben, egyre növekvő közösséggel - meghajtott beépülő modul</value>
   </data>
@@ -270,5 +267,11 @@ A vágólapot valaha is nyomon követik vagy tárolják, bárhol a saját gépé
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● További platformok és funkciók hamarosan! Csak a Gettings elindultak 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Gyors keresés és kiemelés megvilágítása, csak kezdje el a gépelést!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Tárolja a szöveget, a képet és a fájlklipeket az összes forrásával (az alkalmazás, a weboldal, az idő és még sok más) információk automatikusan</value>
   </data>
 </root>

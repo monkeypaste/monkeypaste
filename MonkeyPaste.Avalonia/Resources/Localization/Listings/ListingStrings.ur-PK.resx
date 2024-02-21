@@ -128,9 +128,6 @@ a 1000 تک مواد کے کلپس
   <data name="ssCaption3" xml:space="preserve">
     <value>مکمل طور پر - تلاش/تبدیل کرنے کے ساتھ نمایاں کلپ ایڈیٹر ، بھرپور متن (میزیں ، فہرستیں ، لنکس ، وغیرہ) آپ کے ٹکڑوں کے ذخیرے سے فوری ، متحرک چسپاں کرنے کے لئے ٹیکسٹ ٹیمپلیٹنگ</value>
   </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>اختیاری 2 کے ساتھ محفوظ ، محفوظ اور نجی مقامی ڈیٹا اسٹوریج - فیکٹر پاس ورڈ سے تحفظ</value>
-  </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>بلٹ - پلگ ان براؤزر میں ایک ہمیشہ کے ساتھ - بڑھتی ہوئی کمیونٹی - پلگ ان کی کارفرما لائبریری</value>
   </data>
@@ -270,5 +267,11 @@ lim لامحدود صلاحیت</value>
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● جلد ہی مزید پلیٹ فارم اور خصوصیات آرہے ہیں! ہم ابھی شروع ہوئے ہیں 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>تیز رفتار تلاش اور روشنی ڈالیتے ہوئے ، صرف ٹائپنگ شروع کریں!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>متن ، تصویر اور فائل کلپس کو اپنے تمام ماخذ (ایپ ، ویب سائٹ ، وقت ، اور بہت کچھ) کے ساتھ خود بخود معلومات اسٹور کریں</value>
   </data>
 </root>
