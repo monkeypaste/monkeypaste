@@ -656,6 +656,7 @@ namespace MonkeyPaste.Avalonia {
                 // req to component contains unprocessed input ido
                 // with only the formats/params for the custom or def enabled presets 
                 var req = new MpOlePluginRequest() {
+                    Clipboard = Mp.Services.DeviceClipboard,
                     dataObjectLookup = dataLookup,
                     isDnd = isDnd,
                     ignoreParams = ignorePlugins,

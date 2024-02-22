@@ -62,7 +62,11 @@ function getImageContentData() {
 	if (globals.ContentItemType != 'Image') {
 		return null;
 	}
-	let img_elm = document.getElementsByClassName('content-image')[0]
+	let img_elms = document.getElementsByClassName('content-image');
+	if (img_elms.length == 0) {
+		return null;
+	}
+	let img_elm = img_elms[0]
 	let img_data = img_elm.getAttribute('src').replace('data:image/png;base64,', '');
 	return img_data;
 }

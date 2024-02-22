@@ -1,5 +1,4 @@
-﻿using Avalonia.Input;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -22,38 +21,47 @@ namespace CoreOleHandler {
 
         #region Private Methods
         private async Task<MpOlePluginResponse> ProcessReadRequestAsync_internal(MpOlePluginRequest request, int retryCount = 10) {
-
             if (request.isDnd && !Dispatcher.UIThread.CheckAccess()) {
                 return await Dispatcher.UIThread.InvokeAsync(async () => {
                     return await ProcessReadRequestAsync_internal(request, retryCount);
                 });
             }
 
-            IDataObject avdo = null;
-            IEnumerable<string> availableFormats = null;
+            //IDataObject avdo = null;
+            Dictionary<string, object> avdo = null;
             // only actually read formats found for data
             if (request.dataObjectLookup == null) {
                 // clipboard read
-                avdo = await Dispatcher.UIThread.InvokeAsync(() => CoreOleHelpers.ClipboardRef.ToDataObjectAsync(formatFilter: request.formats.ToArray()));
-                availableFormats = avdo.GetAllDataFormats();
+                //if (request.Clipboard is not null) {
+                //    //avdo = await Dispatcher.UIThread.InvokeAsync(() => CoreOleHelpers.ClipboardRef.ToDataObjectAsync(formatFilter: request.formats.ToArray()));
+                //    avdo = await Dispatcher.UIThread.InvokeAsync(async () => {
+                //        var result = new Dictionary<string, object>();
+                //        foreach (string format in request.formats) {
+                //            object data = await request.Clipboard.GetDataAsync(format);
+                //            result.Add(format, data);
+                //        }
+                //        return result;
+                //    });
+                //}
+                avdo = await MpAvClipboardExtensions.ReadClipboardAsync(formatFilter: request.formats.ToArray());
             } else {
-                avdo = request.dataObjectLookup.ToDataObject();
+                avdo = request.dataObjectLookup;
 
-                try {
+                //try {
 
-                    availableFormats = avdo.GetAllDataFormats();//.Where(x => avdo.Get(x) != null).ToArray();
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error reading dnd formats retrying (attempt {10 - retryCount + 1})", ex);
-                    await Task.Delay(100);
+                //    availableFormats = avdo.GetAllDataFormats();//.Where(x => avdo.Get(x) != null).ToArray();
+                //}
+                //catch (Exception ex) {
+                //    MpConsole.WriteTraceLine($"Error reading dnd formats retrying (attempt {10 - retryCount + 1})", ex);
+                //    await Task.Delay(100);
 
-                    if (retryCount == 0) {
-                        MpConsole.WriteLine("Retry attempts reached, failed");
-                        return null;
-                    }
-                    var retry_result = await ProcessReadRequestAsync_internal(request, --retryCount);
-                    return retry_result;
-                }
+                //    if (retryCount == 0) {
+                //        MpConsole.WriteLine("Retry attempts reached, failed");
+                //        return null;
+                //    }
+                //    var retry_result = await ProcessReadRequestAsync_internal(request, --retryCount);
+                //    return retry_result;
+                //}
 
             }
             CoreOleHelpers.SetCulture(request);
@@ -61,23 +69,24 @@ namespace CoreOleHandler {
             List<MpUserNotification> nfl = [];
             List<Exception> exl = [];
             Dictionary<string, object> conversion_results = [];
-            MpAvDataObject read_output = new();
-            var readFormats = request.formats.Where(x => availableFormats.Contains(x));
+            Dictionary<string, object> read_output = [];
+            var readFormats = request.formats.Where(x => avdo.ContainsKey(x));
 
             foreach (var read_format in readFormats) {
                 if (MpPortableDataFormats.InternalFormats.Contains(read_format)) {
                     // ignore internal formats but let them pass through as output
-                    read_output.SetData(read_format, avdo.Get(read_format));
+                    read_output.AddOrReplace(read_format, avdo[read_format]);
                     continue;
                 }
                 // store data in object but read all data as strings
                 object data = null;
-                if (avdo.TryGetData(read_format, out string dataStr)) {
+                if (avdo.TryGetValue(read_format, out string dataStr)) {
                     data = dataStr;
                 }
                 if (data == null) {
                     continue;
                 }
+                data = dataStr;
 
                 bool is_valid = true;
                 if (!request.ignoreParams) {
@@ -117,19 +126,22 @@ namespace CoreOleHandler {
                 if (data == null || !is_valid) {
                     continue;
                 }
-                read_output.SetData(read_format, data);
+                read_output.AddOrReplace(read_format, data);
             }
             if (conversion_results != null) {
-                conversion_results.ForEach(x => read_output.SetData(x.Key, x.Value));
+                conversion_results.ForEach(x => read_output.AddOrReplace(x.Key, x.Value));
             }
 
             return new MpOlePluginResponse() {
-                dataObjectLookup = read_output.ToDictionary(),
+                dataObjectLookup = read_output,
                 userNotifications = nfl,
                 errorMessage = string.Join(Environment.NewLine, exl)
             };
         }
 
+        private string ReadAsString(string format, object data) {
+            return MpAvPlatformDataObjectExtensions.ReadDataFormat<string>(format, data);
+        }
         #endregion
     }
 }

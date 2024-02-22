@@ -390,7 +390,7 @@ namespace MonkeyPaste.Avalonia {
             // }
 
             if (OperatingSystem.IsLinux()) {
-                var actual_formats = await MpAvCommonTools.Services.DeviceClipboard.GetFormatsSafeAsync();
+                var actual_formats = await Mp.Services.DeviceClipboard.GetFormatsAsync();
                 // linux doesn't case non-html formats the same as windows so mapping them here
                 bool isLinuxFileList = avdo.ContainsData(MpPortableDataFormats.MimeText) &&
                                     actual_formats.Contains(MpPortableDataFormats.MimeGnomeFiles);

@@ -1,15 +1,18 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvProgressSpinner :
         UserControl, MpIOverrideRender {
+        private List<IDisposable> _disposables = [];
 
         #region Statics
 
@@ -36,6 +39,7 @@ namespace MonkeyPaste.Avalonia {
         //protected override Type StyleKeyOverride => typeof(UserControl);
         #endregion
 
+        #region Style Properties
         #region Percent AvaloniaProperty
         public double Percent {
             get { return GetValue(PercentProperty); }
@@ -96,12 +100,40 @@ namespace MonkeyPaste.Avalonia {
 
 
         #endregion
+
+        #region ShowBusyWhenDone AvaloniaProperty
+
+        public bool ShowBusyWhenDone {
+            get { return GetValue(ShowBusyWhenDoneProperty); }
+            set { SetValue(ShowBusyWhenDoneProperty, value); }
+        }
+        public static readonly StyledProperty<bool> ShowBusyWhenDoneProperty =
+            AvaloniaProperty.Register<MpAvProgressSpinner, bool>(nameof(ShowBusyWhenDone), false);
+        #endregion
+        #endregion
+
+        bool IsDone =>
+            Percent >= 1.0d;
+
         #endregion
 
         #region Constructors
-        public MpAvProgressSpinner() : base() { }
+        public MpAvProgressSpinner() : base() {
+            Content = new MpAvBusySpinnerView() {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                IsVisible = false
+            };
+            this.GetObservable(PercentProperty).Subscribe(value => OnPercentChanged()).AddDisposable(_disposables);
+        }
 
         #endregion
+
+        protected override void OnUnloaded(global::Avalonia.Interactivity.RoutedEventArgs e) {
+            base.OnUnloaded(e);
+            _disposables.ForEach(x => x.Dispose());
+            _disposables = null;
+        }
 
 
         public override void Render(DrawingContext context) {
@@ -112,6 +144,9 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             base.Render(context);
+            if (IsDone && ShowBusyWhenDone) {
+                return;
+            }
             double arc_width = ArcWidth;
             double w = Bounds.Width;
             double h = Bounds.Height;
@@ -170,5 +205,12 @@ namespace MonkeyPaste.Avalonia {
                 tl.ToAvPoint());
         }
 
+        void OnPercentChanged() {
+            if (Content is not MpAvBusySpinnerView bspv) {
+                return;
+            }
+            bspv.IsVisible = IsDone && ShowBusyWhenDone;
+
+        }
     }
 }

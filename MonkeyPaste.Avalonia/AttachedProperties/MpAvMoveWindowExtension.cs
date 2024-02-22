@@ -37,7 +37,13 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<string> RejectedControlTypeNamesProperty =
             AvaloniaProperty.RegisterAttached<object, Control, string>(
                 "RejectedControlTypeNames",
-                $"{typeof(TextBox).ToAssemblyReferencedString()}|{typeof(Button).ToAssemblyReferencedString()}");
+                string.Join(
+                    "|",
+                    new Type[] {
+                        typeof(TextBox),
+                        typeof(Button),
+                        typeof(SelectableTextBlock) }
+                    .Select(x => x.ToAssemblyReferencedString())));
 
         #endregion
 

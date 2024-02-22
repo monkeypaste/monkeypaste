@@ -5165,6 +5165,10 @@ namespace MonkeyPaste.Avalonia {
                     var aci_citl = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(aci.Id);
 
                     var aci_create_cit = aci_citl.FirstOrDefault(x => x.TransactionType == MpTransactionType.Created);
+                    if (aci_create_cit == null && aci_citl.FirstOrDefault(x => x.TransactionType == MpTransactionType.Dropped) is { } drop_cit) {
+                        // this occurs when append tile was a drop created
+                        aci_create_cit = drop_cit;
+                    }
                     if (aci_create_cit == null) {
                         MpDebug.Break($"append error, no create transaction found for appened item");
                     } else {

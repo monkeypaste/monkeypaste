@@ -2112,7 +2112,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             bool success = await to_focus.TrySetFocusAsync(focusType);
-            if (success) {
+            if (success && !IsSelected) {
                 IsSelected = true;
             }
             MpConsole.WriteLine($"Focusing '{this}' with method '{focusType}' {success.ToTestResultLabel()}");

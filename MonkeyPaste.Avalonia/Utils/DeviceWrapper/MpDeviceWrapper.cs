@@ -1,5 +1,5 @@
-﻿using Avalonia.Input.Platform;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
         public abstract MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
 
         public abstract MpIIconBuilder IconBuilder { get; set; }
-        public abstract IClipboard DeviceClipboard { get; set; }
+        public abstract MpIClipboard DeviceClipboard { get; set; }
 
         #endregion
         #endregion

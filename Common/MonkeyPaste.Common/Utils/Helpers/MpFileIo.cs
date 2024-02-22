@@ -437,34 +437,31 @@ namespace MonkeyPaste.Common {
         }
 
         public static string GetUniqueFileOrDirectoryPath(
-            string dir,
-            string fileOrDirectoryName,
+            string force_dir = default,
+            string force_name = default,
             string instanceSeparator = "_") {
 
-            string fp = string.IsNullOrEmpty(dir) ? GetThisAppRandomTempDir() : dir;
-            string fn = string.IsNullOrEmpty(fileOrDirectoryName) ? Path.GetRandomFileName() : fileOrDirectoryName;
-            if (string.IsNullOrEmpty(fn)) {
-                fn = Path.GetRandomFileName();
-            }
-            if (!dir.IsDirectory()) {
-                MpConsole.WriteLine($"Directory '{dir}' does not exist, creating..");
-                dir = dir.RemoveSpecialCharacters();
-                Directory.CreateDirectory(dir);
+            string fd = force_dir ?? GetThisAppRandomTempDir();
+            string fn = string.IsNullOrEmpty(force_name) ? Path.GetRandomFileName() : force_name;
+            if (!fd.IsDirectory()) {
+                MpConsole.WriteLine($"Directory '{fd}' does not exist, creating..");
+                fd = fd.RemoveSpecialCharacters();
+                Directory.CreateDirectory(fd);
             }
 
             string fe = string.Empty;
-            if (fileOrDirectoryName.Contains(".")) {
+            if (fn.Contains(".")) {
                 //is file name                
                 fe = Path.GetExtension(fn);
-                fn = Path.GetFileNameWithoutExtension(fileOrDirectoryName);
+                fn = Path.GetFileNameWithoutExtension(force_name);
             }
 
             int count = 1;
 
-            string newFullPath = Path.Combine(dir, fn + fe);
+            string newFullPath = Path.Combine(fd, fn + fe);
 
             while (newFullPath.IsFileOrDirectory()) {
-                newFullPath = Path.Combine(dir, fn + instanceSeparator + count + fe);
+                newFullPath = Path.Combine(fd, fn + instanceSeparator + count + fe);
                 count++;
             }
             return newFullPath;

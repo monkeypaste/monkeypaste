@@ -1,7 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input.Platform;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System.IO;
@@ -11,7 +8,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
 
     public interface MpIDeviceWrapper {
-        IClipboard DeviceClipboard { get; }
+        MpIClipboard DeviceClipboard { get; }
         MpIJsImporter JsImporter { get; }
         MpIPlatformInfo PlatformInfo { get; }
         MpIPlatformScreenInfoCollection ScreenInfoCollection { get; }
@@ -90,16 +87,14 @@ namespace MonkeyPaste.Avalonia {
         public MpIClipboardMonitor ClipboardMonitor { get; set; }
 
         public MpIExternalPasteHandler ExternalPasteHandler { get; set; }
-        public MpIHtml2Rtf Html2Rtf { get; set; }
 
         public MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
 
-        private IClipboard _deviceClipboard;
-        public IClipboard DeviceClipboard {
+        private MpIClipboard _deviceClipboard;
+        public MpIClipboard DeviceClipboard {
             get {
-                if (_deviceClipboard == null &&
-                    Application.Current.GetMainTopLevel() is TopLevel tl) {
-                    _deviceClipboard = tl.Clipboard;
+                if (_deviceClipboard == null) {
+                    _deviceClipboard = new MpAvClipboardWrapper();
                 }
                 return _deviceClipboard;
             }
@@ -139,7 +134,6 @@ namespace MonkeyPaste.Avalonia {
             DbInfo = new MpAvDbInfo();
             await MpAvPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
-            Html2Rtf = new MpAvHtml2RtfWrapper();
             DefaultDataCreator = new MpAvDefaultDataCreator();
             UserAgentProvider = MpAvPlainHtmlConverter.Instance;
             SslInfo = MpAvPrefViewModel.Instance;
@@ -196,21 +190,7 @@ namespace MonkeyPaste.Avalonia {
             UserCultureInfo = MpAvCurrentCultureViewModel.Instance;
         }
 
-
         #endregion
     }
 
-    public class MpAvHtml2RtfWrapper : MpIHtml2Rtf {
-        public string RtfToHtml(string rtf) {
-            return rtf.RtfToHtml();
-        }
-
-        public string HtmlToRtf(string html) {
-            return html.HtmlToRtf();
-        }
-
-        public string HtmlFragmentToRtf(string html) {
-            return html.ToRtfFromHtmlFragment();
-        }
-    }
 }

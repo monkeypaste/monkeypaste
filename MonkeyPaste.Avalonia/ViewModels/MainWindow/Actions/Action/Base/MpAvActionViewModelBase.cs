@@ -1466,7 +1466,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private async Task UpdateCanPasteAsync() {
-            var dfl = await MpAvCommonTools.Services.DeviceClipboard.GetFormatsSafeAsync();
+            var dfl = await Mp.Services.DeviceClipboard.GetFormatsAsync();
             CanPaste = dfl.Contains(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT);
         }
         private async Task<MpCopyItem> GetPrimaryCopyItemToProcessAsync() {
@@ -1705,7 +1705,7 @@ namespace MonkeyPaste.Avalonia {
                 //if (avdo == null) {
                 //    return;
                 //}
-                object action_data = await MpAvCommonTools.Services.DeviceClipboard.GetDataAsync(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT);
+                object action_data = await Mp.Services.DeviceClipboard.GetDataAsync(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT);
                 if (action_data is not byte[] json_bytes ||
                     json_bytes.ToDecodedString() is not string action_json ||
                     MpJsonExtensions.DeserializeObject<MpAction>(action_json) is not MpAction child_to_assign) {

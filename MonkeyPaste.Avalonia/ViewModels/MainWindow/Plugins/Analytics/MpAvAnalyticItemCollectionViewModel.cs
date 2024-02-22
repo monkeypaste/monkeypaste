@@ -73,14 +73,15 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = true;
 
-            //
-            bool success = await MpPluginLoader.BeginUpdatePluginAsync(plugin_guid, package_url, cpivm);
-            if (success) {
-                success = await AddOrReplaceAnalyzerViewModelByGuidAsync(plugin_guid);
+            await RemoveAnalyzerReferencesAsync(aivm, false);
+
+            bool can_reload = await MpPluginLoader.BeginUpdatePluginAsync(plugin_guid, package_url, cpivm);
+            if (can_reload) {
+                can_reload = await AddOrReplaceAnalyzerViewModelByGuidAsync(plugin_guid);
 
             }
             IsBusy = false;
-            return success;
+            return can_reload;
         }
 
         #endregion
@@ -350,6 +351,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(SortedItems));
         }
         private void MpPluginLoader_Plugins_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            // This only removes plugins not found in loader
             var plugin_guids_to_remove = Items.Where(x => !MpPluginLoader.PluginGuidLookup.ContainsKey(x.PluginGuid)).Select(x => x.PluginGuid).ToList();
             foreach (string guid in plugin_guids_to_remove) {
                 // this should only find matches when plugins were removed for invalidation(s) during install. 

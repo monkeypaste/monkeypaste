@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static MpIManagePluginComponents GetComponentManager(this MpManifestFormat mf) {
             if (mf == null) {
-                return new MpPluginFallbackComponentManager();
+                return null;
             }
             switch (mf.pluginType) {
                 case MpPluginType.Clipboard:
@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpPluginType.Fetcher:
                     return MpAvAnalyticItemCollectionViewModel.Instance;
                 default:
-                    return new MpPluginFallbackComponentManager();
+                    return null;
 
             }
         }

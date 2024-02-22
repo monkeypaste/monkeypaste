@@ -4,7 +4,7 @@ using MonkeyPaste.Common.Plugin;
 
 namespace CoreOleHandler {
     public static class CoreOleParamProcessor {
-        public static string CurImageExtVal { get; private set; } = "png";
+        public static string CurImageExtVal { get; set; } = "png";
         public static object ProcessParam(
             MpParameterRequestItemFormat paramInfo,
             string format,
@@ -50,9 +50,7 @@ namespace CoreOleHandler {
                             case CoreOleParamType.RICHTEXTFORMAT_R_TOHTML: {
                                     if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT) &&
                                         data is string rtf &&
-                                        MpAvCommonTools.Services != null &&
-                                        MpAvCommonTools.Services.Html2Rtf != null &&
-                                        MpAvCommonTools.Services.Html2Rtf.RtfToHtml(rtf) is string html) {
+                                        rtf.RtfToHtml() is { } html) {
                                         convData = new() {
                                             { MpPortableDataFormats.Html, html },
                                             { MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT, true } };
@@ -84,9 +82,7 @@ namespace CoreOleHandler {
                             case CoreOleParamType.HTMLFORMAT_R_TORTF: {
                                     if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT) &&
                                         data is string html_str &&
-                                        MpAvCommonTools.Services != null &&
-                                        MpAvCommonTools.Services.Html2Rtf != null &&
-                                        MpAvCommonTools.Services.Html2Rtf.HtmlFragmentToRtf(html_str) is string rtf) {
+                                        html_str.ToRtfFromHtmlFragment() is { } rtf) {
                                         convData = new() {
                                             { MpPortableDataFormats.Rtf, rtf },
                                             { MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT, true } };
@@ -118,9 +114,7 @@ namespace CoreOleHandler {
                             case CoreOleParamType.TEXTHTML_R_TORTF: {
                                     if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT) &&
                                         data is string html_str &&
-                                        MpAvCommonTools.Services != null &&
-                                        MpAvCommonTools.Services.Html2Rtf != null &&
-                                        MpAvCommonTools.Services.Html2Rtf.RtfToHtml(html_str) is string rtf) {
+                                        html_str.HtmlToRtf() is { } rtf) {
                                         convData = new() {
                                             { MpPortableDataFormats.Rtf, rtf },
                                             { MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT, true } };

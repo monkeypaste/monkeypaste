@@ -40,8 +40,8 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.TRANSLATE_RESX |
             //MpLedgerizerFlags.GEN_EMPTY_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
-            MpLedgerizerFlags.GEN_PROD_LISTING |
-            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            //MpLedgerizerFlags.GEN_PROD_LISTING |
+            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
             //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
@@ -50,14 +50,14 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.DO_REMOTE_INDEX |
             //MpLedgerizerFlags.DO_LOCAL_LEDGER |
             //MpLedgerizerFlags.DO_REMOTE_LEDGER |
-            //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
-            //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
-            //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
-            //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
-            // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
-            //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
-            //MpLedgerizerFlags.DEBUG |
-            MpLedgerizerFlags.RELEASE
+            MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+                                     //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
+                                     //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
+                                     //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
+                                     // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
+                                     //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
+                                     //MpLedgerizerFlags.DEBUG //|
+                                     MpLedgerizerFlags.RELEASE
             ;
 
         #region Localizer Props
@@ -154,6 +154,8 @@ namespace Ledgerizer {
             //"WebSearch",
             //"YoloImageAnnotator",
         ];
+        static IEnumerable<string> WorkingCorePlugins =>
+            WorkingPluginNames.Where(x => CorePlugins.Contains(x));
 
         static string[] AllPluginNames => [
             "AzureComputerVision",
@@ -243,8 +245,8 @@ namespace Ledgerizer {
 
 
         static void Main(string[] args) {
-            Console.WriteLine("Press any key to ledgerize!");
             Console.WriteLine($"Tasks: {LEDGERIZER_FLAGS}");
+            Console.WriteLine("Press any key to ledgerize!");
             Console.ReadKey();
             Console.WriteLine("Starting...");
 
@@ -300,10 +302,10 @@ namespace Ledgerizer {
                 CreateIndex(true);
             }
             if (LOCAL_MOVE_CORE_TO_DAT) {
-                MoveCoreToDat_local();
+                MoveCoresToDat_local();
             }
             if (REMOTE_MOVE_CORE_TO_DAT) {
-                MoveCoreToDat_remote();
+                MoveCoresToDat_remote();
             }
             if (MOVE_JS_UISTRINGS) {
                 MoveJsUiStrings();
@@ -816,6 +818,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 "ssCaption3",
                 "ssCaption4",
                 "ssCaption5",
+                "ssCaption6",
             ];
 
             string[] rel_path_keys = [
@@ -824,6 +827,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 "ssSrc3",
                 "ssSrc4",
                 "ssSrc5",
+                "ssSrc6",
                 "logo720x1080",
                 "logo1080x1080",
                 "logo300x300",
@@ -1007,8 +1011,8 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         #endregion
 
         #region Move Core 
-        static void MoveCorePluginToServer(string core_plugin_name) {
-            string root_pack_dir = MpLedgerConstants.PLUGIN_PACKAGES_DIR;
+        static void MoveCorePluginToServer(string core_plugin_name, bool is_debug) {
+            string root_pack_dir = GetPackagesDir(is_debug);
             string core_plugin_zip_path = Path.Combine(root_pack_dir, $"{core_plugin_name}.zip");
             if (!core_plugin_zip_path.IsFile()) {
                 MpConsole.WriteLine($"Error! No package found for '{core_plugin_name}' at '{core_plugin_zip_path}'");
@@ -1054,41 +1058,59 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 MpConsole.WriteTraceLine($"Error moving remote dat {core_plugin_name}.", ex);
             }
         }
-        static void MoveCoreToDat_remote() {
+        static void MoveCoresToDat_remote() {
             MpConsole.WriteLine($"[REMOTE] Moving core plugins to dat STARTED", true);
 
-            foreach (string core_plugin_name in CorePlugins) {
-                MoveCorePluginToServer(core_plugin_name);
+
+            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DEBUG)) {
+                foreach (string core_plugin_name in WorkingCorePlugins) {
+                    MoveCorePluginToServer(core_plugin_name, true);
+                }
             }
+            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.RELEASE)) {
+                foreach (string core_plugin_name in WorkingCorePlugins) {
+                    MoveCorePluginToServer(core_plugin_name, false);
+                }
+            }
+
             MpConsole.WriteLine($"[REMOTE] Moving core plugins to dat DONE", false, true);
         }
-        static void MoveCoreToDat_local() {
+        static void MoveCoresToDat_local() {
             MpConsole.WriteLine($"[LOCAL] Moving core plugins to dat STARTED", true);
-            string root_pack_dir = MpLedgerConstants.PLUGIN_PACKAGES_DIR;
-            string proj_dat_dir =
-                Path.Combine(
-                    MpPlatformHelpers.GetSolutionDir(),
-                    "MonkeyPaste.Avalonia",
-                    "Assets",
-                    "dat");
-            if (!proj_dat_dir.IsDirectory()) {
-                MpFileIo.CreateDirectory(proj_dat_dir);
+            void DoLocalMove(bool is_debug) {
+                string root_pack_dir = GetPackagesDir(is_debug);
+                string proj_dat_dir =
+                    Path.Combine(
+                        MpPlatformHelpers.GetSolutionDir(),
+                        "MonkeyPaste.Avalonia",
+                        "Assets",
+                        "dat");
+                if (!proj_dat_dir.IsDirectory()) {
+                    MpFileIo.CreateDirectory(proj_dat_dir);
+                }
+
+                foreach (string core_plugin_name in WorkingCorePlugins) {
+                    string core_plugin_zip_path = Path.Combine(root_pack_dir, $"{core_plugin_name}.zip");
+                    if (!core_plugin_zip_path.IsFile()) {
+                        MpConsole.WriteLine($"Error! No package found for '{core_plugin_name}' at '{core_plugin_zip_path}'");
+                        continue;
+                    }
+                    if (ReadPluginManifestFromProjDir(core_plugin_name) is not { } core_mf) {
+                        MpConsole.WriteLine($"Error could not find core manifest for '{core_plugin_name}'");
+                        continue;
+                    }
+
+                    string target_dat_path = Path.Combine(proj_dat_dir, $"{core_mf.guid}.zip");
+                    MpFileIo.CopyFileOrDirectory(core_plugin_zip_path, target_dat_path, forceOverwrite: true);
+                    MpConsole.WriteLine(target_dat_path);
+                }
             }
 
-            foreach (string core_plugin_name in CorePlugins) {
-                string core_plugin_zip_path = Path.Combine(root_pack_dir, $"{core_plugin_name}.zip");
-                if (!core_plugin_zip_path.IsFile()) {
-                    MpConsole.WriteLine($"Error! No package found for '{core_plugin_name}' at '{core_plugin_zip_path}'");
-                    continue;
-                }
-                if (ReadPluginManifestFromProjDir(core_plugin_name) is not { } core_mf) {
-                    MpConsole.WriteLine($"Error could not find core manifest for '{core_plugin_name}'");
-                    continue;
-                }
-
-                string target_dat_path = Path.Combine(proj_dat_dir, $"{core_mf.guid}.zip");
-                MpFileIo.CopyFileOrDirectory(core_plugin_zip_path, target_dat_path, forceOverwrite: true);
-                MpConsole.WriteLine(target_dat_path);
+            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DEBUG)) {
+                DoLocalMove(true);
+            }
+            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.RELEASE)) {
+                DoLocalMove(false);
             }
             MpConsole.WriteLine($"[LOCAL] Moving core plugins to dat DONE", false, true);
         }
@@ -1586,7 +1608,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             string config = is_release ? "Release" : "Debug";
             string args = CorePlugins.Contains(plugin_name) ?
                 $"msbuild /p:OutDir={publish_dir} -target:Publish /property:Configuration={config} /property:DefineConstants=AUX%3B{BUILD_OS} -restore" :
-                $"publish --configuration {config} --output {publish_dir}";
+                $"publish --configuration {config} --outputcor {publish_dir}";
 
             (int exit_code, string proc_output) =
                 RunProcess(
@@ -1674,7 +1696,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             string target_package_path = Path.Combine(proj_dir, target_package_file_name);
 
             if (CorePlugins.Contains(plugin_name)) {
-                MoveCorePluginToServer(plugin_name);
+                MoveCorePluginToServer(plugin_name, false);
                 return GetPluginPackageUri(plugin_name, false, false);
             }
             MpConsole.WriteLine($"Pushing {target_package_file_name} for {plugin_name} to github...");
@@ -1840,9 +1862,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         }
         static string GetPluginPackageUri(string plugin_name, bool is_local, bool is_debug) {
             if (is_local) {
-                string root_pack_dir = is_debug ?
-                    MpLedgerConstants.DEBUG_PACKAGES_DIR :
-                    MpLedgerConstants.RELEASE_PACKAGES_DIR;
+                string root_pack_dir = GetPackagesDir(is_debug);
                 string output_path = Path.Combine(root_pack_dir, $"{plugin_name}.zip");
                 return output_path.ToFileSystemUriFromPath();
             }
@@ -1853,6 +1873,12 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 return $"{MpLedgerConstants.REMOTE_CORE_PLUGIN_BASE_URI}/{mf.guid}/{package_name}";
             }
             return string.Format(PUBLIC_PACKAGE_URL_FORMAT, plugin_name, $"v{mf.version}");
+        }
+
+        static string GetPackagesDir(bool is_debug) {
+            return is_debug ?
+                    MpLedgerConstants.DEBUG_PACKAGES_DIR :
+                    MpLedgerConstants.RELEASE_PACKAGES_DIR;
         }
 
         static (int, string) RunProcess(string file, string dir, string args) {

@@ -25,13 +25,6 @@
         public static string RELEASE_PACKAGES_DIR =>
             $"{LEDGER_PROJ_DIR}/plugin_packages_release/";
 
-        public static string PLUGIN_PACKAGES_DIR =>
-#if DEBUG
-                DEBUG_PACKAGES_DIR;
-#else
-                RELEASE_PACKAGES_DIR;
-#endif
-
         public static string LOCAL_CULTURES_DIR_URI =>
             $"file:///{LEDGER_PROJ_DIR}/{CULTURE_DIR_NAME}";
         public static string REMOTE_CULTURES_DIR_URI =>

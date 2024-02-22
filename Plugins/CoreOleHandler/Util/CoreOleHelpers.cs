@@ -1,28 +1,8 @@
-﻿using Avalonia;
-using Avalonia.Input.Platform;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System;
-using System.Collections.Generic;
 
 namespace CoreOleHandler {
     public static class CoreOleHelpers {
-
-        private static IClipboard _clipboardRef;
-        public static IClipboard ClipboardRef {
-            get {
-                if (_clipboardRef == null) {
-                    if (MpAvCommonTools.Services != null) {
-                        _clipboardRef = MpAvCommonTools.Services.DeviceClipboard;
-                    }
-                    if (_clipboardRef == null && Application.Current.GetMainTopLevel() is { } tl) {
-                        _clipboardRef = tl.Clipboard;
-                    }
-                }
-                return _clipboardRef;
-            }
-        }
 
         public static void SetCulture(MpMessageRequestFormatBase req, List<MpUserNotification> ntfl = default) {
             if (req == null) {

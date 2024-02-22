@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Avalonia.Threading;
+using HtmlAgilityPack;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -24,10 +25,10 @@ namespace MonkeyPaste.Avalonia {
         static string ABUSE_BASE_URL =
             $"{MpServerConstants.PLUGINS_BASE_URL}/abuse?id=";
 
-
         #endregion
 
         #region Statics
+        static DispatcherPriority DOWNLOAD_PRIORITY = DispatcherPriority.Default;
         #endregion
 
         #region Interfaces
@@ -81,7 +82,8 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-        public MpAvCommonCancelableProgressIndicatorViewModel ProgressViewModel { get; set; }
+        public MpAvCommonCancelableProgressIndicatorViewModel InstallProgressViewModel { get; set; }
+        public MpAvCommonCancelableProgressIndicatorViewModel UpdateProgressViewModel { get; set; }
         public MpAvPluginDependencyViewModel RootDependencyViewModel =>
             RootDependencyCollection.FirstOrDefault();
 
@@ -165,7 +167,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public bool IsDownloading =>
-            ProgressViewModel != null;
+            InstallProgressViewModel != null;
         public bool ShowDisabledInstallTooltip =>
             IsUninstallPending || IsUpdatePending || IsCorePlugin;
         public bool ShowDisabledUpdateTooltip =>
@@ -642,14 +644,14 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand InstallPluginCommand => new MpAsyncCommand(
             async () => {
+                // await Dispatcher.UIThread.InvokeAsync(async () => {
                 if (PluginFormat.GetComponentManager() is not { } cm) {
                     return;
                 }
 
+                InstallProgressViewModel = new MpAvCommonCancelableProgressIndicatorViewModel(this);
                 IsBusy = true;
-                ProgressViewModel = new MpAvCommonCancelableProgressIndicatorViewModel(this);
-                bool success = await cm.InstallAsync(PluginGuid, SelectedRemotePackageUrl, ProgressViewModel);
-                ProgressViewModel = null;
+                bool success = await cm.InstallAsync(PluginGuid, SelectedRemotePackageUrl, InstallProgressViewModel);
 
                 // TODO success should only return true if plugin installs fine but it gets gummed up w/
                 // all the nested exception handling...this shouldn't be done here
@@ -668,10 +670,34 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 IsBusy = false;
+                InstallProgressViewModel = null;
                 Parent.PerformFilterCommand.Execute("Refresh");
+                // }, DOWNLOAD_PRIORITY);
             }, () => {
                 return CanInstall;
             });
+
+        public ICommand UpdatePluginCommand => new MpAsyncCommand(
+            async () => {
+                //await Dispatcher.UIThread.InvokeAsync(async () => {
+                if (PluginFormat.GetComponentManager() is not { } cm) {
+                    return;
+                }
+
+                IsBusy = true;
+                UpdateProgressViewModel = new MpAvCommonCancelableProgressIndicatorViewModel(this);
+                bool success = await cm.BeginUpdateAsync(PluginGuid, SelectedRemotePackageUrl, UpdateProgressViewModel);
+                IsBusy = false;
+
+                UpdateProgressViewModel = null;
+                Parent.PerformFilterCommand.Execute("Refresh");
+                //}, DOWNLOAD_PRIORITY);
+
+
+            }, () => {
+                return CanUpdate && !IsBusy;
+            });
+
 
         public ICommand UninstallPluginCommand => new MpAsyncCommand(
             async () => {
@@ -696,24 +722,6 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 return CanUninstall;
             });
-
-        public ICommand UpdatePluginCommand => new MpAsyncCommand(
-            async () => {
-                if (PluginFormat.GetComponentManager() is not { } cm) {
-                    return;
-                }
-
-                IsBusy = true;
-                ProgressViewModel = new MpAvCommonCancelableProgressIndicatorViewModel(this);
-                bool success = await cm.BeginUpdateAsync(PluginGuid, SelectedRemotePackageUrl, ProgressViewModel);
-                ProgressViewModel = null;
-                IsBusy = false;
-
-                Parent.PerformFilterCommand.Execute("Refresh");
-            }, () => {
-                return CanUpdate && !IsBusy;
-            });
-
         public ICommand ToggleIsPluginInstalledCommand => new MpCommand(
             () => {
                 if (HasInstallation) {

@@ -467,14 +467,16 @@ namespace MonkeyPaste.Common.Wpf {
             span_node.AddClass($"ql-font-{GetHtmlFont(s)}");
             var style_parts = new List<string>();
             if (s.FontSize.IsNumber()) {
-                style_parts.Add(GetFontSize(s));
+                string fs = GetFontSize(s);
+                style_parts.Add($"font-size: {fs};");
+                span_node.AddClass($"ql-size-{fs}");
             }
             if (s.Foreground is SolidColorBrush fg_scb) {
-                style_parts.Add($"color: {GetHtmlColor(fg_scb.Color)}");
+                style_parts.Add($"color: {GetHtmlColor(fg_scb.Color)};");
                 //span_node.AddClass("font-color-override-on");
             }
             if (s.Background is SolidColorBrush bg_scb) {
-                style_parts.Add($"background-color: {GetHtmlColor(bg_scb.Color)}");
+                style_parts.Add($"background-color: {GetHtmlColor(bg_scb.Color)};");
                 //span_node.AddClass("font-bg-color-override-on");
             }
             span_node.SetAttributeValue("style", string.Join(" ", style_parts));
@@ -484,12 +486,12 @@ namespace MonkeyPaste.Common.Wpf {
         private static string GetFontSize(Span s) {
             double fs = (double)((int)s.FontSize);//new FontSizeConverter().ConvertFrom(s.FontSize+"pt");
             //MpWpfRtfDefaultProperties.Instance.AddFontSize(fs);
-            return string.Format(@"font-size: {0}px;", fs);
+            return $"{fs}px";
         }
 
         private static string GetHtmlColor(Color c) {
             //MpWpfRtfDefaultProperties.Instance.AddFontColor(c);
-            return string.Format(@"rgb({0},{1},{2});", c.R, c.G, c.B);
+            return string.Format(@"rgb({0},{1},{2})", c.R, c.G, c.B);
         }
 
         private static string GetHtmlFont(Span s) {

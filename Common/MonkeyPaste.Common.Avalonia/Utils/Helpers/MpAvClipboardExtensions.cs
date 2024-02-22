@@ -9,6 +9,8 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin;
+using Avalonia;
+
 
 
 #if WINDOWS
@@ -25,6 +27,33 @@ namespace MonkeyPaste.Common.Avalonia {
                 return MpRandom.Rand.Next(20, 100);
             }
         }
+
+        public static async Task<Dictionary<string, object>> ReadClipboardAsync(string[] formatFilter = default, int retryCount = 0) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                var output = await Dispatcher.UIThread.InvokeAsync(() => ReadClipboardAsync(formatFilter, retryCount));
+                return output;
+            }
+
+            if (Application.Current.GetMainTopLevel() is not { } tl ||
+                tl.Clipboard is not { } cb) {
+                return new();
+            }
+            var result = await cb.ToDataObjectAsync(formatFilter, retryCount);
+            return result.DataFormatLookup.ToDictionary(x => x.Key, x => x.Value);
+        }
+        public static async Task WriteToClipboardAsync(Dictionary<string, object> dataFormatLookup) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                await Dispatcher.UIThread.InvokeAsync(() => WriteToClipboardAsync(dataFormatLookup));
+                return;
+            }
+
+            if (Application.Current.GetMainTopLevel() is not { } tl ||
+                tl.Clipboard is not { } cb) {
+                return;
+            }
+            await cb.SetDataObjectAsync(new MpAvDataObject(dataFormatLookup));
+        }
+
 
         public static async Task<MpAvDataObject> ToDataObjectAsync(this IClipboard cb, string[] formatFilter = default, int retryCount = 0) {
             var avdo = new MpAvDataObject();
