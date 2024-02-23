@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
         #endregion
 
-        #region Statics>
+        #region Statics
         public static bool BreakOnNextLoad = false;
 
 #if OUTSYS_WV
@@ -99,6 +99,10 @@ namespace MonkeyPaste.Avalonia {
             this.ExecuteJavascript(msgJsonBase64Str);
 #elif OUTSYS_WV
             this.ExecuteScript(msgJsonBase64Str);
+#elif SUGAR_WV
+            if (this is MpICanExecuteJavascript icej) {
+                icej.ExecuteJavascript(msgJsonBase64Str);
+            }
 #else
             if (Interop == null) {
                 MpDebug.Break("lifecycle bug");

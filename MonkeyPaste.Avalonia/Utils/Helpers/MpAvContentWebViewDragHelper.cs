@@ -185,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (_dragSource is MpAvContentWebView wv) {
                 // this makes sure dnd state is reset for drag item
-                wv.ExecuteJavascript($"resetDragAndDrop_ext()");
+                wv.SendMessage($"resetDragAndDrop_ext()");
             }
             MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
             ResetDragState();

@@ -1,4 +1,4 @@
-﻿#if CEFNET_WV
+﻿#if CEFNET_WV || OUTSYS_WV || SUGAR_WV
 
 using System.Collections.Generic;
 

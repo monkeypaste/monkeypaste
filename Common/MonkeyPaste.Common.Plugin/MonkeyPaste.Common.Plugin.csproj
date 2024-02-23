@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Platforms>$(DefaultPlatforms)</Platforms>
@@ -16,7 +15,6 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <Version>1.0.2.0</Version>
-    <!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
   </PropertyGroup>
   
   <PropertyGroup>
@@ -27,11 +25,6 @@
       <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
     </ItemGroup>
   </Target>
-  <ItemGroup>
-    <Compile Remove="Data\DataFormat\**" />
-    <EmbeddedResource Remove="Data\DataFormat\**" />
-    <None Remove="Data\DataFormat\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="icon.png">

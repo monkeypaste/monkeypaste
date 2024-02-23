@@ -71,16 +71,15 @@
     <ProjectReference Include="..\_build\_build.csproj" />
   </ItemGroup>
 
-  <!--<ItemGroup Condition="$(UseCefNet) == 'True' And '$(Configuration)' == 'Debug'">
-    <Content Include="$(CefPlatformDir)\Debug\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>-->
+  <ItemGroup Condition="'$(UseSugarWv)' == 'True'">
+    <PackageReference Include="WebView.Avalonia.Desktop" Version="11.0.0.1" />
+  </ItemGroup>
 
 
   <ItemGroup>
-    <None Remove="cef\**"/>
+    <None Remove="cef\**" />
   </ItemGroup>
+  
   <ItemGroup Condition="$(UseCefNet) == 'True'">
     <Content Include="$(CefPlatformDir)\Release\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -96,14 +95,7 @@
     </Content>
   </ItemGroup>
 
-  <!--<ItemGroup>
-    <Content Include="$(CefPlatformDir)\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>-->
-  
-
-  <ItemGroup>
+  <ItemGroup Condition="$(UseCefNet) == 'True'">
     <Reference Include="CefNet">
       <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
     </Reference>
