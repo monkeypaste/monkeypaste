@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste er en clipboard manager, automatisering og produktivitetsværktøj som ingen anden. Forbedring af dit udklipsholder til en beriget og organiseret del af din arbejdsgang,
-Med en intuitiv og lav -profilgrænseflade, der understøtter tekst, filer og billeder. Designet til fleksibilitet med et nogensinde voksende samfundsdrevet libray af plugins.
-
-Det begyndte som et eksperiment af en programmør, der ønsker mere end bare at kopiere og indsætte ud af udklipsholderen. Han ville have en simpel kommando som Ctrl+C, der ville 'tilføje til' i stedet
-af 'Udskift' hvad der var på udklipsholderen. Og eksperimentet fungerede. Det lille værktøj var meget praktisk. Denne indtrådte programmøren med flere ideer og flere eksperimenter, det
-er nu blevet "Monkeypaste".
-
-Da skrivebordet er til dine filer, har Monkeypaste til hensigt at være på dit udklipsholder. Det er en pakke med værktøjer, der er omhyggeligt designet til tilsyneladende at integrere og interoperere med
-Ethvert program eller format af indhold. Ctrl+C og Ctrl+V er meget mere end bare genveje. De er indgangsporte, som alle applikationer deler, bærer en
-Rigdom af værdi og mening, du fortjener at have til rådighed lige ved hånden. Ikke bare smidt væk efter den næste Ctrl+c.
-
-Jeg er den programmør, der er nævnt tidligere, og jeg vil have, at alle skal være i stand til at finde brug af Monkeypaste. Så det og alle dens funktioner er helt gratis at bruge.
-Jeg vil også have dig til at føle dig godt tilpas med at bruge det. Så jeg kan forsikre dig om at være den eneste kraft bag dens oprettelse, at ingen af ​​de (meget) personlige oplysninger, der kan opstå
-Dit udklipsholder spores eller gemmes nogensinde overalt ud over din egen maskine. Periode.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Dit udklipsholder spores eller gemmes nogensinde overalt ud over din egen maskin
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Opbevar tekst, image og filklip med al sin kilde (appen, webstedet, tid og meget mere) oplysninger automatisk</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste er et udklipsholderhåndterings-, automatiserings- og produktivitetsværktøj som intet andet. Forbedring af dit udklipsholder til en beriget og organiseret del af din arbejdsgang,
+Med en intuitiv grænseflade med lav profil, der understøtter tekst, filer og billeder. Designet til fleksibilitet med et stadigt voksende fællesskabsdrevet libray af plugins.
+
+Det begyndte som et eksperiment af en programmør, der ønskede mere end bare at kopiere og indsætte ud af udklipsholderen. Han ønskede en simpel kommando som Ctrl + C, der ville 'tilføje til' i stedet 
+af 'udskift' det, der var på udklipsholderen. Og eksperimentet virkede. Det lille værktøj var meget praktisk. Dette fascinerede programmøren med flere ideer og flere eksperimenter, der 
+nu er blevet "MonkeyPaste". 
+
+Da skrivebordet er til dine filer, har MonkeyPaste til hensigt at være til dit udklipsholder. Det er en række værktøjer, der er omhyggeligt designet til tilsyneladende at integrere og interagere med 
+enhver applikation eller ethvert format af indhold. Ctrl + C og Ctrl + V er meget mere end bare genveje. De er indgangshavnene, som alle applikationer deler, med en 
+rigdom af værdi og mening, du fortjener at have til rådighed lige ved hånden. Ikke bare smidt væk efter næste Ctrl+C.
+
+Jeg er den programmør, der blev nævnt tidligere, og jeg ønsker, at alle skal kunne finde brug ud af MonkeyPaste. Så det og alle dets funktioner er helt gratis at bruge. 
+Jeg vil også have dig til at føle dig godt tilpas med at bruge det. Så jeg forsikrer dig, som den eneste kraft bag dens oprettelse, at INGEN af de (meget) personlige oplysninger, der kan opstå på 
+dit udklipsholder spores eller gemmes nogensinde HVOR som helst ud over din egen maskine. Periode.
+
+(MonkeyPaste kræver administratorrettigheder)</value>
   </data>
 </root>

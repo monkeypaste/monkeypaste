@@ -6,13 +6,7 @@ using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
-#if DEBUG
-using MonkeyPaste.Common.Plugin;
 using Avalonia.Controls;
-using WebViewCore.Configurations;
-
-
-#endif
 
 #if CEFNET_WV
 using CefNet;
@@ -21,6 +15,7 @@ using CefNet.Internal;
 #elif OUTSYS_WV
 using WebViewControl;
 #elif SUGAR_WV
+using WebViewCore.Configurations;
 using AvaloniaWebView;
 #endif
 

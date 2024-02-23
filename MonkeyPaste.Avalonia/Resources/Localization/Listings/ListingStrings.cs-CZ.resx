@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste je správce schránky, nástroj pro automatizaci a produktivitu jako žádný jiný. Vylepšení schránky na obohacenou a organizovanou část vašeho pracovního postupu,
-Představujeme intuitivní a nízkoprofilové rozhraní, které podporuje text, soubory a obrázky. Navrženo pro flexibilitu, s vždy - rostoucí komunitou - řízenou Libray pluginů.
-
-Začalo to jako experiment programátorem, který chce více než jen kopírovat a vložit ze schránky. Chtěl jednoduchý příkaz, jako je Ctrl+C, který by místo toho „přidal“
-„nahradit“, co bylo ve schránce. A experiment fungoval. Malý nástroj byl velmi užitečný. To přijalo programátora s více nápady a dalšími experimenty, že
-nyní se stala „Monkeypaste“.
-
-Vzhledem k tomu, že plocha je pro vaše soubory, má MonkeyPaste v úmyslu být ve vaší schránce. Je to sada nástrojů pečlivě navržených tak, aby se bezprostředně integrovala a spolupracovala s
-jakákoli aplikace nebo formát obsahu. Ctrl+C a Ctrl+V jsou mnohem více než jen zkratky. Jsou to přístavy vstupu, všechny sdílejí všechny aplikace a nesou a
-Bohatství hodnoty a význam si zasloužíte mít k dispozici na dosah ruky. Nejen odhození po dalším Ctrl+c.
-
-Jsem tento programátor zmíněný dříve a chci, aby všichni mohli najít použití z Monkeypaste. Takže to a všechny jeho funkce jsou zcela zdarma.
-Chci také, abyste se používali pohodlně. Ujišťuji vás tedy, že jste jedinou silou za jeho stvořením, že žádná z (velmi) osobních údajů, které mohou nastat
-Vaše schránka je vždy sledována nebo ukládána kdekoli za vlastní stroj. Doba.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Vaše schránka je vždy sledována nebo ukládána kdekoli za vlastní stroj. D
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Automaticky automaticky ukládejte text, obrázek a souborové klipy se všemi jeho zdroji (aplikace, web, čas a mnoho dalšího)</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste je správce schránky, nástroj pro automatizaci a produktivitu jako žádný jiný. Vylepšení schránky na obohacenou a organizovanou součást vašeho pracovního postupu,
+Díky intuitivnímu a nízkoprofilovému rozhraní, které podporuje text, soubory a obrázky. Navrženo pro flexibilitu se stále rostoucí komunitou řízených libray pluginů.
+
+Začalo to jako experiment programátora, který chtěl víc než jen zkopírovat a vložit ze schránky. Chtěl jednoduchý příkaz jako Ctrl+C, který by místo toho "přidal do" 
+"nahradit" to, co bylo ve schránce. A experiment se povedl. Malý nástroj byl velmi šikovný. To programátora zaujalo dalšími nápady a experimenty, které 
+nyní se stal "MonkeyPaste". 
+
+Stejně jako plocha je pro vaše soubory, MonkeyPaste má v úmyslu být ve vaší schránce. Jedná se o sadu nástrojů pečlivě navržených tak, aby se hladce integrovaly a spolupracovaly s 
+Jakákoli aplikace nebo formát obsahu. Ctrl+C a Ctrl+V jsou mnohem víc než jen klávesové zkratky. Jsou to vstupní přístavy, které sdílejí všechny aplikace a které nesou 
+Bohatství hodnoty a významu, které si zasloužíte mít na dosah ruky. Ne jen tak zahodit po dalším Ctrl+C.
+
+Jsem ten programátor zmíněný dříve a chci, aby každý mohl najít využití MonkeyPaste. Takže on a všechny jeho funkce jsou zcela zdarma k použití. 
+Také chci, abyste se při jeho používání cítili pohodlně. Takže vás ujišťuji, že jako jediná síla, která stojí za jeho vytvořením, ŽÁDNÁ z (velmi) osobních informací, které mohou vzniknout na 
+vaše schránka je vždy sledována nebo uložena KDEKOLI mimo váš vlastní počítač. Perioda.
+
+(MonkeyPaste vyžaduje zvýšená oprávnění)</value>
   </data>
 </root>

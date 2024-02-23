@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste adalah manajer clipboard, otomatisasi dan alat produktivitas tidak seperti yang lain. Meningkatkan clipboard Anda menjadi bagian alur kerja yang diperkaya dan terorganisir
-Menampilkan antarmuka profil intuitif dan rendah yang mendukung teks, file, dan gambar. Dirancang untuk fleksibilitas, dengan pustaka plugin yang terus berkembang - yang digerakkan.
-
-Ini dimulai sebagai percobaan oleh seorang programmer yang menginginkan lebih dari sekadar menyalin dan menempel keluar dari clipboard. Dia menginginkan perintah sederhana seperti Ctrl+C yang akan 'menambah' sebagai gantinya
-dari 'ganti' apa yang ada di clipboard. Dan percobaan berhasil. Alat kecil itu sangat berguna. Ini menggagalkan programmer dengan lebih banyak ide dan lebih banyak eksperimen, itu
-sekarang telah menjadi "monkeypaste".
-
-Karena desktop ke file Anda, Monkeypaste bermaksud untuk ke clipboard Anda. Ini adalah serangkaian alat yang dirancang dengan hati -hati untuk mengintegrasikan dan beroperasi dengan baik
-aplikasi atau format konten apa pun. Ctrl+C dan Ctrl+V jauh lebih dari sekadar pintasan. Mereka adalah port masuk semua aplikasi berbagi, membawa a
-Kekayaan nilai dan artinya Anda layak tersedia di ujung jari Anda. Tidak hanya dibuang setelah ctrl+c berikutnya.
-
-Saya adalah programmer yang disebutkan sebelumnya dan saya ingin semua orang dapat menemukan penggunaan dari monkeypaste. Jadi itu dan semua fiturnya benar -benar gratis untuk digunakan.
-Saya juga ingin Anda merasa nyaman menggunakannya. Jadi saya meyakinkan Anda, sebagai satu -satunya kekuatan di balik penciptaannya, bahwa tidak ada informasi pribadi (sangat) yang dapat muncul
-Clipboard Anda pernah dilacak atau disimpan di mana pun di luar mesin Anda sendiri. Periode.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Clipboard Anda pernah dilacak atau disimpan di mana pun di luar mesin Anda sendi
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Menyimpan teks, gambar, dan klip file dengan semua sumbernya (aplikasi, situs web, waktu, dan banyak lagi) informasi secara otomatis</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste adalah manajer clipboard, otomatisasi, dan alat produktivitas yang tiada duanya. Meningkatkan clipboard Anda menjadi bagian yang diperkaya dan terorganisir dari alur kerja Anda,
+Menampilkan antarmuka profil rendah dan intuitif yang mendukung teks, file, dan gambar. Dirancang untuk fleksibilitas, dengan libray plugin berbasis komunitas yang terus berkembang.
+
+Ini dimulai sebagai percobaan oleh seorang programmer yang menginginkan lebih dari sekadar menyalin dan menempel dari clipboard. Dia menginginkan perintah sederhana seperti Ctrl + C yang akan 'menambah' sebagai gantinya 
+dari 'ganti' apa yang ada di clipboard. Dan eksperimen itu berhasil. Alat kecil itu sangat berguna. Ini menggelitik programmer dengan lebih banyak ide dan lebih banyak eksperimen, bahwa 
+sekarang telah menjadi "MonkeyPaste". 
+
+Karena desktop adalah untuk file Anda, MonkeyPaste bermaksud untuk berada di clipboard Anda. Ini adalah seperangkat alat yang dirancang dengan cermat untuk mengintegrasikan dan beroperasi dengan mulus 
+aplikasi atau format konten apa pun. Ctrl + C dan Ctrl + V jauh lebih dari sekadar pintasan. Mereka adalah pelabuhan masuk semua aplikasi berbagi, membawa 
+kekayaan nilai dan makna yang layak Anda miliki di ujung jari Anda. Tidak hanya dibuang setelah Ctrl + C berikutnya.
+
+Saya adalah programmer yang disebutkan sebelumnya dan saya ingin semua orang dapat menggunakan MonkeyPaste. Jadi itu dan semua fiturnya benar-benar gratis untuk digunakan. 
+Saya juga ingin Anda merasa nyaman menggunakannya. Jadi saya meyakinkan Anda, sebagai satu-satunya kekuatan di balik penciptaannya, bahwa TIDAK ADA informasi (sangat) pribadi yang dapat muncul pada 
+clipboard Anda pernah dilacak atau disimpan DI MANA SAJA di luar mesin Anda sendiri. Masa.
+
+(MonkeyPaste memerlukan izin yang lebih tinggi)</value>
   </data>
 </root>

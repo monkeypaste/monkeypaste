@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Монкеипасте је менаџер међуспремника, алат за аутоматизацију и продуктивност као ниједан други. Повећавање међуспремника у обогаћен и организован део вашег радног тока,
-Садржи интуитивно и нископрофилни интерфејс који подржава текст, датотеке и слике. Дизајниран за флексибилност, са икада растуће заједнице - вођена Либраи додатака.
-
-Почео је као експеримент програмера који жели више од само копирања и пасте из међуспремника. Желео је једноставну команду попут ЦТРЛ + Ц која би уместо тога 'додала'
-"Замените 'Шта је било у међуспремник. А експеримент је радио. Мали алат је био веома згодан. Ово је пренио програмера више идеја и више експеримената, то
-сада је постало "монкеупасте".
-
-Како је радна површина на ваше датотеке, монкеапасте намерава да буде у вашем међуспремник. Свој апарат за алате пажљиво дизајниран да се чинило се интегрише и интегришу са њима
-било која апликација или формат садржаја. Цтрл + Ц и ЦТРЛ + В су много више од само пречица. Они су лука уноса Све апликације уделе, носећи а
-Богатство вредности и значење које заслужујете да имате на располагању на дохват руке. Не баца се само након следећег ЦТРЛ + Ц.
-
-Ја сам тај који је раније споменуо програмер и желим да сви могу да пронађу употребу од монкеупасте. Дакле, и све његове карактеристике су потпуно бесплатне за употребу.
-Такође желим да се осећате угодно користећи га. Тако да вас уверавам, као једина сила иза њеног стварања, да се не могу појавити ниједна од (врло) личних података
-Ваш међуспремник је икада пратио или чуван било где изван ваше машине. Раздобље.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Снимите текстове, слике и датотеке са свим извором (апликација, веб локација, време и много више) информација аутоматски</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste je menadžer ostave, alat za automatizaciju i produktivnost kao nijedan drugi. Poboljšanje ostave u obogaćeni i organizovani deo toka posla,
+intuitivan i nizak - interfejs profila koji podržava tekst, datoteke i slike. Dizajniran za fleksibilnost, sa uvek rastućom zajednicom, vođen libray pluginova.
+
+Počelo je kao eksperiment programera koji želi više od kopiranja i lepkanja iz ostave. Želeo je jednostavnu komandu kao što je Ctrl+C koja bi se umesto toga "dodala" 
+"zameni" onoga što je bilo u ostavi. I eksperiment je uspeo. Mala alatka je bila veoma zgodna. Ovo je preduhitilo programera sa više ideja i više eksperimenata, da 
+sada je postao "MonkeyPaste". 
+
+Kako je radna površina u vašim datotekama, MonkeyPaste namerava da bude u vašoj ostavi. To je paket alata pažljivo dizajniran da se bezočno integriše i interoperira sa 
+bilo koju aplikaciju ili format sadržaja. Ctrl+C i Ctrl+V su mnogo više od prečica. To su portovi unosa koje sve aplikacije dele, noseći 
+bogatstvo vrednosti i smisla koje zaslužujete da imate na dohvat ruke. Ne samo bačeno posle sledećeg Ctrl+C.
+
+Ja sam onaj programer koji je pomenut ranije i ћelim da svi mogu da naрu upotrebu od MonkeyPastea. Tako da su ona i sve njegove karakteristike potpuno besplatne za korišćenje. 
+Takođe želim da se osećaš prijatno dok ga koristiš. Zato vas uveravam, kao jedina sila koja stoji iza njegovog stvaranja, da nijedan od (veoma) ličnih podataka koji mogu da se pojave na 
+vaša ostava se ikada prati ili skladišti bilo gde izvan vaše mašine. Menstruacija.
+
+(MonkeyPaste zahteva povišene dozvole)</value>
   </data>
 </root>

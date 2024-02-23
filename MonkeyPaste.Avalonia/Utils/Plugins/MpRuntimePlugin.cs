@@ -90,21 +90,27 @@ namespace MonkeyPaste.Avalonia {
                      comp.GetType().GetMethod(methodName) is not { } mi) {
                     continue;
                 }
-                IDisposable loader_context = MpPluginLoader.GetPluginContext(guid);
-                // NOTE this prevents exception since unload has NO args
-                // NOTE2 this presumes all other components have ONE req arg
-                object[] args = mi.GetParameters().Length == 0 ? null : new[] { req };
-                object result = null;
-                if (methodName.EndsWith("Async")) {
-                    dynamic task = mi.Invoke(comp, args);
-                    result = await task;
-                } else {
-                    result = mi.Invoke(comp, args);
+                try {
+                    IDisposable loader_context = MpPluginLoader.GetPluginContext(guid);
+                    // NOTE this prevents exception since unload has NO args
+                    // NOTE2 this presumes all other components have ONE req arg
+                    object[] args = mi.GetParameters().Length == 0 ? null : new[] { req };
+                    object result = null;
+                    if (methodName.EndsWith("Async")) {
+                        dynamic task = mi.Invoke(comp, args);
+                        result = await task;
+                    } else {
+                        result = mi.Invoke(comp, args);
+                    }
+                    if (loader_context != null) {
+                        loader_context.Dispose();
+                    }
+                    return result;
                 }
-                if (loader_context != null) {
-                    loader_context.Dispose();
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Plugin request error '{typeName}' '{methodName}'.", ex);
+                    return null;
                 }
-                return result;
 
             }
             if (!methodName.EndsWith("Async") && !sync_only) {

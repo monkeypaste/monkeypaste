@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste on leikepöydän hallinta-, automaatio- ja tuottavuustyökalu kuin mikään muu. Leikepöydän parantaminen rikastettuun ja järjestäytyneeseen osaan työnkulkuasi,
-Mukana intuitiivisen ja matalan profiilin käyttöliittymän, joka tukee tekstiä, tiedostoja ja kuvia. Suunniteltu joustavuuteen, ja jatkuvasti kasvava yhteisö - ohjaavat libray -laajennuksia.
-
-Se alkoi ohjelmoijan kokeiluna, joka haluaa enemmän kuin vain kopioida ja liittää leikepöydältä. Hän halusi Ctrl+C: n kaltaisen yksinkertaisen komennon, joka "lisää"
-"Korvaa", mikä oli leikepöydällä. Ja kokeilu toimi. Pieni työkalu oli erittäin kätevä. Tämä tarttui ohjelmoijaan lisää ideoita ja enemmän kokeita, että
-Nyt on tullut "monkepaste".
-
-Kuten työpöytä on tiedostosi, MonkeyPaste aikoo olla leikepöydällesi. Sen sarja työkaluja, jotka on huolellisesti suunniteltu integroimaan ja yhteistyöhön
-kaikki sisällön sovellukset tai muoto. Ctrl+C ja Ctrl+V ovat paljon enemmän kuin vain pikakuvakkeita. Ne ovat kaikkien sovellusten jakamisen sisäänkäynnin satamat, jotka kantavat a
-Rikkaus arvo ja merkitys, jonka ansaitset, että sinulla on käytettävissä sormenpäässäsi. Ei vain heitetty pois seuraavan Ctrl+c: n jälkeen.
-
-Olen se aiemmin mainittu ohjelmoija ja haluan, että kaikki voivat löytää käytön monkepasteista. Joten se ja kaikki sen ominaisuudet ovat täysin ilmaisia.
-Haluan myös sinun olevan mukava käyttää sitä. Joten vakuutan teille, että se on ainoa voima sen luomisen takana, ettei mikään (erittäin) henkilökohtaista tietoa, joka voi syntyä
-Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ulkopuolella. Ajanjakso.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ul
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Tallenna teksti-, kuva- ja tiedostoleikkeet kaikki lähteensä (sovellus, verkkosivusto, aika ja paljon muuta) tietoja automaattisesti</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste on leikepöydän hallinta-, automaatio- ja tuottavuustyökalu kuin mikään muu. Leikepöydän parantaminen rikastetuksi ja organisoiduksi osaksi työnkulkua,
+sisältää intuitiivisen ja matalan profiilin käyttöliittymän, joka tukee tekstiä, tiedostoja ja kuvia. Suunniteltu joustavuuteen, jatkuvasti kasvavalla yhteisövetoisella laajennusvalikoimalla.
+
+Se alkoi ohjelmoijan kokeiluna, joka halusi enemmän kuin vain kopioida ja liittää leikepöydältä. Hän halusi yksinkertaisen komennon, kuten Ctrl+C, joka "lisäisi" sen sijaan 
+"korvata" leikepöydällä ollut. Ja kokeilu toimi. Pieni työkalu oli erittäin kätevä. Tämä kiehtoi ohjelmoijaa enemmän ideoita ja kokeita, jotka 
+nyt on tullut "MonkeyPaste". 
+
+Koska työpöytä on tiedostoillesi, MonkeyPaste aikoo olla leikepöydällesi. Se on joukko työkaluja, jotka on suunniteltu huolellisesti näennäisesti integroimaan ja toimimaan yhdessä 
+mikä tahansa sovellus tai sisällön muoto. Ctrl+C ja Ctrl+V ovat paljon enemmän kuin vain pikanäppäimiä. Ne ovat kaikkien sovellusten yhteisiä maahantulosatamia, joissa on 
+Arvon ja merkityksen rikkaus, jonka ansaitset olla käden ulottuvilla. Ei vain heitetty pois seuraavan Ctrl+C: n jälkeen.
+
+Olen aiemmin mainittu ohjelmoija ja haluan, että jokainen voi löytää käyttöä MonkeyPastesta. Joten se ja kaikki sen ominaisuudet ovat täysin ilmaisia käyttää. 
+Haluan myös, että tunnet olosi mukavaksi käyttää sitä. Joten vakuutan teille, ainoana voimana sen luomisen takana, että MIKÄÄN (erittäin) henkilökohtaisista tiedoista, joita voi syntyä 
+leikepöytääsi seurataan tai tallennetaan MIHIN tahansa oman koneesi ulkopuolelle. Jakso.
+
+(MonkeyPaste vaatii järjestelmänvalvojan oikeudet)</value>
   </data>
 </root>

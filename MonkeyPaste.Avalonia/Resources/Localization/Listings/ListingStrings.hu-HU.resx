@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>A MonkeyPaste egy vágólapkezelő, automatizálási és termelékenységi eszköz, mint senki más. A vágólap fejlesztése a munkafolyamat dúsított és szervezett részévé,
-Intuitív és alacsony profil interfész, amely támogatja a szöveget, a fájlokat és a képeket. Rugalmasságra tervezték, egy folyamatosan növekvő közösséggel meghajtott beépülő modulokkal.
-
-Egy programozó kísérleteként kezdődött, amely nemcsak a vágólapról való másolás és beillesztés vágyakozik. Egy egyszerű parancsot akart, mint például a Ctrl+C, amely ehelyett „hozzáadna”
-a „Cserélje le”, ami a vágólapon volt. És a kísérlet működött. A kis szerszám nagyon hasznos volt. Ez több ötletet és több kísérletet vett fel a programozóra, ami
-Most "majompaste" lett.
-
-Mivel az asztal az Ön fájljainál található, a MonkeyPaste a vágólapra szándékozik lenni. Ez egy olyan szerszámcsomag, amely gondosan úgy van kialakítva, hogy látszólag integrálódjon és együttműködjön
-bármely alkalmazás vagy tartalom formátuma. A Ctrl+C és a Ctrl+V sokkal több, mint a parancsikonok. Ezek a belépési portok, amelyekben az összes alkalmazás megosztja a
-Az érték és a jelentés gazdagsága megérdemli, hogy kéznél elérhető legyen. Nem csak a következő Ctrl+c után dobták el.
-
-Én vagyok az a programozó, aki korábban említett, és azt akarom, hogy mindenki megtalálja a Monkepaste -ból való felhasználást. Tehát ez és annak minden funkciója teljesen szabadon használható.
-Azt is szeretném, ha jól érezheti magát. Tehát biztosíthatom Önöket, hogy az egyetlen erő a teremtés mögött, hogy egyik (nagyon) személyes információt sem felmerülhet
-A vágólapot valaha is nyomon követik vagy tárolják, bárhol a saját gépén túl. Időszak.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ A vágólapot valaha is nyomon követik vagy tárolják, bárhol a saját gépé
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Tárolja a szöveget, a képet és a fájlklipeket az összes forrásával (az alkalmazás, a weboldal, az idő és még sok más) információk automatikusan</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>A MonkeyPaste egy vágólapkezelő, automatizálási és termelékenységi eszköz, mint senki más. A vágólap továbbfejlesztése a munkafolyamat gazdagított és szervezett részévé,
+intuitív és alacsony profilú felülettel rendelkezik, amely támogatja a szöveget, fájlokat és képeket. Rugalmasságra tervezve, folyamatosan növekvő közösség által vezérelt plugin-meghajtóval.
+
+Egy programozó kísérleteként kezdődött, aki többet akart, mint a vágólapról való másolás és beillesztés. Olyan egyszerű parancsot akart, mint a Ctrl+C, amely ehelyett "hozzáad" 
+hogy "kicserélje" azt, ami a vágólapon volt. És a kísérlet működött. A kis eszköz nagyon praktikus volt. Ez több ötlettel és kísérlettel érdekelte a programozót, hogy 
+most "MonkeyPaste" lett. 
+
+Mivel az asztal a fájlokhoz tartozik, a MonkeyPaste a vágólapra kíván kerülni. Ez egy gondosan megtervezett eszközkészlet, amely látszólag integrálódik és együttműködik 
+bármilyen alkalmazás vagy tartalomformátum. A Ctrl+C és a Ctrl+V billentyűkombináció sokkal több, mint egyszerű billentyűparancsok. Ezek azok a belépési kikötők, amelyeken minden alkalmazás osztozik, és 
+Az érték és az értelem gazdagsága, amelyet megérdemel, hogy kéznél legyen. Nem csak a következő Ctrl+C után dobják ki.
+
+Én vagyok a korábban említett programozó, és azt akarom, hogy mindenki megtalálja a MonkeyPaste használatát. Tehát ez és minden funkciója teljesen ingyenesen használható. 
+Azt is szeretném, ha kényelmesen érezné magát. Tehát biztosíthatom Önöket, mint az egyetlen erőt a létrehozása mögött, hogy EGYIK (nagyon) személyes információ sem merülhet fel 
+a vágólapodat mindig nyomon követheted vagy tárolhatod BÁRHOL a saját gépeden kívül. Periódus.
+
+(A MonkeyPaste emelt szintű engedélyeket igényel)</value>
   </data>
 </root>

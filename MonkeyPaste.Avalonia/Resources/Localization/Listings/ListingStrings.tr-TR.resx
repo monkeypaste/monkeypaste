@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste, bir pano yöneticisi, otomasyon ve üretkenlik aracıdır. Panonuzu iş akışınızın zenginleştirilmiş ve organize bir bölümüne dönüştürmek,
-Metin, dosyalar ve resimleri destekleyen sezgisel ve düşük profilli bir arayüze sahip. Esneklik için tasarlanmış, sürekli büyüyen bir topluluk - eklenti kütüphanesi ile.
-
-Bir programcı tarafından panodan kopyalamak ve yapıştırmadan daha fazlasını isteyen bir deney olarak başladı. Ctrl+C gibi basit bir komut istedi, bunun yerine 'ekleyecek'
-Panoda olanı 'değiştir'. Ve deney çalıştı. Küçük araç çok kullanışlıydı. Bu, programcıya daha fazla fikir ve daha fazla deneyle uğraştı,
-Şimdi "Monkeycaste" haline geldi.
-
-Masaüstü dosyalarınıza göre, Monkeypaste panonuza olmayı planlıyor. Görünüşte entegre ve birlikte çalışmak için özenle tasarlanmış bir araç paketi
-herhangi bir içerik uygulaması veya biçimi. Ctrl+C ve Ctrl+V sadece kısayollardan çok daha fazlasıdır. Bunlar, tüm uygulamaların paylaştığı giriş bağlantı noktalarıdır.
-Değer ve anlam zenginliği, parmaklarınızın ucunda mevcut olmayı hak ettiğiniz. Sadece bir sonraki CTRL+c'den sonra atılmadı.
-
-Ben daha önce bahsetti ve herkesin Monkeypaste'den kullanım bulabilmesini istiyorum. Yani o ve tüm özelliklerinin kullanımı tamamen ücretsizdir.
-Ayrıca onu kullanırken rahat hissetmenizi istiyorum. Bu yüzden, yaratılışının arkasındaki tek güç olarak, ortaya çıkabilecek (çok) kişisel bilgilerin hiçbiri
-Panonunuz kendi makinenizin ötesinde herhangi bir yerde izlenir veya saklanır. Dönem.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Panonunuz kendi makinenizin ötesinde herhangi bir yerde izlenir veya saklanır.
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Metin, resim ve dosya kliplerini tüm kaynağıyla (uygulama, web sitesi, zaman ve çok daha fazlası) otomatik olarak saklayın</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste, benzeri olmayan bir pano yöneticisi, otomasyon ve üretkenlik aracıdır. Panonuzu iş akışınızın zenginleştirilmiş ve düzenli bir parçası haline getirmek,
+Metin, dosya ve görüntüleri destekleyen sezgisel ve düşük profilli bir arayüze sahiptir. Sürekli büyüyen bir topluluk odaklı eklenti kitaplığı ile esneklik için tasarlanmıştır.
+
+Panodan kopyalayıp yapıştırmaktan daha fazlasını isteyen bir programcı tarafından yapılan bir deney olarak başladı. Bunun yerine 'ekleyecek' Ctrl+C gibi basit bir komut istedi 
+panodakileri 'değiştir'. Ve deney işe yaradı. Küçük alet çok kullanışlıydı. Bu, programcıyı daha fazla fikir ve daha fazla deneyle ilgilendirdi. 
+şimdi "MonkeyPaste" oldu. 
+
+Masaüstü dosyalarınız için olduğu gibi, MonkeyPaste de panonuzda olmayı amaçlar. Görünüşe göre entegre olmak ve birlikte çalışmak için özenle tasarlanmış bir araç paketi 
+herhangi bir uygulama veya içerik formatı. Ctrl+C ve Ctrl+V kısayollardan çok daha fazlasıdır. Bunlar, tüm uygulamaların paylaştığı giriş bağlantı noktalarıdır ve bir 
+Parmaklarınızın ucunda olmasını hak ettiğiniz değer ve anlam zenginliği. Sadece bir sonraki Ctrl+C'den sonra atılmaz.
+
+Ben daha önce bahsedilen programcıyım ve herkesin MonkeyPaste'den yararlanabilmesini istiyorum. Bu nedenle, o ve tüm özelliklerinin kullanımı tamamen ücretsizdir. 
+Ayrıca onu kullanırken kendinizi rahat hissetmenizi istiyorum. Bu yüzden sizi temin ederim ki, yaratılışının arkasındaki tek güç olarak, ortaya çıkabilecek (çok) kişisel bilgilerin HİÇBİRİ 
+panonuz, kendi makinenizin ötesinde HERHANGİ BİR YERDE izlenir veya saklanır. Dönem.
+
+(MonkeyPaste yükseltilmiş izinler gerektirir)</value>
   </data>
 </root>

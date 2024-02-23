@@ -2,16 +2,43 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvPlatformInfoBase : MpIPlatformInfo {
         #region Properties
 
         #region State
+        public virtual bool IsAdmin {
+            get {
+#if WINDOWS
+                try {
+                    WindowsIdentity identity = WindowsIdentity.GetCurrent();
+                    if (identity != null) {
+                        WindowsPrincipal principal = new WindowsPrincipal(identity);
+                        List<Claim> list = new List<Claim>(principal.UserClaims);
+                        Claim c = list.Find(p => p.Value.Contains("S-1-5-32-544"));
+                        if (c != null)
+                            return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error checking if admin.", ex);
+                    return false;
+                }
+#else
+
+                return false;
+#endif
+            }
+        }
         public virtual bool IsTraceEnabled {
             get {
                 bool do_trace =

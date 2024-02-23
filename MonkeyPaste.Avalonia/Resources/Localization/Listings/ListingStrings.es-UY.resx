@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkyPaste es un administrador de portapapeles, una herramienta de automatización y productividad como ninguna otra. Mejorar su portapapeles en una parte enriquecida y organizada de su flujo de trabajo,
-Con una interfaz intuitiva y de bajo perfil que admite texto, archivos e imágenes. Diseñado para la flexibilidad, con una libra de complementos de la comunidad cada vez mayor.
-
-Comenzó como un experimento de un programador que quería más que solo copiar y pegar del portapapeles. Quería un comando simple como Ctrl+C que 'se sumaría a' en su lugar
-de 'reemplazar' lo que había en el portapapeles. Y el experimento funcionó. La pequeña herramienta era muy útil. Esto apiló al programador con más ideas y más experimentos, que
-Ahora se ha convertido en "monjeyypaste".
-
-Como el escritorio es para sus archivos, MonkyPaste tiene la intención de estar en su portapapeles. Es un conjunto de herramientas cuidadosamente diseñadas para integrarse e interoperar aparentemente con
-cualquier aplicación o formato de contenido. Ctrl+C y Ctrl+V son mucho más que solo atajos. Son los puertos de entrada que todas las aplicaciones comparten, con un
-Riqueza de valor y significado que merece tener disponible a su alcance. No solo tirado después del próximo Ctrl+c.
-
-Soy ese programador mencionado anteriormente y quiero que todos puedan encontrar el uso de MonkyyPaste. Entonces, y todas sus características son completamente gratuitas.
-También quiero que te sientas cómodo usándolo. Así que te aseguro, como la única fuerza detrás de su creación, que ninguna de las (muy) información personal que puede surgir en
-Su portapapeles siempre se rastrea o almacena en cualquier lugar más allá de su propia máquina. Período.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Su portapapeles siempre se rastrea o almacena en cualquier lugar más allá de s
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Almacenar texto, imagen y clips de archivos con toda su información (la aplicación, sitio web, tiempo y mucho más) información automáticamente</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste es un administrador de portapapeles, una herramienta de automatización y productividad como ninguna otra. Mejorar su portapapeles para convertirlo en una parte enriquecida y organizada de su flujo de trabajo,
+Con una interfaz intuitiva y de bajo perfil que admite texto, archivos e imágenes. Diseñado para la flexibilidad, con una biblioteca de complementos impulsada por la comunidad en constante crecimiento.
+
+Comenzó como un experimento de un programador que quería algo más que copiar y pegar del portapapeles. Quería un comando simple como Ctrl + C que 'agregara a' en su lugar 
+de 'reemplazar' lo que estaba en el portapapeles. Y el experimento funcionó. La pequeña herramienta era muy útil. Esto entiguó al programador con más ideas y más experimentos, que 
+ahora se ha convertido en "MonkeyPaste". 
+
+Así como el escritorio es para sus archivos, MonkeyPaste tiene la intención de estar para su portapapeles. Es un conjunto de herramientas cuidadosamente diseñadas para integrarse e interoperar sin problemas con 
+cualquier aplicación o formato de contenido. Ctrl+C y Ctrl+V son mucho más que simples atajos. Son los puertos de entrada que comparten todas las aplicaciones, que llevan un 
+riqueza de valor y significado que mereces tener disponible al alcance de tu mano. No solo se tira después de la siguiente Ctrl+C.
+
+Soy ese programador mencionado anteriormente y quiero que todos puedan encontrar uso de MonkeyPaste. Por lo tanto, él y todas sus funciones son de uso completamente gratuito. 
+También quiero que te sientas cómodo usándolo. Así que les aseguro, como la única fuerza detrás de su creación, que NINGUNA de las (muy) personales información que puede surgir en 
+su portapapeles se rastrea o almacena en cualquier lugar más allá de su propia máquina. Periodo.
+
+(MonkeyPaste requiere permisos elevados)</value>
   </data>
 </root>

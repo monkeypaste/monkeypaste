@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste to menedżer schowka, narzędzie automatyzacji i produktywności jak żaden inny. Ulepszanie schowka w wzbogaconą i zorganizowaną część przepływu pracy,
-Wyposażony w intuicyjny i niski interfejs profilu, który obsługuje tekst, pliki i obrazy. Zaprojektowany pod kątem elastyczności, z wiecznie rozwijającą się społecznością napędzaną wtyczkami.
-
-Zaczęło się jako eksperyment programisty, który chce coś więcej niż tylko kopiować i wkleić ze schowka. Chciał prostego polecenia, takiego jak Ctrl+C, które zamiast tego dodałoby „do”
-„Wymień” to, co było w schowku. I eksperyment zadziałał. Małe narzędzie było bardzo przydatne. To pogrążyło programistę większą liczbą pomysłów i większej liczby eksperymentów, że
-Teraz stał się „małpą”.
-
-Ponieważ pulpit jest dla twoich plików, Monkeypaste zamierza być w schowku. Jest to pakiet narzędzi starannie zaprojektowany tak, aby pozornie się zintegrować i współpracować
-dowolna aplikacja lub format treści. Ctrl+C i Ctrl+V to znacznie więcej niż tylko skróty. Są to porty wejścia wszystkie aplikacje, które mają podzielić
-Bogactwo wartości i znaczenia, na które zasługujesz na dostępne na wyciągnięcie ręki. Nie tylko wyrzucony po następnym Ctrl+c.
-
-Jestem tym programistą wspomnianym wcześniej i chcę, aby wszyscy mogli dowiedzieć się z małpy. Tak więc i wszystkie jego funkcje są całkowicie bezpłatne.
-Chcę też, żebyś czuł się komfortowo, używając go. Zapewniam więc, że jesteś jedyną siłą stojącą za jego stworzeniem, że żadna z (bardzo) danych osobowych, która może się pojawić
-Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza własną maszyną. Okres.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza w�
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Przechowuj klipy tekstowe, obrazu i plików ze wszystkimi jego źródłem (aplikacja, strona internetowa, czas i wiele więcej) automatycznie</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste to menedżer schowka, narzędzie do automatyzacji i produktywności jak żadne inne. Wzbogacenie schowka w wzbogaconą i zorganizowaną część przepływu pracy,
+Wyposażony w intuicyjny i niskoprofilowy interfejs, który obsługuje tekst, pliki i obrazy. Zaprojektowany z myślą o elastyczności, z stale rosnącą biblioteką wtyczek kierowaną przez społeczność.
+
+Zaczęło się od eksperymentu programisty, który chciał czegoś więcej niż tylko kopiować i wklejać ze schowka. Chciał prostego polecenia, takiego jak Ctrl+C, które zamiast tego "dodawałoby do" 
+"zastąp" to, co było w schowku. I eksperyment się powiódł. Małe narzędzie było bardzo poręczne. To uwikłało programistę kolejnymi pomysłami i eksperymentami, które 
+teraz stał się "MonkeyPaste". 
+
+Ponieważ pulpit jest dla twoich plików, MonkeyPaste zamierza być w twoim schowku. Jest to zestaw narzędzi starannie zaprojektowanych, aby bezproblemowo integrować się i współpracować z 
+dowolne zastosowanie lub format treści. Ctrl+C i Ctrl+V to znacznie więcej niż tylko skróty. Są to porty wejścia, które są wspólne dla wszystkich aplikacji, 
+Bogactwo wartości i znaczenia, na które zasługujesz, aby mieć je na wyciągnięcie ręki. Nie tylko wyrzucone po następnym Ctrl+C.
+
+Jestem wspomnianym wcześniej programistą i chcę, aby każdy mógł znaleźć zastosowanie w MonkeyPaste. Tak więc on i wszystkie jego funkcje są całkowicie darmowe. 
+Chcę też, abyś czuł się komfortowo, korzystając z niego. Zapewniam więc Cię, jako jedyną siłę stojącą za jego stworzeniem, że ŻADNA z (bardzo) osobistych informacji, które mogą powstać na 
+Twój schowek jest zawsze śledzony lub przechowywany GDZIEKOLWIEK poza Twoim komputerem. Okres.
+
+(MonkeyPaste wymaga podwyższonych uprawnień)</value>
   </data>
 </root>

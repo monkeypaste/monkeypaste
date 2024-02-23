@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste is 'n klembordbestuurder, outomatisering en produktiwiteitsinstrument soos geen ander nie. Verbeter u knipbord in 'n verrykte en georganiseerde deel van u werkvloei,
-Met 'n intuïtiewe en lae -profiel -koppelvlak wat teks, lêers en beelde ondersteun. Ontwerp vir buigsaamheid, met 'n steeds groeiende gemeenskap - gedrewe libray van plugins.
-
-Dit het begin as 'n eksperiment deur 'n programmeerder wat meer as net uit die knipbord wil kopieer en plak. Hy wou 'n eenvoudige opdrag soos Ctrl+C hê wat eerder sou 'byvoeg'
-van 'Vervang' wat op die knipbord was. En die eksperiment het gewerk. Die klein werktuig was baie handig. Dit het die programmeerder met meer idees en meer eksperimente aangepak
-het nou 'Monkeypaste' geword.
-
-Aangesien die lessenaar by u lêers is, is MonkeyPaste van plan om na u knipbord te wees. Dit is 'n reeks gereedskap wat noukeurig ontwerp is om oënskynlik te integreer en saam te werk
-enige toepassing of formaat van inhoud. Ctrl+C en Ctrl+V is veel meer as net kortpaaie. Dit is die hawens van toegang alle aansoeke wat deel, dra 'n
-rykdom van waarde en betekenis wat u verdien om binne u vingers beskikbaar te wees. Nie net weggegooi na die volgende Ctrl+c.
-
-Ek is daardie programmeerder wat vroeër genoem is en ek wil hê dat almal uit Monkeypaste kan gebruik. Dus is dit en al sy funksies heeltemal gratis om te gebruik.
-Ek wil ook hê dat u gemaklik moet voel om dit te gebruik. Dus kan ek u verseker dat dit die enigste krag agter die skepping daarvan is, dat geeneen van die (baie) persoonlike inligting waarop u kan ontstaan ​​nie
-U knipbord word ooit opgespoor of gestoor op enige plek buite u eie masjien. Periode.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ U knipbord word ooit opgespoor of gestoor op enige plek buite u eie masjien. Per
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Stoor teks, beeld- en lêerknipsels met al die bron (die app, webwerf, tyd en nog baie meer) outomaties</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste is 'n knipbordbestuurder, outomatiserings- en produktiwiteitsinstrument soos geen ander nie. Verbeter u knipbord tot 'n verrykte en georganiseerde deel van u werkvloei,
+Met 'n intuïtiewe en lae profiel koppelvlak wat teks, lêers en beelde ondersteun. Ontwerp vir buigsaamheid, met 'n steeds groeiende gemeenskap - gedrewe libray van plugins.
+
+Dit het begin as 'n eksperiment deur 'n programmeerder wat meer wil hê as om net uit die knipbord te kopieer en te plak. Hy wou 'n eenvoudige opdrag soos Ctrl +C hê wat eerder sou 'byvoeg' 
+van 'vervang' wat op die knipbord was. En die eksperiment het gewerk. Die klein gereedskap was baie handig. Dit het die programmeerder betower met meer idees en meer eksperimente, wat 
+het nou "MonkeyPaste" geword. 
+
+Aangesien die lessenaar vir u lêers is, is MonkeyPaste van plan om op u knipbord te wees. Dit is 'n reeks gereedskap wat noukeurig ontwerp is om skynbaar te integreer en met mekaar te interopereer 
+enige toepassing of formaat van inhoud. Ctrl+C en Ctrl+V is veel meer as net kortpaaie. Dit is die toegangshawe wat alle aansoeke deel, met 'n 
+rykdom van waarde en betekenis wat jy verdien om binne jou vingers beskikbaar te hê. Nie net weggegooi na die volgende Ctrl+C nie.
+
+Ek is die programmeerder wat vroeër genoem is en ek wil hê almal moet gebruik kan vind uit MonkeyPaste. Dit en al sy funksies is dus heeltemal gratis om te gebruik. 
+Ek wil ook hê jy moet gemaklik voel om dit te gebruik. Ek verseker u dus, as die enigste krag agter die skepping daarvan, dat GEEN van die (baie) persoonlike inligting wat op 
+jou knipbord word ooit opgespoor of gestoor ENIGE plek buite jou eie masjien. Tydperk.
+
+(MonkeyPaste benodig verhoogde toestemmings)</value>
   </data>
 </root>

@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste je upravitelj odložišč, orodje za avtomatizacijo in produktivnost kot nobeno drugo. Izboljšanje odložišča v obogateni in organiziran del vašega delovnega toka,
-z intuitivnim in nizkim profilnim vmesnikom, ki podpira besedilo, datoteke in slike. Zasnovan za prilagodljivost, z vedno rastočo skupnostjo - podvig v knjižnico vtičnikov.
-
-Začel se je kot eksperiment programerja, ki želi več kot samo kopirati in prilepiti iz odložišča. Želel je preprost ukaz, kot je Ctrl+C, ki bi namesto tega "dodal"
-od 'zamenjajte' tisto, kar je bilo na odložišču. In eksperiment je deloval. Majhno orodje je bilo zelo priročno. To je programerja vključilo z več idejami in več poskusi, to
-zdaj je postal "MonkeyPaste".
-
-Ker je namizje za vaše datoteke, namerava MonkeyPaste na odložišču. Je nabor orodij, ki je skrbno zasnovana tako, da se na videz integrira in sodeluje z
-katero koli aplikacijo ali obliko vsebine. Ctrl+C in Ctrl+V sta veliko več kot le bližnjice. So vhodna vrata, ki jih delijo vse aplikacije, ki nosijo a
-bogastvo vrednosti in pomena, ki si ga zaslužite, da imate na voljo na dosegu roke. Ne samo vrženo po naslednjem CTRL+C.
-
-Jaz sem tisti programer, ki smo ga omenjali prej in želim, da bi vsi lahko našli uporabo iz MonkeyPaste. Torej so in vse njegove lastnosti popolnoma brezplačne za uporabo.
-Prav tako želim, da se počutite udobno z uporabo. Zato vam zagotavljam, da ste edina sila njegovega ustvarjanja, da nobenega od (zelo) osebnih podatkov, ki bi lahko nastali
-Odložišče je kdajkoli spremljano ali shranjeno kjer koli zunaj vašega stroja. Obdobje.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Odložišče je kdajkoli spremljano ali shranjeno kjer koli zunaj vašega stroja
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Shranite posnetke besedila, slike in datotek z vsemi svojimi viri (aplikacija, spletno mesto, čas in še veliko več) samodejno</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste je upravitelj odložišča, orodje za avtomatizacijo in produktivnost kot nobeno drugo. izboljšanje odložišča v obogaten in organiziran del vašega poteka dela,
+Ponuja intuitiven vmesnik z nizkim profilom, ki podpira besedilo, datoteke in slike. Zasnovan za prilagodljivost, z vedno večjo knjižnico vtičnikov, ki jo poganja skupnost.
+
+Začelo se je kot eksperiment programerja, ki je želel več kot le kopirati in prilepiti iz odložišča. Želel je preprost ukaz, kot je Ctrl + C, ki bi namesto tega "dodal" 
+"zamenjati" tisto, kar je bilo v odložišču. In poskus je deloval. Malo orodje je bilo zelo priročno. To je programerja pritegnilo z več idejami in več eksperimenti, ki 
+zdaj je postal "MonkeyPaste". 
+
+Ker je namizje za vaše datoteke, MonkeyPaste namerava biti v odložišču. To je nabor orodij, skrbno zasnovanih za brezhibno integracijo in medsebojno delovanje z 
+vsako aplikacijo ali obliko vsebine. Ctrl+C in Ctrl+V sta veliko več kot le bližnjici. To so vstopna pristanišča, ki si jih delijo vse aplikacije, ki imajo 
+bogastvo vrednosti in pomena, ki si ga zaslužite, da imate na dosegu roke. Ne samo, da ga zavržete po naslednjem Ctrl+C.
+
+Jaz sem programer, ki sem ga omenil prej, in želim, da bi vsi lahko našli uporabo iz MonkeyPaste. Tako je in vse njegove funkcije popolnoma brezplačne za uporabo. 
+Prav tako želim, da se počutite udobno ob uporabi. Zato vam zagotavljam, da kot edina sila za njegovim nastankom ni nobenega od (zelo) osebnih podatkov, ki se lahko pojavijo na 
+Odložišče je vedno sledeno ali shranjeno KJERKOLI zunaj vašega lastnega stroja. Obdobje.
+
+(MonkeyPaste zahteva skrbniška dovoljenja)</value>
   </data>
 </root>

@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste est un gestionnaire de presse-papiers, l'outil d'automatisation et de productivité comme aucun autre. Améliorer votre presse-papiers en une partie enrichie et organisée de votre flux de travail,
-Doté d'une interface intuitive et bas - Profile qui prend en charge le texte, les fichiers et les images. Conçu pour la flexibilité, avec une bibliothèque de plugins en pleine communauté en pleine croissance.
-
-Il a commencé comme une expérience d'un programmeur voulant plus que copier et coller hors du presse-papiers. Il voulait une commande simple comme Ctrl + C qui «ajouterait à» plutôt
-de «remplacer» ce qui était dans le presse-papiers. Et l'expérience a fonctionné. Le petit outil était très pratique. Cela a entré le programmeur avec plus d'idées et plus d'expériences, que
-est maintenant devenu "Monkeypaste".
-
-Comme le bureau est à vos fichiers, Monkeypaste a l'intention d'être dans votre presse-papiers. C'est une suite d'outils soigneusement conçus pour intégrer et interopérer sans apparemment
-toute application ou format de contenu. Ctrl + C et Ctrl + V sont bien plus que des raccourcis. Ce sont les ports d'entrée toutes les applications partagent, transportant un
-richesse de valeur et signifiant que vous méritez d'avoir disponible à portée de main. Pas seulement jeté après le prochain Ctrl + c.
-
-Je suis ce programmeur mentionné plus tôt et je veux que tout le monde puisse trouver l'utilisation de Monkeypaste. Ainsi et toutes ses fonctionnalités sont entièrement gratuites à utiliser.
-Je veux aussi que vous vous sentiez à l'aise de l'utiliser. Je vous assure donc, comme étant la seule force derrière sa création, qu'aucune des (très) informations personnelles qui peuvent survenir
-Votre presse-papiers est toujours suivi ou stocké n'importe où au-delà de votre propre machine. Période.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Votre presse-papiers est toujours suivi ou stocké n'importe où au-delà de vot
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Stocker le texte, l'image et les clips de fichiers avec toutes ses informations sur la source (application, site Web, temps et bien plus)</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste est un gestionnaire de presse-papiers, un outil d’automatisation et de productivité pas comme les autres. Transformer votre presse-papiers en une partie enrichie et organisée de votre flux de travail,
+Doté d’une interface intuitive et discrète qui prend en charge le texte, les fichiers et les images. Conçu pour la flexibilité, avec une bibliothèque de plugins toujours plus nombreuse.
+
+Cela a commencé comme une expérience par un programmeur qui voulait plus qu’un simple copier-coller du presse-papiers. Il voulait une commande simple comme Ctrl+C qui « ajouterait à » à la place 
+de 'remplacer' ce qui était dans le presse-papiers. Et l’expérience a fonctionné. Le petit outil était très pratique. Cela a piégé le programmeur avec plus d’idées et plus d’expériences, 
+est maintenant devenu « MonkeyPaste ». 
+
+Comme le bureau l’est à vos fichiers, MonkeyPaste a l’intention d’être à votre presse-papiers. Il s’agit d’une suite d’outils soigneusement conçus pour s’intégrer et interagir de manière transparente avec 
+toute application ou tout format de contenu. Ctrl+C et Ctrl+V sont bien plus que de simples raccourcis. Ce sont les points d’entrée que toutes les applications partagent, 
+Une richesse de valeur et de sens que vous méritez d’avoir à portée de main. Pas seulement jeté après le prochain Ctrl+C.
+
+Je suis le programmeur mentionné plus tôt et je veux que tout le monde puisse trouver une utilisation de MonkeyPaste. Ainsi, son utilisation et toutes ses fonctionnalités sont entièrement gratuites. 
+Je veux aussi que vous vous sentiez à l’aise de l’utiliser. Je vous assure donc, en tant que seule force derrière sa création, qu’AUCUNE des informations (très) personnelles qui peuvent survenir sur 
+votre presse-papiers n’est jamais suivi ou stocké N’IMPORTE OÙ au-delà de votre propre machine. Période.
+
+(MonkeyPaste nécessite des autorisations élevées)</value>
   </data>
 </root>

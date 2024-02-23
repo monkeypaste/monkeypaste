@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>A Monkeypaste é um gerente de quadro de transferência, ferramenta de automação e produtividade como nenhuma outra. Aprimorando sua prancha em uma parte enriquecida e organizada do seu fluxo de trabalho,
-Apresentando uma interface intuitiva e baixa - que suporta texto, arquivos e imagens. Projetado para flexibilidade, com um Libray de plug -ins, orientado a uma comunidade em crescimento.
-
-Começou como um experimento de um programador querendo mais do que apenas copiar e colar fora da área de transferência. Ele queria um comando simples como Ctrl+C que 'adicionaria' em vez disso
-de 'substituir' o que estava na área de transferência. E o experimento funcionou. A pequena ferramenta foi muito útil. Isso entrou o programador com mais idéias e mais experimentos, que
-agora se tornou "macaco".
-
-Como o desktop é para seus arquivos, o MonkeyySaste pretende estar na sua área de transferência. É um conjunto de ferramentas cuidadosamente projetadas para integrar e integrar com aparecimento com
-qualquer aplicação ou formato de conteúdo. Ctrl+C e Ctrl+V são muito mais do que apenas atalhos. Eles são os portos de entrada, todos os aplicativos compartilham, carregando um
-Riqueza de valor e significado que você merece ter disponível na ponta dos dedos. Não apenas jogado fora após o próximo Ctrl+c.
-
-Eu sou o programador mencionado anteriormente e quero que todos possam encontrar o uso de Monkeyyyasaste. Então, e todos os seus recursos são totalmente gratuitos.
-Eu também quero que você se sinta confortável em usá -lo. Por isso, garanto -lhe, como sendo a única força por trás de sua criação, que nenhuma das informações (muito) pessoais que podem surgir
-Sua área de transferência é sempre rastreada ou armazenada em qualquer lugar além da sua própria máquina. Período.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Sua área de transferência é sempre rastreada ou armazenada em qualquer lugar 
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Armazene o texto, a imagem e os clipes de arquivos com toda a sua fonte (o aplicativo, site, tempo e muito mais) informações automaticamente</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste é um gerenciador de área de transferência, automação e ferramenta de produtividade como nenhum outro. Aprimorando sua área de transferência em uma parte enriquecida e organizada de seu fluxo de trabalho,
+Com uma interface intuitiva e de baixo perfil que suporta texto, arquivos e imagens. Projetado para flexibilidade, com uma comunidade cada vez maior - impulsionada libray de plugins.
+
+Começou como um experimento de um programador querendo mais do que apenas copiar e colar da área de transferência. Ele queria um comando simples como Ctrl+C que "adicionasse" em vez disso 
+de 'substituir' o que estava na prancheta. E o experimento deu certo. A pequena ferramenta foi muito útil. Isso intrigou o programador com mais ideias e mais experimentos, que 
+agora tornou-se "MonkeyPaste". 
+
+Como a área de trabalho está para seus arquivos, o MonkeyPaste pretende estar para sua área de transferência. É um conjunto de ferramentas cuidadosamente projetado para integrar e interoperar perfeitamente com 
+qualquer aplicação ou formato de conteúdo. Ctrl+C e Ctrl+V são muito mais do que apenas atalhos. Eles são as portas de entrada que todos os aplicativos compartilham, carregando um 
+riqueza de valor e significado que você merece ter disponível na ponta dos dedos. Não apenas jogado fora após o próximo Ctrl+C.
+
+Eu sou o programador mencionado anteriormente e quero que todos sejam capazes de encontrar o uso do MonkeyPaste. Assim, ele e todos os seus recursos são completamente gratuitos para usar. 
+Eu também quero que você se sinta confortável em usá-lo. Por isso, garanto-lhe, como sendo a única força por trás de sua criação, que NENHUMA das informações (muito) pessoais que podem surgir em 
+sua área de transferência é sempre rastreada ou armazenada em qualquer lugar além de sua própria máquina. Período.
+
+(MonkeyPaste requer permissões elevadas)</value>
   </data>
 </root>

@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste është një menaxher i klipit, automatizimi dhe mjeti i produktivitetit si askush tjetër. Përmirësimi i clipboard tuaj në një pjesë të pasuruar dhe të organizuar të rrjedhës suaj të punës,
-Duke shfaqur një ndërfaqe intuitive dhe të ulët me profil që mbështet tekstin, skedarët dhe imazhet. Projektuar për fleksibilitet, me një komunitet gjithnjë në rritje - të drejtuar nga plugins.
-
-Filloi si një eksperiment nga një programues që dëshironte më shumë sesa thjesht të kopjoni dhe ngjiteni nga clipboard. Ai donte një komandë të thjeshtë si ctrl+c që do të 'shtonte në' në vend të kësaj
-të 'zëvendësoni' atë që ishte në clipboard. Dhe eksperimenti funksionoi. Mjeti i vogël ishte shumë i dobishëm. Kjo e futi programuesin me më shumë ide dhe më shumë eksperimente, që
-Tani është bërë "Monkeypaste".
-
-Ndërsa desktopi është për skedarët tuaj, MonkeyPaste synon të jetë në clipboard tuaj. Itsshtë një grup mjetesh të dizajnuara me kujdes për të integruar dhe ndërvepruar në dukje
-çdo aplikacion ose format i përmbajtjes. Ctrl+C dhe Ctrl+V janë shumë më tepër sesa thjesht shkurtore. Ato janë portet e hyrjes të gjitha aplikacionet ndajnë, që mbajnë një
-Pasuria e vlerës dhe kuptimit që ju meritoni të keni në dispozicion në majë të gishtave. Jo vetëm u hodh pas Ctrl+C tjetër.
-
-Unë jam ai programues i përmendur më parë dhe dua që të gjithë të jenë në gjendje të gjejnë përdorim nga Monkeypaste. Kështu që dhe të gjitha tiparet e saj janë plotësisht të lira për t'u përdorur.
-Unë gjithashtu dua që ju të ndjeheni rehat duke e përdorur atë. Kështu që unë ju siguroj, si forca e vetme që qëndron pas krijimit të saj, se asnjë nga (shumë) informacione personale që mund të lindin
-Clipboard juaj është ndjekur ose ruajtur ndonjëherë diku përtej makinës suaj. Periudhë</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Clipboard juaj është ndjekur ose ruajtur ndonjëherë diku përtej makinës su
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Ruani tekstin, imazhin dhe kapëset e skedarëve me të gjithë burimin e tij (aplikacionin, faqen e internetit, kohën dhe shumë më tepër) informacionin automatikisht</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste është një menaxher clipboard, automatizimi dhe mjet produktiviteti si asnjë tjetër. Duke e përmirësuar tabelën tuaj në një pjesë të pasuruar dhe të organizuar të workflow-it tuaj,
+me një ndërfaqe intuitive dhe me profil të ulët që mbështet tekstin, skedarët dhe imazhet. Projektuar për fleksibilitet, me një libray gjithnjë e më të madh të plugins të drejtuar nga komuniteti.
+
+Filloi si një eksperiment nga një programues që donte më shumë se thjesht të kopjonte dhe të dilte nga tabela. Ai donte një komandë të thjeshtë si Ctrl+C që do të 'shtonte' në vend të kësaj 
+'zëvendëso' atë që ishte në tabelën e shënimeve. Dhe eksperimenti funksionoi. Mjeti i vogël ishte shumë i dobishëm. Kjo e pengoi programuesin me më shumë ide dhe më shumë eksperimente, që 
+Tani është bërë "MonkeyPaste". 
+
+Siç është desktopi për skedarët tuaj, MonkeyPaste synon të jetë në tabelën tuaj. Është një suitë veglash të dizajnuara me kujdes për t'u integruar dhe për t'u ndërvepruar në mënyrë të pakuptueshme me 
+Çdo aplikim ose format i përmbajtjes. Ctrl+C dhe Ctrl+V janë shumë më tepër se vetëm shkurtesa. Ato janë portet e hyrjes që të gjitha aplikacionet ndajnë, duke mbajtur një 
+Pasuri me vlerë dhe kuptim që meriton të kesh në dispozicion në majë të gishtave. Jo vetëm të hedhur pas Ctrl+C tjetër.
+
+Unë jam ai programuesi i përmendur më parë dhe dua që të gjithë të jenë në gjendje të gjejnë përdorimin nga MonkeyPaste. Pra, ajo dhe të gjitha veçoritë e saj janë krejtësisht të lira për t'u përdorur. 
+Dua gjithashtu që të ndihesh rehat duke e përdorur atë. Kështu që ju siguroj, si të ishte e vetmja forcë pas krijimit të saj, se asnjë nga (shumë) informacionet personale që mund të dalin në 
+Dërrasa juaj është gjurmuar ose ruajtur ndonjëherë kudo përtej makinës suaj. Periudha.
+
+(MonkeyPaste kërkon leje të ngritura)</value>
   </data>
 </root>

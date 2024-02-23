@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Mae MonkeyPaste yn rheolwr clipfwrdd, offeryn awtomeiddio a chynhyrchedd fel dim arall. Gwella'ch clipfwrdd i mewn i ran gyfoethog a threfnus o'ch llif gwaith,
-Yn cynnwys rhyngwyneb greddfol ac proffil isel sy'n cefnogi testun, ffeiliau a delweddau. Wedi'i gynllunio ar gyfer hyblygrwydd, gyda Libray o ategion sy'n cael ei yrru gan gymuned sy'n tyfu erioed.
-
-Dechreuodd fel arbrawf gan raglennydd eisiau mwy na chopïo a gludo allan o'r clipfwrdd yn unig. Roedd eisiau gorchymyn syml fel Ctrl+C a fyddai'n 'ychwanegu at' yn lle
-o 'Amnewid' beth oedd ar y clipfwrdd. Ac roedd yr arbrawf yn gweithio. Roedd yr offeryn bach yn ddefnyddiol iawn. Roedd hyn yn ymroi i'r rhaglennydd gyda mwy o syniadau a mwy o arbrofion, hynny
-Nawr mae wedi dod yn "monkeypaste".
-
-Gan fod y bwrdd gwaith i'ch ffeiliau, mae MonkeyPaste yn bwriadu bod i'ch clipfwrdd. Mae'n gyfres o offer sydd wedi'u cynllunio'n ofalus i integreiddio a rhyngweithio yn ddi -ymddangos
-unrhyw gymhwysiad neu fformat o gynnwys. Mae Ctrl+C a Ctrl+V yn llawer mwy na llwybrau byr yn unig. Nhw yw'r porthladdoedd mynediad y mae pob cais yn eu rhannu, gan gario a
-Cyfoeth o werth ac ystyr rydych chi'n haeddu bod ar gael ar flaenau eich bysedd. Nid dim ond ei daflu ar ôl y Ctrl+c nesaf.
-
-Fi yw'r rhaglennydd hwnnw y soniwyd amdano yn gynharach ac rwyf am i bawb allu dod o hyd i ddefnydd allan o MonkeyPaste. Felly mae hi a phob un o'i nodweddion yn hollol rhydd i'w defnyddio.
-Rwyf hefyd eisiau ichi deimlo'n gyffyrddus yn ei ddefnyddio. Felly fe'ch sicrhaf, fel yr unig rym y tu ôl i'w greu, nad oes yr un o'r wybodaeth bersonol (iawn) a all godi arni
-Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt i'ch peiriant eich hun. Cyfnod.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt 
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Storio clipiau testun, delwedd a ffeiliau gyda'i holl wybodaeth ffynhonnell (yr ap, gwefan, amser, a llawer mwy) yn awtomatig</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>Mae MonkeyPaste yn rheolwr clipfwrdd, offeryn awtomeiddio a chynhyrchiant fel dim arall. Gwella eich clipfwrdd i mewn i ran gyfoethog a threfnus o'ch llif gwaith,
+Yn cynnwys rhyngwyneb proffil greddfol ac isel sy'n cefnogi testun, ffeiliau a delweddau. Wedi'i gynllunio ar gyfer hyblygrwydd, gyda chymuned sy'n tyfu erioed - libray o ategion.
+
+Dechreuodd fel arbrawf gan raglennydd eisiau mwy na dim ond copïo a gludo allan o'r clipfwrdd. Roedd eisiau gorchymyn syml fel Ctrl + C a fyddai'n 'ychwanegu at' yn lle hynny 
+o 'replace' beth oedd ar y clipfwrdd. Ac mae'r arbrawf yn gweithio. Roedd y teclyn bach yn ddefnyddiol iawn. Roedd hyn yn ennyn diddordeb y rhaglennydd gyda mwy o syniadau a mwy o arbrofion, bod 
+bellach wedi dod yn "MonkeyPaste". 
+
+Gan fod y bwrdd gwaith i'ch ffeiliau, mae MonkeyPaste yn bwriadu bod i'ch clipfwrdd. Mae'n gyfres o offer sydd wedi'u cynllunio'n ofalus i integreiddio a rhyngweithio â nhw yn ddi-baid 
+unrhyw gais neu fformat y cynnwys. Mae Ctrl + C a Ctrl + V yn llawer mwy na llwybrau byr yn unig. Nhw yw'r porthladdoedd mynediad y mae pob cais yn eu rhannu, gan gario a 
+cyfoeth o werth ac ystyr rydych chi'n haeddu ei gael ar flaenau eich bysedd. Nid yn unig ar ôl y Ctrl + C nesaf.
+
+Fi yw'r rhaglennydd hwnnw a grybwyllwyd yn gynharach ac rwyf am i bawb allu dod o hyd i ddefnydd allan o MonkeyPaste. Felly mae'n a'i holl nodweddion yn hollol rhad ac am ddim i'w defnyddio. 
+Rwyf am i chi deimlo'n gyfforddus yn ei ddefnyddio hefyd. Felly, rwy'n eich sicrhau, fel yr unig rym y tu ôl i'w greu, bod NONE o'r wybodaeth bersonol (iawn) a all godi ar 
+Mae eich clipfwrdd yn cael ei olrhain neu ei storio UNRHYW le y tu hwnt i'ch peiriant eich hun. Cyfnod.
+
+(Mae angen caniatadau uwch ar Glud Mwnci)</value>
   </data>
 </root>

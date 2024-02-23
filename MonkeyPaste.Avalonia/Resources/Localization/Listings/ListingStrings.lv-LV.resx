@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste ir starpliktuves pārvaldnieks, automatizācijas un produktivitātes rīks kā neviens cits. Starpliktuves uzlabošana bagātinātā un organizētā darbplūsmas daļā,
-ar intuitīvu un zemu profila saskarni, kas atbalsta tekstu, failus un attēlus. Paredzēts elastībai, ar vienmēr augošu kopienu - spraudņu vadītu libriju.
-
-Tas sākās kā eksperiments ar programmētāju, kurš vēlas vairāk nekā tikai kopēt un ielīmēt no starpliktuves. Viņš gribēja tādu vienkāršu komandu kā Ctrl+C, kas “pievienotu” tā vietā
-no “nomainiet”, kas bija uz starpliktuves. Un eksperiments darbojās. Mazais rīks bija ļoti parocīgs. Tas programmētāju izvirzīja ar vairāk ideju un vairāk eksperimentu, tas
-Tagad ir kļuvis par "pērtiķiem".
-
-Tā kā darbvirsma attiecas uz jūsu failiem, Monkeypaste plāno atrasties starpliktuvē. Tā rīku komplekts, kas rūpīgi izstrādāts, lai šķietami integrētu un sadarbotos ar
-jebkura satura lietojumprogramma vai formāts. Ctrl+C un Ctrl+V ir daudz vairāk nekā tikai saīsnes. Tās ir visas lietojumprogrammu akcijas, kas ir ieejas, pārvadājot a
-Vērtības un nozīmes bagātība, kuru esat pelnījis, lai jums būtu pieejams pirkstu galos. Ne tikai izmests pēc nākamā Ctrl+c.
-
-Es esmu tas programmētājs, kas minēts iepriekš, un es vēlos, lai visi varētu atrast lietojumu no pērtiķiem. Tātad tā un visas tās funkcijas ir pilnīgi brīvi izmantot.
-Es arī vēlos, lai jūs justos ērti, izmantojot to. Tāpēc es jums kā vienīgais spēks jums apliecinu, ka tā nav tā, ka neviena no (ļoti) personiskajām informācijām, kas var rasties
-Jūsu starpliktuvē kādreiz tiek izsekots vai glabāts jebkur ārpus jūsu mašīnas. Periods.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Jūsu starpliktuvē kādreiz tiek izsekots vai glabāts jebkur ārpus jūsu maš
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Uzglabājiet tekstu, attēlu un failu klipus ar visu tā avotu (lietotni, vietni, laiku un daudz ko citu) automātiski</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste ir starpliktuves pārvaldnieks, automatizācijas un produktivitātes rīks kā neviens cits. Starpliktuves uzlabošana par bagātinātu un organizētu darbplūsmas daļu,
+Ar intuitīvu un zema profila saskarni, kas atbalsta tekstu, failus un attēlus. Izstrādāts elastībai, ar arvien pieaugošu kopienu, ko virza spraudņu libray.
+
+Tas sākās kā programmētāja eksperiments, kurš vēlējās vairāk nekā tikai kopēt un ielīmēt no starpliktuves. Viņš vēlējās vienkāršu komandu, piemēram, Ctrl+C, kas tā vietā "pievienotu" 
+no "aizstāt" to, kas bija starpliktuvē. Un eksperiments nostrādāja. Mazais rīkstnieks bija ļoti parocīgs. Tas ieintriģēja programmētāju ar vairāk idejām un vairāk eksperimentiem, ka 
+tagad ir kļuvis par "MonkeyPaste". 
+
+Tā kā darbvirsma ir jūsu failiem, MonkeyPaste plāno būt jūsu starpliktuvē. Tas ir rīku komplekts, kas rūpīgi izstrādāts, lai šķietami integrētu un savstarpēji sadarbotos ar 
+jebkura lietojumprogramma vai satura formāts. Ctrl+C un Ctrl+V ir daudz vairāk nekā tikai saīsnes. Tās ir iebraukšanas ostas, ar kurām dalās visi pieteikumi, nesot 
+vērtības un nozīmes bagātība, ko esat pelnījuši, lai tie būtu pieejami pa rokai. Ne tikai izmests pēc nākamā Ctrl+C.
+
+Es esmu tas programmētājs, kas minēts iepriekš, un es vēlos, lai ikviens varētu atrast pielietojumu no MonkeyPaste. Tātad to un visas tā funkcijas ir pilnīgi brīvi lietojamas. 
+Es arī vēlos, lai jūs justos ērti, izmantojot to. Tāpēc es jums apliecinu, ka tas ir vienīgais spēks, kas ir tā radīšanas pamatā, ka NEKAS no (ļoti) personiskās informācijas, kas var rasties 
+jūsu starpliktuve kādreiz tiek izsekota vai glabāta JEBKUR ārpus jūsu mašīnas. Periods.
+
+(MonkeyPaste nepieciešama paaugstināta atļauja)</value>
   </data>
 </root>

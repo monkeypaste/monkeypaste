@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>„MonkeYPaste“ yra mainų srities tvarkyklė, automatikos ir produktyvumo įrankis, kaip niekas kitas. Patobulinkite mainų sritį į praturtintą ir organizuojančią jūsų darbo eigos dalį,
-Pateikiama intuityvi ir žema profilio sąsaja, palaikanti tekstą, failus ir vaizdus. Skirta lankstumo, su vis augančia bendruomene - paskatinta papildinių bibliotekos.
-
-Tai prasidėjo programuotojo, norinčio ne tik kopijuoti ir įklijuoti iš mainų srities, prasidėjo. Jis norėjo paprastos komandos, tokios kaip „Ctrl+C“, kuri „pridėtų“ vietoj to
-„Pakeiskite“ tai, kas buvo mainų srityje. Ir eksperimentas veikė. Mažas įrankis buvo labai patogus. Tai sužadino programuotoją daugiau idėjų ir daugiau eksperimentų, tai
-Dabar tapo „Monkeypaste“.
-
-Kadangi darbalaukis yra jūsų failams, „MonkeYPaste“ ketina būti jūsų mainų srityje. Tai įrankių komplektas
-Bet kokia programa ar turinio formatas. „Ctrl+C“ ir „Ctrl+V“ yra daug daugiau nei tik nuorodos. Jie yra įėjimo uostai, kuriuos dalijasi visos programos, nešančios a
-Vertės ir prasmės, kurią nusipelnėte turėti po ranka. Ne tik išmestas po kito „Ctrl+C“.
-
-Aš esu tas anksčiau minėtas programuotojas ir noriu, kad visi galėtų rasti naudą iš „MonkeYPaste“. Taigi tai ir visos jo funkcijos yra visiškai nemokamos.
-Aš taip pat noriu, kad jaustumėtės patogiai naudodamiesi tuo. Taigi patikinu jus kaip vienintelę jo kūrimo jėgą, kad nė viena iš (labai) asmeninės informacijos, kuri gali kilti
-Jūsų mainų sritis yra kada nors stebima ar saugoma bet kur už savo mašinos už savo mašinos. Laikotarpis.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Jūsų mainų sritis yra kada nors stebima ar saugoma bet kur už savo mašinos 
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Automatiškai saugokite tekstą, vaizdo ir failų klipus su visu jo šaltiniu (programa, svetainė, laikas ir dar daugiau)</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste yra iškarpinės tvarkyklė, automatizavimo ir produktyvumo įrankis, kaip niekas kitas. Iškarpinės patobulinimas į praturtintą ir organizuotą darbo eigos dalį,
+su intuityvia ir žemo profilio sąsaja, palaikančia tekstą, failus ir vaizdus. Sukurtas lankstumui, su nuolat augančia bendruomene, varomas įskiepių.
+
+Tai prasidėjo kaip programuotojo eksperimentas, norintis daugiau nei tik nukopijuoti ir įklijuoti iš mainų srities. Jis norėjo paprastos komandos, tokios kaip Ctrl+C, kuri vietoj to "pridėtų" 
+"pakeisti" tai, kas buvo iškarpinėje. Ir eksperimentas pavyko. Mažas įrankis buvo labai patogus. Tai programuotojui suteikė daugiau idėjų ir daugiau eksperimentų, kad 
+dabar tapo "MonkeyPaste". 
+
+Kadangi darbalaukis yra jūsų failuose, MonkeyPaste ketina būti jūsų mainų srityje. Tai įrankių rinkinys, kruopščiai sukurtas taip, kad, atrodytų, būtų galima integruoti ir sąveikauti su 
+bet kokia turinio programa ar formatas. Ctrl+C ir Ctrl+V yra daug daugiau nei tik spartieji klavišai. Jie yra įvežimo uostai, kuriais dalijasi visos programos, turinčios 
+vertės ir prasmės turtus, kuriuos nusipelnėte turėti po ranka. Ne tik išmestas po kito Ctrl+C.
+
+Aš esu tas programuotojas, kuris buvo paminėtas anksčiau, ir noriu, kad visi galėtų naudotis "MonkeyPaste". Taigi juo ir visomis jo funkcijomis galima naudotis visiškai nemokamai. 
+Taip pat noriu, kad jaustumėtės patogiai naudodamiesi juo. Taigi užtikrinu jus, kaip vienintelę jos sukūrimo jėgą, kad NĖ VIENA iš (labai) asmeninės informacijos, kuri gali atsirasti 
+jūsų mainų sritis visada stebima arba saugoma BET KUR, išskyrus jūsų kompiuterį. Tarpas.
+
+("MonkeyPaste" reikia didesnių leidimų)</value>
   </data>
 </root>

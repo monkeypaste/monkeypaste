@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste huwa maniġer tal-clipboard, awtomazzjoni u għodda ta 'produttività bħal ħadd ieħor. Titjib il-clipboard tiegħek f'parti arrikkita u organizzata mill-fluss tax-xogħol tiegħek,
-Jidhru interface intuwittiv u baxx ta 'profil li jappoġġja test, fajls u immaġini. Iddisinjat għall-flessibilità, bi librerija ta 'plugins immexxija mill-komunità dejjem tikber.
-
-Dan beda bħala esperiment minn programmatur li jkun irid iktar milli sempliċement jikkopja u jippejstja mill-clipboard. Ried kmand sempliċi bħal Ctrl + C li "jżid ma '" minflok
-ta '' Ibdel 'dak li kien fuq il-clipboard. U l-esperiment ħadem. L-għodda żgħira kienet ferm utli. Dan iddaħħal lill-programmatur b'aktar ideat u aktar esperimenti, li
-Issa sar "Monkeypaste".
-
-Peress li d-desktop huwa għall-fajls tiegħek, MonkeyPaste għandu l-intenzjoni li jkun għall-clipboard tiegħek. Is-suite tagħha ta 'għodod iddisinjati bir-reqqa biex apparentement jintegraw u jinteroperaw ma'
-kwalunkwe applikazzjoni jew format tal-kontenut. Ctrl + C u Ctrl + V huma ħafna iktar minn sempliċement shortcuts. Huma l-portijiet tad-dħul li l-applikazzjonijiet kollha jaqsmu, li jġorru
-ġid ta 'valur u tifsira li ħaqqek li jkollok disponibbli fuq ponot subgħajk. Mhux biss mitfugħa wara s-Ctrl + C li jmiss.
-
-Jiena dak il-programmatur imsemmi qabel u nixtieq li kulħadd ikun jista 'jsib użu mill-monkeypaste. Allura huwa u l-karatteristiċi kollha tiegħu huma kompletament ħielsa li jintużaw.
-Irrid ukoll li tħossok komdu tużah. Allura nassigurak, bħala l-unika forza wara l-ħolqien tagħha, li l-ebda waħda mill-informazzjoni personali (ħafna) li tista 'tinqala' fuqha
-Il-clipboard tiegħek huwa dejjem traċċat jew maħżun kullimkien lil hinn mill-magna tiegħek stess. Perjodu.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Il-clipboard tiegħek huwa dejjem traċċat jew maħżun kullimkien lil hinn mil
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Aħżen it-test, l-immaġni u l-klipps tal-fajl mas-sors kollu tagħha (l-app, il-websajt, il-ħin, u ħafna iktar) informazzjoni awtomatikament</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste huwa maniġer tal-clipboard, awtomazzjoni u għodda ta 'produttività bħal ħaddieħor. It-titjib tal-klibbord tiegħek f'parti arrikkita u organizzata tal-fluss tax-xogħol tiegħek,
+Jidhru interface intuwittiv u baxx - profil li jappoġġja test, fajls u stampi. Iddisinjat għall-flessibilità, b'komunità dejjem tikber - immexxija mill-libray ta 'plugins.
+
+Beda bħala esperiment minn programmatur li jrid aktar minn sempliċement kopja u paste mill-clipboard. Huwa ried kmand sempliċi bħal Ctrl + C li 'jżid ma' minflok 
+ta' 'ibdel' dak li kien fuq il-clipboard. U l-esperiment ħadem. L-għodda żgħira kienet utli ħafna. Dan daħal fil-programmatur b'aktar ideat u aktar esperimenti, li 
+issa sar "MonkeyPaste". 
+
+Peress li d-desktop huwa għall-fajls tiegħek, MonkeyPaste beħsiebu jkun fil-klibbord tiegħek. Is-sett ta 'għodod tiegħu ddisinjat bir-reqqa biex jidher li jintegra u jinteropera bla dubju ma' 
+kwalunkwe applikazzjoni jew format tal-kontenut. Ctrl+C u Ctrl+V huma ħafna aktar minn sempliċement shortcuts. Huma l-portijiet tad-dħul li jaqsmu l-applikazzjonijiet kollha, li jġorru 
+ġid ta' valur u tifsira li jistħoqqlek li jkollok disponibbli fuq ponot subgħajk. Mhux biss mormi wara l-Ctrl+C li jmiss.
+
+Jien dak il-programmatur imsemmi qabel u nixtieq li kulħadd ikun jista 'jsib użu minn MonkeyPaste. Allura u l-karatteristiċi kollha tiegħu huma kompletament ħielsa li jintużaw. 
+Irrid ukoll li tħossok komdu tużah. Allura nassigurak, bħala l-unika forza wara l-ħolqien tagħha, li l-ebda informazzjoni personali (ħafna) li tista 'tinqala' fuq 
+il-klibbord tiegħek qatt jiġi traċċat jew maħżun KULLIMKIEN lil hinn mill-magna tiegħek stess. Perjodu.
+
+(MonkeyPaste jeħtieġ permessi elevati)</value>
   </data>
 </root>

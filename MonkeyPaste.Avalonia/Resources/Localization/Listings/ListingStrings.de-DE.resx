@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste ist wie kein anderer ein Instrument für Zwischenablement -Manager, Automatisierung und Produktivität. Verbessern Sie Ihre Zwischenablage zu einem angereicherten und organisierten Teil Ihres Workflows,
-Mit einer intuitiven und niedrigen Profil -Schnittstelle, die Text, Dateien und Bilder unterstützt. Entwickelt für Flexibilität mit einer immer wachsenden Community - angetriebene Libray von Plugins.
-
-Es begann als Experiment eines Programmierers, der mehr als nur kopieren und aus der Zwischenablage einfügen wollte. Er wollte einen einfachen Befehl wie Strg+C, der stattdessen zu 'hinzufügen würde
-von "Ersetzen", was sich in der Zwischenablage befand. Und das Experiment funktionierte. Das kleine Werkzeug war sehr praktisch. Dadurch wurde der Programmierer mit mehr Ideen und mehr Experimenten angereist, das
-Jetzt ist "Monkeypaste" geworden.
-
-Da der Desktop in Ihren Dateien liegt, beabsichtigt Monkeypaste, in Ihrer Zwischenablage zu sein. Es ist eine Reihe von Werkzeugen
-jede Anwendung oder jedes Format von Inhalten. Strg+C und Strg+V sind viel mehr als nur Verknüpfungen. Sie sind die Eintrittshäfen, die alle Anwendungen teilen, die a tragen
-Wertschöpfung und Bedeutung, die Sie verdienen, die Sie für Ihre Fingerspitzen zur Verfügung haben. Nicht nur nach dem nächsten Strg+c weggeworfen.
-
-Ich bin dieser Programmierer, der früher erwähnt wurde, und ich möchte, dass jeder in der Lage ist, Monkeypaste zu nutzen. So können es und alle seine Funktionen völlig kostenlos verwendet werden.
-Ich möchte auch, dass Sie sich wohl fühlen. Ich versichere Ihnen, dass Sie die einzige Kraft, die hinter seiner Schöpfung hinter der Erschaffung ist
-Ihre Zwischenablage wird jemals überall über Ihren eigenen Maschine verfolgt oder gespeichert. Zeitraum.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Ihre Zwischenablage wird jemals überall über Ihren eigenen Maschine verfolgt o
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Speichern Sie automatisch Text-, Bild- und Dateiclips mit der gesamten Quelle (App, Website, Zeit und vielem mehr).</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste ist ein Zwischenablage-Manager, Automatisierungs- und Produktivitätswerkzeug wie kein anderes. Verbessern Sie Ihre Zwischenablage zu einem angereicherten und organisierten Teil Ihres Workflows,
+Mit einer intuitiven und flachen Benutzeroberfläche, die Text, Dateien und Bilder unterstützt. Entwickelt für Flexibilität, mit einer ständig wachsenden Community-gesteuerten Bibliothek von Plugins.
+
+Es begann als Experiment eines Programmierers, der mehr wollte als nur Kopieren und Einfügen aus der Zwischenablage. Er wollte einen einfachen Befehl wie Strg+C, der stattdessen "addieren" würde 
+zu "ersetzen", was sich in der Zwischenablage befand. Und das Experiment funktionierte. Das kleine Werkzeug war sehr praktisch. Dies verleitete den Programmierer zu mehr Ideen und Experimenten, die 
+jetzt ist "MonkeyPaste" geworden. 
+
+So wie der Desktop zu Ihren Dateien gehört, soll MonkeyPaste zu Ihrer Zwischenablage gehören. Es handelt sich um eine Reihe von Tools, die sorgfältig entwickelt wurden, um sie nahtlos zu integrieren und zu interoperieren 
+jede Anwendung oder jedes Format von Inhalten. Strg+C und Strg+V sind viel mehr als nur Tastenkombinationen. Sie sind die Eingangshäfen, die sich alle Anwendungen teilen, und tragen eine 
+Reichtum an Wert und Bedeutung, den Sie verdienen, zur Verfügung zu haben. Nicht einfach nach dem nächsten Strg+C weggeworfen.
+
+Ich bin der bereits erwähnte Programmierer und möchte, dass jeder in der Lage ist, MonkeyPaste zu nutzen. Es und alle seine Funktionen sind also völlig kostenlos. 
+Ich möchte auch, dass Sie sich damit wohl fühlen. Ich versichere Ihnen also, als die einzige Kraft hinter seiner Erschaffung, dass KEINE der (sehr) persönlichen Informationen, die auf 
+Ihre Zwischenablage wird immer IRGENDWO außerhalb Ihres eigenen Computers verfolgt oder gespeichert. Periode.
+
+(MonkeyPaste erfordert erhöhte Berechtigungen)</value>
   </data>
 </root>

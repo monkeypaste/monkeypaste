@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste je upravitelj međuspremnika, alat za automatizaciju i produktivnost kao nijedan drugi. Poboljšanje međuspremnika u obogaćeni i organizirani dio vašeg tijeka rada,
-Sadrži intuitivno i nisko - profilno sučelje koje podržava tekst, datoteke i slike. Dizajniran za fleksibilnost, s stalno rastućom zajednicom - Libray od dodataka.
-
-Počeo je kao eksperiment programera koji je želio više od kopiranja i zalijepiti iz međuspremnika. Htio je jednostavnu naredbu poput ctrl+c koja bi umjesto toga 'dodala'
-'Zamijenite' ono što je bilo na međuspremniku. I eksperiment je djelovao. Mali alat bio je vrlo zgodan. Ovo je programera ubacio s više ideja i više eksperimenata, koji
-sada je postao "monkeypaste".
-
-Kako je radna površina prema vašim datotekama, MonkeyPaste namjerava biti u vašem međuspremnik. Njegov je apartma
-bilo koja aplikacija ili format sadržaja. Ctrl+C i Ctrl+V mnogo su više od prečaca. To su luke unosa koje sve aplikacije dijele, noseći a
-bogatstvo vrijednosti i značenja koje zaslužujete imati na raspolaganju na dohvat ruke. Ne samo bačen nakon sljedećeg Ctrl+c.
-
-Ja sam taj programer spomenut ranije i želim da svi mogu pronaći korištenje od Monkeypaste. Dakle, IT i sve njegove značajke potpuno su besplatne za korištenje.
-Također želim da se osjećate ugodno koristeći ga. Stoga vas uvjeravam kao jedina sila koja stoji iza njenog stvaranja, da nijedan (vrlo) osobni podaci koji se ne mogu pojaviti
-Vaš se međuspremnik ikada prati ili pohranjuje bilo gdje izvan vašeg vlastitog stroja. Razdoblje.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Vaš se međuspremnik ikada prati ili pohranjuje bilo gdje izvan vašeg vlastito
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Pohranite tekst, slike i datoteke s svim njegovim izvorima (aplikaciju, web mjesto, vrijeme i još mnogo toga) automatski</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste je upravitelj međuspremnika, alat za automatizaciju i produktivnost kao nijedan drugi. Poboljšanje međuspremnika u obogaćeni i organizirani dio tijeka rada,
+s intuitivnim sučeljem niskog profila koje podržava tekst, datoteke i slike. Dizajniran za fleksibilnost, sa stalno rastućom zajednicom - vođenom librayom dodataka.
+
+Počelo je kao eksperiment programera koji je želio više od kopiranja i lijepljenja iz međuspremnika. Želio je jednostavnu naredbu poput Ctrl+C koja bi umjesto toga 'dodala' 
+'zamijeni' ono što je bilo u međuspremniku. I eksperiment je uspio. Mali alat je bio vrlo zgodan. To je zaintrigiralo programera s više ideja i više eksperimenata, da 
+sada je postao "MonkeyPaste". 
+
+Budući da je radna površina u vašim datotekama, MonkeyPaste namjerava biti u vašem međuspremniku. To je paket alata pažljivo dizajniranih za naizgled integraciju i interoperabilnost s 
+bilo koja aplikacija ili format sadržaja. Ctrl + C i Ctrl + V mnogo su više od prečaca. Oni su ulazne luke koje sve prijave dijele, noseći 
+bogatstvo vrijednosti i značenje koje zaslužujete imati na dohvat ruke. Ne samo bačena nakon sljedećeg Ctrl+C.
+
+Ja sam taj programer koji je ranije spomenut i želim da svi mogu naći koristi od MonkeyPastea. Tako su on i sve njegove značajke potpuno besplatne za upotrebu. 
+Također želim da se osjećate ugodno koristeći ga. Stoga vas uvjeravam, kao jedina sila koja stoji iza njegovog stvaranja, da NIJEDAN od (vrlo) osobnih podataka koji se mogu pojaviti na 
+vaš međuspremnik se uvijek prati ili pohranjuje BILO GDJE izvan vašeg vlastitog računala. Razdoblje.
+
+(MonkeyPaste zahtijeva povišene dozvole)</value>
   </data>
 </root>

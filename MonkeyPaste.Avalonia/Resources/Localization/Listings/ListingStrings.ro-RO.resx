@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste este un manager de clipboard, un instrument de automatizare și productivitate ca niciun altul. Îmbunătățirea clipboard -ului într -o parte îmbogățită și organizată din fluxul dvs. de lucru,
-Prezentând o interfață intuitivă și scăzută de profil care acceptă text, fișiere și imagini. Proiectat pentru flexibilitate, cu o comunitate în creștere - o libray de plugin -uri conduse în permanență.
-
-A început ca un experiment de către un programator care dorește mai mult decât să copieze și să lipească din clipboard. El a vrut o comandă simplă precum Ctrl+C, care să „adauge la” în schimb
-din „înlocuiți” ceea ce a fost pe clipboard. Iar experimentul a funcționat. Micul instrument era foarte la îndemână. Acest lucru a înregistrat programatorul cu mai multe idei și mai multe experimente, care
-Acum a devenit „Monkeypaste”.
-
-Deoarece desktopul este la fișierele dvs., Monkeypaste intenționează să fie la clipboard. Este o suită de instrumente concepute cu atenție pentru a se integra și a se interopa pe aparent cu
-orice aplicație sau format de conținut. Ctrl+C și Ctrl+V sunt mult mai mult decât doar comenzile rapide. Sunt porturile de intrare toate aplicațiile, care transportă un
-Bogăția de valoare și sensul pe care meritați să îl aveți la dispoziție la îndemână. Nu doar aruncat după următorul Ctrl+C.
-
-Sunt acel programator menționat mai devreme și vreau ca toată lumea să poată găsi utilizarea din Monkeypaste. Deci și toate caracteristicile sale sunt complet gratuite de utilizat.
-De asemenea, vreau să vă simțiți confortabil folosindu -l. Așa că vă asigur, ca fiind singura forță din spatele creației sale, că niciuna dintre informațiile personale (foarte) personale nu pot apărea
-Clipboard -ul dvs. este urmărit sau păstrat oriunde dincolo de propria mașină. Perioadă.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Clipboard -ul dvs. este urmărit sau păstrat oriunde dincolo de propria mașin�
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Stocați clipuri de text, imagine și fișiere cu toate informațiile sursei sale (aplicația, site -ul, timpul și multe altele) automat</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste este un manager de clipboard, instrument de automatizare și productivitate ca nimeni altul. Îmbunătățirea clipboard-ului într-o parte îmbogățită și organizată a fluxului de lucru,
+Dispunând de o interfață intuitivă și cu profil redus, care acceptă text, fișiere și imagini. Proiectat pentru flexibilitate, cu o bibliotecă de plugin-uri în continuă creștere, condusă de comunitate.
+
+A început ca un experiment al unui programator care dorea mai mult decât să copieze și să lipească din clipboard. El a vrut o comandă simplă, cum ar fi Ctrl + C, care să "adauge la" în schimb 
+de a "înlocui" ceea ce era în clipboard. Și experimentul a funcționat. Micul instrument a fost foarte util. Acest lucru a atras programatorul cu mai multe idei și mai multe experimente, care 
+acum a devenit "MonkeyPaste". 
+
+Așa cum desktopul este pentru fișierele dvs., MonkeyPaste intenționează să fie pentru clipboard. Este o suită de instrumente proiectate cu atenție pentru a se integra și a interacționa aparent cu 
+orice aplicație sau format de conținut. Ctrl + C și Ctrl + V sunt mult mai mult decât simple comenzi rapide. Acestea sunt porturile de intrare pe care le partajează toate aplicațiile, purtând un 
+bogăție de valoare și semnificație pe care meritați să o aveți la îndemână. Nu doar aruncat după următorul Ctrl + C.
+
+Sunt acel programator menționat mai devreme și vreau ca toată lumea să poată găsi utilizare din MonkeyPaste. Deci, acesta și toate caracteristicile sale sunt complet gratuite. 
+De asemenea, vreau să vă simțiți confortabil folosind-o. Așa că vă asigur, ca fiind singura forță din spatele creării sale, că NICIUNA dintre informațiile (foarte) personale care pot apărea pe 
+clipboard-ul dvs. este urmărit sau stocat ORIUNDE în afara propriei mașini. Perioadă.
+
+(MonkeyPaste necesită permisiuni sporite)</value>
   </data>
 </root>

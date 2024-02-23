@@ -210,22 +210,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste is a clipboard manager, automation and productivity tool like no other. Enhancing your clipboard into an enriched and organized part of your workflow,
-featuring an intuitive and low - profile interface that supports text, files and images. Designed for flexibility, with an ever - growing community - driven libray of plugins.
-
-It began as an experiment by a programmer wanting more than just copy and paste out of the clipboard. He wanted a simple command like Ctrl+C that would 'add to' instead 
-of 'replace' what was on the clipboard. And the experiment worked. The little tool was very handy. This entrigued the programmer with more ideas and more experiments, that 
-now has become "MonkeyPaste". 
-
-As the desktop is to your files, MonkeyPaste intends to be to your clipboard. Its a suite of tools carefully designed to seemlessly integrate and interoperate with 
-any application or format of content. Ctrl+C and Ctrl+V are much more than just shortcuts. They are the ports of entry all applications share, carrying a 
-wealth of value and meaning you deserve to have available at your fingertips. Not just thrown away after the next Ctrl+C.
-
-I am that programmer mentioned earlier and I want everyone to be able to find use out of MonkeyPaste. So it and all of its features are completely free to use. 
-I also want you to feel comfortable using it. So I assure you, as being the only force behind its creation, that NONE of the (very) personal information that can arise on 
-your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Period.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -336,5 +320,23 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Store text, image and file clips with all of its source (the app, website, time, and much more) information automatically</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste is a clipboard manager, automation and productivity tool like no other. Enhancing your clipboard into an enriched and organized part of your workflow,
+featuring an intuitive and low - profile interface that supports text, files and images. Designed for flexibility, with an ever - growing community - driven libray of plugins.
+
+It began as an experiment by a programmer wanting more than just copy and paste out of the clipboard. He wanted a simple command like Ctrl+C that would 'add to' instead 
+of 'replace' what was on the clipboard. And the experiment worked. The little tool was very handy. This entrigued the programmer with more ideas and more experiments, that 
+now has become "MonkeyPaste". 
+
+As the desktop is to your files, MonkeyPaste intends to be to your clipboard. Its a suite of tools carefully designed to seemlessly integrate and interoperate with 
+any application or format of content. Ctrl+C and Ctrl+V are much more than just shortcuts. They are the ports of entry all applications share, carrying a 
+wealth of value and meaning you deserve to have available at your fingertips. Not just thrown away after the next Ctrl+C.
+
+I am that programmer mentioned earlier and I want everyone to be able to find use out of MonkeyPaste. So it and all of its features are completely free to use. 
+I also want you to feel comfortable using it. So I assure you, as being the only force behind its creation, that NONE of the (very) personal information that can arise on 
+your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Period.
+
+(MonkeyPaste requires elevated permissions)</value>
   </data>
 </root>

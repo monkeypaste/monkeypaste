@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste è un gestore degli appunti, l'automazione e lo strumento di produttività come nessun altro. Migliorare gli appunti in una parte arricchita e organizzata del flusso di lavoro,
-Con un'interfaccia intuitiva e bassa - profilo che supporta testo, file e immagini. Progettato per la flessibilità, con una biblioteca di plugin in costante comunità.
-
-È iniziato come esperimento da un programmatore che desiderava molto più che copia e incolla dagli appunti. Voleva un semplice comando come ctrl+c che invece "si aggiungesse"
-di "Sostituisci" ciò che era negli appunti. E l'esperimento ha funzionato. Il piccolo strumento era molto utile. Ciò ha fatto entrare il programmatore con più idee e più esperimenti, quello
-Ora è diventato "Monkeypaste".
-
-Dato che il desktop è per i tuoi file, Monkeypaste intende essere negli appunti. È una suite di strumenti attentamente progettati per integrare e interabicare apparentemente con
-qualsiasi applicazione o formato di contenuto. CTRL+C e CTRL+V sono molto più di semplici scorciatoie. Sono i porti di voce che tutte le applicazioni condividono, che trasportano un
-ricchezza di valore e significato che meriti di avere a disposizione a portata di mano. Non solo gettato via dopo il prossimo Ctrl+C.
-
-Sono quel programmatore menzionato in precedenza e voglio che tutti siano in grado di trovare l'uso da Monkeypaste. Quindi e tutte le sue caratteristiche sono completamente gratuite da usare.
-Voglio anche che tu ti senta a tuo agio a usarlo. Quindi ti assicuro, come l'unica forza dietro la sua creazione, che nessuna delle (molto) informazioni personali che possono sorgere
-Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Periodo.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Peri
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Memorizza le informazioni di testo, immagini e file con tutte le sue informazioni di origine (l'app, sito Web, tempo e molto altro) automaticamente</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste è uno strumento di gestione degli appunti, automazione e produttività come nessun altro. Migliorare gli appunti in una parte arricchita e organizzata del flusso di lavoro,
+Caratterizzato da un'interfaccia intuitiva e a basso profilo che supporta testo, file e immagini. Progettato per la flessibilità, con una libreria di plugin in continua crescita guidata dalla comunità.
+
+È iniziato come un esperimento di un programmatore che voleva qualcosa di più di un semplice copia e incolla dagli appunti. Voleva un comando semplice come Ctrl+C che invece 'aggiungesse a' 
+di 'sostituire' ciò che era negli appunti. E l'esperimento ha funzionato. Il piccolo strumento era molto utile. Questo ha coinvolto il programmatore con più idee e più esperimenti, che 
+ora è diventato "MonkeyPaste". 
+
+Come il desktop sta ai tuoi file, MonkeyPaste intende essere per i tuoi appunti. Si tratta di una suite di strumenti accuratamente progettati per integrarsi e interagire in modo semplice con 
+qualsiasi applicazione o formato di contenuto. Ctrl+C e Ctrl+V sono molto più che semplici scorciatoie. Sono le porte di ingresso condivise da tutte le applicazioni, che portano un 
+ricchezza di valore e significato che meriti di avere a portata di mano. Non solo buttato via dopo il prossimo Ctrl+C.
+
+Io sono quel programmatore menzionato prima e voglio che tutti siano in grado di trovare l'uso di MonkeyPaste. Quindi e tutte le sue funzionalità sono completamente gratuite. 
+Voglio anche che tu ti senta a tuo agio nell'usarlo. Quindi vi assicuro, essendo l'unica forza dietro la sua creazione, che NESSUNA delle informazioni (molto) personali che possono sorgere su 
+i tuoi appunti sono sempre tracciati o archiviati OVUNQUE oltre la tua macchina. Periodo.
+
+(MonkeyPaste richiede autorizzazioni elevate)</value>
   </data>
 </root>

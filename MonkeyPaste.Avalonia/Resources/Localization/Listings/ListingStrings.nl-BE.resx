@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste is een klembordmanager, automatisering en productiviteitstool als geen ander. Uw klembord verbeteren tot een verrijkt en georganiseerd deel van uw workflow,
-Met een intuïtieve en lage profielinterface die tekst, bestanden en afbeeldingen ondersteunt. Ontworpen voor flexibiliteit, met een steeds groeiende community - gedreven lifray van plug -ins.
-
-Het begon als een experiment door een programmeur die meer wilde dan alleen kopiëren en plakken uit het klembord. Hij wilde een eenvoudig commando zoals Ctrl+C die in plaats daarvan zou 'toevoegen aan'
-van 'vervangen' wat er op het klembord was. En het experiment werkte. Het kleine gereedschap was erg handig. Dit heeft de programmeur meer ideeën en meer experimenten geactiveerd, dat
-nu is "Monkeypaste" geworden.
-
-Omdat het bureaublad naar uw bestanden is, is Monkeypaste van plan om op uw klembord te zijn. Het is een reeks hulpmiddelen die zorgvuldig zijn ontworpen om te lijken te integreren en mee te werken
-elke toepassing of inhoudsopmaak. Ctrl+C en Ctrl+V zijn veel meer dan alleen snelkoppelingen. Ze zijn de toegangspoorten die alle toepassingen delen, die een
-De rijkdom van waarde en betekenis die u verdient om binnen handbereik beschikbaar te zijn. Niet alleen weggegooid na de volgende Ctrl+C.
-
-Ik ben die eerder genoemde programmeur en ik wil dat iedereen in staat is om gebruik te maken van Monkeypaste. Dus het en alle functies zijn volledig gratis te gebruiken.
-Ik wil ook dat je je op je gemak voelt om het te gebruiken. Dus ik verzeker je, als de enige kracht achter de creatie ervan, dat geen van de (zeer) persoonlijke informatie die kan optreden
-Uw klembord wordt ooit bijgehouden of opgeslagen overal voorbij uw eigen machine. Periode.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Uw klembord wordt ooit bijgehouden of opgeslagen overal voorbij uw eigen machine
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Bewaar tekst-, afbeeldings- en bestandsclips met al zijn bron (de app, website, tijd en nog veel meer) informatie automatisch</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste is een klembordmanager, automatiserings- en productiviteitstool als geen ander. Verbetering van uw klembord tot een verrijkt en georganiseerd onderdeel van uw workflow,
+Met een intuïtieve en onopvallende interface die tekst, bestanden en afbeeldingen ondersteunt. Ontworpen voor flexibiliteit, met een steeds groter wordende community - gedreven libray van plugins.
+
+Het begon als een experiment van een programmeur die meer wilde dan alleen kopiëren en plakken van het klembord. Hij wilde een eenvoudig commando zoals Ctrl+C dat in plaats daarvan zou 'toevoegen aan' 
+van 'vervangen' wat er op het klembord stond. En het experiment werkte. Het kleine gereedschap was erg handig. Dit intrigeerde de programmeur met meer ideeën en meer experimenten, die 
+is nu "MonkeyPaste" geworden. 
+
+Zoals het bureaublad voor uw bestanden is, is MonkeyPaste van plan om voor uw klembord te zijn. Het is een reeks tools die zorgvuldig zijn ontworpen om naadloos te integreren en samen te werken met 
+elke toepassing of indeling van inhoud. Ctrl+C en Ctrl+V zijn veel meer dan alleen snelkoppelingen. Het zijn de toegangspoorten die alle applicaties delen, met een 
+Rijkdom aan waarde en betekenis die u verdient om binnen handbereik te hebben. Niet zomaar weggegooid na de volgende Ctrl+C.
+
+Ik ben die eerder genoemde programmeur en ik wil dat iedereen het nut van MonkeyPaste kan vinden. Het en al zijn functies zijn dus volledig gratis te gebruiken. 
+Ik wil ook dat je je op je gemak voelt bij het gebruik ervan. Dus ik verzeker je, als zijnde de enige kracht achter de creatie ervan, dat GEEN van de (zeer) persoonlijke informatie die kan ontstaan op 
+uw klembord wordt ooit gevolgd of opgeslagen OVERAL buiten uw eigen machine. Periode.
+
+(Voor MonkeyPaste zijn verhoogde machtigingen vereist)</value>
   </data>
 </root>

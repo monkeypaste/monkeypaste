@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyyPaste je međuspremnik menadžer, alat za automatizaciju i produktivnost kao nijedan drugi. Poboljšavajući međuspremnik u obogaćeni i organizirani dio vašeg tipa rada,
-Sadrži intuitivno i nisko - profilno sučelje koje podržava tekst, datoteke i slike. Dizajniran za fleksibilnost, sa ikad - rastuća zajednica - pogoršana libraj dodataka.
-
-Počelo je kao eksperiment od strane programera koji želi više od kopirati i zalijepiti iz međuspremnika. Želeo je jednostavnu naredbu poput Ctrl + C koja bi "dodala"
-"Zamijeni" ono što je bilo na međuspremnici. A eksperiment je radio. Mali alat je bio vrlo zgodan. Ovo je ugledalo programeru s više ideja i više eksperimenata, to
-Sada je postao "monkeyypaste".
-
-Kako je radna površina u vaše datoteke, monkeyyPaste namjerava biti u vašem međuspremniku. To je paket alata pažljivo dizajniran da se naglo integrira i interoperira
-svaka aplikacija ili format sadržaja. Ctrl + C i Ctrl + V su mnogo više od prečica. Oni su portovi unosa svih aplikacija udjela, noseći a
-Bogatstvo vrijednos i značenje zaslužujete da imate dostupan na dohvat ruke. Nije baš bačen nakon sledećeg Ctrl + c.
-
-Ja sam taj programer koji je ranije spomenut i želim da svi budu u mogućnosti da pronađu upotrebu iz MonkeyPaste. Tako i sve njegove karakteristike su potpuno slobodne za upotrebu.
-Želim i da se osjećate ugodno koristeći ga. Zavjerujem vas, kao jedino sile iza njegovog stvaranja, da nijedan od (vrlo) ličnih podataka koji mogu nastaviti
-Vaš međuspremnik se ikad prati ili pohranjuje bilo gdje izvan vlastite mašine. Period.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Vaš međuspremnik se ikad prati ili pohranjuje bilo gdje izvan vlastite mašine
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Spremite klipove teksta, slike i datoteke sa svim svojim izvorom (aplikacija, web lokacija, vrijeme i još mnogo više) informacijama automatski</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyyPaste je međuspremnik menadžer, alat za automatizaciju i produktivnost kao nijedan drugi. Poboljšavajući međuspremnik u obogaćeni i organizirani dio vašeg tipa rada,
+Sadrži intuitivno i nisko - profilno sučelje koje podržava tekst, datoteke i slike. Dizajniran za fleksibilnost, sa ikad - rastuća zajednica - pogoršana libraj dodataka.
+
+Počelo je kao eksperiment od strane programera koji želi više od kopirati i zalijepiti iz međuspremnika. Želeo je jednostavnu naredbu poput Ctrl + C koja bi "dodala"
+"Zamijeni" ono što je bilo na međuspremnici. A eksperiment je radio. Mali alat je bio vrlo zgodan. Ovo je ugledalo programeru s više ideja i više eksperimenata, to
+Sada je postao "monkeyypaste".
+
+Kako je radna površina u vaše datoteke, monkeyyPaste namjerava biti u vašem međuspremniku. To je paket alata pažljivo dizajniran da se naglo integrira i interoperira
+svaka aplikacija ili format sadržaja. Ctrl + C i Ctrl + V su mnogo više od prečica. Oni su portovi unosa svih aplikacija udjela, noseći a
+Bogatstvo vrijednos i značenje zaslužujete da imate dostupan na dohvat ruke. Nije baš bačen nakon sledećeg Ctrl + c.
+
+Ja sam taj programer koji je ranije spomenut i želim da svi budu u mogućnosti da pronađu upotrebu iz MonkeyPaste. Tako i sve njegove karakteristike su potpuno slobodne za upotrebu.
+Želim i da se osjećate ugodno koristeći ga. Zavjerujem vas, kao jedino sile iza njegovog stvaranja, da nijedan od (vrlo) ličnih podataka koji mogu nastaviti
+Vaš međuspremnik se ikad prati ili pohranjuje bilo gdje izvan vlastite mašine. Period.
+
+(MonkeyyPaste zahtijeva povišene dozvole)</value>
   </data>
 </root>

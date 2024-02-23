@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Maýmaýfase başga hiç kim ýaly laýyk oturgyç we öndürijilik guraldyr. Paneli güýçlendirmek we iş meýdanyňyzyň baýlaşdyrylan we guramaçylykly bölegine güýçlendirmek,
-Salgyly we pes - tekst, faýllary we şekilleri görkezýän profil we pes profilini görkezmek. Hiç haçan ösýän jemgyýeti üçin çeýeligi üçin niýetlenendir, barha köprülendiriň.
-
-Diňe bir bitewi göçürip almak we paneli göçürmekden has köp isleýän önümçiligiň synagyny synamak hökmünde başlandy. CTRL + C ýaly ýönekeý buýruk isledi, bu ýerine "goşjak" ýaly
-buferde näme bolandygyny "çalyşmak". Synag işledi. Kiçijik gural gaty amatlydy. Bu, bu maksatnama has köp pikir we has köp synag bilen girdi
-Indi "Maýkype" boldy.
-
-Iş stoluňyza çenli faýllaryňyzyň, maýmaýpaste paneliňize bolmagy mümkin. Bilen seresaplylyk bilen düzülmedik ýaly düzülen gurallaryň bir bölegi
-mazmuny ýa-da mazmuny görkezmek. Ctrl + C we Ctrl + v diňe gysga ýollardan has köp. Alyp, ähli programmalary girizmegiň portlarynyň portlarydyr
-Gymmatlyklaryň baýlygy we nobatymyň ujunda elýeterli bolmaga mynasypdygyňyza mynasyp. Indiki Ctrl + C-den soň diňe zyňylmaýar.
-
-Men öňküsi ýaly agzalýan şol programmist, her kimiň maýynjadan peýdalanmagyny isläp bilmegini isleýärin. Şeýlelik bilen, bu aýratynlyklaryň hemmesi ulanmak üçin doly satdyr.
-Şeýle hem, ony öz-özümi öz-özümi öz-özüne özümi rahat duýmagyňyzy isleýärin. Şonuň üçin döreden şahsy maglumatlaryň hiç biriniň (gaty) degişli maglumatlaryň hiç biriniň hiç biriniň hiç biriniň hiç biriniň ýokdugyny kesgitlemek üçin ýeke-täk güýji ýaly ediň
-SÖ .GI BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLANOK Döwür.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ SÖ .GI BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN 
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Teklipi saklaň, surat we faýl klipleri (programma, web sahypasy, wagtym we köp) salgysy awtomatiki usulda</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste – klipboard menejder, awtomatlaşdyrma we öndürijilik guraly, edil beýleki ler ýaly. Klipiňizi iş aklawyňyzyň baýlaşdyrylan we guramaçylykly bölegine kämilleşdirmek,
+onda teksti, faýllary we suratlary goldaýan düşnükli we pes profilli interfeýs görkezilýär. Bu ýerde tehniki enjamlar has - da ösýär.
+
+Ol diňe bir klipden göçürmek we goýmak bilen çäklenmän, eýsem, programmaçynyň ekspertizasy hökmünde başlandy. Ol ýerine 'goşmak' üçin Ctrl+C ýaly ýönekeý buýruk isledi 
+klipde bar zady 'çalyşmak'. Ekspertiza hem netije berdi. Kiçijik gural örän peýdaly bolupdyr. Bu bolsa programmany köp pikirler we köp barlaglar bilen gyzyklandyrdy, bu 
+indi "MonkeyPaste" boldy. 
+
+Desktop siziň faýllaryňyza bolşy ýaly, MonkeyPaste siziň klipiňize bolmagy maksat edinýär. Onuň dykgatly niýetlenen gurallarynyň paketi göze görünmeýän we özara hyzmatdaşlyk etmek üçin niýetlenendir 
+mazmunyň islendik bir anketa ýa-da formaty. Ctrl+C we Ctrl+V – diňe bir gysgaldylan ýollardan has köp. Olar ähli programmalaryň paýlaşýan, göterýän giriş portlary 
+gymmatlyk baýlygy we barmaklaryňyzyň ujunda elýeterli bolmaga mynasypdygyňyzy aňladýar. Diňe indiki Ctrl+C-den soň zyňylman.
+
+Men ýokarda agzalan programmaçy we her bir adamyň MonkeyPaste-den peýdalanyp bilmegini isleýärin. Görşümiz ýaly, ol we onuň ähli aýratynlyklaryny ulanmak doly mugtdyr. 
+Şeýle-de ony ulanmaga özüňizi oňaýsyz duýmagyňyzy isleýärin. Şonuň üçin men size ynandyrýaryn, onuň döredilmeginiň arkasynda duran ýeke-täk güýç hökmünde, ýüze çykyp biljek (köp) şahsy maglumatlaryň hiç biri 
+klipiňiz hiç haçan öz maşynyňyzdan başga islendik ýerde yzarlanýar ýa-da saklanýar. Döwri.
+
+(MonkeyPaste ýokarlandyrylan rugsatnamalar talap edýär)</value>
   </data>
 </root>

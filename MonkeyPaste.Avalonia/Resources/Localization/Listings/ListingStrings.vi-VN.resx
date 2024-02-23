@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste là một người quản lý bảng tạm, công cụ tự động hóa và năng suất không giống ai. Nâng cao bảng tạm của bạn thành một phần được làm giàu và có tổ chức trong quy trình làm việc của bạn,
-Với giao diện hồ sơ trực quan và thấp hỗ trợ văn bản, tệp và hình ảnh. Được thiết kế cho sự linh hoạt, với một cộng đồng phát triển ngày càng tăng - thư viện các plugin.
-
-Nó bắt đầu như một thử nghiệm của một lập trình viên muốn nhiều hơn là chỉ sao chép và dán ra khỏi bảng tạm. Anh ấy muốn một lệnh đơn giản như ctrl+c sẽ 'thêm vào' thay vào đó
-của 'thay thế' những gì trên bảng tạm. Và thí nghiệm đã làm việc. Công cụ nhỏ rất tiện dụng. Điều này đã thu hút các lập trình viên với nhiều ý tưởng hơn và nhiều thử nghiệm hơn, rằng
-Bây giờ đã trở thành "khỉ".
-
-Vì máy tính để bàn là cho các tệp của bạn, khỉ dự định sẽ đến bảng tạm của bạn. Đó là một bộ công cụ được thiết kế cẩn thận để tích hợp và tương tác một cách vô tận với
-bất kỳ ứng dụng hoặc định dạng của nội dung. Ctrl+C và Ctrl+V không chỉ là các phím tắt. Chúng là các cổng nhập cảnh tất cả các ứng dụng chia sẻ, mang theo
-Sự giàu có của giá trị và nghĩa là bạn xứng đáng có sẵn trong tầm tay của bạn. Không chỉ vứt bỏ sau Ctrl+c tiếp theo.
-
-Tôi là lập trình viên đã đề cập trước đó và tôi muốn mọi người có thể tìm thấy sử dụng từ khỉ. Vì vậy, nó và tất cả các tính năng của nó hoàn toàn miễn phí để sử dụng.
-Tôi cũng muốn bạn cảm thấy thoải mái khi sử dụng nó. Vì vậy, tôi đảm bảo với bạn, là lực lượng duy nhất đằng sau sự sáng tạo của nó, rằng không có thông tin cá nhân nào (rất) có thể phát sinh
-Clipboard của bạn được theo dõi hoặc lưu trữ ở bất cứ đâu ngoài máy của riêng bạn. Giai đoạn.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Clipboard của bạn được theo dõi hoặc lưu trữ ở bất cứ đâu 
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Lưu trữ văn bản, hình ảnh và clip tệp với tất cả các nguồn của nó (ứng dụng, trang web, thời gian và nhiều hơn nữa) thông tin</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste là một trình quản lý clipboard, công cụ tự động hóa và năng suất không giống ai. Nâng cao clipboard của bạn thành một phần phong phú và có tổ chức trong quy trình làm việc của bạn,
+Có giao diện trực quan và cấu hình thấp hỗ trợ văn bản, tệp và hình ảnh. Được thiết kế để linh hoạt, với một cộng đồng ngày càng phát triển - điều khiển libray của các plugin.
+
+Nó bắt đầu như một thử nghiệm của một lập trình viên muốn nhiều hơn là chỉ sao chép và dán ra khỏi khay nhớ tạm. Anh ấy muốn một lệnh đơn giản như Ctrl + C sẽ 'thêm vào' thay thế 
+của 'thay thế' những gì có trên khay nhớ tạm. Và thí nghiệm đã hoạt động. Công cụ nhỏ rất tiện dụng. Điều này hấp dẫn lập trình viên với nhiều ý tưởng hơn và nhiều thử nghiệm hơn, rằng 
+nay đã trở thành "MonkeyPaste". 
+
+Vì máy tính để bàn là các tệp của bạn, MonkeyPaste dự định sẽ vào khay nhớ tạm của bạn. Đó là một bộ công cụ được thiết kế cẩn thận để dường như tích hợp và tương tác với 
+bất kỳ ứng dụng hoặc định dạng nội dung nào. Ctrl + C và Ctrl + V không chỉ là các phím tắt. Chúng là các cổng nhập cảnh mà tất cả các ứng dụng chia sẻ, mang theo một 
+Sự giàu có về giá trị và ý nghĩa mà bạn xứng đáng có sẵn trong tầm tay. Không chỉ vứt đi sau Ctrl + C tiếp theo.
+
+Tôi là lập trình viên đã đề cập trước đó và tôi muốn mọi người có thể tìm thấy cách sử dụng từ MonkeyPaste. Vì vậy, nó và tất cả các tính năng của nó là hoàn toàn miễn phí để sử dụng. 
+Tôi cũng muốn bạn cảm thấy thoải mái khi sử dụng nó. Vì vậy, tôi đảm bảo với bạn, với tư cách là lực lượng duy nhất đằng sau sự sáng tạo của nó, rằng KHÔNG có thông tin cá nhân (rất) nào có thể phát sinh trên 
+khay nhớ tạm của bạn đã từng được theo dõi hoặc lưu trữ BẤT CỨ NƠI NÀO ngoài máy của riêng bạn. Thì.
+
+(MonkeyPaste yêu cầu quyền nâng cao)</value>
   </data>
 </root>

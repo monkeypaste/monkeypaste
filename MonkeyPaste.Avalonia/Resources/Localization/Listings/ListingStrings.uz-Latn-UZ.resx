@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypste - bu klipboard menejer, boshqa boshqa bo'lmagan avtomatlashtirish va unumdorlik vositasi. Klipbordni ish oqimingizning boyitilgan va tashkillashtirilgan qismiga aylantirish,
-Matn, fayllar va rasmlarni qo'llab-quvvatlaydigan intuitiv va past darajadagi interfeys. Plaginlar kutubxonasini boshqargan holda moslashuvchanlik uchun mo'ljallangan.
-
-Bu dasturchi tomonidan shunchaki nusxa ko'chirish va pleymdan chiqib ketishni istagan dasturchi tomonidan tajriba sifatida boshlandi. U Ctrl + C kabi oddiy buyruqni xohlagan
-Klipboard nima bo'lganini 'almashtiring. Va tajriba ishladi. Kichkina asbob juda qulay edi. Bu dasturchini yanada g'oyalar va qo'shimcha tajribalar bilan to'ldirdi
-Endi "maymun past" ga aylandi.
-
-Ish stolingiz sizning fayllaringiz uchun, maykeyp pastroq sizning rozetkangizga tegishli bo'lish niyatida. Uning to'plami, ehtimol, birlashishga va o'zaro bog'liqlik bilan ajralib turishi mumkin
-har qanday kontent yoki tarkib formati. CTRL + C va CTRL + v - bu shunchaki yorliqlardan ancha ko'p. Ular barcha ilovalarning barcha ulushini olish, olib yurish portlari
-Sizning boylik boyligi va sizning barmoqlaringizingizda mavjud bo'lishga loyiqdir. Keyingi Ctrl + C dan keyin shunchaki tashlanmaydi.
-
-Men ilgari bu dasturchiman va men hamma narsani maymun pastasidan foydalanishni istayman. Shunday qilib, uning barcha xususiyatlari to'liq bepul foydalanish mumkin.
-Bundan tashqari, men uni qulay his qilishingizni xohlayman. Shunday qilib, men sizni yaratgan yagona kuch sifatida, bu erda yuzaga keladigan shaxsiy ma'lumotlar emas
-Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi yoki saqlanadi. Davr.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi 
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Matn, rasm va faylli kliplarni saqlang (ilova, veb-sayt, vaqt, vaqt va undan ko'p) ma'lumot avtomatik ravishda</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>Monkeypste - bu klipboard menejer, boshqa boshqa bo'lmagan avtomatlashtirish va unumdorlik vositasi. Klipbordni ish oqimingizning boyitilgan va tashkillashtirilgan qismiga aylantirish,
+Matn, fayllar va rasmlarni qo'llab-quvvatlaydigan intuitiv va past darajadagi interfeys. Plaginlar kutubxonasini boshqargan holda moslashuvchanlik uchun mo'ljallangan.
+
+Bu dasturchi tomonidan shunchaki nusxa ko'chirish va pleymdan chiqib ketishni istagan dasturchi tomonidan tajriba sifatida boshlandi. U Ctrl + C kabi oddiy buyruqni xohlagan
+Klipboard nima bo'lganini 'almashtiring. Va tajriba ishladi. Kichkina asbob juda qulay edi. Bu dasturchini yanada g'oyalar va qo'shimcha tajribalar bilan to'ldirdi
+Endi "maymun past" ga aylandi.
+
+Ish stolingiz sizning fayllaringiz uchun, maykeyp pastroq sizning rozetkangizga tegishli bo'lish niyatida. Uning to'plami, ehtimol, birlashishga va o'zaro bog'liqlik bilan ajralib turishi mumkin
+har qanday kontent yoki tarkib formati. CTRL + C va CTRL + v - bu shunchaki yorliqlardan ancha ko'p. Ular barcha ilovalarning barcha ulushini olish, olib yurish portlari
+Sizning boylik boyligi va sizning barmoqlaringizingizda mavjud bo'lishga loyiqdir. Keyingi Ctrl + C dan keyin shunchaki tashlanmaydi.
+
+Men ilgari bu dasturchiman va men hamma narsani maymun pastasidan foydalanishni istayman. Shunday qilib, uning barcha xususiyatlari to'liq bepul foydalanish mumkin.
+Bundan tashqari, men uni qulay his qilishingizni xohlayman. Shunday qilib, men sizni yaratgan yagona kuch sifatida, bu erda yuzaga keladigan shaxsiy ma'lumotlar emas
+Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi yoki saqlanadi. Davr.
+
+(Monkeypaste yuqori martabali ruxsatlarni talab qiladi)</value>
   </data>
 </root>

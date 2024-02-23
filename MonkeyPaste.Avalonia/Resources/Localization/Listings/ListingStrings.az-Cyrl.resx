@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeySaste, digərləri kimi bir panoya meneceri, avtomatlaşdırma və məhsuldarlıq vasitəsidir. Panoya işləmə axınınızın zənginləşdirilmiş və mütəşəkkil bir hissəsinə keçin,
-Mətn, faylları və şəkilləri dəstəkləyən intuitiv və aşağı profilli interfeys təqdim olunur. İndiyə qədər böyüyən bir cəmiyyətlə rahatlıq üçün hazırlanmışdır - pluginlərin idarə olunan tərbiyəsi.
-
-Panoya çıxmaq və yapışdırmaqdan daha çox istəyən bir proqramçı tərəfindən bir təcrübə olaraq başladı. Bunun əvəzinə 'əlavə edər' Ctrl + C kimi sadə bir əmr istədi
-panoya nə olduğunu 'dəyişdirin'. Və təcrübə işlədi. Kiçik vasitə çox əlverişli idi. Bu, proqramçıya daha çox fikir və daha çox təcrübə ilə yazdı
-İndi "Monkeytast" oldu.
-
-Masaüstü sənədlərinizdəki kimi, Monkeypaste panoya getmək niyyətindədir. Görünürlük bir şəkildə inteqrasiya və müdaxilə etmək üçün diqqətlə hazırlanmış alətlər dəsti
-hər hansı bir tətbiq və ya məzmun formatı. CTRL + C və CTRL + V yalnız qısa yollardan daha çox şeydir. Onlar a aparan bütün ərizələrin paylaşımının portlarıdır
-Parmaklarınızın ucunda olmağa layiq olduğunuz dəyər və məna var. Növbəti Ctrl + c-dən sonra yalnız atılmadı.
-
-Mən əvvəlki proqramçıyam və hər kəsin meymundan istifadə edə bilməyəcəyimi istəyirəm. Beləliklə, onun bütün xüsusiyyətləri istifadə etmək üçün tamamilə pulsuzdur.
-İstəyirəm ki, onu da istifadə edərək rahat hiss etməyinizi istəyirəm. Buna görə sizi inandırıram, yaradılışının yeganə qüvvəsi olduğu kimi, ortaya çıxa biləcək şəxsi məlumatların heç biri
-Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır. Dövr.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Mətn, şəkil və fayl klipləri bütün mənbəyi (tətbiq, veb, vaxt, vaxt və daha çox) məlumat avtomatik olaraq</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste digər heç kim kimi clipboard meneceri, avtomatlaşdırma və məhsuldarlıq vasitədir. Panonuzun zənginləşdirilmiş və mütəşəkkil bir iş axınına çevrilməsi,
+mətn, fayl və şəkilləri dəstəkləyən intuitiv və aşağı profilli interfeysi nümayiş etdirir. O, elastiklik üçün nəzərdə tutulub və getdikcə artan icmaya aid olan plaqinlərin librayları var.
+
+Bu, sadəcə köçürmək və panodan yapışdırmaqdan daha çox şey istəyən proqramçının eksperimenti kimi başladı. O, Ctrl+C kimi sadə bir əmr istəyirdi ki, onun yerinə "əlavə" edəcək 
+"əvəz et" (lər)ində nə vardı? Eksperiment isə işə yaradı. Balaca alət çox əla idi. Bu, proqramçını daha çox ideya və daha çox eksperimentlərlə maraqlandırmış, ki, 
+hazırda "MonkeyPaste" oldu. 
+
+Masa üstü fayllarınıza olduğu kimi, MonkeyPaste də sizin panonuzda olmaq niyyətindədir. Onun, göründüyü kimi, bir-birinə inteqrasiya etmək və qarşılıqlı əməkdaşlıq etmək üçün diqqətlə hazırlanmış alətlər dəsti 
+məzmunun istənilən tətbiqi və ya formatı. Ctrl+C və Ctrl+V sadəcə qısa yollardan çoxdur. Onlar giriş limanları bütün applications pay, daşıyır a 
+zəngin dəyəri və mənası siz barmaqlarınızın ucunda mövcud olmağa layiqsiniz. Sadəcə növbəti Ctrl+C-dan sonra atılmır.
+
+Mən yuxarıda xatırlanan o proqramçıyam və istəyirəm ki, hamı "MonkeyPaste"dan istifadəni öyrənə bilsin. Beləliklə, o və onun bütün xüsusiyyətləri istifadə etmək üçün tamamilə pulsuzdur. 
+Həmçinin istəyirəm ki, siz ondan istifadə edərək özünüzü rahat hiss edirsiniz. Buna görə də sizi əmin edirəm ki, onun yaradılmasının arxasında duran yeganə qüvvə kimi, ortaya çıxa biləcək (çox) şəxsi məlumatların HEÇ BIRI 
+sizin clipboard nə vaxtsa öz maşınınızdan kənarda ANYWHERE izlənilir və ya saxlanılır. Dövr.
+
+(MonkeyPaste yüksək icazə tələb edir)</value>
   </data>
 </root>

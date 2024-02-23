@@ -151,22 +151,6 @@
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste er en utklippsbehandler, automatisering og produktivitetsverktøy som ingen andre. Forbedre utklippstavlen til en beriket og organisert del av arbeidsflyten din,
-Med et intuitivt og lavt profilgrensesnitt som støtter tekst, filer og bilder. Designet for fleksibilitet, med et stadig - voksende fellesskap - drevet libray av plugins.
-
-Det begynte som et eksperiment av en programmerer som ønsket mer enn bare å kopiere og lime ut av utklippstavlen. Han ønsket en enkel kommando som Ctrl+C som ville 'legge til' i stedet
-av 'erstatt' hva som var på utklippstavlen. Og eksperimentet fungerte. Det lille verktøyet var veldig nyttig. Dette medførte programmereren med flere ideer og flere eksperimenter, det
-Nå har blitt "Monkeypaste".
-
-Som skrivebordet er på filene dine, har MonkeyPaste til hensikt å være på utklippstavlen. Det er en serie verktøy som er nøye designet for å tilsynelatende integrere og interoperere med
-Enhver applikasjon eller format for innhold. Ctrl+C og Ctrl+V er mye mer enn bare snarveier. De er inngangsportene alle applikasjoner deler, og bærer en
-Value av verdi og mening du fortjener å ha tilgjengelig til fingerspissene. Ikke bare kastet etter neste Ctrl+c.
-
-Jeg er den programmereren som er nevnt tidligere, og jeg vil at alle skal kunne finne bruk av MonkeyPaste. Så det og alle funksjonene er helt gratis å bruke.
-Jeg vil også at du skal føle deg komfortabel med å bruke det. Så jeg forsikrer deg, som den eneste kraften bak opprettelsen, at ingen av de (veldig) personlige informasjonen som kan oppstå
-Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din egen maskin. Periode.</value>
-  </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
     <comment>@Invariant</comment>
@@ -273,5 +257,23 @@ Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din 
   </data>
   <data name="ssCaption4" xml:space="preserve">
     <value>Lagre tekst, bilde og filklipp med all sin kilde (appen, nettstedet, tiden og mye mer) informasjon automatisk</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste er et utklippstavlebehandling, automatiserings- og produktivitetsverktøy som ingen andre. Forbedre utklippstavlen til en beriket og organisert del av arbeidsflyten din,
+Med et intuitivt og lavprofilgrensesnitt som støtter tekst, filer og bilder. Designet for fleksibilitet, med en stadig voksende fellesskapsdrevet libray av plugins.
+
+Det begynte som et eksperiment av en programmerer som ønsket mer enn bare å kopiere og lime ut av utklippstavlen. Han ønsket en enkel kommando som Ctrl + C som ville "legge til" i stedet 
+av å "erstatte" det som var på utklippstavlen. Og eksperimentet fungerte. Det lille verktøyet var veldig praktisk. Dette fascinerte programmereren med flere ideer og flere eksperimenter, det 
+nå har blitt "MonkeyPaste". 
+
+Som skrivebordet er til filene dine, har MonkeyPaste til hensikt å være til utklippstavlen. Det er en pakke med verktøy nøye designet for å sømløst integrere og samhandle med 
+enhver applikasjon eller format av innhold. Ctrl + C og Ctrl + V er mye mer enn bare snarveier. De er inngangsportene alle applikasjoner deler, med en 
+Rikdom av verdi og mening du fortjener å ha tilgjengelig på fingertuppene. Ikke bare kastet bort etter neste Ctrl + C.
+
+Jeg er den programmereren som ble nevnt tidligere, og jeg vil at alle skal kunne finne bruk av MonkeyPaste. Så det og alle funksjonene er helt gratis å bruke. 
+Jeg vil også at du skal føle deg komfortabel med å bruke den. Så jeg forsikrer deg, som den eneste kraften bak opprettelsen, at INGEN av de (veldig) personlige opplysninger som kan oppstå på 
+utklippstavlen din blir noen gang sporet eller lagret hvor som helst utenfor din egen maskin. Periode.
+
+(MonkeyPaste krever forhøyede tillatelser)</value>
   </data>
 </root>

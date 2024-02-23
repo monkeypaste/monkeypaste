@@ -1,0 +1,24 @@
+Info about what's changed in this update (1.0.11.0):
+
+Verified tester's issue described in the 1.0.10.0 Certification Report by running app WITHOUT elevated permissions. Have now updated the bottom of the Listing Description by noting it as a requirement.
+
+
+Usernames and passwords for any test accounts needed to test the submission:
+
+None
+
+Steps to access features, modes, or content that may be hidden, conditional, or locked/limited:
+
+Steps to observe 'Free' subscription limitation:
+1. Complete initial Welcome wizard, either by clicking 'Skip' or click through the options via the 'Next' button and then finally click the 'Done' button 
+2. After copying more than 5 pieces of content (text, images or group of files) from any application (within reason, notepad would be a suitable one for testing),
+   the total storage will be restricted to 5 items (without 'Basic' or 'Unlimited' subscription), so the first added clip will be moved to the trash when the 6th one is added.
+
+Steps to verify background audio usage:
+Audio playback volume is set to 0 by default (treated as muted). To hear it
+1. open the Settings window (accessed from cog icon at top-left of the main window or right-clicking system tray icon and selecting 'Settings').
+2. select the "Preferences" tab (should be by default) then scroll to the "Sound" panel and increase the volume slider of "Notification Volume"
+3. A sample audio clip will play at selected volume
+
+Dependencies on other products:
+None

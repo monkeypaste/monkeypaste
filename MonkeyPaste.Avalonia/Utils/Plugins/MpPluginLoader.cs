@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public static bool USE_LOADERS => true;
+        public static bool USE_LOADERS => false;
 
         private static Dictionary<string, PluginLoader> _loaders = [];
         static string PLUGIN_INFO_URL =>
