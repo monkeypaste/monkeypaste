@@ -6,6 +6,9 @@ using Avalonia.Logging;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
+#if SUGAR_WV
+using AvaloniaWebView;
+#endif
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
@@ -120,6 +123,13 @@ namespace MonkeyPaste.Avalonia {
         public override void Initialize() {
             AvaloniaXamlLoader.Load(this);
         }
+#if SUGAR_WV
+        public override void RegisterServices() {
+            base.RegisterServices();
+            AvaloniaWebViewBuilder.Initialize(config => MpAvWebView.ConfigureWebViewCreationProperties(config));
+        }
+#endif
+
         public override async void OnFrameworkInitializationCompleted() {
             DateTime startup_datetime = DateTime.Now;
 #if DEBUG

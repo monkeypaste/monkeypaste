@@ -52,6 +52,7 @@
     <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
     <UseCefNet>false</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
+    <UseSugarWv>false</UseSugarWv>
     <DefaultFramework>net8.0</DefaultFramework>
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
@@ -75,7 +76,8 @@
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>true</UseCefNet>
+    <UseCefNet>false</UseCefNet>
+    <UseSugarWv>true</UseSugarWv>
     <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
     <PlatformShortName>uwp</PlatformShortName> 
     <StartupOutputType>WinExe</StartupOutputType>
@@ -168,6 +170,11 @@
 
   <PropertyGroup Condition="'$(UseOutSysCef)' == 'True'">
     <DefineConstants>$(DefineConstants);OUTSYS_WV</DefineConstants>
+    <DefaultPlatforms>AnyCpu</DefaultPlatforms>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(UseSugarWv)' == 'True'">
+    <DefineConstants>$(DefineConstants);SUGAR_WV</DefineConstants>
     <DefaultPlatforms>AnyCpu</DefaultPlatforms>
   </PropertyGroup>
   

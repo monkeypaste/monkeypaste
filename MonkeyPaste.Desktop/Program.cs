@@ -1,5 +1,8 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
+#if SUGAR_WV
+using Avalonia.WebView.Desktop;
+#endif
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -42,6 +45,9 @@ namespace MonkeyPaste.Avalonia {
             //.With(new AvaloniaNativePlatformOptions { UseGpu = false }
 
             .UsePlatformDetect()
+#if SUGAR_WV
+            .UseDesktopWebView()
+#endif
             //.WithInterFont()
             .UseReactiveUI()
                 .LogToTrace()// LogEventLevel.Verbose)

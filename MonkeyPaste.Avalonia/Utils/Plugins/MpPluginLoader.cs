@@ -37,46 +37,46 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        //private static Type[] _sharedTypes;
-        private static Type[] _sharedTypes = [
-            typeof(MpIPluginComponentBase),
-            typeof(MpISupportHeadlessAnalyzerFormat),
-            typeof(MpISupportHeadlessClipboardComponentFormat),
-            typeof(MpIAnalyzeComponent),
-            typeof(MpIAnalyzeComponentAsync),
-            typeof(MpISupportDeferredValue),
-            typeof(MpISupportDeferredValueAsync),
-            typeof(MpISupportDeferredParameterCommand),
-            typeof(MpIUnloadPluginComponent),
-            typeof(MpIOlePluginComponent),
-            typeof(MpIOleReaderComponent),
-            typeof(MpIOleWriterComponent),
-            typeof(MpIParamterValueProvider),
-            typeof(MpIParamterValueProvider),
-            typeof(MpOlePluginRequest),
-            typeof(MpOlePluginResponse),
-            typeof(MpHeadlessComponentFormatRequest),
-            typeof(MpParameterFormat),
-            typeof(MpParameterValueFormat),
-            ];
+        private static Type[] _sharedTypes;
+        //private static Type[] _sharedTypes = [
+        //    typeof(MpIPluginComponentBase),
+        //    typeof(MpISupportHeadlessAnalyzerFormat),
+        //    typeof(MpISupportHeadlessClipboardComponentFormat),
+        //    typeof(MpIAnalyzeComponent),
+        //    typeof(MpIAnalyzeComponentAsync),
+        //    typeof(MpISupportDeferredValue),
+        //    typeof(MpISupportDeferredValueAsync),
+        //    typeof(MpISupportDeferredParameterCommand),
+        //    typeof(MpIUnloadPluginComponent),
+        //    typeof(MpIOlePluginComponent),
+        //    typeof(MpIOleReaderComponent),
+        //    typeof(MpIOleWriterComponent),
+        //    typeof(MpIParamterValueProvider),
+        //    typeof(MpIParamterValueProvider),
+        //    typeof(MpOlePluginRequest),
+        //    typeof(MpOlePluginResponse),
+        //    typeof(MpHeadlessComponentFormatRequest),
+        //    typeof(MpParameterFormat),
+        //    typeof(MpParameterValueFormat),
+        //    ];
         private static Type[] sharedTypes {
             get {
-                //                if (_sharedTypes == null) {
-                //                    _sharedTypes =
-                //                        typeof(MpIPluginComponentBase).Assembly.ExportedTypes
-                //                        //.Union(typeof(MpCommonTools).Assembly.ExportedTypes)
-                //                        // .Union(typeof(MpAvCommonTools).Assembly.ExportedTypes)
-                //#if WINDOWS
-                //                        //.Union(typeof(MpWpfHtmlToRtfConverter).Assembly.ExportedTypes)
-                //#endif
-                //                        .OrderBy(x => x.Name)
-                //                        .ToArray();
-                //                }
+                if (_sharedTypes == null) {
+                    _sharedTypes =
+                        typeof(MpIPluginComponentBase).Assembly.ExportedTypes
+                        //.Union(typeof(MpCommonTools).Assembly.ExportedTypes)
+                        // .Union(typeof(MpAvCommonTools).Assembly.ExportedTypes)
+#if WINDOWS
+                        //.Union(typeof(MpWpfHtmlToRtfConverter).Assembly.ExportedTypes)
+#endif
+                        .OrderBy(x => x.Name)
+                        .ToArray();
+                }
                 return _sharedTypes;
             }
         }
 
-        public static bool USE_LOADERS => false;
+        public static bool USE_LOADERS => true;
 
         private static Dictionary<string, PluginLoader> _loaders = [];
         static string PLUGIN_INFO_URL =>

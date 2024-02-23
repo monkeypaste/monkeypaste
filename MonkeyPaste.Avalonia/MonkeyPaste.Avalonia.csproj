@@ -610,6 +610,7 @@
     <None Remove="Resources\Editor\src\components\localizer\UiStrings.js" />
     <None Remove="resources\editor\src\components\quill-wrapper\parchment\parchment-wrapper.js" />
     <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
+    <None Remove="Resources\Editor\test.html" />
     <None Remove="Resources\Legal\credits.html" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
@@ -2408,8 +2409,11 @@
   <ItemGroup Condition="'$(UseOutSysCef)' == 'True'">
     <PackageReference Include="WebViewControl-Avalonia" Version="2.117.7-avalonia11" />
     <PackageReference Include="CefGlue.Avalonia" Version="117.5938.8-avalonia11" />
-    <PackageReference Include="CefGlue.Common" Version="117.5938.8-avalonia11" />
-    
+    <PackageReference Include="CefGlue.Common" Version="117.5938.8-avalonia11" />    
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(UseSugarWv)' == 'True'">
+    <PackageReference Include="WebView.Avalonia" Version="11.0.0.1" />
   </ItemGroup>
     
   <ItemGroup Condition="$(IsDesktop) == 'true'">
@@ -2484,7 +2488,7 @@
     <Folder Include="Utils\Plugins\Headless\" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(UseCefNet)' == 'True'">
     <Reference Include="CefNet">
       <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
     </Reference>
@@ -2494,6 +2498,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Resources\Editor\test.html">
+      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
+    </Content>
     <Content Update="Resources\Editor\lib\jquery-context-menus\src\context-menu.css">
       <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
     </Content>

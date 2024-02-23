@@ -763,7 +763,7 @@ namespace MonkeyPaste.Avalonia {
                 var req = new MpQuillAnnotationSelectedMessage() {
                     annotationGuid = to_sel_ann_guid
                 };
-                wv.ExecuteJavascript($"annotationSelected_ext('{req.SerializeObjectToBase64()}')");
+                wv.SendMessage($"annotationSelected_ext('{req.SerializeObjectToBase64()}')");
             });
 
         public MpIAsyncCommand ShowMostRecentRuntimeTransactionCommand => new MpAsyncCommand(
@@ -785,7 +785,7 @@ namespace MonkeyPaste.Avalonia {
                 while (!Parent.IsEditorLoaded) {
                     await Task.Delay(100);
                 }
-                wv.ExecuteJavascript($"hideAnnotations_ext()");
+                wv.SendMessage($"hideAnnotations_ext()");
             });
         #endregion
     }

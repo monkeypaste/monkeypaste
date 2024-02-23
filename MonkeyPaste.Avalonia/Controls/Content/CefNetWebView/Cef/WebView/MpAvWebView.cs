@@ -1,22 +1,27 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
-using CefNet;
 using System.Collections.Generic;
 #if DEBUG
 using MonkeyPaste.Common.Plugin;
+using Avalonia.Controls;
+using WebViewCore.Configurations;
+
+
 #endif
 
 #if CEFNET_WV
+using CefNet;
 using CefNet.Avalonia;
 using CefNet.Internal;
 #elif OUTSYS_WV
 using WebViewControl;
+#elif SUGAR_WV
+using AvaloniaWebView;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -27,6 +32,8 @@ namespace MonkeyPaste.Avalonia {
         WebView
 #elif OUTSYS_WV
         WebView, MpIWebViewNavigator
+#elif SUGAR_WV
+        UserControl
 #else
         MpAvNativeWebViewHost
 #endif
@@ -52,12 +59,33 @@ namespace MonkeyPaste.Avalonia {
             WebView.Settings.OsrEnabled = true;
             WebView.Settings.AddCommandLineSwitch("use-mock-keychain", null);
             WebView.Settings.AddCommandLineSwitch("process-per-site", null);
+#elif SUGAR_WV
+
 #endif
         }
+
+#if SUGAR_WV
+        public static void ConfigureWebViewCreationProperties(WebViewCreationProperties config) {
+#if DEBUG
+            config.AreDevToolEnabled = true;
+#else
+            config.AreDevToolEnabled = false; 
+#endif
+            config.AreDefaultContextMenusEnabled = false;
+            config.IsStatusBarEnabled = false;
+            //config.BrowserExecutableFolder = _creationProperties.BrowserExecutableFolder;
+            //config.UserDataFolder = _creationProperties.UserDataFolder;
+            config.Language = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name;
+            //config.AdditionalBrowserArguments = _creationProperties.AdditionalBrowserArguments;
+            //config.ProfileName = _creationProperties.ProfileName;
+            //config.IsInPrivateModeEnabled = _creationProperties.IsInPrivateModeEnabled;
+            config.DefaultWebViewBackgroundColor = System.Drawing.Color.Transparent;
+        }
+#endif
         #endregion
 
         #region Interfaces
-#if CEFNET_WV || OUTSYS_WV
+#if CEFNET_WV || OUTSYS_WV || SUGAR_WV
         public void OpenDevTools() {
 #if RELEASE
             return;
@@ -67,6 +95,11 @@ namespace MonkeyPaste.Avalonia {
 #elif CEFNET_WV
             base.ShowDevTools();
             return;
+#elif SUGAR_WV
+            if (InnerWebView != null) {
+                InnerWebView.OpenDevToolsWindow();
+            }
+            return;
 #endif
         }
 #endif
@@ -74,7 +107,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIWebViewBindingResponseHandler Implemention
 
 #if CEFNET_WV
-#elif OUTSYS_WV
+#elif OUTSYS_WV || SUGAR_WV
         public MpAvIWebViewBindingResponseHandler BindingHandler =>
             this;
 #else
@@ -109,11 +142,19 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIWebViewNavigator 
-#if OUTSYS_WV
+#if OUTSYS_WV || SUGAR_WV
         public void Navigate(string url) {
             // NOTE outsys has an address prop, this does nothing but is called when address changes
             // so treating it like Navigating cefnet event
+
+#if OUTSYS_WV
             IsNavigating = true;
+#else
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
+                return;
+            }
+            InnerWebView.Url = new Uri(url, UriKind.Absolute);
+#endif
         }
 #endif
         #endregion
@@ -122,12 +163,20 @@ namespace MonkeyPaste.Avalonia {
         void MpICanExecuteJavascript.ExecuteJavascript(string script) {
 #if CEFNET_WV
             this.GetMainFrame().ExecuteJavaScript(script, this.GetMainFrame().Url, 0);
+#elif SUGAR_WV
+            InnerWebView.ExecuteScriptAsync(script).FireAndForgetSafeAsync();
 #endif
         }
         #endregion
         #endregion
 
         #region Properties
+
+#if SUGAR_WV
+        WebView InnerWebView =>
+            Content as WebView;
+#endif
+
 
         #region Address
 
@@ -230,7 +279,19 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvWebView() : base() {
             this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged()).AddDisposable(_disposables);
-#if CEFNET_WV
+#if SUGAR_WV
+            this.Content = new WebView();
+            InnerWebView.NavigationStarting += InnerWebView_NavigationStarting;
+            InnerWebView.NavigationCompleted += InnerWebView_NavigationCompleted;
+            InnerWebView.WebMessageReceived += (s, e) => {
+                if (e.MessageAsJson is not string jsonStr ||
+                    jsonStr.IsNullOrEmpty()) {
+                    return;
+                }
+                var msg = jsonStr.DeserializeObject<MpQuillPostMessageResponse>();
+                HandleBindingNotification(msg.msgType, msg.msgData, msg.handle);
+            };
+#elif CEFNET_WV
             Navigating += MpAvWebView_Navigating;
             Navigated += MpAvWebView_Navigated;
             LoadError += MpAvWebView_LoadError;
@@ -258,21 +319,18 @@ namespace MonkeyPaste.Avalonia {
 
 
 
+
         #endregion
 
         #region Public Methods
 
-#if OUTSYS_WV
+#if OUTSYS_WV || SUGAR_WV
         public virtual void OnNavigated(string url) { }
 #endif
         #endregion
 
         #region Protected Methods
 
-        protected override void OnDocumentTitleChanged(DocumentTitleChangedEventArgs e) {
-            base.OnDocumentTitleChanged(e);
-            DocumentTitle = e.Title;
-        }
         protected override void OnPointerReleased(PointerReleasedEventArgs e) {
             base.OnPointerReleased(e);
             if (!e.IsMiddleRelease(this)) {
@@ -282,6 +340,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
 #if CEFNET_WV
+        protected override void OnDocumentTitleChanged(DocumentTitleChangedEventArgs e) {
+            base.OnDocumentTitleChanged(e);
+            DocumentTitle = e.Title;
+        }
         protected override WebViewGlue CreateWebViewGlue() {
             return new MpAvCefNetWebViewGlue(this);
         }
@@ -353,6 +415,15 @@ namespace MonkeyPaste.Avalonia {
                 LoadErrorInfo = null;
             }
             OnNavigated(url);
+        }
+#elif SUGAR_WV
+        private void InnerWebView_NavigationCompleted(object sender, WebViewCore.Events.WebViewUrlLoadedEventArg e) {
+            IsNavigating = false;
+            OnNavigated(InnerWebView.Url.AbsoluteUri);
+        }
+
+        private void InnerWebView_NavigationStarting(object sender, WebViewCore.Events.WebViewUrlLoadingEventArg e) {
+            IsNavigating = true;
         }
 #endif
         #endregion
