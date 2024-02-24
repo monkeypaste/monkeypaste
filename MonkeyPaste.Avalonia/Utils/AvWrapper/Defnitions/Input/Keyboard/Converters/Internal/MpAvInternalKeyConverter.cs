@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public Key ConvertStringToKey(string keyStr) {
-            if (keyStr.IsNullOrEmpty()) {
+            if (string.IsNullOrEmpty(keyStr)) {
                 return Key.None;
             }
 

@@ -50,7 +50,20 @@ namespace MonkeyPaste.Common {
         }
 
         public static string GetStorageDir() {
-            return typeof(MpPlatformHelpers).Assembly.GetCustomAttribute<MpLocalStorageDirAttribute>().Value;
+            string app_name =
+#if DEBUG
+                "MonkeyPaste_DEBUG";
+#else
+                            "MonkeyPaste";
+#endif
+            string storage_dir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                app_name);
+            return storage_dir;
+            //if(MpCommonTools.Services.PlatformInfo.IsAdmin) {
+
+            //}
+            //return typeof(MpPlatformHelpers).Assembly.GetCustomAttribute<MpLocalStorageDirAttribute>().Value;
         }
         private static string GetPackageDir() {
 #if !WINDOWS

@@ -126,7 +126,9 @@ namespace MonkeyPaste.Avalonia {
 #if SUGAR_WV
         public override void RegisterServices() {
             base.RegisterServices();
-            AvaloniaWebViewBuilder.Initialize(config => MpAvWebView.ConfigureWebViewCreationProperties(config));
+            AvaloniaWebViewBuilder.Initialize((e) => {
+                MpAvWebView.ConfigureWebViewCreationProperties(e);
+            });
         }
 #endif
 
@@ -143,8 +145,6 @@ namespace MonkeyPaste.Avalonia {
 
             ReportCommandLineArgs(Args);
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
-
-            MpAvAppRestarter.RemoveRestartTask();
 
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {

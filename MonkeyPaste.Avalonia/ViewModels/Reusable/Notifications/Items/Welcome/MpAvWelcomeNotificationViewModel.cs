@@ -398,7 +398,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private async Task BeginWelcomeSetupAsync() {
             IsWelcomeDone = false;
-            Mp.Services.LoadOnLoginTools.SetLoadOnLogin(false);
+            await Mp.Services.LoadOnLoginTools.SetLoadOnLoginAsync(false);
             bool is_pwd_already_set = await MpDb.CheckIsUserPasswordSetAsync();
             if (is_pwd_already_set) {
                 // this is not initial startup, user has reset ntf
@@ -473,7 +473,7 @@ namespace MonkeyPaste.Avalonia {
             // LOGIN LOAD
             bool loadOnLogin =
                 LoginLoadViewModel.Items.FirstOrDefault(x => x.OptionId is bool boolVal && boolVal).IsChecked;
-            Mp.Services.LoadOnLoginTools.SetLoadOnLogin(loadOnLogin);
+            await Mp.Services.LoadOnLoginTools.SetLoadOnLoginAsync(loadOnLogin);
             MpAvPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
 
             // SHORTCUT PROFILE

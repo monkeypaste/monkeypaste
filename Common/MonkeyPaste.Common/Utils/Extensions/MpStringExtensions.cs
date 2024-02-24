@@ -292,14 +292,14 @@ namespace MonkeyPaste.Common {
             return Uri.IsWellFormedUriString(str, UriKind.Absolute);
         }
 
-        public static bool IsStringNullOrEmpty(this string str) {
+        public static bool IsNullOrEmpty(this string str) {
             return string.IsNullOrEmpty(str);
         }
         public static string Format(this string str, params object[] paramObjs) {
             return string.Format(str, paramObjs);
         }
 
-        public static bool IsStringNullOrWhiteSpace(this string str) {
+        public static bool IsNullOrWhiteSpace(this string str) {
             return string.IsNullOrWhiteSpace(str);
         }
 
@@ -663,7 +663,7 @@ namespace MonkeyPaste.Common {
             //    str = str.Replace(replacement.Key, replacement.Value);
             //}
             //return str;
-            if (html.IsNullOrEmpty()) {
+            if (string.IsNullOrEmpty(html)) {
                 return html;
             }
             //var regex = MpRegEx.RegExLookup[MpRegExType.HexEncodedHtmlEntity];

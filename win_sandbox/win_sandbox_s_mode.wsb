@@ -1,0 +1,10 @@
+<Configuration>
+	<vGPU>Enable</vGPU>
+	<MappedFolders>
+		<MappedFolder>
+			<HostFolder>C:\Users\tkefauver\Source\Repos\MonkeyPaste\win_sandbox\CodeIntegrity</HostFolder>
+			<SandboxFolder>C:\Windows\System32\CodeIntegrity\</SandboxFolder>
+			<ReadOnly>false</ReadOnly>
+		</MappedFolder>
+	</MappedFolders>
+</Configuration>

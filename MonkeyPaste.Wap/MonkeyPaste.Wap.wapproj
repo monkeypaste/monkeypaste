@@ -63,8 +63,9 @@
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+    <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
     <EntryPointProjectUniqueName>..\MonkeyPaste.Desktop\MonkeyPaste.Desktop.csproj</EntryPointProjectUniqueName>
+    <AppxPackageDir>E:\</AppxPackageDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <AppxBundle>Always</AppxBundle>
@@ -168,6 +169,7 @@
     <_CopyItems Include="$(MainTargetDir)cef\**\*.*" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Desktop.Launcher\MonkeyPaste.Desktop.Launcher.csproj" />
     <ProjectReference Include="..\MonkeyPaste.Desktop\MonkeyPaste.Desktop.csproj" />
   </ItemGroup>
   <Target Name="AfterBuild">

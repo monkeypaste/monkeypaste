@@ -86,6 +86,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureComputerVision", "Plug
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YoloImageAnnotator", "Plugins\YoloImageAnnotator\YoloImageAnnotator.csproj", "{E558AB02-0E06-43F8-B725-D7524B35C985}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.Desktop.Launcher", "MonkeyPaste.Desktop.Launcher\MonkeyPaste.Desktop.Launcher.csproj", "{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1454,6 +1456,48 @@ Global
 		{E558AB02-0E06-43F8-B725-D7524B35C985}.Release|x64.Build.0 = Release|Any CPU
 		{E558AB02-0E06-43F8-B725-D7524B35C985}.Release|x86.ActiveCfg = Release|Any CPU
 		{E558AB02-0E06-43F8-B725-D7524B35C985}.Release|x86.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|ARM.Build.0 = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|x64.Build.0 = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Debug|x86.Build.0 = Debug|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|Any CPU.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|ARM.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|ARM.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|ARM64.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|ARM64.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|iPhone.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|iPhone.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|x64.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|x64.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|x86.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Nuget_Release|x86.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|ARM.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|ARM.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|ARM64.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|iPhone.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|x64.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|x64.Build.0 = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|x86.ActiveCfg = Release|Any CPU
+		{2EC03327-5E39-41C5-8A6E-AAE3255FBD54}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1482,14 +1526,14 @@ Global
 		{E558AB02-0E06-43F8-B725-D7524B35C985} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ConfirmAddLanguageFile = False
-		RESX_ExcelExportMode = Text
-		RESX_TaskErrorCategory = Message
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_RemoveEmptyEntries = False
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_DuplicateKeyHandling = Fail
-		RESX_ShowPerformanceTraces = True
 		RESX_CultureCountyOverrides = ar=ar-DJ
+		RESX_ShowPerformanceTraces = True
+		RESX_DuplicateKeyHandling = Fail
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_RemoveEmptyEntries = False
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_TaskErrorCategory = Message
+		RESX_ExcelExportMode = Text
+		RESX_ConfirmAddLanguageFile = False
 	EndGlobalSection
 EndGlobal

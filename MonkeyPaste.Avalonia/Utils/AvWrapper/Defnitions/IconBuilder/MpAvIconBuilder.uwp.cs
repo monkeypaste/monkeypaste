@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
             if (string.IsNullOrEmpty(base64)) {
                 base64 = MpAvWinPathIconHelper.GetIconBase64FromWindowsPath(path, (int)iconSize);
             }
-            if (base64.IsNullOrEmpty()) {
+            if (string.IsNullOrEmpty(base64)) {
                 return MpBase64Images.QuestionMark;
             }
             return base64;

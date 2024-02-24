@@ -38,7 +38,7 @@
     <Nullable>disable</Nullable>
     <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
-    <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE;REMOTE;</DefineConstants>
   </PropertyGroup>
 
 
@@ -50,7 +50,7 @@
     <IsMobile>false</IsMobile>
     <DefaultPlatforms>AnyCPU;x64;x86</DefaultPlatforms>
     <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
-    <UseCefNet>false</UseCefNet>
+    <UseCefNet>true</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
     <UseSugarWv>false</UseSugarWv>
     <DefaultFramework>net8.0</DefaultFramework>

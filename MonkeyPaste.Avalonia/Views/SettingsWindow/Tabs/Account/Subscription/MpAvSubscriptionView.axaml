@@ -446,6 +446,7 @@
                                                     <!--  RATE TEXT  -->
                                                     <Viewbox Stretch="UniformToFill">
                                                         <TextBlock HorizontalAlignment="Left"
+                                                                   Margin="1"
                                                                    ClipToBounds="False"
                                                                    VerticalAlignment="Center"
                                                                    TextWrapping="Wrap"
@@ -467,6 +468,7 @@
                                                                 IsVisible="{Binding TrialText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                                 Background="Crimson">
                                                             <TextBlock Foreground="White"
+                                                                       Margin="1"
                                                                        LineHeight="10"
                                                                        TextWrapping="WrapWithOverflow"
                                                                        Text="{Binding TrialText}" />

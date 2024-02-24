@@ -57,7 +57,6 @@
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.7" />
     <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
-    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
   </ItemGroup>
@@ -69,10 +68,6 @@
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
     <ProjectReference Include="..\_build\_build.csproj" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(UseSugarWv)' == 'True'">
-    <PackageReference Include="WebView.Avalonia.Desktop" Version="11.0.0.1" />
   </ItemGroup>
 
 
@@ -102,5 +97,9 @@
     <Reference Include="CefNet.Avalonia">
       <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="$(UseSugarWv) == 'True'">
+    <PackageReference Include="WebView.Avalonia.Desktop" Version="11.0.0.2" />
   </ItemGroup>
 </Project>

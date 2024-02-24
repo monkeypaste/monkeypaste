@@ -173,17 +173,20 @@ namespace MonkeyPaste.Avalonia {
 
 
             if (Mp.Services.PlatformInfo.IsDesktop) {
-                var sw = Stopwatch.StartNew();
                 var quillWindow = new MpAvHiddenWindow();
 
                 quillWindow.Content = ConverterWebView;
                 ConverterWebView.AttachedToVisualTree += async (s, e) => {
+                    var sw = Stopwatch.StartNew();
                     if (OperatingSystem.IsWindows()) {
                         // hide converter window from windows alt-tab menu
                         MpAvToolWindow_Win32.SetAsToolWindow(quillWindow.TryGetPlatformHandle().Handle);
                     }
 
                     while (!ConverterWebView.IsEditorInitialized) {
+                        if (sw.Elapsed > TimeSpan.FromSeconds(60)) {
+                            // TODO should fallback here 
+                        }
                         MpConsole.WriteLine("[loader] waiting for html converter init...");
                         await Task.Delay(100);
                     }

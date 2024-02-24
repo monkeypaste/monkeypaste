@@ -2392,14 +2392,14 @@
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.6" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
     <PackageReference Include="Markdig" Version="0.34.0" />
-    <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" />
+    <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" NoWarn="NU1701" />
     <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="ResXResourceReader.NetStandard" Version="1.2.0" />
     <PackageReference Include="SharpHook" Version="5.2.2" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
     <PackageReference Include="System.Management" Version="8.0.0" />
-    <PackageReference Include="NetCoreAudio" Version="2.0.0" />
+    <PackageReference Include="NetCoreAudio" Version="2.0.0" NoWarn="NU1701" />
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
     <PackageReference Include="System.Speech" Version="8.0.0" />
     <PackageReference Include="TaskScheduler" Version="2.10.1" />
@@ -2413,7 +2413,7 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(UseSugarWv)' == 'True'">
-    <PackageReference Include="WebView.Avalonia" Version="11.0.0.1" />
+    <PackageReference Include="WebView.Avalonia" Version="11.0.0.2" />
   </ItemGroup>
     
   <ItemGroup Condition="$(IsDesktop) == 'true'">
@@ -2496,6 +2496,7 @@
       <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
     </Reference>
   </ItemGroup>
+  
 
   <ItemGroup>
     <Content Update="Resources\Editor\test.html">

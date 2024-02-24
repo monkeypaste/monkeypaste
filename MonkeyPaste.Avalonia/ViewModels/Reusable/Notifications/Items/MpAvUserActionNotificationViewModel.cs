@@ -535,7 +535,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand RestartCommand => new MpCommand(
             () => {
                 InputResult = null;
-                MpAvAppRestarter.ShutdownWithRestartTask("By ntf");
+                MpAvAppRestarter.ShutdownWithRestartTaskAsync("By ntf").FireAndForgetSafeAsync();
             });
 
         public ICommand OkCommand => new MpCommand(

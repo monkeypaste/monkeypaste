@@ -1538,10 +1538,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void SetLoadOnLogin(bool loadOnLogin) {
-            Mp.Services.LoadOnLoginTools.SetLoadOnLogin(loadOnLogin);
-            MpAvPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
+            Dispatcher.UIThread.Post(async () => {
+                await Mp.Services.LoadOnLoginTools.SetLoadOnLoginAsync(loadOnLogin);
+                MpAvPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
 
-            MpConsole.WriteLine($"Load At Login: {(MpAvPrefViewModel.Instance.LoadOnLogin ? "ON" : "OFF")}");
+                MpConsole.WriteLine($"Load At Login: {(MpAvPrefViewModel.Instance.LoadOnLogin ? "ON" : "OFF")}");
+            });
         }
 
         #region Theme Button Color
@@ -1999,7 +2001,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPrefViewModel.Instance.RestoreDefaults();
                 IsBatchUpdate = false;
 
-                MpAvAppRestarter.ShutdownWithRestartTask("Restoring Default Preferences");
+                MpAvAppRestarter.ShutdownWithRestartTaskAsync("Restoring Default Preferences").FireAndForgetSafeAsync();
 
             });
         #endregion

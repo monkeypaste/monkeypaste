@@ -11,7 +11,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return $"<html><head></head><body><img src=\"{imgBase64.ToBase64ImageUrl()}\"></body></html>";
         }
         public static bool IsAvResourceString(this string str) {
-            if (str.IsNullOrEmpty()) {
+            if (string.IsNullOrEmpty(str)) {
                 return false;
             }
             return str.ToLowerInvariant().StartsWith("avares://");

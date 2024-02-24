@@ -2,11 +2,16 @@
 using Avalonia.Data;
 using Avalonia.Input;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
+using Avalonia.Threading;
+using System.Threading.Tasks;
+
+
 
 #if CEFNET_WV
 using CefNet;
@@ -61,20 +66,23 @@ namespace MonkeyPaste.Avalonia {
 
 #if SUGAR_WV
         public static void ConfigureWebViewCreationProperties(WebViewCreationProperties config) {
+            config.AreDevToolEnabled =
 #if DEBUG
-            config.AreDevToolEnabled = true;
+            true;
 #else
-            config.AreDevToolEnabled = false; 
+            false; 
 #endif
             config.AreDefaultContextMenusEnabled = false;
             config.IsStatusBarEnabled = false;
+            config.DefaultWebViewBackgroundColor = System.Drawing.Color.Transparent;
+            config.AdditionalBrowserArguments = MpAvCefCommandLineArgs.ToArgString();
+            MpConsole.WriteLine($"Cef args: '{config.AdditionalBrowserArguments}'");
             //config.BrowserExecutableFolder = _creationProperties.BrowserExecutableFolder;
             //config.UserDataFolder = _creationProperties.UserDataFolder;
-            config.Language = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name;
+            //config.Language = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name;
             //config.AdditionalBrowserArguments = _creationProperties.AdditionalBrowserArguments;
             //config.ProfileName = _creationProperties.ProfileName;
             //config.IsInPrivateModeEnabled = _creationProperties.IsInPrivateModeEnabled;
-            config.DefaultWebViewBackgroundColor = System.Drawing.Color.Transparent;
         }
 #endif
         #endregion
@@ -88,6 +96,15 @@ namespace MonkeyPaste.Avalonia {
             ShowDeveloperTools();
             return;
 #elif CEFNET_WV
+            if (!_isBrowserCreated) {
+                Dispatcher.UIThread.Post(async () => {
+                    while (!_isBrowserCreated) {
+                        await Task.Delay(100);
+                    }
+                    base.ShowDevTools();
+                });
+                return;
+            }
             base.ShowDevTools();
             return;
 #elif SUGAR_WV
@@ -279,8 +296,8 @@ namespace MonkeyPaste.Avalonia {
             InnerWebView.NavigationStarting += InnerWebView_NavigationStarting;
             InnerWebView.NavigationCompleted += InnerWebView_NavigationCompleted;
             InnerWebView.WebMessageReceived += (s, e) => {
-                if (e.MessageAsJson is not string jsonStr ||
-                    jsonStr.IsNullOrEmpty()) {
+                if (e.Message is not string jsonStr ||
+                    string.IsNullOrEmpty(jsonStr)) {
                     return;
                 }
                 var msg = jsonStr.DeserializeObject<MpQuillPostMessageResponse>();
