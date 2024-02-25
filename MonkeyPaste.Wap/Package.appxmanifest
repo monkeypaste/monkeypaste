@@ -40,7 +40,7 @@
           <desktop:StartupTask
               TaskId="5c8dfa29-456c-425a-8fd7-9d5540663691"
               Enabled="true"
-              DisplayName="MonkeyPasteLoginLoad" />
+              DisplayName="MonkeyPaste" />
         </desktop:Extension>
       </Extensions>
       <uap:VisualElements

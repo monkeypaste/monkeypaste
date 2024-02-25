@@ -96,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
                     // remove ext if there 
                     mpdo.Remove(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT);
                     // add file explorer as source
-                    mpdo.SetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, new MpPortableProcessInfo(Mp.Services.PlatformInfo.OsFileManagerPath));
+                    mpdo.SetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, MpPortableProcessInfo.FromPath(Mp.Services.PlatformInfo.OsFileManagerPath));
                     break;
                 case MpDataObjectSourceType.PluginResponse:
                 case MpDataObjectSourceType.ShortcutTrigger:
@@ -801,8 +801,6 @@ namespace MonkeyPaste.Avalonia {
         public int HeadQueryIdx => !SortOrderedItems.Any() ? -1 : SortOrderedItems.Min(x => x.QueryOffsetIdx);
 
         public int TailQueryIdx => !SortOrderedItems.Any() ? -1 : Items.Max(x => x.QueryOffsetIdx);
-        public int FirstPlaceholderItemIdx =>
-            Items.IndexOf(PlaceholderItems.FirstOrDefault());
 
         public int LastNonVisibleItemIdx {
             get {
@@ -877,8 +875,6 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvClipTileViewModel> SortOrderedItems =>
             Items.Where(x => x.QueryOffsetIdx >= 0).OrderBy(x => x.QueryOffsetIdx);
 
-        public IEnumerable<MpAvClipTileViewModel> PlaceholderItems =>
-            Items.Where(x => x.IsPlaceholder);
         public IEnumerable<MpAvClipTileViewModel> AllItems =>
             Items.Union(PinnedItems);
         public IEnumerable<MpAvClipTileViewModel> AllActiveItems =>
@@ -901,7 +897,7 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem.CopyItemId;
             }
         }
-
+        public MpAvClipTileViewModel PinTrayCachePlaceholder { get; set; }
         public MpAvClipTileViewModel SelectedItem {
             get {
                 //if (MpAvAppendNotificationWindow.Instance != null &&
@@ -1544,6 +1540,7 @@ namespace MonkeyPaste.Avalonia {
 
             await ProcessAccountCapsAsync(MpAccountCapCheckType.Init);
             await UpdateEmptyPropertiesAsync();
+            await CreatePinTrayCachePlaceholderAsync();
 
             SetCurPasteInfoMessage(Mp.Services.ProcessWatcher.LastProcessInfo);
 
@@ -3195,6 +3192,33 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(keys);
         }
 
+        private void PinToCachedPlaceholder(MpAvClipTileViewModel ctvm_to_pin, MpPinType pinType, int pin_to_idx = 0) {
+            int cache_idx = PinTrayCachePlaceholder == null ? -1 : PinnedItems.IndexOf(PinTrayCachePlaceholder);
+            if (pinType != MpPinType.Internal ||
+                PinTrayCachePlaceholder == null ||
+                PinTrayCachePlaceholder.IsAnyBusy ||
+                pin_to_idx > 0 ||
+                cache_idx < 0
+                ) {
+                if (pin_to_idx >= PinnedItems.Count) {
+                    PinnedItems.Add(ctvm_to_pin);
+                } else {
+                    PinnedItems.Insert(pin_to_idx, ctvm_to_pin);
+                }
+                return;
+            }
+            PinnedItems[cache_idx] = ctvm_to_pin;
+            CreatePinTrayCachePlaceholderAsync().FireAndForgetSafeAsync(this);
+        }
+        private async Task CreatePinTrayCachePlaceholderAsync() {
+            if (PinTrayCachePlaceholder == null) {
+                PinTrayCachePlaceholder = await CreateClipTileViewModelAsync(null);
+            }
+            if (InternalPinnedItems.FirstOrDefault() != PinTrayCachePlaceholder) {
+                MpDebug.Assert(PinnedItems.All(x => x != PinTrayCachePlaceholder), $"Pin Tray Cache item misplaced");
+                PinnedItems.Insert(0, PinTrayCachePlaceholder);
+            }
+        }
         #endregion
 
         #region Commands
@@ -3403,10 +3427,12 @@ namespace MonkeyPaste.Avalonia {
                      PinnedItems.Move(cur_pin_idx, pin_idx);
                  } else if (pin_idx == PinnedItems.Count) {
                      // new item or user pinned query item
-                     PinnedItems.Add(ctvm_to_pin);
+                     PinToCachedPlaceholder(ctvm_to_pin, pinType);
+                     //PinnedItems.Add(ctvm_to_pin);
                  } else {
                      // for drop from external or query tray
-                     PinnedItems.Insert(pin_idx, ctvm_to_pin);
+                     //PinnedItems.Insert(pin_idx, ctvm_to_pin);
+                     PinToCachedPlaceholder(ctvm_to_pin, pinType, pin_idx);
                  }
 
                  if (pinType == MpPinType.Window || pinType == MpPinType.Append) {
@@ -3611,16 +3637,7 @@ namespace MonkeyPaste.Avalonia {
             });
         public MpIAsyncCommand UnpinAllCommand => new MpAsyncCommand(
             async () => {
-                //int pin_count = PinnedItems.Count;
-                //while (pin_count > 0) {
-                //    var to_unpin_ctvm = PinnedItems[--pin_count];
-                //    if (to_unpin_ctvm.IsWindowOpen ||
-                //        to_unpin_ctvm.IsAppendNotifier) {
-                //        continue;
-                //    }
-                //    await UnpinTileCommand.ExecuteAsync(to_unpin_ctvm);
-                //}
-                var to_unpin_ciidl = InternalPinnedItems.Select(x => x.CopyItemId).ToList();
+                var to_unpin_ciidl = InternalPinnedItems.Where(x => x != PinTrayCachePlaceholder).Select(x => x.CopyItemId).ToList();
                 for (int i = 0; i < to_unpin_ciidl.Count; i++) {
                     if (PinnedItems.FirstOrDefault(x => x.CopyItemId == to_unpin_ciidl[i]) is { } to_unpin_ctvm) {
                         PinnedItems.Remove(to_unpin_ctvm);

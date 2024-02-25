@@ -81,7 +81,7 @@ function getDocumentSelectionHtml(docSel) {
 	return htmlStr;
 }
 
-function getCaretLine(forceDocIdx = -1) {
+function getCaretLine(forceDocIdx = -1, byLineHight = false) {
 	let caret_doc_idx = forceDocIdx;
 	if (caret_doc_idx < 0) {
 		let sel = getDocSelection();
@@ -98,7 +98,7 @@ function getCaretLine(forceDocIdx = -1) {
 	}
 
 	let editor_rect = getEditorContainerRect();
-	let caret_rect = getCharacterRect(caret_doc_idx);
+	let caret_rect = getCharacterRect(caret_doc_idx, true, byLineHight, true);
 
 	let caret_line = { x1: caret_rect.left, y1: caret_rect.top, x2: caret_rect.left, y2: caret_rect.bottom };
 	let left_clamp = 0;

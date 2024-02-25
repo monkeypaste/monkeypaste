@@ -65,7 +65,7 @@
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
     <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
     <EntryPointProjectUniqueName>..\MonkeyPaste.Desktop\MonkeyPaste.Desktop.csproj</EntryPointProjectUniqueName>
-    <AppxPackageDir>E:\</AppxPackageDir>
+    <AppxPackageDir>C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Wap\AppPackages\</AppxPackageDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <AppxBundle>Always</AppxBundle>

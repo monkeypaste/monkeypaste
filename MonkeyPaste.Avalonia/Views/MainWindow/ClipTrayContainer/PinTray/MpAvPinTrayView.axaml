@@ -25,6 +25,10 @@
 
         <Style Selector="ListBox#PinTrayListBox > ListBoxItem"
                x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
+                    Value="{Binding IsPlaceholder, ConverterParameter=placeholder|, Converter={x:Static local:MpAvBoolToStringConverter.Instance}}" />
+            <Setter Property="local:MpAvClassHelperExtension.ClassesToRemove"
+                    Value="{Binding !IsPlaceholder, ConverterParameter=placeholder|, Converter={x:Static local:MpAvBoolToStringConverter.Instance}}" />
             <Setter Property="IsVisible">
                 <Setter.Value>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -33,6 +37,14 @@
                     </MultiBinding>
                 </Setter.Value>
             </Setter>
+        </Style>
+
+        <Style Selector="ListBox#PinTrayListBox > ListBoxItem.placeholder"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Opacity"
+                    Value="0" />
+            <Setter Property="Width"
+                    Value="0" />
         </Style>
 
         <!--  UNPIN ALL/BUSY BUTTON  -->

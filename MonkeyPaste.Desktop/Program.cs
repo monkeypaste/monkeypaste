@@ -16,6 +16,7 @@ using System.Threading;
 namespace MonkeyPaste.Avalonia {
     internal class Program {
         static bool FORCE_WAIT_FOR_REMOTE_DEBUG = false;
+        static bool FORCE_WAIT_FOR_REMOTE_DEBUG_FROM_RESTART = false;
         static bool CLEAR_STORAGE = false;
         const string THIS_APP_GUID = "252C6489-DFF3-4CFF-A419-7D3770461FFE";
         // Initialization code. Don't use any Avalonia, third-party APIs or any
@@ -136,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
             if (FORCE_WAIT_FOR_REMOTE_DEBUG ||
                 args.Contains(App.WAIT_FOR_DEBUG_ARG) ||
-                (args.Contains(App.RESTART_ARG) && is_debug)) {
+                (args.Contains(App.RESTART_ARG) && is_debug && FORCE_WAIT_FOR_REMOTE_DEBUG_FROM_RESTART)) {
                 Console.WriteLine("Attach debugger and use 'Set next statement'");
                 while (true) {
                     Thread.Sleep(100);

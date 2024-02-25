@@ -199,6 +199,10 @@ namespace MonkeyPaste.Avalonia {
                     ShowDeleteButton = true;
                     ShowIgnoreButton = true;
                     break;
+                case MpNotificationButtonsType.ModalShutdownLater:
+                    ShowShutdownButton = true;
+                    ShowLaterButton = true;
+                    break;
                 case MpNotificationButtonsType.RestartNowLater:
                     ShowRestartNowButton = true;
                     ShowLaterButton = true;
@@ -536,6 +540,9 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 InputResult = null;
                 MpAvAppRestarter.ShutdownWithRestartTaskAsync("By ntf").FireAndForgetSafeAsync();
+                // NOTE settings result as Cancel so follow up code doesn't shut down but 
+                // restarter is going to keep triggering itself until it can restart
+                DialogResult = MpNotificationDialogResultType.Cancel;
             });
 
         public ICommand OkCommand => new MpCommand(

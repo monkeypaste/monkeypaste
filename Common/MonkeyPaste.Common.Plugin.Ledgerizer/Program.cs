@@ -37,20 +37,20 @@ namespace Ledgerizer {
     internal class Program {
 
         static MpLedgerizerFlags LEDGERIZER_FLAGS =
-                                     //MpLedgerizerFlags.TRANSLATE_RESX |
-                                     //MpLedgerizerFlags.GEN_EMPTY_RESX
-                                     //MpLedgerizerFlags.GEN_ADDON_LISTING |
-                                     //MpLedgerizerFlags.GEN_PROD_LISTING |
-                                     MpLedgerizerFlags.DO_LOCAL_PACKAGING |
-                                     //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
-                                     //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
-                                     //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
-                                     //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
-                                     //MpLedgerizerFlags.DO_LOCAL_INDEX |
-                                     //MpLedgerizerFlags.DO_REMOTE_INDEX |
-                                     //MpLedgerizerFlags.DO_LOCAL_LEDGER |
-                                     //MpLedgerizerFlags.DO_REMOTE_LEDGER |
-                                     MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+                                                             //MpLedgerizerFlags.TRANSLATE_RESX |
+                                                             //MpLedgerizerFlags.GEN_EMPTY_RESX
+                                                             //MpLedgerizerFlags.GEN_ADDON_LISTING |
+                                                             //MpLedgerizerFlags.GEN_PROD_LISTING |
+                                                             MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+                                                             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
+                                                             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
+                                                             //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
+                                                             //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
+                                                             //MpLedgerizerFlags.DO_LOCAL_INDEX |
+                                                             //MpLedgerizerFlags.DO_REMOTE_INDEX |
+                                                             //MpLedgerizerFlags.DO_LOCAL_LEDGER |
+                                                             //MpLedgerizerFlags.DO_REMOTE_LEDGER |
+                                                             MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
                                                              //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
                                                              //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
                                                              //| MpLedgerizerFlags.DO_LOCAL_VERSIONS

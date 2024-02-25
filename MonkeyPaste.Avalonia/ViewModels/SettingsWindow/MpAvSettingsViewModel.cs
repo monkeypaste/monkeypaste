@@ -1402,6 +1402,7 @@ namespace MonkeyPaste.Avalonia {
                     ftb.Focus();
                 }
             }
+
             void Sw_Closed(object sender, EventArgs e) {
                 sw.Opened -= Sw_Opened;
                 sw.Closed -= Sw_Closed;
@@ -1409,9 +1410,9 @@ namespace MonkeyPaste.Avalonia {
 
             sw.Opened += Sw_Opened;
             sw.Closed += Sw_Closed;
+
             return sw;
         }
-
 
 
         private void UpdateFilters() {
@@ -1768,6 +1769,7 @@ namespace MonkeyPaste.Avalonia {
                     IsWindowActive = true;
                 } else if (Mp.Services.PlatformInfo.IsDesktop) {
                     var sw = CreateSettingsWindow();
+
                     sw.Show();
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }

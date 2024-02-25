@@ -2891,6 +2891,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You will have to restart manually..
+        /// </summary>
+        public static string CommonRestartFailedText {
+            get {
+                return ResourceManager.GetString("CommonRestartFailedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart Failed.
+        /// </summary>
+        public static string CommonRestartFailedTitle {
+            get {
+                return ResourceManager.GetString("CommonRestartFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Result.
         /// </summary>
         public static string CommonResultLabel {
@@ -3816,15 +3834,6 @@ namespace MonkeyPaste.Avalonia {
         public static string InvalidParamEx21 {
             get {
                 return ResourceManager.GetString("InvalidParamEx21", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string InvalidParamEx22 {
-            get {
-                return ResourceManager.GetString("InvalidParamEx22", resourceCulture);
             }
         }
         

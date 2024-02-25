@@ -4,6 +4,7 @@ using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -603,6 +604,14 @@ namespace MonkeyPaste.Avalonia {
             MpPortableProcessInfo active_pi =
                 ido == null ? null : ido.Get(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) as MpPortableProcessInfo;
 
+#if WINDOWS
+            if (attachActiveProcessIfNone && isRead && !isDnd && active_pi == null && !ignorePlugins) {
+                // on clipboard change (windows) get clipboard override process watcher and use clipboard owner 
+                // NOTE only doing this on change (ignorePlugins === false) for perf
+                nint cb_owner_handle = WinApi.GetOpenClipboardWindow();
+                active_pi = MpPortableProcessInfo.FromHandle(cb_owner_handle);
+            }
+#endif
             int[] custom_preset_ids = ignorePlugins ? null :
                     MpAvAppCollectionViewModel.Instance
                     .GetAppCustomOlePresetsByWatcherState(

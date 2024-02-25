@@ -489,7 +489,7 @@ namespace MonkeyPaste.Avalonia {
                         // canceled
                         return;
                     }
-                    pi_to_add = new MpPortableProcessInfo(appPath);
+                    pi_to_add = MpPortableProcessInfo.FromPath(appPath);
                 }
                 if (pi_to_add == null) {
                     return;

@@ -1609,6 +1609,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modal Shutdown Later.
+        /// </summary>
+        public static string MpNotificationType_ModalShutdownLater {
+            get {
+                return ResourceManager.GetString("MpNotificationType_ModalShutdownLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modal Text Box Ok Cancel Message Box.
         /// </summary>
         public static string MpNotificationType_ModalTextBoxOkCancelMessageBox {

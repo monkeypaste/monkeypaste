@@ -26,7 +26,7 @@ function getDropBlockState(doc_idx, mp, isShiftDown) {
     }
 
     let caret_rect = getCharacterRect(doc_idx);
-    let caret_line = getCaretLine(doc_idx);
+    let caret_line = getCaretLine(doc_idx, true);
     let block_threshold = Math.max(2, caret_line.height / 4);
 
     let doc_start_rect = getCharacterRect(0);

@@ -141,6 +141,9 @@ namespace MonkeyPaste.Avalonia {
             var handle = GetParentHandleAtPoint(pixelPoint);
             return GetProcessInfoByHandle(handle);
         }
+        public MpPortableProcessInfo GetProcessInfoFromHandle(nint handle) {
+            return GetProcessInfoByHandle(handle);
+        }
 
 
 

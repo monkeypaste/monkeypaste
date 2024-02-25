@@ -102,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public static void ShutdownCefNet() {
-            if (Instance == null) {
+            if (Instance == null || Instance.IsDisposed) {
                 return;
             }
             Instance.Shutdown();

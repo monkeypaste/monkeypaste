@@ -188,7 +188,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Desktop_ShutdownRequested(object sender, ShutdownRequestedEventArgs e) {
-
             Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.FrameworkExit, "ShutdownRequested triggered");
         }
         #endregion

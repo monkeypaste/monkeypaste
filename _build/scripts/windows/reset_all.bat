@@ -21,6 +21,9 @@ rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Common\MonkeyPaste.Comm
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Desktop\obj\"
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Desktop\bin\"
 
+rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Desktop.Launcher\obj\"
+rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Desktop.Launcher\bin\"
+
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\obj\"
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\bin\"
 

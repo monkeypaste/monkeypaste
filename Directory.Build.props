@@ -38,7 +38,7 @@
     <Nullable>disable</Nullable>
     <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
-    <DefineConstants>$(DefineConstants)TRACE;REMOTE;</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
   </PropertyGroup>
 
 

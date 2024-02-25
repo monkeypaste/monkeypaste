@@ -29,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
                     return MpNotificationLayoutType.Welcome;
                 case MpNotificationType.ConfirmEndAppend:
                 case MpNotificationType.ModalRestartNowOrLater:
+                case MpNotificationType.ModalShutdownLater:
                 case MpNotificationType.ModalRestartIgnore:
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalOkMessageBox:
@@ -77,6 +78,8 @@ namespace MonkeyPaste.Avalonia {
         }
         public static MpNotificationButtonsType GetNotificationButtonsType(MpNotificationType ndt) {
             switch (ndt) {
+                case MpNotificationType.ModalShutdownLater:
+                    return MpNotificationButtonsType.ModalShutdownLater;
                 case MpNotificationType.ModalRestartNowOrLater:
                     return MpNotificationButtonsType.RestartNowLater;
                 case MpNotificationType.ModalRestartIgnore:
@@ -132,6 +135,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static MpNotificationPlacementType GetNotificationPlacementType(MpNotificationType ndt) {
             switch (ndt) {
+                case MpNotificationType.ModalShutdownLater:
                 case MpNotificationType.ModalRestartNowOrLater:
                 case MpNotificationType.ModalRestartIgnore:
                 case MpNotificationType.ModalResetSharedValuePreset:

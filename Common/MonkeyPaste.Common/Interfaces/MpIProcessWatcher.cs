@@ -8,6 +8,7 @@ namespace MonkeyPaste.Common {
         bool IsProcessPathEqual(MpPortableProcessInfo p1, MpPortableProcessInfo p2);
         nint SetActiveProcess(MpPortableProcessInfo p);
         MpPortableProcessInfo GetProcessInfoFromScreenPoint(MpPoint pixelPoint);
+        MpPortableProcessInfo GetProcessInfoFromHandle(nint handle);
         MpPortableProcessInfo LastProcessInfo { get; }
         MpPortableProcessInfo ThisAppProcessInfo { get; }
         IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos { get; }

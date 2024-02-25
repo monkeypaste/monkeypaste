@@ -59,6 +59,7 @@
         ModalBusyMessageBox,
         ModalRestartIgnore,
         ModalRestartNowOrLater,
+        ModalShutdownLater,
 
         ConfirmEndAppend,
 

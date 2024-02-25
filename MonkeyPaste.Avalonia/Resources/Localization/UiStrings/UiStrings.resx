@@ -2974,4 +2974,10 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>'{0}' contains shared values. Would you like to reset those as well?</value>
     <comment>Preset Name</comment>
   </data>
+  <data name="CommonRestartFailedText" xml:space="preserve">
+    <value>You will have to restart manually.</value>
+  </data>
+  <data name="CommonRestartFailedTitle" xml:space="preserve">
+    <value>Restart Failed</value>
+  </data>
 </root>

@@ -1,10 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
+    <!--<TargetFramework>$(MainTargetFramework)</TargetFramework>-->
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <!--<RuntimeIdentifier>$(TargetRuntimeIdentifiers)</RuntimeIdentifier>-->
+    <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
 </Project>

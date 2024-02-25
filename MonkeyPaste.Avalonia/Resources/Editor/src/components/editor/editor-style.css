@@ -123,3 +123,13 @@ body:has(.editable) {
 #editor:not(.no-select) a {
     cursor: pointer;
 }
+
+.ql-editor h1 {
+    line-height: 4em;
+}
+.ql-editor h2 {
+    line-height: 3em;
+}
+.ql-editor h3, .ql-editor h4, .ql-editor h5, .ql-editor h6  {
+    line-height: 2em;
+}
