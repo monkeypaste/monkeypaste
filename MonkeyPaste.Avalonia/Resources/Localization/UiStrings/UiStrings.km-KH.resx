@@ -2844,10 +2844,6 @@ feedback@monkeypales.com</value>
     <value>មិនអាចកំណត់ប៉ារ៉ាម៉ែត្រតម្លៃដែលបានចែករំលែកនៅក្នុង Pritet បានទេ។ PARAMID '{0}' ក្នុងកំណត់ជាមុន '{1}' ត្រូវការកម្មវិធីជំនួយ '{2}' ត្រូវការលុបចោលឬ ParamValue អាចត្រូវបានបញ្ជាក់ក្នុងផ្នែកអង្គនកម្មប៉ារ៉ាម៉ែត្រ។</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Pretets ត្រូវតែមានការណែនាំពិសេស។ គន្លឹះនៃការស្ទួន) {0} 'ត្រូវបានរកឃើញក្នុងកម្មវិធីជំនួយ' {1} 'សម្រាប់ Pritets: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>កំហុសក្នុងការញែក PURUSIN ក្នុងផ្លូវ '{0}' មោឃៈកំហុសដែលទំនងបានញែក JSON ។ ការមិនអើពើកម្មវិធីជំនួយ</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ feedback@monkeypales.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' មានតំលៃដែលបានចែករំលែក។ តើអ្នកចង់កំណត់អ្នកទាំងនោះផងដែរឬទេ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Presets ត្រូវ តែ មាន ហ្គីឌីត តែ មួយ គត់ ។ Duplicate preset guid '{0}' ត្រូវ បាន រក ឃើញ នៅ ក្នុង កម្មវិធី ជំនួយ '{1}' សម្រាប់ presets: {2}។</value>
   </data>
 </root>

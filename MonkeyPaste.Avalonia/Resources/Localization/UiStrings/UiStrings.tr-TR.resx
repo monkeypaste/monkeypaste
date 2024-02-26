@@ -2844,10 +2844,6 @@ Tam geri yükleme garanti edilemez ve verilerin kaynağına bağlı olarak perfo
     <value>Ön ayarlarda paylaşılan değer parametrelerini ayarlayamıyor. Partin '{0}' PARAMID '{1}' eklenti için {2} 'için kaldırılması gerekir veya parametre tanımı bölümünde paramValue belirtilebilir.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Ön ayarların benzersiz kılavuzları olmalıdır. Ön ayarlar için '{1}' eklentisinde yinelenen hazır ayar kılavuzu '{0}' algılandı: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Eklenti ayrıştırma hatası, yol '{0}' null, muhtemelen json ayrıştırma hatası. Eklentiyi yok sayma</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Tam geri yükleme garanti edilemez ve verilerin kaynağına bağlı olarak perfo
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' paylaşılan değerleri içerir. Bunları da sıfırlamak ister misiniz?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Hazır ayarların benzersiz kılavuzları olmalıdır. Ön ayarlar için '{1}' eklentisinde yinelenen ön ayar guid'i '{0}' algılandı: {2}.</value>
   </data>
 </root>

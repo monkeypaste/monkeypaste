@@ -2844,10 +2844,6 @@ feathback@monkeypaste.com</value>
     <value>無法在預設中設置共享值參數。插入'{1}'中的paramid'{0}'需要在參數定義部分中刪除插件'{2}'或ParamValue。</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>預設必須具有獨特的指導。在插件'{1}'中檢測到重複的預設guid'{0}'用於預設：{2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>插件解析錯誤，在路徑'{0}'null，可能錯誤解析JSON。忽略插件</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ feathback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}'包含共享值。您是否也想重置這些？</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>預設必須具有唯一的 guid。在外掛程式“{1}”中檢測到重複的預設 guid '{0}'：{2}。</value>
   </data>
 </root>

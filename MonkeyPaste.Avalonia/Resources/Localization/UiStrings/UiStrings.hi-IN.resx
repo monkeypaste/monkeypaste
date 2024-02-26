@@ -2844,10 +2844,6 @@
     <value>प्रीसेट में साझा मूल्य पैरामीटर सेट नहीं कर सकते। PARAMID '{0}' इन प्रीसेट में '{1}' प्लगइन के लिए '{2}' को हटाने की आवश्यकता है या पैरामीटर परिभाषा अनुभाग में Paramvalue निर्दिष्ट किया जा सकता है।</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>प्रीसेट में अद्वितीय गाइड होना चाहिए। डुप्लिकेट प्रीसेट गाइड '{0}' को प्रीसेट के लिए प्लगइन '{1}' में पाया गया था: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>प्लगइन पार्सिंग त्रुटि, पथ पर '{0}' नल, संभावित त्रुटि JSON को पार्सिंग। प्लगइन को अनदेखा करना</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' में साझा मान शामिल हैं। क्या आप उन लोगों को भी रीसेट करना चाहेंगे?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>प्रीसेट में अद्वितीय गाइड होने चाहिए। डुप्लिकेट प्रीसेट गाइड '{0}' प्लगइन '{1}' में प्रीसेट के लिए पाया गया था: {2}।</value>
   </data>
 </root>

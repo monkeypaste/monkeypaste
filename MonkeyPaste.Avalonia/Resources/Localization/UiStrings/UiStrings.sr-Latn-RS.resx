@@ -2844,10 +2844,6 @@ Ukupna restauracija ne može biti zagarantovana i može smanjiti performanse ili
     <value>Не могу поставити заједничке вредности вредности у унапред постављеним. Парамим '{0}' у подешењу '{1}' за додатак '{2}' '{2}' треба да се уклони или парамалал може да се одреди у одељку за дефиницију параметра.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Подељења морају имати јединствене гријехе. Дупликат подешене ГУИД '{0}' откривено је у додатку '{1}' за предосједнике: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Грешка додатака, на путу '{0}' нулл, вероватно да је Грешкара рашчлањивање ЈСОН-а. Игнорирање додатка</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Ukupna restauracija ne može biti zagarantovana i može smanjiti performanse ili
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' садржи заједничке вредности. Да ли желите да то ресетујете?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Predsetovi moraju imati jedinstvene guidove. Otkriven je duplikat unapred određenog guida "{0}" u dodatnoj komponenti "{1}" za predsetva: {2}.</value>
   </data>
 </root>

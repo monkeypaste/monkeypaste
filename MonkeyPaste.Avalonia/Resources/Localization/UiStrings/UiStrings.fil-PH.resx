@@ -2844,10 +2844,6 @@ Ang kabuuang pagpapanumbalik ay hindi maaaring garantisadong at maaaring mabawas
     <value>Hindi maaaring itakda ang mga ibinahaging mga parameter ng halaga sa mga preset. Ang Paramid '{0}' sa preset '{1}' para sa plugin '{2}' ay kailangang alisin o ang ParamValue ay maaaring matukoy sa seksyon ng Kahulugan ng Parameter.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Ang mga preset ay dapat magkaroon ng natatanging mga gabay. Ang dobleng preset na gabay na '{0}' ay napansin sa plugin '{1}' para sa mga preset: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Error sa pag -parse ng plugin, sa landas '{0}' null, malamang na error sa pag -parse ng json. Hindi papansin ang plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Ang kabuuang pagpapanumbalik ay hindi maaaring garantisadong at maaaring mabawas
   <data name="SharedValNtfText" xml:space="preserve">
     <value>Ang '{0}' ay naglalaman ng mga ibinahaging halaga. Nais mo bang i -reset ang mga iyon?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Ang mga preset ay dapat magkaroon ng natatanging mga guids. Duplicate preset guid '{0}' ay natukoy sa plugin '{1}' para sa mga preset: {2}.</value>
   </data>
 </root>

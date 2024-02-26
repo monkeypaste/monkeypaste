@@ -2844,10 +2844,6 @@ La restauration totale ne peut pas être garantie et peut réduire les performan
     <value>Impossible de définir les paramètres de valeur partagés dans les préréglages. Parcid '{0}' dans préset '{1}' pour le plugin '{2}' doit être supprimé ou paramvalue peut être spécifié dans la section de définition des paramètres.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Les préréglages doivent avoir des guids uniques. Duplicate Preset Guid '{0}' a été détecté dans le plugin '{1}' pour les préréglages: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Erreur d'analyse du plugin, au chemin '{0}' null, error-erreur d'analyse JSON. Ignorer le plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ La restauration totale ne peut pas être garantie et peut réduire les performan
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' contient des valeurs partagées. Souhaitez-vous également les réinitialiser?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Les préréglages doivent avoir des guides uniques. Un guid de préréglage en double '{0}' a été détecté dans le plugin '{1}' pour les préréglages : {2}.</value>
   </data>
 </root>

@@ -2844,10 +2844,6 @@ Potpuna obnova ne može biti zajamčena i može smanjiti performanse ili čak sr
     <value>Ne mogu postaviti parametre zajedničke vrijednosti u unaprijed postavljenim postavkama. PAMAMID '{0}' U unaprijed postavljenom '{1}' za dodatak '{2}' treba ukloniti ili se paramValue može odrediti u odjeljku definicije parametra.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Pretpostavljene postavke moraju imati jedinstvene upute. Duplikat unaprijed GUID '{0}' otkriven je u dodatku '{1}' za unaprijed postavljene: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Pogreška raščlanjivanja dodatka, na putu '{0}' null, vjerojatno raščlanjivanje pogreške JSON. Zanemarivanje dodatka</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Potpuna obnova ne može biti zajamčena i može smanjiti performanse ili čak sr
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' sadrži zajedničke vrijednosti. Želite li ih resetirati?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Gotove konfiguracije moraju imati jedinstvene GUID-ove. U dodatku '{1}' za gotove konfiguracije otkriven je dvostruki unaprijed postavljeni GUID '{0}' za unaprijed postavljene konfiguracije: {2}.</value>
   </data>
 </root>

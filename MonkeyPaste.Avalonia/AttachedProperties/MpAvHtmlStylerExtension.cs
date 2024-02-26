@@ -5,6 +5,7 @@ using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
@@ -63,6 +64,23 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPrefViewModel.Instance == null ?
                     MpAvPrefViewModel.BASE_DEFAULT_FONT_SIZE :
                     MpAvPrefViewModel.Instance.DefaultFontSize);
+
+        #endregion
+
+
+        #region DefaultFontFamily AvaloniaProperty
+        public static string GetDefaultFontFamily(AvaloniaObject obj) {
+            return obj.GetValue(DefaultFontFamilyProperty);
+        }
+
+        public static void SetDefaultFontFamily(AvaloniaObject obj, string value) {
+            obj.SetValue(DefaultFontFamilyProperty, value);
+        }
+
+        public static readonly AttachedProperty<string> DefaultFontFamilyProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, string>(
+                "DefaultFontFamily",
+                MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily);
 
         #endregion
 
@@ -148,18 +166,29 @@ namespace MonkeyPaste.Avalonia {
             if (sender is not HtmlControl hc) {
                 return;
             }
+            var dl = hc.Tag as List<IDisposable>;
+            if (dl == null) {
+                dl = new List<IDisposable>();
+            }
+
             hc.DetachedFromVisualTree += Hc_DetachedFromVisualTree;
             hc.RenderError += Hc_RenderError;
             hc.StylesheetLoad += Hc_StylesheetLoad;
             hc.LinkClicked += Hc_LinkClicked;
-
+            hc.GetObservable(HtmlControl.TextProperty).Subscribe(value => OnTextChanged(hc)).AddDisposable(dl);
+            hc.Tag = dl;
+            UpdateContent(hc);
+        }
+        private static void OnTextChanged(HtmlControl hc) {
+            UpdateContent(hc);
+        }
+        private static void UpdateContent(HtmlControl hc) {
             hc.BaseStylesheet = GetStyleSheet(hc);
             if (!hc.Text.ToStringOrEmpty().IsStringHtmlDocument()) {
                 // ensure text is full html doc or stylesheet stuff doesn't work
                 hc.Text = hc.Text.ToStringOrEmpty().ToHtmlDocumentFromTextOrPartialHtml();
             }
         }
-
         private static void Hc_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             if (sender is not HtmlControl hc) {
                 return;
@@ -168,6 +197,10 @@ namespace MonkeyPaste.Avalonia {
             hc.RenderError -= Hc_RenderError;
             hc.StylesheetLoad -= Hc_StylesheetLoad;
             hc.LinkClicked -= Hc_LinkClicked;
+            if (hc.Tag is not List<IDisposable> dl) {
+                return;
+            }
+            dl.ForEach(x => x.Dispose());
         }
         private static void Hc_LinkClicked(object sender, HtmlRendererRoutedEventArgs<TheArtOfDev.HtmlRenderer.Core.Entities.HtmlLinkClickedEventArgs> e) {
             if (sender is not HtmlControl hc ||
@@ -223,14 +256,17 @@ namespace MonkeyPaste.Avalonia {
                 case MpHtmlStyleType.Tooltip:
                 default:
                     return string.Format(
-@"* {{ margin: 0; padding: 0; color: {0}; font: {1}px {2};}}
+@"* {{ margin: 0; padding: 0; color: {0}; font-size: {1}px; font-family: {2}; }}
+body {{ white-space: pre-wrap; line-height: {1}px; }}
+p {{ margin: 0; }}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 a:link {{ text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}",
-                        GetDefaultHexColor(hc).RemoveHexAlpha(),
-                        GetDefaultFontSize(hc),
-                        MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily,
-                        MpSystemColors.gold1.RemoveHexAlpha());
+                        GetDefaultHexColor(hc).RemoveHexAlpha(), //0
+                        GetDefaultFontSize(hc), //1
+                        GetDefaultFontFamily(hc), //2
+                        MpSystemColors.gold1.RemoveHexAlpha() //3
+                        );
             }
         }
     }

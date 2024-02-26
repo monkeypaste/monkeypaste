@@ -1,6 +1,6 @@
 Info about what's changed in this update (1.0.11.0):
 
-Verified tester's issue described in the 1.0.10.0 Certification Report by running app WITHOUT elevated permissions. Have now updated the bottom of the Listing Description by noting it as a requirement.
+Verified tester's issue described in the 1.0.10.0 Certification Report by running app WITHOUT elevated permissions. This version (1.0.11.0) now should work for Standard users.
 
 
 Usernames and passwords for any test accounts needed to test the submission:
@@ -22,3 +22,7 @@ Audio playback volume is set to 0 by default (treated as muted). To hear it
 
 Dependencies on other products:
 None
+
+-----------------------------------------------
+runFullTrust:
+This app uses Desktop Bridge which requires 'runFullTrust'.

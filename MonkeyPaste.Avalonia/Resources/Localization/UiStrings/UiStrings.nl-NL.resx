@@ -2844,10 +2844,6 @@ Volledig herstel kan niet worden gegarandeerd en kan de prestaties verminderen o
     <value>Kan gedeelde waardeparameters niet in voorinstellingen instellen. Paramid '{0}' in preset '{1}' voor plugin '{2}' moet worden verwijderd of paramValue kan worden opgegeven in de parameterdefinitie -sectie.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Voorinstellingen moeten unieke gids hebben. Duplicate preset guid '{0}' werd gedetecteerd in plugin '{1}' voor presets: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plug -in parsingfout, op pad '{0}' null, waarschijnlijk fout parsing json. Het negeren van plug -in</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Volledig herstel kan niet worden gegarandeerd en kan de prestaties verminderen o
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' bevat gedeelde waarden. Wil je die ook resetten?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Voorinstellingen moeten unieke richtlijnen hebben. Dubbele preset-guid '{0}' is gedetecteerd in plug-in '{1}' voor presets: {2}.</value>
   </data>
 </root>

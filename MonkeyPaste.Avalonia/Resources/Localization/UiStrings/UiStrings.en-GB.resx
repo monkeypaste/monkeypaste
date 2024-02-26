@@ -2844,10 +2844,6 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>Cannot set shared value parameters in Presets. ParamId '{0}' in Preset '{1}' for Plugin '{2}' needs to be removed or paramValue can be specified in the parameter definition section.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Presets must have unique guids. Duplicate preset guid '{0}' was detected in plugin '{1}' for presets: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin parsing error, at path '{0}' null, likely error parsing json. Ignoring plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' contains shared values. Would you like to reset those as well?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Presets must have unique guids. Duplicate preset guid '{0}' was detected in plugin '{1}' for presets: {2}.</value>
   </data>
 </root>

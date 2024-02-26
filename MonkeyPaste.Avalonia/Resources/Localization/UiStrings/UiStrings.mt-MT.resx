@@ -2844,10 +2844,6 @@ Ir-restawr totali ma jistax jiġi garantit u jista 'jnaqqas il-prestazzjoni jew 
     <value>Ma jistgħux jistabbilixxu parametri ta 'valur maqsum fil-presets. Paramid "{0}" fil-preset "{1}" għall-plugin "{2}" jeħtieġ li jitneħħa jew ParamValue jista 'jiġi speċifikat fit-taqsima tad-definizzjoni tal-parametru.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Il-presets għandu jkollhom gwida uniċi. GUID PRESETT DUPLIKAT "{0}" ġie skopert fil-plugin "{1}" għall-presets: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Żball ta 'parsing tal-plugin, fil-passaġġ "{0}" null, x'aktarx żball ta' parsing json. Injorat plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Ir-restawr totali ma jistax jiġi garantit u jista 'jnaqqas il-prestazzjoni jew 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>"{0}" fih valuri maqsuma. Tixtieq tirrisettja dawk ukoll?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Il-presets għandu jkollhom guids uniċi. Duplikat preset guid '{0}' instab fil-plugin '{1}' għal presets: {2}.</value>
   </data>
 </root>

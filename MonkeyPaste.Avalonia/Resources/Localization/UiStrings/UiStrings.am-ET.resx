@@ -2844,10 +2844,6 @@
     <value>በቅድመ-ቅጥር ውስጥ የተጋራ እሴት መለኪያዎች ማዘጋጀት አልተቻለም. {0} 'ቅድመ-}' {1} '{1}' {1} '{1}' {1} '{2} የመነሻ ወይም የእኩልነት መወገድ አለባቸው.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ቅድመ-ቅምጦች ልዩ ግልገሎች ሊኖራቸው ይገባል. የተባዛ የቀደመ መመሪያ መመሪያ '{0}' ለቅድመ-ቅምጦች 'በፕኪሊን' {1} ተገኝቷል: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plakin ይተላለፋል, በመንገድ '{0}' NAL '{0 {0 {0 {0} ተሰኪን ችላ ማለት</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0} የጋራ እሴቶችን ይ contains ል. እንዲሁም እነዚህን እንደገና ማስጀመር ይፈልጋሉ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ቅድመ-ቅምጦች ልዩ መመሪያዎች ሊኖራቸው ይገባል። የተባዛ ቅድመ-ቅምጥ መመሪያ «{0}» በፕለጊን «{1}» ውስጥ ለቅድመ-ቅምጦች፡ {2} ተገኝቷል።</value>
   </data>
 </root>

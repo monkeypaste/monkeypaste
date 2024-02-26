@@ -9,6 +9,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -154,7 +155,54 @@ namespace MonkeyPaste.Avalonia {
                 cr.DeterminedFormat = MpPortableDataFormats.Image;
                 cr.OutputData = img_base64;
             }
+            cr.OutputData = ApplyTheme(html_doc);
             return cr;
+        }
+        private string ApplyTheme(HtmlDocument doc) {
+            if (doc.DocumentNode.SelectNodes("//*[@style]") is not { } styled_nodes) {
+                return doc.DocumentNode.OuterHtml;
+            }
+            bool is_dark = MpAvThemeViewModel.Instance.IsThemeDark;
+            string fallback_fg = is_dark ?
+                Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeWhiteColor.ToString()) :
+                Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeBlackColor.ToString());
+            foreach (var node in styled_nodes) {
+                string style_val = node.GetAttributeValue("style", string.Empty).Trim();
+
+                var style_props =
+                    style_val
+                    .SplitNoEmpty(";")
+                    .Select(x => x.Trim());
+                // fg
+                if (style_props.FirstOrDefault(x => x.StartsWith("color")) is { } color_prop) {
+                    string color_val = color_prop.SplitNoEmpty(":").LastOrDefault().ToStringOrEmpty().Trim();
+                    var c = new MpColor(color_val, fallback_fg);
+                    MpColorHelpers.ColorToHsl(c, out double h, out double s, out double l);
+                    if (is_dark) {
+                        l = Math.Max(l == 0 ? 1 : l, 0.75);
+                    } else {
+                        l = Math.Min(l == 1 ? 0 : 0, 0.25);
+                    }
+                    var tc = MpColorHelpers.ColorFromHsl(h, s, l);
+                    tc.A = 255;
+                    string new_color_prop = $"color: {tc.ToHex(true)}";
+                    style_val = style_val.Replace(color_prop, new_color_prop);
+                }
+                // bg
+                string new_bg_color_prop = "background-color: transparent";
+                string bg_color_prop = style_props.FirstOrDefault(x => x.StartsWith("background-color"));
+                if (!bg_color_prop.IsNullOrEmpty()) {
+                    style_val = style_val.Replace(bg_color_prop, new_bg_color_prop);
+                } else {
+                    new_bg_color_prop += ";";
+                    if (!style_val.IsNullOrEmpty() && !style_val.EndsWith(";")) {
+                        style_val += ";";
+                    }
+                    style_val += new_bg_color_prop;
+                }
+                node.SetAttributeValue("style", style_val);
+            }
+            return doc.DocumentNode.OuterHtml;
         }
         private async Task CreateWebViewConverterAsync() {
             IsBusy = true;
@@ -252,7 +300,11 @@ namespace MonkeyPaste.Avalonia {
 
             return new MpRichHtmlContentConverterResult() {
                 InputHtml = resp.html.ToStringFromBase64(),
-                OutputData = resp.quillHtml.ToStringFromBase64(),
+#if SUGAR_WV
+                OutputData = resp.themedHtml.ToStringFromBase64(),
+#else
+                OutputData = resp.quillHtml.ToStringFromBase64(), 
+#endif
                 Delta = resp.quillDelta.ToStringFromBase64(),
                 SourceUrl = resp.sourceUrl
             };

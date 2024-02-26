@@ -1,0 +1,68 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:Name="ClipTileContentViewRoot"
+                       x:DataType="local:MpAvClipTileViewModel"
+                       x:TypeArguments="local:MpAvClipTileViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvCompositeContentView">
+    <local:MpAvUserControl.Styles>
+        <!--  PASTE TOOLBAR TRANSITIONS  -->
+
+        <Style Selector="local|MpAvPasteToolbarView"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <ThicknessTransition Property="Margin"
+                                         Duration="0:0:0.2" />
+                </Transitions>
+            </Setter>
+            <Setter Property="Margin"
+                    Value="0,120,0,0" />
+        </Style>
+        <Style Selector="local|MpAvPasteToolbarView.show"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Margin"
+                    Value="0,0,0,0" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Grid RowDefinitions="*,60">
+        <!--  READ ONLY WEBVIEW  -->
+        <av:HtmlPanel x:Name="ReadOnlyWebView"
+                      Grid.RowSpan="2"
+                      Margin="5"
+                      ScrollViewer.HorizontalScrollBarVisibility="{Binding IsSubSelectionEnabled, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|DISABLED}"
+                      ScrollViewer.VerticalScrollBarVisibility="{Binding IsSubSelectionEnabled, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|DISABLED}"
+                      local:MpAvHtmlStylerExtension.DefaultFontSize="{Binding DefaultFontSize, Source={x:Static local:MpAvPrefViewModel.Instance}}"
+                      local:MpAvHtmlStylerExtension.DefaultFontFamily="{Binding DefaultEditableFontFamily, Source={x:Static local:MpAvPrefViewModel.Instance}}"
+                      local:MpAvHtmlStylerExtension.IsEnabled="True"
+                      IsSelectionEnabled="{Binding IsSubSelectionEnabled}"
+                      Text="{Binding CopyItemData}">
+            <av:HtmlPanel.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="IsContentReadOnly" />
+                    <Binding Path="!IsWindowOpen" />
+                </MultiBinding>
+            </av:HtmlPanel.IsVisible>
+        </av:HtmlPanel>
+        <!--  EDITABLE WEBVIEW  -->
+        <local:MpAvContentWebViewContainer x:Name="EditableWebView"
+                                           Grid.RowSpan="2"
+                                           IsVisible="{Binding !IsVisible, ElementName=ReadOnlyWebView}" />
+        <!--  PASTE TOOLBAR  -->
+
+        <local:MpAvPasteToolbarView Grid.Row="1"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Height="60"
+                                    Classes.show="{Binding IsSubSelectionEnabled}" />
+    </Grid>
+
+</local:MpAvUserControl>

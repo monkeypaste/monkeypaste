@@ -2844,10 +2844,6 @@ feedback@monkeypaste.com</value>
     <value>プリセットに共有値パラメーターを設定できません。 Paramid '{0}' in preset '{1}' for plugin '{2}'を削除する必要があります。または、パラメーター定義セクションでパラメージを指定する必要があります。</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>プリセットには一意のガイドが必要です。プリセットのプラグイン '{1}'で複製されたプリセットGUID '{0}'が検出されました：{2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>PATH '{0}' nullでのプラグインの解析エラーは、JSONを解析する可能性があります。プラグインを無視します</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ feedback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}'には共有値が含まれています。それらもリセットしませんか？</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>プリセットには一意の GUID が必要です。プリセットのプラグイン '{1}' で重複するプリセット guid '{0}' が検出されました: {2}。</value>
   </data>
 </root>

@@ -2844,10 +2844,6 @@ zpětná vazba@monkeypaste.com</value>
     <value>Nelze nastavit parametry sdílené hodnoty v předvolbách. ParamId '{0}' v předvolbě '{1}' pro plugin '{2}' je třeba odstranit nebo v části Definice parametru lze zadat parametr.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Předvolby musí mít jedinečné GUID. Duplicitní předvolba GUID '{0}' byl detekován v pluginu '{1}' pro předvolby: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Chyba parsingu pluginu, na cestě '{0}' null, pravděpodobně chyba analýza JSON. Ignorování pluginu</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ zpětná vazba@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' obsahuje sdílené hodnoty. Chtěli byste je také resetovat?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Předvolby musí mít jedinečná vodítka. V pluginu '{1}' byla detekována duplicitní předvolba guid '{0}' pro předvolby: {2}.</value>
   </data>
 </root>

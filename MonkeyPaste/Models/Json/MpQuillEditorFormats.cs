@@ -166,6 +166,7 @@ namespace MonkeyPaste {
 
     public class MpQuillConvertPlainHtmlToQuillHtmlResponseMessage {
         public string html { get; set; }
+        public string themedHtml { get; set; }
         public string quillHtml { get; set; }
         public string quillDelta { get; set; }
         public string sourceUrl { get; set; }

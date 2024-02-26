@@ -2844,10 +2844,6 @@ feedback@monkeypaste.com</value>
     <value>לא ניתן להגדיר פרמטרים של ערך משותף בהגדרות קביעות מוגדרות מראש. PARAMID '{0}' בקביעה מוגדרת מראש '{1}' לתוסף '{2}' יש להסיר או ניתן לציין את ParamValue בסעיף הגדרת הפרמטר.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>קביעות מוגדרות מראש חייבות להיות בעלות מדריכים ייחודיים. כפולים מוגדרים מראש מדויקים '{0}' התגלה בתוסף '{1}' עבור קביעות מוגדרות מראש: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>שגיאת ניתוח תוסף, בנתיב '{0}' null, ככל הנראה שגיאה בניתוח JSON. התעלמות מתוסף</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ feedback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' מכיל ערכים משותפים. האם תרצה לאפס גם את אלה?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>קביעות מוגדרות מראש חייבות להיות בעלות קווי מנחים ייחודיים. גאיד קבוע מראש כפול '{0}' זוהה בתוסף '{1}' עבור קביעות מוגדרות מראש: {2}.</value>
   </data>
 </root>

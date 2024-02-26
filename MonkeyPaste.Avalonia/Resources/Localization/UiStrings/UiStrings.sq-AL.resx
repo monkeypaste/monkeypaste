@@ -2844,16 +2844,12 @@ Restaurimi total nuk mund të garantohet dhe mund të zvogëlojë performancën 
     <value>Nuk mund të vendosë parametrat e vlerës së përbashkët në paravendosjet. Paramid '{0}' në paracaktim '{1}' për plugin '{2}' duhet të hiqet ose paramvalue mund të specifikohet në seksionin e përcaktimit të parametrave.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Paravendosjet duhet të kenë udhëzime unike. Dublikoni udhëzimin e paracaktuar '{0}' u zbulua në shtojcë '{1}' për paracaktimet: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Gabim i analizimit të pluginit, në shtegun '{0}' null, gabimi i mundshëm duke analizuar JSON. Injorimi i shtojcës</value>
     <comment>File Path</comment>
   </data>
   <data name="InvalidPluginEx2" xml:space="preserve">
-    <value>Gabim i titullit të pluginit, në shtegun '{0}' duhet të ketë pronë 'Titulli' me jo më shumë se karaktere {1. Injorimi i shtojcës</value>
+    <value>Gabim i titullit të pluginit, në shtegun '{0}' duhet të ketë pronë 'Titulli' me jo më shumë se karaktere {1}. Injorimi i shtojcës</value>
     <comment>File Path, Number</comment>
   </data>
   <data name="InvalidPluginEx3" xml:space="preserve">
@@ -2895,5 +2891,8 @@ Restaurimi total nuk mund të garantohet dhe mund të zvogëlojë performancën 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' përmban vlera të përbashkëta. Dëshironi të rivendosni ato gjithashtu?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Presetet duhet të kenë guida unike. Duplikimi i guidës preset '{0}' u zbulua në plugin '{1}' për preset: {2}.</value>
   </data>
 </root>

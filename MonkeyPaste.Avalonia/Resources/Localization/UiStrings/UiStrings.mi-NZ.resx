@@ -2844,10 +2844,6 @@ Kāore e taea te whakaū i te whakaoratanga katoa, ā, ka whakaiti rānei i te m
     <value>Kaore e taea te whakarite i nga tohu uara kua tohatoha i nga whakaaturanga. Paramid '{0}' i mua i te tatūkē '{1}' mo te plgin '{{2}' me tango, he paramvalue ranei ka tohua i roto i te waahanga tohu tohu.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Me whiwhi nga kaiarahi ahurei. Whakahaahia te Tapahia te Guid '{0}' i kitea i roto i te mono '{1}' mo nga Preses: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Ko te hapa o te mononi mo te mono, i te huarahi '{0}' e kore e hapa te hapa a Json. Kei te warewarehia te mono</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Kāore e taea te whakaū i te whakaoratanga katoa, ā, ka whakaiti rānei i te m
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' Kei roto i nga uara tahi. Kei te hiahia koe ki te tautuhi ano i te hunga?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Me whai tohutohu ahurei nga huinga. I kitea te tohutohu tōmua '{0}' i te mono mai i te '{1}' mō ngā huinga: {2}.</value>
   </data>
 </root>

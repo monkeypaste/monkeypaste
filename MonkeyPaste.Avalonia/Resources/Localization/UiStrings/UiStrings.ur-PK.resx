@@ -2844,10 +2844,6 @@
     <value>پریسیٹس میں مشترکہ قدر کے پیرامیٹرز کو مقرر نہیں کرسکتے ہیں۔ پیرامڈ '{0}' میں پریسیٹ '{1}' پلگ ان '{2}' کے لئے '{2}' کو ختم کرنے کی ضرورت ہے یا پیرامیٹر کی تعریف کے حصے میں پیرامولیو کی وضاحت کی جاسکتی ہے۔</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>پریسیٹس کے پاس انوکھا گائڈ ہونا ضروری ہے۔ ڈپلیکیٹ پریسیٹ گائڈ '{0}' کا پتہ لگانے کے لئے پلگ ان '{1}' میں پایا گیا: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>پلگ ان پارسنگ کی خرابی ، راستے پر '{0}' null ، JSON کی تجزیہ کرنے میں ممکنہ غلطی۔ پلگ ان کو نظرانداز کرنا</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' میں مشترکہ اقدار شامل ہیں۔ کیا آپ ان کو بھی دوبارہ ترتیب دینا چاہیں گے؟</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>پریسیٹس میں منفرد گائیڈز ہونا ضروری ہے۔ پری سیٹ کے لئے پلگ ان '{1}' میں ڈپلیکیٹ پری سیٹ گائیڈ '{0}' کا پتہ چلا: {2}۔</value>
   </data>
 </root>

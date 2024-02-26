@@ -2844,10 +2844,6 @@ Ekki er hægt að tryggja heildar endurheimt og getur dregið úr afköstum eða
     <value>Get ekki stillt sameiginlega gildi breytur í forstillingum. Paramid '{0}' í forstillingu '{1}' fyrir viðbótar '{2}' þarf að fjarlægja eða hægt er að tilgreina paramvalue í hlutanum Definition Definition.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Forstillingar verða að hafa einstaka leiðsögn. Afrit forstillt GUID '{0}' fannst í viðbót '{1}' fyrir forstillingar: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Pluge Parsing villa, á slóð '{0}' null, líklega villa að flokka JSON. Hunsa viðbót</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Ekki er hægt að tryggja heildar endurheimt og getur dregið úr afköstum eða
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' inniheldur sameiginleg gildi. Viltu endurstilla þá líka?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Forstillingar verða að hafa einstakt leiðarljós. Tvítekning guid guid '{0}' fannst í íforritinu '{1}' fyrir forstilltar: {2}.</value>
   </data>
 </root>

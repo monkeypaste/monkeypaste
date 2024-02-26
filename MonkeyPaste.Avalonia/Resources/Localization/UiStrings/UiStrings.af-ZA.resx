@@ -2844,10 +2844,6 @@ Totale herstel kan nie gewaarborg word nie en kan prestasie verminder of selfs M
     <value>Kan nie gedeelde waardeparameters in voorafinstellings instel nie. Paramid '{0}' in vooraf ingestelde '{1}' vir inprop '{2}' moet verwyder word, of paramValue kan in die parameterdefinisie -afdeling gespesifiseer word.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Voorinstellings moet unieke GUID's hê. Duplikaat vooraf ingestelde gids '{0}' is opgespoor in plugin '{1}' vir voorafinstellings: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Inprop -ontledingfout, by die pad '{0}' nul, waarskynlik foute om JSON te ontleed. Ignoreer inprop</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Totale herstel kan nie gewaarborg word nie en kan prestasie verminder of selfs M
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' bevat gedeelde waardes. Wil u dit ook herstel?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Voorinstellings moet unieke gidse hê. Duplikaatvoorinstellinggids '{0}' is in inprop '{1}' bespeur vir voorafinstellings: {2}.</value>
   </data>
 </root>

@@ -2910,10 +2910,6 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>ਪ੍ਰੀਸੈਟਸ ਵਿੱਚ ਸਾਂਝੇ ਮੁੱਲ ਮਾਪਦੰਡ ਨੂੰ ਸੈੱਟ ਨਹੀਂ ਕਰ ਸਕਦਾ. ਪਲੱਗਇਨ '{2}' ਲਈ ਅਰਜੀਡ '{0}' ਪਲੱਗਇਨ '{1}' ਲਈ PREACT '{1}' ਨੂੰ ਹਟਾਉਣ ਜਾਂ ਪੈਰਾਮੀਟਰ ਦੀ ਪਰਿਭਾਸ਼ਾ ਵਿੱਚ ਦਿੱਤਾ ਜਾ ਸਕਦਾ ਹੈ.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ਪ੍ਰੀਸੈਟਸ ਦੇ ਵਿਲੱਖਣ GNDS ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ. ਡੁਪਲਿਕੇਟ ਪ੍ਰੀਸੈਟ ਗਾਈਡ '{0}' ਪ੍ਰੀਸੈਟਾਂ ਲਈ ਪਲੱਗਇਨ '{1}' ਵਿੱਚ ਖੋਜਿਆ ਗਿਆ: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>ਪਲੱਗਇਨ ਪਾਰਸਿੰਗ ਗਲਤੀ, ਮਾਰਗ '{0}' null, ਜੋ ਜੇਐਸਐਨ ਪਾਰ ਕਰਨ ਵਾਲੀ ਗਲਤੀ ਹੈ. ਪਲੱਗਇਨ ਨੂੰ ਅਣਡਿੱਠ ਕਰਨਾ</value>
     <comment>File Path</comment>
@@ -2961,5 +2957,8 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ਨੇ ਸ਼ੇਅਰ ਕੀਤੇ ਮੁੱਲ ਹਨ. ਕੀ ਤੁਸੀਂ ਉਨ੍ਹਾਂ ਨੂੰ ਰੀਸੈਟ ਕਰਨਾ ਚਾਹੋਗੇ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ਪ੍ਰੀਸੈਟਸ ਦੇ ਵਿਲੱਖਣ GNDS ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ. ਡੁਪਲਿਕੇਟ ਪ੍ਰੀਸੈਟ ਗਾਈਡ '{0}' ਪ੍ਰੀਸੈਟਾਂ ਲਈ ਪਲੱਗਇਨ '{1}' ਵਿੱਚ ਖੋਜਿਆ ਗਿਆ ਸੀ: {2}.</value>
   </data>
 </root>

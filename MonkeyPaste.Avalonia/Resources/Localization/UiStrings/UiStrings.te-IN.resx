@@ -2844,10 +2844,6 @@ feedback@monkeypaste.com</value>
     <value>భాగస్వామ్య విలువ పారామితులను ప్రీసెట్స్‌లో సెట్ చేయలేరు. ప్లగ్ఇట్ '{0}' ప్లగ్ఇన్ '{1}' ప్లగిన్ కోసం {1} '' {2} 'తొలగించాల్సిన అవసరం ఉంది లేదా పారామాల్యూ పారామితి నిర్వచనం విభాగంలో పేర్కొనవచ్చు.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ప్రీసెట్లు తప్పనిసరిగా ప్రత్యేకమైన మార్గదర్శకాలను కలిగి ఉండాలి. ప్రీసెట్లు కోసం నకిలీ ప్రీసెట్ గైడ్ '{0}' ప్లగిన్ '{1}' లో కనుగొనబడింది: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>ప్లగ్ఇన్ పార్సింగ్ లోపం, మార్గం వద్ద '{0}' శూన్యమైనది, JSON ను అన్వయించడం లోపం. ప్లగిన్‌ను విస్మరిస్తున్నారు</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ feedback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' భాగస్వామ్య విలువలను కలిగి ఉంటుంది. మీరు వాటిని కూడా రీసెట్ చేయాలనుకుంటున్నారా?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ప్రీసెట్ లకు ప్రత్యేకమైన మార్గదర్శకాలు ఉండాలి. ప్రీసెట్ ల కొరకు ప్లగిన్ '{1}'లో డూప్లికేట్ ప్రీసెట్ గైడ్ '{0}' కనుగొనబడింది: {2}.</value>
   </data>
 </root>

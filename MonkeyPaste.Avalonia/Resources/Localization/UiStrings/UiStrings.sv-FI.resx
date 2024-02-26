@@ -2844,10 +2844,6 @@ Total återställning kan inte garanteras och kan minska prestandan eller till o
     <value>Det går inte att ställa in delade värdeparametrar i förinställningar. Paramid '{0}' i förinställd '{1}' för plugin '{2}' måste tas bort eller paramValue kan anges i avsnittet Parameter Definition.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Förinställningar måste ha unika GUID. Duplikat förinställningsguid '{0}' upptäcktes i plugin '{1}' för förinställningar: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin parsing -fel, vid sökvägen '{0}' null, troligt fel parsing json. Ignorera plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Total återställning kan inte garanteras och kan minska prestandan eller till o
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' innehåller delade värden. Vill du också återställa dem?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Förinställningar måste ha unika guider. Duplicerat förinställt guid "{0}" identifierades i plugin-programmet "{1}" för förinställningar: {2}.</value>
   </data>
 </root>

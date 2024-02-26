@@ -2844,10 +2844,6 @@ Całkowite przywrócenie nie może być zagwarantowane i może zmniejszyć wydaj
     <value>Nie można ustawić parametrów wartości współdzielonych w ustawieniach wstępnych. ParamId „{0}” w Presecie „{1}” dla wtyczki „{2}” musi zostać usunięty lub można określić paramValue w sekcji definicji parametrów.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Presety muszą mieć unikalne Guids. Zduplikowane ustawione guid '{0}' zostały wykryte w Plugin '{1}' dla ustawień wstępnych: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Błąd parsowania wtyczki, na ścieżce null '{0}, prawdopodobnie błąd analizujący JSON. Ignorowanie wtyczki</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Całkowite przywrócenie nie może być zagwarantowane i może zmniejszyć wydaj
   <data name="SharedValNtfText" xml:space="preserve">
     <value>„{0}” zawiera współdzielone wartości. Czy chcesz je również zresetować?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Ustawienia predefiniowane muszą mieć unikatowe identyfikatory GUID. Wykryto zduplikowany identyfikator GUID presetu "{0}" we wtyczce "{1}" dla ustawień wstępnych: {2}.</value>
   </data>
 </root>

@@ -2844,10 +2844,6 @@ MonkeyPaste روی دستگاه
     <value>نمی توان پارامترهای ارزش مشترک را در پیش تنظیم تنظیم کرد. PARAMID '{0}' در پیش تنظیم '{1}' برای افزونه '{2}' باید حذف شود یا paramvalue در بخش تعریف پارامتر مشخص شود.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>از پیش تنظیم شده باید راهنماهای منحصر به فرد داشته باشد. Duplication Premet Guid '{0}' در افزونه '{1}' برای پیش تنظیم شده شناسایی شد: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>خطای تجزیه پلاگین ، در مسیر '{0}' تهی ، احتمالاً خطای تجزیه JSON. نادیده گرفتن افزونه</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ MonkeyPaste روی دستگاه
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' حاوی مقادیر مشترک است. آیا دوست دارید آن را دوباره تنظیم کنید؟</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ایستگاه از پیش تنظیم باید guids منحصر به فرد داشته باشد. تکراری هدایت از پیش تعیین شده '{0}' در پلاگین '{1}' برای ایستگاه از پیش تنظیم شناسایی شد: {2}.</value>
   </data>
 </root>

@@ -2844,10 +2844,6 @@ feedback@monkeyptaste.com</value>
     <value>Ортақ мән параметрлерін алдын-ала орната алмайды. «{0}» параметрі «{2}» PLOSET '{1}' ішінде «{2}» пленкуляциясын алу керек немесе Параметрді анықтау бөлімінде параметрлерді жою керек.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Алдын ала орнатуларда бірегей бағыттаушылар болуы керек. Алдын ала орнату нұсқаулығының қайталанатын "{0}" "{1}" плагинінде алдын ала орнатулар үшін анықталды: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Плагинді талдау қатесі, «{0}» жолында «{0}» жолында, мүмкін, JSON-ді талдау. Плагинді елемеу</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ feedback@monkeyptaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ортақ мәндерден тұрады. Сіздерді де қалпына келтіргіңіз келе ме?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Прецеденттердің бірегей бағыттаушылары болуы тиіс. «{1}» плагин модулінде алдын ала орнатылған «{0}» гидының қайталануы анықталды: {2}.</value>
   </data>
 </root>

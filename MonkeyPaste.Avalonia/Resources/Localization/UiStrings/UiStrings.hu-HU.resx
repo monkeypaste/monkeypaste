@@ -2844,10 +2844,6 @@ A teljes helyreállítás nem garantálható, és az adatok forrásától függ�
     <value>Nem lehet beállítani a megosztott értékparamétereket az előre beállításokba. A '{0}' paramid '{1}' beállításban a '{2}' pluginhez el kell távolítani, vagy a paramValue meg lehet határozni a paraméter -meghatározási szakaszban.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Az előre beállításoknak egyedi útmutatókkal kell rendelkezniük. Az előre beállított guid '{0}' másolatát a '{1}' pluginban észlelték az előre beállításokhoz: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>A plugin elemzési hiba, a '{0}' null elérési útján, valószínűleg hiba a JSON elemzését. A plugin figyelmen kívül hagyása</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ A teljes helyreállítás nem garantálható, és az adatok forrásától függ�
   <data name="SharedValNtfText" xml:space="preserve">
     <value>A '{0}' megosztott értékeket tartalmaz. Szeretné visszaállítani ezeket is?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>A készleteknek egyedi GUID azonosítókkal kell rendelkezniük. A rendszer duplikált "{0}" előre beállított guid azonosítót észlelt az "{1}" bővítményben az előre beállított beállításokhoz: {2}.</value>
   </data>
 </root>

@@ -2844,10 +2844,6 @@ No se puede garantizar la restauración total y puede reducir el rendimiento o i
     <value>No se puede establecer parámetros de valor compartido en presets. Paramid '{0}' en preet '{1}' para complementar {2} 'debe eliminarse o ParamValue se puede especificar en la sección Definición de parámetros.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Los presets deben tener GUID únicos. Duplicado Preset Guid '{0}' se detectó en el complemento {1} 'para preajuste: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Error de análisis de complementos, en ruta '{0}' NULL, probable error de error JSON. Ignorando el complemento</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ No se puede garantizar la restauración total y puede reducir el rendimiento o i
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' contiene valores compartidos. ¿Te gustaría restablecerlos también?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Los ajustes preestablecidos deben tener guids únicos. Se detectó el guid preestablecido duplicado '{0}' en el complemento '{1}' para los ajustes preestablecidos: {2}.</value>
   </data>
 </root>

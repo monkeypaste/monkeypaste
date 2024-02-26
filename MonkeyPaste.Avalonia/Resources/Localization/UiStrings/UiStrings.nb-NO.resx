@@ -2844,10 +2844,6 @@ Total restaurering kan ikke garanteres og kan redusere ytelsen eller til og med 
     <value>Kan ikke angi delte verdiparametere i forhåndsinnstillinger. Paramid '{0}' i forhåndsinnstilling '{1}' for plugin '{2}' må fjernes eller paramvalue kan spesifiseres i parameterdefinisjonsdelen.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Forhåndsinnstillinger må ha unike guider. Duplikat forhåndsinnstilt guid '{0}' ble oppdaget i plugin '{1}' for forhåndsinnstillinger: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin -parsingfeil, på banen '{0}' null, sannsynligvis feil parsing json. Ignorerer plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Total restaurering kan ikke garanteres og kan redusere ytelsen eller til og med 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' inneholder delte verdier. Vil du tilbakestille dem også?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Forhåndsinnstillinger må ha unike guider. Duplikatforhåndsinnstilt guid '{0}' ble oppdaget i plugin '{1}' for forhåndsinnstillinger: {2}.</value>
   </data>
 </root>

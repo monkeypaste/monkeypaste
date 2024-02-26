@@ -2844,10 +2844,6 @@ Pemulihan total tidak dapat dijamin dan dapat mengurangi kinerja atau bahkan cra
     <value>Tidak dapat mengatur parameter nilai bersama di preset. Paramid '{0}' di preset '{1}' untuk plugin '{2}' perlu dihapus atau paramValue dapat ditentukan di bagian definisi parameter.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Preset harus memiliki guid yang unik. Duplikat Preset Guid '{0}' terdeteksi di plugin '{1}' untuk preset: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Kesalahan parsing plugin, di path '{0}' null, kemungkinan kesalahan parsing json. Mengabaikan plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Pemulihan total tidak dapat dijamin dan dapat mengurangi kinerja atau bahkan cra
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' berisi nilai bersama. Apakah Anda juga ingin mengatur ulang itu?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Preset harus memiliki guid unik. Duplikat panduan preset '{0}' terdeteksi di plugin '{1}' untuk preset: {2}.</value>
   </data>
 </root>

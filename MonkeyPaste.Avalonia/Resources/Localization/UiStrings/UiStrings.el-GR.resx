@@ -2844,10 +2844,6 @@ feedble@monkeypaste.com</value>
     <value>Δεν είναι δυνατή η ρύθμιση παραμέτρων κοινής αξίας σε προεπιλογές. Paramid '{0}' σε προεπιλογή '{1}' για plugin '{2}' πρέπει να αφαιρεθεί ή paramValue μπορεί να καθοριστεί στην ενότητα ορισμού παραμέτρων.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Οι προεπιλογές πρέπει να έχουν μοναδικές οδηγίες. Το Dupplicate Preset Guid '{0}' ανιχνεύθηκε στο plugin '{1}' για προεπιλογές: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Σφάλμα ανάλυσης plugin, στη διαδρομή '{0}' null, πιθανό σφάλμα αναλύοντας το JSON. Αγνοώντας το plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ feedble@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' περιέχει κοινές τιμές. Θα θέλατε να επαναφέρετε και αυτά;</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Οι προεπιλογές πρέπει να έχουν μοναδικούς οδηγούς. Διπλότυπος οδηγός προεπιλογής "{0}" εντοπίστηκε στην προσθήκη "{1}" για προεπιλογές: {2}.</value>
   </data>
 </root>

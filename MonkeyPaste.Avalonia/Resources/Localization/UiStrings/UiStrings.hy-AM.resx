@@ -2844,10 +2844,6 @@ feedback@monkepte.com</value>
     <value>Չի կարող սահմանել բաժնետիրական արժեքի պարամետրեր: «{0}» պարամետրը «{1}» plugin- ի համար անհրաժեշտ է հեռացնել կամ պարամվալուի համար կարելի է նշել պարամետրերի սահմանման բաժնում:</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Նախադրվածները պետք է ունենան յուրօրինակ ուղեցույցներ: Կրկնօրինակված նախադրված «{0}» - ը հայտնաբերվել է «{1}» pluget- ի համար. {2</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin Parsing Error, «{0}» ուղու վրա, հավանաբար, սխալ է վերլուծել JSON- ը: Անտեսելով plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ feedback@monkepte.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>«{0}» պարունակում է ընդհանուր արժեքներ: Կցանկանայիք նաեւ դրանք վերափոխել:</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Պրեսետները պետք է առանձնահատուկ առաջնորդություն ունենան ։ «{0}» պրեսետների համար plugin '{1}' -ում հայտնաբերվել է կրկնակի նախնական ուղեցույց՝ {2}:</value>
   </data>
 </root>

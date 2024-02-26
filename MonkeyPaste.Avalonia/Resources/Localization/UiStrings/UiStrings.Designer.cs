@@ -3937,6 +3937,33 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plugin Linking Error &apos;{0}&apos;{1}{2}.
+        /// </summary>
+        public static string InvalidPluginEx6 {
+            get {
+                return ResourceManager.GetString("InvalidPluginEx6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error, Plugin &apos;{0}&apos; is flagged as {1} type in &apos;{2}&apos; but does not have a matching &apos;{3}.{4}&apos; in its folder..
+        /// </summary>
+        public static string InvalidPluginEx7 {
+            get {
+                return ResourceManager.GetString("InvalidPluginEx7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin dependency error for plugin &apos;{0}&apos;: {1}{2}.
+        /// </summary>
+        public static string InvalidPluginEx8 {
+            get {
+                return ResourceManager.GetString("InvalidPluginEx8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click + Ctrl to follow....
         /// </summary>
         public static string LinkNavigateToolTipText {

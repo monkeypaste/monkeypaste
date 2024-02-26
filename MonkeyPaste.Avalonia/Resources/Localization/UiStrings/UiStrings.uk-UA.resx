@@ -2844,10 +2844,6 @@
     <value>Неможливо встановити параметри спільного значення на попередніхетах. Парамід '{0}' у попередньому встановленні '{1}' для плагіна '{2}' потрібно видалити або парамфалум може бути вказаний у розділі визначення параметрів.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>У пресетах повинні бути унікальні Guids. Дублікат PRESET GUID '{0}' був виявлений у плагіні '{1}' для пресетів: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Помилка розбору плагінів, на шляху '{0}' null, ймовірно, помилка розбору json. Ігнорування плагіна</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' містить спільні значення. Чи хотіли б ви також скинути їх?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Пресети повинні мати унікальні ідентифікатори. Дублікат пресетів guid '{0}' було виявлено в плагіні '{1}' для пресетів: {2}.</value>
   </data>
 </root>

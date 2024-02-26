@@ -2844,10 +2844,6 @@ A restauração total não pode ser garantida e pode reduzir o desempenho ou at�
     <value>Não é possível definir parâmetros de valor compartilhado em predefinições. Paramid '{0}' em predefinição '{1}' para plugin '{2}' precisa ser removido ou o paramvalue pode ser especificado na seção de definição de parâmetros.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Predefinições devem ter GUIDs únicos. Duplicate Preset GUID '{0}' foi detectado no plugin '{1}' para predefinições: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Erro de análise do plug -in, no caminho '{0}' nulo, provável que analise o JSON. Ignorando o plug -in</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ A restauração total não pode ser garantida e pode reduzir o desempenho ou at�
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' contém valores compartilhados. Você gostaria de redefini -los também?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>As predefinições devem ter guids exclusivos. GUID predefinido duplicado '{0}' foi detetado no plugin '{1}' para predefinições: {2}.</value>
   </data>
 </root>

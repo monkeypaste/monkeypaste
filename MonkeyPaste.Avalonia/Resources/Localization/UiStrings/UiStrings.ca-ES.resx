@@ -2844,10 +2844,6 @@ La restauració total no es pot garantir i pot reduir el rendiment o fins i tot 
     <value>No es pot definir els paràmetres de valor compartit en els presets. Paramid '{0}' a Preset '{1}' Per al plugin '{2}' cal eliminar o es pot especificar paramValue a la secció de definició de paràmetres.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Els presets han de tenir orientals únics. Es va detectar el guid preestablert "{0} 'en plugin' {1} 'per a presets: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Error de l'analització del complement, a la ruta '{0}' nul, probablement l'error analitzant JSON. Ignorant el connector</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ La restauració total no es pot garantir i pot reduir el rendiment o fins i tot 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' conté valors compartits. Voleu restablir -los també?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Els valors predefinits han de tenir guies úniques. S'ha detectat una guia predeterminada duplicada "{0}" al connector "{1}" per a les configuracions predeterminades: {2}.</value>
   </data>
 </root>

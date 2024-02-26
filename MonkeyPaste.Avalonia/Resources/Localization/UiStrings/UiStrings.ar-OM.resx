@@ -2844,10 +2844,6 @@ feedback@monkeypaste.com</value>
     <value>لا يمكن تعيين معلمات القيمة المشتركة في الإعدادات المسبقة. يجب إزالة الباراميد '{0}' في الإعداد المسبق "{1} 'للمكون الإضافي {2}' أو يمكن تحديد paramValue في قسم تعريف المعلمة.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>يجب أن يكون لدى الإعدادات المسبقة Guids فريدة من نوعها. تم اكتشاف GUID PRESET DIDET المكررة في البرنامج المساعد "{1}" للإعداد المسبق: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>خطأ في تحليل البرنامج المساعد ، في Path '{0}' NULL ، من المحتمل أن يكون هناك خطأ في تحليل JSON. تجاهل البرنامج المساعد</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ feedback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>يحتوي '{0}' على قيم مشتركة. هل ترغب في إعادة ضبط هؤلاء أيضًا؟</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>يجب أن تحتوي الإعدادات المسبقة على أدلة فريدة. تم اكتشاف دليل الإعداد المسبق المكرر '{0}' في البرنامج المساعد '{1}' للإعدادات المسبقة: {2}.</value>
   </data>
 </root>

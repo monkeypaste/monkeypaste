@@ -2844,10 +2844,6 @@ Restaurarea totală nu poate fi garantată și poate reduce performanța sau chi
     <value>Nu se poate seta parametrii de valoare partajați în presetări. ParamID '{0}' în presetare '{1}' pentru plugin '{2}' trebuie eliminat sau ParamValue poate fi specificat în secțiunea Definiție a parametrilor.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Presetările trebuie să aibă ghiduri unice. Duplicat presetat Guid '{0}' a fost detectat în plugin '{1}' pentru presetări: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Eroare de analiză a pluginului, la calea '{0}' null, probabil eroarea de analiză JSON. Ignorarea pluginului</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Restaurarea totală nu poate fi garantată și poate reduce performanța sau chi
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' conține valori partajate. Doriți să le resetați și pe acestea?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Presetările trebuie să aibă ghidaje unice. Duplicatul ghidului presetat "{0}" a fost detectat în pluginul "{1}" pentru presetări: {2}.</value>
   </data>
 </root>

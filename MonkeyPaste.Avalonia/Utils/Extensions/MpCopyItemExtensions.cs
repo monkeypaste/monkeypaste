@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             if (includeSelfRef) {
-                avdo.SetData(MpPortableDataFormats.CefAsciiUrl, Mp.Services.SourceRefTools.ToUrlAsciiBytes(ci));
+                avdo.AddContentReferences(ci, true);
             }
             if (includeTitle) {
                 avdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, ci.Title);

@@ -2844,10 +2844,6 @@ Il ripristino totale non può essere garantito e può ridurre le prestazioni o a
     <value>Impossibile impostare i parametri del valore condiviso nei preset. Paramid '{0}' in preset '{1}' per il plugin '{2}' deve essere rimosso o può essere specificato ParamValue nella sezione Definizione dei parametri.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>I preset devono avere GUID unici. Duplicato preset Guid '{0}' è stato rilevato nel plugin '{1}' per preset: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Errore di analisi del plugin, al percorso '{0}' null, probabile errore di analisi JSON. Ignorare il plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Il ripristino totale non può essere garantito e può ridurre le prestazioni o a
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' contiene valori condivisi. Vorresti ripristinare anche quelli?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>I set di impostazioni devono avere GUID univoci. È stato rilevato un guid preimpostato duplicato '{0}' nel plug-in '{1}' per i preset: {2}.</value>
   </data>
 </root>

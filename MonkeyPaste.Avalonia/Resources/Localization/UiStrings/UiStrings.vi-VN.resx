@@ -2844,10 +2844,6 @@ Không thể đảm bảo khôi phục toàn bộ và có thể làm giảm hi�
     <value>Không thể đặt tham số giá trị được chia sẻ trong các cài đặt trước. Paramid '{0}' trong preset '{1}' cho plugin '{2}' cần được xóa hoặc paramValue có thể được chỉ định trong phần định nghĩa tham số.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Cài đặt trước phải có hướng dẫn độc đáo. Sao chép GUID GUID '{0}' đã được phát hiện trong plugin '{1}' cho các cài đặt trước: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Lỗi phân tích cú pháp plugin, tại đường dẫn '{0}' null, có thể là lỗi phân tích lỗi JSON. Bỏ qua plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Không thể đảm bảo khôi phục toàn bộ và có thể làm giảm hi�
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' chứa các giá trị được chia sẻ. Bạn có muốn thiết lập lại những thứ đó không?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Cài đặt trước phải có hướng dẫn duy nhất. Hướng dẫn đặt trước trùng lặp '{0}' đã được phát hiện trong plugin '{1}' cho các cài đặt trước: {2}.</value>
   </data>
 </root>

@@ -2844,10 +2844,6 @@ Marejesho ya jumla hayawezi kuhakikishiwa na inaweza kupunguza utendaji au hata 
     <value>Haiwezi kuweka vigezo vya thamani vilivyoshirikiwa katika vifaa. Paramid '{0}' katika preset '{1}' kwa programu -jalizi '{2}' inahitaji kuondolewa au paramValue inaweza kutajwa katika sehemu ya ufafanuzi wa parameta.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Presets lazima ziwe na GUID za kipekee. Nakala mbili za preset '{0}' ziligunduliwa katika programu -jalizi '{1}' kwa presets: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Kosa la kupandisha programu -jalizi, kwa njia '{0}' null, uwezekano wa kosa la kumweka JSON. Kupuuza programu -jalizi</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Marejesho ya jumla hayawezi kuhakikishiwa na inaweza kupunguza utendaji au hata 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ina maadili ya pamoja. Je! Ungependa kuweka upya hizo pia?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Maandalizi lazima yawe na guids ya kipekee. Duplicate preset guid '{0}' iligunduliwa katika programu-jalizi '{1}' kwa presets: {2}.</value>
   </data>
 </root>

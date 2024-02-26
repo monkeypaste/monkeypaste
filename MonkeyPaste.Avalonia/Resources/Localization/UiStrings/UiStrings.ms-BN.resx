@@ -2844,10 +2844,6 @@ Pemulihan total tidak boleh dijamin dan boleh mengurangkan prestasi atau bahkan 
     <value>Tidak dapat menetapkan parameter nilai bersama dalam pratetap. Paramid '{0}' dalam pratetap '{1}' untuk plugin '{2}' perlu dikeluarkan atau paramvalue boleh ditentukan dalam bahagian definisi parameter.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Pratetap mesti mempunyai panduan yang unik. Duplicate Preset Guid '{0}' dikesan dalam plugin '{1}' untuk pratetap: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Ralat parsing plugin, pada path '{0}' null, kemungkinan ralat parsing json. Mengabaikan plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Pemulihan total tidak boleh dijamin dan boleh mengurangkan prestasi atau bahkan 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' mengandungi nilai bersama. Adakah anda ingin menetapkan semula mereka juga?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Pratetap mesti mempunyai panduan yang unik. Duplicate preset guid '{0}' dikesan dalam plugin '{1}' untuk pratetap: {2}.</value>
   </data>
 </root>

@@ -2844,10 +2844,6 @@ feedback@monkeypaste.com</value>
     <value>Алдын ала орнотууларда бөлүшүлгөн маани параметрлерин коюу мүмкүн эмес. '{2}' плагини үчүн алдын ала коюлган '{1}' параметриндеги '{0}' ParamId алынып салынышы керек же paramValue параметрин аныктоо бөлүмүндө көрсөтүлүшү мүмкүн.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Орнотулган уникалдуу гейддер болушу керек. "{0}" Плагинде "{1}" температурасында орнотулган жана Plugin '{2 {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin талдоо катасы, '{0}' нөлүндө, кыязы, JSON менен байланышкан ката. Плагинге көңүл бурбоо</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ feedback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' Бөлүшүлгөн маанилерди камтыйт. Ошондой эле сиздерди баштапкы абалга келтиргиңиз келеби?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Прецеденттер уникалдуу жетекчиликке ээ болушу керек. Алдын ала аныктамалар үчүн «{1}» плагининде алдын ала белгиленген «{0}» дубликаты аныкталды: {2}.</value>
   </data>
 </root>

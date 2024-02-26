@@ -2844,10 +2844,6 @@
     <value>ኣብ ቅድመ-ምድላዋት ዝተኻፈለ ዋጋ መለክዒታት ከቐምጥ ኣይክእልን። ፓራሚድ '{0}' ኣብ ቅድመ-ምድላው '{1}' ንፕላግኢን '{2}' ምእላይ የድልዮ ወይ ኣብ ክፍሊ ትርጉም መለክዒ ፓራምቫሉ ክግለጽ ይኽእል።</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ቅድመ-ምድላዋት ፍሉይ ጓይድ ክህልዎም ኣለዎ። ድፕሊኬት ቅድመ-ምድላው guid '{0}' ኣብ ፕላግ-ኢን '{1}' ንቅድመ-ምድላው ተረኺቡ: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>ስሕተት ምትንታን ፕላግ-ኢን፡ ኣብ መንገዲ '{0}' null፡ ምናልባት ጌጋ ምጽናዕ ንJSON. ንፕላግ-ኢን ሸለል ምባል</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ናይ ሓባር ክብርታት ዝሓዘ እዩ። ነቶም ውን ዳግማይ ክትሰርዖም ትደሊ ዶ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ኣቐዲምካ ምድላው ፍሉይ መምርሒ ኺህልዎ ኣለዎ ። ኣቐዲምካ ናይ ምድላው መምርሒ '{0}' ኣብ ፕለጊን '{1}' ኣቐዲምካ ምድላው ከም {2} ተፈልጠ።</value>
   </data>
 </root>

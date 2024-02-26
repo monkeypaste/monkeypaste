@@ -2844,10 +2844,6 @@
     <value>प्रीसेटमध्ये सामायिक मूल्य पॅरामीटर्स सेट करू शकत नाही. प्लगइनसाठी '{0}' प्लगइन '{1}' प्लगइन '{2}' काढण्याची आवश्यकता आहे किंवा पॅरामीटर परिभाषा विभागात पॅरामाव्हल्यू निर्दिष्ट करणे आवश्यक आहे.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>प्रीसेटमध्ये अद्वितीय मार्गदर्शक असणे आवश्यक आहे. प्रीसेटसाठी डुप्लिकेट प्रीसेट मार्गदर्शक '{0}' प्लगइन '{1}' मध्ये आढळले: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>प्लगइन पार्सिंग त्रुटी, पथ '{0}' शून्य, संभाव्य त्रुटी जेएसओएन विश्लेषित करते. प्लगइनकडे दुर्लक्ष करणे</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' मध्ये सामायिक मूल्ये आहेत. आपण ते देखील रीसेट करू इच्छिता?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>प्रीसेटमध्ये युनिक गाइड्स असणे आवश्यक आहे. प्रीसेटसाठी प्लगइन '{1}'मध्ये डुप्लिकेट प्रीसेट गाइड '{0}' आढळले: {2}.</value>
   </data>
 </root>

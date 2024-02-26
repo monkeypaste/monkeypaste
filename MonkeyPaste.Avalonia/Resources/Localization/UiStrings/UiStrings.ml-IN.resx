@@ -2844,10 +2844,6 @@
     <value>പ്രീസെറ്റുകളിൽ പങ്കിട്ട മൂല്യ പാരാമീറ്ററുകൾ സജ്ജമാക്കാൻ കഴിയില്ല. '{2}' പ്ലഗിനിനായുള്ള പ്രീസെറ്റ് '{1}' ലെ ParamId '{0}' നീക്കം ചെയ്യേണ്ടതുണ്ട് അല്ലെങ്കിൽ പാരാമീറ്റർ ഡെഫനിഷൻ വിഭാഗത്തിൽ paramValue വ്യക്തമാക്കാം.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>പ്രീസെറ്റുകൾക്ക് അദ്വിതീയ ഗൈഡുകൾ ഉണ്ടായിരിക്കണം. പ്രീസെറ്റുകൾക്കായുള്ള '{1}' പ്ലഗിനിൽ ഡ്യൂപ്ലിക്കേറ്റ് പ്രീസെറ്റ് ഗൈഡ് '{0}' കണ്ടെത്തി: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>പ്ലഗിൻ പാഴ്സിംഗ് പിശക്, പാതയിൽ '{0}' NULL, JSON പാഴ്സുചെയ്യാൻ സാധ്യതയുണ്ട്. പ്ലഗിൻ അവഗണിക്കുന്നു</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' പങ്കിട്ട മൂല്യങ്ങൾ അടങ്ങിയിരിക്കുന്നു. അവയെ പുന reset സജ്ജമാക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>പ്രീസെറ്റുകൾക്ക് സവിശേഷമായ മാർഗ്ഗനിർദ്ദേശങ്ങൾ ഉണ്ടായിരിക്കണം. പ്രീസെറ്റുകൾക്കായി പ്ലഗിൻ '{1}' ൽ ഡ്യൂപ്ലിക്കേറ്റ് പ്രീസെറ്റ് ഗൈഡ് '{0}' കണ്ടെത്തി: {2}.</value>
   </data>
 </root>

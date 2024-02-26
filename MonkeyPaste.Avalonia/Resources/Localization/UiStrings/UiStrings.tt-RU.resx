@@ -2844,10 +2844,6 @@ Changeзгәрешләр өчен сылтамага иярегез
     <value>Пресетларда уртак кыйммәт параметрларын куя алмыйлар. ParamId '{0}' алдан билгеләнгән '{1}' плагин өчен '{2}' бетерелергә тиеш яки параметрны билгеләү бүлегендә paramValue күрсәтелергә мөмкин.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Предактларның уникаль гуитлары булырга тиеш. Тәкъдимнәр өчен "{1}" плагинга дубликат "{0} 'табылды: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Плагин анализлау хата, '{0}' nourult'та, мөгаен, Джсонны анализлый. Плагинны санга сукмау</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Changeзгәрешләр өчен сылтамага иярегез
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0} »уртак кыйммәтләр бар. Сез шулай ук ​​яңадан торгызырга телисезме?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Пресетларның уникаль гәүсәләре булырга тиеш. Председатлар өчен "{1}" плагинында председат "{0}"ны кабатлату ачыкланган: {2}.</value>
   </data>
 </root>

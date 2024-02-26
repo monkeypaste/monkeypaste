@@ -2844,10 +2844,6 @@
     <value>Не может установить параметры общего значения в пресетах. Paramid '{0}' в Preset '{1}' для плагина '{2}' должен быть удален или параметра может быть указана в разделе «Определение параметра».</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Престоны должны иметь уникальные гииды. Duplicate Preset Guid '{0}' был обнаружен в плагине '{1}' для пресетов: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Ошибка анализа плагина, по пути '{0}' NULL, вероятно, анализ ошибок JSON. Игнорируя плагин</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' содержит общие значения. Хотели бы вы их сбросить?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Пресеты должны иметь уникальные идентификаторы. В плагине '{1}' для пресетов: {2} обнаружен дубликат guid пресета '{0}'.</value>
   </data>
 </root>

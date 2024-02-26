@@ -1,0 +1,67 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:Name="ClipTileContentViewRoot"
+                       x:DataType="local:MpAvClipTileViewModel"
+                       x:TypeArguments="local:MpAvClipTileViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvPasteToolbarView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Button#PasteButton">
+            <Style.Resources>
+                <SolidColorBrush x:Key="ButtonBackground">DodgerBlue</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundPointerOver">DodgerBlue</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundPressed">DodgerBlue</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForeground">White</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundPointerOver">White</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundPressed">White</SolidColorBrush>
+            </Style.Resources>
+        </Style>
+        <Style Selector="Button#PasteButton.custom">
+            <Style.Resources>
+                <SolidColorBrush x:Key="ButtonBackground">Magenta</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Magenta</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundPressed">Magenta</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForeground">White</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundPointerOver">White</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundPressed">White</SolidColorBrush>
+            </Style.Resources>
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Border x:Name="PasteToolbarOuterBorder"
+            Background="Teal"
+            BorderThickness="1"
+            BorderBrush="Black">
+        <DockPanel LastChildFill="False">
+            <StackPanel DockPanel.Dock="Right"
+                        Margin="0,0,10,0"
+                        Orientation="Horizontal"
+                        Spacing="5">
+                <Button x:Name="PasteButton"
+                        Classes="defaultButton iconTextButton outline outlineOver"
+                        Classes.custom="{Binding !IsPasteDefault, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                        Command="{Binding PasteFromClipTilePasteButtonCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                        CommandParameter="{Binding .}">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView IsHtml="True"
+                                               ToolTipText="{Binding PasteButtonTooltipHtml, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
+                    </ToolTip.Tip>
+                    <DockPanel>
+                        <Image Source="{Binding PasteButtonIconBase64, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
+                        <TextBlock FontSize="16"
+                                   FontWeight="DemiBold"
+                                   Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.EditorPasteButtonLabel}" />
+                    </DockPanel>
+                </Button>
+            </StackPanel>
+        </DockPanel>
+    </Border>
+
+</local:MpAvUserControl>

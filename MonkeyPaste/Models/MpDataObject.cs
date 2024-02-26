@@ -128,6 +128,9 @@ namespace MonkeyPaste {
                     // text
 
                     itemDataStr = kvp.Value.ToString();
+                } else if (kvp.Value is int) {
+                    // content id ref
+                    itemDataStr = kvp.Value.ToString();
                 } else {
                     MpDebug.Assert(
                         kvp.Key != MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT,

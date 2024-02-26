@@ -2910,10 +2910,6 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>Presets-da umumiy qiymat parametrlarini oʻrnatib boʻlmadi. "{2}" plaginining "{1}" oldindan o'rnatilgan parametridagi "{0}" parametrini o'chirish kerak yoki parametrlarni aniqlash bo'limida paramValue ko'rsatilishi mumkin.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Oldindan o'rnatilgan sozlamalar noyob yo'riqnomalarga ega bo'lishi kerak. Oldindan sozlash uchun “{1}” plaginida “{0}” takroriy oldindan oʻrnatilgan qoʻllanma aniqlandi: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plaginni taqqoslash xatosi, {0} 'Noll, ehtimol Jsonni tahlil qilishda xato. Plaginni e'tiborsiz qoldiring</value>
     <comment>File Path</comment>
@@ -2961,5 +2957,8 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' umumiy qiymatlar mavjud. Bularni ham tiklamoqchimisiz?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Oldindan o'rnatilgan sozlamalar noyob yo'riqnomalarga ega bo'lishi kerak. Oldindan oʻrnatish uchun “{0}” qoʻllanmasining takroriy nusxasi “{1}” plaginida aniqlandi: {2}.</value>
   </data>
 </root>

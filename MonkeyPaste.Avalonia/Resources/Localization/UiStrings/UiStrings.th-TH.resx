@@ -2844,10 +2844,6 @@ feedback@monkeypaste.com</value>
     <value>ไม่สามารถตั้งค่าพารามิเตอร์ค่าที่ใช้ร่วมกันในที่ตั้งไว้ล่วงหน้า paramid '{0}' ในที่ตั้งไว้ล่วงหน้า '{1}' สำหรับปลั๊กอิน '{2}' จะต้องถูกลบออกหรือสามารถระบุ paramValue ในส่วนนิยามพารามิเตอร์</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ค่าที่ตั้งไว้ล่วงหน้าจะต้องมี GUID ที่ไม่ซ้ำกัน ตรวจพบ Guid '{0}' ซ้ำในปลั๊กอิน '{1}' สำหรับที่ตั้งไว้ล่วงหน้า: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>ข้อผิดพลาดในการแยกวิเคราะห์ปลั๊กอินที่เส้นทาง '{0}' เป็นโมฆะข้อผิดพลาดที่น่าจะแยกวิเคราะห์ JSON ไม่สนใจปลั๊กอิน</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ feedback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' มีค่าที่ใช้ร่วมกัน คุณต้องการรีเซ็ตสิ่งเหล่านั้นด้วยหรือไม่?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ค่าที่ตั้งไว้ล่วงหน้าต้องมีคําแนะนําที่ไม่ซ้ํากัน ตรวจพบ guid ที่ตั้งไว้ล่วงหน้าซ้ํากัน '{0}' ในปลั๊กอิน '{1}' สําหรับค่าที่ตั้งไว้ล่วงหน้า: {2}</value>
   </data>
 </root>

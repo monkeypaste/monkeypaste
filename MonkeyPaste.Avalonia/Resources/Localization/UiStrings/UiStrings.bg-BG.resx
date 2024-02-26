@@ -2844,10 +2844,6 @@ feedback@monkeypaste.com</value>
     <value>Не може да зададе параметри на споделена стойност в предварително зададени настройки. Paramid '{0}' в предварително зададен '{1}' за плъгин '{2}' трябва да бъде премахнат или paramvalue може да бъде посочен в раздела за дефиниция на параметъра.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Предварителните настройки трябва да имат уникални Guids. Дублиране на предварително зададен Guid '{0}' беше открит в плъгин '{1}' за предварително зададени настройки: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Грешка в анализа на приставката, по пътя '{0}' null, вероятно грешка при анализиране на json. Игнориране на плъгин</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ feedback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' съдържа споделени стойности. Искате ли да нулирате и тези?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Предварителните настройки трябва да имат уникални ръководства. Дублиран предварително зададен guid '{0}' беше открит в приставката '{1}' за предварително зададени настройки: {2}.</value>
   </data>
 </root>

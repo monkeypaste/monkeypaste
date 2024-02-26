@@ -2181,6 +2181,9 @@
     <Compile Update="Views\ExternalDropWindow\MpAvExternalDropView.axaml.cs">
       <DependentUpon>MpAvExternalDropView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CompositeContentView\PasteToolbar\MpAvPasteToolbarView.axaml.cs">
+      <DependentUpon>MpAvPasteToolbarView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\ContentWebViewContainer\MpAvContentWebViewContainer.axaml.cs">
       <DependentUpon>MpAvContentWebViewContainer.axaml</DependentUpon>
     </Compile>

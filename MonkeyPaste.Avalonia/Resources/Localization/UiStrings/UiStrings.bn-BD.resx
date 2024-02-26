@@ -2844,10 +2844,6 @@
     <value>প্রিসেটগুলিতে ভাগ করা মান পরামিতি সেট করতে পারে না। প্লাগইন '{2}' এর জন্য প্রিসেট '{1}' তে প্যারামিড '{0}' অপসারণ করা দরকার বা প্যারামভ্যালু প্যারামিটার সংজ্ঞা বিভাগে নির্দিষ্ট করা যেতে পারে।</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>প্রিসেটগুলির অবশ্যই অনন্য গাইড থাকতে হবে। ডুপ্লিকেট প্রিসেট গুইড '{0}' প্রিসেটগুলির জন্য প্লাগইন '{1}' তে সনাক্ত করা হয়েছিল: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>প্লাগইন পার্সিং ত্রুটি, পাথ '{0}' নাল, সম্ভবত ত্রুটি json পার্সিং। প্লাগইন উপেক্ষা</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' এর ভাগ করা মান রয়েছে। আপনি কি সেগুলি পুনরায় সেট করতে চান?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>প্রিসেটের অনন্য গাইড থাকতে হবে। প্রিসেটের জন্য প্লাগইন '{1}'-এ ডুপ্লিকেট প্রিসেট গাইড '{0}' সনাক্ত করা হয়েছে: {2}।</value>
   </data>
 </root>

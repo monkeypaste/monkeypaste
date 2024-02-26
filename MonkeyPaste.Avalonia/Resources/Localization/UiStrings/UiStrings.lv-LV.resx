@@ -2844,10 +2844,6 @@ Pilnīgu atjaunošanu nevar garantēt, un tā var samazināt veiktspēju vai pat
     <value>Nevar iestatīt kopīgas vērtības parametrus iepriekšējos iestatījumos. Paramid '{0}' Iepriekšējā '{1}' spraudnim '{2}' ir jānoņem vai paramvalu var norādīt sadaļā Parametru definīcija.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Iepriekšējiem iestatījumiem jābūt unikālām guidiem. PRESETS PRESET GUID '{0}' tika atklāts spraudnī '{1}', lai iegūtu iestatījumus: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Spraudņu parsēšanas kļūda, pa ceļu '{0}' nulle, iespējams, kļūdu parsēšana JSON. Ignorējot spraudni</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Pilnīgu atjaunošanu nevar garantēt, un tā var samazināt veiktspēju vai pat
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' satur kopīgas vērtības. Vai vēlaties tos atiestatīt arī?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Sākotnējiem iestatījumiem ir jābūt unikāliem guidiem. Sākotnējo iestatījumu spraudnī "{1}" tika atrasts iepriekš iestatīts guid "{0}" dublikāts: {2}.</value>
   </data>
 </root>

@@ -2844,10 +2844,6 @@ Umumy dikeldiş işlerine kepil geçip bolmaýar we maglumatlaryň çeşmesine b
     <value>Öňünden kesgitlenen baha parametrlerini düzüp bolmaýar. “{2}” plugin üçin deslapky “{1}” -de ParamId '{0}' aýrylmaly ýa-da parametr kesgitlemek bölüminde paramValue görkezilip bilner.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Deslapky gollanmalar bolmaly. Öňünden kesgitlenen gollanma '{0}' deslapky bellikler üçin '{1}' plugininde tapyldy: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>PLUIN SÖ .GI ALMAK: "{0} 'pyçakda, jsony derňemek ähtimallygy. Plugini äsgermezlik etmek</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Umumy dikeldiş işlerine kepil geçip bolmaýar we maglumatlaryň çeşmesine b
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}'-de umumy bahalary öz içine alýar. Bulary täzeden düzmek isleýärsiňizmi?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Öňki setlerde üýtgeşik guidler bolmaly. {0} üçin '{1}' plýonkasynda ýene-de bir preset guid anyklandy: {2}.</value>
   </data>
 </root>

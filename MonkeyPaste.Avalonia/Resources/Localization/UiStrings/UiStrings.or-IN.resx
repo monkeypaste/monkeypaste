@@ -2844,10 +2844,6 @@ FANDUCE@ONKEYPASTET.com</value>
     <value>ପ୍ରେସେଟ୍ ରେ ଅଂଶୀଦାର ମୂଲ୍ୟ ପାରାମିଟର ସେଟ୍ କରିପାରିବେ ନାହିଁ। ପ୍ଲଗଇନ୍ '{2}' ପାଇଁ ପ୍ରିସେଟ୍ '{1}'ରେ ପାରାମିଡ୍ '{0}' ଅପସାରଣ କରିବା ଆବଶ୍ୟକ କିମ୍ବା ପାରାମିଟର ସଂଜ୍ଞା ବିଭାଗରେ ପାରାମ୍ଭାଲ୍ୟୁ ନିର୍ଦ୍ଦିଷ୍ଟ କରାଯାଇପାରିବ।</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ପ୍ରିସେଟ୍ ଗୁଡିକରେ ଅନନ୍ୟ ଗାଇଡ୍ ରହିବା ଜରୁରୀ | ପ୍ରିସେଟ୍ ପାଇଁ ପ୍ଲଗଇନ୍ '{1}' ରେ ନକଲ ପ୍ରିସେଟ୍ ଗାଇଡ୍ '{0}' ଚିହ୍ନଟ ହେଲା: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>ପ୍ଲଗଇନ୍ ତ୍ରୁଟି, ପଥ '{0}' nols, ସମ୍ଭବତ J ଜୋନ୍ ପାର୍ସ କରିବା | ପ୍ଲଗଇନ୍ କୁ ଅଣଦେଖା କରିବା |</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ FANDUCE@ONKEYPASTET.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ଅଂଶୀଦାର ମୂଲ୍ୟ ଧାରଣ କରେ | ଆପଣ ସେଗୁଡିକୁ ପୁନ res ସେଟ୍ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ପ୍ରେସେଟ୍ ରେ ଅନନ୍ୟ ଗୁଇଡ୍ ରହିବା ଆବଶ୍ୟକ। ପ୍ରିସେଟ୍ ପାଇଁ ପ୍ଲଗଇନ୍ '{1}'ରେ ଡୁପ୍ଲିକେଟ୍ ପ୍ରିସେଟ୍ ଗିଲ୍ଡ '{0}' ଚିହ୍ନଟ ହୋଇଥିଲା: {2}।</value>
   </data>
 </root>

@@ -2844,10 +2844,6 @@ Monkeypaste на уредот
     <value>Не може да ги постави параметрите на заедничка вредност во претходно поставените. Paramid '{0}' во претходно поставениот '{1}' за додаток '{2}' треба да се отстрани или парамејството може да се наведе во делот за дефинирање на параметарот.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Претставите мора да имаат уникатни упатства. Дупликат претходно наместениот Guid '{0}' беше откриен во приклучокот '{1}' за претходно поставените страни: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Грешка во приклучокот за парсирање, на патеката '{0}' NULL, најверојатно грешки во парсирање на JSON. Игнорирање на приклучокот</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Monkeypaste на уредот
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' содржи споделени вредности. Дали сакате да ги ресетирате и тие?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Претпоставките мора да имаат уникатни водичи. Дупликатниот однапред наменет водич "{0}" бил откриен во приклучок "{1}" за претпоставки: {2}.</value>
   </data>
 </root>

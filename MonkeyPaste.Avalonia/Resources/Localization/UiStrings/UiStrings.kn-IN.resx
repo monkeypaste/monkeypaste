@@ -2844,10 +2844,6 @@
     <value>ಪೂರ್ವನಿಗದಿಗಳಲ್ಲಿ ಹಂಚಿದ ಮೌಲ್ಯ ನಿಯತಾಂಕಗಳನ್ನು ಹೊಂದಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ಪ್ಲಗಿನ್ '{2}' ಗಾಗಿ '{1}' ನಲ್ಲಿ ಮೊದಲೇ '{0}' ಪ್ಯಾರಾಮಿಡ್ ಅನ್ನು ತೆಗೆದುಹಾಕಬೇಕಾಗುತ್ತದೆ ಅಥವಾ ಪ್ಯಾರಾಮೀಟರ್ ವ್ಯಾಖ್ಯಾನ ವಿಭಾಗದಲ್ಲಿ ಪ್ಯಾರಾಮೌಲ್ಯೂ ಅನ್ನು ನಿರ್ದಿಷ್ಟಪಡಿಸಬಹುದು.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ಪೂರ್ವನಿಗದಿಗಳು ಅನನ್ಯ ಮಾರ್ಗದರ್ಶಿಗಳನ್ನು ಹೊಂದಿರಬೇಕು. ಪೂರ್ವನಿಗದಿಗಳಿಗಾಗಿ '{1}' ಪ್ಲಗಿನ್ ನಲ್ಲಿ ನಕಲಿ ಮೊದಲೇ GUID '{0}' ಪತ್ತೆಯಾಗಿದೆ: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>ಪ್ಲಗಿನ್ ಪಾರ್ಸಿಂಗ್ ದೋಷ, ಹಾದಿಯಲ್ಲಿ '{0}' ಶೂನ್ಯ, JSON ಅನ್ನು ಪಾರ್ಸಿಂಗ್ ಮಾಡುವ ದೋಷ. ಪ್ಲಗಿನ್ ಅನ್ನು ನಿರ್ಲಕ್ಷಿಸಲಾಗುತ್ತಿದೆ</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ಹಂಚಿದ ಮೌಲ್ಯಗಳನ್ನು ಒಳಗೊಂಡಿದೆ. ನೀವು ಅದನ್ನು ಮರುಹೊಂದಿಸಲು ಬಯಸುವಿರಾ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ಪ್ರಿಸೆಟ್ ಗಳು ಅನನ್ಯ ಮಾರ್ಗದರ್ಶಿಗಳನ್ನು ಹೊಂದಿರಬೇಕು. ಪ್ರಿಸೆಟ್ ಗಳಿಗಾಗಿ '{1}' ಪ್ಲಗಿನ್ ನಲ್ಲಿ ನಕಲಿ ಪ್ರಿಸೆಟ್ ಮಾರ್ಗದರ್ಶಿ '{0}' ಪತ್ತೆಯಾಗಿದೆ: {2}.</value>
   </data>
 </root>

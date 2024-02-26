@@ -2844,10 +2844,6 @@ Ni ellir gwarantu adfer cyfanswm a gall leihau perfformiad neu hyd yn oed damwai
     <value>Ni all osod paramedrau gwerth a rennir mewn rhagosodiadau. Mae angen dileu paramid '{0}' yn rhagosodiad '{1}' ar gyfer ategyn '{2}' neu gellir nodi paramvalue yn yr adran diffiniad paramedr.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Rhaid i ragosodiadau fod â guidau unigryw. Canfuwyd rhagosodiad dyblyg '{0}' mewn ategyn '{1}' ar gyfer rhagosodiadau: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Gwall dosrannu ategyn, yn y llwybr '{0}' null, gwall tebygol yn dosrannu json. Anwybyddu ategyn</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Ni ellir gwarantu adfer cyfanswm a gall leihau perfformiad neu hyd yn oed damwai
   <data name="SharedValNtfText" xml:space="preserve">
     <value>Mae '{0}' yn cynnwys gwerthoedd a rennir. Hoffech chi ailosod y rheini hefyd?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Rhaid i ragosodiadau gael canllawiau unigryw. Canfuwyd canllaw rhagosodedig dyblyg '{0}' yn ategyn '{1}' ar gyfer rhagosodiadau: {2}.</value>
   </data>
 </root>

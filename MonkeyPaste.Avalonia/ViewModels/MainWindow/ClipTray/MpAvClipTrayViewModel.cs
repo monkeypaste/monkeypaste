@@ -100,6 +100,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpDataObjectSourceType.PluginResponse:
                 case MpDataObjectSourceType.ShortcutTrigger:
+                case MpDataObjectSourceType.ClipTileClone:
                     // always remove external source
                     remove_ext = true;
                     break;
@@ -1428,7 +1429,13 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSubQuerying { get; set; } = false;
         public int SparseLoadMoreRemaining { get; set; }
 
+        #region Paste Button
+
+        public string PasteButtonIconBase64 { get; set; }
+        public string PasteButtonTooltipHtml { get; set; }
+        public bool IsPasteDefault { get; set; }
         public MpQuillPasteButtonInfoMessage CurPasteInfoMessage { get; private set; } = new MpQuillPasteButtonInfoMessage();
+        #endregion
 
         #region Drag Drop
         public bool IsAnyDropOverTrays { get; private set; }
@@ -2542,6 +2549,9 @@ namespace MonkeyPaste.Avalonia {
                     isFormatDefault = !is_custom
                 };
             }
+            PasteButtonIconBase64 = CurPasteInfoMessage.pasteButtonIconBase64;
+            PasteButtonTooltipHtml = CurPasteInfoMessage.pasteButtonTooltipHtml;
+            IsPasteDefault = CurPasteInfoMessage.isFormatDefault;
 
             string msg = $"enableSubSelection_ext('{CurPasteInfoMessage.SerializeObjectToBase64()}')";
 
@@ -3658,8 +3668,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DuplicateSelectedClipsCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
-                var avdo = SelectedItem.CopyItem.ToAvDataObject();
-                await BuildFromDataObjectAsync(avdo, true);
+                var avdo = SelectedItem.CopyItem.ToAvDataObject(true, true);
+                await BuildFromDataObjectAsync(avdo, true, MpDataObjectSourceType.ClipTileClone);
 
                 IsBusy = false;
             }, () => SelectedItem != null && SelectedItem.IsContentReadOnly);

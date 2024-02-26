@@ -37,27 +37,27 @@ namespace Ledgerizer {
     internal class Program {
 
         static MpLedgerizerFlags LEDGERIZER_FLAGS =
-                                                             //MpLedgerizerFlags.TRANSLATE_RESX |
-                                                             //MpLedgerizerFlags.GEN_EMPTY_RESX
-                                                             //MpLedgerizerFlags.GEN_ADDON_LISTING |
-                                                             //MpLedgerizerFlags.GEN_PROD_LISTING |
-                                                             MpLedgerizerFlags.DO_LOCAL_PACKAGING |
-                                                             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
-                                                             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
-                                                             //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
-                                                             //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
-                                                             //MpLedgerizerFlags.DO_LOCAL_INDEX |
-                                                             //MpLedgerizerFlags.DO_REMOTE_INDEX |
-                                                             //MpLedgerizerFlags.DO_LOCAL_LEDGER |
-                                                             //MpLedgerizerFlags.DO_REMOTE_LEDGER |
-                                                             MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
-                                                             //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
-                                                             //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
-                                                             //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
-                                                             // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
-                                                             //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
-                                                             //MpLedgerizerFlags.DEBUG //|
-                                                             MpLedgerizerFlags.RELEASE
+            //MpLedgerizerFlags.TRANSLATE_RESX |
+            //MpLedgerizerFlags.GEN_EMPTY_RESX
+            //MpLedgerizerFlags.GEN_ADDON_LISTING |
+            //MpLedgerizerFlags.GEN_PROD_LISTING |
+            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
+            //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
+            //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
+            //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
+            //MpLedgerizerFlags.DO_LOCAL_INDEX |
+            //MpLedgerizerFlags.DO_REMOTE_INDEX |
+            //MpLedgerizerFlags.DO_LOCAL_LEDGER |
+            //MpLedgerizerFlags.DO_REMOTE_LEDGER |
+            MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+            //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
+            //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
+            //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
+            // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
+            //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
+            MpLedgerizerFlags.DEBUG |
+            MpLedgerizerFlags.RELEASE
             ;
 
         #region Localizer Props
@@ -145,7 +145,7 @@ namespace Ledgerizer {
             //"AzureComputerVision",
             //"AzureTextTranslator",
             //"ChatGpt",
-            "CoreAnnotator",
+            //"CoreAnnotator",
             "CoreOleHandler",
             //"FileConverter",
             //"GoogleLiteTextTranslator",
@@ -215,6 +215,10 @@ namespace Ledgerizer {
 #else
             "";
 #endif
+        static string[] ExcludedPublishFileNames = [
+            "PresentationFramework.dll",
+            "PresentationFramework.xml",
+            ];
 
         static string[] CorePlugins => [
             "CoreAnnotator",
@@ -1629,6 +1633,14 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             }
             // clear previous package
             MpFileIo.DeleteFile(output_path);
+
+            // remove any important excluded files (ref assemblies, only in CoreOle)
+            new DirectoryInfo(publish_dir)
+                .GetFiles()
+                .Where(x => ExcludedPublishFileNames.Contains(x.Name))
+                .Select(x => x.FullName)
+                .ForEach(x => MpFileIo.DeleteFile(x));
+
             // zip publish output 
             ZipFile.CreateFromDirectory(publish_dir, output_path, CompressionLevel.Fastest, true);
 

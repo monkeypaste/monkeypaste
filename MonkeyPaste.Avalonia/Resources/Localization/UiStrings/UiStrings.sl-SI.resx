@@ -2844,10 +2844,6 @@ Popolne obnove ni mogoče zagotoviti in lahko zmanjša zmogljivost ali celo zru�
     <value>V prednastavitvah ni mogoče nastaviti parametrov skupne vrednosti. Paramid '{0}' v prednastavitvi '{1}' za vtičnik '{2}' je treba odstraniti ali pa je mogoče določiti v razdelku Definicija parametra.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Prednastavitve morajo imeti edinstvene GUID. Podvojena prednastavljena GUID '{0}' je bila zaznana v Plugin '{1}' za prednastavitve: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Napaka v razčlenjevanju vtičnika, na poti '{0}' null, verjetno napaka razčlenitev json. Ignoriranje vtičnika</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Popolne obnove ni mogoče zagotoviti in lahko zmanjša zmogljivost ali celo zru�
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' vsebuje skupne vrednosti. Bi jih radi ponastavili tudi?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Prednastavitve morajo imeti edinstvene vodila. Podvojeni prednastavljeni guid '{0}' je bil zaznan v vtičniku '{1}' za prednastavitve: {2}.</value>
   </data>
 </root>

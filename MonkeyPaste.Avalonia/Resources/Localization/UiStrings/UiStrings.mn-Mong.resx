@@ -2844,10 +2844,6 @@ FEEDBOWY@monkeypue.com</value>
     <value>Урьдчилан тохируулалт дотор хуваалцсан утгын параметрүүдийг тохируулах боломжгүй. '{2}' залгаасын урьдчилан тохируулсан '{1}' доторх ParamId '{0}'-г хасах шаардлагатай эсвэл параметрийн тодорхойлолтын хэсэгт paramValue-г зааж өгч болно.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Урьдчилан бэлтгэх нь өвөрмөц удирдамжтай байх ёстой. Prongin '{{0 {{0}' -ийг Prongin '{1}}' Хүснэгтэнд илэрсэн: {1} {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin Parsing Apront нь '{0 {0}' NULL, JSON-ийг задлах магадлалтай. Залгаасыг үл тоомсорлох</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ FEEDBOWY@monkeypue.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' нь хуваалцсан утгыг агуулдаг. Та эдгээрийг бас дахин тохируулахыг хүсч байна уу?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ᠤᠷᠢᠳᠴᠢᠯᠠᠨ ᠲᠥᠰᠥᠭᠡᠯᠡᠬᠦ ᠳᠦ ᠡᠷᠬᠡᠪᠰᠢ ᠴᠤᠷ ᠤᠨ ᠭᠠᠭᠴᠠ ᠭᠧᠨᠳ᠋ ᠪᠠᠶᠢᠬᠤ ᠬᠡᠷᠡᠭᠲᠡᠢ ᠃ ᠬᠠᠪᠴᠢᠭᠤᠯᠤᠯ ᠤᠨ 《 {1} 》 ᠳᠤ ᠳᠠᠪᠬᠤᠷᠳᠠᠭᠤᠯᠤᠭᠰᠠᠨ ᠤᠷᠢᠳᠴᠢᠯᠠᠨ ᠲᠥᠰᠦᠭᠡᠯᠡᠭᠰᠡᠨ guid 〉 {0} ᠢ ᠪᠠᠶᠢᠴᠠᠭᠠᠨ ᠰᠢᠯᠭᠠᠵᠤ ᠣᠯᠵᠠᠢ ᠄ {2} ᠃</value>
   </data>
 </root>

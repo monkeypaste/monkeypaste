@@ -146,6 +146,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	//log(output_html);
 	stop();
 	return {
+		themed_html: getHtml(null,true,false,true),
 		html: output_html,
 		delta: output_delta,
 		valid: is_conv_html_valid

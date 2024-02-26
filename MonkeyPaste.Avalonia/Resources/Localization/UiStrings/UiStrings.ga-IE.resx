@@ -2844,10 +2844,6 @@ Ní féidir athchóiriú iomlán a ráthú agus d'fhéadfadh sé feidhmíocht a 
     <value>Ní féidir paraiméadair luacha chomhroinnte a shocrú i réamhshocruithe. Ní mór paramid '{0}' in réamhshocrú '{1}' le haghaidh plugin '{2}' a bhaint nó is féidir paramvalue a shonrú sa rannóg sainmhínithe paraiméadair.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Ní mór go mbeadh treoir uathúla ag réamhshocruithe. Braitheadh ​​Dúblach réamhshocraithe '{0}' i mbreiseán '{1}' le haghaidh réamhshocruithe: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Earráid pharsála plugin, ag an gcosán '{0}' null, earráid is dócha a pharsálann JSON. Breiseán neamhaird</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Ní féidir athchóiriú iomlán a ráthú agus d'fhéadfadh sé feidhmíocht a 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>Tá luachanna comhroinnte i '{0}'. Ar mhaith leat iad siúd a athshocrú chomh maith?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Ní mór guids uathúla a bheith ag réamhshocruithe. Braitheadh guid réamhshocraithe dúblach '{0}' sa bhreiseán '{1}' le haghaidh réamhshocruithe: {2}.</value>
   </data>
 </root>

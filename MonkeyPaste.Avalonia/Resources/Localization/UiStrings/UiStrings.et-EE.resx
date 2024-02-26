@@ -2844,10 +2844,6 @@ Täielikku taastamist ei saa garanteerida ja see võib sõltuvalt andmete allika
     <value>Eelseadetes ei saa jagatud väärtuse parameetreid määrata. Plugina '{2}' eelseadistuses '{1}' olev ParamId '{0}' tuleb eemaldada või paramValue saab määrata parameetri määratluse jaotises.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Eelseadistustel peavad olema ainulaadsed juhised. Pluginas '{1}' tuvastati eelseadete juhendi "{0}" duplikaat: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Pistikprogrammi parsimisviga, tee ääres '{0}' null, tõenäoliselt tõrge JSON -i parsimine. Plugina ignoreerimine</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Täielikku taastamist ei saa garanteerida ja see võib sõltuvalt andmete allika
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' sisaldab jagatud väärtusi. Kas soovite ka neid lähtestada?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Valmisseadetel peavad olema unikaalsed guidid. Dubleeritud eelseadistatud guid '{0}' tuvastati pluginas '{1}' eelseadete jaoks: {2}.</value>
   </data>
 </root>

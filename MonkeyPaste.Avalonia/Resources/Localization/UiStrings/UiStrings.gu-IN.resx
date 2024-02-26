@@ -2844,10 +2844,6 @@
     <value>પ્રીસેટ્સમાં વહેંચાયેલ મૂલ્ય પરિમાણો સેટ કરી શકતા નથી. પેરામિડ '{0}' પ્રીસેટમાં '{1}' પ્લગઇન માટે '{2}' ને દૂર કરવાની જરૂર છે અથવા પરિમાણ વ્યાખ્યા વિભાગમાં પેરામવ al લ્યુનો ઉલ્લેખ કરી શકાય છે.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>પ્રીસેટ્સમાં અનન્ય જી.આઈ.ડી. હોવા આવશ્યક છે. ડુપ્લિકેટ પ્રીસેટ ગાઇડ '{0}' પ્રીસેટ્સ માટે પ્લગઇનમાં '{1}' મળી: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>પ્લગઇન પાર્સિંગ ભૂલ, પાથ '{0}' નલ પર, સંભવિત ભૂલ જેએસઓનને પાર્સિંગ કરવામાં આવે છે. અવગણીને</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' માં વહેંચાયેલ મૂલ્યો શામેલ છે. શું તમે તેને ફરીથી સેટ કરવા માંગો છો?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>પ્રિસેટમાં અનન્ય માર્ગદર્શન હોવું આવશ્યક છે. નકલી પૂર્વસુયોજિત માર્ગદર્શન '{0}' એ પૂર્વસુયોજનો માટે પ્લગઇન '{1}' માં શોધાયેલ હતુ: {2}.</value>
   </data>
 </root>

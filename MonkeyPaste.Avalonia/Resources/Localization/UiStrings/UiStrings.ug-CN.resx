@@ -2844,10 +2844,6 @@ tempo@Monkepaste.com</value>
     <value>ئالدىن بەلگىلەشتە ئورتاق قىممەت پارامېتىرلىرىنى تەڭشىگىلى بولمايدۇ. قىستۇرما '{2}' نىڭ ئالدىن بېكىتىلگەن '{1}' دىكى ParamId '{0}' نى چىقىرىۋېتىش كېرەك ياكى پارامېتىر ئېنىقلىما بۆلىكىدە paramValue نى بەلگىلىگىلى بولىدۇ.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ئالدىن بەلگىلەشتە چوقۇم ئۆزگىچە يېتەكچى بولۇشى كېرەك. ئالدىن بەلگىلەش قوللانمىسى '{0}' قىستۇرما '{1}' قىستۇرمىسىدا بايقالدى: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>قىستۇرما تەھدىد بۇزۇشتا خاتالىق, «{0} '] NSON نى ساقلاپ قېلىشتا خاتالىق كۆرۈلدى. قىستۇرما</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ tempo@Monkepaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' بار. بۇلارنىمۇ ئەسلىگە كەلتۈرمەكچىمۇ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ئالدىن بېكىتىشتە چوقۇم ئۆزگىچە گۈزىلى بولۇشى كېرەك. ئالدىن تەييارلاش ئۈچۈن قىستۇرما '{1}' قىستۇرمىسىدا ئالدىن بەلگىلەنگەن '{0}' بايقالدى: {2}.</value>
   </data>
 </root>

@@ -80,7 +80,7 @@ function getRootHtml() {
 	return globals.quill.root.innerHTML;
 }
 
-function getHtml(range, encodeHtmlEntities = true) {
+function getHtml(range, encodeHtmlEntities = true, restoreContentColors = true, useInlineStyles = false) {
 	if (globals.ContentItemType != 'Text' ||
 		(isTableInDocument() && isNullOrUndefined(range))) {
 		let root_html = getRootHtml();
@@ -92,13 +92,34 @@ function getHtml(range, encodeHtmlEntities = true) {
 
 	range = isNullOrUndefined(range) ? { index: 0, length: getDocLength() } : range;
 	let delta = getDelta(range);
-	delta = restoreContentColorsFromDelta(delta);
+	delta = restoreContentColors ? restoreContentColorsFromDelta(delta) : delta;
 
 	if (encodeHtmlEntities) {
 		delta = encodeHtmlEntitiesInDeltaInserts(delta);
 	}
 	let htmlStr = convertDeltaToHtml(delta, false);
+	if (useInlineStyles) {
+		htmlStr = getHtmlWithInlineStyles(htmlStr);
+	}
 	return htmlStr;
+}
+
+function getHtmlWithInlineStyles(htmlStr) {
+	let html_doc = globals.DomParser.parseFromString(htmlStr, 'text/html');
+
+	// font size
+	html_doc.body.querySelectorAll("[class^='ql-size']").forEach(elm => {
+		let fs_class_name = Array.from(elm.classList).find(x => x.startsWith('ql-size'));
+		elm.style.fontSize = fs_class_name.split('ql-size-')[1];
+	});
+	// font family
+	html_doc.body.querySelectorAll("[class^='ql-font']").forEach(elm => {
+		let fs_class_name = Array.from(elm.classList).find(x => x.startsWith('ql-font'));
+		elm.style.fontFamily = toTitleCase(fs_class_name.split('ql-font-')[1].replace('-',' '));
+	});
+
+	let output_html = html_doc.body.innerHTML;
+	return output_html;
 }
 
 

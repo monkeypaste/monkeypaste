@@ -100,8 +100,8 @@ namespace MonkeyPaste.Avalonia {
             try {
 
                 //App.Args = args ?? new string[] { };
+                //#if CEFNET_WV
                 BuildAvaloniaApp()
-        //#if CEFNET_WV
         //        .StartWithCefNetApplicationLifetime(App.Args);
         //#else
         .StartWithClassicDesktopLifetime(App.Args);

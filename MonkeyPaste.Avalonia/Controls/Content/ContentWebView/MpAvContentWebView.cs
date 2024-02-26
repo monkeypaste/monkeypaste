@@ -70,6 +70,7 @@ namespace MonkeyPaste.Avalonia {
         static MpAvContentWebView() {
             //CommonCefRenderHandler.StartDragFunc = StartDragging;
         }
+        }
 
         private static bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
 
@@ -1048,6 +1049,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<MpQuillEditorSelectionStateMessage> GetSelectionStateAsync() {
+            if (!this.IsAttachedToVisualTree()) {
+                return new();
+            }
             // NOTE resetting sel state is lazy upon request
             _lastEditorSelectionStateMessage = null;
             SendMessage($"selectionStateRequest_ext_ntf()");

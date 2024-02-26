@@ -2844,10 +2844,6 @@
     <value>प्रिसेटहरूमा साझा मान प्यारामिटरहरू सेट गर्न सकिँदैन। प्लगइन '{2}' को लागि प्रिसेट '{1}' मा ParamId '{0}' हटाउन आवश्यक छ वा paramValue प्यारामिटर परिभाषा खण्डमा निर्दिष्ट गर्न सकिन्छ।</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>प्रिसेटहरूमा अद्वितीय गाइडहरू हुनुपर्छ। प्रिसेटहरूको लागि प्लगइन '{1}' मा नक्कल प्रिसेट गाइड '{0}' पत्ता लाग्यो: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>प्लगइन पार्सन त्रुटि, पथ '{0}' शून्य, सम्भवतः JOSS parsing त्रुटि। प्लगइनलाई बेवास्ता गर्दै</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' साझा मानहरू समावेश गर्दछ। के तपाइँ तीसँग रिसेट गर्न चाहानुहुन्छ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>प्रिसेटहरूमा अद्वितीय गाइडहरू हुनुपर्दछ। पूर्वनिर्धारितहरूका लागि प्लगइन '{1}' मा डुप्लिकेट पूर्वनिर्धारित गाइड '{0}' पत्ता लगाइएको थियो: {2}।</value>
   </data>
 </root>

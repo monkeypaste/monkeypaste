@@ -2844,10 +2844,6 @@ Monkeypaste მოწყობილობაზე
     <value>ვერ დააწესეთ საერთო ღირებულების პარამეტრები წინასწარ. Paramid '{0}' წინასწარ '{1}' მოდულისთვის '{2}' უნდა ამოიღოთ ან პარამეტრის დაზუსტება შესაძლებელია პარამეტრის განსაზღვრის განყოფილებაში.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>წინასწარ უნდა ჰქონდეს უნიკალური სახელმძღვანელო. დუბლიკატი წინასწარ განსაზღვრული სახელმძღვანელო '{0}' დაფიქსირდა მოდულში '{1}' წინასწარ: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>დანამატის გაანალიზების შეცდომა, ბილიკზე '{0}' null, სავარაუდოდ, შეცდომების გაანალიზება JSON. მოდულის უგულებელყოფა</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Monkeypaste მოწყობილობაზე
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' შეიცავს საერთო მნიშვნელობებს. გსურთ აღადგინოთ ისინი?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Presets უნდა ჰქონდეს უნიკალური guids. დუბლიკატი წინასწარ დაყენებული guid '{0}' გამოვლინდა მოდულის "{1}" წინასწარ დაყენებებისთვის: {2}.</value>
   </data>
 </root>

@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public static bool USE_LOADERS => false;
+        public static bool USE_LOADERS => true;
 
         private static Dictionary<string, PluginLoader> _loaders = [];
         static string PLUGIN_INFO_URL =>
@@ -894,10 +894,15 @@ namespace MonkeyPaste.Avalonia {
             alc = null;
             try {
                 if (USE_LOADERS) {
+                    bool is_core = CorePluginGuids.Contains(guid);
                     if (PluginLoader.CreateFromAssemblyFile(
                         assemblyFile: targetDllPath,
                         sharedTypes: sharedTypes,
-                        isUnloadable: true) is { } pl) {
+                        isUnloadable: true,
+                        configure: (config) => {
+                            config.DefaultContext = new MpPluginAssemblyLoadContext(targetDllPath);
+                            config.PreferSharedTypes = true;
+                        }) is { } pl) {
                         var objs = new List<T>();
                         var plugin_types = pl.LoadDefaultAssembly().GetTypes().Where(t => typeof(T).IsAssignableFrom(t) && !t.IsAbstract);
                         foreach (var pluginType in plugin_types) {
@@ -930,7 +935,8 @@ namespace MonkeyPaste.Avalonia {
 
             }
             catch (Exception ex) {
-                throw new MpUserNotifiedException($"Plugin Linking error '{targetDllPath}':{Environment.NewLine}{ex}");
+                //throw new MpUserNotifiedException($"Plugin Linking error '{nupkgPath}':{Environment.NewLine}{ex}");
+                throw new MpUserNotifiedException(UiStrings.InvalidPluginEx6.Format(targetDllPath, Environment.NewLine, ex.Message));
             }
         }
         public static IDisposable GetPluginContext(string plugin_guid) {
@@ -953,7 +959,8 @@ namespace MonkeyPaste.Avalonia {
                 return Assembly.Load(target.ToArray());
             }
             catch (Exception ex) {
-                throw new MpUserNotifiedException($"Plugin Linking error '{nupkgPath}':{Environment.NewLine}{ex}");
+                //throw new MpUserNotifiedException($"Plugin Linking error '{nupkgPath}':{Environment.NewLine}{ex}");
+                throw new MpUserNotifiedException(UiStrings.InvalidPluginEx6.Format(nupkgPath, Environment.NewLine, ex.Message));
             }
         }
 
@@ -965,7 +972,8 @@ namespace MonkeyPaste.Avalonia {
 
             if (plugin.packageType != MpPluginPackageType.Http && !bundle_path.IsFile()) {
                 // not found
-                throw new MpUserNotifiedException($"Error, Plugin '{plugin.title}' is flagged as {bundle_ext} type in '{manifestPath}' but does not have a matching '{bundle_file_name}.{bundle_ext}' in its folder.");
+                //throw new MpUserNotifiedException($"Error, Plugin '{plugin.title}' is flagged as {bundle_ext} type in '{manifestPath}' but does not have a matching '{bundle_file_name}.{bundle_ext}' in its folder.");
+                throw new MpUserNotifiedException(UiStrings.InvalidPluginEx7.Format(plugin.title, bundle_ext, manifestPath, bundle_file_name, bundle_ext));
             }
             return bundle_path;
         }
@@ -996,7 +1004,8 @@ namespace MonkeyPaste.Avalonia {
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine("Exported types exception: ", ex);
-                throw new MpUserNotifiedException($"Plugin dependency error for plugin '{pluginAssembly.FullName}': {Environment.NewLine}{ex.Message}");
+                //throw new MpUserNotifiedException($"Plugin dependency error for plugin '{pluginAssembly.FullName}': {Environment.NewLine}{ex.Message}");
+                throw new MpUserNotifiedException(UiStrings.InvalidPluginEx8.Format(pluginAssembly.FullName, Environment.NewLine, ex.Message));
             }
             if (avail_types == null) {
                 return null;
@@ -1020,7 +1029,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine("Exported types exception: ", ex);
-                    throw new MpUserNotifiedException($"Plugin activation error for plugin '{pluginAssembly.FullName}': {Environment.NewLine}{ex}");
+                    //throw new MpUserNotifiedException($"Plugin activation error for plugin '{pluginAssembly.FullName}': {Environment.NewLine}{ex}");
+                    throw new MpUserNotifiedException(UiStrings.InvalidPluginEx8.Format(pluginAssembly.FullName, Environment.NewLine, ex.Message));
                 }
             }
             return objs;

@@ -2844,10 +2844,6 @@ Eine vollständige Wiederherstellung kann nicht garantiert werden und kann je na
     <value>Die gemeinsam genutzten Wertparameter in Voreinstellungen können nicht festgelegt werden. Paramid '{0}' in voreingestellter '{1}' für Plugin '{2}' muss entfernt werden oder ParamValue kann im Abschnitt Parameterdefinition angegeben werden.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Voreinstellungen müssen einzigartige Richtlinien haben. Douplicate Preset Guid '{0}' wurde in Plugin '{1}' für Voreinstellungen erkannt: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin -Parsenfehler, bei Pfad '{0}' null, wahrscheinlich Fehler analysieren JSON. Plugin ignorieren</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Eine vollständige Wiederherstellung kann nicht garantiert werden und kann je na
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' enthält gemeinsame Werte. Möchten Sie diese auch zurücksetzen?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Voreinstellungen müssen eindeutige Anleitungen haben. Im Plugin „{1}“ wurde eine doppelte Voreinstellungs-GUID „{0}“ für die Voreinstellungen „{2}“ erkannt.</value>
   </data>
 </root>

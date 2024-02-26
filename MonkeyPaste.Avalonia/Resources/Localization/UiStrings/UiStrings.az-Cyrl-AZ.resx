@@ -2844,10 +2844,6 @@ geribildirim@monkeypaste.com</value>
     <value>Paylaşılan dəyər parametrlərini hafızada təyin edə bilməz. Paramid '{0}' Plugin '{1}' üçün '{1}' üçün '{2}' çıxarılması və ya paramvalılar parametr tərifi bölməsində göstərilə bilər.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Hazırlıqların özünəməxsus bələdləri olmalıdır. Dublikat əvvəlcədən təyin edilmiş GUID '{0}' Plugin'də hafızası üçün '{1}' də aşkar edildi: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin analizi səhv, '{0}' null, JSON-ı təhlil etmək ehtimalı var. Pluginə məhəl qoymamaq</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ geribildirim@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' paylaşılan dəyərləri ehtiva edir. Bunları da yenidən qurmaq istərdinizmi?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Hazırlıqların özünəməxsus bələdləri olmalıdır. Dublikat əvvəlcədən təyin edilmiş GUID '{0}' Plugin'də hafızası üçün '{1}' də aşkar edildi: {2}.</value>
   </data>
 </root>

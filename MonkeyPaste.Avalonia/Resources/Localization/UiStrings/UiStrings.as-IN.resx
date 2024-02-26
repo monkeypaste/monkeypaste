@@ -2844,10 +2844,6 @@
     <value>প্ৰিছেটত ভাগ বতৰা কৰা মূল্যৰ প্ৰাচলসমূহ ছেট কৰিব নোৱাৰি। প্লাগিন '{2}'ৰ বাবে পূৰ্বনিৰ্ধাৰিত '{1}'ত পৰমিড '{0}' আঁতৰাব লাগিব বা পেৰামাউণ্ট সংজ্ঞা শাখাত পৰমমূল্য নিৰ্ধাৰণ কৰিব পাৰি।</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>প্ৰিছেটত অনন্য GUIDs থাকিব লাগিব। Presets ৰ বাবে প্লাগইন '{1}' ত ডুপ্লিকেট প্ৰিছেট guid '{0}' ধৰা পৰিছিল: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>প্লাগইন পাৰ্চিং ত্ৰুটি, পথত '{0}' NULL, সম্ভাৱ্য ভুল json বিশ্লেষণ কৰা। প্লাগইনক আওকাণ কৰা</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ত অংশীদাৰী মান আছে। সেইবোৰো ৰিছেট কৰিব বিচাৰিবনে?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>প্ৰিছেটসমূহৰ একক গাইড থাকিব লাগিব। প্ৰিছেটসমূহৰ বাবে প্লাগইন '{1}' ত ডুপ্লিকেট প্ৰিছেট গাইড '{0}' ধৰা পৰিছে: {2} ।</value>
   </data>
 </root>

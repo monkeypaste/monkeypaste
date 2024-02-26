@@ -2844,10 +2844,6 @@ Täydellistä palauttamista ei voida taata, ja se voi heikentää suorituskykyä
     <value>Esiasetuksissa ei voida asettaa jaettuja arvoparametreja. Paramid '{0}' esiasetuksessa '{1}' laajennukselle '{2}' on poistettava tai parametrimääritysosassa voidaan määrittää parametrimääritysosassa.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Esiasetuksissa on oltava ainutlaatuiset GUIDS. Duplikate esiasetettu GUID '{0}' havaittiin laajennuksessa '{1}' esiasetuksista: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Laajennuksen jäsentämisvirhe, polulla '{0}' NULL, todennäköisesti virheen jäsentäminen JSON. Sivuuttaa laajennus</value>
     <comment>File Path</comment>
@@ -2895,5 +2891,8 @@ Täydellistä palauttamista ei voida taata, ja se voi heikentää suorituskykyä
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' sisältää jaettuja arvoja. Haluatko myös nollata ne?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Esiasetuksilla on oltava yksilölliset tunnukset. Esiasetetun esiasetetun tunnuksen '{0}' kaksoiskappale havaittiin esiasetusten laajennuksessa '{1}': {2}.</value>
   </data>
 </root>
