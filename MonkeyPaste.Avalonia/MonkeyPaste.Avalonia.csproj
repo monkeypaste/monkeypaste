@@ -539,6 +539,7 @@
     <None Remove="Assets\Images\spellcheck.png" />
     <None Remove="Assets\Images\spinner.png" />
     <None Remove="Assets\Images\spreadsheet.png" />
+    <None Remove="Assets\Images\stack.png" />
     <None Remove="Assets\Images\stargold.png" />
     <None Remove="Assets\Images\staroutline.png" />
     <None Remove="Assets\Images\starsolid.png" />
@@ -1670,6 +1671,9 @@
     <AvaloniaResource Include="Assets\Images\spinner.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\stack.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\stargold.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -2393,7 +2397,7 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.6" />
-    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
+    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.1" />
     <PackageReference Include="Markdig" Version="0.34.0" />
     <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" NoWarn="NU1701" />
     <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />
@@ -2493,10 +2497,10 @@
 
   <ItemGroup Condition="'$(UseCefNet)' == 'True'">
     <Reference Include="CefNet">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
+      <HintPath>..\ext\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
     </Reference>
     <Reference Include="CefNet.Avalonia">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
+      <HintPath>..\ext\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
     </Reference>
   </ItemGroup>
   

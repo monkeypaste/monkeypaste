@@ -678,6 +678,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsOverDetailGrid { get; set; }
         public bool IsHovering { get; set; }
+        public bool IsPasteBarHovering { get; set; }
         public bool IsContentHovering { get; set; }
 
         public bool IsPlaceholderForThisPinnedItemHovering =>

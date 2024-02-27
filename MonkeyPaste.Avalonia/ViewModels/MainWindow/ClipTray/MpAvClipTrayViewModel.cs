@@ -1434,6 +1434,7 @@ namespace MonkeyPaste.Avalonia {
         public string PasteButtonIconBase64 { get; set; }
         public string PasteButtonTooltipHtml { get; set; }
         public bool IsPasteDefault { get; set; }
+        public MpPortableProcessInfo PasteProcessInfo { get; set; }
         public MpQuillPasteButtonInfoMessage CurPasteInfoMessage { get; private set; } = new MpQuillPasteButtonInfoMessage();
         #endregion
 
@@ -2551,6 +2552,7 @@ namespace MonkeyPaste.Avalonia {
             }
             PasteButtonIconBase64 = CurPasteInfoMessage.pasteButtonIconBase64;
             PasteButtonTooltipHtml = CurPasteInfoMessage.pasteButtonTooltipHtml;
+            PasteProcessInfo = MpPortableProcessInfo.FromPath(CurPasteInfoMessage.infoId);
             IsPasteDefault = CurPasteInfoMessage.isFormatDefault;
 
             string msg = $"enableSubSelection_ext('{CurPasteInfoMessage.SerializeObjectToBase64()}')";

@@ -18,17 +18,15 @@ namespace MonkeyPaste.Avalonia {
 
     public static class MpAvHtmlStylerExtension {
         static MpAvHtmlStylerExtension() {
-            try {
-                MpAvThemeViewModel.Instance
-                .CustomFontFamilyNames
-                .ForEach(x =>
-                    HtmlRender.AddFontFamily(MpAvStringToFontFamilyConverter.Instance.Convert(x, null, null, null) as FontFamily));
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error initializing html font familys.", ex);
-            }
 
             IsEnabledProperty.Changed.AddClassHandler<HtmlControl>((x, y) => HandleIsEnabledChanged(x, y));
+
+            // need handlers for any css related properties
+            HtmlStyleTypeProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
+            DefaultFontSizeProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
+            DefaultFontFamilyProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
+            DefaultHexColorProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
+            ShowUnderlinesProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
         }
 
         #region Properties
@@ -67,7 +65,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region DefaultFontFamily AvaloniaProperty
         public static string GetDefaultFontFamily(AvaloniaObject obj) {
             return obj.GetValue(DefaultFontFamilyProperty);
@@ -103,6 +100,22 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region ShowUnderlines AvaloniaProperty
+        public static bool GetShowUnderlines(AvaloniaObject obj) {
+            return obj.GetValue(ShowUnderlinesProperty);
+        }
+
+        public static void SetShowUnderlines(AvaloniaObject obj, bool value) {
+            obj.SetValue(ShowUnderlinesProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> ShowUnderlinesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "ShowUnderlines",
+                false);
+
+        #endregion
+
         #region LinkClickCommand AvaloniaProperty
         public static ICommand GetLinkClickCommand(AvaloniaObject obj) {
             return obj.GetValue(LinkClickCommandProperty);
@@ -135,7 +148,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
@@ -166,6 +178,18 @@ namespace MonkeyPaste.Avalonia {
             if (sender is not HtmlControl hc) {
                 return;
             }
+            if (hc.Container is { } hct) {
+                try {
+                    MpAvThemeViewModel.Instance
+                    .CustomFontFamilyNames
+                    .ForEach(x =>
+                        hct.AddFontFamily(MpAvStringToFontFamilyConverter.Instance.Convert(x, null, null, null) as FontFamily));
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error initializing html font familys.", ex);
+                }
+            }
+
             var dl = hc.Tag as List<IDisposable>;
             if (dl == null) {
                 dl = new List<IDisposable>();
@@ -188,6 +212,7 @@ namespace MonkeyPaste.Avalonia {
                 // ensure text is full html doc or stylesheet stuff doesn't work
                 hc.Text = hc.Text.ToStringOrEmpty().ToHtmlDocumentFromTextOrPartialHtml();
             }
+            hc.Redraw();
         }
         private static void Hc_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             if (sender is not HtmlControl hc) {
@@ -251,13 +276,28 @@ namespace MonkeyPaste.Avalonia {
                             .comment { color: green; margin-bottom: 5px; margin-left: 3px; }
                             .comment2 { color: green; }";
             */
+            string css_str = string.Empty;
             switch (GetHtmlStyleType(hc)) {
                 case MpHtmlStyleType.Content:
+                    css_str = string.Format(
+@"* {{ margin: 0; padding: 0; }}
+body {{ white-space: pre-wrap; line-height: {1}px; color: {0}; font-size: {1}px; font-family: {2}; }}
+p {{ margin: 0; text-decoration: {4};  }}
+.paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
+a:link {{ text-decoration: none; }}
+a:hover {{ text-decoration: underline; }}",
+                        GetDefaultHexColor(hc).RemoveHexAlpha(), //0
+                        GetDefaultFontSize(hc), //1
+                        GetDefaultFontFamily(hc), //2
+                        MpSystemColors.gold1.RemoveHexAlpha(), //3
+                        "none"//GetShowUnderlines(hc) ? "underline" : "none" //4
+                        );
+                    break;
                 case MpHtmlStyleType.Tooltip:
                 default:
-                    return string.Format(
-@"* {{ margin: 0; padding: 0; color: {0}; font-size: {1}px; font-family: {2}; }}
-body {{ white-space: pre-wrap; line-height: {1}px; }}
+                    css_str = string.Format(
+@"* {{ margin: 0; padding: 0; }}
+body {{ white-space: pre-wrap; line-height: {1}px; color: {0}; font-size: {1}px; font-family: {2}; }}
 p {{ margin: 0; }}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 a:link {{ text-decoration: none; }}
@@ -267,7 +307,9 @@ a:hover {{ text-decoration: underline; }}",
                         GetDefaultFontFamily(hc), //2
                         MpSystemColors.gold1.RemoveHexAlpha() //3
                         );
+                    break;
             }
+            return css_str;
         }
     }
 }

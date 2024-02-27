@@ -1316,7 +1316,6 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
             MpResxTools.WriteResxToPath(trans_resx_path, trans_resx_lookup);
             MpConsole.WriteLine(trans_resx_path);
-            return;
 
             // get non-empty neutral single line keys that aren't html, invariant or have localized data
             var neutral_single_line_kvps =

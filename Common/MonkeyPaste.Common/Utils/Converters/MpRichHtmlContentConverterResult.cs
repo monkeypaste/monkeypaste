@@ -42,10 +42,10 @@ namespace MonkeyPaste.Common {
 
         public static string ParseHtmlFragmentForVersion(string htmlClipboardData) {
             if (htmlClipboardData.SplitNoEmpty("Version:") is not string[] version_parts ||
-                version_parts.Length < 2) {
+                version_parts.Length < 1) {
                 return string.Empty;
             }
-            return version_parts[1].SplitNoEmpty(@"\n")[0].Replace(@"\r", string.Empty).Trim();
+            return version_parts[0].SplitNoEmpty(@"\n")[0].Replace(@"\r", string.Empty).Trim();
         }
 
         public static string ParseHtmlFragmentForPlainHtml(string htmlClipboardData, out string version) {
@@ -53,9 +53,9 @@ namespace MonkeyPaste.Common {
             if (version.StartsWith("0.9")) {
                 string htmlStartToken = @"<!--StartFragment-->";
                 string htmlEndToken = @"<!--EndFragment-->";
-
-                int html_start_idx = htmlClipboardData.IndexOf(htmlStartToken) + htmlStartToken.Length;
-                if (html_start_idx > htmlStartToken.Length) {
+                int start_token_idx = htmlClipboardData.IndexOf(htmlStartToken);
+                int html_start_idx = start_token_idx + htmlStartToken.Length;
+                if (start_token_idx >= 0 && html_start_idx > htmlStartToken.Length) {
                     int html_end_idx = htmlClipboardData.IndexOf(htmlEndToken);
                     int html_length = html_end_idx - html_start_idx;
 

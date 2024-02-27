@@ -1013,6 +1013,21 @@ namespace MonkeyPaste.Avalonia {
         }
 #endif
 
+#if SUGAR_WV
+        protected override void OnPointerEntered(PointerEventArgs e) {
+            base.OnPointerEntered(e);
+            MpConsole.WriteLine($"Wv Pointer entered");
+        }
+        protected override void OnPointerMoved(PointerEventArgs e) {
+            base.OnPointerMoved(e);
+            MpConsole.WriteLine($"Wv Pointer moved");
+        }
+        protected override void OnPointerExited(PointerEventArgs e) {
+            base.OnPointerExited(e);
+            MpConsole.WriteLine($"Wv Pointer exited");
+        }
+#endif
+
         #endregion
 
         #region Public Methods

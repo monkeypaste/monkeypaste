@@ -174,7 +174,7 @@ namespace MonkeyPaste.Avalonia {
 
             CoreItems.AddRange(
                new List<MpAvLoaderItemViewModel>() {
-                    //new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), "Content Converters"),
+                    new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),
                     //new MpAvLoaderItemViewModel(typeof(MpAvNotificationWindowManager),"Notifications"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
                     new MpAvLoaderItemViewModel(typeof(MpPortableDataFormats),UiStrings.LoaderClipboardLabel, Mp.Services.DataObjectRegistrar),
@@ -206,9 +206,6 @@ namespace MonkeyPaste.Avalonia {
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 PlatformItems.AddRange(
                    new List<MpAvLoaderItemViewModel>() {
-#if OUTSYS_WV || CEFNET_WV || MOBILE
-		                new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),  
-#endif
                         new MpAvLoaderItemViewModel(typeof(MpAvMenuView),  UiStrings.LoaderMainWindowLabel),
                         new MpAvLoaderItemViewModel(typeof(MpAvMainView), UiStrings.LoaderMainWindowLabel),
                         new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel),  UiStrings.LoaderMainWindowLabel)
@@ -217,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
                 PlatformItems.AddRange(
                    new List<MpAvLoaderItemViewModel>() {
                         new MpAvLoaderItemViewModel(typeof(MpAvMainView),  UiStrings.LoaderMainWindowLabel),
-#if OUTSYS_WV || CEFNET_WV || MOBILE
+#if OUTSYS_WV || CEFNET_WV || MOBILE || SUGAR_WV
 		                new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),  
 #endif
                         new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel),  UiStrings.LoaderMainWindowLabel)

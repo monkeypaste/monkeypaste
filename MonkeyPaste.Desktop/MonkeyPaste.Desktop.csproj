@@ -14,11 +14,6 @@
     <Authors>$(ApplicationAuthor)</Authors>
     <AssemblyVersion>$(ApplicationVersion)</AssemblyVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <!--<AssemblyName>$(ApplicationName)</AssemblyName>-->
-    <!--<TargetName>$(ApplicationName)</TargetName>-->
-    
-    <!-- This remove extra runtime folders see https://stackoverflow.com/a/70144716/105028 -->
-    <!--<SelfContained>False</SelfContained>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
@@ -92,10 +87,10 @@
 
   <ItemGroup Condition="$(UseCefNet) == 'True'">
     <Reference Include="CefNet">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
+      <HintPath>..\ext\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
     </Reference>
     <Reference Include="CefNet.Avalonia">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
+      <HintPath>..\ext\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
     </Reference>
   </ItemGroup>
   

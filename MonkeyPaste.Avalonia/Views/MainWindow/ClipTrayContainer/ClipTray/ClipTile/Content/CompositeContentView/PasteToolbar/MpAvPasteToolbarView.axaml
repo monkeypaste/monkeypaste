@@ -8,31 +8,77 @@
                        x:Name="ClipTileContentViewRoot"
                        x:DataType="local:MpAvClipTileViewModel"
                        x:TypeArguments="local:MpAvClipTileViewModel"
-                       x:CompileBindings="True"
+                       x:CompileBindings="False"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPasteToolbarView">
     <local:MpAvUserControl.Styles>
-        <Style Selector="Button#PasteButton">
-            <Style.Resources>
-                <SolidColorBrush x:Key="ButtonBackground">DodgerBlue</SolidColorBrush>
-                <SolidColorBrush x:Key="ButtonBackgroundPointerOver">DodgerBlue</SolidColorBrush>
-                <SolidColorBrush x:Key="ButtonBackgroundPressed">DodgerBlue</SolidColorBrush>
-                <SolidColorBrush x:Key="ButtonForeground">White</SolidColorBrush>
-                <SolidColorBrush x:Key="ButtonForegroundPointerOver">White</SolidColorBrush>
-                <SolidColorBrush x:Key="ButtonForegroundPressed">White</SolidColorBrush>
-            </Style.Resources>
+        <!--  PASTE TOOLBAR  -->
+        <Style Selector="StackPanel#PasteToolbarButtonContainer">
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
         </Style>
-        <Style Selector="Button#PasteButton.custom">
+        <Style Selector="StackPanel#PasteToolbarButtonContainer">
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+
+        <!--  PASTE BUTTON FLYOUT  -->
+        <Style Selector="SplitButton.paste-button">
             <Style.Resources>
-                <SolidColorBrush x:Key="ButtonBackground">Magenta</SolidColorBrush>
-                <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Magenta</SolidColorBrush>
-                <SolidColorBrush x:Key="ButtonBackgroundPressed">Magenta</SolidColorBrush>
-                <SolidColorBrush x:Key="ButtonForeground">White</SolidColorBrush>
-                <SolidColorBrush x:Key="ButtonForegroundPointerOver">White</SolidColorBrush>
-                <SolidColorBrush x:Key="ButtonForegroundPressed">White</SolidColorBrush>
+                <SolidColorBrush x:Key="FlyoutPresenterBackground">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="FlyoutBorderThemeBrush">Transparent</SolidColorBrush>
             </Style.Resources>
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="FontWeight"
+                    Value="DemiBold" />
+        </Style>
+        <!--  PASTE BUTTON ICON  -->
+        <Style Selector="SplitButton.paste-button Image">
+            <Setter Property="Width"
+                    Value="20" />
+            <Setter Property="Height"
+                    Value="20" />
+            <Setter Property="Margin"
+                    Value="0,0,5,0" />
+        </Style>
+        <!--  PASTE BUTTON  -->
+        <Style Selector="SplitButton.paste-button"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Command"
+                    Value="{Binding PasteFromClipTilePasteButtonCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
+            <Setter Property="CommandParameter"
+                    Value="{Binding .}" />
+            <Setter Property="SplitButton.Flyout">
+                <Setter.Value>
+                    <Flyout>
+                        <local:MpAvMenuView DataContext="{Binding CurAppOleMenuViewModel, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}" />
+                    </Flyout>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Template>
+                        <DockPanel>
+                            <Image Source="{Binding PasteButtonIconBase64, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
+                            <TextBlock FontSize="16"
+                                       FontWeight="DemiBold"
+                                       Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.EditorPasteButtonLabel}" />
+                        </DockPanel>
+                    </Template>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView IsHtml="True"
+                                               ToolTipText="{Binding PasteButtonTooltipHtml, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="PasteToolbarOuterBorder"
@@ -40,26 +86,62 @@
             BorderThickness="1"
             BorderBrush="Black">
         <DockPanel LastChildFill="False">
-            <StackPanel DockPanel.Dock="Right"
-                        Margin="0,0,10,0"
+            <StackPanel x:Name="PasteToolbarButtonContainer"
+                        DockPanel.Dock="Right"
+                        Margin="0,5,7,0"
                         Orientation="Horizontal"
                         Spacing="5">
-                <Button x:Name="PasteButton"
-                        Classes="defaultButton iconTextButton outline outlineOver"
-                        Classes.custom="{Binding !IsPasteDefault, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                        Command="{Binding PasteFromClipTilePasteButtonCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                        CommandParameter="{Binding .}">
+                <!--  ENABLE APPEND BUTTON  -->
+                <Button x:Name="EnableAppendButton"
+                        Classes="defaultButton iconOnlyButton squareByWidth"
+                        Command="{Binding ToggleAppendLineModeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+                    <Button.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="IsPasteBarHovering" />
+                            <Binding Path="!IsAppendNotifier" />
+                        </MultiBinding>
+                    </Button.IsVisible>
                     <ToolTip.Tip>
-                        <local:MpAvToolTipView IsHtml="True"
-                                               ToolTipText="{Binding PasteButtonTooltipHtml, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
+                        <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ToggleAppendBlockMode, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.EditorPasteButtonAppendBeginLabel}" />
                     </ToolTip.Tip>
-                    <DockPanel>
-                        <Image Source="{Binding PasteButtonIconBase64, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
-                        <TextBlock FontSize="16"
-                                   FontWeight="DemiBold"
-                                   Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.EditorPasteButtonLabel}" />
-                    </DockPanel>
+                    <Image Source="{Binding Source={StaticResource StackImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
                 </Button>
+                <!--  DEFAULT PASTE BUTTON  -->
+                <SplitButton x:Name="DefaultPasteButton"
+                             Classes="defaultButton iconTextButton paste-button"
+                             IsVisible="{Binding IsPasteDefault, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+                    <SplitButton.Resources>
+                        <SolidColorBrush x:Key="ButtonButtonBackground">DodgerBlue</SolidColorBrush>
+                        <SolidColorBrush x:Key="ButtonBorderBrush">White</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonBackground">DodgerBlue</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonBorderBrush">White</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonBackgroundPointerOver">DodgerBlue</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonBackgroundPressed">DodgerBlue</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonBorderBrushPointerOver">Yellow</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonForeground">White</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonForegroundPointerOver">White</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonForegroundPressed">White</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonBorderBrushPressed">Lime</SolidColorBrush>
+                    </SplitButton.Resources>
+                </SplitButton>
+                <!--  CUSTOM PASTE BUTTON  -->
+                <SplitButton x:Name="CustomPasteButton"
+                             Classes="defaultButton iconTextButton paste-button"
+                             IsVisible="{Binding !IsPasteDefault, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+                    <SplitButton.Resources>
+                        <SolidColorBrush x:Key="ButtonButtonBackground">Magenta</SolidColorBrush>
+                        <SolidColorBrush x:Key="ButtonBorderBrush">Black</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonBorderBrush">Black</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonBackgroundPointerOver">Magenta</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonBackgroundPressed">Magenta</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonBorderBrushPointerOver">Yellow</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonForeground">Black</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonForegroundPointerOver">Black</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonForegroundPressed">Black</SolidColorBrush>
+                        <SolidColorBrush x:Key="SplitButtonBorderBrushPressed">Lime</SolidColorBrush>
+                    </SplitButton.Resources>
+                </SplitButton>
             </StackPanel>
         </DockPanel>
     </Border>
