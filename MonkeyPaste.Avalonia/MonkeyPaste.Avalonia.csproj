@@ -2393,11 +2393,11 @@
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.3" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.6" />
-    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.1" />
     <PackageReference Include="Markdig" Version="0.34.0" />
     <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" NoWarn="NU1701" />
     <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />

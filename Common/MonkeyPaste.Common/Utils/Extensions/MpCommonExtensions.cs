@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using HtmlAgilityPack;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
@@ -352,6 +354,63 @@ namespace MonkeyPaste.Common {
         //public static ObservableCollection<T> ToObservableCollection<T>(this T obj) where T : class {
         //    return new ObservableCollection<T>() { obj };
         //}
+        #endregion
+
+        #region HtmlAgility
+
+        public static HtmlNodeCollection SelectNodesSafe(this HtmlNode node, string xpath) {
+            if (node.SelectNodes(xpath) is not { } hnc) {
+                return new(node);
+            }
+            return hnc;
+        }
+
+        public static HtmlNode SplitNode(this HtmlNode node, int match_idx, int len, string match_class_to_add) {
+            try {
+                if (node.ParentNode is not { } parentNode) {
+                    return null;
+                }
+                HtmlNode span_node = node.OwnerDocument.CreateElement("span");
+                int cur_idx = 0;
+                string match_text = node.InnerText.DecodeSpecialHtmlEntities().Substring(match_idx, len);
+                string node_text = node.InnerText.DecodeSpecialHtmlEntities();
+
+                if (match_idx > 0) {
+                    // create lead run (in example "{'>',"")
+                    string lead_text = node_text.Substring(cur_idx, match_idx);
+                    HtmlNode lead_text_node = node.OwnerDocument.CreateTextNode(lead_text.EncodeSpecialHtmlEntities());
+                    HtmlNode lead_text_node_wrapper_span = node.OwnerDocument.CreateElement("span");
+                    lead_text_node_wrapper_span.AppendChild(lead_text_node);
+                    span_node.AppendChild(lead_text_node_wrapper_span);
+                }
+
+                // wrap match in span tag
+                HtmlNode match_text_node = node.OwnerDocument.CreateTextNode(match_text.EncodeSpecialHtmlEntities());
+                HtmlNode match_span_node = node.OwnerDocument.CreateElement("span");
+                match_span_node.AppendChild(match_text_node);
+                match_span_node.AddClass(match_class_to_add);
+                span_node.AppendChild(match_span_node);
+
+                cur_idx += match_idx + match_text.Length;
+
+                if (cur_idx < node_text.Length) {
+                    // create trailing run after encoded special entities
+                    string trailing_text = node_text.Substring(cur_idx);
+                    HtmlNode trail_text_node = node.OwnerDocument.CreateTextNode(trailing_text.EncodeSpecialHtmlEntities());
+                    HtmlNode trailing_text_node_wrapper_span = node.OwnerDocument.CreateElement("span");
+                    trailing_text_node_wrapper_span.AppendChild(trail_text_node);
+                    span_node.AppendChild(trailing_text_node_wrapper_span);
+                }
+                // swap old node w/ new split node
+                var new_wrap_span = parentNode.ReplaceChild(span_node, node);
+                // return match node
+                return match_span_node;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error splitting node '{node.ToStringOrEmpty()}' idx {match_idx} len {len}", ex);
+            }
+            return null;
+        }
         #endregion
 
         #region Enums

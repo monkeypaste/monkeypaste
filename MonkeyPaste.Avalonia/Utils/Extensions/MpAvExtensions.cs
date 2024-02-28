@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Platform;
 using Avalonia.Threading;
+using HtmlAgilityPack;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -183,6 +184,7 @@ namespace MonkeyPaste.Avalonia {
         public static IEnumerable<(int, int)> QueryText(this string search_text, MpITextMatchInfo tmi) {
             return search_text.QueryText(tmi.MatchValue, tmi.CaseSensitive, tmi.WholeWord, tmi.UseRegex);
         }
+
         #endregion
     }
 }

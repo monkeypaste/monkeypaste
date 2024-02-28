@@ -99,8 +99,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIHighlightTextRangesInfoViewModel Implementation
-        ObservableCollection<MpTextRange> MpIHighlightTextRangesInfoViewModel.HighlightRanges { get; } = new ObservableCollection<MpTextRange>();
-        int MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx { get; set; } = -1;
+        public ObservableCollection<MpTextRange> HighlightRanges { get; } = new ObservableCollection<MpTextRange>();
+        public int ActiveHighlightIdx { get; set; } = -1;
+
 
         #endregion
 
@@ -583,6 +584,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool HasSearchResults =>
+            HighlightRanges.Any();
         public string SearchableText { get; set; }
         public bool IsAnimating { get; set; }
         bool IsContentChangeModelChange { get; set; }
@@ -1342,6 +1345,13 @@ namespace MonkeyPaste.Avalonia {
                 SelfRef = null;
                 SelfRef = this;
             }
+#if SUGAR_WV
+            if (CopyItemType == MpCopyItemType.Text) {
+                SearchableText = CopyItemData.ToPlainText("html");
+            } else if (CopyItemType == MpCopyItemType.FileList) {
+                SearchableText = CopyItemData;
+            }
+#endif
             IsBusy = false;
         }
 

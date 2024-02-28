@@ -4,11 +4,14 @@ using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Threading;
+using HtmlAgilityPack;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvHighlightTextExtension {
@@ -70,12 +73,13 @@ namespace MonkeyPaste.Avalonia {
             }
 
             void RangeInfoViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-                if (e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel)) ||
-                    e.PropertyName == nameof(MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx) ||
-                    e.PropertyName == nameof(MpIHighlightTextRangesInfoViewModel.HighlightRanges)) {
+                if (//e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel)) ||
+                    e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx)) ||
+                    e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel.HighlightRanges))) {
                     UpdateHighlights(element);
+                    MpConsole.WriteLine($"highlight prop changed: '{e.PropertyName}'");
                 }
-                //MpConsole.WriteLine($"highlight prop changed: '{e.PropertyName}'");
+                //
             }
 
             if (e.OldValue is MpIHighlightTextRangesInfoViewModel old_htrivm) {
@@ -205,6 +209,10 @@ namespace MonkeyPaste.Avalonia {
                 mtb.Redraw();
                 return;
             }
+            if (attached_control is HtmlControl hc) {
+                HighlightHtml(hc, hrivm);
+                return;
+            }
             FormattedText ft = null;
             bool is_empty = false;
             if (attached_control.TryGetVisualDescendant<TextBox>(out var tb)) {
@@ -243,6 +251,7 @@ namespace MonkeyPaste.Avalonia {
 
             FinishUpdate(attached_control, tha, gl);
         }
+
 
         private static void FinishUpdate(Control attached_control, MpAvTextHighlightAdorner tha, IEnumerable<(IBrush, Geometry)> gl) {
             tha.DrawHighlights(gl);
@@ -297,6 +306,73 @@ namespace MonkeyPaste.Avalonia {
 
             layer.Children.Remove(adorner);
             ((ISetLogicalParent)adorner).SetParent(null);
+        }
+
+        private static void HighlightHtml(HtmlControl hc, MpIHighlightTextRangesInfoViewModel hrivm) {
+            if (hc.Text is not string html_str ||
+                hrivm is not MpAvClipTileViewModel ctvm) {
+                return;
+            }
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html_str);
+            // clear current highlights
+            var hl_nodes = doc.DocumentNode.SelectNodesSafe("span[contains(@class, 'highlight')]");
+            hl_nodes.ForEach(x => x.RemoveClass("highlight"));
+            hl_nodes.ForEach(x => x.RemoveClass("highlight-active"));
+            // get content ranges
+            if (hrivm.HighlightRanges == null ||
+                hrivm.HighlightRanges.Where(x => x.Document == hc).ToArray() is not { } hlrl ||
+                !hlrl.Any()) {
+                return;
+            }
+            string test = html_str.ToPlainText();
+            if (test.Contains("\\n")) {
+
+            }
+            // adjust active idx to content range subset
+            //int range_diff = Math.Max(0,hrivm.HighlightRanges.Count - hlrl.Length - 1);
+            int range_diff = hrivm.HighlightRanges.Count - hlrl.Length - 1;
+            int active_idx = hrivm.ActiveHighlightIdx >= 0 && hrivm.ActiveHighlightIdx >= range_diff ?
+                hrivm.ActiveHighlightIdx - range_diff : -1;
+            MpConsole.WriteLine($"Actual {hrivm.ActiveHighlightIdx} Relative {active_idx}");
+            // find text nodes
+            var text_nodes = doc.DocumentNode.SelectNodesSafe("//text() | //br");
+
+            (int idx, HtmlNode node) FindNodeAtTextIdx(HtmlNodeCollection hnc, int idx) {
+                int cur_idx = 0;
+                foreach (HtmlNode hn in hnc) {
+                    if (hn is not HtmlTextNode tn) {
+                        // line break
+                        cur_idx += Environment.NewLine.Length;
+                        continue;
+                    }
+                    string tn_text = tn.Text.DecodeSpecialHtmlEntities();
+                    int next_idx = cur_idx + tn_text.Length;
+                    if (cur_idx <= idx && idx < next_idx) {
+                        return (idx - cur_idx, tn);
+                    }
+                    cur_idx += tn_text.Length;
+                }
+                return default;
+            }
+            MpConsole.WriteLine($"Count {hlrl.Length}");
+            foreach (var (hlr, idx) in hlrl.WithIndex()) {
+                string hl_class = idx == active_idx ? "highlight-active" : "highlight";
+                var start_node_tup = FindNodeAtTextIdx(text_nodes, hlr.StartIdx);
+                if (start_node_tup.IsDefault()) {
+                    continue;
+                }
+                var end_node_tup = FindNodeAtTextIdx(text_nodes, hlr.EndIdx);
+                HtmlNode match_node = null;
+
+                if (start_node_tup.node != end_node_tup.node) {
+                    // not sure what to do yet
+                } else {
+                    match_node = start_node_tup.node.SplitNode(start_node_tup.idx, hlr.Count, hl_class);
+                }
+            }
+            new HtmlPanel
+            hc.Text = doc.DocumentNode.OuterHtml;
         }
     }
 

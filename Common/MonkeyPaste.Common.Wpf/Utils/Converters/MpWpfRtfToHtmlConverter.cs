@@ -179,7 +179,6 @@ namespace MonkeyPaste.Common.Wpf {
                 span_node.AppendChild(code_node);
 
                 cur_idx += match_idx + m.Value.Length;
-                string test = r.Text.Substring(cur_idx);
                 m = MpRegEx.RegExLookup[MpRegExType.HexEncodedHtmlEntity].Match(r.Text.Substring(cur_idx));
             }
             if (cur_idx < r.Text.Length) {

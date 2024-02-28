@@ -206,7 +206,7 @@ namespace MonkeyPaste.Common {
                 var word_str = whole_word ? "\\b" : "";
                 regex = new Regex($"{word_str}{Regex.Escape(match_value)}{word_str}", flags);
             }
-            var mc = regex.Matches(search_text);
+            var mc = regex.Matches(search_text.ToStringOrEmpty());
             foreach (Match m in mc) {
                 foreach (Group mg in m.Groups) {
                     foreach (Capture c in mg.Captures) {

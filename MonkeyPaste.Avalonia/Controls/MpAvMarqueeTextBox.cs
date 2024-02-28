@@ -910,7 +910,9 @@ namespace MonkeyPaste.Avalonia {
 
             // CLEAR BG
             ctx.FillRectangle(ReadOnlyBackground, this.Bounds);
-            double hl_x = GetActiveHighlighAdjOffset(ctx, _offsetX1);
+            MpTextRange[] hlr = HighlightRanges == null ? [] : HighlightRanges.Where(x => x.Document == this).ToArray();
+            int? active_idx = ActiveHighlightIdx.HasValue && ActiveHighlightIdx.Value < hlr.Length ? ActiveHighlightIdx.Value : null;
+            double hl_x = GetActiveHighlighAdjOffset(ctx, _offsetX1, hlr, active_idx);
 
 
             var origin1 = new Point(_offsetX1 + hl_x, 0);
@@ -927,13 +929,14 @@ namespace MonkeyPaste.Avalonia {
                 DrawReadOnlyText(ctx, fg, origin2, true);
             }
         }
-        private double GetActiveHighlighAdjOffset(DrawingContext ctx, double x_offset) {
-            if (HighlightRanges == null ||
-                HighlightRanges.Count == 0 ||
-                ActiveHighlightIdx == null) {
+        private double GetActiveHighlighAdjOffset(DrawingContext ctx, double x_offset, MpTextRange[] hlrl, int? active_idx) {
+            if (hlrl == null ||
+                active_idx == null ||
+                active_idx.Value >= hlrl.Length ||
+                hlrl[active_idx.Value].StartIdx >= this.Text.Length) {
                 return 0;
             }
-            var test_hl_geom = _ft.BuildHighlightGeometry(new Point(x_offset, 0), HighlightRanges[ActiveHighlightIdx.Value].StartIdx, 1);
+            var test_hl_geom = _ft.BuildHighlightGeometry(new Point(x_offset, 0), hlrl[active_idx.Value].StartIdx, 1);
             double delta_x = 0;
             double max_x = x_offset + GetRenderWidth();
             if (max_x < test_hl_geom.Bounds.Left) {
@@ -948,8 +951,11 @@ namespace MonkeyPaste.Avalonia {
             lock (_drawReadOnlyLock) {
                 if (showHighlight &&
                 HighlightRanges != null &&
-                HighlightRanges.Any()) {
-                    var brl = GetAllBrushes(ReadOnlyBackground, InactiveHighlightBrush, ActiveHighlightBrush, ActiveHighlightIdx, HighlightRanges.ToArray());
+                HighlightRanges.Where(x => x.Document == this) is { } hrl &&
+                hrl.ToArray() is { } hlr &&
+                hlr.Any()) {
+                    int? active_idx = ActiveHighlightIdx.HasValue && ActiveHighlightIdx.Value < hlr.Length ? ActiveHighlightIdx.Value : null;
+                    var brl = GetAllBrushes(ReadOnlyBackground, InactiveHighlightBrush, ActiveHighlightBrush, active_idx, hrl.ToArray());
                     foreach (var br_kvp in brl) {
                         if (br_kvp.Key is not IBrush brush) {
                             continue;
@@ -1004,12 +1010,8 @@ namespace MonkeyPaste.Avalonia {
                 brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(ContentRange.Document, hl_ranges.Last().AfterEndIdx, Text.Length - hl_ranges.Last().AfterEndIdx)));
             }
 
-            var valid = brush_tuples.Where(x => x.Value.StartIdx < 0 || x.Value.EndIdx >= Text.Length);
-            if (valid.Any()) {
-                string test = Text;
-                MpDebug.Break();
-            }
-            return brush_tuples.ToArray();
+            var valid = brush_tuples.Where(x => x.Value.StartIdx >= 0 && x.Value.EndIdx < Text.Length);
+            return valid.ToArray();
         }
 
         private bool CanMarquee() {

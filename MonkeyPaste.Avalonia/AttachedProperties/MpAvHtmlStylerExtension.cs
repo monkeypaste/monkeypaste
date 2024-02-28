@@ -1,11 +1,15 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.VisualTree;
+using HtmlAgilityPack;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
@@ -17,6 +21,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public static class MpAvHtmlStylerExtension {
+        private static Dictionary<HtmlControl, List<IDisposable>> _disposableLookup = [];
         static MpAvHtmlStylerExtension() {
 
             IsEnabledProperty.Changed.AddClassHandler<HtmlControl>((x, y) => HandleIsEnabledChanged(x, y));
@@ -26,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
             DefaultFontSizeProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
             DefaultFontFamilyProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
             DefaultHexColorProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
-            ShowUnderlinesProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
+            ShowUnderlinesProperty.Changed.AddClassHandler<HtmlControl>((x, y) => ToggleUnderlines(x));
         }
 
         #region Properties
@@ -189,10 +194,12 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteTraceLine($"Error initializing html font familys.", ex);
                 }
             }
-
-            var dl = hc.Tag as List<IDisposable>;
-            if (dl == null) {
-                dl = new List<IDisposable>();
+            List<IDisposable> dl = null;
+            if (!_disposableLookup.ContainsKey(hc)) {
+                dl = [];
+                _disposableLookup.Add(hc, dl);
+            } else {
+                dl = _disposableLookup[hc];
             }
 
             hc.DetachedFromVisualTree += Hc_DetachedFromVisualTree;
@@ -200,20 +207,47 @@ namespace MonkeyPaste.Avalonia {
             hc.StylesheetLoad += Hc_StylesheetLoad;
             hc.LinkClicked += Hc_LinkClicked;
             hc.GetObservable(HtmlControl.TextProperty).Subscribe(value => OnTextChanged(hc)).AddDisposable(dl);
-            hc.Tag = dl;
-            UpdateContent(hc);
+            UpdateContent(hc, true);
         }
         private static void OnTextChanged(HtmlControl hc) {
             UpdateContent(hc);
         }
-        private static void UpdateContent(HtmlControl hc) {
-            hc.BaseStylesheet = GetStyleSheet(hc);
+        private static void UpdateContent(HtmlControl hc, bool set_style = false) {
+            if (set_style) {
+                // for some reason changing the style sheet makes html disappear so only setting on load now
+                hc.BaseStylesheet = GetStyleSheet(hc);
+            }
             if (!hc.Text.ToStringOrEmpty().IsStringHtmlDocument()) {
                 // ensure text is full html doc or stylesheet stuff doesn't work
                 hc.Text = hc.Text.ToStringOrEmpty().ToHtmlDocumentFromTextOrPartialHtml();
             }
             hc.Redraw();
         }
+
+        private static void ToggleUnderlines(HtmlControl hc) {
+            if (hc.Text is not string html_str) {
+                return;
+            }
+            try {
+                var doc = new HtmlDocument();
+                doc.LoadHtml(html_str);
+                if (doc.DocumentNode.SelectNodes("//p") is not { } pl) {
+                    return;
+                }
+                bool is_disabling = pl.Any(x => x.HasClass("underline"));
+                if (is_disabling) {
+                    pl.ForEach(x => x.RemoveClass("underline"));
+                } else {
+                    pl.ForEach(x => x.AddClass("underline"));
+                }
+
+                hc.Text = doc.DocumentNode.OuterHtml;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error toggling underlines. ", ex);
+            }
+        }
+
         private static void Hc_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             if (sender is not HtmlControl hc) {
                 return;
@@ -222,10 +256,10 @@ namespace MonkeyPaste.Avalonia {
             hc.RenderError -= Hc_RenderError;
             hc.StylesheetLoad -= Hc_StylesheetLoad;
             hc.LinkClicked -= Hc_LinkClicked;
-            if (hc.Tag is not List<IDisposable> dl) {
-                return;
+            if (_disposableLookup.TryGetValue(hc, out var dl)) {
+                dl.ForEach(x => x.Dispose());
+                _disposableLookup.Remove(hc);
             }
-            dl.ForEach(x => x.Dispose());
         }
         private static void Hc_LinkClicked(object sender, HtmlRendererRoutedEventArgs<TheArtOfDev.HtmlRenderer.Core.Entities.HtmlLinkClickedEventArgs> e) {
             if (sender is not HtmlControl hc ||
@@ -282,15 +316,19 @@ namespace MonkeyPaste.Avalonia {
                     css_str = string.Format(
 @"* {{ margin: 0; padding: 0; }}
 body {{ white-space: pre-wrap; line-height: {1}px; color: {0}; font-size: {1}px; font-family: {2}; }}
-p {{ margin: 0; text-decoration: {4};  }}
+p {{ margin: 0; }}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
+.underline {{ text-decoration: underline;  }}
+.highlight {{ background-color: yellow; color: black; }}
+.highlight-active {{ background-color: lime; color: black; }}
 a:link {{ text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}",
                         GetDefaultHexColor(hc).RemoveHexAlpha(), //0
                         GetDefaultFontSize(hc), //1
                         GetDefaultFontFamily(hc), //2
                         MpSystemColors.gold1.RemoveHexAlpha(), //3
-                        "none"//GetShowUnderlines(hc) ? "underline" : "none" //4
+                        Mp.Services.PlatformResource
+                        .GetResource<IBrush>("HighlightBrush_inactive").ToPortableColor().ToHex(true) //5
                         );
                     break;
                 case MpHtmlStyleType.Tooltip:
