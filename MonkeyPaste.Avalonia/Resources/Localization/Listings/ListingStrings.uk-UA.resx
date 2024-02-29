@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>копіювати</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>пасти</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Менеджер буфера обміну</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>інструмент</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Буфер обміну - це джунглі. Мавпаста - король! Розгойдуйтеся від програми до програми, копіювання цього та вставлення, як ніколи раніше з MonkeyPaste !! Бренд - новий, передовий буфер обміну та інструмент аналітичної автоматизації !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Зразок мавпасти в дії!</value>
   </data>
@@ -273,5 +262,8 @@
 Я програміст, про якого згадувалося раніше, і я хочу, щоб кожен зміг знайти застосування MonkeyPaste. Таким чином, він і всі його функції абсолютно безкоштовні для використання. 
 Я також хочу, щоб вам було комфортно ним користуватися. Тому я запевняю вас, як єдину силу, що стоїть за його створенням, що жодна з (дуже) особистої інформації, яка може виникнути на 
 ваш буфер обміну завжди відстежується або зберігається БУДЬ-ДЕ за межами вашого власного комп'ютера. Період.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Буфер обміну</value>
   </data>
 </root>

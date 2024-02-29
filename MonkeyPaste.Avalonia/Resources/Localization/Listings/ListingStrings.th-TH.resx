@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>สำเนา</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>แปะ</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>ผู้จัดการคลิปบอร์ด</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>เครื่องมือ</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>คลิปบอร์ดเป็นป่า Monkeypaste เป็นราชา! แกว่งจากแอพสู่แอพคัดลอกสิ่งนี้และวางสิ่งที่ไม่เคยมีมาก่อนด้วย monkeypaste !! แบรนด์ - คลิปบอร์ดใหม่ที่ทันสมัยและเครื่องมือการวิเคราะห์อัตโนมัติ !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>ตัวอย่างของ monkeypaste ในการดำเนินการ!</value>
   </data>
@@ -273,5 +262,8 @@
 ฉันเป็นโปรแกรมเมอร์ที่กล่าวถึงก่อนหน้านี้และฉันต้องการให้ทุกคนสามารถค้นหาการใช้งานจาก MonkeyPaste ดังนั้นมันและคุณสมบัติทั้งหมดจึงใช้งานได้ฟรีอย่างสมบูรณ์ 
 ฉันยังต้องการให้คุณรู้สึกสบายใจที่จะใช้มัน ดังนั้นฉันรับรองกับคุณในฐานะพลังเดียวที่อยู่เบื้องหลังการสร้างว่าไม่มีข้อมูลส่วนบุคคล (มาก) ที่อาจเกิดขึ้นได้ 
 คลิปบอร์ดของคุณเคยถูกติดตามหรือเก็บไว้ที่ใดก็ได้นอกเหนือจากเครื่องของคุณเอง ช่วง</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>คลิ ปบอร์ด</value>
   </data>
 </root>

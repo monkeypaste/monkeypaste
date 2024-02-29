@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>копија</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>залепити</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Менаџер међуспремника</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>оруђе</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Међуспремник је џунгла. Монкеипасте је краљ! Свирање из апликације у апликацију, копирање овога и лепљење тог некада са монкеипастеом !! Бренд - Нова, врхунска ивица и алат за аутоматизацију и аналитички аутоматизација !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Узорак монкеупасте у акцији!</value>
   </data>
@@ -273,5 +262,8 @@ bogatstvo vrednosti i smisla koje zaslužujete da imate na dohvat ruke. Ne samo 
 Ja sam onaj programer koji je pomenut ranije i ћelim da svi mogu da naрu upotrebu od MonkeyPastea. Tako da su ona i sve njegove karakteristike potpuno besplatne za korišćenje. 
 Takođe želim da se osećaš prijatno dok ga koristiš. Zato vas uveravam, kao jedina sila koja stoji iza njegovog stvaranja, da nijedan od (veoma) ličnih podataka koji mogu da se pojave na 
 vaša ostava se ikada prati ili skladišti bilo gde izvan vaše mašine. Menstruacija.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Ostave</value>
   </data>
 </root>

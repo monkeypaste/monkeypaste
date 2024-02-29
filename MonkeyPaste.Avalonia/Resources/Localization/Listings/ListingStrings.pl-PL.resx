@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Kopiuj</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pasta</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Menedżer schowka</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>narzędzie</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Schowek to dżungla. Małpa jest królem! Huśtaj się z aplikacji, kopiując to i wklejając, jak nigdy dotąd z małpą !! Marka - nowe, najnowocześniejsze narzędzie do automatyzacji schowka i analitycznej !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Próbka małpy w akcji!</value>
   </data>
@@ -273,5 +262,8 @@ Bogactwo wartości i znaczenia, na które zasługujesz, aby mieć je na wyciągn
 Jestem wspomnianym wcześniej programistą i chcę, aby każdy mógł znaleźć zastosowanie w MonkeyPaste. Tak więc on i wszystkie jego funkcje są całkowicie darmowe. 
 Chcę też, abyś czuł się komfortowo, korzystając z niego. Zapewniam więc Cię, jako jedyną siłę stojącą za jego stworzeniem, że ŻADNA z (bardzo) osobistych informacji, które mogą powstać na 
 Twój schowek jest zawsze śledzony lub przechowywany GDZIEKOLWIEK poza Twoim komputerem. Okres.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>schowek</value>
   </data>
 </root>

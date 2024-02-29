@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copie</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pastă</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Clipboard Manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>instrument</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard -ul este o junglă. Monkeypaste este regele! Swing de la aplicație în aplicație, copierea acestui lucru și lipirea asta ca niciodată cu Monkeypaste !! Un brand - instrument nou, clipboard de ultimă oră și automatizare analitică !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Eșantion de Monkeypaste în acțiune!</value>
   </data>
@@ -273,5 +262,8 @@ bogăție de valoare și semnificație pe care meritați să o aveți la îndem�
 Sunt acel programator menționat mai devreme și vreau ca toată lumea să poată găsi utilizare din MonkeyPaste. Deci, acesta și toate caracteristicile sale sunt complet gratuite. 
 De asemenea, vreau să vă simțiți confortabil folosind-o. Așa că vă asigur, ca fiind singura forță din spatele creării sale, că NICIUNA dintre informațiile (foarte) personale care pot apărea pe 
 clipboard-ul dvs. este urmărit sau stocat ORIUNDE în afara propriei mașini. Perioadă.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Clipboard</value>
   </data>
 </root>

@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Kopieren</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>Paste</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Zwischenablagenmanager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>Werkzeug</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Die Zwischenablage ist ein Dschungel. Monkeypaste ist der König! Schwingen Sie von App zu App, kopieren Sie dies und das Einfügen wie nie zuvor mit Monkeypaste !! Eine Marke - neue, modernste Klemme und analytisches Automatisierungswerkzeug !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Probe von Monkeypaste in Aktion!</value>
   </data>
@@ -273,5 +262,8 @@ Reichtum an Wert und Bedeutung, den Sie verdienen, zur Verfügung zu haben. Nich
 Ich bin der bereits erwähnte Programmierer und möchte, dass jeder in der Lage ist, MonkeyPaste zu nutzen. Es und alle seine Funktionen sind also völlig kostenlos. 
 Ich möchte auch, dass Sie sich damit wohl fühlen. Ich versichere Ihnen also, als die einzige Kraft hinter seiner Erschaffung, dass KEINE der (sehr) persönlichen Informationen, die auf 
 Ihre Zwischenablage wird immer IRGENDWO außerhalb Ihres eigenen Computers verfolgt oder gespeichert. Periode.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Zwischenablage</value>
   </data>
 </root>

@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopya</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>I -paste</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Clipboard Manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>tool</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Ang clipboard ay isang gubat. Ang Monkeypaste ay ang hari! Swing mula sa app hanggang sa app, pagkopya nito at pag -paste na tulad ng hindi pa bago sa Monkeypaste !! Isang tatak - bago, pagputol ng clipboard ng gilid at tool ng analytic automation !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Halimbawang Monkeypaste sa Aksyon!</value>
   </data>
@@ -273,5 +262,8 @@ kayamanan ng halaga at kahulugan karapat dapat kang magkaroon ng magagamit sa iy
 Ako na programmer nabanggit mas maaga at gusto ko lahat ng tao ay magagawang upang mahanap ang paggamit out ng MonkeyPaste. Kaya ito at ang lahat ng mga tampok nito ay ganap na libre upang gamitin. 
 Gusto ko rin na maging komportable ka sa paggamit nito. Kaya tinitiyak ko sa iyo, bilang ang tanging puwersa sa likod ng paglikha nito, na WALA sa (napaka) personal na impormasyon na maaaring lumitaw sa 
 ang iyong clipboard ay kailanman sinusubaybayan o naka imbak SAANMAN lampas sa iyong sariling makina. Panahon.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>clipboard</value>
   </data>
 </root>

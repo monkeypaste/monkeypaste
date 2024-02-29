@@ -274,7 +274,7 @@ function onDragLeave(e) {
     let from_host = e.fromHost === undefined || e.fromHost == false ? false : true;
     log('drag leave called. mp dist: ' + mp_dist + ' in editor: ' + is_mp_in_win);
 
-    if (is_mp_in_win && !from_host) {
+    if (is_mp_in_win && !from_host/* && !isRunningOnWebView2()*/) {
         // NOTE host only triggers in webview drag leave
         // since catching actual drag leave is so problematic
         updateWindowMouseState(e, 'dragOver');

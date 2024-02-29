@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>cóip</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>greab</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>bainisteoir gearrthaisce</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>úsáid</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Is jungle an gearrthaisce. Is é Monkeypaste an Rí! Swing ó app go app, é seo a chóipeáil agus a ghreamú mar nach raibh riamh roimhe seo le monkeypaste !! Branda - gearrthaisce nua, ceannródaíoch agus uirlis uathoibrithe anailíseach !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Sampla de mhonagáin i ngníomh!</value>
   </data>
@@ -273,5 +262,8 @@ saibhreas luacha agus brí atá tuillte agat a bheith ar fáil ar do mhéar. Ní
 Is mise an ríomhchláraitheoir sin a luadh níos luaithe agus ba mhaith liom go mbeadh gach duine in ann úsáid a bhaint as MonkeyPaste. Mar sin, tá sé agus gach ceann dá ghnéithe go hiomlán saor in aisce le húsáid. 
 Ba mhaith liom freisin go mbraitheann tú compordach á úsáid. Mar sin, geallaim duit, mar an t-aon fhórsa atá taobh thiar dá chruthú, nach bhfuil aon chuid den fhaisnéis phearsanta (an-) a d'fhéadfadh teacht chun cinn ar 
 déantar do ghearrthaisce a rianú nó a stóráil riamh ÁIT AR BITH thar do mheaisín féin. Tréimhse.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>gearrthaisce</value>
   </data>
 </root>

@@ -371,7 +371,6 @@ namespace MonkeyPaste.Avalonia {
                     match_node = start_node_tup.node.SplitNode(start_node_tup.idx, hlr.Count, hl_class);
                 }
             }
-            new HtmlPanel
             hc.Text = doc.DocumentNode.OuterHtml;
         }
     }

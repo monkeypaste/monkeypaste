@@ -5,6 +5,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
@@ -562,7 +563,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpEditorBindingFunctionType.notifySubSelectionEnabledChanged:
                     ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillSubSelectionChangedNotification subSelChangedNtf) {
+#if !SUGAR_WV
                         ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
+#endif
                     }
                     break;
 
@@ -618,6 +621,14 @@ namespace MonkeyPaste.Avalonia {
                 #region DND
 
                 case MpEditorBindingFunctionType.notifyDragEnter:
+                    //if (MpAvClipTrayViewModel.Instance.AllActiveItems.FirstOrDefault(x => x.IsDropOverTile) is { } old_drop_ctvm &&
+                    //    old_drop_ctvm != BindingContext &&
+                    //    old_drop_ctvm.GetContentView() is MpAvContentWebView old_drop_cwv) {
+                    //    var dndMsg = new MpQuillDragDropEventMessage() {
+                    //        eventType = "dragleave"
+                    //    };
+                    //    old_drop_cwv.SendMessage($"dragEventFromHost_ext('{dndMsg.SerializeObjectToBase64()}')");
+                    //}
                     BindingContext.IsDropOverTile = true;
                     break;
                 case MpEditorBindingFunctionType.notifyDragLeave:
@@ -787,6 +798,38 @@ namespace MonkeyPaste.Avalonia {
                         ctvm.CanShowContextMenu = !ctxMenuCanShowChangedMsg.canInternalContextMenuBeShown;
                     }
                     break;
+                case MpEditorBindingFunctionType.notifyPointerEvent:
+                    ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillPointerEventMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillPointerEventMessage pointerMsg) {
+
+                        if (pointerMsg.eventType != "up" && pointerMsg.eventType != "down") {
+                            var pe = MpAvPointerInputHelpers.CreatePointerEventArgs(
+                                eventType: pointerMsg.eventType.ToEnum<MpPointerEventType>().ToRoutedEvent(),
+                                interactive: this,
+                                mp: new MpPoint(pointerMsg.clientX, pointerMsg.clientY),
+                                kmf: MpKeyModifierFlags.None,
+                                isLocalMp: true);
+                            this.RaiseEvent(pe);
+                            return;
+                        }
+                        if (this.GetVisualAncestor<MpAvClipTileView>() is not { } ctv ||
+                            ctv.ClipTileContainerBorder == null) {
+                            return;
+                        }
+                        var gmp = this.PointToScreen(new Point(pointerMsg.clientX, pointerMsg.clientY));
+                        var mp = ctv.ClipTileContainerBorder.PointToClient(gmp).ToPortablePoint();
+                        var pe2 = MpAvPointerInputHelpers.CreatePointerEventArgs(
+                                eventType: pointerMsg.eventType.ToEnum<MpPointerEventType>().ToRoutedEvent(),
+                                interactive: ctv.ClipTileContainerBorder,
+                                mp: mp,
+                                kmf: MpKeyModifierFlags.None,
+                                isLocalMp: true,
+                                isLeftButton: pointerMsg.isLeft);
+                        ctv.ClipTileContainerBorder.RaiseEvent(pe2);
+
+                    }
+                    break;
+
                 #endregion
 
                 #region OTHER
@@ -981,6 +1024,9 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvContentWebView.IsContentSubSelectableProperty).Subscribe(value => OnIsContentSubSelectableChanged()).AddDisposable(_disposables);
             this.GetObservable(MpAvContentWebView.IsContentFindAndReplaceVisibleProperty).Subscribe(value => OnIsContentFindOrReplaceVisibleChanged()).AddDisposable(_disposables);
 
+#if SUGAR_WV
+            Background = Brushes.Transparent;
+#endif
         }
 
 #if CEFNET_WV
@@ -1016,15 +1062,38 @@ namespace MonkeyPaste.Avalonia {
 #if SUGAR_WV
         protected override void OnPointerEntered(PointerEventArgs e) {
             base.OnPointerEntered(e);
-            MpConsole.WriteLine($"Wv Pointer entered");
+            //MpConsole.WriteLine($"Wv Pointer entered");
+            if (BindingContext == null) {
+                return;
+            }
+            BindingContext.IsHovering = true;
+            BindingContext.IsContentHovering = true;
         }
         protected override void OnPointerMoved(PointerEventArgs e) {
             base.OnPointerMoved(e);
-            MpConsole.WriteLine($"Wv Pointer moved");
+
+            if (BindingContext == null) {
+                return;
+            }
+            BindingContext.IsHovering = true;
+            BindingContext.IsContentHovering = true;
+            //MpConsole.WriteLine($"Wv Pointer moved");
         }
         protected override void OnPointerExited(PointerEventArgs e) {
             base.OnPointerExited(e);
-            MpConsole.WriteLine($"Wv Pointer exited");
+            //MpConsole.WriteLine($"Wv Pointer exited");
+
+            if (BindingContext == null) {
+                return;
+            }
+            BindingContext.IsDropOverTile = false;
+            BindingContext.IsContentHovering = false;
+            // BUG when this is triggered mp is still in the tile but tile won't
+            // receive actual exit so only allow if exited to title panel
+            if (this.GetVisualAncestor<MpAvClipTileView>() is not { } ctv) {
+                return;
+            }
+            BindingContext.IsHovering = ctv.IsPointerOver;
         }
 #endif
 
@@ -1093,7 +1162,6 @@ namespace MonkeyPaste.Avalonia {
             };
             SendMessage($"dragEventFromHost_ext('{dndMsg.SerializeObjectToBase64()}')");
         }
-
 #endif
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {
             if (!IsScrollWheelEnabled) {

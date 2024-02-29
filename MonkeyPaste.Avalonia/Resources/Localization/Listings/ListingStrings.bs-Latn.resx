@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopija</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>zalijepiti</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Clipboard Manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>alat</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Međuspremnik je džungla. MonkeyyPaste je kralj! Zahtevajte od aplikacije do aplikacije, kopirajte ovo i zalijepite to kao nikad prije monski lista !! Brend - novi, vrhunski alat za mirnice i analitički automatizacija !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Uzorak monahana u akciji!</value>
   </data>
@@ -273,5 +262,8 @@ Bogatstvo vrijednos i značenje zaslužujete da imate dostupan na dohvat ruke. N
 Ja sam taj programer koji je ranije spomenut i želim da svi budu u mogućnosti da pronađu upotrebu iz MonkeyPaste. Tako i sve njegove karakteristike su potpuno slobodne za upotrebu.
 Želim i da se osjećate ugodno koristeći ga. Zavjerujem vas, kao jedino sile iza njegovog stvaranja, da nijedan od (vrlo) ličnih podataka koji mogu nastaviti
 Vaš međuspremnik se ikad prati ili pohranjuje bilo gdje izvan vlastite mašine. Period.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>clipboard</value>
   </data>
 </root>

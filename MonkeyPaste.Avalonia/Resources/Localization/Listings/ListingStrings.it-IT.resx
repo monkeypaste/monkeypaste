@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copia</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>impasto</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Manager degli appunti</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>attrezzo</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Lo Appuntante è una giungla. Monkeypaste è il re! Swing da app a app, copiando questo e incollando che non prima con Monkeypaste !! Un marchio - Nuovo strumento di appunti e automazione analitica !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Esempio di Monkeypaste in azione!</value>
   </data>
@@ -273,5 +262,8 @@ ricchezza di valore e significato che meriti di avere a portata di mano. Non sol
 Io sono quel programmatore menzionato prima e voglio che tutti siano in grado di trovare l'uso di MonkeyPaste. Quindi e tutte le sue funzionalità sono completamente gratuite. 
 Voglio anche che tu ti senta a tuo agio nell'usarlo. Quindi vi assicuro, essendo l'unica forza dietro la sua creazione, che NESSUNA delle informazioni (molto) personali che possono sorgere su 
 i tuoi appunti sono sempre tracciati o archiviati OVUNQUE oltre la tua macchina. Periodo.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Appunti</value>
   </data>
 </root>

@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>պատճեն</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>մածուկ</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Clipboard Manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>գործիք</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard- ը ջունգլիներ է: Monkepaste- ը թագավորն է: Օրհնեք հավելվածից հավելված, պատճենելով սա եւ տեղադրեք այն, ինչը նման է երբեք Monkepaste- ով: Ապրանքանիշ - նոր, կտրող եզրային ստեղնաշարի եւ վերլուծական ավտոմատացման գործիք !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Գործողության մեջ Monkepaste- ի նմուշը:</value>
   </data>
@@ -273,5 +262,8 @@
 Ես այն ծրագրավորողն եմ, որի մասին ավելի վաղ նշվեց եւ ցանկանում եմ, որ բոլորը կարողանան օգտվել MonkeyPaste-ից: Այսպիսով, այն եւ նրա բոլոր առանձնահատկությունները լիովին ազատ են օգտագործելու համար: 
 Ես նաեւ ուզում եմ, որ դուք հարմարավետ զգաք այն օգտագործելու համար: Այսպիսով, վստահեցնում եմ ձեզ, որ լինելով նրա ստեղծման միակ ուժը, ոչ մի անձնական տեղեկություն, որը կարող է առաջանալ 
 ձեր clipboard-ը երբեւէ հետապնդվում կամ պահվում է ANYWHERE-ում ձեր սեփական մեքենայից այն կողմ: Ժամանակաշրջան:</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>ամրակապ</value>
   </data>
 </root>

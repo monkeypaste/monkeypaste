@@ -5,7 +5,7 @@
     <Nullable>disable</Nullable>
     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <Platforms>AnyCpu;x64</Platforms>
+    <Platforms>$(DefaultPlatforms)</Platforms>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <RuntimeIdentifier>$(TargetRuntimeIdentifiers)</RuntimeIdentifier>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -95,6 +95,6 @@
   </ItemGroup>
   
   <ItemGroup Condition="$(UseSugarWv) == 'True'">
-    <PackageReference Include="WebView.Avalonia.Desktop" Version="11.0.0.2" />
+    <PackageReference Include="WebView.Avalonia.Desktop" Version="11.0.0" />
   </ItemGroup>
 </Project>

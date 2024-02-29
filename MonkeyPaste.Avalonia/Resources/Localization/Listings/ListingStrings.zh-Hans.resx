@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>复制</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>粘贴</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>剪贴板经理</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>工具</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>剪贴板是一个丛林。 Monkeypaste是国王！从应用到应用程序，复制此并粘贴以前从未与monkeypaste一起粘贴！品牌 - 新的，最前沿的剪贴板和分析自动化工具！！！</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>在行动中的Monkeypaste样本！</value>
   </data>
@@ -273,5 +262,8 @@
 我就是前面提到的程序员，我希望每个人都能从 MonkeyPaste 中找到用途。因此，它及其所有功能都是完全免费使用的。
 我也希望你使用它时感到舒适。因此，我向您保证，作为其创建背后的唯一力量，任何（非常）个人信息都可能出现在
 您的剪贴板会被跟踪或存储在您自己的机器之外的任何地方。时期。</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>剪贴板</value>
   </data>
 </root>

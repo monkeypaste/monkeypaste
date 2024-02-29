@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>ينسخ</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>معجون</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>مدير الحافظة</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>أداة</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>الحافظة هي غابة. Monkeypaste هو الملك! تأرجح من التطبيق إلى التطبيق ، ونسخ هذا ولصق أنه لم يسبق له مثيل مع Monkeypaste !! علامة تجارية - جديدة ، متطورة الحافظة والأتمتة التحليلية !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>عينة من monkeypaste في العمل!</value>
   </data>
@@ -273,5 +262,8 @@
 أنا هذا المبرمج المذكور سابقا وأريد أن يتمكن الجميع من استخدام MonkeyPaste. لذلك فهو وجميع ميزاته مجانية تماما للاستخدام. 
 أريدك أيضا أن تشعر بالراحة عند استخدامه. لذلك أؤكد لكم ، بصفتكم القوة الوحيدة وراء إنشائها ، أن أيا من المعلومات الشخصية (جدا) التي يمكن أن تنشأ على 
 يتم تتبع الحافظة الخاصة بك أو تخزينها في أي مكان خارج جهازك الخاص. مرحلة زمنية.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>حافظة</value>
   </data>
 </root>

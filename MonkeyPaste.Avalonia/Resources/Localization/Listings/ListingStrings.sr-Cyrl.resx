@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>копија</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>залепити</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Менаџер међуспремника</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>оруђе</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Међуспремник је џунгла. Монкеипасте је краљ! Свирање из апликације у апликацију, копирање овога и лепљење тог некада са монкеипастеом !! Бренд - Нова, врхунска ивица и алат за аутоматизацију и аналитички аутоматизација !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Узорак монкеупасте у акцији!</value>
   </data>
@@ -273,5 +262,8 @@
 Ја сам онај програмер који је поменут раније и ћелим да сви могу да нару употребу од МонкеyПастеа. Тако да су она и све његове карактеристике потпуно бесплатне за коришћење. 
 Такође желим да се осећаш пријатно док га користиш. Зато вас уверавам, као једина сила која стоји иза његовог стварања, да ниједан од (веома) личних података који могу да се појаве на 
 ваша остава се икада прати или складишти било где изван ваше машине. Менструација.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Оставе</value>
   </data>
 </root>

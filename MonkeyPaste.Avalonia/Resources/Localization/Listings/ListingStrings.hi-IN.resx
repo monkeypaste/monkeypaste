@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>कॉपी</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>चिपकाएं</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>क्लिपबोर्ड मैनेजर</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>औजार</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>क्लिपबोर्ड एक जंगल है। Monkeypaste राजा है! ऐप से ऐप में स्विंग, इसे कॉपी करना और यह पेस्ट करना जैसे कि पहले कभी नहीं था एक ब्रांड - नया, अत्याधुनिक क्लिपबोर्ड और विश्लेषणात्मक स्वचालन उपकरण !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>कार्रवाई में मंकीपास्ट का नमूना!</value>
   </data>
@@ -273,5 +262,8 @@
 मैं वह प्रोग्रामर हूं जिसका उल्लेख पहले किया गया था और मैं चाहता हूं कि हर कोई मंकीपेस्ट का उपयोग करने में सक्षम हो। तो यह और इसकी सभी विशेषताएं उपयोग करने के लिए पूरी तरह से स्वतंत्र हैं। 
 मैं यह भी चाहता हूं कि आप इसका उपयोग करने में सहज महसूस करें। इसलिए मैं आपको विश्वास दिलाता हूं, इसके निर्माण के पीछे एकमात्र बल होने के नाते, कि (बहुत) व्यक्तिगत जानकारी में से कोई भी उत्पन्न नहीं हो सकता है 
 आपका क्लिपबोर्ड कभी भी आपकी अपनी मशीन से परे कहीं भी ट्रैक या संग्रहीत किया जाता है। काल।</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>क्लिपबोर्ड</value>
   </data>
 </root>

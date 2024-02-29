@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>whakaahua</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>whakapiri</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Kaiwhakahaere topa</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>taputapu</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Ko te paparahi he ngahere. Ko Monkeypaste te Kingi! Swanging mai i te taupānga ki te taupānga, te kape i tenei me te whakaputa i tera penei me te Monkeypaste !! He waitohu - he hou, he tapahi i te topātuhi mata me te taputapu aunoa !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Tauira o Monkeypaste i te mahi!</value>
   </data>
@@ -273,5 +262,8 @@ Ko te rawa o te uara me te tikanga e tika ana kia wātea koe i ō matimati. Kāo
 Ko ahau tērā kaiwhakahaere i kōrerotia i mua, ā, e hiahia ana ahau kia kitea e te katoa te whakamahinga i roto i MonkeyPaste. Nā reira me ōna āhuahira katoa e wātea ana ki te whakamahi. 
 E hiahia ana hoki ahau kia rongo koe i te pai ki te whakamahi. Nā reira ka whakaū atu ahau ki a koe, he tōpana anake i muri i tōna hanganga, ko te NONE o ngā mōhiohio whaiaro (tino) ka puta ake 
 Kua aroturukitia tō papatopenga, kua penapenatia rānei te ANYWHERE ki tua atu i tō ake mīhini. Wā.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>papatopenga</value>
   </data>
 </root>

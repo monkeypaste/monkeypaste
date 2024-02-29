@@ -133,7 +133,11 @@ namespace MonkeyPaste.Avalonia {
                 return no_match_result;
             }
             MpTransactionSourceType source_type = param_lookup["type"].ToEnum<MpTransactionSourceType>();
-            int source_id = param_lookup.ContainsKey("id") ? int.Parse(param_lookup["id"]) : 0;
+            int source_id = 0;
+            if (param_lookup.ContainsKey("id") &&
+                int.TryParse(param_lookup["id"], out int sid)) {
+                source_id = sid;
+            }
 
             if (source_id == 0) {
                 if (source_type == MpTransactionSourceType.CopyItem) {

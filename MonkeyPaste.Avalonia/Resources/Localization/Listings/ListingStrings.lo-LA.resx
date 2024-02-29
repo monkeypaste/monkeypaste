@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>ສໍາເນົາ</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>ວາງໄວ້</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>ຜູ້ຈັດການ Clipboard</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>ເຄື່ອງມື</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard ແມ່ນໄກ່ປ່າ. monkeypaste ແມ່ນກະສັດ! ແກວ່ງຈາກແອັບ to ໄປຫາແອັບ, ສໍາເນົາສິ່ງນີ້ແລະເຮັດໃຫ້ສິ່ງທີ່ຄ້າຍຄືກັບທີ່ບໍ່ເຄີຍມີມາກ່ອນກັບ monkeypaste !! ຍີ່ຫໍ້ - ໃຫມ່, ຕັດແຂບຂອບແລະອັດຕະໂນມັດການວິເຄາະແລະເຄື່ອງມືອັດຕະໂນມັດ !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>ຕົວຢ່າງຂອງ monkeypaste ໃນການປະຕິບັດ!</value>
   </data>
@@ -273,5 +262,8 @@
 ຂ້າ ພະ ເຈົ້າ ເປັນ ຜູ້ ຂຽນ ໂຄງ ການ ທີ່ ໄດ້ ກ່າວ ເຖິງ ກ່ອນ ຫນ້າ ນີ້ ແລະ ຂ້າ ພະ ເຈົ້າ ຢາກ ໃຫ້ ທຸກ ຄົນ ສາ ມາດ ຊອກ ຫາ ການ ນໍາ ໃຊ້ ອອກ ຈາກ MonkeyPaste ໄດ້ . ດັ່ງນັ້ນແລະຄຸນລັກສະນະທັງຫມົດຂອງມັນແມ່ນມີອິດສະຫຼະທີ່ຈະໃຊ້ໄດ້ຢ່າງສິ້ນເຊີງ. 
 ຂ້າພະເຈົ້າຍັງຢາກໃຫ້ທ່ານຮູ້ສຶກສະບາຍໃຈໃນການໃຊ້ມັນ. ສະນັ້ນຂ້າພະເຈົ້າຈຶ່ງໃຫ້ທ່ານຫມັ້ນໃຈວ່າ, ໃນຖານະເປັນກໍາລັງດຽວທີ່ຢູ່ເບື້ອງຫຼັງການສ້າງຂອງມັນ, ວ່າ NONE ຂອງຂໍ້ມູນສ່ວນຕົວ (ຫຼາຍ) ທີ່ສາມາດເກີດຂຶ້ນໄດ້ 
 ຄລິບຂອງທ່ານແມ່ນເຄີຍຖືກຕິດຕາມຫຼືເກັບຮັກສາANYWHERE ເກີນເຄື່ອງຈັກຂອງທ່ານເອງ. ໄລຍະເວລາ.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>ຄລິບ</value>
   </data>
 </root>

@@ -12,7 +12,8 @@ const ExampleList = [
       <>
         <br />
         <br />
-        ● Optional 2-factor password protection
+        ● Store text, image and file clips with all of its source (the app,
+        website, time, and much more) information automatically
         <br />
       </>
     ),

@@ -23,7 +23,15 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvHtmlStylerExtension {
         private static Dictionary<HtmlControl, List<IDisposable>> _disposableLookup = [];
         static MpAvHtmlStylerExtension() {
-
+            try {
+                MpAvThemeViewModel.Instance
+                .CustomFontFamilyNames
+                .ForEach(x =>
+                    HtmlRender.AddFontFamily(MpAvStringToFontFamilyConverter.Instance.Convert(x, null, null, null) as FontFamily));
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error initializing html font familys.", ex);
+            }
             IsEnabledProperty.Changed.AddClassHandler<HtmlControl>((x, y) => HandleIsEnabledChanged(x, y));
 
             // need handlers for any css related properties
@@ -121,6 +129,22 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region ZoomFactor AvaloniaProperty
+        public static double GetZoomFactor(AvaloniaObject obj) {
+            return obj.GetValue(ZoomFactorProperty);
+        }
+
+        public static void SetZoomFactor(AvaloniaObject obj, double value) {
+            obj.SetValue(ZoomFactorProperty, value);
+        }
+
+        public static readonly AttachedProperty<double> ZoomFactorProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, double>(
+                "ZoomFactor",
+                1.0d);
+
+        #endregion
+
         #region LinkClickCommand AvaloniaProperty
         public static ICommand GetLinkClickCommand(AvaloniaObject obj) {
             return obj.GetValue(LinkClickCommandProperty);
@@ -182,17 +206,6 @@ namespace MonkeyPaste.Avalonia {
         private static void Hc_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             if (sender is not HtmlControl hc) {
                 return;
-            }
-            if (hc.Container is { } hct) {
-                try {
-                    MpAvThemeViewModel.Instance
-                    .CustomFontFamilyNames
-                    .ForEach(x =>
-                        hct.AddFontFamily(MpAvStringToFontFamilyConverter.Instance.Convert(x, null, null, null) as FontFamily));
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error initializing html font familys.", ex);
-                }
             }
             List<IDisposable> dl = null;
             if (!_disposableLookup.ContainsKey(hc)) {

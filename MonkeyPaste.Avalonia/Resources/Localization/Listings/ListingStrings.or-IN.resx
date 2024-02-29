@@ -97,18 +97,11 @@ U ଅସୀମିତ ଆବର୍ଜନା ଏବଂ ଅଭିଲେଖାଗା
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>କପି କରନ୍ତୁ |</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>ପେଷ୍ଟ କରନ୍ତୁ |</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>କ୍ଲିପବୋର୍ଡ ପରିଚାଳକ |</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>ସାଧନ</value>
@@ -212,10 +205,6 @@ U ଅସୀମିତ ଆବର୍ଜନା ଏବଂ ଅଭିଲେଖାଗା
   <data name="StoreShortDescription" xml:space="preserve">
     <value>କ୍ଲିପବୋର୍ଡ ହେଉଛି ଏକ ଜଙ୍ଗଲ | ମୋନକପାଟ୍ ହେଉଛି ରାଜା! ଆପରେ ଆପରେ APT ରୁ ଆପ୍, ଏହାକୁ କପି କରିବା ଏବଂ ପେଷ୍ଟ କରିବା ଯାହା ତୁମ ସହିତ କେବେ ନୁହେଁ | ଏକ ବ୍ରାଣ୍ଡ - ନୂତନ, ଡଙ୍ଗ୍ କ୍ଲିପବୋର୍ଡ ଏବଂ ବିଶ୍ଳେଷଣ ସ୍ୱୟଂଚାଳିତ ସ୍ୱୟଂଚାଳିତ ଉପକରଣ !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>କାର୍ଯ୍ୟରେ ମାଙ୍କଡ଼ପେଷ୍ଟର ନମୁନା!</value>
   </data>
@@ -273,5 +262,8 @@ U ଅସୀମିତ କ୍ଷମତା |</value>
 ମୁଁ ସେହି ପ୍ରୋଗ୍ରାମର ଯାହା ପୂର୍ବରୁ ଉଲ୍ଲେଖ କରାଯାଇଛି ଏବଂ ମୁଁ ଚାହୁଁଛି ଯେ ସମସ୍ତେ ମଙ୍କି ପେଷ୍ଟରୁ ବ୍ୟବହାର ଖୋଜିବାରେ ସକ୍ଷମ ହୁଅନ୍ତୁ । ତେଣୁ ଏହା ଏବଂ ଏହାର ସମସ୍ତ ଫିଚର ବ୍ୟବହାର ପାଇଁ ସମ୍ପୂର୍ଣ୍ଣ ମାଗଣା । 
 ମୁଁ ମଧ୍ୟ ଚାହୁଁଛି ଯେ ଆପଣ ଏହାକୁ ବ୍ୟବହାର କରିବାରେ ସହଜ ଅନୁଭବ କରନ୍ତୁ । ତେଣୁ ମୁଁ ଆପଣଙ୍କୁ ଆଶ୍ୱାସନା ଦେଉଛି ଯେ, ଏହାର ସୃଷ୍ଟି ପଛରେ ଏକମାତ୍ର ଶକ୍ତି ଭାବରେ, କୌଣସି (ଅତ୍ୟନ୍ତ) ବ୍ୟକ୍ତିଗତ ସୂଚନା ସୃଷ୍ଟି ହୋଇପାରିବ ନାହିଁ 
 ଆପଣଙ୍କ କ୍ଲିପ୍ ବୋର୍ଡ କେବେ ବି ଆପଣଙ୍କ ନିଜ ମେସିନ୍ ବାହାରେ ଯେକୌଣସି ସ୍ଥାନରେ ଟ୍ରାକ୍ କିମ୍ୱା ଷ୍ଟୋର୍ ହୋଇଛି। ଅବଧି[ସମ୍ପାଦନା]।</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>କ୍ଲିପ୍ ବୋର୍ଡ</value>
   </data>
 </root>

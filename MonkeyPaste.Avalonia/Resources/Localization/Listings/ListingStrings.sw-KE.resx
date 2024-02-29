@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Nakala</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>Bandika</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Meneja wa Clipboard</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>chombo</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard ni msitu. Monkeypaste ndiye mfalme! Swing kutoka kwa programu hadi programu, kunakili hii na kubandika kama hapo awali na Monkeypaste !! Chapa - mpya, ya kukata clipboard na zana ya uchanganuzi wa vifaa !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Mfano wa Monkeypaste katika hatua!</value>
   </data>
@@ -273,5 +262,8 @@ utajiri wa thamani na maana unayostahili kuwa nayo kwenye vidole vyako. Sio tu k
 Mimi ni programu hiyo iliyotajwa hapo awali na ninataka kila mtu aweze kupata matumizi kutoka kwa MonkeyPaste. Kwa hivyo na huduma zake zote ni bure kabisa kutumia. 
 Pia nataka kujisikia vizuri kutumia. Kwa hivyo ninakuhakikishia, kama kuwa nguvu pekee nyuma ya uumbaji wake, kwamba hakuna habari yoyote ya kibinafsi ambayo inaweza kutokea 
 ubao wako wa kunakili unafuatiliwa au kuhifadhiwa popote zaidi ya mashine yako mwenyewe. Kipindi cha.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Ubaoklipu</value>
   </data>
 </root>

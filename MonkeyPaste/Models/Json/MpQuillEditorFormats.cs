@@ -388,4 +388,10 @@ namespace MonkeyPaste {
     public class MpQuillEditorScaleChangedMessage {
         public double editorScale { get; set; } = 1.0d;
     }
+    public class MpQuillPointerEventMessage {
+        public double clientX { get; set; }
+        public double clientY { get; set; }
+        public string eventType { get; set; }
+        public bool isLeft { get; set; }
+    }
 }

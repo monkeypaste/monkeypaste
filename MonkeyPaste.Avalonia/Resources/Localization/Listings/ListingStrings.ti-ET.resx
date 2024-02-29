@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>ቅዳሕ</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>ምልጣፍ .</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>ናይ ቅንጥብጣብ ሰሌዳ ኣካያዲ ስራሕ</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>መሳርሒ</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>እቲ ቅንጥብጣብ ሰሌዳ ጫካ እዩ። ሞንኪፓስቲ ንጉስ እዩ! ካብ ኣፕ ናብ ኣፕ ምውጥዋጥ፡ ነዚ ምቕዳሕን ምልጣፍን ከምቲ ቅድሚ ሕጂ ምስ MonkeyPaste!! ሓደ ምልክት - ሓድሽ፣ መቑረፂ ወሰን ቅንጥብጣብ ሰሌዳን ትንተናዊ ኣውቶማቲክ መሳርሒን!!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>ናሙና ናይ MonkeyPaste ብተግባር!</value>
   </data>
@@ -273,5 +262,8 @@
 ኣነ እቲ ኣቐዲሙ እተጠቕሰ ፕሮግራም ዘዳሉ ሰብ ኢየ ኵሉ ሰብ ድማ ካብ ህበይፓስተር ክጥቀም እደሊ ኢየ ። ስለዚ ንሳን ኵሉ መዳያቱን ምሉእ ብምሉእ ናጻ እዩ ። 
 ክትጥቀመሉ እውን እደሊ እየ ። ስለዚ ጠንቂ ፍጥረታ ኸም ምዃንካ መጠን ዋላ ሓደ ኻብቲ ኺለዓል ዚኽእል (ኣዝዩ) ብሕታዊ ሓበሬታ ኸም ዘየሎ አረጋግጸልኩም ኣለኹ 
 ክሊፕቦርካ ኻብ ማሽንካ ወጻኢ ኣብ ዝዀነ ይኹን ቦታ ተኸታቲሉ ወይ ተዓቚሩ ኣይፈልጥን እዩ። እዋን ።</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>ክሊፕቦር</value>
   </data>
 </root>

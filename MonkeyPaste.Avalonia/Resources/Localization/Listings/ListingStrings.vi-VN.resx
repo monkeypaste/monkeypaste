@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>sao chép</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>dán</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Trình quản lý bảng tạm</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>dụng cụ</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard là một rừng rậm. Monkeypaste là Vua! Swing từ ứng dụng này sang ứng dụng khác, sao chép điều này và dán mà chưa từng có với khỉ !! Một thương hiệu - mới, clipboard tiên tiến và công cụ tự động hóa phân tích !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Mẫu khỉ trong hành động!</value>
   </data>
@@ -273,5 +262,8 @@ Sự giàu có về giá trị và ý nghĩa mà bạn xứng đáng có sẵn t
 Tôi là lập trình viên đã đề cập trước đó và tôi muốn mọi người có thể tìm thấy cách sử dụng từ MonkeyPaste. Vì vậy, nó và tất cả các tính năng của nó là hoàn toàn miễn phí để sử dụng. 
 Tôi cũng muốn bạn cảm thấy thoải mái khi sử dụng nó. Vì vậy, tôi đảm bảo với bạn, với tư cách là lực lượng duy nhất đằng sau sự sáng tạo của nó, rằng KHÔNG có thông tin cá nhân (rất) nào có thể phát sinh trên 
 khay nhớ tạm của bạn đã từng được theo dõi hoặc lưu trữ BẤT CỨ NƠI NÀO ngoài máy của riêng bạn. Thì.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Clipboard</value>
   </data>
 </root>

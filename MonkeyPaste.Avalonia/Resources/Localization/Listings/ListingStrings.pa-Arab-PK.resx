@@ -97,18 +97,11 @@ Atimpate ਸਮੱਗਰੀ ਦੇ 1000 ਕਲਿੱਪਾਂ
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>ਕਾਪੀ</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>ਚਿਪਕਾਓ</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>ਕਲਿੱਪਬੋਰਡ ਮੈਨੇਜਰ</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>ਟੂਲ</value>
@@ -212,10 +205,6 @@ Atimpate ਸਮੱਗਰੀ ਦੇ 1000 ਕਲਿੱਪਾਂ
   <data name="StoreShortDescription" xml:space="preserve">
     <value>ਕਲਿੱਪਬੋਰਡ ਇਕ ਜੰਗਲ ਹੈ. ਬਾਂਦਰਪੀਸੇਟ ਰਾਜਾ ਹੈ! ਐਪ ਤੋਂ ਐਪ ਤੋਂ ਸਵਿੰਗ ਕਰਨਾ, ਇਸ ਨੂੰ ਨਕਲ ਕਰਨਾ ਅਤੇ ਚਿਪਕਾਉਣਾ ਕਿ ਬਾਂਦਰ ਐਪਸੈਟ ਨਾਲ ਕਦੇ ਵੀ ਪਹਿਲਾਂ ਕਦੇ ਨਹੀਂ !! ਇੱਕ ਬ੍ਰਾਂਡ - ਨਵਾਂ, ਕੱਟਣ ਵਾਲੀ ਐਜ ਕਲਿੱਪਬੋਰਡ ਅਤੇ ਵਿਸ਼ਲੇਸ਼ਕ ਸਵੈਚਾਲਨ ਸੰਦ !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>ਕਾਰਵਾਈ ਵਿਚ ਬਾਂਕੀਪਾਸਟ ਦਾ ਨਮੂਨਾ!</value>
   </data>
@@ -273,5 +262,8 @@ Atimpate ਸਮੱਗਰੀ ਦੇ 1000 ਕਲਿੱਪਾਂ
 ਮੈਂ ਉਹ ਪ੍ਰੋਗ੍ਰਾਮ ਦਾ ਪਹਿਲਾਂ ਜ਼ਿਕਰ ਕੀਤਾ ਹੈ ਅਤੇ ਮੈਂ ਚਾਹੁੰਦਾ ਹਾਂ ਕਿ ਹਰ ਕੋਈ ਬਾਂਕੀਪਾਸਟ ਤੋਂ ਵਰਤੋਂ ਨੂੰ ਲੱਭਣ ਦੇ ਯੋਗ ਹੋਵੇ. ਇਸ ਲਈ ਇਹ ਅਤੇ ਇਸ ਦੀਆਂ ਸਾਰੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਵਰਤਣ ਲਈ ਪੂਰੀ ਤਰ੍ਹਾਂ ਆਜ਼ਾਦ ਹਨ.
 ਮੈਂ ਵੀ ਚਾਹੁੰਦਾ ਹਾਂ ਕਿ ਤੁਸੀਂ ਇਸ ਦੀ ਵਰਤੋਂ ਕਰਨਾ ਆਰਾਮ ਮਹਿਸੂਸ ਕਰੋ. ਇਸ ਲਈ ਮੈਂ ਤੁਹਾਨੂੰ ਭਰੋਸਾ ਦਿਵਾਉਂਦਾ ਹਾਂ ਕਿ ਇਸ ਦੇ ਨਿਰਮਾਣ ਦੇ ਪਿੱਛੇ ਇਕੋ ਇਕ ਤਾਕਤ ਹੋਣ ਦੇ ਨਾਤੇ, ਜੋ ਕਿ ਕਿਸੇ ਵੀ (ਬਹੁਤ) ਨਿੱਜੀ ਜਾਣਕਾਰੀ ਜੋ ਪੈਦਾ ਕਰ ਸਕਦੀ ਹੈ
 ਤੁਹਾਡੇ ਕਲਿੱਪਬੋਰਡ ਕਦੇ ਵੀ ਤੁਹਾਡੀ ਆਪਣੀ ਮਸ਼ੀਨ ਤੋਂ ਬਾਹਰ ਜਾਂ ਸਟੋਰ ਕੀਤੇ ਜਾਂ ਸਟੋਰ ਕੀਤੇ ਜਾਂਦੇ ਹਨ. ਅਵਧੀ</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>ਕਲਿੱਪਬੋਰਡ</value>
   </data>
 </root>

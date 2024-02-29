@@ -97,18 +97,11 @@ A सामग्रीको 1,000 क्लिपहरू सम्म
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>कापी</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>टाँसिनु</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>क्लिपबोर्डर प्रबन्धक</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>औजार</value>
@@ -212,10 +205,6 @@ A सामग्रीको 1,000 क्लिपहरू सम्म
   <data name="StoreShortDescription" xml:space="preserve">
     <value>क्लिपबोर्ड एक जंगल हो। Ridretspaste राजा हो! अनुप्रयोगबाट अनुप्रयोगबाट स्विंग, यो प्रतिलिपि गर्दै र पेस्टिप्ससाससँग पहिले कहिल्यै मनपर्दैन !! एक ब्रान्ड - नयाँ, किनारा क्लिपबोर्ड र विश्लेषक स्वचालित उपकरण !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>कार्यमा बाँधिकीपेस को नमूना!</value>
   </data>
@@ -273,5 +262,8 @@ A सामग्रीको 1,000 क्लिपहरू सम्म
 म त्यो प्रोग्रामर हुँ जुन पहिले उल्लेख गरिएको छ र म चाहन्छु कि सबैले मंकीपेस्टको प्रयोग पत्ता लगाउन सक्षम होऊन्। त्यसैले यो र यसको सबै सुविधाहरू प्रयोग गर्न पूर्ण रूपमा स्वतन्त्र छन्। 
 म पनि तपाईं यसलाई प्रयोग सहज महसुस गर्न चाहनुहुन्छ. त्यसैले म तपाईंलाई विश्वास दिलाउँदछु, यसको सिर्जनाको पछाडि एक मात्र शक्तिको रूपमा, कि कुनै पनि (धेरै) व्यक्तिगत जानकारी जुन उत्पन्न हुन सक्छ 
 तपाईंको क्लिपबोर्ड कहिल्यै ट्र्याक गरिएको छ वा तपाईंको आफ्नै मिसिन भन्दा बाहिर कहीं पनि भण्डारण गरिएको छ। अवधि।</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>क्लिपबोर्ड</value>
   </data>
 </root>

@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>cópia de</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>colar</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Gerenciador da área de transferência</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>ferramenta</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>A área de transferência é uma selva. Monkeypaste é o rei! Swing de aplicativo para aplicativo, copiando isso e colando isso como nunca antes com o MonkeyyySaste !! Uma marca - Ferramenta de transferência de arestas de ponta e ferramenta de automação analítica !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Amostra de macacão em ação!</value>
   </data>
@@ -273,5 +262,8 @@ riqueza de valor e significado que você merece ter disponível na ponta dos ded
 Eu sou o programador mencionado anteriormente e quero que todos sejam capazes de encontrar o uso do MonkeyPaste. Assim, ele e todos os seus recursos são completamente gratuitos para usar. 
 Eu também quero que você se sinta confortável em usá-lo. Por isso, garanto-lhe, como sendo a única força por trás de sua criação, que NENHUMA das informações (muito) pessoais que podem surgir em 
 sua área de transferência é sempre rastreada ou armazenada em qualquer lugar além de sua própria máquina. Período.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>área de transferência</value>
   </data>
 </root>

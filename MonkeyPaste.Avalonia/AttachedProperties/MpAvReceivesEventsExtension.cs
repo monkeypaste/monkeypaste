@@ -110,7 +110,7 @@ namespace MonkeyPaste.Avalonia {
             var gmp = unscaled_mp.ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
             MpConsole.WriteLine($"Touch ({x},{y}) converted to mw Point ({gmp.X},{gmp.Y})");
 
-            var pe = MpAvPointerInputHelpers.SimulatePointerEventArgs(
+            var pe = MpAvPointerInputHelpers.CreatePointerEventArgs(
                 eventType.ToRoutedEvent(),
                 App.MainView as Control,
                 gmp,

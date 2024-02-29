@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>хуулах</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>товч</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>сүлжээний менежер</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>багаж</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Санах самбар нь ширэнгэн ой юм. Monkeypaste нь хаан юм! Апп-аас апп-аас апп руу шилжиж, энэ нь урьд өмнө хэзээ ч монкераастай хэзээ ч хийж байгаагүй юм шиг хуулж, буулгах болно !! Брэнд - Шинэ, зүсэлтийн самбар самбар, аналитик автоматжуулалтын автоматжуулалтын хэрэгсэл !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Монкекастын дээжийг үйлдэхэд хүргэдэг!</value>
   </data>
@@ -273,5 +262,8 @@
 ᠪᠢ ᠪᠣᠯ ᠳᠠᠷᠤᠢ ᠡᠮᠦᠨ᠎ᠡ ᠳᠤᠷᠠᠳᠤᠭᠰᠠᠨ ᠫᠷᠦᠭ᠍ᠷᠠᠮ ᠤᠨ ᠠᠵᠢᠯᠲᠠᠨ ᠂ ᠬᠥᠮᠥᠨ ᠪᠣᠯᠭᠠᠨ Monkkpsste ᠡᠴᠡ ᠬᠡᠷᠡᠭ᠍ᠯᠡᠭᠡ ᠣᠯᠬᠤ ᠶᠢ ᠬᠦᠰᠡᠵᠦ ᠪᠠᠢ᠌ᠨ᠎ᠠ ᠃ ᠡᠶᠢᠮᠦ ᠡᠴᠡ ᠂ ᠲᠡᠭᠦᠨ ᠪᠣᠯᠣᠨ ᠲᠡᠭᠦᠨ ᠦ ᠠᠯᠢᠪᠠ ᠴᠢᠳᠠᠮᠵᠢ ᠶᠢ ᠪᠦᠷ ᠪᠦᠷᠢᠮᠦᠰᠦᠨ ᠰᠦᠢᠳᠬᠡᠯ ᠬᠤᠷᠢᠶᠠᠬᠤ ᠦᠭᠡᠶ ᠪᠡᠷ ᠬᠡᠷᠡᠭᠯᠡᠵᠡᠶ ᠃ 
 ᠪᠢ ᠪᠠᠰᠠ ᠴᠢ ᠲᠡᠭᠦᠨ ᠢ ᠬᠡᠷᠡᠭ᠍ᠯᠡᠬᠦ ᠦᠶ᠎ᠡ ᠳᠦ ᠲᠠᠭᠠᠯᠠᠮᠵᠢᠲᠠᠢ ᠰᠠᠨᠠᠭᠳᠠᠬᠤ ᠶᠢ ᠬᠦᠰᠡᠵᠦ ᠪᠠᠢ᠌ᠨ᠎ᠠ ᠃ ᠡᠶᠢᠮᠦ ᠡᠴᠡ ᠂ ᠪᠢ ᠲᠠᠨ ᠳᠤ ᠪᠠᠲᠤᠯᠠᠶ᠎ᠠ ᠂ ᠲᠡᠭᠦᠨ ᠦ ᠡᠭᠦᠳᠦᠨ ᠪᠠᠶᠢᠭᠤᠯᠤᠭᠰᠠᠨ ᠤ ᠠᠷᠤ ᠳᠠᠬᠢ ᠴᠣᠷᠢ ᠶᠢᠨ ᠭᠠᠭᠴᠠ ᠬᠦᠴᠦᠨ ᠪᠣᠯᠣᠭᠰᠠᠨ ᠤ ᠬᠤᠪᠢ ᠳᠤ ᠂ ᠶᠠᠮᠠᠷᠪᠠ ( ᠲᠤᠩ ) ᠬᠤᠪᠢ ᠬᠥᠮᠦᠨ ᠦ ᠮᠡᠳᠡᠭᠡ ᠵᠠᠩᠭᠢ ᠪᠦᠷ ᠢᠯᠡᠷᠡᠵᠦ ᠮᠡᠳᠡᠨ᠎ᠡ ᠃ 
 ᠲᠠᠨ ᠤ ᠨᠠᠭᠠᠯᠲᠠ ᠶᠢᠨ ᠬᠠᠪᠲᠠᠰᠤ ᠲᠠᠨ ᠤ ᠥᠪᠡᠷ ᠦᠨ ᠮᠠᠰᠢᠨ ᠠᠴᠠ ᠭᠠᠳᠠᠨᠠᠬᠢ ᠶᠠᠮᠠᠷᠪᠠ ᠭᠠᠵᠠᠷ ᠢ ᠮᠥᠷᠳᠡᠬᠦ ᠪᠤᠶᠤ ᠬᠠᠳᠠᠭᠠᠯᠠᠨ᠎ᠠ ᠃ ᠴᠠᠭ ᠦᠶ᠎ᠡ ᠃</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>ᠬᠠᠶᠢᠴᠢᠯᠠᠬᠤ ᠰᠠᠮᠪᠠᠷ᠎ᠠ ᠶᠢ ᠨᠠᠭᠠᠬᠤ</value>
   </data>
 </root>

@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopiera</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>klistra</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>urklippshanterare</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>verktyg</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Urklippet är en djungel. Monkeypaste är kungen! Sväng från app till app, kopiera detta och klistra in det som aldrig tidigare med monkeypasta !! Ett helt - nytt, banbrytande urklipp och analytiskt automatiseringsverktyg !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Exempel på monkeypaste i aktion!</value>
   </data>
@@ -273,5 +262,8 @@ rikedom av värde och mening som du förtjänar att ha till hands. Inte bara kas
 Jag är den programmerare som nämndes tidigare och jag vill att alla ska kunna använda MonkeyPaste. Så den och alla dess funktioner är helt gratis att använda. 
 Jag vill också att du ska känna dig bekväm med att använda den. Så jag försäkrar er, som den enda kraften bakom dess skapande, att INGEN av den (mycket) personliga information som kan uppstå på 
 ditt urklipp spåras eller lagras VAR som helst utanför din egen maskin. Period.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Urklipp</value>
   </data>
 </root>

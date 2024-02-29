@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopjoj</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>ngjit</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>menaxher</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>mjet</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard është një xhungël. Monkeypaste është mbreti! Lëvizni nga aplikacioni në aplikacion, duke kopjuar këtë dhe ngjitur atë si kurrë më parë me Monkeypaste !! Një markë - Clipboard i ri, prerje dhe mjet automatizimi analitik !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Shembull i Monkeypaste në veprim!</value>
   </data>
@@ -273,5 +262,8 @@ Pasuri me vlerë dhe kuptim që meriton të kesh në dispozicion në majë të g
 Unë jam ai programuesi i përmendur më parë dhe dua që të gjithë të jenë në gjendje të gjejnë përdorimin nga MonkeyPaste. Pra, ajo dhe të gjitha veçoritë e saj janë krejtësisht të lira për t'u përdorur. 
 Dua gjithashtu që të ndihesh rehat duke e përdorur atë. Kështu që ju siguroj, si të ishte e vetmja forcë pas krijimit të saj, se asnjë nga (shumë) informacionet personale që mund të dalin në 
 Dërrasa juaj është gjurmuar ose ruajtur ndonjëherë kudo përtej makinës suaj. Periudha.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Clipboard</value>
   </data>
 </root>

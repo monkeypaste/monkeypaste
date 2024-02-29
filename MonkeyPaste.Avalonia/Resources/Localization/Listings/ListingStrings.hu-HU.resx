@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>másolat</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>paszta</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>vágólapkezelő</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>eszköz</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>A vágólap egy dzsungel. A majomító a király! Swing az alkalmazástól az alkalmazásig, másolva ezt, és beilleszteni, mint még soha nem a MonkeyPaste -val !! Márka - új, élvonalbeli vágólap és analitikus automatizálási eszköz !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Munkaminta a majompaszta akcióban!</value>
   </data>
@@ -273,5 +262,8 @@ Az érték és az értelem gazdagsága, amelyet megérdemel, hogy kéznél legye
 Én vagyok a korábban említett programozó, és azt akarom, hogy mindenki megtalálja a MonkeyPaste használatát. Tehát ez és minden funkciója teljesen ingyenesen használható. 
 Azt is szeretném, ha kényelmesen érezné magát. Tehát biztosíthatom Önöket, mint az egyetlen erőt a létrehozása mögött, hogy EGYIK (nagyon) személyes információ sem merülhet fel 
 a vágólapodat mindig nyomon követheted vagy tárolhatod BÁRHOL a saját gépeden kívül. Periódus.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>vágólap</value>
   </data>
 </root>

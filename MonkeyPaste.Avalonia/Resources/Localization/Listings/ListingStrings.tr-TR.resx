@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopya</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>yapıştırmak</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Pano Yöneticisi</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>alet</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Pano bir orman. Moneypaste Kral! Uygulamadan uygulamaya, bunu kopyalama ve daha önce hiç olmadığı gibi Monkeypaste ile yapıştırma !! Bir marka - yeni, son teknoloji pano ve analitik otomasyon aracı !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Moneypaste örneği çalışmada!</value>
   </data>
@@ -273,5 +262,8 @@ Parmaklarınızın ucunda olmasını hak ettiğiniz değer ve anlam zenginliği.
 Ben daha önce bahsedilen programcıyım ve herkesin MonkeyPaste'den yararlanabilmesini istiyorum. Bu nedenle, o ve tüm özelliklerinin kullanımı tamamen ücretsizdir. 
 Ayrıca onu kullanırken kendinizi rahat hissetmenizi istiyorum. Bu yüzden sizi temin ederim ki, yaratılışının arkasındaki tek güç olarak, ortaya çıkabilecek (çok) kişisel bilgilerin HİÇBİRİ 
 panonuz, kendi makinenizin ötesinde HERHANGİ BİR YERDE izlenir veya saklanır. Dönem.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Pano</value>
   </data>
 </root>

@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>αντίγραφο</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>Επικόλληση</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Διευθυντής πρόχειρων</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>εργαλείο</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Το πρόχειρο είναι μια ζούγκλα. Το Monkeypaste είναι ο βασιλιάς! Swing από εφαρμογή στην εφαρμογή, αντιγράφοντας αυτό και επικόλληση που όπως ποτέ άλλοτε με MonkeyPaste !! Ένα εμπορικό σήμα - νέο, κορυφαίο σκάφος και εργαλείο αναλυτικής αυτοματοποίησης !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Δείγμα Monkeypaste σε δράση!</value>
   </data>
@@ -273,5 +262,8 @@
 Είμαι αυτός ο προγραμματιστής που αναφέρθηκε νωρίτερα και θέλω όλοι να μπορούν να βρουν χρήση από το MonkeyPaste. Έτσι, αυτό και όλα τα χαρακτηριστικά του είναι εντελώς δωρεάν για χρήση. 
 Θέλω επίσης να αισθάνεστε άνετα να το χρησιμοποιείτε. Σας διαβεβαιώνω λοιπόν, ως η μόνη δύναμη πίσω από τη δημιουργία του, ότι ΚΑΜΙΑ από τις (πολύ) προσωπικές πληροφορίες που μπορεί να προκύψουν 
 το πρόχειρό σας παρακολουθείται ή αποθηκεύεται ΟΠΟΥΔΗΠΟΤΕ πέρα από το δικό σας μηχάνημα. Περίοδος.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>πρόχειρο</value>
   </data>
 </root>

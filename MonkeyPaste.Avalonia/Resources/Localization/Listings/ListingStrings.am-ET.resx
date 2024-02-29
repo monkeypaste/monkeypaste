@@ -97,18 +97,11 @@ The እስከ 1,000 የሚሆኑ ክሊፖች
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>ቅጂ</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>ፓስተር</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>የቅንጥብ ሰሌዳ አቀናባሪ</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>መሣሪያ</value>
@@ -212,10 +205,6 @@ The እስከ 1,000 የሚሆኑ ክሊፖች
   <data name="StoreShortDescription" xml:space="preserve">
     <value>ክሊፕቦርዱ ጫካ ነው. ንጉሠ ነገሥት ንጉሣዊ ነው! ከዘር else ት ጋር ከዚህ በፊት እንደዚህ ያለ ማንም ሰው ከማይችለው መተግበሪያ ወደ መተግበሪያ ማወዛወዝ !! የምርት ስም - አዲስ, የዴንጅ ጠርዝ ቅንጥብ ሰሌዳ እና የመተንተን ራስ-ሰር መሣሪያ !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>በተግባር የተካሄደ ናሙና!</value>
   </data>
@@ -273,5 +262,8 @@ The እስከ 1,000 የሚሆኑ ክሊፖች
 ቀደም ሲል የተጠቀስኩት ፕሮግራም አዘጋጅ እኔ ነኝ፤ እንዲሁም ሁሉም ሰው ከጦጣፓስት ጥቅም ማግኘት እንዲችል እፈልጋለሁ። በመሆኑም ይህ መጽሐፍም ሆነ ሁሉም ገጽታዎቹ ሙሉ በሙሉ በነፃነት ጥቅም ላይ ይውላሉ ። 
 በተጨማሪም ይህን መሣሪያ መጠቀም ቀላል እንዲሆንልህ እፈልጋለሁ ። ስለዚህ ከፍጥረቱ በስተጀርባ ያለው ብቸኛው ኃይል እንደመሆኑ መጠን ሊነሱ ከሚችሉት (እጅግ) የግል መረጃዎች መካከል አንዳቸውም እንደማይነሱ አረጋግጥላችኋለሁ 
 ክሊፕቦርህ ከራስህ ማሽን ባሻገር በየትኛውም ቦታ ተከታትለህ ወይም ተቀምጠህ ታውቃለህ። የጊዜ ርዝመት ።</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>ክሊፕቦርድ</value>
   </data>
 </root>

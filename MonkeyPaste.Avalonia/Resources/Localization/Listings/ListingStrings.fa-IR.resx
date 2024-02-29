@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>کپی 🀄</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>خمیر</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>مدیر کلیپ بورد</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>ابزار</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>کلیپ بورد یک جنگل است. Monkeypaste پادشاه است! چرخش از برنامه به برنامه ، کپی کردن از این و چسباندن آن مانند هرگز با Monkeypaste !! یک برند - کلیپ بورد جدید ، برش و ابزار اتوماسیون تحلیلی !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>نمونه میمون در عمل!</value>
   </data>
@@ -273,5 +262,8 @@
 من که برنامه نویس قبلا ذکر شده و من می خواهم هر قادر به پیدا کردن استفاده از MonkeyPaste. بنابراین ان و تمام ویژگی های ان کاملا رایگان برای استفاده است. 
 همچنین می خواهم با استفاده از ان احساس راحتی کنید. بنابراین من به شما اطمینان می دهم، به عنوان تنها نیروی ایجاد ان، که هیچ یک از اطلاعات شخصی (بسیار) که می تواند در 
 کلیپ بورد خود را تا کنون ردیابی و یا ذخیره شده در هر نقطه فراتر از دستگاه خود را. دوره.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>کلیپ بورد</value>
   </data>
 </root>

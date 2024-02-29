@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>ನಕಲು</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>ಅಂಟಿಸು</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ವ್ಯವಸ್ಥಾಪಕ</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>ಉಪಕರಣ</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಒಂದು ಕಾಡು. ಮಂಕೈಪಾಸ್ಟ್ ರಾಜ! ಅಪ್ಲಿಕೇಶನ್‌ನಿಂದ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಸ್ವಿಂಗ್ ಮಾಡಿ, ಇದನ್ನು ನಕಲಿಸಿ ಮತ್ತು ಮಾಂಕೈಪೇಸ್ಟ್‌ನೊಂದಿಗೆ ಹಿಂದೆಂದಿಗಿಂತಲೂ ಅಂಟಿಕೊಳ್ಳುವುದು !! ಒಂದು ಬ್ರ್ಯಾಂಡ್ - ಹೊಸ, ಅತ್ಯಾಧುನಿಕ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಮತ್ತು ವಿಶ್ಲೇಷಣಾತ್ಮಕ ಯಾಂತ್ರೀಕೃತಗೊಂಡ ಸಾಧನ !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>ಕ್ರಿಯೆಯಲ್ಲಿ ಮಾಂಕೈಪೇಸ್ಟ್‌ನ ಮಾದರಿ!</value>
   </data>
@@ -273,5 +262,8 @@
 ನಾನು ಮೊದಲೇ ಉಲ್ಲೇಖಿಸಿದ ಪ್ರೋಗ್ರಾಮರ್ ಮತ್ತು ಪ್ರತಿಯೊಬ್ಬರೂ ಮಂಕಿಪಾಸ್ಟೆಯಿಂದ ಬಳಕೆಯನ್ನು ಕಂಡುಹಿಡಿಯಲು ಸಾಧ್ಯವಾಗುತ್ತದೆ ಎಂದು ನಾನು ಬಯಸುತ್ತೇನೆ. ಆದ್ದರಿಂದ ಇದು ಮತ್ತು ಅದರ ಎಲ್ಲಾ ವೈಶಿಷ್ಟ್ಯಗಳು ಬಳಸಲು ಸಂಪೂರ್ಣವಾಗಿ ಉಚಿತವಾಗಿದೆ. 
 ನೀವು ಅದನ್ನು ಬಳಸಲು ಆರಾಮದಾಯಕವಾಗಿರಬೇಕು ಎಂದು ನಾನು ಬಯಸುತ್ತೇನೆ. ಆದ್ದರಿಂದ ಅದರ ಸೃಷ್ಟಿಯ ಹಿಂದಿನ ಏಕೈಕ ಶಕ್ತಿಯಾಗಿ ನಾನು ನಿಮಗೆ ಭರವಸೆ ನೀಡುತ್ತೇನೆ, ಯಾವುದೇ (ಬಹಳ) ವೈಯಕ್ತಿಕ ಮಾಹಿತಿಯು ಉದ್ಭವಿಸುವುದಿಲ್ಲ 
 ನಿಮ್ಮ ಕ್ಲಿಪ್ ಬೋರ್ಡ್ ಅನ್ನು ನಿಮ್ಮ ಸ್ವಂತ ಯಂತ್ರವನ್ನು ಮೀರಿ ಎಲ್ಲಿಯಾದರೂ ಟ್ರ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತದೆ ಅಥವಾ ಸಂಗ್ರಹಿಸಲಾಗುತ್ತದೆ. ಅವಧಿ.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>ಕ್ಲಿಪ್ ಬೋರ್ಡ್</value>
   </data>
 </root>

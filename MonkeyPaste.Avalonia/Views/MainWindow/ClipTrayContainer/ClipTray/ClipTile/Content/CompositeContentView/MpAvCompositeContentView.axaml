@@ -52,55 +52,88 @@
             <Setter Property="VerticalAlignment"
                     Value="Top" />
         </Style>
+
+        <!--  READ ONLY / WEBVIEW OPACITY TOGGLE  -->
+        <Style Selector="Grid#CompositeWebViewContainerGrid av|HtmlPanel">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvContentWebViewContainer">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only av|HtmlPanel">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only local|MpAvContentWebViewContainer">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="CompositeWebViewContainerGrid"
           RowDefinitions="*,60"
           Classes.tile-hover="{Binding IsHovering}">
+        <Classes.show-read-only>
+            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                <Binding Path="IsContentReadOnly" />
+                <Binding Path="!IsWindowOpen" />
+                <Binding Path="!IsDropOverTile" />
+            </MultiBinding>
+        </Classes.show-read-only>
         <!--  READ ONLY WEBVIEW  -->
         <av:HtmlPanel x:Name="ReadOnlyWebView"
+                      Classes="content-zoom"
                       Grid.RowSpan="2"
+                      HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
                       Margin="5"
+                      local:MpAvDropExtension.IsEnabled="True"
+                      local:MpAvDropExtension.DragEnterCommand="{Binding DragEnterCommand}"
+                      local:MpAvDropExtension.DragLeaveCommand="{Binding DragLeaveCommand}"
+                      local:MpAvDropExtension.IsDragOverHandled="False"
+                      local:MpAvDropExtension.IsDropHandled="False"
                       local:MpAvHighlightTextExtension.IsEnabled="True"
+                      local:MpAvHtmlStylerExtension.IsEnabled="True"
                       local:MpAvHtmlStylerExtension.HtmlStyleType="Content"
                       local:MpAvHtmlStylerExtension.DefaultFontSize="{Binding DefaultFontSize, Source={x:Static local:MpAvPrefViewModel.Instance}}"
                       local:MpAvHtmlStylerExtension.DefaultFontFamily="{Binding DefaultEditableFontFamily, Source={x:Static local:MpAvPrefViewModel.Instance}}"
                       local:MpAvHtmlStylerExtension.ShowUnderlines="{Binding IsSubSelectionEnabled}"
-                      IsVerticalScrollBarVisible="{Binding IsSubSelectionEnabled}"
-                      IsHorizontalScrollBarVisible="{Binding IsSubSelectionEnabled}"
-                      local:MpAvHtmlStylerExtension.IsEnabled="True"
+                      IsSelectionEnabled="{Binding IsSubSelectionEnabled}"
                       Text="{Binding CopyItemData}">
-            <av:HtmlPanel.IsSelectionEnabled>
+            <!--<av:HtmlPanel.IsSelectionEnabled>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="!IsSubSelectionEnabled" />
                     <Binding Path="!HasSearchResults" />
                 </MultiBinding>
-            </av:HtmlPanel.IsSelectionEnabled>
-            <av:HtmlPanel.IsVisible>
-                <MultiBinding Converter="{x:Static BoolConverters.And}">
-                    <Binding Path="IsContentReadOnly" />
-                    <Binding Path="!IsWindowOpen" />
-                </MultiBinding>
-            </av:HtmlPanel.IsVisible>
+            </av:HtmlPanel.IsSelectionEnabled>-->
             <Interaction.Behaviors>
                 <local:MpAvReadOnlyWebViewHighlightBehavior />
             </Interaction.Behaviors>
         </av:HtmlPanel>
         <!--  EDITABLE WEBVIEW  -->
         <local:MpAvContentWebViewContainer x:Name="EditableWebView"
-                                           Grid.RowSpan="2"
-                                           IsVisible="{Binding !IsVisible, ElementName=ReadOnlyWebView}" />
+                                           Grid.RowSpan="2" />
         <!--  PASTE TOOLBAR  -->
 
         <local:MpAvPasteToolbarView Grid.Row="1"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
+                                    IsVisible="{Binding !IsDropOverTile}"
                                     local:MpAvIsHoveringExtension.IsEnabled="True"
                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsPasteBarHovering}"
                                     Height="60">
             <Classes.show>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!IsDropOverTile" />
                     <Binding Path="IsSubSelectionEnabled" />
                     <Binding Path="!IsWindowOpen" />
+                    <!--<Binding Path="Opacity"
+                             ElementName="ReadOnlyWebView"
+                             ConverterParameter="1"
+                             Converter="{x:Static local:MpAvDoubleToBoolConverter.Instance}" />-->
+                    <Binding Path="IsVisible"
+                             ElementName="ReadOnlyWebView" />
                 </MultiBinding>
             </Classes.show>
         </local:MpAvPasteToolbarView>

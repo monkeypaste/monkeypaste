@@ -2381,7 +2381,6 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
-    <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin.Localizer\Localizer.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
@@ -2393,7 +2392,7 @@
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.3" />
+    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="$(AvaloniaVersion)" />
@@ -2420,7 +2419,7 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(UseSugarWv)' == 'True'">
-    <PackageReference Include="WebView.Avalonia" Version="11.0.0.2" />
+    <PackageReference Include="WebView.Avalonia" Version="11.0.0" />
   </ItemGroup>
     
   <ItemGroup Condition="$(IsDesktop) == 'true'">

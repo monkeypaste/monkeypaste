@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopiëren</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>Plakken</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>klembordmanager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>hulpmiddel</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Het klembord is een jungle. Monkeypaste is de koning! Swing van app naar app, kopieer dit en plakten dat als nooit tevoren met Monkeypaste !! Een merk - nieuw, gesneden klembord en analyse -automatiseringstool !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Voorbeeld van Monkeypaste in actie!</value>
   </data>
@@ -273,5 +262,8 @@ Rijkdom aan waarde en betekenis die u verdient om binnen handbereik te hebben. N
 Ik ben die eerder genoemde programmeur en ik wil dat iedereen het nut van MonkeyPaste kan vinden. Het en al zijn functies zijn dus volledig gratis te gebruiken. 
 Ik wil ook dat je je op je gemak voelt bij het gebruik ervan. Dus ik verzeker je, als zijnde de enige kracht achter de creatie ervan, dat GEEN van de (zeer) persoonlijke informatie die kan ontstaan op 
 uw klembord wordt ooit gevolgd of opgeslagen OVERAL buiten uw eigen machine. Periode.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>klembord</value>
   </data>
 </root>

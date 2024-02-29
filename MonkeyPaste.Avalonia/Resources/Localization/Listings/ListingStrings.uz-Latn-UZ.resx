@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>nusxa ko'chirmoq</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pastroq qilmoq</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Clipboard menejeri</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>asbob</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard - bu o'rmon. Monkeypste - bu shoh! Ilovadan ilova qilish uchun, buni nusxalash va o't qo'yishdan oldin Monkeyp bilan hech qachon emas !! Brend - yangi, kesish qirrali pleyboard va analitik avtomatlashtirish vositalari !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Monkeypaste namunasi harakatda!</value>
   </data>
@@ -273,5 +262,8 @@ Sizning boylik boyligi va sizning barmoqlaringizingizda mavjud bo'lishga loyiqdi
 Men ilgari bu dasturchiman va men hamma narsani maymun pastasidan foydalanishni istayman. Shunday qilib, uning barcha xususiyatlari to'liq bepul foydalanish mumkin.
 Bundan tashqari, men uni qulay his qilishingizni xohlayman. Shunday qilib, men sizni yaratgan yagona kuch sifatida, bu erda yuzaga keladigan shaxsiy ma'lumotlar emas
 Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi yoki saqlanadi. Davr.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>almashish buferi</value>
   </data>
 </root>

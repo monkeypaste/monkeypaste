@@ -97,18 +97,11 @@ Content સામગ્રીની 1000 ક્લિપ્સ સુધી
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>નકલ</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>લપેટવું</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>ક્લિપબોર્ડ મેનેજર</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>હાંસલ</value>
@@ -212,10 +205,6 @@ Content સામગ્રીની 1000 ક્લિપ્સ સુધી
   <data name="StoreShortDescription" xml:space="preserve">
     <value>ક્લિપબોર્ડ એક જંગલ છે. વાંદરો રાજા છે! એપ્લિકેશનથી એપ્લિકેશન તરફ સ્વિંગ કરો, આની નકલ કરો અને તે પહેલાં ક્યારેય વાંદરાની જેમ ક્યારેય નહીં કરો !! એક બ્રાન્ડ - નવું, કટીંગ એજ ક્લિપબોર્ડ અને વિશ્લેષણાત્મક ઓટોમેશન ટૂલ !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>ક્રિયામાં વાંદરાના નમૂના!</value>
   </data>
@@ -273,5 +262,8 @@ Content સામગ્રીની 1000 ક્લિપ્સ સુધી
 હું તે પ્રોગ્રામર છું જેનો અગાઉ ઉલ્લેખ કરવામાં આવ્યો છે અને હું ઇચ્છું છું કે દરેક જણ મંકીપેસ્ટનો ઉપયોગ શોધી શકે. તેથી તે અને તેની તમામ સુવિધાઓ વાપરવા માટે સંપૂર્ણપણે મફત છે. 
 હું પણ ઇચ્છું છું કે તમે તેનો ઉપયોગ કરીને આરામદાયક અનુભવો. તેથી હું તમને ખાતરી આપું છું કે, તેના સર્જન પાછળનું એકમાત્ર બળ હોવાને નાતે, કે કોઈ પણ (ખૂબ જ) વ્યક્તિગત માહિતી જે આના પર ઊભી થઈ શકે તેમ નથી 
 તમારું ક્લિપબોર્ડ તમારા પોતાના મશીનથી આગળ ક્યાંય પણ ટ્રેક અથવા સંગ્રહિત થાય છે. સમયગાળો.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>ક્લિપબોર્ડ</value>
   </data>
 </root>

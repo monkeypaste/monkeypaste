@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>göçürmek</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>çökdürmek</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>paneli dolandyryjy</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>gural</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Paneli jeňňeldir. Maýmpasta patyşa! Programmadan programmadan göçürmek, bu monalpasta-da hiç haçan basseýklemek we hiç haçan biperwaýlygy göçürmek !! Marka - Täze, kesmek banky we analitiki enjam guraly !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Hereketde maýmpastyň nusgasy!</value>
   </data>
@@ -273,5 +262,8 @@ gymmatlyk baýlygy we barmaklaryňyzyň ujunda elýeterli bolmaga mynasypdygyňy
 Men ýokarda agzalan programmaçy we her bir adamyň MonkeyPaste-den peýdalanyp bilmegini isleýärin. Görşümiz ýaly, ol we onuň ähli aýratynlyklaryny ulanmak doly mugtdyr. 
 Şeýle-de ony ulanmaga özüňizi oňaýsyz duýmagyňyzy isleýärin. Şonuň üçin men size ynandyrýaryn, onuň döredilmeginiň arkasynda duran ýeke-täk güýç hökmünde, ýüze çykyp biljek (köp) şahsy maglumatlaryň hiç biri 
 klipiňiz hiç haçan öz maşynyňyzdan başga islendik ýerde yzarlanýar ýa-da saklanýar. Döwri.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>gonşy</value>
   </data>
 </root>

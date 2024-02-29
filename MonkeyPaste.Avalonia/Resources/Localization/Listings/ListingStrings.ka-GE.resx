@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>ასლი</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>პასი</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>ბუფერული მენეჯერი</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>ხელსაწყო</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>ბუფერული ჯუნგლებია. Monkeypaste არის მეფე! აპლიკაციიდან აპლიკაციამდე გადასვლა, ამ კოპირება და ჩასმა, როგორც არასდროს, Monkeypaste- თან ერთად !! ბრენდი - ახალი, Cutting Edge Clipboard და ანალიტიკური ავტომატიზაციის ინსტრუმენტი !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Monkeypaste- ის ნიმუში მოქმედებაში!</value>
   </data>
@@ -273,5 +262,8 @@
 მე ვარ ის პროგრამისტი, რომელიც ადრე იყო ნახსენები და მინდა, რომ ყველამ შეძლოს მაიმუნის პასტიდან გამოყენება. ასე რომ, ის და მისი ყველა მახასიათებელი სრულიად უფასოა. 
 მე ასევე მინდა, რომ თავი კომფორტულად იგრძნოთ მის გამოყენებაში. ასე რომ, გარწმუნებთ, როგორც მისი შექმნის ერთადერთი ძალა, რომ არცერთი (ძალიან) პირადი ინფორმაცია, რომელიც შეიძლება წარმოიშვას 
 თქვენი ბუფერი ოდესმე თვალყურს ადევნებს ან ინახება სადმე საკუთარი მანქანის მიღმა. პერიოდი.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>ბუფერში</value>
   </data>
 </root>

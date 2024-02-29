@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Copiar</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pegar</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>administrador de portapapeles</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>herramienta</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>El portapapeles es una jungla. ¡Monkipaste es el rey! ¡Gire de la aplicación a la aplicación, copiando esto y pegando eso como nunca antes con MonkyyPaste! ¡Una marca: la nueva herramienta de automatización analítica y portapapeles de vanguardia!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>¡Muestra de monje en acción!</value>
   </data>
@@ -273,5 +262,8 @@ riqueza de valor y significado que mereces tener disponible al alcance de tu man
 Soy ese programador mencionado anteriormente y quiero que todos puedan encontrar uso de MonkeyPaste. Por lo tanto, él y todas sus funciones son de uso completamente gratuito. 
 También quiero que te sientas cómodo usándolo. Así que les aseguro, como la única fuerza detrás de su creación, que NINGUNA de las (muy) personales información que puede surgir en 
 su portapapeles se rastrea o almacena en cualquier lugar más allá de su propia máquina. Periodo.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>portapapeles</value>
   </data>
 </root>

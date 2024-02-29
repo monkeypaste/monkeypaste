@@ -5,7 +5,7 @@
     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <Platforms>$(DefaultPlatforms)</Platforms>
     <UserSecretsId>76007d6d-3b32-4d7d-a98b-36f9c70b1848</UserSecretsId>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <!--<GeneratePackageOnBuild>True</GeneratePackageOnBuild>-->
     <Title>MonkeyPaste.Common</Title>
     <Authors>Monkey</Authors>
     <PackageProjectUrl>https://github.com/monkeypaste/MonkeyPaste.Common.Plugin</PackageProjectUrl>

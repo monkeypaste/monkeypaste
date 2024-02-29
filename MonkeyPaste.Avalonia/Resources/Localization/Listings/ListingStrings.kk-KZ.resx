@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>еліктеу</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>ұту</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Аралық сақтағышты басқару</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>аспап</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Аралық сақтағыш - Джунгли. Монкейце - бұл патша! Қолданбадан қосымшадан тербеліп, оны ешқашан маймылмен бірге және ешқашан маймылмен бірге қою !! Бренд - жаңа, кесу жиек буфері және аналитикалық автоматика құралы !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Монкефонның үлгісі!</value>
   </data>
@@ -273,5 +262,8 @@
 Мен бұрын айтылған бағдарламашымын және әркімнің MonkeyPaste-тен қолданыс таба алғанын қалаймын. Осылайша ол және оның барлық ерекшеліктері толығымен еркін қолданылады. 
 Сондай-ақ, оны пайдалана отырып, өзіңізді жайлы сезінуіңізді қалаймын. Сондықтан сізді, оны құрудың бірден-бір күші ретінде, пайда болуы мүмкін жеке ақпараттың ешқайсысы (өте) жоқ екеніне сендіремін. 
 алмасу буфері өз машинаңыздан тыс кез келген жерде бақыланады немесе сақталады. Кезең....</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>алмасу буфері</value>
   </data>
 </root>

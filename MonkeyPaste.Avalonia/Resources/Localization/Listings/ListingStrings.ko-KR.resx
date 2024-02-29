@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>복사</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>반죽</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>클립 보드 관리자</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>도구</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>클립 보드는 정글입니다. Monkeypaste는 왕입니다! 앱에서 앱으로 스윙하고, 이것을 복사하고 monkeypaste와 함께 전에는 그와 같이 붙여 넣기 !! 브랜드 - 새롭고 최첨단 클립 보드 및 분석 자동화 도구 !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>행동중인 원숭이의 샘플!</value>
   </data>
@@ -273,5 +262,8 @@
 저는 앞서 언급 한 프로그래머이며 모든 사람이 MonkeyPaste를 사용할 수 있기를 바랍니다. 따라서 모든 기능을 완전히 무료로 사용할 수 있습니다. 
 나도 당신이 그것을 편안하게 사용하기를 바랍니다. 그래서 나는 그 창조의 유일한 힘으로서 (매우) 개인 정보 중 어느 것도 발생할 수 없다고 확신합니다. 
 클립보드는 자신의 컴퓨터 이외의 어느 곳에서나 추적되거나 저장됩니다. 마침표.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>클립보드</value>
   </data>
 </root>

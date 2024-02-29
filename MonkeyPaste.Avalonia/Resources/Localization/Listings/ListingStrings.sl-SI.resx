@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopirati</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>Prilepi</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Upravitelj odložišč</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>orodje</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Odložišče je džungla. MonkeyPaste je kralj! Nihajte iz aplikacije do aplikacije, kopirate to in prilepite, kot še nikoli prej z MonkeyPaste !! Blagovna znamka - novo, vrhunsko odložišče in analitično orodje za avtomatizacijo !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Vzorec MonkeyPaste v akciji!</value>
   </data>
@@ -273,5 +262,8 @@ bogastvo vrednosti in pomena, ki si ga zaslužite, da imate na dosegu roke. Ne s
 Jaz sem programer, ki sem ga omenil prej, in želim, da bi vsi lahko našli uporabo iz MonkeyPaste. Tako je in vse njegove funkcije popolnoma brezplačne za uporabo. 
 Prav tako želim, da se počutite udobno ob uporabi. Zato vam zagotavljam, da kot edina sila za njegovim nastankom ni nobenega od (zelo) osebnih podatkov, ki se lahko pojavijo na 
 Odložišče je vedno sledeno ali shranjeno KJERKOLI zunaj vašega lastnega stroja. Obdobje.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Odložišče</value>
   </data>
 </root>

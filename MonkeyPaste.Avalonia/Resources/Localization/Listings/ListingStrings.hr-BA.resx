@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopirati</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>zalijepiti</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Upravitelj za međuspremnik</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>alat</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Međuspremnik je džungla. Monkeypaste je kralj! Zamahnite od aplikacije do aplikacije, kopirate i zalijepite kao nikad do sada s monkeypaste !! Marka - Nova, vrhunska međuspremnika i analitički alat za automatizaciju !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Uzorak monkeypaste u akciji!</value>
   </data>
@@ -273,5 +262,8 @@ bogatstvo vrijednosti i značenje koje zaslužujete imati na dohvat ruke. Ne sam
 Ja sam taj programer koji je ranije spomenut i želim da svi mogu naći koristi od MonkeyPastea. Tako su on i sve njegove značajke potpuno besplatne za upotrebu. 
 Također želim da se osjećate ugodno koristeći ga. Stoga vas uvjeravam, kao jedina sila koja stoji iza njegovog stvaranja, da NIJEDAN od (vrlo) osobnih podataka koji se mogu pojaviti na 
 vaš međuspremnik se uvijek prati ili pohranjuje BILO GDJE izvan vašeg vlastitog računala. Razdoblje.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Međuspremnik</value>
   </data>
 </root>

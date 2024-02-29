@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopija</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pastā</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>starpliktuves vadītājs</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>instruments</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Starpliktuvē ir džungļi. Monkeypaste ir karalis! Pārejiet no lietotnes uz lietotni, kopējot to un ielīmējot to kā vēl nekad ar pērtiķiem !! Zīmols - jauns, progresīvas starpliktuves un analītiskās automatizācijas rīks !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Monkeypaste paraugs darbībā!</value>
   </data>
@@ -273,5 +262,8 @@ vērtības un nozīmes bagātība, ko esat pelnījuši, lai tie būtu pieejami p
 Es esmu tas programmētājs, kas minēts iepriekš, un es vēlos, lai ikviens varētu atrast pielietojumu no MonkeyPaste. Tātad to un visas tā funkcijas ir pilnīgi brīvi lietojamas. 
 Es arī vēlos, lai jūs justos ērti, izmantojot to. Tāpēc es jums apliecinu, ka tas ir vienīgais spēks, kas ir tā radīšanas pamatā, ka NEKAS no (ļoti) personiskās informācijas, kas var rasties 
 jūsu starpliktuve kādreiz tiek izsekota vai glabāta JEBKUR ārpus jūsu mašīnas. Periods.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Starpliktuvē</value>
   </data>
 </root>

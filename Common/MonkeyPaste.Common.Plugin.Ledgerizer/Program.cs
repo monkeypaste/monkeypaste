@@ -40,8 +40,8 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.TRANSLATE_RESX |
             //MpLedgerizerFlags.GEN_EMPTY_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
-            //MpLedgerizerFlags.GEN_PROD_LISTING |
-            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            MpLedgerizerFlags.GEN_PROD_LISTING |
+            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
             //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
@@ -50,7 +50,7 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.DO_REMOTE_INDEX |
             //MpLedgerizerFlags.DO_LOCAL_LEDGER |
             //MpLedgerizerFlags.DO_REMOTE_LEDGER |
-            MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+            //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
             //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
             //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
             //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
@@ -759,7 +759,10 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 (1,"StoreDescription"),
                 (2,"WhatsNew"),
                 (3,"StoreTitle"),
-                (7,"StoreShortDescription"),
+                (4,"StoreShortName"),
+                (5,"StoreSortName"),
+                (6,"StoreSortName"),
+                (7,"StoreVoiceName"),
                 (8,"StoreDevStudio"),
                 (11,"ssSrc4"),
                 (12,"ssSrc6"),

@@ -988,7 +988,7 @@ namespace MonkeyPaste.Avalonia {
                 return CopyItem.ZoomFactor;
             }
             set {
-                if (ZoomFactor != value) {
+                if (ZoomFactor != value && !IsPlaceholder) {
                     CopyItem.ZoomFactor = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ZoomFactor));
@@ -1336,8 +1336,14 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsImplicitHover));
             OnPropertyChanged(nameof(ZoomFactor));
 
-            if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ||
-                SelfRef == null) {
+            bool trigger_self_ref_change =
+#if SUGAR_WV
+                    true;
+#else
+                !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ||
+                SelfRef == null;
+#endif
+            if (trigger_self_ref_change) {
                 // NOTE in compatibility mode content template must be reselected
                 // and for overall efficiency re-setting datacontext is better than
                 // locating this tile from the view side (changing contentControl.content to id)
@@ -1896,11 +1902,17 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(MinWidth));
                     break;
                 case nameof(IsDropOverTile):
+                    //MpConsole.WriteLine($"Drop Over: {IsDropOverTile} '{this}'");
+
+#if !SUGAR_WV
                     if (IsDropOverTile && !IsSubSelectionEnabled) {
                         IsSubSelectionEnabled = true;
-                    }
+                    } 
+#endif
+
                     if (IsDropOverTile) {
                         Parent.NotifyDragOverTrays(true);
+                        Parent.ScrollIntoView(this);
                     }
 
                     break;
@@ -2036,6 +2048,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsTileDragging):
                     Parent.OnPropertyChanged(nameof(Parent.CanTouchScroll));
+
                     break;
                 case nameof(IsFrozen):
                     OnPropertyChanged(nameof(IsResizerEnabled));
@@ -2665,8 +2678,18 @@ namespace MonkeyPaste.Avalonia {
                 }
                 ZoomFactor = Math.Clamp(newZoomFactor, MinZoomFactor, MaxZoomFactor);
             });
-
-
+#if SUGAR_WV
+        public ICommand DragEnterCommand => new MpCommand(() => {
+            if (IsTileDragging) {
+                // don't flip view for self drop
+                return;
+            }
+            IsDropOverTile = true;
+        });
+        public ICommand DragLeaveCommand => new MpCommand(() => {
+            //IsDropOverTile = false;
+        });
+#endif
         #endregion
     }
 }

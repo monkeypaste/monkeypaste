@@ -97,18 +97,11 @@ a 1000 تک مواد کے کلپس
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>کاپی</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>چسپاں کریں</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>کلپ بورڈ مینیجر</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>ٹول</value>
@@ -212,10 +205,6 @@ a 1000 تک مواد کے کلپس
   <data name="StoreShortDescription" xml:space="preserve">
     <value>کلپ بورڈ ایک جنگل ہے۔ بندر پیسٹ بادشاہ ہے! ایپ سے ایپ میں سوئنگ ، اس کی کاپی کرنا اور اس طرح چسپاں کرنا جیسے پہلے کبھی نہیں مانکی پیسٹ کے ساتھ !! ایک برانڈ - نیا ، جدید کلپ بورڈ اور تجزیاتی آٹومیشن ٹول !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>ایکشن میں بندر کی قیمت کا نمونہ!</value>
   </data>
@@ -273,5 +262,8 @@ lim لامحدود صلاحیت</value>
 میں وہ پروگرامر ہوں جس کا پہلے ذکر کیا گیا ہے اور میں چاہتا ہوں کہ ہر کوئی منکی پیسٹ کا استعمال تلاش کرنے کے قابل ہو۔ لہذا یہ اور اس کی تمام خصوصیات استعمال کرنے کے لئے مکمل طور پر آزاد ہیں. 
 میں یہ بھی چاہتا ہوں کہ آپ اسے استعمال کرنے میں آرام محسوس کریں. لہذا میں آپ کو یقین دلاتا ہوں کہ اس کی تخلیق کے پیچھے واحد قوت ہونے کے ناطے ، (بہت) ذاتی معلومات میں سے کوئی بھی نہیں جو اس پر پیدا ہوسکتی ہے۔ 
 آپ کا کلپ بورڈ کبھی بھی آپ کی اپنی مشین سے باہر کہیں بھی ٹریک یا ذخیرہ کیا جاتا ہے۔ دور.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>تراشہ</value>
   </data>
 </root>

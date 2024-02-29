@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopio</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>liittää</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>leikepöydän hallinta</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>työkalu</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Leikepöytä on viidakko. Monkepaste on kuningas! Käännä sovelluksesta sovellukseen, kopioimalla tämä ja liittämällä, joka ei ole koskaan ennen Monkeypasten kanssa !! Tuotemerkki - uusi, huippuluokan leikepöytä ja analyyttinen automaatiotyökalu !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Näyte Monkeypasten toiminnasta!</value>
   </data>
@@ -273,5 +262,8 @@ Arvon ja merkityksen rikkaus, jonka ansaitset olla käden ulottuvilla. Ei vain h
 Olen aiemmin mainittu ohjelmoija ja haluan, että jokainen voi löytää käyttöä MonkeyPastesta. Joten se ja kaikki sen ominaisuudet ovat täysin ilmaisia käyttää. 
 Haluan myös, että tunnet olosi mukavaksi käyttää sitä. Joten vakuutan teille, ainoana voimana sen luomisen takana, että MIKÄÄN (erittäin) henkilökohtaisista tiedoista, joita voi syntyä 
 leikepöytääsi seurataan tai tallennetaan MIHIN tahansa oman koneesi ulkopuolelle. Jakso.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>leikepöytä</value>
   </data>
 </root>

@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopi</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>sæt ind</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Clipboard Manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>værktøj</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Klippebordet er en jungle. Monkeypaste er kongen! Sving fra app til app, kopiering af dette og indsat det som aldrig før med abeypaste !! Et brand - nyt, banebrydende clipboard og analytisk automatiseringsværktøj !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Eksempel på abeypaste i aktion!</value>
   </data>
@@ -273,5 +262,8 @@ rigdom af værdi og mening, du fortjener at have til rådighed lige ved hånden.
 Jeg er den programmør, der blev nævnt tidligere, og jeg ønsker, at alle skal kunne finde brug ud af MonkeyPaste. Så det og alle dets funktioner er helt gratis at bruge. 
 Jeg vil også have dig til at føle dig godt tilpas med at bruge det. Så jeg forsikrer dig, som den eneste kraft bag dens oprettelse, at INGEN af de (meget) personlige oplysninger, der kan opstå på 
 dit udklipsholder spores eller gemmes nogensinde HVOR som helst ud over din egen maskine. Periode.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>udklipsholder</value>
   </data>
 </root>

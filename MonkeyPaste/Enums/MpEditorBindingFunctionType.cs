@@ -48,6 +48,7 @@
         notifyShowDebugger,
         notifyScrollBarVisibilityChanged,
         notifyPasteInfoFormatsClicked,
-        notifyAppendStateChangeComplete
+        notifyAppendStateChangeComplete,
+        notifyPointerEvent
     }
 }

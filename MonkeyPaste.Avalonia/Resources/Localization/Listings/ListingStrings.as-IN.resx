@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>কপি কৰক</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>পেষ্ট কৰক</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>ক্লিপবোৰ্ড ব্যৱস্থাপক</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>সঁজুলি</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>ক্লিপবৰ্ডখন জংঘল। MonkeyPaste হৈছে ৰজা! এপৰ পৰা এপলৈ দোল খাই, এইটো কপি কৰা আৰু সেই পেষ্ট কৰা যে আগতে কেতিয়াও কেতিয়াও নহয় MonkeyPaste!! এটা ব্র্যান্ড - নতুন, কাটিং এজ ক্লিপবোর্ড এবং বিশ্লেষণাত্মক অটোমেচন টুল!!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>কাৰ্য্যত MonkeyPaste ৰ নমুনা!</value>
   </data>
@@ -273,5 +262,8 @@
 মই সেই প্ৰগ্ৰামাৰ জন যিআগতে উল্লেখ কৰা হৈছিল আৰু মই বিচাৰো যে সকলোৱে মাঙ্কিপেষ্টৰ পৰা ব্যৱহাৰ বিচাৰি উলিয়াবলৈ সক্ষম হওক। গতিকে এইটো আৰু ইয়াৰ সকলো বোৰ বৈশিষ্ট্য ব্যৱহাৰ কৰিবলৈ সম্পূৰ্ণবিনামূলীয়া। 
 মই এইটোও বিচাৰো যে আপুনি ইয়াক ব্যৱহাৰ কৰি আৰামদায়ক অনুভৱ কৰক। গতিকে মই আপোনাক আশ্বাস দিওঁ, ইয়াৰ সৃষ্টিৰ আঁৰৰ একমাত্ৰ শক্তি হিচাপে, যে উদ্ভৱ হ'ব পৰা কোনো (অতি) ব্যক্তিগত তথ্যনাই নহয় 
 আপোনাৰ ক্লিপবোৰ্ড কেতিয়াবা আপোনাৰ নিজৰ যন্ত্ৰৰ বাহিৰত যিকোনো স্থানত ট্ৰেক বা সংৰক্ষণ কৰা হয়। ম্যাদ।</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>ক্লিপবোৰ্ড</value>
   </data>
 </root>

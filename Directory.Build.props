@@ -49,6 +49,7 @@
     <IsDesktop>false</IsDesktop>
     <IsMobile>false</IsMobile>
     <DefaultPlatforms>AnyCPU;x64;x86</DefaultPlatforms>
+    <DefaultPlatforms>x64;</DefaultPlatforms>
     <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
     <UseCefNet>true</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
@@ -79,6 +80,7 @@
     <UseCefNet>false</UseCefNet>
     <UseSugarWv>true</UseSugarWv>
     <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <PlatformShortName>uwp</PlatformShortName> 
     <StartupOutputType>WinExe</StartupOutputType>
     <BuildScriptsDir>$(BuildScriptsRootDir)\windows</BuildScriptsDir>

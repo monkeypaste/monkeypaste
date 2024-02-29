@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>копие</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>поставете</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Мениджър на клипборда</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>инструмент</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Клипбордът е джунгла. Monkeypaste е кралят! Свържете се от приложението към приложение, копиране на това и поставяне на това, както никога досега с Monkeypaste !! Марка - нов, авангарден клипборд и инструмент за аналитична автоматизация !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Проба от Monkeypaste в действие!</value>
   </data>
@@ -273,5 +262,8 @@
 Аз съм този програмист, споменат по-рано и искам всеки да може да намери употреба от MonkeyPaste. Така че той и всички негови функции са напълно безплатни за използване. 
 Също така искам да се чувствате комфортно да го използвате. Така че ви уверявам, като единствената сила зад създаването му, че НИТО една от (много) личната информация, която може да възникне на 
 клипбордът ви винаги се проследява или съхранява НАВСЯКЪДЕ извън собствената ви машина. Период.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Клипборда</value>
   </data>
 </root>

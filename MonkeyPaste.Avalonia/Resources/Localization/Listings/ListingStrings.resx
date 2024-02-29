@@ -156,18 +156,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copy</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>paste</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>clipboard manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>tool</value>
@@ -271,10 +264,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>The clipboard is a jungle. MonkeyPaste is the KING! Swing from app to app, copying this and pasting that like never before with MonkeyPaste!! A brand - new, cutting edge clipboard and analytic automation tool!!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Sample of MonkeyPaste in action!</value>
   </data>
@@ -336,5 +325,28 @@ wealth of value and meaning you deserve to have available at your fingertips. No
 I am that programmer mentioned earlier and I want everyone to be able to find use out of MonkeyPaste. So it and all of its features are completely free to use. 
 I also want you to feel comfortable using it. So I assure you, as being the only force behind its creation, that NONE of the (very) personal information that can arise on 
 your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Period.</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value>MonkeyPaste Studio - Clipboard Manager</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="StoreShortName" xml:space="preserve">
+    <value>MonkeyPaste</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="StoreSortName" xml:space="preserve">
+    <value>MonkeyPaste Studio - Clipboard Manager</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="StoreVoiceName" xml:space="preserve">
+    <value>Monkey Paste</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value>clipboard</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>clipboard</value>
   </data>
 </root>

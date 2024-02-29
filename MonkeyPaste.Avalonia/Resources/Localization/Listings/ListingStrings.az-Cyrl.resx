@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>surətini çıxarmaq</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>yapışdır</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>paneli meneceri</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>alət</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Panoya bir cəngəllikdir. Monkeytaste padşahdır! App-dən tətbiqə, bu və yapışdırmaqdan əvvəl Monkeyte ilə heç vaxt olmadığını kopyalayın! Bir marka - yeni, qabaqcıl panoya və analitik avtomatlaşdırma vasitəsi !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Fəaliyyətdə Monkeysaste nümunəsi!</value>
   </data>
@@ -273,5 +262,8 @@ Parmaklarınızın ucunda olmağa layiq olduğunuz dəyər və məna var. Növb�
 Mən əvvəlki proqramçıyam və hər kəsin meymundan istifadə edə bilməyəcəyimi istəyirəm. Beləliklə, onun bütün xüsusiyyətləri istifadə etmək üçün tamamilə pulsuzdur.
 İstəyirəm ki, onu da istifadə edərək rahat hiss etməyinizi istəyirəm. Buna görə sizi inandırıram, yaradılışının yeganə qüvvəsi olduğu kimi, ortaya çıxa biləcək şəxsi məlumatların heç biri
 Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır. Dövr.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>bufer</value>
   </data>
 </root>

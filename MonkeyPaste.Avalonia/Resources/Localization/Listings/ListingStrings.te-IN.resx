@@ -97,18 +97,11 @@ Stort 1,000 క్లిప్‌ల కంటెంట్ వరకు
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>కాపీ</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>అతికించండి</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>క్లిప్‌బోర్డ్ మేనేజర్</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>సాధనం</value>
@@ -212,10 +205,6 @@ Stort 1,000 క్లిప్‌ల కంటెంట్ వరకు
   <data name="StoreShortDescription" xml:space="preserve">
     <value>క్లిప్‌బోర్డ్ ఒక అడవి. మంకీపాస్ట్ రాజు! అనువర్తనం నుండి అనువర్తనానికి స్వింగ్, దీన్ని కాపీ చేయడం మరియు మంకీపేస్ట్‌తో మునుపెన్నడూ లేని విధంగా అతికించడం !! ఒక బ్రాండ్ - క్రొత్త, కట్టింగ్ ఎడ్జ్ క్లిప్‌బోర్డ్ మరియు విశ్లేషణాత్మక ఆటోమేషన్ సాధనం !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>చర్యలో మంకీపేస్ట్ యొక్క నమూనా!</value>
   </data>
@@ -273,5 +262,8 @@ Stort 1,000 క్లిప్‌ల కంటెంట్ వరకు
 నేను ఇంతకు ముందు పేర్కొన్న ప్రోగ్రామర్ ని మరియు ప్రతి ఒక్కరూ మంకీపేస్ట్ నుండి ఉపయోగాన్ని కనుగొనగలరని నేను కోరుకుంటున్నాను. కాబట్టి ఇది మరియు దాని ఫీచర్లన్నీ పూర్తిగా ఉపయోగించడానికి ఉచితం. 
 మీరు దీనిని ఉపయోగించడం సౌకర్యవంతంగా ఉండాలని నేను కోరుకుంటున్నాను. కాబట్టి, దాని సృష్టి వెనుక ఉన్న ఏకైక శక్తిగా, (చాలా) వ్యక్తిగత సమాచారం ఏదీ తలెత్తదని నేను మీకు హామీ ఇస్తున్నాను. 
 మీ క్లిప్ బోర్డ్ మీ స్వంత యంత్రానికి మించి ఎక్కడైనా ట్రాక్ చేయబడుతుంది లేదా నిల్వ చేయబడుతుంది. కాలం.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>క్లిప్ బోర్డ్</value>
   </data>
 </root>

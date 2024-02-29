@@ -1524,6 +1524,8 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
 
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalDrag += Instance_OnGlobalDrag;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalDragEnd += Instance_OnGlobalDragEnd;
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
@@ -2504,6 +2506,45 @@ namespace MonkeyPaste.Avalonia {
 
 
             IsAnyDropOverTrays = false;
+            // TODO Add disableDrag() called at end of contentChange in editor.
+            // See if cef startDrag or js dragEnter gets called.
+            // Both should never get called, cut cef out of dnd.
+            // Render/browser process crap is jamming it up, too many layers  
+
+        }
+        private void Instance_OnGlobalDrag(object sender, object e) {
+            if (AllItems.Where(x => x.IsDropOverTile) is not { } drop_ctvml ||
+                !drop_ctvml.Any()) {
+                return;
+            }
+            var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalUnscaledMouseLocation;
+            var lbil =
+                MpAvQueryTrayView.Instance.ClipTrayListBox.GetVisualDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext))
+                .Union(MpAvPinTrayView.Instance.PinTrayListBox.GetVisualDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext)));
+            foreach (var lbi in lbil) {
+                if (new PixelRect(lbi.PointToScreen(new Point()), lbi.PointToScreen(lbi.Bounds.BottomRight)).Contains(gmp) ||
+                    lbi.DataContext is not MpAvClipTileViewModel stale_ctvm) {
+                    continue;
+                }
+                MpConsole.WriteLine($"Clearing drop on '{stale_ctvm}'");
+                stale_ctvm.IsDropOverTile = false;
+                stale_ctvm.IsSubSelectionEnabled = !stale_ctvm.IsContentReadOnly;
+            }
+        }
+        private void Instance_OnGlobalDragEnd(object sender, object e) {
+            // BUG in some cases dragend/dragcancel/drop isn't getting reported
+            // and corner buttons stop showing up this shall fix it
+
+            // TODO if any dragging or dropping, wait 3 secs,
+            // if still, cancel all and log. May need to reinit clip trays
+
+
+            IsAnyDropOverTrays = false;
+            Dispatcher.UIThread.Post(async () => {
+                await Task.Delay(1_000);
+                AllItems.Where(x => x.IsDropOverTile).ForEach(x => x.IsDropOverTile = false);
+                AllItems.Where(x => x.IsTileDragging).ForEach(x => x.IsTileDragging = false);
+            });
             // TODO Add disableDrag() called at end of contentChange in editor.
             // See if cef startDrag or js dragEnter gets called.
             // Both should never get called, cut cef out of dnd.

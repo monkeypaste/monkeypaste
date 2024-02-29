@@ -14,6 +14,16 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileContentView">
     <local:MpAvUserControl.Styles>
+        <Style Selector=":is(Control).content-zoom"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="RenderTransformOrigin"
+                    Value="0,0" />
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="{Binding ZoomFactor}" ScaleY="{Binding ZoomFactor}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
 
     </local:MpAvUserControl.Styles>
     <ContentControl x:Name="ClipTileContentControl"

@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>còpia</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pastar</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Gestor de porta -retalls</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>eina</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>El porta -retalls és una selva. Monkeypaste és el rei! Swing des de l'aplicació a l'aplicació, copiant això i enganxant això com mai abans amb Monkeypaste !! Una marca: porta -retalls de retallada i eina d’automatització analítica nova !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Mostra de Monkeypaste en acció!</value>
   </data>
@@ -273,5 +262,8 @@ riquesa de valor i significat que mereixes tenir disponible al teu abast. No nom
 Sóc aquest programador esmentat anteriorment i vull que tothom pugui trobar ús fora de MonkeyPaste. Per tant, i totes les seves funcions són completament gratuïtes. 
 També vull que et sentis còmode utilitzant-lo. Així que us asseguro, com a única força darrere de la seva creació, que cap de les (molt) dades personals que poden sorgir sobre 
 el porta-retalls es rastreja o s'emmagatzema EN QUALSEVOL lloc més enllà de la vostra pròpia màquina. Període.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>porta-retalls</value>
   </data>
 </root>

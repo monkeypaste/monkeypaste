@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>koopia</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pasta</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>lõikelauahaldur</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>tööriist</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Lõikelaud on džungel. Monkeypaste on kuningas! Kiikuke rakendusest rakenduseni, kopeerides selle ja kleepides, nagu kunagi varem ahveypastaga !! Bränd - uus tipptasemel lõikelaud ja analüütiline automatiseerimise tööriist !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Ahvivast näidis tegevuses!</value>
   </data>
@@ -273,5 +262,8 @@ väärtuse ja tähenduse rikkus, mida sa väärid, et see oleks sinu käeulatuse
 Olen see varem mainitud programmeerija ja tahan, et kõik saaksid MonkeyPaste'ist kasutust leida. Nii et seda ja kõiki selle funktsioone on täiesti tasuta kasutada. 
 Samuti tahan, et tunneksite end seda kasutades mugavalt. Nii et ma kinnitan teile, olles ainus jõud selle loomise taga, et MITTE ÜKSKI (väga) isiklik teave, mis võib tekkida 
 teie lõikelauda jälgitakse või salvestatakse alati kõikjal väljaspool teie enda masinat. Perioodi.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Lõikelaud</value>
   </data>
 </root>

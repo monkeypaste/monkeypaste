@@ -314,3 +314,16 @@ function onAppendStateChanged_ntf(appendDataStr = null) {
 function onAnnDblClick_ntf(annGuid) {
 
 }
+
+function onPointerEvent_ntf(evtType, mp, is_left) {
+	// output 'MpQuillPointerEventMessage'
+	let msg = {
+		clientX: mp.x,
+		clientY: mp.y,
+		eventType: evtType,
+		isLeft: is_left
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyPointerEvent', msgStr);
+
+}

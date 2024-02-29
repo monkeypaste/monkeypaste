@@ -97,18 +97,11 @@ Thread ● 1000гә кадәр эчтәлек
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>күчереп алу</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>паста</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Керү менеджеры</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>корал</value>
@@ -212,10 +205,6 @@ Thread ● 1000гә кадәр эчтәлек
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Буфер тактасы - джунгли. Майкипаст - патша! Кушымтадан кушымтага селкенеп, маймыллык белән беркайчан да эчкән һәм күңел ачу !! Бренд - яңа, кисү кырын буфер һәм аналитик автоматлаштыру коралы !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Монең ягъкәт үрнәге!</value>
   </data>
@@ -273,5 +262,8 @@ Thread ● 1000гә кадәр эчтәлек
 Мин элегрәк искә алынган программист һәм бар кешенең маймыл Папастадан файдалана алуын телим. Димәк, ул һәм аның бөтен үзенчәлекләре тулысынча кулланылмыйча. 
 Мин дә сезгә аны кулланырга уңайлы булып тоелырга телим. Шуңа күрә, мин сезне аның барлыкка китерүенең бердәнбер көче буларак ышандырам, анда була алган шәхси мәгълүматның берсе дә юк. 
 тактаң һәрвакыт үз машинасыңнан тыш нинди урында саклана яки саклана. Период.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>клип тактасы</value>
   </data>
 </root>

@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Afritaðu</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>Límu</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Klemmuspjaldastjóri</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>Tól</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Klemmuspjaldið er frumskógur. Monkeysta er konungur! Sveifla frá appi til app, afrita þetta og líma það eins og aldrei áður með MonkeyPaste !! Vörumerki - Nýtt, fremsta klemmuspjald og greinandi sjálfvirkni tól !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Sýnishorn af monkeypaste í aðgerð!</value>
   </data>
@@ -273,5 +262,8 @@ Auður af verðmæti og merkingu sem þú átt skilið að hafa tiltækt innan s
 ÉG er þessi forritari umtal áðan og ÉG vilja allir til vera fær til finna nota út af MonkeyPaste. Svo það og allir eiginleikar þess eru algjörlega ókeypis í notkun. 
 Ég vil líka að þér líði vel með að nota það. Svo ég fullvissa þig, eins og að vera eina aflið á bak við stofnun þess, að EKKERT af (mjög) persónulegum upplýsingum sem geta komið upp á 
 þinn klemmuspjald er alltaf rekja spor einhvers eða birgðir EINHVERS staðar fyrir handan þinn eiga vél. Tímabil.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>klemmuspjald</value>
   </data>
 </root>

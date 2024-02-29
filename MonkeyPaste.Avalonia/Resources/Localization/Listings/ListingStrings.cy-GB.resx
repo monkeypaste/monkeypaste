@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copïan</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pastia</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Rheolwr Clipfwrdd</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>offeryn</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Jyngl yw'r clipfwrdd. MonkeyPaste yw'r brenin! Swing o app i app, copïo hwn a gludo hynny fel erioed o'r blaen gyda monkeyPaste !! Clipfwrdd Brand - Newydd, Cutting Edge ac Offeryn Awtomeiddio Dadansoddol !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Sampl o MonkeyPaste ar waith!</value>
   </data>
@@ -273,5 +262,8 @@ cyfoeth o werth ac ystyr rydych chi'n haeddu ei gael ar flaenau eich bysedd. Nid
 Fi yw'r rhaglennydd hwnnw a grybwyllwyd yn gynharach ac rwyf am i bawb allu dod o hyd i ddefnydd allan o MonkeyPaste. Felly mae'n a'i holl nodweddion yn hollol rhad ac am ddim i'w defnyddio. 
 Rwyf am i chi deimlo'n gyfforddus yn ei ddefnyddio hefyd. Felly, rwy'n eich sicrhau, fel yr unig rym y tu ôl i'w greu, bod NONE o'r wybodaeth bersonol (iawn) a all godi ar 
 Mae eich clipfwrdd yn cael ei olrhain neu ei storio UNRHYW le y tu hwnt i'ch peiriant eich hun. Cyfnod.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>clipfwrdd</value>
   </data>
 </root>

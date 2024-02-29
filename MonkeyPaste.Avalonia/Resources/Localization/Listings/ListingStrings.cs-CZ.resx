@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopírovat</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>vložit</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Správce schránky</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>nástroj</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Služba je džungle. Monkeypaste je král! Swing z aplikace k aplikaci, kopírování a vkládání jako nikdy předtím s MonkeyPaste !! Značka - nová, špičková schránka a nástroj pro analytickou automatizaci !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Ukázka MonkeyPaste v akci!</value>
   </data>
@@ -273,5 +262,8 @@ Bohatství hodnoty a významu, které si zasloužíte mít na dosah ruky. Ne jen
 Jsem ten programátor zmíněný dříve a chci, aby každý mohl najít využití MonkeyPaste. Takže on a všechny jeho funkce jsou zcela zdarma k použití. 
 Také chci, abyste se při jeho používání cítili pohodlně. Takže vás ujišťuji, že jako jediná síla, která stojí za jeho vytvořením, ŽÁDNÁ z (velmi) osobních informací, které mohou vzniknout na 
 vaše schránka je vždy sledována nebo uložena KDEKOLI mimo váš vlastní počítač. Perioda.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>schránka</value>
   </data>
 </root>

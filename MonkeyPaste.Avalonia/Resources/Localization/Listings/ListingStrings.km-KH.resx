@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>ការចម្លង</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>រេនាយោហរការ</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>កម្មវិធីគ្រប់គ្រងក្តារតម្បៀតខ្ទាស់</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>ឧបករន៍</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>ក្តារតម្បៀតខ្ទាស់គឺជាព្រៃ។ monkeypousey គឺជាស្តេច! បញ្ចោញពីកម្មវិធីទៅកម្មវិធីមួយដែលចម្លងវានិងការបិទភ្ជាប់ដែលមិនធ្លាប់មានពីមុនមកជាមួយ monkeysyyyyysyyysyyyysyyysyyysyyysyyysyyyysyyyyyysy !! យីហោមួយ - ថ្មី, គែម, ឃ្លីបឃ្លីបនិងឧបករណ៍ស្វ័យប្រវត្តិកម្មរបស់ឧបករណ៍ស្វ័យប្រវត្តិកម្ម !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>គំរូនៃ monkeypaxe នៅក្នុងសកម្មភាព!</value>
   </data>
@@ -273,5 +262,8 @@
 ខ្ញុំ ជា អ្នក សរសេរ កម្មវិធី ដែល បាន លើក ឡើង ពី មុន ហើយ ខ្ញុំ ចង់ ឲ្យ មនុស្ស គ្រប់ គ្នា អាច ស្វែង រក ការ ប្រើប្រាស់ ចេញ ពី MonkeyPaste ។ ដូច្នេះ វា និង លក្ខណៈ ពិសេស ទាំង អស់ របស់ វា គឺ ឥត គិត ថ្លៃ ទាំង ស្រុង ក្នុង ការ ប្រើប្រាស់ ។ 
 ខ្ញុំ ក៏ ចង់ ឲ្យ អ្នក មាន អារម្មណ៍ ស្រួល ក្នុង ការ ប្រើ វា ផង ដែរ ។ ដូច្នេះ ខ្ញុំ ធានា អ្នក ថា ជា កម្លាំង តែ មួយ គត់ នៅ ពី ក្រោយ ការ បង្កើត របស់ វា ដែល គ្មាន ព័ត៌មាន ផ្ទាល់ ខ្លួន ( ច្រើន ណាស់ ) ដែល អាច កើត ឡើង 
 ក្តារ បន្ទះ បន្ទះ របស់ អ្នក ត្រូវ បាន តាមដាន ឬ រក្សា ទុក ANYWHERE ហួស ពី ម៉ាស៊ីន ផ្ទាល់ ខ្លួន របស់ អ្នក ។ រយៈពេល។</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>ក្តារខៀន</value>
   </data>
 </root>

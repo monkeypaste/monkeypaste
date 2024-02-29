@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copie</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pâte</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>responsable du presse-papiers</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>outil</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Le presse-papiers est une jungle. Monkeypaste est le roi! Passer de l'application à l'application, copiant ceci et coller cela comme jamais auparavant avec MonkeyPaste !! Une marque - un nouvel outil d'automatisation du presse-papiers et analytique de pointe !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Échantillon de Monkeypaste en action!</value>
   </data>
@@ -273,5 +262,8 @@ Une richesse de valeur et de sens que vous méritez d’avoir à portée de main
 Je suis le programmeur mentionné plus tôt et je veux que tout le monde puisse trouver une utilisation de MonkeyPaste. Ainsi, son utilisation et toutes ses fonctionnalités sont entièrement gratuites. 
 Je veux aussi que vous vous sentiez à l’aise de l’utiliser. Je vous assure donc, en tant que seule force derrière sa création, qu’AUCUNE des informations (très) personnelles qui peuvent survenir sur 
 votre presse-papiers n’est jamais suivi ou stocké N’IMPORTE OÙ au-delà de votre propre machine. Période.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Presse-papiers</value>
   </data>
 </root>

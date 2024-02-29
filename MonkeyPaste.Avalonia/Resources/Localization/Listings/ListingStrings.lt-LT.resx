@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopijuoti</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>įklijuoti</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>iškarpų srities tvarkyklė</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>įrankis</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Mainų sritis yra džiunglės. Monkeypaste yra karalius! Pasisukite iš programos į programą, nukopijuokite tai ir įklijuokite, kaip niekad anksčiau su „MonkeYPaste“ !! Prekės ženklas - naujas, pažangiausias mainų sritis ir analitinis automatizavimo įrankis !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Monkeypaste pavyzdys veikia!</value>
   </data>
@@ -273,5 +262,8 @@ vertės ir prasmės turtus, kuriuos nusipelnėte turėti po ranka. Ne tik išmes
 Aš esu tas programuotojas, kuris buvo paminėtas anksčiau, ir noriu, kad visi galėtų naudotis "MonkeyPaste". Taigi juo ir visomis jo funkcijomis galima naudotis visiškai nemokamai. 
 Taip pat noriu, kad jaustumėtės patogiai naudodamiesi juo. Taigi užtikrinu jus, kaip vienintelę jos sukūrimo jėgą, kad NĖ VIENA iš (labai) asmeninės informacijos, kuri gali atsirasti 
 jūsų mainų sritis visada stebima arba saugoma BET KUR, išskyrus jūsų kompiuterį. Tarpas.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Mainų sritį</value>
   </data>
 </root>

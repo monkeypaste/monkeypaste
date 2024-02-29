@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>עותק</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>לְהַדבִּיק</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>מנהל הלוח</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>כְּלִי</value>
@@ -212,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>הלוח הוא ג'ונגל. Monkeypaste הוא המלך! התנדנדו מאפליקציה לאפליקציה, העתקת זאת והדביקו את זה שאוהב מעולם עם קופיפסטה !! מותג - לוח חדש, חדיש את הלוח וכלי אוטומציה אנליטית !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>מדגם של קופיפסטה בפעולה!</value>
   </data>
@@ -273,5 +262,8 @@
 אני המתכנת שהוזכר קודם ואני רוצה שכולם יוכלו למצוא שימוש ב-MonkeyPaste. אז זה וכל התכונות שלה הם לגמרי בחינם לשימוש. 
 אני גם רוצה שתרגישו בנוח להשתמש בו. אז אני מבטיח לכם, בתור הכוח היחיד מאחורי יצירתו, שאף אחד מהמידע האישי (מאוד) שיכול לצוץ 
 אי פעם עוקבים אחר הלוח שלך או מאחסנים אותו בכל מקום מעבר למחשב שלך. תקופה.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>הלוח</value>
   </data>
 </root>

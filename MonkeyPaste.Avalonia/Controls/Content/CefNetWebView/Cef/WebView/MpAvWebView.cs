@@ -165,6 +165,7 @@ namespace MonkeyPaste.Avalonia {
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
                 return;
             }
+
             InnerWebView.Url = new Uri(url, UriKind.Absolute);
 #endif
         }
