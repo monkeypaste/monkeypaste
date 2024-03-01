@@ -129,7 +129,7 @@ function initDefaults(defaultsObj) {
 		setElementComputedStyleProp(document.body, '--editortoolbarbgcolor', cleanHexColor(edit_tb_bg_color,null,false));
 		setElementComputedStyleProp(document.body, '--editortoolbarsepbgcolor', cleanHexColor(edit_tb_sep_bg_color,null,false));
 		setElementComputedStyleProp(document.body, '--editortoolbarbuttoncolor', cleanHexColor(edit_tb_button_color,null,false));
-		setElementComputedStyleProp(document.body, '--pastetemplatebgcolor', cleanHexColor(paste_template_bg_color,null,false));
+		setElementComputedStyleProp(document.body, '--pastetoolbarbgcolor', cleanHexColor(paste_template_bg_color,null,false));
 		setElementComputedStyleProp(document.body, '--pastetoolbarbuttoncolor', cleanHexColor(paste_toolbar_button_color,null,false));
 		setElementComputedStyleProp(document.body, '--edittemplatebgcolor', cleanHexColor(edit_template_bg_color,null,false));
 		setElementComputedStyleProp(document.body, '--hovercolor', cleanHexColor(hover_color,null,false));

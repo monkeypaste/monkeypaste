@@ -92,7 +92,7 @@ namespace CoreOleHandler {
 
             // NOTE not sure if this is needed omitted for now
             //PostProcessImage(write_output);
-            await PrepareForOutputAsync(write_output, request.isDnd);
+            await PrepareForOutputAsync(write_output, request.isDnd, writeFormats);
 
             return new MpOlePluginResponse() {
                 //dataObjectLookup = write_output,
@@ -227,15 +227,13 @@ namespace CoreOleHandler {
         #endregion
 
         #region Platform DataObject Post-Process
-        private async Task PrepareForOutputAsync(Dictionary<string, object> ido, bool isDnd) {
-            // NOTE need to make sure empty formats are removed or clipboard will bark
-            var empty_formats = ido.Keys.Where(x => ido[x] == null || (ido[x] is string && string.IsNullOrEmpty(((string)ido[x]))));
-            empty_formats.ForEach(x => ido.Remove(x));
+        private async Task PrepareForOutputAsync(Dictionary<string, object> ido, bool isDnd, IEnumerable<string> formats) {
 
-            if (ido.TryGetValue(MpPortableDataFormats.Files, out IEnumerable<string> fpl)) {
-                var av_fpl = await fpl.ToAvFilesObjectAsync();
-                ido[MpPortableDataFormats.Files] = av_fpl;
-            }
+            await MapAllPseudoFormatsAsync(ido);
+
+            // NOTE need to make sure empty formats are removed or clipboard will bark
+            var empty_formats = ido.Keys.Where(x => !formats.Contains(x) || ido[x] == null || (ido[x] is string && string.IsNullOrEmpty(((string)ido[x]))));
+            empty_formats.ForEach(x => ido.Remove(x));
 
             if (isDnd) {
 #if MAC
@@ -245,6 +243,99 @@ namespace CoreOleHandler {
             }
             //await clipboard.SetDataObjectAsync(ido);
             await MpAvClipboardExtensions.WriteToClipboardAsync(ido);
+        }
+
+        private async Task MapAllPseudoFormatsAsync(Dictionary<string, object> ido) {
+
+            if (ido.ContainsKey(MpPortableDataFormats.Xhtml) &&
+                !ido.ContainsKey(MpPortableDataFormats.Html) &&
+                ido.TryGetValue(MpPortableDataFormats.Xhtml, out byte[] html_bytes)) {
+                // convert html bytes to string and map to cef html
+                string htmlStr = html_bytes.ToDecodedString();
+                ido.AddOrReplace(MpPortableDataFormats.Html, htmlStr);
+            }
+            if (ido.ContainsKey(MpPortableDataFormats.Html) &&
+                !ido.ContainsKey(MpPortableDataFormats.Xhtml) &&
+                ido.TryGetValue(MpPortableDataFormats.Html, out string cef_html_str)) {
+                // convert html sring to to bytes
+                byte[] htmlBytes = cef_html_str.ToBytesFromString();
+                ido.AddOrReplace(MpPortableDataFormats.Xhtml, htmlBytes);
+            }
+
+            if (ido.ContainsKey(MpPortableDataFormats.Text) &&
+                !ido.ContainsKey(MpPortableDataFormats.MimeText) &&
+                ido.TryGetValue(MpPortableDataFormats.Text, out string pt)) {
+                // ensure cef style text is in formats
+                ido.AddOrReplace(MpPortableDataFormats.MimeText, pt);
+            }
+            if (ido.ContainsKey(MpPortableDataFormats.MimeText) &&
+                !ido.ContainsKey(MpPortableDataFormats.Text) &&
+                ido.TryGetValue(MpPortableDataFormats.MimeText, out string mt)) {
+                // ensure avalonia style text is in formats
+                ido.AddOrReplace(MpPortableDataFormats.Text, mt);
+            }
+
+            if (OperatingSystem.IsLinux()) {
+                // TODO this should only be for gnome based linux
+
+                if (ido.ContainsKey(MpPortableDataFormats.Files) &&
+                    !ido.ContainsKey(MpPortableDataFormats.MimeGnomeFiles) &&
+                    ido.TryGetValue(MpPortableDataFormats.Files, out IEnumerable<string> files) &&
+                    string.Join(Environment.NewLine, files) is string av_files_str) {
+                    // ensure cef style text is in formats
+                    ido.AddOrReplace(MpPortableDataFormats.MimeGnomeFiles, av_files_str);
+                }
+                if (ido.ContainsKey(MpPortableDataFormats.MimeGnomeFiles) &&
+                    !ido.ContainsKey(MpPortableDataFormats.Files) &&
+                    ido.TryGetValue(MpPortableDataFormats.MimeGnomeFiles, out string gn_files_str) &&
+                    gn_files_str.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries) is IEnumerable<string> gn_files
+                    ) {
+                    // ensure avalonia style text is in formats
+                    ido.AddOrReplace(MpPortableDataFormats.Files, gn_files);
+                }
+            } else if (OperatingSystem.IsWindows()) {
+                //if (ido.ContainsKey(MpPortableDataFormats.AvPNG) &&
+                //    GetData(MpPortableDataFormats.AvPNG) is string png64) {
+                //    //ido.AddOrReplace(MpPortableDataFormats.AvPNG, png64.ToBytesFromBase64String());
+                //}
+                //if (ido.ContainsKey(MpPortableDataFormats.AvPNG) &&
+                //    GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes) {
+                //    //#if WINDOWS
+                //    //                    //ido.AddOrReplace(MpPortableDataFormats.WinBitmap, pngBytes);
+                //    //                    //ido.AddOrReplace(MpPortableDataFormats.WinDib, pngBytes);
+                //    //                    SetBitmap(pngBytes);
+                //    //#endif
+
+                //}
+
+                // TODO should pass req formats into this and only create rtf if contianed
+                //if (ido.ContainsKey(MpPortableDataFormats.CefHtml) &&
+                //    !ido.ContainsKey(MpPortableDataFormats.AvRtf_bytes) &&
+                //    GetData(MpPortableDataFormats.CefHtml) is string htmlStr) {
+                //    // TODO should check if content is csv here (or in another if?) and create rtf table 
+                //    string rtf = htmlStr.ToRtfFromRichHtml();
+                //    ido.AddOrReplace(MpPortableDataFormats.AvRtf_bytes, rtf.ToBytesFromString());
+                //}
+            }
+
+
+            if (ido.TryGetValue(MpPortableDataFormats.Files, out object fn_obj)) {
+                IEnumerable<string> fpl = null;
+                if (fn_obj is IEnumerable<string>) {
+                    fpl = fn_obj as IEnumerable<string>;
+                } else if (fn_obj is string fpl_str) {
+                    fpl = fpl_str.SplitNoEmpty(Environment.NewLine);
+                } else {
+
+                }
+                if (fpl != null) {
+
+                    var av_fpl = await fpl.ToAvFilesObjectAsync();
+                    ido.AddOrReplace(MpPortableDataFormats.Files, av_fpl);
+                    MpConsole.WriteLine($"Files set");
+                }
+            }
+            // TODO should add unicode, oem, etc. here for greater compatibility
         }
         #endregion
 

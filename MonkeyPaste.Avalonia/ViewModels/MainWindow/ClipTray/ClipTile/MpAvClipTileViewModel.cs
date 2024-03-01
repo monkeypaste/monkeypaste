@@ -584,6 +584,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool IsAppendButtonHovering { get; set; }
+        public bool IsPasteButtonHovering { get; set; }
         public bool HasSearchResults =>
             HighlightRanges.Any();
         public string SearchableText { get; set; }
@@ -669,10 +671,16 @@ namespace MonkeyPaste.Avalonia {
 
 
         public bool IsResizerEnabled =>
-            //MpAvThemeViewModel.Instance.IsDesktop &&
             !IsWindowOpen &&
             !IsFrozen &&
             (IsPinned || (Parent != null && Parent.IsQueryItemResizeEnabled));
+
+        public bool IsEditPopOutOnly =>
+#if SUGAR_WV
+            true;
+#else
+            Parent != null && Parent.LayoutType == MpClipTrayLayoutType.Grid;
+#endif
 
         public MpIEmbedHost EmbedHost =>
             GetContentView() as MpIEmbedHost;
@@ -1577,6 +1585,7 @@ namespace MonkeyPaste.Avalonia {
             if (_contentView != null) {
                 // view already stored, verify this is data context or reset
                 if (_contentView is Control c &&
+                    !IsPinPlaceholder &&
                     c.DataContext == this) {
                     return _contentView;
                 }
@@ -2573,23 +2582,10 @@ namespace MonkeyPaste.Avalonia {
             });
         public MpIAsyncCommand PinToPopoutWindowCommand => new MpAsyncCommand(
             async () => {
-                if (!IsSelected) {
-                    IsSelected = true;
-                }
-                if (Mp.Services.PlatformInfo.IsDesktop) {
-                    bool needs_lock = !MpAvMainWindowViewModel.Instance.IsMainWindowLocked;
-                    if (needs_lock) {
-                        MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
-                    }
-                    await Parent.PinTileCommand.ExecuteAsync(new object[] { this, MpPinType.Window });
-                    if (needs_lock) {
-                        MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
-                    }
-                } else {
-                    // Some kinda view nav here
-                    // see https://github.com/AvaloniaUI/Avalonia/discussions/9818
-
-                }
+                //if (!IsSelected) {
+                //    IsSelected = true;
+                //}
+                await Parent.PinTileCommand.ExecuteAsync(new object[] { this, MpPinType.Window });
             }, () => {
                 return !IsWindowOpen && Parent != null;
             });
@@ -2617,13 +2613,19 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand ToggleIsContentReadOnlyCommand => new MpAsyncCommand(
             async () => {
-                if (IsResizerEnabled || !IsContentReadOnly || IsPinned) {
-                    IsContentReadOnly = !IsContentReadOnly;
+                if (!IsContentReadOnly) {
+                    IsContentReadOnly = true;
                     return;
                 }
-                // when disabling read-only from query tray in grid
-                // mode pop tile out since tile isn't resizable
-                int ciid = CopyItemId;
+                if (!IsEditPopOutOnly) {
+                    IsContentReadOnly = false;
+                    return;
+                }
+
+                if (IsWindowOpen) {
+                    IsContentReadOnly = false;
+                    return;
+                }
                 await Parent.PinTileCommand.ExecuteAsync(new object[] { this, MpPinType.Window, true });
             },
             () => {

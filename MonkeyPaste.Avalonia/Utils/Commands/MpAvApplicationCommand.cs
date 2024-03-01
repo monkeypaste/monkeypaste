@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -225,7 +226,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand DecreaseFocusCommand => new MpCommand(
             () => {
-                if (MpAvDoDragDropWrapper.IsAnyDragging) {
+                if (MpAvDoDragDropWrapper.IsAnyDragging ||
+                    (MpAvDoDragDropWrapper.LastDragCompletedDateTime.HasValue &&
+                        DateTime.Now - MpAvDoDragDropWrapper.LastDragCompletedDateTime.Value < TimeSpan.FromSeconds(2))) {
                     return;
                 }
                 if (MpAvFocusManager.Instance.FocusElement is not Control fc) {

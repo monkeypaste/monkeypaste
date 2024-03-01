@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
 #if OUTSYS_WV
             {"enable-devtools-experiments",null },
 #endif
-#if CEFNET_WV
+#if CEFNET_WV || SUGAR_WV
             {"in-process-gpu",null },
             {"disable-gpu",null },
             {"disable-gpu-compositing",null },

@@ -29,6 +29,7 @@
         <SolidColorBrush x:Key="NextTrashOverlayBrush">Yellow</SolidColorBrush>
         <SolidColorBrush x:Key="NextRemoveOverlayBrush">Red</SolidColorBrush>
 
+
         <!--  COLORS  -->
 
         <Color x:Key="ThemeBlackColor">Black</Color>
@@ -72,6 +73,18 @@
         <Color x:Key="ThemeGrayAccent1Color">DimGray</Color>
         <Color x:Key="ThemeGrayAccent2Color">Silver</Color>
         <Color x:Key="ThemeGrayAccent3Color">Gainsboro</Color>
+
+        <Color x:Key="PasteToolbarBgColor">Teal</Color>
+        <Color x:Key="PasteButtonDefaultBgColor">DodgerBlue</Color>
+        <Color x:Key="PasteButtonCustomBgColor">Fuchsia</Color>
+
+        <Color x:Key="PasteToolbarBgColor_dark">DarkSlateGray</Color>
+        <Color x:Key="PasteButtonDefaultBgColor_dark">DarkBlue</Color>
+        <Color x:Key="PasteButtonCustomBgColor_dark">Fuchsia</Color>
+
+        <Color x:Key="ThemePasteToolbarBgColor">Teal</Color>
+        <Color x:Key="ThemePasteButtonDefaultBgColor">DodgerBlue</Color>
+        <Color x:Key="ThemePasteButtonCustomBgColor">Fuchsia</Color>
 
         <!--  BRUSHES  -->
 

@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
             config.AreDefaultContextMenusEnabled = false;
             config.IsStatusBarEnabled = false;
-            config.DefaultWebViewBackgroundColor = System.Drawing.Color.Transparent;
+            config.DefaultWebViewBackgroundColor = System.Drawing.Color.FromArgb(System.Drawing.Color.Transparent.ToArgb());
             config.AdditionalBrowserArguments = MpAvCefCommandLineArgs.ToArgString();
             MpConsole.WriteLine($"Cef args: '{config.AdditionalBrowserArguments}'");
             //config.BrowserExecutableFolder = _creationProperties.BrowserExecutableFolder;

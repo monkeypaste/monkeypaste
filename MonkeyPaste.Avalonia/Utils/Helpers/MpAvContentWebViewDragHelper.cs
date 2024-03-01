@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private static MpAvIContentWebViewDragSource _dragSource;
-
+        private static bool _usePlaceholders;
         #endregion
 
         #region Properties
@@ -39,12 +39,14 @@ namespace MonkeyPaste.Avalonia {
                 await Dispatcher.UIThread.InvokeAsync(() => StartDragAsync(dragSource, allowedEffects));
                 return DragDropEffects.None;
             }
-            StartDrag(dragSource);
 
+            StartDrag(dragSource);
             dragSource.IsDragging = true;
             // wait for source data
-            bool use_placeholders = MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled;
-            SourceDataObject = await dragSource.GetDataObjectAsync(_dragSource.GetDragFormats(), use_placeholders) as MpAvDataObject;
+            _usePlaceholders = MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled;
+            //SourceDataObject = await dragSource.GetDataObjectAsync(_dragSource.GetDragFormats(), use_placeholders) as MpAvDataObject;
+            // NOTE since using ALL formats drop widget won't work here
+            SourceDataObject = await dragSource.GetDataObjectAsync(null, _usePlaceholders) as MpAvDataObject;
 
             if (SourceDataObject == null) {
                 // is none selected?
@@ -54,6 +56,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             await ApplyClipboardPresetOrSourceUpdateToDragDataAsync();
+
 
             MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
 
@@ -111,21 +114,31 @@ namespace MonkeyPaste.Avalonia {
                 // no drag in progress
                 return;
             }
-            if (DragDataObject == null) {
-                // initial case
-                DragDataObject = new MpAvDataObject();
-                SourceDataObject.CopyTo(DragDataObject);
-            }
 
-            // clone source or processing will overwrite original data (so drop widget changes have no affect)
-            var source_clone = SourceDataObject.Clone();
-            var temp = await Mp.Services.DataObjectTools.WriteDragDropDataObjectAsync(source_clone);
-            if (temp is IDataObject temp_ido &&
-                DragDataObject is MpAvDataObject ddo) {
-                // update actual drag ido while retaining its ref (must be same as in StartDrag)
-                temp_ido.CopyTo(DragDataObject);
-                await ddo.MapAllPseudoFormatsAsync();
-                MpConsole.WriteLine("DragDataObject updated");
+            if (_usePlaceholders) {
+                if (DragDataObject == null) {
+                    // initial case
+                    DragDataObject = new MpAvDataObject();
+                    SourceDataObject.CopyTo(DragDataObject);
+                }
+
+                // clone source or processing will overwrite original data (so drop widget changes have no affect)
+                var source_clone = SourceDataObject.Clone();
+                var temp = await Mp.Services.DataObjectTools.WriteDragDropDataObjectAsync(source_clone);
+                if (temp is IDataObject temp_ido &&
+                    DragDataObject is MpAvDataObject ddo) {
+                    // update actual drag ido while retaining its ref (must be same as in StartDrag)
+                    temp_ido.CopyTo(DragDataObject);
+                    MpConsole.WriteLine("DragDataObject updated");
+                }
+                return;
+            }
+            if (DragDataObject == null) {
+                DragDataObject = SourceDataObject;
+            }
+            var result = await Mp.Services.DataObjectTools.WriteDragDropDataObjectAsync(DragDataObject);
+            if (result is IDataObject ido) {
+                DragDataObject = ido;
             }
         }
         #endregion

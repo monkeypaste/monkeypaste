@@ -19,7 +19,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-
 using AvToolTip = Avalonia.Controls.ToolTip;
 
 #if CEFNET_WV
@@ -34,6 +33,9 @@ using Xilium.CefGlue.Common.Helpers.Logger;
 using Xilium.CefGlue.Common.InternalHandlers;
 #endif
 
+#if SUGAR_WV
+using TheArtOfDev.HtmlRenderer.Avalonia;
+#endif
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvContentWebView :
@@ -225,6 +227,7 @@ namespace MonkeyPaste.Avalonia {
             SendMessage($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeObjectToBase64()}')");
         }
 
+
         public async Task<MpAvDataObject> GetDataObjectAsync(
             string[] formats = null,
             bool use_placeholders = false,
@@ -276,23 +279,50 @@ namespace MonkeyPaste.Avalonia {
                 contentDataReq.formats.Remove(MpPortableDataFormats.WinDib);
             }
 
-            _lastDataObjectResp = null;
-            SendMessage($"contentDataObjectRequestAsync_ext_ntf('{contentDataReq.SerializeObjectToBase64()}')");
-            while (_lastDataObjectResp == null) {
-                // wait for binding handler to receive 
-                await Task.Delay(100);
+            MpAvDataObject GetFallbackDataObject() {
+                var fb_avdo = BindingContext.CopyItem.ToAvDataObject(true, true, contentDataReq.formats.ToArray());
+                //await fb_avdo.MapAllPseudoFormatsAsync();
+                fb_avdo.DataFormatLookup.Where(x => x.Value == null).ForEach(x => fb_avdo.Remove(x.Key));
+                return fb_avdo;
             }
 
-            // store resp and immediabtly clear msg obj
-            MpQuillContentDataObjectResponseMessage contentDataResp = _lastDataObjectResp;
-            _lastDataObjectResp = null;
-
-            if (contentDataResp.dataItems == null) {
-                return null;
-            }
             var avdo = new MpAvDataObject();
-            foreach (var di in contentDataResp.dataItems) {
-                avdo.SetData(di.format, di.data);
+            bool is_all_content = true;
+            if (IsEditorLoaded) {
+                var sw = Stopwatch.StartNew();
+                _lastDataObjectResp = null;
+                SendMessage($"contentDataObjectRequestAsync_ext_ntf('{contentDataReq.SerializeObjectToBase64()}')");
+                while (_lastDataObjectResp == null) {
+                    // wait for binding handler to receive 
+                    await Task.Delay(100);
+                    if (sw.Elapsed > TimeSpan.FromSeconds(10)) {
+                        MpConsole.WriteLine($"GetDataObject timeout waiting for resp for '{BindingContext}'");
+                        return GetFallbackDataObject();
+                    }
+                }
+
+                // store resp and immediabtly clear msg obj
+                MpQuillContentDataObjectResponseMessage contentDataResp = _lastDataObjectResp;
+                _lastDataObjectResp = null;
+                is_all_content = contentDataResp.isAllContent;
+
+                if (contentDataResp.dataItems == null) {
+                    return null;
+                }
+                foreach (var di in contentDataResp.dataItems) {
+                    avdo.SetData(di.format, di.data);
+                }
+            } else if (ReadOnlyWebView != null) {
+                string pt = ignore_selection || ReadOnlyWebView.SelectedText.IsNullOrEmpty() ?
+                    BindingContext.SearchableText : ReadOnlyWebView.SelectedText;
+                string html = ignore_selection || ReadOnlyWebView.SelectedHtml.IsNullOrEmpty() ?
+                    BindingContext.EditorFormattedItemData : ReadOnlyWebView.SelectedHtml;
+                // NOTE always providing text and html (should be stripping later)
+
+                avdo.SetData(MpPortableDataFormats.Text, pt);
+                avdo.SetData(MpPortableDataFormats.Html, html);
+            } else {
+                return GetFallbackDataObject();
             }
 
             if (ctvm.CopyItemType == MpCopyItemType.FileList) {
@@ -315,7 +345,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     // NOTE presumes Text is txt and Image is png
                     // get unique pseudo-file path for whole or partial content
-                    bool is_fragment = ctvm.CopyItemType == MpCopyItemType.Text && !contentDataResp.isAllContent ? true : false;
+                    bool is_fragment = ctvm.CopyItemType == MpCopyItemType.Text && !is_all_content ? true : false;
                     string ctvm_fp = ctvm.CopyItem.GetDefaultFilePaths(isFragment: is_fragment).FirstOrDefault();
                     string ctvm_data = is_fragment ? avdo.GetData(MpPortableDataFormats.Text) as string : ctvm.CopyItemData;
                     avdo.SetData(
@@ -325,7 +355,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            bool is_full_content = ctvm.CopyItemType == MpCopyItemType.Image || contentDataResp.isAllContent;
+            bool is_full_content = ctvm.CopyItemType == MpCopyItemType.Image || is_all_content;
             avdo.AddContentReferences(ctvm.CopyItem, is_full_content);
 
             if (ctvm.CopyItemType == MpCopyItemType.Image &&
@@ -346,7 +376,7 @@ namespace MonkeyPaste.Avalonia {
                 //}
             }
 
-            await avdo.MapAllPseudoFormatsAsync();
+            //await avdo.MapAllPseudoFormatsAsync();
             // remove all empty formats (workaround for cefnet bug w/ empty asciiUrl
             avdo.DataFormatLookup.Where(x => x.Value == null)
                 .ForEach(x => avdo.Remove(x.Key));
@@ -969,6 +999,25 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
+#if SUGAR_WV
+        #region ReadOnlyWebView
+
+        HtmlPanel _readOnlyWebView;
+        HtmlPanel ReadOnlyWebView {
+            get {
+                if (_readOnlyWebView == null &&
+                    this.GetVisualAncestor<MpAvCompositeContentView>() is { } ccv) {
+                    _readOnlyWebView = ccv.ReadOnlyWebView;
+                }
+                return _readOnlyWebView;
+            }
+        }
+
+
+        #endregion
+#endif
+
         #region View Models
         public MpAvClipTileViewModel BindingContext {
             get {
@@ -1274,8 +1323,8 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) {
             base.OnAttachedToLogicalTree(e);
             Mp.Services.ContentViewLocator.AddView(this);
-
         }
+
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
             LastPointerPressedEventArgs = e;
@@ -1283,7 +1332,6 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) {
             base.OnDetachedFromLogicalTree(e);
             Mp.Services.ContentViewLocator.RemoveView(this);
-
         }
 
         protected override void OnDataContextEndUpdate() {
@@ -1348,6 +1396,9 @@ namespace MonkeyPaste.Avalonia {
 #else
             await Task.Delay(1);
 #endif
+            if (this is not MpAvPlainHtmlConverterWebView) {
+
+            }
             var req = GetInitMessage();
             SendMessage($"initMain_ext('{req.SerializeObjectToBase64()}')");
         }

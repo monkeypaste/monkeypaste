@@ -30,7 +30,7 @@ body {
     --highlightopacity: 0.5;
     --defaultFontFamily: Helvetica;
     --defaultFontSize: 12px;
-    --pastetemplatebgcolor: teal;
+    --pastetoolbarbgcolor: teal;
     --pastetoolbarbuttoncolor: dodgerblue;
     --pastetoolbarcustominfobuttoncolor: fuchsia;
     --pastetoolbarbuttoncolor_checked: blue;

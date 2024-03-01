@@ -1,5 +1,5 @@
 ﻿#pasteToolbar {
-    background-color: var(--pastetemplatebgcolor);
+    background-color: var(--pastetoolbarbgcolor);
     /*height: 10vh;*/
     min-height: 65px;
     min-width: 850px;

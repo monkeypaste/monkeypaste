@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
     public static class MpAvHtmlStylerExtension {
         private static Dictionary<HtmlControl, List<IDisposable>> _disposableLookup = [];
+        private static Dictionary<MpHtmlStyleType, string> _stylesLookup = [];
         static MpAvHtmlStylerExtension() {
             try {
                 MpAvThemeViewModel.Instance
@@ -255,6 +256,16 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 hc.Text = doc.DocumentNode.OuterHtml;
+
+                if (hc.GetLogicalDescendants<ScrollBar>().ToList() is { } sbl) {
+                    if (sbl.Count < 2) {
+
+                    }
+                    foreach (var sb in sbl) {
+                        sb.IsVisible = !is_disabling;
+                        sb.Visibility = sb.IsVisible ? ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden;
+                    }
+                }
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error toggling underlines. ", ex);
@@ -323,32 +334,38 @@ namespace MonkeyPaste.Avalonia {
                             .comment { color: green; margin-bottom: 5px; margin-left: 3px; }
                             .comment2 { color: green; }";
             */
+            var style_type = GetHtmlStyleType(hc);
+            if (_stylesLookup.TryGetValue(style_type, out string css)) {
+                return css;
+            }
             string css_str = string.Empty;
-            switch (GetHtmlStyleType(hc)) {
+
+            switch (style_type) {
                 case MpHtmlStyleType.Content:
                     css_str = string.Format(
 @"* {{ margin: 0; padding: 0; }}
-body {{ white-space: pre-wrap; line-height: {1}px; color: {0}; font-size: {1}px; font-family: {2}; }}
+body {{ white-space: pre-wrap; line-height: {6}px; color: {0}; font-size: {1}px; font-family: {2}; }}
 p {{ margin: 0; }}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 .underline {{ text-decoration: underline;  }}
-.highlight {{ background-color: yellow; color: black; }}
-.highlight-active {{ background-color: lime; color: black; }}
+.highlight {{ background-color: {4}; color: black; }}t
+.highlight-active {{ background-color: {5}; color: black; }}
 a:link {{ text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}",
                         GetDefaultHexColor(hc).RemoveHexAlpha(), //0
                         GetDefaultFontSize(hc), //1
                         GetDefaultFontFamily(hc), //2
                         MpSystemColors.gold1.RemoveHexAlpha(), //3
-                        Mp.Services.PlatformResource
-                        .GetResource<IBrush>("HighlightBrush_inactive").ToPortableColor().ToHex(true) //5
+                        Mp.Services.PlatformResource.GetResource<IBrush>("HighlightBrush_inactive").ToPortableColor().ToHex(true), //4
+                        Mp.Services.PlatformResource.GetResource<IBrush>("HighlightBrush_active").ToPortableColor().ToHex(true), //5
+                        GetDefaultFontSize(hc) + 2 //6
                         );
                     break;
                 case MpHtmlStyleType.Tooltip:
                 default:
                     css_str = string.Format(
 @"* {{ margin: 0; padding: 0; }}
-body {{ white-space: pre-wrap; line-height: {1}px; color: {0}; font-size: {1}px; font-family: {2}; }}
+body {{ color: {0}; font-size: {1}px; font-family: {2}; }}
 p {{ margin: 0; }}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 a:link {{ text-decoration: none; }}
@@ -360,6 +377,7 @@ a:hover {{ text-decoration: underline; }}",
                         );
                     break;
             }
+            _stylesLookup.Add(style_type, css_str);
             return css_str;
         }
     }

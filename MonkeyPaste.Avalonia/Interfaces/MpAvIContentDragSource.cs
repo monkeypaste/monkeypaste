@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
 
     public interface MpAvIContentWebViewDragSource : MpAvIContentDragSource {
         bool WasDragCanceled { get; set; }
-        PointerEventArgs LastPointerPressedEventArgs { get; }
+        PointerEventArgs LastPointerPressedEventArgs { get; set; }
         void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta);
 
     }

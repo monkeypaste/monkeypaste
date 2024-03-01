@@ -44,14 +44,14 @@
         </Style>
 
         <!--  PASTE TOOLBAR BUTTON ALIGNMENT  -->
-        <Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvPasteToolbarView StackPanel#PasteToolbarButtonContainer">
+        <!--<Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvPasteToolbarView StackPanel#PasteToolbarButtonContainer">
             <Setter Property="VerticalAlignment"
                     Value="Center" />
         </Style>
         <Style Selector="Grid#CompositeWebViewContainerGrid.tile-hover local|MpAvPasteToolbarView StackPanel#PasteToolbarButtonContainer">
             <Setter Property="VerticalAlignment"
                     Value="Top" />
-        </Style>
+        </Style>-->
 
         <!--  READ ONLY / WEBVIEW OPACITY TOGGLE  -->
         <Style Selector="Grid#CompositeWebViewContainerGrid av|HtmlPanel">
@@ -70,6 +70,28 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
+
+        <!--  PASTE BUTTON TOOLTIP (over webview)  -->
+        <Style Selector="av|HtmlPanel.over-paste-button">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView IsHtml="True"
+                                               ToolTipText="{Binding PasteButtonTooltipHtml, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="av|HtmlPanel.over-append-button">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ToggleAppendBlockMode, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.EditorPasteButtonAppendBeginLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="CompositeWebViewContainerGrid"
           RowDefinitions="*,60"
@@ -84,6 +106,8 @@
         <!--  READ ONLY WEBVIEW  -->
         <av:HtmlPanel x:Name="ReadOnlyWebView"
                       Classes="content-zoom"
+                      Classes.over-paste-button="{Binding IsPasteButtonHovering}"
+                      Classes.over-append-button="{Binding IsAppendButtonHovering}"
                       Grid.RowSpan="2"
                       HorizontalAlignment="Left"
                       VerticalAlignment="Top"
@@ -101,12 +125,6 @@
                       local:MpAvHtmlStylerExtension.ShowUnderlines="{Binding IsSubSelectionEnabled}"
                       IsSelectionEnabled="{Binding IsSubSelectionEnabled}"
                       Text="{Binding CopyItemData}">
-            <!--<av:HtmlPanel.IsSelectionEnabled>
-                <MultiBinding Converter="{x:Static BoolConverters.And}">
-                    <Binding Path="!IsSubSelectionEnabled" />
-                    <Binding Path="!HasSearchResults" />
-                </MultiBinding>
-            </av:HtmlPanel.IsSelectionEnabled>-->
             <Interaction.Behaviors>
                 <local:MpAvReadOnlyWebViewHighlightBehavior />
             </Interaction.Behaviors>
@@ -128,10 +146,6 @@
                     <Binding Path="!IsDropOverTile" />
                     <Binding Path="IsSubSelectionEnabled" />
                     <Binding Path="!IsWindowOpen" />
-                    <!--<Binding Path="Opacity"
-                             ElementName="ReadOnlyWebView"
-                             ConverterParameter="1"
-                             Converter="{x:Static local:MpAvDoubleToBoolConverter.Instance}" />-->
                     <Binding Path="IsVisible"
                              ElementName="ReadOnlyWebView" />
                 </MultiBinding>

@@ -247,9 +247,9 @@ namespace MonkeyPaste.Common.Avalonia {
                         if (format == MpPortableDataFormats.Xhtml) {
                             var detected_encoding = bytes.DetectTextEncoding(out string detected_text);
                             bytes = Encoding.UTF8.GetBytes(detected_text);
-                            if (detected_text.Contains("Â")) {
-                                MpDebug.Break();
-                            }
+                            //if (detected_text.Contains("Â")) {
+                            //    MpDebug.Break();
+                            //}
                         }
 #endif
                         typed_data = bytes.ToDecodedString() as T;
@@ -264,6 +264,8 @@ namespace MonkeyPaste.Common.Avalonia {
                 } else if (dataObj is int intVal) {
                     // int -> string (occurs internally putting actionId on clipboard)
                     typed_data = intVal.ToString() as T;
+                } else if (dataObj != null) {
+                    typed_data = dataObj.ToString() as T;
                 }
             } else if (typeof(T) == typeof(byte[])) {
                 // wants bytes

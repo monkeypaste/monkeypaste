@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static void HandleRangesInfoViewModelChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             void HighlightRanges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-                UpdateHighlights(element);
+                //UpdateHighlights(element);
             }
 
             void RangeInfoViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -325,10 +325,6 @@ namespace MonkeyPaste.Avalonia {
                 !hlrl.Any()) {
                 return;
             }
-            string test = html_str.ToPlainText();
-            if (test.Contains("\\n")) {
-
-            }
             // adjust active idx to content range subset
             //int range_diff = Math.Max(0,hrivm.HighlightRanges.Count - hlrl.Length - 1);
             int range_diff = hrivm.HighlightRanges.Count - hlrl.Length - 1;
@@ -343,7 +339,7 @@ namespace MonkeyPaste.Avalonia {
                 foreach (HtmlNode hn in hnc) {
                     if (hn is not HtmlTextNode tn) {
                         // line break
-                        cur_idx += Environment.NewLine.Length;
+                        //cur_idx += Environment.NewLine.Length;
                         continue;
                     }
                     string tn_text = tn.Text.DecodeSpecialHtmlEntities();

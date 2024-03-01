@@ -34,11 +34,10 @@ namespace MonkeyPaste.Common {
 
         #region Encoding Extensions
         public static string ToBase64ImageUrl(this string base64Str) {
-            if (base64Str.Contains(",")) {
-                MpDebug.Break($"Base64 conv error, string already is url");
+            string prefix = @"data:image/png;base64,";
+            if (base64Str.StartsWith(prefix)) {
                 return base64Str;
             }
-            string prefix = @"data:image/png;base64,";
             return prefix + base64Str;
         }
 

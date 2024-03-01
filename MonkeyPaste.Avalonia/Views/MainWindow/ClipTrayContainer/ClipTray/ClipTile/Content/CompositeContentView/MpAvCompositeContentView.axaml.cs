@@ -27,34 +27,24 @@ public partial class MpAvCompositeContentView : MpAvUserControl<MpAvClipTileView
 #if MOBILE
             return;
 #else
-        if (sender is not HtmlPanel hp) {
+        if (sender is not HtmlPanel hp ||
+            !e.IsLeftPress(hp) ||
+            hp.IsSelectionEnabled ||
+            BindingContext is not MpAvClipTileViewModel ctvm ||
+            ctvm.GetContentView() is not MpAvIContentWebViewDragSource cv) {
             return;
         }
-
-        if (!e.IsLeftPress(hp) ||
-            hp.IsSelectionEnabled) {
-            return;
-        }
+        cv.LastPointerPressedEventArgs = e;
 
         this.DragCheckAndStart(e,
             start: async (start_e) => {
-                int ciid = BindingContext.CopyItemId;
-                BindingContext.IsTileDragging = true;
-                var avdo = BindingContext.CopyItem.ToAvDataObject(includeSelfRef: true, includeTitle: true);
-                await avdo.MapAllPseudoFormatsAsync();
-                var result = await MpAvDoDragDropWrapper.DoDragDropAsync(hp, e, avdo, DragDropEffects.Copy);
-                if (MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == ciid) is not { } ctvm) {
-                    return;
-                }
-                ctvm.IsTileDragging = false;
-
+                await MpAvContentWebViewDragHelper.StartDragAsync(cv, DragDropEffects.Copy | DragDropEffects.Move);
             },
             move: (move_e) => {
-
             },
             end: (end_e) => {
 
-                BindingContext.IsTileDragging = false;
+                //BindingContext.IsTileDragging = false;
                 //ended = true;
             },
             MIN_DISTANCE: 20);
