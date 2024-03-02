@@ -327,7 +327,7 @@ I also want you to feel comfortable using it. So I assure you, as being the only
 your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Period.</value>
   </data>
   <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste Studio - Clipboard Manager</value>
+    <value>MonkeyPaste</value>
     <comment>@Invariant</comment>
   </data>
   <data name="StoreShortName" xml:space="preserve">
@@ -335,7 +335,7 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
     <comment>@Invariant</comment>
   </data>
   <data name="StoreSortName" xml:space="preserve">
-    <value>MonkeyPaste Studio - Clipboard Manager</value>
+    <value>MonkeyPaste</value>
     <comment>@Invariant</comment>
   </data>
   <data name="StoreVoiceName" xml:space="preserve">

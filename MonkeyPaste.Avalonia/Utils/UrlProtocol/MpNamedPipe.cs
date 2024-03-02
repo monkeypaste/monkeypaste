@@ -26,7 +26,9 @@ namespace MonkeyPaste.Avalonia {
             _started = false;
             _pipeName = pipeType.ToString();
             _thread = new Thread(Main);
-            _thread.SetApartmentState(ApartmentState.STA);
+#if WINDOWS
+            _thread.SetApartmentState(ApartmentState.STA); 
+#endif
             _thread.Name = "NamePipe: " + pipeType.ToString() + " Thread";
             _thread.IsBackground = true;
         }

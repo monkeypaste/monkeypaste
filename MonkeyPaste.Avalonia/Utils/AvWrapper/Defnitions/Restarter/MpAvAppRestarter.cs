@@ -1,12 +1,10 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common.Wpf;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvAppRestarter {
@@ -35,23 +33,6 @@ namespace MonkeyPaste.Avalonia {
 
             await Task.Delay(1);
             //RequestRestartAsync(true, detail).FireAndForgetSafeAsync();
-        }
-
-        private static async Task RequestRestartAsync(bool is_initial, string detail) {
-            if (is_initial) {
-                //Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.Restart, detail);
-            }
-
-            WinApi.SetActiveWindow(MpAvWindowManager.PrimaryHandle);
-            WinApi.SetForegroundWindow(MpAvWindowManager.PrimaryHandle);
-
-            var result = await CoreApplication.RequestRestartAsync(App.RESTART_ARG);
-            if (result == AppRestartFailureReason.RestartPending) {
-                return;
-            }
-            MpConsole.WriteLine($"Restart failed. Reason: '{result}'");
-            await Task.Delay(100);
-            RequestRestartAsync(false, detail).FireAndForgetSafeAsync();
         }
     }
 }

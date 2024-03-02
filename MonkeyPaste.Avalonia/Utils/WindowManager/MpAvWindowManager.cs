@@ -5,12 +5,15 @@ using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+
+#if WINDOWS
+using MonkeyPaste.Common.Wpf;
+#endif
 
 namespace MonkeyPaste.Avalonia {
 

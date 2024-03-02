@@ -2458,6 +2458,8 @@
   </ItemGroup>
   <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
     <Compile Include="Utils\Helpers\MpAvAppleScripts.cs" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ScreenInfo\Collection\Item\Desktop\MpAvTaskbar.uwp.cs" />
+    <Compile Remove="Utils\Helpers\MpPngToIcoConverter.uwp.cs" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\Images\radar.png">

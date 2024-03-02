@@ -2,25 +2,23 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste.Avalonia
-{
-    public enum MpUserAccountState
-    {
+namespace MonkeyPaste.Avalonia {
+    public enum MpUserAccountState {
         Connected,
         Disconnected,
         Unregistered
     }
 
-    interface MpIAccountTools
-    {
+    interface MpIAccountTools {
+        string RateAppUri { get; }
+        string ThisProductUri { get; }
         string GetStoreSubscriptionUrl(MpUserAccountType uat, bool isMonthly);
         Task<bool> RefreshAddOnInfoAsync();
         Task<MpSubscriptionFormat> GetStoreUserLicenseInfoAsync();
         Task<bool?> PurchaseSubscriptionAsync(MpUserAccountType uat, bool isMonthly);
     }
 
-    public partial class MpAvAccountTools : MpIAccountTools
-    {
+    public partial class MpAvAccountTools : MpIAccountTools {
         #region Private Variables
         private MpContentCapInfo _lastCapInfo = new();
         private int _lastContentCount = 0;
@@ -57,23 +55,18 @@ namespace MonkeyPaste.Avalonia
         public int LastContentCount =>
             _lastContentCount;
 
-        public int GetAccountPriority(MpUserAccountType uat, bool isMonthly)
-        {
-            if(uat == MpUserAccountType.Free)
-            {
+        public int GetAccountPriority(MpUserAccountType uat, bool isMonthly) {
+            if (uat == MpUserAccountType.Free) {
                 return 0;
             }
-            if(uat == MpUserAccountType.Basic)
-            {
+            if (uat == MpUserAccountType.Basic) {
                 return isMonthly ? 1 : 2;
             }
             return isMonthly ? 3 : 4;
         }
 
-        public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType)
-        {
-            switch(acctType)
-            {
+        public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {
+            switch (acctType) {
                 default:
                 case MpUserAccountType.Free:
                     return MAX_FREE_CLIP_COUNT;
@@ -84,10 +77,8 @@ namespace MonkeyPaste.Avalonia
             }
         }
 
-        public int GetTrashCapacity(MonkeyPaste.MpUserAccountType acctType)
-        {
-            switch(acctType)
-            {
+        public int GetTrashCapacity(MonkeyPaste.MpUserAccountType acctType) {
+            switch (acctType) {
                 default:
                 case MpUserAccountType.Free:
                     return MAX_FREE_TRASH_COUNT;
@@ -98,38 +89,32 @@ namespace MonkeyPaste.Avalonia
             }
         }
 
-        public string GetAccountRate(MpUserAccountType acctType, bool isMonthly)
-        {
-            if(acctType == MpUserAccountType.Free)
-            {
+        public string GetAccountRate(MpUserAccountType acctType, bool isMonthly) {
+            if (acctType == MpUserAccountType.Free) {
                 return "$0.00";
             }
-            if(AccountTypePriceLookup.TryGetValue((acctType, isMonthly), out string rate))
-            {
+            if (AccountTypePriceLookup.TryGetValue((acctType, isMonthly), out string rate)) {
                 return rate;
             }
             // NOTE this should only happen when not offline
             return EMPTY_RATE_TEXT;
         }
 
-        public async Task<MpContentCapInfo> RefreshCapInfoAsync(MpUserAccountType cur_uat, MpAccountCapCheckType source, int added_ciid = 0)
-        {
+        public async Task<MpContentCapInfo> RefreshCapInfoAsync(MpUserAccountType cur_uat, MpAccountCapCheckType source, int added_ciid = 0) {
             int prev_content_count = _lastContentCount;
             int prev_trash_count = _lastTrashCount;
 
             int new_content_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.AllTagId);
             int new_trash_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.TrashTagId);
             bool has_changed = new_content_count != _lastContentCount || new_trash_count != _lastTrashCount;
-            if(has_changed)
-            {
+            if (has_changed) {
                 _lastContentCount = new_content_count;
                 _lastTrashCount = new_trash_count;
                 MpMessenger.SendGlobal(MpMessageType.AccountInfoChanged);
             }
 
             int content_cap = GetContentCapacity(cur_uat);
-            if(content_cap < 0)
-            {
+            if (content_cap < 0) {
                 // unlimited, no need to check trash
                 _lastCapInfo = new MpContentCapInfo();
                 return _lastCapInfo;
@@ -149,12 +134,10 @@ namespace MonkeyPaste.Avalonia
 
             int to_trash_ciid = 0;
             int max_diff = source == MpAccountCapCheckType.Add ? 0 : -1;
-            if(new_content_count - content_cap > max_diff)
-            {
+            if (new_content_count - content_cap > max_diff) {
                 int content_offset = MpAvPrefViewModel.Instance.ContentCountAtAccountDowngrade - content_cap;
-                if(content_offset >= new_content_count ||
-                    content_offset < 0)
-                {
+                if (content_offset >= new_content_count ||
+                    content_offset < 0) {
                     content_offset = 0;
                 }
                 to_trash_ciid = await GetNextToTrashAsync(content_offset, added_ciid);
@@ -166,13 +149,11 @@ namespace MonkeyPaste.Avalonia
             int trash_cap = GetTrashCapacity(cur_uat);
             bool needs_trash_cap_info = totalTrash >= trash_cap;
             int to_remove_ciid = 0;
-            if(needs_trash_cap_info)
-            {
+            if (needs_trash_cap_info) {
                 to_remove_ciid = await GetNextToRemoveAsync();
             }
 
-            _lastCapInfo = new MpContentCapInfo()
-            {
+            _lastCapInfo = new MpContentCapInfo() {
                 ToBeTrashed_ciid = to_trash_ciid,
                 ToBeRemoved_ciid = to_remove_ciid,
             };
@@ -237,10 +218,8 @@ namespace MonkeyPaste.Avalonia
         #region Public Methods
         private MpAvAccountTools() { }
 
-        public int GetSubscriptionTrialLength(MpUserAccountType uat, bool isMonthly)
-        {
-            if(AccountTypeTrialAvailabilityLookup.TryGetValue((uat, isMonthly), out int dayCount))
-            {
+        public int GetSubscriptionTrialLength(MpUserAccountType uat, bool isMonthly) {
+            if (AccountTypeTrialAvailabilityLookup.TryGetValue((uat, isMonthly), out int dayCount)) {
                 return dayCount;
             }
             return 0;
@@ -253,8 +232,7 @@ namespace MonkeyPaste.Avalonia
         #region Private Methods
 
         #region Cap
-        private async Task<int> GetNextToTrashAsync(int offset, int added_ciid)
-        {
+        private async Task<int> GetNextToTrashAsync(int offset, int added_ciid) {
             // NOTE during an 'Add' cap check added_ciid should be a new, non-duplicate ciid.
             // for free accts when favorites is full it would be selected for removal and would immediatly go to trash.
             // To workaround 'AddBlock' state, new item shouldn't be factored in so lowest priority favorite is selected.
@@ -275,23 +253,20 @@ order by LastCapRelatedDateTime limit 1 offset ?";
 
             // select non-favorite, non added ciid offseted by count at account downgrade
             var to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, MpTag.FavoritesTagId, added_ciid, offset);
-            if(to_trash_result.Any())
-            {
+            if (to_trash_result.Any()) {
                 return to_trash_result.First();
             }
             // no non-favorited items to trash or next to trash has no response,
 
             // requery allowing favorites
             to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, 0, added_ciid, offset);
-            if(to_trash_result.Any())
-            {
+            if (to_trash_result.Any()) {
                 return to_trash_result.First();
             }
             return 0;
         }
 
-        private async Task<int> GetNextToRemoveAsync()
-        {
+        private async Task<int> GetNextToRemoveAsync() {
             // select oldest and next oldest linked to trash(5)
             string to_remove_query = @"
 select pk_MpCopyItemId 

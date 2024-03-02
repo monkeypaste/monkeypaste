@@ -23,7 +23,7 @@
   <!-- MANUALLY SET PROPERTIES-->
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>MAC</BuildOs>
     <CultureExt>en-US</CultureExt>
     <IncludeCultures>True</IncludeCultures>
     <PushPlugins>false</PushPlugins>
@@ -48,8 +48,7 @@
     <!-- DEFAULTS (MAYBE OVERRIDEN BY CONDITIONS) -->
     <IsDesktop>false</IsDesktop>
     <IsMobile>false</IsMobile>
-    <DefaultPlatforms>AnyCPU;x64;x86</DefaultPlatforms>
-    <DefaultPlatforms>x64;</DefaultPlatforms>
+    <DefaultPlatforms>x64</DefaultPlatforms>
     <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
     <UseCefNet>true</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
@@ -91,7 +90,8 @@
     <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
-    <UseCefNet>true</UseCefNet>
+    <UseCefNet>false</UseCefNet>
+    <UseSugarWv>true</UseSugarWv>
     <PlatformShortName>linux</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\linux</BuildScriptsDir>
   </PropertyGroup>
@@ -102,9 +102,11 @@
     <DefineConstants>$(DefineConstants);MAC;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
-    <UseOutSysCef>true</UseOutSysCef>
+    <UseOutSysCef>false</UseOutSysCef>
+    <UseCefNet>false</UseCefNet>
+    <UseSugarWv>true</UseSugarWv>
     <PlatformShortName>mac</PlatformShortName>
-    <TargetRuntimeIdentifiers>osx-x64;</TargetRuntimeIdentifiers>
+    <TargetRuntimeIdentifiers>osx-x64</TargetRuntimeIdentifiers>
     <BuildScriptsDir>$(BuildScriptsRootDir)\mac</BuildScriptsDir>
     <!-- NOTE RuntimeIdentifiers set in mp-bundle-osx-x64.sh -->
     <!--<RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>-->

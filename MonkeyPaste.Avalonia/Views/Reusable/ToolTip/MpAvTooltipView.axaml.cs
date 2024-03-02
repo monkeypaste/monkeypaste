@@ -86,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
                 // BUG avalonia won't show tooltips if they open under pointer so scooching
                 host_control.Classes.Add("tt_near_right");
 #if MAC
-                host_control.Classes.Add("tt_near_top")
+                host_control.Classes.Add("tt_near_top");
 #else
                 host_control.Classes.Add("tt_near_bottom");
 #endif

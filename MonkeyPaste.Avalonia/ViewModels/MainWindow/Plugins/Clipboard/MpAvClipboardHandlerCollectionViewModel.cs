@@ -4,12 +4,15 @@ using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+#if WINDOWS
+using MonkeyPaste.Common.Wpf; 
+#endif
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardHandlerCollectionViewModel :

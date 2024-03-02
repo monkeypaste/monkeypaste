@@ -1,15 +1,15 @@
-﻿using Avalonia.Input;
+﻿using Avalonia;
+using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin;
-using Avalonia;
 
 
 
@@ -150,12 +150,12 @@ namespace MonkeyPaste.Common.Avalonia {
             await WaitForClipboardAsync();
 
             try {
-#if MAC
-                await ido.WriteToPasteboardAsync(false);
-#else
+                //#if MAC
+                //                await ido.WriteToPasteboardAsync(false);
+                //#else
 
                 await cb.SetDataObjectAsync(ido);
-#endif
+                //#endif
                 CloseClipboard();
             }
             catch (COMException) {

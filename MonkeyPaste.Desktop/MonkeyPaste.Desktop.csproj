@@ -65,6 +65,10 @@
     <ProjectReference Include="..\_build\_build.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="$(BuildOs) == 'MAC'">
+    <ProjectReference Include="..\MonkeyPaste.Desktop.Launcher\MonkeyPaste.Desktop.Launcher.csproj" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <None Remove="cef\**" />
