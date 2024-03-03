@@ -126,10 +126,11 @@ namespace MonkeyPaste.Avalonia {
 #if SUGAR_WV
         public override void RegisterServices() {
             base.RegisterServices();
-            AvaloniaWebViewBuilder.Initialize((e) => {
-                MpAvWebView.ConfigureWebViewCreationProperties(e);
+            AvaloniaWebViewBuilder.Initialize((config) => {
+                MpAvWebView.ConfigureWebViewCreationProperties(config);
             });
         }
+
 #endif
 
         public override async void OnFrameworkInitializationCompleted() {

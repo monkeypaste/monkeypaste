@@ -22,8 +22,4 @@
     <!-- NOTE This ony runs when no plug dir exists, like after manually running 'reset_all.bat' -->
     <!--<Exec Command="$(ProjectDir)scripts\windows\build_and_move_required_plugins.bat $(PluginTargetDir)" />-->
   </Target>
-  
-  <ItemGroup>
-    
-  </ItemGroup>
 </Project>

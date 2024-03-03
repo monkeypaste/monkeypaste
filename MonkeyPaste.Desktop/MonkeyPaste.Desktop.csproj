@@ -5,7 +5,7 @@
     <Nullable>disable</Nullable>
     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <Platforms>$(DefaultPlatforms)</Platforms>
+    <Platforms>AnyCpu;x64</Platforms>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <RuntimeIdentifier>$(TargetRuntimeIdentifiers)</RuntimeIdentifier>
     <ApplicationManifest>app.manifest</ApplicationManifest>

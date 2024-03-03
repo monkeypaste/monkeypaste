@@ -8,7 +8,7 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
-    <Platforms>$(DefaultPlatforms)</Platforms>
+    <Platforms>AnyCpu;x64</Platforms>
   </PropertyGroup>
 
 </Project>

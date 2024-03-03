@@ -225,7 +225,6 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
-        // public static unsafe IEnumerable<(MpColor, int)> GetStatistics(this Bitmap bmpSrc) {
         public static unsafe IEnumerable<(MpColor, int)> GetStatistics(this string imgBase64) {
             lock (_statsLock) {
                 try {

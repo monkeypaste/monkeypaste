@@ -177,7 +177,18 @@ namespace MonkeyPaste.Avalonia {
 #if CEFNET_WV
             this.GetMainFrame().ExecuteJavaScript(script, this.GetMainFrame().Url, 0);
 #elif SUGAR_WV
-            InnerWebView.ExecuteScriptAsync(script).FireAndForgetSafeAsync();
+            Dispatcher.UIThread.Post(async () => {
+                try {
+                    await InnerWebView.ExecuteScriptAsync(script);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteLine($"Error executing script!", true);
+                    MpConsole.WriteLine($"Script: '{script}'");
+                    MpConsole.WriteLine($"Ex: {ex}", false, true);
+
+                }
+            });
+
 #endif
         }
         #endregion

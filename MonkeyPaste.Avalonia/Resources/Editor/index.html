@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
     <title>Editor</title>
 
-    <script defer type="text/javascript">
+    <script type="text/javascript">
         const HTML_CONVERTER_PARAMS = "converter=true";
         const AUTO_TEST = "auto_test";
 
@@ -16,6 +16,16 @@
                 init_test();
             });
         }
+
+        //if (window.webkit) {
+            window.__dispatchMessageCallback = function (message) {
+                eval(message);
+                // return something to avoid null exception
+                return '';
+            };
+        //}
+
+        
 
 
     </script>

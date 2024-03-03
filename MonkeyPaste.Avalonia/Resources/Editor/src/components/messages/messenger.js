@@ -12,6 +12,13 @@
 
 // #region State
 
+function isRunningOnWebKit() {
+	if (window &&
+		window.webkit) {
+		return true;
+	}
+	return false;
+}
 function isRunningOnWebView2() {
 	if (window &&
 		window.chrome &&
@@ -56,15 +63,22 @@ function isDesktop() {
 
 function sendMessage(fn, msg) {
 	if (isRunningOnWebView2()) {
-		log('webview2 host detected!')
 		// output 'MpQuillPostMessageResponse'
 		let resp = {
 			msgType: fn,
 			msgData: msg,
 			handle: globals.ContentHandle
 		}; 
-		log(JSON.stringify(resp));
 		window.chrome.webview.postMessage(JSON.stringify(resp));
+		return;
+	}
+	if (isRunningOnWebKit()) {
+		let resp = {
+			msgType: fn,
+			msgData: msg,
+			handle: globals.ContentHandle
+		}; 
+		window.webkit.messageHandlers.webview.postMessage(JSON.stringify(resp));
 		return;
 	}
 	if (isRunningOnCef()) {

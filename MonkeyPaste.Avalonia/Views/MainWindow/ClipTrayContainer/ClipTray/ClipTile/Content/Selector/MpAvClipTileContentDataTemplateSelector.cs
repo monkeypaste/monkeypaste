@@ -20,7 +20,12 @@ namespace MonkeyPaste.Avalonia {
                 needs_fallback = true;
             }
 #elif SUGAR_WV
-            needs_fallback = ctvm.IsContentReadOnly;
+            needs_fallback =
+#if WINDOWS
+        ctvm.IsContentReadOnly; 
+#else
+                ctvm.IsContentReadOnly; //false;
+#endif
 #endif
             if (needs_fallback) {
 #if !SUGAR_WV
