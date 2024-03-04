@@ -10,6 +10,11 @@ using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using System.Threading.Tasks;
+using System.IO;
+using Avalonia.VisualTree;
+using Avalonia.WebView.MacCatalyst.Core;
+
+
 
 
 
@@ -20,6 +25,8 @@ using CefNet.Internal;
 #elif OUTSYS_WV
 using WebViewControl;
 #elif SUGAR_WV
+using Foundation;
+using WkWebview = WebKit.WKWebView;
 using WebViewCore.Configurations;
 using AvaloniaWebView;
 #endif
@@ -61,6 +68,7 @@ namespace MonkeyPaste.Avalonia {
             WebView.Settings.AddCommandLineSwitch("process-per-site", null);
 #elif SUGAR_WV
 
+
 #endif
         }
 
@@ -76,11 +84,10 @@ namespace MonkeyPaste.Avalonia {
             config.IsStatusBarEnabled = false;
             config.DefaultWebViewBackgroundColor = System.Drawing.Color.FromArgb(System.Drawing.Color.Transparent.ToArgb());
             config.AdditionalBrowserArguments = MpAvCefCommandLineArgs.ToArgString();
+            config.BrowserExecutableFolder = Path.GetDirectoryName(new MpAvPlatformInfo_desktop().EditorPath);
             MpConsole.WriteLine($"Cef args: '{config.AdditionalBrowserArguments}'");
-            //config.BrowserExecutableFolder = _creationProperties.BrowserExecutableFolder;
             //config.UserDataFolder = _creationProperties.UserDataFolder;
             //config.Language = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name;
-            //config.AdditionalBrowserArguments = _creationProperties.AdditionalBrowserArguments;
             //config.ProfileName = _creationProperties.ProfileName;
             //config.IsInPrivateModeEnabled = _creationProperties.IsInPrivateModeEnabled;
         }
@@ -155,18 +162,46 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIWebViewNavigator 
 #if OUTSYS_WV || SUGAR_WV
-        public void Navigate(string url) {
+        public virtual void Navigate(string urlStr) {
             // NOTE outsys has an address prop, this does nothing but is called when address changes
             // so treating it like Navigating cefnet event
 
 #if OUTSYS_WV
             IsNavigating = true;
-#else
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
+#elif SUGAR_WV
+            if (!Uri.IsWellFormedUriString(urlStr, UriKind.Absolute)) {
                 return;
             }
 
-            InnerWebView.Url = new Uri(url, UriKind.Absolute);
+#if MAC
+            /*
+            from https://stackoverflow.com/a/57756238/105028
+            [wkwebView.configuration.preferences setValue:@"TRUE" forKey:@"allowFileAccessFromFileURLs"];
+        NSURL *url = [NSURL fileURLWithPath:YOURFILEPATH];
+        [wkwebView loadFileURL:url allowingReadAccessToURL:url.URLByDeletingLastPathComponent];
+            */
+            //Dispatcher.UIThread.Post(async () => {
+            //    while (true) {
+            //        // wait for webview to get attached to visual tree (where PlatformWebView is assigned)
+            //        if (InnerWebView == null || InnerWebView.PlatformWebView == null) {
+            //            await Task.Delay(100);
+            //            continue;
+            //        }
+            //        break;
+            //    }
+            //    if (InnerWebView.PlatformWebView is MacCatalystWebViewCore wvc &&
+            //        wvc.WebView is WkWebview wv &&
+            //        urlStr.ToPathFromUri() is string url_path) {
+            //        wv.Configuration.Preferences.SetValueForKey(NSObject.FromObject(true), new NSString("allowFileAccessFromFileURLs"));
+            //        NSUrl url = NSUrl.FromFilename(url_path);
+            //        NSUrl url_dir = NSUrl.FromFilename(Path.GetDirectoryName(url_path));
+            //        wv.LoadFileUrl(url, url_dir);
+            //    }
+            //});
+            InnerWebView.Url = new Uri(urlStr, UriKind.Absolute);
+#else
+            InnerWebView.Url = new Uri(urlStr, UriKind.Absolute); 
+#endif
 #endif
         }
 #endif
@@ -197,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
 #if SUGAR_WV
-        WebView InnerWebView =>
+        protected WebView InnerWebView =>
             Content as WebView;
 #endif
 
@@ -305,16 +340,10 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged()).AddDisposable(_disposables);
 #if SUGAR_WV
             this.Content = new WebView();
+            InnerWebView.WebViewCreated += InnerWebView_WebViewCreated;
             InnerWebView.NavigationStarting += InnerWebView_NavigationStarting;
             InnerWebView.NavigationCompleted += InnerWebView_NavigationCompleted;
-            InnerWebView.WebMessageReceived += (s, e) => {
-                if (e.Message is not string jsonStr ||
-                    string.IsNullOrEmpty(jsonStr)) {
-                    return;
-                }
-                var msg = jsonStr.DeserializeObject<MpQuillPostMessageResponse>();
-                HandleBindingNotification(msg.msgType, msg.msgData, msg.handle);
-            };
+            InnerWebView.WebMessageReceived += InnerWebView_WebMessageReceived;
 #elif CEFNET_WV
             Navigating += MpAvWebView_Navigating;
             Navigated += MpAvWebView_Navigated;
@@ -340,10 +369,6 @@ namespace MonkeyPaste.Avalonia {
 #endif
 
         }
-
-
-
-
         #endregion
 
         #region Public Methods
@@ -407,6 +432,18 @@ namespace MonkeyPaste.Avalonia {
             }
 #endif
         }
+        protected override void OnUnloaded(global::Avalonia.Interactivity.RoutedEventArgs e) {
+            base.OnUnloaded(e);
+#if SUGAR_WV
+            if (InnerWebView == null) {
+                return;
+            }
+            InnerWebView.WebViewCreated -= InnerWebView_WebViewCreated;
+            InnerWebView.NavigationStarting -= InnerWebView_NavigationStarting;
+            InnerWebView.NavigationCompleted -= InnerWebView_NavigationCompleted;
+            InnerWebView.WebMessageReceived -= InnerWebView_WebMessageReceived;
+#endif
+        }
         #endregion
 
         #region Private Methods
@@ -441,6 +478,18 @@ namespace MonkeyPaste.Avalonia {
             OnNavigated(url);
         }
 #elif SUGAR_WV
+
+        private void InnerWebView_WebViewCreated(object sender, WebViewCore.Events.WebViewCreatedEventArgs e) {
+#if MAC
+            if (InnerWebView.PlatformWebView is MacCatalystWebViewCore wvc &&
+                    wvc.WebView is WkWebview wv) {
+                //wv.SetValueForKey(NSObject.FromObject(true), new NSString("drawsTransparentBackground"));
+                wv.SetValueForKey(NSObject.FromObject(false), new NSString("drawsBackground"));
+            } else {
+
+            }
+#endif
+        }
         private void InnerWebView_NavigationCompleted(object sender, WebViewCore.Events.WebViewUrlLoadedEventArg e) {
             IsNavigating = false;
             OnNavigated(InnerWebView.Url.AbsoluteUri);
@@ -448,6 +497,15 @@ namespace MonkeyPaste.Avalonia {
 
         private void InnerWebView_NavigationStarting(object sender, WebViewCore.Events.WebViewUrlLoadingEventArg e) {
             IsNavigating = true;
+        }
+
+        private void InnerWebView_WebMessageReceived(object sender, WebViewCore.Events.WebViewMessageReceivedEventArgs e) {
+            if (e.Message is not string jsonStr ||
+                    string.IsNullOrEmpty(jsonStr)) {
+                return;
+            }
+            var msg = jsonStr.DeserializeObject<MpQuillPostMessageResponse>();
+            HandleBindingNotification(msg.msgType, msg.msgData, msg.handle);
         }
 #endif
         #endregion

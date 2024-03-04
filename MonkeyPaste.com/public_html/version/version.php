@@ -3,12 +3,16 @@
 require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
 const WIN_VER = '1.0.11.0';
+const MAC_VER = '1.0.12.0';
 
 function exit_w_version_resp(string $device_type) {
      $resp_obj = null;
      switch ($device_type) {
           case 'Windows':
                $resp_obj = ['device_version' => WIN_VER];
+               break;
+          case 'Mac':
+               $resp_obj = ['device_version' => MAC_VER];
                break;
           default:
                exit_w_error('unknown device type');

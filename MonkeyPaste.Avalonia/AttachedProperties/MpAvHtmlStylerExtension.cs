@@ -348,11 +348,11 @@ body {{ white-space: pre-wrap; line-height: {6}px; color: {0}; font-size: {1}px;
 p {{ margin: 0; }}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 .underline {{ text-decoration: underline;  }}
-.highlight {{ background-color: {4}; color: black; }}t
+.highlight {{ background-color: {4}; color: black; }}
 .highlight-active {{ background-color: {5}; color: black; }}
 a:link {{ text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}",
-                        GetDefaultHexColor(hc).RemoveHexAlpha(), //0
+                        Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveColor").ToPortableColor().ToHex(true), //0
                         GetDefaultFontSize(hc), //1
                         GetDefaultFontFamily(hc), //2
                         MpSystemColors.gold1.RemoveHexAlpha(), //3

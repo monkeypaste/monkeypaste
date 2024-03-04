@@ -14,7 +14,7 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		//debug: true,
 		//allowReadOnlyEdits: true,
 		theme: "snow",
-		formula: true,
+		formula: false,
 		history: {
 			delay: 1000,
 			userOnly: false,

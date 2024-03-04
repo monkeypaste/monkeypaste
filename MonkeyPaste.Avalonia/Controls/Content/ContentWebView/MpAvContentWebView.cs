@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Web;
 using AvToolTip = Avalonia.Controls.ToolTip;
 
+
 #if CEFNET_WV
 using CefNet.Avalonia;
 #endif
@@ -35,6 +36,8 @@ using Xilium.CefGlue.Common.InternalHandlers;
 
 #if SUGAR_WV
 using TheArtOfDev.HtmlRenderer.Avalonia;
+using MonoMac.Foundation;
+
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -1075,6 +1078,7 @@ namespace MonkeyPaste.Avalonia {
 
 #if SUGAR_WV
             Background = Brushes.Transparent;
+
 #endif
         }
 

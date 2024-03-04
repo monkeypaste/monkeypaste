@@ -13,9 +13,9 @@ namespace MonkeyPaste.Avalonia {
             {"enable-devtools-experiments",null },
 #endif
 #if CEFNET_WV || SUGAR_WV
-            {"in-process-gpu",null },
-            {"disable-gpu",null },
-            {"disable-gpu-compositing",null },
+            //{"in-process-gpu",null },
+            //{"disable-gpu",null },
+            //{"disable-gpu-compositing",null },
             {"ignore-certificate-errors",null },
 
             //{"enable-begin-frame-scheduling",null },

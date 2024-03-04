@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncObject,
         MpIAsyncCollectionObject {
         #region Private Variables
+        private MpAvHiddenWindow _convWindow;
 
         #endregion
 
@@ -221,14 +222,17 @@ namespace MonkeyPaste.Avalonia {
 
 
             if (Mp.Services.PlatformInfo.IsDesktop) {
-                var quillWindow = new MpAvHiddenWindow();
+                _convWindow = new MpAvHiddenWindow() {
+                    Width = 10,
+                    Height = 10
+                };
 
-                quillWindow.Content = ConverterWebView;
+                _convWindow.Content = ConverterWebView;
                 ConverterWebView.AttachedToVisualTree += async (s, e) => {
                     var sw = Stopwatch.StartNew();
                     if (OperatingSystem.IsWindows()) {
                         // hide converter window from windows alt-tab menu
-                        MpAvToolWindow_Win32.SetAsToolWindow(quillWindow.TryGetPlatformHandle().Handle);
+                        MpAvToolWindow_Win32.SetAsToolWindow(_convWindow.TryGetPlatformHandle().Handle);
                     }
 
                     while (!ConverterWebView.IsEditorInitialized) {
@@ -238,13 +242,13 @@ namespace MonkeyPaste.Avalonia {
                         MpConsole.WriteLine("[loader] waiting for html converter init...");
                         await Task.Delay(100);
                     }
-                    quillWindow.Hide();
-                    quillWindow.WindowState = WindowState.Minimized;
+                    _convWindow.Hide();
+                    _convWindow.WindowState = WindowState.Minimized;
                     sw.Stop();
-                    MpConsole.WriteLine($"Html converter initialized. Load time: {sw.ElapsedMilliseconds}ms");
+                    MpConsole.WriteLine($"Html converter initialized. ({_convWindow.Bounds.Width}x{_convWindow.Bounds.Height}) Load time: {sw.ElapsedMilliseconds}ms");
                     IsLoaded = true;
                 };
-                quillWindow.Show();
+                _convWindow.Show();
             } else if (App.PrimaryView is MpAvMainView mv) {
                 ConverterWebView.AttachedToLogicalTree += (s, e) => {
                     ConverterWebView.IsVisible = false;
@@ -315,7 +319,16 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowConverterDevTools => new MpCommand(
             () => {
-                ConverterWebView.OpenDevTools();
+#if SUGAR_WV && MAC
+                // NOTE WKWebView doesn't have a 'show dev tools' only right-click context option so s
+                // showing the conv window
+                if (_convWindow is not MpAvHiddenWindow cw) {
+                    return;
+                }
+                cw.Unhide();
+#else
+                ConverterWebView.OpenDevTools(); 
+#endif
             });
 
         #endregion

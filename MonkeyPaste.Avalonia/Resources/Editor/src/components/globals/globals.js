@@ -728,7 +728,7 @@
 
 	// #region LOG
 	MinLogLevel: 0,
-	IsDebug: false,
+	IsDebug: true,
 	LogLevel_Verbose: 1,
 	LogLevel_Debug: 2,
 	LogLevel_Informational: 3,

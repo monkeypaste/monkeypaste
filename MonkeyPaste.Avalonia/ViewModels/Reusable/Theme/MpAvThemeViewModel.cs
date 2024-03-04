@@ -124,6 +124,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public bool IsMac =>
+#if MAC
+            true;
+#else
+            false;
+#endif
+
         public bool IsRtl {
             get =>
                 GetThemeValue<bool>(MpThemeResourceKey.IsRtl);

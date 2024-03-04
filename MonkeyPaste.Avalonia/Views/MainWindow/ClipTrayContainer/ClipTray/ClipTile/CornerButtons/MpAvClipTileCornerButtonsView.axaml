@@ -105,20 +105,22 @@
                     Value="-45" />
         </Style>
 
-        <!--  BL HOTKEY TOOLTIP  -->
+        <!--  MAC BOTTOM INDENT  -->
 
-        <!--<Style Selector="local|MpAvToolTipView.canHotkey">
-            <Setter Property="InputGestureText"
-                    Value="{Binding ., ConverterParameter=AssignShortcut, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
+        <Style Selector="Grid#OuterGrid.mac.windowed Button.bottom.left">
+            <Setter Property="Margin"
+                    Value="20,0,0,0" />
         </Style>
-
-        <Style Selector="local|MpAvToolTipView.canHotkey.activeHotkey">
-            <Setter Property="InputGestureText"
-                    Value="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
-        </Style>-->
+        <Style Selector="Grid#OuterGrid.mac.windowed Button.bottom.right">
+            <Setter Property="Margin"
+                    Value="0,0,20,0" />
+        </Style>
     </local:MpAvUserControl.Styles>
-    <Grid Classes.tileHover="{Binding IsHovering}"
+    <Grid x:Name="OuterGrid"
+          Classes.tileHover="{Binding IsHovering}"
           Classes.subselect="{Binding IsSubSelectionEnabled}"
+          Classes.windowed="{Binding IsWindowOpen}"
+          Classes.mac="{Binding IsMac, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           Margin="2">

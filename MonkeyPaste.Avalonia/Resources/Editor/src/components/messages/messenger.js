@@ -28,12 +28,6 @@ function isRunningOnWebView2() {
 	}
 	return false;
 }
-function isRunningOnHost() {
-	if (isRunningOnCef() || isRunningOnXam()) {
-		return true;
-	}
-	return false;
-}
 
 function isRunningOnCef() {
 	return typeof window['notifyLoadComplete'] === 'function';
@@ -50,6 +44,16 @@ function isRunningInIframe() {
 	return window.parent != window;
 }
 
+function isRunningOnHost() {
+	if (isRunningOnWebKit() ||
+		isRunningOnWebView2() ||
+		isRunningOnCef() ||
+		isRunningOnOutSys() ||
+		isRunningOnXam()) {
+		return true;
+	}
+	return false;
+}
 function isDesktop() {
 	return
 		globals.EnvName == globals.WindowsEnv ||

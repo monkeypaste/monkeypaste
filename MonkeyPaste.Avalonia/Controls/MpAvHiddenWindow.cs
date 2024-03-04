@@ -14,5 +14,13 @@ namespace MonkeyPaste.Avalonia {
             ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
             SystemDecorations = SystemDecorations.None;
         }
+
+        public void Unhide() {
+            Width = 500;
+            Height = 500;
+            Opacity = 1;
+            WindowState = WindowState.Normal;
+            Activate();
+        }
     }
 }

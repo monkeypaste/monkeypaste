@@ -24,9 +24,6 @@ function initLocalizer(cc) {
     });
     document.head.appendChild(culture_script_elm);
     //document.write(culture_script_elm.outerHTML);
-
-
-    
 }
 
 function initLocalizerDomWatcher() {

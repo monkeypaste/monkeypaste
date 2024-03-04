@@ -7,7 +7,6 @@ function initPlainHtmlConverter() {
 
 	if (!isRunningOnHost()) {
 		document.head.getElementsByTagName('title')[0].innerText = 'Editor (converter)';
-		getEditorContainerElement().classList.add('html-converter');
 	}
 
 	globals.quill = initQuill();
@@ -33,7 +32,7 @@ function initPlainHtmlConverter() {
 // #region State
 
 function isPlainHtmlConverter() {
-	return getEditorContainerElement().classList.contains('html-converter');
+	return getEditorElement().classList.contains('ql-editor-converter');
 }
 // #endregion State
 

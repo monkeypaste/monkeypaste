@@ -968,6 +968,9 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
                 if (Mp.Services.PlatformInfo.IsDesktop) {
+                    if (IsWindowOpen) {
+                        return true;
+                    }
                     if (IsHovering && !Parent.IsAnyDropOverTrays) {
                         return true;
                     }
@@ -1352,12 +1355,7 @@ namespace MonkeyPaste.Avalonia {
                 SelfRef == null;
 #endif
             if (trigger_self_ref_change) {
-                // NOTE in compatibility mode content template must be reselected
-                // and for overall efficiency re-setting datacontext is better than
-                // locating this tile from the view side (changing contentControl.content to id)
-                //OnPropertyChanged(nameof(ContentTemplateParam));
-                SelfRef = null;
-                SelfRef = this;
+                ResetDataTemplate();
             }
 #if SUGAR_WV
             if (CopyItemType == MpCopyItemType.Text) {
@@ -2042,6 +2040,10 @@ namespace MonkeyPaste.Avalonia {
                     Parent.UpdateTileLocationCommand.Execute(this);
                     break;
                 case nameof(IsWindowOpen):
+#if SUGAR_WV
+                    ResetDataTemplate();
+#endif
+                    OnPropertyChanged(nameof(IsCornerButtonsVisible));
                     break;
                 case nameof(CopyItemSize1):
                 case nameof(CopyItemSize2):
@@ -2081,9 +2083,9 @@ namespace MonkeyPaste.Avalonia {
             var pow = new MpAvWindow() {
                 DataContext = this,
                 ShowInTaskbar = true,
+                Background = Brushes.Transparent,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(WindowIcon), null, null) as WindowIcon,
                 Content = new MpAvClipTileView(),
-                Background = Brushes.Transparent,
                 CornerRadius = Mp.Services.PlatformResource.GetResource<CornerRadius>("TileCornerRadius")
             };
             if (pow.Content is MpAvClipTileView ctv &&
@@ -2341,7 +2343,14 @@ namespace MonkeyPaste.Avalonia {
             _isContentReadOnly = false;
             OnPropertyChanged(nameof(IsContentReadOnly));
         }
-
+        private void ResetDataTemplate() {
+            // NOTE in compatibility mode content template must be reselected
+            // and for overall efficiency re-setting datacontext is better than
+            // locating this tile from the view side (changing contentControl.content to id)
+            //OnPropertyChanged(nameof(ContentTemplateParam));
+            SelfRef = null;
+            SelfRef = this;
+        }
         private void StorePersistentState() {
             if (BoundWidth != MinWidth) {
                 MpAvPersistentClipTilePropertiesHelper.AddOrReplaceUniqueWidth_ById(CopyItemId, BoundWidth, QueryOffsetIdx);

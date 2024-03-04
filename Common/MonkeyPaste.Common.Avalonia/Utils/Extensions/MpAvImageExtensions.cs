@@ -45,7 +45,7 @@ namespace MonkeyPaste.Common.Avalonia {
                     return bmp.Scale(new MpSize(scale, scale));
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine("Error creating bitmap from bytes ", ex);
+                    MpConsole.WriteTraceLine($"Error creating bitmap from bytes '{bytes.ToBase64String()}'", ex);
                     return null;
                 }
             }
