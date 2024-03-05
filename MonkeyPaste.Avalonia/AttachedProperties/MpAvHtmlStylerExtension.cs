@@ -344,11 +344,15 @@ namespace MonkeyPaste.Avalonia {
                 case MpHtmlStyleType.Content:
                     css_str = string.Format(
 @"* {{ margin: 0; padding: 0; }}
+h1 {{ margin-bottom: .47em }}
+h2 {{ margin-bottom: .3em }}
+h3 {{ margin-bottom: .4em }}
+ul {{ margin-top: .5em }}
+ul li {{ margin: .25em }}
 body {{ white-space: pre-wrap; line-height: {6}px; color: {0}; font-size: {1}px; font-family: {2}; }}
 p {{ margin: 0; }}
-.paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 .underline {{ text-decoration: underline;  }}
-.highlight {{ background-color: {4}; color: black; }}
+.highlight-inactive {{ background-color: {4}; color: black; }}
 .highlight-active {{ background-color: {5}; color: black; }}
 a:link {{ text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}",
@@ -365,7 +369,7 @@ a:hover {{ text-decoration: underline; }}",
                 default:
                     css_str = string.Format(
 @"* {{ margin: 0; padding: 0; }}
-body {{ color: {0}; font-size: {1}px; font-family: {2}; }}
+body {{ color: {0}; font-size: {1}px; font-family: {2}; line-height: {4}px; }}
 p {{ margin: 0; }}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 a:link {{ text-decoration: none; }}
@@ -373,7 +377,8 @@ a:hover {{ text-decoration: underline; }}",
                         GetDefaultHexColor(hc).RemoveHexAlpha(), //0
                         GetDefaultFontSize(hc), //1
                         GetDefaultFontFamily(hc), //2
-                        MpSystemColors.gold1.RemoveHexAlpha() //3
+                        MpSystemColors.gold1.RemoveHexAlpha(), //3
+                        GetDefaultFontSize(hc) + 2 //4
                         );
                     break;
             }
@@ -381,4 +386,5 @@ a:hover {{ text-decoration: underline; }}",
             return css_str;
         }
     }
+
 }

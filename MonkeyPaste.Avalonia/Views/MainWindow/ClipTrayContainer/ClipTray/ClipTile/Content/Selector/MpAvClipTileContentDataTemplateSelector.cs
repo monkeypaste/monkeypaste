@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 #if WINDOWS
         ctvm.IsContentReadOnly; 
 #else
-                !ctvm.IsWindowOpen; //false;
+                ctvm.IsContentReadOnly; //false;
 #endif
 #endif
             if (needs_fallback) {

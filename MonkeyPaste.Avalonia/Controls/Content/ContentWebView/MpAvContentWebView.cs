@@ -36,7 +36,9 @@ using Xilium.CefGlue.Common.InternalHandlers;
 
 #if SUGAR_WV
 using TheArtOfDev.HtmlRenderer.Avalonia;
-using MonoMac.Foundation;
+#if MAC
+using MonoMac.Foundation; 
+#endif
 
 #endif
 
@@ -118,6 +120,8 @@ namespace MonkeyPaste.Avalonia {
             Interop.SendMessage(this, msgJsonBase64Str);
 #endif
         }
+
+
         #endregion
 
         //        #region MpIAyncJsonMessenger Implementation
@@ -319,7 +323,7 @@ namespace MonkeyPaste.Avalonia {
                 string pt = ignore_selection || ReadOnlyWebView.SelectedText.IsNullOrEmpty() ?
                     BindingContext.SearchableText : ReadOnlyWebView.SelectedText;
                 string html = ignore_selection || ReadOnlyWebView.SelectedHtml.IsNullOrEmpty() ?
-                    BindingContext.EditorFormattedItemData : ReadOnlyWebView.SelectedHtml;
+                    BindingContext.CopyItemData : ReadOnlyWebView.SelectedHtml;
                 // NOTE always providing text and html (should be stripping later)
 
                 avdo.SetData(MpPortableDataFormats.Text, pt);
@@ -1007,7 +1011,7 @@ namespace MonkeyPaste.Avalonia {
         #region ReadOnlyWebView
 
         HtmlPanel _readOnlyWebView;
-        HtmlPanel ReadOnlyWebView {
+        public HtmlPanel ReadOnlyWebView {
             get {
                 if (_readOnlyWebView == null &&
                     this.GetVisualAncestor<MpAvCompositeContentView>() is { } ccv) {
@@ -1544,9 +1548,14 @@ namespace MonkeyPaste.Avalonia {
                 // no content
                 return;
             }
+            var sw = Stopwatch.StartNew();
             while (!IsEditorInitialized) {
                 // wait for initMain - onInitComplete_ntf
                 await Task.Delay(100);
+                if (sw.Elapsed > TimeSpan.FromMilliseconds(5_000) && this is not MpAvPlainHtmlConverterWebView) {
+                    // timeout
+                    return;
+                }
             }
             if (BindingContext == null) {
                 // unloaded

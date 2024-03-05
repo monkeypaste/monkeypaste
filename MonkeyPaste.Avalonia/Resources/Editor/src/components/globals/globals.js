@@ -320,6 +320,8 @@
 	// #endregion
 
 	// #region FIND/REPLACE
+	HighlightAttrb: null,
+	ActiveHighlightAttrb: null,
 
 	CurFindReplaceDocRanges: null,
 	CurFindReplaceDocRangeIdx: -1,

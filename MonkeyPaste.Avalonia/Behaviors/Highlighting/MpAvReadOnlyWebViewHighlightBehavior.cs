@@ -92,7 +92,7 @@ namespace MonkeyPaste.Avalonia {
                     _matches.AddRange(
                         Mp.Services.Query.Infos
                         .Where(x => !string.IsNullOrEmpty(x.MatchValue) && x.QueryFlags.HasStringMatchFilterFlag())
-                        .SelectMany(x => ctvm.SearchableText.QueryText(x))
+                        .SelectMany(x => ctvm.SearchableText.StripLineBreaks().QueryText(x))
                         .Select(x => new MpTextRange(ContentRange.Document, x.Item1, x.Item2))
                         .Distinct()
                         .OrderBy(x => x.StartIdx)

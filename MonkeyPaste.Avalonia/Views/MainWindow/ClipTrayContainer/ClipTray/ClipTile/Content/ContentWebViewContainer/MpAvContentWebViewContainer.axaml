@@ -38,7 +38,4 @@
             <local:MpAvContentWebViewHighlightBehavior />
         </Interaction.Behaviors>
     </local:MpAvContentWebView>
-    <!--<avwv:WebView x:Name="AvWebView"
-                      Background="Transparent"
-                      Url="{Binding EditorUri, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />-->
 </local:MpAvUserControl>

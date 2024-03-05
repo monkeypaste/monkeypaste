@@ -5,6 +5,7 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using HtmlAgilityPack;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -584,10 +585,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
         public bool IsAppendButtonHovering { get; set; }
         public bool IsPasteButtonHovering { get; set; }
-        public bool HasSearchResults =>
-            HighlightRanges.Any();
+        public HtmlDocument CopyItemDoc { get; private set; } = new HtmlDocument();
         public string SearchableText { get; set; }
         public bool IsAnimating { get; set; }
         bool IsContentChangeModelChange { get; set; }
@@ -1285,6 +1286,7 @@ namespace MonkeyPaste.Avalonia {
             //IsBusy = true;
             await Task.Delay(1);
 
+
             bool is_query_item = queryOffset >= 0;
             bool is_pinned_item = !is_query_item && ci != null && ci.Id > 0;
             bool is_reload =
@@ -1349,7 +1351,7 @@ namespace MonkeyPaste.Avalonia {
 
             bool trigger_self_ref_change =
 #if SUGAR_WV
-                    true;
+                    !is_reload;
 #else
                 !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ||
                 SelfRef == null;
@@ -1362,6 +1364,11 @@ namespace MonkeyPaste.Avalonia {
                 SearchableText = CopyItemData.ToPlainText("html");
             } else if (CopyItemType == MpCopyItemType.FileList) {
                 SearchableText = CopyItemData;
+            }
+            if (CopyItemType == MpCopyItemType.Text && CopyItemId > 0) {
+                CopyItemDoc.LoadHtml(CopyItemData);
+            } else {
+                CopyItemDoc.LoadHtml(string.Empty);
             }
 #endif
             IsBusy = false;
@@ -2055,6 +2062,9 @@ namespace MonkeyPaste.Avalonia {
                     if (Parent != null && Parent.ListOrientation == Orientation.Horizontal) {
                         break;
                     }
+
+                    break;
+                case nameof(IsPlaceholder):
 
                     break;
                 case nameof(IsTileDragging):

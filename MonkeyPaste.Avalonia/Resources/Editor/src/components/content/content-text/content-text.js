@@ -470,7 +470,6 @@ function getBlotAtDocIdx(docIdx, isSearching = false) {
 	}
 	return null;
 }
-
 function getElementAtDocIdx(docIdx, ignoreTextNode = false, ignoreColGroup = true) {
 	if (!isNullOrUndefined(ignoreColGroup) &&
 		ignoreColGroup &&

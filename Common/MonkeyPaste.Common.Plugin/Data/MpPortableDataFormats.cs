@@ -182,7 +182,7 @@ namespace MonkeyPaste.Common.Plugin {
 #if WINDOWS
             WinFiles;
 #elif MAC
-            MacFiles1;
+            WinFiles;//MacFiles1;
 #endif
         public const string Csv =
 #if WINDOWS

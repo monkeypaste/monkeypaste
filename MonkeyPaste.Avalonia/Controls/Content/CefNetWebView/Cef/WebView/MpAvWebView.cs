@@ -12,7 +12,6 @@ using Avalonia.Threading;
 using System.Threading.Tasks;
 using System.IO;
 using Avalonia.VisualTree;
-using Avalonia.WebView.MacCatalyst.Core;
 
 
 
@@ -25,8 +24,11 @@ using CefNet.Internal;
 #elif OUTSYS_WV
 using WebViewControl;
 #elif SUGAR_WV
+#if MAC
 using Foundation;
 using WkWebview = WebKit.WKWebView;
+using Avalonia.WebView.MacCatalyst.Core; 
+#endif
 using WebViewCore.Configurations;
 using AvaloniaWebView;
 #endif
@@ -200,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
             //});
             InnerWebView.Url = new Uri(urlStr, UriKind.Absolute);
 #else
-            InnerWebView.Url = new Uri(urlStr, UriKind.Absolute); 
+            InnerWebView.Url = new Uri(urlStr, UriKind.Absolute);
 #endif
 #endif
         }
@@ -226,6 +228,22 @@ namespace MonkeyPaste.Avalonia {
 
 #endif
         }
+#if SUGAR_WV
+        public async Task<string> ExecuteJavascriptAsync(string msgJsonBase64Str) {
+            try {
+
+                string result = await InnerWebView.ExecuteScriptAsync(msgJsonBase64Str);
+                return result;
+            }
+            catch (Exception ex) {
+
+                MpConsole.WriteLine($"Error executing script!", true);
+                MpConsole.WriteLine($"Script: '{msgJsonBase64Str}'");
+                MpConsole.WriteLine($"Ex: {ex}", false, true);
+            }
+            return string.Empty;
+        }
+#endif
         #endregion
         #endregion
 

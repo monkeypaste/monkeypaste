@@ -61,14 +61,22 @@
         <Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvContentWebViewContainer">
             <Setter Property="IsVisible"
                     Value="True" />
+            <Setter Property="Width"
+                    Value="{StaticResource NaN}" />
+            <Setter Property="Height"
+                    Value="{StaticResource NaN}" />
         </Style>
         <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only av|HtmlPanel">
             <Setter Property="IsVisible"
                     Value="True" />
         </Style>
         <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only local|MpAvContentWebViewContainer">
-            <Setter Property="IsVisible"
-                    Value="False" />
+            <!--<Setter Property="IsVisible"
+                    Value="False" />-->
+            <Setter Property="Width"
+                    Value="1" />
+            <Setter Property="Height"
+                    Value="1" />
         </Style>
 
         <!--  PASTE BUTTON TOOLTIP (over webview)  -->
@@ -94,8 +102,16 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="CompositeWebViewContainerGrid"
-          RowDefinitions="*,60"
-          Classes.tile-hover="{Binding IsHovering}">
+          RowDefinitions="*,60">
+        <Classes.tile-hover>
+            <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                <Binding Path="IsHovering" />
+                <Binding Path="IsWindowOpen" />
+            </MultiBinding>
+        </Classes.tile-hover>
+        <!--<Interaction.Behaviors>
+            <local:MpAvContentWebViewHighlightBehavior />
+        </Interaction.Behaviors>-->
         <Classes.show-read-only>
             <MultiBinding Converter="{x:Static BoolConverters.And}">
                 <Binding Path="IsContentReadOnly" />

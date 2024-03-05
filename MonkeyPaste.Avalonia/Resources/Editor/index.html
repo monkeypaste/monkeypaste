@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
     <title>Editor</title>
 
+    <script src="src/components/messages/messenger.js"></script>
     <script type="text/javascript">
         const HTML_CONVERTER_PARAMS = "converter=true";
         const AUTO_TEST = "auto_test";
@@ -16,17 +17,12 @@
                 init_test();
             });
         }
-
-        //if (window.webkit) {
-            window.__dispatchMessageCallback = function (message) {
-                eval(message);
-                // return something to avoid null exception
-                return '';
-            };
-        //}
-
-        
-
+        window.__dispatchMessageCallback = function (message) {
+            eval(message);
+            // return something to avoid null exception
+            return '';
+        };
+        //window.__dispatchMessageCallback = receivedWindowMessage;
 
     </script>
 
@@ -52,7 +48,6 @@
     </script>
 
     <!--<link href="lib/katex/katex.min.css" rel="stylesheet" />-->
-
     <!-- EXTERNAL STYLES END -->
     <!-- INTERNAL STYLES BEGIN -->
 
@@ -196,7 +191,6 @@
     <script defer src="src/components/util/graphics/roundedRect.js"></script>
     <script defer src="src/components/util/graphics/screenshot.js"></script>
     <script defer src="src/components/converter/converter.js"></script>
-    <script defer src="src/components/messages/messenger.js"></script>
     <script defer src="src/components/messages/messages_ext.js"></script>
     <script defer src="src/components/messages/messages_ext_ntf.js"></script>
     <script defer src="src/components/messages/messages_get.js"></script>

@@ -365,6 +365,16 @@ namespace MonkeyPaste.Common {
             return hnc;
         }
 
+        public static HtmlNode FindParent(this HtmlNode node, string parentTagName) {
+            HtmlNode cur_node = node;
+            while (cur_node != null) {
+                if (cur_node.Name == parentTagName) {
+                    return cur_node;
+                }
+                cur_node = cur_node.ParentNode;
+            }
+            return null;
+        }
         public static HtmlNode SplitNode(this HtmlNode node, int match_idx, int len, string match_class_to_add) {
             try {
                 if (node.ParentNode is not { } parentNode) {
