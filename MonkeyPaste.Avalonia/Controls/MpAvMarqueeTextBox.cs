@@ -505,14 +505,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region HighlightRanges AvaloniaProperty
         // FORMAT [index,count]
-        private ObservableCollection<MpTextRange> _highlightRanges;
-        public ObservableCollection<MpTextRange> HighlightRanges {
+        private IEnumerable<MpTextRange> _highlightRanges;
+        public IEnumerable<MpTextRange> HighlightRanges {
             get => _highlightRanges;
             set => SetAndRaise(HighlightRangesProperty, ref _highlightRanges, value);
         }
 
-        public static readonly DirectProperty<MpAvMarqueeTextBox, ObservableCollection<MpTextRange>> HighlightRangesProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, ObservableCollection<MpTextRange>>
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IEnumerable<MpTextRange>> HighlightRangesProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IEnumerable<MpTextRange>>
             (
                 nameof(HighlightRanges),
                 o => o.HighlightRanges,
@@ -932,6 +932,7 @@ namespace MonkeyPaste.Avalonia {
         private double GetActiveHighlighAdjOffset(DrawingContext ctx, double x_offset, MpTextRange[] hlrl, int? active_idx) {
             if (hlrl == null ||
                 active_idx == null ||
+                active_idx.Value < 0 ||
                 active_idx.Value >= hlrl.Length ||
                 hlrl[active_idx.Value].StartIdx >= this.Text.Length) {
                 return 0;
@@ -957,10 +958,10 @@ namespace MonkeyPaste.Avalonia {
                     int? active_idx = ActiveHighlightIdx.HasValue && ActiveHighlightIdx.Value < hlr.Length ? ActiveHighlightIdx.Value : null;
                     var brl = GetAllBrushes(ReadOnlyBackground, InactiveHighlightBrush, ActiveHighlightBrush, active_idx, hrl.ToArray());
                     foreach (var br_kvp in brl) {
-                        if (br_kvp.Key is not IBrush brush) {
+                        if (br_kvp.Key is not IBrush brush ||
+                            _ft.BuildHighlightGeometry(offset, br_kvp.Value.StartIdx, br_kvp.Value.Count) is not { } g) {
                             continue;
                         }
-                        var g = _ft.BuildHighlightGeometry(offset, br_kvp.Value.StartIdx, br_kvp.Value.Count);
                         ctx.DrawGeometry(brush, null, g);
                     }
 

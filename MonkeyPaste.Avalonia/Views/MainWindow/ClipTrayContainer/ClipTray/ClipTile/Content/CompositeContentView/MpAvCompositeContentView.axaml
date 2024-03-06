@@ -74,9 +74,9 @@
             <!--<Setter Property="IsVisible"
                     Value="False" />-->
             <Setter Property="Width"
-                    Value="1" />
+                    Value="0" />
             <Setter Property="Height"
-                    Value="1" />
+                    Value="0" />
         </Style>
 
         <!--  PASTE BUTTON TOOLTIP (over webview)  -->
@@ -134,6 +134,8 @@
                       local:MpAvDropExtension.IsDragOverHandled="False"
                       local:MpAvDropExtension.IsDropHandled="False"
                       local:MpAvHighlightTextExtension.IsEnabled="True"
+                      local:MpAvHighlightTextExtension.HighlightRanges="{Binding HighlightRanges}"
+                      local:MpAvHighlightTextExtension.ActiveHighlightIdx="{Binding ActiveHighlightIdx}"
                       local:MpAvHtmlStylerExtension.IsEnabled="True"
                       local:MpAvHtmlStylerExtension.HtmlStyleType="Content"
                       local:MpAvHtmlStylerExtension.DefaultFontSize="{Binding DefaultFontSize, Source={x:Static local:MpAvPrefViewModel.Instance}}"

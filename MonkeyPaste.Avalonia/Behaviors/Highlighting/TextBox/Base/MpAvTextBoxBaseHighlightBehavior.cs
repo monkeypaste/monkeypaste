@@ -64,18 +64,11 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
             _matches.Clear();
 
-            bool can_match = CanMatch();
-
             if (AssociatedObject != null &&
                 AssociatedObject is TextBox tb &&
-                AssociatedObject.DataContext is MpIHighlightTextRangesInfoViewModel htrivm) {
-                var to_remove = htrivm.HighlightRanges.Where(x => x.Document == ContentRange.Document).ToList();
-                for (int i = 0; i < to_remove.Count; i++) {
-                    htrivm.HighlightRanges.Remove(to_remove[i]);
-                }
-                if (can_match) {
-
-                    _matches.AddRange(
+                AssociatedObject.DataContext is MpIHighlightTextRangesInfoViewModel htrivm &&
+                CanMatch()) {
+                _matches.AddRange(
                         Mp.Services.Query.Infos
                         .Where(x => !string.IsNullOrEmpty(x.MatchValue) && x.QueryFlags.HasStringMatchFilterFlag())
                         .SelectMany(x => tb.Text.QueryText(x))
@@ -83,13 +76,8 @@ namespace MonkeyPaste.Avalonia {
                         .Distinct()
                         .OrderBy(x => x.StartIdx)
                         .ThenBy(x => x.Count));
-
-                    foreach (var m in _matches) {
-                        htrivm.HighlightRanges.Add(m);
-                    }
-                }
             }
-            SetMatchCount(_matches.Count);
+            FinishFind(_matches);
         }
     }
 }

@@ -375,51 +375,111 @@ namespace MonkeyPaste.Common {
             }
             return null;
         }
-        public static HtmlNode SplitNode(this HtmlNode node, int match_idx, int len, string match_class_to_add) {
+        public static bool IsBlockElement(this HtmlNode node) {
+            return Regex.IsMatch(node.Name, "^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)");
+        }
+        public static HtmlNode CloneEmpty(this HtmlNode node) {
+            var empty_clone = node.Clone();
+            empty_clone.RemoveAllChildren();
+            return empty_clone;
+        }
+        public static (HtmlNode start, HtmlNode end) SplitTextNode(this HtmlTextNode text_node, int index, int length, string match_class_to_add) {
             try {
-                if (node.ParentNode is not { } parentNode) {
-                    return null;
+                if (text_node.ParentNode is not { } parentNode) {
+                    return default;
                 }
-                HtmlNode span_node = node.OwnerDocument.CreateElement("span");
-                int cur_idx = 0;
-                string match_text = node.InnerText.DecodeSpecialHtmlEntities().Substring(match_idx, len);
-                string node_text = node.InnerText.DecodeSpecialHtmlEntities();
+                bool was_parent_block = parentNode.IsBlockElement();
+                if (was_parent_block) {
+                    // ensure parent isn't block
+                    HtmlNode new_parent_span = text_node.OwnerDocument.CreateElement("span");
+                    new_parent_span.AppendChild(text_node);
+                    text_node.ParentNode.ReplaceChild(new_parent_span, text_node);
+                    parentNode = new_parent_span;
+                    text_node = parentNode.FirstChild as HtmlTextNode;
+                }
 
-                if (match_idx > 0) {
+                string node_text = text_node.InnerText.DecodeSpecialHtmlEntities();
+                string match_text = length < 0 ? node_text.Substring(index) : node_text.Substring(index, length);
+
+                List<HtmlNode> split_results = [];
+                //HtmlNode temp_wrapper_span = parentNode.CloneEmpty();
+                if (index > 0) {
                     // create lead run (in example "{'>',"")
-                    string lead_text = node_text.Substring(cur_idx, match_idx);
-                    HtmlNode lead_text_node = node.OwnerDocument.CreateTextNode(lead_text.EncodeSpecialHtmlEntities());
-                    HtmlNode lead_text_node_wrapper_span = node.OwnerDocument.CreateElement("span");
-                    lead_text_node_wrapper_span.AppendChild(lead_text_node);
-                    span_node.AppendChild(lead_text_node_wrapper_span);
+                    string lead_text = node_text.Substring(0, index);
+                    HtmlNode lead_text_node = text_node.OwnerDocument.CreateTextNode(lead_text.EncodeSpecialHtmlEntities());
+                    HtmlNode lead_span = parentNode.CloneEmpty();
+                    lead_span.AppendChild(lead_text_node);
+                    //temp_wrapper_span.AppendChild(lead_span);
+                    split_results.Add(lead_span);
                 }
 
                 // wrap match in span tag
-                HtmlNode match_text_node = node.OwnerDocument.CreateTextNode(match_text.EncodeSpecialHtmlEntities());
-                HtmlNode match_span_node = node.OwnerDocument.CreateElement("span");
-                match_span_node.AppendChild(match_text_node);
-                match_span_node.AddClass(match_class_to_add);
-                span_node.AppendChild(match_span_node);
+                HtmlNode match_text_node = text_node.OwnerDocument.CreateTextNode(match_text.EncodeSpecialHtmlEntities());
+                HtmlNode match_span = parentNode.CloneEmpty();
+                match_span.AppendChild(match_text_node);
+                match_span.AddClass(match_class_to_add);
+                //temp_wrapper_span.AppendChild(match_span_node);
+                split_results.Add(match_span);
 
-                cur_idx += match_idx + match_text.Length;
+                int end_idx = index + match_text.Length;
 
-                if (cur_idx < node_text.Length) {
+                if (end_idx < node_text.Length) {
                     // create trailing run after encoded special entities
-                    string trailing_text = node_text.Substring(cur_idx);
-                    HtmlNode trail_text_node = node.OwnerDocument.CreateTextNode(trailing_text.EncodeSpecialHtmlEntities());
-                    HtmlNode trailing_text_node_wrapper_span = node.OwnerDocument.CreateElement("span");
-                    trailing_text_node_wrapper_span.AppendChild(trail_text_node);
-                    span_node.AppendChild(trailing_text_node_wrapper_span);
+                    string trailing_text = node_text.Substring(end_idx);
+                    HtmlNode trail_text_node = text_node.OwnerDocument.CreateTextNode(trailing_text.EncodeSpecialHtmlEntities());
+                    HtmlNode trail_span = parentNode.CloneEmpty();
+                    trail_span.AppendChild(trail_text_node);
+                    //temp_wrapper_span.AppendChild(trail_span);
+                    split_results.Add(trail_span);
                 }
-                // swap old node w/ new split node
-                var new_wrap_span = parentNode.ReplaceChild(span_node, node);
-                // return match node
-                return match_span_node;
+                HtmlNode real_parent = was_parent_block ? parentNode.ParentNode : parentNode;
+                HtmlNode real_child = was_parent_block ? parentNode : text_node;
+                real_parent.ReplaceChild(split_results.First(), real_child);
+                foreach (var split_node in split_results.Skip(1)) {
+                    real_parent.InsertAfter(split_node, split_results.First());
+                }
+                return (split_results.First(), split_results.Last());
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error splitting node '{node.ToStringOrEmpty()}' idx {match_idx} len {len}", ex);
+                MpConsole.WriteTraceLine($"Error splitting node '{text_node.ToStringOrEmpty()}' idx {index} len {length}", ex);
             }
-            return null;
+            return default;
+        }
+        public static void ExtractRange(this (int sub_idx, HtmlTextNode node) start, (int sub_idx, HtmlTextNode node) end, string match_class_to_add) {
+            if (start.node == end.node) {
+                int len = end.sub_idx - start.sub_idx + 1;
+                start.node.SplitTextNode(start.sub_idx, len, match_class_to_add);
+                return;
+            }
+
+            var start_result = start.node.SplitTextNode(start.sub_idx, -1, match_class_to_add);
+            var end_result = end.node.SplitTextNode(0, end.sub_idx + 1, match_class_to_add);
+
+            void ExtractInner(HtmlNode node, HtmlTextNode source, HtmlTextNode target) {
+                if (node == null || node == target) {
+                    return;
+                }
+
+                if (node.IsBlockElement()) {
+                    ExtractInner(node.FirstChild, source, target);
+                    return;
+                }
+                if (node != source && node is HtmlTextNode tn) {
+                    var cur_result = tn.SplitTextNode(0, -1, match_class_to_add);
+                    node = cur_result.end;
+                }
+                if (node.NextSibling == null) {
+                    if (node.FirstChild == null) {
+                        ExtractInner(node.ParentNode.NextSibling, source, target);
+                        return;
+                    }
+                    ExtractInner(node.FirstChild, source, target);
+                    return;
+                }
+                ExtractInner(node.NextSibling, source, target);
+
+            }
+            ExtractInner(start_result.end, start_result.end.LastChild as HtmlTextNode, end_result.start.FirstChild as HtmlTextNode);
         }
         #endregion
 

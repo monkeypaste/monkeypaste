@@ -160,8 +160,14 @@ function getHighlightHtml() {
 				let hl_val =
 					i == globals.CurFindReplaceDocRangeIdx ? 'active' : 'inactive';
 				globals.quill.formatText(tr.index, tr.length, 'highlight', hl_val, 'user');
+				globals.quill.formatText(tr.index, tr.length, 'background-color', false, 'user');
+				globals.quill.formatText(tr.index, tr.length, 'color', false, 'user');
 			} else {
 				globals.quill.formatText(tr.index, tr.length, 'highlight', false, 'user');
+				let fmt = globals.quill.getFormat(tr.index, tr.length);
+				if (fmt.themecoloroverride) {
+					globals.quill.formatText(tr.index, tr.length, 'color', fmt.themecoloroverride, 'user');
+				}
 			}
 			
 		}
@@ -170,7 +176,7 @@ function getHighlightHtml() {
 	let result = globals.quill.root.innerHTML;
 	toggleHighlighting(false);
 	unsupressTextChanged(sup_guid);
-	return result;
+	return utf8_to_b64(result);
 }
 // #endregion Getters
 

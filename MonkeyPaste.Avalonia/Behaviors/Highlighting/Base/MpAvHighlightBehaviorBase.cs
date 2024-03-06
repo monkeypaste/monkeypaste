@@ -4,6 +4,8 @@ using Avalonia.Xaml.Interactivity;
 using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +23,8 @@ namespace MonkeyPaste.Avalonia {
         MpIHighlightRegion where T : Control {
         #region Private Variables
         #endregion
+
+        protected static MpTextRangeComparer TextRangeComparer = new MpTextRangeComparer();
 
         #region Properties
 
@@ -104,6 +108,18 @@ namespace MonkeyPaste.Avalonia {
                 // because textboxes are faster and old webview count still will be set
                 MatchCountChanged?.Invoke(this, _matchCount);
             }
+        }
+
+        protected void FinishFind(List<MpTextRange> matches) {
+            if (AssociatedObject == null ||
+                AssociatedObject.DataContext is not MpIHighlightTextRangesInfoViewModel hrivm) {
+                return;
+            }
+            var old_ranges = hrivm.HighlightRanges.Where(x => x.Document == ContentRange.Document).ToList();
+            if (old_ranges.Difference(matches, TextRangeComparer).Any()) {
+                hrivm.HighlightRanges = new(matches.Union(hrivm.HighlightRanges.Where(x => !old_ranges.Contains(x))));
+            }
+            SetMatchCount(matches.Count);
         }
 
         protected async Task AttachToSelectorAsync() {

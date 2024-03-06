@@ -24,8 +24,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIHighlightTextRangesInfoViewModel Implementation
 
-        ObservableCollection<MpTextRange> MpIHighlightTextRangesInfoViewModel.HighlightRanges { get; } = new ObservableCollection<MpTextRange>();
-        int MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx { get; set; } = -1;
+        public ObservableCollection<MpTextRange> HighlightRanges { get; set; } = new ObservableCollection<MpTextRange>();
+        public int ActiveHighlightIdx { get; set; } = -1;
 
         #endregion
 

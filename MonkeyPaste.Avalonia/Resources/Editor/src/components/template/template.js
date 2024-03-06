@@ -942,23 +942,26 @@ function insertTemplate(range, t, fromDropDown, source = 'api') {
 }
 
 function focusTemplate(ftguid) {
+    if (!hasTemplates()) {
+        return;
+    }
     let sup_guid = suppressTextChanged();
 
-    if (isShowingPasteToolbar()) {
-        // only mark template as visited after it loses focus
-        let old_ftguid = getFocusTemplateGuid();
-        if (old_ftguid) {
-            let ft = getTemplateDefByGuid(old_ftguid);
-            let telms = getTemplateElements(old_ftguid);
-            for (var i = 0; i < telms.length; i++) {
-                if (parseBool(telms[i].getAttribute('wasVisited')) == false) {
-                    telms[i].setAttribute('wasVisited', true);
-                }
+  //  if (isShowingPasteToolbar()) {
+  //      // only mark template as visited after it loses focus
+  //      let old_ftguid = getFocusTemplateGuid();
+  //      if (old_ftguid) {
+  //          let ft = getTemplateDefByGuid(old_ftguid);
+  //          let telms = getTemplateElements(old_ftguid);
+  //          for (var i = 0; i < telms.length; i++) {
+  //              if (parseBool(telms[i].getAttribute('wasVisited')) == false) {
+  //                  telms[i].setAttribute('wasVisited', true);
+  //              }
                 
-            }
-		}
+  //          }
+		//}
         
-    }
+  //  }
 
     if (ftguid == null) {
         unsupressTextChanged(sup_guid);

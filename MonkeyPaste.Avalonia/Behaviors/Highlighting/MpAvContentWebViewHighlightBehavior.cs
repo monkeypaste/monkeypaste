@@ -25,11 +25,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        MpAvContentWebView _contentWebView;
-        MpAvContentWebView ContentWebView {
+        protected MpAvContentWebView _contentWebView;
+        protected virtual MpAvContentWebView ContentWebView {
             get {
                 if (_contentWebView == null && AssociatedObject != null) {
-                    _contentWebView = AssociatedObject.GetLogicalDescendants().OfType<MpAvContentWebView>().FirstOrDefault();
+                    _contentWebView = AssociatedObject.GetSelfAndLogicalDescendants().OfType<MpAvContentWebView>().FirstOrDefault();
                 }
                 return _contentWebView;
             }
@@ -48,7 +48,8 @@ namespace MonkeyPaste.Avalonia {
                 if (ContentWebView.IsEditorLoaded) {
                     break;
                 }
-                if (ContentWebView.BindingContext.IsPlaceholder) {
+                if (ContentWebView.BindingContext == null ||
+                    ContentWebView.BindingContext.IsPlaceholder) {
                     // this is likely a tile that was filtered out of query
                     // by new search criteria and will block here until
                     // it needs to be used again so vacate
@@ -73,10 +74,15 @@ namespace MonkeyPaste.Avalonia {
                         await Task.Delay(100);
                     }
                     match_count = wv.SearchResponse.rangeCount;
-                    wv.SearchResponse = null;
+                    HandleSearchResponseAsync(wv).FireAndForgetSafeAsync();
                 }
             }
             SetMatchCount(match_count);
+        }
+
+        protected virtual async Task HandleSearchResponseAsync(MpAvContentWebView wv) {
+            wv.SearchResponse = null;
+            await Task.Delay(1);
         }
 
         public override async Task ApplyHighlightingAsync() {
@@ -96,10 +102,8 @@ namespace MonkeyPaste.Avalonia {
                 wv.SendMessage($"activateFindReplace_ext('{msg.SerializeObjectToBase64()}')");
 
 #if SUGAR_WV
-                //if (wv.ReadOnlyWebView != null && wv.ReadOnlyWebView.IsVisible) {
-                //    string hl_html = await wv.ExecuteJavascriptAsync("getHighlightHtml()");
-                //    wv.ReadOnlyWebView.SetCurrentValue(HtmlPanel.TextProperty, hl_html);
-                //}
+                if (wv.ReadOnlyWebView != null && wv.ReadOnlyWebView.IsVisible) {
+                }
 #endif
             }
 

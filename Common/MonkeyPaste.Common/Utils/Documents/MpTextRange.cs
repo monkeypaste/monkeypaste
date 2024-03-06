@@ -1,5 +1,8 @@
 ﻿using MonkeyPaste.Common.Plugin;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Xml.Linq;
 
 namespace MonkeyPaste.Common {
     public class MpTextRange :
@@ -72,11 +75,29 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Public Methods
-        public bool Contains(int idx) {
+        public bool ContainsOffset(int idx) {
             return idx >= StartIdx && idx <= EndIdx;
         }
 
-
         #endregion
+    }
+    public class MpTextRangeComparer : IEqualityComparer<MpTextRange> {
+        public bool Equals(MpTextRange x, MpTextRange y) {
+            if (x == y) {
+                return true;
+            }
+            if (x == null || y == null) {
+                return false;
+            }
+
+            return
+                x.Document == y.Document &&
+                x.StartIdx == y.StartIdx &&
+                x.Count == y.Count;
+        }
+
+        public int GetHashCode(MpTextRange obj) {
+            return obj.GetHashCode();
+        }
     }
 }

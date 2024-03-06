@@ -22,12 +22,12 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                     return
                         MpAvWindowManager.AllWindows
-                            .SelectMany(x => x.GetVisualDescendants<MpAvContentWebView>())
+                            .SelectMany(x => x.GetLogicalDescendants<MpAvContentWebView>())
                             .FirstOrDefault(x => x.BindingContext != null && x.BindingContext.CopyItemId == ciid && !x.BindingContext.IsPinPlaceholder);
                 }
                 return
                         MpAvWindowManager.AllWindows
-                            .SelectMany(x => x.GetVisualDescendants<MpAvContentTextBox>())
+                            .SelectMany(x => x.GetLogicalDescendants<MpAvContentTextBox>())
                             .FirstOrDefault(x => x.BindingContext != null && x.BindingContext.CopyItemId == ciid && !x.BindingContext.IsPinPlaceholder);
             }
             if (result.Count > 1) {

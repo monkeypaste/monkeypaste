@@ -100,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIHighlightTextRangesInfoViewModel Implementation
-        public ObservableCollection<MpTextRange> HighlightRanges { get; } = new ObservableCollection<MpTextRange>();
+        public ObservableCollection<MpTextRange> HighlightRanges { get; set; } = [];
         public int ActiveHighlightIdx { get; set; } = -1;
 
 
@@ -586,10 +586,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public MpCopyItemType LastCopyItemType { get; private set; }
         public bool IsAppendButtonHovering { get; set; }
         public bool IsPasteButtonHovering { get; set; }
         public HtmlDocument CopyItemDoc { get; private set; } = new HtmlDocument();
-        public string SearchableText { get; set; }
+        private string _searchableText = string.Empty;
+        public string SearchableText {
+            get => _searchableText;
+            set {
+                if (_searchableText != value) {
+                    _searchableText = value.ToStringOrEmpty();
+                    EncodedSearchableText = _searchableText.StripLineBreaks().EncodeSpecialHtmlEntities();
+                    OnPropertyChanged(nameof(SearchableText));
+                }
+            }
+        }
+        public string EncodedSearchableText { get; private set; }
         public bool IsAnimating { get; set; }
         bool IsContentChangeModelChange { get; set; }
         public bool CanDrop {
@@ -1298,6 +1310,7 @@ namespace MonkeyPaste.Avalonia {
             _contentView = null;
             if (!is_reload) {
                 IsWindowOpen = false;
+                LastCopyItemType = CopyItemType;
             }
 
             if (ci != null &&
@@ -1351,7 +1364,7 @@ namespace MonkeyPaste.Avalonia {
 
             bool trigger_self_ref_change =
 #if SUGAR_WV
-                    !is_reload;
+                    CopyItemType != LastCopyItemType;
 #else
                 !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ||
                 SelfRef == null;
@@ -2048,7 +2061,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsWindowOpen):
 #if SUGAR_WV
-                    ResetDataTemplate();
+                    if (!IsWindowOpen) {
+                        ResetDataTemplate();
+                    }
 #endif
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
                     break;
@@ -2102,8 +2117,8 @@ namespace MonkeyPaste.Avalonia {
                 ctv.Content is MpAvClipBorder cb) {
                 cb.CornerRadius = new CornerRadius(0);
             }
-            pow.Classes.Add("fadeIn");
-            pow.Classes.Add("fadeOut");
+            //pow.Classes.Add("fadeIn");
+            //pow.Classes.Add("fadeOut");
 
             #region Window Bindings
 
@@ -2191,17 +2206,23 @@ namespace MonkeyPaste.Avalonia {
         #region Event Wrappers
         private void HandleThisPopoutOpen(MpAvWindow pow, EventArgs e) {
             OnPropertyChanged(nameof(IsTitleVisible));
-            if (GetContentView() is not MpIContentView cv) {
-                // is this ok?
+            if (pow.GetLogicalDescendants<MpAvContentWebView>().FirstOrDefault() is not { } wv) {
                 return;
             }
-            cv.LoadContentAsync().FireAndForgetSafeAsync(this);
-            if (cv is not MpAvContentWebView wv) {
-                return;
-            }
+            //if (GetContentView() is not MpIContentView cv) {
+            //    // is this ok?
+            //    return;
+            //}
+            wv.LoadContentAsync().FireAndForgetSafeAsync(this);
+            //if (cv is not MpAvContentWebView wv) {
+            //    return;
+            //}
             Dispatcher.UIThread.Post(async () => {
                 // since selection isn't changing need manually move focus to pop out window
-                await Task.Delay(1000);
+                while (wv.IsEditorLoaded) {
+                    await Task.Delay(300);
+                }
+                await Task.Delay(150);
                 wv.FocusEditor();
             });
         }

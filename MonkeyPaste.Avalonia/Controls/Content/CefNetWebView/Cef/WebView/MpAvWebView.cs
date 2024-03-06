@@ -233,7 +233,7 @@ namespace MonkeyPaste.Avalonia {
             try {
 
                 string result = await InnerWebView.ExecuteScriptAsync(msgJsonBase64Str);
-                return result;
+                return result.Replace("\"", string.Empty).ToStringFromBase64();
             }
             catch (Exception ex) {
 

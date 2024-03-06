@@ -38,10 +38,11 @@ namespace MonkeyPaste.Avalonia {
 
         private string _userAgent = MpFileIo.GetDefaultUserAgent();
         public string UserAgent =>
-            ConverterWebView == null ||
-            string.IsNullOrEmpty(ConverterWebView.UserAgent) ?
-                _userAgent :
-                ConverterWebView.UserAgent;
+            //ConverterWebView == null ||
+            //string.IsNullOrEmpty(ConverterWebView.UserAgent) ?
+            //    _userAgent :
+            //    ConverterWebView.UserAgent;
+            _userAgent;
         #endregion
 
         #region MpIAsyncObject Implementation
@@ -327,7 +328,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 cw.Unhide();
 #else
-                ConverterWebView.OpenDevTools(); 
+                ConverterWebView.OpenDevTools();
 #endif
             });
 

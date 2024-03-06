@@ -10,7 +10,9 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
@@ -35,64 +37,97 @@ namespace MonkeyPaste.Avalonia {
         #region Statics
         static MpAvHighlightTextExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
-            RangesInfoViewModelProperty.Changed.AddClassHandler<Control>((x, y) => HandleRangesInfoViewModelChanged(x, y));
+            HighlightRangesProperty.Changed.AddClassHandler<Control>((x, y) => UpdateHighlights(x, nameof(HighlightRangesProperty)));
+            ActiveHighlightIdxProperty.Changed.AddClassHandler<Control>((x, y) => UpdateHighlights(x, nameof(ActiveHighlightIdxProperty)));
         }
 
         #endregion
 
         #region Properties
 
-        #region RangesInfoViewModel AvaloniaProperty
-        public static MpIHighlightTextRangesInfoViewModel GetRangesInfoViewModel(AvaloniaObject obj) {
-            if (obj.GetValue(RangesInfoViewModelProperty) is not MpIHighlightTextRangesInfoViewModel bound_htrvm) {
-                if (obj is not Control c ||
-                        c.DataContext == null) {
-                    return null;
-                }
-                if (c.DataContext is not MpIHighlightTextRangesInfoViewModel dc_htrvm) {
-                    throw new NotImplementedException($"Highlight ext needs highlight vm by datacontext or property binding");
-                }
-                // manually set hlr to trigger prop change attach
-                SetRangesInfoViewModel(obj, dc_htrvm);
-                return dc_htrvm;
-            }
-            return bound_htrvm;
+        //#region RangesInfoViewModel AvaloniaProperty
+        //public static MpIHighlightTextRangesInfoViewModel GetRangesInfoViewModel(AvaloniaObject obj) {
+        //    if (obj.GetValue(RangesInfoViewModelProperty) is not MpIHighlightTextRangesInfoViewModel bound_htrvm) {
+        //        if (obj is not Control c ||
+        //                c.DataContext == null) {
+        //            return null;
+        //        }
+        //        if (c.DataContext is not MpIHighlightTextRangesInfoViewModel dc_htrvm) {
+        //            throw new NotImplementedException($"Highlight ext needs highlight vm by datacontext or property binding");
+        //        }
+        //        // manually set hlr to trigger prop change attach
+        //        SetRangesInfoViewModel(obj, dc_htrvm);
+        //        return dc_htrvm;
+        //    }
+        //    return bound_htrvm;
+        //}
+
+        //public static void SetRangesInfoViewModel(AvaloniaObject obj, MpIHighlightTextRangesInfoViewModel value) {
+        //    obj.SetValue(RangesInfoViewModelProperty, value);
+        //}
+
+        //public static readonly AttachedProperty<MpIHighlightTextRangesInfoViewModel> RangesInfoViewModelProperty =
+        //    AvaloniaProperty.RegisterAttached<object, Control, MpIHighlightTextRangesInfoViewModel>(
+        //        "RangesInfoViewModel");
+
+        //private static void HandleRangesInfoViewModelChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
+        //    void HighlightRanges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+        //        UpdateHighlights(element);
+        //    }
+
+        //    void RangeInfoViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        //        if (//e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel)) ||
+        //            e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx)) ||
+        //            e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel.HighlightRanges))) {
+        //            UpdateHighlights(element);
+        //            //MpConsole.WriteLine($"highlight prop changed: '{e.PropertyName}'");
+        //        }
+        //        //
+        //    }
+
+        //    if (e.OldValue is MpIHighlightTextRangesInfoViewModel old_htrivm) {
+        //        old_htrivm.PropertyChanged -= RangeInfoViewModel_PropertyChanged;
+        //        old_htrivm.HighlightRanges.CollectionChanged -= HighlightRanges_CollectionChanged;
+        //    }
+        //    if (e.NewValue is MpIHighlightTextRangesInfoViewModel new_htrivm) {
+        //        new_htrivm.PropertyChanged += RangeInfoViewModel_PropertyChanged;
+        //        new_htrivm.HighlightRanges.CollectionChanged += HighlightRanges_CollectionChanged;
+        //    }
+        //    UpdateHighlights(element);
+        //}
+
+
+        //#endregion
+
+        #region HighlightRanges AvaloniaProperty
+        public static object GetHighlightRanges(AvaloniaObject obj) {
+            return obj.GetValue(HighlightRangesProperty);
         }
 
-        public static void SetRangesInfoViewModel(AvaloniaObject obj, MpIHighlightTextRangesInfoViewModel value) {
-            obj.SetValue(RangesInfoViewModelProperty, value);
+        public static void SetHighlightRanges(AvaloniaObject obj, object value) {
+            obj.SetValue(HighlightRangesProperty, value);
         }
 
-        public static readonly AttachedProperty<MpIHighlightTextRangesInfoViewModel> RangesInfoViewModelProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, MpIHighlightTextRangesInfoViewModel>(
-                "RangesInfoViewModel");
+        public static readonly AttachedProperty<object> HighlightRangesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "HighlightRanges",
+                defaultValue: null);
 
-        private static void HandleRangesInfoViewModelChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
-            void HighlightRanges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-                UpdateHighlights(element);
-            }
+        #endregion
 
-            void RangeInfoViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-                if (//e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel)) ||
-                    e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx)) ||
-                    e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel.HighlightRanges))) {
-                    UpdateHighlights(element);
-                    //MpConsole.WriteLine($"highlight prop changed: '{e.PropertyName}'");
-                }
-                //
-            }
-
-            if (e.OldValue is MpIHighlightTextRangesInfoViewModel old_htrivm) {
-                old_htrivm.PropertyChanged -= RangeInfoViewModel_PropertyChanged;
-                old_htrivm.HighlightRanges.CollectionChanged -= HighlightRanges_CollectionChanged;
-            }
-            if (e.NewValue is MpIHighlightTextRangesInfoViewModel new_htrivm) {
-                new_htrivm.PropertyChanged += RangeInfoViewModel_PropertyChanged;
-                new_htrivm.HighlightRanges.CollectionChanged += HighlightRanges_CollectionChanged;
-            }
-            UpdateHighlights(element);
+        #region ActiveHighlightIdx AvaloniaProperty
+        public static int GetActiveHighlightIdx(AvaloniaObject obj) {
+            return obj.GetValue(ActiveHighlightIdxProperty);
         }
 
+        public static void SetActiveHighlightIdx(AvaloniaObject obj, int value) {
+            obj.SetValue(ActiveHighlightIdxProperty, value);
+        }
+
+        public static readonly AttachedProperty<int> ActiveHighlightIdxProperty =
+            AvaloniaProperty.RegisterAttached<int, Control, int>(
+                "ActiveHighlightIdx",
+                defaultValue: -1);
 
         #endregion
 
@@ -148,7 +183,8 @@ namespace MonkeyPaste.Avalonia {
                 if (isEnabledVal) {
                     attached_control.Loaded += Attached_control_Loaded;
                     attached_control.Unloaded += Attached_control_Unloaded;
-                    attached_control.EffectiveViewportChanged += Attached_control_EffectiveViewportChanged;
+                    attached_control.SizeChanged += Attached_control_SizeChanged;
+                    //attached_control.EffectiveViewportChanged += Attached_control_EffectiveViewportChanged;
                     if (attached_control.IsInitialized) {
                         Attached_control_Loaded(attached_control, null);
                     }
@@ -159,26 +195,27 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void Attached_control_Loaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if (sender is not Control attached_control ||
-                _AttachedControlAdornerLookup.ContainsKey(attached_control)) {
+        private static void Attached_control_SizeChanged(object sender, SizeChangedEventArgs e) {
+            if (sender is not Control attached_control) {
                 return;
             }
-            var tha = new MpAvTextHighlightAdorner(attached_control);
-            _AttachedControlAdornerLookup.Add(attached_control, tha);
-            Dispatcher.UIThread.Post(async () => {
-                //AddVisualAdorner(attached_control, tha, AdornerLayer.GetAdornerLayer(attached_control));
-                await attached_control.AddOrReplaceAdornerAsync(tha);
 
-                UpdateHighlights(attached_control);
-            });
+            UpdateHighlights(attached_control, null);
+        }
+
+        private static void Attached_control_Loaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            if (sender is not Control attached_control) {
+                return;
+            }
+
+            UpdateHighlights(attached_control, null);
         }
 
         private static void Attached_control_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
             if (sender is not Control attached_control) {
                 return;
             }
-            UpdateHighlights(attached_control);
+            UpdateHighlights(attached_control, null);
         }
 
         private static void Attached_control_Unloaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
@@ -198,21 +235,64 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        private static void UpdateHighlights(Control attached_control) {
-            if (!_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha) ||
-                GetRangesInfoViewModel(attached_control) is not MpIHighlightTextRangesInfoViewModel hrivm) {
-                return;
-            }
+        private static void UpdateHighlights(Control attached_control, string sourcePropertyName) {
             if (attached_control is MpAvMarqueeTextBox mtb) {
-                mtb.HighlightRanges = hrivm.HighlightRanges;
-                mtb.ActiveHighlightIdx = hrivm.ActiveHighlightIdx < 0 ? null : hrivm.ActiveHighlightIdx;
+                mtb.HighlightRanges = GetHighlightRanges(attached_control) as IEnumerable<MpTextRange>;
+                mtb.ActiveHighlightIdx = GetActiveHighlightIdx(attached_control);
                 mtb.Redraw();
                 return;
             }
             if (attached_control is HtmlControl hc) {
-                HighlightHtml(hc, hrivm);
+                HighlightHtml(hc, sourcePropertyName);
                 return;
             }
+            HighlightTextControl(attached_control);
+        }
+
+        private static void HighlightTextControl(Control attached_control) {
+            var HighlightRanges = (GetHighlightRanges(attached_control) as IEnumerable<MpTextRange>).ToArray();
+            int ActiveHighlightIdx = GetActiveHighlightIdx(attached_control);
+
+            async Task FinishUpdate(IEnumerable<(IBrush, Geometry)> gl) {
+                if (!_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha)) {
+                    tha = new MpAvTextHighlightAdorner(attached_control);
+                    _AttachedControlAdornerLookup.Add(attached_control, tha);
+                    await attached_control.AddOrReplaceAdornerAsync(tha);
+                }
+                tha.DrawHighlights(gl);
+                if (attached_control is not TextBlock tb ||
+                    string.IsNullOrEmpty(tb.Text)) {
+                    return;
+                }
+                string text = tb.Text;
+                tb.Text = string.Empty;
+                tb.Inlines.Clear();
+                if (gl == null || !HighlightRanges.Any()) {
+                    // reset inlines
+                    tb.Text = text;
+                    return;
+                }
+                var gll = gl.ToList();
+                foreach (var (tr, idx) in HighlightRanges.WithIndex()) {
+                    IBrush fg = tb.Foreground;
+                    IBrush bg = gll[idx].Item1;
+                    if (bg is SolidColorBrush scb) {
+                        fg = scb.ToHex().ToContrastForegoundColor().ToAvBrush();
+                    }
+                    if (idx == 0 && tr.StartIdx > 0) {
+                        tb.Inlines.Add(new Run(text.Substring(0, tr.StartIdx)));
+                    }
+                    tb.Inlines.Add(new Run(text.Substring(tr.StartIdx, tr.Count)) { Foreground = fg, Background = bg });
+
+                    int end_idx = tr.StartIdx + tr.Count;
+                    if (idx == HighlightRanges.Length - 1) {
+                        tb.Inlines.Add(new Run(text.Substring(end_idx, text.Length - end_idx)));
+                    } else if (HighlightRanges[idx + 1].StartIdx - end_idx > 1) {
+                        tb.Inlines.Add(new Run(text.Substring(end_idx + 1, HighlightRanges[idx + 1].StartIdx - end_idx)));
+                    }
+                }
+            }
+            // create formatted text
             FormattedText ft = null;
             bool is_empty = false;
             if (attached_control.TryGetVisualDescendant<TextBox>(out var tb)) {
@@ -227,18 +307,19 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (is_empty ||
-                hrivm.HighlightRanges.Where(x => x.Document == null || x.Document == attached_control) is not IEnumerable<MpTextRange> hlrl ||
+                HighlightRanges.Where(x => x.Document == null || x.Document == attached_control) is not IEnumerable<MpTextRange> hlrl ||
                 !hlrl.Any()) {
-                FinishUpdate(attached_control, tha, null);
+                // no text or no highlights
+                FinishUpdate(null).FireAndForgetSafeAsync();
                 return;
             }
 
+            // create brushes/geometry
             var all_brl =
-                hrivm
-                .HighlightRanges
+                HighlightRanges
                 .Select((x, idx) =>
                     (
-                        idx == hrivm.ActiveHighlightIdx ?
+                        idx == ActiveHighlightIdx ?
                             GetActiveHighlightBrush(attached_control) ?? DefaultActiveHighlightBrush :
                             GetInactiveHighlightBrush(attached_control) ?? DefaultInactiveHighlightBrush,
                         x));
@@ -249,54 +330,91 @@ namespace MonkeyPaste.Avalonia {
                     x.Item1.ToHex().ToAvBrush() as IBrush,
                     ft.BuildHighlightGeometry(new Point(), x.Item2.StartIdx, x.Item2.Count)));
 
-            FinishUpdate(attached_control, tha, gl);
+            FinishUpdate(gl).FireAndForgetSafeAsync();
         }
 
 
-        private static void FinishUpdate(Control attached_control, MpAvTextHighlightAdorner tha, IEnumerable<(IBrush, Geometry)> gl) {
-            tha.DrawHighlights(gl);
-            if (attached_control is not TextBlock tb ||
-                string.IsNullOrEmpty(tb.Text) ||
-                GetRangesInfoViewModel(attached_control) is not MpIHighlightTextRangesInfoViewModel hrivm) {
+        private static void HighlightHtml(HtmlControl attached_control, string sourcePropertyName) {
+            if (attached_control.DataContext is not MpAvClipTileViewModel ctvm ||
+                ctvm.CopyItemDoc is null) {
                 return;
             }
+            var HighlightRanges = (GetHighlightRanges(attached_control) as IEnumerable<MpTextRange>).ToArray();
+            int ActiveHighlightIdx = GetActiveHighlightIdx(attached_control);
 
-            if (attached_control != null &&
-                attached_control.GetVisualAncestor<MpAvAnalyticItemSelectorView>() != null) {
+            var doc = ctvm.CopyItemDoc;
 
-            }
-            string text = tb.Text;
-            tb.Text = string.Empty;
-            tb.Inlines.Clear();
-            if (gl == null || !hrivm.HighlightRanges.Any()) {
-                // reset inlines
-                tb.Text = text;
-                return;
-            }
-
-            if (attached_control != null &&
-                attached_control.GetVisualAncestor<MpAvAnalyticItemSelectorView>() != null) {
-
-            }
-            var gll = gl.ToList();
-            foreach (var (tr, idx) in hrivm.HighlightRanges.WithIndex()) {
-                IBrush fg = tb.Foreground;
-                IBrush bg = gll[idx].Item1;
-                if (bg is SolidColorBrush scb) {
-                    fg = scb.ToHex().ToContrastForegoundColor().ToAvBrush();
-                }
-                if (idx == 0 && tr.StartIdx > 0) {
-                    tb.Inlines.Add(new Run(text.Substring(0, tr.StartIdx)));
-                }
-                tb.Inlines.Add(new Run(text.Substring(tr.StartIdx, tr.Count)) { Foreground = fg, Background = bg });
-
-                int end_idx = tr.StartIdx + tr.Count;
-                if (idx == hrivm.HighlightRanges.Count - 1) {
-                    tb.Inlines.Add(new Run(text.Substring(end_idx, text.Length - end_idx)));
-                } else if (hrivm.HighlightRanges[idx + 1].StartIdx - end_idx > 1) {
-                    tb.Inlines.Add(new Run(text.Substring(end_idx + 1, hrivm.HighlightRanges[idx + 1].StartIdx - end_idx)));
+            void ChangeActiveIdx() {
+                // adjust active idx to content range subset
+                //int range_diff = Math.Max(0, HighlightRanges.Count - hlrl.Length - 1);
+                int rel_active_idx =
+                    ActiveHighlightIdx -
+                    HighlightRanges
+                    .IndexOf(HighlightRanges.FirstOrDefault(x => x.Document == attached_control));
+                //MpConsole.WriteLine($"Actual {ActiveHighlightIdx} Relative {rel_active_idx}");
+                foreach (var (hl_node, idx) in doc.DocumentNode.SelectNodesSafe("span[contains(@class, 'highlight')]").WithIndex()) {
+                    hl_node.RemoveClass("highlight");
+                    hl_node.RemoveClass("highlight-active");
+                    hl_node.RemoveClass("highlight-active");
+                    hl_node.AddClass(idx == rel_active_idx ? "highlight-active" : "highlight-inactive");
                 }
             }
+            void ChangeRanges() {
+                // get content ranges
+                if (HighlightRanges.Where(x => x.Document == attached_control).ToArray() is not { } hlrl ||
+                    !hlrl.Any()) {
+                    return;
+                }
+
+                // find text nodes
+                //var text_nodes = doc.DocumentNode.SelectNodesSafe("//text() | //br");
+                var text_nodes = doc.DocumentNode.SelectNodesSafe("//text()");//.OfType<HtmlTextNode>().ToList();
+
+                (int sub_idx, HtmlTextNode node) FindNodeAtTextIdx(HtmlNodeCollection hnc, int idx) {
+                    if (!hnc.Any()) {
+                        return default;
+                    }
+                    int cur_idx = 0;
+                    foreach (var (n, tn_idx) in hnc.WithIndex()) {
+                        if (n is not HtmlTextNode tn) {
+                            continue;
+                        }
+                        string tn_text = tn.Text.DecodeSpecialHtmlEntities();
+                        //string tn_text = tn.InnerText;
+                        if (tn_text.Contains("\n")) {
+
+                        }
+                        int next_idx = cur_idx + tn_text.Length;
+                        if (cur_idx <= idx && idx < next_idx) {
+                            // idx part of this text node
+                            return (idx - cur_idx, tn);
+                        }
+                        cur_idx += tn_text.Length;
+                    }
+                    return default;
+                }
+                foreach (var (hlr, idx) in hlrl.WithIndex()) {
+                    var start_node_tup = FindNodeAtTextIdx(text_nodes, hlr.StartIdx);
+                    if (start_node_tup.IsDefault()) {
+                        continue;
+                    }
+                    var end_node_tup = FindNodeAtTextIdx(text_nodes, hlr.EndIdx);
+                    if (end_node_tup.IsDefault()) {
+                        continue;
+                    }
+                    start_node_tup.ExtractRange(end_node_tup, "highlight");
+                }
+            }
+
+            if (sourcePropertyName == nameof(ActiveHighlightIdxProperty)) {
+                ChangeActiveIdx();
+            } else {
+                //ChangeRanges();
+                ChangeActiveIdx();
+            }
+
+
+            attached_control.Text = doc.DocumentNode.OuterHtml;
         }
 
         private static void RemoveVisualAdorner(Visual visual, Control? adorner, AdornerLayer? layer) {
@@ -306,73 +424,6 @@ namespace MonkeyPaste.Avalonia {
 
             layer.Children.Remove(adorner);
             ((ISetLogicalParent)adorner).SetParent(null);
-        }
-
-        private static void HighlightHtml(HtmlControl hc, MpIHighlightTextRangesInfoViewModel hrivm) {
-            if (hrivm is not MpAvClipTileViewModel ctvm ||
-                ctvm.CopyItemDoc is null) {
-                return;
-            }
-            var doc = ctvm.CopyItemDoc;
-            // clear current highlights
-            foreach (var hl_node in doc.DocumentNode.SelectNodesSafe("span[contains(@class, 'highlight')]")) {
-                hl_node.RemoveClass("highlight-inactive");
-                hl_node.RemoveClass("highlight-active");
-            }
-            // get content ranges
-            if (hrivm.HighlightRanges == null ||
-                hrivm.HighlightRanges.Where(x => x.Document == hc).ToArray() is not { } hlrl ||
-                !hlrl.Any()) {
-                return;
-            }
-            // adjust active idx to content range subset
-            //int range_diff = Math.Max(0, hrivm.HighlightRanges.Count - hlrl.Length - 1);
-            int range_diff = hrivm.HighlightRanges.Count - hlrl.Length;
-            int active_idx = hrivm.ActiveHighlightIdx >= 0 && hrivm.ActiveHighlightIdx >= range_diff ?
-                hrivm.ActiveHighlightIdx - range_diff : -1;
-            MpConsole.WriteLine($"Actual {hrivm.ActiveHighlightIdx} Relative {active_idx}");
-            // find text nodes
-            //var text_nodes = doc.DocumentNode.SelectNodesSafe("//text() | //br");
-            var text_nodes = doc.DocumentNode.SelectNodesSafe("//text()");//.OfType<HtmlTextNode>().ToList();
-
-            (int sub_idx, HtmlNode node) FindNodeAtTextIdx(HtmlNodeCollection hnc, int idx) {
-                if (!hnc.Any()) {
-                    return default;
-                }
-                int cur_idx = 0;
-                foreach (var (n, tn_idx) in hnc.WithIndex()) {
-                    if (n is not HtmlTextNode tn) {
-                        continue;
-                    }
-                    string tn_text = tn.Text.DecodeSpecialHtmlEntities();
-                    if (tn_text.Contains("\n")) {
-
-                    }
-                    int next_idx = cur_idx + tn_text.Length;
-                    if (cur_idx <= idx && idx < next_idx) {
-                        // idx part of this text node
-                        return (idx - cur_idx, tn);
-                    }
-                    cur_idx += tn_text.Length;
-                }
-                return default;
-            }
-            foreach (var (hlr, idx) in hlrl.WithIndex()) {
-                string hl_class = idx == active_idx ? "highlight-active" : "highlight-inactive";
-                var start_node_tup = FindNodeAtTextIdx(text_nodes, hlr.StartIdx);
-                if (start_node_tup.IsDefault()) {
-                    continue;
-                }
-                var end_node_tup = FindNodeAtTextIdx(text_nodes, hlr.EndIdx);
-                HtmlNode match_node = null;
-
-                if (start_node_tup.node != end_node_tup.node) {
-                    // not sure what to do yet
-                } else {
-                    match_node = start_node_tup.node.SplitNode(start_node_tup.sub_idx, hlr.Count, hl_class);
-                }
-            }
-            hc.Text = doc.DocumentNode.OuterHtml;
         }
     }
 

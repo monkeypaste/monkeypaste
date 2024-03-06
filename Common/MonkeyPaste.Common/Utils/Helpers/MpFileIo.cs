@@ -823,7 +823,8 @@ namespace MonkeyPaste.Common {
         }
 
         public static string GetDefaultUserAgent() {
-            string user_agent_str = $"Mozilla/5.0 (compatible; {MpCommonTools.Services.ThisAppInfo.ThisAppProductName}/{MpCommonTools.Services.ThisAppInfo.ThisAppProductVersion})";
+            //string user_agent_str = $"Mozilla/5.0 (compatible; {MpCommonTools.Services.ThisAppInfo.ThisAppProductName}/{MpCommonTools.Services.ThisAppInfo.ThisAppProductVersion})";
+            string user_agent_str = $"{MpCommonTools.Services.ThisAppInfo.ThisAppProductName})";
             return user_agent_str;
         }
 
@@ -831,7 +832,8 @@ namespace MonkeyPaste.Common {
             //httpClient.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
             //httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(MpCommonTools.Services.ThisAppInfo.ThisAppProductName);
             string ua = MpCommonTools.Services.UserAgentProvider.UserAgent;
-            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(ua);
+            //httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(ua);
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "C# App");
         }
     }
 

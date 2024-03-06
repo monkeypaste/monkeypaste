@@ -1,4 +1,6 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.LogicalTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -13,12 +15,39 @@ using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvReadOnlyWebViewHighlightBehavior : MpAvHighlightBehaviorBase<HtmlPanel> {
+    public class MpAvReadOnlyWebViewHighlightBehavior : MpAvContentWebViewHighlightBehavior {
+
+        protected override MpAvContentWebView ContentWebView {
+            get {
+                if (_contentWebView == null && AssociatedObject != null &&
+                    AssociatedObject.GetVisualAncestor<UserControl>() is { } uc &&
+                    uc.GetVisualDescendant<MpAvContentWebView>() is { } wv) {
+                    _contentWebView = wv;
+                }
+                return _contentWebView;
+            }
+        }
+        protected override async Task HandleSearchResponseAsync(MpAvContentWebView wv) {
+            await Task.Delay(30);
+            string HighlightHtml = await wv.ExecuteJavascriptAsync("getHighlightHtml()");
+            SetWebViewHtml(wv, HighlightHtml);
+            await base.HandleSearchResponseAsync(wv);
+        }
+
+        private void SetWebViewHtml(MpAvContentWebView wv, string html) {
+            wv.ReadOnlyWebView.Text = html;
+        }
+    }
+
+    [DoNotNotify]
+    public class MpAvReadOnlyWebViewHighlightBehavior2 : MpAvHighlightBehaviorBase<HtmlPanel> {
         private List<IDisposable> _disposables = [];
         public override MpHighlightType HighlightType => MpHighlightType.Content;
         public override MpContentQueryBitFlags AcceptanceFlags =>
             MpContentQueryBitFlags.Annotations |
-            MpContentQueryBitFlags.Content; protected List<MpTextRange> _matches = new List<MpTextRange>();
+            MpContentQueryBitFlags.Content;
+
+        protected List<MpTextRange> _matches = new List<MpTextRange>();
 
         private MpTextRange _contentRange;
         protected override MpTextRange ContentRange {
@@ -73,7 +102,15 @@ namespace MonkeyPaste.Avalonia {
             htrivm.HighlightRanges.Clear();
             htrivm.ActiveHighlightIdx = -1;
         }
-
+        MpAvContentWebView _contentWebView;
+        MpAvContentWebView ContentWebView {
+            get {
+                if (_contentWebView == null && AssociatedObject != null) {
+                    _contentWebView = AssociatedObject.GetLogicalDescendants().OfType<MpAvContentWebView>().FirstOrDefault();
+                }
+                return _contentWebView;
+            }
+        }
 
         public override async Task FindHighlightingAsync() {
             await Task.Delay(1);
@@ -82,28 +119,20 @@ namespace MonkeyPaste.Avalonia {
 
             if (AssociatedObject != null &&
                 AssociatedObject is HtmlPanel hp &&
-                AssociatedObject.DataContext is MpAvClipTileViewModel ctvm) {
-                var to_remove = ctvm.HighlightRanges.Where(x => x.Document == ContentRange.Document).ToList();
-                for (int i = 0; i < to_remove.Count; i++) {
-                    ctvm.HighlightRanges.Remove(to_remove[i]);
-                }
-                if (CanMatch()) {
+                AssociatedObject.DataContext is MpAvClipTileViewModel ctvm &&
+                CanMatch()) {
 
-                    _matches.AddRange(
+                _matches.AddRange(
                         Mp.Services.Query.Infos
                         .Where(x => !string.IsNullOrEmpty(x.MatchValue) && x.QueryFlags.HasStringMatchFilterFlag())
+                        //.SelectMany(x => ctvm.EncodedSearchableText.QueryText(x.MatchValue.EncodeSpecialHtmlEntities(),x.CaseSensitive,x.WholeWord,x.UseRegex))
                         .SelectMany(x => ctvm.SearchableText.StripLineBreaks().QueryText(x))
                         .Select(x => new MpTextRange(ContentRange.Document, x.Item1, x.Item2))
                         .Distinct()
                         .OrderBy(x => x.StartIdx)
                         .ThenBy(x => x.Count));
-
-                    foreach (var m in _matches) {
-                        ctvm.HighlightRanges.Add(m);
-                    }
-                }
             }
-            SetMatchCount(_matches.Count);
+            FinishFind(_matches);
         }
     }
 }
