@@ -18,9 +18,10 @@
             });
         }
         window.__dispatchMessageCallback = function (message) {
-            eval(message);
+            let result = eval(message);
+            result = isNullOrUndefined(result) ? ' ' : result;
             // return something to avoid null exception
-            return '';
+            return result;
         };
         //window.__dispatchMessageCallback = receivedWindowMessage;
 
@@ -115,9 +116,7 @@
     <script defer src="src/components/util/debug.js"></script>
 
     <script defer type="text/javascript">
-        //loadLifeCycleHandlers();
         document.addEventListener('DOMContentLoaded', (e) => {
-            //init_test();
             window.name = globals.EDITOR_WINDOW_NAME;
             onDomLoaded_ntf();
         });
@@ -131,11 +130,7 @@
                 console.log('unload accepted, is reloading');
                 return undefined;
             }
-            //if (!isRunningInHost()) {
-            //    return;
-            //}
 
-            //alert('Are you sure you want to leave?');
             console.log('unload rejected');
             e.preventDefault();
             e.stopPropagation();

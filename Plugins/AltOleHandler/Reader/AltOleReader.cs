@@ -104,6 +104,7 @@ namespace AltOleHandler {
             };
         }
         private async Task<object> ReadDataObjectFormat(string format, IDataObject avdo) {
+            await Task.Delay(1);
             object format_data = null;
 
             //if (avdo == null) {

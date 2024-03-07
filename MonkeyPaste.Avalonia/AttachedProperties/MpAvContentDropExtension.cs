@@ -105,10 +105,11 @@ namespace MonkeyPaste.Avalonia {
                 e.DragEffects = DragDropEffects.None;
                 return;
             }
+            string pt = e.Data.Get(MpPortableDataFormats.Text) as string;
             if (sender is TextBox tb) {
-                tb.Text = e.Data.Get(MpPortableDataFormats.Text) as string;
+                tb.SetCurrentValue(TextBox.TextProperty, pt);
             } else if (sender is AutoCompleteBox acb) {
-                acb.Text = e.Data.Get(MpPortableDataFormats.Text) as string;
+                acb.SetCurrentValue(AutoCompleteBox.TextProperty, pt);
             }
         }
 

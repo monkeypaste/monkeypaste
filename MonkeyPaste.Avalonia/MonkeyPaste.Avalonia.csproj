@@ -23,16 +23,6 @@
   <PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
     <UseWPF>True</UseWPF>
   </PropertyGroup>
-
-
-  <PropertyGroup>
-    <NoWarn>CS8632</NoWarn>
-    <NoWarn>CS8073</NoWarn>
-    <NoWarn>$(NoWarn),IDE1006</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup>
-    <WarningsAsErrors>CS4014;</WarningsAsErrors>
-  </PropertyGroup>
   
   <ItemGroup>
     <AndroidJavaSource Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />

@@ -54,7 +54,7 @@
         </Style>-->
 
         <!--  READ ONLY / WEBVIEW OPACITY TOGGLE  -->
-        <Style Selector="Grid#CompositeWebViewContainerGrid av|HtmlPanel">
+        <Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvHtmlPanel">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
@@ -66,7 +66,7 @@
             <Setter Property="Height"
                     Value="{StaticResource NaN}" />
         </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only av|HtmlPanel">
+        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only local|MpAvHtmlPanel">
             <Setter Property="IsVisible"
                     Value="True" />
         </Style>
@@ -80,7 +80,7 @@
         </Style>
 
         <!--  PASTE BUTTON TOOLTIP (over webview)  -->
-        <Style Selector="av|HtmlPanel.over-paste-button">
+        <Style Selector="local|MpAvHtmlPanel.over-paste-button">
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
@@ -90,7 +90,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style Selector="av|HtmlPanel.over-append-button">
+        <Style Selector="local|MpAvHtmlPanel.over-append-button">
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
@@ -109,9 +109,6 @@
                 <Binding Path="IsWindowOpen" />
             </MultiBinding>
         </Classes.tile-hover>
-        <!--<Interaction.Behaviors>
-            <local:MpAvContentWebViewHighlightBehavior />
-        </Interaction.Behaviors>-->
         <Classes.show-read-only>
             <MultiBinding Converter="{x:Static BoolConverters.And}">
                 <Binding Path="IsContentReadOnly" />
@@ -120,33 +117,39 @@
             </MultiBinding>
         </Classes.show-read-only>
         <!--  READ ONLY WEBVIEW  -->
-        <av:HtmlPanel x:Name="ReadOnlyWebView"
-                      Classes="content-zoom"
-                      Classes.over-paste-button="{Binding IsPasteButtonHovering}"
-                      Classes.over-append-button="{Binding IsAppendButtonHovering}"
-                      Grid.RowSpan="2"
-                      HorizontalAlignment="Left"
-                      VerticalAlignment="Top"
-                      Margin="5"
-                      local:MpAvDropExtension.IsEnabled="True"
-                      local:MpAvDropExtension.DragEnterCommand="{Binding DragEnterCommand}"
-                      local:MpAvDropExtension.DragLeaveCommand="{Binding DragLeaveCommand}"
-                      local:MpAvDropExtension.IsDragOverHandled="False"
-                      local:MpAvDropExtension.IsDropHandled="False"
-                      local:MpAvHighlightTextExtension.IsEnabled="True"
-                      local:MpAvHighlightTextExtension.HighlightRanges="{Binding HighlightRanges}"
-                      local:MpAvHighlightTextExtension.ActiveHighlightIdx="{Binding ActiveHighlightIdx}"
-                      local:MpAvHtmlStylerExtension.IsEnabled="True"
-                      local:MpAvHtmlStylerExtension.HtmlStyleType="Content"
-                      local:MpAvHtmlStylerExtension.DefaultFontSize="{Binding DefaultFontSize, Source={x:Static local:MpAvPrefViewModel.Instance}}"
-                      local:MpAvHtmlStylerExtension.DefaultFontFamily="{Binding DefaultEditableFontFamily, Source={x:Static local:MpAvPrefViewModel.Instance}}"
-                      local:MpAvHtmlStylerExtension.ShowUnderlines="{Binding IsSubSelectionEnabled}"
-                      IsSelectionEnabled="{Binding IsSubSelectionEnabled}"
-                      Text="{Binding CopyItemData}">
+        <local:MpAvHtmlPanel x:Name="ReadOnlyWebView"
+                             Classes="content-zoom"
+                             Classes.over-paste-button="{Binding IsPasteButtonHovering}"
+                             Classes.over-append-button="{Binding IsAppendButtonHovering}"
+                             Grid.RowSpan="2"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             Margin="5"
+                             local:MpAvDropExtension.IsEnabled="True"
+                             local:MpAvDropExtension.DragEnterCommand="{Binding DragEnterCommand}"
+                             local:MpAvDropExtension.DragLeaveCommand="{Binding DragLeaveCommand}"
+                             local:MpAvDropExtension.IsDragOverHandled="False"
+                             local:MpAvDropExtension.IsDropHandled="False"
+                             local:MpAvHighlightTextExtension.IsEnabled="True"
+                             local:MpAvHighlightTextExtension.HighlightRanges="{Binding HighlightRanges}"
+                             local:MpAvHighlightTextExtension.ActiveHighlightIdx="{Binding ActiveHighlightIdx}"
+                             local:MpAvHtmlStylerExtension.IsEnabled="True"
+                             local:MpAvHtmlStylerExtension.HtmlStyleType="Content"
+                             local:MpAvHtmlStylerExtension.DefaultFontSize="{Binding DefaultFontSize, Source={x:Static local:MpAvPrefViewModel.Instance}}"
+                             local:MpAvHtmlStylerExtension.DefaultFontFamily="{Binding DefaultEditableFontFamily, Source={x:Static local:MpAvPrefViewModel.Instance}}"
+                             local:MpAvHtmlStylerExtension.ShowUnderlines="{Binding IsSubSelectionEnabled}"
+                             Text="{Binding CopyItemData}">
+            <local:MpAvHtmlPanel.IsSelectionEnabled>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="IsSubSelectionEnabled" />
+                    <Binding Path="HasText"
+                             Source="{x:Static local:MpAvSearchBoxViewModel.Instance}" />
+                </MultiBinding>
+            </local:MpAvHtmlPanel.IsSelectionEnabled>
             <Interaction.Behaviors>
                 <local:MpAvReadOnlyWebViewHighlightBehavior />
             </Interaction.Behaviors>
-        </av:HtmlPanel>
+        </local:MpAvHtmlPanel>
         <!--  EDITABLE WEBVIEW  -->
         <local:MpAvContentWebViewContainer x:Name="EditableWebView"
                                            Grid.RowSpan="2" />

@@ -9,13 +9,6 @@
     <TargetFramework>$(CommonTargetFramework)</TargetFramework>
     <Platforms>$(DefaultPlatforms)</Platforms>
   </PropertyGroup>
-  
-  <PropertyGroup>
-    <NoWarn>CS8632</NoWarn>
-    <NoWarn>CS8073</NoWarn>
-    <NoWarn>$(NoWarn),IDE1006</NoWarn>
-    <NoWarn>$(NoWarn),CA1401</NoWarn>
-  </PropertyGroup>
 
   <ItemGroup>
     <AvaloniaXaml Remove="Utils\Input\Platform\Win32\COM\**" />

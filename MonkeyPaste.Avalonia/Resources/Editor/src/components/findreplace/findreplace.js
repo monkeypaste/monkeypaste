@@ -160,6 +160,7 @@ function getHighlightHtml() {
 				let hl_val =
 					i == globals.CurFindReplaceDocRangeIdx ? 'active' : 'inactive';
 				globals.quill.formatText(tr.index, tr.length, 'highlight', hl_val, 'user');
+				// remove inline styles or hl won't work in rowv
 				globals.quill.formatText(tr.index, tr.length, 'background-color', false, 'user');
 				globals.quill.formatText(tr.index, tr.length, 'color', false, 'user');
 			} else {
@@ -173,7 +174,7 @@ function getHighlightHtml() {
 		}
 	}
 	toggleHighlighting(true);
-	let result = globals.quill.root.innerHTML;
+	let result = getRootHtml();
 	toggleHighlighting(false);
 	unsupressTextChanged(sup_guid);
 	return utf8_to_b64(result);

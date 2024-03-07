@@ -586,22 +586,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsSugarWv =>
+#if SUGAR_WV
+            true;
+#else
+            false;
+#endif
         public MpCopyItemType LastCopyItemType { get; private set; }
         public bool IsAppendButtonHovering { get; set; }
         public bool IsPasteButtonHovering { get; set; }
-        public HtmlDocument CopyItemDoc { get; private set; } = new HtmlDocument();
+
         private string _searchableText = string.Empty;
-        public string SearchableText {
-            get => _searchableText;
-            set {
-                if (_searchableText != value) {
-                    _searchableText = value.ToStringOrEmpty();
-                    EncodedSearchableText = _searchableText.StripLineBreaks().EncodeSpecialHtmlEntities();
-                    OnPropertyChanged(nameof(SearchableText));
-                }
-            }
-        }
-        public string EncodedSearchableText { get; private set; }
+        public string SearchableText { get; set; } = string.Empty;
         public bool IsAnimating { get; set; }
         bool IsContentChangeModelChange { get; set; }
         public bool CanDrop {
@@ -1378,11 +1374,6 @@ namespace MonkeyPaste.Avalonia {
             } else if (CopyItemType == MpCopyItemType.FileList) {
                 SearchableText = CopyItemData;
             }
-            if (CopyItemType == MpCopyItemType.Text && CopyItemId > 0) {
-                CopyItemDoc.LoadHtml(CopyItemData);
-            } else {
-                CopyItemDoc.LoadHtml(string.Empty);
-            }
 #endif
             IsBusy = false;
         }
@@ -1934,7 +1925,7 @@ namespace MonkeyPaste.Avalonia {
 #if !SUGAR_WV
                     if (IsDropOverTile && !IsSubSelectionEnabled) {
                         IsSubSelectionEnabled = true;
-                    } 
+                    }
 #endif
 
                     if (IsDropOverTile) {
@@ -2720,7 +2711,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 ZoomFactor = Math.Clamp(newZoomFactor, MinZoomFactor, MaxZoomFactor);
             });
-#if SUGAR_WV
         public ICommand DragEnterCommand => new MpCommand(() => {
             if (IsTileDragging) {
                 // don't flip view for self drop
@@ -2731,7 +2721,6 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DragLeaveCommand => new MpCommand(() => {
             //IsDropOverTile = false;
         });
-#endif
         #endregion
     }
 }

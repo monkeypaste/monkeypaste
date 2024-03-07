@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
                 AssociatedObject.DataContext is not MpIHighlightTextRangesInfoViewModel htrivm) {
                 return;
             }
-            htrivm.ActiveHighlightIdx = SelectedIdx;
+            //htrivm.ActiveHighlightIdx = SelectedIdx;
         }
         public override void ClearHighlighting() {
             base.ClearHighlighting();
@@ -56,7 +56,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             htrivm.HighlightRanges.Clear();
-            htrivm.ActiveHighlightIdx = -1;
+            //htrivm.ActiveHighlightIdx = -1;
         }
 
 

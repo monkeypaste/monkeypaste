@@ -358,6 +358,17 @@ namespace MonkeyPaste.Common {
 
         #region HtmlAgility
 
+        public static HtmlDocument ToHtmlDocument(this string html) {
+            try {
+                var doc = new HtmlDocument();
+                doc.LoadHtml(html.ToStringOrEmpty());
+                return doc;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error creating html doc.", ex);
+            }
+            return new HtmlDocument();
+        }
         public static HtmlNodeCollection SelectNodesSafe(this HtmlNode node, string xpath) {
             if (node.SelectNodes(xpath) is not { } hnc) {
                 return new(node);

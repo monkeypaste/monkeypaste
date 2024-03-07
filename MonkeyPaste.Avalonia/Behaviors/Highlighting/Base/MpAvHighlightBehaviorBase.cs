@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
         protected static MpTextRangeComparer TextRangeComparer = new MpTextRangeComparer();
 
         #region Properties
-
+        public virtual bool IsEnabled { get; } = true;
         public bool IsVisible => MatchCount > 0;
 
         protected abstract MpTextRange ContentRange { get; }

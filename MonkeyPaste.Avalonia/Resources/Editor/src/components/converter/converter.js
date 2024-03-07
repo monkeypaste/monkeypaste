@@ -138,14 +138,15 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 			output_html = encodeHtmlSpecialEntitiesFromPlainText(verifyText);
 		}
 	}
+	setEditorHtml(output_html);
 	let output_delta = convertHtmlToDelta(output_html);
-		
+	let themed_html = getHtml(null, true, false, true)
 	//log('');
 	//log('RichHtml: ');
 	//log(output_html);
 	stop();
 	return {
-		themed_html: getHtml(null,true,false,true),
+		themed_html: themed_html,
 		html: output_html,
 		delta: output_delta,
 		valid: is_conv_html_valid

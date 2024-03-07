@@ -124,6 +124,55 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private async Task<MpRichHtmlContentConverterResult> ConvertWithWebViewAsync(
+            MpDataFormatType inputFormatType,
+            string htmlDataStr,
+            string verifyPlainText,
+            MpCsvFormatProperties csvProps = null) {
+            if (!IsWebViewConverterAvailable) {
+                MpDebug.Break($"Convert from webview called before available");
+                return ConvertWithFallback(htmlDataStr, verifyPlainText);
+            }
+            htmlDataStr = htmlDataStr.ToString().ToBase64String();
+
+            if (string.IsNullOrWhiteSpace(htmlDataStr)) {
+                MpConsole.WriteTraceLine("Error parsing html data obj, no data found");
+                return null;
+            }
+
+            var req = new MpQuillConvertPlainHtmlToQuillHtmlRequestMessage() {
+                data = htmlDataStr,
+                dataFormatType = inputFormatType.ToString().ToLowerInvariant(),
+                verifyText = verifyPlainText,
+                isBase64 = true
+            };
+
+            ConverterWebView.LastPlainHtmlResp = null;
+            ConverterWebView.SendMessage($"convertPlainHtml_ext_ntf('{req.SerializeObjectToBase64()}')");
+            var sw = Stopwatch.StartNew();
+            while (ConverterWebView.LastPlainHtmlResp == null) {
+                await Task.Delay(100);
+                if (sw.ElapsedMilliseconds >= MpAvClipTrayViewModel.ADD_CONTENT_TIMEOUT_MS) {
+                    // shouldn't happen, check converter dev tool console for errors..
+                    MpConsole.WriteLine($"Error! Html converter timed out. Cannot convert");
+                    return null;
+                }
+            }
+            MpQuillConvertPlainHtmlToQuillHtmlResponseMessage resp = ConverterWebView.LastPlainHtmlResp;
+            ConverterWebView.LastPlainHtmlResp = null;
+            MpConsole.WriteLine($"{(resp.success ? "[SUCCESS]" : "[FAILED]")}Content Conversion Complete. Total Time {sw.ElapsedMilliseconds}ms");
+
+            return new MpRichHtmlContentConverterResult() {
+                InputHtml = resp.html.ToStringFromBase64(),
+#if SUGAR_WV
+                OutputData = resp.themedHtml.ToStringFromBase64(),
+#else
+                OutputData = resp.quillHtml.ToStringFromBase64(), 
+#endif
+                Delta = resp.quillDelta.ToStringFromBase64(),
+                SourceUrl = resp.sourceUrl
+            };
+        }
         private async Task<MpRichHtmlContentConverterResult> FinishHtmlConversionAsync(MpRichHtmlContentConverterResult cr, string verifyStr) {
             if (cr == null ||
                 string.IsNullOrWhiteSpace(cr.InputHtml) ||
@@ -157,12 +206,12 @@ namespace MonkeyPaste.Avalonia {
                 cr.DeterminedFormat = MpPortableDataFormats.Image;
                 cr.OutputData = img_base64;
             }
-            cr.OutputData = ApplyTheme(html_doc);
             return cr;
         }
-        private string ApplyTheme(HtmlDocument doc) {
-            if (doc.DocumentNode.SelectNodes("//*[@style]") is not { } styled_nodes) {
-                return doc.DocumentNode.OuterHtml;
+        private string ApplyTheme(string html) {
+            if (html.ToHtmlDocument() is not { } doc ||
+                doc.DocumentNode.SelectNodes("//*[@style]") is not { } styled_nodes) {
+                return html;
             }
             bool is_dark = MpAvThemeViewModel.Instance.IsThemeDark;
             string fallback_fg = is_dark ?
@@ -262,58 +311,12 @@ namespace MonkeyPaste.Avalonia {
 
         private MpRichHtmlContentConverterResult ConvertWithFallback(string htmlDataStr, string verifyText) {
             var result = MpRichHtmlContentConverterResult.Parse(htmlDataStr.ToString());
+            if (result != null && result.DeterminedFormat == MpPortableDataFormats.Html) {
+                result.OutputData = ApplyTheme(result.OutputData);
+            }
             return result;
         }
 
-        private async Task<MpRichHtmlContentConverterResult> ConvertWithWebViewAsync(
-            MpDataFormatType inputFormatType,
-            string htmlDataStr,
-            string verifyPlainText,
-            MpCsvFormatProperties csvProps = null) {
-            if (!IsWebViewConverterAvailable) {
-                MpDebug.Break($"Convert from webview called before available");
-                return ConvertWithFallback(htmlDataStr, verifyPlainText);
-            }
-            htmlDataStr = htmlDataStr.ToString().ToBase64String();
-
-            if (string.IsNullOrWhiteSpace(htmlDataStr)) {
-                MpConsole.WriteTraceLine("Error parsing html data obj, no data found");
-                return null;
-            }
-
-            var req = new MpQuillConvertPlainHtmlToQuillHtmlRequestMessage() {
-                data = htmlDataStr,
-                dataFormatType = inputFormatType.ToString().ToLowerInvariant(),
-                verifyText = verifyPlainText,
-                isBase64 = true
-            };
-
-            ConverterWebView.LastPlainHtmlResp = null;
-            ConverterWebView.SendMessage($"convertPlainHtml_ext_ntf('{req.SerializeObjectToBase64()}')");
-            var sw = Stopwatch.StartNew();
-            while (ConverterWebView.LastPlainHtmlResp == null) {
-                await Task.Delay(100);
-                if (sw.ElapsedMilliseconds >= MpAvClipTrayViewModel.ADD_CONTENT_TIMEOUT_MS) {
-                    // shouldn't happen, check converter dev tool console for errors..
-                    MpConsole.WriteLine($"Error! Html converter timed out. Cannot convert");
-                    return null;
-                }
-            }
-            MpQuillConvertPlainHtmlToQuillHtmlResponseMessage resp = ConverterWebView.LastPlainHtmlResp;
-            ConverterWebView.LastPlainHtmlResp = null;
-            MpConsole.WriteLine($"{(resp.success ? "[SUCCESS]" : "[FAILED]")}Content Conversion Complete. Total Time {sw.ElapsedMilliseconds}ms");
-
-            return new MpRichHtmlContentConverterResult() {
-                InputHtml = resp.html.ToStringFromBase64(),
-#if SUGAR_WV
-                OutputData = resp.themedHtml.ToStringFromBase64(),
-#else
-                OutputData = resp.quillHtml.ToStringFromBase64(), 
-#endif
-                Delta = resp.quillDelta.ToStringFromBase64(),
-                SourceUrl = resp.sourceUrl
-            };
-        }
         #endregion
 
         #region Commands

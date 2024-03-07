@@ -319,16 +319,18 @@ namespace MonkeyPaste.Avalonia {
                 foreach (var di in contentDataResp.dataItems) {
                     avdo.SetData(di.format, di.data);
                 }
-            } else if (ReadOnlyWebView != null) {
-                string pt = ignore_selection || ReadOnlyWebView.SelectedText.IsNullOrEmpty() ?
-                    BindingContext.SearchableText : ReadOnlyWebView.SelectedText;
-                string html = ignore_selection || ReadOnlyWebView.SelectedHtml.IsNullOrEmpty() ?
-                    BindingContext.CopyItemData : ReadOnlyWebView.SelectedHtml;
-                // NOTE always providing text and html (should be stripping later)
+            }
+            //else if (ReadOnlyWebView != null) {
+            //    string pt = ignore_selection || ReadOnlyWebView.SelectedText.IsNullOrEmpty() ?
+            //        BindingContext.SearchableText : ReadOnlyWebView.SelectedText;
+            //    string html = ignore_selection || ReadOnlyWebView.SelectedHtml.IsNullOrEmpty() ?
+            //        BindingContext.CopyItemData : ReadOnlyWebView.SelectedHtml;
+            //    // NOTE always providing text and html (should be stripping later)
 
-                avdo.SetData(MpPortableDataFormats.Text, pt);
-                avdo.SetData(MpPortableDataFormats.Html, html);
-            } else {
+            //    avdo.SetData(MpPortableDataFormats.Text, pt);
+            //    avdo.SetData(MpPortableDataFormats.Html, html);
+            //} 
+            else {
                 return GetFallbackDataObject();
             }
 
@@ -1548,11 +1550,11 @@ namespace MonkeyPaste.Avalonia {
                 // no content
                 return;
             }
-            var sw = Stopwatch.StartNew();
+            var sw2 = Stopwatch.StartNew();
             while (!IsEditorInitialized) {
                 // wait for initMain - onInitComplete_ntf
                 await Task.Delay(100);
-                if (sw.Elapsed > TimeSpan.FromMilliseconds(5_000) && this is not MpAvPlainHtmlConverterWebView) {
+                if (sw2.Elapsed > TimeSpan.FromMilliseconds(5_000) && this is not MpAvPlainHtmlConverterWebView) {
                     // timeout
                     return;
                 }

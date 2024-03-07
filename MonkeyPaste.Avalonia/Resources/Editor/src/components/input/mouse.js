@@ -87,6 +87,9 @@ function updateWindowMouseState(e, eventType) {
 }
 
 function sendHostMouseState(eventType, isLeft) {
+	if (isRunningOnCef()) {
+		return;
+	}
 	if (eventType != 'enter' && eventType != 'leave' && eventType != 'up' && eventType != 'down' && eventType != 'move') {
 		return;
 	}

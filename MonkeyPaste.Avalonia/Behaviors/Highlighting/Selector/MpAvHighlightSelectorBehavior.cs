@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Xaml.Interactivity;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -138,7 +139,6 @@ namespace MonkeyPaste.Avalonia {
         }
         private void HighlightBehavior_MatchCountChanged(object sender, int matchCount) {
             UpdateActiveIdx();
-            //CheckMatchCount();
         }
 
         private void Hlr_SelIdxChanged(object sender, int e) {
@@ -148,12 +148,10 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
 
                 case MpMessageType.SelectNextMatch:
+                    SelectNextMatch();
+                    break;
                 case MpMessageType.SelectPreviousMatch:
-                    if (msg == MpMessageType.SelectNextMatch) {
-                        SelectNextMatch();
-                    } else {
-                        SelectPreviousMatch();
-                    }
+                    SelectPreviousMatch();
                     break;
                 case MpMessageType.RequeryCompleted:
                 case MpMessageType.JumpToIdxCompleted:
@@ -212,7 +210,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private bool IsRegionEnabled(MpIHighlightRegion hr) {
-            return
+            return hr.IsEnabled &&
             Mp.Services.Query.Infos
             .Any(x => x.QueryFlags.HasAnyFlag(hr.AcceptanceFlags));
         }
@@ -245,36 +243,41 @@ namespace MonkeyPaste.Avalonia {
             if (!IsActive) {
                 return;
             }
-            SelectedItem.SelectedIdx = -1;
+            var last_item = SelectedItem;
             do {
                 SelectedHighlighterIdx++;
                 if (SelectedHighlighterIdx >= Items.Count) {
                     SelectedHighlighterIdx = 0;
                 }
             } while (SelectedItem.MatchCount == 0);
-
+            if (last_item != SelectedItem) {
+                last_item.SelectedIdx = -1;
+            }
             SelectedItem.SelectedIdx = 0;
         }
         private void SelectPrevItem() {
             if (!IsActive) {
                 return;
             }
-            SelectedItem.SelectedIdx = -1;
+            var last_item = SelectedItem;
             do {
                 SelectedHighlighterIdx--;
                 if (SelectedHighlighterIdx < 0) {
                     SelectedHighlighterIdx = Items.Count - 1;
                 }
             } while (SelectedItem.MatchCount == 0);
-
+            if (last_item != SelectedItem) {
+                last_item.SelectedIdx = -1;
+            }
             SelectedItem.SelectedIdx = SelectedItem.MatchCount - 1;
         }
         private void SelectNextMatch() {
+            if (AssociatedObject != null && AssociatedObject.BindingContext != null && AssociatedObject.BindingContext.CopyItemTitle == "Text34") {
+                MpConsole.WriteLine("select Next match called");
+            }
+
             if (!IsActive) {
                 return;
-            }
-            if (AssociatedObject.BindingContext.CopyItemTitle == "Test_99,999") {
-
             }
             int next_idx = SelectedMatchIdx + 1;
             if (next_idx >= SelectedItem.MatchCount) {
@@ -285,6 +288,7 @@ namespace MonkeyPaste.Avalonia {
             EnabledItems.ForEach(x => x.ApplyHighlightingAsync().FireAndForgetSafeAsync());
         }
         private void SelectPreviousMatch() {
+            MpConsole.WriteLine("select prev match called");
             if (!IsActive) {
                 return;
             }

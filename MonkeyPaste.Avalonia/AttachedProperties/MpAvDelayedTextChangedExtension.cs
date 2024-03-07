@@ -95,9 +95,9 @@ namespace MonkeyPaste.Avalonia {
             }
             if (element is Control control) {
                 if (element is TextBox tb) {
-                    tb.Text = newText;
+                    tb.SetCurrentValue(TextBox.TextProperty, newText);
                 } else if (element is AutoCompleteBox acb) {
-                    acb.Text = newText;
+                    acb.SetCurrentValue(AutoCompleteBox.TextProperty, newText);
                 }
                 SetLastNotifiedText(control, newText);
                 SetLastNotifiedDt(control, null);

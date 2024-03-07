@@ -763,7 +763,7 @@ async function convertTextContentToFormatsAsync(selectionOnly, formats) {
 		if (isHtmlFormat(lwc_format)) {
 			if (isContentATable()) {
 				// make sure to get whole table when no sub-selection
-				data = selectionOnly && (isAllSelected() || isNoneSelected()) ? globals.quill.root.innerHTML : getHtmlWithTables(sel);
+				data = selectionOnly && (isAllSelected() || isNoneSelected()) ? getRootHtml() : getHtmlWithTables(sel);
 			} else {
 				data = getHtml(sel);
 				if (lwc_format == 'html format') {

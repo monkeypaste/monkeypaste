@@ -29,16 +29,18 @@
     <PushPlugins>false</PushPlugins>
     <!-- NOTE when changing av version need to reset coreole, probably everything-->
     <AvaloniaVersion>11.0.7</AvaloniaVersion>
+    <DefaultLangVersion>Latest</DefaultLangVersion>
+    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
   </PropertyGroup>
 
-  <!-- SYSTEM PROPERTIES -->
+  <!-- MSBUILD PROPERTIES -->
 
   <PropertyGroup>
-    <DefaultLangVersion>Latest</DefaultLangVersion>
     <Nullable>disable</Nullable>
-    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
+    <NoWarn>$(NoWarn);NU1701;NU1702;IDE1006;CA1401;</NoWarn>
+    <WarningsAsErrors>CS4014;</WarningsAsErrors>
   </PropertyGroup>
 
 
@@ -76,8 +78,8 @@
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>false</UseCefNet>
-    <UseSugarWv>true</UseSugarWv>
+    <UseCefNet>true</UseCefNet>
+    <UseSugarWv>false</UseSugarWv>
     <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <PlatformShortName>uwp</PlatformShortName> 

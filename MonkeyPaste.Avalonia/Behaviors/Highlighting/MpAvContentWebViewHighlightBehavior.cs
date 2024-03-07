@@ -13,7 +13,11 @@ using TheArtOfDev.HtmlRenderer.Avalonia;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvContentWebViewHighlightBehavior : MpAvHighlightBehaviorBase<Control> {
-
+        public override bool IsEnabled =>
+            //ContentWebView == null ||
+            //ContentWebView.ReadOnlyWebView == null ||
+            //!ContentWebView.ReadOnlyWebView.IsVisible;
+            true;
         private MpTextRange _contentRange;
         protected override MpTextRange ContentRange {
             get {

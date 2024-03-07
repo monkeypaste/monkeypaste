@@ -1,4 +1,6 @@
 ﻿using Avalonia.LogicalTree;
+using MonkeyPaste;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System;
@@ -7,6 +9,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvPlainHtmlConverterWebView :
         MpAvContentWebView,
+        MpIUserAgentProvider,
         MpIPlainHtmlConverterView {
         #region Private Variables
         private MpQuillConvertPlainHtmlToQuillHtmlResponseMessage _lastPlainHtmlConvertedResp = null;

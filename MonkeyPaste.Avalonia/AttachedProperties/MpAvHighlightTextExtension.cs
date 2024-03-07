@@ -19,7 +19,9 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvHighlightTextExtension {
         #region Private Variables
         private static Dictionary<Control, MpAvTextHighlightAdorner> _AttachedControlAdornerLookup = new Dictionary<Control, MpAvTextHighlightAdorner>();
-
+        const string HL_INACTIVE_CLASS = "highlight-inactive";
+        const string HL_ACTIVE_CLASS = "highlight-active";
+        const string HL_BASE_CLASS = "highlight";
         public static IBrush DefaultInactiveHighlightBrush =>
             Mp.Services == null ||
             Mp.Services.PlatformResource == null ?
@@ -265,11 +267,12 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 string text = tb.Text;
-                tb.Text = string.Empty;
+                tb.SetCurrentValue(TextBox.TextProperty, string.Empty);
                 tb.Inlines.Clear();
                 if (gl == null || !HighlightRanges.Any()) {
                     // reset inlines
                     tb.Text = text;
+                    tb.SetCurrentValue(TextBox.TextProperty, text);
                     return;
                 }
                 var gll = gl.ToList();
@@ -336,27 +339,39 @@ namespace MonkeyPaste.Avalonia {
 
         private static void HighlightHtml(HtmlControl attached_control, string sourcePropertyName) {
             if (attached_control.DataContext is not MpAvClipTileViewModel ctvm ||
-                ctvm.CopyItemDoc is null) {
+                attached_control is not MpAvHtmlPanel hp ||
+                hp.Text.ToHtmlDocument() is not { } doc ||
+                GetHighlightRanges(attached_control) is not IEnumerable<MpTextRange> HighlightRanges) {
                 return;
             }
-            var HighlightRanges = (GetHighlightRanges(attached_control) as IEnumerable<MpTextRange>).ToArray();
             int ActiveHighlightIdx = GetActiveHighlightIdx(attached_control);
 
-            var doc = ctvm.CopyItemDoc;
+            HtmlNode active_elm = null;
+            if (HighlightRanges.Any()) {
+
+            }
 
             void ChangeActiveIdx() {
                 // adjust active idx to content range subset
-                //int range_diff = Math.Max(0, HighlightRanges.Count - hlrl.Length - 1);
-                int rel_active_idx =
-                    ActiveHighlightIdx -
-                    HighlightRanges
-                    .IndexOf(HighlightRanges.FirstOrDefault(x => x.Document == attached_control));
+                int rel_offset = 0;
+                if (HighlightRanges.Where(x => x.Document != attached_control) is { } other_ranges) {
+                    // should only have these for title or source highlights
+                    rel_offset = other_ranges.Count();
+                }
+                int rel_active_idx = ActiveHighlightIdx - rel_offset;
                 //MpConsole.WriteLine($"Actual {ActiveHighlightIdx} Relative {rel_active_idx}");
-                foreach (var (hl_node, idx) in doc.DocumentNode.SelectNodesSafe("span[contains(@class, 'highlight')]").WithIndex()) {
-                    hl_node.RemoveClass("highlight");
-                    hl_node.RemoveClass("highlight-active");
-                    hl_node.RemoveClass("highlight-active");
-                    hl_node.AddClass(idx == rel_active_idx ? "highlight-active" : "highlight-inactive");
+                var hl_node_tups = doc.DocumentNode.SelectNodesSafe($"//span[contains(@class, 'highlight')]").WithIndex();
+                foreach (var (hl_node, idx) in hl_node_tups) {
+                    hl_node.RemoveClass(HL_BASE_CLASS);
+                    hl_node.RemoveClass(HL_INACTIVE_CLASS);
+                    hl_node.RemoveClass(HL_ACTIVE_CLASS);
+                    hl_node.AddClass(idx == rel_active_idx ? HL_ACTIVE_CLASS : HL_INACTIVE_CLASS);
+                    if (string.IsNullOrEmpty(hl_node.Id)) {
+                        hl_node.Id = System.Guid.NewGuid().ToString();
+                    }
+                    if (idx == rel_active_idx) {
+                        active_elm = hl_node;
+                    }
                 }
             }
             void ChangeRanges() {
@@ -402,7 +417,7 @@ namespace MonkeyPaste.Avalonia {
                     if (end_node_tup.IsDefault()) {
                         continue;
                     }
-                    start_node_tup.ExtractRange(end_node_tup, "highlight");
+                    start_node_tup.ExtractRange(end_node_tup, HL_BASE_CLASS);
                 }
             }
 
@@ -412,9 +427,16 @@ namespace MonkeyPaste.Avalonia {
                 //ChangeRanges();
                 ChangeActiveIdx();
             }
+            // update html
+            attached_control.SetCurrentValue(HtmlPanel.TextProperty, doc.DocumentNode.OuterHtml);
 
-
-            attached_control.Text = doc.DocumentNode.OuterHtml;
+            // scroll to active
+            double step = 0;
+            if (active_elm == null) {
+                hp.ScrollToHome(step);
+            } else {
+                hp.ScrollToElement(active_elm.Id, step);
+            }
         }
 
         private static void RemoveVisualAdorner(Visual visual, Control? adorner, AdornerLayer? layer) {

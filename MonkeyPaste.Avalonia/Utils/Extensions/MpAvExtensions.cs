@@ -33,7 +33,6 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-
         #region Adorners        
         public static async Task<IEnumerable<MpAvAdornerBase>> GetControlAdornersAsync(this Control control, int timeout_ms = 1000) {
             Dispatcher.UIThread.VerifyAccess();
@@ -112,6 +111,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return default;
         }
+
         #endregion
 
         #region Strings

@@ -18,10 +18,18 @@
             <Setter Property="ToolTip.Tip"
                     Value="{x:Null}" />
         </Style>
+        <!--<Style Selector="local|MpAvContentWebView:not(.sugarwv)">
+            <Setter Property="Interaction.Behaviors">
+                <Setter.Value>
+                  <local:MpAvContentWebViewHighlightBehavior />
+                </Setter.Value>
+            </Setter>
+        </Style>-->
     </local:MpAvUserControl.Styles>
     <local:MpAvContentWebView x:Name="ContentWebView"
                               DragDrop.AllowDrop="{Binding CanDrop}"
                               Classes.drag="{Binding IsTileDragging}"
+                              Classes.sugarwv="{Binding IsSugarWv}"
                               Focusable="{Binding IsSubSelectionEnabled}"
                               local:MpAvReceivesEventsExtension.IsEnabled="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                               ContentId="{Binding CopyItemId, Mode=OneWay}"

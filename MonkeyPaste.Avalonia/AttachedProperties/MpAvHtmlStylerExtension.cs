@@ -24,14 +24,17 @@ namespace MonkeyPaste.Avalonia {
         private static Dictionary<HtmlControl, List<IDisposable>> _disposableLookup = [];
         private static Dictionary<MpHtmlStyleType, string> _stylesLookup = [];
         static MpAvHtmlStylerExtension() {
-            try {
-                MpAvThemeViewModel.Instance
-                .CustomFontFamilyNames
-                .ForEach(x =>
-                    HtmlRender.AddFontFamily(MpAvStringToFontFamilyConverter.Instance.Convert(x, null, null, null) as FontFamily));
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error initializing html font familys.", ex);
+            if (MpAvThemeViewModel.Instance != null &&
+                MpAvThemeViewModel.Instance.CustomFontFamilyNames != null) {
+                try {
+                    MpAvThemeViewModel.Instance
+                    .CustomFontFamilyNames
+                    .ForEach(x =>
+                        HtmlRender.AddFontFamily(MpAvStringToFontFamilyConverter.Instance.Convert(x, null, null, null) as FontFamily));
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error initializing html font familys.", ex);
+                }
             }
             IsEnabledProperty.Changed.AddClassHandler<HtmlControl>((x, y) => HandleIsEnabledChanged(x, y));
 
@@ -233,39 +236,33 @@ namespace MonkeyPaste.Avalonia {
             }
             if (!hc.Text.ToStringOrEmpty().IsStringHtmlDocument()) {
                 // ensure text is full html doc or stylesheet stuff doesn't work
-                hc.Text = hc.Text.ToStringOrEmpty().ToHtmlDocumentFromTextOrPartialHtml();
+                string html_doc_str = hc.Text.ToStringOrEmpty().ToHtmlDocumentFromTextOrPartialHtml();
+                hc.SetCurrentValue(HtmlPanel.TextProperty, html_doc_str);
             }
             hc.Redraw();
         }
 
         private static void ToggleUnderlines(HtmlControl hc) {
-            if (hc.Text is not string html_str) {
+            if (hc is not MpAvHtmlPanel hp ||
+                hp.Text.ToHtmlDocument() is not { } doc) {
                 return;
             }
             try {
-                var doc = new HtmlDocument();
-                doc.LoadHtml(html_str);
                 if (doc.DocumentNode.SelectNodes("//p") is not { } pl) {
                     return;
                 }
-                bool is_disabling = pl.Any(x => x.HasClass("underline"));
-                if (is_disabling) {
-                    pl.ForEach(x => x.RemoveClass("underline"));
-                } else {
+
+                bool is_enabling = GetShowUnderlines(hc);
+                bool has_underlines = pl.Any(x => x.HasClass("underline"));
+                if (is_enabling && !has_underlines) {
+                    // show underlines
                     pl.ForEach(x => x.AddClass("underline"));
+                } else if (!is_enabling && has_underlines) {
+                    // hide underlines
+                    pl.ForEach(x => x.RemoveClass("underline"));
                 }
 
-                hc.Text = doc.DocumentNode.OuterHtml;
-
-                if (hc.GetLogicalDescendants<ScrollBar>().ToList() is { } sbl) {
-                    if (sbl.Count < 2) {
-
-                    }
-                    foreach (var sb in sbl) {
-                        sb.IsVisible = !is_disabling;
-                        sb.Visibility = sb.IsVisible ? ScrollBarVisibility.Auto : ScrollBarVisibility.Hidden;
-                    }
-                }
+                hc.SetCurrentValue(HtmlPanel.TextProperty, doc.DocumentNode.OuterHtml);
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error toggling underlines. ", ex);
