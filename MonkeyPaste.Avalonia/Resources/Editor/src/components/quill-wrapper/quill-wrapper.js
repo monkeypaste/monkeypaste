@@ -9,7 +9,7 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 	//hljs.configure({   // optionally configure hljs
 	//	languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml']
 	//});
-
+	Quill.debug('error');
 	let quillOptions = {
 		//debug: true,
 		//allowReadOnlyEdits: true,
@@ -116,6 +116,10 @@ function getHtmlWithInlineStyles(htmlStr) {
 	html_doc.body.querySelectorAll("[class^='ql-font']").forEach(elm => {
 		let fs_class_name = Array.from(elm.classList).find(x => x.startsWith('ql-font'));
 		elm.style.fontFamily = toTitleCase(fs_class_name.split('ql-font-')[1].replace('-',' '));
+	});
+	// links
+	html_doc.body.querySelectorAll("a").forEach(elm => {
+		elm.style.color = getElementComputedStyleProp(document.body, '--linkcolor');
 	});
 
 	let output_html = html_doc.body.innerHTML;

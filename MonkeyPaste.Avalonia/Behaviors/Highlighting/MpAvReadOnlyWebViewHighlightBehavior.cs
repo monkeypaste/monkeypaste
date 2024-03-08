@@ -35,15 +35,15 @@ namespace MonkeyPaste.Avalonia {
         }
 #if SUGAR_WV
         protected override async Task HandleSearchResponseAsync(MpAvContentWebView wv) {
-            await Task.Delay(30);
-            string HighlightHtml = await wv.ExecuteJavascriptAsync("getHighlightHtml()");
-            SetWebViewHtml(wv, HighlightHtml);
+            await Task.Delay(0);
+            SetWebViewHtml(wv, wv.SearchResponse.highlightHtmlFragment.ToStringFromBase64());
+            wv.ReadOnlyWebView.ParseScrollOffsets(wv.SearchResponse.matchOffsetsCsvFragment);
             await base.HandleSearchResponseAsync(wv);
         }
 
         private void SetWebViewHtml(MpAvContentWebView wv, string html) {
             wv.ReadOnlyWebView.SetCurrentValue(HtmlPanel.TextProperty, html);
-        } 
+        }
 #endif
     }
 }

@@ -20,6 +20,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using AvToolTip = Avalonia.Controls.ToolTip;
+using static System.Net.Mime.MediaTypeNames;
+using System.Windows.Media.Media3D;
+
 
 
 #if CEFNET_WV
@@ -1012,8 +1015,8 @@ namespace MonkeyPaste.Avalonia {
 #if SUGAR_WV
         #region ReadOnlyWebView
 
-        HtmlPanel _readOnlyWebView;
-        public HtmlPanel ReadOnlyWebView {
+        MpAvHtmlPanel _readOnlyWebView;
+        public MpAvHtmlPanel ReadOnlyWebView {
             get {
                 if (_readOnlyWebView == null &&
                     this.GetVisualAncestor<MpAvCompositeContentView>() is { } ccv) {
@@ -2006,6 +2009,18 @@ namespace MonkeyPaste.Avalonia {
                 }
                 BindingContext.StoreSelectionStateCommand.Execute(null);
             });
+        }
+        public bool DoSs { get; set; }
+        public override void Render(DrawingContext context) {
+            base.Render(context);
+            if (DoSs && ReadOnlyWebView != null) {
+                int w = (int)(ReadOnlyWebView.Bounds.Width * this.VisualPixelDensity());
+                int h = (int)(ReadOnlyWebView.Bounds.Height * this.VisualPixelDensity());
+                var bitmap = new RenderTargetBitmap(new PixelSize(w, h));
+                bitmap.Render(this);
+                bitmap.Save(@"C:\Users\tkefauver\Desktop\ss.png");
+                DoSs = false;
+            }
         }
 
     }

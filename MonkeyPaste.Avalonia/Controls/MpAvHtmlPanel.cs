@@ -16,16 +16,42 @@ using TheArtOfDev.HtmlRenderer.Avalonia;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvHtmlPanel : HtmlPanel {
+        private Point[] _scrollOffsets = [];
+
+        public static readonly AvaloniaProperty CanScrollXProperty =
+           AvaloniaProperty.Register<MpAvHtmlPanel, bool>(nameof(CanScrollX), defaultValue: false);
+
+        public static readonly AvaloniaProperty CanScrollYProperty =
+           AvaloniaProperty.Register<MpAvHtmlPanel, bool>(nameof(CanScrollY), defaultValue: false);
+
+        public bool CanScrollX {
+            get { return (bool)GetValue(CanScrollXProperty); }
+            private set { SetValue(CanScrollXProperty, value); }
+        }
+        public bool CanScrollY {
+            get { return (bool)GetValue(CanScrollYProperty); }
+            private set { SetValue(CanScrollYProperty, value); }
+        }
+        public void ParseScrollOffsets(string offsetsStr) {
+            _scrollOffsets =
+                offsetsStr.ToStringOrEmpty()
+                .SplitNoEmpty(" ")
+                .Select(x => new MpPoint(x.SplitNoEmpty("|").Select(y => double.Parse(y)).ToArray()))
+                .Select(x => new Point(x.X, x.Y))
+                .ToArray();
+        }
 
         public void ScrollToHome(double step = 0) {
             ScrollToOffset(new(), step);
         }
-        public void ScrollToElement(string elementId, double step = 0) {
-            if (_htmlContainer == null ||
-                _htmlContainer.GetElementRectangle(elementId) is not { } rect) {
+        public void ScrollToOffsetIdx(int offsetIdx, double step = 0) {
+            // HACK HtmlPanel.ScrollToElement does NOT work, it always returns an empty rect
+            if (_scrollOffsets == null ||
+                offsetIdx < 0 ||
+                offsetIdx >= _scrollOffsets.Length) {
                 return;
             }
-            ScrollToOffset(rect.Position, step);
+            ScrollToOffset(_scrollOffsets[offsetIdx], step);
         }
 
         public void ScrollToOffset(Point offset, double step = 0) {
@@ -54,8 +80,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void UpdateScrollbars() {
-            _verticalScrollBar.IsVisible = IsSelectionEnabled;
-            _horizontalScrollBar.IsVisible = IsSelectionEnabled;
+            _verticalScrollBar.IsVisible = IsSelectionEnabled && _verticalScrollBar.Visibility == ScrollBarVisibility.Visible;
+            _horizontalScrollBar.IsVisible = IsSelectionEnabled && _horizontalScrollBar.Visibility == ScrollBarVisibility.Visible;
+            CanScrollX = _horizontalScrollBar.IsVisible;
+            CanScrollY = _verticalScrollBar.IsVisible;
             this.Redraw();
         }
 
@@ -73,7 +101,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs e) {
-            base.OnPropertyChanged(e);
+            try {
+                base.OnPropertyChanged(e);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"HtmlPanel prop change error. ", ex);
+            }
 
             // On text property change reset the scrollbars to zero.
             if (e.Property == IsSelectionEnabledProperty) {

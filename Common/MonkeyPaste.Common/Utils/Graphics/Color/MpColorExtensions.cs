@@ -60,17 +60,14 @@ namespace MonkeyPaste.Common {
             return MpColorHelpers.ColorFromHsv(new_hue, s, v).ToHex();
         }
 
-        public static string ToContrastForegoundColor(this string hex, bool flip = false) {
-            if (hex != null && (hex.ToLowerInvariant() == "#ff252226" || hex.ToLowerInvariant() == "#252226")) {
-
-            }
+        public static string ToContrastForegoundColor(this string hex, bool flip = false, bool remove_alpha = false) {
             bool is_bright = hex.IsHexStringBright();
             if (flip) {
                 is_bright = !is_bright;
             }
             return is_bright ?
-                MpCommonTools.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeBlackColor.ToString()) :
-                MpCommonTools.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeWhiteColor.ToString());
+                MpCommonTools.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeBlackColor.ToString()).ToPortableColor().ToHex(remove_alpha) :
+                MpCommonTools.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeWhiteColor.ToString()).ToPortableColor().ToHex(remove_alpha);
         }
         public static string ToContrastHexColor(this string hex) {
 

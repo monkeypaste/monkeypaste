@@ -666,10 +666,11 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand1 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                //await MpAvClipTrayViewModel.Instance.DisposeAndReloadAllCommand.ExecuteAsync();
-                string msg = "eyJlbnZOYW1lIjoiV2luZG93cyIsImlzQ29udmVydGVyIjp0cnVlLCJkZWZhdWx0cyI6eyJpc0RlYnVnIjp0cnVlLCJtaW5Mb2dMZXZlbCI6MCwiY3VsdHVyZUNvZGUiOiJ0YS1JTiIsImRlZmF1bHRGb250RmFtaWx5IjoiaGVsdmV0aWNhIiwiZGVmYXVsdEZvbnRT";
-                string test = $"initMain_ext('{msg}')";
-                MpAvPlainHtmlConverter.Instance.ConverterWebView.SendMessage(test);
+                if (MpAvClipTrayViewModel.Instance.SelectedItem.GetContentView() is MpAvContentWebView cwv) {
+                    cwv.DoSs = true;
+                    cwv.Redraw();
+                }
+
             });
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(

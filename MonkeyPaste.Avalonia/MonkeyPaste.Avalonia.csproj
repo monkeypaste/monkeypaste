@@ -2175,6 +2175,9 @@
     <Compile Update="Views\ExternalDropWindow\MpAvExternalDropView.axaml.cs">
       <DependentUpon>MpAvExternalDropView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CompatabilityViewers\MpAvClipTileCompatibilityView.axaml.cs">
+      <DependentUpon>MpAvClipTileCompatibilityView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CompositeContentView\PasteToolbar\MpAvPasteToolbarView.axaml.cs">
       <DependentUpon>MpAvPasteToolbarView.axaml</DependentUpon>
     </Compile>
@@ -2410,7 +2413,7 @@
   
   <ItemGroup Condition="'$(UseSugarWv)' == 'True'">
     <PackageReference Include="WebView.Avalonia" Version="11.0.0.1" />
-    <PackageReference Include="WebView.Avalonia.MacCatalyst" Version="11.0.0.1" Condition="'$(BuildOs)' == 'MAC'"/>
+    <PackageReference Include="WebView.Avalonia.MacCatalyst" Version="11.0.0.1" Condition="'$(BuildOs)' == 'MAC'" />
   </ItemGroup>
     
   <ItemGroup Condition="$(IsDesktop) == 'true'">

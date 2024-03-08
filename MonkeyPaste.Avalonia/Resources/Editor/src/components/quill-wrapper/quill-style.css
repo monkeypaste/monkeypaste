@@ -178,12 +178,11 @@ button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
     padding: 0 !important;
 }
 
-#editor.light .ql-snow a {
-    color: blue !important;
+#editor a {
+    color: var(--linkcolor) !important;
 }
-
-#editor.dark a {
-    color: cyan !important;
+#editor a:hover {
+    color: var(--linkhovercolor) !important;
 }
 
 #editor.dark:not(.no-select) tr:hover a,

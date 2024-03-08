@@ -42,6 +42,9 @@ namespace MonkeyPaste.Avalonia {
             return result;
         }
 
+        public T GetResource<T>(MpThemeResourceKey resourceKey) =>
+            GetResource<T>(resourceKey.ToString());
+
         public T GetResource<T>(string resourceKey) {
             object valObj = GetResource(resourceKey);
             if (valObj is T valT) {
@@ -57,6 +60,11 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             if (typeof(T) == typeof(IBrush)) {
+                if (valObj is Color color) {
+                    return (T)((object)new SolidColorBrush(color));
+                }
+            }
+            if (typeof(T) == typeof(Color)) {
                 if (valObj is Color color) {
                     return (T)((object)new SolidColorBrush(color));
                 }

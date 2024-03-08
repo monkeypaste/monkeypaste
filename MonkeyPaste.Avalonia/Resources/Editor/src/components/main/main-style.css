@@ -43,6 +43,8 @@ body {
     --appendpad: 15px;
     --maxfontsize: 98px;
     --editorzoom: 100%;
+    --linkcolor: 'blue';
+    --linkhovercolor: 'red';
     margin: 0px;
     padding: 0px;
     font-family: var(--defaultFontFamily);

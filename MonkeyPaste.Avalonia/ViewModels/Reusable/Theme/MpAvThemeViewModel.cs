@@ -528,7 +528,20 @@ namespace MonkeyPaste.Avalonia {
             SetThemeValue(MpThemeResourceKey.ThemeDarkColor, colors[28]);
 
 
+
             // NON-DYNAMIC COLORS
+            SetThemeValue(
+                MpThemeResourceKey.ThemeContentLinkColor,
+                tt == MpThemeType.Dark ?
+                    Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkColor_dark") :
+                    Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkColor_light"));
+
+            SetThemeValue(
+                MpThemeResourceKey.ThemeContentLinkHoverColor,
+                tt == MpThemeType.Dark ?
+                    Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkHoverColor_dark") :
+                    Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkHoverColor_light"));
+
             SetThemeValue(
                 MpThemeResourceKey.ThemePasteToolbarBgColor,
                 tt == MpThemeType.Dark ?

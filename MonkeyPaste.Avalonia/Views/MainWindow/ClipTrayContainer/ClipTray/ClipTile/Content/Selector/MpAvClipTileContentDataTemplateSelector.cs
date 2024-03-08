@@ -12,45 +12,16 @@ namespace MonkeyPaste.Avalonia {
             if (param is not MpAvClipTileViewModel ctvm) {
                 return null;
             }
-            string key = "ContentWebViewTemplate";
-            bool needs_fallback = !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled;
-
-#if CEFNET_WV
-            if(!MpAvCefNetApplication.IsCefNetLoaded) {
-                needs_fallback = true;
-            }
-#elif SUGAR_WV
-            needs_fallback =
-#if WINDOWS
-        ctvm.IsContentReadOnly; 
-#else
-                ctvm.IsContentReadOnly; //false;
-#endif
-#endif
-            if (needs_fallback) {
-#if !SUGAR_WV
-                ctvm.IsEditorLoaded = true; 
-#endif
-                switch (ctvm.CopyItemType) {
-                    default:
-                    case MpCopyItemType.Text:
+            string key;
+            if (MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
 #if SUGAR_WV
-                        key = "CompositeWebViewTemplate";
+                key = "CompositeWebViewTemplate";
 #else
-                        key = "PlainTextTemplate"; 
+                key = "ContentWebViewTemplate";
 #endif
-                        break;
-                    case MpCopyItemType.Image:
-                        key = "ImageTemplate";
-                        break;
-                    case MpCopyItemType.FileList:
-                        key = "FileListTemplate";
-                        break;
-                }
             } else {
-
+                key = "CompatibilityViewTemplate";
             }
-
             return AvailableTemplates[key].Build(param);
         }
 

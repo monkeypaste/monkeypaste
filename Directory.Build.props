@@ -52,9 +52,9 @@
     <IsMobile>false</IsMobile>
     <DefaultPlatforms>x64</DefaultPlatforms>
     <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
-    <UseCefNet>true</UseCefNet>
+    <UseCefNet>false</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
-    <UseSugarWv>false</UseSugarWv>
+    <UseSugarWv>true</UseSugarWv>
     <DefaultFramework>net8.0</DefaultFramework>
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
@@ -78,8 +78,8 @@
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>true</UseCefNet>
-    <UseSugarWv>false</UseSugarWv>
+    <UseCefNet>false</UseCefNet>
+    <UseSugarWv>true</UseSugarWv>
     <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <PlatformShortName>uwp</PlatformShortName> 

@@ -3245,9 +3245,9 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(keys);
         }
 
-        private void PinToCachedPlaceholder(MpAvClipTileViewModel ctvm_to_pin, MpPinType pinType, int pin_to_idx = 0) {
+        private MpAvClipTileView PinToCachedPlaceholder(MpAvClipTileViewModel ctvm_to_pin, MpPinType pinType, int pin_to_idx = 0) {
             int cache_idx = PinTrayCachePlaceholder == null ? -1 : PinnedItems.IndexOf(PinTrayCachePlaceholder);
-            if (pinType != MpPinType.Internal ||
+            if (//pinType != MpPinType.Internal ||
                 PinTrayCachePlaceholder == null ||
                 PinTrayCachePlaceholder.IsAnyBusy ||
                 pin_to_idx > 0 ||
@@ -3258,10 +3258,19 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     PinnedItems.Insert(pin_to_idx, ctvm_to_pin);
                 }
-                return;
+                return null;
             }
+            MpAvClipTileView cached_view = null;
             PinnedItems[cache_idx] = ctvm_to_pin;
+            if (pinType != MpPinType.Internal &&
+                MpAvPinTrayView.Instance != null &&
+                MpAvPinTrayView.Instance.PinTrayListBox != null &&
+                MpAvPinTrayView.Instance.PinTrayListBox.ContainerFromIndex(cache_idx) is Control cache_cont
+                ) {
+                cached_view = cache_cont.GetVisualDescendant<MpAvClipTileView>();
+            }
             CreatePinTrayCachePlaceholderAsync().FireAndForgetSafeAsync(this);
+            return cached_view;
         }
         private async Task CreatePinTrayCachePlaceholderAsync() {
             if (PinTrayCachePlaceholder == null) {
@@ -3464,6 +3473,7 @@ namespace MonkeyPaste.Avalonia {
                      ctvm_to_pin = temp_ctvm;
                  }
 
+                 MpAvClipTileView cached_view = null;
                  if (ctvm_to_pin.IsPinned) {
                      // cases:
                      // 1. drop from pin tray (sort)
@@ -3480,19 +3490,20 @@ namespace MonkeyPaste.Avalonia {
                      PinnedItems.Move(cur_pin_idx, pin_idx);
                  } else if (pin_idx == PinnedItems.Count) {
                      // new item or user pinned query item
-                     PinToCachedPlaceholder(ctvm_to_pin, pinType);
+                     cached_view = PinToCachedPlaceholder(ctvm_to_pin, pinType);
                      //PinnedItems.Add(ctvm_to_pin);
                  } else {
                      // for drop from external or query tray
                      //PinnedItems.Insert(pin_idx, ctvm_to_pin);
-                     PinToCachedPlaceholder(ctvm_to_pin, pinType, pin_idx);
+                     cached_view = PinToCachedPlaceholder(ctvm_to_pin, pinType, pin_idx);
                  }
 
                  if (pinType == MpPinType.Window || pinType == MpPinType.Append) {
                      ctvm_to_pin.OpenPopOutWindow(
                          pinType == MpPinType.Window ?
                             MpAppendModeType.None :
-                            appendType);
+                            appendType,
+                         cached_view);
                      var sw = Stopwatch.StartNew();
                      while (true) {
                          // wait for window to actually open

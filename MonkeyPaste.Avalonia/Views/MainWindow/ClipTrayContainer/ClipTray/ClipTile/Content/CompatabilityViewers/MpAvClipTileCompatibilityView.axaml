@@ -1,0 +1,39 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:Name="ClipTileContentViewRoot"
+                       x:DataType="local:MpAvClipTileViewModel"
+                       x:TypeArguments="local:MpAvClipTileViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvClipTileCompatibilityView">
+    <local:MpAvUserControl.Styles>
+    </local:MpAvUserControl.Styles>
+    <ContentControl x:Name="ClipTileContentControl"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Content="{Binding CopyItemType}">
+        <ContentControl.DataTemplates>
+            <local:MpAvClipTileCompatibilityViewSelector>
+                <DataTemplate x:Key="PlainTextTemplate"
+                              DataType="local:MpAvClipTileViewModel">
+                    <local:MpAvPlainTextContentView />
+                </DataTemplate>
+                <DataTemplate x:Key="ImageTemplate"
+                              DataType="local:MpAvClipTileViewModel">
+                    <local:MpAvImageContentView />
+                </DataTemplate>
+                <DataTemplate x:Key="FileListTemplate"
+                              DataType="local:MpAvClipTileViewModel">
+                    <local:MpAvFileListContentView />
+                </DataTemplate>
+            </local:MpAvClipTileCompatibilityViewSelector>
+        </ContentControl.DataTemplates>
+    </ContentControl>
+</local:MpAvUserControl>

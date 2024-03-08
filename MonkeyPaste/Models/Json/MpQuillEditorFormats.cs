@@ -100,6 +100,8 @@ namespace MonkeyPaste {
     }
     public class MpQuillContentQuerySearchRangesChangedNotificationMessage {
         public int rangeCount { get; set; }
+        public string highlightHtmlFragment { get; set; }
+        public string matchOffsetsCsvFragment { get; set; }
     }
 
     public class MpQuillContentSearchRangeNavigationMessage {

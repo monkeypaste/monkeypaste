@@ -29,7 +29,7 @@
     <ContentControl x:Name="ClipTileContentControl"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    Content="{Binding SelfRef}">
+                    Content="{Binding}">
         <ContentControl.DataTemplates>
             <local:MpAvClipTileContentDataTemplateSelector>
                 <DataTemplate x:Key="CompositeWebViewTemplate"
@@ -40,17 +40,9 @@
                               DataType="local:MpAvClipTileViewModel">
                     <local:MpAvContentWebViewContainer />
                 </DataTemplate>
-                <DataTemplate x:Key="PlainTextTemplate"
+                <DataTemplate x:Key="CompatibilityViewTemplate"
                               DataType="local:MpAvClipTileViewModel">
-                    <local:MpAvPlainTextContentView />
-                </DataTemplate>
-                <DataTemplate x:Key="ImageTemplate"
-                              DataType="local:MpAvClipTileViewModel">
-                    <local:MpAvImageContentView />
-                </DataTemplate>
-                <DataTemplate x:Key="FileListTemplate"
-                              DataType="local:MpAvClipTileViewModel">
-                    <local:MpAvFileListContentView />
+                    <local:MpAvClipTileCompatibilityView />
                 </DataTemplate>
             </local:MpAvClipTileContentDataTemplateSelector>
         </ContentControl.DataTemplates>

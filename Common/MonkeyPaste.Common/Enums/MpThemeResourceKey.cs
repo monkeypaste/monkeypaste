@@ -55,6 +55,12 @@
         ThemePasteButtonDefaultBgColor,
         ThemePasteButtonCustomBgColor,
 
+        ThemeContentLinkColor,
+        ThemeContentLinkHoverColor,
+
+        ThemeHighlightInactiveColor,
+        ThemeHighlightActiveColor,
+
         PostThemeIdx,
         #endregion
 

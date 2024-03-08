@@ -46,7 +46,11 @@ function loadFindReplace(searches) {
 		showAllScrollbars();
 		//setFindReplaceInputState(searches);
 		populateFindReplaceResults();
-		onQuerySearchRangesChanged_ntf(globals.CurFindReplaceDocRanges.length);
+		let hl_html = getHighlightHtml();
+		let range_offsets =
+			globals.CurFindReplaceDocRangeRectIdxLookup.map(x =>
+				`${globals.CurFindReplaceDocRangesRects[x[0]].left}|${globals.CurFindReplaceDocRangesRects[x[0]].top}`).join(' ');
+		onQuerySearchRangesChanged_ntf(globals.CurFindReplaceDocRanges.length, hl_html, range_offsets);
 	}
 }
 

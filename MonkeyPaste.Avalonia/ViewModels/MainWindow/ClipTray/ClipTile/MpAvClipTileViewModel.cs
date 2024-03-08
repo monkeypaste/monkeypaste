@@ -216,6 +216,9 @@ namespace MonkeyPaste.Avalonia {
                 return !IsFocusWithin && !MpAvSearchBoxViewModel.Instance.IsAnySearchControlFocused;
             }
         }
+
+        public bool CanScrollX { get; set; }
+        public bool CanScrollY { get; set; }
         public bool CanSelect =>
             !IsPinPlaceholder;
 
@@ -835,6 +838,9 @@ namespace MonkeyPaste.Avalonia {
         public bool IsVerticalScrollbarVisibile { get; set; }
 
         public bool IsAnyScrollbarVisible =>
+            // NOTE keeping CanScrollX/Y separate since they are bound to rowv
+            CanScrollX ||
+            CanScrollY ||
             IsHorizontalScrollbarVisibile ||
             IsVerticalScrollbarVisibile;
 
@@ -1306,7 +1312,9 @@ namespace MonkeyPaste.Avalonia {
             _contentView = null;
             if (!is_reload) {
                 IsWindowOpen = false;
-                LastCopyItemType = CopyItemType;
+                if (CopyItemType != MpCopyItemType.None) {
+                    LastCopyItemType = CopyItemType;
+                }
             }
 
             if (ci != null &&
@@ -1360,7 +1368,7 @@ namespace MonkeyPaste.Avalonia {
 
             bool trigger_self_ref_change =
 #if SUGAR_WV
-                    CopyItemType != LastCopyItemType;
+                    CopyItemType != LastCopyItemType && CopyItemType != MpCopyItemType.None;
 #else
                 !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ||
                 SelfRef == null;
@@ -1502,12 +1510,12 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsPinPlaceholder));
         }
 
-        public void OpenPopOutWindow(MpAppendModeType amt) {
+        public void OpenPopOutWindow(MpAppendModeType amt, MpAvClipTileView cached_view) {
             IsAppendNotifier = amt != MpAppendModeType.None;
             if (!IsWindowOpen) {
                 MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(CopyItemId, QueryOffsetIdx);
 
-                var pow = CreatePopoutWindow();
+                var pow = CreatePopoutWindow(cached_view);
                 var ws = amt == MpAppendModeType.None ? new Size(500, 500) : new Size(350, 250);
                 pow.Width = ws.Width;
                 pow.Height = ws.Height;
@@ -2093,7 +2101,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Popout Window
-        private MpAvWindow CreatePopoutWindow() {
+        private MpAvWindow CreatePopoutWindow(MpAvClipTileView cached_view) {
             int orig_ciid = CopyItemId;
 
             var pow = new MpAvWindow() {
@@ -2101,7 +2109,7 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = true,
                 Background = Brushes.Transparent,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(WindowIcon), null, null) as WindowIcon,
-                Content = new MpAvClipTileView(),
+                Content = cached_view ?? new MpAvClipTileView(),
                 CornerRadius = Mp.Services.PlatformResource.GetResource<CornerRadius>("TileCornerRadius")
             };
             if (pow.Content is MpAvClipTileView ctv &&

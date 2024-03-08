@@ -14,10 +14,6 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileContentView : MpAvUserControl<MpAvClipTileViewModel> {
         public MpAvClipTileContentView() {
             InitializeComponent();
-            //InitDnd();
         }
-
-
-
     }
 }

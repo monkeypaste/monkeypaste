@@ -239,8 +239,15 @@
         <!--  GENERAL  -->
 
 
-        <SolidColorBrush x:Key="HighlightBrush_inactive" Color="{DynamicResource ThemeAccent1BgColor}" Opacity="0.5" />
-        <SolidColorBrush x:Key="HighlightBrush_active" Color="{DynamicResource ThemeAccent3BgColor}" Opacity="0.5" />
+        <SolidColorBrush x:Key="ThemeHighlightInactiveColor" Color="{DynamicResource ThemeAccent1BgColor}" Opacity="0.5" />
+        <SolidColorBrush x:Key="ThemeHighlightActiveColor" Color="{DynamicResource ThemeAccent3BgColor}" Opacity="0.5" />
+
+        <SolidColorBrush x:Key="ThemeContentLinkColor" Color="Blue" />
+        <SolidColorBrush x:Key="ThemeContentLinkHoverColor" Color="Red" />
+        <SolidColorBrush x:Key="ContentLinkColor_light" Color="Blue" />
+        <SolidColorBrush x:Key="ContentLinkHoverColor_light" Color="Red" />
+        <SolidColorBrush x:Key="ContentLinkColor_dark" Color="Cyan" />
+        <SolidColorBrush x:Key="ContentLinkHoverColor_dark" Color="Salmon" />
 
         <SolidColorBrush x:Key="MainWindowBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 

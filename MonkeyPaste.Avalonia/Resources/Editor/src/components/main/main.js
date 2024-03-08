@@ -70,7 +70,7 @@ function initDefaults(defaultsObj) {
 		setElementComputedStyleProp(document.body, '--editableopacity', parseFloat(defaultsObj.bgOpacity));
 	}
 
-	const bg_opacity = 0;// isRunningOnHost() ? 0:1;// parseFloat(getElementComputedStyleProp(document.body, '--editableopacity'));
+	const bg_opacity =  isRunningOnHost() ? 0:1;// parseFloat(getElementComputedStyleProp(document.body, '--editableopacity'));
 	if(!isNullOrUndefined(defaultsObj.currentTheme)) {
 		globals.EditorTheme = defaultsObj.currentTheme;
 
@@ -89,6 +89,8 @@ function initDefaults(defaultsObj) {
 		let sub_sel_bg = `rgba(189,188,188,${bg_opacity})`;
 		let copy_color = 'lime';
 		let hover_color = 'gold';
+		let link_color = 'blue';
+		let link_hover_color = 'red';
 
 		if (defaultsObj.currentTheme.toLowerCase() == 'dark') {
 			getEditorContainerElement().classList.remove('light');
@@ -109,6 +111,8 @@ function initDefaults(defaultsObj) {
 			caret_color = 'white';
 			copy_color = 'lime';
 			hover_color = 'yellow';
+			link_color = 'cyan';
+			link_hover_color = 'salmon';
 		} else {
 			getEditorContainerElement().classList.add('light');
 			getEditorContainerElement().classList.remove('dark');
@@ -133,6 +137,8 @@ function initDefaults(defaultsObj) {
 		setElementComputedStyleProp(document.body, '--pastetoolbarbuttoncolor', cleanHexColor(paste_toolbar_button_color,null,false));
 		setElementComputedStyleProp(document.body, '--edittemplatebgcolor', cleanHexColor(edit_template_bg_color,null,false));
 		setElementComputedStyleProp(document.body, '--hovercolor', cleanHexColor(hover_color,null,false));
+		setElementComputedStyleProp(document.body, '--linkcolor', cleanHexColor(link_color,null,false));
+		setElementComputedStyleProp(document.body, '--linkhovercolor', cleanHexColor(link_hover_color,null,false));
 
 	}
 	if(!isNullOrUndefined(defaultsObj.defaultFontFamily)) {

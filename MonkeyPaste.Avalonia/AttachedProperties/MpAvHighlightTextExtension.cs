@@ -27,13 +27,13 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.PlatformResource == null ?
                 null :
         //Brushes.Yellow;
-        Mp.Services.PlatformResource.GetResource<IBrush>("HighlightBrush_inactive");
+        Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightInactiveColor);
 
         public static IBrush DefaultActiveHighlightBrush =>
         Mp.Services == null || Mp.Services.PlatformResource == null ?
             null :
         //Brushes.Lime;
-        Mp.Services.PlatformResource.GetResource<IBrush>("HighlightBrush_active");
+        Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor);
         #endregion
 
         #region Statics
@@ -346,11 +346,12 @@ namespace MonkeyPaste.Avalonia {
             }
             int ActiveHighlightIdx = GetActiveHighlightIdx(attached_control);
 
-            HtmlNode active_elm = null;
+            //HtmlNode active_elm = null;
             if (HighlightRanges.Any()) {
 
             }
 
+            int scroll_to_match_idx = -1;
             void ChangeActiveIdx() {
                 // adjust active idx to content range subset
                 int rel_offset = 0;
@@ -366,11 +367,12 @@ namespace MonkeyPaste.Avalonia {
                     hl_node.RemoveClass(HL_INACTIVE_CLASS);
                     hl_node.RemoveClass(HL_ACTIVE_CLASS);
                     hl_node.AddClass(idx == rel_active_idx ? HL_ACTIVE_CLASS : HL_INACTIVE_CLASS);
-                    if (string.IsNullOrEmpty(hl_node.Id)) {
-                        hl_node.Id = System.Guid.NewGuid().ToString();
-                    }
+                    //if (string.IsNullOrEmpty(hl_node.Id)) {
+                    //    hl_node.Id = System.Guid.NewGuid().ToString();
+                    //}
                     if (idx == rel_active_idx) {
-                        active_elm = hl_node;
+                        //active_elm = hl_node;
+                        scroll_to_match_idx = idx;
                     }
                 }
             }
@@ -432,10 +434,10 @@ namespace MonkeyPaste.Avalonia {
 
             // scroll to active
             double step = 0;
-            if (active_elm == null) {
+            if (scroll_to_match_idx < 0) {
                 hp.ScrollToHome(step);
             } else {
-                hp.ScrollToElement(active_elm.Id, step);
+                hp.ScrollToOffsetIdx(scroll_to_match_idx, step);
             }
         }
 

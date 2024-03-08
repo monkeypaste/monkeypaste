@@ -21,9 +21,9 @@ public partial class MpAvCompositeContentView : MpAvUserControl<MpAvClipTileView
         InitDnd();
     }
     private void InitDnd() {
-        ReadOnlyWebView.AddHandler(PointerPressedEvent, MpAvTagView_PointerPressed, RoutingStrategies.Tunnel);
+        ReadOnlyWebView.AddHandler(PointerPressedEvent, ReadOnlyWebView_PointerPressed, RoutingStrategies.Tunnel);
     }
-    private void MpAvTagView_PointerPressed(object sender, PointerPressedEventArgs e) {
+    private void ReadOnlyWebView_PointerPressed(object sender, PointerPressedEventArgs e) {
 #if MOBILE
             return;
 #else

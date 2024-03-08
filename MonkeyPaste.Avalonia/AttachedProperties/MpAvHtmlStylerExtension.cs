@@ -248,7 +248,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             try {
-                if (doc.DocumentNode.SelectNodes("//p") is not { } pl) {
+                if (doc.DocumentNode.SelectNodes("//*").Where(x => x.IsBlockElement()) is not { } pl) {
                     return;
                 }
 
@@ -311,60 +311,153 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        private static string DefaultStyleSheet = @"
+        html, address,
+        blockquote,
+        body, dd, div,
+        dl, dt, fieldset, form,
+        frame, frameset,
+        h1, h2, h3, h4,
+        h5, h6, noframes,
+        ol, p, ul, center,
+        dir, menu, pre   { display: block }
+        li              { display: list-item }
+        head            { display: none }
+        table           { display: table }
+        tr              { display: table-row }
+        thead           { display: table-header-group }
+        tbody           { display: table-row-group }
+        tfoot           { display: table-footer-group }
+        col             { display: table-column }
+        colgroup        { display: table-column-group }
+        td, th          { display: table-cell }
+        caption         { display: table-caption }
+        th              { font-weight: bolder; text-align: center }
+        caption         { text-align: center }
+        body            { margin: 8px }
+        h1              { font-size: 2em; margin: .67em 0 }
+        h2              { font-size: 1.5em; margin: .75em 0 }
+        h3              { font-size: 1.17em; margin: .83em 0 }
+        h4,
+        blockquote, ul,
+        fieldset, form,
+        ol, dl, dir,
+        menu            { margin: 1.12em 0 }
+        h5              { font-size: .83em; margin: 1.5em 0 }
+        h6              { font-size: .75em; margin: 1.67em 0 }
+        h1, h2, h3, h4,
+        h5, h6, b,
+        strong          { font-weight: bolder; }
+        blockquote      { margin-left: 40px; margin-right: 40px }
+        i, cite, em,
+        var, address    { font-style: italic }
+        pre, tt, code,
+        kbd, samp       { font-family: monospace }
+        pre             { white-space: pre }
+        button, textarea,
+        input, select   { display: inline-block }
+        big             { font-size: 1.17em }
+        small, sub, sup { font-size: .83em }
+        sub             { vertical-align: sub }
+        sup             { vertical-align: super }
+        table           { border-spacing: 2px; }
+        thead, tbody,
+        tfoot, tr       { vertical-align: middle }
+        td, th          { vertical-align: inherit }
+        s, strike, del  { text-decoration: line-through }
+        hr              { border: 1px inset; }
+        ol, ul, dir,
+        menu, dd        { margin-left: 40px }
+        ol              { list-style-type: decimal }
+        ol ul, ul ol,
+        ul ul, ol ol    { margin-top: 0; margin-bottom: 0 }
+        ol ul, ul ul   { list-style-type: circle }
+        ul ul ul, 
+        ol ul ul, 
+        ul ol ul        { list-style-type: square }
+        u, ins          { text-decoration: underline }
+        br:before       { content: ""\A"" }
+        :before, :after { white-space: pre-line }
+        center          { text-align: center }
+        :link, :visited { text-decoration: underline }
+        :focus          { outline: thin dotted invert }
+
+        /* Begin bidirectionality settings (do not change) */
+        BDO[DIR=""ltr""]  { direction: ltr; unicode-bidi: bidi-override }
+        BDO[DIR=""rtl""]  { direction: rtl; unicode-bidi: bidi-override }
+
+        *[DIR=""ltr""]    { direction: ltr; unicode-bidi: embed }
+        *[DIR=""rtl""]    { direction: rtl; unicode-bidi: embed }
+
+        @media print {
+          h1            { page-break-before: always }
+          h1, h2, h3,
+          h4, h5, h6    { page-break-after: avoid }
+          ul, ol, dl    { page-break-before: avoid }
+        }
+
+        /* Not in the specification but necessary */
+        a               { color: #0055BB; text-decoration:underline }
+        table           { border-color:#dfdfdf; }
+        td, th          { border-color:#dfdfdf; overflow: hidden; }
+        style, title,
+        script, link,
+        meta, area,
+        base, param     { display:none }
+        hr              { border-top-color: #9A9A9A; border-left-color: #9A9A9A; border-bottom-color: #EEEEEE; border-right-color: #EEEEEE; }
+        pre             { font-size: 10pt; margin-top: 15px; }
+        
+        /*This is the background of the HtmlToolTip*/
+        .htmltooltip {
+            border:solid 1px #767676;
+            background-color:white;
+            background-gradient:#E4E5F0;
+            padding: 8px; 
+            Font: 9pt Tahoma;
+        }
+";
+
         private static string GetStyleSheet(HtmlControl hc) {
             // NOTE this is sample css from HtmlRenderer proj:
-            /*
-            @"h1, h2, h3 { color: navy; font-weight:normal; }
-                            h1 { margin-bottom: .47em }
-                            h2 { margin-bottom: .3em }
-                            h3 { margin-bottom: .4em }
-                            ul { margin-top: .5em }
-                            ul li {margin: .25em}
-                            body { font:10pt Tahoma }
-		                    pre  { border:solid 1px gray; background-color:#eee; padding:1em }
-                            a:link { text-decoration: none; }
-                            a:hover { text-decoration: underline; }
-                            .gray    { color:gray; }
-                            .example { background-color:#efefef; corner-radius:5px; padding:0.5em; }
-                            .whitehole { background-color:white; corner-radius:10px; padding:15px; }
-                            .caption { font-size: 1.1em }
-                            .comment { color: green; margin-bottom: 5px; margin-left: 3px; }
-                            .comment2 { color: green; }";
-            */
             var style_type = GetHtmlStyleType(hc);
             if (_stylesLookup.TryGetValue(style_type, out string css)) {
                 return css;
             }
-            string css_str = string.Empty;
+            string css_str = DefaultStyleSheet;
 
             switch (style_type) {
                 case MpHtmlStyleType.Content:
-                    css_str = string.Format(
-@"* {{ margin: 0; padding: 0; }}
-h1 {{ margin-bottom: .47em }}
-h2 {{ margin-bottom: .3em }}
-h3 {{ margin-bottom: .4em }}
-ul {{ margin-top: .5em }}
-ul li {{ margin: .25em }}
-body {{ white-space: pre-wrap; line-height: {6}px; color: {0}; font-size: {1}px; font-family: {2}; }}
-p {{ margin: 0; }}
+                    //                    css_str += string.Format(@"
+                    //body {{ color: {0}; font-size: {1}px; font-family: {2}; white-space: pre-wrap; word-break: break-all; }}
+                    //
+                    //.underline {{ text-decoration: underline;  }}
+                    //.highlight-inactive {{ background-color: {3}; color: {4}; }}
+                    //.highlight-active {{ background-color: {5}; color: {6}; }}
+                    //a:link {{ text-decoration: underline; color: {7}; }}
+                    //a:hover {{ text-decoration: underline; color: {8}; }}",
+                    css_str += string.Format(@"
+body {{ color: {0}; font-size: {1}px; font-family: {2}; word-break: break-all; }}
+p {{ margin: 0; line-height: {9}px; }}
 .underline {{ text-decoration: underline;  }}
-.highlight-inactive {{ background-color: {4}; color: black; }}
-.highlight-active {{ background-color: {5}; color: black; }}
-a:link {{ text-decoration: none; }}
-a:hover {{ text-decoration: underline; }}",
-                        Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveColor").ToPortableColor().ToHex(true), //0
-                        GetDefaultFontSize(hc), //1
-                        GetDefaultFontFamily(hc), //2
-                        MpSystemColors.gold1.RemoveHexAlpha(), //3
-                        Mp.Services.PlatformResource.GetResource<IBrush>("HighlightBrush_inactive").ToPortableColor().ToHex(true), //4
-                        Mp.Services.PlatformResource.GetResource<IBrush>("HighlightBrush_active").ToPortableColor().ToHex(true), //5
-                        GetDefaultFontSize(hc) + 2 //6
-                        );
+.highlight-inactive {{ background-color: {3}; color: {4}; }}
+.highlight-active {{ background-color: {5}; color: {6}; }}
+a:link {{ text-decoration: none; color: {7}; }}
+a:hover {{ text-decoration: underline; color: {8}; }}",
+                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor).ToPortableColor().ToHex(true), //0
+                                            GetDefaultFontSize(hc), //1
+                                            GetDefaultFontFamily(hc), //2
+                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightInactiveColor).ToPortableColor().ToHex(true), //3
+                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightInactiveColor).ToPortableColor().ToHex(true).ToContrastForegoundColor(remove_alpha: true), //4
+                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).ToPortableColor().ToHex(true), //5
+                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).ToPortableColor().ToHex(true).ToContrastForegoundColor(remove_alpha: true), //6
+                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkColor).ToPortableColor().ToHex(true), //7
+                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkHoverColor).ToPortableColor().ToHex(true), //8
+                                            GetDefaultFontSize(hc) + 3 //9
+                                            );
                     break;
                 case MpHtmlStyleType.Tooltip:
                 default:
-                    css_str = string.Format(
+                    css_str += string.Format(
 @"* {{ margin: 0; padding: 0; }}
 body {{ color: {0}; font-size: {1}px; font-family: {2}; line-height: {4}px; }}
 p {{ margin: 0; }}

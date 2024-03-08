@@ -138,38 +138,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected async Task<MpAvHighlightSelectorBehavior> FindSelectorAsync(int timeout = 10_000) {
-            //var sw = Stopwatch.StartNew();
-            //while (true) {
-            //    if (AssociatedObject != null && AssociatedObject.DataContext != null) {
-            //        break;
-            //    }
-            //    if (sw.ElapsedMilliseconds >= 10_000) {
-            //        break;
-            //    }
-            //    await Task.Delay(100);
-            //}
-            //MpAvClipTileView ctv = null;
-            //var parent = AssociatedObject.Parent;
-            //while (true) {
-            //    if (parent is MpAvClipTileView parent_ctv) {
-            //        ctv = parent_ctv;
-            //        break;
-            //    }
-            //    if (parent == null) {
-            //        break;
-            //    }
-            //    parent = parent.Parent;
-            //}
             await Task.Delay(0);
             if (AssociatedObject == null ||
                 AssociatedObject.GetLogicalAncestors().OfType<MpAvClipTileView>().FirstOrDefault()
                     is not MpAvClipTileView ctv) {
                 return null;
             }
-            //}
-            //if ( ctv == null) {
-            //    return null;
-            //}
             if (Interaction.GetBehaviors(ctv).OfType<MpAvHighlightSelectorBehavior>()
                 .FirstOrDefault() is MpAvHighlightSelectorBehavior hsb) {
                 return hsb;
