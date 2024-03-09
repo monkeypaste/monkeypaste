@@ -140,7 +140,8 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	}
 	setEditorHtml(output_html);
 	let output_delta = convertHtmlToDelta(output_html);
-	let themed_html = getHtml(null, true, false, true);
+	let themed_html = getHtml(null, true, false, true, true);
+	output_html = convertHtmlLineBreaks(output_html);
 	//log('');
 	//log('RichHtml: ');
 	//log(output_html);

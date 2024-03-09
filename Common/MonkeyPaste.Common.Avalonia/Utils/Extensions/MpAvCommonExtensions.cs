@@ -246,8 +246,8 @@ namespace MonkeyPaste.Common.Avalonia {
                     MpDebug.Assert(scb.Opacity >= 1, $"Needs solid bg");
                 }
             }
-            var pixelSize = new PixelSize((int)target.Width, (int)target.Height);
-            var size = new Size(target.Width, target.Height);
+            var pixelSize = new PixelSize((int)target.Bounds.Width, (int)target.Bounds.Height);
+            var size = new Size(target.Bounds.Width, target.Bounds.Height);
             using (RenderTargetBitmap bitmap = new RenderTargetBitmap(pixelSize, new Vector(96, 96))) {
                 target.Measure(size);
                 target.Arrange(new Rect(size));

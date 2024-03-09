@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Threading;
 using HtmlAgilityPack;
@@ -41,6 +42,7 @@ namespace MonkeyPaste.Avalonia {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
             HighlightRangesProperty.Changed.AddClassHandler<Control>((x, y) => UpdateHighlights(x, nameof(HighlightRangesProperty)));
             ActiveHighlightIdxProperty.Changed.AddClassHandler<Control>((x, y) => UpdateHighlights(x, nameof(ActiveHighlightIdxProperty)));
+            CanHighlightProperty.Changed.AddClassHandler<Control>((x, y) => UpdateHighlights(x, nameof(CanHighlightProperty)));
         }
 
         #endregion
@@ -100,6 +102,23 @@ namespace MonkeyPaste.Avalonia {
 
 
         //#endregion
+
+        #region CanHighlight AvaloniaProperty
+        public static bool GetCanHighlight(AvaloniaObject obj) {
+            return obj.GetValue(CanHighlightProperty);
+        }
+
+        public static void SetCanHighlight(AvaloniaObject obj, bool value) {
+            obj.SetValue(CanHighlightProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> CanHighlightProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "CanHighlight",
+                defaultValue: true,
+                defaultBindingMode: BindingMode.TwoWay);
+
+        #endregion
 
         #region HighlightRanges AvaloniaProperty
         public static object GetHighlightRanges(AvaloniaObject obj) {
@@ -185,8 +204,7 @@ namespace MonkeyPaste.Avalonia {
                 if (isEnabledVal) {
                     attached_control.Loaded += Attached_control_Loaded;
                     attached_control.Unloaded += Attached_control_Unloaded;
-                    attached_control.SizeChanged += Attached_control_SizeChanged;
-                    //attached_control.EffectiveViewportChanged += Attached_control_EffectiveViewportChanged;
+                    attached_control.EffectiveViewportChanged += Attached_control_EffectiveViewportChanged;
                     if (attached_control.IsInitialized) {
                         Attached_control_Loaded(attached_control, null);
                     }
@@ -197,13 +215,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void Attached_control_SizeChanged(object sender, SizeChangedEventArgs e) {
-            if (sender is not Control attached_control) {
-                return;
-            }
-
-            UpdateHighlights(attached_control, null);
-        }
 
         private static void Attached_control_Loaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             if (sender is not Control attached_control) {
@@ -214,7 +225,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Attached_control_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
-            if (sender is not Control attached_control) {
+            if (sender is not Control attached_control ||
+                sender is HtmlPanel) {
                 return;
             }
             UpdateHighlights(attached_control, null);
@@ -238,6 +250,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         private static void UpdateHighlights(Control attached_control, string sourcePropertyName) {
+            if (!GetCanHighlight(attached_control) && sourcePropertyName != nameof(CanHighlightProperty)) {
+                return;
+            }
             if (attached_control is MpAvMarqueeTextBox mtb) {
                 mtb.HighlightRanges = GetHighlightRanges(attached_control) as IEnumerable<MpTextRange>;
                 mtb.ActiveHighlightIdx = GetActiveHighlightIdx(attached_control);
@@ -252,7 +267,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void HighlightTextControl(Control attached_control) {
-            var HighlightRanges = (GetHighlightRanges(attached_control) as IEnumerable<MpTextRange>).ToArray();
+            if (GetHighlightRanges(attached_control) is not IEnumerable<MpTextRange> trl ||
+                trl.ToArray() is not { } HighlightRanges) {
+                return;
+            }
             int ActiveHighlightIdx = GetActiveHighlightIdx(attached_control);
 
             async Task FinishUpdate(IEnumerable<(IBrush, Geometry)> gl) {
@@ -431,6 +449,7 @@ namespace MonkeyPaste.Avalonia {
             }
             // update html
             attached_control.SetCurrentValue(HtmlPanel.TextProperty, doc.DocumentNode.OuterHtml);
+
 
             // scroll to active
             double step = 0;

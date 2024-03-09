@@ -33,12 +33,23 @@
             <Setter Property="Margin"
                     Value="0,0,0,15" />
         </Style>
-        <!--  PASTE TOOLBAR SHOW/HIDE  -->
-        <Style Selector="local|MpAvPasteToolbarView">
+        <!--  PASTE TOOLBAR SHOW/HIDE (needs anim class to animate)  -->
+        <Style Selector="local|MpAvPasteToolbarView:not(.anim)">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="local|MpAvPasteToolbarView:not(.anim).show">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+        <Style Selector="local|MpAvPasteToolbarView.anim"
+               x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Margin"
                     Value="0,120,0,0" />
+            <Setter Property="IsVisible"
+                    Value="{Binding !IsDropOverTile}" />
         </Style>
-        <Style Selector="local|MpAvPasteToolbarView.show">
+        <Style Selector="local|MpAvPasteToolbarView.anim.show">
             <Setter Property="Margin"
                     Value="0,0,0,0" />
         </Style>
@@ -46,7 +57,7 @@
         <!--  PLAIN CONTENT VIEWS  -->
         <Style Selector=":is(Control).plain-content-view">
             <Setter Property="Grid.RowSpan"
-                    Value="2" />
+                    Value="1" />
         </Style>
 
         <!--  READ ONLY / WEBVIEW OPACITY TOGGLE  -->
@@ -102,7 +113,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="CompositeWebViewContainerGrid"
-          RowDefinitions="*,60"
+          RowDefinitions="*,Auto"
           Classes.over-paste-button="{Binding IsPasteButtonHovering}"
           Classes.over-append-button="{Binding IsAppendButtonHovering}">
         <Classes.show-read-only>
@@ -115,8 +126,8 @@
         <!--  READ ONLY WEBVIEW  -->
         <local:MpAvHtmlPanel x:Name="ReadOnlyWebView"
                              Classes="content-zoom plain-content-view"
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Top"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
                              Margin="5"
                              Classes.active="{Binding CopyItemType, ConverterParameter=Text, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
                              local:MpAvDropExtension.IsEnabled="True"
@@ -125,6 +136,7 @@
                              local:MpAvDropExtension.IsDragOverHandled="False"
                              local:MpAvDropExtension.IsDropHandled="False"
                              local:MpAvHighlightTextExtension.IsEnabled="True"
+                             local:MpAvHighlightTextExtension.CanHighlight="{Binding IsHighlightDataAvailable, Source={x:Static local:MpAvQueryViewModel.Instance}}"
                              local:MpAvHighlightTextExtension.HighlightRanges="{Binding HighlightRanges}"
                              local:MpAvHighlightTextExtension.ActiveHighlightIdx="{Binding ActiveHighlightIdx}"
                              local:MpAvHtmlStylerExtension.IsEnabled="True"
@@ -134,7 +146,7 @@
                              local:MpAvHtmlStylerExtension.ShowUnderlines="{Binding IsSubSelectionEnabled}"
                              CanScrollX="{Binding CanScrollX, Mode=TwoWay}"
                              CanScrollY="{Binding CanScrollY, Mode=TwoWay}"
-                             Text="{Binding CopyItemData, Converter={x:Static local:MpAvStringToDecodedHtmlStringConverter.Instance}}">
+                             Text="{Binding CopyItemData}">
             <local:MpAvHtmlPanel.IsSelectionEnabled>
                 <MultiBinding Converter="{x:Static BoolConverters.Or}">
                     <Binding Path="IsSubSelectionEnabled" />
@@ -160,7 +172,6 @@
         <local:MpAvPasteToolbarView Grid.Row="1"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
-                                    IsVisible="{Binding !IsDropOverTile}"
                                     local:MpAvIsHoveringExtension.IsEnabled="True"
                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsPasteBarHovering}"
                                     Height="60">

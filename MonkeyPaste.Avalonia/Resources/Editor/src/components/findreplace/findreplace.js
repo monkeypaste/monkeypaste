@@ -178,10 +178,10 @@ function getHighlightHtml() {
 		}
 	}
 	toggleHighlighting(true);
-	let result = getRootHtml();
+	let result = convertHtmlLineBreaks(getRootHtml());
 	toggleHighlighting(false);
 	unsupressTextChanged(sup_guid);
-	return utf8_to_b64(result);
+	return result;
 }
 // #endregion Getters
 

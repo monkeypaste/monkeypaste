@@ -1077,7 +1077,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            MpConsole.WriteTraceLine("Unknown mouse button pressed: SharpButton: " + e.Data.Button + " PortableButton: " + button);
+            //MpConsole.WriteTraceLine("Unknown mouse button pressed: SharpButton: " + e.Data.Button + " PortableButton: " + button);
         }
         private void Hook_MouseReleased(object sender, MouseHookEventArgs e) {
             // NOTE: SharpHook Release event shows Button released

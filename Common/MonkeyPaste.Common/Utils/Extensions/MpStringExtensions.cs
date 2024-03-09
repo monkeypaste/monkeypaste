@@ -606,22 +606,29 @@ namespace MonkeyPaste.Common {
             return false;
         }
 
-        public static Dictionary<char, string> HtmlEntityLookup =>
-            new Dictionary<char, string>() {
-                {'&',"&amp;" },
-                {' ',"&nbsp;" },
-                {'\"',"&quot;" },
-                {'\'',"&apos;" },
-                {'>',"&gt;" },
-                {'¢',"&cent;" },
-                {'£',"&pound;" },
-                {'¥',"&yen;" },
-                {'€',"&euro;" },
-                {'©',"&copy;" },
-                {'®',"&reg;" },
-                {'™',"&trade;" },
-                {'<',"&lt;" }
-            };
+        private static Dictionary<char, string> _htmlEntityLookup;
+        public static Dictionary<char, string> HtmlEntityLookup {
+            get {
+                if (_htmlEntityLookup == null) {
+                    _htmlEntityLookup = new Dictionary<char, string>() {
+                        {'&',"&amp;" },
+                        {' ',"&nbsp;" },
+                        {'\"',"&quot;" },
+                        {'\'',"&apos;" },
+                        {'>',"&gt;" },
+                        {'¢',"&cent;" },
+                        {'£',"&pound;" },
+                        {'¥',"&yen;" },
+                        {'€',"&euro;" },
+                        {'©',"&copy;" },
+                        {'®',"&reg;" },
+                        {'™',"&trade;" },
+                        {'<',"&lt;" }
+                    };
+                }
+                return _htmlEntityLookup;
+            }
+        }
 
         private static Regex _AmpNotSpecialEntityRegex;
         public static string EncodeSpecialHtmlEntities(this string str) {
@@ -639,8 +646,12 @@ namespace MonkeyPaste.Common {
             return str;
         }
 
-        public static string DecodeSpecialHtmlEntities(this string str) {
-            foreach (var pattern in HtmlEntityLookup) {
+        public static string DecodeSpecialHtmlEntities(this string str, char[] entityFilter = default) {
+            var patterns =
+                entityFilter == default ?
+                    HtmlEntityLookup :
+                    HtmlEntityLookup.Where(x => entityFilter.Contains(x.Key));
+            foreach (var pattern in patterns) {
                 str = str.Replace(pattern.Value, pattern.Key.ToString());
             }
             return str;

@@ -248,7 +248,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             try {
-                if (doc.DocumentNode.SelectNodes("//*").Where(x => x.IsBlockElement()) is not { } pl) {
+                if (doc.DocumentNode.SelectNodesSafe("//*").Where(x => x.IsBlockElement()) is not { } pl) {
                     return;
                 }
 
@@ -436,9 +436,9 @@ namespace MonkeyPaste.Avalonia {
                     //a:link {{ text-decoration: underline; color: {7}; }}
                     //a:hover {{ text-decoration: underline; color: {8}; }}",
                     css_str += string.Format(@"
-body {{ color: {0}; font-size: {1}px; font-family: {2}; word-break: break-all; }}
-p {{ margin: 0; line-height: {9}px; }}
-.underline {{ text-decoration: underline;  }}
+body {{ color: {0}; font-size: {1}px; font-family: {2}; white-space: pre-wrap; word-break: break-word; }}
+p {{ margin: 0; line-height: 1; }}
+.underline {{ text-decoration: underline; line-height: 1.5; }}
 .highlight-inactive {{ background-color: {3}; color: {4}; }}
 .highlight-active {{ background-color: {5}; color: {6}; }}
 a:link {{ text-decoration: none; color: {7}; }}
@@ -451,8 +451,8 @@ a:hover {{ text-decoration: underline; color: {8}; }}",
                                             Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).ToPortableColor().ToHex(true), //5
                                             Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).ToPortableColor().ToHex(true).ToContrastForegoundColor(remove_alpha: true), //6
                                             Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkColor).ToPortableColor().ToHex(true), //7
-                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkHoverColor).ToPortableColor().ToHex(true), //8
-                                            GetDefaultFontSize(hc) + 3 //9
+                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkHoverColor).ToPortableColor().ToHex(true) //8
+                                                                                                                                                                          //GetDefaultFontSize(hc) + 3 //9
                                             );
                     break;
                 case MpHtmlStyleType.Tooltip:

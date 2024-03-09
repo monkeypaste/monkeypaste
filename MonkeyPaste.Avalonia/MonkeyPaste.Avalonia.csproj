@@ -272,6 +272,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\RadioButton.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ScrollViewer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\SelectingItemsControl.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\SplitButton.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
@@ -2067,6 +2068,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\ContextMenu.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPluginBrowser.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltipHint.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\SplitButton.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TopLevel.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Nav\TabNav.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Image.axaml" />

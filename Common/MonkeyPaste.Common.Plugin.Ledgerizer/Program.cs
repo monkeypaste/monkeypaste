@@ -146,7 +146,7 @@ namespace Ledgerizer {
             //"AzureTextTranslator",
             //"ChatGpt",
             "CoreAnnotator",
-            "CoreOleHandler",
+            //"CoreOleHandler",
             //"FileConverter",
             //"GoogleLiteTextTranslator",
             //"QrCoder",

@@ -80,7 +80,7 @@ function getRootHtml() {
 	return globals.quill.root.innerHTML;
 }
 
-function getHtml(range, encodeHtmlEntities = true, restoreContentColors = true, useInlineStyles = false) {
+function getHtml(range, encodeHtmlEntities = true, restoreContentColors = true, useInlineStyles = false, convertLineBreaks = true) {
 	if (globals.ContentItemType != 'Text' ||
 		(isTableInDocument() && isNullOrUndefined(range))) {
 		let root_html = getRootHtml();
@@ -101,6 +101,14 @@ function getHtml(range, encodeHtmlEntities = true, restoreContentColors = true, 
 	if (useInlineStyles) {
 		htmlStr = getHtmlWithInlineStyles(htmlStr);
 	}
+	if (convertLineBreaks) {
+		htmlStr = convertHtmlLineBreaks(htmlStr);
+	}
+	return htmlStr;
+}
+
+function convertHtmlLineBreaks(htmlStr) {
+	htmlStr = htmlStr.replaceAll('<br>', '</p><p>').replaceAll('<br/>', '</p><p>');
 	return htmlStr;
 }
 

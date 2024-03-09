@@ -1367,12 +1367,12 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(ZoomFactor));
 
             bool trigger_self_ref_change =
-#if SUGAR_WV
-                    CopyItemType != LastCopyItemType && CopyItemType != MpCopyItemType.None;
-#else
+                //#if SUGAR_WV
+                //                    CopyItemType != LastCopyItemType && CopyItemType != MpCopyItemType.None;
+                //#else
                 !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ||
                 SelfRef == null;
-#endif
+            //#endif
             if (trigger_self_ref_change) {
                 ResetDataTemplate();
             }

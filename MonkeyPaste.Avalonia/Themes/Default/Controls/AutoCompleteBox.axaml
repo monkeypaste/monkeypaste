@@ -12,6 +12,6 @@
         <Setter Property="MinimumPrefixLength"
                 Value="0" />
       <Setter Property="MinimumPopulateDelay"
-                Value="1.25" />
+                Value="1000.25" />
     </Style>
 </Styles>

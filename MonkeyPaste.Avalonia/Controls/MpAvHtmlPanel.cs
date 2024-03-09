@@ -39,6 +39,14 @@ namespace MonkeyPaste.Avalonia {
                 .Select(x => new MpPoint(x.SplitNoEmpty("|").Select(y => double.Parse(y)).ToArray()))
                 .Select(x => new Point(x.X, x.Y))
                 .ToArray();
+            if (_scrollOffsets.Any()) {
+                MpConsole.WriteLine($"Offsets for {DataContext}: ", true);
+                _scrollOffsets.ForEach(x => MpConsole.WriteLine($"{x}", false, x == _scrollOffsets.Last()));
+            }
+        }
+
+        public void SetHtml(string html) {
+            this.SetCurrentValue(TextProperty, html.DecodeSpecialHtmlEntities());
         }
 
         public void ScrollToHome(double step = 0) {

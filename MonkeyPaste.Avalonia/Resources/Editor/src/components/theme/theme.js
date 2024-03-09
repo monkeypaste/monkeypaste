@@ -113,6 +113,13 @@ function adjustDeltaOpForTheme(op) {
     if (op.attributes === undefined) {
         op.attributes = {};
     }
+    if (op.attributes.link) {
+        // remove ops
+        let link_fg = getElementComputedStyleProp(document.body, '--linkcolor');
+        setAttrThemeColorVal(op.attributes, link_fg, false);
+        delete op.attributes.background;
+        return op;
+    }
     if (op.attributes.color === undefined) {
         // op has text but no color info
         // so set based on theme

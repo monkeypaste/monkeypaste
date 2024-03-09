@@ -667,8 +667,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 await Task.Delay(1);
                 if (MpAvClipTrayViewModel.Instance.SelectedItem.GetContentView() is MpAvContentWebView cwv) {
-                    cwv.DoSs = true;
-                    cwv.Redraw();
+                    cwv.RenderToFile(@"C:\Users\tkefauver\Desktop\ss.png");
                 }
 
             });
