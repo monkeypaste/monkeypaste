@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 using Avalonia.Threading;
 using HtmlAgilityPack;
 using MonkeyPaste.Common;
@@ -32,61 +33,68 @@ namespace MonkeyPaste.Avalonia {
             get { return (bool)GetValue(CanScrollYProperty); }
             private set { SetValue(CanScrollYProperty, value); }
         }
-        public void ParseScrollOffsets(string offsetsStr) {
-            _scrollOffsets =
-                offsetsStr.ToStringOrEmpty()
-                .SplitNoEmpty(" ")
-                .Select(x => new MpPoint(x.SplitNoEmpty("|").Select(y => double.Parse(y)).ToArray()))
-                .Select(x => new Point(x.X, x.Y))
-                .ToArray();
-            if (_scrollOffsets.Any()) {
-                MpConsole.WriteLine($"Offsets for {DataContext}: ", true);
-                _scrollOffsets.ForEach(x => MpConsole.WriteLine($"{x}", false, x == _scrollOffsets.Last()));
-            }
-        }
 
-        public void SetHtml(string html) {
-            this.SetCurrentValue(TextProperty, html.DecodeSpecialHtmlEntities());
-        }
+        public Point ScrollOffset =>
+            new Point(_horizontalScrollBar.Value, _verticalScrollBar.Value);
 
         public void ScrollToHome(double step = 0) {
             ScrollToOffset(new(), step);
         }
-        public void ScrollToOffsetIdx(int offsetIdx, double step = 0) {
-            // HACK HtmlPanel.ScrollToElement does NOT work, it always returns an empty rect
-            if (_scrollOffsets == null ||
-                offsetIdx < 0 ||
-                offsetIdx >= _scrollOffsets.Length) {
+
+        public void ScrollToElement(string elementId, double step = 0) {
+            if (_htmlContainer == null) {
                 return;
             }
-            ScrollToOffset(_scrollOffsets[offsetIdx], step);
+            var rect = _htmlContainer.GetElementRectangle(elementId);
+            if (rect.HasValue) {
+                Point new_offset = new Point(_horizontalScrollBar.Value, rect.Value.Y);
+                ScrollToOffset(new_offset, step);
+            }
         }
-
         public void ScrollToOffset(Point offset, double step = 0) {
             if (_htmlContainer == null) {
                 return;
             }
             if (step == 0) {
-                _htmlContainer.ScrollOffset = offset;
+                SetScrollOffset(offset.X, offset.Y);
                 return;
             }
             Dispatcher.UIThread.Post(async () => {
-                var diff = offset - _htmlContainer.ScrollOffset;
+                var cur_offset = new Point(_horizontalScrollBar.Value, _verticalScrollBar.Value);
+                var diff = offset - cur_offset;
                 double x_dir = diff.X == 0 ? 0 : diff.X > 0 ? 1 : -1;
                 double y_dir = diff.Y == 0 ? 0 : diff.Y > 0 ? 1 : -1;
                 var vel = new Point(step * x_dir, step * y_dir);
                 while (true) {
-                    var cur_diff = offset - _htmlContainer.ScrollOffset;
-                    if (Math.Abs(cur_diff.X) < 1 && Math.Abs(cur_diff.Y) < 1) {
-                        _htmlContainer.ScrollOffset = offset;
+                    var cur_diff = offset - cur_offset;
+                    bool is_done = Math.Abs(cur_diff.X) < 1 && Math.Abs(cur_diff.Y) < 1;
+                    if (is_done) {
+                        cur_offset = offset;
+                    } else {
+                        cur_offset += vel;
+                    }
+                    SetScrollOffset(cur_offset.X, cur_offset.Y);
+                    if (is_done) {
                         return;
                     }
-                    _htmlContainer.ScrollOffset += vel;
                     await Task.Delay(20);
                 }
             });
         }
+        private void SetScrollOffset(double x, double y) {
+            _horizontalScrollBar.Value = x;
+            _verticalScrollBar.Value = y;
+            UpdateScroll();
+        }
 
+        private void UpdateScroll() {
+            var newScrollOffset = new Point(-_horizontalScrollBar.Value, -_verticalScrollBar.Value);
+            if (!newScrollOffset.Equals(_htmlContainer.ScrollOffset)) {
+                _htmlContainer.ScrollOffset = newScrollOffset;
+                InvalidateVisual();
+
+            }
+        }
         private void UpdateScrollbars() {
             _verticalScrollBar.IsVisible = IsSelectionEnabled && _verticalScrollBar.Visibility == ScrollBarVisibility.Visible;
             _horizontalScrollBar.IsVisible = IsSelectionEnabled && _horizontalScrollBar.Visibility == ScrollBarVisibility.Visible;
@@ -106,6 +114,9 @@ namespace MonkeyPaste.Avalonia {
             }
             UpdateScrollbars();
             return result;
+        }
+        protected override void OnPointerPressed(PointerPressedEventArgs e) {
+            base.OnPointerPressed(e);
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs e) {

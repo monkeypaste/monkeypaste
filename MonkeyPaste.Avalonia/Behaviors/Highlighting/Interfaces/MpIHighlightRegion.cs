@@ -10,7 +10,6 @@ namespace MonkeyPaste.Avalonia {
         MpHighlightType HighlightType { get; }
 
         MpContentQueryBitFlags AcceptanceFlags { get; }
-        bool IsEnabled { get; }
 
         bool IsVisible { get; }
 

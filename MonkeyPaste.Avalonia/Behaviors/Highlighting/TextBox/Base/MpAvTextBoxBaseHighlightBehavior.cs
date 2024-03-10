@@ -55,7 +55,10 @@ namespace MonkeyPaste.Avalonia {
                 AssociatedObject.DataContext is not MpIHighlightTextRangesInfoViewModel htrivm) {
                 return;
             }
-            htrivm.HighlightRanges.Clear();
+            htrivm.HighlightRanges
+                .Where(x => x.Document == ContentRange.Document)
+                .ToList()
+                .ForEach(x => htrivm.HighlightRanges.Remove(x));
             //htrivm.ActiveHighlightIdx = -1;
         }
 

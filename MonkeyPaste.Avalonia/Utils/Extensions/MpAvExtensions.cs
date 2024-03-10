@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvExtensions {
@@ -112,6 +113,9 @@ namespace MonkeyPaste.Avalonia {
             return default;
         }
 
+        public static void SetHtml(this HtmlControl hc, string html) {
+            hc.SetCurrentValue(HtmlControl.TextProperty, html);
+        }
         #endregion
 
         #region Strings

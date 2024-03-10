@@ -1746,7 +1746,8 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsAppendNotifier):
                     if (IsAppendNotifier) {
                         IsSubSelectionEnabled = true;
-                        IsPopoutCloseRequireConfirm = true;
+                        //IsPopoutCloseRequireConfirm = true;
+                        IsPopoutCloseRequireConfirm = false;
                     } else {
                         IsPopoutCloseRequireConfirm = false;
                     }

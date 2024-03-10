@@ -2,6 +2,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:beh="clr-namespace:Avalonia.Xaml.Interactivity"
                        xmlns:sys="clr-namespace:Sys"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:avwv="using:AvaloniaWebView"
@@ -18,13 +19,15 @@
             <Setter Property="ToolTip.Tip"
                     Value="{x:Null}" />
         </Style>
-        <!--<Style Selector="local|MpAvContentWebView:not(.sugarwv)">
+        <Style Selector="local|MpAvContentWebView:not(.sugarwv)">
             <Setter Property="Interaction.Behaviors">
                 <Setter.Value>
-                  <local:MpAvContentWebViewHighlightBehavior />
+                    <BehaviorCollection>
+                        <local:MpAvContentWebViewHighlightBehavior />
+                    </BehaviorCollection>
                 </Setter.Value>
             </Setter>
-        </Style>-->
+        </Style>
     </local:MpAvUserControl.Styles>
     <local:MpAvContentWebView x:Name="ContentWebView"
                               DragDrop.AllowDrop="{Binding CanDrop}"
@@ -42,8 +45,5 @@
                               IsContentFindAndReplaceVisible="{Binding IsFindAndReplaceVisible, Mode=TwoWay}"
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Stretch">
-        <Interaction.Behaviors>
-            <local:MpAvContentWebViewHighlightBehavior />
-        </Interaction.Behaviors>
     </local:MpAvContentWebView>
 </local:MpAvUserControl>

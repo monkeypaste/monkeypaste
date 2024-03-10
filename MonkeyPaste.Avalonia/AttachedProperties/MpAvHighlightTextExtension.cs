@@ -250,17 +250,17 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         private static void UpdateHighlights(Control attached_control, string sourcePropertyName) {
-            if (!GetCanHighlight(attached_control) && sourcePropertyName != nameof(CanHighlightProperty)) {
+            if (!GetIsEnabled(attached_control)) {
+                return;
+            }
+            if (!GetCanHighlight(attached_control) &&
+                sourcePropertyName != nameof(CanHighlightProperty)) {
                 return;
             }
             if (attached_control is MpAvMarqueeTextBox mtb) {
                 mtb.HighlightRanges = GetHighlightRanges(attached_control) as IEnumerable<MpTextRange>;
                 mtb.ActiveHighlightIdx = GetActiveHighlightIdx(attached_control);
                 mtb.Redraw();
-                return;
-            }
-            if (attached_control is HtmlControl hc) {
-                HighlightHtml(hc, sourcePropertyName);
                 return;
             }
             HighlightTextControl(attached_control);
@@ -352,112 +352,6 @@ namespace MonkeyPaste.Avalonia {
                     ft.BuildHighlightGeometry(new Point(), x.Item2.StartIdx, x.Item2.Count)));
 
             FinishUpdate(gl).FireAndForgetSafeAsync();
-        }
-
-
-        private static void HighlightHtml(HtmlControl attached_control, string sourcePropertyName) {
-            if (attached_control.DataContext is not MpAvClipTileViewModel ctvm ||
-                attached_control is not MpAvHtmlPanel hp ||
-                hp.Text.ToHtmlDocument() is not { } doc ||
-                GetHighlightRanges(attached_control) is not IEnumerable<MpTextRange> HighlightRanges) {
-                return;
-            }
-            int ActiveHighlightIdx = GetActiveHighlightIdx(attached_control);
-
-            //HtmlNode active_elm = null;
-            if (HighlightRanges.Any()) {
-
-            }
-
-            int scroll_to_match_idx = -1;
-            void ChangeActiveIdx() {
-                // adjust active idx to content range subset
-                int rel_offset = 0;
-                if (HighlightRanges.Where(x => x.Document != attached_control) is { } other_ranges) {
-                    // should only have these for title or source highlights
-                    rel_offset = other_ranges.Count();
-                }
-                int rel_active_idx = ActiveHighlightIdx - rel_offset;
-                //MpConsole.WriteLine($"Actual {ActiveHighlightIdx} Relative {rel_active_idx}");
-                var hl_node_tups = doc.DocumentNode.SelectNodesSafe($"//span[contains(@class, 'highlight')]").WithIndex();
-                foreach (var (hl_node, idx) in hl_node_tups) {
-                    hl_node.RemoveClass(HL_BASE_CLASS);
-                    hl_node.RemoveClass(HL_INACTIVE_CLASS);
-                    hl_node.RemoveClass(HL_ACTIVE_CLASS);
-                    hl_node.AddClass(idx == rel_active_idx ? HL_ACTIVE_CLASS : HL_INACTIVE_CLASS);
-                    //if (string.IsNullOrEmpty(hl_node.Id)) {
-                    //    hl_node.Id = System.Guid.NewGuid().ToString();
-                    //}
-                    if (idx == rel_active_idx) {
-                        //active_elm = hl_node;
-                        scroll_to_match_idx = idx;
-                    }
-                }
-            }
-            void ChangeRanges() {
-                // get content ranges
-                if (HighlightRanges.Where(x => x.Document == attached_control).ToArray() is not { } hlrl ||
-                    !hlrl.Any()) {
-                    return;
-                }
-
-                // find text nodes
-                //var text_nodes = doc.DocumentNode.SelectNodesSafe("//text() | //br");
-                var text_nodes = doc.DocumentNode.SelectNodesSafe("//text()");//.OfType<HtmlTextNode>().ToList();
-
-                (int sub_idx, HtmlTextNode node) FindNodeAtTextIdx(HtmlNodeCollection hnc, int idx) {
-                    if (!hnc.Any()) {
-                        return default;
-                    }
-                    int cur_idx = 0;
-                    foreach (var (n, tn_idx) in hnc.WithIndex()) {
-                        if (n is not HtmlTextNode tn) {
-                            continue;
-                        }
-                        string tn_text = tn.Text.DecodeSpecialHtmlEntities();
-                        //string tn_text = tn.InnerText;
-                        if (tn_text.Contains("\n")) {
-
-                        }
-                        int next_idx = cur_idx + tn_text.Length;
-                        if (cur_idx <= idx && idx < next_idx) {
-                            // idx part of this text node
-                            return (idx - cur_idx, tn);
-                        }
-                        cur_idx += tn_text.Length;
-                    }
-                    return default;
-                }
-                foreach (var (hlr, idx) in hlrl.WithIndex()) {
-                    var start_node_tup = FindNodeAtTextIdx(text_nodes, hlr.StartIdx);
-                    if (start_node_tup.IsDefault()) {
-                        continue;
-                    }
-                    var end_node_tup = FindNodeAtTextIdx(text_nodes, hlr.EndIdx);
-                    if (end_node_tup.IsDefault()) {
-                        continue;
-                    }
-                    start_node_tup.ExtractRange(end_node_tup, HL_BASE_CLASS);
-                }
-            }
-
-            if (sourcePropertyName == nameof(ActiveHighlightIdxProperty)) {
-                ChangeActiveIdx();
-            } else {
-                //ChangeRanges();
-                ChangeActiveIdx();
-            }
-            // update html
-            attached_control.SetCurrentValue(HtmlPanel.TextProperty, doc.DocumentNode.OuterHtml);
-
-
-            // scroll to active
-            double step = 0;
-            if (scroll_to_match_idx < 0) {
-                hp.ScrollToHome(step);
-            } else {
-                hp.ScrollToOffsetIdx(scroll_to_match_idx, step);
-            }
         }
 
         private static void RemoveVisualAdorner(Visual visual, Control? adorner, AdornerLayer? layer) {

@@ -237,7 +237,7 @@ namespace MonkeyPaste.Avalonia {
             if (!hc.Text.ToStringOrEmpty().IsStringHtmlDocument()) {
                 // ensure text is full html doc or stylesheet stuff doesn't work
                 string html_doc_str = hc.Text.ToStringOrEmpty().ToHtmlDocumentFromTextOrPartialHtml();
-                hc.SetCurrentValue(HtmlPanel.TextProperty, html_doc_str);
+                hc.SetHtml(html_doc_str);
             }
             hc.Redraw();
         }
@@ -262,7 +262,7 @@ namespace MonkeyPaste.Avalonia {
                     pl.ForEach(x => x.RemoveClass("underline"));
                 }
 
-                hc.SetCurrentValue(HtmlPanel.TextProperty, doc.DocumentNode.OuterHtml);
+                hc.SetHtml(doc.DocumentNode.OuterHtml);
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error toggling underlines. ", ex);

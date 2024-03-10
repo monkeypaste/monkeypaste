@@ -376,16 +376,6 @@ namespace MonkeyPaste.Common {
             return hnc;
         }
 
-        public static HtmlNode FindParent(this HtmlNode node, string parentTagName) {
-            HtmlNode cur_node = node;
-            while (cur_node != null) {
-                if (cur_node.Name == parentTagName) {
-                    return cur_node;
-                }
-                cur_node = cur_node.ParentNode;
-            }
-            return null;
-        }
         public static bool IsBlockElement(this HtmlNode node) {
             return Regex.IsMatch(node.Name, "^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)");
         }
@@ -394,103 +384,100 @@ namespace MonkeyPaste.Common {
             empty_clone.RemoveAllChildren();
             return empty_clone;
         }
-        public static (HtmlNode start, HtmlNode end) SplitTextNode(this HtmlTextNode text_node, int index, int length, string match_class_to_add) {
-            try {
-                if (text_node.ParentNode is not { } parentNode) {
-                    return default;
-                }
-                bool was_parent_block = parentNode.IsBlockElement();
-                if (was_parent_block) {
-                    // ensure parent isn't block
-                    HtmlNode new_parent_span = text_node.OwnerDocument.CreateElement("span");
-                    new_parent_span.AppendChild(text_node);
-                    text_node.ParentNode.ReplaceChild(new_parent_span, text_node);
-                    parentNode = new_parent_span;
-                    text_node = parentNode.FirstChild as HtmlTextNode;
-                }
-
-                string node_text = text_node.InnerText.DecodeSpecialHtmlEntities();
-                string match_text = length < 0 ? node_text.Substring(index) : node_text.Substring(index, length);
-
-                List<HtmlNode> split_results = [];
-                //HtmlNode temp_wrapper_span = parentNode.CloneEmpty();
-                if (index > 0) {
-                    // create lead run (in example "{'>',"")
-                    string lead_text = node_text.Substring(0, index);
-                    HtmlNode lead_text_node = text_node.OwnerDocument.CreateTextNode(lead_text.EncodeSpecialHtmlEntities());
-                    HtmlNode lead_span = parentNode.CloneEmpty();
-                    lead_span.AppendChild(lead_text_node);
-                    //temp_wrapper_span.AppendChild(lead_span);
-                    split_results.Add(lead_span);
-                }
-
-                // wrap match in span tag
-                HtmlNode match_text_node = text_node.OwnerDocument.CreateTextNode(match_text.EncodeSpecialHtmlEntities());
-                HtmlNode match_span = parentNode.CloneEmpty();
-                match_span.AppendChild(match_text_node);
-                match_span.AddClass(match_class_to_add);
-                //temp_wrapper_span.AppendChild(match_span_node);
-                split_results.Add(match_span);
-
-                int end_idx = index + match_text.Length;
-
-                if (end_idx < node_text.Length) {
-                    // create trailing run after encoded special entities
-                    string trailing_text = node_text.Substring(end_idx);
-                    HtmlNode trail_text_node = text_node.OwnerDocument.CreateTextNode(trailing_text.EncodeSpecialHtmlEntities());
-                    HtmlNode trail_span = parentNode.CloneEmpty();
-                    trail_span.AppendChild(trail_text_node);
-                    //temp_wrapper_span.AppendChild(trail_span);
-                    split_results.Add(trail_span);
-                }
-                HtmlNode real_parent = was_parent_block ? parentNode.ParentNode : parentNode;
-                HtmlNode real_child = was_parent_block ? parentNode : text_node;
-                real_parent.ReplaceChild(split_results.First(), real_child);
-                foreach (var split_node in split_results.Skip(1)) {
-                    real_parent.InsertAfter(split_node, split_results.First());
-                }
-                return (split_results.First(), split_results.Last());
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error splitting node '{text_node.ToStringOrEmpty()}' idx {index} len {length}", ex);
-            }
-            return default;
+        public static HtmlNode CreateElement(this HtmlDocument doc, string name, HtmlNode firstChild) {
+            HtmlNode elm = doc.CreateElement(name);
+            elm.AppendChild(firstChild);
+            return elm;
         }
-        public static void ExtractRange(this (int sub_idx, HtmlTextNode node) start, (int sub_idx, HtmlTextNode node) end, string match_class_to_add) {
-            if (start.node == end.node) {
-                int len = end.sub_idx - start.sub_idx + 1;
-                start.node.SplitTextNode(start.sub_idx, len, match_class_to_add);
-                return;
+
+        public static HtmlNode SplitTextRange(this HtmlDocument doc, int idx, int len, HtmlNodeCollection text_nodes = default, string assert_match_text = default) {
+            // NOTE idx,len should be based on plain text, no special entities or line breaks
+            text_nodes = text_nodes == default ?
+                doc.DocumentNode.SelectNodesSafe("//text()") :
+                text_nodes;
+
+            if (!text_nodes.Any()) {
+                return default;
             }
-
-            var start_result = start.node.SplitTextNode(start.sub_idx, -1, match_class_to_add);
-            var end_result = end.node.SplitTextNode(0, end.sub_idx + 1, match_class_to_add);
-
-            void ExtractInner(HtmlNode node, HtmlTextNode source, HtmlTextNode target) {
-                if (node == null || node == target) {
-                    return;
+#if DEBUG
+            string assert_total_text = doc.DocumentNode.InnerText.DecodeSpecialHtmlEntities();
+#endif
+            int cur_idx = 0;
+            int match_start_idx = idx;
+            int match_end_idx = idx + len;
+            HtmlNode splitNode = null;
+            var sb = new StringBuilder();
+            // split start
+            foreach (var n in text_nodes) {
+                if (n is not HtmlTextNode tn) {
+                    continue;
                 }
+                string tn_raw_text = tn.Text;
+                string tn_text = tn.Text.DecodeSpecialHtmlEntities();
+                int next_idx = cur_idx + tn_text.Length;
 
-                if (node.IsBlockElement()) {
-                    ExtractInner(node.FirstChild, source, target);
-                    return;
-                }
-                if (node != source && node is HtmlTextNode tn) {
-                    var cur_result = tn.SplitTextNode(0, -1, match_class_to_add);
-                    node = cur_result.end;
-                }
-                if (node.NextSibling == null) {
-                    if (node.FirstChild == null) {
-                        ExtractInner(node.ParentNode.NextSibling, source, target);
-                        return;
+                if (splitNode == null) {
+                    // looking for start
+                    if (match_start_idx >= cur_idx && match_start_idx < next_idx) {
+                        // match starts in this text node
+                        int rel_split_start_idx = match_start_idx - cur_idx;
+                        int rel_split_start_len = tn_text.Length - rel_split_start_idx;
+                        int start_split_len = Math.Min(len, rel_split_start_len);
+                        string start_split_text = tn_text.Substring(rel_split_start_idx, start_split_len);
+                        // update text for pre split node
+                        tn.Text = tn_text.Substring(0, rel_split_start_idx).EncodeSpecialHtmlEntities();
+                        // create split node with pre match text
+                        sb.Append(start_split_text);
+                        splitNode = doc.CreateElement("span");
+                        tn.ParentNode.InsertAfter(splitNode, tn);
+
+                        int post_split_idx = rel_split_start_idx + start_split_len;
+                        if (post_split_idx < tn_text.Length) {
+                            // range is entirely within start node and start node has more text after match
+                            // create post match node
+                            string post_match_text = tn_text.Substring(post_split_idx, tn_text.Length - post_split_idx);
+                            tn.ParentNode.InsertAfter(doc.CreateTextNode(post_match_text.EncodeSpecialHtmlEntities()), splitNode);
+                            // all done
+                            break;
+                        }
+                        if (start_split_text.Length == len) {
+                            // was whole node so all done
+                            break;
+                        }
+
+                        // need to continue appending text nodes to split node
                     }
-                    ExtractInner(node.FirstChild, source, target);
-                    return;
+                } else {
+                    HtmlTextNode split_text_node = splitNode.FirstChild as HtmlTextNode;
+                    if (match_end_idx < next_idx) {
+                        // match ends in this text node
+                        int rel_split_end_idx = len - sb.ToString().Length;
+                        sb.Append(tn_text.Substring(0, rel_split_end_idx));
+                        tn.Text = tn_text.Substring(rel_split_end_idx, tn_text.Length - rel_split_end_idx);
+                        // all done
+                        break;
+                    } else {
+                        // match is across this entire text node
+                        sb.Append(tn_text);
+                        // clear nodes text
+                        tn.Text = string.Empty;
+                    }
                 }
-                ExtractInner(node.NextSibling, source, target);
 
+                cur_idx += tn_text.Length;
             }
-            ExtractInner(start_result.end, start_result.end.LastChild as HtmlTextNode, end_result.start.FirstChild as HtmlTextNode);
+
+            if (splitNode != null) {
+                splitNode.AppendChild(doc.CreateTextNode(sb.ToString().EncodeSpecialHtmlEntities()));
+            }
+            //            if (assert_match_text != default) {
+            //                MpDebug.Assert(splitNode != null, $"Error '{assert_match_text}' not found", true);
+            //                MpDebug.Assert(splitNode.InnerText.DecodeSpecialHtmlEntities() == assert_match_text, $"Error split text '{splitNode.InnerText.DecodeSpecialHtmlEntities()}' does not equal assert text '{assert_match_text}'", true);
+            //            }
+            //#if DEBUG
+            //            MpDebug.Assert(doc.DocumentNode.InnerText.DecodeSpecialHtmlEntities() == assert_total_text, $"Error total text mismatch. original '{assert_total_text.DecodeSpecialHtmlEntities()}' after split '{doc.DocumentNode.InnerText.DecodeSpecialHtmlEntities()}'", true);
+            //#endif
+            return splitNode;
         }
         #endregion
 

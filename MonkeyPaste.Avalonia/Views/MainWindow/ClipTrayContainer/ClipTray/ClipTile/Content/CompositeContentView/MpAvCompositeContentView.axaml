@@ -111,6 +111,26 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!--  RO/RW BEHAVIOR ATTACHMENT  -->
+        <Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvContentWebView">
+            <Setter Property="Interaction.Behaviors">
+                <Setter.Value>
+                    <BehaviorCollection>
+                        <local:MpAvContentWebViewHighlightBehavior />
+                    </BehaviorCollection>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only local|MpAvHtmlPanel">
+            <Setter Property="Interaction.Behaviors">
+                <Setter.Value>
+                    <BehaviorCollection>
+                        <local:MpAvReadOnlyWebViewHighlightBehavior />
+                    </BehaviorCollection>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="CompositeWebViewContainerGrid"
           RowDefinitions="*,Auto"
@@ -129,13 +149,14 @@
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"
                              Margin="5"
+                             IsContextMenuEnabled="False"
                              Classes.active="{Binding CopyItemType, ConverterParameter=Text, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
                              local:MpAvDropExtension.IsEnabled="True"
                              local:MpAvDropExtension.DragEnterCommand="{Binding DragEnterCommand}"
                              local:MpAvDropExtension.DragLeaveCommand="{Binding DragLeaveCommand}"
                              local:MpAvDropExtension.IsDragOverHandled="False"
                              local:MpAvDropExtension.IsDropHandled="False"
-                             local:MpAvHighlightTextExtension.IsEnabled="True"
+                             local:MpAvHighlightTextExtension.IsEnabled="False"
                              local:MpAvHighlightTextExtension.CanHighlight="{Binding IsHighlightDataAvailable, Source={x:Static local:MpAvQueryViewModel.Instance}}"
                              local:MpAvHighlightTextExtension.HighlightRanges="{Binding HighlightRanges}"
                              local:MpAvHighlightTextExtension.ActiveHighlightIdx="{Binding ActiveHighlightIdx}"
@@ -154,9 +175,6 @@
                              Source="{x:Static local:MpAvSearchBoxViewModel.Instance}" />
                 </MultiBinding>
             </local:MpAvHtmlPanel.IsSelectionEnabled>
-            <Interaction.Behaviors>
-                <local:MpAvReadOnlyWebViewHighlightBehavior />
-            </Interaction.Behaviors>
         </local:MpAvHtmlPanel>
         <!--  IMAGE VIEW  -->
         <local:MpAvImageContentView Classes="content-zoom plain-content-view"

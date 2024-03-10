@@ -196,7 +196,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private bool IsRegionEnabled(MpIHighlightRegion hr) {
-            return hr.IsEnabled &&
+            return
             Mp.Services.Query.Infos
             .Any(x => x.QueryFlags.HasAnyFlag(hr.AcceptanceFlags));
         }

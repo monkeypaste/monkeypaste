@@ -1587,13 +1587,13 @@ namespace MonkeyPaste.Avalonia {
                 IsEditorInitialized = true;
             }
 
+
+            IsEditorLoaded = true;
+
             if (BindingContext == null ||
                 BindingContext.IsAnyPlaceholder) {
                 return;
             }
-
-            IsEditorLoaded = true;
-
             if (BindingContext.IsAppendNotifier &&
                 BindingContext.AppendCount == 0) {
                 // don't set clipboard to append buffer until somethings actually appended
