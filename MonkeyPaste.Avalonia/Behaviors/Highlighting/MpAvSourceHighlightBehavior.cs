@@ -91,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
             bool can_match =
                 Mp.Services.Query.Infos
                 .Any(x => x.QueryFlags.HasSourceMatchFilterFlag());
-            SelectedIdx = -1;
+            //SelectedIdx = -1;
             SetMatchCount(_matches.Count);
         }
 

@@ -34,65 +34,49 @@ namespace MonkeyPaste.Avalonia {
             private set { SetValue(CanScrollYProperty, value); }
         }
 
-        public Point ScrollOffset =>
-            new Point(_horizontalScrollBar.Value, _verticalScrollBar.Value);
-
-        public void ScrollToHome(double step = 0) {
-            ScrollToOffset(new(), step);
+        public MpPoint ScrollOffset {
+            get => new MpPoint(_horizontalScrollBar.Value, _verticalScrollBar.Value);
+            set {
+                if (ScrollOffset.X != value.X || ScrollOffset.Y != value.Y) {
+                    _horizontalScrollBar.Value = value.X;
+                    _verticalScrollBar.Value = value.Y;
+                    if (_htmlContainer != null) {
+                        _htmlContainer.ScrollOffset = new Point(-value.X, -value.Y);
+                        InvalidateVisual();
+                    }
+                }
+            }
         }
 
-        public void ScrollToElement(string elementId, double step = 0) {
+        public async Task ScrollToHomeAsync(double t = 0) {
+            await ScrollToOffsetAsync(new(), t);
+        }
+
+        public async Task ScrollToElementAsync(string elementId, double t = 0) {
             if (_htmlContainer == null) {
                 return;
             }
             var rect = _htmlContainer.GetElementRectangle(elementId);
-            if (rect.HasValue) {
-                Point new_offset = new Point(_horizontalScrollBar.Value, rect.Value.Y);
-                ScrollToOffset(new_offset, step);
+            if (rect.HasValue && CanScrollY && (rect.Value.Top < ScrollOffset.Y || rect.Value.Bottom > (ScrollOffset.Y + this.Bounds.Height))) {
+                MpPoint new_offset = new MpPoint(_horizontalScrollBar.Value, Math.Max(0, rect.Value.Y - (rect.Value.Height * 2)));
+                await ScrollToOffsetAsync(new_offset, t);
             }
         }
-        public void ScrollToOffset(Point offset, double step = 0) {
+        public async Task ScrollToOffsetAsync(MpPoint offset, double t_s = 0) {
             if (_htmlContainer == null) {
                 return;
             }
-            if (step == 0) {
-                SetScrollOffset(offset.X, offset.Y);
-                return;
-            }
-            Dispatcher.UIThread.Post(async () => {
-                var cur_offset = new Point(_horizontalScrollBar.Value, _verticalScrollBar.Value);
-                var diff = offset - cur_offset;
-                double x_dir = diff.X == 0 ? 0 : diff.X > 0 ? 1 : -1;
-                double y_dir = diff.Y == 0 ? 0 : diff.Y > 0 ? 1 : -1;
-                var vel = new Point(step * x_dir, step * y_dir);
-                while (true) {
-                    var cur_diff = offset - cur_offset;
-                    bool is_done = Math.Abs(cur_diff.X) < 1 && Math.Abs(cur_diff.Y) < 1;
-                    if (is_done) {
-                        cur_offset = offset;
-                    } else {
-                        cur_offset += vel;
-                    }
-                    SetScrollOffset(cur_offset.X, cur_offset.Y);
-                    if (is_done) {
-                        return;
-                    }
-                    await Task.Delay(20);
+            var d = offset - ScrollOffset;
+            double time_step = 20d / 1000d;
+            var vel = t_s == 0 ? d : (d / t_s) * time_step;
+            double dt = 0;
+            while (true) {
+                ScrollOffset += vel;
+                if (dt >= t_s) {
+                    return;
                 }
-            });
-        }
-        private void SetScrollOffset(double x, double y) {
-            _horizontalScrollBar.Value = x;
-            _verticalScrollBar.Value = y;
-            UpdateScroll();
-        }
-
-        private void UpdateScroll() {
-            var newScrollOffset = new Point(-_horizontalScrollBar.Value, -_verticalScrollBar.Value);
-            if (!newScrollOffset.Equals(_htmlContainer.ScrollOffset)) {
-                _htmlContainer.ScrollOffset = newScrollOffset;
-                InvalidateVisual();
-
+                await Task.Delay(20);
+                dt += time_step;
             }
         }
         private void UpdateScrollbars() {

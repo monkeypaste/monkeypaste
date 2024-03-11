@@ -11,12 +11,13 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvHighlightSelectorBehavior : Behavior<MpAvClipTileView> {
+        public const int MIN_HL_MATCH_LENGTH = 4;
 
         #region Properties
 
         #region Behaviors
 
-        ObservableCollection<MpIHighlightRegion> Items { get; } = new ObservableCollection<MpIHighlightRegion>();
+        ObservableCollection<MpIHighlightRegion> Items { get; } = [];
         IEnumerable<MpIHighlightRegion> SortedItems =>
             Items.OrderBy(x => x.Priority);
 
@@ -26,18 +27,28 @@ namespace MonkeyPaste.Avalonia {
         IEnumerable<MpIHighlightRegion> DisabledItems =>
             SortedItems.Where(x => !IsRegionEnabled(x));
 
-        MpIHighlightRegion SelectedItem =>
-            SelectedHighlighterIdx >= 0 && SelectedHighlighterIdx < Items.Count ?
-            Items[SelectedHighlighterIdx] :
-            null;
 
+        //MpIHighlightRegion SelectedItem =>
+        //    SelectedHighlighterIdx >= 0 && SelectedHighlighterIdx < Items.Count ?
+        //    Items[SelectedHighlighterIdx] :
+        //    null;
+
+        public (MpIHighlightRegion region, int idx)[] Highlights =>
+            EnabledItems
+            .Where(x => x.MatchCount > 0)
+            .SelectMany(x =>
+                Enumerable.Range(0, x.MatchCount)
+                .Select(y => (x, y)))
+            .ToArray();
+
+        public (MpIHighlightRegion region, int idx) SelectedHighlight =>
+            SelectedHighlightIdx < 0 || SelectedHighlightIdx >= Highlights.Length ?
+                default :
+                Highlights[SelectedHighlightIdx];
         #endregion
 
         #region State
-        int SelectedMatchIdx =>
-            SelectedItem == null ? -1 : SelectedItem.SelectedIdx;
-
-        int SelectedHighlighterIdx { get; set; } = 0;
+        public int SelectedHighlightIdx { get; set; }
 
         bool IsActive =>
             Items.Any(x => x.MatchCount > 0);
@@ -97,23 +108,16 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvHighlightSelectorBehavior_PropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e) {
             switch (e.Property.Name) {
-                case nameof(SelectedHighlighterIdx):
-                    UpdateActiveIdx();
-                    break;
+                //case nameof(SelectedHighlighterIdx):
+                //    UpdateActiveIdx();
+                //    break;
             }
 
         }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-
             PerformHighlighting().FireAndForgetSafeAsync();
         }
         private void AssociatedObject_DataContextChanged(object sender, System.EventArgs e) {
-            if (AssociatedObject == null ||
-                AssociatedObject.DataContext == null ||
-                string.IsNullOrEmpty(MpAvQueryViewModel.Instance.MatchValue)) {
-                Reset();
-            }
-
             PerformHighlighting().FireAndForgetSafeAsync();
         }
 
@@ -130,29 +134,45 @@ namespace MonkeyPaste.Avalonia {
         private void Hlr_SelIdxChanged(object sender, int e) {
             UpdateActiveIdx();
         }
-        private async void ReceivedGlobalMessage(MpMessageType msg) {
+        private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
 
                 case MpMessageType.SelectNextMatch:
-                    SelectNextMatch();
+                    SelectNextMatchAsync().FireAndForgetSafeAsync();
                     break;
                 case MpMessageType.SelectPreviousMatch:
-                    SelectPreviousMatch();
+                    SelectPreviousMatchAsync().FireAndForgetSafeAsync();
                     break;
                 case MpMessageType.RequeryCompleted:
                 case MpMessageType.JumpToIdxCompleted:
-                    await PerformHighlighting();
+                    PerformHighlighting().FireAndForgetSafeAsync();
                     break;
             }
         }
 
         #endregion
 
-        private async Task PerformHighlighting() {
-            Reset();
-            if (!MpAvQueryViewModel.Instance.IsHighlightDataAvailable) {
+        public bool CanHighlight() {
+            return
+                Mp.Services != null &&
+                Mp.Services.Query != null &&
+                Mp.Services.Query.Infos != null &&
+                Mp.Services.Query.Infos
+                .Any(x =>
+                    x.QueryFlags.HasStringMatchFilterFlag() &&
+                    x.MatchValue != null &&
+                    x.MatchValue.Length >= MIN_HL_MATCH_LENGTH);
+        }
+        private async Task PerformHighlighting(bool reset = true) {
+            if (reset) {
+                Reset();
+            }
+            if (!CanHighlight()) {
                 // avoid long running task on content webview which reloads content
                 // when no search info provides highlighting
+                if (!reset) {
+                    Reset();
+                }
                 return;
             }
 
@@ -185,12 +205,10 @@ namespace MonkeyPaste.Avalonia {
                 .Select(x => x.FindHighlightingAsync()));
 
             CheckMatchCount();
-
-            SelectedHighlighterIdx = 0;
+            await SelectNextMatchAsync();
             if (EnabledItems.All(x => x.MatchCount == 0)) {
                 return;
             }
-            SelectNextMatch();
 
             await Task.WhenAll(EnabledItems.Select(x => x.ApplyHighlightingAsync()));
         }
@@ -198,95 +216,55 @@ namespace MonkeyPaste.Avalonia {
         private bool IsRegionEnabled(MpIHighlightRegion hr) {
             return
             Mp.Services.Query.Infos
-            .Any(x => x.QueryFlags.HasAnyFlag(hr.AcceptanceFlags));
+            .Any(x => x.QueryFlags.HasAnyFlag(hr.AcceptanceFlags) && x.MatchValue.ToStringOrEmpty().Length > MIN_HL_MATCH_LENGTH);
         }
 
         private void Reset() {
-            SelectedHighlighterIdx = 0;
+            SelectedHighlightIdx = -1;
             Items.ForEach(x => x.Reset());
         }
 
         private void UpdateActiveIdx() {
-            int cur_idx = IsActive ? 0 : -1;
-            if (IsActive) {
-                foreach (var hlb in SortedItems) {
-                    if (hlb == SelectedItem) {
-                        cur_idx += hlb.SelectedIdx;
-                        break;
-                    } else {
-                        cur_idx += hlb.MatchCount;
-                    }
-                }
-            }
-            if (AssociatedObject != null &&
-                AssociatedObject.DataContext is MpIHighlightTextRangesInfoViewModel htrivm) {
-                htrivm.ActiveHighlightIdx = cur_idx;
-            }
+            //PerformHighlighting(false).FireAndForgetSafeAsync();
+            EnabledItems.ForEach(x => x.ApplyHighlightingAsync().FireAndForgetSafeAsync());
         }
 
         #region Selection
-        private void SelectNextItem() {
+        private async Task SelectNextMatchAsync() {
             if (!IsActive) {
                 return;
             }
-            var last_item = SelectedItem;
-            do {
-                SelectedHighlighterIdx++;
-                if (SelectedHighlighterIdx >= Items.Count) {
-                    SelectedHighlighterIdx = 0;
-                }
-            } while (SelectedItem.MatchCount == 0);
-            if (last_item != SelectedItem) {
-                last_item.SelectedIdx = -1;
+            var prev_hl = SelectedHighlight;
+            SelectedHighlightIdx =
+                SelectedHighlightIdx < Highlights.Length - 1 ?
+                SelectedHighlightIdx + 1 :
+                0;
+            if (!prev_hl.IsDefault() && prev_hl.region != SelectedHighlight.region) {
+                await prev_hl.region.ApplyHighlightingAsync();
             }
-            SelectedItem.SelectedIdx = 0;
-        }
-        private void SelectPrevItem() {
-            if (!IsActive) {
-                return;
-            }
-            var last_item = SelectedItem;
-            do {
-                SelectedHighlighterIdx--;
-                if (SelectedHighlighterIdx < 0) {
-                    SelectedHighlighterIdx = Items.Count - 1;
-                }
-            } while (SelectedItem.MatchCount == 0);
-            if (last_item != SelectedItem) {
-                last_item.SelectedIdx = -1;
-            }
-            SelectedItem.SelectedIdx = SelectedItem.MatchCount - 1;
-        }
-        private void SelectNextMatch() {
-            if (AssociatedObject != null && AssociatedObject.BindingContext != null && AssociatedObject.BindingContext.CopyItemTitle == "Text34") {
-                MpConsole.WriteLine("select Next match called");
+            if (!SelectedHighlight.IsDefault()) {
+                await SelectedHighlight.region.ApplyHighlightingAsync();
             }
 
-            if (!IsActive) {
-                return;
-            }
-            int next_idx = SelectedMatchIdx + 1;
-            if (next_idx >= SelectedItem.MatchCount) {
-                SelectNextItem();
-            } else {
-                SelectedItem.SelectedIdx = next_idx;
-            }
-            EnabledItems.ForEach(x => x.ApplyHighlightingAsync().FireAndForgetSafeAsync());
         }
-        private void SelectPreviousMatch() {
-            MpConsole.WriteLine("select prev match called");
+        private async Task SelectPreviousMatchAsync() {
             if (!IsActive) {
                 return;
             }
-            int prev_idx = SelectedMatchIdx - 1;
-            if (prev_idx < 0) {
-                SelectPrevItem();
-            } else {
-                SelectedItem.SelectedIdx = prev_idx;
-            }
+            var prev_hl = SelectedHighlight;
+            SelectedHighlightIdx =
+                SelectedHighlightIdx > 0 ?
+                SelectedHighlightIdx - 1 :
+                Highlights.Length - 1;
 
-            EnabledItems.ForEach(x => x.ApplyHighlightingAsync().FireAndForgetSafeAsync());
+            if (!prev_hl.IsDefault() && prev_hl.region != SelectedHighlight.region) {
+                await prev_hl.region.ApplyHighlightingAsync();
+            }
+            if (!SelectedHighlight.IsDefault()) {
+                await SelectedHighlight.region.ApplyHighlightingAsync();
+            }
         }
+
         #endregion
 
         #endregion

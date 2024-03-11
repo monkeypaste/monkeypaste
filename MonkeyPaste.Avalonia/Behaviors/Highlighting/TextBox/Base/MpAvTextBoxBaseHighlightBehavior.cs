@@ -41,14 +41,6 @@ namespace MonkeyPaste.Avalonia {
 
         protected abstract bool CanMatch();
 
-        public override async Task ApplyHighlightingAsync() {
-            await base.ApplyHighlightingAsync();
-            if (AssociatedObject == null ||
-                AssociatedObject.DataContext is not MpIHighlightTextRangesInfoViewModel htrivm) {
-                return;
-            }
-            //htrivm.ActiveHighlightIdx = SelectedIdx;
-        }
         public override void ClearHighlighting() {
             base.ClearHighlighting();
             if (AssociatedObject == null ||

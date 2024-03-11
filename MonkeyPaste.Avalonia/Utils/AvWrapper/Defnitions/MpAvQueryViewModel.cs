@@ -178,7 +178,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         public void NotifyQueryChanged(bool forceRequery = false) {
-            OnPropertyChanged(nameof(IsHighlightDataAvailable));
             if (!CanRequery) {
                 return;
             }
@@ -254,23 +253,6 @@ namespace MonkeyPaste.Avalonia {
         #region Properties     
 
         #region State
-        public bool IsHighlightDataAvailable {
-            get {
-                if (this is not MpIQueryInfo qi) {
-                    return false;
-                }
-                while (qi != null) {
-                    if (qi.QueryFlags.HasStringMatchFilterFlag() &&
-                         !string.IsNullOrEmpty(qi.MatchValue)) {
-                        // there's something to highlight
-                        return true;
-                    }
-                    qi = qi.Next;
-                }
-                return false;
-            }
-        }
-
         #endregion
 
         #endregion

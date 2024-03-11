@@ -1,4 +1,6 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Threading;
 using HtmlAgilityPack;
 using MonkeyPaste.Common;
@@ -16,9 +18,10 @@ using TheArtOfDev.HtmlRenderer.Avalonia;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvReadOnlyWebViewHighlightBehavior : MpAvHighlightBehaviorBase<MpAvHtmlPanel> {
-        private HtmlDocument _doc;
-        private string _plainText;
-        private bool _isThisChangingText = false;
+        private double _scrollTimeS = 0.25d;
+        HtmlDocument _doc { get; set; }
+        string _plainText { get; set; }
+        bool _isThisChangingText { get; set; }
 
         protected List<MpTextRange> _matches = new List<MpTextRange>();
 
@@ -57,27 +60,48 @@ namespace MonkeyPaste.Avalonia {
                 _isThisChangingText = false;
                 return;
             }
+            if (!CanMatch()) {
+                return;
+            }
             FindHighlightingAsync().FireAndForgetSafeAsync();
+
+            //Dispatcher.UIThread.Post(async () => {
+            //    await FindHighlightingAsync();
+            //    await ApplyHighlightingAsync();
+            //});
         }
         private bool CanMatch() {
-            return Mp.Services.Query.Infos
+            return
+                ParentSelector != null &&
+                ParentSelector.CanHighlight() &&
+                Mp.Services.Query.Infos
                 .Any(x => x.QueryFlags.HasContentMatchFilterFlag());
         }
 
         public override async Task ApplyHighlightingAsync() {
             await base.ApplyHighlightingAsync();
-            if (AssociatedObject == null ||
-                AssociatedObject.DataContext is not MpAvClipTileViewModel ctvm) {
-                return;
+
+            var hl_node_tups = _doc.DocumentNode.SelectNodesSafe($"//span[contains(@class, 'highlight')]").WithIndex();
+            //MpDebug.Assert(hl_node_tups.Count() == _matches.Count, $"SetActiveMatch count error. Found '{hl_node_tups.Count()}' Expected '{_matches.Count}'", true);
+
+            string active_id = null;
+            foreach (var (match_node, idx) in hl_node_tups) {
+                match_node.RemoveClass("highlight-inactive");
+                match_node.RemoveClass("highlight-active");
+                match_node.AddClass(idx == SelectedIdx ? "highlight-active" : "highlight-inactive");
+                match_node.Id = $"match{idx}";
+                if (idx == SelectedIdx) {
+                    active_id = match_node.Id;
+                }
             }
 
-            int rel_offset = 0;
-            if (ctvm.HighlightRanges.Where(x => x.Document != ContentRange.Document) is { } other_ranges) {
-                // should only have these for title or source highlights
-                rel_offset = other_ranges.Count();
+            await SetHtmlAsync(_doc.DocumentNode.OuterHtml);
+
+            if (active_id != null) {
+                await AssociatedObject.ScrollToElementAsync(active_id, _scrollTimeS);
+            } else {
+                await AssociatedObject.ScrollToHomeAsync(_scrollTimeS);
             }
-            int rel_active_idx = SelectedIdx - rel_offset;
-            SetActiveMatch(rel_active_idx);
         }
 
         public override void ClearHighlighting() {
@@ -93,20 +117,25 @@ namespace MonkeyPaste.Avalonia {
                 .Where(x => x.Document == ContentRange.Document)
                 .ToList()
                 .ForEach(x => ctvm.HighlightRanges.Remove(x));
-            SetHtml(ctvm.CopyItemData);
-            AssociatedObject.ScrollToHome();
+
+            Dispatcher.UIThread.Post(async () => {
+                await SetHtmlAsync(ctvm.CopyItemData);
+                if (AssociatedObject == null) {
+                    return;
+                }
+                await AssociatedObject.ScrollToHomeAsync(_scrollTimeS);
+            });
         }
 
         public override async Task FindHighlightingAsync() {
             await Task.Delay(1);
             _matches.Clear();
 
-            string plain_html = string.Empty;
             if (AssociatedObject != null &&
-                AssociatedObject is MpAvHtmlPanel hp &&
-                AssociatedObject.DataContext is MpAvClipTileViewModel ctvm &&
-                CanMatch()) {
-                plain_html = ctvm.CopyItemData;
+                    AssociatedObject is MpAvHtmlPanel hp &&
+                    AssociatedObject.DataContext is MpAvClipTileViewModel ctvm &&
+                    CanMatch()) {
+                //await Task.Run(() => {
                 _plainText = ctvm.SearchableText.StripLineBreaks();
                 _matches.AddRange(
                         Mp.Services.Query.Infos
@@ -116,68 +145,41 @@ namespace MonkeyPaste.Avalonia {
                         .Distinct()
                         .OrderBy(x => x.StartIdx)
                         .ThenBy(x => x.Count));
+                _doc = ConvertMatchesToHighlights(ctvm.CopyItemData);
+                //});
+            } else {
+
+                _doc = ConvertMatchesToHighlights(string.Empty);
             }
 
-            _doc = ConvertMatchesToHighlights(plain_html);
             FinishFind(_matches);
         }
 
         private HtmlDocument ConvertMatchesToHighlights(string html) {
             var doc = html.ToHtmlDocument();
-
+            //doc.SplitTextRanges(
+            //    ranges: _matches.Select(x => (x.StartIdx, x.Count)).ToArray(),
+            //    split_class: "highlight-inactive");
+            //assert_match_texts: _matches.Select(x => _plainText.Substring(x.StartIdx, x.Count)).ToList());
             foreach (var match in _matches) {
                 string match_text = _plainText.Substring(match.StartIdx, match.Count);
-                if (doc.SplitTextRange(match.StartIdx, match.Count, assert_match_text: match_text)
+                if (doc.SplitTextRange(match.StartIdx, match.Count)
                     is not { } hl_node) {
                     continue;
                 }
                 hl_node.AddClass("highlight-inactive");
             }
-
             return doc;
         }
 
-        private void SetActiveMatch(int active_idx) {
-            var hl_node_tups = _doc.DocumentNode.SelectNodesSafe($"//span[contains(@class, 'highlight')]").WithIndex();
-            MpDebug.Assert(hl_node_tups.Count() == _matches.Count, $"SetActiveMatch count error. Found '{hl_node_tups.Count()}' Expected '{_matches.Count}'", true);
 
-            string active_id = null;
-            foreach (var (match_node, idx) in hl_node_tups) {
-                match_node.RemoveClass("highlight-inactive");
-                match_node.RemoveClass("highlight-active");
-                match_node.AddClass(idx == active_idx ? "highlight-active" : "highlight-inactive");
-                match_node.Id = $"match{idx}";
-                if (idx == active_idx) {
-                    active_id = match_node.Id;
-                }
-            }
-            // NOTE changing html resets scroll so store actual scroll pos
-            //var cur_offset = AssociatedObject.ScrollOffset;
-            void HandleScroll(object sender, EventArgs e) {
-                AssociatedObject.LoadComplete -= HandleScroll;
-
-                if (active_id != null) {
-                    v
-                    AssociatedObject.ScrollToElement(active_id);
-                    //Dispatcher.UIThread.Post(async () => {
-                    //    await Task.Delay(300);
-                    //    AssociatedObject.ScrollToOffset(cur_offset, 0);
-                    //    AssociatedObject.ScrollToElement(active_id, 0);
-                    //});
-                } else {
-                    AssociatedObject.ScrollToHome();
-                }
-            }
-            AssociatedObject.LoadComplete += HandleScroll;
-            SetHtml(_doc.DocumentNode.OuterHtml);
-        }
-
-        private void SetHtml(string html) {
-            if (AssociatedObject.Text == html) {
+        private async Task SetHtmlAsync(string html) {
+            if (AssociatedObject == null ||
+                AssociatedObject.Text == html) {
                 return;
             }
             _isThisChangingText = true;
-            AssociatedObject.SetHtml(html);
+            await AssociatedObject.SetHtmlAsync(html);
         }
     }
 }

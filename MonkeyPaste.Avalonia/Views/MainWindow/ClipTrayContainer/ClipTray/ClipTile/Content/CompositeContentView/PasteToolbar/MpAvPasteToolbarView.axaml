@@ -38,10 +38,38 @@
                     Value="Center" />
             <Setter Property="FontWeight"
                     Value="DemiBold" />
-            <Setter Property="local:MpAvIsHoveringExtension.IsEnabled"
-                    Value="True" />
-            <Setter Property="local:MpAvIsHoveringExtension.IsHovering"
-                    Value="{Binding IsPasteButtonHovering, Mode=TwoWay}" />
+            <Setter Property="Command"
+                    Value="{Binding PasteFromClipTilePasteButtonCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
+            <Setter Property="CommandParameter"
+                    Value="{Binding .}" />
+            <Setter Property="SplitButton.Flyout">
+                <Setter.Value>
+                    <Flyout>
+                        <local:MpAvMenuView DataContext="{Binding CurAppOleMenuViewModel, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}" />
+                    </Flyout>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Template>
+                        <DockPanel>
+                            <Image Source="{Binding PasteButtonIconBase64, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
+                            <TextBlock FontSize="16"
+                                       FontWeight="DemiBold"
+                                       Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.EditorPasteButtonLabel}" />
+                        </DockPanel>
+                    </Template>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView Anchor="{Binding $parent[8]}"
+                                               IsHtml="True"
+                                               ToolTipText="{Binding PasteButtonTooltipHtml, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
         </Style>
         <!--  PASTE BUTTON ICON  -->
         <Style Selector="SplitButton.paste-button Image">
@@ -66,36 +94,6 @@
             <Setter Property="BorderThickness"
                     Value="1" />
         </Style>
-        <Style Selector="SplitButton.paste-button"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="local:MpAvIsHoveringExtension.IsEnabled"
-                    Value="True" />
-            <Setter Property="local:MpAvIsHoveringExtension.IsHovering"
-                    Value="{Binding IsPasteButtonHovering, Mode=TwoWay}" />
-            <Setter Property="Command"
-                    Value="{Binding PasteFromClipTilePasteButtonCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
-            <Setter Property="CommandParameter"
-                    Value="{Binding .}" />
-            <Setter Property="SplitButton.Flyout">
-                <Setter.Value>
-                    <Flyout>
-                        <local:MpAvMenuView DataContext="{Binding CurAppOleMenuViewModel, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}" />
-                    </Flyout>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Content">
-                <Setter.Value>
-                    <Template>
-                        <DockPanel>
-                            <Image Source="{Binding PasteButtonIconBase64, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
-                            <TextBlock FontSize="16"
-                                       FontWeight="DemiBold"
-                                       Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.EditorPasteButtonLabel}" />
-                        </DockPanel>
-                    </Template>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="PasteToolbarOuterBorder"
             Background="Teal"
@@ -111,8 +109,6 @@
                 <!--  ENABLE APPEND BUTTON  -->
                 <Button x:Name="EnableAppendButton"
                         Classes="defaultButton iconOnlyButton squareByHeight"
-                        local:MpAvIsHoveringExtension.IsEnabled="True"
-                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsAppendButtonHovering, Mode=TwoWay}"
                         Height="{Binding Bounds.Height, ElementName=DefaultPasteButton}"
                         Command="{Binding ToggleAppendLineModeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
                     <Button.Resources>
@@ -132,6 +128,11 @@
                             <Binding Path="!IsAppendNotifier" />
                         </MultiBinding>
                     </Button.IsVisible>
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView Anchor="{Binding $parent[8]}"
+                                               InputGestureText="{Binding ., ConverterParameter=ToggleAppendBlockMode, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.EditorPasteButtonAppendBeginLabel}" />
+                    </ToolTip.Tip>
                     <Image Source="{Binding Source={StaticResource StackImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                 </Button>
                 <!--  DEFAULT PASTE BUTTON  -->

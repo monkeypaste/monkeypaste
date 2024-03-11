@@ -28,6 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
         public bool IsVisible => MatchCount > 0;
+        protected MpAvHighlightSelectorBehavior ParentSelector { get; private set; }
 
         protected abstract MpTextRange ContentRange { get; }
 
@@ -36,14 +37,23 @@ namespace MonkeyPaste.Avalonia {
 
         public int Priority => (int)HighlightType;
 
-        private int _selectedIdx = -1;
+        //private int _selectedIdx = -1;
+        //public int SelectedIdx {
+        //    get => _selectedIdx;
+        //    set {
+        //        if (SelectedIdx != value) {
+        //            _selectedIdx = value;
+        //            SelIdxChanged?.Invoke(this, SelectedIdx);
+        //        }
+        //    }
+        //}
         public int SelectedIdx {
-            get => _selectedIdx;
-            set {
-                if (SelectedIdx != value) {
-                    _selectedIdx = value;
-                    SelIdxChanged?.Invoke(this, SelectedIdx);
+            get {
+                if (ParentSelector == null ||
+                    ParentSelector.SelectedHighlight.region != this) {
+                    return -1;
                 }
+                return ParentSelector.SelectedHighlight.idx;
             }
         }
 
@@ -69,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
         public void Reset() {
             ClearHighlighting();
             SetMatchCount(0);
-            SelectedIdx = -1;
+            //SelectedIdx = -1;
         }
 
         public abstract Task FindHighlightingAsync();
@@ -78,6 +88,15 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual async Task ApplyHighlightingAsync() {
             await Task.Delay(1);
+            int all_region_active_idx =
+                ParentSelector == null ? -1 :
+                ParentSelector.SelectedHighlightIdx;
+
+            if (AssociatedObject != null &&
+                AssociatedObject.DataContext is MpIHighlightTextRangesInfoViewModel htrivm &&
+                htrivm.ActiveHighlightIdx != all_region_active_idx) {
+                htrivm.ActiveHighlightIdx = all_region_active_idx;
+            }
         }
 
         #endregion
@@ -85,6 +104,9 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override void OnAttached() {
+            if (this is MpAvContentWebViewHighlightBehavior) {
+
+            }
             base.OnAttached();
             AssociatedObject.Loaded += AssociatedObject_Initialized;
         }
@@ -97,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnDetaching() {
             base.OnDetaching();
             Reset();
-            DetachToSelectorAsync().FireAndForgetSafeAsync();
+            DetachFromSelectorAsync().FireAndForgetSafeAsync();
         }
         protected void SetMatchCount(int count) {
             bool changed = _matchCount != count;
@@ -122,14 +144,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected async Task AttachToSelectorAsync() {
-            var hsb = await FindSelectorAsync();
-            if (hsb == null) {
+            ParentSelector = await FindSelectorAsync();
+            if (ParentSelector == null) {
                 return;
             }
-            hsb.AddHighlighter(this);
+            ParentSelector.AddHighlighter(this);
         }
-        protected async Task DetachToSelectorAsync() {
-            var hsb = await FindSelectorAsync();
+        protected async Task DetachFromSelectorAsync() {
+            var hsb = ParentSelector ?? await FindSelectorAsync();
+            ParentSelector = null;
             if (hsb == null) {
                 return;
             }

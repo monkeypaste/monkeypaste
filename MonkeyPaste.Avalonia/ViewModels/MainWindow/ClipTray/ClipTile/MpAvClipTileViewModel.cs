@@ -596,8 +596,6 @@ namespace MonkeyPaste.Avalonia {
             false;
 #endif
         public MpCopyItemType LastCopyItemType { get; private set; }
-        public bool IsAppendButtonHovering { get; set; }
-        public bool IsPasteButtonHovering { get; set; }
 
         private string _searchableText = string.Empty;
         public string SearchableText { get; set; } = string.Empty;

@@ -42,83 +42,11 @@ namespace MonkeyPaste.Avalonia {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
             HighlightRangesProperty.Changed.AddClassHandler<Control>((x, y) => UpdateHighlights(x, nameof(HighlightRangesProperty)));
             ActiveHighlightIdxProperty.Changed.AddClassHandler<Control>((x, y) => UpdateHighlights(x, nameof(ActiveHighlightIdxProperty)));
-            CanHighlightProperty.Changed.AddClassHandler<Control>((x, y) => UpdateHighlights(x, nameof(CanHighlightProperty)));
         }
 
         #endregion
 
         #region Properties
-
-        //#region RangesInfoViewModel AvaloniaProperty
-        //public static MpIHighlightTextRangesInfoViewModel GetRangesInfoViewModel(AvaloniaObject obj) {
-        //    if (obj.GetValue(RangesInfoViewModelProperty) is not MpIHighlightTextRangesInfoViewModel bound_htrvm) {
-        //        if (obj is not Control c ||
-        //                c.DataContext == null) {
-        //            return null;
-        //        }
-        //        if (c.DataContext is not MpIHighlightTextRangesInfoViewModel dc_htrvm) {
-        //            throw new NotImplementedException($"Highlight ext needs highlight vm by datacontext or property binding");
-        //        }
-        //        // manually set hlr to trigger prop change attach
-        //        SetRangesInfoViewModel(obj, dc_htrvm);
-        //        return dc_htrvm;
-        //    }
-        //    return bound_htrvm;
-        //}
-
-        //public static void SetRangesInfoViewModel(AvaloniaObject obj, MpIHighlightTextRangesInfoViewModel value) {
-        //    obj.SetValue(RangesInfoViewModelProperty, value);
-        //}
-
-        //public static readonly AttachedProperty<MpIHighlightTextRangesInfoViewModel> RangesInfoViewModelProperty =
-        //    AvaloniaProperty.RegisterAttached<object, Control, MpIHighlightTextRangesInfoViewModel>(
-        //        "RangesInfoViewModel");
-
-        //private static void HandleRangesInfoViewModelChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
-        //    void HighlightRanges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-        //        UpdateHighlights(element);
-        //    }
-
-        //    void RangeInfoViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-        //        if (//e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel)) ||
-        //            e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx)) ||
-        //            e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel.HighlightRanges))) {
-        //            UpdateHighlights(element);
-        //            //MpConsole.WriteLine($"highlight prop changed: '{e.PropertyName}'");
-        //        }
-        //        //
-        //    }
-
-        //    if (e.OldValue is MpIHighlightTextRangesInfoViewModel old_htrivm) {
-        //        old_htrivm.PropertyChanged -= RangeInfoViewModel_PropertyChanged;
-        //        old_htrivm.HighlightRanges.CollectionChanged -= HighlightRanges_CollectionChanged;
-        //    }
-        //    if (e.NewValue is MpIHighlightTextRangesInfoViewModel new_htrivm) {
-        //        new_htrivm.PropertyChanged += RangeInfoViewModel_PropertyChanged;
-        //        new_htrivm.HighlightRanges.CollectionChanged += HighlightRanges_CollectionChanged;
-        //    }
-        //    UpdateHighlights(element);
-        //}
-
-
-        //#endregion
-
-        #region CanHighlight AvaloniaProperty
-        public static bool GetCanHighlight(AvaloniaObject obj) {
-            return obj.GetValue(CanHighlightProperty);
-        }
-
-        public static void SetCanHighlight(AvaloniaObject obj, bool value) {
-            obj.SetValue(CanHighlightProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> CanHighlightProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "CanHighlight",
-                defaultValue: true,
-                defaultBindingMode: BindingMode.TwoWay);
-
-        #endregion
 
         #region HighlightRanges AvaloniaProperty
         public static object GetHighlightRanges(AvaloniaObject obj) {
@@ -251,10 +179,6 @@ namespace MonkeyPaste.Avalonia {
 
         private static void UpdateHighlights(Control attached_control, string sourcePropertyName) {
             if (!GetIsEnabled(attached_control)) {
-                return;
-            }
-            if (!GetCanHighlight(attached_control) &&
-                sourcePropertyName != nameof(CanHighlightProperty)) {
                 return;
             }
             if (attached_control is MpAvMarqueeTextBox mtb) {

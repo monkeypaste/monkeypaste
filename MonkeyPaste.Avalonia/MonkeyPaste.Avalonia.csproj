@@ -8,7 +8,9 @@
      <LangVersion>$(DefaultLangVersion)</LangVersion>
      <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
-    <Platforms>$(DefaultPlatforms)</Platforms>
+
+     <WarningsAsErrors>CS4014;</WarningsAsErrors>
+     <Platforms>$(DefaultPlatforms)</Platforms>
      <!--<RuntimeIdentifiers>$(TargetRuntimeIdentifiers)</RuntimeIdentifiers>-->
      <!--<AvaloniaNameGeneratorIsEnabled>true</AvaloniaNameGeneratorIsEnabled>-->
     <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->

@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
         bool IsVisible { get; }
 
         int MatchCount { get; }
-        int SelectedIdx { get; set; }
+        int SelectedIdx { get; }
         //int ContentItemIdx { get; }
 
         Task FindHighlightingAsync();

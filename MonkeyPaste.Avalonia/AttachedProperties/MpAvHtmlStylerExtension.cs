@@ -239,7 +239,6 @@ namespace MonkeyPaste.Avalonia {
                 string html_doc_str = hc.Text.ToStringOrEmpty().ToHtmlDocumentFromTextOrPartialHtml();
                 hc.SetHtml(html_doc_str);
             }
-            hc.Redraw();
         }
 
         private static void ToggleUnderlines(HtmlControl hc) {

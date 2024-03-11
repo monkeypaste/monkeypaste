@@ -86,32 +86,6 @@
                     Value="0" />
         </Style>
 
-        <!--  PASTE BUTTON TOOLTIP (over webview)  -->
-        <Style Selector="Grid#CompositeWebViewContainerGrid">
-            <Setter Property="ToolTip.Tip"
-                    Value="{x:Null}" />
-        </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid.over-paste-button">
-            <Setter Property="ToolTip.Tip">
-                <Setter.Value>
-                    <Template>
-                        <local:MpAvToolTipView IsHtml="True"
-                                               ToolTipText="{Binding PasteButtonTooltipHtml, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
-                    </Template>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid.over-append-button">
-            <Setter Property="ToolTip.Tip">
-                <Setter.Value>
-                    <Template>
-                        <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ToggleAppendBlockMode, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
-                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.EditorPasteButtonAppendBeginLabel}" />
-                    </Template>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <!--  RO/RW BEHAVIOR ATTACHMENT  -->
         <Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvContentWebView">
             <Setter Property="Interaction.Behaviors">
@@ -121,6 +95,10 @@
                     </BehaviorCollection>
                 </Setter.Value>
             </Setter>
+        </Style>
+        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only local|MpAvContentWebView">
+            <Setter Property="Interaction.Behaviors"
+                    Value="{x:Null}" />
         </Style>
         <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only local|MpAvHtmlPanel">
             <Setter Property="Interaction.Behaviors">
@@ -133,9 +111,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="CompositeWebViewContainerGrid"
-          RowDefinitions="*,Auto"
-          Classes.over-paste-button="{Binding IsPasteButtonHovering}"
-          Classes.over-append-button="{Binding IsAppendButtonHovering}">
+          RowDefinitions="*,Auto">
         <Classes.show-read-only>
             <MultiBinding Converter="{x:Static BoolConverters.And}">
                 <Binding Path="IsContentReadOnly" />
@@ -157,7 +133,6 @@
                              local:MpAvDropExtension.IsDragOverHandled="False"
                              local:MpAvDropExtension.IsDropHandled="False"
                              local:MpAvHighlightTextExtension.IsEnabled="False"
-                             local:MpAvHighlightTextExtension.CanHighlight="{Binding IsHighlightDataAvailable, Source={x:Static local:MpAvQueryViewModel.Instance}}"
                              local:MpAvHighlightTextExtension.HighlightRanges="{Binding HighlightRanges}"
                              local:MpAvHighlightTextExtension.ActiveHighlightIdx="{Binding ActiveHighlightIdx}"
                              local:MpAvHtmlStylerExtension.IsEnabled="True"

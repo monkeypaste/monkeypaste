@@ -6,6 +6,7 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System.Threading.Tasks;
 
@@ -27,6 +28,32 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
         public bool IsDevToolsOpen { get; set; }
+
+        #region Anchor Property
+        public object Anchor {
+            get { return GetValue(AnchorProperty); }
+            set { SetValue(AnchorProperty, value); }
+        }
+
+        public static readonly StyledProperty<object> AnchorProperty =
+            AvaloniaProperty.Register<MpAvToolTipView, object>(
+                name: nameof(Anchor),
+                defaultValue: default);
+
+        #endregion
+
+        #region Anchor Property
+        public PlacementMode PlacementMode {
+            get { return GetValue(PlacementModeProperty); }
+            set { SetValue(PlacementModeProperty, value); }
+        }
+
+        public static readonly StyledProperty<PlacementMode> PlacementModeProperty =
+            AvaloniaProperty.Register<MpAvToolTipView, PlacementMode>(
+                name: nameof(PlacementMode),
+                defaultValue: PlacementMode.Center);
+
+        #endregion
 
         #region InputGestureText Property
         public string InputGestureText {
@@ -178,6 +205,33 @@ namespace MonkeyPaste.Avalonia {
             if (TopLevel.GetTopLevel(this) is not PopupRoot pr ||
                 pr.Screens.ScreenFromWindow(pr) is not Screen pr_screen ||
                 GetHostControl() is not Control host) {
+                return;
+            }
+            if (Anchor is Control anchor &&
+                anchor.TranslatePoint(new(), host) is { } p) {
+                var anchor_origin = p.ToPortablePoint();
+                double hw = this.Bounds.Center.X;
+                double hh = this.Bounds.Center.Y;
+                MpConsole.WriteLine($"Anchor Origin: {anchor_origin}", true);
+                MpPoint new_offset = new();
+                switch (PlacementMode) {
+                    case PlacementMode.TopEdgeAlignedLeft:
+                        new_offset = anchor_origin;
+                        break;
+                    case PlacementMode.Top:
+                        new_offset = anchor_origin + new MpPoint(anchor.Bounds.Center.X - this.Bounds.Center.X, 0);
+                        break;
+                    case PlacementMode.Center:
+                        //new_offset = anchor_origin + anchor.Bounds.Center.ToPortablePoint() - this.Bounds.Center.ToPortablePoint();
+                        new_offset = anchor_origin;
+                        break;
+                    default:
+                        MpDebug.Break($"Unhandled tooltip placement '{PlacementMode}'");
+                        break;
+                }
+                MpConsole.WriteLine($"ToolTip Offset: {new_offset}", false, true);
+                ToolTip.SetHorizontalOffset(host, new_offset.X);
+                ToolTip.SetVerticalOffset(host, new_offset.Y);
                 return;
             }
             var scr_center = pr_screen.Bounds.Center.ToPortablePoint(pr_screen.Scaling);
