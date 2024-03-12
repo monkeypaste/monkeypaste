@@ -82,7 +82,16 @@ namespace MonkeyPaste.Avalonia {
             await base.ApplyHighlightingAsync();
 
             var hl_node_tups = _doc.DocumentNode.SelectNodesSafe($"//span[contains(@class, 'highlight')]").WithIndex();
-            //MpDebug.Assert(hl_node_tups.Count() == _matches.Count, $"SetActiveMatch count error. Found '{hl_node_tups.Count()}' Expected '{_matches.Count}'", true);
+            if (hl_node_tups.Count() != _matches.Count &&
+                _matches.Any() &&
+                AssociatedObject != null
+                && AssociatedObject.DataContext is MpAvClipTileViewModel ctvm) {
+                MpConsole.WriteLine($"SetActiveMatch count error #1. Found '{hl_node_tups.Count()}' Expected '{_matches.Count}'", true);
+                // BUG sometimes highlights don't show up
+                _doc = ConvertMatchesToHighlights(ctvm.CopyItemData);
+                hl_node_tups = _doc.DocumentNode.SelectNodesSafe($"//span[contains(@class, 'highlight')]").WithIndex();
+            }
+            MpDebug.Assert(hl_node_tups.Count() == _matches.Count, $"SetActiveMatch count error #2. Found '{hl_node_tups.Count()}' Expected '{_matches.Count}'", false, true);
 
             string active_id = null;
             foreach (var (match_node, idx) in hl_node_tups) {
