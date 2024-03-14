@@ -164,6 +164,17 @@ namespace MonkeyPaste.Avalonia {
             ptrlb.AddHandler(DragDrop.DragOverEvent, DragOver);
             ptrlb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
             ptrlb.AddHandler(DragDrop.DropEvent, Drop);
+
+            ptrlb.Loaded += PinTrayListBox_Loaded;
+            if (ptrlb.IsLoaded) {
+                PinTrayListBox_Loaded(ptrlb, null);
+            }
+        }
+
+        private void PinTrayListBox_Loaded(object sender, RoutedEventArgs e) {
+            if (sender is not Control ptrlb) {
+                return;
+            }
             InitAdorner(ptrlb);
         }
 
@@ -275,16 +286,7 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break();
             }
 
-            Dispatcher.UIThread.Post(async () => {
-                while (!Mp.Services.StartupState.IsReady) {
-                    await Task.Delay(100);
-                }
-                _dropAdorner = new MpAvDropHostAdorner(adornedControl);
-                await adornedControl
-                    .AddOrReplaceAdornerAsync(_dropAdorner);
-            });
-
-            //MpConsole.WriteLine("Adorner added to control: " + adornedControl);
+            _dropAdorner = new MpAvDropHostAdorner(adornedControl);
         }
 
         #endregion

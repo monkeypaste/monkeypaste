@@ -2,12 +2,13 @@
 
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvIconBuilder {
 
         public string GetPathIconBase64(string path, MpIconSize iconSize = MpIconSize.MediumIcon32) =>
-            GetPathIconBase64(path, nint.Zero, iconSize);
+            GetPathIconBase64(path, IntPtr.Zero, iconSize);
 
         public string GetPathIconBase64(string path, nint handle, MpIconSize iconSize = MpIconSize.MediumIcon32) {
             if (string.IsNullOrEmpty(path)) {
@@ -15,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
             }
             string base64 = null;
             if (path.ToLowerInvariant().EndsWith("bin") &&
-                handle != nint.Zero) {
+                handle != IntPtr.Zero) {
                 // handling weird case of libre office pointing process path to .bin not actual app so using handle here
                 base64 = MpAvWinPathIconHelper.GetIconBase64FromHandle(handle);
 

@@ -2,6 +2,7 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -60,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
             MpPortableProcessInfo pi,
             string pasteCmdKeyString,
             int[] custom_writer_preset_ids = null) {
-            if (pi == null || pi.Handle == nint.Zero) {
+            if (pi == null || pi.Handle == IntPtr.Zero) {
                 // somethings terribly wrong_lastInternalProcessInfo
                 MpDebug.Break();
                 return false;

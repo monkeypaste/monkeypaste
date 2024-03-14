@@ -55,7 +55,7 @@
     <UseCefNet>false</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
     <UseSugarWv>true</UseSugarWv>
-    <DefaultFramework>net8.0</DefaultFramework>
+    <DefaultTargetFramework>net8.0</DefaultTargetFramework>
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
     <BuildScriptsRootDir>$(SolutionDir)\_build\scripts</BuildScriptsRootDir>
@@ -68,12 +68,13 @@
   
   <!-- DYNAMIC PROPERTIES-->
 
-  
+  <!-- WINDOWS -->
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
+    <!-- When changing this need to rebuild plugins -->
+    <UseWap>false</UseWap>
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
     <Tfm>10.0.22621.0</Tfm>
-    <MainTargetFramework>$(DefaultFramework)-windows$(Tfm)</MainTargetFramework>
-    <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;WAP;</DefineConstants>
+    <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
@@ -86,9 +87,22 @@
     <StartupOutputType>WinExe</StartupOutputType>
     <BuildScriptsDir>$(BuildScriptsRootDir)\windows</BuildScriptsDir>
   </PropertyGroup>
-   
+
+  <PropertyGroup Condition="$(UseWap) == 'True'">
+    <MainTargetFramework>$(DefaultTargetFramework)-windows$(Tfm)</MainTargetFramework>
+    <DefineConstants>$(DefineConstants);WAP;</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(UseWap) == 'False'">
+    <DefaultTargetFramework>net6.0</DefaultTargetFramework>
+    <CommonTargetFramework>net6.0</CommonTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)-windows</MainTargetFramework>
+  </PropertyGroup>
+  
+  <!-- LINUX -->
+  
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'"> 
-    <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
@@ -99,8 +113,8 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
-    <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
-    <CommonTargetFramework>$(DefaultFramework)</CommonTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
+    <CommonTargetFramework>$(DefaultTargetFramework)</CommonTargetFramework>
     <DefineConstants>$(DefineConstants);MAC;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
@@ -115,14 +129,14 @@
   </PropertyGroup>
     
   <PropertyGroup Condition="$(BuildOs) == 'BROWSER'">
-    <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);BROWSER;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Web</MainProjectName>
     <PlatformShortName>wasm</PlatformShortName>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
-    <MainTargetFramework>$(DefaultFramework)-android</MainTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)-android</MainTargetFramework>
     <DefineConstants>$(DefineConstants);MOBILE;ANDROID;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Android</MainProjectName>
     <AndroidPackageName>com.Monkey.MonkeyPaste</AndroidPackageName>
@@ -133,7 +147,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">
-    <MainTargetFramework>$(DefaultFramework)-ios</MainTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)-ios</MainTargetFramework>
     <DefineConstants>$(DefineConstants);MOBILE;IOS;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
     <IsMobile>true</IsMobile>

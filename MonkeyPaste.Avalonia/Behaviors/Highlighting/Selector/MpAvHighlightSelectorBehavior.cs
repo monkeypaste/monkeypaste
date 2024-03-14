@@ -3,17 +3,22 @@ using Avalonia.Xaml.Interactivity;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvHighlightSelectorBehavior : Behavior<MpAvClipTileView> {
-        public const int MIN_HL_MATCH_LENGTH = 4;
 
         #region Properties
+        public MpIHighlightTextRangesInfoViewModel TextRangesInfoViewModel =>
+            AssociatedObject == null ?
+                null :
+                AssociatedObject.DataContext as MpIHighlightTextRangesInfoViewModel;
 
         #region Behaviors
 
@@ -26,12 +31,6 @@ namespace MonkeyPaste.Avalonia {
 
         IEnumerable<MpIHighlightRegion> DisabledItems =>
             SortedItems.Where(x => !IsRegionEnabled(x));
-
-
-        //MpIHighlightRegion SelectedItem =>
-        //    SelectedHighlighterIdx >= 0 && SelectedHighlighterIdx < Items.Count ?
-        //    Items[SelectedHighlighterIdx] :
-        //    null;
 
         public (MpIHighlightRegion region, int idx)[] Highlights =>
             EnabledItems
@@ -48,7 +47,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public int SelectedHighlightIdx { get; set; }
+        public int SelectedHighlightIdx {
+            get => TextRangesInfoViewModel == null ? -1 : TextRangesInfoViewModel.ActiveHighlightIdx;
+            set {
+                if (TextRangesInfoViewModel != null &&
+                    TextRangesInfoViewModel.ActiveHighlightIdx != value) {
+                    TextRangesInfoViewModel.ActiveHighlightIdx = value;
+                }
+            }
+        }
 
         bool IsActive =>
             Items.Any(x => x.MatchCount > 0);
@@ -62,7 +69,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvHighlightSelectorBehavior() : base() {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             Items.CollectionChanged += Items_CollectionChanged;
-            PropertyChanged += MpAvHighlightSelectorBehavior_PropertyChanged;
         }
 
 
@@ -75,13 +81,11 @@ namespace MonkeyPaste.Avalonia {
             }
             Items.Add(hlr);
             hlr.MatchCountChanged += HighlightBehavior_MatchCountChanged;
-            hlr.SelIdxChanged += Hlr_SelIdxChanged;
         }
 
 
         public void RemoveHighlighter(MpIHighlightRegion hlr) {
             hlr.MatchCountChanged -= HighlightBehavior_MatchCountChanged;
-            hlr.SelIdxChanged -= Hlr_SelIdxChanged;
             Items.Remove(hlr);
         }
         #endregion
@@ -106,19 +110,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Event Handlers
 
-        private void MpAvHighlightSelectorBehavior_PropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e) {
-            switch (e.Property.Name) {
-                //case nameof(SelectedHighlighterIdx):
-                //    UpdateActiveIdx();
-                //    break;
-            }
-
-        }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            PerformHighlighting().FireAndForgetSafeAsync();
+            PerformHighlighting("items changed").FireAndForgetSafeAsync();
         }
         private void AssociatedObject_DataContextChanged(object sender, System.EventArgs e) {
-            PerformHighlighting().FireAndForgetSafeAsync();
+            PerformHighlighting("dc changed").FireAndForgetSafeAsync();
         }
 
         private void CheckMatchCount() {
@@ -131,9 +127,6 @@ namespace MonkeyPaste.Avalonia {
             UpdateActiveIdx();
         }
 
-        private void Hlr_SelIdxChanged(object sender, int e) {
-            UpdateActiveIdx();
-        }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
 
@@ -145,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpMessageType.RequeryCompleted:
                 case MpMessageType.JumpToIdxCompleted:
-                    PerformHighlighting().FireAndForgetSafeAsync();
+                    PerformHighlighting("query completed").FireAndForgetSafeAsync();
                     break;
             }
         }
@@ -160,25 +153,24 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.Query.Infos
                 .Any(x =>
                     x.QueryFlags.HasStringMatchFilterFlag() &&
-                    x.MatchValue != null &&
-                    x.MatchValue.Length >= MIN_HL_MATCH_LENGTH);
+                    !x.MatchValue.IsNullOrEmpty());
         }
-        private async Task PerformHighlighting(bool reset = true) {
-            if (reset) {
-                Reset();
-            }
+        private async Task PerformHighlighting(string source) {
             if (!CanHighlight()) {
                 // avoid long running task on content webview which reloads content
                 // when no search info provides highlighting
-                if (!reset) {
-                    Reset();
-                }
+                Reset();
                 return;
             }
 
             if (AssociatedObject != null &&
                 AssociatedObject.BindingContext is MpIAsyncCollectionObject async_dc) {
+                var sw = Stopwatch.StartNew();
                 while (true) {
+                    if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                        MpConsole.WriteLine($"Highlight selector timeout");
+                        return;
+                    }
                     if (AssociatedObject == null ||
                         AssociatedObject.BindingContext == null) {
                         return;
@@ -216,7 +208,7 @@ namespace MonkeyPaste.Avalonia {
         private bool IsRegionEnabled(MpIHighlightRegion hr) {
             return
             Mp.Services.Query.Infos
-            .Any(x => x.QueryFlags.HasAnyFlag(hr.AcceptanceFlags) && x.MatchValue.ToStringOrEmpty().Length > MIN_HL_MATCH_LENGTH);
+            .Any(x => x.QueryFlags.HasAnyFlag(hr.AcceptanceFlags));
         }
 
         private void Reset() {

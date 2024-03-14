@@ -134,6 +134,7 @@ function scrollToEditorLoc(x, y) {
 function scrollDocRangeIntoView(docRange, opts) {
     // opts as bool = alignToTop
     // opts as obj = behavior (smooth|instant|auto), block (*start*|center|end|nearest), inline (start|center|end|*nearest*)
+    
     const start_opts = opts && opts.start ? opts.start : { behavior: 'auto', block: 'start', inline: 'nearest' };
     const end_opts = opts && opts.end ? opts.end : { behavior: 'auto', block: 'end', inline: 'nearest' };
 

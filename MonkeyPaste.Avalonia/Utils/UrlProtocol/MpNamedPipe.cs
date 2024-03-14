@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
             _pipeName = pipeType.ToString();
             _thread = new Thread(Main);
 #if WINDOWS
-            _thread.SetApartmentState(ApartmentState.STA); 
+            _thread.SetApartmentState(ApartmentState.STA);
 #endif
             _thread.Name = "NamePipe: " + pipeType.ToString() + " Thread";
             _thread.IsBackground = true;
@@ -49,13 +49,13 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public static void Send(MpNamedPipeTypes pipeType, T t) {
+#pragma warning disable SYSLIB0011 
             using (var npc = new NamedPipeClientStream(".", pipeType.ToString(), PipeDirection.Out)) {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 var bf = new BinaryFormatter();
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
                 npc.Connect();
                 bf.Serialize(npc, t);
             }
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
         }
 
         public static T Recieve(MpNamedPipeTypes pipeType) {
@@ -115,12 +115,13 @@ namespace MonkeyPaste.Avalonia {
         private static T Recieve(NamedPipeServerStream nps) {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
             var bf = new BinaryFormatter();
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+
 
             try {
                 nps.WaitForConnection();
 
                 var obj = bf.Deserialize(nps);
+
 
                 if (obj is T)
                     return (T)obj;
@@ -131,6 +132,7 @@ namespace MonkeyPaste.Avalonia {
                 Console.WriteLine("ERROR: {0}", e.Message);
             }
             return default(T);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
         }
     }
 }

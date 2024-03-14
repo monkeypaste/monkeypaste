@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
                     w = ow;
                 }
                 if (w == null) {
-                    return nint.Zero;
+                    return IntPtr.Zero;
                 }
                 return w.TryGetPlatformHandle().Handle;
             }

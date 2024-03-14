@@ -322,8 +322,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand BeginAutoSearchCommand => new MpAsyncCommand<object>(
-            async (args) => {
+        public ICommand BeginAutoSearchCommand => new MpCommand<object>(
+            (args) => {
                 // NOTE expand before locating tb, if first expand it won't be found otherwise
                 bool needs_text = !HasExpanded;
                 IsExpanded = true;

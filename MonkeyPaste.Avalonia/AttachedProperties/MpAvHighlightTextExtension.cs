@@ -19,22 +19,34 @@ using TheArtOfDev.HtmlRenderer.Avalonia;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvHighlightTextExtension {
         #region Private Variables
-        private static Dictionary<Control, MpAvTextHighlightAdorner> _AttachedControlAdornerLookup = new Dictionary<Control, MpAvTextHighlightAdorner>();
+        private static Dictionary<Control, MpAvGeometryAdorner> _AttachedControlAdornerLookup = new Dictionary<Control, MpAvGeometryAdorner>();
         const string HL_INACTIVE_CLASS = "highlight-inactive";
         const string HL_ACTIVE_CLASS = "highlight-active";
         const string HL_BASE_CLASS = "highlight";
-        public static IBrush DefaultInactiveHighlightBrush =>
-            Mp.Services == null ||
-            Mp.Services.PlatformResource == null ?
-                null :
-        //Brushes.Yellow;
-        Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightInactiveColor);
+        private static IBrush _defaultInactiveHighlightBrush;
+        public static IBrush DefaultInactiveHighlightBrush {
+            get {
+                if (_defaultInactiveHighlightBrush == null &&
+                    Mp.Services != null &&
+                    Mp.Services.PlatformResource != null) {
+                    _defaultInactiveHighlightBrush = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightInactiveColor).AdjustOpacity(0.5);
+                }
+                return _defaultInactiveHighlightBrush;
+            }
+        }
 
-        public static IBrush DefaultActiveHighlightBrush =>
-        Mp.Services == null || Mp.Services.PlatformResource == null ?
-            null :
-        //Brushes.Lime;
-        Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor);
+        private static IBrush _defaultActiveHighlightBrush;
+        public static IBrush DefaultActiveHighlightBrush {
+            get {
+                if (_defaultActiveHighlightBrush == null &&
+                    Mp.Services != null &&
+                    Mp.Services.PlatformResource != null) {
+                    _defaultActiveHighlightBrush = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).AdjustOpacity(0.5);
+                }
+                return _defaultActiveHighlightBrush;
+            }
+        }
+
         #endregion
 
         #region Statics
@@ -148,6 +160,10 @@ namespace MonkeyPaste.Avalonia {
             if (sender is not Control attached_control) {
                 return;
             }
+            if (!_AttachedControlAdornerLookup.ContainsKey(attached_control)) {
+                var tha = new MpAvGeometryAdorner(attached_control);
+                _AttachedControlAdornerLookup.Add(attached_control, tha);
+            }
 
             UpdateHighlights(attached_control, null);
         }
@@ -166,10 +182,9 @@ namespace MonkeyPaste.Avalonia {
             }
             attached_control.Loaded += Attached_control_Loaded;
             attached_control.Unloaded += Attached_control_Unloaded;
-            if (!_AttachedControlAdornerLookup.ContainsKey(attached_control)) {
+            if (!_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha)) {
                 return;
             }
-            RemoveVisualAdorner(attached_control, _AttachedControlAdornerLookup[attached_control], AdornerLayer.GetAdornerLayer(attached_control));
             _AttachedControlAdornerLookup.Remove(attached_control);
         }
         #endregion
@@ -197,13 +212,11 @@ namespace MonkeyPaste.Avalonia {
             }
             int ActiveHighlightIdx = GetActiveHighlightIdx(attached_control);
 
-            async Task FinishUpdate(IEnumerable<(IBrush, Geometry)> gl) {
-                if (!_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha)) {
-                    tha = new MpAvTextHighlightAdorner(attached_control);
-                    _AttachedControlAdornerLookup.Add(attached_control, tha);
-                    await attached_control.AddOrReplaceAdornerAsync(tha);
-                }
-                tha.DrawHighlights(gl);
+            void FinishUpdate(IEnumerable<(IBrush, Geometry)> gl) {
+                //if (!_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha)) {
+                //    return;
+                //}
+                //tha.DrawGeometry(gl);
                 if (attached_control is not TextBlock tb ||
                     string.IsNullOrEmpty(tb.Text)) {
                     return;
@@ -255,7 +268,7 @@ namespace MonkeyPaste.Avalonia {
                 HighlightRanges.Where(x => x.Document == null || x.Document == attached_control) is not IEnumerable<MpTextRange> hlrl ||
                 !hlrl.Any()) {
                 // no text or no highlights
-                FinishUpdate(null).FireAndForgetSafeAsync();
+                FinishUpdate(null);
                 return;
             }
 
@@ -265,8 +278,8 @@ namespace MonkeyPaste.Avalonia {
                 .Select((x, idx) =>
                     (
                         idx == ActiveHighlightIdx ?
-                            GetActiveHighlightBrush(attached_control) ?? DefaultActiveHighlightBrush :
-                            GetInactiveHighlightBrush(attached_control) ?? DefaultInactiveHighlightBrush,
+                            /*GetActiveHighlightBrush(attached_control) ?? */DefaultActiveHighlightBrush :
+                            /*GetInactiveHighlightBrush(attached_control) ?? */DefaultInactiveHighlightBrush,
                         x));
             var gl =
                 all_brl
@@ -275,37 +288,8 @@ namespace MonkeyPaste.Avalonia {
                     x.Item1.ToHex().ToAvBrush() as IBrush,
                     ft.BuildHighlightGeometry(new Point(), x.Item2.StartIdx, x.Item2.Count)));
 
-            FinishUpdate(gl).FireAndForgetSafeAsync();
+            FinishUpdate(gl);
         }
 
-        private static void RemoveVisualAdorner(Visual visual, Control? adorner, AdornerLayer? layer) {
-            if (adorner is null || layer is null || !layer.Children.Contains(adorner)) {
-                return;
-            }
-
-            layer.Children.Remove(adorner);
-            ((ISetLogicalParent)adorner).SetParent(null);
-        }
-    }
-
-    internal class MpAvTextHighlightAdorner : MpAvAdornerBase {
-        private IEnumerable<(IBrush, Geometry)> _gl;
-        public MpAvTextHighlightAdorner(Control adornedControl) : base(adornedControl) { }
-
-        public void Clear() {
-            IsVisible = false;
-            this.Redraw();
-        }
-        public void DrawHighlights(IEnumerable<(IBrush, Geometry)> gl) {
-            _gl = gl;
-            IsVisible = _gl != null && _gl.Any();
-            this.Redraw();
-        }
-        public override void Render(DrawingContext context) {
-            if (IsVisible) {
-                _gl.Where(x => x.Item2 != null).ForEach(x => context.DrawGeometry(x.Item1, null, x.Item2));
-            }
-            base.Render(context);
-        }
     }
 }

@@ -31,6 +31,26 @@ namespace MonkeyPaste.Common {
             return new MpPoint(size.Width, size.Height);
         }
 
+        public static MpPoint FindTranslation(this MpRect rect, MpRect other_rect) {
+            var translate_vector = MpPoint.Zero;
+            if (other_rect.Left < rect.Left) {
+                //item is outside on left
+                translate_vector.X = other_rect.Left - rect.Left;
+            } else if (other_rect.Right > rect.Right) {
+                //item is outside on right
+                translate_vector.X = other_rect.Right - rect.Right;
+            }
+
+            if (other_rect.Top < rect.Top) {
+                //item is outside above
+                translate_vector.Y = other_rect.Top - rect.Top;
+            } else if (other_rect.Bottom > rect.Bottom) {
+                //item is outside below
+                translate_vector.Y = other_rect.Bottom - rect.Bottom;
+            }
+            return translate_vector;
+        }
+
         public static bool IsEqual(this MpRect rect, MpRect otherRect, double thresh = 0) {
             if (rect == otherRect) {
                 return true;

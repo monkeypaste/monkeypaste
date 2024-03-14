@@ -91,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
                 _doc = ConvertMatchesToHighlights(ctvm.CopyItemData);
                 hl_node_tups = _doc.DocumentNode.SelectNodesSafe($"//span[contains(@class, 'highlight')]").WithIndex();
             }
-            MpDebug.Assert(hl_node_tups.Count() == _matches.Count, $"SetActiveMatch count error #2. Found '{hl_node_tups.Count()}' Expected '{_matches.Count}'", false, true);
+            //MpDebug.Assert(hl_node_tups.Count() == _matches.Count, $"SetActiveMatch count error #2. Found '{hl_node_tups.Count()}' Expected '{_matches.Count}'", false, true);
 
             string active_id = null;
             foreach (var (match_node, idx) in hl_node_tups) {
@@ -106,8 +106,9 @@ namespace MonkeyPaste.Avalonia {
 
             await SetHtmlAsync(_doc.DocumentNode.OuterHtml);
 
-            if (active_id != null) {
+            if (SelectedIdx >= 0 && active_id != null) {
                 await AssociatedObject.ScrollToElementAsync(active_id, _scrollTimeS);
+                //AssociatedObject.ScrollToElement($"match-{SelectedIdx}");
             } else {
                 await AssociatedObject.ScrollToHomeAsync(_scrollTimeS);
             }
@@ -143,6 +144,7 @@ namespace MonkeyPaste.Avalonia {
             if (AssociatedObject != null &&
                     AssociatedObject is MpAvHtmlPanel hp &&
                     AssociatedObject.DataContext is MpAvClipTileViewModel ctvm &&
+                    !ctvm.IsAnyPlaceholder &&
                     CanMatch()) {
                 //await Task.Run(() => {
                 _plainText = ctvm.SearchableText.StripLineBreaks();
@@ -170,12 +172,13 @@ namespace MonkeyPaste.Avalonia {
             //    ranges: _matches.Select(x => (x.StartIdx, x.Count)).ToArray(),
             //    split_class: "highlight-inactive");
             //assert_match_texts: _matches.Select(x => _plainText.Substring(x.StartIdx, x.Count)).ToList());
-            foreach (var match in _matches) {
-                string match_text = _plainText.Substring(match.StartIdx, match.Count);
+            foreach (var (match, idx) in _matches.WithIndex()) {
+                //string match_text = _plainText.Substring(match.StartIdx, match.Count);
                 if (doc.SplitTextRange(match.StartIdx, match.Count)
                     is not { } hl_node) {
                     continue;
                 }
+                hl_node.Id = $"match-{idx}";
                 hl_node.AddClass("highlight-inactive");
             }
             return doc;
@@ -188,7 +191,17 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             _isThisChangingText = true;
-            await AssociatedObject.SetHtmlAsync(html);
+
+            bool is_done = false;
+            void OnLoadComplete(object sender, EventArgs e) {
+                AssociatedObject.LoadComplete -= OnLoadComplete;
+                is_done = true;
+            }
+            AssociatedObject.LoadComplete += OnLoadComplete;
+            AssociatedObject.SetHtml(html);
+            while (!is_done) {
+                await Task.Delay(100);
+            }
         }
     }
 }

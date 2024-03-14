@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
@@ -20,25 +21,38 @@ namespace MonkeyPaste.Avalonia {
         public MpAvAdornerBase(Control adornedControl) : base() {
             IsVisible = false;
             AdornedControl = adornedControl;
-            //adornedControl.GetObservable(Control.IsVisibleProperty).Subscribe(paramValue => Draw());
-            //adornedControl.GetObservable(Control.BoundsProperty).Subscribe(paramValue => Draw());
-            //adornedControl.DetachedFromVisualTree += AdornedControl_DetachedFromVisualTree;
-            //adornedControl.DetachedFromLogicalTree += AdornedControl_DetachedFromLogicalTree;
-            //adornedControl.EffectiveViewportChanged += AdornedControl_EffectiveViewportChanged;
+            if (AdornedControl != null) {
+                AdornedControl.Unloaded += AdornedControl_Unloaded;
+                AdornedControl.Loaded += AdornedControl_Loaded;
+                if (AdornedControl.IsLoaded) {
+                    AdornedControl_Loaded(AdornedControl, null);
+                }
+            }
         }
 
-        private void AdornedControl_DetachedFromLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
-            Draw(false);
+        private void AdornedControl_Loaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            var adornerLayer = AdornerLayer.GetAdornerLayer(AdornedControl);
+            adornerLayer.Children.Add(this);
+            AdornerLayer.SetAdornedElement(this, AdornedControl);
         }
 
-        private void AdornedControl_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            Draw(false);
+        private void AdornedControl_Unloaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            Remove();
+            if (sender is not Control c) {
+                return;
+            }
+            c.Unloaded -= AdornedControl_Unloaded;
         }
 
-        private void AdornedControl_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
-            Draw();
-        }
 
+        public virtual void Remove() {
+            if (AdornedControl is not Control adornedControl ||
+                AdornerLayer.GetAdornerLayer(adornedControl) is not { } al) {
+                return;
+            }
+            al.Children.Remove(this);
+            ((ISetLogicalParent)this).SetParent(null);
+        }
         public virtual void Draw(bool? forceIsVisibleValue = null) {
             if (forceIsVisibleValue.HasValue) {
                 IsVisible = forceIsVisibleValue.Value;

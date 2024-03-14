@@ -5,13 +5,16 @@ using Avalonia.Input;
 using Avalonia.Threading;
 using HtmlAgilityPack;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheArtOfDev.HtmlRenderer.Adapters;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
@@ -24,6 +27,9 @@ namespace MonkeyPaste.Avalonia {
 
         public static readonly AvaloniaProperty CanScrollYProperty =
            AvaloniaProperty.Register<MpAvHtmlPanel, bool>(nameof(CanScrollY), defaultValue: false);
+
+        public static readonly DirectProperty<MpAvHtmlPanel, MpPoint> ScrollOffsetProperty =
+           AvaloniaProperty.RegisterDirect<MpAvHtmlPanel, MpPoint>(nameof(ScrollOffset), o => o.ScrollOffset, (x, o) => x.ScrollOffset = o);
 
         public bool CanScrollX {
             get { return (bool)GetValue(CanScrollXProperty); }
@@ -38,12 +44,14 @@ namespace MonkeyPaste.Avalonia {
             get => new MpPoint(_horizontalScrollBar.Value, _verticalScrollBar.Value);
             set {
                 if (ScrollOffset.X != value.X || ScrollOffset.Y != value.Y) {
+                    var old_val = ScrollOffset;
                     _horizontalScrollBar.Value = value.X;
                     _verticalScrollBar.Value = value.Y;
                     if (_htmlContainer != null) {
                         _htmlContainer.ScrollOffset = new Point(-value.X, -value.Y);
                         InvalidateVisual();
                     }
+                    this.RaisePropertyChanged(ScrollOffsetProperty, old_val, value);
                 }
             }
         }
@@ -53,16 +61,21 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task ScrollToElementAsync(string elementId, double t = 0) {
-            if (_htmlContainer == null) {
+            if (_htmlContainer == null ||
+                _htmlContainer.GetElementRectangle(elementId) is not Rect rect) {
                 return;
             }
-            var rect = _htmlContainer.GetElementRectangle(elementId);
-            if (rect.HasValue && CanScrollY && (rect.Value.Top < ScrollOffset.Y || rect.Value.Bottom > (ScrollOffset.Y + this.Bounds.Height))) {
-                MpPoint new_offset = new MpPoint(_horizontalScrollBar.Value, Math.Max(0, rect.Value.Y - (rect.Value.Height * 2)));
-                await ScrollToOffsetAsync(new_offset, t);
-            }
+            await BringIntoViewAsync(rect, t);
         }
-        public async Task ScrollToOffsetAsync(MpPoint offset, double t_s = 0) {
+        private async Task BringIntoViewAsync(Rect rect, double t_s = 0) {
+            if (this.Bounds.Contains(rect)) {
+                return;
+            }
+            MpPoint scroll_delta = this.Bounds.ToPortableRect().FindTranslation(rect.ToPortableRect());
+            var new_offset = ScrollOffset + scroll_delta;
+            await ScrollToOffsetAsync(new_offset, t_s);
+        }
+        private async Task ScrollToOffsetAsync(MpPoint offset, double t_s = 0) {
             if (_htmlContainer == null) {
                 return;
             }
@@ -79,9 +92,11 @@ namespace MonkeyPaste.Avalonia {
                 dt += time_step;
             }
         }
+
         private void UpdateScrollbars() {
             _verticalScrollBar.IsVisible = IsSelectionEnabled && _verticalScrollBar.Visibility == ScrollBarVisibility.Visible;
             _horizontalScrollBar.IsVisible = IsSelectionEnabled && _horizontalScrollBar.Visibility == ScrollBarVisibility.Visible;
+
             CanScrollX = _horizontalScrollBar.IsVisible;
             CanScrollY = _verticalScrollBar.IsVisible;
             this.Redraw();

@@ -1,9 +1,10 @@
 #!/bin/sh
+TARGET_FRAMEWORK="net8.0"
 INFO_PLIST="Info.plist"
 ICON_FILE="MyIcon.icns"
 
 PROJECT_DIR="/Users/tkefauver/mp/MonkeyPaste.Desktop"
-PROJECT_TARGET_DIR="$PROJECT_DIR/bin/Debug/net8.0/osx-x64"
+PROJECT_TARGET_DIR="$PROJECT_DIR/bin/Debug/$TARGET_FRAMEWORK/osx-x64"
 PUBLISH_DIR="$PROJECT_TARGET_DIR/publish/"
 
 APP_PATH="$PROJECT_TARGET_DIR/MonkeyPaste.app"

@@ -1,8 +1,9 @@
 #!/bin/sh
 echo "Bundling plugins..."
+TARGET_FRAMEWORK="net8.0"
 
-#DAT_DIR="/Users/tkefauver/mp/MonkeyPaste.Desktop/bin/Debug/net8.0/osx-x64/MonkeyPaste.app/Contents/MacOS/dat"
-DAT_DIR="/Users/tkefauver/mp/MonkeyPaste.Desktop/bin/x64/Debug/net8.0/osx-x64/publish/MonkeyPaste.app/Contents/MacOS/dat"
+#DAT_DIR="/Users/tkefauver/mp/MonkeyPaste.Desktop/bin/Debug/$TARGET_FRAMEWORK/osx-x64/MonkeyPaste.app/Contents/MacOS/dat"
+DAT_DIR="/Users/tkefauver/mp/MonkeyPaste.Desktop/bin/x64/Debug/$TARGET_FRAMEWORK/osx-x64/publish/MonkeyPaste.app/Contents/MacOS/dat"
 CORE_OLE_GUID="cf2ec03f-9edd-45e9-a605-2a2df71e03bd"
 CORE_ANN_GUID="ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31"
 
@@ -17,7 +18,7 @@ rm -fr obj
 dotnet build -r osx-x64
 
 rm -fr CoreOleHandler
-cp -a "bin/Debug/net8.0/osx-x64/." "CoreOleHandler"
+cp -a "bin/Debug/$TARGET_FRAMEWORK/osx-x64/." "CoreOleHandler"
 zip -rq "$CORE_OLE_GUID.zip" "CoreOleHandler"
 mv "$CORE_OLE_GUID.zip" "$DAT_DIR"
 

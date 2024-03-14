@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <!--<TargetFramework>$(MainTargetFramework)</TargetFramework>-->
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>$(DefaultTargetFramework)</TargetFramework>
     <!--<RuntimeIdentifier>$(TargetRuntimeIdentifiers)</RuntimeIdentifier>-->
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>

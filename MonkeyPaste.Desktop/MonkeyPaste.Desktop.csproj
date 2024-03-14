@@ -14,6 +14,7 @@
     <Authors>$(ApplicationAuthor)</Authors>
     <AssemblyVersion>$(ApplicationVersion)</AssemblyVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">

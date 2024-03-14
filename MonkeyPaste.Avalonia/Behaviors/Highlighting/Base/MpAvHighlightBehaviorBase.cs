@@ -37,16 +37,6 @@ namespace MonkeyPaste.Avalonia {
 
         public int Priority => (int)HighlightType;
 
-        //private int _selectedIdx = -1;
-        //public int SelectedIdx {
-        //    get => _selectedIdx;
-        //    set {
-        //        if (SelectedIdx != value) {
-        //            _selectedIdx = value;
-        //            SelIdxChanged?.Invoke(this, SelectedIdx);
-        //        }
-        //    }
-        //}
         public int SelectedIdx {
             get {
                 if (ParentSelector == null ||
@@ -65,7 +55,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Events
         public event EventHandler<int> MatchCountChanged;
-        public event EventHandler<int> SelIdxChanged;
         #endregion
 
         #region Constructors

@@ -2,13 +2,16 @@
 using MonkeyPaste.Common;
 using System;
 using System.Threading.Tasks;
+#if WAP
 using Windows.ApplicationModel;
-using Windows.UI.Popups;
+using Windows.UI.Popups; 
+#endif
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvLoginLoadTools {
-        string TASK_ID = "5c8dfa29-456c-425a-8fd7-9d5540663691";
         public bool IsLoadOnLoginEnabled { get; private set; }
+#if WAP
+        string TASK_ID = "5c8dfa29-456c-425a-8fd7-9d5540663691";
 
         static string ExecProcessArgs {
             get {
@@ -67,7 +70,12 @@ namespace MonkeyPaste.Avalonia {
                     await dialog2.ShowAsync();
                     break;
             }
+        } 
+#else
+        public async Task SetLoadOnLoginAsync(bool isLoadOnLogin, bool silent = false) {
+            await Task.Delay(1);
         }
+#endif
         //public void SetLoadOnLogin2(bool isLoadOnLogin, bool silent = false) {
         //    // from https://stackoverflow.com/a/7394955/105028
         //    if (isLoadOnLogin == IsLoadOnLoginEnabled) {

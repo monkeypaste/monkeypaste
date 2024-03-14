@@ -30,7 +30,7 @@ namespace CoreOleHandler {
             CoreOleHelpers.SetCulture(request);
             List<Exception> exl = new List<Exception>();
             //IDataObject write_output = ido_dict == null ? new MpAvDataObject() : ido_dict.ToDataObject();
-            Dictionary<string, object> write_output = ido_dict == null ? [] : ido_dict.ToDictionary();
+            Dictionary<string, object> write_output = ido_dict == null ? [] : ido_dict;
             var writeFormats =
                 request.formats
                 .Where(x => ido_dict.ContainsKey(x))

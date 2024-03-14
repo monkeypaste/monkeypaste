@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
                 if (this.TryGetPlatformHandle() is { } ph) {
                     return ph.Handle;
                 }
-                return nint.Zero;
+                return IntPtr.Zero;
             }
         }
 

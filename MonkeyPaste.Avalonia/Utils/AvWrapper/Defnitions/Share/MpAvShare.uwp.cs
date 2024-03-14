@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+#if WAP
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
-using Windows.Storage;
+using Windows.Storage; 
+#endif
 
 namespace MonkeyPaste.Avalonia {
     [ComImport, Guid("3A3DCD6C-3EAB-43DC-BCDE-45671CE800C8")]
@@ -16,6 +18,7 @@ namespace MonkeyPaste.Avalonia {
         void ShowShareUIForWindow(IntPtr appWindow);
     }
     public partial class MpAvShare {
+#if WAP
 
         private DataTransferManager ShowShareUi(TypedEventHandler<DataTransferManager, DataRequestedEventArgs> dataRequestedHandler) {
             IntPtr windowHandle = MpAvWindowManager.ActiveWindow.TryGetPlatformHandle().Handle;
@@ -92,6 +95,11 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteTraceLine($"Error showing shareUi:", ex);
                 MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
             }
+        } 
+#else
+        async Task PlatformRequestAsync(MpAvShareRequestBase request) {
+            await Task.Delay(1);
         }
+#endif
     }
 }

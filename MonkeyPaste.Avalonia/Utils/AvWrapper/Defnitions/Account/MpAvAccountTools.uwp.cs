@@ -5,10 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Services.Store;
+
+#if WAP
+using Windows.Services.Store; 
+#endif
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvAccountTools {
+#if WAP
         #region Private Variables
         private bool _isContextWindowInitialized = false;
         private string _WindowsStoreId = "9MZRBMH3JT75";
@@ -28,6 +32,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
         #endregion
 
+
         #region Properties
 
         StoreContext _context;
@@ -38,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (!_isContextWindowInitialized &&
-                    MpAvWindowManager.PrimaryHandle != nint.Zero) {
+                    MpAvWindowManager.PrimaryHandle != IntPtr.Zero) {
                     // from https://learn.microsoft.com/en-us/windows/uwp/monetize/in-app-purchases-and-trials#desktop
                     WinRT.Interop.InitializeWithWindow.Initialize(_context, MpAvWindowManager.PrimaryHandle);
                     _isContextWindowInitialized = true;
@@ -52,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 return $"ms-windows-store://review/?PFN={Windows.ApplicationModel.Package.Current.Id.FamilyName}";
             }
-        }
+        } 
 
         public string ThisProductUri {
             get {
@@ -76,7 +81,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<bool> RefreshAddOnInfoAsync() {
-
             AccountTypeTrialAvailabilityLookup.Clear();
             AccountTypePriceLookup.Clear();
 
@@ -169,6 +173,7 @@ namespace MonkeyPaste.Avalonia {
             // available for this customer. If they previously acquired a trial they won't 
             // be able to get a trial again, and the StoreProduct.Skus property will 
             // only contain one SKU.
+
             StoreProductQueryResult result =
                 await context.GetAssociatedStoreProductsAsync(new string[] { "Durable" });
 
@@ -259,6 +264,31 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
         #endregion
+#else
+        public string RateAppUri =>
+            "https://www.monkeypaste.com";
+        public string ThisProductUri =>
+            "https://www.monkeypaste.com";
+
+        public string GetStoreSubscriptionUrl(MpUserAccountType uat, bool isMonthly) {
+            return "https://www.monkeypaste.com";
+        }
+
+        public async Task<bool> RefreshAddOnInfoAsync() {
+            await Task.Delay(1);
+            return false;
+        }
+
+        public async Task<MpSubscriptionFormat> GetStoreUserLicenseInfoAsync() {
+            await Task.Delay(1);
+            return MpSubscriptionFormat.Default;
+        }
+
+        public async Task<bool?> PurchaseSubscriptionAsync(MpUserAccountType uat, bool isMonthly) {
+            await Task.Delay(1);
+            return true;
+        }
+#endif
 
     }
 }

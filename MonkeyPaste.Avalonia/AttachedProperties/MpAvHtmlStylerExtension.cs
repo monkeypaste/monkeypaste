@@ -24,18 +24,18 @@ namespace MonkeyPaste.Avalonia {
         private static Dictionary<HtmlControl, List<IDisposable>> _disposableLookup = [];
         private static Dictionary<MpHtmlStyleType, string> _stylesLookup = [];
         static MpAvHtmlStylerExtension() {
-            if (MpAvThemeViewModel.Instance != null &&
-                MpAvThemeViewModel.Instance.CustomFontFamilyNames != null) {
-                try {
-                    MpAvThemeViewModel.Instance
-                    .CustomFontFamilyNames
-                    .ForEach(x =>
-                        HtmlRender.AddFontFamily(MpAvStringToFontFamilyConverter.Instance.Convert(x, null, null, null) as FontFamily));
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error initializing html font familys.", ex);
-                }
-            }
+            //if (MpAvThemeViewModel.Instance != null &&
+            //    MpAvThemeViewModel.Instance.CustomFontFamilyNames != null) {
+            //    try {
+            //        MpAvThemeViewModel.Instance
+            //        .CustomFontFamilyNames
+            //        .ForEach(x =>
+            //            HtmlRender.AddFontFamily(MpAvStringToFontFamilyConverter.Instance.Convert(x, null, null, null) as FontFamily));
+            //    }
+            //    catch (Exception ex) {
+            //        MpConsole.WriteTraceLine($"Error initializing html font familys.", ex);
+            //    }
+            //}
             IsEnabledProperty.Changed.AddClassHandler<HtmlControl>((x, y) => HandleIsEnabledChanged(x, y));
 
             // need handlers for any css related properties
@@ -211,6 +211,20 @@ namespace MonkeyPaste.Avalonia {
             if (sender is not HtmlControl hc) {
                 return;
             }
+            if (MpAvThemeViewModel.Instance != null &&
+                MpAvThemeViewModel.Instance.CustomFontFamilyNames != null &&
+                hc.Container != null) {
+                try {
+                    MpAvThemeViewModel.Instance
+                    .CustomFontFamilyNames
+                    .ForEach(x =>
+                        hc.Container.AddFontFamily(MpAvStringToFontFamilyConverter.Instance.Convert(x, null, null, null) as FontFamily));
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error initializing html font familys.", ex);
+                }
+            }
+
             List<IDisposable> dl = null;
             if (!_disposableLookup.ContainsKey(hc)) {
                 dl = [];
@@ -422,7 +436,8 @@ namespace MonkeyPaste.Avalonia {
             if (_stylesLookup.TryGetValue(style_type, out string css)) {
                 return css;
             }
-            string css_str = DefaultStyleSheet;
+            //string css_str = DefaultStyleSheet;
+            string css_str = string.Empty;
 
             switch (style_type) {
                 case MpHtmlStyleType.Content:
@@ -435,8 +450,9 @@ namespace MonkeyPaste.Avalonia {
                     //a:link {{ text-decoration: underline; color: {7}; }}
                     //a:hover {{ text-decoration: underline; color: {8}; }}",
                     css_str += string.Format(@"
-body {{ color: {0}; font-size: {1}px; font-family: {2}; white-space: pre-wrap; word-break: break-word; }}
-p {{ margin: 0; line-height: 1; }}
+* {{ margin: 0; padding: 0; }}
+body {{ color: {0}; font-size: {1}px; font-family: {2}; white-space: normal;  word-break: break-all; }}
+p {{ height: 1em; line-height: 1; }}
 .underline {{ text-decoration: underline; line-height: 1.5; }}
 .highlight-inactive {{ background-color: {3}; color: {4}; }}
 .highlight-active {{ background-color: {5}; color: {6}; }}
@@ -451,23 +467,21 @@ a:hover {{ text-decoration: underline; color: {8}; }}",
                                             Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).ToPortableColor().ToHex(true).ToContrastForegoundColor(remove_alpha: true), //6
                                             Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkColor).ToPortableColor().ToHex(true), //7
                                             Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkHoverColor).ToPortableColor().ToHex(true) //8
-                                                                                                                                                                          //GetDefaultFontSize(hc) + 3 //9
                                             );
                     break;
                 case MpHtmlStyleType.Tooltip:
                 default:
                     css_str += string.Format(
 @"* {{ margin: 0; padding: 0; }}
-body {{ color: {0}; font-size: {1}px; font-family: {2}; line-height: {4}px; }}
-p {{ margin: 0; }}
+body {{ color: {0}; font-size: {1}px; font-family: {2}; line-height: 1; white-space: normal;  word-break: break-all; }}
+p {{ margin: 0; height: 1em; line-height: 1; }}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 a:link {{ text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}",
                         GetDefaultHexColor(hc).RemoveHexAlpha(), //0
                         GetDefaultFontSize(hc), //1
                         GetDefaultFontFamily(hc), //2
-                        MpSystemColors.gold1.RemoveHexAlpha(), //3
-                        GetDefaultFontSize(hc) + 2 //4
+                        MpSystemColors.gold1.RemoveHexAlpha()
                         );
                     break;
             }

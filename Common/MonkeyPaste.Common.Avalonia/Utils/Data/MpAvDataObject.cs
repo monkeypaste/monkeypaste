@@ -203,35 +203,35 @@ namespace MonkeyPaste.Common.Avalonia {
         //}
     }
 
-    internal static partial class MpAvDataObjectPInvokes {
-        [LibraryImport("user32.dll")]
-        public static partial IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
+    //internal static partial class MpAvDataObjectPInvokes {
+    //    [LibraryImport("user32.dll")]
+    //    public static partial IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
 
-        [LibraryImport("user32.dll")]
-        public static partial IntPtr GetDC(IntPtr hWnd);
-
-
-        [LibraryImport("gdi32.dll")]
-        public static partial IntPtr CreateCompatibleDC(IntPtr hDC);
+    //    [LibraryImport("user32.dll")]
+    //    public static partial IntPtr GetDC(IntPtr hWnd);
 
 
-        [LibraryImport("gdi32.dll")]//, ExactSpelling = true)]
-        public static partial IntPtr CreateCompatibleBitmap(IntPtr hdc, int cx, int cy);
+    //    [LibraryImport("gdi32.dll")]
+    //    public static partial IntPtr CreateCompatibleDC(IntPtr hDC);
 
-        [LibraryImport("gdi32.dll", SetLastError = true)]
-        public static partial IntPtr SelectObject(IntPtr hdc, IntPtr h);
 
-        [LibraryImport("gdi32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static partial bool BitBlt(
-            IntPtr hdc,
-            int x,
-            int y,
-            int cx,
-            int cy,
-            IntPtr hdcSrc,
-            int x1,
-            int y1,
-            uint rop);
-    }
+    //    [LibraryImport("gdi32.dll")]//, ExactSpelling = true)]
+    //    public static partial IntPtr CreateCompatibleBitmap(IntPtr hdc, int cx, int cy);
+
+    //    [LibraryImport("gdi32.dll", SetLastError = true)]
+    //    public static partial IntPtr SelectObject(IntPtr hdc, IntPtr h);
+
+    //    [LibraryImport("gdi32.dll", SetLastError = true)]
+    //    [return: MarshalAs(UnmanagedType.Bool)]
+    //    public static partial bool BitBlt(
+    //        IntPtr hdc,
+    //        int x,
+    //        int y,
+    //        int cx,
+    //        int cy,
+    //        IntPtr hdcSrc,
+    //        int x1,
+    //        int y1,
+    //        uint rop);
+    //}
 }

@@ -1722,23 +1722,7 @@ namespace MonkeyPaste.Avalonia {
                 ObservedQueryTrayScreenHeight - pad_extent);
 
             MpRect ctvm_rect = ctvm.ScreenRect;
-            MpPoint delta_scroll_offset = new MpPoint();
-
-            if (ctvm_rect.Left < svr.Left) {
-                //item is outside on left
-                delta_scroll_offset.X = ctvm_rect.Left - svr.Left;
-            } else if (ctvm_rect.Right > svr.Right) {
-                //item is outside on right
-                delta_scroll_offset.X = ctvm_rect.Right - svr.Right;
-            }
-
-            if (ctvm_rect.Top < svr.Top) {
-                //item is outside above
-                delta_scroll_offset.Y = ctvm_rect.Top - svr.Top;
-            } else if (ctvm_rect.Bottom > svr.Bottom) {
-                //item is outside below
-                delta_scroll_offset.Y = ctvm_rect.Bottom - svr.Bottom;
-            }
+            MpPoint delta_scroll_offset = svr.FindTranslation(ctvm_rect);
 
             var target_offset = ScrollOffset + delta_scroll_offset;
             ScrollVelocity = MpPoint.Zero;

@@ -117,20 +117,6 @@ namespace MonkeyPaste.Avalonia {
         public static void SetHtml(this HtmlControl hc, string html) {
             hc.SetCurrentValue(HtmlControl.TextProperty, html);
         }
-        public static async Task SetHtmlAsync(this HtmlControl hc, string html) {
-            bool is_done = false;
-            void hc_LoadComplete(object sender, EventArgs e) {
-                is_done = true;
-            }
-            hc.LoadComplete += hc_LoadComplete;
-            hc.SetCurrentValue(HtmlControl.TextProperty, html);
-            hc.InvalidateVisual();
-            is_done = !hc.IsVisible || !hc.IsEffectivelyVisible;
-            while (!is_done) {
-                await Task.Delay(50);
-            }
-            hc.LoadComplete -= hc_LoadComplete;
-        }
         #endregion
 
         #region Strings
