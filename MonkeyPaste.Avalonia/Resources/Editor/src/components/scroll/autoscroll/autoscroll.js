@@ -36,6 +36,7 @@ function startAutoScroll() {
 
 function stopAutoScroll(isLeave) {
     if (globals.AutoScrollInterval == null) {
+        log("cannot stop autoscroll. interval is null.")
         return;
     }
     wrapContentScroll();

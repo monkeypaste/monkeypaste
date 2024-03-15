@@ -1523,9 +1523,7 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.ClipboardMonitor.OnClipboardChanged += ClipboardWatcher_OnClipboardChanged;
             Mp.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
 
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalDrag += Instance_OnGlobalDrag;
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalDragEnd += Instance_OnGlobalDragEnd;
+            SetupDropHelpers();
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
@@ -2496,44 +2494,61 @@ namespace MonkeyPaste.Avalonia {
             // Render/browser process crap is jamming it up, too many layers  
 
         }
-        private void Instance_OnGlobalDrag(object sender, object e) {
-            if (AllItems.Where(x => x.IsDropOverTile) is not { } drop_ctvml ||
-                !drop_ctvml.Any()) {
-                return;
-            }
-            var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalUnscaledMouseLocation;
-            var lbil =
-                MpAvQueryTrayView.Instance.ClipTrayListBox.GetVisualDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext))
-                .Union(MpAvPinTrayView.Instance.PinTrayListBox.GetVisualDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext)));
-            foreach (var lbi in lbil) {
-                if (new PixelRect(lbi.PointToScreen(new Point()), lbi.PointToScreen(lbi.Bounds.BottomRight)).Contains(gmp) ||
-                    lbi.DataContext is not MpAvClipTileViewModel stale_ctvm) {
-                    continue;
+        private void SetupDropHelpers() {
+            bool was_drag_in_progress = false;
+
+            void Instance_OnGlobalDrag(object sender, object e) {
+                var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalUnscaledMouseLocation;
+                var drop_ctvml = AllActiveItems.Where(x => !x.IsWindowOpen);
+                var lbil =
+                    MpAvQueryTrayView.Instance.ClipTrayListBox.GetLogicalDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext))
+                    .Union(MpAvPinTrayView.Instance.PinTrayListBox.GetLogicalDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext)));
+                foreach (var lbi in lbil) {
+                    if (lbi.DataContext is not MpAvClipTileViewModel ctvm ||
+                        lbi.GetLogicalDescendant<MpAvContentWebViewContainer>() is not { } cwv ||
+                        cwv.GetLogicalDescendant<MpAvContentWebView>() is not { } ctwv) {
+                        continue;
+                    }
+                    if (new PixelRect(lbi.PointToScreen(new Point()), lbi.PointToScreen(lbi.Bounds.BottomRight)).Contains(gmp)) {
+                        // drag over this tile
+                        continue;
+                    }
+                    if (!ctvm.IsDropOverTile) {
+                        // not stale 
+                        continue;
+                    }
+                    was_drag_in_progress = true;
+                    /// drag left this tile
+                    MpConsole.WriteLine($"Clearing drop on '{ctvm}'");
+                    //ctwv.RelayDndMsg(MpDragDropOpType.dragleave, null, MpAvDoDragDropWrapper.DragDataObject, gmp);
+                    ctvm.IsDropOverTile = false;
+                    ctvm.IsSubSelectionEnabled = !ctvm.IsContentReadOnly;
+                    ReloadContentAsync(new[] { ctvm }).FireAndForgetSafeAsync();
+
+                    // BUG i think since dnd thread is active style selectors aren't updating during change
+                    // (webview is supposed to go back to empty size)
+                    //cwv.IsVisible = false;
+                    MpConsole.WriteLine($"rwwv size cleared! {cwv.Bounds} {cwv.Width} {cwv.Height}");
                 }
-                MpConsole.WriteLine($"Clearing drop on '{stale_ctvm}'");
-                stale_ctvm.IsDropOverTile = false;
-                stale_ctvm.IsSubSelectionEnabled = !stale_ctvm.IsContentReadOnly;
             }
-        }
-        private void Instance_OnGlobalDragEnd(object sender, object e) {
-            // BUG in some cases dragend/dragcancel/drop isn't getting reported
-            // and corner buttons stop showing up this shall fix it
 
-            // TODO if any dragging or dropping, wait 3 secs,
-            // if still, cancel all and log. May need to reinit clip trays
+            void Instance_OnGlobalDragEnd(object sender, object e) {
+                Dispatcher.UIThread.Post(async () => {
+                    if ((MpAvDoDragDropWrapper.LastDragCompletedDateTime.HasValue &&
+                        DateTime.Now - MpAvDoDragDropWrapper.LastDragCompletedDateTime < TimeSpan.FromSeconds(2)) ||
+                        was_drag_in_progress) {
+                        AllItems.Where(x => x.IsDropOverTile).ForEach(x => x.IsDropOverTile = false);
+                        AllItems.Where(x => x.IsTileDragging).ForEach(x => x.IsTileDragging = false);
+                        IsAnyDropOverTrays = false;
+                        await Task.Delay(1_000);
+                        ReloadAllContentCommand.Execute(null);
+                    }
 
-
-            IsAnyDropOverTrays = false;
-            Dispatcher.UIThread.Post(async () => {
-                await Task.Delay(1_000);
-                AllItems.Where(x => x.IsDropOverTile).ForEach(x => x.IsDropOverTile = false);
-                AllItems.Where(x => x.IsTileDragging).ForEach(x => x.IsTileDragging = false);
-            });
-            // TODO Add disableDrag() called at end of contentChange in editor.
-            // See if cef startDrag or js dragEnter gets called.
-            // Both should never get called, cut cef out of dnd.
-            // Render/browser process crap is jamming it up, too many layers  
-
+                });
+            }
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalDrag += Instance_OnGlobalDrag;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalDragEnd += Instance_OnGlobalDragEnd;
         }
         private void ProcessWatcher_OnAppActivated(object sender, MpPortableProcessInfo e) {
             Dispatcher.UIThread.Post(() => SetCurPasteInfoMessage(e), DispatcherPriority.Background);
@@ -4864,29 +4879,33 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
 
+        private async Task ReloadContentAsync(IEnumerable<MpAvClipTileViewModel> ctvml) {
+            // store all items content state
+            await Task.WhenAll(
+                ctvml
+                .Select(x => x.PersistContentStateCommand.ExecuteAsync(null)));
+
+            ctvml.ForEach(x => x.IsEditorLoaded = false);
+            ctvml.ForEach(x => x.OnPropertyChanged(nameof(x.IsAnyBusy)));
+
+            // get all content content controls
+            var ctccl =
+                MpAvWindowManager.AllWindows
+                    .SelectMany(x => x.GetVisualDescendants<MpAvClipTileContentView>())
+                    .Where(x => ctvml.Contains(x.DataContext))
+                    .Select(x => x.FindControl<ContentControl>("ClipTileContentControl"));
+
+            // trigger data context change
+            ctccl.ForEach(x => x.ReloadDataContext());
+
+
+            while (ctvml.Any(x => x.IsAnyBusy)) {
+                await Task.Delay(100);
+            }
+        }
         public ICommand ReloadAllContentCommand => new MpAsyncCommand(
             async () => {
-                // store all items content state
-                await Task.WhenAll(
-                    AllActiveItems
-                    .Select(x => x.PersistContentStateCommand.ExecuteAsync(null)));
-
-                AllActiveItems.ForEach(x => x.IsEditorLoaded = false);
-                AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsAnyBusy)));
-
-                // get all content content controls
-                var ctccl =
-                    MpAvWindowManager.AllWindows
-                        .SelectMany(x => x.GetVisualDescendants<MpAvClipTileContentView>())
-                        .Select(x => x.FindControl<ContentControl>("ClipTileContentControl"));
-
-                // trigger data context change
-                ctccl.ForEach(x => x.ReloadDataContext());
-
-
-                while (AllActiveItems.Any(x => x.IsAnyBusy)) {
-                    await Task.Delay(100);
-                }
+                await ReloadContentAsync(AllActiveItems.ToList());
 
             });
         public MpIAsyncCommand ReloadAllCommand => new MpAsyncCommand(

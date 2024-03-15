@@ -70,8 +70,8 @@
                     Value="True" />
         </Style>
         <Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvContentWebViewContainer">
-            <Setter Property="IsVisible"
-                    Value="True" />
+            <!--<Setter Property="IsVisible"
+                    Value="True" />-->
             <Setter Property="Width"
                     Value="{StaticResource NaN}" />
             <Setter Property="Height"
@@ -159,6 +159,8 @@
                                        Classes.active="{Binding CopyItemType, ConverterParameter=FileList, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}" />
         <!--  EDITABLE WEBVIEW  -->
         <local:MpAvContentWebViewContainer x:Name="EditableWebView"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch"
                                            Grid.RowSpan="2" />
         <!--  PASTE TOOLBAR  -->
 

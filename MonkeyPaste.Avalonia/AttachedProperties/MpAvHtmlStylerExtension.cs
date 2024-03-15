@@ -441,33 +441,25 @@ namespace MonkeyPaste.Avalonia {
 
             switch (style_type) {
                 case MpHtmlStyleType.Content:
-                    //                    css_str += string.Format(@"
-                    //body {{ color: {0}; font-size: {1}px; font-family: {2}; white-space: pre-wrap; word-break: break-all; }}
-                    //
-                    //.underline {{ text-decoration: underline;  }}
-                    //.highlight-inactive {{ background-color: {3}; color: {4}; }}
-                    //.highlight-active {{ background-color: {5}; color: {6}; }}
-                    //a:link {{ text-decoration: underline; color: {7}; }}
-                    //a:hover {{ text-decoration: underline; color: {8}; }}",
                     css_str += string.Format(@"
 * {{ margin: 0; padding: 0; }}
 body {{ color: {0}; font-size: {1}px; font-family: {2}; white-space: normal;  word-break: break-all; }}
-p {{ height: 1em; line-height: 1; }}
+p {{ height: 1em; line-height: 1; margin: 0; padding: 0; }}
 .underline {{ text-decoration: underline; line-height: 1.5; }}
 .highlight-inactive {{ background-color: {3}; color: {4}; }}
 .highlight-active {{ background-color: {5}; color: {6}; }}
 a:link {{ text-decoration: none; color: {7}; }}
 a:hover {{ text-decoration: underline; color: {8}; }}",
-                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor).ToPortableColor().ToHex(true), //0
-                                            GetDefaultFontSize(hc), //1
-                                            GetDefaultFontFamily(hc), //2
-                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightInactiveColor).ToPortableColor().ToHex(true), //3
-                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightInactiveColor).ToPortableColor().ToHex(true).ToContrastForegoundColor(remove_alpha: true), //4
-                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).ToPortableColor().ToHex(true), //5
-                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).ToPortableColor().ToHex(true).ToContrastForegoundColor(remove_alpha: true), //6
-                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkColor).ToPortableColor().ToHex(true), //7
-                                            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkHoverColor).ToPortableColor().ToHex(true) //8
-                                            );
+Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor).ToPortableColor().ToHex(true), //0
+GetDefaultFontSize(hc), //1
+GetDefaultFontFamily(hc), //2
+Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightInactiveColor).ToPortableColor().ToHex(true), //3
+Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightInactiveColor).ToPortableColor().ToHex(true).ToContrastForegoundColor(remove_alpha: true), //4
+Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).ToPortableColor().ToHex(true), //5
+Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).ToPortableColor().ToHex(true).ToContrastForegoundColor(remove_alpha: true), //6
+Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkColor).ToPortableColor().ToHex(true), //7
+Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkHoverColor).ToPortableColor().ToHex(true) //8
+);
                     break;
                 case MpHtmlStyleType.Tooltip:
                 default:
@@ -478,10 +470,10 @@ p {{ margin: 0; height: 1em; line-height: 1; }}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 a:link {{ text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}",
-                        GetDefaultHexColor(hc).RemoveHexAlpha(), //0
-                        GetDefaultFontSize(hc), //1
-                        GetDefaultFontFamily(hc), //2
-                        MpSystemColors.gold1.RemoveHexAlpha()
+GetDefaultHexColor(hc).RemoveHexAlpha(), //0
+GetDefaultFontSize(hc), //1
+GetDefaultFontFamily(hc), //2
+MpSystemColors.gold1.RemoveHexAlpha()
                         );
                     break;
             }

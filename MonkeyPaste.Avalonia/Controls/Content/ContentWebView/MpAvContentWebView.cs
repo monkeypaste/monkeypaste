@@ -298,7 +298,14 @@ namespace MonkeyPaste.Avalonia {
 
             var avdo = new MpAvDataObject();
             bool is_all_content = true;
-            if (IsEditorLoaded) {
+            bool use_wv = IsEditorLoaded &&
+#if SUGAR_WV
+                (ReadOnlyWebView == null || !ReadOnlyWebView.IsVisible);
+#else
+                true;
+#endif
+            MpConsole.WriteLine($"GetDataObject using {(use_wv ? "rwwv" : "rowv")}");
+            if (use_wv) {
                 var sw = Stopwatch.StartNew();
                 _lastDataObjectResp = null;
                 SendMessage($"contentDataObjectRequestAsync_ext_ntf('{contentDataReq.SerializeObjectToBase64()}')");
@@ -322,19 +329,19 @@ namespace MonkeyPaste.Avalonia {
                 foreach (var di in contentDataResp.dataItems) {
                     avdo.SetData(di.format, di.data);
                 }
-            }
-            //else if (ReadOnlyWebView != null) {
-            //    string pt = ignore_selection || ReadOnlyWebView.SelectedText.IsNullOrEmpty() ?
-            //        BindingContext.SearchableText : ReadOnlyWebView.SelectedText;
-            //    string html = ignore_selection || ReadOnlyWebView.SelectedHtml.IsNullOrEmpty() ?
-            //        BindingContext.CopyItemData : ReadOnlyWebView.SelectedHtml;
-            //    // NOTE always providing text and html (should be stripping later)
+            } else {
+#if SUGAR_WV
+                string pt = ignore_selection || ReadOnlyWebView.SelectedText.IsNullOrEmpty() ?
+                    BindingContext.SearchableText : ReadOnlyWebView.SelectedText;
+                string html = ignore_selection || ReadOnlyWebView.SelectedHtml.IsNullOrEmpty() ?
+                    BindingContext.CopyItemData : ReadOnlyWebView.SelectedHtml;
+                // NOTE always providing text and html (should be stripping later)
 
-            //    avdo.SetData(MpPortableDataFormats.Text, pt);
-            //    avdo.SetData(MpPortableDataFormats.Html, html);
-            //} 
-            else {
+                avdo.SetData(MpPortableDataFormats.Text, pt);
+                avdo.SetData(MpPortableDataFormats.Html, html);
+#else
                 return GetFallbackDataObject();
+#endif
             }
 
             if (ctvm.CopyItemType == MpCopyItemType.FileList) {
@@ -1121,44 +1128,6 @@ namespace MonkeyPaste.Avalonia {
         }
 #endif
 
-#if SUGAR_WV
-        protected override void OnPointerEntered(PointerEventArgs e) {
-            base.OnPointerEntered(e);
-            //MpConsole.WriteLine($"Wv Pointer entered");
-            if (BindingContext == null) {
-                return;
-            }
-            BindingContext.IsHovering = true;
-            BindingContext.IsContentHovering = true;
-        }
-        protected override void OnPointerMoved(PointerEventArgs e) {
-            base.OnPointerMoved(e);
-
-            if (BindingContext == null) {
-                return;
-            }
-            BindingContext.IsHovering = true;
-            BindingContext.IsContentHovering = true;
-            //MpConsole.WriteLine($"Wv Pointer moved");
-        }
-        protected override void OnPointerExited(PointerEventArgs e) {
-            base.OnPointerExited(e);
-            //MpConsole.WriteLine($"Wv Pointer exited");
-
-            if (BindingContext == null) {
-                return;
-            }
-            BindingContext.IsDropOverTile = false;
-            BindingContext.IsContentHovering = false;
-            // BUG when this is triggered mp is still in the tile but tile won't
-            // receive actual exit so only allow if exited to title panel
-            if (this.GetVisualAncestor<MpAvClipTileView>() is not { } ctv) {
-                return;
-            }
-            BindingContext.IsHovering = ctv.IsPointerOver;
-        }
-#endif
-
         #endregion
 
         #region Public Methods
@@ -1225,6 +1194,45 @@ namespace MonkeyPaste.Avalonia {
             SendMessage($"dragEventFromHost_ext('{dndMsg.SerializeObjectToBase64()}')");
         }
 #endif
+
+
+#if SUGAR_WV
+        protected override void OnPointerEntered(PointerEventArgs e) {
+            base.OnPointerEntered(e);
+            //MpConsole.WriteLine($"Wv Pointer entered");
+            if (BindingContext == null) {
+                return;
+            }
+            BindingContext.IsHovering = true;
+            BindingContext.IsContentHovering = true;
+        }
+        protected override void OnPointerMoved(PointerEventArgs e) {
+            base.OnPointerMoved(e);
+
+            if (BindingContext == null) {
+                return;
+            }
+            BindingContext.IsHovering = true;
+            BindingContext.IsContentHovering = true;
+            //MpConsole.WriteLine($"Wv Pointer moved");
+        }
+        protected override void OnPointerExited(PointerEventArgs e) {
+            base.OnPointerExited(e);
+            //MpConsole.WriteLine($"Wv Pointer exited");
+
+            if (BindingContext == null) {
+                return;
+            }
+            BindingContext.IsDropOverTile = false;
+            BindingContext.IsContentHovering = false;
+            // BUG when this is triggered mp is still in the tile but tile won't
+            // receive actual exit so only allow if exited to title panel
+            if (this.GetVisualAncestor<MpAvClipTileView>() is not { } ctv) {
+                return;
+            }
+            BindingContext.IsHovering = ctv.IsPointerOver;
+        }
+#endif
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {
             if (!IsScrollWheelEnabled) {
                 // disabled in no-select mode, otherwise cefnet swallows event and pin tray won't scroll
@@ -1239,6 +1247,24 @@ namespace MonkeyPaste.Avalonia {
             };
         }
 
+        protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) {
+            base.OnAttachedToLogicalTree(e);
+            Mp.Services.ContentViewLocator.AddView(this);
+        }
+
+        protected override void OnPointerPressed(PointerPressedEventArgs e) {
+            base.OnPointerPressed(e);
+            LastPointerPressedEventArgs = e;
+        }
+        protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) {
+            base.OnDetachedFromLogicalTree(e);
+            Mp.Services.ContentViewLocator.RemoveView(this);
+        }
+
+        protected override void OnDataContextEndUpdate() {
+            base.OnDataContextEndUpdate();
+            _locatedDateTime = DateTime.Now;
+        }
         #endregion
 
         #region Private Methods
@@ -1332,27 +1358,6 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region Control Life Cycle
-        protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) {
-            base.OnAttachedToLogicalTree(e);
-            Mp.Services.ContentViewLocator.AddView(this);
-        }
-
-        protected override void OnPointerPressed(PointerPressedEventArgs e) {
-            base.OnPointerPressed(e);
-            LastPointerPressedEventArgs = e;
-        }
-        protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) {
-            base.OnDetachedFromLogicalTree(e);
-            Mp.Services.ContentViewLocator.RemoveView(this);
-        }
-
-        protected override void OnDataContextEndUpdate() {
-            base.OnDataContextEndUpdate();
-            _locatedDateTime = DateTime.Now;
-        }
-
-        #endregion
 
         #region Dom Init
 
@@ -1963,6 +1968,49 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+        #region Dnd
+        public void RelayDndMsg(MpDragDropOpType eventType, RoutedEventArgs e, IDataObject ido = default, PixelPoint gmp = default) {
+            if (eventType == MpDragDropOpType.reset) {
+                SendMessage($"resetDragAndDrop_ext()");
+                return;
+            }
+            string frag = string.Empty;
+            Point mp = new Point();
+
+            if (BindingContext == null ||
+                !BindingContext.IsEditorLoaded ||
+                this.GetVisualDescendant<MpAvContentWebView>() is not { } wv) {
+                return;
+            }
+
+            if (e is DragEventArgs dea) {
+                //e.Handled = true;
+                frag = dea.Data.ToQuillDataItemsMessage(dde: DragDropEffects.Copy).SerializeObjectToBase64();
+                mp = dea.GetPosition(wv);
+            } else if (e is PointerEventArgs pea) {
+                mp = pea.GetPosition(wv);
+            }
+            if (ido != default && frag.IsNullOrEmpty()) {
+                frag = ido.ToQuillDataItemsMessage(dde: DragDropEffects.Copy).SerializeObjectToBase64();
+            }
+            if (gmp != default) {
+                mp = this.PointToClient(gmp);
+            }
+            var dndMsg = new MpQuillDragDropEventMessage() {
+
+                eventType = eventType.ToString(),
+                dataItemsFragment = frag,
+                screenX = mp.X,
+                screenY = mp.Y,
+                shiftKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsShiftDown,
+                ctrlKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown,
+                altKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsAltDown,
+                metaKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsMetaDown,
+                escKey = MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown,
+            };
+            wv.SendMessage($"dragEventFromHost_ext('{dndMsg.SerializeObjectToBase64()}')");
+        }
+        #endregion
         private void GrowView() {
             double nw = Math.Max(BindingContext.DesiredWidth, BindingContext.BoundWidth);
             double nh = Math.Max(BindingContext.BoundHeight, BindingContext.BoundHeight); //no change

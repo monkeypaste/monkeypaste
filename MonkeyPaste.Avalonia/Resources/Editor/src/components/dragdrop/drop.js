@@ -231,7 +231,7 @@ function onDragOver(e) {
     if (!can_proceed) {
         return false;
     }
-
+    log('drag over');
     if (processEffectAllowed(e) == 'none') {
         log('drag over effects none, rejecting')
         return rejectDrop(e);
@@ -246,22 +246,25 @@ function onDragOver(e) {
 
     // DROP IDX
 
-    globals.DropIdx = getDocIdxFromPoint(globals.WindowMouseLoc);
+    let fallback_idx = -1;
+    if (globals.WindowMouseLoc) {
+        let mid_y = getEditorContainerRect().bottom - (getEditorContainerRect().height / 2);
+        fallback_idx = globals.WindowMouseLoc.y >= mid_y ? getDocLength() : 0;
+    }
+    globals.DropIdx = getDocIdxFromPoint(globals.WindowMouseLoc, fallback_idx);
 
     // INVALIDATE DROP ONTO SELECTION
-    //if (isDragging()) {
-        let sel = getDocSelection();
-        let is_drop_over_drag_sel = isDocIdxInRange(globals.DropIdx, sel);
-        let is_drop_over_template = getAllTemplateDocIdxs().includes(globals.DropIdx);
-        if (!is_drop_over_drag_sel && !is_drop_over_template) {
-            is_drop_over_drag_sel = isPointInRange(globals.WindowMouseLoc, sel);
-        }
-        if (is_drop_over_drag_sel ||
-            is_drop_over_template) {
-            log('invalidating self drop. DROP EFFECT SHOULD BE NONE IS: ' + e.dataTransfer.dropEffect + ' over drag sel: ' + is_drop_over_drag_sel + ' over template: ' + is_drop_over_template);
-            return rejectDrop(e);
-        }
-    //}
+    let sel = getDocSelection();
+    let is_drop_over_drag_sel = isDocIdxInRange(globals.DropIdx, sel);
+    let is_drop_over_template = getAllTemplateDocIdxs().includes(globals.DropIdx);
+    if (!is_drop_over_drag_sel && !is_drop_over_template) {
+        is_drop_over_drag_sel = isPointInRange(globals.WindowMouseLoc, sel);
+    }
+    if (is_drop_over_drag_sel ||
+        is_drop_over_template) {
+        log('invalidating self drop. DROP EFFECT SHOULD BE NONE IS: ' + e.dataTransfer.dropEffect + ' over drag sel: ' + is_drop_over_drag_sel + ' over template: ' + is_drop_over_template);
+        return rejectDrop(e);
+    }
     drawOverlay();
 
     return false;
@@ -271,6 +274,7 @@ function onDragLeave(e) {
     let window_rect = getWindowRect();
     let mp_dist = getPointDistanceToRect(globals.WindowMouseLoc, window_rect);
     let is_mp_in_win = isPointInRect(window_rect, globals.WindowMouseLoc);
+    let is_leave_drop_elm = e.currentTarget == globals.CurDropTargetElm;
     let from_host = e.fromHost === undefined || e.fromHost == false ? false : true;
     log('drag leave called. mp dist: ' + mp_dist + ' in editor: ' + is_mp_in_win);
 

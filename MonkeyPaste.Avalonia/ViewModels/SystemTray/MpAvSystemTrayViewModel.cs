@@ -678,6 +678,8 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand GenericTestCommand3 => new MpAsyncCommand(
             async () => {
+                // NOTE this one will clear rwwv after dnd
+
                 await Task.Delay(1);
                 MpAvClipTrayViewModel.Instance.ReloadAllContentCommand.Execute(null);
             });

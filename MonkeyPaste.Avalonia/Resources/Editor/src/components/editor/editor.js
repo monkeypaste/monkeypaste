@@ -416,6 +416,9 @@ function isTextChangeSupressed() {
 // #region Event Handlers
 
 function onEditorFocus(e) {
+	if (getEditorContainerElement().classList.contains('editor-focused')) {
+		return;
+	}
 	log('editor got focus');
 	hideAllPopups();
 	getEditorContainerElement().classList.add('editor-focused');

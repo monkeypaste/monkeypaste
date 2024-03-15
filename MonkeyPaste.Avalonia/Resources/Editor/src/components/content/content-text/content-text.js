@@ -386,69 +386,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 			}
 
 		}
-
 		return doc_idx;
-
-		if (textNode && textNode.parentElement) {
-			let parent_blot = quillFindBlot(textNode.parentElement);
-			if (parent_blot && typeof parent_blot.offset === 'function') {
-				// get doc idx of block
-				parent_idx = parent_blot.offset(globals.quill.scroll);
-				let prev_sib_node = textNode.previousSibling;
-				if (prev_sib_node != null) {
-					let prev_sib_total_offset = 0;
-					while (prev_sib_node != null) {
-						// get prev siblings offset from parent block to current node
-						let prev_sib_offset = 0;
-						if (prev_sib_node.nodeType == 3) {
-							prev_sib_offset = prev_sib_node.textContent.length;;
-						} else {
-							let prev_sib_blot = quillFindBlot(prev_sib_node);
-							if (prev_sib_blot && typeof prev_sib_blot.offset === 'function') {
-								if (prev_sib_node.hasAttribute('templateGuid')) {
-									//length of 0
-								} else {
-									prev_sib_offset = prev_sib_node.innerText.length;
-								}
-							}
-						}
-						if (isNaN(parseInt(prev_sib_offset))) {
-							debugger;
-						} else {
-							prev_sib_total_offset += prev_sib_node.textContent.length;
-						}
-						prev_sib_node = prev_sib_node.previousSibling;
-					}
-					doc_idx = /*text_node_idx + */parent_idx + prev_sib_total_offset;
-				} else {
-					doc_idx = text_node_idx + parent_idx;
-				}
-				doc_idx += range.endOffset;
-
-
-				if (doc_idx == 0) {
-					// NOTE parentElement is editor if p is outside of actual editable space (after line break)
-					// but parentElement will still be the enclosed block blot so find the blot offset
-					let p_elm = document.elementFromPoint(p.x, p.y);
-					if (p_elm) {
-						let blot = quillFindBlot(p_elm);
-						if (blot && typeof blot.offset === 'function') {
-							let block_idx = blot.offset(globals.quill.scroll);
-							if (!isNaN(parseInt(block_idx))) {
-								doc_idx = block_idx;
-							} else {
-								debugger;
-							}
-						}
-
-					} else {
-						debugger;
-					}
-
-				}
-
-			}
-		}
 	}
 	//log('doc_idx: ' + doc_idx + ' offset: ' + text_node_idx + ' parent_idx: ' + parent_idx);
 	return doc_idx;

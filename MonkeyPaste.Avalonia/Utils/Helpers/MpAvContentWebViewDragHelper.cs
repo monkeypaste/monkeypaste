@@ -1,6 +1,7 @@
 ﻿
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -141,6 +142,8 @@ namespace MonkeyPaste.Avalonia {
                 DragDataObject = ido;
             }
         }
+
+
         #endregion
 
         #region Private Methods
