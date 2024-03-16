@@ -145,7 +145,7 @@ namespace Ledgerizer {
             //"AzureComputerVision",
             //"AzureTextTranslator",
             //"ChatGpt",
-            //"CoreAnnotator",
+            "CoreAnnotator",
             "CoreOleHandler",
             //"FileConverter",
             //"GoogleLiteTextTranslator",
@@ -1670,7 +1670,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             }
             // cleanup published output
             MpFileIo.DeleteDirectory(publish_dir);
-            MpConsole.WriteLine($"{plugin_name} local [{config.ToUpper()}] DONE" + install_update_suffix);
+            MpConsole.WriteLine($"{plugin_name} local [{BUILD_OS}({BUILD_CONFIG})-{config.ToUpper()}] DONE" + install_update_suffix);
 
             // return zip uri to use for local packageUrl
             return output_path.ToFileSystemUriFromPath();

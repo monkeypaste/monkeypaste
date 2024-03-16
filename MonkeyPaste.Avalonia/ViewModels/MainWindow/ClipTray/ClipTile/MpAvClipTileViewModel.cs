@@ -1510,10 +1510,12 @@ namespace MonkeyPaste.Avalonia {
 
         public void OpenPopOutWindow(MpAppendModeType amt, MpAvClipTileView cached_view) {
             IsAppendNotifier = amt != MpAppendModeType.None;
-            if (!IsWindowOpen) {
+
+            if (!IsWindowOpen || (IsWindowOpen && IsAppendNotifier)) {
+                // create popout or use existing if changing to append
                 MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(CopyItemId, QueryOffsetIdx);
 
-                var pow = CreatePopoutWindow(cached_view);
+                var pow = MpAvWindowManager.LocateWindow(this, scanDescendants: false) ?? CreatePopoutWindow(cached_view);
                 var ws = amt == MpAppendModeType.None ? new Size(500, 500) : new Size(350, 250);
                 pow.Width = ws.Width;
                 pow.Height = ws.Height;
@@ -2724,6 +2726,13 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             IsDropOverTile = true;
+            if (IsPinPlaceholder &&
+                PinnedItemForThisPlaceholder != null &&
+                PinnedItemForThisPlaceholder.IsWindowOpen &&
+                PinnedItemForThisPlaceholder.WindowState == WindowState.Minimized) {
+                // on drag enter for minimized popout pin placeholders, show pop out
+                PinnedItemForThisPlaceholder.WindowState = WindowState.Normal;
+            }
         });
         public ICommand DragLeaveCommand => new MpCommand(() => {
             //IsDropOverTile = false;

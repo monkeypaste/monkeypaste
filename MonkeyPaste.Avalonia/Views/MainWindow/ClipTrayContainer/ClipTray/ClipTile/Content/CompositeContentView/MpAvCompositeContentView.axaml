@@ -14,7 +14,8 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvCompositeContentView">
     <local:MpAvUserControl.Styles>
-        <!--  PASTE TOOLBAR TRANSITIONS  -->
+      
+      <!--  PASTE TOOLBAR TRANSITIONS  -->
 
         <Style Selector="local|MpAvPasteToolbarView,local|MpAvContentWebViewContainer">
             <Setter Property="Transitions">

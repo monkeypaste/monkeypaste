@@ -136,13 +136,16 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvWindow LocateWindow(MpPoint gmp) {
             return AllWindows.FirstOrDefault(x => x.ScaledScreenRect().Contains(gmp));
         }
-        public static MpAvWindow LocateWindow(object dataContext) {
+        public static MpAvWindow LocateWindow(object dataContext, bool scanDescendants = false) {
             if (!Dispatcher.UIThread.CheckAccess()) {
                 var result = Dispatcher.UIThread.Invoke(() => LocateWindow(dataContext));
                 return result;
             }
             if (AllWindows.FirstOrDefault(x => x.DataContext == dataContext) is MpAvWindow w) {
                 return w;
+            }
+            if (!scanDescendants) {
+                return null;
             }
             // search whole tree
             foreach (var cw in AllWindows) {

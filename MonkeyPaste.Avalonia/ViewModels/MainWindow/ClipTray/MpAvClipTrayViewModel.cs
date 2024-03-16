@@ -2475,6 +2475,9 @@ namespace MonkeyPaste.Avalonia {
                         cwv.SendMessage($"pasteOrDropCompleteResponse_ext()");
                     }
                     CurPasteOrDragItem = null;
+                    if (msg == MpMessageType.ItemDragEnd || msg == MpMessageType.ItemDragCanceled) {
+                        ResetDndAsync().FireAndForgetSafeAsync();
+                    }
                     break;
             }
         }
@@ -2537,18 +2540,20 @@ namespace MonkeyPaste.Avalonia {
                     if ((MpAvDoDragDropWrapper.LastDragCompletedDateTime.HasValue &&
                         DateTime.Now - MpAvDoDragDropWrapper.LastDragCompletedDateTime < TimeSpan.FromSeconds(2)) ||
                         was_drag_in_progress) {
-                        AllItems.Where(x => x.IsDropOverTile).ForEach(x => x.IsDropOverTile = false);
-                        AllItems.Where(x => x.IsTileDragging).ForEach(x => x.IsTileDragging = false);
-                        IsAnyDropOverTrays = false;
-                        await Task.Delay(1_000);
-                        ReloadAllContentCommand.Execute(null);
+                        await ResetDndAsync();
                     }
-
                 });
             }
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalDrag += Instance_OnGlobalDrag;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalDragEnd += Instance_OnGlobalDragEnd;
+        }
+        private async Task ResetDndAsync() {
+            AllItems.Where(x => x.IsDropOverTile).ForEach(x => x.IsDropOverTile = false);
+            AllItems.Where(x => x.IsTileDragging).ForEach(x => x.IsTileDragging = false);
+            IsAnyDropOverTrays = false;
+            await Task.Delay(1_000);
+            ReloadAllContentCommand.Execute(null);
         }
         private void ProcessWatcher_OnAppActivated(object sender, MpPortableProcessInfo e) {
             Dispatcher.UIThread.Post(() => SetCurPasteInfoMessage(e), DispatcherPriority.Background);
@@ -3498,6 +3503,8 @@ namespace MonkeyPaste.Avalonia {
                  }
 
                  if (pinType == MpPinType.Window || pinType == MpPinType.Append) {
+                     // pin to popout
+
                      ctvm_to_pin.OpenPopOutWindow(
                          pinType == MpPinType.Window ?
                             MpAppendModeType.None :
@@ -3515,6 +3522,11 @@ namespace MonkeyPaste.Avalonia {
                              break;
                          }
                          await Task.Delay(100);
+                     }
+                     if (pin_as_editable.IsTrue() && ctvm_to_pin.IsContentReadOnly) {
+                         // BUG toggling to edit from pinned item doesn't switch to editable cause the 
+                         // datacontext doesn't re-initialize
+                         ctvm_to_pin.DisableContentReadOnlyCommand.Execute(null);
                      }
                  } else {
                      // reset pinned item size (may have been missed if init was before adding to 1 of the item collections)

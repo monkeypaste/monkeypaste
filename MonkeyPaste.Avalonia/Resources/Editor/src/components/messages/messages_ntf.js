@@ -4,6 +4,15 @@ function onContentLoaded_ntf(conentMsg) {
 	let msgStr = toBase64FromJsonObj(conentMsg);
 	sendMessage('notifyLoadComplete', msgStr);
 }
+function onContentImageLoaded_ntf(w, h) {
+	// output 'MpQuillContentImageLoadedNotification'
+	let msg = {
+		width: w,
+		height: h
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyContentImageLoaded', msgStr);
+}
 
 function onAnnotationSelected_ntf(ann_guid, dblClick) {
 	// output 'MpQuillAnnotationSelectedMessage'

@@ -477,6 +477,13 @@ namespace MonkeyPaste.Avalonia {
 
                 #region CONTENT CHANGED
 
+                case MpEditorBindingFunctionType.notifyContentImageLoaded:
+                    ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillContentImageLoadedNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillContentImageLoadedNotification imgLoadedNtf) {
+                        BindingContext.CopyItemSize1 = (int)imgLoadedNtf.width;
+                        BindingContext.CopyItemSize2 = (int)imgLoadedNtf.height;
+                    }
+                    break;
                 case MpEditorBindingFunctionType.notifyReadOnlyDisabled:
                     ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillDisableReadOnlyResponseMessage disableReadOnlyMsg) {
@@ -1227,10 +1234,10 @@ namespace MonkeyPaste.Avalonia {
             BindingContext.IsContentHovering = false;
             // BUG when this is triggered mp is still in the tile but tile won't
             // receive actual exit so only allow if exited to title panel
-            if (this.GetVisualAncestor<MpAvClipTileView>() is not { } ctv) {
-                return;
-            }
-            BindingContext.IsHovering = ctv.IsPointerOver;
+            //if (this.GetVisualAncestor<MpAvClipTileView>() is not { } ctv) {
+            //    return;
+            //}
+            //BindingContext.IsHovering = ctv.IsPointerOver;
         }
 #endif
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {

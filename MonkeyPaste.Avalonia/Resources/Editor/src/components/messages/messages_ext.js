@@ -21,9 +21,9 @@ function prepareForReload_ext() {
 	globals.IsReloading = true;
 }
 
-async function loadContentAsync_ext(loadContentMsgStr_base64) {
+function loadContentAsync_ext(loadContentMsgStr_base64) {
 	// input 'MpQuillLoadContentRequestMessage'
-	//log('loadContentAsync_ext: ' + loadContentMsgStr_base64);
+	//log('loadContentAsync_ext: ' + loadContentMsgStr_base64);s	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
 
 	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
 
@@ -48,7 +48,8 @@ async function loadContentAsync_ext(loadContentMsgStr_base64) {
 		paste_button_info = toJsonObjFromBase64Str(req.pasteButtonInfoFragment);
 	}
 
-	await loadContentAsync(
+	//let result;
+	loadContentAsync(
 		req.isReadOnly,
 		req.isSubSelectionEnabled,
 		req.contentHandle,
@@ -60,8 +61,13 @@ async function loadContentAsync_ext(loadContentMsgStr_base64) {
 		sel_state,
 		paste_button_info,
 		req.breakBeforeLoad,
-		req.editorScale);
-
+		req.editorScale)
+	//	.then(x => {
+	//		result = x;
+	//	});
+	//while (result === undefined) {
+	//	sleep(100);
+	//}
 }
 
 function contentChanged_ext(contentChangedMsgStr_base64) {

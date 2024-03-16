@@ -1,6 +1,6 @@
 
 // #region Life Cycle
-async function loadImageContentAsync(itemDataStr, annotationsJsonStr) {
+function loadImageContentAsync(itemDataStr, annotationsJsonStr) {
 	// itemData must remain base64 image string
 	hideAllToolbars();
 	enableReadOnly();
@@ -15,7 +15,10 @@ async function loadImageContentAsync(itemDataStr, annotationsJsonStr) {
 	img.onload = function (e) {
 		globals.ContentImageNaturalWidth = img.naturalWidth;
 		globals.ContentImageNaturalHeight = img.naturalHeight;
+
+		onContentImageLoaded_ntf(globals.ContentImageNaturalWidth, globals.ContentImageNaturalHeight);
 	}
+
 
 	let p = document.createElement('p');
 	p.classList.add('ql-align-center');
@@ -27,9 +30,11 @@ async function loadImageContentAsync(itemDataStr, annotationsJsonStr) {
 	globals.ContentClassAttrb.add(getEditorElement().firstChild.firstChild, 'image');
 	updateImageContentSizeAndPosition();
 	updateQuill();
-	while (!isContentImageDimsSet()) {
-		await delay(100);
-	}
+
+	//while (!isContentImageDimsSet()) {
+		//	await delay(100);
+	//}
+	//log('loaded: ' + isContentImageDimsSet());
 }
 // #endregion Life Cycle
 

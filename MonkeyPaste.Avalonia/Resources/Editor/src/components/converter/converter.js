@@ -86,6 +86,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 		// fallback and use delta2html, i think its a problem when there's only 1 block and content was plain text
 		output_html = getHtml(null, needs_encoding);
 	}
+	// swap pre's for spans cause it screws stuf upf
 
 	let is_conv_html_valid = true;
 

@@ -937,34 +937,41 @@
 	TemplateBeforeEdit: null,
 	TemplateTypesMenuOptions: [
 		{
-			label: '#EditorTemplateDynamicName#',
+			id: '#EditorTemplateDynamicName#',
+			label: '',
 			templateType: 'dynamic',
 			icon: 'text'
 		},
 		{
-			label: '#EditorTemplateStaticName#',
+			id: '#EditorTemplateStaticName#',
+			label: '',
 			templateType: 'static',
 			icon: 'snowflake'
 		},
 		/* {
-			 label: 'Content',
+			 id: 'Content',
+			label: '',
 			 icon: 'fa-solid fa-clipboard'
 		 },
 		 {
-			 label: 'Analyzer',
+			 id: 'Analyzer',
+			label: '',
 			 icon: 'fa-solid fa-scale-balanced'
 		 },
 		 {
-			 label: 'Action',
+			 id: 'Action',
+			label: '',
 			 icon: 'fa-solid fa-bolt-lightning'
 		 },
 		{
-			label: '#EditorTemplateContactName#',
+			id: '#EditorTemplateContactName#',
+			label: '',
 			templateType: 'contact',
 			icon: 'contact'
 		},*/
 		{
-			label: '#EditorTemplateDateTimeName#',
+			id: '#EditorTemplateDateTimeName#',
+			label: '',
 			templateType: 'datetime',
 			icon: 'datetime',
 		},
@@ -972,8 +979,8 @@
 			separator: true
 		},
 		{
-			id: 'MoreLink',
-			label: '#EditorTemplateTeaserText#',
+			id: '#EditorTemplateTeaserText#',
+			moreLink: true,
 			url: 'https://www.monkeypaste.com/docs/templates/#coming-soon',
 			iconClasses: 'svg-no-defaults',
 			icon: 'megaphone'

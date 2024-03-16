@@ -17,6 +17,7 @@
                 init_test();
             });
         }
+
         window.__dispatchMessageCallback = function (message) {
             let result = eval(message);
             result = isNullOrUndefined(result) ? ' ' : result;

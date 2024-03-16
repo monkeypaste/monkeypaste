@@ -12,6 +12,7 @@ function initClipboard() {
 function initAllMatchers() {
     initLineBreakMatcher();
     initWhitespaceMatcher();
+    initPreSwapMatcher();
 
     if (isPlainHtmlConverter()) {
         initFontColorMatcher();
@@ -34,6 +35,23 @@ function initTemplateMatcher() {
     let Delta = Quill.imports.delta;
 
     globals.quill.clipboard.addMatcher('span', function (node, delta) {
+        if (node.hasAttribute('templateguid')) {
+            delta.ops[0].attributes = delta.ops[0].insert.template;
+            //delete delta.ops[0].insert.template;
+            //delta.ops[0].insert = '';
+        }
+        return delta;
+    });
+}
+function initPreSwapMatcher() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+
+    globals.quill.clipboard.addMatcher('pre', function (node, delta) {
+
         if (node.hasAttribute('templateguid')) {
             delta.ops[0].attributes = delta.ops[0].insert.template;
             //delete delta.ops[0].insert.template;

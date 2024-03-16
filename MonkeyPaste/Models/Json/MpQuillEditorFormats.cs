@@ -142,6 +142,11 @@ namespace MonkeyPaste {
 
         public string dataTransferCompletedRespFragment { get; set; }
     }
+
+    public class MpQuillContentImageLoadedNotification {
+        public double width { get; set; }
+        public double height { get; set; }
+    }
     public class MpQuillUserDeletedTemplateNotification {
         public string userDeletedTemplateGuid { get; set; }
     }

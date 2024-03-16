@@ -49,6 +49,7 @@
         notifyScrollBarVisibilityChanged,
         notifyPasteInfoFormatsClicked,
         notifyAppendStateChangeComplete,
-        notifyPointerEvent
+        notifyPointerEvent,
+        notifyContentImageLoaded
     }
 }

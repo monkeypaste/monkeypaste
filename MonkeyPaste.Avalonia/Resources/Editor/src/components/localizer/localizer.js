@@ -91,18 +91,24 @@ function localizeElement(elm, args) {
     }
 }
 
+function localizeTemplates() {
+    for (var i = 0; i < globals.TemplateTypesMenuOptions.length; i++) {
+        if (globals.TemplateTypesMenuOptions[i].separator) {
+            // separator
+            continue;
+        }
+        if (isNullOrEmpty(globals.TemplateTypesMenuOptions[i].id)) {
+            continue;
+        }
+        let content_key = globals.TemplateTypesMenuOptions[i].id.replaceAll('#', '');
+        globals.TemplateTypesMenuOptions[i].label = UiStrings[content_key];
+    }
+}
 function localizeGlobals() {
     // labels are '#<ResourceKeyName>#'
 
     // TEMPLATE NAME 
-    for (var i = 0; i < globals.TemplateTypesMenuOptions.length; i++) {
-        if (globals.TemplateTypesMenuOptions[i].label === undefined) {
-            // separator
-            continue;
-        }
-        let content_key = globals.TemplateTypesMenuOptions[i].label.replaceAll('#', '');
-        globals.TemplateTypesMenuOptions[i].label = UiStrings[content_key];
-    }
+    localizeTemplates();
 
     // TEMPLATE CUSTOM DATETIME
     let custom_label_key = globals.CUSTOM_TEMPLATE_LABEL_VAL.replaceAll('#', '');

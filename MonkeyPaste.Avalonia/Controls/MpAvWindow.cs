@@ -130,6 +130,10 @@ namespace MonkeyPaste.Avalonia {
                 _openingWindows.Remove(this);
             });
         }
+        protected override void OnClosed(EventArgs e) {
+            _openingWindows.Remove(this);
+            base.OnClosed(e);
+        }
 
         public new void Show(Window owner = null) {
             //if (silentLock) {

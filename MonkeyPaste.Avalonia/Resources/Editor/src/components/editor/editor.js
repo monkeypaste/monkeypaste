@@ -420,9 +420,14 @@ function onEditorFocus(e) {
 		return;
 	}
 	log('editor got focus');
-	hideAllPopups();
 	getEditorContainerElement().classList.add('editor-focused');
 	drawOverlay();
+	delay(500)
+		.then(x => {
+			// wait a bit for any popup click handlers to process
+			// (on webview2 they are intermittently missed)
+			hideAllPopups();
+		});
 }
 
 function onEditorBlur(e) {

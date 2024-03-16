@@ -1,7 +1,7 @@
 
 // #region Life Cycle
 
-async function loadContentAsync(
+function loadContentAsync(
 	isContentReadOnly,
 	isContentSubSelectionEnabled,
 	contentHandle,
@@ -64,7 +64,7 @@ async function loadContentAsync(
 
 		deactivateFindReplace(false);
 
-		await loadContentDataAsync(contentData);
+		loadContentDataAsync(contentData);
 
 		updateQuill();
 		if (!is_reload) {
@@ -146,6 +146,7 @@ async function loadContentAsync(
 	setEditorPlaceholderText('');
 	// signal content loaded (atm used by scrollToAppendIdx)
 	getEditorContainerElement().dispatchEvent(globals.ContentLoadedEvent);
+	//return '[DONE]';
 }
 
 function initContentClassStyle() {
@@ -401,12 +402,12 @@ function appendContentData(data) {
 	}
 }
 
-async function loadContentDataAsync(contentData) {
+function loadContentDataAsync(contentData) {
 	// enusre globals.IsLoaded is false so msg'ing doesn't get clogged up
 	setEditorIsLoaded(false);
 
 	if (globals.ContentItemType == 'Image') {
-		await loadImageContentAsync(contentData);
+		loadImageContentAsync(contentData);
 	} else if (globals.ContentItemType == 'FileList') {
 		loadFileListContent(contentData);
 	} else if (globals.ContentItemType == 'Text') {

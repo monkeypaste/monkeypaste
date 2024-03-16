@@ -71,7 +71,7 @@
   <!-- WINDOWS -->
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
     <!-- When changing this need to rebuild plugins -->
-    <UseWap>false</UseWap>
+    <UseWap>true</UseWap>
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
     <Tfm>10.0.22621.0</Tfm>
     <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;</DefineConstants>
