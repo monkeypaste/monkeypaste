@@ -20,8 +20,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using AvToolTip = Avalonia.Controls.ToolTip;
+
+#if WINDOWS
 using static System.Net.Mime.MediaTypeNames;
-using System.Windows.Media.Media3D;
+using System.Windows.Media.Media3D; 
+#endif
 
 
 
@@ -40,7 +43,7 @@ using Xilium.CefGlue.Common.InternalHandlers;
 #if SUGAR_WV
 using TheArtOfDev.HtmlRenderer.Avalonia;
 #if MAC
-using MonoMac.Foundation; 
+using MonoMac.Foundation;
 #endif
 
 #endif
@@ -54,7 +57,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvIDomStateAwareWebView,
         MpAvIAsyncJsEvalWebView,
         MpAvIReloadableContentWebView {
-
 
         #region Private Variables
         private object _sendMessageLock = new object();

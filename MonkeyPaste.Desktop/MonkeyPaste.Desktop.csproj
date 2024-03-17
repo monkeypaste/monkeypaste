@@ -100,6 +100,6 @@
   </ItemGroup>
   
   <ItemGroup Condition="$(UseSugarWv) == 'True'">
-    <PackageReference Include="WebView.Avalonia.Desktop" Version="11.0.0" />
+    <PackageReference Include="WebView.Avalonia.Desktop" Version="11.0.0.3" />
   </ItemGroup>
 </Project>

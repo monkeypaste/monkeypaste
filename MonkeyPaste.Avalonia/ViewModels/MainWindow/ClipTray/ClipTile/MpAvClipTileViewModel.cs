@@ -13,6 +13,7 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -400,6 +401,9 @@ namespace MonkeyPaste.Avalonia {
                                 detailText = string.Format(UiStrings.ClipTileDetailDimText, CopyItemSize1, CopyItemSize2);
                                 break;
                             case MpCopyItemType.FileList:
+                                if (CopyItemSize1 == 0 && CopyItemSize2 == 0 && FileItemCollectionViewModel != null) {
+                                    FileItemCollectionViewModel.SetDetailInfo();
+                                }
                                 detailText = string.Format(UiStrings.ClipTileDetailDimFiles, CopyItemSize1, CopyItemSize2);
                                 break;
                         }
@@ -1060,12 +1064,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 switch (CopyItemType) {
                     case MpCopyItemType.FileList:
-                        var fl_frag = new MpQuillFileListDataFragment() {
-                            fileItems = FileItemCollectionViewModel.Items.Select(x => new MpQuillFileListItemDataFragmentMessage() {
-                                filePath = x.Path,
-                                fileIconBase64 = x.IconBase64
-                            }).ToList()
-                        };
+                        var fl_frag = CopyItem.ToFileListDataFragmentMessage();
                         var itemData = fl_frag.SerializeObjectToBase64();
                         return itemData;
                     default:

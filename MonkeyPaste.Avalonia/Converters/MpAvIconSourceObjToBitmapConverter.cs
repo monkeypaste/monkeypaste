@@ -41,9 +41,10 @@ namespace MonkeyPaste.Avalonia {
                 return _fallback;
             }
 
-            if (valStr.IsFileOrDirectory()) {
-                bool isFilePathIcon = paramParts.Any(x => x.ToLowerInvariant() == "pathimg");
-                if (valStr.IsSupportedImageFileType() && !isFilePathIcon) {
+            bool is_file_or_dir = valStr.IsFileOrDirectory();
+            bool wants_path_icon = paramParts.Any(x => x.ToLowerInvariant() == "pathimg");
+            if (is_file_or_dir || wants_path_icon) {
+                if (valStr.IsSupportedImageFileType() && !wants_path_icon) {
                     try {
                         using (var fs = new FileStream(valStr, FileMode.Open)) {
                             return new Bitmap(fs);
@@ -54,7 +55,14 @@ namespace MonkeyPaste.Avalonia {
                         return null;
                     }
                 }
-                string appIconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(valStr);
+                string appIconBase64 = is_file_or_dir ?
+                    Mp.Services.IconBuilder.GetPathIconBase64(valStr, wants_path_icon ? MpIconSize.SmallIcon16 : MpIconSize.MediumIcon32) :
+                    MpAvPrefViewModel.Instance.ThemeType == MpThemeType.Dark ?
+                        MpBase64Images.MissingFile_white :
+                        MpBase64Images.MissingFile;
+                if (targetType == typeof(string)) {
+                    return appIconBase64;
+                }
                 return new MpAvStringBase64ToBitmapConverter().Convert(appIconBase64, null, null, CultureInfo.CurrentCulture);
             }
             //types: resource key, hex color, base64, file system path, shape name

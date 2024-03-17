@@ -336,17 +336,50 @@ namespace MonkeyPaste.Common {
                 directory.CopyContents(targetDir.CreateSubdirectory(directory.Name), recursive, overwrite);
             }
         }
-        public static double GetFileSizeInBytes(string filePath) {
+
+        public static double GetPathsSizeInMegaBytes(IEnumerable<string> paths) {
+            double total_bytes = paths.Select(x => GetPathSizeInBytes(x)).Sum();
+            double total_mega_bytes = Math.Round(total_bytes / Math.Pow(1024.0, 2), 2);
+            return total_mega_bytes;
+        }
+        private static double GetPathSizeInBytes(string path) {
+            if (path == null) {
+                return 0;
+            }
+            bool is_file = path.IsFile();
+            bool is_dir = path.IsDirectory();
+            if (!is_file && !is_dir) {
+                return 0;
+            }
+            double bytes = is_file ?
+                    GetFileSizeInBytes(path) : GetDirectorySizeInBytes(path);
+            return 0;
+        }
+        private static double GetFileSizeInBytes(string filePath) {
             try {
-                if (File.Exists(filePath)) {
-                    FileInfo fi = new FileInfo(filePath);
-                    return fi.Length;
-                }
+                FileInfo fi = new FileInfo(filePath);
+                return fi.Length;
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error checking size of path {filePath}", ex);
             }
-            return -1;
+            return 0;
+        }
+        private static double GetDirectorySizeInBytes(string path) {
+            // from https://stackoverflow.com/a/51942249/105028
+            try {
+                double total_bytes = Directory.GetFiles(path, "*", SearchOption.AllDirectories)
+                    .Select(d => new FileInfo(d))
+                    .Select(d => new { Directory = d.DirectoryName, FileSize = d.Length })
+                    .ToLookup(d => d.Directory)
+                    .Select(d => d.Select(x => x.FileSize).Sum())
+                    .Sum();
+                return total_bytes;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error calculating dir size.", ex);
+                return 0;
+            }
         }
 
         public static string CopyFileOrDirectory(string sourcePath, string targetPath, bool recursive = true, bool forceOverwrite = false) {

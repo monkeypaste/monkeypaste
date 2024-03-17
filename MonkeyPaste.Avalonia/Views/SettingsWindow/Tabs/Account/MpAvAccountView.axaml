@@ -51,7 +51,7 @@
                                     x:CompileBindings="False"
                                     IsVisible="{Binding !IsUserViewEnabled, Source={x:Static local:MpAvAccountViewModel.Instance}}"
                                     HorizontalAlignment="Center"
-                                    VerticalAlignment="Top">
+                                    VerticalAlignment="Center">
             <local:MpAvSubscriptionView.Width>
                 <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
                               ConverterParameter="*">

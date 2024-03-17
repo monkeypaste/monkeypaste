@@ -223,12 +223,13 @@
                     Value="Red" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Grid>
+    <Grid HorizontalAlignment="Center"
+          VerticalAlignment="Center">
         <!--  SUBSCRIPTION CONTAINER  -->
 
         <Grid RowDefinitions="Auto,*,Auto"
-              HorizontalAlignment="Stretch"
-              VerticalAlignment="Top"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
               Margin="10">
             <Grid.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">

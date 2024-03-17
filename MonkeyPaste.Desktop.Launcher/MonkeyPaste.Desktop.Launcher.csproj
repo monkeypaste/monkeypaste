@@ -9,6 +9,7 @@
     <Nullable>disable</Nullable>
     <PlatformTarget>x64</PlatformTarget>
     <Platforms>AnyCpu;x64</Platforms>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
 </Project>

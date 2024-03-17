@@ -3505,6 +3505,11 @@ namespace MonkeyPaste.Avalonia {
                  if (pinType == MpPinType.Window || pinType == MpPinType.Append) {
                      // pin to popout
 
+#if MAC
+                     // re-parenting web view crashes on mac
+                     cached_view = null;
+#endif
+
                      ctvm_to_pin.OpenPopOutWindow(
                          pinType == MpPinType.Window ?
                             MpAppendModeType.None :
@@ -5251,7 +5256,7 @@ namespace MonkeyPaste.Avalonia {
             bool isNew = !aci.WasDupOnCreate;
             string append_data = aci.ItemData;
             if (AppendClipTileViewModel.CopyItemType == MpCopyItemType.FileList) {
-                append_data = await MpAvFileItemCollectionViewModel.CreateFileListEditorFragment(aci);
+                append_data = aci.ToFileListDataFragmentMessage().SerializeObjectToBase64();
             }
 
             if (AppendClipTileViewModel.CopyItemId != aci.Id) {

@@ -70,7 +70,7 @@ function initDefaults(defaultsObj) {
 		setElementComputedStyleProp(document.body, '--editableopacity', parseFloat(defaultsObj.bgOpacity));
 	}
 
-	const bg_opacity =  isRunningOnHost() ? 0:0;// parseFloat(getElementComputedStyleProp(document.body, '--editableopacity'));
+	const bg_opacity =  isRunningOnHost() ? 0:30;// parseFloat(getElementComputedStyleProp(document.body, '--editableopacity'));
 	if(!isNullOrUndefined(defaultsObj.currentTheme)) {
 		globals.EditorTheme = defaultsObj.currentTheme;
 

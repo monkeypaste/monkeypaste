@@ -72,7 +72,7 @@ function loadContentAsync_ext(loadContentMsgStr_base64) {
 
 function contentChanged_ext(contentChangedMsgStr_base64) {
 	// input 'MpQuillIsHostFocusedChangedMessage'
-	log('content changed from host: ' + contentChangedMsgStr_base64);
+	//log('content changed from host: ' + contentChangedMsgStr_base64);
 	let msg = toJsonObjFromBase64Str(contentChangedMsgStr_base64);
 
 	// only update if changed
@@ -82,14 +82,14 @@ function contentChanged_ext(contentChangedMsgStr_base64) {
 		log('rejecting content changed, no change for me. appender: ' + isAnyAppendEnabled() + ' appendee: ' + isAnyAppendEnabled());
 		return;
 	}
-	log('');
-	log('content change accepted. appender: ' + isAnyAppendEnabled() + ' appendee: ' + isAnyAppendEnabled());
-	log('mine:')
-	log(cur_data);
-	log('');
-	log('incoming: ');
-	log(msg.itemData);
-	log('');
+	//log('');
+	//log('content change accepted. appender: ' + isAnyAppendEnabled() + ' appendee: ' + isAnyAppendEnabled());
+	//log('mine:')
+	//log(cur_data);
+	//log('');
+	//log('incoming: ');
+	//log(msg.itemData);
+	//log('');
 	loadContentDataAsync(msg.itemData);
 }
 

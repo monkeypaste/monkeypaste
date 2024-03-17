@@ -10,94 +10,163 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvFileListContentView">
-    <ListBox Background="Transparent"
-             DragDrop.AllowDrop="{Binding CanDrop}"
-             BorderThickness="0"
-             DataContext="{Binding FileItemCollectionViewModel}"
-             ItemsSource="{Binding Items}"
-             HorizontalAlignment="Stretch"
-             VerticalAlignment="Stretch">
-        <ListBox.Styles>
-            <Style Selector="ListBoxItem">
-                <Setter Property="MaxHeight"
-                        Value="50" />
-                <Setter Property="HorizontalAlignment"
-                        Value="Stretch" />
-                <Setter Property="VerticalContentAlignment"
-                        Value="Stretch" />
-                <Setter Property="BorderThickness"
-                        Value="1" />
-                <Setter Property="BorderBrush"
-                        Value="{DynamicResource ThemeGrayAccent3Brush}" />
-            </Style>
-            <Style Selector="ListBoxItem:nth-child(even) /template/ ContentPresenter">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent1Brush}" Opacity="{DynamicResource GlobalBgOpacity}" />
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style Selector="ListBoxItem:nth-child(odd) /template/ ContentPresenter">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent2Brush}" Opacity="{DynamicResource GlobalBgOpacity}" />
-                    </Setter.Value>
-                </Setter>
-            </Style>
+    <local:MpAvUserControl.Styles>
+        <!--  LB STYLE  -->
+        <Style Selector="ListBox#FileItemListBox">
+            <Setter Property="IsHitTestVisible"
+                    Value="False" />
+            <Setter Property="DragDrop.AllowDrop"
+                    Value="False" />
+        </Style>
+        <Style Selector="Border#FileListContainerBorder.selected ListBox#FileItemListBox">
+            <Setter Property="IsHitTestVisible"
+                    Value="True" />
+        </Style>
+        <Style Selector="Border#FileListContainerBorder.can-drop ListBox#FileItemListBox">
+            <Setter Property="DragDrop.AllowDrop"
+                    Value="True" />
+        </Style>
+        <!--  LBI STYLE  -->
+        <Style Selector="ListBoxItem">
+            <Setter Property="MaxHeight"
+                    Value="50" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Stretch" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeGrayAccent3Brush}" />
+        </Style>
 
-            <Style Selector="ListBoxItem:nth-child(even):pointerover /template/ ContentPresenter, ListBoxItem:nth-child(odd):pointerover /template/ ContentPresenter,ListBoxItem:focus-within /template/ ContentPresenter">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3Brush}" Opacity="{DynamicResource GlobalBgOpacity}" />
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="BorderBrush"
-                        Value="{DynamicResource ThemeAccent1Brush}" />
-            </Style>
-            <Style Selector="TextBlock#PathTextBlock">
-                <Setter Property="Foreground"
-                        Value="{DynamicResource ThemeInteractiveBrush}" />
-            </Style>
-            <Style Selector="TextBlock#PathTextBlock:pointerover">
-                <Setter Property="Foreground"
-                        Value="{DynamicResource ThemeAccent1Brush}" />
-                <Setter Property="TextDecorations"
-                        Value="Underline" />
-                <Setter Property="FontWeight"
-                        Value="SemiBold" />
-                <Setter Property="Cursor"
-                        Value="Hand" />
 
-            </Style>
-        </ListBox.Styles>
-        <ListBox.ItemTemplate>
-            <DataTemplate>
-                <DockPanel>
-                    <Image DockPanel.Dock="Left"
-                           Width="35"
-                           Height="35"
-                           Stretch="Uniform"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Center"
-                           Source="{Binding Path, Converter={x:Static local:MpAvStringFileOrFolderPathToBitmapConverter.Instance}}" />
-                    <TextBlock x:Name="PathTextBlock"
-                               IsHitTestVisible="{Binding $parent[ListBoxItem].IsSelected}"
-                               HorizontalAlignment="Stretch"
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeGrayAccent3Brush}" />
+            <!--<Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent1Brush}" />-->
+        </Style>
+        <Style Selector="ListBoxItem /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="{StaticResource HitTestableTransparent}" />
+        </Style>
+        <!--  LBI ALT BG STYLE  -->
+        <Style Selector="ListBoxItem:nth-child(even) /template/ ContentPresenter">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="{DynamicResource ThemeGrayAccent1Brush}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ListBoxItem:nth-child(odd) /template/ ContentPresenter">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="{DynamicResource ThemeGrayAccent2Brush}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="ListBoxItem:nth-child(even):pointerover /template/ ContentPresenter, ListBoxItem:nth-child(odd):pointerover /template/ ContentPresenter,ListBoxItem:focus-within /template/ ContentPresenter">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3Brush}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent1Brush}" />
+        </Style>
+
+        <!--  REMOVE BUTTON  -->
+        <Style Selector="Button#RemoveButton">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Width"
+                                      Duration="0:0:1.0" />
+                </Transitions>
+            </Setter>
+            <Setter Property="Width"
+                    Value="0" />
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeAccent2Color}" />
+        </Style>
+
+        <Style Selector="Border#FileListContainerBorder.selected ListBox#FileItemListBox.has-multiple Button#RemoveButton">
+            <Setter Property="Width"
+                    Value="{Binding $self.Bounds.Height}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Border x:Name="FileListContainerBorder"
+            Classes.can-drop="{Binding CanDrop}"
+            Classes.selected="{Binding IsSelected}">
+        <!--  FILES LISTBOX  -->
+        <ListBox x:Name="FileItemListBox"
+                 Margin="5"
+                 Classes.has-multiple="{Binding HasMultiple}"
+                 Background="Transparent"
+                 SelectionMode="Multiple,Toggle"
+                 Selection="{Binding Selection}"
+                 BorderThickness="0"
+                 DataContext="{Binding FileItemCollectionViewModel}"
+                 ItemsSource="{Binding Items}"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch">
+            <ListBox.Resources>
+                <Thickness x:Key="ListBoxItemPadding">0,0,0,0</Thickness>
+
+            </ListBox.Resources>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel LastChildFill="False">
+                        <Image DockPanel.Dock="Left"
+                               Width="25"
+                               Height="25"
+                               Stretch="Uniform"
+                               HorizontalAlignment="Left"
                                VerticalAlignment="Center"
-                               TextAlignment="Right"
-                               TextWrapping="Wrap"
-                               FontSize="16"
-                               Foreground="{DynamicResource ThemeInteractiveColor}"
-                               local:MpAvPointerCommandExtension.IsEnabled="True"
-                               local:MpAvPointerCommandExtension.LeftReleaseCommand="{Binding NavigateToFileItemCommand}"
-                               Text="{Binding PathLabel}">
-                        <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.LinkNavigateToolTipText}" />
-                        </ToolTip.Tip>
-                    </TextBlock>
-
-                </DockPanel>
-            </DataTemplate>
-        </ListBox.ItemTemplate>
-    </ListBox>
+                               Source="{Binding Path, Converter={x:Static local:MpAvStringFileOrFolderPathToBitmapConverter.Instance}}" />
+                        <StackPanel DockPanel.Dock="Right"
+                                    Orientation="Horizontal"
+                                    Spacing="10">
+                            <Button x:Name="PathNavButton"
+                                    Classes="link"
+                                    Command="{Binding NavigateToUriCtrlEnforcedCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                    CommandParameter="{Binding Path}">
+                                <TextBlock HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Center"
+                                           TextAlignment="Right"
+                                           TextWrapping="Wrap"
+                                           FontSize="16"
+                                           Text="{Binding Path, Converter={x:Static local:MpAvAbsoluteToRelativePathStringConverter.Instance}}">
+                                    <ToolTip.Tip>
+                                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.LinkNavigateToolTipText}" />
+                                    </ToolTip.Tip>
+                                </TextBlock>
+                            </Button>
+                            <Button x:Name="RemoveButton"
+                                    VerticalAlignment="Stretch"
+                                    Classes="defaultButton iconOnlyButton"
+                                    Command="{Binding RemoveThisFileItemCommand}">
+                                <Button.Resources>
+                                    <!--<Thickness x:Key="ButtonBorderThemeThickness">0,0,0,0</Thickness>-->
+                                    <CornerRadius x:Key="ControlCornerRadius">0,0,0,0</CornerRadius>
+                                    <SolidColorBrush x:Key="ButtonBackground">Red</SolidColorBrush>
+                                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Salmon</SolidColorBrush>
+                                    <SolidColorBrush x:Key="ButtonBackgroundPressed">Crimson</SolidColorBrush>
+                                </Button.Resources>
+                                <ToolTip.Tip>
+                                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonRemoveLabel}" />
+                                </ToolTip.Tip>
+                                <Image Width="20"
+                                       Height="20"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Source="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeWhiteColor}" />
+                            </Button>
+                        </StackPanel>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Border>
 </local:MpAvUserControl>

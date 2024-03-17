@@ -199,7 +199,7 @@ namespace MonkeyPaste {
         }
     }
     public class MpQuillFileListDataFragment {
-        public List<MpQuillFileListItemDataFragmentMessage> fileItems { get; set; }
+        public List<MpQuillFileListItemDataFragmentMessage> fileItems { get; set; } = [];
     }
     public class MpQuillFileListItemDataFragmentMessage {
         public string filePath { get; set; }

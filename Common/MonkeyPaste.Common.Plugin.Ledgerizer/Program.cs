@@ -1616,7 +1616,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             string config = is_release ? "Release" : "Debug";
             string args = CorePlugins.Contains(plugin_name) ?
                 $"msbuild /p:OutDir={publish_dir} -target:Publish /property:Configuration={config} /property:DefineConstants=AUX%3B{BUILD_OS} -restore" :
-                $"publish --configuration {config} --outputcor {publish_dir}";
+                $"publish --configuration {config} --output {publish_dir}";
 
             (int exit_code, string proc_output) =
                 RunProcess(
@@ -1670,7 +1670,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             }
             // cleanup published output
             MpFileIo.DeleteDirectory(publish_dir);
-            MpConsole.WriteLine($"{plugin_name} local [{BUILD_OS}({BUILD_CONFIG})-{config.ToUpper()}] DONE" + install_update_suffix);
+            MpConsole.WriteLine($"{plugin_name} local [{BUILD_OS}-{config.ToUpper()}] DONE" + install_update_suffix);
 
             // return zip uri to use for local packageUrl
             return output_path.ToFileSystemUriFromPath();

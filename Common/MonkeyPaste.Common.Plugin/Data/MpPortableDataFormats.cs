@@ -78,13 +78,13 @@ namespace MonkeyPaste.Common.Plugin {
         #region Constants
 
         // Windows Formats
-        public const string WinText = "Text";
+        public const string AvText = "Text";
         public const string WinXaml = "Xaml";
         public const string WinXamlPackage = "XamlPackage";
         public const string WinUnicode = "Unicode";
         public const string WinOEMText = "OEMText";
-        public const string WinFiles = "Files";
-        public const string WinImage = "PNG";
+        public const string AvFiles = "Files";
+        public const string AvImage = "PNG";
 
 
         public const string WinCsv = "CSV";
@@ -140,9 +140,9 @@ namespace MonkeyPaste.Common.Plugin {
 
         public const string Text =
 #if MAC
-            MacText1;
+            AvText;//MacText1;
 #else
-            WinText;
+            AvText;//WinText;
 #endif
 
         public const string Text2 =
@@ -166,7 +166,7 @@ namespace MonkeyPaste.Common.Plugin {
 #endif
         public const string Image =
 #if WINDOWS
-            WinImage;
+            AvImage;//WinImage;
 #elif MAC
             MacImage1;
 #endif
@@ -180,9 +180,9 @@ namespace MonkeyPaste.Common.Plugin {
 
         public const string Files =
 #if WINDOWS
-            WinFiles;
+            AvFiles;//WinFiles;
 #elif MAC
-            WinFiles;//MacFiles1;
+            AvFiles;//MacFiles1;
 #endif
         public const string Csv =
 #if WINDOWS

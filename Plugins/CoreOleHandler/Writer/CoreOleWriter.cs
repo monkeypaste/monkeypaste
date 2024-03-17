@@ -236,7 +236,7 @@ namespace CoreOleHandler {
             empty_formats.ForEach(x => ido.Remove(x));
 
             if (isDnd) {
-#if MAC
+#if MAC && False
                 await ido.WriteToPasteboardAsync(true);
 #endif
                 return;

@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncObject,
         MpIAsyncCollectionObject {
         #region Private Variables
-        private MpAvHiddenWindow _convWindow;
+        private MpAvWindow _convWindow;
 
         #endregion
 
@@ -272,7 +272,7 @@ namespace MonkeyPaste.Avalonia {
 
 
             if (Mp.Services.PlatformInfo.IsDesktop) {
-                _convWindow = new MpAvHiddenWindow() {
+                _convWindow = new MpAvWindow() {
                     Width = 10,
                     Height = 10
                 };
@@ -292,8 +292,8 @@ namespace MonkeyPaste.Avalonia {
                         MpConsole.WriteLine("[loader] waiting for html converter init...");
                         await Task.Delay(100);
                     }
-                    _convWindow.Hide();
-                    _convWindow.WindowState = WindowState.Minimized;
+                    //_convWindow.Hide();
+                    //_convWindow.WindowState = WindowState.Minimized;
                     sw.Stop();
                     MpConsole.WriteLine($"Html converter initialized. ({_convWindow.Bounds.Width}x{_convWindow.Bounds.Height}) Load time: {sw.ElapsedMilliseconds}ms");
                     IsLoaded = true;

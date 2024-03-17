@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<bool> RefreshAddOnInfoAsync() {
             await Task.Delay(1);
-            return false;
+            return true;
             //var connected = await CrossInAppBilling.Current.ConnectAsync();
             //if (!connected)
             //    return;
@@ -62,7 +62,11 @@ namespace MonkeyPaste.Avalonia {
             //return false;
 
             await Task.Delay(1);
+#if DEBUG
+            return true;
+#else
             return false;
+#endif
         }
     }
 }

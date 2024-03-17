@@ -3,6 +3,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -113,6 +114,21 @@ namespace MonkeyPaste.Avalonia {
             return new[] { MpFileIo.GetUniqueFileOrDirectoryPath(dir, $"{ci.Title}{(isFragment ? "-Part" : string.Empty)}.{ext}") };
         }
 
+        public static MpQuillFileListDataFragment ToFileListDataFragmentMessage(this MpCopyItem ci) {
+            MpDebug.Assert(ci.ItemType == MpCopyItemType.FileList, $"FileListDataFragment error. Item type should be '{MpCopyItemType.FileList}' but was '{ci.ItemType}'");
+            if (ci.ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter) is not string[] fpl) {
+                return new MpQuillFileListDataFragment();
+            }
+            var msg = new MpQuillFileListDataFragment() {
+                fileItems = fpl.Select(x => new MpQuillFileListItemDataFragmentMessage() {
+                    filePath = x,
+                    fileIconBase64 =
+                        MpAvStringFileOrFolderPathToBitmapConverter.Instance
+                        .Convert(x, typeof(string), null, CultureInfo.CurrentCulture) as string
+                }).ToList()
+            };
+            return msg;
+        }
         public static MpQuillDelta ToDelta(this MpCopyItem ci) {
             // DO NOT DELETE! part of omitted transaction change-tracking 
             MpQuillDelta deltaObj = new MpQuillDelta() {

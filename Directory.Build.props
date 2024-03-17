@@ -23,12 +23,12 @@
   <!-- MANUALLY SET PROPERTIES-->
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>MAC</BuildOs>
     <CultureExt>en-US</CultureExt>
     <IncludeCultures>True</IncludeCultures>
     <PushPlugins>false</PushPlugins>
     <!-- NOTE when changing av version need to reset coreole, probably everything-->
-    <AvaloniaVersion>11.0.7</AvaloniaVersion>
+    <AvaloniaVersion>11.0.10</AvaloniaVersion>
     <DefaultLangVersion>Latest</DefaultLangVersion>
     <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
   </PropertyGroup>
@@ -88,12 +88,12 @@
     <BuildScriptsDir>$(BuildScriptsRootDir)\windows</BuildScriptsDir>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(UseWap) == 'True'">
+  <PropertyGroup Condition="$(UseWap) == 'True' And $(BuildOs) == 'WINDOWS'">
     <MainTargetFramework>$(DefaultTargetFramework)-windows$(Tfm)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);WAP;</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup Condition="$(UseWap) == 'False'">
+  <PropertyGroup Condition="$(UseWap) == 'False' And $(BuildOs) == 'WINDOWS'">
     <DefaultTargetFramework>net6.0</DefaultTargetFramework>
     <CommonTargetFramework>net6.0</CommonTargetFramework>
     <MainTargetFramework>$(DefaultTargetFramework)-windows</MainTargetFramework>
