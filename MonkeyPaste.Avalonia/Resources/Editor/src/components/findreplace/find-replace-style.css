@@ -25,6 +25,7 @@
     }
 
         #findReplaceContainer form label {
+            -webkit-user-select: none;
             user-select: none;
         }
         #findReplaceContainer input {

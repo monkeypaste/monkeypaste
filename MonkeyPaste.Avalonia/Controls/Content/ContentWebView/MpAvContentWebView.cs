@@ -10,6 +10,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using Avalonia.Diagnostics;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -453,6 +454,9 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Assert(this is MpAvPlainHtmlConverterWebView, "Shouldn't happen, editor never loads. Maybe need to block until data context set?");
                 return;
             }
+            if (BindingContext != null && BindingContext.CopyItemTitle == "Text12" && BindingContext.IsWindowOpen) {
+
+            }
             object ntf = null;
             switch (notificationType) {
 
@@ -891,7 +895,11 @@ namespace MonkeyPaste.Avalonia {
                 #endregion
 
                 #region OTHER
-
+                case MpEditorBindingFunctionType.notifyDevToolsRequested:
+                    if (TopLevel.GetTopLevel(this) is MpAvWindow tl) {
+                        tl.ShowDevTools();
+                    }
+                    break;
                 #endregion
 
                 #region GET CALLBACKS
@@ -1085,6 +1093,11 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Events
+        public event EventHandler EditorInitialized;
+        public event EventHandler ContentLoaded;
+        #endregion
+
         #region Constructors
 
         public MpAvContentWebView() : base() {
@@ -1274,6 +1287,21 @@ namespace MonkeyPaste.Avalonia {
             base.OnDataContextEndUpdate();
             _locatedDateTime = DateTime.Now;
         }
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs e) {
+
+            base.OnPropertyChanged(e);
+
+            if (e.Property == IsEditorInitializedProperty &&
+                IsEditorInitialized) {
+                EditorInitialized?.Invoke(this, EventArgs.Empty);
+                return;
+            }
+            if (e.Property == IsEditorLoadedProperty &&
+                IsEditorLoaded) {
+                ContentLoaded?.Invoke(this, EventArgs.Empty);
+                return;
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -1367,7 +1395,6 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-
         #region Dom Init
 
         #region IsEditorInitialized Property
@@ -1404,7 +1431,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         public async Task LoadEditorAsync() {
             Dispatcher.UIThread.VerifyAccess();
-#if CEFNET_WV
+#if CEFNET_WV || SUGAR_WV
             var sw = Stopwatch.StartNew();
             while (!IsDomLoaded) {
                 // wait for Navigate(EditorPath)
@@ -1423,9 +1450,6 @@ namespace MonkeyPaste.Avalonia {
 #else
             await Task.Delay(1);
 #endif
-            if (this is not MpAvPlainHtmlConverterWebView) {
-
-            }
             var req = GetInitMessage();
             SendMessage($"initMain_ext('{req.SerializeObjectToBase64()}')");
         }
@@ -1538,9 +1562,6 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task LoadContentAsync(bool isSearchEnabled = true) {
             Dispatcher.UIThread.VerifyAccess();
-            if (this is MpAvPlainHtmlConverterWebView) {
-
-            }
             IsEditorLoaded = false;
 
 #if CEFNET_WV
@@ -1558,6 +1579,10 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 #endif
+            if (TopLevel.GetTopLevel(this) is MpAvWindow w &&
+                w.Classes.Contains("content-window")) {
+
+            }
             if (BindingContext == null) {
                 // unloaded
                 return;
@@ -1567,7 +1592,15 @@ namespace MonkeyPaste.Avalonia {
                 // no content
                 return;
             }
+
             var sw2 = Stopwatch.StartNew();
+            while (!IsDomLoaded) {
+                await Task.Delay(100);
+                if (sw2.Elapsed > TimeSpan.FromMilliseconds(5_000) && this is not MpAvPlainHtmlConverterWebView) {
+                    // timeout
+                    return;
+                }
+            }
             while (!IsEditorInitialized) {
                 // wait for initMain - onInitComplete_ntf
                 await Task.Delay(100);
@@ -1631,6 +1664,8 @@ namespace MonkeyPaste.Avalonia {
 
             BindingContext.HasEditableTable = contentChanged_ntf.hasEditableTable;
             BindingContext.ActualContentHeight = contentChanged_ntf.contentHeight;
+            BindingContext.CopyItemSize1 = contentChanged_ntf.itemSize1;
+            BindingContext.CopyItemSize2 = contentChanged_ntf.itemSize2;
 
             if (BindingContext.HasTemplates != contentChanged_ntf.hasTemplates) {
                 // find out if tile has templates lazy cause some are not in db
@@ -1648,8 +1683,6 @@ namespace MonkeyPaste.Avalonia {
             BindingContext.IgnoreHasModelChanged = true;
 
             BindingContext.SearchableText = contentChanged_ntf.itemPlainText;
-            BindingContext.CopyItemSize1 = contentChanged_ntf.itemSize1;
-            BindingContext.CopyItemSize2 = contentChanged_ntf.itemSize2;
 
             if (contentChanged_ntf.itemData != null) {
                 bool is_empty = contentChanged_ntf.itemData.IsNullOrWhitespaceHtmlString();
@@ -1813,10 +1846,20 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void FocusEditor() {
-            this.Focus();
-            SendMessage($"hostIsFocusedChanged_ext('{new MpQuillIsHostFocusedChangedMessage() {
-                isHostFocused = true
-            }.SerializeObjectToBase64()}')");
+            Dispatcher.UIThread.Post(async () => {
+                var sw = Stopwatch.StartNew();
+                while (!IsEditorLoaded) {
+                    await Task.Delay(100);
+                    if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                        MpConsole.WriteLine($"FocusEditor timeout reach, avoiding sending message");
+                        return;
+                    }
+                }
+                this.Focus();
+                SendMessage($"hostIsFocusedChanged_ext('{new MpQuillIsHostFocusedChangedMessage() {
+                    isHostFocused = true
+                }.SerializeObjectToBase64()}')");
+            });
         }
         #endregion
 

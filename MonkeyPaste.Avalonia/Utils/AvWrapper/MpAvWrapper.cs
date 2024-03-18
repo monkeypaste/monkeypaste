@@ -32,6 +32,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Startup Set Services 
+        public MpIPointerSimulator PointerSimulator { get; set; }
         public MpICultureInfo UserCultureInfo { get; set; }
         public MpIUiStringToEnumConverter UiStrEnumConverter { get; set; }
         public MpIDebugBreakHelper DebugBreakHelper { get; set; }
@@ -155,6 +156,7 @@ namespace MonkeyPaste.Avalonia {
             SourceRefTools = new MpAvSourceRefTools();
             TransactionBuilder = new MpAvTransactionReporter();
             DebugBreakHelper = new MpAvDebugBreakHelper();
+            PointerSimulator = new MpAvPointerSimulator();
 
             FocusMonitor = MpAvFocusManager.Instance as MpIFocusMonitor;
 

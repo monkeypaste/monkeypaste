@@ -257,6 +257,9 @@
   <data name="TextFormatLabel" xml:space="preserve">
     <value>Text</value>
   </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Image (tiff)</value>
+  </data>
   <data name="UntitledLabel" xml:space="preserve">
     <value>Untitled</value>
   </data>

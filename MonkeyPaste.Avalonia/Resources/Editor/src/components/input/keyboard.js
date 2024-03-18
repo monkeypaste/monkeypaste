@@ -164,6 +164,9 @@ function handleWindowKeyDown(e) {
 }
 
 function handleWindowKeyUp(e) {
+	if (globals.IsDebug && e.code == 'F12') {
+		onDevToolsRequested_ntf();
+	}
 	if (!isWindowFocused()) {
 		return;
 	}

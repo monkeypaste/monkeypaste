@@ -28,6 +28,24 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
+        static Dictionary<string, string> _MacFormatMap;
+        static Dictionary<string, string> MacFormatMap {
+            get {
+                if (_MacFormatMap == null) {
+                    _MacFormatMap = new() {
+                        {MpPortableDataFormats.MacRtf1, MpPortableDataFormats.WinRtf },
+                        //{MpPortableDataFormats.MacImage1, MpPortableDataFormats.AvImage },
+                        {MpPortableDataFormats.MacImage2, MpPortableDataFormats.AvImage },
+                        {MpPortableDataFormats.MacFiles1, MpPortableDataFormats.AvFiles },
+                        {MpPortableDataFormats.MacFiles2, MpPortableDataFormats.AvFiles },
+                        {MpPortableDataFormats.MacText1, MpPortableDataFormats.Text },
+                        {MpPortableDataFormats.MacHtml1, MpPortableDataFormats.MimeHtml },
+                    };
+                }
+                return _MacFormatMap;
+            }
+        }
+
         public static async Task<Dictionary<string, object>> ReadClipboardAsync(string[] formatFilter = default, int retryCount = 0) {
             if (!Dispatcher.UIThread.CheckAccess()) {
                 var output = await Dispatcher.UIThread.InvokeAsync(() => ReadClipboardAsync(formatFilter, retryCount));
@@ -61,11 +79,21 @@ namespace MonkeyPaste.Common.Avalonia {
                 return avdo;
             }
             var actualFormats = await cb.GetFormatsSafeAsync();
+            // <PlatformFormatName,CommonFormatName>
+            var mappedFormats = actualFormats.ToDictionary(x => x, x => x);
+
+#if MAC
+            for (int i = 0; i < actualFormats.Length; i++) {
+                if (MacFormatMap.TryGetValue(actualFormats[i], out string mapped_format)) {
+                    mappedFormats[actualFormats[i]] = mapped_format;
+                }
+            }
+#endif
 
             if (formatFilter == null) {
-                formatFilter = actualFormats;
+                formatFilter = mappedFormats.Keys.ToArray();
             } else {
-                formatFilter = formatFilter.Where(x => actualFormats.Contains(x)).ToArray();
+                formatFilter = mappedFormats.Where(x => formatFilter.Contains(x.Value)).Select(x => x.Key).ToArray();
             }
 
             foreach (string format in formatFilter) {
@@ -73,7 +101,11 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (data == null) {
                     continue;
                 }
-                avdo.SetData(format, data);
+                if (mappedFormats.TryGetValue(format, out string common_format_name)) {
+                    avdo.SetData(common_format_name, data);
+                } else {
+                    MpConsole.WriteLine($"Could not find commong format for: '{format}'");
+                }
             }
             return avdo;
         }

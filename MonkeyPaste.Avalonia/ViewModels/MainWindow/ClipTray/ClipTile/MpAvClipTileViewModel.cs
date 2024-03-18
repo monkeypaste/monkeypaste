@@ -1515,6 +1515,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(CopyItemId, QueryOffsetIdx);
 
                 var pow = MpAvWindowManager.LocateWindow(this, scanDescendants: false) ?? CreatePopoutWindow(cached_view);
+                var test = pow.GetVisualDescendant<MpAvContentWebView>();
                 var ws = amt == MpAppendModeType.None ? new Size(500, 500) : new Size(350, 250);
                 pow.Width = ws.Width;
                 pow.Height = ws.Height;
@@ -2115,7 +2116,10 @@ namespace MonkeyPaste.Avalonia {
             if (pow.Content is MpAvClipTileView ctv &&
                 ctv.Content is MpAvClipBorder cb) {
                 cb.CornerRadius = new CornerRadius(0);
+                // ensure dc not mismatched
+                ctv.DataContext = this;
             }
+            pow.Classes.Add("content-window");
             //pow.Classes.Add("fadeIn");
             //pow.Classes.Add("fadeOut");
 
@@ -2150,13 +2154,14 @@ namespace MonkeyPaste.Avalonia {
             #endregion
 
             pow.Activated += activate_handler;
-            pow.Opened += open_handler;
+            pow.Loaded += loaded_handler;
             pow.Closing += closing_handler;
             pow.Closed += close_handler;
 
             _contentView = null;
             return pow;
         }
+
 
         public async Task<bool> FocusContainerAsync(NavigationMethod focusType) {
             if (GetContentView() is not Control c) {
@@ -2203,27 +2208,27 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Event Wrappers
-        private void HandleThisPopoutOpen(MpAvWindow pow, EventArgs e) {
+        private void HandleThisPopoutInitialized(MpAvWindow pow, EventArgs e) {
             OnPropertyChanged(nameof(IsTitleVisible));
             if (pow.GetLogicalDescendants<MpAvContentWebView>().FirstOrDefault() is not { } wv) {
                 return;
             }
-            //if (GetContentView() is not MpIContentView cv) {
-            //    // is this ok?
-            //    return;
-            //}
-            wv.LoadContentAsync().FireAndForgetSafeAsync(this);
-            //if (cv is not MpAvContentWebView wv) {
-            //    return;
-            //}
-            Dispatcher.UIThread.Post(async () => {
-                // since selection isn't changing need manually move focus to pop out window
-                while (wv.IsEditorLoaded) {
-                    await Task.Delay(300);
-                }
-                await Task.Delay(150);
+        }
+
+        private void HandleThisPopoutLoaded(MpAvWindow pow, EventArgs e) {
+            if (pow.GetLogicalDescendants<MpAvContentWebView>().FirstOrDefault() is not { } wv) {
+                return;
+            }
+            void EditorInitialized(object sender, EventArgs e2) {
+                wv.EditorInitialized -= EditorInitialized;
+                wv.LoadContentAsync().FireAndForgetSafeAsync(this);
+            }
+            void ContentLoaded(object sender, EventArgs e2) {
+                wv.ContentLoaded -= ContentLoaded;
                 wv.FocusEditor();
-            });
+            }
+            wv.EditorInitialized += EditorInitialized;
+            wv.ContentLoaded += ContentLoaded;
         }
         private void HandleThisPopoutActivate(MpAvWindow pow, EventArgs e) {
 
@@ -2315,6 +2320,10 @@ namespace MonkeyPaste.Avalonia {
         private void HandleThisPopoutClosed(MpAvWindow pow, EventArgs e) {
             IsFinalClosingState = false;
             // IsClosePopoutConfirmFinished = false;
+            pow.Activated -= activate_handler;
+            pow.Loaded -= loaded_handler;
+            pow.Closing -= closing_handler;
+            pow.Closed -= close_handler;
 
             if (GetContentView() is MpAvContentWebView wv) {
                 // NOTE for some reason even canceling closing webview tries to dispose
@@ -2326,12 +2335,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Event Handlers
-        private void open_handler(object sender, EventArgs e) {
+        private void loaded_handler(object sender, EventArgs e) {
             if (sender is not MpAvWindow pow ||
                 pow.DataContext is not MpAvClipTileViewModel popout_ctvm) {
                 return;
             }
-            popout_ctvm.HandleThisPopoutOpen(pow, e);
+            popout_ctvm.HandleThisPopoutLoaded(pow, e);
         }
         private void activate_handler(object sender, EventArgs e) {
             if (sender is not MpAvWindow pow ||

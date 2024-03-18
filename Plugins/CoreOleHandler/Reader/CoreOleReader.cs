@@ -27,41 +27,12 @@ namespace CoreOleHandler {
                 });
             }
 
-            //IDataObject avdo = null;
             Dictionary<string, object> avdo = null;
             // only actually read formats found for data
             if (request.dataObjectLookup == null) {
-                // clipboard read
-                //if (request.Clipboard is not null) {
-                //    //avdo = await Dispatcher.UIThread.InvokeAsync(() => CoreOleHelpers.ClipboardRef.ToDataObjectAsync(formatFilter: request.formats.ToArray()));
-                //    avdo = await Dispatcher.UIThread.InvokeAsync(async () => {
-                //        var result = new Dictionary<string, object>();
-                //        foreach (string format in request.formats) {
-                //            object data = await request.Clipboard.GetDataAsync(format);
-                //            result.Add(format, data);
-                //        }
-                //        return result;
-                //    });
-                //}
                 avdo = await MpAvClipboardExtensions.ReadClipboardAsync(formatFilter: request.formats.ToArray());
             } else {
                 avdo = request.dataObjectLookup;
-
-                //try {
-
-                //    availableFormats = avdo.GetAllDataFormats();//.Where(x => avdo.Get(x) != null).ToArray();
-                //}
-                //catch (Exception ex) {
-                //    MpConsole.WriteTraceLine($"Error reading dnd formats retrying (attempt {10 - retryCount + 1})", ex);
-                //    await Task.Delay(100);
-
-                //    if (retryCount == 0) {
-                //        MpConsole.WriteLine("Retry attempts reached, failed");
-                //        return null;
-                //    }
-                //    var retry_result = await ProcessReadRequestAsync_internal(request, --retryCount);
-                //    return retry_result;
-                //}
 
             }
             CoreOleHelpers.SetCulture(request);

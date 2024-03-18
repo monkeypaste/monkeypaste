@@ -19,6 +19,8 @@ function loadContentAsync(
 		debugger;
 	}
 	// NOTE only called fromHost (or tester which calls _ext)
+
+	let sup_guid = suppressTextChanged();
 	globals.IsLoadingContent = true;
 
 	let is_reload = contentHandle == globals.ContentHandle;
@@ -146,7 +148,8 @@ function loadContentAsync(
 	setEditorPlaceholderText('');
 	// signal content loaded (atm used by scrollToAppendIdx)
 	getEditorContainerElement().dispatchEvent(globals.ContentLoadedEvent);
-	//return '[DONE]';
+
+	unsupressTextChanged(sup_guid);
 }
 
 function initContentClassStyle() {

@@ -50,6 +50,7 @@
         notifyPasteInfoFormatsClicked,
         notifyAppendStateChangeComplete,
         notifyPointerEvent,
-        notifyContentImageLoaded
+        notifyContentImageLoaded,
+        notifyDevToolsRequested
     }
 }

@@ -107,13 +107,13 @@
 
         <!--  MAC BOTTOM INDENT  -->
 
-        <Style Selector="Grid#OuterGrid.mac.windowed Button.bottom.left">
+        <Style Selector="Grid#OuterGrid.mac.windowed :is(Button).bottom.left">
             <Setter Property="Margin"
-                    Value="20,0,0,0" />
+                    Value="15,0,0,0" />
         </Style>
-        <Style Selector="Grid#OuterGrid.mac.windowed Button.bottom.right">
+        <Style Selector="Grid#OuterGrid.mac.windowed :is(Button).bottom.right">
             <Setter Property="Margin"
-                    Value="0,0,20,0" />
+                    Value="0,0,15,0" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="OuterGrid"

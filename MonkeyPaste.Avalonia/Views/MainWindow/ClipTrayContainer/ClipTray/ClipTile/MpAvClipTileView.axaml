@@ -86,7 +86,7 @@
         <!--  POPOUT MARGIN  -->
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout local|MpAvClipTileContentView">
             <Setter Property="Margin"
-                    Value="2" />
+                    Value="2,2,2,15" />
         </Style>
 
         <!--  TILE BORDER  -->

@@ -14,8 +14,8 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvCompositeContentView">
     <local:MpAvUserControl.Styles>
-      
-      <!--  PASTE TOOLBAR TRANSITIONS  -->
+
+        <!--  PASTE TOOLBAR TRANSITIONS  -->
 
         <Style Selector="local|MpAvPasteToolbarView,local|MpAvContentWebViewContainer">
             <Setter Property="Transitions">
@@ -32,7 +32,7 @@
         </Style>
         <Style Selector="Grid#CompositeWebViewContainerGrid:not(.show-read-only) local|MpAvContentWebViewContainer">
             <Setter Property="Margin"
-                    Value="0,0,0,15" />
+                    Value="0,0,0,0" />
         </Style>
         <!--  PASTE TOOLBAR SHOW/HIDE (needs anim class to animate)  -->
         <Style Selector="local|MpAvPasteToolbarView:not(.anim)">

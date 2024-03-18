@@ -174,6 +174,12 @@ namespace MonkeyPaste.Avalonia {
             return $"MpAvWindow = '{this.Title}'";
         }
 
+        public void ShowDevTools() {
+#if DEBUG
+            this.Focus();
+            Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence("F12");
+#endif
+        }
         #endregion
 
         #region Protected Methods

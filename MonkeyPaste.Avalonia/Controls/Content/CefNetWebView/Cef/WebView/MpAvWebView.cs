@@ -27,10 +27,12 @@ using WebViewControl;
 #if MAC
 using Foundation;
 using WkWebview = WebKit.WKWebView;
-using Avalonia.WebView.MacCatalyst.Core; 
+using Avalonia.WebView.MacCatalyst.Core;
 #endif
 using WebViewCore.Configurations;
 using AvaloniaWebView;
+using System.Diagnostics;
+using System.Collections.Concurrent;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -118,7 +120,21 @@ namespace MonkeyPaste.Avalonia {
             return;
 #elif SUGAR_WV
             if (InnerWebView != null) {
-                InnerWebView.OpenDevToolsWindow();
+#if MAC
+                Dispatcher.UIThread.Post(async () => {
+                    InnerWebView.Focus();
+                    Mp.Services.PointerSimulator.SimulateRightClick(InnerWebView);
+                    await Task.Delay(300);
+                    Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence("Down");
+                    await Task.Delay(50);
+                    Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence("Down");
+                    await Task.Delay(50);
+                    Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence("Enter");
+                });
+
+#else
+                InnerWebView.OpenDevToolsWindow(); 
+#endif
             }
             return;
 #endif
@@ -137,8 +153,8 @@ namespace MonkeyPaste.Avalonia {
 #endif
 
         public virtual void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
-
 #if DEBUG
+            LogResponse(notificationType, msgJsonBase64Str);
             object ntf = null;
             switch (notificationType) {
                 case MpEditorBindingFunctionType.notifyShowDebugger:
@@ -210,22 +226,39 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpICanExecuteJavascript 
-        void MpICanExecuteJavascript.ExecuteJavascript(string script) {
+        async void MpICanExecuteJavascript.ExecuteJavascript(string script) {
 #if CEFNET_WV
             this.GetMainFrame().ExecuteJavaScript(script, this.GetMainFrame().Url, 0);
 #elif SUGAR_WV
-            Dispatcher.UIThread.Post(async () => {
-                try {
-                    await InnerWebView.ExecuteScriptAsync(script);
+            var sw = Stopwatch.StartNew();
+            bool needed_wait = !CanMakeRequest(script);
+            while (!CanMakeRequest(script)) {
+                await Task.Delay(50);
+                MpConsole.WriteLine($"{DataContext} Waiting to execute script: {script}");
+                if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                    MpConsole.WriteLine($"{DataContext} Wait to executeJavascript timeout for script: {script}");
+                    return;
                 }
-                catch (Exception ex) {
-                    MpConsole.WriteLine($"Error executing script!", true);
-                    MpConsole.WriteLine($"Script: '{script}'");
-                    MpConsole.WriteLine($"Ex: {ex}", false, true);
+            }
+            if (needed_wait) {
+                MpConsole.WriteLine($"{DataContext} Wait complete ({sw.ElapsedMilliseconds}ms) for script: {script}");
+            }
+            try {
+                LogRequest(script);
 
+                if (DataContext is MpAvClipTileViewModel ctvm &&
+                    ctvm.CopyItemTitle == "Text12" &&
+                    ctvm.IsWindowOpen) {
+                    //return;
                 }
-            });
+                Dispatcher.UIThread.Invoke(() => InnerWebView.ExecuteScriptAsync(script).FireAndForgetSafeAsync());
+            }
+            catch (Exception ex) {
+                MpConsole.WriteLine($"Error executing script!", true);
+                MpConsole.WriteLine($"Script: '{script}'");
+                MpConsole.WriteLine($"Ex: {ex}", false, true);
 
+            }
 #endif
         }
 #if SUGAR_WV
@@ -254,6 +287,88 @@ namespace MonkeyPaste.Avalonia {
             Content as WebView;
 #endif
 
+        #region State
+
+        protected ConcurrentDictionary<string, List<string>> RequestLookup { get; set; } = [];
+        protected ConcurrentDictionary<string, List<string>> ResponseLookup { get; set; } = [];
+        protected void LogRequest(string script) {
+            if (script.SplitNoEmpty("(") is not { } script_parts ||
+                        script_parts.Length < 1 ||
+                    script_parts[0] is not string reqTypeName ||
+                    script_parts[1] is not string reqData_raw ||
+                    reqData_raw.Replace("'", string.Empty).Replace(")", string.Empty) is not string reqData) {
+                return;
+            }
+            if (!this.RequestLookup.TryGetValue(reqTypeName, out var requests)) {
+                requests = [];
+                if (!this.RequestLookup.TryAdd(reqTypeName, requests)) {
+                    return;
+                }
+            }
+            requests.Add(reqData);
+        }
+
+        protected void LogResponse(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
+            if (!this.ResponseLookup.TryGetValue(notificationType.ToString(), out var responses)) {
+                responses = [];
+                if (!this.ResponseLookup.TryAdd(notificationType.ToString(), responses)) {
+                    return;
+                }
+            }
+            responses.Add(msgJsonBase64Str);
+        }
+
+        protected bool CanMakeRequest(string script) {
+            if (script.SplitNoEmpty("(") is not { } script_parts ||
+                        script_parts.Length == 0 ||
+                        script_parts[0] is not string reqTypeName) {
+                return false;
+            }
+
+            if (this.InnerWebView == null ||
+                    !this.InnerWebView.IsLoaded ||
+                    this.InnerWebView.Url == null ||
+                    this.InnerWebView.Url.AbsoluteUri != Address) {
+                // webview not loaded
+                return false;
+            }
+            if (this is MpAvContentWebView cwv2 &&
+                !cwv2.IsDomLoaded) {
+                // dom not loaded
+                return false;
+            }
+            string main_req_name = "initMain_ext";
+            string content_req_name = "loadContentAsync_ext";
+
+            bool is_main_loaded = RequestLookup.ContainsKey(main_req_name);
+            if (reqTypeName == main_req_name) {
+                // should be initial setup request
+                if (is_main_loaded) {
+                    // already made initial setup request, which can be resent but shouldn't that often
+                    MpConsole.WriteLine($"Warning! WebView {DataContext} has already made a '{reqTypeName}'. Should not need repeating but allowing");
+                }
+                return true;
+            }
+            if (this is MpAvPlainHtmlConverterWebView) {
+                // no further checks needed
+                return true;
+            }
+            if (is_main_loaded) {
+                if (this is not MpAvContentWebView cwv) {
+                    return true;
+                }
+                if (reqTypeName == content_req_name && cwv.IsEditorInitialized) {
+                    // only allow loadContent when editor initialized
+                    return true;
+                }
+                if (cwv.IsEditorInitialized && cwv.IsEditorLoaded) {
+                    // allow any other request after init and load are complete
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion
 
         #region Address
 
@@ -353,6 +468,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
+
         #region Constructors
         public MpAvWebView() : base() {
             this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged()).AddDisposable(_disposables);
@@ -397,6 +514,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
+
 
         protected override void OnPointerReleased(PointerReleasedEventArgs e) {
             base.OnPointerReleased(e);

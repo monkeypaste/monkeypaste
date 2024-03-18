@@ -2389,7 +2389,7 @@
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.15" />
+    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.16" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="$(AvaloniaVersion)" />
@@ -2417,7 +2417,7 @@
   
   <ItemGroup Condition="'$(UseSugarWv)' == 'True'">
     <PackageReference Include="WebView.Avalonia" Version="11.0.0.3" />
-    <PackageReference Include="WebView.Avalonia.MacCatalyst" Version="11.0.0.3" Condition="'$(BuildOs)' == 'MAC'"/>
+    <PackageReference Include="WebView.Avalonia.MacCatalyst" Version="11.0.0.3" Condition="'$(BuildOs)' == 'MAC'" />
   </ItemGroup>
     
   <ItemGroup Condition="$(IsDesktop) == 'true'">

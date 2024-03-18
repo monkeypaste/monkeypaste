@@ -113,8 +113,8 @@ namespace MonkeyPaste.Common.Plugin {
         // this formats on dnd from chrome on mac with the toplevel domain url as the content
         public const string MacUrl3 = "org.chromium.chromium-renderer-initiated-drag";
 
-        public const string MacImage1 = "public.tiff";
-        public const string MacImage2 = "public.png";
+        public const string MacImage1 = "public.png";
+        public const string MacImage2 = "public.tiff";
 
 
         // Avalonia Formats
@@ -162,13 +162,13 @@ namespace MonkeyPaste.Common.Plugin {
 #if WINDOWS
             WinRtf;
 #elif MAC
-            MacRtf1;
+            WinRtf;//MacRtf1;
 #endif
         public const string Image =
 #if WINDOWS
             AvImage;//WinImage;
 #elif MAC
-            MacImage1;
+            AvImage;//MacImage1;
 #endif
 
         public const string Image2 =

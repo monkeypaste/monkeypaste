@@ -466,6 +466,15 @@ namespace CoreOleHandler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image (tiff).
+        /// </summary>
+        public static string TiffFormatLabel {
+            get {
+                return ResourceManager.GetString("TiffFormatLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Untitled.
         /// </summary>
         public static string UntitledLabel {

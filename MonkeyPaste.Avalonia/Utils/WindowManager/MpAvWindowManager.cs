@@ -34,10 +34,17 @@ namespace MonkeyPaste.Avalonia {
             AllWindows.Any() ? AllWindows.FirstOrDefault().Screens : null;
         public static ObservableCollection<MpAvWindow> AllWindows { get; private set; } = new ObservableCollection<MpAvWindow>();
         public static IReadOnlyList<MpAvWindow> TopmostWindowsByZOrder =>
-            AllWindows
-                .Where(x => x.Owner == null && x.WantsTopmost && x.WindowState != WindowState.Minimized)
+#if MAC
+        AllWindows
+                .Where(x => x.WantsTopmost && x.WindowState != WindowState.Minimized)
                 .OrderBy(x => (int)x.BindingContext.WindowType)
                 .ToList();
+#else
+        AllWindows
+                .Where(x => x.Owner == null && x.WantsTopmost && x.WindowState != WindowState.Minimized)
+                .OrderBy(x => (int)x.BindingContext.WindowType)
+                .ToList(); 
+#endif
 
         public static bool IsAnyChildWindowOpening =>
             MpAvWindow.OpeningWindows.Where(x => x is not MpAvMainWindow).Any();
@@ -445,15 +452,15 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 #else
-            var mw = AllWindows.FirstOrDefault(x => x is MpAvMainWindow);
+            //var mw = AllWindows.FirstOrDefault(x => x is MpAvMainWindow);
 
-            // activate windows wanting top most from highest to lowestpriority
+            //// activate windows wanting top most from highest to lowestpriority
 
-            if (TopmostWindowsByZOrder.Contains(mw)) {
-                mw.Topmost = true;
-            } else if (mw != null) {
-                mw.Topmost = false;
-            }
+            //if (TopmostWindowsByZOrder.Contains(mw)) {
+            //    mw.Topmost = true;
+            //} else if (mw != null) {
+            //    mw.Topmost = false;
+            //}
 
             TopmostWindowsByZOrder
                 .Where(x => x is not MpAvMainWindow)

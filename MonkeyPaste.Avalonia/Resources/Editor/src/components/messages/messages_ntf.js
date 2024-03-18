@@ -202,7 +202,9 @@ function onInitComplete_ntf() {
 	}
 	sendMessage('notifyInitComplete', resp);
 }
-
+function onDevToolsRequested_ntf() {
+	sendMessage('notifyDevToolsRequested', '');
+}
 function onShowCustomColorPicker_ntf(dotnetHexStr,title) {
 	// output 'MpQuillShowCustomColorPickerNotification'
 	let msg = {

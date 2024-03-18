@@ -130,6 +130,7 @@ textarea {
     cursor: not-allowed !important;
     border-color: darkgray !important;
     user-select: none !important;
+    -webkit-user-select: none !important;
 }
 
 button {
@@ -146,6 +147,7 @@ button {
     align-items: center;
     cursor: pointer;
     user-select: none;
+    -webkit-user-select: none;
 }
     button:hover:not(.disabled),
     button:focus:not(.disabled) {

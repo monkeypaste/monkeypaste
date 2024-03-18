@@ -57,6 +57,7 @@ body.no-host .tooltip-hint-container::before {
     padding: 5px;
     font-size: 12px !important;
     user-select: none;
+    -webkit-user-select: none;
 }
 
 .tooltip {

@@ -2996,7 +2996,7 @@ namespace MonkeyPaste.Avalonia {
             if (ctvm.IsPinned) {
                 return
                         InternalPinnedItems
-                            .Where(x => is_next ? x.ObservedBounds.Y > ctvm.ObservedBounds.Y : x.ObservedBounds.Y < ctvm.ObservedBounds.Y)
+                            .Where(x => x.ObservedBounds != null && is_next ? x.ObservedBounds.Y > ctvm.ObservedBounds.Y : x.ObservedBounds.Y < ctvm.ObservedBounds.Y)
                             .OrderBy(x => x.ObservedBounds.Location.Distance(ctvm.ObservedBounds.Location))
                             .FirstOrDefault();
             }

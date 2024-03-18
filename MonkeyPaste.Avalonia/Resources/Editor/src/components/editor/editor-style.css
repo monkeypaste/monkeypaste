@@ -60,6 +60,7 @@
 
 
 #editor.no-select > .ql-editor {
+    -webkit-user-select: none;
     user-select: none;
     pointer-events: none;
 }
@@ -79,6 +80,7 @@
     }
 
 .sub-select {
+    -webkit-user-select: auto;
     user-select: auto;
     overflow: auto;
     cursor: text;
@@ -103,6 +105,7 @@ body:has(.sub-select) {
 }
 
 .editable {
+    -webkit-user-select: auto;
     user-select: auto;
     white-space: unset;
     cursor: text;

@@ -20,7 +20,7 @@ namespace CoreOleHandler {
         }
 
         private (string, string, int, string)[] GetFormatModels() {
-            return new (string, string, int, string)[] {
+            return [
                 (MpPortableDataFormats.Text,Resources.TextFormatLabel,DEF_MAX_TEXT,"text.png"),
                 (MpPortableDataFormats.MimeText,Resources.MimeTextFormatLabel,DEF_MAX_TEXT,"text.png"),
                 (MpPortableDataFormats.Rtf,Resources.RtfFormatLabel,DEF_MAX_TEXT,"rtf.png"),
@@ -28,10 +28,13 @@ namespace CoreOleHandler {
                 (MpPortableDataFormats.Html,Resources.MimeHtmlFormatLabel,-1,"html.png"),
                 (MpPortableDataFormats.MimeMozUrl,Resources.MozUrlFormatLabel,-1,"html.png"),
                 (MpPortableDataFormats.Image,Resources.PngFormatLabel,-1,"png.png"),
+#if MAC
+		        (MpPortableDataFormats.Image2,Resources.PngFormatLabel + "2",-1,"png.png"),
+#endif
                 (MpPortableDataFormats.Csv,Resources.CsvFormatLabel,DEF_MAX_TEXT,"csv.png"),
                 (MpPortableDataFormats.Files,Resources.FilesFormatLabel,-1,"files.png"),
                 //("x-special/gnome-copied-files","Files (Linux)"),
-        };
+        ];
         }
 
         private MpClipboardHandlerFormat GetFormat(string format, bool isReader) {
