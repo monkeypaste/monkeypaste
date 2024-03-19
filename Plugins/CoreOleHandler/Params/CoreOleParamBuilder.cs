@@ -29,7 +29,7 @@ namespace CoreOleHandler {
                 (MpPortableDataFormats.MimeMozUrl,Resources.MozUrlFormatLabel,-1,"html.png"),
                 (MpPortableDataFormats.Image,Resources.PngFormatLabel,-1,"png.png"),
 #if MAC
-		        (MpPortableDataFormats.Image2,Resources.PngFormatLabel + "2",-1,"png.png"),
+		        (MpPortableDataFormats.Image2,"TIFF",-1,"png.png"),
 #endif
                 (MpPortableDataFormats.Csv,Resources.CsvFormatLabel,DEF_MAX_TEXT,"csv.png"),
                 (MpPortableDataFormats.Files,Resources.FilesFormatLabel,-1,"files.png"),

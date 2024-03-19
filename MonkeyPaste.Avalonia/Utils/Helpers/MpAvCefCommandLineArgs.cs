@@ -14,11 +14,11 @@ namespace MonkeyPaste.Avalonia {
 #endif
 #if CEFNET_WV || SUGAR_WV
             {"ignore-certificate-errors",null },
-//#if WINDOWS
-		{"in-process-gpu",null },
+#if WINDOWS
+		    {"in-process-gpu",null },
             {"disable-gpu",null },
             {"disable-gpu-compositing",null },  
-//#endif
+#endif
 
             //{"enable-begin-frame-scheduling",null },
             //{"enable-media-stream",null },

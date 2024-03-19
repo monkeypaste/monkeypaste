@@ -151,6 +151,13 @@ namespace MonkeyPaste.Common.Avalonia {
             var bmpTarget = bmpSrc.CreateScaledBitmap(new PixelSize((int)size.Width, (int)size.Height));
             return bmpTarget;
         }
+
+        public static Bitmap? ResizeKeepAspect(this Bitmap bmpSrc, MpSize size, bool enlarge) {
+
+            var new_size = bmpSrc.Size.ToPortableSize().ResizeKeepAspect(size.Width, size.Height, enlarge).ToAvPixelSize(1);
+            var bmpTarget = bmpSrc.CreateScaledBitmap(new_size);
+            return bmpTarget;
+        }
         public static MpSize ResizeKeepAspect(this MpSize src, double maxWidth, double maxHeight, bool enlarge = false) {
             maxWidth = enlarge ? maxWidth : Math.Min(maxWidth, src.Width);
             maxHeight = enlarge ? maxHeight : Math.Min(maxHeight, src.Height);

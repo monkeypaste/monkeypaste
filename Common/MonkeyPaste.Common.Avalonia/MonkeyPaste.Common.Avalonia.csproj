@@ -78,6 +78,7 @@
 
   <ItemGroup>
     <Compile Remove="Utils\Extensions\DataObject\**" />
+    <Compile Include="Utils\Extensions\DataObject\Mac\MpAvMacDataFormatReader.cs" />
     <Compile Include="Utils\Extensions\DataObject\MpAvPlatformDataObjectExtensions.shared.cs" />
     <Compile Include="Utils\Extensions\DataObject\MpAvPlatformDataObjectExtensions.$(PlatformShortName).cs" />
   </ItemGroup>

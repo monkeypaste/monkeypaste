@@ -486,8 +486,18 @@ namespace MonkeyPaste.Avalonia {
                 case MpEditorBindingFunctionType.notifyContentImageLoaded:
                     ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillContentImageLoadedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillContentImageLoadedNotification imgLoadedNtf) {
-                        BindingContext.CopyItemSize1 = (int)imgLoadedNtf.width;
-                        BindingContext.CopyItemSize2 = (int)imgLoadedNtf.height;
+                        Dispatcher.UIThread.Post(async () => {
+                            var sw = Stopwatch.StartNew();
+                            while (BindingContext.IsPlaceholder) {
+                                await Task.Delay(100);
+                                if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                                    MpConsole.WriteLine($"Image load timeout, item is placeholder..");
+                                    return;
+                                }
+                            }
+                            BindingContext.CopyItemSize1 = (int)imgLoadedNtf.width;
+                            BindingContext.CopyItemSize2 = (int)imgLoadedNtf.height;
+                        });
                     }
                     break;
                 case MpEditorBindingFunctionType.notifyReadOnlyDisabled:
@@ -1186,7 +1196,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<MpQuillEditorSelectionStateMessage> GetSelectionStateAsync() {
-            if (!this.IsAttachedToVisualTree()) {
+            if (!this.IsAttachedToVisualTree() ||
+                (BindingContext != null && BindingContext.CopyItemType == MpCopyItemType.Image)) {
                 return new();
             }
             // NOTE resetting sel state is lazy upon request

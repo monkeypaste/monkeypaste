@@ -128,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(EditableForeground),
                 o => o.EditableForeground,
                 (o, v) => o.EditableForeground = v,
-                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor.ToString())
+                Brushes.Black//Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor.ToString())
             );
 
         #endregion
@@ -147,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(EditableBackground),
                 o => o.EditableBackground,
                 (o, v) => o.EditableBackground = v,
-                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString())
+                Brushes.White// Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString())
             );
 
         #endregion
@@ -168,19 +168,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region HoverBrush AvaloniaProperty
 
-        private IBrush _hoverBrush = null;
         public IBrush HoverBrush {
-            get => _hoverBrush;
-            set => SetAndRaise(HoverBrushProperty, ref _hoverBrush, value);
+            get { return GetValue(HoverBrushProperty); }
+            set { SetValue(HoverBrushProperty, value); }
         }
 
-        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> HoverBrushProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+        public static readonly StyledProperty<IBrush> HoverBrushProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>
             (
                 nameof(HoverBrush),
-                o => o.HoverBrush,
-                (o, v) => o.HoverBrush = v,
-                null
+                defaultValue: null
             );
         #endregion
 
@@ -199,7 +196,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(NavigatedBrush),
                 o => o.NavigatedBrush,
                 (o, v) => o.NavigatedBrush = v,
-                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment4DarkColor.ToString())
+                Brushes.Blue//Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment4DarkColor.ToString())
             );
         #endregion
 
@@ -217,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(ActiveHighlightBrush),
                 o => o.ActiveHighlightBrush,
                 (o, v) => o.ActiveHighlightBrush = v,
-                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString())
+                MpAvHighlightTextExtension.DefaultActiveHighlightBrush//Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString())
             );
         #endregion
 
@@ -234,7 +231,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(InactiveHighlightBrush),
                 o => o.InactiveHighlightBrush,
                 (o, v) => o.InactiveHighlightBrush = v,
-                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent1BgColor.ToString())
+                MpAvHighlightTextExtension.DefaultInactiveHighlightBrush//Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent1BgColor.ToString())
             );
         #endregion
 
@@ -442,19 +439,16 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region SelectViewModelOnFocus AvaloniaProperty
-        private bool _selectViewModelOnFocus = true;
         public bool SelectViewModelOnFocus {
-            get => _selectViewModelOnFocus;
-            set => SetAndRaise(SelectViewModelOnFocusProperty, ref _selectViewModelOnFocus, value);
+            get { return GetValue(SelectViewModelOnFocusProperty); }
+            set { SetValue(SelectViewModelOnFocusProperty, value); }
         }
 
-        public static readonly DirectProperty<MpAvMarqueeTextBox, bool> SelectViewModelOnFocusProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, bool>
+        public static readonly StyledProperty<bool> SelectViewModelOnFocusProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>
             (
                 nameof(SelectViewModelOnFocus),
-                o => o.SelectViewModelOnFocus,
-                (o, v) => o.SelectViewModelOnFocus = v,
-                true
+                defaultValue: true
             );
         #endregion
 

@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
             ////var sw = new Stopwatch();
             ////sw.Start();
             //var bmp = iconBase64.ToAvBitmap();
-            MpConsole.WriteLine($"Icon Str: '{iconBase64}'");
+            //MpConsole.WriteLine($"Icon Str: '{iconBase64}'");
             var primaryIconColorList = new List<string>();
             var hist = MpAvImageExtensions.GetStatistics(iconBase64);
             //var hist = bmp.GetStatistics();

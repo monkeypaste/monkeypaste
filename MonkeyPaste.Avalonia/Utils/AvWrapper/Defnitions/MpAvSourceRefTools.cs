@@ -265,9 +265,21 @@ namespace MonkeyPaste.Avalonia {
         }
         private string FindSourceUrl(MpAvDataObject avdo) {
             string cb_html_or_fragment = null;
-            if (avdo.ContainsData(MpPortableDataFormats.MimeMozUrl) &&
-                       avdo.GetData(MpPortableDataFormats.MimeMozUrl) is byte[] url_bytes &&
-                       url_bytes.ToDecodedString(Encoding.ASCII, true) is string source_url_str) {
+#if MAC
+            if (avdo.TryGetData(MpPortableDataFormats.MacChromeUrl, out string chrome_url)) {
+                return chrome_url;
+            }
+            if (avdo.TryGetData(MpPortableDataFormats.MacChromeUrl2, out string chrome_url2)) {
+                return chrome_url2;
+            }
+            if (avdo.TryGetData(MpPortableDataFormats.MacUrl, out string mac_url)) {
+                return mac_url;
+            }
+            if (avdo.TryGetData(MpPortableDataFormats.MacUrl2, out string mac_url2)) {
+                return mac_url2;
+            }
+#endif
+            if (avdo.TryGetData(MpPortableDataFormats.MimeMozUrl, out string source_url_str)) {
                 // on linux html is not in fragment format like windows and firefox supports this format
                 // but chrome doesn't
                 return source_url_str;
@@ -276,9 +288,8 @@ namespace MonkeyPaste.Avalonia {
                 urlBytes.ToDecodedString(Encoding.ASCII, true) is string urlRef) {
                 return urlRef;
             }
-            if (avdo.ContainsData(MpPortableDataFormats.Xhtml) &&
-                        avdo.GetData(MpPortableDataFormats.Xhtml) is byte[] htmlBytes &&
-                        htmlBytes.ToDecodedString() is string avhtmlStr) {
+            if (avdo.TryGetData(MpPortableDataFormats.Xhtml, out byte[] htmlBytes) &&
+                htmlBytes.ToDecodedString() is string avhtmlStr) {
 
                 // HTML
                 cb_html_or_fragment = avhtmlStr;

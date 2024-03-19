@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste {
 
@@ -38,25 +39,37 @@ namespace MonkeyPaste {
             MpUrlProperties url_props = new MpUrlProperties() {
                 FullyFormattedUriStr = GetFullyFormattedUrl(url)
             };
-            url_props.Source = await ReadUrlAsString(url);
+            url_props.Source = await ReadUrlHeadAsString(url);
 
             string formatted_url = url_props.FullyFormattedUriStr;
             url_props.FavIconBase64 = string.Empty;
             if (Uri.IsWellFormedUriString(formatted_url, UriKind.Absolute)) {
                 var uri = new Uri(formatted_url, UriKind.Absolute);
-                url_props.FavIconBase64 = await GetDomainFavIcon1(uri.Host);
-                if (!Mp.Services.IconBuilder.IsStringBase64Image(url_props.FavIconBase64)) {
-                    url_props.FavIconBase64 = await GetDomainFavIcon2(formatted_url);
+                //url_props.FavIconBase64 = await GetDomainFavIcon1(uri.Host);
+                //if (!Mp.Services.IconBuilder.IsStringBase64Image(url_props.FavIconBase64)) {
+                //    url_props.FavIconBase64 = await GetDomainFavIcon2(formatted_url);
+                //    if (!Mp.Services.IconBuilder.IsStringBase64Image(url_props.FavIconBase64)) {
+                //        // NOTE #3 uses html not url
+                //        var result_tuple = await GetDomainFavIcon3(url_props.Source);
+                //        if (result_tuple != null &&
+                //            Mp.Services.IconBuilder.IsStringBase64Image(result_tuple.Item1)) {
+                //            url_props.FavIconBase64 = result_tuple.Item1;
+                //            url_props.Title = result_tuple.Item2;
+                //        }
+                //    }
+                //}
+                var result_tuple = await GetDomainFavIcon3(url_props.Source);
+                if (result_tuple != null &&
+                    Mp.Services.IconBuilder.IsStringBase64Image(result_tuple.Item1)) {
+                    url_props.FavIconBase64 = result_tuple.Item1;
+                    url_props.Title = result_tuple.Item2;
+                } else {
+                    url_props.FavIconBase64 = await GetDomainFavIcon1(uri.Host);
                     if (!Mp.Services.IconBuilder.IsStringBase64Image(url_props.FavIconBase64)) {
-                        // NOTE #3 uses html not url
-                        var result_tuple = await GetDomainFavIcon3(url_props.Source);
-                        if (result_tuple != null &&
-                            Mp.Services.IconBuilder.IsStringBase64Image(result_tuple.Item1)) {
-                            url_props.FavIconBase64 = result_tuple.Item1;
-                            url_props.Title = result_tuple.Item2;
-                        }
+                        url_props.FavIconBase64 = await GetDomainFavIcon2(formatted_url);
                     }
                 }
+
             }
 
             if (string.IsNullOrEmpty(url_props.FavIconBase64) ||
@@ -146,6 +159,54 @@ namespace MonkeyPaste {
             return titleNode.InnerText;
         }
 
+        private static async Task<string> ReadUrlHeadAsString(string url) {
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
+                return string.Empty;
+            }
+            try {
+                var sb = new StringBuilder();
+                using (HttpClient client = new HttpClient()) {
+                    client.SetDefaultUserAgent();
+
+                    try {
+                        using (HttpResponseMessage response = await client.GetAsync(url)) {
+                            using (var stream = await response.Content.ReadAsStreamAsync()) {
+                                while (true) {
+                                    long rem = stream.Length - stream.Position;
+                                    if (rem <= 0) {
+                                        // no head found?
+                                        break;
+                                    }
+                                    int len = Math.Min(1000, (int)rem);
+                                    var bytes = new byte[len];
+                                    var bytesread = stream.Read(bytes, 0, len);
+                                    string text = Encoding.UTF8.GetString(bytes);
+                                    int head_end_idx = text.ToLower().IndexOf("</head>");
+                                    if (head_end_idx < 0) {
+                                        sb.Append(text);
+                                        continue;
+                                    }
+                                    sb.Append(text.Substring(0, head_end_idx + "</head>".Length));
+                                    // complete doc
+                                    sb.Append("</html>");
+                                    break;
+                                }
+                                return sb.ToString();
+                            }
+                        }
+                    }
+                    catch (HttpRequestException) {
+                        return string.Empty;
+                    }
+
+                }
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine("Error scanning for url title at " + url, ex);
+                return string.Empty;
+            }
+        }
+
         private static async Task<string> ReadUrlAsString(string url) {
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {//if (!IsValidUrl(url)) {
                 return string.Empty;
@@ -157,6 +218,7 @@ namespace MonkeyPaste {
                     try {
                         using (HttpResponseMessage response = await client.GetAsync(url)) {
                             using (HttpContent content = response.Content) {
+
                                 var result = await content.ReadAsStringAsync();
                                 return result;
                             }

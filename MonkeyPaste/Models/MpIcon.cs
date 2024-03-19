@@ -11,7 +11,7 @@ namespace MonkeyPaste {
         SmallIcon16 = 0x1,
         MediumIcon32 = 0x0,
         LargeIcon48 = 0x2,
-        ExtraLargeIcon = 0x4
+        ExtraLargeIcon128 = 0x4
     }
     public class MpIcon : MpDbModelBase, MpISyncableDbObject, MpIClonableDbModel<MpIcon> {
         #region Constants

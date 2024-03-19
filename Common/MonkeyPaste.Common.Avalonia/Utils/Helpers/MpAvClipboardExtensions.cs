@@ -4,8 +4,11 @@ using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common.Plugin;
+using MonoMac.AppKit;
+using MonoMac.Foundation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -34,12 +37,11 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (_MacFormatMap == null) {
                     _MacFormatMap = new() {
                         {MpPortableDataFormats.MacRtf1, MpPortableDataFormats.WinRtf },
-                        //{MpPortableDataFormats.MacImage1, MpPortableDataFormats.AvImage },
+                        {MpPortableDataFormats.MacImage1, MpPortableDataFormats.AvImage },
                         {MpPortableDataFormats.MacImage2, MpPortableDataFormats.AvImage },
-                        {MpPortableDataFormats.MacFiles1, MpPortableDataFormats.AvFiles },
-                        {MpPortableDataFormats.MacFiles2, MpPortableDataFormats.AvFiles },
-                        {MpPortableDataFormats.MacText1, MpPortableDataFormats.Text },
                         {MpPortableDataFormats.MacHtml1, MpPortableDataFormats.MimeHtml },
+                        {MpPortableDataFormats.MacChromeUrl, MpPortableDataFormats.MimeMozUrl },
+                        {MpPortableDataFormats.MacChromeUrl2, MpPortableDataFormats.MimeMozUrl },
                     };
                 }
                 return _MacFormatMap;
@@ -101,6 +103,11 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (data == null) {
                     continue;
                 }
+#if MAC
+                if (MpAvMacDataFormatReader.TryRead(format, data, out string mac_data_str)) {
+                    data = mac_data_str;
+                }
+#endif
                 if (mappedFormats.TryGetValue(format, out string common_format_name)) {
                     avdo.SetData(common_format_name, data);
                 } else {

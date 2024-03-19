@@ -31,6 +31,8 @@ namespace MonkeyPaste.Common.Plugin {
             MacText2,
             MacText3,
             MacFiles2,
+            MacChromeUrl,
+            MacChromeUrl2,
 #endif
 
             // linux
@@ -100,7 +102,7 @@ namespace MonkeyPaste.Common.Plugin {
 
         public const string MacText1 = "public.utf8-plain-text";
         public const string MacText2 = "public.utf16-external-plain-text";
-        public const string MacText3 = "NSStringPboardType";
+        public const string MacText3 = "public.plain-text";
 
         public const string MacHtml1 = "public.html";
         public const string MacHtml2 = "Apple HTML pasteboard type";
@@ -110,8 +112,9 @@ namespace MonkeyPaste.Common.Plugin {
 
         public const string MacUrl = "public.url";
         public const string MacUrl2 = "com.apple.webarchive";
+        public const string MacChromeUrl = "org.chromium.source-url";
         // this formats on dnd from chrome on mac with the toplevel domain url as the content
-        public const string MacUrl3 = "org.chromium.chromium-renderer-initiated-drag";
+        public const string MacChromeUrl2 = "org.chromium.chromium-renderer-initiated-drag";
 
         public const string MacImage1 = "public.png";
         public const string MacImage2 = "public.tiff";

@@ -2,6 +2,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
@@ -176,8 +177,8 @@
                     <Binding Path="!IsDropOverTile" />
                     <Binding Path="IsSubSelectionEnabled" />
                     <Binding Path="!IsWindowOpen" />
-                    <Binding Path="IsVisible"
-                             ElementName="ReadOnlyWebView" />
+                    <!--<Binding Path="IsVisible"
+                             ElementName="ReadOnlyWebView" />-->
                 </MultiBinding>
             </Classes.show>
         </local:MpAvPasteToolbarView>

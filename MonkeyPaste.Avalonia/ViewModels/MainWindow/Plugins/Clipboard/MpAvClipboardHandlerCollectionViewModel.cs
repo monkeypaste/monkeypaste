@@ -605,7 +605,10 @@ namespace MonkeyPaste.Avalonia {
             }
             // if ido provided carry use provided pi if exits
             MpPortableProcessInfo active_pi =
-                ido == null ? null : ido.Get(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) as MpPortableProcessInfo;
+                ido == null ? null :
+                ido.Contains(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) ?
+                    ido.Get(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) as MpPortableProcessInfo :
+                    null;
 
 #if WINDOWS
             if (attachActiveProcessIfNone && isRead && !isDnd && active_pi == null && !ignorePlugins) {

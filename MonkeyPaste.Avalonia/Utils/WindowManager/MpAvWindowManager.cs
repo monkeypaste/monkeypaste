@@ -461,6 +461,9 @@ namespace MonkeyPaste.Avalonia {
             //} else if (mw != null) {
             //    mw.Topmost = false;
             //}
+            if (MainWindow != null) {
+                MainWindow.Topmost = TopmostWindowsByZOrder.Contains(MainWindow);
+            }
 
             TopmostWindowsByZOrder
                 .Where(x => x is not MpAvMainWindow)

@@ -234,14 +234,14 @@ namespace MonkeyPaste.Avalonia {
             bool needed_wait = !CanMakeRequest(script);
             while (!CanMakeRequest(script)) {
                 await Task.Delay(50);
-                MpConsole.WriteLine($"{DataContext} Waiting to execute script: {script}");
+                //MpConsole.WriteLine($"{DataContext} Waiting to execute script: {script}");
                 if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
-                    MpConsole.WriteLine($"{DataContext} Wait to executeJavascript timeout for script: {script}");
+                    //MpConsole.WriteLine($"{DataContext} Wait to executeJavascript timeout for script: {script}");
                     return;
                 }
             }
             if (needed_wait) {
-                MpConsole.WriteLine($"{DataContext} Wait complete ({sw.ElapsedMilliseconds}ms) for script: {script}");
+                //MpConsole.WriteLine($"{DataContext} Wait complete ({sw.ElapsedMilliseconds}ms) for script: {script}");
             }
             try {
                 LogRequest(script);
@@ -345,7 +345,7 @@ namespace MonkeyPaste.Avalonia {
                 // should be initial setup request
                 if (is_main_loaded) {
                     // already made initial setup request, which can be resent but shouldn't that often
-                    MpConsole.WriteLine($"Warning! WebView {DataContext} has already made a '{reqTypeName}'. Should not need repeating but allowing");
+                    //MpConsole.WriteLine($"Warning! WebView {DataContext} has already made a '{reqTypeName}'. Should not need repeating but allowing");
                 }
                 return true;
             }

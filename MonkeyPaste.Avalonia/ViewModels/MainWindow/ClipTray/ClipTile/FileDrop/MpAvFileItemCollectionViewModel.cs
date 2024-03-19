@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls.Selection;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Selection;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections;
@@ -129,7 +130,18 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(HasMultiple));
         }
         private void SelectionChanged(object sender, SelectionModelSelectionChangedEventArgs e) {
-            Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
+            if (e.DeselectedItems is { } unselected &&
+                unselected.OfType<MpAvFileDataObjectItemViewModel>() is { } unselected_fivml) {
+                foreach (var to_unselect in unselected_fivml) {
+                    to_unselect.IsSelected = false;
+                }
+            }
+            if (e.SelectedItems is { } selected &&
+                selected.OfType<MpAvFileDataObjectItemViewModel>() is { } selected_fivml) {
+                foreach (var to_select in selected_fivml) {
+                    to_select.IsSelected = true;
+                }
+            }
             OnPropertyChanged(nameof(Selection));
         }
 

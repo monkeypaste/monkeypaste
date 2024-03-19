@@ -34,6 +34,21 @@
                 Value="{DynamicResource ThemeAccent5Color}" />
     </Style>
 
+    <Style Selector="Button.link local|MpAvMarqueeTextBox">
+        <Setter Property="EditOnFocus"
+                Value="False" />
+        <Setter Property="SelectViewModelOnFocus"
+                Value="False" />
+        <Setter Property="NavigateUriCommand"
+                Value="{Binding $parent[Button].Command}" />
+        <Setter Property="NavigateUriCommandParameter"
+                Value="{Binding $parent[Button].CommandParameter}" />
+        <Setter Property="ReadOnlyForeground"
+                Value="{DynamicResource ThemeAccent5BgColor}" />
+        <Setter Property="HoverBrush"
+                Value="{DynamicResource ThemeAccent5Color}" />
+    </Style>
+
     <!--  PLUGIN BROWSER BUTTON  -->
     <Style Selector="Button.showsPluginBrowser">
         <Setter Property="Width"

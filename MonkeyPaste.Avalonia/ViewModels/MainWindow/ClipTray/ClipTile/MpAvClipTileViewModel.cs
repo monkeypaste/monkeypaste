@@ -1122,7 +1122,7 @@ namespace MonkeyPaste.Avalonia {
                 return CopyItem.ItemSize1;
             }
             set {
-                if (CopyItemSize1 != value && value >= 0) {
+                if (CopyItem != null && CopyItemSize1 != value && value >= 0) {
                     CopyItem.ItemSize1 = value;
                     OnPropertyChanged(nameof(CopyItemSize1));
                 }
@@ -1137,7 +1137,7 @@ namespace MonkeyPaste.Avalonia {
                 return CopyItem.ItemSize2;
             }
             set {
-                if (CopyItemSize2 != value && value >= 0) {
+                if (CopyItem != null && CopyItemSize2 != value && value >= 0) {
                     CopyItem.ItemSize2 = value;
                     OnPropertyChanged(nameof(CopyItemSize2));
                 }
