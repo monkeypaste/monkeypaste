@@ -121,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
                 eff_bg == null ||
                 GetContrastedPropertyNameCsv(attached_control) is not string propsCsv ||
                 propsCsv.SplitNoEmpty("|") is not string[] props ||
-                MpAvBrushToContrastBrushConverter.Instance.Convert(eff_bg, null, null, null)
+                MpAvColorToContrastColorConverter.Instance.Convert(eff_bg, typeof(IBrush), null, null)
                     is not IBrush contrast_brush) {
                 return;
             }

@@ -1,13 +1,14 @@
 # Terms and Conditions
+
 MonkeyPaste (R)
 
-~~Copyright (C)~~ Monkey LLC, Thomas Kefauver, and contributors. All Rights Reserved.
+Copyright (C) Monkey LLC, Thomas Kefauver, and contributors. All Rights Reserved.
 
 MonkeyPaste is a ~~registered trademark~~ of Monkey LLC.
 
-License last updated: January 28, 2024
+License last updated: March 20, 2024
 
-MonkeyPaste is free for use in any environment, including but not necessarily limited to: personal, academic, commercial, government, business, non-profit, and for-profit. "Free" in the preceding sentence means that there is no cost or charge associated with the installation and use of MonkeyPaste. 
+MonkeyPaste is free for use in any environment, including but not necessarily limited to: personal, academic, commercial, government, business, non-profit, and for-profit. "Free" in the preceding sentence means that there is no cost or charge associated with the installation and use of MonkeyPaste.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software (the "Software"), to use the Software without restriction, including the rights to use, copy, publish, and distribute the Software, and to permit persons to whom the Software is furnished to do so.
 

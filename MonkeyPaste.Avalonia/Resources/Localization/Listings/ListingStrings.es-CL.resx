@@ -266,4 +266,7 @@ su portapapeles se rastrea o almacena en cualquier lugar más allá de su propia
   <data name="SearchTerm4" xml:space="preserve">
     <value>portapapeles</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Almacenamiento local seguro y privado de datos con protección opcional de 2 factores con contraseña</value>
+  </data>
 </root>

@@ -266,4 +266,7 @@ jou knipbord word ooit opgespoor of gestoor ENIGE plek buite jou eie masjien. Ty
   <data name="SearchTerm4" xml:space="preserve">
     <value>Knipbord</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Veilige, veilige en private plaaslike databerging met opsionele 2-faktor wagwoordbeskerming</value>
+  </data>
 </root>

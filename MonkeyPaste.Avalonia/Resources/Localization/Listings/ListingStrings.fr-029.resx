@@ -266,4 +266,7 @@ votre presse-papiers n’est jamais suivi ou stocké N’IMPORTE OÙ au-delà de
   <data name="SearchTerm4" xml:space="preserve">
     <value>Presse-papiers</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Stockage de données local sûr, sécurisé et privé avec protection par mot de passe à 2 facteurs en option</value>
+  </data>
 </root>

@@ -266,4 +266,7 @@ vaše schránka je vždy sledována nebo uložena KDEKOLI mimo váš vlastní po
   <data name="SearchTerm4" xml:space="preserve">
     <value>schránka</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Bezpečné, zabezpečené a soukromé místní úložiště dat s volitelnou dvoufaktorovou ochranou heslem</value>
+  </data>
 </root>

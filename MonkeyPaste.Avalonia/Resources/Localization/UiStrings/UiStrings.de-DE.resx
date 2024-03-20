@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Erfahren Sie mehr über Pläne</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Einfügen in: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Bei Verwendung verfügbarer Kontakte (erfordert ein Fetcher-Plugin) wird dieses Feld für alle Instanzen dieser Vorlage in diesem Dokument oder in jedem Dokument verwendet, auf das später verwiesen wird.&lt;/p&gt;&lt;p&gt; Wenn Sie hier beispielsweise eine E-Mail-Adresse auswählen, wird das E-Mail-Feld des von Ihnen ausgewählten Kontakts für alle Instanzen in diesem Dokument verwendet.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Eine vollständige Wiederherstellung kann nicht garantiert werden und kann je na
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Voreinstellungen müssen eindeutige Anleitungen haben. Im Plugin „{1}“ wurde eine doppelte Voreinstellungs-GUID „{0}“ für die Voreinstellungen „{2}“ erkannt.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Einfügen in: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

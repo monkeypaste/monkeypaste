@@ -2639,9 +2639,6 @@ beckback@monkeycaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Planlar hakkında daha fazla bilgi edinin</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Yapıştır: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Mevcut kişileri kullanarak (bir alıcı eklentisi gerektirir) bu alan, bu şablonun bu belgedeki tüm örnekleri için veya daha sonra başvurulacak herhangi bir örnek için kullanılacaktır.&lt;/p&gt;&lt;p&gt; Örneğin, burada e-posta adresini seçerseniz, seçtiğiniz kişinin e-posta alanı bu belgedeki tüm örnekler için kullanılacaktır.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Tam geri yükleme garanti edilemez ve verilerin kaynağına bağlı olarak perfo
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Hazır ayarların benzersiz kılavuzları olmalıdır. Ön ayarlar için '{1}' eklentisinde yinelenen ön ayar guid'i '{0}' algılandı: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Yapıştır: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

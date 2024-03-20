@@ -12,7 +12,6 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvProgressSpinner :
         UserControl, MpIOverrideRender {
-        private List<IDisposable> _disposables = [];
 
         #region Statics
 
@@ -124,15 +123,14 @@ namespace MonkeyPaste.Avalonia {
                 VerticalAlignment = VerticalAlignment.Stretch,
                 IsVisible = false
             };
-            this.GetObservable(PercentProperty).Subscribe(value => OnPercentChanged()).AddDisposable(_disposables);
+            this.GetObservable(PercentProperty).Subscribe(value => OnPercentChanged()).AddDisposable(this);
         }
 
         #endregion
 
         protected override void OnUnloaded(global::Avalonia.Interactivity.RoutedEventArgs e) {
             base.OnUnloaded(e);
-            _disposables.ForEach(x => x.Dispose());
-            _disposables = null;
+            this.ClearDisposables();
         }
 
 

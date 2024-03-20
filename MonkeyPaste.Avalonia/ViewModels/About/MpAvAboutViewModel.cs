@@ -31,6 +31,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public bool IsOverCredits { get; set; }
+
+        public string VersionUrl =>
+            $"{MpServerConstants.VERSION_BASE_URL}/{Mp.Services.ThisAppInfo.ThisAppProductVersion}";
+
+        public string TermsUrl =>
+            $"{MpServerConstants.LEGAL_BASE_URL}/terms/index.html";
         #endregion
 
         #region Model
@@ -64,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
                 MinWidth = 300,
                 MinHeight = 200,
                 Width = 500,
-                Height = 300,
+                Height = 330,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 CanResize = true,
                 Title = UiStrings.AboutWindowTitlePrefix.ToWindowTitleText(),

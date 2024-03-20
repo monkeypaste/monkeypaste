@@ -2639,9 +2639,6 @@ Changeзгәрешләр өчен сылтамага иярегез
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Планнар турында күбрәк белү</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Паст: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Булган контактларны кулланып (шпр.-флэш таләп итә) бу кыр шушы документ аша бу шаблийның барлык инҗирләре өчен яки аннан соң да искә алыначак.&lt;/p&gt;&lt;p&gt; Мәсәлән, монда электрон почта адресын сайласа, сайлаган контактның электрон кыры бу документтагы барлык очраклар өчен кулланылыр.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Changeзгәрешләр өчен сылтамага иярегез
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Пресетларның уникаль гәүсәләре булырга тиеш. Председатлар өчен "{1}" плагинында председат "{0}"ны кабатлату ачыкланган: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Паст: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

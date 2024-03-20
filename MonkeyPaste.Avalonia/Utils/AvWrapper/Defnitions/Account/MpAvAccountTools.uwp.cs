@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 #if WAP
-using Windows.Services.Store; 
+using Windows.Services.Store;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -15,12 +15,8 @@ namespace MonkeyPaste.Avalonia {
 #if WAP
         #region Private Variables
         private bool _isContextWindowInitialized = false;
-        private string _WindowsStoreId = "9MZRBMH3JT75";
-
-        //StoreProduct subscriptionStoreProduct;
-
-        // Assign this variable to the Store ID of your subscription add-on.
-        //private string subscriptionStoreId = "9N5X8R1C9CR4"; // unlimited-monthly
+        //private string _WindowsStoreId = "9MZRBMH3JT75";
+        private string _WindowsStoreId = "9MW0FPDSHMJK";
         #endregion
 
         #region Constants
@@ -57,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 return $"ms-windows-store://review/?PFN={Windows.ApplicationModel.Package.Current.Id.FamilyName}";
             }
-        } 
+        }
 
         public string ThisProductUri {
             get {

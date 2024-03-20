@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>পরিকল্পনা সম্পর্কে আরও জানুন</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>পেস্ট করুন: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;উপলভ্য পরিচিতিগুলি ব্যবহার করে (একটি ফেচার প্লাগইন প্রয়োজন) এই ক্ষেত্রটি এই দস্তাবেজ জুড়ে এই টেমপ্লেটের সমস্ত উদাহরণের জন্য ব্যবহার করা হবে বা যে কোনও ক্ষেত্রে এটি পরে উল্লেখ করা হবে।&lt;/p&gt;&lt;p&gt; সুতরাং উদাহরণস্বরূপ, যদি এখানে ইমেল ঠিকানা নির্বাচন করা হয় তবে আপনার নির্বাচন করা পরিচিতির ইমেল ক্ষেত্রটি এই দস্তাবেজের সমস্ত দৃষ্টান্তের জন্য ব্যবহৃত হবে।&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>প্রিসেটের অনন্য গাইড থাকতে হবে। প্রিসেটের জন্য প্লাগইন '{1}'-এ ডুপ্লিকেট প্রিসেট গাইড '{0}' সনাক্ত করা হয়েছে: {2}।</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;পেস্ট করুন: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

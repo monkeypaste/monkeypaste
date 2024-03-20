@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>योजनांबद्दल अधिक जाणून घ्या</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>पेस्ट करा: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;उपलब्ध संपर्कांचा वापर करून (फेचर प्लगइन आवश्यक आहे) हे क्षेत्र या दस्तऐवजातील या टेम्पलेटच्या सर्व उदाहरणांसाठी वापरले जाईल किंवा नंतर संदर्भित केले जाईल.&lt;/p&gt;&lt;p&gt; तर उदाहरणार्थ, जर येथे ईमेल पत्ता निवडला तर आपण निवडलेल्या संपर्काचे ईमेल क्षेत्र या दस्तऐवजातील सर्व घटनांसाठी वापरले जाईल.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>प्रीसेटमध्ये युनिक गाइड्स असणे आवश्यक आहे. प्रीसेटसाठी प्लगइन '{1}'मध्ये डुप्लिकेट प्रीसेट गाइड '{0}' आढळले: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;पेस्ट करा: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

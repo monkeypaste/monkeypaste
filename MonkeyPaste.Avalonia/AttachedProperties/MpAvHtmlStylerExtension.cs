@@ -21,7 +21,6 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public static class MpAvHtmlStylerExtension {
-        private static Dictionary<HtmlControl, List<IDisposable>> _disposableLookup = [];
         private static Dictionary<MpHtmlStyleType, string> _stylesLookup = [];
         static MpAvHtmlStylerExtension() {
             //if (MpAvThemeViewModel.Instance != null &&
@@ -133,19 +132,19 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region ZoomFactor AvaloniaProperty
-        public static double GetZoomFactor(AvaloniaObject obj) {
-            return obj.GetValue(ZoomFactorProperty);
+        #region IsUniqueStyleRequired AvaloniaProperty
+        public static bool GetIsUniqueStyleRequired(AvaloniaObject obj) {
+            return obj.GetValue(IsUniqueStyleRequiredProperty);
         }
 
-        public static void SetZoomFactor(AvaloniaObject obj, double value) {
-            obj.SetValue(ZoomFactorProperty, value);
+        public static void SetIsUniqueStyleRequired(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsUniqueStyleRequiredProperty, value);
         }
 
-        public static readonly AttachedProperty<double> ZoomFactorProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, double>(
-                "ZoomFactor",
-                1.0d);
+        public static readonly AttachedProperty<bool> IsUniqueStyleRequiredProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsUniqueStyleRequired",
+                false);
 
         #endregion
 
@@ -225,19 +224,11 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            List<IDisposable> dl = null;
-            if (!_disposableLookup.ContainsKey(hc)) {
-                dl = [];
-                _disposableLookup.Add(hc, dl);
-            } else {
-                dl = _disposableLookup[hc];
-            }
-
             hc.DetachedFromVisualTree += Hc_DetachedFromVisualTree;
             hc.RenderError += Hc_RenderError;
             hc.StylesheetLoad += Hc_StylesheetLoad;
             hc.LinkClicked += Hc_LinkClicked;
-            hc.GetObservable(HtmlControl.TextProperty).Subscribe(value => OnTextChanged(hc)).AddDisposable(dl);
+            hc.GetObservable(HtmlControl.TextProperty).Subscribe(value => OnTextChanged(hc)).AddDisposable(hc);
             UpdateContent(hc, true);
         }
         private static void OnTextChanged(HtmlControl hc) {
@@ -250,7 +241,15 @@ namespace MonkeyPaste.Avalonia {
             }
             if (!hc.Text.ToStringOrEmpty().IsStringHtmlDocument()) {
                 // ensure text is full html doc or stylesheet stuff doesn't work
-                string html_doc_str = hc.Text.ToStringOrEmpty().ToHtmlDocumentFromTextOrPartialHtml();
+                string html_doc_str = hc.Text.ToStringOrEmpty();
+                if (!html_doc_str.StartsWith("<")) {
+                    // BUG htmlRenderer seems to ignore raw text element html
+                    if (html_doc_str.Contains("\n") || html_doc_str.Contains("<br>") || html_doc_str.Contains("<br/>")) {
+                        // multi-line 
+
+                    }
+                }
+                html_doc_str = html_doc_str.ToHtmlDocumentFromTextOrPartialHtml();
                 hc.SetHtml(html_doc_str);
             }
         }
@@ -290,10 +289,8 @@ namespace MonkeyPaste.Avalonia {
             hc.RenderError -= Hc_RenderError;
             hc.StylesheetLoad -= Hc_StylesheetLoad;
             hc.LinkClicked -= Hc_LinkClicked;
-            if (_disposableLookup.TryGetValue(hc, out var dl)) {
-                dl.ForEach(x => x.Dispose());
-                _disposableLookup.Remove(hc);
-            }
+
+            hc.ClearDisposables();
         }
         private static void Hc_LinkClicked(object sender, HtmlRendererRoutedEventArgs<TheArtOfDev.HtmlRenderer.Core.Entities.HtmlLinkClickedEventArgs> e) {
             if (sender is not HtmlControl hc ||
@@ -539,7 +536,7 @@ namespace MonkeyPaste.Avalonia {
         private static string GetStyleSheet(HtmlControl hc) {
             // NOTE this is sample css from HtmlRenderer proj:
             var style_type = GetHtmlStyleType(hc);
-            if (_stylesLookup.TryGetValue(style_type, out string css)) {
+            if (_stylesLookup.TryGetValue(style_type, out string css) && !GetIsUniqueStyleRequired(hc)) {
                 return css;
             }
             string css_str = DefaultStyleSheet;
@@ -551,11 +548,11 @@ namespace MonkeyPaste.Avalonia {
 * {{ margin: 0; padding: 0; }}
 body {{ color: {0}; font-size: {1}px; font-family: {2}; white-space: normal;  word-break: break-all; }}
 p {{ height: 1em; line-height: 1.42; margin: 0; padding: 0; }}
-.underline {{ text-decoration: underline; line-height: 1.42; }}
+.underline {{ text-decoration: underline; line-height: 1.42; text-underline-offset: -2; }}
 .highlight-inactive {{ background-color: {3}; color: {4}; }}
 .highlight-active {{ background-color: {5}; color: {6}; }}
 a:link {{ text-decoration: none; color: {7}; }}
-a:hover {{ text-decoration: underline; color: {8}; }}",
+a:hover {{ text-decoration: underline; color: {8}; text-underline-offset: -2; }}",
 Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor).ToPortableColor().ToHex(true), //0
 GetDefaultFontSize(hc), //1
 GetDefaultFontFamily(hc), //2
@@ -571,7 +568,7 @@ Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContent
                 default:
                     css_str += string.Format(
 @"* {{ margin: 0; padding: 0; }}
-body {{ color: {0}; font-size: {1}px; font-family: {2}; line-height: 1; white-space: normal;  word-break: break-all; }}
+body {{ color: {0}; font-size: {1}px; font-family: {2}; line-height: 1; }}
 p {{ margin: 0; height: 1em; line-height: 1; }}
 .paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 a:link {{ text-decoration: none; }}
@@ -583,7 +580,9 @@ MpSystemColors.gold1.RemoveHexAlpha()
                         );
                     break;
             }
-            _stylesLookup.Add(style_type, css_str);
+            if (!GetIsUniqueStyleRequired(hc)) {
+                _stylesLookup.Add(style_type, css_str);
+            }
             return css_str;
         }
     }

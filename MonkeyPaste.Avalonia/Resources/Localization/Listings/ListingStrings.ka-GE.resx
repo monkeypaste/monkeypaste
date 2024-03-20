@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>ბუფერში</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>უსაფრთხო, უსაფრთხო და პირადი ადგილობრივი მონაცემთა შენახვა სურვილისამებრ 2 - ფაქტორიანი პაროლის დაცვა</value>
+  </data>
 </root>

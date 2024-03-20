@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>ຄລິບ</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>ການເກັບຮັກສາຂໍ້ມູນທ້ອງຖິ່ນທີ່ປອດໄພ, ປອດໄພແລະເອກະຊົນທີ່ມີທາງເລືອກ 2 - ການປົກປ້ອງລະຫັດຜ່ານປັດໄຈ</value>
+  </data>
 </root>

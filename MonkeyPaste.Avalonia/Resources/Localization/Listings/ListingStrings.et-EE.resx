@@ -266,4 +266,7 @@ teie lõikelauda jälgitakse või salvestatakse alati kõikjal väljaspool teie 
   <data name="SearchTerm4" xml:space="preserve">
     <value>Lõikelaud</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Turvaline, turvaline ja privaatne kohalik andmesalvestus valikulise 2 - teguri paroolikaitsega</value>
+  </data>
 </root>

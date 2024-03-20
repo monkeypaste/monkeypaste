@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>Буфер обміну</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Безпечне, надійне та конфіденційне локальне сховище даних з додатковим 2-факторним захистом паролем</value>
+  </data>
 </root>

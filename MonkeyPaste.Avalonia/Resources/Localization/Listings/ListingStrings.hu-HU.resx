@@ -266,4 +266,7 @@ a vágólapodat mindig nyomon követheted vagy tárolhatod BÁRHOL a saját gép
   <data name="SearchTerm4" xml:space="preserve">
     <value>vágólap</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Biztonságos, védett és privát helyi adattárolás opcionális 2 faktoros jelszavas védelemmel</value>
+  </data>
 </root>

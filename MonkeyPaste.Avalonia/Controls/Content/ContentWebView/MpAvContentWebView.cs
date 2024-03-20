@@ -24,7 +24,7 @@ using AvToolTip = Avalonia.Controls.ToolTip;
 
 #if WINDOWS
 using static System.Net.Mime.MediaTypeNames;
-using System.Windows.Media.Media3D; 
+using System.Windows.Media.Media3D;
 #endif
 
 
@@ -1115,14 +1115,14 @@ namespace MonkeyPaste.Avalonia {
 
             Address = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
 
-            this.GetObservable(MpAvContentWebView.ContentScaleProperty).Subscribe(value => OnContentScaleChanged()).AddDisposable(_disposables);
-            this.GetObservable(MpAvContentWebView.IsEditorInitializedProperty).Subscribe(value => OnIsEditorInitializedChanged()).AddDisposable(_disposables);
-            this.GetObservable(MpAvContentWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged()).AddDisposable(_disposables);
-            this.GetObservable(MpAvContentWebView.IsContentSelectedProperty).Subscribe(value => OnIsContentSelectedChanged()).AddDisposable(_disposables);
-            this.GetObservable(MpAvContentWebView.IsContentResizingProperty).Subscribe(value => OnIsContentResizingChanged()).AddDisposable(_disposables);
-            this.GetObservable(MpAvContentWebView.IsContentReadOnlyProperty).Subscribe(value => OnIsContentReadOnlyChanged()).AddDisposable(_disposables);
-            this.GetObservable(MpAvContentWebView.IsContentSubSelectableProperty).Subscribe(value => OnIsContentSubSelectableChanged()).AddDisposable(_disposables);
-            this.GetObservable(MpAvContentWebView.IsContentFindAndReplaceVisibleProperty).Subscribe(value => OnIsContentFindOrReplaceVisibleChanged()).AddDisposable(_disposables);
+            this.GetObservable(MpAvContentWebView.ContentScaleProperty).Subscribe(value => OnContentScaleChanged()).AddDisposable(this);
+            this.GetObservable(MpAvContentWebView.IsEditorInitializedProperty).Subscribe(value => OnIsEditorInitializedChanged()).AddDisposable(this);
+            this.GetObservable(MpAvContentWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged()).AddDisposable(this);
+            this.GetObservable(MpAvContentWebView.IsContentSelectedProperty).Subscribe(value => OnIsContentSelectedChanged()).AddDisposable(this);
+            this.GetObservable(MpAvContentWebView.IsContentResizingProperty).Subscribe(value => OnIsContentResizingChanged()).AddDisposable(this);
+            this.GetObservable(MpAvContentWebView.IsContentReadOnlyProperty).Subscribe(value => OnIsContentReadOnlyChanged()).AddDisposable(this);
+            this.GetObservable(MpAvContentWebView.IsContentSubSelectableProperty).Subscribe(value => OnIsContentSubSelectableChanged()).AddDisposable(this);
+            this.GetObservable(MpAvContentWebView.IsContentFindAndReplaceVisibleProperty).Subscribe(value => OnIsContentFindOrReplaceVisibleChanged()).AddDisposable(this);
 
 #if SUGAR_WV
             Background = Brushes.Transparent;

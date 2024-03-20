@@ -25,15 +25,6 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Collections
-        public static void AddDisposable(this IDisposable disp, IList<IDisposable> list) {
-            if (disp == null || list == null) {
-                if (list == null) {
-                    MpDebug.Break($"List should exist");
-                }
-                return;
-            }
-            list.Add(disp);
-        }
         public static void AddRangeOrDefault<T>(this IList<T> list, IEnumerable<T> range) {
             if (range == null) {
                 return;

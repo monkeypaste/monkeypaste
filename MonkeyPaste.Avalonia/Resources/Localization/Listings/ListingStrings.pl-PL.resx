@@ -266,4 +266,7 @@ Twój schowek jest zawsze śledzony lub przechowywany GDZIEKOLWIEK poza Twoim ko
   <data name="SearchTerm4" xml:space="preserve">
     <value>schowek</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Bezpieczne i prywatne lokalne przechowywanie danych z opcjonalną 2-składnikową ochroną hasłem</value>
+  </data>
 </root>

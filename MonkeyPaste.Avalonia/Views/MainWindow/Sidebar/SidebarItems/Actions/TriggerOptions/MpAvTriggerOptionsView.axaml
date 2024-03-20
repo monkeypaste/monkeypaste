@@ -48,7 +48,7 @@
 
         <Style Selector=":is(Button) /template/ ContentPresenter">
             <Setter Property="Foreground"
-                    Value="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                    Value="{Binding $self.Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />
         </Style>
 
         <!--  ENABLE  -->

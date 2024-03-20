@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>کلیپ بورد</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>ذخیره سازی داده های محلی امن، امن و خصوصی با حفاظت از رمز عبور 2 فاکتور اختیاری</value>
+  </data>
 </root>

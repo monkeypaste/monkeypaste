@@ -266,4 +266,7 @@ panonuz, kendi makinenizin ötesinde HERHANGİ BİR YERDE izlenir veya saklanır
   <data name="SearchTerm4" xml:space="preserve">
     <value>Pano</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>İsteğe bağlı 2 faktörlü parola koruması ile güvenli, emniyetli ve özel yerel veri depolama</value>
+  </data>
 </root>

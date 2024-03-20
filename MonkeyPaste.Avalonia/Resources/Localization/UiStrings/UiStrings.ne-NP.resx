@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>योजनाहरूको बारेमा अधिक जान्नुहोस्</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>यसमा टाँस्नुहोस्: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;उपलब्ध सम्पर्कहरू प्रयोग गरेर (फेचर प्लगइन आवश्यक पर्दछ) यो फिल्ड यो कागजातमा यो टेम्प्लेटको सबै उदाहरणका लागि प्रयोग गरिनेछ वा कुनै पनि मा यो पछि सन्दर्भित गरिनेछ।&lt;/p&gt;&lt;p&gt; त्यसैले उदाहरणका लागि यदि यहाँ इमेल ठेगाना चयन गर्नुहोस् भने तपाईले चयन गर्नुभएको सम्पर्कको इमेल फिल्ड यस कागजातमा सबै उदाहरणहरूको लागि प्रयोग गरिनेछ।&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>प्रिसेटहरूमा अद्वितीय गाइडहरू हुनुपर्दछ। पूर्वनिर्धारितहरूका लागि प्लगइन '{1}' मा डुप्लिकेट पूर्वनिर्धारित गाइड '{0}' पत्ता लगाइएको थियो: {2}।</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;यसमा टाँस्नुहोस्: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

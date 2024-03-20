@@ -9,12 +9,12 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="10843MonkeyLLC.MonkeyPaste"
+    Name="10843MonkeyLLC.MonkeyPastetemp"
     Publisher="CN=359EAD65-2530-476F-82ED-8E549E87C6A6"
     Version="1.0.13.0" />
 
   <Properties>
-    <DisplayName>MonkeyPaste</DisplayName>
+    <DisplayName>Monkey Paste</DisplayName>
     <PublisherDisplayName>Monkey LLC</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
@@ -44,7 +44,7 @@
         </desktop:Extension>
       </Extensions>
       <uap:VisualElements
-        DisplayName="MonkeyPaste"
+        DisplayName="Monkey Paste"
         Description="The clipboard is a jungle. You need the prowess of a primate to navigate the terrain and tap its true potential."
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"

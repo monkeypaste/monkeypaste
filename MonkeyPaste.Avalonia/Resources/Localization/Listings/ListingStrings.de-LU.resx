@@ -266,4 +266,7 @@ Ihre Zwischenablage wird immer IRGENDWO außerhalb Ihres eigenen Computers verfo
   <data name="SearchTerm4" xml:space="preserve">
     <value>Zwischenablage</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Sichere und private lokale Datenspeicherung mit optionalem 2-Faktor-Passwortschutz</value>
+  </data>
 </root>

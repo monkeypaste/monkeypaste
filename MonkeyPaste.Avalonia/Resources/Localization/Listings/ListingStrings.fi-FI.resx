@@ -266,4 +266,7 @@ leikepöytääsi seurataan tai tallennetaan MIHIN tahansa oman koneesi ulkopuole
   <data name="SearchTerm4" xml:space="preserve">
     <value>leikepöytä</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Turvallinen, suojattu ja yksityinen paikallinen tietojen tallennus valinnaisella 2-vaiheisella salasanasuojauksella</value>
+  </data>
 </root>

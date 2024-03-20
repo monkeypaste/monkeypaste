@@ -266,4 +266,7 @@ jūsu starpliktuve kādreiz tiek izsekota vai glabāta JEBKUR ārpus jūsu maš�
   <data name="SearchTerm4" xml:space="preserve">
     <value>Starpliktuvē</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Droša, droša un privāta lokālā datu glabāšana ar papildu 2 faktoru paroles aizsardzību</value>
+  </data>
 </root>

@@ -266,4 +266,7 @@ khay nhớ tạm của bạn đã từng được theo dõi hoặc lưu trữ B�
   <data name="SearchTerm4" xml:space="preserve">
     <value>Clipboard</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Lưu trữ dữ liệu cục bộ an toàn, bảo mật và riêng tư với tùy chọn bảo vệ bằng mật khẩu 2 yếu tố</value>
+  </data>
 </root>

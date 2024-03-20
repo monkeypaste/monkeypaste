@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Matuto nang higit pa tungkol sa mga plano</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Idikit sa: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Gamit ang magagamit na mga contact (nangangailangan ng isang fetcher plugin) ang patlang na ito ay gagamitin para sa lahat ng mga pagkakataon ng template na ito sa buong dokumentong ito o sa anumang ito ay sanggunian sa mamaya.&lt;/p&gt;&lt;p&gt; Kaya halimbawa kung piliin ang email address dito pagkatapos ay ang email field ng contact na iyong pinili ay gagamitin para sa lahat ng mga pagkakataon sa dokumentong ito.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Ang kabuuang pagpapanumbalik ay hindi maaaring garantisadong at maaaring mabawas
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Ang mga preset ay dapat magkaroon ng natatanging mga guids. Duplicate preset guid '{0}' ay natukoy sa plugin '{1}' para sa mga preset: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Idikit sa: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

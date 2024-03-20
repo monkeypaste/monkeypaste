@@ -266,4 +266,7 @@ ditt urklipp spåras eller lagras VAR som helst utanför din egen maskin. Period
   <data name="SearchTerm4" xml:space="preserve">
     <value>Urklipp</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Trygg, säker och privat lokal datalagring med valfritt 2-faktors lösenordsskydd</value>
+  </data>
 </root>

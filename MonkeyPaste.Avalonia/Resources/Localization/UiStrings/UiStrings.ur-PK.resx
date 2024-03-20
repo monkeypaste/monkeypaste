@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>منصوبوں کے بارے میں مزید معلومات حاصل کریں</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>پیسٹ کریں: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;دستیاب رابطوں کا استعمال کرتے ہوئے (فیچر پلگ ان کی ضرورت ہوتی ہے) یہ فیلڈ اس دستاویز میں اس ٹیمپلیٹ کی تمام مثالوں کے لئے استعمال کی جائے گی یا کسی میں بھی بعد میں اس کا حوالہ دیا جائے گا۔&lt;/p&gt;&lt;p&gt; لہذا مثال کے طور پر اگر یہاں ای میل ایڈریس منتخب کریں تو آپ کے منتخب کردہ رابطے کا ای میل فیلڈ اس دستاویز میں تمام مثالوں کے لئے استعمال کیا جائے گا۔&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>پریسیٹس میں منفرد گائیڈز ہونا ضروری ہے۔ پری سیٹ کے لئے پلگ ان '{1}' میں ڈپلیکیٹ پری سیٹ گائیڈ '{0}' کا پتہ چلا: {2}۔</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;پیسٹ کریں: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

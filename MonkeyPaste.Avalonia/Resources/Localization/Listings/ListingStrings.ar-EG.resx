@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>حافظة</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>تخزين بيانات محلية آمنة ومأمونة وخاصة مع حماية اختيارية بكلمة مرور ثنائية العوامل</value>
+  </data>
 </root>

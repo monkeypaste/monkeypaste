@@ -2639,9 +2639,6 @@ Feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Preberite več o načrtih</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Prilepi na: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Z uporabo stikov, ki so na voljo (zahteva vtičnik za fetcher), bo to polje uporabljeno za vse primerke te predloge v tem dokumentu ali v katerem koli drugem dokumentu, na katerega se boste sklicevali pozneje.&lt;/p&gt;&lt;p&gt; Torej, na primer, če tukaj izberete e-poštni naslov, bo e-poštno polje stika, ki ga izberete, uporabljeno za vse primerke v tem dokumentu.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Popolne obnove ni mogoče zagotoviti in lahko zmanjša zmogljivost ali celo zru�
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Prednastavitve morajo imeti edinstvene vodila. Podvojeni prednastavljeni guid '{0}' je bil zaznan v vtičniku '{1}' za prednastavitve: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Prilepi na: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

@@ -42,30 +42,30 @@
     <!--  CONTRAST BG (B/W)  -->
     <Style Selector=":is(TemplatedControl).contrastFg /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Foreground"
-                Value="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                Value="{Binding $self.Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />
     </Style>
     <Style Selector=":is(TemplatedControl).contrastBorder /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="BorderBrush"
-                Value="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                Value="{Binding $self.Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />
     </Style>
 
     <Style Selector=":is(Border).contrastBorder">
         <Setter Property="BorderBrush"
-                Value="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                Value="{Binding $self.Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />
     </Style>
 
   <!--  CONTRAST BG (Compliment)  -->
     <Style Selector=":is(TemplatedControl).comp.contrastFg /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Foreground"
-                Value="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}, ConverterParameter=compliment}" />
+                Value="{Binding $self.Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}, ConverterParameter=compliment}" />
     </Style>
     <Style Selector=":is(TemplatedControl).comp.contrastBorder /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="BorderBrush"
-                Value="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}, ConverterParameter=compliment}" />
+                Value="{Binding $self.Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}, ConverterParameter=compliment}" />
     </Style>
 
     <Style Selector=":is(Border).comp.contrastBorder">
         <Setter Property="BorderBrush"
-                Value="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}, ConverterParameter=compliment}" />
+                Value="{Binding $self.Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}, ConverterParameter=compliment}" />
     </Style>
 </Styles>

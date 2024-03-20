@@ -266,4 +266,7 @@ vaša ostava se ikada prati ili skladišti bilo gde izvan vaše mašine. Menstru
   <data name="SearchTerm4" xml:space="preserve">
     <value>Ostave</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Bezbedno, bezbedno i privatno lokalno skladištenje podataka sa opcionalnom zaštitom lozinke 2 - faktor zaštite lozinkom</value>
+  </data>
 </root>

@@ -73,11 +73,11 @@
 
         <Style Selector=":is(Button).cornerButton.bottom Image">
             <Setter Property="local:MpAvImageTintExtension.Tint"
-                    Value="{Binding $parent[local:MpAvClipBorder].BorderBrush, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                    Value="{Binding $parent[local:MpAvClipBorder].BorderBrush, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />
         </Style>
         <Style Selector=":is(Button).cornerButton.bottom:pointerover Image">
             <!--<Setter Property="local:MpAvImageTintExtension.Tint"
-                    Value="{Binding $parent[local:MpAvClipBorder].BorderBrush, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}, ConverterParameter=compliment}" />-->
+                    Value="{Binding $parent[local:MpAvClipBorder].BorderBrush, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}, ConverterParameter=compliment}" />-->
             <Setter Property="local:MpAvImageTintExtension.Tint"
                     Value="{DynamicResource ThemeAccent5BgColor}" />
         </Style>

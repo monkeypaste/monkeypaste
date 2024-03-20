@@ -266,4 +266,7 @@ sua área de transferência é sempre rastreada ou armazenada em qualquer lugar 
   <data name="SearchTerm4" xml:space="preserve">
     <value>área de transferência</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Armazenamento de dados local seguro, seguro e privado com proteção opcional por senha de 2 fatores</value>
+  </data>
 </root>

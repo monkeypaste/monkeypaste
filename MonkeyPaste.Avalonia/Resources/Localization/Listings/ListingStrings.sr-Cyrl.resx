@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>Оставе</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Безбедно , безбедно и приватно локално складиштење података са опционалном заштитом лозинке 2 - фактор заштите лозинком</value>
+  </data>
 </root>

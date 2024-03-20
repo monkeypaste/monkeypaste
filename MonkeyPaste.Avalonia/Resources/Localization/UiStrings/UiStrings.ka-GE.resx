@@ -2639,9 +2639,6 @@ Monkeypaste მოწყობილობაზე
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>შეიტყვეთ მეტი გეგმების შესახებ</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ჩასვით: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;ხელმისაწვდომი კონტაქტების გამოყენებით (მოითხოვს fetcher მოდულს) ეს ველი გამოყენებული იქნება ამ შაბლონის ყველა შემთხვევისთვის ამ დოკუმენტის გასწვრივ ან ნებისმიერ შემთხვევაში ის მოგვიანებით იქნება მითითებული.&lt;/p&gt;&lt;p&gt; მაგალითად, თუ აქ აირჩიეთ ელ.ფოსტის მისამართი, მაშინ თქვენ მიერ არჩეული კონტაქტის ელ.ფოსტის ველი გამოყენებული იქნება ამ დოკუმენტის ყველა შემთხვევისთვის.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Monkeypaste მოწყობილობაზე
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Presets უნდა ჰქონდეს უნიკალური guids. დუბლიკატი წინასწარ დაყენებული guid '{0}' გამოვლინდა მოდულის "{1}" წინასწარ დაყენებებისთვის: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;ჩასვით: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

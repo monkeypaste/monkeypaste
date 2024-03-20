@@ -390,8 +390,7 @@ namespace MonkeyPaste.Avalonia {
             DbPasswordViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.DbPassword) {
                 SplashIconSourceObj = "ShieldImage",
                 Title = UiStrings.WelcomeDbPasswordTitle,
-                Caption = UiStrings.WelcomeDbPasswordCaption,
-                NeedsSkip = true
+                Caption = UiStrings.WelcomeDbPasswordCaption
             };
             #endregion
 

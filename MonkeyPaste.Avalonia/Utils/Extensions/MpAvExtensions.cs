@@ -16,6 +16,10 @@ using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvExtensions {
+        #region Private Variables
+        private static Dictionary<AvaloniaObject, List<IDisposable>> _disposableLookup = [];
+        #endregion
+
         #region Plugins
 
         public static MpIManagePluginComponents GetComponentManager(this MpManifestFormat mf) {
@@ -116,6 +120,27 @@ namespace MonkeyPaste.Avalonia {
 
         public static void SetHtml(this HtmlControl hc, string html) {
             hc.SetCurrentValue(HtmlControl.TextProperty, html);
+        }
+
+        public static void AddDisposable(this IDisposable disp, AvaloniaObject hostObject) {
+            if (!_disposableLookup.TryGetValue(hostObject, out var displ)) {
+                displ = [];
+            }
+            if (!displ.Contains(disp)) {
+                displ.Add(disp);
+            }
+        }
+
+        public static void ClearDisposables(this AvaloniaObject hostObject) {
+            if (!_disposableLookup.TryGetValue(hostObject, out var displ)) {
+                // none found
+                return;
+            }
+            foreach (var disp in displ) {
+                disp.Dispose();
+            }
+            displ.Clear();
+            _disposableLookup.Remove(hostObject);
         }
         #endregion
 

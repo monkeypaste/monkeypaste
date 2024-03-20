@@ -12,10 +12,8 @@ using Avalonia.Threading;
 using System.Threading.Tasks;
 using System.IO;
 using Avalonia.VisualTree;
-
-
-
-
+using System.Diagnostics;
+using System.Collections.Concurrent;
 
 #if CEFNET_WV
 using CefNet;
@@ -31,8 +29,6 @@ using Avalonia.WebView.MacCatalyst.Core;
 #endif
 using WebViewCore.Configurations;
 using AvaloniaWebView;
-using System.Diagnostics;
-using System.Collections.Concurrent;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -58,7 +54,6 @@ namespace MonkeyPaste.Avalonia {
 #if CEFNET_WV
         private bool _isBrowserCreated = false;
 #endif
-        protected List<IDisposable> _disposables = [];
         #endregion
 
         #region Constants
@@ -226,7 +221,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpICanExecuteJavascript 
-        async void MpICanExecuteJavascript.ExecuteJavascript(string script) {
+#if SUGAR_WV
+        async 
+#endif
+        void MpICanExecuteJavascript.ExecuteJavascript(string script) {
 #if CEFNET_WV
             this.GetMainFrame().ExecuteJavaScript(script, this.GetMainFrame().Url, 0);
 #elif SUGAR_WV
@@ -325,13 +323,15 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
 
+#if SUGAR_WV
             if (this.InnerWebView == null ||
-                    !this.InnerWebView.IsLoaded ||
-                    this.InnerWebView.Url == null ||
-                    this.InnerWebView.Url.AbsoluteUri != Address) {
+                        !this.InnerWebView.IsLoaded ||
+                        this.InnerWebView.Url == null ||
+                        this.InnerWebView.Url.AbsoluteUri != Address) {
                 // webview not loaded
                 return false;
-            }
+            } 
+#endif
             if (this is MpAvContentWebView cwv2 &&
                 !cwv2.IsDomLoaded) {
                 // dom not loaded
@@ -404,10 +404,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
             _isBrowserCreated = false;
-            if (_disposables != null) {
-                _disposables.ForEach(x => x.Dispose());
-                _disposables.Clear();
-            }
+            this.ClearDisposables();
         }
 #endif
         #endregion
@@ -472,7 +469,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvWebView() : base() {
-            this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged()).AddDisposable(_disposables);
+            this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged()).AddDisposable(this);
 #if SUGAR_WV
             this.Content = new WebView();
             InnerWebView.WebViewCreated += InnerWebView_WebViewCreated;

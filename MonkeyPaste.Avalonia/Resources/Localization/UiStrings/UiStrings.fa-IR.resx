@@ -2639,9 +2639,6 @@ MonkeyPaste روی دستگاه
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>درباره برنامه ها بیشتر بدانید</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>چسباندن به: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;با استفاده از اشناهای موجود ) نیاز به وصلۀ واکشی ( این زمینه برای همۀ نمونههای این قالب در سراسر این سند یا در هر موردی که بعدا به ان ارجاع داده خواهد شد ، استفاده خواهد شد.&lt;/p&gt;&lt;p&gt; بنابراین به عنوان مثال اگر ادرس ایمیل را در اینجا انتخاب کنید، فیلد ایمیل مخاطبی که انتخاب می کنید برای همه موارد موجود در این سند استفاده می شود.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ MonkeyPaste روی دستگاه
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>ایستگاه از پیش تنظیم باید guids منحصر به فرد داشته باشد. تکراری هدایت از پیش تعیین شده '{0}' در پلاگین '{1}' برای ایستگاه از پیش تنظیم شناسایی شد: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;چسباندن به: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

@@ -2639,9 +2639,6 @@ FANDUCE@ONKEYPASTET.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ଯୋଜନା ବିଷୟରେ ଅଧିକ ଜାଣନ୍ତୁ |</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ପେଷ୍ଟ: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;ଉପଲବ୍ଧ ସମ୍ପର୍କଗୁଡିକ ବ୍ୟବହାର କରି (ଏକ ଫ୍ଲାଚର୍ ପ୍ଲଗଇନ୍ ଆବଶ୍ୟକ କରେ) ଏହି କ୍ଷେତ୍ର ଏହି ଦସ୍ତାବିଜରେ ଏହି ଟେମ୍ପଲେଟ୍ ର ସମସ୍ତ ଉଦାହରଣ ପାଇଁ ବ୍ୟବହୃତ ହେବ କିମ୍ବା ଏହା ପରେ ଉଲ୍ଲେଖ କରାଯିବ।&lt;/p&gt;&lt;p&gt; ତେଣୁ ଉଦାହରଣ ସ୍ୱରୂପ ଯଦି ଏଠାରେ ଇମେଲ୍ ଠିକଣା ଚୟନ କରନ୍ତୁ ତେବେ ଆପଣ ଚୟନ କରିଥିବା ସମ୍ପର୍କର ଇମେଲ୍ ଫିଲ୍ଡ ଏହି ଦସ୍ତାବିଜରେ ଥିବା ସମସ୍ତ ଉଦାହରଣ ପାଇଁ ବ୍ୟବହୃତ ହେବ।&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ FANDUCE@ONKEYPASTET.com</value>
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>ପ୍ରେସେଟ୍ ରେ ଅନନ୍ୟ ଗୁଇଡ୍ ରହିବା ଆବଶ୍ୟକ। ପ୍ରିସେଟ୍ ପାଇଁ ପ୍ଲଗଇନ୍ '{1}'ରେ ଡୁପ୍ଲିକେଟ୍ ପ୍ରିସେଟ୍ ଗିଲ୍ଡ '{0}' ଚିହ୍ନଟ ହୋଇଥିଲା: {2}।</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;ପେଷ୍ଟ: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

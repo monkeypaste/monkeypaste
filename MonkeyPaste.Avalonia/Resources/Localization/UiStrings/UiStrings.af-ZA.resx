@@ -2639,9 +2639,6 @@ terugvoer@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lees meer oor planne</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Plak aan: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Met behulp van beskikbare kontakte (benodig 'n fetcher-inprop) sal hierdie veld gebruik word vir alle gevalle van hierdie sjabloon in hierdie dokument of in enige plek waarna later verwys sal word.&lt;/p&gt;&lt;p&gt; As u byvoorbeeld e-posadres hier kies, sal die e-posveld van die kontak wat u kies, vir alle gevalle in hierdie dokument gebruik word.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Totale herstel kan nie gewaarborg word nie en kan prestasie verminder of selfs M
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Voorinstellings moet unieke gidse hê. Duplikaatvoorinstellinggids '{0}' is in inprop '{1}' bespeur vir voorafinstellings: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Plak na: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

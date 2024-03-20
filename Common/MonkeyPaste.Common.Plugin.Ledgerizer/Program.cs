@@ -39,9 +39,9 @@ namespace Ledgerizer {
         static MpLedgerizerFlags LEDGERIZER_FLAGS =
             //MpLedgerizerFlags.TRANSLATE_RESX |
             //MpLedgerizerFlags.GEN_EMPTY_RESX
-            //MpLedgerizerFlags.GEN_ADDON_LISTING |
-            //MpLedgerizerFlags.GEN_PROD_LISTING |
-            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            MpLedgerizerFlags.GEN_ADDON_LISTING |
+            MpLedgerizerFlags.GEN_PROD_LISTING |
+            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
             //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
@@ -50,14 +50,14 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.DO_REMOTE_INDEX |
             //MpLedgerizerFlags.DO_LOCAL_LEDGER |
             //MpLedgerizerFlags.DO_REMOTE_LEDGER |
-            MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+            //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
             //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
             //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
             //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
             // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
             //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
-            MpLedgerizerFlags.DEBUG// |
-                                   //MpLedgerizerFlags.RELEASE
+            MpLedgerizerFlags.DEBUG | // |
+                                   MpLedgerizerFlags.RELEASE
             ;
 
         #region Localizer Props
@@ -70,34 +70,36 @@ namespace Ledgerizer {
 
         static IEnumerable<string> WorkingCultures {
             get {
-                // these give 400 error on google translate
-                string[] omitted = new string[] {
-                    "iu-Latn",
-                    "iu-Latn-CA",
-                    "kok-IN",
-                };
-                // get cultures resx tool supports
-                var specificCultures = CultureInfo.GetCultures(CultureTypes.AllCultures)
-                .Where(c => c.GetAncestors().Any())
-                .OrderBy(c => c.DisplayName)
-                .ToArray();
+                return new string[] { "en-US" };
 
-                // get azure langs
-                var azure_langs = new (string, string)[] {
-                    ("Afrikaans-Afrikaans","af"),("Amharic-አማርኛ","am"),("Arabic-العربية","ar"),("Assamese-অসমীয়া","as"),("Azerbaijani-Azərbaycan","az"),("Bashkir-Bashkir","ba"),("Bulgarian-Български","bg"),("Bangla-বাংলা","bn"),("Tibetan-བོད་སྐད་","bo"),("Bosnian-Bosnian","bs"),("Catalan-Català","ca"),("Czech-Čeština","cs"),("Welsh-Cymraeg","cy"),("Danish-Dansk","da"),("German-Deutsch","de"),("Divehi-ދިވެހިބަސް","dv"),("Greek-Ελληνικά","el"),("English-English","en"),("Spanish-Español","es"),("Estonian-Eesti","et"),("Persian-فارسی","fa"),("Finnish-Suomi","fi"),("Filipino-Filipino","fil"),("Fijian-NaVosaVakaviti","fj"),("French-Français","fr"),("French(Canada)-Français(Canada)","fr-CA"),("Irish-Gaeilge","ga"),("Gujarati-ગુજરાતી","gu"),("Hebrew-עברית","he"),("Hindi-हिन्दी","hi"),("Croatian-Hrvatski","hr"),("HaitianCreole-HaitianCreole","ht"),("Hungarian-Magyar","hu"),("Armenian-Հայերեն","hy"),("Indonesian-Indonesia","id"),("Inuinnaqtun-Inuinnaqtun","ikt"),("Icelandic-Íslenska","is"),("Italian-Italiano","it"),("Inuktitut-ᐃᓄᒃᑎᑐᑦ","iu"),("Inuktitut(Latin)-Inuktitut(Latin)","iu-Latn"),("Japanese-日本語","ja"),("Georgian-ქართული","ka"),("Kazakh-ҚазақТілі","kk"),("Khmer-ខ្មែរ","km"),("Kurdish(Northern)-Kurdî(Bakur)","kmr"),("Kannada-ಕನ್ನಡ","kn"),("Korean-한국어","ko"),("Kurdish(Central)-Kurdî(Navîn)","ku"),("Kyrgyz-Kyrgyz","ky"),("Lao-ລາວ","lo"),("Lithuanian-Lietuvių","lt"),("Latvian-Latviešu","lv"),("Chinese(Literary)-中文(文言文)","lzh"),("Malagasy-Malagasy","mg"),("Māori-TeReoMāori","mi"),("Macedonian-Македонски","mk"),("Malayalam-മലയാളം","ml"),("Mongolian(Cyrillic)-Mongolian(Cyrillic)","mn-Cyrl"),("Mongolian(Traditional)-ᠮᠣᠩᠭᠣᠯᠬᠡᠯᠡ","mn-Mong"),("Marathi-मराठी","mr"),("Malay-Melayu","ms"),("Maltese-Malti","mt"),("HmongDaw-HmongDaw","mww"),("Myanmar(Burmese)-မြန်မာ","my"),("Norwegian-NorskBokmål","nb"),("Nepali-नेपाली","ne"),("Dutch-Nederlands","nl"),("Odia-ଓଡ଼ିଆ","or"),("QuerétaroOtomi-Hñähñu","otq"),("Punjabi-ਪੰਜਾਬੀ","pa"),("Polish-Polski","pl"),("Dari-دری","prs"),("Pashto-پښتو","ps"),("Portuguese(Brazil)-Português(Brasil)","pt"),("Portuguese(Portugal)-Português(Portugal)","pt-PT"),("Romanian-Română","ro"),("Russian-Русский","ru"),("Slovak-Slovenčina","sk"),("Slovenian-Slovenščina","sl"),("Samoan-GaganaSāmoa","sm"),("Albanian-Shqip","sq"),("Serbian(Cyrillic)-Српски(ћирилица)","sr-Cyrl"),("Serbian(Latin)-Srpski(latinica)","sr-Latn"),("Swedish-Svenska","sv"),("Swahili-Kiswahili","sw"),("Tamil-தமிழ்","ta"),("Telugu-తెలుగు","te"),("Thai-ไทย","th"),("Tigrinya-ትግር","ti"),("Turkmen-TürkmenDili","tk"),("Klingon(Latin)-Klingon(Latin)","tlh-Latn"),("Klingon(pIqaD)-Klingon(pIqaD)","tlh-Piqd"),("Tongan-LeaFakatonga","to"),("Turkish-Türkçe","tr"),("Tatar-Татар","tt"),("Tahitian-ReoTahiti","ty"),("Uyghur-ئۇيغۇرچە","ug"),("Ukrainian-Українська","uk"),("Urdu-اردو","ur"),("Uzbek(Latin)-Uzbek(Latin)","uz"),("Vietnamese-TiếngViệt","vi"),("YucatecMaya-YucatecMaya","yua"),("Cantonese(Traditional)-粵語(繁體)","yue"),("ChineseSimplified-中文(简体)","zh-Hans"),("ChineseTraditional-繁體中文(繁體)","zh-Hant")
-                };
-                // get ms store cultures resx tool AND azure supports
-                var common_cultures_before = specificCultures.Where(x => MsStoreCultures.Any(y => y == x.Name)).ToList();
-                var common_cultures =
-                    specificCultures
-                    .Where(x =>
-                        MsStoreCultures.Any(y => y == x.Name) &&
-                        azure_langs.Any(y => x.Name.ToLower().StartsWith(y.Item2.ToLower())) &&
-                        omitted.All(y => y.ToLower() != x.Name.ToLower())).ToList();
+                //// these give 400 error on google translate
+                //string[] omitted = new string[] {
+                //    "iu-Latn",
+                //    "iu-Latn-CA",
+                //    "kok-IN",
+                //};
+                //// get cultures resx tool supports
+                //var specificCultures = CultureInfo.GetCultures(CultureTypes.AllCultures)
+                //.Where(c => c.GetAncestors().Any())
+                //.OrderBy(c => c.DisplayName)
+                //.ToArray();
 
-                //string diffs = string.Join(",", common_cultures_before.Select(x => x.Name).Difference(common_cultures.Select(x => x.Name)).ToList());
+                //// get azure langs
+                //var azure_langs = new (string, string)[] {
+                //    ("Afrikaans-Afrikaans","af"),("Amharic-አማርኛ","am"),("Arabic-العربية","ar"),("Assamese-অসমীয়া","as"),("Azerbaijani-Azərbaycan","az"),("Bashkir-Bashkir","ba"),("Bulgarian-Български","bg"),("Bangla-বাংলা","bn"),("Tibetan-བོད་སྐད་","bo"),("Bosnian-Bosnian","bs"),("Catalan-Català","ca"),("Czech-Čeština","cs"),("Welsh-Cymraeg","cy"),("Danish-Dansk","da"),("German-Deutsch","de"),("Divehi-ދިވެހިބަސް","dv"),("Greek-Ελληνικά","el"),("English-English","en"),("Spanish-Español","es"),("Estonian-Eesti","et"),("Persian-فارسی","fa"),("Finnish-Suomi","fi"),("Filipino-Filipino","fil"),("Fijian-NaVosaVakaviti","fj"),("French-Français","fr"),("French(Canada)-Français(Canada)","fr-CA"),("Irish-Gaeilge","ga"),("Gujarati-ગુજરાતી","gu"),("Hebrew-עברית","he"),("Hindi-हिन्दी","hi"),("Croatian-Hrvatski","hr"),("HaitianCreole-HaitianCreole","ht"),("Hungarian-Magyar","hu"),("Armenian-Հայերեն","hy"),("Indonesian-Indonesia","id"),("Inuinnaqtun-Inuinnaqtun","ikt"),("Icelandic-Íslenska","is"),("Italian-Italiano","it"),("Inuktitut-ᐃᓄᒃᑎᑐᑦ","iu"),("Inuktitut(Latin)-Inuktitut(Latin)","iu-Latn"),("Japanese-日本語","ja"),("Georgian-ქართული","ka"),("Kazakh-ҚазақТілі","kk"),("Khmer-ខ្មែរ","km"),("Kurdish(Northern)-Kurdî(Bakur)","kmr"),("Kannada-ಕನ್ನಡ","kn"),("Korean-한국어","ko"),("Kurdish(Central)-Kurdî(Navîn)","ku"),("Kyrgyz-Kyrgyz","ky"),("Lao-ລາວ","lo"),("Lithuanian-Lietuvių","lt"),("Latvian-Latviešu","lv"),("Chinese(Literary)-中文(文言文)","lzh"),("Malagasy-Malagasy","mg"),("Māori-TeReoMāori","mi"),("Macedonian-Македонски","mk"),("Malayalam-മലയാളം","ml"),("Mongolian(Cyrillic)-Mongolian(Cyrillic)","mn-Cyrl"),("Mongolian(Traditional)-ᠮᠣᠩᠭᠣᠯᠬᠡᠯᠡ","mn-Mong"),("Marathi-मराठी","mr"),("Malay-Melayu","ms"),("Maltese-Malti","mt"),("HmongDaw-HmongDaw","mww"),("Myanmar(Burmese)-မြန်မာ","my"),("Norwegian-NorskBokmål","nb"),("Nepali-नेपाली","ne"),("Dutch-Nederlands","nl"),("Odia-ଓଡ଼ିଆ","or"),("QuerétaroOtomi-Hñähñu","otq"),("Punjabi-ਪੰਜਾਬੀ","pa"),("Polish-Polski","pl"),("Dari-دری","prs"),("Pashto-پښتو","ps"),("Portuguese(Brazil)-Português(Brasil)","pt"),("Portuguese(Portugal)-Português(Portugal)","pt-PT"),("Romanian-Română","ro"),("Russian-Русский","ru"),("Slovak-Slovenčina","sk"),("Slovenian-Slovenščina","sl"),("Samoan-GaganaSāmoa","sm"),("Albanian-Shqip","sq"),("Serbian(Cyrillic)-Српски(ћирилица)","sr-Cyrl"),("Serbian(Latin)-Srpski(latinica)","sr-Latn"),("Swedish-Svenska","sv"),("Swahili-Kiswahili","sw"),("Tamil-தமிழ்","ta"),("Telugu-తెలుగు","te"),("Thai-ไทย","th"),("Tigrinya-ትግር","ti"),("Turkmen-TürkmenDili","tk"),("Klingon(Latin)-Klingon(Latin)","tlh-Latn"),("Klingon(pIqaD)-Klingon(pIqaD)","tlh-Piqd"),("Tongan-LeaFakatonga","to"),("Turkish-Türkçe","tr"),("Tatar-Татар","tt"),("Tahitian-ReoTahiti","ty"),("Uyghur-ئۇيغۇرچە","ug"),("Ukrainian-Українська","uk"),("Urdu-اردو","ur"),("Uzbek(Latin)-Uzbek(Latin)","uz"),("Vietnamese-TiếngViệt","vi"),("YucatecMaya-YucatecMaya","yua"),("Cantonese(Traditional)-粵語(繁體)","yue"),("ChineseSimplified-中文(简体)","zh-Hans"),("ChineseTraditional-繁體中文(繁體)","zh-Hant")
+                //};
+                //// get ms store cultures resx tool AND azure supports
+                //var common_cultures_before = specificCultures.Where(x => MsStoreCultures.Any(y => y == x.Name)).ToList();
+                //var common_cultures =
+                //    specificCultures
+                //    .Where(x =>
+                //        MsStoreCultures.Any(y => y == x.Name) &&
+                //        azure_langs.Any(y => x.Name.ToLower().StartsWith(y.Item2.ToLower())) &&
+                //        omitted.All(y => y.ToLower() != x.Name.ToLower())).ToList();
 
-                return common_cultures.Select(x => x.Name).OrderBy(x => x);
+                ////string diffs = string.Join(",", common_cultures_before.Select(x => x.Name).Difference(common_cultures.Select(x => x.Name)).ToList());
+
+                //return common_cultures.Select(x => x.Name).OrderBy(x => x);
 
             }
         }
@@ -772,12 +774,14 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 (14,"ssSrc2"),
                 (15,"ssSrc3"),
                 (16,"ssSrc5"),
+                (17,"ssSrc7"),
                 (41,"ssCaption4"),
                 (42,"ssCaption6"),
                 (43,"ssCaption1"),
                 (44,"ssCaption2"),
                 (45,"ssCaption3"),
                 (46,"ssCaption5"),
+                (47,"ssCaption7"),
                 (291,"logo720x1080"),
                 (292,"logo1080x1080"),
                 (293,"logo300x300"),
@@ -828,6 +832,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 "ssCaption4",
                 "ssCaption5",
                 "ssCaption6",
+                "ssCaption7",
             ];
 
             string[] rel_path_keys = [
@@ -837,6 +842,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 "ssSrc4",
                 "ssSrc5",
                 "ssSrc6",
+                "ssSrc7",
                 "logo720x1080",
                 "logo1080x1080",
                 "logo300x300",
@@ -871,7 +877,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                         $"ListingStrings.resx");
             MpDebug.Assert(inv_listing_path.IsFile(), $"Error listing for inv not found: '{inv_listing_path}'");
             var inv_listing_lookup = MpResxTools.ReadResxFromPath(inv_listing_path);
-            var ccl = MpLocalizationHelpers.FindCulturesInDirectory(GetListingDir(), "ListingStrings").Select(x => x.Name);
+            var ccl = GetListingCultures();
             int max_feature_len = 200;
             foreach (string cc in ccl) {
                 string local_listing_path =
@@ -946,7 +952,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             //GenEmptyLocalizedListings();
             string listing_dir_name = $"listing_{plan_name}_{cycle_type}_{APP_VERSION}";
 
-            var ccl = MpLocalizationHelpers.FindCulturesInDirectory(GetListingDir(), "ListingStrings").Select(x => x.Name);
+            var ccl = GetListingCultures();
             var line1 = "Field,ID,Type (Type),default".Split(",").ToList();
             line1.AddRange(ccl.Select(x => x));
 
@@ -1016,6 +1022,21 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 "Localization",
                 "Listings");
             return listing_dir;
+        }
+        static IEnumerable<string> GetListingCultures() {
+            var all_ccl =
+                MpLocalizationHelpers.FindCulturesInDirectory(GetListingDir(), "ListingStrings")
+                .Select(x => x.Name);
+            var ccl =
+                all_ccl
+                .Where(x => WorkingCultures.Contains(x));
+            if (ccl.Difference(WorkingCultures) is { } culture_diffs && culture_diffs.Any()) {
+                MpConsole.WriteLine($"Cultures found/working culture mismatch detected.");
+
+                MpConsole.WriteLine($"Working cultures not to be generated: {string.Join(",", WorkingCultures.Where(x => !ccl.Contains(x)))}");
+                MpConsole.WriteLine($"Available cultures not to be generated: {string.Join(",", all_ccl.Where(x => !ccl.Contains(x)))}");
+            }
+            return ccl;
         }
         #endregion
 

@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Meer informatie over plannen</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Plakken op: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Met behulp van beschikbare contacten (vereist een fetcher-plug-in) wordt dit veld gebruikt voor alle exemplaren van dit sjabloon in dit document of in een ander waarnaar later wordt verwezen.&lt;/p&gt;&lt;p&gt; Dus als u hier bijvoorbeeld een e-mailadres selecteert, wordt het e-mailveld van de contactpersoon die u selecteert gebruikt voor alle instanties in dit document.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Volledig herstel kan niet worden gegarandeerd en kan de prestaties verminderen o
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Voorinstellingen moeten unieke richtlijnen hebben. Dubbele preset-guid '{0}' is gedetecteerd in plug-in '{1}' voor presets: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Plakken op: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>クリップボード</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>安全、安心、プライベートなローカルデータストレージ、オプションの2要素パスワード保護</value>
+  </data>
 </root>

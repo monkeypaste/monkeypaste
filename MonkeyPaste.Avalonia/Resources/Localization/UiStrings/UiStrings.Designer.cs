@@ -2132,7 +2132,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Paste to: &lt;em&gt;&lt;i class=&quot;paste-tooltip-suffix&quot;&gt;{0}&lt;/i&gt;&lt;/em&gt;.
+        ///   Looks up a localized string similar to &lt;span&gt;Paste to: &lt;em&gt;&lt;i class=&quot;paste-tooltip-suffix&quot;&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;.
         /// </summary>
         public static string ClipTilePasteButtonTooltipHtml {
             get {
@@ -2887,24 +2887,6 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonResetLabel {
             get {
                 return ResourceManager.GetString("CommonResetLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You will have to restart manually..
-        /// </summary>
-        public static string CommonRestartFailedText {
-            get {
-                return ResourceManager.GetString("CommonRestartFailedText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Restart Failed.
-        /// </summary>
-        public static string CommonRestartFailedTitle {
-            get {
-                return ResourceManager.GetString("CommonRestartFailedTitle", resourceCulture);
             }
         }
         
@@ -3883,7 +3865,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Presets must have unique guids. Duplicate preset guid &apos;{0}&apos; was detected in plugin &apos;{1}&apos; for presets: {2}.
+        ///   Looks up a localized string similar to Presets must have unique guids. Duplicate preset guid &apos;{0}&apos; was detected in plugin &apos;{1}&apos; for presets: {2}..
         /// </summary>
         public static string InvalidParamEx8 {
             get {
@@ -3933,33 +3915,6 @@ namespace MonkeyPaste.Avalonia {
         public static string InvalidPluginEx5 {
             get {
                 return ResourceManager.GetString("InvalidPluginEx5", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Plugin Linking Error &apos;{0}&apos;{1}{2}.
-        /// </summary>
-        public static string InvalidPluginEx6 {
-            get {
-                return ResourceManager.GetString("InvalidPluginEx6", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error, Plugin &apos;{0}&apos; is flagged as {1} type in &apos;{2}&apos; but does not have a matching &apos;{3}.{4}&apos; in its folder..
-        /// </summary>
-        public static string InvalidPluginEx7 {
-            get {
-                return ResourceManager.GetString("InvalidPluginEx7", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Plugin dependency error for plugin &apos;{0}&apos;: {1}{2}.
-        /// </summary>
-        public static string InvalidPluginEx8 {
-            get {
-                return ResourceManager.GetString("InvalidPluginEx8", resourceCulture);
             }
         }
         

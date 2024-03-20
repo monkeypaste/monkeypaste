@@ -2639,9 +2639,6 @@ feedback@monkeypales.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ស្វែងយល់បន្ថែមអំពីផែនការ</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;ការ ប្រើ ទំនាក់ទំនង ដែល មាន (តម្រូវ ឲ្យ មាន កម្មវិធី ជំនួយ fetcher) វាល នេះ នឹង ត្រូវ បាន ប្រើ សម្រាប់ គ្រប់ ករណី នៃ template នេះ នៅ ទូទាំង ឯកសារ នេះ ឬ នៅ ក្នុង ឯកសារ ណាមួយ ដែល វា នឹង ត្រូវ បាន យោង នៅ ពេល ក្រោយ ។&lt;/p&gt;&lt;p&gt; ដូច្នេះ ឧទាហរណ៍ ប្រសិន បើ ជ្រើស អាសយដ្ឋាន អ៊ីមែល នៅ ទីនេះ នោះ វាល អ៊ីមែល នៃ ទំនាក់ទំនង ដែល អ្នក ជ្រើស នឹង ត្រូវ បាន ប្រើ សម្រាប់ រាល់ ករណី នៅ ក្នុង ឯកសារ នេះ ។&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ feedback@monkeypales.com</value>
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Presets ត្រូវ តែ មាន ហ្គីឌីត តែ មួយ គត់ ។ Duplicate preset guid '{0}' ត្រូវ បាន រក ឃើញ នៅ ក្នុង កម្មវិធី ជំនួយ '{1}' សម្រាប់ presets: {2}។</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

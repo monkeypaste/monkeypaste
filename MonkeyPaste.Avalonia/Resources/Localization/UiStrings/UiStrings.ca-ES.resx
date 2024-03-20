@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Obteniu més informació sobre els plans</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Enganxeu-lo a: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Utilitzant els contactes disponibles (requereix un connector d'obtenció), aquest camp s'utilitzarà per a totes les instàncies d'aquesta plantilla en aquest document o en qualsevol en què es farà referència més endavant.&lt;/p&gt;&lt;p&gt; Així, per exemple, si seleccioneu l'adreça de correu electrònic aquí, el camp de correu electrònic del contacte que seleccioneu s'utilitzarà per a totes les instàncies d'aquest document.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ La restauració total no es pot garantir i pot reduir el rendiment o fins i tot 
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Els valors predefinits han de tenir guies úniques. S'ha detectat una guia predeterminada duplicada "{0}" al connector "{1}" per a les configuracions predeterminades: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Enganxeu-lo a: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

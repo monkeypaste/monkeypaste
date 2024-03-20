@@ -2639,10 +2639,6 @@ Filbir@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Rejalar haqida ko'proq ma'lumot oling</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Pasting: {0}</value>
-    <comment>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</comment>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>Mavjud kontaktlar yordamida ushbu soha ushbu hujjatda yoki boshqa biron bir joyda ushbu shablonning barcha holatlarida qo'llanilishi kerak.
  Shunday qilib, masalan, agar siz bu erda elektron pochta manzilini tanlasangiz, siz tanlagan elektron pochta aloqasi ushbu hujjatdagi barcha instansiyalar uchun foydalaniladi.</value>
@@ -2960,5 +2956,8 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Oldindan o'rnatilgan sozlamalar noyob yo'riqnomalarga ega bo'lishi kerak. Oldindan oʻrnatish uchun “{0}” qoʻllanmasining takroriy nusxasi “{1}” plaginida aniqlandi: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Buga joylashtirish: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

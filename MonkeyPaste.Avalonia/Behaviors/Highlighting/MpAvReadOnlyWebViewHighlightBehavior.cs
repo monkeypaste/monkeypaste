@@ -24,8 +24,6 @@ namespace MonkeyPaste.Avalonia {
         bool _isThisChangingText { get; set; }
 
         protected List<MpTextRange> _matches = new List<MpTextRange>();
-
-        private List<IDisposable> _disposables = [];
         public override MpHighlightType HighlightType => MpHighlightType.Content;
         public override MpContentQueryBitFlags AcceptanceFlags =>
             MpContentQueryBitFlags.Annotations |
@@ -47,12 +45,11 @@ namespace MonkeyPaste.Avalonia {
             if (AssociatedObject is not MpAvHtmlPanel hp) {
                 return;
             }
-            hp.GetObservable(MpAvHtmlPanel.TextProperty).Subscribe(value => OnTextChaged()).AddDisposable(_disposables);
+            hp.GetObservable(MpAvHtmlPanel.TextProperty).Subscribe(value => OnTextChaged()).AddDisposable(this);
         }
         protected override void OnDetaching() {
             base.OnDetaching();
-            _disposables.ForEach(x => x.Dispose());
-            _disposables.Clear();
+            this.ClearDisposables();
         }
 
         private void OnTextChaged() {

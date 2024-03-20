@@ -2639,10 +2639,6 @@ geribildirim@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Planlar haqqında daha çox məlumat əldə edin</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Yağlamaq: {0}</value>
-    <comment>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</comment>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>Mövcud kontaktlardan istifadə etmək (bu sahə bu sahə bu sənəddəki bu şablon nümunələri üçün istifadə ediləcək və ya sonradan istinad ediləcək.
  Beləliklə, məsələn, burada E-poçt ünvanı varsa, seçdiyiniz kontaktın e-poçt sahəsi bu sənəddəki bütün hallar üçün istifadə ediləcəkdir.</value>
@@ -2960,5 +2956,8 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Hazırlıqların özünəməxsus bələdləri olmalıdır. Dublikat əvvəlcədən təyin edilmiş GUID '{0}' Plugin'də hafızası üçün '{1}' də aşkar edildi: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Yerləşdirin: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

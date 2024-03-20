@@ -266,4 +266,7 @@ clipboard-ul dvs. este urmărit sau stocat ORIUNDE în afara propriei mașini. P
   <data name="SearchTerm4" xml:space="preserve">
     <value>Clipboard</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Stocare sigură, securizată și privată a datelor locale cu protecție opțională cu parolă cu 2 factori</value>
+  </data>
 </root>

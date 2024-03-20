@@ -1,4 +1,5 @@
 ﻿using Avalonia.Data.Converters;
+using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -11,34 +12,48 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             string hexStr = value.ToHex();
-            if (hexStr.IsStringHexColor()) {
-                bool flip = false;
-                string contrast_type = "fg";
-                if (parameter is string paramStr &&
-                    !string.IsNullOrEmpty(paramStr) &&
-                    paramStr.SplitNoEmpty("|") is string[] paramParts) {
-                    flip = paramParts.Any(x => x == "flip");
-                    if (paramParts.FirstOrDefault(x => x != "flip") is string paramContrastType &&
-                        !string.IsNullOrEmpty(paramContrastType)) {
-                        contrast_type = paramContrastType;
-                    }
-                }
-                switch (contrast_type) {
-                    case "compliment":
-                        return hexStr.ToContrastHexColor().ToAvColor();
-                    case "lighter":
-                        return MpColorHelpers.GetLighterHexColor(hexStr).ToAvColor();
-                    case "darker":
-                        return MpColorHelpers.GetDarkerHexColor(hexStr).ToAvColor();
-                    case "fg":
-                    default:
-                        return hexStr.ToContrastForegoundColor(flip).ToAvColor();
-                }
-
+            if (!hexStr.IsStringHexColor()) {
+                return null;
             }
-            return null;
-            //MpDebug.Break($"Unhandled color '{hexStr}'");
-            //return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeBlackColor.ToString()).ToAvColor();
+            bool flip = false;
+            bool use_hex = false;
+            string contrast_type = "fg";
+
+            string result_hex = hexStr;
+
+            if (parameter is string paramStr &&
+                !string.IsNullOrEmpty(paramStr) &&
+                paramStr.SplitNoEmpty("|") is string[] paramParts) {
+                flip = paramParts.Any(x => x == "flip");
+                use_hex = paramParts.Any(x => x == "hex");
+                if (paramParts.FirstOrDefault(x => x != "flip") is string paramContrastType &&
+                    !string.IsNullOrEmpty(paramContrastType)) {
+                    contrast_type = paramContrastType;
+                }
+            }
+            switch (contrast_type) {
+                case "compliment":
+                    result_hex = hexStr.ToContrastHexColor();
+                    break;
+                case "lighter":
+                    result_hex = MpColorHelpers.GetLighterHexColor(hexStr);
+                    break;
+                case "darker":
+                    result_hex = MpColorHelpers.GetDarkerHexColor(hexStr);
+                    break;
+                case "fg":
+                default:
+                    result_hex = hexStr.ToContrastForegoundColor(flip);
+                    break;
+            }
+            if (use_hex) {
+                // return hex
+                return result_hex;
+            }
+            if (targetType == typeof(Color)) {
+                return result_hex.ToAvColor();
+            }
+            return result_hex.ToAvBrush();
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {

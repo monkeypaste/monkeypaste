@@ -171,18 +171,31 @@ namespace MonkeyPaste.Avalonia {
 
         protected Dictionary<string, (MpUserAccountType, bool)> AccountTypeAddOnStoreIdLookup { get; } =
             new Dictionary<string, (MpUserAccountType, bool)>() {
+                // bool == IsMonthly
 #if DEBUG
-                {"9N0M0CF894CV", (MpUserAccountType.Basic, true) },
-                {"9NTBHV933F76", (MpUserAccountType.Basic, false) },
+#if WINDOWS
+		        //{"9N0M0CF894CV", (MpUserAccountType.Basic, true) },
+          //      {"9NTBHV933F76", (MpUserAccountType.Basic, false) },
 
-                {"9P06QJ00F7Q8", (MpUserAccountType.Unlimited, true) },
-                {"9N2BVBP6MSP6", (MpUserAccountType.Unlimited, false) }
+          //      {"9P06QJ00F7Q8", (MpUserAccountType.Unlimited, true) },
+          //      {"9N2BVBP6MSP6", (MpUserAccountType.Unlimited, false) }  
+                {"9NL9RRF8GKVK", (MpUserAccountType.Basic, true) },
+                {"9PF1GLR2ZWRB", (MpUserAccountType.Basic, false) },
+
+                {"9PBWTVDTFVT0", (MpUserAccountType.Unlimited, true) },
+                {"9N971DWGB8S5", (MpUserAccountType.Unlimited, false) }  
+	#endif
 #else
-                {"9PP3W114BHL5", (MpUserAccountType.Basic, true) },
-                {"9N41GXV5HQQ2", (MpUserAccountType.Basic, false) },
+                //{"9PP3W114BHL5", (MpUserAccountType.Basic, true) },
+                //{"9N41GXV5HQQ2", (MpUserAccountType.Basic, false) },
 
-                {"9PGVZ60KMDQ7", (MpUserAccountType.Unlimited, true) },
-                {"9NN60Z6FX02H", (MpUserAccountType.Unlimited, false) }
+                //{"9PGVZ60KMDQ7", (MpUserAccountType.Unlimited, true) },
+                //{"9NN60Z6FX02H", (MpUserAccountType.Unlimited, false) }
+                {"9ND71914NRH9", (MpUserAccountType.Basic, true) },
+                {"9PD4RW8870QW", (MpUserAccountType.Basic, false) },
+
+                {"9N774CD8WF9H", (MpUserAccountType.Unlimited, true) },
+                {"9NVW2DQXMDLD", (MpUserAccountType.Unlimited, false) }
 
 #endif
             };

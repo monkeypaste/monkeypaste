@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ప్రణాళికల గురించి మరింత తెలుసుకోండి</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>పేస్ట్: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;లభ్యం అవుతున్న కాంటాక్ట్ లను ఉపయోగించి (గ్రహీత ప్లగిన్ అవసరం) ఈ పత్రం అంతటా ఈ టెంప్లేట్ యొక్క అన్ని సందర్భాల కొరకు ఈ ఫీల్డ్ ఉపయోగించబడుతుంది లేదా తరువాత రిఫరెన్స్ చేయబడుతుంది.&lt;/p&gt;&lt;p&gt; ఉదాహరణకు ఇక్కడ ఇమెయిల్ చిరునామాను ఎంచుకుంటే, మీరు ఎంచుకున్న కాంటాక్ట్ యొక్క ఇమెయిల్ ఫీల్డ్ ఈ డాక్యుమెంట్ లోని అన్ని సందర్భాలకు ఉపయోగించబడుతుంది.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>ప్రీసెట్ లకు ప్రత్యేకమైన మార్గదర్శకాలు ఉండాలి. ప్రీసెట్ ల కొరకు ప్లగిన్ '{1}'లో డూప్లికేట్ ప్రీసెట్ గైడ్ '{0}' కనుగొనబడింది: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;పేస్ట్: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

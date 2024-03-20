@@ -266,4 +266,7 @@ Mae eich clipfwrdd yn cael ei olrhain neu ei storio UNRHYW le y tu hwnt i'ch pei
   <data name="SearchTerm4" xml:space="preserve">
     <value>clipfwrdd</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Storio data lleol diogel, diogel a phreifat gyda diogelwch cyfrinair 2 ffactor dewisol</value>
+  </data>
 </root>

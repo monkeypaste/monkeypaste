@@ -266,4 +266,7 @@ Dërrasa juaj është gjurmuar ose ruajtur ndonjëherë kudo përtej makinës su
   <data name="SearchTerm4" xml:space="preserve">
     <value>Clipboard</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Ruajtje e sigurt, e sigurt dhe private e të dhënave lokale me mbrojtje opsionale të fjalëkalimeve 2 - faktor</value>
+  </data>
 </root>

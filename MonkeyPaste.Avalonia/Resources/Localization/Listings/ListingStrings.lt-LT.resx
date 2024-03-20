@@ -266,4 +266,7 @@ jūsų mainų sritis visada stebima arba saugoma BET KUR, išskyrus jūsų kompi
   <data name="SearchTerm4" xml:space="preserve">
     <value>Mainų sritį</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Saugus, patikimas ir privatus vietinis duomenų saugojimas su pasirenkama 2 faktorių slaptažodžio apsauga</value>
+  </data>
 </root>

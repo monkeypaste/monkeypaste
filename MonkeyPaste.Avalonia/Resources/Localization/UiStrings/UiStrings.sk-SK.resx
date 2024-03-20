@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Dozviete sa viac o plánoch</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Prilepiť do: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Pri použití dostupných kontaktov (vyžaduje sa doplnok na získanie kreditu) sa toto pole použije pre všetky inštancie tejto šablóny v tomto dokumente alebo v akomkoľvek prípade, na ktorý sa bude neskôr odkazovať.&lt;/p&gt;&lt;p&gt; Napríklad, ak tu vyberiete e-mailovú adresu, e-mailové pole vybraného kontaktu sa použije pre všetky inštancie v tomto dokumente.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Predvoľby musia mať jedinečné ovládacie prvky. Duplicitné prednastavené guid '{0}' bolo zistené v plugine '{1}' pre predvoľby: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Prilepiť do: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

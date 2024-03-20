@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using System;
 using System.Diagnostics;
 using System.Linq;

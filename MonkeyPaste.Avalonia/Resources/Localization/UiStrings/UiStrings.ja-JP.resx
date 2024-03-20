@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>計画の詳細をご覧ください</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>貼り付け先: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;利用可能な連絡先(フェッチャープラグインが必要)を使用すると、このフィールドは、このドキュメント全体のこのテンプレートのすべてのインスタンス、または後で参照されるすべてのインスタンスに使用されます。&lt;/p&gt;&lt;p&gt; たとえば、ここでメールアドレスを選択すると、選択した連絡先のメールフィールドがこのドキュメントのすべてのインスタンスに使用されます。&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>プリセットには一意の GUID が必要です。プリセットのプラグイン '{1}' で重複するプリセット guid '{0}' が検出されました: {2}。</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;貼り付け先: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

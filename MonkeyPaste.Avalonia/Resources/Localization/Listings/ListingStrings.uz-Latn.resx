@@ -266,4 +266,7 @@ Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi 
   <data name="SearchTerm4" xml:space="preserve">
     <value>almashish buferi</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Ixtiyoriy 2 faktorli parol bilan himoyalangan xavfsiz, xavfsiz va shaxsiy mahalliy ma'lumotlarni saqlash</value>
+  </data>
 </root>

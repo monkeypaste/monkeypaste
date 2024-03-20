@@ -266,4 +266,7 @@ dit udklipsholder spores eller gemmes nogensinde HVOR som helst ud over din egen
   <data name="SearchTerm4" xml:space="preserve">
     <value>udklipsholder</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Sikker, sikker og privat lokal datalagring med valgfri 2-faktor adgangskodebeskyttelse</value>
+  </data>
 </root>

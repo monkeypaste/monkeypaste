@@ -4,8 +4,6 @@ using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common.Plugin;
-using MonoMac.AppKit;
-using MonoMac.Foundation;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,6 +17,13 @@ using System.Threading.Tasks;
 #if WINDOWS
 
 using MonkeyPaste.Common.Wpf;
+
+#endif
+
+#if MAC
+
+using MonoMac.AppKit;
+using MonoMac.Foundation;
 
 #endif
 

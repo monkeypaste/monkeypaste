@@ -266,4 +266,7 @@ uw klembord wordt ooit gevolgd of opgeslagen OVERAL buiten uw eigen machine. Per
   <data name="SearchTerm4" xml:space="preserve">
     <value>klembord</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Veilige, beveiligde en privé lokale gegevensopslag met optionele 2-factor wachtwoordbeveiliging</value>
+  </data>
 </root>

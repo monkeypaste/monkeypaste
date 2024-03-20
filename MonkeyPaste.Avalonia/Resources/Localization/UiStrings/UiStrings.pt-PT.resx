@@ -2639,9 +2639,6 @@ feedback@monkeypsaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Saiba mais sobre planos</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Cole em: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Usando contatos disponíveis (requer um plug-in fetcher) este campo será usado para todas as instâncias deste modelo neste documento ou em qualquer um que será referenciado mais tarde.&lt;/p&gt;&lt;p&gt; Assim, por exemplo, se selecionar o endereço de e-mail aqui, o campo de e-mail do contato selecionado será usado para todas as instâncias neste documento.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ A restauração total não pode ser garantida e pode reduzir o desempenho ou at�
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>As predefinições devem ter guids exclusivos. GUID predefinido duplicado '{0}' foi detetado no plugin '{1}' para predefinições: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Cole em: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

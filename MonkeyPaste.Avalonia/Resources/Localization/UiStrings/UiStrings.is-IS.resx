@@ -2639,9 +2639,6 @@ endurgjöf@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lærðu meira um áætlanir</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Líma í: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Notkun tiltækra tengiliða (þarf að sækja íforrit) á þessi reitur að verða notaður fyrir öll tilfelli af þessu sniðmáti í þessu skjali eða í þeim tilvikum sem vísað verður í það síðar.&lt;/p&gt;&lt;p&gt; Svo til dæmis, ef veldu netfang hér, þá verður tölvupóstreitur tengiliðarins sem þú velur notaður í öllum tilvikum í þessu skjali.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Ekki er hægt að tryggja heildar endurheimt og getur dregið úr afköstum eða
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Forstillingar verða að hafa einstakt leiðarljós. Tvítekning guid guid '{0}' fannst í íforritinu '{1}' fyrir forstilltar: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Líma í: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

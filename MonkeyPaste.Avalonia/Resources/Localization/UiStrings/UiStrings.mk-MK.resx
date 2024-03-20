@@ -2639,9 +2639,6 @@ Monkeypaste на уредот
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Дознајте повеќе за плановите</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Паста на: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Користејќи ги достапните контакти (бара приклучок за фетиш) ова поле ќе се користи за сите случаи на овој шаблон низ овој документ или во било кој ќе биде референциран подоцна.&lt;/p&gt;&lt;p&gt; На пример, ако изберете email адреса тука тогаш полето на е-поштата на контактот што ќе го изберете ќе се користи за сите инстанци во овој документ.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Monkeypaste на уредот
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Претпоставките мора да имаат уникатни водичи. Дупликатниот однапред наменет водич "{0}" бил откриен во приклучок "{1}" за претпоставки: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Паста на: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

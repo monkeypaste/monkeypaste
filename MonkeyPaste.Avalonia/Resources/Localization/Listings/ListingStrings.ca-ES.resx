@@ -266,4 +266,7 @@ el porta-retalls es rastreja o s'emmagatzema EN QUALSEVOL lloc més enllà de la
   <data name="SearchTerm4" xml:space="preserve">
     <value>porta-retalls</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Emmagatzematge de dades local segur, segur i privat amb protecció amb contrasenya opcional de 2 factors</value>
+  </data>
 </root>

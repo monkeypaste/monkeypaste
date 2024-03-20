@@ -120,7 +120,7 @@
         <!--  TEXT COLOR  -->
         <Style Selector="TextBlock">
             <!--<Setter Property="Foreground"
-                    Value="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />-->
+                    Value="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />-->
             <Setter Property="Foreground"
                     Value="{DynamicResource ThemeWhiteBrush}" />
         </Style>
@@ -459,7 +459,7 @@
 
                                                     </Viewbox>
                                                     <!--  TRIAL BADGE  -->
-                                                    <Viewbox Stretch="UniformToFill">
+                                                    <Viewbox Stretch="Fill">
                                                         <Border Grid.Row="1"
                                                                 Margin="0"
                                                                 Classes="badge trial"

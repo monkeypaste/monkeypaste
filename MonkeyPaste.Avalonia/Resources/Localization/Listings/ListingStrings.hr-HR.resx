@@ -266,4 +266,7 @@ vaš međuspremnik se uvijek prati ili pohranjuje BILO GDJE izvan vašeg vlastit
   <data name="SearchTerm4" xml:space="preserve">
     <value>Međuspremnik</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Sigurna, sigurna i privatna lokalna pohrana podataka s opcionalnom zaštitom lozinkom od 2 faktora</value>
+  </data>
 </root>

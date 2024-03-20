@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>алмасу буфері</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Міндетті емес 2 - факторлық парольді қорғаумен жергілікті деректерді қауіпсіз, қауіпсіз және жеке сақтау</value>
+  </data>
 </root>

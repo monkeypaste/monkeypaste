@@ -266,4 +266,7 @@ ang iyong clipboard ay kailanman sinusubaybayan o naka imbak SAANMAN lampas sa i
   <data name="SearchTerm4" xml:space="preserve">
     <value>clipboard</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Ligtas, ligtas at pribadong lokal na imbakan ng data na may opsyonal na 2 - factor na proteksyon ng password</value>
+  </data>
 </root>

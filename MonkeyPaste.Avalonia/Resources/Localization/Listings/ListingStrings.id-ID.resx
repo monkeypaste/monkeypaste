@@ -266,4 +266,7 @@ clipboard Anda pernah dilacak atau disimpan DI MANA SAJA di luar mesin Anda send
   <data name="SearchTerm4" xml:space="preserve">
     <value>Clipboard</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Penyimpanan data lokal yang aman, terlindungi, dan pribadi dengan perlindungan kata sandi 2 faktor opsional</value>
+  </data>
 </root>

@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>클립보드</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>안전하고 보안이 유지되는 개인 로컬 데이터 스토리지(2단계 암호 보호 옵션)</value>
+  </data>
 </root>

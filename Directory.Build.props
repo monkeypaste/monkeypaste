@@ -5,7 +5,7 @@
     <ApplicationAuthor>Monkey LLC</ApplicationAuthor>
     <ApplicationVersionMajor>1</ApplicationVersionMajor>
     <ApplicationVersionMinor>0</ApplicationVersionMinor>
-    <ApplicationVersionPatch>12</ApplicationVersionPatch>
+    <ApplicationVersionPatch>13</ApplicationVersionPatch>
     <ApplicationVersionRevision>0</ApplicationVersionRevision>
     <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch).$(ApplicationVersionRevision)</ApplicationVersion>
    </PropertyGroup>
@@ -23,7 +23,7 @@
   <!-- MANUALLY SET PROPERTIES-->
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>MAC</BuildOs>
+    <BuildOs>WINDOWS</BuildOs>
     <CultureExt>en-US</CultureExt>
     <IncludeCultures>True</IncludeCultures>
     <PushPlugins>false</PushPlugins>
@@ -54,7 +54,7 @@
     <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
     <UseCefNet>false</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
-    <UseSugarWv>true</UseSugarWv>
+    <UseSugarWv>false</UseSugarWv>
     <DefaultTargetFramework>net8.0</DefaultTargetFramework>
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
@@ -79,8 +79,8 @@
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>false</UseCefNet>
-    <UseSugarWv>true</UseSugarWv>
+    <UseCefNet>true</UseCefNet>
+    <UseSugarWv>false</UseSugarWv>
     <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <PlatformShortName>uwp</PlatformShortName> 

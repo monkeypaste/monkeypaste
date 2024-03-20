@@ -192,8 +192,8 @@ namespace MonkeyPaste.Avalonia {
             string drag_ctvm_pub_handle = avdo.Contains(MpPortableDataFormats.INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT) ?
                 avdo.Get(MpPortableDataFormats.INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT) as string :
                 null;
-            if (!string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
-                // Tile drop is always valid
+            if (string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
+                // non-Tile drop is always valid
                 return true;
             }
 

@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>Клипборда</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Безопасно, защитено и частно локално съхранение на данни с опционална двуфакторна защита с парола</value>
+  </data>
 </root>

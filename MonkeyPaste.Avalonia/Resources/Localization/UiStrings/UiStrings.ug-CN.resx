@@ -2639,9 +2639,6 @@ tempo@Monkepaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>پىلان ھەققىدىكى تەپسىلاتلار</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>چاپلاش: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;ئىشلىتىشكە بولىدىغان ئالاقىداش (fetcher قىستۇرمىسىنى تەلەپ قىلىدۇ) بۇ ساھە بۇ ھۆججەتتىكى ياكى ھەرقانداق بىر ھۆججەتتىكى بارلىق مىساللار ئۈچۈن كېيىن پايدىلىنىشقا بولىدۇ.&lt;/p&gt;&lt;p&gt; شۇڭا مەسىلەن، بۇ يەردە ئېلخەت ئادرېسىنى تاللىسىڭىز، ئۇنداقتا سىز تاللىغان ئالاقىداشنىڭ ئېلخەت ساھەسى بۇ ھۆججەتتىكى بارلىق مىساللار ئۈچۈن ئىشلىتىلىدۇ.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ tempo@Monkepaste.com</value>
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>ئالدىن بېكىتىشتە چوقۇم ئۆزگىچە گۈزىلى بولۇشى كېرەك. ئالدىن تەييارلاش ئۈچۈن قىستۇرما '{1}' قىستۇرمىسىدا ئالدىن بەلگىلەنگەن '{0}' بايقالدى: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;چاپلاش: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

@@ -2639,9 +2639,6 @@ atsiliepimai@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Sužinokite daugiau apie planus</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Įklijuoti į: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Naudojant galimus kontaktus (reikalingas fetcher papildinys), šis laukas bus naudojamas visiems šio šablono egzemplioriams šiame dokumente arba bet kuriame, kuriame jis bus nurodytas vėliau.&lt;/p&gt;&lt;p&gt; Pavyzdžiui, jei čia pasirinkite el. pašto adresą, pasirinkto kontakto el. pašto laukas bus naudojamas visiems šio dokumento atvejams.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Visiškas atkūrimas negali būti garantuotas ir gali sumažinti našumą arba n
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Išankstiniai nustatymai turi turėti unikalius guidus. Pasikartojantis iš anksto nustatytas guid "{0}" buvo aptiktas papildinyje "{1}", skirtame išankstiniams nustatymams: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Įklijuoti į: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

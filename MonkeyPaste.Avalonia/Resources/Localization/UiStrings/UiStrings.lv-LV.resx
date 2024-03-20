@@ -2639,9 +2639,6 @@ ATBILDĪBA@monkepaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Uzziniet vairāk par plāniem</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Ielīmēt uz: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Izmantojot pieejamās kontaktpersonas (nepieciešams ienesuma spraudnis), šis lauks tiks izmantots visiem šīs veidnes gadījumiem visā šajā dokumentā vai jebkurā citā, uz kuru vēlāk tiks sniegta atsauce.&lt;/p&gt;&lt;p&gt; Tā, piemēram, ja šeit atlasiet e-pasta adresi, tad atlasītā kontaktpersonas e-pasta lauks tiks izmantots visiem šī dokumenta gadījumiem.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Pilnīgu atjaunošanu nevar garantēt, un tā var samazināt veiktspēju vai pat
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Sākotnējiem iestatījumiem ir jābūt unikāliem guidiem. Sākotnējo iestatījumu spraudnī "{1}" tika atrasts iepriekš iestatīts guid "{0}" dublikāts: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Ielīmēt uz: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

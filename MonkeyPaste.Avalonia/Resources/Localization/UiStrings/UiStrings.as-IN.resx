@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>পৰিকল্পনাৰ বিষয়ে অধিক জানক</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>লেপন কৰক: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;উপলব্ধ সম্পৰ্কসমূহ ব্যৱহাৰ কৰি (ফেচাৰ প্লাগিনৰ প্ৰয়োজন) এই ফিল্ডটো এই ডকুমেণ্টত এই টেমপ্লেটৰ সকলো উদাহৰণৰ বাবে ব্যৱহাৰ কৰা হ'ব বা যিকোনো এটাত ইয়াক পিছত উল্লেখ কৰা হ'ব।&lt;/p&gt;&lt;p&gt; গতিকে উদাহৰণ স্বৰূপে যদি ইয়াত ইমেইল ঠিকনা বাছনি কৰক তেন্তে আপুনি বাছনি কৰা সম্পৰ্কৰ ইমেইল ক্ষেত্ৰটো এই ডকুমেণ্টৰ সকলো উদাহৰণৰ বাবে ব্যৱহাৰ কৰা হ'ব।&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>প্ৰিছেটসমূহৰ একক গাইড থাকিব লাগিব। প্ৰিছেটসমূহৰ বাবে প্লাগইন '{1}' ত ডুপ্লিকেট প্ৰিছেট গাইড '{0}' ধৰা পৰিছে: {2} ।</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;লেপন কৰক: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

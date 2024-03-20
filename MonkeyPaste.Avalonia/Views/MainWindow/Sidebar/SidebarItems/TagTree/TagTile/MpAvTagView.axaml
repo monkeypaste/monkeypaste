@@ -198,7 +198,7 @@
                         Margin="1"
                         Padding="4,1"
                         BorderThickness="1.5"
-                        BorderBrush="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                        BorderBrush="{Binding $self.Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                         Background="{Binding TagHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
                     <Grid x:Name="CountContainer">
                         <TextBlock x:Name="TagCountTextBlock"
@@ -247,7 +247,7 @@
                         <local:MpAvBusySpinnerView x:Name="TagCountBusySpinner"
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch"
-                                                   Foreground="{Binding Background, ElementName=TagCountContainer, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                                                   Foreground="{Binding Background, ElementName=TagCountContainer, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                                                    Cursor="Wait">
                             <local:MpAvBusySpinnerView.IsVisible>
                                 <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -266,8 +266,8 @@
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch"
                                                    ArcWidth="2.5"
-                                                   RingBrush="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
-                                                   PercentBrush="{Binding $parent[Border].Background, ConverterParameter=compliment, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                                                   RingBrush="{Binding $parent[Border].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                                                   PercentBrush="{Binding $parent[Border].Background, ConverterParameter=compliment, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                                                    LabelBrush="Transparent"
                                                    IsVisible="{Binding TotalAnalysisCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                    Percent="{Binding PercentLoaded}" />

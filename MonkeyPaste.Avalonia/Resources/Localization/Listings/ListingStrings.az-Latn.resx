@@ -266,4 +266,7 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
   <data name="SearchTerm4" xml:space="preserve">
     <value>bufer</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>İsteğe bağlı 2 faktorlu parol qorunması ilə təhlükəsiz, təhlükəsiz və özəl yerli məlumat saxlama</value>
+  </data>
 </root>

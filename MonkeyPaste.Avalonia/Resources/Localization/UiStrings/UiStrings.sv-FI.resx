@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lär dig mer om planer</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Klistra in i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Med hjälp av tillgängliga kontakter (kräver ett hämtningsplugin) kommer det här fältet att användas för alla instanser av den här mallen i det här dokumentet eller i alla som det kommer att refereras till senare.&lt;/p&gt;&lt;p&gt; Om du till exempel väljer e-postadress här kommer e-postfältet för den kontakt du väljer att användas för alla förekomster i det här dokumentet.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ Total återställning kan inte garanteras och kan minska prestandan eller till o
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Förinställningar måste ha unika guider. Duplicerat förinställt guid "{0}" identifierades i plugin-programmet "{1}" för förinställningar: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Klistra in i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

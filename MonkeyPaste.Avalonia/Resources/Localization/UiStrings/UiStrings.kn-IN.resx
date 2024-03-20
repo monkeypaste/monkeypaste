@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ಯೋಜನೆಗಳ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ಇದಕ್ಕೆ ಅಂಟಿಸಿ: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;ಲಭ್ಯವಿರುವ ಸಂಪರ್ಕಗಳನ್ನು ಬಳಸಿಕೊಂಡು (ಫೆಚರ್ ಪ್ಲಗಿನ್ ಅಗತ್ಯವಿದೆ) ಈ ಫೀಲ್ಡ್ ಅನ್ನು ಈ ದಾಖಲೆಯಾದ್ಯಂತ ಈ ಟೆಂಪ್ಲೇಟ್ ನ ಎಲ್ಲಾ ಸಂದರ್ಭಗಳಿಗೆ ಬಳಸಲಾಗುತ್ತದೆ ಅಥವಾ ನಂತರ ಉಲ್ಲೇಖಿಸಲಾಗುವ ಯಾವುದರಲ್ಲಾದರೂ.&lt;/p&gt;&lt;p&gt; ಆದ್ದರಿಂದ ಉದಾಹರಣೆಗೆ ಇಲ್ಲಿ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ಆಯ್ಕೆ ಮಾಡಿದರೆ, ನೀವು ಆಯ್ಕೆ ಮಾಡಿದ ಸಂಪರ್ಕದ ಇಮೇಲ್ ಕ್ಷೇತ್ರವನ್ನು ಈ ದಾಖಲೆಯಲ್ಲಿನ ಎಲ್ಲಾ ಸಂದರ್ಭಗಳಿಗೆ ಬಳಸಲಾಗುತ್ತದೆ.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>ಪ್ರಿಸೆಟ್ ಗಳು ಅನನ್ಯ ಮಾರ್ಗದರ್ಶಿಗಳನ್ನು ಹೊಂದಿರಬೇಕು. ಪ್ರಿಸೆಟ್ ಗಳಿಗಾಗಿ '{1}' ಪ್ಲಗಿನ್ ನಲ್ಲಿ ನಕಲಿ ಪ್ರಿಸೆಟ್ ಮಾರ್ಗದರ್ಶಿ '{0}' ಪತ್ತೆಯಾಗಿದೆ: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;ಇದಕ್ಕೆ ಅಂಟಿಸಿ: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

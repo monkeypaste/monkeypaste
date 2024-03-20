@@ -2639,9 +2639,6 @@ feedback@monkyepaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Obtenga más información sobre los planes</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Pegar en: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Usando los contactos disponibles (requiere un complemento de búsqueda), este campo se utilizará para todas las instancias de esta plantilla en este documento o en cualquiera de las que se haga referencia más adelante.&lt;/p&gt;&lt;p&gt; Entonces, por ejemplo, si selecciona la dirección de correo electrónico aquí, el campo de correo electrónico del contacto que seleccione se utilizará para todas las instancias de este documento.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ No se puede garantizar la restauración total y puede reducir el rendimiento o i
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>Los ajustes preestablecidos deben tener guids únicos. Se detectó el guid preestablecido duplicado '{0}' en el complemento '{1}' para los ajustes preestablecidos: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Pegar en: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>剪贴板</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>安全、可靠和私密的本地数据存储，可选的 2 因素密码保护</value>
+  </data>
 </root>

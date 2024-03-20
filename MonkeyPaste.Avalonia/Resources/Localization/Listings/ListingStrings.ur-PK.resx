@@ -266,4 +266,7 @@ lim لامحدود صلاحیت</value>
   <data name="SearchTerm4" xml:space="preserve">
     <value>تراشہ</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>اختیاری 2 - فیکٹر پاس ورڈ کی حفاظت کے ساتھ محفوظ، محفوظ اور نجی مقامی ڈیٹا اسٹوریج</value>
+  </data>
 </root>

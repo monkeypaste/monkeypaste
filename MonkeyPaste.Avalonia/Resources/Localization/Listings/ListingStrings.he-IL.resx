@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>הלוח</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>אחסון נתונים מקומי בטוח, מאובטח ופרטי עם הגנה אופציונלית באמצעות סיסמה דו-שלבית</value>
+  </data>
 </root>

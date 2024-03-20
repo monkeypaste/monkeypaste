@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Tudjon meg többet a tervekről</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Beillesztés: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;A rendelkezésre álló névjegyek használatával (amelyhez fetcher bővítmény szükséges) ez a mező lesz használva a sablon összes példányához ebben a dokumentumban, vagy bármely olyan példányban, amelyre később hivatkozni fogunk.&lt;/p&gt;&lt;p&gt; Tehát például, ha itt válassza ki az e-mail címet, akkor a kiválasztott kapcsolattartó e-mail mezőjét fogja használni a dokumentum összes példányához.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ A teljes helyreállítás nem garantálható, és az adatok forrásától függ�
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>A készleteknek egyedi GUID azonosítókkal kell rendelkezniük. A rendszer duplikált "{0}" előre beállított guid azonosítót észlelt az "{1}" bővítményben az előre beállított beállításokhoz: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Beillesztés: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

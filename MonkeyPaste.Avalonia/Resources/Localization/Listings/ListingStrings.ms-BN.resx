@@ -266,4 +266,7 @@ papan keratan anda pernah dijejaki atau disimpan DI MANA-MANA di luar mesin anda
   <data name="SearchTerm4" xml:space="preserve">
     <value>Papanklip</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Penyimpanan data tempatan yang selamat, selamat dan peribadi dengan perlindungan kata laluan 2 faktor pilihan</value>
+  </data>
 </root>

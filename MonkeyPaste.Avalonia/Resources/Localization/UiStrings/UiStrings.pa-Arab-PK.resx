@@ -2639,10 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ਯੋਜਨਾਵਾਂ ਬਾਰੇ ਹੋਰ ਜਾਣੋ</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ਪੇਸਟ ਕਰੋ: {0}</value>
-    <comment>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</comment>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>ਉਪਲਬਧ ਸੰਪਰਕ ਦੀ ਵਰਤੋਂ ਕਰਨਾ (ਗ੍ਰਹਿ ਪਲੱਗਇਨ ਦੀ ਜ਼ਰੂਰਤ ਹੈ) ਇਹ ਖੇਤਰ ਇਸ ਟੈਂਪਲੇਟ ਦੇ ਸਾਰੇ ਉਦਾਹਰਣਾਂ ਲਈ ਇਸ ਦਸਤਾਵੇਜ਼ ਦੇ ਸਾਰੇ ਮਾਮਲਿਆਂ ਲਈ ਵਰਤਿਆ ਜਾਏਗਾ ਜਾਂ ਕਿਸੇ ਵੀ ਇਸ ਨੂੰ ਬਾਅਦ ਵਿਚ ਦੱਸਿਆ ਜਾਵੇਗਾ.
  ਇਸ ਲਈ ਉਦਾਹਰਣ ਦੇ ਤੌਰ ਤੇ ਜੇ ਇੱਥੇ ਈਮੇਲ ਪਤਾ ਚੁਣੋ ਅਤੇ ਇਸ ਦਸਤਾਵੇਜ਼ ਦੇ ਈਮੇਲ ਖੇਤਰ ਇਸ ਦਸਤਾਵੇਜ਼ ਦੇ ਸਾਰੇ ਉਦਾਹਰਣਾਂ ਲਈ ਵਰਤੇ ਜਾਣਗੇ.</value>
@@ -2960,5 +2956,8 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>ਪ੍ਰੀਸੈਟਸ ਦੇ ਵਿਲੱਖਣ GNDS ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ. ਡੁਪਲਿਕੇਟ ਪ੍ਰੀਸੈਟ ਗਾਈਡ '{0}' ਪ੍ਰੀਸੈਟਾਂ ਲਈ ਪਲੱਗਇਨ '{1}' ਵਿੱਚ ਖੋਜਿਆ ਗਿਆ ਸੀ: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;ਇਸ ਵਿੱਚ ਪੇਸਟ ਕਰੋ: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

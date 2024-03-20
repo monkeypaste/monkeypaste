@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>تعرف على المزيد حول الخطط</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>لصق إلى: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;باستخدام جهات الاتصال المتاحة (يتطلب مكونا إضافيا للجلب) ، سيتم استخدام هذا الحقل لجميع مثيلات هذا القالب عبر هذا المستند أو في أي منها سيتم الرجوع إليه لاحقا.&lt;/p&gt;&lt;p&gt; على سبيل المثال ، إذا حدد عنوان البريد الإلكتروني هنا ، استخدام حقل البريد الإلكتروني لجهة الاتصال التي تحددها لجميع الحالات في هذا المستند.&lt;/p&gt;</value>
   </data>
@@ -2894,5 +2891,8 @@ feedback@monkeypaste.com</value>
   </data>
   <data name="InvalidParamEx8" xml:space="preserve">
     <value>يجب أن تحتوي الإعدادات المسبقة على أدلة فريدة. تم اكتشاف دليل الإعداد المسبق المكرر '{0}' في البرنامج المساعد '{1}' للإعدادات المسبقة: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;لصق إلى: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
 </root>

@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>πρόχειρο</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Ασφαλής, ασφαλής και ιδιωτική τοπική αποθήκευση δεδομένων με προαιρετική προστασία κωδικού πρόσβασης 2 παραγόντων</value>
+  </data>
 </root>

@@ -266,4 +266,7 @@ Odložišče je vedno sledeno ali shranjeno KJERKOLI zunaj vašega lastnega stro
   <data name="SearchTerm4" xml:space="preserve">
     <value>Odložišče</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Varna, zaščitena in zasebna lokalna shramba podatkov z izbirno 2-faktorsko zaščito z geslom</value>
+  </data>
 </root>

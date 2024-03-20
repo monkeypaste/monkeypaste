@@ -266,4 +266,7 @@
   <data name="SearchTerm4" xml:space="preserve">
     <value>คลิ ปบอร์ด</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>การจัดเก็บข้อมูลในเครื่องที่ปลอดภัย มั่นคง และเป็นส่วนตัวพร้อมการป้องกันด้วยรหัสผ่านแบบ 2 ปัจจัยเสริม</value>
+  </data>
 </root>

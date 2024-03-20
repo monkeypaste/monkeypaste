@@ -429,7 +429,6 @@
                                        RememberPassword="{Binding RememberDbPassword}"
                                        AutoFilledPassword="{Binding AutoFillPassword}"
                                        ConfirmedPassword="{Binding DbPassword}"
-                                       RememberTooltip="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.WelcomeRememberDbPasswordTooltip}"
                                        IsPasswordValid="{Binding IsDbPasswordValid}" />
         </Border>
 

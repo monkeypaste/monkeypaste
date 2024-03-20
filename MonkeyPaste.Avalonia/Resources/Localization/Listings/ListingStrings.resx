@@ -349,4 +349,11 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
   <data name="SearchTerm4" xml:space="preserve">
     <value>clipboard</value>
   </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Safe, secure and private local data storage with optional 2 - factor password protection</value>
+  </data>
+  <data name="ssSrc7" xml:space="preserve">
+    <value>{0}/ss7.png</value>
+    <comment>@Invariant</comment>
+  </data>
 </root>

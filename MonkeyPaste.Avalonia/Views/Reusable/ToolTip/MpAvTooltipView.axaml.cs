@@ -8,6 +8,8 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -15,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvToolTipView : MpAvUserControl<object> {
         #region Private Variables
-
+        private List<IDisposable> _disposables = [];
         #endregion
 
         #region Statics
@@ -99,6 +101,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvToolTipView() {
             InitializeComponent();
+            this.GetObservable(ToolTipTextProperty).Subscribe(value => OnToolTipTextChanged()).AddDisposable(this);
         }
         protected override void OnLoaded(RoutedEventArgs e) {
             base.OnLoaded(e);
@@ -137,6 +140,13 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown && !IsDevToolsOpen) {
                 //SetupDevTools();
             }
+        }
+
+        private void OnToolTipTextChanged() {
+            if (IsHtml || ToolTipText.IsNullOrWhiteSpace()) {
+                return;
+            }
+            IsHtml = ToolTipText.ContainsHtml();
         }
 
         private void MpAvToolTipView_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
