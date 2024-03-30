@@ -3,7 +3,9 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -21,11 +23,18 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
         #endregion
 
+        #region Events
+        // arg is ci guid
+        public event EventHandler<string> OnCopyItemSourceInfoRejected;
+        // arg is ci guid, icon id
+        public event EventHandler<(string,int)> OnCopyItemSourceInfoComplete;
+
+        #endregion
+
         #region Public Methods
 
         public async Task<MpCopyItem> BuildAsync(
             MpAvDataObject avdo,
-            bool suppressWrite = false,
             MpTransactionType transType = MpTransactionType.None,
             bool force_allow_dup = false) {
             if (avdo == null || avdo.DataFormatLookup.Count == 0) {
@@ -51,32 +60,33 @@ namespace MonkeyPaste.Avalonia {
             (MpCopyItem ci, string checksum) = await PerformDupCheckAsync(
                 compare_data: itemPlainText,
                 itemType: itemType,
-                force_allow_dup, suppressWrite);
+                force_allow_dup, false);
 
-            IEnumerable<MpISourceRef> refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(avdo);
+            string ci_guid = ci == null ? System.Guid.NewGuid().ToString() : ci.Guid;
+            CancellationTokenSource source_cts = new CancellationTokenSource();
 
-            if (Mp.Services.SourceRefTools.IsAnySourceRejected(refs)) {
-                return null;
-            }
+            BuildSupplementalsAsync(ci_guid, avdo, ci == null, transType, source_cts.Token).FireAndForgetSafeAsync();
+
+            
             if (ci == null) {
                 // new, non-duplicate or don't care
                 var dobj = await MpDataObject.CreateAsync(pdo: avdo);
-
                 string default_title = await GetDefaultItemTitleAsync(itemType, avdo);
-                int itemIconId = PickIconIdFromSourceRefs(refs);
+
                 MpDataObjectSourceType dataObjectSourceType = avdo.GetDataObjectSourceType();
 
                 ci = await MpCopyItem.CreateAsync(
+                    guid: ci_guid,
                     dataObjectId: dobj.Id,
                     title: default_title,
                     data: itemData,
                     itemType: itemType,
-                    iconId: itemIconId,
                     checksum: checksum,
                     dataObjectSourceType: dataObjectSourceType,
-                    suppressWrite: suppressWrite);
+                    suppressWrite: false);
                 if (ci == null) {
                     // probably null data, clean up pre-create
+                    source_cts.Cancel();
                     await dobj.DeleteFromDatabaseAsync();
                     return null;
                 }
@@ -87,6 +97,27 @@ namespace MonkeyPaste.Avalonia {
                     transType = MpTransactionType.Recreated;
                 }
             }
+            return ci;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        #region Source Helpers
+        private async Task BuildSupplementalsAsync(
+            string ci_guid, 
+            MpAvDataObject avdo, 
+            bool is_new,
+            MpTransactionType transType,
+            CancellationToken ct) {
+            IEnumerable<MpISourceRef> refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(avdo);
+            
+            if (Mp.Services.SourceRefTools.IsAnySourceRejected(refs)) {
+                OnCopyItemSourceInfoRejected?.Invoke(this, ci_guid);
+                return;
+            }
+
             List<string> ref_urls = refs.Select(x => Mp.Services.SourceRefTools.ConvertToInternalUrl(x)).ToList();
             if (avdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> urls)) {
                 var urlList = urls.ToList();
@@ -103,26 +134,42 @@ namespace MonkeyPaste.Avalonia {
                     ref_urls.AddRange(urlList);
                 }
             }
-
-            if (!suppressWrite) {
-                await Mp.Services.TransactionBuilder.ReportTransactionAsync(
-                            copyItemId: ci.Id,
+            if (ct.IsCancellationRequested) {
+                // probably empty data
+                return;
+            }
+            int icon_id = -1;
+            if (is_new) {
+                // arg is ci guid
+                icon_id = PickIconIdFromSourceRefs(refs);
+            }
+            if (ct.IsCancellationRequested) {
+                // probably empty data
+                return;
+            }
+            int ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
+            if(ciid <= 0) {
+                var sw = Stopwatch.StartNew();
+                while (ciid <= 0) {
+                    if(sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                        MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Timed out, shouldn't happen...");
+                        return;
+                    }
+                    MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Will retry...");
+                    await Task.Delay(100);
+                    ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
+                }
+            }
+            await Mp.Services.TransactionBuilder.ReportTransactionAsync(
+                            copyItemId: ciid,
                             reqType: MpJsonMessageFormatType.DataObject,
                             //req: avdo.SerializeData(),
                             respType: MpJsonMessageFormatType.Delta,
                             //resp: string.IsNullOrEmpty(itemDelta) ? ci.ToDelta():itemDelta,
                             ref_uris: ref_urls,
                             transType: transType);
-            }
-
-            return ci;
+            OnCopyItemSourceInfoComplete?.Invoke(this, (ci_guid,icon_id));
         }
-
-        #endregion
-
-        #region Private Methods
-
-        #region Source Helpers
         #endregion
 
         #region Content Helpers

@@ -2621,6 +2621,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown Error {0}.
+        /// </summary>
+        public static string CommonErrorCodeText {
+            get {
+                return ResourceManager.GetString("CommonErrorCodeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string CommonErrorLabel {
@@ -5931,6 +5940,15 @@ namespace MonkeyPaste.Avalonia {
         public static string PrivacyPolicyLabel {
             get {
                 return ResourceManager.GetString("PrivacyPolicyLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your purchase could not be completed. Reason: {0}.
+        /// </summary>
+        public static string PurchaseFailureText {
+            get {
+                return ResourceManager.GetString("PurchaseFailureText", resourceCulture);
             }
         }
         

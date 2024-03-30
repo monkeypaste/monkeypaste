@@ -1101,7 +1101,7 @@ namespace MonkeyPaste.Avalonia {
                     e.SuppressEvent = true;
                 }
             } else {
-                MpConsole.WriteTraceLine("Unknown mouse button released: SharpButton: " + e.Data.Button + " PortableButton: " + button);
+                //MpConsole.WriteLine("Unknown mouse button released: SharpButton: " + e.Data.Button + " PortableButton: " + button);
             }
         }
 
@@ -1115,7 +1115,7 @@ namespace MonkeyPaste.Avalonia {
                     e.SuppressEvent = true;
                 }
             } else {
-                MpConsole.WriteTraceLine("Unknown mouse button clicked: " + e.Data.Button);
+                //MpConsole.WriteLine("Unknown mouse button clicked: " + e.Data.Button);
             }
         }
 

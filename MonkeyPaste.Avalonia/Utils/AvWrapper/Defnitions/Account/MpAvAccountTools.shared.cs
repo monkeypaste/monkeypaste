@@ -184,7 +184,7 @@ namespace MonkeyPaste.Avalonia {
 
                 {"9PBWTVDTFVT0", (MpUserAccountType.Unlimited, true) },
                 {"9N971DWGB8S5", (MpUserAccountType.Unlimited, false) }  
-	#endif
+#endif
 #else
                 //{"9PP3W114BHL5", (MpUserAccountType.Basic, true) },
                 //{"9N41GXV5HQQ2", (MpUserAccountType.Basic, false) },
@@ -199,20 +199,19 @@ namespace MonkeyPaste.Avalonia {
 
 #endif
             };
-        //protected Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new();
-        //protected Dictionary<(MpUserAccountType, bool), int> AccountTypeTrialAvailabilityLookup { get; } = new();
+
         protected Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new Dictionary<(MpUserAccountType, bool), string>() {
-        {(MpUserAccountType.Free,true),"$0.00" },
-        {(MpUserAccountType.Free,false),"$0.00" },
-        {(MpUserAccountType.Basic,true),"$0.99" },
-        {(MpUserAccountType.Basic,false),"$9.99" },
-        {(MpUserAccountType.Unlimited,true),"$2.99" },
-        {(MpUserAccountType.Unlimited,false),"$29.99" }
+            {(MpUserAccountType.Free,true),"$0.00" },
+            {(MpUserAccountType.Free,false),"$0.00" },
+            {(MpUserAccountType.Basic,true),"$0.99" },
+            {(MpUserAccountType.Basic,false),"$9.99" },
+            {(MpUserAccountType.Unlimited,true),"$2.99" },
+            {(MpUserAccountType.Unlimited,false),"$29.99" }
         };
 
         protected Dictionary<(MpUserAccountType, bool), int> AccountTypeTrialAvailabilityLookup { get; } = new Dictionary<(MpUserAccountType, bool), int>() {
-        {(MpUserAccountType.Unlimited,true),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT },
-        {(MpUserAccountType.Unlimited,false),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT }
+            {(MpUserAccountType.Unlimited,true),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT },
+            {(MpUserAccountType.Unlimited,false),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT }
         };
 
         public bool IsContentAddPausedByAccount { get; private set; }

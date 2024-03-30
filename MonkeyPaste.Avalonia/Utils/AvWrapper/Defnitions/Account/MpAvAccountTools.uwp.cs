@@ -49,17 +49,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string RateAppUri {
-            get {
-                return $"ms-windows-store://review/?PFN={Windows.ApplicationModel.Package.Current.Id.FamilyName}";
-            }
-        }
+        public string RateAppUri =>
+            $"ms-windows-store://review/?PFN={Windows.ApplicationModel.Package.Current.Id.FamilyName}";
 
-        public string ThisProductUri {
-            get {
-                return $"ms-windows-store://pdp/?productid={_WindowsStoreId}";
-            }
-        }
+        public string ThisProductUri =>
+            $"ms-windows-store://pdp/?productid={_WindowsStoreId}";
 
         #endregion
 
@@ -205,17 +199,30 @@ namespace MonkeyPaste.Avalonia {
 
             var storeid_kvp = AccountTypeAddOnStoreIdLookup.FirstOrDefault(x => x.Value == (uat, isMonthly));
             if (string.IsNullOrEmpty(storeid_kvp.Key)) {
+                // shouldn't happen, 
+                Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                        title: UiStrings.CommonErrorLabel,
+                        message: UiStrings.CommonErrorCodeText.Format(3.ToErrorCode()),
+                        iconResourceObj: "WarningImage").FireAndForgetSafeAsync();
                 return false;
             }
 
             StoreProduct sp = await GetAddOnByStoreIdAsync(storeid_kvp.Key);
             if (sp == null) {
                 // likely offline
+                Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                        title: UiStrings.CommonErrorLabel,
+                        message: UiStrings.CommonErrorCodeText.Format(UiStrings.AccountOfflineLabel),
+                        iconResourceObj: "WarningImage").FireAndForgetSafeAsync();
                 return false;
             }
             MpDebug.Assert(_isContextWindowInitialized, "StoreContext not initialized");
             if (!_isContextWindowInitialized) {
                 // window handle error, should probably not happen but dunno
+                Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                        title: UiStrings.CommonErrorLabel,
+                        message: UiStrings.CommonErrorCodeText.Format(4.ToErrorCode()),
+                        iconResourceObj: "WarningImage").FireAndForgetSafeAsync();
                 return false;
             }
             // Request a purchase of the subscription product. If a trial is available it will be offered 
@@ -227,20 +234,30 @@ namespace MonkeyPaste.Avalonia {
             if (result.ExtendedError != null) {
                 extendedError = result.ExtendedError.Message;
             }
+            MpConsole.WriteLine($"Purchase for {uat} Monthly: {isMonthly} result: {result.Status}");
 
             switch (result.Status) {
                 case StorePurchaseStatus.Succeeded:
                     // Show a UI to acknowledge that the customer has purchased your subscription 
                     // and unlock the features of the subscription. 
-                    //SetAccountType(uat);
                     return true;
 
                 case StorePurchaseStatus.AlreadyPurchased:
                     MpConsole.WriteLine("The customer already owns this subscription. ExtendedError: " + extendedError);
-                    //SetAccountType(uat);
                     return true;
                 case StorePurchaseStatus.NotPurchased:
+                    // NOTE This can happen for a lot of reasons apparently like:
+                    // clicked cancel
+                    // using a gift card
+                    // pay pal
+                    // has overdue payments
+                    // virus protection
+
                     MpConsole.WriteLine("The purchase did not complete. The customer may have cancelled the purchase. ExtendedError: " + extendedError);
+                    //Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                    //    title: UiStrings.CommonErrorLabel,
+                    //    message: UiStrings.PurchaseFailureText.Format(extendedError),
+                    //    iconResourceObj: "WarningImage").FireAndForgetSafeAsync();
                     return null;
                 default:
                 case StorePurchaseStatus.ServerError:

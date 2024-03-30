@@ -62,6 +62,10 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Converters
+        public static string ToErrorCode(this object obj) {
+            // obj should be a number..
+            return "0x" + int.Parse(obj.ToStringOrEmpty()).ToString().PadLeft(2,'0');
+        }
 
         public static string ToCommaSeperatedIntString(this int value) {
             return $"{value:n0}";

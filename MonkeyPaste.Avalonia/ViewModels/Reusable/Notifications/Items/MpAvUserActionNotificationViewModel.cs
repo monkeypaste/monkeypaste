@@ -72,6 +72,7 @@ namespace MonkeyPaste.Avalonia {
             NotificationType == MpNotificationType.ContentAddBlockedByAccount ||
             NotificationType == MpNotificationType.ContentRestoreBlockedByAccount ||
             NotificationType == MpNotificationType.ConfirmEndAppend ||
+            NotificationType == MpNotificationType.AppendModeChanged ||
             NotificationType == MpNotificationType.ModalContentFormatDegradation;
 
         public bool IsFixing { get; set; } = false;

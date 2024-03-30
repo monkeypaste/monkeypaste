@@ -168,12 +168,21 @@ namespace MonkeyPaste.Avalonia {
                 MpUserAccountType purchase_uat = purchase_vm.AccountType;
                 IsMonthlyEnabled = is_monthly;
                 if (purchase_uat == MpUserAccountType.Free) {
+                    Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                        title: UiStrings.CommonErrorLabel,
+                        message: UiStrings.CommonErrorCodeText.Format(1.ToErrorCode()),
+                        iconResourceObj: "WarningImage").FireAndForgetSafeAsync();
                     return;
                 }
                 if (!purchase_vm.CanBuy) {
+                    Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                        title: UiStrings.CommonErrorLabel,
+                        message: UiStrings.CommonErrorCodeText.Format(2.ToErrorCode()),
+                        iconResourceObj: "WarningImage").FireAndForgetSafeAsync();
                     MpConsole.WriteLine($"Cannot buy {purchase_vm} monthly: {is_monthly}");
                     return;
                 }
+
                 // NOTE get purchase action info before changing account state
                 string post_action_url = MpAvAccountTools.Instance.GetStoreSubscriptionUrl(
                     MpAvAccountViewModel.Instance.AccountType,

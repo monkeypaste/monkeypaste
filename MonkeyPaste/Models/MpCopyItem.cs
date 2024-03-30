@@ -162,10 +162,13 @@ namespace MonkeyPaste {
 
         [Ignore]
         public bool IgnoreDb { get; set; } = false;
+
+
         #endregion
 
         #region Static Methods
         public static async Task<MpCopyItem> CreateAsync(
+            string guid = "",
             string data = "",
             MpCopyItemType itemType = MpCopyItemType.Text,
             string title = "",
@@ -188,7 +191,7 @@ namespace MonkeyPaste {
 
             var create_dt = DateTime.Now;
             var newCopyItem = new MpCopyItem() {
-                CopyItemGuid = System.Guid.NewGuid(),
+                CopyItemGuid = guid.IsNullOrEmpty() ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 CopyDateTime = create_dt,
                 LastCapRelatedDateTime = create_dt,
                 Title = title,

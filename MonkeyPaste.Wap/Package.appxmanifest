@@ -11,7 +11,7 @@
   <Identity
     Name="10843MonkeyLLC.MonkeyPastetemp"
     Publisher="CN=359EAD65-2530-476F-82ED-8E549E87C6A6"
-    Version="1.0.13.0" />
+    Version="1.0.14.0" />
 
   <Properties>
     <DisplayName>Monkey Paste</DisplayName>

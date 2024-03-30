@@ -2974,4 +2974,12 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Unknown Error {0}</value>
+    <comment>Error Code</comment>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Your purchase could not be completed. Reason: {0}</value>
+    <comment>Extended Error Message</comment>
+  </data>
 </root>

@@ -84,7 +84,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool IsUrlRejected(string url) {
-            return Items.FirstOrDefault(x => x.UrlPath.ToLower() == url.ToLower() && x.IsUrlRejected) != null;
+            return IsUrlDomainRejected(url) || 
+                Items.Where(x=>x.IsUrlRejected).FirstOrDefault(x => x.UrlPath.ToLower() == url.ToLower()) != null;
+        }
+        
+        public bool IsUrlDomainRejected(string url) {
+            return Items.Where(x=>x.IsDomainRejected).FirstOrDefault(x => x.UrlDomainPath.ToLower() == MpUrlHelpers.GetUrlDomain(url.ToLower())) != null;
         }
 
         public void Remove(MpAvUrlViewModel avm) {

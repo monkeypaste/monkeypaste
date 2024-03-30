@@ -238,7 +238,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static async Task<int> ExeucuteAsync(string query, params object[] args) {
+        public static async Task<int> ExeucuteCommandAsync(string query, params object[] args) {
             if (_connectionAsync == null) {
                 await CreateConnectionAsync();
             }

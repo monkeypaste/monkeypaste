@@ -179,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
             return sources;
         }
 
-        public async Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(object mpOrAvDataObj) {
+        public async Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(object mpOrAvDataObj, bool enforce_rejection = false) {
             MpAvDataObject avdo = null;
             if (mpOrAvDataObj is IDataObject ido) {
                 avdo = ido.ToPlatformDataObject();
@@ -308,8 +308,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnySourceRejected(IEnumerable<MpISourceRef> refs) {
             foreach (var source_ref in refs) {
-                if (source_ref is MpUrl url &&
-                    (url.IsDomainRejected || url.IsUrlRejected)) {
+                if (source_ref is MpUrl url && 
+                    MpAvUrlCollectionViewModel.Instance.IsUrlRejected(url.UrlPath)) {
                     MpConsole.WriteLine($"Rejected url detected. Url: '{url}'");
                     return true;
                 } else if (source_ref is MpApp app &&

@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
             var time_for_this = w.OpenDateTime ?? DateTime.Now;
             double offsetY =
                 MpAvWindowManager.ToastNotifications
-                .Where(x => x.OpenDateTime < time_for_this)
+                .Where(x => x.OpenDateTime < time_for_this && x.WindowState != WindowState.Minimized)
                 .Sum(x => (GetWindowSize(x).Height + pad) * primaryScreen.Scaling);
 #if MAC
             y += offsetY;

@@ -1238,9 +1238,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        bool IgnoreContentDelete { get; set; }
         public int PinOpCopyItemId { get; set; } = -1;
-
         public bool IsAutoEditEnabled =>
             !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled;
 
@@ -1523,6 +1521,9 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.ClipboardMonitor.OnClipboardChanged += ClipboardWatcher_OnClipboardChanged;
             Mp.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
 
+            _copyItemBuilder.OnCopyItemSourceInfoComplete += CopyItemBuilder_OnCopyItemSourceInfoComplete;
+            _copyItemBuilder.OnCopyItemSourceInfoRejected += CopyItemBuilder_OnCopyItemSourceInfoRejected;
+
             SetupDropHelpers();
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
@@ -1555,6 +1556,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(SelectedItem));
             IsBusy = false;
         }
+
+
         public async Task<MpAvClipTileViewModel> CreateClipTileViewModelAsync(MpCopyItem ci, int queryOffsetIdx = -1) {
             MpAvClipTileViewModel ctvm = new MpAvClipTileViewModel(this);
             await ctvm.InitializeAsync(ci, queryOffsetIdx);
@@ -2059,7 +2062,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (e is MpCopyItem ci && !IgnoreContentDelete) {
+            if (e is MpCopyItem ci) {
                 if (AppendClipTileViewModel != null &&
                     ci.Id == AppendClipTileViewModel.CopyItemId &&
                     IsAnyAppendMode) {
@@ -2480,6 +2483,72 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
             }
+        }
+
+        private void CopyItemBuilder_OnCopyItemSourceInfoRejected(object sender, string ci_guid) {
+            // TODO need to be careful here if item is being appended or part of an automation
+            // this maybe dangerous.
+            // TODO2 should figure out append
+            MpConsole.WriteLine($"CopyItem w/ guid '{ci_guid}' source rejected. Removing item...");
+            Dispatcher.UIThread.Post(async () => {
+                // find ciid
+                int ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
+                if (ciid <= 0) {
+                    var sw = Stopwatch.StartNew();
+                    while (ciid <= 0) {
+                        if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                            MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Timed out, shouldn't happen...");
+                            return;
+                        }
+                        MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Will retry...");
+                        await Task.Delay(100);
+                        ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
+                    }
+                }
+                await MpDataModelProvider.DeleteItemAsync<MpCopyItem>(ciid);
+                MpConsole.WriteLine($"Rejected source CopyItem w/ guid '{ci_guid}' successfully removed");
+            });
+        }
+
+        private void CopyItemBuilder_OnCopyItemSourceInfoComplete(object sender, (string ci_guid,int icon_id) info_props) {
+            string ci_guid = info_props.ci_guid;
+            int icon_id = info_props.icon_id;
+            Dispatcher.UIThread.Post(async () => {
+                // find ciid
+                int ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
+                if (ciid <= 0) {
+                    var sw = Stopwatch.StartNew();
+                    while (ciid <= 0) {
+                        if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                            MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Timed out, shouldn't happen...");
+                            return;
+                        }
+                        MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Will retry...");
+                        await Task.Delay(100);
+                        ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
+                    }
+                }
+                if(icon_id > 0) {
+                    // should only happen for new items
+                    bool success = await MpDataModelProvider.SetCopyItemIconIdByIdAsync(ciid, icon_id);
+                    if (!success) {
+                        MpConsole.WriteLine($"Error updating ci icon. ci_guid: {ci_guid} icon_id: {icon_id}");
+                    }
+                }
+
+                if (AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid) is not { } ctvm_to_ntf) {
+                    if(icon_id > 0 && PendingNewModels.FirstOrDefault(x=>x.Id == ciid) is { } ci_to_ntf) {                        
+                        ci_to_ntf.IconId = icon_id;
+                    }
+                    // if no tile found refresh wont be necessary
+                    return;
+                } else if(icon_id > 0) {
+                    ctvm_to_ntf.CopyItem.IconId = icon_id;
+                    ctvm_to_ntf.OnPropertyChanged(nameof(ctvm_to_ntf.IconResourceObj));
+                }
+
+                await ctvm_to_ntf.TransactionCollectionViewModel.InitializeAsync(ciid);
+            });            
         }
 
         private void Instance_OnGlobalMouseReleased(object sender, bool e) {
@@ -3507,7 +3576,8 @@ namespace MonkeyPaste.Avalonia {
 
 #if MAC
                      // re-parenting web view crashes on mac
-                     cached_view = null;
+                     // NOTE omitting cause i don't think this was the problem
+                     //cached_view = null;
 #endif
 
                      ctvm_to_pin.OpenPopOutWindow(
@@ -5261,33 +5331,48 @@ namespace MonkeyPaste.Avalonia {
 
             if (AppendClipTileViewModel.CopyItemId != aci.Id) {
                 Dispatcher.UIThread.Post(async () => {
+                    // TODO should handle append source reject here...
+
                     // no need to wait for source updates
                     // get appended items transactions which should be only 1 since new and add a paste transaction to append item with its create sources
                     var aci_citl = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(aci.Id);
-
-                    var aci_create_cit = aci_citl.FirstOrDefault(x => x.TransactionType == MpTransactionType.Created);
-                    if (aci_create_cit == null && aci_citl.FirstOrDefault(x => x.TransactionType == MpTransactionType.Dropped) is { } drop_cit) {
-                        // this occurs when append tile was a drop created
-                        aci_create_cit = drop_cit;
-                    }
-                    if (aci_create_cit == null) {
-                        MpDebug.Break($"append error, no create transaction found for appened item");
-                    } else {
-                        var aci_create_sources = await MpDataModelProvider.GetSourceRefsByCopyItemTransactionIdAsync(aci_create_cit.Id);
-
-                        if (isNew || !MpAvPrefViewModel.Instance.IgnoreAppendedItems) {
-                            // if item is not new or will persist include ref to it
-                            // NOTE item ref is added to END to keep primary source at front
-                            aci_create_sources.Add(aci);
+                    bool is_still_building = !aci_citl.Any();
+                    if(is_still_building) {
+                        var sw = Stopwatch.StartNew();
+                        while (is_still_building) {
+                            // wait for sources to be gathered
+                            if(sw.Elapsed >= TimeSpan.FromSeconds(30)) {
+                                MpConsole.WriteLine($"Append source gather timeout. Ignoring sources.");
+                                break;
+                            }
+                            await Task.Delay(100);
+                            aci_citl = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(aci.Id);
+                            is_still_building = !aci_citl.Any();
                         }
-                        //// NOTE ignoring msg data here since its only used for analyze transactions for now
-                        await Mp.Services.TransactionBuilder.ReportTransactionAsync(
-                            copyItemId: AppendClipTileViewModel.CopyItemId,
-                            reqType: MpJsonMessageFormatType.DataObject,
-                            respType: MpJsonMessageFormatType.Delta,
-                            ref_uris: aci_create_sources.Select(x => x.ToSourceUri()),
-                            transType: MpTransactionType.Appended);
                     }
+                    if(aci_citl.Any()) {
+                        var aci_create_cit = aci_citl.FirstOrDefault(x => x.TransactionType == MpTransactionType.Created);
+                        if (aci_create_cit == null && aci_citl.FirstOrDefault(x => x.TransactionType == MpTransactionType.Dropped) is { } drop_cit) {
+                            // this occurs when append tile was a drop created
+                            aci_create_cit = drop_cit;
+                        }
+                        if (aci_create_cit != null) {
+                            var aci_create_sources = await MpDataModelProvider.GetSourceRefsByCopyItemTransactionIdAsync(aci_create_cit.Id);
+
+                            if (isNew || !MpAvPrefViewModel.Instance.IgnoreAppendedItems) {
+                                // if item is not new or will persist include ref to it
+                                // NOTE item ref is added to END to keep primary source at front
+                                aci_create_sources.Add(aci);
+                            }
+                            //// NOTE ignoring msg data here since its only used for analyze transactions for now
+                            await Mp.Services.TransactionBuilder.ReportTransactionAsync(
+                                copyItemId: AppendClipTileViewModel.CopyItemId,
+                                reqType: MpJsonMessageFormatType.DataObject,
+                                respType: MpJsonMessageFormatType.Delta,
+                                ref_uris: aci_create_sources.Select(x => x.ToSourceUri()),
+                                transType: MpTransactionType.Appended);
+                        }
+                    }                    
 
                     if (isNew &&
                         MpAvPrefViewModel.Instance.IgnoreAppendedItems) {

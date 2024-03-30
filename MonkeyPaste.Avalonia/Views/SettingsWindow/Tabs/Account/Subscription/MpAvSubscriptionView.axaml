@@ -286,7 +286,7 @@
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Viewbox Stretch="UniformToFill"
+                        <Viewbox Stretch="Uniform"
                                  ClipToBounds="False">
                             <!--  ACCOUNT TYPE ITEM OUTER BORDER  -->
                             <local:MpAvClipBorder x:Name="OuterBorder"
@@ -445,9 +445,10 @@
                                                             DataContext="{Binding $parent[ListBoxItem].DataContext}"
                                                             Spacing="3">
                                                     <!--  RATE TEXT  -->
-                                                    <Viewbox Stretch="UniformToFill">
+                                                    <Viewbox Stretch="Uniform">
                                                         <TextBlock HorizontalAlignment="Left"
                                                                    Margin="1"
+                                                                   Padding="1"
                                                                    ClipToBounds="False"
                                                                    VerticalAlignment="Center"
                                                                    TextWrapping="Wrap"
@@ -459,7 +460,8 @@
 
                                                     </Viewbox>
                                                     <!--  TRIAL BADGE  -->
-                                                    <Viewbox Stretch="Fill">
+                                                    <Viewbox Stretch="Fill"
+                                                             Margin="1">
                                                         <Border Grid.Row="1"
                                                                 Margin="0"
                                                                 Classes="badge trial"

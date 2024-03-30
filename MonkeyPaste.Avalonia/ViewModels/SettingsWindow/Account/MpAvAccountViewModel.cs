@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvAccountViewModel :
         MpAvViewModelBase {
         #region Private Variables
-        private MpUserAccountType _lastAccountType;
+        private MpUserAccountType _lastAccountType = MpUserAccountType.Free;
         private MpBillingCycleType _lastBillingCycleType;
         private DispatcherTimer _expiration_timer;
         private DispatcherTimer _attempt_login_timer;
@@ -181,8 +181,9 @@ namespace MonkeyPaste.Avalonia {
         public int TrashCapacity =>
             MpAvAccountTools.Instance.GetTrashCapacity(AccountType);
         public bool HasBillingCycle =>
-            BillingCycleType == MpBillingCycleType.Monthly ||
-            BillingCycleType == MpBillingCycleType.Yearly;
+            AccountType.IsPaidType() &&
+            (BillingCycleType == MpBillingCycleType.Monthly ||
+             BillingCycleType == MpBillingCycleType.Yearly);
 
         public bool IsPaymentPastDue =>
             HasBillingCycle && DateTime.UtcNow > NextPaymentUtc;
@@ -455,6 +456,9 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvAccountViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(AccountType):
+                    if(AccountType == MpUserAccountType.None) {
+                        MpDebug.BreakAll();
+                    }
                     MpConsole.WriteLine($"Account Type changed to '{AccountType}'");
                     break;
                 case nameof(AccountState):
