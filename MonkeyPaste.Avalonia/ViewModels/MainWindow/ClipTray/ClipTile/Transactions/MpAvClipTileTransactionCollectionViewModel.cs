@@ -52,7 +52,8 @@ namespace MonkeyPaste.Avalonia {
                         .SelectMany(x => x.Sources)
                         .Where(x => x.SourceRef != null)
                         .DistinctBy(x => new { x.SourceType, x.SourceObjId })
-                        .Where(x => !(x.SourceType == MpTransactionSourceType.App && x.SourceObjId == MpDefaultDataModelTools.ThisAppId) && x.ContextMenuItemViewModel != null)
+                        //.Where(x => !(x.SourceType == MpTransactionSourceType.App && x.SourceObjId == MpDefaultDataModelTools.ThisAppId) && x.ContextMenuItemViewModel != null)
+                        .Where(x => x.ContextMenuItemViewModel != null)
                         .Select(x => x.SourceRef)
                         .OrderBy(x => SortedTransactions.IndexOf(SortedTransactions.FirstOrDefault(y => y.HasSource(x))))
                         .ToList();
@@ -356,6 +357,17 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(CreateTransaction));
             OnPropertyChanged(nameof(SortedMessages));
 
+            if(Parent != null && 
+                Parent.CopyItemId > 0 && 
+                Parent.CopyItemIconId == 0 && 
+                CreateTransaction != null && 
+                CreateTransaction.IconSourceObj is int ciid_icon_id) {
+                // this is a fallback check for new/buggy passive ci source gathering, should figure out cases when this happens and fix/remove this at some point...
+                MpConsole.WriteLine($"{Parent} used transaction fallback icon set to {ciid_icon_id}");
+                Parent.CopyItemIconId = ciid_icon_id;
+
+            }
+
             IsBusy = false;
         }
 
@@ -385,6 +397,16 @@ namespace MonkeyPaste.Avalonia {
 
                     //OpenTransactionPaneCommand.Execute(null);
                     //SelectedTransaction = cisvm;
+                });
+            }
+        }
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            base.Instance_OnItemDeleted(sender, e);
+            if (e is MpCopyItemTransaction cit && 
+                cit.CopyItemId == CopyItemId &&
+                Transactions.FirstOrDefault(x=>x.TransactionId == cit.Id) is { } trvm) {
+                Dispatcher.UIThread.Post(async () => {
+                    Transactions.Remove(trvm);                    
                 });
             }
         }

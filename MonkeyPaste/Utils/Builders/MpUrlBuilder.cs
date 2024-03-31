@@ -28,6 +28,17 @@ namespace MonkeyPaste {
                 return null;
             }
 
+            var dupCheck = await MpDataModelProvider.GetUrlByPathAndAppIdAsync(url,appId);
+            if (dupCheck != null) {
+                dupCheck = await MpDataModelProvider.GetItemAsync<MpUrl>(dupCheck.Id);
+                dupCheck.WasDupOnCreate = true;
+                //if(dupCheck.IconId != 0 && dupCheck.IconId != MpDefaultDataModelTools.UnknownIconId) {
+                //    // only use dup if icon was found
+                //    return dupCheck;
+                //}
+                return dupCheck;                
+            }
+
             var urlProps = await MpUrlHelpers.DiscoverUrlPropertiesAsync(url);
             if (urlProps == null) {
                 return null;

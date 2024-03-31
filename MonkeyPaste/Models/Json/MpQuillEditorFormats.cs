@@ -42,6 +42,7 @@ namespace MonkeyPaste {
 
 
     public class MpQuillLoadContentRequestMessage {
+        public bool isPopOut { get; set; }
         public double editorScale { get; set; } = MpCopyItem.DEFAULT_ZOOM_FACTOR;
         public bool breakBeforeLoad { get; set; }
         public int contentId { get; set; }
@@ -294,10 +295,22 @@ namespace MonkeyPaste {
         public int appendDocIdx { get; set; }
         public int appendDocLength { get; set; }
         public string appendData { get; set; }
+        public string appendContentHandle { get; set; }
 
 
     }
+    public class MpQuillAppendStateChangeCompletedMessage {
+        public int appendDocIdx { get; set; }
+        public int appendDocLength { get; set; }
+        public string appendContentHandle { get; set; }
 
+    }
+
+    public class MpQuillRemoveAppendRangeMessage {
+        public int index { get; set; }
+        public int length { get; set; }
+    }
+    
     public class MpQuillSelectionChangedMessage {
         public int index { get; set; }
         public int length { get; set; }

@@ -258,6 +258,14 @@ namespace MonkeyPaste {
             }
             return result[0];
         }
+        public static async Task<MpUrl> GetUrlByPathAndAppIdAsync(string url, int appId) {
+            string query = $"select * from MpUrl where UrlPath=? and fk_MpAppId=?";
+            var result = await MpDb.QueryAsync<MpUrl>(query, url, appId);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
 
         #endregion MpUrl
 

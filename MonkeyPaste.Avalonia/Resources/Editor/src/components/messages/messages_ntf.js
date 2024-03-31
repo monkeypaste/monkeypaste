@@ -177,8 +177,16 @@ function onFindReplaceVisibleChange_ntf(isVisible) {
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyFindReplaceVisibleChange', msgStr);
 }
-function appendStateChangeComplete_ntf() {
-	sendMessage('notifyAppendStateChangeComplete', '');
+function onAppendStateChangeComplete_ntf(handle, rng) {
+	// output 'MpQuillAppendStateChangeCompletedMessage'
+	rng = isNullOrUndefined(rng) ? { index: 0, length: -1 } : rng;
+	let msg = {
+		appendContentHandle: handle,
+		appendDocIdx: rng.index,
+		appendDocLength: rng.length
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyAppendStateChangeComplete', msgStr);
 }
 function onQuerySearchRangesChanged_ntf(range_count,hl_html,range_offsets_csv) {
 	// output 'MpQuillContentQuerySearchRangesChangedNotificationMessage'

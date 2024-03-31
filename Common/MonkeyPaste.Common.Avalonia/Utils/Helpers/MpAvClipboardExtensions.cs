@@ -11,6 +11,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using System.Runtime.Intrinsics.X86;
+
 
 
 
@@ -55,7 +57,10 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static async Task<Dictionary<string, object>> ReadClipboardAsync(string[] formatFilter = default, int retryCount = 0) {
             if (!Dispatcher.UIThread.CheckAccess()) {
-                var output = await Dispatcher.UIThread.InvokeAsync(() => ReadClipboardAsync(formatFilter, retryCount));
+                var output = await Dispatcher.UIThread.InvokeAsync(async() => { 
+                    var result = await ReadClipboardAsync(formatFilter, retryCount); 
+                    return result; 
+                });
                 return output;
             }
 
@@ -133,7 +138,8 @@ namespace MonkeyPaste.Common.Avalonia {
             await WaitForClipboardAsync();
             if (!Dispatcher.UIThread.CheckAccess()) {
                 var result = await Dispatcher.UIThread.InvokeAsync(async () => {
-                    return await cb.GetFormatsSafeAsync(retryCount);
+                    var formats = await cb.GetFormatsSafeAsync(retryCount);
+                    return formats;
                 });
                 return result;
             }
@@ -158,19 +164,21 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static async Task<object> GetDataSafeAsync(this IClipboard cb, string format, int retryCount = OLE_RETRY_COUNT) {
             await WaitForClipboardAsync();
-            //if (!Dispatcher.UIThread.CheckAccess()) {
-            //    var result = await Dispatcher.UIThread.InvokeAsync(async () => {
-            //        return await cb.GetDataSafeAsync(format, retryCount);
-            //    });
-            //    return result;
-            //}
+            // 
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                var result = await Dispatcher.UIThread.InvokeAsync(async () => {
+                    var cb_data = await cb.GetDataSafeAsync(format, retryCount);
+                    return cb_data;
+                });
+                return result;
+            }
             try {
                 object result = await cb.GetDataAsync(format).TimeoutAfter(TimeSpan.FromSeconds(1));
                 CloseClipboard();
                 return result;
             }
-            catch (SerializationException ex) {
-                MpConsole.WriteTraceLine($"Error reading cb format: '{format}'.", ex);
+            catch (SerializationException serx) {
+                MpConsole.WriteTraceLine($"Error reading cb format: '{format}'.", serx);
                 CloseClipboard();
                 return null;
             }
@@ -185,6 +193,11 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             catch (AccessViolationException avex) {
                 MpConsole.WriteTraceLine($"Error reading cb format: '{format}'.", avex);
+                CloseClipboard();
+                return null;
+            }
+            catch(Exception ex) {
+                MpConsole.WriteTraceLine($"Error reading cb format: '{format}'.", ex);
                 CloseClipboard();
                 return null;
             }
@@ -254,10 +267,14 @@ namespace MonkeyPaste.Common.Avalonia {
             await Task.Delay(0);
 #if WINDOWS
             if (OperatingSystem.IsWindows()) {
-                bool canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
-                while (!canOpen) {
-                    await Task.Delay(OLE_RETRY_DELAY_MS);
-                    canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
+                try {
+                    bool canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
+                    while (!canOpen) {
+                        await Task.Delay(OLE_RETRY_DELAY_MS);
+                        canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
+                    }
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine($"WaitForClipboard async error.", ex);
                 }
             }
 #endif

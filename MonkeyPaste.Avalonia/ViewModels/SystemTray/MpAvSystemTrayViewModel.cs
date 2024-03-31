@@ -447,7 +447,8 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {
                             Header = MpAvShortcutCollectionViewModel.Instance.HookPauseLabel,
-                            Command = MpAvShortcutCollectionViewModel.Instance.ToggleGlobalHooksCommand
+                            Command = MpAvShortcutCollectionViewModel.Instance.ToggleGlobalHooksCommand,
+                            CommandParameter = "click"
                         },
                         new MpAvMenuItemViewModel() {
                             Header = "Test Command 1",

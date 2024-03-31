@@ -54,10 +54,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="README.md">
       <PackagePath>\</PackagePath>
       <Pack>True</Pack>
@@ -77,6 +73,10 @@
     <AssemblyAttribute Include="MonkeyPaste.Common.MpAppVersionAttribute">
       <_Parameter1>$(ApplicationVersion)</_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
   </ItemGroup>
 
 </Project>

@@ -61,7 +61,8 @@ function loadContentAsync_ext(loadContentMsgStr_base64) {
 		sel_state,
 		paste_button_info,
 		req.breakBeforeLoad,
-		req.editorScale)
+		req.editorScale,
+		req.isPopOut);
 	//	.then(x => {
 	//		result = x;
 	//	});
@@ -228,6 +229,16 @@ function appendStateChanged_ext(reqMsgBase64Str) {
 
 	updateAppendModeStateFromHost(req, true);	
 }
+
+function deleteDocRange_ext(reqDeleteDocRangeBase64Str) {
+	// input 'MpQuillRemoveAppendRangeMessage'
+	let req = toJsonObjFromBase64Str(reqDeleteDocRangeBase64Str);
+	if (req &&
+		!isNullOrUndefined(req.index) &&
+		!isNullOrUndefined(req.length)) {
+		deleteText(req, 'silent');
+	}
+ } 
 
 function annotationSelected_ext(reqMsgBase64Str) {
 	// output 'MpQuillAnnotationSelectedMessage'

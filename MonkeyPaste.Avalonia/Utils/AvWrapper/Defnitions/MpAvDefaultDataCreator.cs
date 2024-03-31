@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
                     MpRoutingType globalRouting = routingProfile.GetProfileBasedRoutingType(MpShortcutType.ToggleListenToClipboard);
                     _defaultShortcutDefinitions = new List<string[]>() {
                         // ORDER:
-                        // guid,keyString,shortcutType,routeType, readOnly = false
+                        // guid,keyString,shortcutType,routeType, readOnly = false, isInternalOnly = true
 
                         // GLOBAL
                 
@@ -77,6 +77,10 @@ namespace MonkeyPaste.Avalonia {
                             new string[] { "73a4cfff-8cf9-456a-9e91-06c61bb160e2", "Control+Left", MpShortcutType.OrientMainWindowLeft.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] { "3df9acbe-1acf-4d1b-ba36-936369b1936f", "Control+Right", MpShortcutType.OrientMainWindowRight.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] { "88832664-68f5-4c4e-9c3a-4a34851d3f3f", "Control+Shift+W", MpShortcutType.ClearPinTray.ToString(), MpRoutingType.Internal.ToString()},
+#if DEBUG
+                            new string[] { "15f42684-7e50-40fc-8dc8-6a1a6b1bed3f", "F4", MpShortcutType.ToggleGlobalHooks.ToString(), MpRoutingType.Override.ToString(),"False","False"},
+
+#endif
                     };
                 }
                 return _defaultShortcutDefinitions;

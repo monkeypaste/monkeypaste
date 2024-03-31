@@ -483,6 +483,9 @@
   <data name="MpShortcutType_ClearPinTray" xml:space="preserve">
     <value>Clear Pin Tray</value>
   </data>
+  <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
+    <value>Toggle Global Hooks</value>
+  </data>
   <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
     <value>M A X_A P P_S H O R T C U T</value>
   </data>

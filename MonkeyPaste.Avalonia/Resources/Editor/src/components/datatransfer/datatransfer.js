@@ -199,7 +199,7 @@ function performDataTransferOnContent(
     // SCROLL TO DEST
 
     updateQuill();
-    scrollDocRangeIntoView(dt_range);
+    scrollDocRangeIntoView(dt_range);    
     drawOverlay();
 
     // RESET STATE
@@ -208,6 +208,12 @@ function performDataTransferOnContent(
     clearLastDelta()
 
     unsupressTextChanged(sup_guid);
+
+    // (BUG) link handlers not refreshing, i think it needs to wait maybe
+    sleep(500)
+        .then(x => {
+            loadLinkHandlers();
+        });
 }
 
 

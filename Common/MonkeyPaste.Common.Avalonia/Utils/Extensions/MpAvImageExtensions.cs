@@ -73,6 +73,15 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
+        public static Bitmap ToAvBitmap(this RenderTargetBitmap rtbmp, int quality = 100) {
+            using (var outStream = new MemoryStream()) {
+                rtbmp.Save(outStream, quality);
+                outStream.Seek(0, SeekOrigin.Begin);
+                var outBmp = new Bitmap(outStream);
+                return outBmp;
+            }
+        }
+
 
         public static string ToRichHtmlImage(this Bitmap bmp) {
             string qhtml = $"<p><img src='{bmp.ToBase64String().ToBase64ImageUrl()}'></p>";

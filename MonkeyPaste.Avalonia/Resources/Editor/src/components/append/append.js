@@ -248,6 +248,7 @@ function updateAppendModeStateFromHost(req, fromHost = false) {
 	let is_resuming = isAppendPaused() && !req.isAppendPaused;
 	let is_pausing = !isAppendPaused() && req.isAppendPaused;
 	let is_pre_changing = isAppendPreMode() != req.isAppendPreMode;
+
 	// NOTE manual mode update from host was disabled cause the state keeps getting enabled somehow
 	// I think its an async msg problem, the design is supposed to only have 1 append state flag changed
 	// at a time so host/editor stays in sync but something weird happens w/ hosts manual setting overriding
@@ -256,25 +257,28 @@ function updateAppendModeStateFromHost(req, fromHost = false) {
 	let is_manual_changing = isAppendManualMode() != req.isAppendManualMode && !fromHost;
 
 	let is_appending_data = !isNullOrEmpty(req.appendData);
+	if (is_appending_data && req.appendContentHandle == globals.LastAppendContentHandle) {
+		// BUG seems like on first append the data is appended twice 
+		// so this will prevent a second data transfer
+		is_appending_data = false;
 
+	}
 	let is_append_range_changed =
 		req.isAppendManualMode &&
 		didSelectionChange(getAppendDocRange(), new_append_range);
 
-	log(' ');
-	log(`updateAppendFromHost changes:`);
-	log('is_enabling: ' + is_enabling);
-	log('is_disabling: ' + is_disabling);
-	log('is_append_range_changed: ' + is_append_range_changed);
-	log('cur append range: ', getAppendDocRange());
-	log('new append range: ', new_append_range);
-	log('is_appending_data: ' + is_appending_data);
-	log('is_resuming: ' + is_resuming);
-	log('is_pausing: ' + is_pausing);
-	log('append_data: ' + req.appendData);
-	log(' ');
-
-	
+	//log(' ');
+	//log(`updateAppendFromHost changes:`);
+	//log('is_enabling: ' + is_enabling);
+	//log('is_disabling: ' + is_disabling);
+	//log('is_append_range_changed: ' + is_append_range_changed);
+	//log('cur append range: ', getAppendDocRange());
+	//log('new append range: ', new_append_range);
+	//log('is_appending_data: ' + is_appending_data);
+	//log('is_resuming: ' + is_resuming);
+	//log('is_pausing: ' + is_pausing);
+	//log('append_data: ' + req.appendData);
+	//log(' ');	
 
 	if (is_enabling) {
 		enableAppendMode(req.isAppendLineMode, req.isAppendManualMode, fromHost);
@@ -304,11 +308,19 @@ function updateAppendModeStateFromHost(req, fromHost = false) {
 	if (is_resuming) {
 		disablePauseAppend(fromHost);
 	}
-	//if (is_append_range_changed) {
-	//	setDocSelection(new_append_range);
-	//}
+
+	let appended_range = null;
 	if (is_appending_data) {
+		globals.LastAppendContentHandle = req.appendContentHandle;
+
+		// check sel before appending
+		let pre_range = getDocSelection();
 		appendContentData(req.appendData);
+		let post_range = getDocSelection();
+		if (!isDocRangeEqual(pre_range, post_range)) {
+			// data was appended
+			appended_range = post_range;
+		}
 	}
 
 	if (fromHost) {
@@ -318,7 +330,7 @@ function updateAppendModeStateFromHost(req, fromHost = false) {
 		// pre mode and it only scrolls the preview line (state) doesn't change
 		// because the host reports back old pre state AFTER internally changed so 
 		// it unchanges
-		appendStateChangeComplete_ntf();
+		onAppendStateChangeComplete_ntf(req.appendContentHandle, appended_range);
 	}
 }
 

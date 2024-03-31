@@ -1,3 +1,4 @@
+@echo OFF
 taskkill /f /im "MonkeyPaste.Desktop.exe"
 
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Plugins\CoreOleHandler\obj\"
@@ -35,9 +36,9 @@ rmdir /S /Q "C:\Users\tkefauver\AppData\Local\MonkeyPaste_DEBUG"
 rmdir /S /Q "C:\Users\tkefauver\AppData\Roaming\MonkeyPaste" 
 rmdir /S /Q "C:\Users\tkefauver\AppData\Roaming\MonkeyPaste_DEBUG" 
 
-print "1. Clean out solution file"
-print "2. Remove and add MonkeyPaste.Common ref to MonkeyPaste"
-print "3. Remove and add MonkeyPaste.Common.Plugin ref to MonkeyPaste.Common"
+echo 1. Clean out solution file
+echo 2. Remove and add MonkeyPaste.Common ref to MonkeyPaste
+echo 3. Remove and add MonkeyPaste.Common.Plugin ref to MonkeyPaste.Common
 
 pause
 

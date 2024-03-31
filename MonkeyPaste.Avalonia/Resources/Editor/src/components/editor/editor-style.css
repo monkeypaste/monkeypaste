@@ -128,11 +128,26 @@ body:has(.editable) {
 }
 
 .ql-editor h1 {
-    line-height: 4em;
+    line-height: 84px;
+    font-size: 42px;
 }
 .ql-editor h2 {
-    line-height: 3em;
+    line-height: 64px;
+    font-size: 32px;
 }
-.ql-editor h3, .ql-editor h4, .ql-editor h5, .ql-editor h6  {
-    line-height: 2em;
+.ql-editor h3  {
+    line-height: 64px;
+    font-size: 32px;
+}
+.ql-editor h4 {
+    line-height: 48px;
+    font-size: 24px;
+}
+.ql-editor h5 {
+    line-height: 48px;
+    font-size: 24px;
+}
+.ql-editor h6 {
+    line-height: 40px;
+    font-size: 20px;
 }

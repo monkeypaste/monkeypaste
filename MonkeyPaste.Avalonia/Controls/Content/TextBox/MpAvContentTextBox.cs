@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsContentLoaded =>
             IsInitialized && BindingContext != null;
         public bool IsSubSelectable =>
-            BindingContext.IsSubSelectionEnabled;
+            BindingContext != null && BindingContext.IsSubSelectionEnabled;
 
         public async Task LoadContentAsync(bool isSearchEnabled = true) {
             // really dont need to do anything

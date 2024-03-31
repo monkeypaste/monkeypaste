@@ -683,8 +683,8 @@
                                     <Grid>
                                         <DataGrid x:Name="ExcludedUrlDatagrid"
                                                   CanUserResizeColumns="True"
-                                                  IsVisible="{Binding FilteredItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                                  ItemsSource="{Binding FilteredItems}"
+                                                  IsVisible="{Binding RejectedItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                  ItemsSource="{Binding RejectedItems}"
                                                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                                             <DataGrid.Columns>
                                                 <DataGridTemplateColumn Width="30"

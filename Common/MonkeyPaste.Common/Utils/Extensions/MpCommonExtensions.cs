@@ -2,6 +2,7 @@
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -163,6 +164,15 @@ namespace MonkeyPaste.Common {
             }
             d.Add(key, value);
             return true;
+        }
+        public static bool TryAddOrReplace<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> d, TKey key, TValue value) {
+            //returns true if kvp was added
+            //returns false if kvp was replaced
+            if (d.ContainsKey(key)) {
+                d[key] = value;
+                return false;
+            }
+            return d.TryAdd(key, value);
         }
 
         public static int FastIndexOf<T>(this IList<T> list, T value) {

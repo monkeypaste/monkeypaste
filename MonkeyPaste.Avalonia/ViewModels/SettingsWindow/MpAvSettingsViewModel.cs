@@ -1495,9 +1495,10 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (_reinitContentParams.Any(x => x.ToLowerInvariant() == e.PropertyName.ToLowerInvariant())) {
-                Task.WhenAll(MpAvClipTrayViewModel.Instance.AllActiveItems
-                    .Where(x => x.GetContentView() != null)
-                    .Select(x => x.GetContentView().ReloadAsync())).FireAndForgetSafeAsync();
+                //Task.WhenAll(MpAvClipTrayViewModel.Instance.AllActiveItems
+                //    .Where(x => x.GetContentView() != null)
+                //    .Select(x => x.GetContentView().ReloadAsync())).FireAndForgetSafeAsync();
+                MpAvClipTrayViewModel.Instance.ReloadAllContentCommand.Execute(null);
             }
 
             if (_restartContentParams.Any(x => x.ToLowerInvariant() == e.PropertyName.ToLowerInvariant())) {

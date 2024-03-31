@@ -13,6 +13,7 @@ function initAllMatchers() {
     initLineBreakMatcher();
     initWhitespaceMatcher();
     initPreSwapMatcher();
+    initHeaderConverterMatcherMatcher();
 
     if (isPlainHtmlConverter()) {
         initFontColorMatcher();
@@ -90,6 +91,31 @@ function initWhitespaceMatcher() {
         if(node.data.match(/[^\n\S]|\t/)) {
             return new Delta().insert(node.data);
         }
+        return delta;
+    });    
+}
+
+function initHeaderConverterMatcherMatcher() {
+    // BUG header blots don't use font sizes and full line blots so converting to big spans
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+    let headers = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+    let sizes = ['42px','32px','32px','24px','24px','20px']
+    globals.quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
+        // this fixes whitespace issues 
+        let h_idx = headers.indexOf(node.tagName.toLowerCase())
+        if (h_idx < 0) {
+            return delta;
+        }
+        delta.forEach((op) => {
+            if (isNullOrUndefined(op.attributes)) {
+                op.attributes = {};
+            }
+            op.attributes.size = sizes[h_idx];
+        });
         return delta;
     });    
 }

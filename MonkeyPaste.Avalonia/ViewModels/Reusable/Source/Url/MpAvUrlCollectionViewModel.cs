@@ -130,6 +130,8 @@ namespace MonkeyPaste.Avalonia {
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             ValidateUrlViewModels();
             OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(FilteredItems));
+            OnPropertyChanged(nameof(RejectedItems));
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {

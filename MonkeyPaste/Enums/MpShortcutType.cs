@@ -57,6 +57,9 @@
         ZoomOutOnSelection,
         ResetSelectionZoom,
         ClearPinTray,
+#if DEBUG
+        ToggleGlobalHooks,
+#endif
         // CUT-OFF 
         MAX_APP_SHORTCUT,
         //remaining are data (not context) driven using commandId

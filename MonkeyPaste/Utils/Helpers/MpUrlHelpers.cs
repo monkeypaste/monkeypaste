@@ -3,6 +3,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using Nager.PublicSuffix;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -17,8 +18,9 @@ namespace MonkeyPaste {
         public string FavIconBase64 { get; set; }
 
         public string FullyFormattedUriStr { get; set; }
+        public string Domain { get; set; }
 
-        public string Source { get; set; }
+        public string HeadSource { get; set; }
     }
 
     public static class MpUrlHelpers {
@@ -29,6 +31,21 @@ namespace MonkeyPaste {
 
         #region Statics
         private static DomainParser _domainParser;
+
+        private static IEnumerable<Func<MpUrlProperties,Task<string>>> _fav_icon_finders;
+        private static IEnumerable<Func<MpUrlProperties, Task<string>>> fav_icon_finders {
+            get {
+                if(_fav_icon_finders == null) {
+                    _fav_icon_finders = [
+                        GetDomainFavIcon_parse_head,
+                        GetDomainFavIcon_domain_favicon,
+                        GetDomainFavIcon_use_google_service,
+                        GetDomainFavIcon_parse_domain_head,
+                        ];
+                }
+                return _fav_icon_finders;
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -39,51 +56,133 @@ namespace MonkeyPaste {
             MpUrlProperties url_props = new MpUrlProperties() {
                 FullyFormattedUriStr = GetFullyFormattedUrl(url)
             };
-            url_props.Source = await ReadUrlHeadAsString(url);
+            url_props.Domain = GetUrlDomain(url_props.FullyFormattedUriStr);
+            url_props.HeadSource = await ReadUrlHeadAsString(url);
 
-            string formatted_url = url_props.FullyFormattedUriStr;
-            url_props.FavIconBase64 = string.Empty;
-            if (Uri.IsWellFormedUriString(formatted_url, UriKind.Absolute)) {
-                var uri = new Uri(formatted_url, UriKind.Absolute);
-                //url_props.FavIconBase64 = await GetDomainFavIcon1(uri.Host);
-                //if (!Mp.Services.IconBuilder.IsStringBase64Image(url_props.FavIconBase64)) {
-                //    url_props.FavIconBase64 = await GetDomainFavIcon2(formatted_url);
-                //    if (!Mp.Services.IconBuilder.IsStringBase64Image(url_props.FavIconBase64)) {
-                //        // NOTE #3 uses html not url
-                //        var result_tuple = await GetDomainFavIcon3(url_props.Source);
-                //        if (result_tuple != null &&
-                //            Mp.Services.IconBuilder.IsStringBase64Image(result_tuple.Item1)) {
-                //            url_props.FavIconBase64 = result_tuple.Item1;
-                //            url_props.Title = result_tuple.Item2;
-                //        }
-                //    }
-                //}
-                var result_tuple = await GetDomainFavIcon3(url_props.Source);
-                if (result_tuple != null &&
-                    Mp.Services.IconBuilder.IsStringBase64Image(result_tuple.Item1)) {
-                    url_props.FavIconBase64 = result_tuple.Item1;
-                    url_props.Title = result_tuple.Item2;
-                } else {
-                    url_props.FavIconBase64 = await GetDomainFavIcon1(uri.Host);
-                    if (!Mp.Services.IconBuilder.IsStringBase64Image(url_props.FavIconBase64)) {
-                        url_props.FavIconBase64 = await GetDomainFavIcon2(formatted_url);
+            foreach(var fav_func in fav_icon_finders) {
+                url_props.FavIconBase64 = await fav_func.Invoke(url_props);
+                if(url_props.FavIconBase64 is not null) {
+                    if(Mp.Services.IconBuilder.IsStringBase64Image(url_props.FavIconBase64)) {
+                        break;
                     }
+                    url_props.FavIconBase64 = null;
                 }
-
             }
 
-            if (string.IsNullOrEmpty(url_props.FavIconBase64) ||
-                url_props.FavIconBase64.Equals(MpBase64Images.UnknownFavIcon)) {
-                url_props.FavIconBase64 = null;// MpBase64Images.AppIcon;
+            if(url_props.HeadSource.ToStringOrEmpty().SplitNoEmpty("<title") is { } tl &&
+                tl.Skip(1).FirstOrDefault().ToStringOrEmpty().SplitNoEmpty("</title>").FirstOrDefault() is { } t_inner) {
+                int close_idx = t_inner.IndexOf(">");
+                if(close_idx >= 0 && close_idx < t_inner.Length - 1 && t_inner.Substring(close_idx + 1) is { } title_str) {
+                    url_props.Title = title_str;
+                }
             }
             if (string.IsNullOrEmpty(url_props.Title) &&
-                !string.IsNullOrEmpty(url_props.Source)) {
-                url_props.Title = ParseHtmlTitle(url_props.Source);
+                !string.IsNullOrEmpty(url_props.HeadSource)) {
+                url_props.Title = ParseHtmlTitle(url_props.HeadSource);
             }
 
             return url_props;
         }
 
+        #region Favicon
+        private static async Task<string> GetDomainFavIcon_domain_favicon(MpUrlProperties url_props) {
+            string domain = url_props.Domain.ToStringOrEmpty();
+            try {
+                if (!domain.StartsWith("https://")) {
+                    domain = "https://" + domain;
+                }
+                if (!domain.EndsWith("/")) {
+                    domain += "/";
+                }
+                string favicon_uri_str = $"{domain}favicon.ico";
+                if (!Uri.IsWellFormedUriString(favicon_uri_str, UriKind.Absolute)) {
+                    // whats the domain?
+                    MpDebug.Break();
+                    return null;
+                }
+                Uri favicon = new Uri(favicon_uri_str, UriKind.Absolute);
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(favicon.AbsoluteUri);
+                if (bytes == null || bytes.Length == 0) {
+                    return null;
+                }
+                return Convert.ToBase64String(bytes);
+            }
+            catch (Exception ex) {
+                Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + domain + " with exception: " + ex);
+                return null;
+            }
+        }
+
+        private static async Task<string> GetDomainFavIcon_use_google_service(MpUrlProperties url_props) {
+            try {
+                string urlDomain = url_props.Domain.ToStringOrEmpty();
+                Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(favicon.AbsoluteUri);
+                if (bytes != null &&
+                    bytes.Length > 0 &&
+                    Convert.ToBase64String(bytes) is { } base64 && 
+                    !base64.Equals(MpBase64Images.UnknownFavIcon)) {
+                    // avoid googles fallback 
+                    return base64;
+                }
+                return null;
+            }
+            catch (Exception ex) {
+                Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url_props.FullyFormattedUriStr + " with exception: " + ex);
+                return null;
+            }
+        }
+        private static async Task<string> GetDomainFavIcon_parse_domain_head(MpUrlProperties url_props) {
+            string domain_head_html = await ReadUrlHeadAsString(url_props.Domain);
+            var result = await GetDomainFavIcon_parse_head(new() { HeadSource = domain_head_html });
+            return result;
+        }
+        private static async Task<string> GetDomainFavIcon_parse_head(MpUrlProperties url_props) {
+            string html_source = url_props.HeadSource.ToStringOrEmpty();
+
+            var url_doc = new HtmlDocument();
+            try {
+                url_doc.LoadHtml(html_source);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error loading html  w/ Source: '{html_source}'", ex);
+                url_doc = null;
+            }
+            if (url_doc == null ||
+                url_doc.DocumentNode.SelectSingleNode("//head") is not HtmlNode headNode) {
+                return null;
+            }
+            string icon_base64 = null;
+            // icon based on https://www.how7o.com/t/how-to-get-a-websites-favicon-url-with-javascript/57/2
+            var icon_link_nodes =
+                headNode.ChildNodes
+                .Where(x =>
+                    x.Name.ToLowerInvariant() == "link" &&
+                    (x.GetAttributeValue("rel", string.Empty).Trim().ToLowerInvariant() == "icon" ||
+                    x.GetAttributeValue("rel", string.Empty).Trim().ToLowerInvariant() == "shortcut icon"));
+
+            string icon_uri = null;
+            if (icon_link_nodes.Any()) {
+                var icon_node = icon_link_nodes.FirstOrDefault(x => x.GetAttributeValue("rel", string.Empty).Trim().ToLowerInvariant() == "icon");
+                if (icon_node != null) {
+                    // prefer 'icon' over 'shortcut icon' (i guess)
+                    icon_uri = icon_node.GetAttributeValue("href", null);
+                } else {
+                    icon_uri = icon_link_nodes.First().GetAttributeValue("href", null);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(icon_uri)) {
+                var bytes = await MpFileIo.ReadBytesFromUriAsync(icon_uri);
+                if (bytes != null && bytes.Length > 0) {
+                    icon_base64 = Convert.ToBase64String(bytes);
+                }
+            }
+
+            return icon_base64;
+        }
+
+        #endregion
         public static bool IsBlankUrl(string url) {
             if (string.IsNullOrEmpty(url)) {
                 return false;
@@ -133,23 +232,6 @@ namespace MonkeyPaste {
             return title;
         }
 
-        private static string ParseHtmlTitle2(string html) {
-            string GetXmlElementContent(string xml, string element) {
-                if (string.IsNullOrEmpty(xml) || string.IsNullOrEmpty(element)) {
-                    return string.Empty;
-                }
-                element = element.Replace(@"<", string.Empty).Replace(@"/>", string.Empty);
-                element = @"<" + element + @">";
-                var strl = xml.Split(new string[] { element }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                if (strl.Count > 1) {
-                    element = element.Replace(@"<", @"</");
-                    return strl[1].Substring(0, strl[1].IndexOf(element));
-                }
-                return string.Empty;
-            }
-
-            return GetXmlElementContent(html, @"title");
-        }
 
         private static string ParseHtmlTitle3(HtmlDocument doc) {
             // from https://stackoverflow.com/a/49487198/105028
@@ -207,34 +289,6 @@ namespace MonkeyPaste {
             }
         }
 
-        private static async Task<string> ReadUrlAsString(string url) {
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {//if (!IsValidUrl(url)) {
-                return string.Empty;
-            }
-            try {
-                using (HttpClient client = new HttpClient()) {
-                    client.SetDefaultUserAgent();
-
-                    try {
-                        using (HttpResponseMessage response = await client.GetAsync(url)) {
-                            using (HttpContent content = response.Content) {
-
-                                var result = await content.ReadAsStringAsync();
-                                return result;
-                            }
-                        }
-                    }
-                    catch (HttpRequestException) {
-                        return string.Empty;
-                    }
-
-                }
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine("Error scanning for url title at " + url, ex);
-                return string.Empty;
-            }
-        }
 
         public static bool IsUrlTopLevel(string url) {
             string url_domain = GetUrlDomain(url);
@@ -279,97 +333,6 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine($"Error resolving domain from url '{url}'.", ex);
             }
             return string.Empty;
-        }
-
-        private static async Task<string> GetDomainFavIcon1(string domain) {
-            try {
-                if (!domain.StartsWith("https://")) {
-                    domain = "https://" + domain;
-                }
-                if (!domain.EndsWith("/")) {
-                    domain += "/";
-                }
-                string favicon_uri_str = $"{domain}favicon.ico";
-                if (!Uri.IsWellFormedUriString(favicon_uri_str, UriKind.Absolute)) {
-                    // whats the domain?
-                    MpDebug.Break();
-                    return null;
-                }
-                Uri favicon = new Uri(favicon_uri_str, UriKind.Absolute);
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(favicon.AbsoluteUri);
-                if (bytes == null || bytes.Length == 0) {
-                    return null;
-                }
-                return Convert.ToBase64String(bytes);
-            }
-            catch (Exception ex) {
-                Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + domain + " with exception: " + ex);
-                return string.Empty;
-            }
-        }
-
-        private static async Task<string> GetDomainFavIcon2(string url) {
-            try {
-                string urlDomain = GetUrlDomain(url);
-                Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(favicon.AbsoluteUri);
-                if (bytes == null || bytes.Length == 0) {
-                    return null;
-                }
-                return Convert.ToBase64String(bytes);
-            }
-            catch (Exception ex) {
-                Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: " + ex);
-                return string.Empty;
-            }
-        }
-        private static async Task<Tuple<string, string>> GetDomainFavIcon3(string html_source) {
-            // use EXTREME fallback to find favicon (& title if found)
-            // result [base64FavIcon,title]
-
-            var url_doc = new HtmlDocument();
-            try {
-                url_doc.LoadHtml(html_source);
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error loading html  w/ Source: '{html_source}'", ex);
-                url_doc = null;
-            }
-            if (url_doc == null ||
-                url_doc.DocumentNode.SelectSingleNode("//head") is not HtmlNode headNode) {
-                return null;
-            }
-
-            string title = ParseHtmlTitle3(url_doc);
-
-            string icon_base64 = null;
-            // icon based on https://www.how7o.com/t/how-to-get-a-websites-favicon-url-with-javascript/57/2
-            var icon_link_nodes =
-                headNode.ChildNodes
-                .Where(x =>
-                    x.Name.ToLowerInvariant() == "link" &&
-                    (x.GetAttributeValue("rel", string.Empty).Trim().ToLowerInvariant() == "icon" ||
-                    x.GetAttributeValue("rel", string.Empty).Trim().ToLowerInvariant() == "shortcut icon"));
-
-            string icon_uri = null;
-            if (icon_link_nodes.Count() > 0) {
-                var icon_node = icon_link_nodes.FirstOrDefault(x => x.GetAttributeValue("rel", string.Empty).Trim().ToLowerInvariant() == "icon");
-                if (icon_node != null) {
-                    // prefer 'icon' over 'shortcut icon' (i guess)
-                    icon_uri = icon_node.GetAttributeValue("href", null);
-                } else {
-                    icon_uri = icon_link_nodes.First().GetAttributeValue("href", null);
-                }
-            }
-
-            if (!string.IsNullOrEmpty(icon_uri)) {
-                var bytes = await MpFileIo.ReadBytesFromUriAsync(icon_uri);
-                if (bytes != null && bytes.Length > 0) {
-                    icon_base64 = Convert.ToBase64String(bytes);
-                }
-            }
-
-            return new Tuple<string, string>(icon_base64, title);
         }
 
         #endregion

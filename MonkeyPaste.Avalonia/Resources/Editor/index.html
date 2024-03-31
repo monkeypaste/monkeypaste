@@ -129,19 +129,21 @@
         });
 
         window.onbeforeunload = function (e) {
-            if (!isRunningOnHost()) {
-                return undefined;
-            }
-            if (globals && globals.IsReloading) {
-                // disable confirm
-                console.log('unload accepted, is reloading');
-                return undefined;
-            }
+            //if (!isRunningOnHost()) {
+            //    return undefined;
+            //}
+            //if (globals && globals.IsReloading) {
+            //    // disable confirm
+            //    console.log('unload accepted, is reloading');
+            //    return undefined;
+            //}
 
-            console.log('unload rejected');
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
+            //console.log('unload rejected');
+            //e.preventDefault();
+            //e.stopPropagation();
+            //return false;
+
+            return undefined;
         };
 
     </script>

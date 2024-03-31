@@ -721,8 +721,8 @@ async function convertTextContentToFormatsAsync(selectionOnly, formats) {
 			}
 		} else if (isCsvFormat(lwc_format) && isContentATable()) {
 			data = getTablesCsv(lwc_format, null, selectionOnly);
-		} else if (isImageFormat(lwc_format)) {
-			data = await getDocRangeAsImageAsync(sel);
+		} //else if (isImageFormat(lwc_format)) {
+			//data = await getDocRangeAsImageAsync(sel);
 
 			// trigger async screenshot notification where host needs
 			// to null and wait for value to avoid async issues
@@ -731,7 +731,7 @@ async function convertTextContentToFormatsAsync(selectionOnly, formats) {
 			//		onCreateContentScreenShot_ntf(result);
 			//	});
 			//data = globals.PLACEHOLDER_DATAOBJECT_TEXT;
-		} 
+		//} 
 		if (!data || data == '') {
 			continue;
 		} 

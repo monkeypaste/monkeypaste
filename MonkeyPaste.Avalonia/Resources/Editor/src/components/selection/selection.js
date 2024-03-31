@@ -217,11 +217,27 @@ function isDomRangeEqual(dom_range_1, dom_range_2) {
 		return false;
 	}
 
-	return
+	let result = 
 		dom_range_1.startContainer == dom_range_2.startContainer &&
 		dom_range_1.endContainer == dom_range_2.endContainer &&
 		dom_range_1.startOffset == dom_range_2.startOffset &&
 		dom_range_1.endOffset == dom_range_2.endOffset;
+	return result;
+}
+function isDocRangeEqual(doc_range_1, doc_range_2) {
+	if (!doc_range_1 && !doc_range_2) {
+		return true;
+	}
+	if (!doc_range_1) {
+		return false;
+	}
+	if (!doc_range_2) {
+		return false;
+	}
+
+	let result =
+		doc_range_1.index == doc_range_2.index &&
+		doc_range_1.length == doc_range_2.length;
 }
 
 function isNavJump() {

@@ -24,10 +24,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Events
-        // arg is ci guid
-        public event EventHandler<string> OnCopyItemSourceInfoRejected;
         // arg is ci guid, icon id
-        public event EventHandler<(string,int)> OnCopyItemSourceInfoComplete;
+        public event EventHandler<(string ciguid,int iconid,bool rejected)> OnSourceInfoGathered;
 
         #endregion
 
@@ -114,7 +112,7 @@ namespace MonkeyPaste.Avalonia {
             IEnumerable<MpISourceRef> refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(avdo);
             
             if (Mp.Services.SourceRefTools.IsAnySourceRejected(refs)) {
-                OnCopyItemSourceInfoRejected?.Invoke(this, ci_guid);
+                OnSourceInfoGathered?.Invoke(this, (ci_guid,0,true));
                 return;
             }
 
@@ -168,7 +166,7 @@ namespace MonkeyPaste.Avalonia {
                             //resp: string.IsNullOrEmpty(itemDelta) ? ci.ToDelta():itemDelta,
                             ref_uris: ref_urls,
                             transType: transType);
-            OnCopyItemSourceInfoComplete?.Invoke(this, (ci_guid,icon_id));
+            OnSourceInfoGathered?.Invoke(this, (ci_guid,icon_id,false));
         }
         #endregion
 

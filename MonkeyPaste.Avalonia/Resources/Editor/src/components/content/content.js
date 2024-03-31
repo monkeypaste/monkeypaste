@@ -13,7 +13,8 @@ function loadContentAsync(
 	sel_state,
 	paste_button_info,
 	break_before_load,
-	editor_scale) {
+	editor_scale,
+	is_pop_out) {
 	if (break_before_load) {
 		log('breaking before load called...');
 		debugger;
@@ -29,6 +30,11 @@ function loadContentAsync(
 
 	try {
 		setEditorZoom(editor_scale);
+		if (is_pop_out) {
+			document.body.classList.add('popOut');
+		} else {
+			document.body.classList.remove('popOut');
+		}
 
 		if (is_reload) {
 			was_sub_sel_enabled = isSubSelectionEnabled();
@@ -135,14 +141,7 @@ function loadContentAsync(
 	}
 	if (was_editable != null && was_editable) {
 		disableReadOnly();
-	}
-
-	
-	if (is_reload) {
-		log('Editor re-loaded');
-	} else {
-		log('Editor loaded');
-	}
+	}	
 
 	globals.IsLoadingContent = false;
 	setEditorPlaceholderText('');
@@ -150,6 +149,14 @@ function loadContentAsync(
 	getEditorContainerElement().dispatchEvent(globals.ContentLoadedEvent);
 
 	unsupressTextChanged(sup_guid);
+
+	if (is_reload) {
+		log('Editor re-loaded');
+	} else {
+		log('Editor loaded');
+		// clear any load history
+		globals.quill.history.clear();
+	}
 }
 
 function initContentClassStyle() {

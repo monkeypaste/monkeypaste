@@ -20,14 +20,14 @@
         <!--  OUTER BORDER EFFECT  -->
         <Style Selector="Border#TooltipOuterContainer">
             <Setter Property="BoxShadow"
-                    Value="inset 0 0 5 5 #46000000" />
+                    Value="inset 0 0 5 5 #12000000" />
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeBlackBrush}" />
         </Style>
 
         <Style Selector="Border#TooltipOuterContainer.bright-fg">
             <Setter Property="BoxShadow"
-                    Value="inset 0 0 5 5 #46FFFFFF" />
+                    Value="inset 0 0 5 5 #12FFFFFF" />
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeWhiteBrush}" />
         </Style>

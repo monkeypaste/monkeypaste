@@ -7,6 +7,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -1238,6 +1239,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        List<string> PendingRejectedItemGuids { get; set; } = [];
         public int PinOpCopyItemId { get; set; } = -1;
         public bool IsAutoEditEnabled =>
             !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled;
@@ -1257,6 +1259,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsRestoringSelection { get; set; }
 
         #region Append
+
+        ConcurrentDictionary<string,MpRecentAppendItemInfo> RecentAppendItemLookup { get; set; } = [];
 
         private MpAppendModeFlags _appendModeFlags = MpAppendModeFlags.None;
         public MpAppendModeFlags AppendModeStateFlags =>
@@ -1521,8 +1525,7 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.ClipboardMonitor.OnClipboardChanged += ClipboardWatcher_OnClipboardChanged;
             Mp.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
 
-            _copyItemBuilder.OnCopyItemSourceInfoComplete += CopyItemBuilder_OnCopyItemSourceInfoComplete;
-            _copyItemBuilder.OnCopyItemSourceInfoRejected += CopyItemBuilder_OnCopyItemSourceInfoRejected;
+            _copyItemBuilder.OnSourceInfoGathered += CopyItemBuilder_OnSourceInfoGathered;
 
             SetupDropHelpers();
 
@@ -2485,35 +2488,44 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private void CopyItemBuilder_OnCopyItemSourceInfoRejected(object sender, string ci_guid) {
-            // TODO need to be careful here if item is being appended or part of an automation
-            // this maybe dangerous.
-            // TODO2 should figure out append
-            MpConsole.WriteLine($"CopyItem w/ guid '{ci_guid}' source rejected. Removing item...");
-            Dispatcher.UIThread.Post(async () => {
-                // find ciid
-                int ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
-                if (ciid <= 0) {
-                    var sw = Stopwatch.StartNew();
-                    while (ciid <= 0) {
-                        if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
-                            MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Timed out, shouldn't happen...");
-                            return;
-                        }
-                        MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Will retry...");
-                        await Task.Delay(100);
-                        ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
-                    }
-                }
-                await MpDataModelProvider.DeleteItemAsync<MpCopyItem>(ciid);
-                MpConsole.WriteLine($"Rejected source CopyItem w/ guid '{ci_guid}' successfully removed");
-            });
-        }
-
-        private void CopyItemBuilder_OnCopyItemSourceInfoComplete(object sender, (string ci_guid,int icon_id) info_props) {
+        private void CopyItemBuilder_OnSourceInfoGathered(
+            object sender, 
+            (string ci_guid,int icon_id, bool rejected) info_props) {
             string ci_guid = info_props.ci_guid;
             int icon_id = info_props.icon_id;
+            bool rejected = info_props.rejected;
             Dispatcher.UIThread.Post(async () => {
+                if(!IsAnyAppendMode && rejected) {
+                    if(!PendingRejectedItemGuids.Contains(ci_guid)) {
+                        PendingRejectedItemGuids.Add(ci_guid);
+                    }
+                    return;
+                }
+
+                if(IsAnyAppendMode) {
+                    /*
+                    When append active and no 
+                    rari found OR its range is default, wait for rari and 
+                    range before handling the case
+                    */
+                    var sw = Stopwatch.StartNew();
+                    while(true) {
+                        if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                            MpConsole.WriteLine($"Append timeout waiting for recent append info...ignoring");
+                            break;
+                        }
+                        bool wait_for_rari =
+                                    !RecentAppendItemLookup.ContainsKey(ci_guid) ||
+                                    RecentAppendItemLookup[ci_guid] == null ||
+                                    RecentAppendItemLookup[ci_guid].doc_append_length < 0; 
+                        if(wait_for_rari) {
+                            await Task.Delay(30);
+                            continue;
+                        }
+                        break;
+                    } 
+
+                }
                 // find ciid
                 int ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
                 if (ciid <= 0) {
@@ -2528,6 +2540,34 @@ namespace MonkeyPaste.Avalonia {
                         ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
                     }
                 }
+                if (rejected) {
+                    // has to be append
+                    /*
+                            If the reject id matches a rari.handle send a 
+                            range delete req to editor and then remove that rari. 
+                            (May need to add or create new entry of that items merged transaction 
+                            source ids to rari in the merge sources subtask then delete those 
+                            items along with range delete req)
+                            */
+                    if (RecentAppendItemLookup.TryGetValue(ci_guid, out var rari)) {
+                        await MpDataModelProvider.DeleteItemAsync<MpCopyItemTransaction>(rari.trans_id);
+
+                        if (AppendClipTileViewModel != null) {
+                            if (AppendClipTileViewModel.GetContentView() is { } cv) {
+                                var req = new MpQuillRemoveAppendRangeMessage() { index = rari.doc_index, length = rari.doc_append_length };
+                                cv.SendMessage($"deleteDocRange_ext('{req.SerializeObjectToBase64()}')");
+                            }
+                            await AppendClipTileViewModel.TransactionCollectionViewModel.InitializeAsync(AppendClipTileViewModel.CopyItemId);
+                        }
+                        RecentAppendItemLookup.Remove(ci_guid, out _);
+                    }
+
+                    await MpDataModelProvider.DeleteItemAsync<MpCopyItem>(ciid);
+                    MpConsole.WriteLine($"Rejected source CopyItem w/ guid '{ci_guid}' successfully removed");
+                    return;
+                }
+                RecentAppendItemLookup.Remove(ci_guid, out _);
+
                 if(icon_id > 0) {
                     // should only happen for new items
                     bool success = await MpDataModelProvider.SetCopyItemIconIdByIdAsync(ciid, icon_id);
@@ -3824,6 +3864,17 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                 }
+
+                // remove any rejected items here its too messy blocking and trying to snatch it..
+                var to_remove_ciidl = PendingNewModels.Where(x => PendingRejectedItemGuids.Contains(x.Guid)).Select(x=>x.Id).ToList();
+                foreach(var to_remove_ciid in to_remove_ciidl) {
+                    await MpDataModelProvider.DeleteItemAsync<MpCopyItem>(to_remove_ciid);
+                    if(PendingNewModels.FirstOrDefault(x=>x.Id == to_remove_ciid) is { } pnm_to_remove) {
+                        PendingNewModels.Remove(pnm_to_remove);
+                        PendingRejectedItemGuids.Remove(pnm_to_remove.Guid);
+                    }
+                }
+
                 if (!PendingNewModels.Any()) {
                     // nothing to add (at least now)
                     return;
@@ -5057,14 +5108,15 @@ namespace MonkeyPaste.Avalonia {
             });
 
         #region Append
-        public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data) {
+        public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data, string handle) {
             return new MpQuillAppendStateChangedMessage() {
                 isAppendLineMode = IsAppendLineMode,
                 isAppendInsertMode = IsAppendInsertMode,
                 isAppendManualMode = IsAppendManualMode,
                 isAppendPaused = IsAppendPaused,
                 isAppendPreMode = IsAppendPreMode,
-                appendData = data
+                appendData = data,
+                appendContentHandle = handle
             };
         }
         private bool IsCopyItemAppendable(MpCopyItem ci) {
@@ -5099,8 +5151,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvWindowManager.ActiveWindow.DataContext is MpAvClipTileViewModel active_ctvm) {
                 MpDebug.Assert(SelectedItem == active_ctvm, $"Append activate sel/active item mismatch");
                 append_ctvm = active_ctvm;
-            }
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+            } else if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
                 if (SelectedItem != null) {
                     append_ctvm = SelectedItem;
                 }
@@ -5161,7 +5212,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (AppendClipTileViewModel != null &&
                 AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
-                await wv.ProcessAppendStateChangedMessageAsync(GetAppendStateMessage(null), source);
+                await wv.ProcessAppendStateChangedMessageAsync(GetAppendStateMessage(null,null), source);
             }
         }
 
@@ -5282,6 +5333,21 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public void AddOrUpdateRecentAppendInfo(string handle, (int,int) appended_range = default, int trans_id = 0) {
+            
+            if(!RecentAppendItemLookup.TryGetValue(handle,out var rai)) {
+                rai = new MpRecentAppendItemInfo();
+            }
+            if(!appended_range.IsDefault()) {
+                rai.doc_index = appended_range.Item1;
+                rai.doc_append_length = appended_range.Item2;
+            }
+            if(trans_id > 0) {
+                rai.trans_id = trans_id;
+            }
+            RecentAppendItemLookup.TryAddOrReplace(handle, rai);
+        }
+
         private bool IsModelToBeAdded(MpCopyItem aci) {
             // this prevents cap from treating temporary append only items from 'Add' processing
             if (aci.WasDupOnCreate) {
@@ -5324,17 +5390,19 @@ namespace MonkeyPaste.Avalonia {
             }
 
             bool isNew = !aci.WasDupOnCreate;
+            string append_handle = aci.Guid;
             string append_data = aci.ItemData;
             if (AppendClipTileViewModel.CopyItemType == MpCopyItemType.FileList) {
+                // create file fragment
                 append_data = aci.ToFileListDataFragmentMessage().SerializeObjectToBase64();
             }
+            // add stub for this append
+            AddOrUpdateRecentAppendInfo(append_handle);
 
             if (AppendClipTileViewModel.CopyItemId != aci.Id) {
                 Dispatcher.UIThread.Post(async () => {
-                    // TODO should handle append source reject here...
-
-                    // no need to wait for source updates
-                    // get appended items transactions which should be only 1 since new and add a paste transaction to append item with its create sources
+                    // get appended items transactions which should be only 1
+                    // if new and add a paste transaction to append item with its create sources
                     var aci_citl = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(aci.Id);
                     bool is_still_building = !aci_citl.Any();
                     if(is_still_building) {
@@ -5364,13 +5432,17 @@ namespace MonkeyPaste.Avalonia {
                                 // NOTE item ref is added to END to keep primary source at front
                                 aci_create_sources.Add(aci);
                             }
+
                             //// NOTE ignoring msg data here since its only used for analyze transactions for now
-                            await Mp.Services.TransactionBuilder.ReportTransactionAsync(
+                            var append_ci_trans = await Mp.Services.TransactionBuilder.ReportTransactionAsync(
                                 copyItemId: AppendClipTileViewModel.CopyItemId,
                                 reqType: MpJsonMessageFormatType.DataObject,
                                 respType: MpJsonMessageFormatType.Delta,
                                 ref_uris: aci_create_sources.Select(x => x.ToSourceUri()),
                                 transType: MpTransactionType.Appended);
+                            if(append_ci_trans != null) {
+                                AddOrUpdateRecentAppendInfo(append_handle, default, append_ci_trans.Id);
+                            }
                         }
                     }                    
 
@@ -5381,7 +5453,7 @@ namespace MonkeyPaste.Avalonia {
                 });
             }
 
-            AppendDataCommand.Execute(append_data);
+            AppendDataCommand.Execute(new object[] { append_data, append_handle });
             return true;
         }
         public MpIAsyncCommand DeactivateAppendModeCommand => new MpAsyncCommand(
@@ -5457,17 +5529,25 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> AppendDataCommand => new MpAsyncCommand<object>(
             async (args) => {
+                if(args is not object[] argParts ||
+                argParts.Length < 2 ||
+                argParts[0] is not string append_data_str ||
+                argParts[1] is not string append_content_handle) {
+                    return;
+                }
                 AppendClipTileViewModel.IsWindowOpen = true;
                 AppendClipTileViewModel.AppendCount++;
                 if (AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
-                    await wv.ProcessAppendStateChangedMessageAsync(GetAppendStateMessage(args as string), "command");
+                    await wv.ProcessAppendStateChangedMessageAsync(GetAppendStateMessage(append_data_str,append_content_handle), "command");
                 }
 
             }, (args) => {
                 if (AppendClipTileViewModel == null || !IsAnyAppendMode) {
                     return false;
                 }
-                return args is string argStr && !string.IsNullOrEmpty(argStr);
+
+                //return args is string argStr && !string.IsNullOrEmpty(argStr);
+                return true;
             });
 
         public ICommand ShowDevToolsCommand => new MpAsyncCommand(
@@ -5519,5 +5599,11 @@ namespace MonkeyPaste.Avalonia {
         //    });
 
         #endregion
+    }
+
+    public class MpRecentAppendItemInfo {
+        public int doc_index { get; set; }
+        public int doc_append_length { get; set; } = -1;
+        public int trans_id { get; set; }
     }
 }

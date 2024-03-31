@@ -17,7 +17,7 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		formula: false,
 		history: {
 			delay: 1000,
-			userOnly: false,
+			userOnly: true,
 			maxStack: globals.MaxUndoLimit < 0 ? Number.MAX_SAFE_INTEGER : globals.MaxUndoLimit
 		},
 		formats: 'background',
@@ -267,7 +267,7 @@ function formatSelection(format, value, source = 'api') {
 
 function replaceFormatInDocRange(range, format, source = 'api') {
 
-	// BUG if format differs after selection start it the change
+	// BUG if format differs after selection start the change
 	// won't affect that different place so applying format to each
 	// idx by itself
 	for (var idx = range.index; idx < range.index+range.length-1; idx++) {

@@ -37,16 +37,8 @@
 	FixedAppendIdx: -1,
 
 	AppendPauseLineColor: 'gold',
+	LastAppendContentHandle: null,
 
-	AppendLineModeLabel: 'Enable Inline',
-	AppendInlineModeLabel: 'Enable Paragraph',
-	AppendManualModeLabel: 'Toggle manual',
-	AppendNonManualModeLabel: 'Toggle manual',
-	AppendPreLabel: 'Toggle Before',
-	AppendPostLabel: 'Toggle Before',
-	AppendPauseLabel: 'Pause appending to clipboard',
-	AppendResumeLabel: 'Resume appending to clipboard',
-	AppendCloseLabel: 'Finish appending',
 	// #endregion
 
 	// #region ATTRIBUTES

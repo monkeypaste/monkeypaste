@@ -246,6 +246,7 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
         #region Control
+        
         public static RenderTargetBitmap RenderToBitmap(this Control target) {
             if (target is TemplatedControl tc) {
                 MpDebug.Assert(tc.Background != null, $"Needs bg");

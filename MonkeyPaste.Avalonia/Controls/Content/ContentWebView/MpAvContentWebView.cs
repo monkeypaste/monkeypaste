@@ -580,20 +580,6 @@ namespace MonkeyPaste.Avalonia {
                                     return;
                                 }
                                 MpPoint center_p = this.Bounds.Center.ToPortablePoint();
-                                //MpPoint anchor_p = new MpPoint(showToolTipNtf.anchorX, showToolTipNtf.anchorY);
-                                //// adj tooltip to be its height + pad away from anchor
-                                //double adj_pad = 10;
-                                //double adj_dist = (tt_size.Height / 2) + adj_pad;
-                                //MpPoint center_to_anchor = anchor_p - center_p;
-                                //double anchor_dist = center_to_anchor.Length;
-                                //if (anchor_dist <= Math.Abs(adj_dist)) {
-                                //    // anchor is IN the center so flip adj_dist out along line
-                                //    adj_dist *= -1;
-                                //}
-                                //double offset_dist = anchor_dist - adj_dist;
-                                //MpPoint adj_offset = center_to_anchor.Normalized * offset_dist;
-                                //MpPoint adj_p = anchor_p - adj_offset;
-                                //adj_p -= (tt_size.ToPortablePoint() * 0.5);
                                 MpPoint adj_p = center_p - (tt_size.ToPortablePoint() * 0.5);
                                 if (Math.Abs(center_p.Y - showToolTipNtf.anchorY) < tt_size.Height) {
                                     // if its in the middle just shove to the top
@@ -661,6 +647,14 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case MpEditorBindingFunctionType.notifyAppendStateChangeComplete:
+                    ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillAppendStateChangeCompletedMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillAppendStateChangeCompletedMessage append_resp &&
+                        !append_resp.appendContentHandle.IsNullOrEmpty() &&
+                        append_resp.appendDocLength >= 0) {
+                        // update appended range
+
+                        MpAvClipTrayViewModel.Instance.AddOrUpdateRecentAppendInfo(append_resp.appendContentHandle, (append_resp.appendDocIdx, append_resp.appendDocLength));
+                    }
                     _lastAppendStateChangeCompleteDt = DateTime.Now;
                     break;
 
@@ -1132,23 +1126,14 @@ namespace MonkeyPaste.Avalonia {
 
 #if CEFNET_WV
 
-        protected override void Dispose(bool disposing) {
-            if (disposing &&
-                BindingContext != null &&
-                BindingContext.IsFinalClosingState) {
-                // disposal handled in pop out closed handler after IsFinalClosingState reset
-                return;
-            }
-            base.Dispose(disposing);
-        }
-
-
-        //protected override async void OnNavigated(NavigatedEventArgs e) {
-        //    base.OnNavigated(e);
-        //    if (MpUrlHelpers.IsBlankUrl(e.Url)) {
+        //protected override void Dispose(bool disposing) {
+        //    if (disposing &&
+        //        BindingContext != null &&
+        //        BindingContext.IsFinalClosingState) {
+        //        // disposal handled in pop out closed handler after IsFinalClosingState reset
         //        return;
         //    }
-        //    //await LoadEditorAsync();
+        //    base.Dispose(disposing);
         //}
 #else
         public override void OnNavigated(string url) {
@@ -1352,6 +1337,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var loadContentMsg = new MpQuillLoadContentRequestMessage() {
+                isPopOut = BindingContext.IsWindowOpen,
                 editorScale = ContentScale,
                 contentId = BindingContext.CopyItemId,
                 contentHandle = BindingContext.PublicHandle,
@@ -1386,7 +1372,7 @@ namespace MonkeyPaste.Avalonia {
             loadContentMsg.appendStateFragment =
                 BindingContext.IsAppendNotifier ?
                     MpAvClipTrayViewModel.Instance
-                    .GetAppendStateMessage(null)
+                    .GetAppendStateMessage(null,null)
                     .SerializeObjectToBase64() : null;
 
             if (MpAvPersistentClipTilePropertiesHelper
@@ -1718,21 +1704,10 @@ namespace MonkeyPaste.Avalonia {
             if (BindingContext.IsAppendNotifier) {
                 MpConsole.WriteLine("content changed on append");
                 Dispatcher.UIThread.Post(async () => {
-                    // NOTE have to call this as
-                    // a workaround since db update trigger made editing too slow
-                    // and this is a case its needed or it doesn't update (the view at least)
-                    //await BindingContext.RefreshModelAsync();
                     // sync append item to current clipboard
                     var append_mpdo = await GetDataObjectAsync(null, false, true);
                     await Mp.Services.DataObjectTools
                         .WriteToClipboardAsync(append_mpdo, true);
-
-                    //MpConsole.WriteLine($"Clipboard updated with append data. Plain Text: ");
-                    //if (append_mpdo.TryGetData(MpPortableDataFormats.Text, out string pt)) {
-                    //    MpConsole.WriteLine(pt);
-                    //} else {
-                    //    MpConsole.WriteLine("NO PLAIN TEXT AVAILABLE");
-                    //}
                 });
             }
         }

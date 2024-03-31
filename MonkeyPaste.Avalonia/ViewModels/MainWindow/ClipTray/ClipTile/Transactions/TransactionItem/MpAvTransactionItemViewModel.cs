@@ -79,6 +79,7 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvTransactionSourceViewModel> Sources =>
             Items.OfType<MpAvTransactionSourceViewModel>().ToList();
+        
         public IEnumerable<MpAvTransactionMessageViewModelBase> Messages =>
 
             Items.OfType<MpAvTransactionMessageViewModelBase>();

@@ -2806,6 +2806,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Toggle Global Hooks.
+        /// </summary>
+        public static string MpShortcutType_ToggleGlobalHooks {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ToggleGlobalHooks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Toggle Listen To Clipboard.
         /// </summary>
         public static string MpShortcutType_ToggleListenToClipboard {
