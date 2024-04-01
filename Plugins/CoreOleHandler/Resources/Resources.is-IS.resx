@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Untitled</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Til skemmtunar, þegar þetta er athugað verður myndinni á klemmuspjaldinu breytt gróflega í ASCII (venjulegan texta) mynd af myndinni 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Mynd til texta</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Þegar þau eru tiltæk verður gögnum fyrsta valins textasniðs breytt í mynd og bætt við klemmuspjaldið.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Texta til myndsniðs</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Mynd (tiff)</value>
+  </data>
 </root>

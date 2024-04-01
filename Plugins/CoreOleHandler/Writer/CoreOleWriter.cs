@@ -29,12 +29,13 @@ namespace CoreOleHandler {
             List<MpUserNotification> nfl = new List<MpUserNotification>();
             CoreOleHelpers.SetCulture(request);
             List<Exception> exl = new List<Exception>();
-            //IDataObject write_output = ido_dict == null ? new MpAvDataObject() : ido_dict.ToDataObject();
+            Dictionary<string, object> conversion_results = [];
             Dictionary<string, object> write_output = ido_dict == null ? [] : ido_dict;
             var writeFormats =
                 request.formats
                 .Where(x => ido_dict.ContainsKey(x))
-                .OrderBy(x => GetWriterPriority(x));
+                .OrderBy(x => GetWriterPriority(x))
+                .ToList();
 
             string source_type = null;
             if (ido_dict.TryGetValue(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT, out object source_type_obj)) {
@@ -42,13 +43,20 @@ namespace CoreOleHandler {
             }
             bool needs_pseudo_file = false;
             if (source_type != "FileList" && // NOTE using 'FileList' to avoid moving MpCopyItemType into common
-                request.items.FirstOrDefault(x => x.paramId.ToEnum<CoreOleParamType>() == CoreOleParamType.FILES_W_IGNORE) is MpParameterRequestItemFormat prif &&
-                !bool.Parse(prif.paramValue)) {
+                request.GetParamValue<bool>(CoreOleParamType.FILES_W_IGNORE.ToString()) is false) {
                 // when file type is enabled but source is not a file,
                 // add file as a format and flag that it needs to be created
                 // AFTER all runtime formats have been processed so best format is written
 
                 needs_pseudo_file = true;
+            }
+            bool needs_pseudo_image = false;
+            if (!request.GetParamValue(CoreOleParamType.PNG_W_FROMTEXTFORMATS.ToString()).IsNullOrEmpty() &&
+                !writeFormats.Contains(MpPortableDataFormats.Image)) {
+                // when text2img param has any formats and image is not present,
+                // add image format so its picked up by ascii param
+                writeFormats.Add(MpPortableDataFormats.Image);
+                needs_pseudo_image = true;
             }
 
             foreach (var write_format in writeFormats) {
@@ -61,15 +69,16 @@ namespace CoreOleHandler {
                         data = dataStr;
                     }
                 }
-
+                bool allow_null = needs_pseudo_image && write_format == MpPortableDataFormats.Image;
                 foreach (var param in request.items) {
                     data = CoreOleParamProcessor.ProcessParam(
                         paramInfo: param,
                         format: write_format,
                         data: data,
-                        all_formats: writeFormats,
+                        all_source_data: ido_dict,
                         req: request,
-                        convData: out _,
+                        allow_null_data: allow_null,
+                        convData: out Dictionary<string, object> conv_result,
                         ex: out var ex,
                         ntfl: out var param_nfl);
 
@@ -83,19 +92,23 @@ namespace CoreOleHandler {
                         // param omitted format, don't process rest of params
                         break;
                     }
+                    if (conv_result != null) {
+                        conv_result.ForEach(x => conversion_results.AddOrReplace(x.Key, x.Value));
+                    }
                 }
                 if (data == null) {
                     continue;
                 }
                 write_output.AddOrReplace(write_format, data);
             }
-
+            if (conversion_results != null) {
+                conversion_results.ForEach(x => write_output.AddOrReplace(x.Key, x.Value));
+            }
             // NOTE not sure if this is needed omitted for now
             //PostProcessImage(write_output);
             await PrepareForOutputAsync(write_output, request.isDnd, writeFormats);
 
             return new MpOlePluginResponse() {
-                //dataObjectLookup = write_output,
                 dataObjectLookup = write_output,
                 userNotifications = nfl,
                 errorMessage = string.Join(Environment.NewLine, exl)

@@ -405,7 +405,7 @@ namespace MonkeyPaste.Avalonia {
             if (e is MpCopyItemTransaction cit && 
                 cit.CopyItemId == CopyItemId &&
                 Transactions.FirstOrDefault(x=>x.TransactionId == cit.Id) is { } trvm) {
-                Dispatcher.UIThread.Post(async () => {
+                Dispatcher.UIThread.Post( () => {
                     Transactions.Remove(trvm);                    
                 });
             }

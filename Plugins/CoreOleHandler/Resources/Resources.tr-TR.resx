@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Açıklıksız</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Eğlence için, bu kontrol edildiğinde, panodaki görüntü kabarık bir şekilde görüntünün ASCII (düz metin) sanatına dönüştürülecek 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Metine Resim</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Mevcut olduğunda, seçilen ilk metin formatı verileri bir görüntüye dönüştürülecek ve panoya eklenecektir.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Görüntü formatlarına metin</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Resim (TIFF)</value>
+  </data>
 </root>

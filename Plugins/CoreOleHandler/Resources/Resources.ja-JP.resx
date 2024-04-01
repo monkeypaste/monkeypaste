@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>無題</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>楽しい場合、これがチェックされると、クリップボードの画像が粗くASCII（プレーンテキスト）アートに変換されます🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>テキストの画像</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>利用可能な場合、最初に選択したテキスト形式のデータが画像に変換され、クリップボードに追加されます。</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>テキストから画像形式</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>画像（tiff）</value>
+  </data>
 </root>

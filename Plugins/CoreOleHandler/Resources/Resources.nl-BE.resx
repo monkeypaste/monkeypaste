@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Ongetiteld</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Voor de lol, wanneer dit wordt gecontroleerd, wordt de afbeelding op het klembord grof omgezet in ASCII (gewone tekst) kunst van de afbeelding 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Afbeelding naar tekst</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Indien beschikbaar, worden de gegevens van het eerste geselecteerde tekstformaat naar een afbeelding geconverteerd en aan het klembord toegevoegd.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Tekst naar beeldformaten</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Afbeelding (TIFF)</value>
+  </data>
 </root>

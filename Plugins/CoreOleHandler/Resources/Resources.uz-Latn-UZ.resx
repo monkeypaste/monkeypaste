@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Uncha ta'sirlanmagan</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>O'yin-kulgi uchun, agar bu Clipboarddagi rasm ASCII (Oddiy matnli) rasmga aylantiriladi</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Matnga rasm</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Agar mavjud bo'lsa, birinchi tanlangan matn formati ma'lumotlari rasmga o'zgartiriladi va klipboardga qo'shiladi.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Rasm formatlariga matn</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Rasm (TIFF)</value>
+  </data>
 </root>

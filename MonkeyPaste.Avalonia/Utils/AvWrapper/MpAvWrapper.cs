@@ -32,6 +32,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Startup Set Services 
+        public MpIFilesToHtmlConverter FilesToHtmlConverter { get; set; }
         public MpIPointerSimulator PointerSimulator { get; set; }
         public MpICultureInfo UserCultureInfo { get; set; }
         public MpIUiStringToEnumConverter UiStrEnumConverter { get; set; }
@@ -168,6 +169,8 @@ namespace MonkeyPaste.Avalonia {
             KeyStrokeSimulator = new MpAvKeyStrokeSimulator();
             PlatformResource = new MpAvPlatformResource();
 
+            FilesToHtmlConverter = new MpAvFilesToHtmlConverter();
+
             MainThreadMarshal = new MpAvMainThreadMarshal();
             StringTools = new MpAvStringTools();
             PlatformMessageBox = new MpAvMessageBox();
@@ -194,5 +197,4 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
     }
-
 }

@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Көнгісі жоқ</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Көңіл көтеру үшін, қашан тексерілген кезде, аралық сақтағыштағы кескінді ASCII (қарапайым мәтін) суретке айналдырады 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Мәтінге сурет</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Қол жетімді болған кезде, таңдалған мәтін пішімінің деректері кескінге түрлендіріліп, алмасу буферіне қосылады.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Сурет форматтарына мәтін</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Сурет (TIFF)</value>
+  </data>
 </root>

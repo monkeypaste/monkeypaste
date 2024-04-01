@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>제목없는</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>재미를 위해, 이것이 클립 보드의 이미지를 확인하면 이미지의 ASCII (일반 텍스트) 예술로 변환됩니다.</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>텍스트 이미지</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>가능한 경우 첫 번째 선택된 텍스트 형식의 데이터가 이미지로 변환되어 클립 보드에 추가됩니다.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>텍스트로 이미지 형식</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>이미지 (TIFF)</value>
+  </data>
 </root>

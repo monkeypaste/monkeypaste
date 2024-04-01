@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MonkeyPaste.Common.Plugin {
 
@@ -9,7 +10,55 @@ namespace MonkeyPaste.Common.Plugin {
 
         private static MpIPlatformDataObjectRegistrar _registrar;
 
-        private static string[] _defaultFormatNames = new string[] {
+        private static List<string> _AllFormats;
+        static List<string> AllFormats {
+            get {
+                if(_AllFormats == null) {
+                    _AllFormats = new string[] {
+                        WinText,
+                        WinXaml,
+                        WinXamlPackage,
+                        WinUnicode,
+                        WinOEMText,
+                        AvFiles,
+                        AvImage,
+                        WinCsv,
+                        WinBitmap,
+                        WinDib,
+                        WinRtf,
+                        WinXhtml,
+                        WinFileDrop,
+                        MacRtf1,
+                        MacRtf2,
+                        MacText1,
+                        MacText2,
+                        MacText3,
+                        MacHtml1,
+                        MacHtml2,
+                        MacFiles1,
+                        MacFiles2,
+                        MacUrl,
+                        MacUrl2,
+                        MacChromeUrl,
+                        MacChromeUrl2,
+                        MacImage1,
+                        MacImage2,
+                        CefAsciiUrl,
+                        MimeHtml,
+                        MimeText,
+                        MimeJson,
+                        MimeMozUrl,
+                        MimeUriList,
+                        MimeGnomeFiles }
+                    .Distinct()
+                    .ToList();
+                }
+                return _AllFormats;
+            }
+        }
+            
+
+        private static string[] _defaultFormatNames = [
 
             // windows
 
@@ -72,15 +121,54 @@ namespace MonkeyPaste.Common.Plugin {
             INTERNAL_FILE_LIST_FRAGMENT_FORMAT,
             INTERNAL_CONTENT_ID_FORMAT,
             INTERNAL_DATA_OBJECT_SOURCE_TYPE_FORMAT
-        };
+        ];
 
-
+        private static string[] _textFormats = [
+            // NOTE these are ordered from least to highest 'fidelity' as for rendering priority
+            MimeText,
+            WinText,
+            MacText3,
+            WinOEMText,
+            MacText1,
+            MacText2,
+            WinUnicode,
+            WinCsv,
+            MacRtf1,
+            MacRtf2,
+            WinRtf,
+            MacHtml1,
+            MacHtml2,
+            WinXhtml,
+            MimeHtml,
+            ];
+        
+        private static string[] _htmlFormats = [
+            MacHtml1,
+            MacHtml2,
+            WinXhtml,
+            MimeHtml,
+            ];
+        
+        private static string[] _imageFormats = [
+            AvImage,
+            WinBitmap,
+            WinDib,
+            MacImage1,
+            MacImage2,
+            ];
+        
+        private static string[] _fileFormats = [
+            AvFiles,
+            MacFiles1,
+            MacFiles2,
+            WinFileDrop
+            ];
         #endregion
 
         #region Constants
 
-        // Windows Formats
-        public const string AvText = "Text";
+        #region Windows Formats
+        public const string WinText = "Text";
         public const string WinXaml = "Xaml";
         public const string WinXamlPackage = "XamlPackage";
         public const string WinUnicode = "Unicode";
@@ -95,8 +183,9 @@ namespace MonkeyPaste.Common.Plugin {
         public const string WinRtf = "Rich Text Format";
         public const string WinXhtml = "HTML Format";
         public const string WinFileDrop = "FileDrop";
+        #endregion
 
-        // Mac Formats
+        #region Mac Formats
         public const string MacRtf1 = "public.rtf";
         public const string MacRtf2 = "com.apple.flat-rtfd";
 
@@ -118,18 +207,17 @@ namespace MonkeyPaste.Common.Plugin {
 
         public const string MacImage1 = "public.png";
         public const string MacImage2 = "public.tiff";
+        #endregion
 
-
-        // Avalonia Formats
-
-
-        // Cef Formats
+        #region Cef Formats
 
         //public const string CefDragData = "CefDragData";
         //public const string CefUnicodeUrl = "UniformResourceLocatorW";
         public const string CefAsciiUrl = "UniformResourceLocator";
 
-        // mime formats
+        #endregion
+
+        #region mime formats
         public const string MimeHtml = "text/html";
         public const string MimeText = "text/plain";
         public const string MimeJson = "application/json";
@@ -138,14 +226,45 @@ namespace MonkeyPaste.Common.Plugin {
         public const string MimeUriList = "text/uri-list";
         // Linux (gnome) only
         public const string MimeGnomeFiles = "x-special/gnome-copied-files";
+        #endregion
 
-        // Runtime formats
+        #region Internal Formats
+        // internal
 
+        public const string INTERNAL_SOURCE_URI_LIST_FORMAT = MimeUriList;
+
+        public const string INTERNAL_CONTENT_ID_FORMAT = "Mp Internal Content";
+        public const string INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT = "Mp Internal Partial Content";
+        public const string INTERNAL_CONTENT_TYPE_FORMAT = "Mp Internal Content Type";
+        public const string INTERNAL_CONTENT_TITLE_FORMAT = "Mp Internal Content Title";
+        public const string INTERNAL_CONTENT_ROI_FORMAT = "Mp Internal Content Roi";
+        public const string INTERNAL_CONTENT_ANNOTATION_FORMAT = "Mp Internal Content Annotation";
+        public const string INTERNAL_CONTENT_DELTA_FORMAT = "Mp Internal Quill Delta Json";
+
+        public const string INTERNAL_PARAMETER_REQUEST_FORMAT = "Mp Internal Parameter Request Format";
+        public const string INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT = "Mp Internal Search Criteria Item";
+        public const string INTERNAL_TAG_ITEM_FORMAT = "Mp Internal Tag Tile Item";
+        public const string INTERNAL_ACTION_ITEM_FORMAT = "Mp Internal Action Item";
+        public const string INTERNAL_PARAMETER_VALUE_FORMAT = "Mp Internal Parameter Value";
+        public const string INTERNAL_PROCESS_INFO_FORMAT = "Mp Internal Process Info";
+        public const string INTERNAL_FILE_LIST_FRAGMENT_FORMAT = "Mp Internal File List Fragment Format";
+        public const string INTERNAL_RTF_TO_HTML_FORMAT = "Mp Internal RTF To HTML Content Type";
+        public const string INTERNAL_HTML_TO_RTF_FORMAT = "Mp Internal HTML To RTF Content Type";
+
+
+        // NOTE data object is not registered and only used to merge data objects
+        public const string INTERNAL_DATA_OBJECT_SOURCE_TYPE_FORMAT = "Mp Internal Data Object Source Type Format";
+        public const string INTERNAL_DATA_OBJECT_FORMAT = "Mp Internal Data Object Format";
+
+        public const string PLACEHOLDER_DATAOBJECT_TEXT = "3acaaed7-862d-47f5-8614-3259d40fce4d";
+        #endregion
+
+        #region Runtime formats
         public const string Text =
 #if MAC
             AvText;//MacText1;
 #else
-            AvText;//WinText;
+                    WinText;//WinText;
 #endif
 
         public const string Text2 =
@@ -206,40 +325,13 @@ namespace MonkeyPaste.Common.Plugin {
 #elif MAC
             WinXhtml;
 #endif
+        #endregion
 
-        // internal
-
-        public const string INTERNAL_SOURCE_URI_LIST_FORMAT = MimeUriList;
-
-        public const string INTERNAL_CONTENT_ID_FORMAT = "Mp Internal Content";
-        public const string INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT = "Mp Internal Partial Content";
-        public const string INTERNAL_CONTENT_TYPE_FORMAT = "Mp Internal Content Type";
-        public const string INTERNAL_CONTENT_TITLE_FORMAT = "Mp Internal Content Title";
-        public const string INTERNAL_CONTENT_ROI_FORMAT = "Mp Internal Content Roi";
-        public const string INTERNAL_CONTENT_ANNOTATION_FORMAT = "Mp Internal Content Annotation";
-        public const string INTERNAL_CONTENT_DELTA_FORMAT = "Mp Internal Quill Delta Json";
-
-        public const string INTERNAL_PARAMETER_REQUEST_FORMAT = "Mp Internal Parameter Request Format";
-        public const string INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT = "Mp Internal Search Criteria Item";
-        public const string INTERNAL_TAG_ITEM_FORMAT = "Mp Internal Tag Tile Item";
-        public const string INTERNAL_ACTION_ITEM_FORMAT = "Mp Internal Action Item";
-        public const string INTERNAL_PARAMETER_VALUE_FORMAT = "Mp Internal Parameter Value";
-        public const string INTERNAL_PROCESS_INFO_FORMAT = "Mp Internal Process Info";
-        public const string INTERNAL_FILE_LIST_FRAGMENT_FORMAT = "Mp Internal File List Fragment Format";
-        public const string INTERNAL_RTF_TO_HTML_FORMAT = "Mp Internal RTF To HTML Content Type";
-        public const string INTERNAL_HTML_TO_RTF_FORMAT = "Mp Internal HTML To RTF Content Type";
-
-
-        // NOTE data object is not registered and only used to merge data objects
-        public const string INTERNAL_DATA_OBJECT_SOURCE_TYPE_FORMAT = "Mp Internal Data Object Source Type Format";
-        public const string INTERNAL_DATA_OBJECT_FORMAT = "Mp Internal Data Object Format";
-
-        public const string PLACEHOLDER_DATAOBJECT_TEXT = "3acaaed7-862d-47f5-8614-3259d40fce4d";
         #endregion
 
         #region Statics
 
-        public static string[] InternalFormats = new string[] {
+        public static string[] InternalFormats = [
             INTERNAL_SOURCE_URI_LIST_FORMAT,
             INTERNAL_CONTENT_ID_FORMAT,
             INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT,
@@ -259,10 +351,13 @@ namespace MonkeyPaste.Common.Plugin {
             INTERNAL_RTF_TO_HTML_FORMAT,
             INTERNAL_HTML_TO_RTF_FORMAT,
             INTERNAL_DATA_OBJECT_SOURCE_TYPE_FORMAT
-        };
+        ];
         #endregion
 
         #region Properties
+
+        public static string[] SortedTextFormats =>
+            _textFormats;
 
         private static List<string> _formatLookup = new List<string>();
         public static IEnumerable<string> RegisteredFormats =>
@@ -287,8 +382,13 @@ namespace MonkeyPaste.Common.Plugin {
                 return;
             }
             // pretty sure registering is only needed for win32 c++ but just keeping it
-            int id = _registrar == null ? 0 : _registrar.RegisterFormat(format);
+            if(_registrar != null) {
+                int id = _registrar.RegisterFormat(format);
+            }
             _formatLookup.Add(format);
+            if(!AllFormats.Contains(format)) {
+                AllFormats.Add(format);
+            }
             //MpConsole.WriteLine($"Successfully registered format name:'{format}' id:{id}");
         }
 
@@ -296,6 +396,80 @@ namespace MonkeyPaste.Common.Plugin {
             _formatLookup.Remove(format);
         }
 
+        public static bool? IsTextFormat(string format) {
+            // returns null if unknwon (not found)
+            if(AllFormats.FirstOrDefault(x=>x.ToLowerInvariant() == format.ToLowerInvariant()) is not string found_format) {
+                return null;
+            }
+            return SortedTextFormats.Contains(format);
+        }
+        public static bool? IsPlainTextFormat(string format) {
+            // returns null if unknwon (not found)
+            if(AllFormats.FirstOrDefault(x=>x.ToLowerInvariant() == format.ToLowerInvariant()) is not string found_format) {
+                return null;
+            }
+            switch(found_format) {
+                case MacText1:
+                case MacText2:
+                case MacText3:
+                case WinText:
+                case WinOEMText:
+                case MimeText:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        
+        public static bool? IsRtfFormat(string format) {
+            // returns null if unknwon (not found)
+            if(AllFormats.FirstOrDefault(x=>x.ToLowerInvariant() == format.ToLowerInvariant()) is not string found_format) {
+                return null;
+            }
+            switch(found_format) {
+                case MacRtf1:
+                case MacRtf2:
+                case WinRtf:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        
+        public static bool? IsCsvFormat(string format) {
+            // returns null if unknwon (not found)
+            if(AllFormats.FirstOrDefault(x=>x.ToLowerInvariant() == format.ToLowerInvariant()) is not string found_format) {
+                return null;
+            }
+            switch(found_format) {
+                case WinCsv:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        public static bool? IsHtmlFormat(string format) {
+            // returns null if unknwon (not found)
+            if(AllFormats.FirstOrDefault(x=>x.ToLowerInvariant() == format.ToLowerInvariant()) is not string found_format) {
+                return null;
+            }
+            return _htmlFormats.Contains(found_format);
+        }
+        public static bool? IsImageFormat(string format) {
+            // returns null if unknwon (not found)
+            if(AllFormats.FirstOrDefault(x=>x.ToLowerInvariant() == format.ToLowerInvariant()) is not string found_format) {
+                return null;
+            }
+            return _imageFormats.Contains(found_format);
+        }
+        
+        public static bool? IsFilesFormat(string format) {
+            // returns null if unknwon (not found)
+            if(AllFormats.FirstOrDefault(x=>x.ToLowerInvariant() == format.ToLowerInvariant()) is not string found_format) {
+                return null;
+            }
+            return _fileFormats.Contains(found_format);
+        }
         #endregion
     }
 }

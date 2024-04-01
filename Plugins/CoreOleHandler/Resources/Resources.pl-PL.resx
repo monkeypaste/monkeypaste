@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Nieuprawny</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Dla zabawy, gdy zostanie to sprawdzone, obraz w schowku zostanie brutalnie przekonwertowany na ASCII (zwykły tekst) Art obrazu 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Obraz do tekstu</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Jeśli są dostępne, dane pierwszego wybranego formatu tekstu zostaną przekonwertowane na obraz i dodane do schowka.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Tekst do formatów obrazu</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Zdjęcie (TIFF)</value>
+  </data>
 </root>

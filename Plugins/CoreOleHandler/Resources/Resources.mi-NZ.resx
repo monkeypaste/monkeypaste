@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Wete</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Mo te ngahau, ka tirohia tenei ko te ahua i runga i te topenga ka hurihia hei whakaweto ki te ASCII (kuputuhi maamaa) toi o te ahua 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Whakaahua ki te kuputuhi</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>I te wa e waatea ana, ka hurihia nga raraunga a te whakatakotoranga tuhinga tuatahi i tohua ki tetahi ahua ka tapiritia ki te topenga.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Tuhinga ki nga whakatakotoranga whakaahua</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Whakaahua (TIFF)</value>
+  </data>
 </root>

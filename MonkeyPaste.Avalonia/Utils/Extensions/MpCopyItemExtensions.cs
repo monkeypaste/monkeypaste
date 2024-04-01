@@ -59,9 +59,9 @@ namespace MonkeyPaste.Avalonia {
                                 case MpPortableDataFormats.Html:
                                     data = ci.ItemData.ToHtmlImageDoc();
                                     break;
-                                case MpPortableDataFormats.Text:
-                                    data = ci.ItemData.ToAvBitmap().ToAsciiImage();
-                                    break;
+                                //case MpPortableDataFormats.Text:
+                                //    data = ci.ItemData.ToAvBitmap().ToAsciiImage();
+                                //    break;
                                 case MpPortableDataFormats.Files:
                                     data = ci.ItemData.ToFile(forcePath: ci.GetDefaultFilePaths().FirstOrDefault());
                                     break;

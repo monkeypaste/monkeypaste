@@ -79,9 +79,9 @@ namespace MonkeyPaste.Avalonia {
                     Selection.Select(i);
                 }
             }
-            if (Selection.Count == 0 && Items.Count > 0) {
-                Selection.Select(0);
-            }
+            //if (Selection.Count == 0 && Items.Count > 0) {
+            //    Selection.Select(0);
+            //}
             Selection.EndBatchUpdate();
 
             OnPropertyChanged(nameof(CurrentValue));

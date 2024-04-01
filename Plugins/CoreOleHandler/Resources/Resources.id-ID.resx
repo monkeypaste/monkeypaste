@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Tanpa judul</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Untuk bersenang -senang, ketika ini diperiksa gambar di clipboard akan dikonversi secara kasar menjadi ASCII (teks biasa) dari gambar 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Gambar ke teks</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Jika tersedia, data format teks yang dipilih pertama akan dikonversi ke gambar dan ditambahkan ke clipboard.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Teks ke Format Gambar</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Gambar (TIFF)</value>
+  </data>
 </root>

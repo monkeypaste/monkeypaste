@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>មិនមានចំណងជើង</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>សម្រាប់ការសប្បាយនៅពេលនេះត្រូវបានធីករូបភាពនៅលើក្តារតម្បៀតខ្ទាស់នឹងត្រូវបានបម្លែងយ៉ាងខ្លាំងទៅក្នុង ASCII (អត្ថបទធម្មតា) សិល្បៈនៃរូបភាព🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>រូបភាពទៅអត្ថបទ</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>នៅពេលមាននោះទិន្នន័យទ្រង់ទ្រាយអត្ថបទដែលបានជ្រើសរើសដំបូងនឹងត្រូវបានបម្លែងទៅជារូបភាពហើយបានបន្ថែមទៅក្ដារតម្បៀតខ្ទាស់។</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>អត្ថបទទៅទ្រង់ទ្រាយរូបភាព</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>រូបភាព (TIFF)</value>
+  </data>
 </root>

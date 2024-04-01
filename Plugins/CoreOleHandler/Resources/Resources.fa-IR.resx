@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>بدون عنوان</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>برای سرگرمی ، هنگامی که این بررسی می شود تصویر روی کلیپ بورد به شدت به هنر ASCII (متن ساده) از تصویر تبدیل می شود</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>تصویر به متن</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>در صورت وجود ، اولین داده های قالب متن انتخاب شده به یک تصویر تبدیل می شوند و به کلیپ بورد اضافه می شوند.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>متن به قالب های تصویر</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>تصویر (TIFF)</value>
+  </data>
 </root>

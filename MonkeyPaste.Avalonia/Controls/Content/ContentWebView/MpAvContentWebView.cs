@@ -384,7 +384,7 @@ namespace MonkeyPaste.Avalonia {
                     ctvm.CopyItemData.ToAvBitmap() is Bitmap bmp) {
 
                 avdo.SetData(MpPortableDataFormats.Image, bmp.ToByteArray());
-                avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
+                //avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
                 // TODO add colorized ascii maybe as html and rtf!!
             } else if (!ignore_ss) {
                 //if (use_placeholders) {

@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>பெயரிடப்படாதது</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>வேடிக்கையாக, இது சரிபார்க்கப்படும் போது கிளிப்போர்டில் உள்ள படம் படத்தின் ASCII (எளிய உரை) கலையாக மாற்றப்படும்</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>உரைக்கு படம்</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>கிடைக்கும்போது, ​​முதலில் தேர்ந்தெடுக்கப்பட்ட உரை வடிவமைப்பின் தரவு ஒரு படமாக மாற்றப்பட்டு கிளிப்போர்டில் சேர்க்கப்படும்.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>பட வடிவங்களுக்கு உரை</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>படம் (TIFF)</value>
+  </data>
 </root>

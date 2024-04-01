@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Без названия</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Для развлечения, когда это проверяется, изображение в буфере обмена будет грубо преобразовано в ASCII (простой текст) искусство изображения 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Изображение в текст</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>При наличии данные первого выбранного текстового формата будут преобразованы в изображение и добавлены в буфер обмена.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Текст в форматы изображения</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Изображение (TIFF)</value>
+  </data>
 </root>

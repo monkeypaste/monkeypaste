@@ -839,6 +839,13 @@ namespace MonkeyPaste.Common {
             }
             return text;
         }
+
+        public static bool IsValidUrl(this string str, UriKind kind = UriKind.Absolute) {
+            if (string.IsNullOrWhiteSpace(str)) {
+                return false;
+            }
+            return Uri.IsWellFormedUriString(str, kind);
+        }
         public static bool IsStringHtmlDocument(this string text) {
             if (text == null) {
                 return false;
@@ -846,6 +853,12 @@ namespace MonkeyPaste.Common {
             return
                 text.Trim().StartsWith("<html>", StringComparison.InvariantCultureIgnoreCase) &&
                 text.Trim().EndsWith("</html>", StringComparison.InvariantCultureIgnoreCase);
+        }
+        public static string ToHtmlImage(this string imgBase64) {
+            return $"<img src=\"{imgBase64.ToBase64ImageUrl()}\">";
+        }
+        public static string ToHtmlImageDoc(this string imgBase64) {
+            return imgBase64.ToHtmlImage().ToHtmlDocumentFromTextOrPartialHtml();
         }
         public static string ToHtmlDocumentFromTextOrPartialHtml(this string text) {
             return $"<html><body>{text}</body></html>";

@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Без заглавие</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>За забавление, когато това е отметнато, изображението в клипборда ще бъде грубо преобразувано в ascii (обикновен текст) изкуство на изображението 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Изображение към текст</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Когато са налични, данните за първия избран текстов формат ще бъдат преобразувани в изображение и добавени към клипборда.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Формати от текст към изображение</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Изображение (tiff)</value>
+  </data>
 </root>

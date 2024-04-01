@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>ላልተሰራ</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>ለመዝናናት፣ ይህ ሲፈተሽ በክሊፕቦርዱ ላይ ያለው ምስል በጭካኔ ወደ አስኪ (ግልፅ ፅሁፍ) የምስሉ ጥበብ ይቀየራል።</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>ምስል ወደ ጽሑፍ</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>ሲገኝ፣ የመጀመሪያው የተመረጠው የጽሑፍ ቅርጸት ውሂብ ወደ ምስል ይቀየራል እና ወደ ቅንጥብ ሰሌዳው ይታከላል።</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>ጽሑፍ ወደ ምስል ቅርጸቶች</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>ምስል (ጤፍ)</value>
+  </data>
 </root>

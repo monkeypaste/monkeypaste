@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Không có tiêu đề</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Để giải trí, khi điều này được kiểm tra, hình ảnh trên bảng tạm sẽ được chuyển đổi một cách thô sơ thành ASCII (văn bản thuần túy) của hình ảnh 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Hình ảnh để văn bản</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Khi có sẵn, dữ liệu của định dạng văn bản được chọn đầu tiên sẽ được chuyển đổi thành hình ảnh và được thêm vào bảng tạm.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Văn bản đến định dạng hình ảnh</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Hình ảnh (TIFF)</value>
+  </data>
 </root>

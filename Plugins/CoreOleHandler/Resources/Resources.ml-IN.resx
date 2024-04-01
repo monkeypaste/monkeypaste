@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>ശീകരിക്കാത്ത</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>വിനോദത്തിനായി, ഇത് പരിശോധിക്കുമ്പോൾ ക്ലിപ്പ്ബോർഡിലെ ചിത്രം ക്രൂരമായി അസ്സി (പ്ലെയിൻ ടെക്സ്റ്റ്) കലയിലേക്ക് പരിവർത്തനം ചെയ്യും</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>വാചകത്തിലേക്കുള്ള ചിത്രം</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>ലഭ്യമാകുമ്പോൾ, തിരഞ്ഞെടുത്ത ടെക്സ്റ്റ് ഫോർമാറ്റിന്റെ ഡാറ്റ ഒരു ചിത്രത്തിലേക്ക് പരിവർത്തനം ചെയ്യുകയും ക്ലിപ്പ്ബോർഡിലേക്ക് ചേർക്കുകയും ചെയ്യും.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>ഇമേജ് ഫോർമാറ്റുകൾക്ക് വാചകം</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>ചിത്രം (TIFF)</value>
+  </data>
 </root>

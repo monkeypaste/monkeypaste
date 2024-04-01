@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>UNTITLED</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>For sjov, når dette er markeret, bliver billedet på udklipsholderen groft konverteret til ascii (almindelig tekst) kunst af billedet 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Billede til tekst</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Når det er tilgængeligt, vil det første valgte tekstformats data blive konverteret til et billede og tilføjet til udklipsholderen.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Tekst til billedformater</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Billede (tiff)</value>
+  </data>
 </root>

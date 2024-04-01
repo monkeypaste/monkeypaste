@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Untitled</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>For fun, when this is checked the image on the clipboard will be crudely converted into ascii (plain text) art of the image 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Image To Text</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>When available, the first selected text format's data will be converted to an image and added to the clipboard.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Text To Image Formats</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Image (tiff)</value>
+  </data>
 </root>

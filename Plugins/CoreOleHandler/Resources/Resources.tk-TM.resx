@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Atsyz</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Şatlyk üçin şepagat uýasyndaky keşbini barlanylanda, şekili ASCII (düzme tekste) sungatyna göz aýlanda, şekili ASCICII (EKINI) sungatyna öwrüler 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Tekst üçin surat</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Bar bolan ilkinji saýlanan tekst finalynyň maglumatlary şekile öwrüler we bufere goşular.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Surat formatlaryny görkezmek üçin tekst</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Surat (Tff)</value>
+  </data>
 </root>

@@ -45,7 +45,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        #region View Models
+        #region Appearance
+        public string DisableUnrejectPageToolTipText =>
+            UiStrings.InteropDisabledUnrejectPageToolTip.Format(UrlDomainPath);
         #endregion
 
         #region State
@@ -183,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
-        public async Task<bool> VerifyAndApplyRejectAsync(bool isDomain) {
+        public async Task<bool> VerifyAndApplyRejectToContentAsync(bool isDomain) {
             bool rejectContent = false;
 
             IEnumerable<MpCopyItem> to_delete_cil = null;
@@ -252,7 +254,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task ApplyRejectStateToOtherDomainUrlsAsync(bool? urlReject, bool? domainReject, bool isSource) {
+        private async Task ApplyRejectStateToOtherDomainUrlsAsync(bool? urlReject, bool? domainReject, bool isSource = true) {
             // NOTE since this may change multiple properties it needs to do it 
             // in the model or weird updates happen
 
@@ -265,7 +267,11 @@ namespace MonkeyPaste.Avalonia {
             await Url.WriteToDatabaseAsync();
             OnPropertyChanged(nameof(IsUrlRejected));
             OnPropertyChanged(nameof(IsDomainRejected));
-            if (!isSource) {
+            if (!isSource || !domainReject.HasValue) {
+                // only propagate domain changes from source call
+                if(isSource && Parent != null) {
+                    Parent.RefreshItemSources();
+                }
                 return;
             }
 
@@ -276,48 +282,82 @@ namespace MonkeyPaste.Avalonia {
             await Task.WhenAll(
                 other_domain_url_vml.Select(x =>
                     x.ApplyRejectStateToOtherDomainUrlsAsync(
-                        urlReject: IsDomainRejected ? true : null,  // ignore implicit change if domain is not rejected
+                        urlReject: null,  // ignore implicit change if domain is not rejected
                         domainReject: IsDomainRejected,
                         isSource: false)));
+
+            if (isSource && Parent != null) {
+                Parent.RefreshItemSources();
+            }
         }
 
         #endregion
 
         #region Commands
 
-        public ICommand ToggleIsUrlRejectedCommand => new MpAsyncCommand(
-            async () => {
-                bool will_url_be_rejected = !IsUrlRejected;
-                bool? will_domain_be_rejected = null;
-                if (will_url_be_rejected) {
-                    bool was_confirmed = await VerifyAndApplyRejectAsync(false);
-                    if (!was_confirmed) {
-                        // canceled 
-                        return;
-                    }
-                } else if (IsDomainRejected) {
-                    // when url unrejected and domain still is, unreject domain
-                    will_domain_be_rejected = false;
+        public MpIAsyncCommand<object> RejectCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if(args is not string rejectType) {
+                    return;
                 }
-                await ApplyRejectStateToOtherDomainUrlsAsync(will_url_be_rejected, will_domain_be_rejected, true);
+                bool is_domain = rejectType == "domain";
+                bool was_confirmed = await VerifyAndApplyRejectToContentAsync(is_domain);
+                if (!was_confirmed) {
+                    // canceled 
+                    return;
+                }
+                bool? block_url = is_domain ? null : true;
+                bool? block_domain = is_domain ? true : null;
+                await ApplyRejectStateToOtherDomainUrlsAsync(block_url, block_domain);
+
+            }, (args) => {
+                if(args is not string rejectType) {
+                    return false;
+                }
+                if(rejectType == "domain") {
+                    return !IsDomainRejected;
+                }
+                return !IsUrlRejected;
+            });
+        
+        public MpIAsyncCommand<object> UnrejectCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if(args is not string rejectType) {
+                    return;
+                }
+                bool is_domain = rejectType == "domain";
+                bool? unblock_url = is_domain ? null : false;
+                bool? unblock_domain = is_domain ? false : null;
+                await ApplyRejectStateToOtherDomainUrlsAsync(unblock_url, unblock_domain);
+
+            }, (args) => {
+                if(args is not string rejectType) {
+                    return false;
+                }
+                if(rejectType == "domain") {
+                    return IsDomainRejected;
+                }
+                return IsUrlRejected && !IsDomainRejected;
             });
 
-        public ICommand ToggleIsDomainRejectedCommand => new MpAsyncCommand(
+
+        public MpIAsyncCommand ToggleIsUrlRejectedCommand => new MpAsyncCommand(
             async () => {
-                bool will_domain_be_rejected = !IsDomainRejected;
-                bool? will_url_be_rejected = null;
-                if (will_domain_be_rejected) {
-                    bool was_confirmed = await VerifyAndApplyRejectAsync(true);
-                    if (!was_confirmed) {
-                        // canceled
-                        return;
-                    }
-                    // treat domain reject as implicit url reject in db
-                    will_url_be_rejected = true;
+                if(IsUrlRejected) {
+                    await UnrejectCommand.ExecuteAsync("page");
+                } else {
+                    await RejectCommand.ExecuteAsync("page");
                 }
-                await ApplyRejectStateToOtherDomainUrlsAsync(will_url_be_rejected, will_domain_be_rejected, true);
             });
 
+        public MpIAsyncCommand ToggleIsDomainRejectedCommand => new MpAsyncCommand(
+            async () => {
+                if (IsUrlRejected) {
+                    await UnrejectCommand.ExecuteAsync("domain");
+                } else {
+                    await RejectCommand.ExecuteAsync("domain");
+                }
+            });
 
         #endregion
     }

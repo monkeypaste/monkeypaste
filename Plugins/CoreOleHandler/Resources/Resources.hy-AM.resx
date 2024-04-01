@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Անիրական</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Զվարճանքի համար, երբ դա ստուգվում է, պատկերն է Clipboard- ի վրա կոպիտ փոխարկվելու է ASCII (պարզ տեքստի) արվեստի արվեստի 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Պատկեր տեքստի համար</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Առկա է, առաջին ընտրված տեքստի ձեւաչափի տվյալները կվերափոխվեն պատկերով եւ կավելացվեն clipboard:</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Տեքստը պատկերի ձեւաչափերին</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Պատկեր (TIFF)</value>
+  </data>
 </root>

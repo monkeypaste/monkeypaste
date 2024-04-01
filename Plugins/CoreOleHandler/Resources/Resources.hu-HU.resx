@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Névtelen</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Szórakozás kedvéért, amikor ezt ellenőrzik, a vágólapon a kép durván átalakul ASCII (sima szöveg) Art of ART 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Kép a szöveghez</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Ha rendelkezésre áll, az első kiválasztott szöveges formátum adatait képré alakítják, és hozzáadják a vágólaphoz.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Szöveg a képformátumokhoz</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Kép (TIFF)</value>
+  </data>
 </root>

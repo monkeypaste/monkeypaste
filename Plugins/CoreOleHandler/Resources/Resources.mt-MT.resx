@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Bla titlu</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Għall-gost, meta din tiġi kkontrollata l-immaġni fuq il-clipboard se tkun konvertita b’mod mhux raffinat f’ASCII (test sempliċi) tal-arti tal-immaġni 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Immaġni għat-test</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Meta tkun disponibbli, l-ewwel dejta tal-format tat-test magħżul tiġi kkonvertita għal immaġni u miżjuda mal-clipboard.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Test għall-formati tal-immaġini</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Immaġni (TIFF)</value>
+  </data>
 </root>

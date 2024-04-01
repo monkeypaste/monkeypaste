@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Be pavadinimo</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Pramogai, kai tai patikrinta, iškarpinės pavadinimas bus grubiai paverčiamas ASCII (paprasto teksto) vaizdo menu 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Vaizdas į tekstą</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Jei įmanoma, pirmieji pasirinkto teksto formato duomenys bus paversti vaizdu ir pridėti į mainų sritį.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Tekstas į vaizdo formatus</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Vaizdas (TIFF)</value>
+  </data>
 </root>

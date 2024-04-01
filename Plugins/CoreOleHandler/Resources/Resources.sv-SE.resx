@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Ofrälse</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>För skojs skull, när detta kontrolleras kommer bilden på urklippet att omvandlas till ASCII (vanlig text) konst av bilden 🤓 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Bild till text</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>När det är tillgängligt kommer den första valda textformatens data att konverteras till en bild och läggas till i urklippet.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Text till bildformat</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Bild (TIFF)</value>
+  </data>
 </root>

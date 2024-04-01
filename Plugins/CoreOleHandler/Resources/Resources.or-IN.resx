@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>ଅବହେଳିତ |</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>ମଜା କରିବା ପାଇଁ, ଯେତେବେଳେ ଏହା କ୍ଲିପବୋର୍ଡରେ ଥିବା ପ୍ରତିଛବିକୁ ଯାଞ୍ଚ କରାଯାଇଥାଏ, ଚିତ୍ରର ଅସିସି (ସାଧା ପାଠ୍ୟ) କଳା ହେବ |</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>ପାଠ୍ୟରେ ପ୍ରତିଛବି |</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>ଯେତେବେଳେ ଉପଲବ୍ଧ, ପ୍ରଥମଟି ମନୋନୀତ ପାଠ୍ୟ ଫର୍ମାଟର ତଥ୍ୟ ଏକ ପ୍ରତିଛବିରେ ରୂପାନ୍ତର କରାଯିବ ଏବଂ କ୍ଲିପବୋର୍ଡରେ ଯୋଗ କରାଯିବ |</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>ପ୍ରତିଛବି ଫର୍ମାଟରେ ପାଠ |</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>ପ୍ରତିଛବି (TIF)</value>
+  </data>
 </root>

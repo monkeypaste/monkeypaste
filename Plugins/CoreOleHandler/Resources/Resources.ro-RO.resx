@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Fără titlu</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Pentru distracție, atunci când aceasta este verificată, imaginea de pe clipboard va fi convertită crud în arta ascii (text simplu) a imaginii 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Imagine la text</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Când este disponibil, datele de format text selectat vor fi convertite într -o imagine și adăugate în clipboard.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Text la formate de imagine</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Imagine (TIFF)</value>
+  </data>
 </root>

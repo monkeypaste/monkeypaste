@@ -195,7 +195,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
-        private static string GetFullyFormattedUrl(string str) {
+        public static string GetFullyFormattedUrl(string str) {
             // reading linux moz url source pads every character of url w/ empty character
             // but trying to trim it doesn't work this manually parses string for actual characters
             // because Uri throws error on create

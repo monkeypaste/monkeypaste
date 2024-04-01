@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>ኣርእስቲ ዘይብሉ</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>ንመዘናግዒ፡ እዚ ምስ ተፈተሸ እቲ ኣብ ቅንጥብጣብ ሰሌዳ ዘሎ ምስሊ ብዘይተጻረየ መንገዲ ናብ ASCII (Plain Text) ስነ ጥበብ ናይቲ ምስሊ ክቕየር እዩ 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>ምስሊ ናብ ጽሑፍ</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>ምስ ዝህሉ፡ እቲ ናይ መጀመርታ ዝተመርጸ ጽሑፍ ቅርጺ ዳታ ናብ ምስሊ ተቐይሩ ናብቲ ቅንጥብጣብ ሰሌዳ ክውሰኽ እዩ።</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>ካብ ጽሑፍ ናብ ምስሊ ፎርማት</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>ምስሊ (TIFF)</value>
+  </data>
 </root>

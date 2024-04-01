@@ -67,7 +67,7 @@ namespace MonkeyPaste {
         [Ignore]
         public bool IsUrlRejected {
             get {
-                return IsDomainRejected || UrlRejected == 1;
+                return UrlRejected == 1;
             }
             set {
                 UrlRejected = value ? 1 : 0;

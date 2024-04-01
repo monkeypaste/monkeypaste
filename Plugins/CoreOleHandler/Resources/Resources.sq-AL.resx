@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>I paprekur</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Për argëtim, kur kjo të kontrollohet, imazhi në clipboard do të shndërrohet në mënyrë të mprehtë në artin ASCII (Teksti i thjeshtë) i figurës 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Imazh në tekst</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Kur të jetë në dispozicion, të dhënat e para të zgjedhura të tekstit të zgjedhur do të shndërrohen në një imazh dhe do të shtohen në clipboard.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Teksti në Format e Imazhit</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Imazhi (TIFF)</value>
+  </data>
 </root>

@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Без наслова</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>За забаву, када се то потврди, слика на међуспремник ће бити грубо претворена у АСЦИИ (обичан текст) уметност слике 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Слика за текст</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Када је доступан, први одабрани подаци текста формат ће се претворити на слику и додавати у међуспремник.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Текст на форматима слика</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Слика (ТИФФ)</value>
+  </data>
 </root>

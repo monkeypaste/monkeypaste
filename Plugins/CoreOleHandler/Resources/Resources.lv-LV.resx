@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Bez nosaukuma</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Izklaides dēļ, kad tas tiek pārbaudīts, attēls uz starpliktuves tiks rupji pārveidots par ASCII (vienkāršā teksta) attēla mākslu 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Attēls uz tekstu</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Ja tie ir pieejami, pirmā atlasītā teksta formāta dati tiks pārveidoti par attēlu un pievienoti starpliktuvē.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Teksts attēlu formātiem</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Attēls (TIFF)</value>
+  </data>
 </root>

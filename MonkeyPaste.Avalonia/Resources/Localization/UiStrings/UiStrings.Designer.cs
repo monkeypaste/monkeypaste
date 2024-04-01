@@ -3685,6 +3685,69 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Domain.
+        /// </summary>
+        public static string InteropAddDomainButtonText {
+            get {
+                return ResourceManager.GetString("InteropAddDomainButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Page.
+        /// </summary>
+        public static string InteropAddPageButtonText {
+            get {
+                return ResourceManager.GetString("InteropAddPageButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The domain for this page is rejected. To allow this page you will need to remove the rejection for &apos;{0}&apos;..
+        /// </summary>
+        public static string InteropDisabledUnrejectPageToolTip {
+            get {
+                return ResourceManager.GetString("InteropDisabledUnrejectPageToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The domain &apos;{0}&apos; is already rejected.
+        /// </summary>
+        public static string InteropDomainAlreadyRejectedText {
+            get {
+                return ResourceManager.GetString("InteropDomainAlreadyRejectedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Domains.
+        /// </summary>
+        public static string InteropDomainsTitle {
+            get {
+                return ResourceManager.GetString("InteropDomainsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This page is already rejected..
+        /// </summary>
+        public static string InteropPageAlreadyRejectedText {
+            get {
+                return ResourceManager.GetString("InteropPageAlreadyRejectedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pages.
+        /// </summary>
+        public static string InteropPagesTitle {
+            get {
+                return ResourceManager.GetString("InteropPagesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plugin error. Plugin &apos;{0}&apos; is &apos;{1}&apos; type but no &apos;{1}&apos; format found.
         /// </summary>
         public static string InvalidCompEx1 {

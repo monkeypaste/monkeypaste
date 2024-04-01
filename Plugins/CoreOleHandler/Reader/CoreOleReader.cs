@@ -67,8 +67,9 @@ namespace CoreOleHandler {
                                 paramInfo: param,
                                 format: read_format,
                                 data: dataStr,
-                                all_formats: readFormats,
+                                all_source_data: avdo,
                                 req: request,
+                                allow_null_data: false,
                                 convData: out Dictionary<string, object> conv_result,
                                 ex: out var ex,
                                 ntfl: out var param_nfl);

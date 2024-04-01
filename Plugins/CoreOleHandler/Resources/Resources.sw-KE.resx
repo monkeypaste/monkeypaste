@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Isiyo na jina</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Kwa kufurahisha, wakati hii inakaguliwa picha kwenye clipboard itabadilishwa kwa busara kuwa sanaa ya ASCII (maandishi wazi) ya picha 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Picha kwa maandishi</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Inapopatikana, data ya maandishi ya maandishi ya kwanza itabadilishwa kuwa picha na kuongezwa kwenye clipboard.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Maandishi kwa fomati za picha</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Picha (TIFF)</value>
+  </data>
 </root>

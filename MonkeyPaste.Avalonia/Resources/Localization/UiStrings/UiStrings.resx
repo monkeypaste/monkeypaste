@@ -2982,4 +2982,27 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>Your purchase could not be completed. Reason: {0}</value>
     <comment>Extended Error Message</comment>
   </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Add Domain</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Add Page</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>The domain for this page is rejected. To allow this page you will need to remove the rejection for '{0}'.</value>
+    <comment>Url Domain</comment>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>The domain '{0}' is already rejected</value>
+    <comment>Url Domain</comment>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domains</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>This page is already rejected.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Pages</value>
+  </data>
 </root>

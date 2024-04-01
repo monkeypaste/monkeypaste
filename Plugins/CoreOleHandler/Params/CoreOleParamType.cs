@@ -42,6 +42,8 @@
         PNG_R_SCALEOVERSIZED,
         PNG_R_IGNORE_EMPTY,
         PNG_W_IGNORE,
+        PNG_W_FROMTEXTFORMATS,
+        PNG_W_ASCIIART,
         PNG_W_EXPORTTYPE,
 
         FILES_R_IGNORE,

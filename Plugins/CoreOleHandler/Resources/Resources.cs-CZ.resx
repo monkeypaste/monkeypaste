@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Nepojmenovaná</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Pro zábavu, když je toto zaškrtnuto, obrázek ve schránce se hrubě převede na ascii (prostý text) umění obrázku 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Obrázek Na Text</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Jakmile budou k dispozici, data prvního vybraného textového formátu budou převedena na obrázek a přidána do schránky.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Text do obrazových formátů</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>obrázek (tiff)</value>
+  </data>
 </root>

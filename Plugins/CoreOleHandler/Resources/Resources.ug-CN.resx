@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>نامەلۇم</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>كۆڭۈل ئېچىش ئۈچۈن, بۇ چاپلانما تاختىسىنى تەكشۈرۈپ, رەسىمدىكى رەسىمنى تەكشۈرۈپ بېقىڭ, رەسىمنىڭ (ئاددىي تېكىست) سەنئەتكارغا مايك.</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>تېكىستكە رەسىم</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>قاچان بار, تۇنجى تاللانغان تېكىست فورماتىنىڭ سانلىق مەلۇماتلىرى رەسىمگە ئۆزگەرتىپ, چاپلاش تاختىسىغا قوشۇلدى.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>رەسىم فورماتلىرىغا تېكىست</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>رەسىم (TIF)</value>
+  </data>
 </root>
