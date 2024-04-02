@@ -441,7 +441,7 @@ namespace MonkeyPaste.Avalonia {
         // requires restart and only used to trigger convert on exit (may not be necessary to restart)
 
         public string RememberedDbPassword { get; set; }
-        //public string DbPassword { get; set; } = ENCRYPT_DB ? MpPasswordGenerator.GetRandomPassword() : null;
+
         #endregion
 
         #region Shortcuts
@@ -540,8 +540,6 @@ namespace MonkeyPaste.Avalonia {
         public bool SearchByAnnotation { get; set; }
 
         public bool SearchByRegex { get; set; }
-
-        //public string LastQueryInfoJson { get; set; } = string.Empty;
 
         #endregion
 

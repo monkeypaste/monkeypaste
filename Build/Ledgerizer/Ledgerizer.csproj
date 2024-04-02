@@ -8,12 +8,17 @@
     <DefineConstants>$(DefineConstants);AUX;</DefineConstants>
     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <Platforms>$(DefaultPlatforms)</Platforms>
+    <UserSecretsId>fda21b04-a963-455b-b33c-0bf1b867d66c</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
+  </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
     <ProjectReference Include="..\..\Plugins\GoogleLiteTextTranslator\GoogleLiteTextTranslator.csproj" />
-    <ProjectReference Include="..\MonkeyPaste.Common.Plugin.Localizer\Localizer.csproj" />
-    <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
-    <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
+    <ProjectReference Include="..\Localizer\Localizer.csproj" />
   </ItemGroup>
 </Project>

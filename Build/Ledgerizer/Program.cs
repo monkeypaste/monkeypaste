@@ -1,4 +1,5 @@
 ﻿using GoogleLiteTextTranslator;
+using Microsoft.Extensions.Configuration;
 using MonkeyPaste.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
@@ -6,6 +7,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO.Compression;
+using System.Reflection;
 using System.Text;
 
 namespace Ledgerizer {
@@ -249,6 +251,19 @@ namespace Ledgerizer {
         const string PRIVATE_PACKAGE_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}/{1}.zip";
         const string PRIVATE_ICON_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}.png";
 
+        #endregion
+
+        #region Env
+        private static IConfiguration _config;
+        static IConfigurationSection Secrets { 
+            get {
+                if(_config == null) {
+                    var cb = new ConfigurationBuilder();
+                    _config = cb.AddUserSecrets<Program>().Build();
+                }
+                return _config.GetSection("server");
+            }
+        }
         #endregion
 
 
@@ -1060,18 +1075,20 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                         GetPluginProjDir(core_plugin_name),
                         "icon.png");
 
+                string username = Secrets["ftpUserName"].ToString();
+                string password = Secrets["ftpPassword"].ToString();
                 var icon_result = MpFtpTools.FtpFileUpload(
                     ftpUrl: $"ftp://ftp.monkeypaste.com//public_html/dat/{core_plugin_name}.png",
-                    userName: "monkeypa",
-                    password: "rYcT3eip",
+                    userName: username,
+                    password: password,
                     filePath: plugin_icon_path);
                 MpConsole.WriteLine($"{core_plugin_name} icon result: {(icon_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
 
                 // transfer package
                 var zip_result = MpFtpTools.FtpFileUpload(
                     ftpUrl: $"ftp://ftp.monkeypaste.com/public_html/dat/{core_mf.guid}/v{core_mf.version}.zip",
-                    userName: "monkeypa",
-                    password: "rYcT3eip",
+                    userName: username,
+                    password: password,
                     filePath: core_plugin_zip_path);
 
                 MpConsole.WriteLine($"{core_plugin_name} {core_mf.version} zip result: {(zip_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
@@ -1079,8 +1096,8 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 // duplicate as latest
                 var latest_result = MpFtpTools.FtpFileUpload(
                     ftpUrl: $"ftp://ftp.monkeypaste.com/public_html/dat/{core_mf.guid}/latest.zip",
-                    userName: "monkeypa",
-                    password: "rYcT3eip",
+                    userName: username,
+                    password: password,
                     filePath: core_plugin_zip_path);
                 MpConsole.WriteLine($"{core_plugin_name} latest zip result: {(latest_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
             }
@@ -1819,7 +1836,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                         {"plugin_guid", mf.guid },
                         {"version", mf.version},
                         {"is_install", "0" },
-                        {"add_phrase", "Im the big T pot check me out" }
+                        {"add_phrase", Secrets["versionUpdatePhrase"].ToString() }
                     };
                     string url = is_remote ?
                         $"{MpServerConstants.REMOTE_SERVER_URL}/plugins/plugin-info-check.php" :

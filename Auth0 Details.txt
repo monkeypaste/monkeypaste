@@ -1,5 +1,0 @@
-Host Address: monkeypaste.000webhostapp.com
-Host Password: $zdLv&x1Di(iOsiQGaS8
-DB Name: id8855016_mp
-DB User: id8855016_admin
-DB Host: localhost

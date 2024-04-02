@@ -34,7 +34,7 @@ rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.iO
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.Web\obj"
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.Web\bin"
 
-rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\_build\obj"
-rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\_build\bin"
+rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Build\_build\obj"
+rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Build\_build\bin"
 
 pause

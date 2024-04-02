@@ -1,11 +1,10 @@
 ﻿
-using System;
-
-namespace MonkeyPaste.Console {
     using System;
     using System.IO;
     using System.Text;
 
+namespace MonkeyPaste.Console {
+	// this is an expermient used to talk to the MonkeyPaste.Chrome add-on
     class Program {
         static void Main(string[] args) {
             while (true) {

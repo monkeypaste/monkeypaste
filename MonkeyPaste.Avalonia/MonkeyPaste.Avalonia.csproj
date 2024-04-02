@@ -2381,7 +2381,6 @@
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
-    <ProjectReference Include="..\_build\_build.csproj" />
   </ItemGroup>
   
   <ItemGroup>

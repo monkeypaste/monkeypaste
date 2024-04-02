@@ -58,7 +58,7 @@
     <DefaultTargetFramework>net8.0</DefaultTargetFramework>
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
-    <BuildScriptsRootDir>$(SolutionDir)\_build\scripts</BuildScriptsRootDir>
+    <BuildScriptsRootDir>$(SolutionDir)\Build\_build\scripts</BuildScriptsRootDir>
     <DefineConstants>$(DefineConstants);TRACE;</DefineConstants>
   </PropertyGroup>
   

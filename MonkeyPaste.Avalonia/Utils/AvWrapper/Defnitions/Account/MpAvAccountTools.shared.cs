@@ -32,11 +32,11 @@ namespace MonkeyPaste.Avalonia {
 
         const MpUserAccountType TEST_ACCOUNT_TYPE = MpUserAccountType.Free;
 
-        const int MAX_FREE_CLIP_COUNT = 5;
-        const int MAX_STANDARD_CLIP_COUNT = 1000;
+        const int MAX_FREE_CLIP_COUNT = -1;//5;
+        const int MAX_STANDARD_CLIP_COUNT = -1;//1000;
         const int MAX_UNLIMITED_CLIP_COUNT = -1;
 
-        const int MAX_FREE_TRASH_COUNT = 20;
+        const int MAX_FREE_TRASH_COUNT = -1;//20;
         const int MAX_STANDARD_TRASH_COUNT = -1;
         const int MAX_UNLIMITED_TRASH_COUNT = -1;
 
