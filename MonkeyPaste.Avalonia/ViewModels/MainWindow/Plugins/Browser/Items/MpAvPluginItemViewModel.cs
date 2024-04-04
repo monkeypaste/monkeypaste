@@ -100,6 +100,32 @@ namespace MonkeyPaste.Avalonia {
                 return _rootDependencyCollection;
             }
         }
+
+        public IEnumerable<MpAvAnalyticItemPresetViewModel> InstalledPluginDefaultPresetViewModels {
+            get {
+                if(!HasInstallation) {
+                    yield break;
+                }
+                if(MpAvAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x=>x.PluginGuid == PluginGuid) is { } aivm) {
+                    // can really return any preset since only worried about shared params but to avoid being arbitrary try to use default preset
+                    if(aivm.Items.FirstOrDefault(x=>x.IsSystemPreset) is { } aipvm) {
+                        yield return aipvm;
+                    } else {
+                        yield return aivm.Items.FirstOrDefault();
+                    }
+                }
+                
+                //if(MpAvClipboardHandlerCollectionViewModel.Instance.Items.FirstOrDefault(x=>x.PluginGuid == PluginGuid) is { } chvm) {
+                //    // can really return any preset since only worried about shared params but to avoid being arbitrary try to use default preset
+                //    foreach(var cfvm in chvm.Items) {
+                //        if(cfvm.Items.FirstOrDefault(x=>x.IsDefault) is { } def_chpvm) {
+                //            yield return def_chpvm;
+                //        }
+                //        yield return cfvm.Items.FirstOrDefault();
+                //    }
+                //}
+            }
+        }
         #endregion
 
         #region Appearance
@@ -228,6 +254,11 @@ namespace MonkeyPaste.Avalonia {
             HasInstallation &&
             !IsUpdatePending &&
             !IsCorePlugin;
+
+        public bool CanConfigure =>
+            InstalledPluginDefaultPresetViewModels.Any(x => x.Items.Any(y => y.IsSharedValue));
+
+        public bool IsConfigurePanelOpen { get; private set; }
 
         public bool CanUpdate {
             get {
@@ -474,6 +505,10 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
         public void RefreshState() {
+            if(!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(RefreshState);
+                return;
+            }
             OnPropertyChanged(nameof(PluginFormat));
             OnPropertyChanged(nameof(HasInstallation));
             OnPropertyChanged(nameof(CanUninstall));
@@ -486,6 +521,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(DisabledUpdateTooltip));
             OnPropertyChanged(nameof(InstallButtonText));
             OnPropertyChanged(nameof(UpdateButtonText));
+            OnPropertyChanged(nameof(CanConfigure));
+            OnPropertyChanged(nameof(InstalledPluginDefaultPresetViewModels));
         }
 
         public override string ToString() {
@@ -738,6 +775,23 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     return InstallPluginCommand.CanExecute(null);
                 }
+            });
+
+        public ICommand ShowConfigurePanelCommand => new MpCommand(
+            () => {
+                //if(!CanConfigure) {
+                //    return;
+                //}
+                IsConfigurePanelOpen = true;
+                InstalledPluginDefaultPresetViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.SharedItems)));
+            });
+        
+        public ICommand HideConfigurePanelCommand => new MpCommand(
+            () => {
+                //if(!IsConfigurePanelOpen) {
+                //    return;
+                //}
+                IsConfigurePanelOpen = false;
             });
         #endregion
 

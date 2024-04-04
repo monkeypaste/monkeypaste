@@ -3005,4 +3005,13 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="InteropPagesTitle" xml:space="preserve">
     <value>Pages</value>
   </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sync</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Another instance of MonkeyPaste is already running. Are you sure you want to open a new instance?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Configure</value>
+  </data>
 </root>

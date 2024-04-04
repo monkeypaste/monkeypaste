@@ -32,6 +32,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Startup Set Services 
+        public MpISingleInstanceTools SingleInstanceTools { get; set; }
         public MpIFilesToHtmlConverter FilesToHtmlConverter { get; set; }
         public MpIPointerSimulator PointerSimulator { get; set; }
         public MpICultureInfo UserCultureInfo { get; set; }
@@ -193,6 +194,18 @@ namespace MonkeyPaste.Avalonia {
             MpAvCommonTools.Init(this);
             MpAvCurrentCultureViewModel.Instance.Init();
             UserCultureInfo = MpAvCurrentCultureViewModel.Instance;
+
+            SingleInstanceTools = new MpAvAppInstanceTools();
+            if(!SingleInstanceTools.DoInstanceCheck()) {
+                // this is not the first instance
+                var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                    notificationType: MpNotificationType.SingleInstanceWarning,
+                    body: UiStrings.SingInstanceCheckNtfText);
+                if(result == MpNotificationDialogResultType.Shutdown) {
+                    // block for shutdown to kill process
+                    await Task.Delay(3_000);
+                }
+            }
         }
 
         #endregion

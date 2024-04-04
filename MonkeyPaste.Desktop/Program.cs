@@ -18,7 +18,6 @@ namespace MonkeyPaste.Avalonia {
         static bool FORCE_WAIT_FOR_REMOTE_DEBUG = false;
         static bool FORCE_WAIT_FOR_REMOTE_DEBUG_FROM_RESTART = false;
         static bool CLEAR_STORAGE = false;
-        const string THIS_APP_GUID = "252C6489-DFF3-4CFF-A419-7D3770461FFE";
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
         // yet and stuff might break.

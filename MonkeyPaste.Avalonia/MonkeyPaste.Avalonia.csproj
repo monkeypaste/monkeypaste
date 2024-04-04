@@ -287,11 +287,8 @@
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\AppMode\MpAvAppModeFlyoutView2.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\ContextMenu\MpAvContextMenuView.axaml" />
-    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\Loader\MpAvLoaderView.axaml" />
-    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\Message\MpAvMessageNotificationView.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationContainerView.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml" />
-    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml" />
     <AvaloniaXaml Remove="Views\SettingsWindow\MpAvSettingsWindow.axaml" />
     <None Remove="Assets\Cursors\copy.png" />
     <None Remove="Assets\Cursors\hand_closed.png" />
@@ -538,6 +535,7 @@
     <None Remove="Assets\Images\starsolid.png" />
     <None Remove="Assets\Images\staryellow.png" />
     <None Remove="Assets\Images\staryellow2.png" />
+    <None Remove="Assets\Images\sync.png" />
     <None Remove="Assets\Images\tag.png" />
     <None Remove="Assets\Images\tagcolor.png" />
     <None Remove="Assets\Images\text.png" />
@@ -652,11 +650,8 @@
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\CheckBox\MpCheckBoxParameterView.axaml.cs" />
     <Compile Remove="Views\Reusable\ContextMenu\MpAvContextMenuView.axaml.cs" />
-    <Compile Remove="Views\Reusable\Notifications\Toast\Loader\MpAvLoaderView.axaml.cs" />
-    <Compile Remove="Views\Reusable\Notifications\Toast\Message\MpAvMessageNotificationView.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationContainerView.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />
-    <Compile Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs" />
     <Compile Remove="Views\SettingsWindow\MpAvSettingsWindow.axaml.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1959,6 +1954,9 @@
     <AvaloniaResource Include="Assets\Images\staryellow2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\sync.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\tag.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -2242,6 +2240,9 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Analytics\Presets\MpAvAnalyticItemPresetDataGridView.axaml.cs">
       <DependentUpon>MpAvAnalyticItemPresetDataGridView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Browser\Item\Configure\MpAvPluginConfigureView.axaml.cs">
+      <DependentUpon>MpAvPluginConfigureView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Browser\Item\Detail\MpAvPluginDetailView.axaml.cs">
       <DependentUpon>MpAvPluginDetailView.axaml</DependentUpon>
     </Compile>
@@ -2271,9 +2272,6 @@
     </Compile>
     <Compile Update="Views\MainWindow\TitleMenu\ZoomSlider\MpAvZoomFactorView.axaml.cs">
       <DependentUpon>MpAvZoomFactorView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Mobile\Notifications\Loader\MpAvMobileLoaderView.axaml.cs">
-      <DependentUpon>MpAvMobileLoaderView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Buttons\PopupSelector\MpAvPopupMenuSelector.axaml.cs">
       <DependentUpon>MpAvPopupMenuSelector.axaml</DependentUpon>
@@ -2334,6 +2332,9 @@
     </Compile>
     <Compile Update="Views\SettingsWindow\Menu\MpAvSettingsMenuView.axaml.cs">
       <DependentUpon>MpAvSettingsMenuView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Sync\MpAvSyncView.axaml.cs">
+      <DependentUpon>MpAvSyncView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Account\MpAvAccountView.axaml.cs">
       <DependentUpon>MpAvAccountView.axaml</DependentUpon>

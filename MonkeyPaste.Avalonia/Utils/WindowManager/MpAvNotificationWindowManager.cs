@@ -121,13 +121,8 @@ namespace MonkeyPaste.Avalonia {
 
                     App.Current.SetMainWindow(nw);
                     break;
-                case MpAvUserActionNotificationViewModel:
-                    nw = new MpAvUserActionNotificationWindow() {
-                        DataContext = nvmb
-                    };
-                    break;
                 default:
-                    nw = new MpAvMessageNotificationWindow() {
+                    nw = new MpAvUserActionNotificationWindow() {
                         DataContext = nvmb,
                     };
                     break;

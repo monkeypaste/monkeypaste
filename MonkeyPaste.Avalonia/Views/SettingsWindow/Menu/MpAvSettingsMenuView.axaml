@@ -115,7 +115,7 @@
             <ColumnDefinition Width="{Binding IsDesktop, ConverterParameter=*|0, Converter={x:Static local:MpAvBoolToGridLengthConverter.Instance}, Source={x:Static local:MpAvThemeViewModel.Instance}}" />
         </Grid.ColumnDefinitions>
 
-        <!--  ACCOUNT  -->
+        <!--  SYNC  -->
 
         <RadioButton Grid.Column="0"
                      Classes.omitted="{Binding !IsTabButtonVisible0}"
@@ -125,8 +125,8 @@
                      Command="{Binding SelectTabCommand}"
                      CommandParameter="0">
             <DockPanel>
-                <Label Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsAccountTabLabel}" />
-                <Image Source="{Binding Source={StaticResource UserColorImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <Label Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SettingsSyncTabLabel}" />
+                <Image Source="{Binding Source={StaticResource SyncImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </DockPanel>
         </RadioButton>
 

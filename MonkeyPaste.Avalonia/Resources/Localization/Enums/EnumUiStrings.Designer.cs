@@ -1717,6 +1717,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Single Instance Warning.
+        /// </summary>
+        public static string MpNotificationType_SingleInstanceWarning {
+            get {
+                return ResourceManager.GetString("MpNotificationType_SingleInstanceWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Startup Complete.
         /// </summary>
         public static string MpNotificationType_StartupComplete {

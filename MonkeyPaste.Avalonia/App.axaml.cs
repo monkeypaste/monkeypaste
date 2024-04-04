@@ -34,6 +34,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+        private static string _instanceGuid;
+        public static string InstanceGuid => _instanceGuid ?? (_instanceGuid = System.Guid.NewGuid().ToString());
         public static string[] Args { get; set; } = new string[] { };
 
         private static App _instance;

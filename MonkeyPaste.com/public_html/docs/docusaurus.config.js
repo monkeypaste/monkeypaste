@@ -232,14 +232,6 @@ const config = {
         // Options here
       },
     ],
-    [
-      "@docusaurus/plugin-content-pages",
-      {
-        path: "src/pages",
-        routeBasePath: "",
-        exclude: ["**/account"],
-      },
-    ],
   ],
 };
 

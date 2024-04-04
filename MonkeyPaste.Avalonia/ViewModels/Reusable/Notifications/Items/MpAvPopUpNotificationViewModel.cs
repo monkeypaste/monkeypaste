@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvUserActionNotificationViewModel : MpAvNotificationViewModelBase {
+    public class MpAvPopUpNotificationViewModel : MpAvNotificationViewModelBase {
         #region Private Variables
         bool _wasIgnoreHiddenToFix = false;
         #endregion
@@ -65,15 +65,16 @@ namespace MonkeyPaste.Avalonia {
         public override bool CanPin => true;
 
         public override bool ShowOptionsButton =>
-            NotificationType == MpNotificationType.AlertAction ||
-            NotificationType == MpNotificationType.UpdateAvailable ||
-            NotificationType == MpNotificationType.ContentCapReached ||
-            NotificationType == MpNotificationType.TrashCapReached ||
-            NotificationType == MpNotificationType.ContentAddBlockedByAccount ||
-            NotificationType == MpNotificationType.ContentRestoreBlockedByAccount ||
-            NotificationType == MpNotificationType.ConfirmEndAppend ||
-            NotificationType == MpNotificationType.AppendModeChanged ||
-            NotificationType == MpNotificationType.ModalContentFormatDegradation;
+            //NotificationType == MpNotificationType.AlertAction ||
+            //NotificationType == MpNotificationType.UpdateAvailable ||
+            //NotificationType == MpNotificationType.ContentCapReached ||
+            //NotificationType == MpNotificationType.TrashCapReached ||
+            //NotificationType == MpNotificationType.ContentAddBlockedByAccount ||
+            //NotificationType == MpNotificationType.ContentRestoreBlockedByAccount ||
+            //NotificationType == MpNotificationType.ConfirmEndAppend ||
+            //NotificationType == MpNotificationType.AppendModeChanged ||
+            //NotificationType == MpNotificationType.ModalContentFormatDegradation;
+            IsToast;
 
         public bool IsFixing { get; set; } = false;
 
@@ -174,7 +175,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvUserActionNotificationViewModel() : base() {
+        public MpAvPopUpNotificationViewModel() : base() {
             PropertyChanged += MpUserActionNotificationViewModel_PropertyChanged;
         }
 
@@ -196,6 +197,10 @@ namespace MonkeyPaste.Avalonia {
 
             await base.InitializeAsync(nf);
             switch (ButtonsType) {
+                case MpNotificationButtonsType.YesShutdown:
+                    ShowYesButton = true;
+                    ShowShutdownButton = true;
+                    break;
                 case MpNotificationButtonsType.DeleteIgnoreFix:
                     ShowDeleteButton = true;
                     ShowIgnoreButton = true;

@@ -44,6 +44,7 @@
         ExecuteParametersRequest,
         DbPasswordInput,
         RateApp,
+        SingleInstanceWarning,
 
         // User Action (Modal) 
 

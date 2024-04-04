@@ -146,9 +146,12 @@ namespace MonkeyPaste.Avalonia {
         }
         private void ValidateUrlViewModels() {
             var dups = Items.Where(x => Items.Any(y => y != x && x.IsValueEqual(y)));
-            if (dups.Any()) {
-                // dup app view models, check db to see if dup app model
-                MpDebug.Break();
+            if (dups.LastOrDefault() is { } dup_uvm) {
+                MpDebug.Break($"Url collection error, dups detected (removing newest ones!): {string.Join(Environment.NewLine,dups.Select(x=>x.UrlPath).Distinct())}");
+                Dispatcher.UIThread.Post(async () => {
+                    await dup_uvm.Url.DeleteFromDatabaseAsync();
+                    Items.Remove(dup_uvm);
+                });
             }
 
         }
@@ -156,11 +159,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-
-        public MpIAsyncCommand<object> RemoveRejectUrlCommand => new MpAsyncCommand<object>(
-            async (args) => {
-
-            });
 
         public MpIAsyncCommand<object> AddRejectUrlCommand => new MpAsyncCommand<object>(
             async (args) => {

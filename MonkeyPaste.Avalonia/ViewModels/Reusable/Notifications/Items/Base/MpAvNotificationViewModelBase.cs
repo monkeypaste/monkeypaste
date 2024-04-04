@@ -50,6 +50,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.DbPasswordInput:
                 case MpNotificationType.UpdateAvailable:
                     return MpNotificationLayoutType.UserAction;
+                case MpNotificationType.SingleInstanceWarning:
                 case MpNotificationType.AnalyzerTimeout:
                 case MpNotificationType.InvalidRequest:
                 case MpNotificationType.InvalidResponse:
@@ -77,7 +78,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public static MpNotificationButtonsType GetNotificationButtonsType(MpNotificationType ndt) {
-            switch (ndt) {
+            switch (ndt) {                
+                case MpNotificationType.SingleInstanceWarning:
+                    return MpNotificationButtonsType.YesShutdown;
                 case MpNotificationType.ModalShutdownLater:
                     return MpNotificationButtonsType.ModalShutdownLater;
                 case MpNotificationType.ModalRestartNowOrLater:

@@ -498,7 +498,8 @@
 
                     <local:MpAvSettingsTabDataTemplateSelector>
                         <DataTemplate x:Key="AccountTemplate">
-                            <local:MpAvAccountView />
+                            <!--<local:MpAvAccountView />-->
+                            <local:MpAvSyncView />
                         </DataTemplate>
                         <DataTemplate x:Key="PreferencesTemplate"
                                       x:DataType="local:MpAvSettingsViewModel">

@@ -13,7 +13,6 @@
         x:DataType="local:MpAvLoaderNotificationViewModel"
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvLoaderNotificationWindow"
-        d:DataContext="{x:Static dd:DesignData.ExampleViewModel}"
         Classes="notificationWindow loader"
         Width="350"
         Height="140">

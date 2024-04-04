@@ -1,0 +1,92 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
+                       xmlns:pcl="using:MonkeyPaste"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvPluginItemViewModel"
+                       x:DataType="local:MpAvPluginItemViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvPluginConfigureView">
+    <local:MpAvUserControl.Styles>
+        <!--<Style Selector="ListBox#SharedParameterListBox > ListBoxItem"
+               x:DataType="local:MpAvParameterViewModelBase">
+            <Setter Property="IsVisible"
+                    Value="{Binding IsSharedValue}" />
+        </Style>-->
+
+        <!--  BACK BUTTON  -->
+
+        <Style Selector="Button#BackToDetailButton Image">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+        </Style>
+
+        <Style Selector="Button#BackToDetailButton:pointerover Image">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent1Color}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Grid RowDefinitions="Auto,*"
+          Margin="5">
+        <Button x:Name="BackToDetailButton"
+                Classes="noBg noHoverBg squareByHeight"
+                Margin="5"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Stretch"
+                Command="{Binding HideConfigurePanelCommand}">
+            <Image VerticalAlignment="Stretch"
+                   Margin="5,2"
+                   Width="20"
+                   Height="20">
+                <Image.RenderTransform>
+                    <RotateTransform Angle="90" />
+                </Image.RenderTransform>
+            </Image>
+        </Button>
+        <ItemsControl Grid.Row="1"
+                      ItemsSource="{Binding InstalledPluginDefaultPresetViewModels}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="local:MpAvAnalyticItemPresetViewModel">
+                    <Grid RowDefinitions="Auto,*">
+                        <!--<TextBlock x:DataType="pcl:MpILabelTextViewModel"
+                                   Text="{Binding LabelText}" />-->
+                        <ListBox x:Name="SharedParameterListBox"
+                                 Classes="paramHost"
+                                 Grid.Row="1"
+                                 HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Top"
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 ItemsSource="{Binding SharedItems}"
+                                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <local:MpAvPluginParameterItemView HorizontalAlignment="Stretch"
+                                                                       Classes.invalid="{Binding !IsValid}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+    </Grid>
+
+</local:MpAvUserControl>
+

@@ -9,7 +9,7 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Name="UserActionNotificationWindow"
-                       x:DataType="local:MpAvUserActionNotificationViewModel"
+                       x:DataType="local:MpAvPopUpNotificationViewModel"
                        x:CompileBindings="True"
                        x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationView">
     <local:MpAvUserControl.Styles>
@@ -210,10 +210,10 @@
                                     VerticalAlignment="Stretch"
                                     Content="{Binding}">
                         <ContentControl.DataTemplates>
-                            <local:MpAvUserActionBodyTemplateSelector>
+                            <local:MpAvPopupBodyTemplateSelector>
                                 <!--  TEXT MESSAGE  -->
                                 <DataTemplate x:Key="TextBodyTemplate"
-                                              x:DataType="local:MpAvUserActionNotificationViewModel">
+                                              x:DataType="local:MpAvPopUpNotificationViewModel">
                                     <SelectableTextBlock x:Name="MessageBody"
                                                          FontSize="14"
                                                          HorizontalAlignment="Left"
@@ -227,7 +227,7 @@
 
                                 <!--  HTML MESSAGE  -->
                                 <DataTemplate x:Key="HtmlBodyTemplate"
-                                              x:DataType="local:MpAvUserActionNotificationViewModel">
+                                              x:DataType="local:MpAvPopUpNotificationViewModel">
                                     <av:HtmlLabel x:Name="ToolTipHtmlPanel"
                                                   HorizontalAlignment="Left"
                                                   VerticalAlignment="Top"
@@ -239,7 +239,7 @@
                                 </DataTemplate>
                                 <!--  PARAMS  -->
                                 <DataTemplate x:Key="ParameterCollectionTemplate"
-                                              x:DataType="local:MpAvUserActionNotificationViewModel">
+                                              x:DataType="local:MpAvPopUpNotificationViewModel">
                                     <Border DataContext="{Binding Body}"
                                             MinWidth="250"
                                             x:DataType="local:MpAvAnalyticItemPresetViewModel">
@@ -275,7 +275,7 @@
 
                                 <!--  TEXTBOX  -->
                                 <DataTemplate x:Key="TextBoxTemplate"
-                                              x:DataType="local:MpAvUserActionNotificationViewModel">
+                                              x:DataType="local:MpAvPopUpNotificationViewModel">
 
                                     <!--  TEXTBOX (Optional)  -->
 
@@ -316,7 +316,7 @@
 
                                 <!--  BUSY  -->
                                 <DataTemplate x:Key="BusyTemplate"
-                                              x:DataType="local:MpAvUserActionNotificationViewModel">
+                                              x:DataType="local:MpAvPopUpNotificationViewModel">
                                     <Border HorizontalAlignment="Stretch"
                                             VerticalAlignment="Center">
                                         <Border.IsVisible>
@@ -349,7 +349,7 @@
 
                                 </DataTemplate>
 
-                            </local:MpAvUserActionBodyTemplateSelector>
+                            </local:MpAvPopupBodyTemplateSelector>
                         </ContentControl.DataTemplates>
                     </ContentControl>
 

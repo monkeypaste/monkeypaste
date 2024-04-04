@@ -4,7 +4,7 @@ using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvUserActionNotificationView : MpAvUserControl<MpAvUserActionNotificationViewModel> {
+    public partial class MpAvUserActionNotificationView : MpAvUserControl<MpAvPopUpNotificationViewModel> {
 
         public MpAvUserActionNotificationView() : base() {
             InitializeComponent();

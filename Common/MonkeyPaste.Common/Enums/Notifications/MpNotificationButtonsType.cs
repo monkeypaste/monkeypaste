@@ -19,6 +19,7 @@
         RestartIgnoreCancel,
         RestartNowLater,
         ModalShutdownLater,
-        DeleteIgnoreFix
+        DeleteIgnoreFix,
+        YesShutdown
     }
 }

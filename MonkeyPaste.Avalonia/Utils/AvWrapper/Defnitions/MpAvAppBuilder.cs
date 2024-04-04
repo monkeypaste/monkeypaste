@@ -1,5 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,6 +30,23 @@ namespace MonkeyPaste.Avalonia {
 #endif
 
             var dupApp = await MpDataModelProvider.GetAppByMembersAsync(processPath, args, MpDefaultDataModelTools.ThisUserDeviceId);
+            if(dupApp == null && !Mp.Services.SingleInstanceTools.IsFirstInstance) {
+                // only let initial instance create sources to avoid duplicates
+                var sw = Stopwatch.StartNew();
+                while(dupApp == null) {
+                    dupApp = await MpDataModelProvider.GetAppByMembersAsync(processPath, args, MpDefaultDataModelTools.ThisUserDeviceId);
+                    await Task.Delay(100);
+                    if(sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                        // first instance not adding so just add it
+                        break;
+                    }
+                }
+                if(dupApp != null) {
+                    // wait a bit for any other data (like icons or something)
+                    await Task.Delay(150);
+                }
+
+            }
             if (dupApp != null) {
                 dupApp.WasDupOnCreate = true;
                 return dupApp;

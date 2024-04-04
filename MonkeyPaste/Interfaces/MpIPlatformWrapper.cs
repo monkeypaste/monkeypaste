@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public interface MpIPlatformWrapper : MpICommonTools {
         Task InitializeAsync();
+        MpISingleInstanceTools SingleInstanceTools { get; set; }
         MpIPointerSimulator PointerSimulator { get; set; }
         MpIClipboard DeviceClipboard { get; set; }
         MpIDefaultDataCreator DefaultDataCreator { get; set; }

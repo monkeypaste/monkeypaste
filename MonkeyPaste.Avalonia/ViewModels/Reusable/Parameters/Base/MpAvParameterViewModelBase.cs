@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -653,11 +654,16 @@ namespace MonkeyPaste.Avalonia {
                     if (Parent is MpISaveOrCancelableViewModel) {
                         // analyzers
                         if (e.PropertyName == nameof(CurrentValue) &&
-                            Parent is MpAvAnalyticItemPresetViewModel aipvm &&
-                            aipvm.IsExecuting &&
-                            IsExecuteParameter) {
-                            // automatically save execute param changes WHILE executing 
-                            SaveCurrentValueCommand.Execute(null);
+                            Parent is MpAvAnalyticItemPresetViewModel aipvm) {
+
+                            if(aipvm.IsExecuting && IsExecuteParameter ||
+                                (MpAvFocusManager.Instance.FocusElement is Control c && 
+                                c.GetSelfOrAncestorDataContext<MpAvAnalyticItemPresetViewModel>() == aipvm)) {
+
+                                // automatically save execute param changes WHILE executing 
+                                // or user actively editing shared vals
+                                SaveCurrentValueCommand.Execute(null);
+                            }
                         } else {
 
                             socvm = Parent as MpISaveOrCancelableViewModel;

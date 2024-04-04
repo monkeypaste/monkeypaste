@@ -93,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
             }
             double width = w.Bounds.Width.IsNumber() && w.Bounds.Width != 0 ? w.Bounds.Width : fallback_w;
             double height = w.Bounds.Height.IsNumber() && w.Bounds.Height != 0 ? w.Bounds.Height : fallbach_h;
-            if (w.DataContext is MpAvMessageNotificationViewModel mnvm) {
+            if (w.DataContext is MpAvPopUpNotificationViewModel mnvm) {
                 width = 350;// mnvm.MessageWindowFixedWidth;
             }
             return new Size(width, height + th);

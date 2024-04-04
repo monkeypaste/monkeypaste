@@ -2468,6 +2468,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure.
+        /// </summary>
+        public static string CommonConfigureLabel {
+            get {
+                return ResourceManager.GetString("CommonConfigureLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string CommonConfirmLabel {
@@ -6730,6 +6739,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sync.
+        /// </summary>
+        public static string SettingsSyncTabLabel {
+            get {
+                return ResourceManager.GetString("SettingsSyncTabLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; contains shared values. Would you like to reset those as well?.
         /// </summary>
         public static string SharedValNtfText {
@@ -7044,6 +7062,15 @@ namespace MonkeyPaste.Avalonia {
         public static string SidebarTriggersToolTip {
             get {
                 return ResourceManager.GetString("SidebarTriggersToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Another instance of MonkeyPaste is already running. Are you sure you want to open a new instance?.
+        /// </summary>
+        public static string SingInstanceCheckNtfText {
+            get {
+                return ResourceManager.GetString("SingInstanceCheckNtfText", resourceCulture);
             }
         }
         

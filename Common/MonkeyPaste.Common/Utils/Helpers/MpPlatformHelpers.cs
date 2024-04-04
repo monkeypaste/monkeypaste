@@ -71,9 +71,13 @@ namespace MonkeyPaste.Common {
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Packages");
             var all_packages = Directory.GetDirectories(packages_dir);
-            var possible_dirs = all_packages.Where(x => x.Contains("MonkeyPaste"));
-            if (possible_dirs.FirstOrDefault() is not string package_dir || !package_dir.IsDirectory()) {
-                return null;
+            var possible_dirs = all_packages.Where(x => x.Contains("MonkeyPaste")).ToList();
+            string package_dir =
+                    possible_dirs
+                    .OrderByDescending(x => new DirectoryInfo(x).LastWriteTimeUtc)
+                    .FirstOrDefault();
+            if (possible_dirs.Count > 1) {
+                MpConsole.WriteLine($"Warning, multiple possible package dirs found, selecting most recently modified");
             }
 
             return package_dir;

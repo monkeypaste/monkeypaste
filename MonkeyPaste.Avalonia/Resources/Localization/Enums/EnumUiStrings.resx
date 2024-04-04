@@ -267,6 +267,9 @@
   <data name="MpNotificationType_RateApp" xml:space="preserve">
     <value>Rate App</value>
   </data>
+  <data name="MpNotificationType_SingleInstanceWarning" xml:space="preserve">
+    <value>Single Instance Warning</value>
+  </data>
   <data name="MpNotificationType_ModalResetSharedValuePreset" xml:space="preserve">
     <value>Modal Reset Shared Value Preset</value>
   </data>
