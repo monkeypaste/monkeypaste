@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Onbeperkt - jaarlijks</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Eerste uitgave</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Met dit abonnement ontvangt u:
 ● Onbeperkte capaciteit</value>
@@ -268,5 +265,17 @@ uw klembord wordt ooit gevolgd of opgeslagen OVERAL buiten uw eigen machine. Per
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Veilige, beveiligde en privé lokale gegevensopslag met optionele 2-factor wachtwoordbeveiliging</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste is nu volledig gratis vanaf deze release !!
+
+Alle beperkingen (in app-abonnementen) zijn verwijderd omdat Monkeypaste nu overstapt naar een open-source project. Dus houd onze GitHub (github.com/monkeypaste) in de gaten als u geïnteresseerd bent om bij te dragen.
+
+Updates:
+
+- Alle capaciteitsbeperkingen verwijderd!
+- Verbeteringen van de URL -editor van de URL -editor
+- Basisondersteuning voor het uitvoeren van meerdere instanties van Monkeypaste
+- Nieuwe gedeelde waarde -editor (in plug -in browser waar van toepassing)</value>
   </data>
 </root>

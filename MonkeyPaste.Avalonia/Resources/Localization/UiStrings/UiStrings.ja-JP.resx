@@ -2895,4 +2895,60 @@ feedback@monkeypaste.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;貼り付け先: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>不明なエラー{0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>ご購入を完了できませんでした。理由：{0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ドメインを追加します</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>ページを追加します</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>このページのドメインは拒否されます。このページを許可するには、「{0}」の拒否を削除する必要があります。</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>ドメイン '{0}'はすでに拒否されています</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ドメイン</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>このページはすでに拒否されています。</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>ページ</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>同期</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Monkeypasteの別のインスタンスはすでに実行されています。新しいインスタンスを開きたいですか？</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>構成、設定</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>グローバルマウスとキーボードショートカットは無効になっています。
+
+グローバルショートカットをシステムトレイメニューで有効にすることができます</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>無効になっているグローバルショートカット：{0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>グローバルマウスとキーボードショートカットが有効になっています。</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>（実験）グローバルショートカットが有効になっています：{0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>グローバルショートカットを切り替えます</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>グローバルショートカットを切り替えます</value>
+  </data>
 </root>

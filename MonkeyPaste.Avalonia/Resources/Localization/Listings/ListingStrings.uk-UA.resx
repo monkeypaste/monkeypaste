@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Необмежений - щорічно</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Початковий випуск</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>За допомогою цієї підписки ви отримаєте:
 ● Необмежена ємність</value>
@@ -268,5 +265,17 @@
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Безпечне, надійне та конфіденційне локальне сховище даних з додатковим 2-факторним захистом паролем</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste тепер повністю безкоштовний станом на цей випуск !!
+
+Усі обмеження (у підписках на додатки) були видалені, оскільки MonkeyPaste зараз переходить до створення проекту з відкритим кодом. Тож слідкуйте за нашим github (github.com/monkeypaste), якщо ви зацікавлені в внеску.
+
+Оновлення:
+
+- Усі обмеження ємності видалені!
+- Покращені удосконалення URL -редактора URL -адреси
+- Базова підтримка для запуску декількох екземплярів Monkeypaste
+- Новий редактор спільного значення (у браузері плагінів, де це можливо)</value>
   </data>
 </root>

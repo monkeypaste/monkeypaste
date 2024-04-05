@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Onbeperk - Jaarliks</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Aanvanklike vrystelling</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Met hierdie intekening sal u ontvang:
 ● Onbeperkte kapasiteit</value>
@@ -268,5 +265,17 @@ jou knipbord word ooit opgespoor of gestoor ENIGE plek buite jou eie masjien. Ty
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Veilige, veilige en private plaaslike databerging met opsionele 2-faktor wagwoordbeskerming</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste is nou heeltemal gratis vanaf hierdie vrystelling!!
+
+Alle beperkings (in app-intekeninge) is verwyder aangesien MonkeyPaste nou oorgaan om 'n oopbronprojek te word. Hou dus ons github (github.com/monkeypaste) dop as jy belangstel om by te dra.
+
+Opdaterings:
+
+- alle kapasiteitsbeperkings verwyder!
+- verwerp URL-redakteur UI verbeterings
+- Basislynondersteuning vir die uitvoer van verskeie gevalle van MonkeyPaste
+- nuwe gedeelde waarderedigeerder (in plugin-blaaier waar van toepassing)</value>
   </data>
 </root>

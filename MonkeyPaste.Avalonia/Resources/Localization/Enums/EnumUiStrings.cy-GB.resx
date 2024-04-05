@@ -1186,4 +1186,13 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>I gyd</value>
   </data>
+  <data name="MpNotificationType_SingleInstanceWarning" xml:space="preserve">
+    <value>Rhybudd Achos Sengl</value>
+  </data>
+  <data name="MpNotificationType_ModalShutdownLater" xml:space="preserve">
+    <value>Cau Modal Yn ddiweddarach</value>
+  </data>
+  <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
+    <value>Toglo Bachau Byd-eang</value>
+  </data>
 </root>

@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Ubegrænset - årligt</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Første udgivelse</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Med dette abonnement vil du modtage:
 ● Ubegrænset kapacitet</value>
@@ -268,5 +265,17 @@ dit udklipsholder spores eller gemmes nogensinde HVOR som helst ud over din egen
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Sikker, sikker og privat lokal datalagring med valgfri 2-faktor adgangskodebeskyttelse</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste er nu helt gratis fra denne udgivelse!!
+
+Alle begrænsninger (i app-abonnementer) er blevet fjernet, da MonkeyPaste nu går over til at blive et open source-projekt. Så hold øje med vores github (github.com/monkeypaste), hvis du er interesseret i at bidrage.
+
+Opdateringer:
+
+- alle kapacitetsbegrænsninger fjernet!
+- afviste forbedringer af Url editor UI
+- Baseline support til at køre flere forekomster af MonkeyPaste
+- ny delt værdieditor (i plugin-browser, hvor det er relevant)</value>
   </data>
 </root>

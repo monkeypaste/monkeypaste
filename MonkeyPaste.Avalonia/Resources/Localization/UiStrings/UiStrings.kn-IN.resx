@@ -2895,4 +2895,60 @@
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;ಇದಕ್ಕೆ ಅಂಟಿಸಿ: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>ಅಜ್ಞಾತ ದೋಷ {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>ನಿಮ್ಮ ಖರೀದಿಯನ್ನು ಪೂರ್ಣಗೊಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ಕಾರಣ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ಡೊಮೇನ್ ಸೇರಿಸಿ</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>ಪುಟ ಸೇರಿಸಿ</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>ಈ ಪುಟದ ಡೊಮೇನ್ ಅನ್ನು ತಿರಸ್ಕರಿಸಲಾಗಿದೆ. ಈ ಪುಟವನ್ನು ಅನುಮತಿಸಲು ನೀವು '{0}' ಗೆ ನಿರಾಕರಣೆಯನ್ನು ತೆಗೆದುಹಾಕಬೇಕಾಗುತ್ತದೆ.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>'{0}' ಡೊಮೇನ್ ಅನ್ನು ಈಗಾಗಲೇ ತಿರಸ್ಕರಿಸಲಾಗಿದೆ</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ಈ</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>ಈ ಪುಟವನ್ನು ಈಗಾಗಲೇ ತಿರಸ್ಕರಿಸಲಾಗಿದೆ.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>ಪುಟಗಳು</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>ಸಿಂಕ್ನ</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>ಮಾಂಕೈಪೇಸ್ಟ್‌ನ ಮತ್ತೊಂದು ಉದಾಹರಣೆ ಈಗಾಗಲೇ ಚಾಲನೆಯಲ್ಲಿದೆ. ನೀವು ಹೊಸ ನಿದರ್ಶನವನ್ನು ತೆರೆಯಲು ಬಯಸುತ್ತೀರಾ?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>ಸಂರಚಿಸು</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ಜಾಗತಿಕ ಮೌಸ್ ಮತ್ತು ಕೀಬೋರ್ಡ್ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ.
+
+ಸಿಸ್ಟಮ್ ಟ್ರೇ ಮೆನುವಿನಲ್ಲಿ ಜಾಗತಿಕ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ಈಗ ಸಕ್ರಿಯಗೊಳಿಸಬಹುದು</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ಜಾಗತಿಕ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ಜಾಗತಿಕ ಮೌಸ್ ಮತ್ತು ಕೀಬೋರ್ಡ್ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ಪ್ರಾಯೋಗಿಕ) ಜಾಗತಿಕ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ಜಾಗತಿಕ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ಟಾಗಲ್ ಮಾಡಿ</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>ಜಾಗತಿಕ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ಟಾಗಲ್ ಮಾಡಿ</value>
+  </data>
 </root>

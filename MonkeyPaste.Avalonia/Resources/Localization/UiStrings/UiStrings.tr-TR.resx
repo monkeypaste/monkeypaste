@@ -2895,4 +2895,60 @@ Tam geri yükleme garanti edilemez ve verilerin kaynağına bağlı olarak perfo
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Yapıştır: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Bilinmeyen hata {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Satın alma işleminiz tamamlanamadı. Sebep: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Etki alanı ekle</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Sayfa ekle</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Bu sayfanın etki alanı reddedilir. Bu sayfaya izin vermek için '{0}' reddetmeyi kaldırmanız gerekir.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>'{0}' alanı zaten reddedildi</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Alanlar</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Bu sayfa zaten reddedildi.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Sayfa</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Senkronize etmek</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Monkeycaste'in başka bir örneği zaten çalışıyor. Yeni bir örnek açmak istediğinizden emin misiniz?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Yapılandır</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Global fare ve klavye kısayolları devre dışı bırakıldı.
+
+Global kısayollar artık sistem tepsisi menüsünde etkinleştirilebilir</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Global kısayollar devre dışı: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Global fare ve klavye kısayolları etkinleştirildi.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Deneysel) Küresel kısayollar etkin: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Global kısayollarını kapatın</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Global kısayollarını değiştirin</value>
+  </data>
 </root>

@@ -1186,4 +1186,13 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>Wote</value>
   </data>
+  <data name="MpNotificationType_SingleInstanceWarning" xml:space="preserve">
+    <value>Onyo moja la mfano</value>
+  </data>
+  <data name="MpNotificationType_ModalShutdownLater" xml:space="preserve">
+    <value>Kufungiwa kwa Modal baadaye</value>
+  </data>
+  <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
+    <value>Kubadilisha ndoano za ulimwengu</value>
+  </data>
 </root>

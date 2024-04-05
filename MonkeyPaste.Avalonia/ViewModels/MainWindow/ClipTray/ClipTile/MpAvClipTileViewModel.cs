@@ -1507,8 +1507,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(CopyItemId, QueryOffsetIdx);
 
                 var pow = MpAvWindowManager.LocateWindow(this, scanDescendants: false) ?? CreatePopoutWindow(cached_view);
-                var test = pow.GetVisualDescendant<MpAvContentWebView>();
-                var ws = amt == MpAppendModeType.None ? new Size(500, 500) : new Size(350, 250);
+                var ws = amt == MpAppendModeType.None ? new Size(500,500) : new Size(350, 250);
                 pow.Width = ws.Width;
                 pow.Height = ws.Height;
                 pow.InvalidateMeasure();
@@ -1519,8 +1518,6 @@ namespace MonkeyPaste.Avalonia {
                     pow.Classes.Add("toast");
                     pow.Position = MpAvWindowPositioner.GetSystemTrayWindowPosition(pow);
                 }
-                // NOTE only silent lock for pop out
-                // when appending user likely wants external app fully visible
                 pow.Show();
             }
 

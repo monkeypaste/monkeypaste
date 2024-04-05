@@ -1186,4 +1186,13 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>Увесь</value>
   </data>
+  <data name="MpNotificationType_SingleInstanceWarning" xml:space="preserve">
+    <value>Попередження про один екземпляр</value>
+  </data>
+  <data name="MpNotificationType_ModalShutdownLater" xml:space="preserve">
+    <value>Модельне відключення пізніше</value>
+  </data>
+  <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
+    <value>Перемикайте глобальні гачки</value>
+  </data>
 </root>

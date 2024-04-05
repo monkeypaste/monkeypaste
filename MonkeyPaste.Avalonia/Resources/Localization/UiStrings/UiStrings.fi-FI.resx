@@ -2895,4 +2895,60 @@ Täydellistä palauttamista ei voida taata, ja se voi heikentää suorituskykyä
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Liitä: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Tuntematon virhe {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ostoasi ei voitu suorittaa. Syy: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Lisää verkkotunnus</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Lisää sivu</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Tämän sivun verkkotunnus hylätään. Tämän sivun sallimiseksi sinun on poistettava hylkääminen '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Verkkotunnus '{0}' on jo hylätty</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Verkkotunnukset</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Tämä sivu on jo hylätty.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Sivut</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synkronoida</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Toinen monkepaste -esimerkki on jo käynnissä. Oletko varma, että haluat avata uuden ilmentymän?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Määrittää</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globaalit hiiri- ja pikanäppäimet on poistettu käytöstä.
+
+Globaalit pikakuvakkeet voidaan nyt ottaa käyttöön järjestelmälokero -valikossa</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globaalit pikakuvakkeet poistettu käytöstä: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globaalit hiiri- ja pikanäppäimet on otettu käyttöön.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Kokeellinen) Globaalit pikakuvakkeet käytössä: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Vaihda globaalit pikakuvakkeet pois</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Vaihtaa globaaleja pikakuvakkeita jhk</value>
+  </data>
 </root>

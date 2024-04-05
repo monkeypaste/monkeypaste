@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>نامحدود - سالانه</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>انتشار اولیه</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>با این اشتراک دریافت خواهید کرد:
 ● ظرفیت نامحدود</value>
@@ -268,5 +265,17 @@
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>ذخیره سازی داده های محلی امن، امن و خصوصی با حفاظت از رمز عبور 2 فاکتور اختیاری</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste اکنون از این نسخه کاملاً رایگان است !!
+
+تمام محدودیت ها (در اشتراک های برنامه) حذف شده اند زیرا Monkeypaste اکنون در حال انتقال به یک پروژه منبع باز است. اگر علاقه مند به مشارکت هستید ، به GitHub ما (github.com/monkeypaste) توجه کنید.
+
+به روزرسانی ها:
+
+- تمام محدودیت های ظرفیت حذف شد!
+- بهبود ویرایشگر URL UI بهبود یافته
+- پشتیبانی پایه برای اجرای چندین نمونه از میمون
+- ویرایشگر ارزش مشترک جدید (در مرورگر افزونه در صورت لزوم)</value>
   </data>
 </root>

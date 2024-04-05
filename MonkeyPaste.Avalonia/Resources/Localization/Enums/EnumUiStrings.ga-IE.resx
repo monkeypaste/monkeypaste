@@ -1186,4 +1186,13 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>Gach</value>
   </data>
+  <data name="MpNotificationType_SingleInstanceWarning" xml:space="preserve">
+    <value>Rabhadh aon chás amháin</value>
+  </data>
+  <data name="MpNotificationType_ModalShutdownLater" xml:space="preserve">
+    <value>Múchadh modal níos déanaí</value>
+  </data>
+  <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
+    <value>Crúcaí Domhanda a scor</value>
+  </data>
 </root>

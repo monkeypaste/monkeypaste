@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common.Plugin;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +15,58 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
 
     public static class MpSyncManager {
+        /*
+        pref sync props
+
+        public interface MpISslInfo {
+            DateTime SslCertExpirationDateTime { get; set; }
+            string SyncCertPath { get; }
+            string SslCertSubject { get; }
+            string SyncCaPath { get; }
+            string SslCASubject { get; set; }
+            string SslPublicKey { get; set; }
+        }
+
+        [JsonIgnore]
+        public string SslAlgorithm { get; set; } = "SHA256WITHRSA";
+        [JsonIgnore]
+        public string SslCASubject { get; set; } = "CN=MPCA";
+        [JsonIgnore]
+        public string SslCertSubject { get; set; } = "CN=127.0.01";
+        [JsonIgnore]
+        public string SyncCertFolderPath => Path.Combine(MpPlatformHelpers.GetStorageDir(), "SyncCerts");
+        [JsonIgnore]
+        public string SyncCaPath => Path.Combine(SyncCertFolderPath, @"MPCA.cert");
+        [JsonIgnore]
+        public string SyncCertPath => Path.Combine(SyncCertFolderPath, @"MPSC.cert");
+        [JsonIgnore]
+        public string SyncServerProtocol => @"https://";
+        [JsonIgnore]
+        public string SyncServerHostNameOrIp => "monkeypaste.com";
+        [JsonIgnore]
+        public int SyncServerPort { get; set; } = 44376;
+        [JsonIgnore]
+        public string SyncServerEndpoint => $"{SyncServerProtocol}{SyncServerHostNameOrIp}:{SyncServerPort}";
+
+        
+
+        #region Encrytion
+
+        public string SslPrivateKey { get; set; } = string.Empty;
+
+        public string SslPublicKey { get; set; } = string.Empty;
+
+        public DateTime SslCertExpirationDateTime { get; set; } = DateTime.UtcNow.AddDays(-1);
+
+        #endregion
+
+        #region Db
+        #endregion
+
+        #region Sync
+        public int SyncPort { get; set; } = 11000;
+        #endregion
+        */
 
         #region Private Variables
 

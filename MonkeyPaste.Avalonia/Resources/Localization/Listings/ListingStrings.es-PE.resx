@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Ilimitado - anual</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Versión inicial</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Con esta suscripción recibirá:
 ● Capacidad ilimitada</value>
@@ -268,5 +265,17 @@ su portapapeles se rastrea o almacena en cualquier lugar más allá de su propia
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Almacenamiento local seguro y privado de datos con protección opcional de 2 factores con contraseña</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>¡Monkipaste ahora es completamente libre a partir de este lanzamiento!
+
+Todas las restricciones (en las suscripciones de aplicaciones) se han eliminado como MonkyEpaste ahora está haciendo la transición para convertirse en un proyecto de código abierto. Así que vigile nuestro GitHub (github.com/monkyypaste) si está interesado en contribuir.
+
+Actualizaciones:
+
+- ¡Todas las restricciones de capacidad eliminadas!
+- Mejoras de la interfaz de usuario del editor de URL rechazado
+- Soporte de línea de base para ejecutar múltiples instancias de Monkipaste
+- Nuevo editor de valor compartido (en el navegador de complementos donde corresponda)</value>
   </data>
 </root>

@@ -13,9 +13,7 @@
                 case MpShortcutType.ToggleRightClickPasteMode:
                 case MpShortcutType.ToggleListenToClipboard:
                 case MpShortcutType.ManuallyAddFromClipboard:
-#if DEBUG
-                case MpShortcutType.ToggleGlobalHooks: 
-#endif
+                case MpShortcutType.ToggleGlobalHooks:
 
                 // USER
                 case MpShortcutType.PasteCopyItem:

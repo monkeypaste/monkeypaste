@@ -2895,4 +2895,60 @@ Totale herstel kan nie gewaarborg word nie en kan prestasie verminder of selfs M
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Plak na: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Onbekende fout {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Jou aankoop kon nie voltooi word nie. Rede: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Voeg domein by</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Voeg bladsy by</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Die domein vir hierdie bladsy is afgekeur. Om hierdie bladsy toe te laat, sal jy die verwerping vir '{0}' moet verwyder.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Die domein '{0}' is reeds afgekeur</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domeine</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Hierdie bladsy is reeds afgekeur.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Bladsye</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinkroniseer</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Nog 'n voorbeeld van MonkeyPaste loop reeds. Is jy seker jy wil 'n nuwe instansie oopmaak?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Stel op</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globale muis- en sleutelbordkortpaaie is gedeaktiveer.
+
+Globale kortpaaie kan nou in die System Tray Menu geaktiveer word</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globale kortpaaie gedeaktiveer: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globale muis- en sleutelbordkortpaaie is geaktiveer.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimenteel) Globale kortpaaie geaktiveer: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Skakel globale kortpaaie af</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Skakel globale kortpaaie aan</value>
+  </data>
 </root>

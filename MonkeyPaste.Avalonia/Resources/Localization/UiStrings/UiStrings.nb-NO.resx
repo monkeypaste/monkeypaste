@@ -2895,4 +2895,60 @@ Total restaurering kan ikke garanteres og kan redusere ytelsen eller til og med 
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Lim inn til: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Ukjent feil {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Kjøpet ditt kunne ikke fullføres. Årsak: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Legg til domene</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Legg til side</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domenet for denne siden blir avvist. For å tillate denne siden må du fjerne avvisningen for '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domenet '{0}' er allerede avvist</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domener</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Denne siden er allerede avvist.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Sider</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synkronisering</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>En annen forekomst av MonkeyPaste kjører allerede. Er du sikker på at du vil åpne en ny forekomst?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurere</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globale snarveier for mus og tastatur er deaktivert.
+
+Globale snarveier kan nå aktiveres i systemskuffenyen</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globale snarveier deaktivert: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globale snarveier for mus og tastatur er aktivert.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimentell) Globale snarveier aktivert: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Veksler globale snarveier av</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Veksle globale snarveier på</value>
+  </data>
 </root>

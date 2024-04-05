@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Obegränsat - årligen</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Första frisläppande</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Med detta prenumeration får du:
 ● Obegränsad kapacitet</value>
@@ -268,5 +265,17 @@ ditt urklipp spåras eller lagras VAR som helst utanför din egen maskin. Period
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Trygg, säker och privat lokal datalagring med valfritt 2-faktors lösenordsskydd</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste är nu helt gratis från och med denna utgåva !!
+
+Alla begränsningar (i APP-prenumerationer) har tagits bort eftersom monkeypasta nu övergår till att bli ett open source-projekt. Så håll ett öga på vår github (github.com/monkeypaste) om du är intresserad av att bidra.
+
+Uppdateringar:
+
+- Alla kapacitetsbegränsningar borttagna!
+- Avvisade UI -förbättringar av UI
+- Baslinjestöd för att köra flera instanser av monkeypasta
+- Ny delad Value Editor (i plugin -webbläsare där det är tillämpligt)</value>
   </data>
 </root>

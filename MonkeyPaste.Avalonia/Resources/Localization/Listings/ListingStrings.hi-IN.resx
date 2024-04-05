@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>असीमित - वार्षिक</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>प्रारंभिक रिहाई</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>इस सदस्यता के साथ आपको प्राप्त होगा:
 ● असीमित क्षमता</value>
@@ -268,5 +265,17 @@
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>वैकल्पिक 2 के साथ सुरक्षित, सुरक्षित और निजी स्थानीय डेटा भंडारण - कारक पासवर्ड सुरक्षा</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste अब इस रिलीज के रूप में पूरी तरह से स्वतंत्र है !!
+
+सभी प्रतिबंध (ऐप सब्सक्रिप्शन में) को हटा दिया गया है क्योंकि मंकीपास्ट अब एक ओपन-सोर्स प्रोजेक्ट बनने के लिए संक्रमण कर रहा है। यदि आप योगदान देने में रुचि रखते हैं तो हमारे GitHub (github.com/monkeypaste) पर नज़र रखें।
+
+अपडेट:
+
+- सभी क्षमता प्रतिबंध हटा दिए गए!
+- URL संपादक UI सुधारों को खारिज कर दिया
+- मंकीपास्ट के कई उदाहरणों को चलाने के लिए बेसलाइन समर्थन
+- नया साझा मूल्य संपादक (प्लगइन ब्राउज़र में जहां लागू हो)</value>
   </data>
 </root>

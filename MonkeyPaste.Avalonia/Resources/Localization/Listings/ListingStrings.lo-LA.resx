@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>ບໍ່ຈໍາກັດ - ປີ</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>ການປ່ອຍເບື້ອງຕົ້ນ</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>ດ້ວຍການສະຫມັກສະມາຊິກນີ້ທ່ານຈະໄດ້ຮັບ:
 ●ຄວາມສາມາດບໍ່ຈໍາກັດ</value>
@@ -268,5 +265,17 @@
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>ການເກັບຮັກສາຂໍ້ມູນທ້ອງຖິ່ນທີ່ປອດໄພ, ປອດໄພແລະເອກະຊົນທີ່ມີທາງເລືອກ 2 - ການປົກປ້ອງລະຫັດຜ່ານປັດໄຈ</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste ດຽວນີ້ແມ່ນບໍ່ເສຍຄ່າທັງຫມົດຂອງການປ່ອຍຕົວນີ້ !!
+
+ຂໍ້ຈໍາກັດທັງຫມົດ (ໃນການສະຫມັກໃຊ້ແອັບ) ໄດ້ຖືກຍ້າຍອອກເປັນ Monkeypaste ຕອນນີ້ກໍາລັງປ່ຽນໄປເພື່ອກາຍເປັນໂຄງການເປີດ. ສະນັ້ນຈົ່ງຕິດຕາມເບິ່ງ GitHub ຂອງພວກເຮົາ (Githubub.com/mitheypaste) ຖ້າທ່ານສົນໃຈໃນການປະກອບສ່ວນ.
+
+ການປັບປຸງ:
+
+- ຂໍ້ຈໍາກັດດ້ານຄວາມສາມາດທັງຫມົດທີ່ຖືກຍ້າຍອອກ!
+- ການປັບປຸງ URL ບັນນາທິການ URL
+- ການສະຫນັບສະຫນູນພື້ນຖານສໍາລັບການແລ່ນຫລາຍໆກໍລະນີຂອງ monkeypaste
+- ບັນນາທິການມູນຄ່າທີ່ໃຊ້ຮ່ວມກັນໃຫມ່ (ໃນໂປແກຼມໂປແກຼມໂປແກຼມໂປແກຼມທີ່ໃຊ້ໄດ້)</value>
   </data>
 </root>

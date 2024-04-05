@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Neobmedzený - ročne</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Počiatočné vydanie</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>S týmto predplatným dostanete:
 ● Neobmedzená kapacita</value>
@@ -268,5 +265,17 @@ Vaša schránka je vždy sledovaná alebo uložená KDEKOĽVEK mimo vášho vlas
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Bezpečné, zabezpečené a súkromné lokálne ukladanie dát s voliteľnou 2-faktorovou ochranou heslom</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste je od tohto vydania teraz úplne zadarmo !!
+
+Všetky obmedzenia (v predplatných aplikáciách) boli odstránené, pretože MonkeyPaste teraz prechádza do projektu s otvoreným zdrojom. Takže sledujte náš github (github.com/monkeypaste), ak máte záujem o prispievanie.
+
+Aktualizácie:
+
+- Všetky obmedzenia kapacity odstránené!
+- Odmietnuté vylepšenia redaktora UIR UI
+- Základná podpora pre spustenie viacerých inštancií MonkeyPaste
+- Nový editor zdieľaných hodnôt (v prípade potreby v prehliadači doplnku)</value>
   </data>
 </root>

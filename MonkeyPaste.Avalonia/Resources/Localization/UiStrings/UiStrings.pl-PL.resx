@@ -2895,4 +2895,60 @@ Całkowite przywrócenie nie może być zagwarantowane i może zmniejszyć wydaj
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Wklej do: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Nieznany błąd {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Twój zakup nie mógł zostać zakończony. Powód: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Dodaj domenę</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Dodaj stronę</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domena tej strony jest odrzucona. Aby zezwolić na tę stronę, musisz usunąć odrzucenie dla „{0}”.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domena „{0}” jest już odrzucona</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domeny</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Ta strona jest już odrzucona.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Strony</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synchronizacja</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Kolejna instancja małpy już działa. Czy na pewno chcesz otworzyć nową instancję?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Skonfiguruj</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globalne skróty myszy i klawiatury zostały wyłączone.
+
+Globalne skróty można teraz włączyć w menu taca systemu</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Wyłączone skróty globalne: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globalne skróty myszy i klawiatury zostały włączone.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperymentalne) Globalne skróty włączone: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Wyłącz globalne skróty</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Włącz globalne skróty</value>
+  </data>
 </root>

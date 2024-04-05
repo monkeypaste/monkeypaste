@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Neierobežots - gada</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Sākotnējā atbrīvošana</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Ar šo abonementu jūs saņemsiet:
 ● Neierobežota ietilpība</value>
@@ -268,5 +265,17 @@ jūsu starpliktuve kādreiz tiek izsekota vai glabāta JEBKUR ārpus jūsu maš�
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Droša, droša un privāta lokālā datu glabāšana ar papildu 2 faktoru paroles aizsardzību</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste tagad ir pilnīgi bezmaksas kā šī izlaiduma dēļ !!
+
+Visi ierobežojumi (lietotņu abonementos) ir noņemti, jo pērtiķiem tagad pāriet uz atvērtā koda projektu. Tāpēc sekojiet līdzi mūsu github (github.com/monkeypaste), ja jūs interesē ieguldījums.
+
+Atjauninājumi:
+
+- Visi jaudas ierobežojumi noņemti!
+- Noraidītie URL redaktora UI uzlabojumi
+- Sākotnējais atbalsts vairāku pērtipāsta gadījumu vadīšanai
+- Jauns koplietošanas vērtības redaktors (attiecīgā gadījumā spraudņu pārlūkprogrammā)</value>
   </data>
 </root>

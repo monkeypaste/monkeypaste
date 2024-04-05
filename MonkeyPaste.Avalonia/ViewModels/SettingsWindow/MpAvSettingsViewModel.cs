@@ -1640,7 +1640,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Param Locators
         public Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameViewModelsByParamId(string paramId, MpSettingsFrameType frameType = MpSettingsFrameType.None) {
             if (Items == null) {

@@ -2895,4 +2895,60 @@ furedback@monkeypaste.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;ஒட்டுக: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>அறியப்படாத பிழை {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>உங்கள் கொள்முதல் முடிக்க முடியவில்லை. காரணம்: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>டொமைனைச் சேர்க்கவும்</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>பக்கத்தைச் சேர்க்கவும்</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>இந்த பக்கத்திற்கான டொமைன் நிராகரிக்கப்பட்டுள்ளது. இந்த பக்கத்தை அனுமதிக்க நீங்கள் '{0}' க்கான நிராகரிப்பை அகற்ற வேண்டும்.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>'{0}' டொமைன் ஏற்கனவே நிராகரிக்கப்பட்டுள்ளது</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>களங்கள்</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>இந்த பக்கம் ஏற்கனவே நிராகரிக்கப்பட்டுள்ளது.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>பக்கங்கள்</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>ஒத்திசைவு</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>குரங்கு சுவையின் மற்றொரு நிகழ்வு ஏற்கனவே இயங்குகிறது. நீங்கள் ஒரு புதிய நிகழ்வைத் திறக்க விரும்புகிறீர்களா?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>உள்ளமைக்கவும்</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>உலகளாவிய சுட்டி மற்றும் விசைப்பலகை குறுக்குவழிகள் முடக்கப்பட்டுள்ளன.
+
+கணினி தட்டு மெனுவில் உலகளாவிய குறுக்குவழிகள் இப்போது இயக்கப்படலாம்</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>உலகளாவிய குறுக்குவழிகள் முடக்கப்பட்டன: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>உலகளாவிய சுட்டி மற்றும் விசைப்பலகை குறுக்குவழிகள் இயக்கப்பட்டுள்ளன.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(சோதனை) உலகளாவிய குறுக்குவழிகள் இயக்கப்பட்டன: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>உலகளாவிய குறுக்குவழிகளை மாற்றவும்</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>உலகளாவிய குறுக்குவழிகளை மாற்றவும்</value>
+  </data>
 </root>

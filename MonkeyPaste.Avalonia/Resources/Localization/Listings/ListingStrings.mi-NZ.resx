@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Mutunga kore - tau</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Te tuku tuatahi</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Ma tenei ohaurunga ka whiwhi koe:
 ● Te kaha kore mutunga</value>
@@ -268,5 +265,17 @@ Kua aroturukitia tō papatopenga, kua penapenatia rānei te ANYWHERE ki tua atu 
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Rokiroki raraunga paetata haumaru, haumaru, tūmataiti hoki me te parenga kupuhipa 2 - āhuatanga</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Ko te Monkeypaste inaianei te tino kore utu i tenei tukunga !!
+
+Ko nga tikanga katoa (i roto i nga ohaurunga App kua tangohia i te Monkeypaste inaianei kei te whakawhiti i te kaupapa tuwhera. Na kia mau tonu to kanohi ki to maatau GitHub (GitHub.com/monkeypaste) Mena kei te hiahia koe ki te koha.
+
+Nga Whakahou:
+
+- Kua nekehia nga tikanga katoa!
+- Kua paopao i te URL Whakatikatika UI
+- Tautoko Bayline mo te whakahaere i nga waa maha o te monkeypaste
+- Ko te ētita uara hou (i roto i te pūtirotiro mono i reira e tika ana)</value>
   </data>
 </root>

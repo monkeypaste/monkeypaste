@@ -2895,4 +2895,60 @@ FEEDBOWY@monkeypue.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;ᠨᠠᠭᠠᠯᠲᠠ ᠄ &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt; ᠃&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Үл мэдэгдэх алдаа {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Таны худалдан авалт дуусах боломжгүй байсан. Шалтгаан: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Нэмэх</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Хуудааны нэмэх</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Энэ хуудасны домэйн татгалзсан байна. Энэ хуудсыг зөвшөөрөхийн тулд та '{0}' -ийн татгалзлыг арилгах хэрэгтэй болно.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Домэйн '{0}' аль хэдийн татгалзсан байна</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домайн</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Энэ хуудсыг аль хэдийн татгалзсан байна.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Ойсний хуудас</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Нэмэх</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Сармагчингийн бас нэг жишээ аль хэдийн ажиллаж байгаа. Та шинэ жишээ нээхийг хүсч байна уу?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Эвлүүл</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Дэлхийн хулгана ба гарын товчлолыг идэвхгүй болгосон байна.
+
+Дэлхийн товчлолуудыг одоо системийн токс цэсээр идэвхжүүлж болно</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Глобал товчлолууд идэвхгүй болсон: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Глобал хулгана ба гарын товчлол идэвхжсэн байна.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Туршилтын) Глобал товчлолыг идэвхжүүлсэн: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Глобал товчлолуудыг унтраах</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Globle Globle товчлолуудыг асаана уу</value>
+  </data>
 </root>

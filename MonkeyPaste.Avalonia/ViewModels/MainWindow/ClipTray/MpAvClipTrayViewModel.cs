@@ -4826,6 +4826,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleIsAppPausedCommand => new MpCommand<object>(
             (args) => {
                 IsIgnoringClipboardChanges = !IsIgnoringClipboardChanges;
+                MpMessenger.SendGlobal(MpMessageType.ClipboardListenerToggled);
+
                 if (args != null) {
                     // sys tray click
                     return;

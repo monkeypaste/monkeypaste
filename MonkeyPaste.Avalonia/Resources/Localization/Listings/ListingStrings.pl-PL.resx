@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Nieograniczony - co roku</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Pierwsze wydanie</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Dzięki tej subskrypcji otrzymasz:
 ● Nieograniczona pojemność</value>
@@ -268,5 +265,17 @@ Twój schowek jest zawsze śledzony lub przechowywany GDZIEKOLWIEK poza Twoim ko
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Bezpieczne i prywatne lokalne przechowywanie danych z opcjonalną 2-składnikową ochroną hasłem</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste jest teraz całkowicie wolny od tego wydania !!
+
+Wszystkie ograniczenia (w subskrypcjach aplikacji) zostały usunięte, ponieważ Monkeypaste przechodzi teraz na projekt typu open source. Więc miej oko na nasz github (github.com/monkeypaste), jeśli chcesz się przyczynić.
+
+Aktualizacje:
+
+- Wszystkie ograniczenia pojemności usunięte!
+- Ulepszenia interfejsu użytkownika edytora URL odrzuconych URL
+- Bazowa obsługa uruchamiania wielu instancji małpy
+- Nowy edytor współdzielonej wartości (w stosownych przypadkach w przeglądarce wtyczki)</value>
   </data>
 </root>

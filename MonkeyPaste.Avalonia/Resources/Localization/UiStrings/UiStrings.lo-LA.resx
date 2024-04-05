@@ -2895,4 +2895,60 @@ monkeypaste ໃນອຸປະກອນ
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>ຂໍ້ຜິດພາດທີ່ບໍ່ຮູ້ຈັກ {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>ການຊື້ຂອງທ່ານບໍ່ສາມາດເຮັດສໍາເລັດໄດ້. ເຫດຜົນ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ເພີ່ມໂດເມນ</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Add Page</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>ໂດເມນສໍາລັບຫນ້ານີ້ຖືກປະຕິເສດ. ເພື່ອອະນຸຍາດໃຫ້ຫນ້ານີ້ທ່ານຈະຕ້ອງກໍາຈັດການປະຕິເສດສໍາລັບ '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>ໂດເມນ '{0}' ຖືກປະຕິເສດແລ້ວ</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ເຂດນ້ໍາ</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>ຫນ້ານີ້ຖືກປະຕິເສດແລ້ວ.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>ຫນ້າທີ່</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>ການລະເມີດ</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>ຕົວຢ່າງອື່ນຂອງ monkeypaste ແມ່ນແລ່ນແລ້ວ. ທ່ານແນ່ໃຈບໍ່ວ່າທ່ານຕ້ອງການເປີດຕົວຢ່າງໃຫມ່?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>ການຕັ້ງຄ່າ</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ທາງລັດແລະແປ້ນພິມທົ່ວໂລກແລະແປ້ນພິມໄດ້ຖືກປິດໃຊ້ງານແລ້ວ.
+
+ໄລຍະທໍາອິດຂອງໂລກສາມາດເປີດໃຊ້ງານໃນເມນູ Tray System</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ທາງລັດໃນໂລກພິການ: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ທາງລັດແລະແປ້ນພິມທົ່ວໂລກແລະຄີບອດໄດ້ຖືກເປີດໃຊ້ງານ.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ທົດລອງ) ການໃຊ້ລັດໂລກທີ່ໃຊ້ໃນໂລກ: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ສະຫຼັບສັ້ນໃນທາງລັດໂລກໄປ</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>ສະຫຼັບທາງລັດທົ່ວໂລກກ່ຽວກັບ</value>
+  </data>
 </root>

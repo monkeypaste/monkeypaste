@@ -20,6 +20,7 @@
     <sys:String x:Key="MegaPhoneImage">avares://MonkeyPaste.Avalonia/Assets/Images/megaphone.png</sys:String>
     <sys:String x:Key="LifePreserverImage">avares://MonkeyPaste.Avalonia/Assets/Images/lifepreserver.png</sys:String>
     <sys:String x:Key="ReadImage">avares://MonkeyPaste.Avalonia/Assets/Images/read.png</sys:String>
+    <sys:String x:Key="MonkeyPausedImage">avares://MonkeyPaste.Avalonia/Assets/Images/monkeypaused.png</sys:String>
     <sys:String x:Key="MonkeyUpdateImage">avares://MonkeyPaste.Avalonia/Assets/Images/monkeyupdate.png</sys:String>
     <sys:String x:Key="RateImage">avares://MonkeyPaste.Avalonia/Assets/Images/rate.png</sys:String>
     <sys:String x:Key="SelectImage">avares://MonkeyPaste.Avalonia/Assets/Images/select.png</sys:String>

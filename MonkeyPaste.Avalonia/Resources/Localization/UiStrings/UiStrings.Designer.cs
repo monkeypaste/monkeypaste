@@ -3685,11 +3685,67 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Global mouse and keyboard shortcuts have been disabled. 
+        ///
+        ///Global Shortcuts can now be enabled in the System Tray Menu.
+        /// </summary>
+        public static string GlobalHooksPausedText {
+            get {
+                return ResourceManager.GetString("GlobalHooksPausedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global Shortcuts disabled: {0}.
+        /// </summary>
+        public static string GlobalHooksPausedTitle {
+            get {
+                return ResourceManager.GetString("GlobalHooksPausedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global mouse and keyboard shortcuts have been enabled..
+        /// </summary>
+        public static string GlobalHooksResumedText {
+            get {
+                return ResourceManager.GetString("GlobalHooksResumedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Experimental) Global Shortcuts enabled: {0}.
+        /// </summary>
+        public static string GlobalHooksResumedTitle {
+            get {
+                return ResourceManager.GetString("GlobalHooksResumedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} - Help.
         /// </summary>
         public static string HelpWindowTitle {
             get {
                 return ResourceManager.GetString("HelpWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Global Shortcuts Off.
+        /// </summary>
+        public static string HookPauseLabel {
+            get {
+                return ResourceManager.GetString("HookPauseLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Global Shortcuts On.
+        /// </summary>
+        public static string HookResumeLabel {
+            get {
+                return ResourceManager.GetString("HookResumeLabel", resourceCulture);
             }
         }
         

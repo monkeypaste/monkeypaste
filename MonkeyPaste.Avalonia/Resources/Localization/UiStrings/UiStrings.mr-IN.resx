@@ -2895,4 +2895,60 @@
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;पेस्ट करा: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>अज्ञात त्रुटी {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>आपली खरेदी पूर्ण होऊ शकली नाही. कारणः {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>डोमेन जोडा</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>पृष्ठ जोडा</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>या पृष्ठाचे डोमेन नाकारले आहे. या पृष्ठास अनुमती देण्यासाठी आपल्याला '{0}' साठी नकार काढण्याची आवश्यकता असेल.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>'{0}' डोमेन आधीच नाकारले गेले आहे</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>डोमेन</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>हे पृष्ठ आधीच नाकारले गेले आहे.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>पृष्ठे</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>समक्रमण</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>वानरपास्टचे आणखी एक उदाहरण आधीच चालू आहे. आपणास खात्री आहे की आपण एक नवीन उदाहरण उघडू इच्छिता?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>कॉन्फिगरेशन</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ग्लोबल माउस आणि कीबोर्ड शॉर्टकट अक्षम केले गेले आहेत.
+
+सिस्टम ट्रे मेनूमध्ये आता ग्लोबल शॉर्टकट सक्षम केले जाऊ शकतात</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ग्लोबल शॉर्टकट अक्षम: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ग्लोबल माउस आणि कीबोर्ड शॉर्टकट सक्षम केले आहेत.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(प्रायोगिक) ग्लोबल शॉर्टकट सक्षम केले: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ग्लोबल शॉर्टकट बंद टॉगल</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>जागतिक शॉर्टकट वर टॉगल करा</value>
+  </data>
 </root>

@@ -2895,4 +2895,60 @@ Restaurarea totală nu poate fi garantată și poate reduce performanța sau chi
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Lipire în: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Eroare necunoscută {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Achiziția dvs. nu a putut fi finalizată. Motiv: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Adăugați domeniu</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Adauga pagina</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domeniul pentru această pagină este respins. Pentru a permite această pagină, va trebui să eliminați respingerea pentru „{0}”.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domeniul '{0}' este deja respins</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domenii</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Această pagină este deja respinsă.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Pagini</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sincronizare</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>O altă instanță a Monkeypaste este deja rulată. Ești sigur că vrei să deschizi o nouă instanță?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Configurați</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Comenzile rapide globale de mouse și tastatură au fost dezactivate.
+
+Comenzile rapide globale pot fi acum activate în meniul tăvii de sistem</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Comenzi rapide globale dezactivate: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Au fost activate comenzile rapide de mouse și tastatură globală.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimental) comenzi rapide globale activate: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Comutați comenzile rapide globale</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Comutați comenzi rapide globale</value>
+  </data>
 </root>

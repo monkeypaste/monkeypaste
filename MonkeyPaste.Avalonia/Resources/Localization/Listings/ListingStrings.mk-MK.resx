@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Неограничено - годишно</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Првично издание</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Со оваа претплата ќе ја добиете:
 ● Неограничен капацитет</value>
@@ -268,5 +265,17 @@
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Безбедно, безбедно и приватно локално складирање на податоци со опционална 2 - заштита на фактор лозинка</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste сега е целосно бесплатен од ова издание !!
+
+Сите ограничувања (во претплати за апликации) се отстранети бидејќи MonkeyPaste сега преминува да стане проект со отворен извор. Затоа, внимавајте на нашиот github (github.com/monkeypaste) ако сте заинтересирани да придонесете.
+
+Ажурирања:
+
+- Отстранети сите ограничувања на капацитетот!
+- Подобрувања на UI -уредникот на URL -уредот
+- Основна поддршка за водење на повеќе случаи на MonkeyPaste
+- Нов уредник на заедничка вредност (во прелистувачот на додатоци каде што е применливо)</value>
   </data>
 </root>

@@ -3014,4 +3014,26 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="CommonConfigureLabel" xml:space="preserve">
     <value>Configure</value>
   </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Global mouse and keyboard shortcuts have been disabled. 
+
+Global Shortcuts can now be enabled in the System Tray Menu</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Global Shortcuts disabled: {0}</value>
+    <comment>Test Result</comment>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Global mouse and keyboard shortcuts have been enabled.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimental) Global Shortcuts enabled: {0}</value>
+    <comment>Test Result</comment>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Toggle Global Shortcuts Off</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Toggle Global Shortcuts On</value>
+  </data>
 </root>

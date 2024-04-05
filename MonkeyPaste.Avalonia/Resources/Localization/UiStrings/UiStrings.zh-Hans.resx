@@ -2895,4 +2895,60 @@ feathback@monkeypaste.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;粘贴到： &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>未知错误{0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>您的购买无法完成。原因：{0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>添加域</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>添加页面</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>此页面的域被拒绝。要允许此页面，您将需要删除“ {0}”的拒绝。</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>域'{0}'已经被拒绝</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>域</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>此页面已经被拒绝。</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>页面</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>同步</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>MonkePaste的另一个实例已经在运行。您确定要打开一个新实例吗？</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>配置</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>全局鼠标和键盘快捷键已被禁用。
+
+现在可以在系统托盘菜单中启用全局快捷方式</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>禁用全局快捷方式：{0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>全局鼠标和键盘快捷键已启用。</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>（实验）启用了全局快捷方式：{0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>切换全局快捷方式</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>切换全局快捷方式</value>
+  </data>
 </root>

@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Isiyo na kikomo - kila mwaka</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Kutolewa kwa awali</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Na usajili huu utapokea:
 ● Uwezo usio na kikomo</value>
@@ -268,5 +265,17 @@ ubao wako wa kunakili unafuatiliwa au kuhifadhiwa popote zaidi ya mashine yako m
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Hifadhi salama, salama na ya kibinafsi ya data ya ndani na hiari 2 - ulinzi wa nenosiri</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste sasa ni bure kabisa kama ya kutolewa hii !!
+
+Vizuizi vyote (katika usajili wa APP) vimeondolewa kama Monkeypaste sasa inabadilika kuwa mradi wa chanzo wazi. Kwa hivyo weka macho kwenye github yetu (github.com/monkeypaste) ikiwa una nia ya kuchangia.
+
+Sasisho:
+
+- Vizuizi vyote vya uwezo vimeondolewa!
+- Uboreshaji wa UI wa URL uliokataliwa
+- Msaada wa kimsingi kwa kuendesha hali nyingi za Monkeypaste
+- Mhariri mpya wa Thamani ya Pamoja (katika kivinjari cha programu -jalizi inapotumika)</value>
   </data>
 </root>

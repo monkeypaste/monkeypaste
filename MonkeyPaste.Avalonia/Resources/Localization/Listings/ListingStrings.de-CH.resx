@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Unbegrenzt - jährlich</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Erstveröffentlichung</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Mit diesem Abonnement erhalten Sie:
 ● Unbegrenzte Kapazität</value>
@@ -268,5 +265,17 @@ Ihre Zwischenablage wird immer IRGENDWO außerhalb Ihres eigenen Computers verfo
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Sichere und private lokale Datenspeicherung mit optionalem 2-Faktor-Passwortschutz</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste ist ab dieser Version komplett kostenlos!! 
+
+Alle Einschränkungen (in App-Abonnements) wurden entfernt, da MonkeyPaste jetzt zu einem Open-Source-Projekt wird. Behalten Sie also unser GitHub (github.com/monkeypaste) im Auge, wenn Sie daran interessiert sind, einen Beitrag zu leisten. 
+
+Aktualisierungen: 
+
+- alle Kapazitätsbeschränkungen entfernt! 
+- abgelehnte Verbesserungen der Benutzeroberfläche des URL-Editors 
+- grundlegende Unterstützung für die Ausführung mehrerer Instanzen von MonkeyPaste 
+- neuer gemeinsamer Werteditor (ggf. im Plugin-Browser)</value>
   </data>
 </root>

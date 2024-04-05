@@ -228,9 +228,6 @@ Atimpate ਸਮੱਗਰੀ ਦੇ 1000 ਕਲਿੱਪਾਂ
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>ਅਸੀਮਿਤ - ਸਾਲਾਨਾ</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>ਸ਼ੁਰੂਆਤੀ ਰਿਹਾਈ</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>ਇਸ ਗਾਹਕੀ ਦੇ ਨਾਲ ਤੁਸੀਂ ਪ੍ਰਾਪਤ ਕਰੋਗੇ:
 ● ਅਸੀਮਤ ਸਮਰੱਥਾ</value>
@@ -268,5 +265,17 @@ Atimpate ਸਮੱਗਰੀ ਦੇ 1000 ਕਲਿੱਪਾਂ
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>ਵਿਕਲਪਿਕ 2 - ਫੈਕਟਰ ਪਾਸਵਰਡ ਸੁਰੱਖਿਆ ਦੇ ਨਾਲ ਸੁਰੱਖਿਅਤ, ਸੁਰੱਖਿਅਤ ਅਤੇ ਨਿੱਜੀ ਸਥਾਨਕ ਡਾਟਾ ਸਟੋਰੇਜ</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>ਇਸ ਰੀਲੀਜ਼ ਦੇ ਅਨੁਸਾਰ MonkeKepaste ਹੁਣ ਪੂਰੀ ਤਰਾਂ ਨਾਲ ਮੁਫਤ ਹੈ !!
+
+ਸਾਰੀਆਂ ਪਾਬੰਦੀਆਂ (ਐਪ ਗਾਹਕੀ ਦੇ ਵਿੱਚ) ਨੂੰ ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ ਕਿਉਂਕਿ MonkePaste ਹੁਣ ਇੱਕ ਓਪਨ-ਸੋਰਸ ਪ੍ਰੋਜੈਕਟ ਬਣਨ ਵਿੱਚ ਤਬਦੀਲ ਕਰ ਰਿਹਾ ਹੈ. ਇਸ ਲਈ ਸਾਡੇ ਗੀਥੌਬ (ਗਿਥਬੈਂਸੀ / ਐਮਮੋਐਕਸਾਈਟ) 'ਤੇ ਨਜ਼ਰ ਰੱਖੋ ਜੇ ਤੁਸੀਂ ਯੋਗਦਾਨ ਵਿਚ ਦਿਲਚਸਪੀ ਰੱਖਦੇ ਹੋ.
+
+ਅਪਡੇਟਸ:
+
+- ਸਮਰੱਥਾ ਦੀਆਂ ਸਾਰੀਆਂ ਪਾਬੰਦੀਆਂ ਹਟਾਈਆਂ!
+- ਅਸਵੀਕਾਰ ਕੀਤਾ URL ਸੰਪਾਦਕ UI ਸੁਧਾਰ
+- ਬਾਂਕੀਪਾਸਟ ਦੀਆਂ ਕਈ ਮਾਮਲਿਆਂ ਵਿੱਚ ਬੇਸਲਾਈਨ ਸਹਾਇਤਾ
+- ਨਵਾਂ ਸਾਂਝਾ ਮੁੱਲ ਸੰਪਾਦਕ (ਪਲੱਗਇਨ ਬਰਾ ser ਜ਼ਰ ਵਿੱਚ ਜਿੱਥੇ ਲਾਗੂ ਹੁੰਦਾ ਹੈ)</value>
   </data>
 </root>

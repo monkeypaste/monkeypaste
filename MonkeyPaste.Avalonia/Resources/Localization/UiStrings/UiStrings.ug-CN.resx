@@ -2895,4 +2895,60 @@ tempo@Monkepaste.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;چاپلاش: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>نامەلۇم خاتالىق {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>سېتىۋېلىش تاماملانمىدى. سەۋەبى: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>دائىرە قوشۇڭ</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>بەت قوشۇڭ</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>بۇ بەتنىڭ تور بېتى رەت قىلىندى. بۇ بەتكە يول قويۇش ئۈچۈن «{0}» ئۈچۈن رەت قىلىشنى چىقىرىۋېتىشىڭىز كېرەك.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>{0} 'ئاللىقاچان رەت قىلىندى</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>دائىرە</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>بۇ بەت ئاللىقاچان رەت قىلىندى.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>بەت</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>ماسقەدەملەش</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Moneypaste نىڭ يەنە بىر مىسالى ئاللىقاچان ئىجرا بولۇۋاتىدۇ. يېڭى مىسال ئاچماقچىمۇ?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>سەپلەڭ</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>يەر شارى چاشقىنەك ۋە كۇنۇپكا تاختىسىنىڭ تېزلەتمىسى ئىناۋەتسىز ھالەتتە.
+
+يەرلىك تېزلەتمىلەر سىستېمىنى سىستېما تەخسىگە تىزىملاتقىلى بولىدۇ</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>يەرشارى تېزلەتمىسى چەكلەنگەن: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>يەر شارى مائېپ / كۇنۇپكا تاختىسىنىڭ تېزلەتمىسى قوزغىتىلدى.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(تەجرىبە) يەر شارى تېزلەتمىلەر قوزغىتىلدى: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>يەرشارىنىڭ تېزلەتمىسى</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>FORGLE FORGENT NOWN STORT</value>
+  </data>
 </root>

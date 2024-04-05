@@ -2895,4 +2895,60 @@
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;paste ወደ &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>ያልታወቀ ስህተት {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>ግዢዎ ሊጠናቀቅ አልቻለም። ምክንያት፡ {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ጎራ አክል</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>ገጽ ያክሉ</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>የዚህ ገጽ ጎራ ተቀባይነት አላገኘም። ይህን ገጽ ለመፍቀድ የ«{0}»ን ውድቅ ማድረግ ያስፈልግዎታል።</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>የ«{0}» ጎራ አስቀድሞ ውድቅ ተደርጓል</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ጎራዎች</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>ይህ ገጽ አስቀድሞ ተቀባይነት አላገኘም።</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>ገፆች</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>አመሳስል</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>ሌላ የ MonkeyPaste ምሳሌ አስቀድሞ እየሰራ ነው። እርግጠኛ ነዎት አዲስ ምሳሌ መክፈት ይፈልጋሉ?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>አዋቅር</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>የአለምአቀፍ መዳፊት እና የቁልፍ ሰሌዳ አቋራጮች ተሰናክለዋል።
+
+አለምአቀፍ አቋራጮች አሁን በስርዓት ትሪው ሜኑ ውስጥ ሊነቁ ይችላሉ።</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ሁለንተናዊ አቋራጮች ተሰናክለዋል፡ {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>የአለምአቀፍ መዳፊት እና የቁልፍ ሰሌዳ አቋራጮች ነቅተዋል።</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(የሙከራ) አለምአቀፍ አቋራጮች ነቅተዋል፡ {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ዓለም አቀፍ አቋራጮችን ቀይር</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>አለምአቀፍ አቋራጮችን አብራ</value>
+  </data>
 </root>

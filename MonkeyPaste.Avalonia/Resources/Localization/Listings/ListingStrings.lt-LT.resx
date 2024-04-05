@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Neribotas - kasmet</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Pradinis išleidimas</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Su šia prenumerata gausite:
 ● Neribotas pajėgumas</value>
@@ -268,5 +265,17 @@ jūsų mainų sritis visada stebima arba saugoma BET KUR, išskyrus jūsų kompi
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Saugus, patikimas ir privatus vietinis duomenų saugojimas su pasirenkama 2 faktorių slaptažodžio apsauga</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste dabar yra visiškai nemokama nuo šios laidos !!
+
+Visi apribojimai (programų prenumeratos) buvo pašalinti, nes „MonkeYPaste“ dabar pereina prie atvirojo kodo projekto. Taigi stebėkite mūsų „GitHub“ (github.com/monkeypaste), jei jus domina prisidėjimas.
+
+Atnaujinimai:
+
+- Nuimti visi pajėgumų apribojimai!
+- Atmesti URL redaktoriaus UI patobulinimai
+- Pradinė parama paleisti kelis „MonkeYPaste“ egzempliorius
+- Naujas bendro naudojimo vertės redaktorius (papildinio naršyklėje, jei taikoma)</value>
   </data>
 </root>

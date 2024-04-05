@@ -2895,4 +2895,60 @@
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;ને ચોંટાડો: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>અજ્ unknown ાત ભૂલ {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>તમારી ખરીદી પૂર્ણ થઈ શકી નથી. કારણ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ડોમેન ઉમેરો</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>પાનું ઉમેરો</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>આ પૃષ્ઠ માટેનું ડોમેન નકારી કા .વામાં આવ્યું છે. આ પૃષ્ઠને મંજૂરી આપવા માટે તમારે '{0}' માટે અસ્વીકાર દૂર કરવાની જરૂર રહેશે.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>ડોમેન '{0}' પહેલેથી જ નકારી કા .વામાં આવ્યું છે</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>હદ</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>આ પૃષ્ઠ પહેલાથી જ નકારી કા .્યું છે.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>પાના</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>સમતળ</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>વાંદરાનો બીજો દાખલો પહેલેથી જ ચાલી રહ્યો છે. શું તમને ખાતરી છે કે તમે કોઈ નવું દાખલો ખોલવા માંગો છો?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>પસંદ કરવું</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ગ્લોબલ માઉસ અને કીબોર્ડ શ shortc ર્ટકટ્સ અક્ષમ કરવામાં આવ્યા છે.
+
+ગ્લોબલ શ shortc ર્ટકટ્સ હવે સિસ્ટમ ટ્રે મેનૂમાં સક્ષમ કરી શકાય છે</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>વૈશ્વિક શ shortc ર્ટકટ્સ અક્ષમ: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ગ્લોબલ માઉસ અને કીબોર્ડ શ shortc ર્ટકટ્સ સક્ષમ કરવામાં આવ્યા છે.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(પ્રાયોગિક) વૈશ્વિક શ shortc ર્ટકટ્સ સક્ષમ: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ગ્લોબલ શોર્ટકટ્સ બંધ</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>ગ્લોબલ શ shortc ર્ટકટ્સ પર ટ g ગલ કરવું</value>
+  </data>
 </root>

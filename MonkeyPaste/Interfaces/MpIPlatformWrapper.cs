@@ -9,7 +9,6 @@ namespace MonkeyPaste {
         MpIPointerSimulator PointerSimulator { get; set; }
         MpIClipboard DeviceClipboard { get; set; }
         MpIDefaultDataCreator DefaultDataCreator { get; set; }
-        MpISslInfo SslInfo { get; set; }
         MpIWelcomeSetupInfo WelcomeSetupInfo { get; set; }
         MpIUserDeviceInfo ThisDeviceInfo { get; set; }
         MpIShare ShareTools { get; set; }

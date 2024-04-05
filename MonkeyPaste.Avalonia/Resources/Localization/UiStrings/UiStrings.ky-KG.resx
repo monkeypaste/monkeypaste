@@ -2895,4 +2895,60 @@ feedback@monkeypaste.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Паста: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Белгисиз ката {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Сатып алууңуз аяктаган жок. Себеби: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Домен кошуу</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Барак кошуу</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Бул баракча үчүн домен четке кагылды. Бул баракчага уруксат берүү үчүн сиз "{0}" үчүн баш тартууну алып салышыңыз керек.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Домен '{0}' домени буга чейин четке кагылды</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домендер</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Бул барак мурунтан эле четке кагылды.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Барактар</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Шайкештештирүү</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>MonkeyPaste дагы бир мисалы буга чейин иштеп жатат. Сиз жаңы инстанцияны ачкыңыз келеби?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Конфигурациялоо</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Дүйнөлүк чычкан жана баскычтоптун жарлыктары өчүрүлгөн.
+
+Дүйнөлүк жарлыктарды азыр тутумдагы жайма менюсуна иштетсе болот</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Глобалдык жарлыктар иштен чыгарылган: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Дүйнөлүк чычкан жана баскычтоптун жарлыктары иштетилген.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Эксперименталдык) Глобалдык жарлыктар иштетилген: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Дүйнөлүк жарлыктарды өчүрүү</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Дүйнөлүк жарлыктарды күйгүзүү</value>
+  </data>
 </root>

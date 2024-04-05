@@ -228,9 +228,6 @@ a 1000 تک مواد کے کلپس
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>لامحدود - سالانہ</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>ابتدائی رہائی</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>اس رکنیت کے ساتھ آپ کو ملے گا:
 lim لامحدود صلاحیت</value>
@@ -268,5 +265,17 @@ lim لامحدود صلاحیت</value>
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>اختیاری 2 - فیکٹر پاس ورڈ کی حفاظت کے ساتھ محفوظ، محفوظ اور نجی مقامی ڈیٹا اسٹوریج</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>مانکی پیسٹ اب اس ریلیز کے مطابق مکمل طور پر آزاد ہے !!
+
+تمام پابندیاں (ایپ سبسکرپشنز میں) کو ہٹا دیا گیا ہے کیونکہ مانکی پیسٹ اب اوپن سورس پروجیکٹ بننے میں تبدیل ہو رہا ہے۔ لہذا اگر آپ تعاون کرنے میں دلچسپی رکھتے ہیں تو ہمارے گٹ ہب (github.com/monkeypaste) پر نگاہ رکھیں۔
+
+تازہ ترین:
+
+- صلاحیت کی تمام پابندیاں ہٹا دی گئیں!
+- مسترد شدہ یو آر ایل ایڈیٹر UI اصلاحات
+- مانکی پیسٹ کی متعدد مثالوں کو چلانے کے لئے بیس لائن سپورٹ
+- نیا مشترکہ ویلیو ایڈیٹر (پلگ ان براؤزر میں جہاں قابل اطلاق ہے)</value>
   </data>
 </root>

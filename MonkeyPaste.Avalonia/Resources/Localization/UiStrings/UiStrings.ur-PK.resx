@@ -2895,4 +2895,60 @@
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;پیسٹ کریں: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>نامعلوم غلطی {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>آپ کی خریداری مکمل نہیں ہوسکی۔ وجہ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ڈومین شامل کریں</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>صفحہ شامل کریں</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>اس صفحے کے لئے ڈومین کو مسترد کردیا گیا ہے۔ اس صفحے کی اجازت دینے کے ل you آپ کو '{0}' کے لئے مسترد کرنے کی ضرورت ہوگی۔</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>ڈومین '{0}' پہلے ہی مسترد ہوچکا ہے</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ڈومینز</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>اس صفحے کو پہلے ہی مسترد کردیا گیا ہے۔</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>صفحات</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>مطابقت پذیری</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>مانکی پیسٹ کی ایک اور مثال پہلے ہی چل رہی ہے۔ کیا آپ واقعی کوئی نئی مثال کھولنا چاہتے ہیں؟</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>تشکیل</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>عالمی ماؤس اور کی بورڈ شارٹ کٹ غیر فعال کردیئے گئے ہیں۔
+
+اب سسٹم ٹرے مینو میں عالمی شارٹ کٹ کو فعال کیا جاسکتا ہے</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>عالمی شارٹ کٹ غیر فعال: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>عالمی ماؤس اور کی بورڈ شارٹ کٹ کو فعال کردیا گیا ہے۔</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(تجرباتی) عالمی شارٹ کٹ فعال: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ٹوگل گلوبل شارٹ کٹ آف</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>گلوبل شارٹ کٹ آن ٹوگل کریں</value>
+  </data>
 </root>

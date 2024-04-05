@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>შეუზღუდავი - ყოველწლიურად</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>საწყისი გამოშვება</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>ამ გამოწერით მიიღებთ:
 ● შეუზღუდავი სიმძლავრე</value>
@@ -268,5 +265,17 @@
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>უსაფრთხო, უსაფრთხო და პირადი ადგილობრივი მონაცემთა შენახვა სურვილისამებრ 2 - ფაქტორიანი პაროლის დაცვა</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste ახლა უკვე უფასოა ამ გამოშვების შემდეგ !!
+
+ყველა შეზღუდვა (აპლიკაციების ხელმოწერებში) ამოღებულია, რადგან Monkeypaste ახლა გადადის ღია წყაროს პროექტი. ასე რომ, გაითვალისწინეთ ჩვენი github (github.com/monkeypaste), თუ თქვენ დაინტერესებული ხართ წვლილის შეტანით.
+
+განახლებები:
+
+- ყველა მოცულობის შეზღუდვა ამოღებულია!
+- უარი ეთქვა URL რედაქტორის UI გაუმჯობესებას
+- საბაზისო მხარდაჭერა Monkeypaste– ის მრავალჯერადი ინსტანციისთვის
+- ახალი საერთო ღირებულების რედაქტორი (მოდულების ბრაუზერში, სადაც ეს შესაძლებელია)</value>
   </data>
 </root>

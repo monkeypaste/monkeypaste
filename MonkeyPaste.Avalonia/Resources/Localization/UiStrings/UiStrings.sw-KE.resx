@@ -2895,4 +2895,60 @@ Marejesho ya jumla hayawezi kuhakikishiwa na inaweza kupunguza utendaji au hata 
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Weka kwenye: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Kosa lisilojulikana {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ununuzi wako haukuweza kukamilika. Sababu: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Ongeza kikoa</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Ongeza ukurasa</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Kikoa cha ukurasa huu kimekataliwa. Ili kuruhusu ukurasa huu utahitaji kuondoa kukataliwa kwa '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Kikoa '{0}' tayari kimekataliwa</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Vikoa</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Ukurasa huu tayari umekataliwa.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Kurasa</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Usawazishaji</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Mfano mwingine wa Monkeypaste tayari unaendelea. Je! Una uhakika unataka kufungua mfano mpya?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Sanidi</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Njia za njia za mkato za ulimwengu na kibodi zimezimwa.
+
+Njia za mkato za ulimwengu sasa zinaweza kuwezeshwa kwenye menyu ya tray ya mfumo</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Njia za mkato za ulimwengu zimezimwa: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Njia za njia za mkato za ulimwengu na kibodi zimewezeshwa.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Majaribio) Njia za mkato za ulimwengu zimewezeshwa: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Kubadilisha njia za mkato za ulimwengu</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Kubadilisha njia za mkato za ulimwengu</value>
+  </data>
 </root>

@@ -2895,4 +2895,60 @@ Pemulihan total tidak dapat dijamin dan dapat mengurangi kinerja atau bahkan cra
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Tempel ke: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Kesalahan tidak diketahui {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Pembelian Anda tidak dapat diselesaikan. Alasan: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Tambahkan domain</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Tambah halaman</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domain untuk halaman ini ditolak. Untuk mengizinkan halaman ini, Anda harus menghapus penolakan untuk '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domain '{0}' sudah ditolak</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domain</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Halaman ini sudah ditolak.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Halaman</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinkronisasi</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Contoh lain dari monkeypaste sudah berjalan. Apakah Anda yakin ingin membuka contoh baru?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurasikan</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Pintasan global mouse dan keyboard telah dinonaktifkan.
+
+Pintasan global sekarang dapat diaktifkan di menu baki sistem</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Pintasan global dinonaktifkan: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Pintasan global mouse dan keyboard telah diaktifkan.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimental) Pintasan global diaktifkan: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Mematikan jalan pintas global</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Mengaktifkan jalan pintas global</value>
+  </data>
 </root>

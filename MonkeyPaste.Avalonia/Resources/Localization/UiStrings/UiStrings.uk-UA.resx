@@ -2895,4 +2895,60 @@
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Вставити до: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Невідома помилка {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Вашу покупку не вдалося завершити. Причина: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Додати домен</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Додати сторінку</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Домен для цієї сторінки відхилений. Щоб дозволити цю сторінку, вам потрібно буде видалити відхилення для '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Домен '{0}' вже відхилений</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домени</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Ця сторінка вже відхилена.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Сторінки</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Синхронізувати</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Ще один екземпляр MonkeyPaste вже працює. Ви впевнені, що хочете відкрити новий екземпляр?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Налаштувати</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Глобальні миші та ярлики клавіатури вимкнено.
+
+Глобальні ярлики тепер можна включити в меню системного лотка</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Глобальні ярлики вимкнено: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Увімкнено глобальні миші та клавіатури.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Експериментальні) Глобальні ярлики увімкнено: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Перемикайте глобальні ярлики</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Перемикайте глобальні ярлики</value>
+  </data>
 </root>

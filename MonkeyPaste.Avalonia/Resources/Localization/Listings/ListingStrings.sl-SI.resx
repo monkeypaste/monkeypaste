@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Neomejeno - letno</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Začetna izdaja</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>S to naročnino boste prejeli:
 ● Neomejena zmogljivost</value>
@@ -268,5 +265,17 @@ Odložišče je vedno sledeno ali shranjeno KJERKOLI zunaj vašega lastnega stro
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Varna, zaščitena in zasebna lokalna shramba podatkov z izbirno 2-faktorsko zaščito z geslom</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste je od te izdaje zdaj povsem brezplačen !!
+
+Vse omejitve (v naročnini na aplikacije) so bile odstranjene, saj MonkeyPaste zdaj prehaja na to, da postane odprtokodni projekt. Zato bodite pozorni na naš github (github.com/monkeypaste), če vas zanima prispevanje.
+
+Posodobitve:
+
+- Odstranjene vse omejitve zmogljivosti!
+- zavrnjene izboljšave UI urejevalnika URL -jev
+- Osnovna podpora za izvajanje več primerkov MonkeyPaste
+- Nov urejevalnik vrednosti (v brskalniku vtičnikov, kjer je primerno)</value>
   </data>
 </root>

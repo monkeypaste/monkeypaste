@@ -2895,4 +2895,60 @@
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;붙여넣기: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>알 수없는 오류 {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>구매를 완료 할 수 없습니다. 이유 : {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>도메인 추가</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>페이지 추가</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>이 페이지의 도메인이 거부됩니다. 이 페이지를 허용하려면 '{0}'에 대한 거부를 제거해야합니다.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>도메인 '{0}'은 이미 거부되었습니다.</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>도메인</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>이 페이지는 이미 거부되었습니다.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>페이지</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>동조</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Monkeypaste의 또 다른 사례가 이미 실행 중입니다. 새 인스턴스를 열고 싶습니까?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>구성</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>글로벌 마우스 및 키보드 바로 가기가 비활성화되었습니다.
+
+이제 시스템 트레이 메뉴에서 글로벌 바로 가기를 활성화 할 수 있습니다.</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>글로벌 바로 가기 비활성화 : {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>글로벌 마우스 및 키보드 바로 가기가 활성화되었습니다.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(실험) 글로벌 바로 가기 활성화 : {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>글로벌 단축키를 전환합니다</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>글로벌 단축키를 전환합니다</value>
+  </data>
 </root>

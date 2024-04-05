@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Tidak Terbatas - Tahunan</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Peluncuran pertama</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Dengan langganan ini Anda akan menerima:
 ● Kapasitas tidak terbatas</value>
@@ -268,5 +265,17 @@ clipboard Anda pernah dilacak atau disimpan DI MANA SAJA di luar mesin Anda send
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Penyimpanan data lokal yang aman, terlindungi, dan pribadi dengan perlindungan kata sandi 2 faktor opsional</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste sekarang sepenuhnya gratis pada rilis ini !!
+
+Semua pembatasan (dalam langganan aplikasi) telah dihapus karena monkeypaste sekarang bertransisi untuk menjadi proyek open-source. Jadi perhatikan github kami (github.com/monkeypaste) jika Anda tertarik untuk berkontribusi.
+
+Pembaruan:
+
+- Semua pembatasan kapasitas dihapus!
+- Peningkatan UI UI yang ditolak
+- Dukungan dasar untuk menjalankan beberapa contoh monkeypaste
+- Editor Nilai Bersama Baru (di browser plugin jika berlaku)</value>
   </data>
 </root>

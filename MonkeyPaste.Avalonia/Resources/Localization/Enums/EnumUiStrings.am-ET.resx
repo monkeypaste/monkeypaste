@@ -1197,4 +1197,13 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>ሁሉም</value>
   </data>
+  <data name="MpNotificationType_SingleInstanceWarning" xml:space="preserve">
+    <value>የነጠላ ምሳሌ ማስጠንቀቂያ</value>
+  </data>
+  <data name="MpNotificationType_ModalShutdownLater" xml:space="preserve">
+    <value>ሞዳል በኋላ መዝጋት</value>
+  </data>
+  <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
+    <value>ግሎባል መንጠቆዎችን ቀያይር</value>
+  </data>
 </root>

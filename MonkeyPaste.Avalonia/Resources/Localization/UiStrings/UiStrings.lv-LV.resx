@@ -2895,4 +2895,60 @@ Pilnīgu atjaunošanu nevar garantēt, un tā var samazināt veiktspēju vai pat
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Ielīmēt uz: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Nezināma kļūda {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Jūsu pirkumu nevarēja pabeigt. Iemesls: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Pievienot domēnu</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Pievienot lapu</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Šīs lapas domēns tiek noraidīts. Lai atļautu šo lapu, jums būs jānoņem noraidījums par “{0}”.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domēns '{0}' jau ir noraidīts</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Sfēras</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Šī lapa jau ir noraidīta.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Lappuses</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinhronizēt</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Vēl viens Monkeypaste gadījums jau darbojas. Vai esat pārliecināts, ka vēlaties atvērt jaunu gadījumu?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurēt</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globālās peles un tastatūras saīsnes ir atspējoti.
+
+Globālās saīsnes tagad var iespējot Sistēmas paplātes izvēlnē</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globālie saīsnes ir atspējoti: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Ir iespējoti globālās peles un tastatūras saīsnes.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimentāli) iespējoti globālie saīsnes: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Pārslēgt globālos saīsnes</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Pārslēdziet globālos saīsnes</value>
+  </data>
 </root>

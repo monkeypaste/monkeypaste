@@ -2895,4 +2895,60 @@ La restauració total no es pot garantir i pot reduir el rendiment o fins i tot 
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Enganxeu-lo a: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Error desconegut {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>No s'ha pogut completar la teva compra. Motiu: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Afegeix domini</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Afegeix pàgina</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>El domini d'aquesta pàgina està rebutjat. Per permetre aquesta pàgina, haureu d'eliminar el rebuig de "{0}".</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>El domini "{0}" ja està rebutjat</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Dominis</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Aquesta pàgina ja està rebutjada.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Pàgines</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sincronitzar</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Una altra instància de MonkeyPaste ja s'està executant. Esteu segur que voleu obrir una instància nova?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Configura</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Les dreceres globals del ratolí i del teclat s'han desactivat.
+
+Les dreceres globals ara es poden activar al menú de la safata del sistema</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Dreceres globals desactivades: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>S'han habilitat les dreceres globals del ratolí i del teclat.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>Dreceres globals (experimentals) activades: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Desactiva les dreceres globals</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Activa o desactiva les dreceres globals</value>
+  </data>
 </root>

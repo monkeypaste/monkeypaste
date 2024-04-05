@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Piiramatu - aastas</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Esialgne väljalase</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Selle tellimusega saate:
 ● Piiramatu võimsus</value>
@@ -268,5 +265,17 @@ teie lõikelauda jälgitakse või salvestatakse alati kõikjal väljaspool teie 
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Turvaline, turvaline ja privaatne kohalik andmesalvestus valikulise 2 - teguri paroolikaitsega</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Ahvüüpasta on nüüd selle väljaande ajal täiesti tasuta !!
+
+Kõik piirangud (rakenduste tellimustes) on eemaldatud, kuna ahveypaste on nüüd üleminekul avatud lähtekoodiga projektiks. Nii et jälgige meie GitHubi (github.com/monkeypaste), kui olete huvitatud panustamisest.
+
+Värskendused:
+
+- Kõik võimsuse piirangud eemaldati!
+- tagasi lükatud URL -i toimetaja kasutajaliidese parandused
+- algtaseme tugi ahveypaste mitme juhtumi käitamiseks
+- Uus jagatud väärtuse redaktor (vajaduse korral pistikprogrammi brauseris)</value>
   </data>
 </root>

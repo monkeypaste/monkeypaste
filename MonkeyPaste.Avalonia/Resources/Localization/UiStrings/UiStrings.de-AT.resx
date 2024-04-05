@@ -2895,4 +2895,60 @@ Eine vollständige Wiederherstellung kann nicht garantiert werden und kann je na
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Einfügen in: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Unbekannter Fehler {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ihr Kauf konnte nicht abgeschlossen werden. Grund: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Domäne hinzufügen</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Seite hinzufügen</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Die Domäne für diese Seite wurde abgelehnt. Um diese Seite zuzulassen, müssen Sie die Ablehnung für „{0}“ entfernen.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Die Domäne „{0}“ wurde bereits abgelehnt</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domänen</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Diese Seite wurde bereits abgelehnt.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Seiten</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synchronisieren</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Eine andere Instanz von MonkeyPaste wird bereits ausgeführt. Möchten Sie wirklich eine neue Instanz öffnen?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurieren</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globale Maus- und Tastaturkürzel wurden deaktiviert. 
+
+Globale Kürzel können jetzt im Taskleistenmenü aktiviert werden.</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globale Verknüpfungen deaktiviert: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globale Maus- und Tastaturkürzel wurden aktiviert.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimentell) Globale Verknüpfungen aktiviert: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Globale Tastenkombinationen ausschalten</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Globale Tastenkombinationen einschalten</value>
+  </data>
 </root>

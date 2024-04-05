@@ -2895,4 +2895,60 @@ feedble@monkeypaste.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Επικόλληση σε: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Άγνωστο σφάλμα {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Η αγορά σας δεν ήταν δυνατό να ολοκληρωθεί. Αιτία: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Προσθήκη τομέα</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Προσθήκη σελίδας</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Ο τομέας για αυτήν τη σελίδα απορρίπτεται. Για να επιτρέψετε αυτήν τη σελίδα, θα πρέπει να καταργήσετε την απόρριψη για το '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Ο τομέας "{0}" έχει ήδη απορριφθεί</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Τομείς</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Αυτή η σελίδα έχει ήδη απορριφθεί.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Σελίδες</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Συγχρονισμός</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Μια άλλη παρουσία του MonkeyPaste εκτελείται ήδη. Είστε βέβαιοι ότι θέλετε να ανοίξετε μια νέα παρουσία;</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Διαμορφώστε</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Οι καθολικές συντομεύσεις ποντικιού και πληκτρολογίου έχουν απενεργοποιηθεί.
+
+Οι καθολικές συντομεύσεις μπορούν πλέον να ενεργοποιηθούν στο μενού του δίσκου συστήματος</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Οι καθολικές συντομεύσεις είναι απενεργοποιημένες: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Οι καθολικές συντομεύσεις ποντικιού και πληκτρολογίου έχουν ενεργοποιηθεί.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Πειραματικά) Ενεργοποιήθηκαν οι καθολικές συντομεύσεις: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Απενεργοποιήστε τις καθολικές συντομεύσεις</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Ενεργοποίηση καθολικών συντομεύσεων</value>
+  </data>
 </root>

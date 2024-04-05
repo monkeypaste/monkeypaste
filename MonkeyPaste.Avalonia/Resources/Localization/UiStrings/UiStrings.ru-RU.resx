@@ -2895,4 +2895,60 @@
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Вставить в: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Неизвестная ошибка {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ваша покупка не может быть завершена. Причина: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Добавить домен</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Добавить страницу</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Домен для этой страницы отклоняется. Чтобы разрешить эту страницу, вам нужно будет удалить отклонение для '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Домен '{0}' уже отклоняется</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домены</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Эта страница уже отвергается.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Страницы</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Синхронизированный</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Другой экземпляр Monkeypaste уже работает. Вы уверены, что хотите открыть новый экземпляр?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Настройка</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Глобальные сочетания мышей и клавиш были отключены.
+
+Глобальные ярлыки теперь могут быть включены в меню системного лотка</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Глобальные ярлыки отключены: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Глобальные сочетания мыши и клавиатуры были включены.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Экспериментальный) Глобальные ярлыки включены: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Переключить глобальные ярлыки</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Переключить глобальные ярлыки на</value>
+  </data>
 </root>

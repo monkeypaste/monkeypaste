@@ -51,7 +51,6 @@ namespace MonkeyPaste.Avalonia {
         public MpIShortcutGestureLocator ShortcutGestureLocator { get; set; }
 
         #endregion 
-        public MpISslInfo SslInfo { get; set; }
         public MpIWelcomeSetupInfo WelcomeSetupInfo { get; set; }
         public MpIUserDeviceInfo ThisDeviceInfo { get; set; }
 
@@ -139,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
 
             DefaultDataCreator = new MpAvDefaultDataCreator();
             UserAgentProvider = MpAvPlainHtmlConverter.Instance;
-            SslInfo = MpAvPrefViewModel.Instance;
+
             WelcomeSetupInfo = MpAvPrefViewModel.Instance;
             ThisDeviceInfo = MpAvPrefViewModel.Instance;
             ContentViewLocator = new MpAvContentViewLocator();
@@ -196,7 +195,7 @@ namespace MonkeyPaste.Avalonia {
             UserCultureInfo = MpAvCurrentCultureViewModel.Instance;
 
             SingleInstanceTools = new MpAvAppInstanceTools();
-            if(!SingleInstanceTools.DoInstanceCheck()) {
+            if(!SingleInstanceTools.IsFirstInstance) {
                 // this is not the first instance
                 var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                     notificationType: MpNotificationType.SingleInstanceWarning,

@@ -2895,4 +2895,60 @@ feedback@monkeyptaste.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Қою: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>{0} белгісіз қате</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Сіздің сатып алуыңыз аяқталмады. Себеп: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Домен қосыңыз</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Бет қосу</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Бұл беттің домені қабылданбады. Бұл беттің рұқсат беру үшін '{0}' үшін қабылдамауды жою қажет.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>'{0} домені қабылданбады</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домендер</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Бұл бет бұрын қабылданбады.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Беттер</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Ынталандыру</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Монкефондағы тағы бір мысал қазірдің өзінде жұмыс істеп жатыр. Сіз жаңа дананы ашқыңыз келе ме?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Теңшеу</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Ғаламдық тінтуір және пернелер тіркесімдері өшірілген.
+
+Енді ғаламдық төте жолдарды жүйелік науа мәзірінде қосу мүмкін</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Ғаламдық сілтемелер өшірілген: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Ғаламдық тінтуір және пернелер тіркесімдері қосылды.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Эксперименттік) ғаламдық төте жолдар қосылған: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Ғаламдық төте жолдарды өшіру</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Ғаламдық тіркесімдерді қосыңыз</value>
+  </data>
 </root>

@@ -79,7 +79,8 @@ namespace MonkeyPaste.Avalonia {
                             new string[] { "88832664-68f5-4c4e-9c3a-4a34851d3f3f", "Control+Shift+W", MpShortcutType.ClearPinTray.ToString(), MpRoutingType.Internal.ToString()},
 #if DEBUG
                             new string[] { "15f42684-7e50-40fc-8dc8-6a1a6b1bed3f", "F4", MpShortcutType.ToggleGlobalHooks.ToString(), MpRoutingType.Override.ToString(),"False","False"},
-
+#else
+                            new string[] { "15f42684-7e50-40fc-8dc8-6a1a6b1bed3f", string.Empty, MpShortcutType.ToggleGlobalHooks.ToString(), MpRoutingType.Override.ToString(),"False","False"},
 #endif
                     };
                 }

@@ -2895,4 +2895,60 @@ feedback@monkeypaste.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;วางบน: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>ข้อผิดพลาดที่ไม่รู้จัก {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>การซื้อของคุณไม่สมบูรณ์ เหตุผล: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>เพิ่มโดเมน</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>เพิ่มหน้า</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>โดเมนสำหรับหน้านี้ถูกปฏิเสธ ในการอนุญาตให้หน้านี้คุณจะต้องลบการปฏิเสธสำหรับ '{0}'</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>โดเมน '{0}' ถูกปฏิเสธแล้ว</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>โดเมน</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>หน้านี้ถูกปฏิเสธแล้ว</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>หน้า</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>ซิงค์</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>อีกตัวอย่างหนึ่งของ monkeypaste กำลังทำงานอยู่แล้ว แน่ใจหรือว่าต้องการเปิดอินสแตนซ์ใหม่?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>กำหนดค่า</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ทางลัดของเมาส์และแป้นพิมพ์ทั่วโลกถูกปิดใช้งาน
+
+สามารถเปิดใช้งานทางลัดทั่วโลกในเมนูถาดระบบ</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ปิดใช้งานทางลัดทั่วโลก: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>มีการเปิดใช้งานทางลัดเมาส์และแป้นพิมพ์ทั่วโลกแล้ว</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ทดลอง) เปิดใช้งานทางลัดทั่วโลก: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>สลับทางลัดทั่วโลก</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>สลับทางลัดทั่วโลก</value>
+  </data>
 </root>

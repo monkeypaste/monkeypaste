@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Limitsiz - illik</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>İlkin buraxılış</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Bu abunə ilə alacaqsınız:
 ● Limitsiz tutum</value>
@@ -268,5 +265,17 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>İsteğe bağlı 2 faktorlu parol mühafizəsi ilə təhlükəsiz, təhlükəsiz və özəl yerli məlumat saxlama</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste indi bu buraxılışdan etibarən tamamilə pulsuzdur!
+
+MonkeyPaste indi açıq mənbəli layihəyə çevrildiyi üçün bütün məhdudiyyətlər (tətbiq abunəliklərində) silindi. Odur ki, töhfə verməkdə maraqlısınızsa, github-a (github.com/monkeypaste) diqqət yetirin.
+
+Yeniləmələr:
+
+- bütün tutum məhdudiyyətləri aradan qaldırıldı!
+- rədd edilmiş Url redaktoru UI təkmilləşdirmələri
+- MonkeyPaste-in çoxsaylı nümunələrini işə salmaq üçün baza dəstəyi
+- yeni paylaşılan dəyər redaktoru (mümkün olduqda plagin brauzerində)</value>
   </data>
 </root>

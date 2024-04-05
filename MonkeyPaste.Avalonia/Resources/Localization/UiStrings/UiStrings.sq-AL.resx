@@ -2895,4 +2895,60 @@ Restaurimi total nuk mund të garantohet dhe mund të zvogëlojë performancën 
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Paste për: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Gabim i panjohur {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Blerja juaj nuk mund të përfundonte. Arsyeja: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Shto skafinë</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Shto faqe</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domain për këtë faqe është refuzuar. Për të lejuar këtë faqe do t'ju duhet të hiqni refuzimin për '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domain '{0}' tashmë është refuzuar</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Fusha</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Kjo faqe është refuzuar tashmë.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Faqe</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinkronizoj</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Një shembull tjetër i MonkeyPaste tashmë po funksionon. A jeni i sigurt që doni të hapni një shembull të ri?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfiguroj</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Shkurtoret globale të miut dhe tastierave janë çaktivizuar.
+
+Shkurtoret globale tani mund të aktivizohen në menunë e tabaka të sistemit</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Shkurtore globale me aftësi të kufizuara: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Shkurtoret globale të miut dhe tastierave janë aktivizuar.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimentale) Shkurtore globale të aktivizuara: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Ndaloni shkurtesat globale</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Ndërroni shkurtesat globale në</value>
+  </data>
 </root>

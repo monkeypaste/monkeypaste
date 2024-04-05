@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Rajoittamaton - vuosittain</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Alkuperäinen julkaisu</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Tällä tilauksella saat:
 ● Rajoittamaton kapasiteetti</value>
@@ -268,5 +265,17 @@ leikepöytääsi seurataan tai tallennetaan MIHIN tahansa oman koneesi ulkopuole
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Turvallinen, suojattu ja yksityinen paikallinen tietojen tallennus valinnaisella 2-vaiheisella salasanasuojauksella</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkepaste on nyt täysin vapaa tästä julkaisusta !!
+
+Kaikki rajoitukset (APP-tilauksissa) on poistettu, koska Monkeypaste on nyt siirtymässä avoimen lähdekoodin projektiin. Joten pidä silmällä GitHubia (github.com/monkeypaste), jos olet kiinnostunut osallistumaan.
+
+Päivitykset:
+
+- Kaikki kapasiteettirajoitukset on poistettu!
+- hylätty URL -URL -editorin käyttöliittymäparannukset
+- Perustuki monkeparten useiden tapausten suorittamiseen
+- Uusi jaettu arvoeditori (laajennusselaimessa tarvittaessa)</value>
   </data>
 </root>

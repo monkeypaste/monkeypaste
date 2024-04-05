@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Neomezené - ročně</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>První vydání</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>S tímto předplatným obdržíte:
 ● Neomezená kapacita</value>
@@ -268,5 +265,17 @@ vaše schránka je vždy sledována nebo uložena KDEKOLI mimo váš vlastní po
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Bezpečné, zabezpečené a soukromé místní úložiště dat s volitelnou dvoufaktorovou ochranou heslem</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste je nyní od tohoto vydání zcela zdarma!!
+
+Všechna omezení (v předplatných aplikací) byla odstraněna, protože MonkeyPaste nyní přechází na open-source projekt. Pokud tedy máte zájem přispět, sledujte náš github (github.com/monkeypaste).
+
+Aktualizace:
+
+- všechna omezení kapacity odstraněna!
+- odmítnutá vylepšení uživatelského rozhraní editoru URL
+- základní podpora pro spouštění více instancí MonkeyPaste
+- nový editor sdílených hodnot (v prohlížeči pluginů, kde je to možné)</value>
   </data>
 </root>

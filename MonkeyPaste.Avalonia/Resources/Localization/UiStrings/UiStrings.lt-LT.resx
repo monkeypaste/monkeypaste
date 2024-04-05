@@ -2895,4 +2895,60 @@ Visiškas atkūrimas negali būti garantuotas ir gali sumažinti našumą arba n
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Įklijuoti į: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Nežinoma klaida {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Jūsų pirkinys negalėjo būti baigtas. Priežastis: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Pridėti domeną</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Pridėti puslapį</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Šio puslapio domenas atmetamas. Norėdami leisti šį puslapį, turėsite pašalinti „{0}“ atmetimą.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domenas '{0}' jau atmetamas</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domenai</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Šis puslapis jau atmetamas.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Puslapiai</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinchronizavimas</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Kitas „MonkeYPaste“ pavyzdys jau veikia. Ar tikrai norite atidaryti naują egzempliorių?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigūruokite</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Pasaulinės pelės ir klaviatūros nuorodos buvo išjungtos.
+
+Dabar „System Tray“ meniu galima įjungti globalius nuorodas</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Pasauliniai nuorodos išjungti: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Buvo įjungti pasaulinės pelės ir klaviatūros nuorodos.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimentiniai) Įgalintos visuotinės nuorodos: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Perjunkite pasaulinius nuorodas</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Įjunkite pasaulinius klavišus</value>
+  </data>
 </root>

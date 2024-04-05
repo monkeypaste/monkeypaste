@@ -2895,4 +2895,60 @@ A restauração total não pode ser garantida e pode reduzir o desempenho ou at�
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Cole em: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Erro desconhecido {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Sua compra não pôde ser completada. Motivo: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Adicionar domínio</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Adicionar Página</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>O domínio para esta página é rejeitado. Para permitir esta página, você precisará remover a rejeição para '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>O domínio '{0}' já foi rejeitado</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domínios</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Esta página já foi rejeitada.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Páginas</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sincronizar</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Outra instância de MonkeyyySaste já está em execução. Tem certeza de que deseja abrir uma nova instância?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Configure</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Os atalhos globais de mouse e teclado foram desativados.
+
+Os atalhos globais agora podem ser ativados no menu da bandeja do sistema</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Atalhos globais desativados: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Os atalhos globais de mouse e teclado foram ativados.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimental) Atalhos globais habilitados: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Tonquela os atalhos globais</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Alternar os atalhos globais em</value>
+  </data>
 </root>

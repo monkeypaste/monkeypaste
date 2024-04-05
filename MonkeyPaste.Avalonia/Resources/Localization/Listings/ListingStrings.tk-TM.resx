@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Çäklendirilmedik - ýyllyk</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Başlangyç neşir</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Bu abunalygy bilen alarsyňyz:
 ● Çäklendirilmedik kuwwat</value>
@@ -268,5 +265,17 @@ klipiňiz hiç haçan öz maşynyňyzdan başga islendik ýerde yzarlanýar ýa-
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Saýlama 2 - faktorly parol goragy bilen howpsuz, howpsuz we hususy ýerli maglumat saklaýyş</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Maýminiň güýji indi bu boşadylyşy ýaly mugt. !!
+
+Allhli çäklendirmeler (APP abunalaryna) "ApplePase" ady bilen aýryldy Indi açyk çeşme boýunça açyk taslama öwrülmegi üçin çykyş edildi. Şonuň üçin seretmek bilen gyzyklanmak isleýän bolsaňyz, "Github.com" -a gözüme göz aýlaň.
+
+Täzelenýär:
+
+- ähli mümkinçilik çäklendirmeleri aýryldy!
+- URL redaktory UI Redaktor UI gowulandyrmalar
+- Maýmilpaste birnäçe infeltiň köp ädimini işlemek üçin esasy goldaw
+- Täze umumy baha redaktory (ulanylýan ýerlerde plugin brauzerinde)</value>
   </data>
 </root>

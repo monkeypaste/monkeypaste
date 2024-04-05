@@ -44,6 +44,8 @@ namespace MonkeyPaste {
 
         VersionInfoChanged,
 
+        GlobalHooksToggled,
+
         StartupComplete,
 
         ShortcutAssignmentActivated,
@@ -126,6 +128,8 @@ namespace MonkeyPaste {
         DropWidgetOpened,
 
         TagSelectionChanged,
+
+        ClipboardListenerToggled,
 
         SelectNextMatch,
         SelectPreviousMatch,

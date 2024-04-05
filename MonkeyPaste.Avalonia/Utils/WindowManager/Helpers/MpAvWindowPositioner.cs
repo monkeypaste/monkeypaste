@@ -72,6 +72,13 @@ namespace MonkeyPaste.Avalonia {
             }
             return pos;
         }
+
+        public static double GetWindowTitleHeight(Window w) {
+            if (w == null) {
+                return 0;
+            }
+            return w.FrameSize.HasValue ? w.FrameSize.Value.Height - w.ClientSize.Height : 0;
+        }
         #endregion
 
         #region Properties
@@ -99,12 +106,6 @@ namespace MonkeyPaste.Avalonia {
             return new Size(width, height + th);
         }
 
-        private static double GetWindowTitleHeight(Window w) {
-            if (w == null) {
-                return 0;
-            }
-            return w.FrameSize.HasValue ? w.FrameSize.Value.Height - w.ClientSize.Height : 0;
-        }
 
         #endregion
 

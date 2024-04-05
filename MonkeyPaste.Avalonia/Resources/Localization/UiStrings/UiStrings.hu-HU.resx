@@ -2895,4 +2895,60 @@ A teljes helyreállítás nem garantálható, és az adatok forrásától függ�
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Beillesztés: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Ismeretlen hiba {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>A vásárlásod nem hajtható végre. Ok: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Adjon hozzá tartományt</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Oldal hozzáadása</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Az oldal domaint elutasítják. Az oldal engedélyezéséhez el kell távolítania a '{0}' elutasítást.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>A '{0}' domaint már elutasították</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domainek</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Ezt az oldalt már elutasították.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Oldalak</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Szinkronizál</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>A Monkepaste újabb példája már fut. Biztos benne, hogy új példányt szeretne megnyitni?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Beállítás</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>A globális egér- és billentyűparancsok le vannak tiltva.
+
+A globális parancsikonok már engedélyezhetők a rendszer tálca menüben</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globális parancsikonok letiltva: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>A globális egér- és billentyűparancsok engedélyezve vannak.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Kísérleti) Globális parancsikonok engedélyezve: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>A globális parancsikonok kapcsolása kikapcsolva</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Váltás a globális parancsikonok</value>
+  </data>
 </root>

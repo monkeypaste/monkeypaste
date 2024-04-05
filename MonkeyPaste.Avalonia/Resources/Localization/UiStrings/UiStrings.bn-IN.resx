@@ -2895,4 +2895,60 @@
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;পেস্ট করুন: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>অজানা ত্রুটি {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>আপনার ক্রয় সম্পূর্ণ করা যায়নি. কারণ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ডোমেন যোগ করুন</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>পাতা যোগ কর</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>এই পৃষ্ঠার জন্য ডোমেন প্রত্যাখ্যান করা হয়েছে. এই পৃষ্ঠাটিকে অনুমতি দেওয়ার জন্য আপনাকে '{0}'-এর জন্য প্রত্যাখ্যানটি সরাতে হবে৷</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>ডোমেন '{0}' ইতিমধ্যেই প্রত্যাখ্যান করা হয়েছে৷</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ডোমেইন</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>এই পৃষ্ঠাটি ইতিমধ্যেই প্রত্যাখ্যান করা হয়েছে।</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>পাতা</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>সুসংগত</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>MonkeyPaste এর আরেকটি উদাহরণ ইতিমধ্যেই চলছে। আপনি কি নিশ্চিত যে আপনি একটি নতুন উদাহরণ খুলতে চান?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>সজ্জিত করা</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>গ্লোবাল মাউস এবং কীবোর্ড শর্টকাট নিষ্ক্রিয় করা হয়েছে।
+
+গ্লোবাল শর্টকাটগুলি এখন সিস্টেম ট্রে মেনুতে সক্রিয় করা যেতে পারে</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>বিশ্বব্যাপী শর্টকাট নিষ্ক্রিয়: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>গ্লোবাল মাউস এবং কীবোর্ড শর্টকাট সক্রিয় করা হয়েছে।</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(পরীক্ষামূলক) গ্লোবাল শর্টকাট সক্রিয়: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>গ্লোবাল শর্টকাট বন্ধ টগল করুন</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>গ্লোবাল শর্টকাট চালু করুন</value>
+  </data>
 </root>

@@ -2895,4 +2895,60 @@ Ekki er hægt að tryggja heildar endurheimt og getur dregið úr afköstum eða
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Líma í: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Óþekkt villa {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ekki var hægt að klára kaupin. Ástæða: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Bæta við léninu</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Bæta við síðu</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Léninu fyrir þessa síðu er hafnað. Til að leyfa þessa síðu þarftu að fjarlægja höfnunina fyrir '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Lénið '{0}' er þegar hafnað</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Lén</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Þessari síðu er þegar hafnað.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Síður</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Samstilla</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Annað dæmi um acepyaste er þegar í gangi. Ertu viss um að þú viljir opna nýtt dæmi?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Stilla</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Global mús og lyklaborðs flýtileiðir hafa verið óvirkir.
+
+Nú er hægt að virkja alþjóðlegar flýtileiðir í kerfisbakkavalmyndinni</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Global flýtileiðir óvirkir: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Global mús og lyklaborðs flýtileiðir hafa verið virkir.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Tilrauna) Global flýtileiðir virkir: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Skiptu um flýtileiðir á heimsvísu</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Skiptu um flýtileiðir á heimsvísu</value>
+  </data>
 </root>

@@ -554,7 +554,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
         public string HookPauseLabel =>
-            $"Toggle Global Hooks {(IsGlobalHooksPaused ? "ON" : "OFF")}";
+            IsGlobalHooksPaused ? UiStrings.HookResumeLabel : UiStrings.HookPauseLabel;
         #endregion
 
         #endregion
@@ -1401,6 +1401,7 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand ToggleGlobalHooksCommand => new MpCommand<object>(
             (args) => {
+                string title = string.Empty;
                 string msg = string.Empty;
                 if (args is bool boolArg &&
                     boolArg == IsGlobalHooksPaused) {
@@ -1411,21 +1412,28 @@ namespace MonkeyPaste.Avalonia {
                 } else if (IsGlobalHooksPaused) {
                     //resume
                     StartInputListener();
-                    msg = $"Global hooks resumed: {(!IsGlobalHooksPaused).ToTestResultLabel()}";
+                    //msg = $"Global hooks resumed: {(!IsGlobalHooksPaused).ToTestResultLabel()}";
+                    title = UiStrings.GlobalHooksResumedTitle.Format((!IsGlobalHooksPaused).ToTestResultLabel());
+                    msg = UiStrings.GlobalHooksResumedText;
                 } else {
                     // pause
                     StopInputListener();
                     _keyboardGestureHelper.ClearCurrentGesture();
-                    msg = $"Global hooks paused: {IsGlobalHooksPaused.ToTestResultLabel()}";
+                    //msg = $"Global hooks paused: {IsGlobalHooksPaused.ToTestResultLabel()}";
+
+                    title = UiStrings.GlobalHooksPausedTitle.Format((IsGlobalHooksPaused).ToTestResultLabel());
+                    msg = UiStrings.GlobalHooksPausedText;
                 }
                 OnPropertyChanged(nameof(IsGlobalHooksPaused));
                 OnPropertyChanged(nameof(HookPauseLabel));
                 MpConsole.WriteLine(msg);
+                MpMessenger.SendGlobal(MpMessageType.GlobalHooksToggled);
                 if(args is null) {
                     // from hotkey show ntf
                     Mp.Services.NotificationBuilder.ShowMessageAsync(MpNotificationType.Message,
-                        title: $"Hooks {(IsGlobalHooksPaused ? "PAUSED" : "RESUMED")}",
-                        body: msg).FireAndForgetSafeAsync();
+                        title: title,
+                        body: msg,
+                        iconSourceObj: "KeyboardColorImage").FireAndForgetSafeAsync();
                 }
 
             }, (args) => {

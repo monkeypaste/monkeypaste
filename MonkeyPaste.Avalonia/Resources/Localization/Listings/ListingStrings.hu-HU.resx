@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Korlátlan - évente</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Első kiadás</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Ezzel az előfizetéssel megkapja:
 ● Korlátlan kapacitás</value>
@@ -268,5 +265,17 @@ a vágólapodat mindig nyomon követheted vagy tárolhatod BÁRHOL a saját gép
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Biztonságos, védett és privát helyi adattárolás opcionális 2 faktoros jelszavas védelemmel</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>A majompaste most már teljesen ingyenes a kiadás óta !!
+
+Az összes korlátozást (az APP-előfizetésekben) eltávolították, mivel a majompaste most áttér a nyílt forráskódú projektvé. Tehát tartsa szemmel a Github -ot (github.com/monkeypaste), ha érdekli a közreműködés.
+
+Frissítések:
+
+- Minden kapacitási korlátozás eltávolítva!
+- Elutasított URL -szerkesztő UI fejlesztései
+- Alapvető támogatás a majompaste több példányának futtatásához
+- Új megosztott értékszerkesztő (adott esetben a plugin böngészőben)</value>
   </data>
 </root>

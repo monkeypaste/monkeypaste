@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Il·limitat - anual</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Versió inicial</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Amb aquesta subscripció rebrà:
 ● Capacitat il·limitada</value>
@@ -268,5 +265,17 @@ el porta-retalls es rastreja o s'emmagatzema EN QUALSEVOL lloc més enllà de la
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Emmagatzematge de dades local segur, segur i privat amb protecció amb contrasenya opcional de 2 factors</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste ara és totalment gratuït a partir d'aquest llançament!!
+
+Totes les restriccions (en les subscripcions d'aplicacions) s'han eliminat ja que MonkeyPaste està passant ara a convertir-se en un projecte de codi obert. Així que estigueu atents al nostre github (github.com/monkeypaste) si esteu interessats a contribuir.
+
+Actualitzacions:
+
+- S'han eliminat totes les restriccions de capacitat!
+- les millores de la interfície d'usuari de l'editor d'URL rebutjades
+- Suport bàsic per executar múltiples instàncies de MonkeyPaste
+- nou editor de valors compartits (al navegador de connectors si escau)</value>
   </data>
 </root>

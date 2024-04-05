@@ -2895,4 +2895,60 @@ feedback@monkeypales.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>មិនស្គាល់កំហុស {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>ការទិញរបស់អ្នកមិនអាចបញ្ចប់បានទេ។ មូលហេតុ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>បន្ថែមដែន</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>បន្ថែមទំព័រ</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>ដែនសម្រាប់ទំព័រនេះត្រូវបានបដិសេធ។ ដើម្បីអនុញ្ញាតឱ្យទំព័រនេះអ្នកត្រូវដកការបដិសេធចេញសម្រាប់ '{0}' ។</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>ដែន '{0}' ត្រូវបានបដិសេធរួចហើយ</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ដែន</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>ទំព័រនេះត្រូវបានបដិសេធរួចហើយ។</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>ទំព័រន</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>ធ្វើសមកាលកម្ម</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>ឧទាហរណ៍មួយទៀតនៃការ monkeypouse នេះកំពុងដំណើរការហើយ។ តើអ្នកពិតជាចង់បើកឧទាហរណ៍ថ្មីមែនទេ?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>តំឡើង</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ផ្លូវកាត់កណ្តុរសកលនិងក្តារចុចត្រូវបានបិទ។
+
+ផ្លូវកាត់សកលអាចត្រូវបានបើកនៅក្នុងម៉ឺនុយថាសប្រព័ន្ធ</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ផ្លូវកាត់សកលដែលត្រូវបានបិទ: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ផ្លូវកាត់កណ្តុរសកលនិងក្តារចុចត្រូវបានបើកដំណើរការ។</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ពិសោធន៍) ផ្លូវកាត់សកលដែលបានអនុញ្ញាត: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>បិទបើកផ្លូវកាត់សកល</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>បិទបើកផ្លូវកាត់សកល</value>
+  </data>
 </root>

@@ -2895,4 +2895,60 @@ feedback@monkeypaste.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;لصق إلى: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>خطأ غير معروف {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>تعذر إكمال الشراء. السبب: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>أضف المجال</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>إضافة صفحة</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>تم رفض المجال لهذه الصفحة. للسماح بهذه الصفحة، ستحتاج إلى إزالة الرفض لـ '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>تم رفض النطاق '{0}' بالفعل</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>المجالات</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>تم رفض هذه الصفحة بالفعل.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>الصفحات</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>مزامنة</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>هناك مثيل آخر لـ MonkeyPaste قيد التشغيل بالفعل. هل أنت متأكد أنك تريد فتح مثيل جديد؟</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>تهيئة</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>تم تعطيل اختصارات الماوس ولوحة المفاتيح العالمية.
+
+يمكن الآن تمكين الاختصارات العامة في قائمة علبة النظام</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>تم تعطيل الاختصارات العامة: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>تم تمكين اختصارات الماوس ولوحة المفاتيح العالمية.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(تجريبي) تم تمكين الاختصارات العامة: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>تبديل الاختصارات العالمية إلى إيقاف التشغيل</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>تفعيل الاختصارات العالمية</value>
+  </data>
 </root>

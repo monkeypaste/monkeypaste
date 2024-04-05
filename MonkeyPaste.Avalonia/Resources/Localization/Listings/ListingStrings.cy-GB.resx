@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Diderfyn - blynyddol</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Rhyddhau Cychwynnol</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Gyda'r tanysgrifiad hwn byddwch yn derbyn:
 ● Capasiti diderfyn</value>
@@ -268,5 +265,17 @@ Mae eich clipfwrdd yn cael ei olrhain neu ei storio UNRHYW le y tu hwnt i'ch pei
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Storio data lleol diogel, diogel a phreifat gyda diogelwch cyfrinair 2 ffactor dewisol</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Mae MonkeyPaste bellach yn hollol rhad ac am ddim o'r datganiad hwn !!
+
+Mae'r holl gyfyngiadau (mewn tanysgrifiadau ap) wedi'u dileu gan fod MonkeyPaste bellach yn trosglwyddo i ddod yn brosiect ffynhonnell agored. Felly cadwch lygad ar ein github (github.com/monkeypaste) os oes gennych chi ddiddordeb mewn cyfrannu.
+
+Diweddariadau:
+
+- dileu'r holl gyfyngiadau capasiti!
+- gwelliannau UI golygydd Url a wrthodwyd
+- cefnogaeth sylfaenol ar gyfer rhedeg sawl achos o MonkeyPaste
+- golygydd gwerth a rennir newydd (mewn porwr ategyn lle bo'n berthnasol)</value>
   </data>
 </root>

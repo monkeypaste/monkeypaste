@@ -2895,4 +2895,60 @@ Kāore e taea te whakaū i te whakaoratanga katoa, ā, ka whakaiti rānei i te m
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Whakapiri ki: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Hapa kore mohiotia {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Kaore i taea te hokonga. Te take: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Tāpirihia te rohe</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Tāpiri whārangi</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Ko te rohe mo tenei whaarangi ka paopao. Hei tuku i tenei whaarangi me tango koe i te whakakahoretanga mo te '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Ko te rohe '{0}' kua paopao kē</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Nga Rohe</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Kua whakakahoretia tenei whaarangi.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Whārangi</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Tukutahi</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Ko tetahi atu tauira o Monkeypaste kei te rere kē. Kei te hiahia koe ki te whakatuwhera i tetahi tauira hou?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Whirihei</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Kua monokia nga kiore o te whare me nga papapātuhi papapātuhi.
+
+Ka taea e te waa poto poto te ao i roto i te tahua Tray punaha</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Kua monokia nga wa poto o te ao: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Kua whakahohea nga kiore o te whare me nga papapātuhi papapātuhi.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Whakamātautau) Kua Whakahohea nga Poto o te Ao: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Toggle Smforcts Sollect</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Toggle Poto Poto o te Ao ON</value>
+  </data>
 </root>

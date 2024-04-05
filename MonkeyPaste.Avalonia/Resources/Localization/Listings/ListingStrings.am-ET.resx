@@ -228,9 +228,6 @@ The እስከ 1,000 የሚሆኑ ክሊፖች
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>ያልተገደበ - በየዓመቱ</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>የመጀመሪያ ልቀት</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>በዚህ የደንበኝነት ምዝገባ ይቀበሉዎታል
 ● ያልተገደበ አቅም</value>
@@ -268,5 +265,17 @@ The እስከ 1,000 የሚሆኑ ክሊፖች
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>ደህንነቱ የተጠበቀ፣ ደህንነቱ የተጠበቀ እና የግል የአካባቢ ውሂብ ማከማቻ ከአማራጭ 2-ፋይል የይለፍ ቃል ጥበቃ</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>የዝንጀሮ መለጠፍ አሁን ከተለቀቀበት ጊዜ ጀምሮ ሙሉ በሙሉ ነፃ ነው!!
+
+MonkeyPaste አሁን ወደ ክፍት ምንጭ ፕሮጀክት እየተሸጋገረ ስለሆነ ሁሉም ገደቦች (በመተግበሪያ ምዝገባዎች) ተወግደዋል። ስለዚህ አስተዋጽዖ ለማድረግ ፍላጎት ካሎት የእኛን github (github.com/monkeypaste) ይከታተሉ።
+
+ዝማኔዎች፡-
+
+- ሁሉም የአቅም ገደቦች ተወግደዋል!
+- ተቀባይነት አላገኘም የዩአርኤል አርታኢ የተጠቃሚ በይነገጽ ማሻሻያ
+- በርካታ የ MonkeyPaste ምሳሌዎችን ለማስኬድ የመነሻ ድጋፍ
+- አዲስ የተጋራ እሴት አርታኢ (የሚመለከተው ከሆነ በተሰኪ አሳሽ ውስጥ)</value>
   </data>
 </root>

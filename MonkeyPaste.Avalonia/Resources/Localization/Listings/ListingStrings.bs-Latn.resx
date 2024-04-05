@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Neograničeno - godišnje</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Početno izdanje</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Ovom pretplatom primit ćete:
 ● Neograničen kapacitet</value>
@@ -268,5 +265,17 @@ Vaš međuspremnik se ikad prati ili pohranjuje bilo gdje izvan vlastite mašine
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Sigurna, sigurna i privatna lokalna pohrana podataka s opcionom 2-faktornom zaštitom lozinkom</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste je sada potpuno besplatan od ovog izdanja!!
+
+Sva ograničenja (u pretplatama na aplikacije) su uklonjena jer MonkeyPaste sada prelazi u projekat otvorenog koda. Zato pripazite na naš github (github.com/monkeypaste) ako ste zainteresirani za doprinos.
+
+Ažuriranja:
+
+- uklonjena sva ograničenja kapaciteta!
+- odbijena poboljšanja korisničkog sučelja uređivača URL-ova
+- osnovna podrška za pokretanje višestrukih instanci MonkeyPaste-a
+- novi uređivač zajedničkih vrijednosti (u pregledniku dodataka gdje je primjenjivo)</value>
   </data>
 </root>

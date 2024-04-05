@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>غير محدود - سنوي</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>الإصدار الأولي</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>مع هذا الاشتراك ستتلقى:
 ● سعة غير محدودة</value>
@@ -268,5 +265,17 @@
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>تخزين بيانات محلية آمنة ومأمونة وخاصة مع حماية اختيارية بكلمة مرور ثنائية العوامل</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste الآن مجاني تمامًا حتى هذا الإصدار !!
+
+تمت إزالة جميع القيود (في اشتراكات التطبيق) حيث تنتقل الآن Monkeypaste إلى مشروع مفتوح المصدر. لذا راقب github (github.com/monkeypaste) إذا كنت مهتمًا بالمساهمة.
+
+التحديثات:
+
+- جميع قيود السعة إزالتها!
+- تحسينات محرر URL URL المرفض
+- الدعم الأساسي لتشغيل مثيلات متعددة من Monkeypaste
+- محرر القيمة المشتركة الجديدة (في متصفح البرنامج المساعد عند الاقتضاء)</value>
   </data>
 </root>

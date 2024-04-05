@@ -2895,4 +2895,60 @@ Popolne obnove ni mogoče zagotoviti in lahko zmanjša zmogljivost ali celo zru�
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Prilepi na: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Neznana napaka {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Vašega nakupa ni bilo mogoče dokončati. Razlog: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Dodaj domeno</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Dodaj stran</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domena za to stran je zavrnjena. Če želite dovoliti to stran, boste morali odstraniti zavrnitev za '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domena '{0}' je že zavrnjena</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domene</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Ta stran je že zavrnjena.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Strani</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinhronizacija</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Še en primerek MonkeyPaste že deluje. Ste prepričani, da želite odpreti nov primerek?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfiguriranje</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globalne bližnjice miške in tipkovnice so onemogočene.
+
+Globalne bližnjice je zdaj mogoče omogočiti v meniju System pladnja</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globalne bližnjice onemogočene: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Omogočene so globalne bližnjice miške in tipkovnice.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimentalno) Omogočene globalne bližnjice: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Preklopite globalne bližnjice</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Preklopite globalne bližnjice na</value>
+  </data>
 </root>

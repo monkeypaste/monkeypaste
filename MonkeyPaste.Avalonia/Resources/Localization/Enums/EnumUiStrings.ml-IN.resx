@@ -1186,4 +1186,13 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>എല്ലാം</value>
   </data>
+  <data name="MpNotificationType_SingleInstanceWarning" xml:space="preserve">
+    <value>ഒറ്റ ഉദാഹരണം മുന്നറിയിപ്പ്</value>
+  </data>
+  <data name="MpNotificationType_ModalShutdownLater" xml:space="preserve">
+    <value>പിന്നീട് മോഡൽ ഷട്ട്ഡൗൺ</value>
+  </data>
+  <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
+    <value>ആഗോള കൊളുത്തുകൾ ടോഗിൾ ചെയ്യുക</value>
+  </data>
 </root>

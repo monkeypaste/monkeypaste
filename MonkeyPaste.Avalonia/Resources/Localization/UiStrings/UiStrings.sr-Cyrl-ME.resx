@@ -2895,4 +2895,60 @@
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Налепити на: &lt;em&gt; &lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Непозната грешка {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ваша куповина није могла бити завршена. Разлог: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Додати домен</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Додај страницу</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Домен за ову страницу је одбачен. Да бисте дозволили ову страницу, морат ћете уклонити одбијање за '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Домен '{0}' је већ одбачен</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домене</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Ова страница је већ одбијена.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Странице</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Синхронизовати</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Још једна инстанца монкеупасте је већ покренута. Јесте ли сигурни да желите да отворите нову инстанцу?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Конфигурација</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Глобални пречици миша и тастатуре су онемогућени.
+
+Глобалне пречице сада се могу омогућити у менију Систем Траи</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Глобалне пречице онемогућене: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Омогућено су пречице глобалне миша и тастатуре.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ЕКСПЕРИМЕНТАЛНИ) Глобалне пречице омогућене: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Пребаците глобалне пречице</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Пребаците глобалне пречице на</value>
+  </data>
 </root>

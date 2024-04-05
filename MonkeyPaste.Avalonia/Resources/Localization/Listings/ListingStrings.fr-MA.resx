@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Illimité - annuel</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Première version</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Avec cet abonnement, vous recevrez:
 ● Capacité illimitée</value>
@@ -268,5 +265,17 @@ votre presse-papiers n’est jamais suivi ou stocké N’IMPORTE OÙ au-delà de
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Stockage de données local sûr, sécurisé et privé avec protection par mot de passe à 2 facteurs en option</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste est maintenant entièrement libre à partir de cette version !!
+
+Toutes les restrictions (dans les abonnements APP) ont été supprimées car Monkeypaste passe maintenant à devenir un projet open-source. Alors gardez un œil sur notre github (github.com/monkeypaste) si vous êtes intéressé à contribuer.
+
+Mises à jour:
+
+- Toutes les restrictions de capacité supprimées!
+- Éditeur d'URL rejeté Améliorations
+- Support de base pour l'exécution de plusieurs instances de Monkeypaste
+- Nouvel éditeur de valeur partagée (dans le navigateur de plugin, le cas échéant)</value>
   </data>
 </root>

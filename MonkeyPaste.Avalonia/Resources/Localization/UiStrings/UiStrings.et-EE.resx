@@ -2895,4 +2895,60 @@ Täielikku taastamist ei saa garanteerida ja see võib sõltuvalt andmete allika
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Kleebi: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Tundmatu viga {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Teie ostu ei saanud lõpule viia. Põhjus: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Lisage domeen</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Lisaleht</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Selle lehe domeen lükatakse tagasi. Selle lehe lubamiseks peate eemaldama tagasilükkamise '{0}' jaoks.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domeen '{0}' lükatakse juba tagasi</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domeenid</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>See leht on juba tagasi lükatud.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Lehed</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sünkroonimine</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Veel üks ahvepaste juhtum töötab juba. Kas olete kindel, et soovite avada uue eksemplari?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigureerima</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globaalsed hiire- ja klaviatuuri otseteed on keelatud.
+
+Globaalsed otseteed saab nüüd süsteemialuse menüüs lubada</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globaalsed otseteed on keelatud: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globaalsed hiire- ja klaviatuuri otseteed on lubatud.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimentaalsed) globaalsed otseteed lubatud: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Lülitage ülemaailmsed otseteed välja</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Lülitage globaalsed otseteed sisse</value>
+  </data>
 </root>

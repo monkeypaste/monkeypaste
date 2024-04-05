@@ -2895,4 +2895,60 @@ feedback@monkeypaste.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;పేస్ట్: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>తెలియని లోపం {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>మీ కొనుగోలు పూర్తి కాలేదు. కారణం: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>డొమైన్ జోడించండి</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>పేజీని జోడించండి</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>ఈ పేజీ కోసం డొమైన్ తిరస్కరించబడింది. ఈ పేజీని అనుమతించడానికి మీరు '{0}' కోసం తిరస్కరణను తొలగించాలి.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>'{0}' డొమైన్ ఇప్పటికే తిరస్కరించబడింది</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>డొమైన్లు</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>ఈ పేజీ ఇప్పటికే తిరస్కరించబడింది.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>పేజీలు</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>సమకాలీకరించు</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>మంకీపేస్ట్ యొక్క మరొక ఉదాహరణ ఇప్పటికే నడుస్తోంది. మీరు ఖచ్చితంగా క్రొత్త ఉదాహరణను తెరవాలనుకుంటున్నారా?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>కాన్ఫిగర్</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>గ్లోబల్ మౌస్ మరియు కీబోర్డ్ సత్వరమార్గాలు నిలిపివేయబడ్డాయి.
+
+గ్లోబల్ సత్వరమార్గాలను ఇప్పుడు సిస్టమ్ ట్రే మెనులో ప్రారంభించవచ్చు</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>గ్లోబల్ సత్వరమార్గాలు నిలిపివేయబడ్డాయి: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>గ్లోబల్ మౌస్ మరియు కీబోర్డ్ సత్వరమార్గాలు ప్రారంభించబడ్డాయి.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ప్రయోగాత్మక) గ్లోబల్ సత్వరమార్గాలు ప్రారంభించబడ్డాయి: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>గ్లోబల్ సత్వరమార్గాలను టోగుల్ చేయండి</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>గ్లోబల్ సత్వరమార్గాలను టోగుల్ చేయండి</value>
+  </data>
 </root>

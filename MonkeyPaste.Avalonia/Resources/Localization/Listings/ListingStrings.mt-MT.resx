@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Unlimited - kull sena</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Rilaxx inizjali</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>B'dan l-abbonament tirċievi:
 ● Kapaċità Unlimited</value>
@@ -268,5 +265,17 @@ il-klibbord tiegħek qatt jiġi traċċat jew maħżun KULLIMKIEN lil hinn mill-
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Ħażna ta 'dejta lokali sikura, sigura u privata b'protezzjoni fakultattiva tal-password tal-fattur 2 -</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste issa huwa kompletament ħieles minn dan ir-rilaxx !!
+
+Ir-restrizzjonijiet kollha (fis-sottoskrizzjonijiet tal-app) tneħħew hekk kif il-monkeypaste issa qed jgħaddi biex isir proġett ta 'sors miftuħ. Allura żżomm għajnejk fuq il-github tagħna (github.com/monkeypaste) jekk int interessat li tikkontribwixxi.
+
+Aġġornamenti:
+
+- Ir-restrizzjonijiet kollha tal-kapaċità mneħħija!
+- Editur tal-URL rifjutat UI Titjib
+- Appoġġ fil-linja bażi għat-tħaddim ta 'każijiet multipli ta' monkeypaste
+- Editur tal-Valur Maqsum Ġdid (fil-plugin browser fejn applikabbli)</value>
   </data>
 </root>

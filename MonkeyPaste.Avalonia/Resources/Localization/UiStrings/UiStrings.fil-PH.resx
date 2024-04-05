@@ -2895,4 +2895,60 @@ Ang kabuuang pagpapanumbalik ay hindi maaaring garantisadong at maaaring mabawas
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Idikit sa: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Hindi kilalang error {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ang iyong pagbili ay hindi makumpleto. Dahilan: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Magdagdag ng domain</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Magdagdag ng Pahina</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Ang domain para sa pahinang ito ay tinanggihan. Upang payagan ang pahinang ito kakailanganin mong alisin ang pagtanggi para sa '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Ang domain '{0}' ay tinanggihan na</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Mga domain</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Ang pahinang ito ay tinanggihan na.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Mga pahina</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>I -sync</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Ang isa pang halimbawa ng Monkeypaste ay tumatakbo na. Sigurado ka bang nais mong magbukas ng isang bagong halimbawa?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>I -configure</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Ang mga global mouse at keyboard shortcut ay hindi pinagana.
+
+Maaari na ngayong paganahin ang mga global shortcut sa menu ng System Tray</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Hindi pinagana ang mga pandaigdigang shortcut: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Pinagana ang mga global mouse at keyboard shortcut.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimental) Pinagana ang mga pandaigdigang shortcut: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Toggle global shortcut off</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>I -toggle ang mga pandaigdigang shortcut sa</value>
+  </data>
 </root>

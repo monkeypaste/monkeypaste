@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Ilimitado - anualmente</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Lançamento inicial</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Com esta assinatura, você receberá:
 ● Capacidade ilimitada</value>
@@ -268,5 +265,17 @@ sua área de transferência é rastreada ou armazenada em qualquer lugar além d
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Armazenamento de dados local seguro e privado com proteção opcional por senha de 2 fatores</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>O MonkeyyySaste agora está totalmente livre a partir deste lançamento !!
+
+Todas as restrições (nas assinaturas de aplicativos) foram removidas, pois agora a MonkeyyySaste está em transição para se tornar um projeto de código aberto. Portanto, fique de olho em nosso github (github.com/monkeypaste) se você estiver interessado em contribuir.
+
+Atualizações:
+
+- Todas as restrições de capacidade removidas!
+- Melhorias da UI do editor de URL rejeitadas
+- Suporte de linha de base para a execução de várias instâncias de macacão
+- Novo editor de valor compartilhado (no navegador do plug -in, quando aplicável)</value>
   </data>
 </root>

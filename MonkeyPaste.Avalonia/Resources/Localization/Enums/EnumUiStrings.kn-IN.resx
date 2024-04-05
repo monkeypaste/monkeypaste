@@ -1186,4 +1186,13 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>ಎಲ್ಲವೂ</value>
   </data>
+  <data name="MpNotificationType_SingleInstanceWarning" xml:space="preserve">
+    <value>ಒಂದೇ ನಿದರ್ಶನ ಎಚ್ಚರಿಕೆ</value>
+  </data>
+  <data name="MpNotificationType_ModalShutdownLater" xml:space="preserve">
+    <value>ಮೋಡಲ್ ಸ್ಥಗಿತಗೊಳಿಸುವಿಕೆ ನಂತರ</value>
+  </data>
+  <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
+    <value>ಜಾಗತಿಕ ಕೊಕ್ಕೆಗಳನ್ನು ಟಾಗಲ್ ಮಾಡಿ</value>
+  </data>
 </root>

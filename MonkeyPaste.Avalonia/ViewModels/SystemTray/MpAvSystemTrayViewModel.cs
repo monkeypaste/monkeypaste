@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -73,6 +74,7 @@ namespace MonkeyPaste.Avalonia {
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
 
+
                         // MODE SUB-MENU
 
                         new MpAvMenuItemViewModel() {
@@ -112,11 +114,13 @@ namespace MonkeyPaste.Avalonia {
                                     InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleAppendBlockMode),
                                     InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                                 },
+
                                 new MpAvMenuItemViewModel() {IsSeparator = true},
 
                                 // AUTO-COPY
 
                                 new MpAvMenuItemViewModel() {
+                                    HasLeadingSeparator = true,
                                     Header = UiStrings.SysTrayAutoCopyHeader,
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
                                     IsCheckedPropPath = nameof(MpAvClipTrayViewModel.Instance.IsAutoCopyMode),
@@ -145,6 +149,18 @@ namespace MonkeyPaste.Avalonia {
                                     InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleRightClickPasteMode),
                                     InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                                 },
+
+                                new MpAvMenuItemViewModel() {IsSeparator = true},
+                                
+                                // TOGGLE GLOBAL HOOKS
+                                new MpAvMenuItemViewModel() {
+                                    HasLeadingSeparator = true,
+                                    IconResourceKey = "KeyboardColorImage",
+                                    HeaderSrcObj = MpAvShortcutCollectionViewModel.Instance,
+                                    HeaderPropPath = nameof(MpAvShortcutCollectionViewModel.Instance.HookPauseLabel),
+                                    CommandSrcObj = MpAvShortcutCollectionViewModel.Instance,
+                                    CommandPath = nameof(MpAvShortcutCollectionViewModel.Instance.ToggleGlobalHooksCommand)
+                                },
                             }
                         },
 
@@ -172,16 +188,6 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {IsSeparator = true},
 
-                        // HELP
-
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.SettingsHelpTabLabel,
-                            IconResourceKey = MpAvHelpViewModel.HELP_ICON_KEY,
-                            CommandSrcObj = MpAvHelpViewModel.Instance,
-                            CommandPath = nameof(MpAvHelpViewModel.Instance.NavigateToHelpLinkCommand),
-                            InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.OpenHelp),
-                            InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
-                        },
 
 
                         // RATE APP
@@ -211,6 +217,18 @@ namespace MonkeyPaste.Avalonia {
                             Command = MpAvUriNavigator.Instance.NavigateToUriCommand,
                             CommandParameter = MpServerConstants.SUPPORT_EMAIL_URI
                         },
+                        
+                        // HELP
+
+                        new MpAvMenuItemViewModel() {
+                            HasLeadingSeparator = true,
+                            Header = UiStrings.SettingsHelpTabLabel,
+                            IconResourceKey = MpAvHelpViewModel.HELP_ICON_KEY,
+                            CommandSrcObj = MpAvHelpViewModel.Instance,
+                            CommandPath = nameof(MpAvHelpViewModel.Instance.NavigateToHelpLinkCommand),
+                            InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.OpenHelp),
+                            InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
+                        },
 
                         // ABOUT
 
@@ -233,12 +251,6 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() {
                             Header = "Duplicate storage to desktop",
                             Command = CreateLocalStorageCopyCommand,
-                        },
-                        new MpAvMenuItemViewModel() {
-                            HeaderSrcObj = MpAvShortcutCollectionViewModel.Instance,
-                            HeaderPropPath = nameof(MpAvShortcutCollectionViewModel.Instance.HookPauseLabel),
-                            CommandSrcObj = MpAvShortcutCollectionViewModel.Instance,
-                            CommandPath = nameof(MpAvShortcutCollectionViewModel.Instance.ToggleGlobalHooksCommand)
                         },
                         new MpAvMenuItemViewModel() {
                             Header = "Test Command 1",
@@ -284,214 +296,7 @@ namespace MonkeyPaste.Avalonia {
                 return tmivm;
             }
         }
-        public MpAvMenuItemViewModel TrayMenuItemViewModel2 {
-            get {
-                var tmivm = new MpAvMenuItemViewModel() {
-                    TooltipSrcObj = this,
-                    TooltipPropPath = nameof(SystemTrayTooltip),
-                    IconSrcBindingObj = this,
-                    IconPropPath = nameof(SystemTrayIconResourceObj),
-                    CommandPath = nameof(TrayIconClickCommand),
-                    CommandSrcObj = this,
-                    SubItems = new List<MpAvMenuItemViewModel>() {
 
-                        // SHOW/HIDE MW
-
-                        new MpAvMenuItemViewModel() {
-                            Header = MpAvMainWindowViewModel.Instance.ShowOrHideLabel,
-                            IconSourceObj = MpAvMainWindowViewModel.Instance.ShowOrHideIconSourceObj,
-                            Command = MpAvMainWindowViewModel.Instance.ToggleShowMainWindowCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.ToggleMainWindow },
-
-                        },
-
-                        // PAUSE/RESUME CB
-
-                        new MpAvMenuItemViewModel() {
-                            Header = MpAvClipTrayViewModel.Instance.PlayOrPauseLabel,
-                            IconSourceObj = MpAvClipTrayViewModel.Instance.PlayOrPauseIconResoureKey,
-                            Command = MpAvClipTrayViewModel.Instance.ToggleIsAppPausedCommand,
-                            CommandParameter = "Click",
-                            ShortcutArgs = new object[] { MpShortcutType.ToggleListenToClipboard }
-                        },
-
-                        // MODE SUB-MENU
-
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.SysTrayModeHeader,
-                            //IconResourceKey = "RobotArmColorImage",
-                            SubItems = new List<MpAvMenuItemViewModel>() {
-
-                                // APPEND INLINE 
-
-                                new MpAvMenuItemViewModel() {
-                                    Header = UiStrings.SysTrayAppenInlineHeader,
-                                    IsChecked = MpAvClipTrayViewModel.Instance.IsAppendInsertMode,
-                                    IconSourceObj = MpAvClipTrayViewModel.Instance.AppendInlineSysTrayIconSourceObj,
-                                    ToggleType = "Radio",
-                                    Command = MpAvClipTrayViewModel.Instance.ToggleAppendInsertModeCommand,
-                                },
-
-                                // APPEND LINE
-
-                                new MpAvMenuItemViewModel() {
-                                    Header = UiStrings.SysTrayAppendLineHeader,
-                                    IsChecked = MpAvClipTrayViewModel.Instance.IsAppendLineMode,
-                                    IconSourceObj = MpAvClipTrayViewModel.Instance.AppendLineSysTrayIconSourceObj,
-                                    ToggleType = "Radio",
-                                    Command = MpAvClipTrayViewModel.Instance.ToggleAppendLineModeCommand,
-                                    ShortcutArgs = new object[] { MpShortcutType.ToggleAppendBlockMode },
-                                },
-
-                                // AUTO-COPY
-
-                                new MpAvMenuItemViewModel() {
-                                    HasLeadingSeparator = true,
-                                    Header = UiStrings.SysTrayAutoCopyHeader,
-                                    IsChecked = MpAvClipTrayViewModel.Instance.IsAutoCopyMode,
-                                    IconSourceObj = MpAvClipTrayViewModel.Instance.AutoCopySysTrayIconSourceObj,
-                                    ToggleType = "CheckBox",
-                                    Command = MpAvClipTrayViewModel.Instance.ToggleAutoCopyModeCommand,
-                                    ShortcutArgs = new object[] { MpShortcutType.ToggleAutoCopyMode },
-                                },
-
-                                // RIGHT-CLICK PASTE
-
-                                new MpAvMenuItemViewModel() {
-                                    Header = UiStrings.SysTrayRightClickPasteHeader,
-                                    IsChecked = MpAvClipTrayViewModel.Instance.IsRightClickPasteMode,
-                                    IconSourceObj = MpAvClipTrayViewModel.Instance.RightClickPasteSysTrayIconSourceObj,
-                                    ToggleType = "CheckBox",
-                                    Command = MpAvClipTrayViewModel.Instance.ToggleRightClickPasteCommand,
-                                    ShortcutArgs = new object[] { MpShortcutType.ToggleRightClickPasteMode },
-                                },
-                            }
-                        },
-
-                        // PLUGIN BROWSER
-
-                        new MpAvMenuItemViewModel() {
-                            HasLeadingSeparator = true,
-                            Header = UiStrings.SysTrayPluginBrowserLabel,
-                            IconResourceKey = "JigsawImage",
-                            Command = MpAvPluginBrowserViewModel.Instance.ShowPluginBrowserCommand
-                        },
-                        
-                        // SETTINGS
-
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.CommonSettingsTitle,
-                            IconSourceObj = "CogColorImage",
-                            Command = MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.ShowSettings },
-                        },
-
-                        // HELP
-
-                        new MpAvMenuItemViewModel() {
-                            HasLeadingSeparator = true,
-                            Header = UiStrings.SettingsHelpTabLabel,
-                            IconResourceKey = MpAvHelpViewModel.HELP_ICON_KEY,
-                            Command = MpAvHelpViewModel.Instance.NavigateToHelpLinkCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.OpenHelp },
-                        },
-
-
-                        // RATE APP
-
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.SysTrayRateAppLabel,
-                            IconResourceKey = "StarYellowImage",
-                            Command = MpAvAccountViewModel.Instance.RateAppCommand
-                        },
-                        
-                        // CHECK FOR UPDATE
-
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.SysTrayCheckForUpdateLabel,
-                            IconResourceKey = "RadarImage",
-                            Command = MpAvThisAppVersionViewModel.Instance.CheckForUpdateCommand,
-                            CommandParameter = "Click"
-                        },
-                        
-                        // CHECK FOR UPDATE
-
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.SysTrayFeebackLabel,
-                            IconResourceKey = "LetterImage",
-                            Command = MpAvUriNavigator.Instance.NavigateToUriCommand,
-                            CommandParameter = MpServerConstants.SUPPORT_EMAIL_URI
-                        },
-
-                        // ABOUT
-
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.SysTrayAboutHeader,
-                            IconResourceKey = "InfoImage",
-                            Command = MpAvAboutViewModel.Instance.ShowAboutWindowCommand
-                        },
-#region DEBUG STUFF
-#if DEBUG && DESKTOP
-                        new MpAvMenuItemViewModel() {
-                            HasLeadingSeparator = true,
-                            Header = "Show Converter DevTools",
-                            Command = MpAvPlainHtmlConverter.Instance.ShowConverterDevTools,
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = "Open Cef Uri",
-                            Command = NavigateToCefNetUriCommand,
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = "Duplicate storage to desktop",
-                            Command = CreateLocalStorageCopyCommand,
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = MpAvShortcutCollectionViewModel.Instance.HookPauseLabel,
-                            Command = MpAvShortcutCollectionViewModel.Instance.ToggleGlobalHooksCommand,
-                            CommandParameter = "click"
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = "Test Command 1",
-                            Command = GenericTestCommand1,
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = "Test Command 2",
-                            Command = GenericTestCommand2,
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = "Test Command 3",
-                            Command = GenericTestCommand3,
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = "Test Command 4",
-                            Command = GenericTestCommand4,
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = "Test Command 5",
-                            Command = GenericTestCommand5,
-                        },
-                        //new MpMenuItemViewModel() {
-                        //    Header = "Show Notifier DevTools",
-                        //    Command = MpAvClipTrayViewModel.Instance.ShowAppendDevToolsCommand
-                        //},
-#endif
-#endregion
-
-                        // QUIT
-
-                        new MpAvMenuItemViewModel() {
-                            HasLeadingSeparator = true,
-                            Header = UiStrings.SysTrayQuitHeader,
-                            IconResourceKey = "SignOutImage",
-                            Command = ExitApplicationCommand,
-                            CommandParameter = "systray menu click",
-                            ShortcutArgs = new object[] { MpShortcutType.ExitApplication },
-                        }
-                    }
-                };
-                return tmivm;
-            }
-        }
         #endregion
 
         #region State
@@ -526,6 +331,9 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvThisAppVersionViewModel.Instance.IsOutOfDate) {
                     return "MonkeyUpdateImage";
                 }
+                //if (MpAvClipTrayViewModel.Instance.IsIgnoringClipboardChanges) {
+                //    return "MonkeyPausedImage";
+                //}
                 return "AppImage";
             }
         }
@@ -553,18 +361,33 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.ClipboardListenerToggled:
+                case MpMessageType.GlobalHooksToggled:
                 case MpMessageType.VersionInfoChanged:
-                    OnPropertyChanged(nameof(SystemTrayTooltip));
-                    OnPropertyChanged(nameof(SystemTrayIconResourceObj));
-                    break;
-                case MpMessageType.AccountInfoChanged:
-                    OnPropertyChanged(nameof(SystemTrayTooltip));
-                    break;
                 case MpMessageType.MainWindowLoadComplete:
-                    OnPropertyChanged(nameof(SystemTrayIconResourceObj));
-                    OnPropertyChanged(nameof(SystemTrayTooltip));
-                    OnPropertyChanged(nameof(IsSystemTrayItemsEnabled));
+                    RefreshBindings();
                     break;
+            }
+        }
+
+        private void RefreshBindings() {
+            if(!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(RefreshBindings);
+                return;
+            }
+
+            object lastTrayIcon = SystemTrayIconResourceObj;
+
+            OnPropertyChanged(nameof(SystemTrayTooltip));
+            OnPropertyChanged(nameof(SystemTrayIconResourceObj));
+            OnPropertyChanged(nameof(SystemTrayTooltip));
+            OnPropertyChanged(nameof(IsSystemTrayItemsEnabled));
+
+            bool needs_reinit = SystemTrayIconResourceObj != lastTrayIcon;
+            if(needs_reinit &&
+                Mp.Services.StartupState.IsReady) {
+                //MpConsole.WriteLine($"System Tray Re-loaded");
+                //MpAvSystemTray.InitActualTray();
             }
         }
         #endregion

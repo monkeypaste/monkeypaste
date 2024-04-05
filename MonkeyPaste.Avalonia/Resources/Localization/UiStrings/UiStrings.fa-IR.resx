@@ -2895,4 +2895,60 @@ MonkeyPaste روی دستگاه
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;چسباندن به: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>خطای ناشناخته {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>خرید شما نمی تواند تکمیل شود. دلیل: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>دامنه را اضافه کنید</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>اضافه کردن صفحه</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>دامنه این صفحه رد می شود. برای اجازه این صفحه ، باید رد "{0}" را حذف کنید.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>دامنه '{0}' از قبل رد شده است</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>دامنه</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>این صفحه قبلاً رد شده است.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>صفحات</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>همگام سازی</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>نمونه دیگر Monkeypaste در حال اجرا است. آیا مطمئن هستید که می خواهید نمونه جدیدی را باز کنید؟</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>پیکربندی کردن</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>میانبرهای جهانی ماوس و صفحه کلید غیرفعال شده اند.
+
+میانبرهای جهانی اکنون می توانند در منوی سینی سیستم فعال شوند</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>میانبرهای جهانی غیرفعال است: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>میانبرهای جهانی ماوس و صفحه کلید فعال شده است.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(تجربی) میانبرهای جهانی فعال شده: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>میانبرهای جهانی را خاموش کنید</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>میانبرهای جهانی را تغییر دهید</value>
+  </data>
 </root>

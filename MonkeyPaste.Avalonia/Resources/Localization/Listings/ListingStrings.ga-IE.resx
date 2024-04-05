@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Unlimited - Bliantúil</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Scaoileadh tosaigh</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Leis an síntiús seo gheobhaidh tú:
 ● Cumas neamhtheoranta</value>
@@ -268,5 +265,17 @@ déantar do ghearrthaisce a rianú nó a stóráil riamh ÁIT AR BITH thar do mh
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Stóráil sonraí áitiúla sábháilte, slán agus príobháideach le cosaint roghnach 2 - cosaint focal faire fachtóir</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Tá Monkeypaste go hiomlán saor in aisce anois mar an scaoileadh seo !!
+
+Baineadh na srianta go léir (i suibscríbhinní app) as mar go bhfuil monkeypaste ag aistriú go tionscadal foinse oscailte anois. Mar sin, coinnigh súil ar ár Github (github.com/monkeypaste) má tá suim agat cur leis.
+
+Nuashonruithe:
+
+- Gach srian acmhainne a bhaint!
+- Feabhsuithe Chomhéadain an Eagarthóra URL diúltaithe
+- Tacaíocht bhunlíne chun il -chásanna de monkeypaste a reáchtáil
+- Eagarthóir Luach Comhroinnte Nua (i mbrabhsálaí plugin nuair is infheidhme)</value>
   </data>
 </root>

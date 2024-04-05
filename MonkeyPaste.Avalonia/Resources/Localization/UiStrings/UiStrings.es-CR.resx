@@ -2895,4 +2895,60 @@ No se puede garantizar la restauración total y puede reducir el rendimiento o i
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Pegar en: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Error desconocido {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Su compra no pudo ser completada. Razón: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Agregar dominio</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Añadir página</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>El dominio de esta página es rechazado. Para permitir esta página, deberá eliminar el rechazo de '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>El dominio '{0}' ya está rechazado</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Dominio</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Esta página ya está rechazada.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Páginas</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sincronización</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Otra instancia de Monkipaste ya está ejecutando. ¿Estás seguro de que quieres abrir una nueva instancia?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Configurar</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Se han deshabilitado los atajos globales para el mouse y el teclado.
+
+Los atajos globales ahora se pueden habilitar en el menú de la bandeja del sistema</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Actualizados globales deshabilitados: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Se han habilitado los atajos globales para el mouse y el teclado.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimental) Accesos directos globales habilitados: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Termine los accesos directos globales apagados</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Alternar atajos globales en</value>
+  </data>
 </root>

@@ -1186,4 +1186,13 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>ਸਾਰੇ</value>
   </data>
+  <data name="MpNotificationType_SingleInstanceWarning" xml:space="preserve">
+    <value>ਇਕੋ ਉਦਾਹਰਣ ਚੇਤਾਵਨੀ</value>
+  </data>
+  <data name="MpNotificationType_ModalShutdownLater" xml:space="preserve">
+    <value>ਮਾਡਲ ਬੰਦ ਬਾਅਦ ਵਿੱਚ ਬੰਦ</value>
+  </data>
+  <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
+    <value>ਗਲੋਬਲ ਹੁੱਕਜ਼ ਨੂੰ ਟੌਗਲ ਕਰੋ</value>
+  </data>
 </root>

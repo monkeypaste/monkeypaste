@@ -18,10 +18,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Remove="Models\Db\Log\Sync\**" />
     <AvaloniaXaml Remove="ViewModels\**" />
     <Compile Remove="Controls\**" />
     <Compile Remove="Converters\**" />
     <Compile Remove="Models\Db\ContentQuery\**" />
+    <Compile Remove="Models\Db\Log\Sync\**" />
     <Compile Remove="Models\Db\SQLite\**" />
     <Compile Remove="Models\Json\Contact\**" />
     <Compile Remove="Models\PreferenceModels\**" />
@@ -35,6 +37,7 @@
     <EmbeddedResource Remove="Controls\**" />
     <EmbeddedResource Remove="Converters\**" />
     <EmbeddedResource Remove="Models\Db\ContentQuery\**" />
+    <EmbeddedResource Remove="Models\Db\Log\Sync\**" />
     <EmbeddedResource Remove="Models\Db\SQLite\**" />
     <EmbeddedResource Remove="Models\Json\Contact\**" />
     <EmbeddedResource Remove="Models\PreferenceModels\**" />
@@ -48,6 +51,7 @@
     <None Remove="Controls\**" />
     <None Remove="Converters\**" />
     <None Remove="Models\Db\ContentQuery\**" />
+    <None Remove="Models\Db\Log\Sync\**" />
     <None Remove="Models\Db\SQLite\**" />
     <None Remove="Models\Json\Contact\**" />
     <None Remove="Models\PreferenceModels\**" />
@@ -126,6 +130,7 @@
 
   <ItemGroup>
     <Folder Include="Controls\" />
+    <Folder Include="Models\Db\Log\Sync\NetworkIO\" />
     <Folder Include="Resources\Data\" />
     <Folder Include="Utils\Builders\Bases\" />
     <Folder Include="Utils\Helpers\Graphics\Animation\" />

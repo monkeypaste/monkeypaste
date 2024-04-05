@@ -2895,4 +2895,60 @@ Ni ellir gwarantu adfer cyfanswm a gall leihau perfformiad neu hyd yn oed damwai
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Gludwch i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Gwall Anhysbys {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Nid oedd modd cwblhau eich pryniant. Rheswm: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Ychwanegu Parth</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Ychwanegu Tudalen</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Mae'r parth ar gyfer y dudalen hon yn cael ei wrthod. I ganiatáu'r dudalen hon bydd angen i chi ddileu'r gwrthodiad ar gyfer '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Mae'r parth '{0}' eisoes wedi'i wrthod</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Parthau</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Mae'r dudalen hon eisoes wedi'i gwrthod.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Tudalennau</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Cysoni</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Mae enghraifft arall o MonkeyPaste eisoes yn rhedeg. Ydych chi'n siŵr eich bod am agor enghraifft newydd?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Ffurfweddu</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Mae llwybrau byr llygoden a bysellfwrdd byd-eang wedi'u hanalluogi.
+
+Bellach gellir galluogi Llwybrau Byr Byd-eang yn y Ddewislen Hambwrdd System</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Analluogwyd llwybrau byr byd-eang: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Mae llwybrau byr llygoden a bysellfwrdd byd-eang wedi'u galluogi.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Arbrofol) Llwybrau Byr Byd-eang wedi'u galluogi: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Toglo llwybrau byr byd-eang i ffwrdd</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Toglo Llwybrau Byr Byd-eang Ymlaen</value>
+  </data>
 </root>

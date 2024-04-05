@@ -2895,4 +2895,60 @@ feedback@monkeypaste.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Prilepiť do: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Neznáma chyba {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Váš nákup nemohol byť dokončený. Dôvod: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Pridať doménu</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Pridať stránku</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Doména tejto stránky je zamietnutá. Ak chcete túto stránku povoliť, musíte odstrániť odmietnutie pre '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Doména '{0}' je už odmietnutá</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domény</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Táto stránka je už odmietnutá.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Stránky</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synchronizovať</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Ďalšia inštancia MonkeyPaste je už spustená. Ste si istí, že chcete otvoriť novú inštanciu?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurovať</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globálne skratky myši a klávesnice boli zakázané.
+
+Globálne skratky je teraz možné povoliť v ponuke System Tray</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globálne skratky zakázané: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Boli povolené globálne skratky myši a klávesnice.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimentálne) povolené globálne skratky: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Prepínať globálne skratky</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Prepínať globálne skratky</value>
+  </data>
 </root>

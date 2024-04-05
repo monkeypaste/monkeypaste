@@ -2895,4 +2895,60 @@ feedback@monkeypaste.com</value>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Постави в: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Неизвестна грешка {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Вашата покупка не можа да бъде завършена. Причина: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Добавете домейн</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Добавяне на страница</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Домейнът за тази страница е отхвърлен. За да разрешите тази страница, ще трябва да премахнете отказа за „{0}“.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Домейнът „{0}“ вече е отхвърлен</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домейни</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Тази страница вече е отхвърлена.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Страници</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Синхр</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Друг екземпляр на MonkeyPaste вече работи. Сигурни ли сте, че искате да отворите нов екземпляр?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Конфигуриране</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Глобалните клавишни комбинации за мишка и клавиатура са деактивирани.
+
+Глобалните преки пътища вече могат да бъдат активирани в менюто на системната област</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Деактивирани глобални преки пътища: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Глобалните клавишни комбинации за мишка и клавиатура са активирани.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Експериментално) Активирани глобални преки пътища: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Изключете глобалните преки пътища</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Включете глобалните преки пътища</value>
+  </data>
 </root>

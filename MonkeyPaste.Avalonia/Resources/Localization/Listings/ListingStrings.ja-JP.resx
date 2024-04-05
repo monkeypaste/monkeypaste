@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>無制限 - 毎年</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>初回リリース</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>このサブスクリプションを使用すると、以下を受け取ります。
 ●無制限の容量</value>
@@ -268,5 +265,17 @@
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>安全、安心、プライベートなローカルデータストレージ、オプションの2要素パスワード保護</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypasteは、このリリースの時点で完全に無料になりました!!
+
+Monkeypasteが現在、オープンソースプロジェクトに移行しているため、すべての制限（APPサブスクリプション）は削除されています。したがって、貢献に興味がある場合は、github（github.com/monkeypaste）に注意してください。
+
+更新：
+
+ - すべての容量制限が削除されました！
+-URLエディターUIの改善を拒否しました
+ - モンキーパストの複数のインスタンスを実行するためのベースラインサポート
+ - 新しい共有値エディター（該当する場合はプラグインブラウザ内）</value>
   </data>
 </root>

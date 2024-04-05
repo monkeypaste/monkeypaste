@@ -2895,4 +2895,60 @@ Volledig herstel kan niet worden gegarandeerd en kan de prestaties verminderen o
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Plakken op: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Onbekende fout {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Uw aankoop kan niet worden voltooid. Reden: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Domein toevoegen</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Pagina toevoegen</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Het domein voor deze pagina wordt afgewezen. Om deze pagina toe te staan, moet u de afwijzing voor '{0}' verwijderen.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Het domein '{0}' is al afgewezen</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domeinen</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Deze pagina is al afgewezen.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Pagina's</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synchroniseren</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Een ander exemplaar van Monkeypaste is al actief. Weet u zeker dat u een nieuw exemplaar wilt openen?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Configureren</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globale muis- en toetsenbord snelkoppelingen zijn uitgeschakeld.
+
+Globale snelkoppelingen kunnen nu worden ingeschakeld in het menu System Tray</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globale snelkoppelingen uitgeschakeld: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globale muis- en toetsenbord snelkoppelingen zijn ingeschakeld.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimenteel) Globale snelkoppelingen ingeschakeld: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Schakel globale snelkoppelingen uit</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Schakel globale snelkoppelingen in</value>
+  </data>
 </root>

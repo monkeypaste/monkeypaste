@@ -2895,4 +2895,60 @@ Total återställning kan inte garanteras och kan minska prestandan eller till o
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Klistra in i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Okänt fel {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ditt köp kunde inte slutföras. Anledning: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Lägg till domän</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Lägg till sidan</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domänen för denna sida avvisas. För att tillåta den här sidan måste du ta bort avslaget för '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domänen '{0}' avvisas redan</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domäner</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Denna sida avvisas redan.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Sidor</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synkronisera</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>En annan instans av monkeypaste körs redan. Är du säker på att du vill öppna en ny instans?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurera</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globala mus- och tangentbordsgenvägar har inaktiverats.
+
+Globala genvägar kan nu vara aktiverade i systemfack -menyn</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globala genvägar inaktiverade: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globala mus- och tangentbordsgenvägar har aktiverats.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimental) Globala genvägar aktiverade: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Växla globala genvägar</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Växla globala genvägar på</value>
+  </data>
 </root>

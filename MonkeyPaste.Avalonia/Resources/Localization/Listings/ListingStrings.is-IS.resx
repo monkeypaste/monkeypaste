@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Ótakmarkað - Árlega</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Upphafleg útgáfa</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Með þessari áskrift færðu:
 ● Ótakmarkað afkastageta</value>
@@ -268,5 +265,17 @@ Auður af verðmæti og merkingu sem þú átt skilið að hafa tiltækt innan s
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Örugg, örugg og einkarekin staðbundin gagnageymsla með valfrjálsri 2 - þátta lykilorðsvörn</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeysta er nú alveg ókeypis frá og með þessari útgáfu !!
+
+Allar takmarkanir (í APP-áskriftum) hafa verið fjarlægðar þar sem MonkeyPaste er nú að breytast yfir í að verða opið verkefni. Svo fylgstu með Github okkar (github.com/monkeypaste) ef þú hefur áhuga á að leggja sitt af mörkum.
+
+Uppfærslur:
+
+- Allar getu takmarkanir fjarlægðar!
+- Hafnar endurbætur á UI ritstjóra
+- Grunnstuðningur við að keyra mörg tilvik af acpryduce
+- Nýr ritstjóri sameiginlegs verðmæta (í viðbótarvafra þar sem við á)</value>
   </data>
 </root>

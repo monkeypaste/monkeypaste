@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Sınırsız - Yıllık</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>İlk sürüm</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Bu abonelikle:
 ● Sınırsız kapasite</value>
@@ -268,5 +265,17 @@ panonuz, kendi makinenizin ötesinde HERHANGİ BİR YERDE izlenir veya saklanır
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>İsteğe bağlı 2 faktörlü parola koruması ile güvenli, emniyetli ve özel yerel veri depolama</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste şimdi bu sürümden itibaren tamamen ücretsiz !!
+
+Monkeypaste şimdi açık kaynaklı bir proje haline geldiğinden tüm kısıtlamalar (uygulama aboneliklerinde) kaldırıldı. Eğer katkıda bulunmak istiyorsanız GitHub'ımıza (GitHub.com/Monkeyaste) göz atın.
+
+Güncellemeler:
+
+- Tüm kapasite kısıtlamaları kaldırıldı!
+- Reddedilen URL Editör Kullanıcı Araştırması Geliştirmeleri
+- Monkeycaste'in birden fazla örneğini çalıştırmak için temel destek
+- Yeni Paylaşılan Değer Düzenleyicisi (Mümkün olan yerlerde eklenti tarayıcısında)</value>
   </data>
 </root>

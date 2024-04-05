@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Чексиз - Жылдык</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Биринчи чыгарылыш</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Бул жазылуу менен сиз аласыз:
 ● Чексиз кубаттуулук</value>
@@ -268,5 +265,17 @@
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>кошумча 2 менен коопсуз, коопсуз жана жеке жергиликтүү маалыматтарды сактоо - фактор сырсөз коргоо</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste азыр бул бошотуу үчүн толугу менен акысыз !!
+
+Бардык чектөөлөр (Колдонмонун жазылуулары) MonkeyPaste азыр ачык булак долбоорун болууну өтүндү. Андыктан, сиз өзүңүздүн салым кошууга кызыкдар болсоңуз, анда биздин Gitub (Github.com/monkepaste) көзүн караңыз.
+
+Жаңыртуулар:
+
+- Бардык кубаттуулуктагы чектөөлөр алынып салынат!
+- Четке кагылган URL редактору UI өркүндөтүү
+- MonkeyPaste бир нече мисалдарын иштеп чыгуу үчүн баштапкы колдоо
+- Жаңы бөлүшүлгөн баалуу редактор (Plugin Browser ичинде)</value>
   </data>
 </root>

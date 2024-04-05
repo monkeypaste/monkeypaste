@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>ደረት ኣልቦ - ዓመት ዓመት</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>ናይ መጀመርታ ምፍታሕ</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>በዚ ምዝገባ እዚ ክትረኽቦ ኢኻ፤
 ● ደረት ኣልቦ ዓቕሚ .</value>
@@ -268,5 +265,17 @@
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>ድሕንነትን ድሕንነትን ናይ ብሕቲ ሓበሬታ ንምኽዛን ኣማራጺ ዝዀነ 2 ረቛሒ ዘለዎ ናይ password መከላኸሊ</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste ሕጂ ምሉእ ብምሉእ ነጻ ኮይኑ ኣሎ ክሳብ እዚ ምውጻእ!!
+
+ሕጂ ሞንኪፓስቲ ናብ ክፉት ምንጪ ዘለዎ ፕሮጀክት ንምዃን ዝሰጋገር ስለዘሎ፡ ኩሉ ገደብ (ኣብ ናይ ኣፕ ምዝገባ) ተኣልዩ ኣሎ። ስለዚ ኣብ ኣበርክቶ ክትገብሩ እንተደሊኹም ኣብ GitHub.com/MonkeyPaste)ና ክትከታተሉ ትኽእሉ ኢኹም።
+
+እዋናዊ ሓበሬታታት፤
+
+- ኩሉ ናይ ዓቕሚ ገደብ ተኣልዩ!
+- ዝተነጽገ URL Editor UI ምምሕያሻት
+- መበገሲ ደገፍ ንብዙሕ ኣጋጣሚታት ናይ MonkeyPaste
+- ሓድሽ ዝተኻፈለ ዋጋ ኣርታዒ (ኣብ ዝምልከቶ ቦታ ኣብ ፕላግኢን መርበብ ሓበሬታ)</value>
   </data>
 </root>

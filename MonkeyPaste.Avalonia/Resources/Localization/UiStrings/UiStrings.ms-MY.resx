@@ -2895,4 +2895,60 @@ Pemulihan total tidak boleh dijamin dan boleh mengurangkan prestasi atau bahkan 
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Tampal ke: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Ralat tidak diketahui {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Pembelian anda tidak dapat diselesaikan. Sebab: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Tambah domain</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Tambah halaman</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domain untuk halaman ini ditolak. Untuk membenarkan halaman ini, anda perlu mengeluarkan penolakan untuk '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domain '{0}' sudah ditolak</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domain</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Halaman ini sudah ditolak.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Halaman</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>SYNC</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Satu lagi contoh monkeypaste sudah berjalan. Adakah anda pasti mahu membuka contoh baru?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurasikan</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Pintasan tetikus global dan papan kekunci telah dilumpuhkan.
+
+Pintasan global kini boleh didayakan dalam menu dulang sistem</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Pintasan Global dilumpuhkan: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Pintasan tetikus global dan papan kekunci telah diaktifkan.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimen) Pintasan global didayakan: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Togol jalan pintas global</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Togol pintasan global di</value>
+  </data>
 </root>

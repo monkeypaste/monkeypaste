@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Walang limitasyong - taun -taon</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Paunang Paglabas</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Sa subscription na ito ay matatanggap mo:
 ● Walang limitasyong kapasidad</value>
@@ -268,5 +265,17 @@ ang iyong clipboard ay kailanman sinusubaybayan o naka imbak SAANMAN lampas sa i
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Ligtas, ligtas at pribadong lokal na imbakan ng data na may opsyonal na 2 - factor na proteksyon ng password</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Ang Monkeypaste ay ganap na libre sa paglabas na ito !!
+
+Ang lahat ng mga paghihigpit (sa mga subscription sa app) ay tinanggal dahil ang Monkeypaste ay lumilipat na ngayon sa pagiging isang bukas na mapagkukunan na proyekto. Kaya pagmasdan ang aming github (github.com/monkeypaste) kung interesado kang mag -ambag.
+
+Mga Update:
+
+- Lahat ng mga paghihigpit sa kapasidad ay tinanggal!
+- tinanggihan ang mga pagpapabuti ng URL editor ng UI
+- Suporta sa Baseline para sa pagpapatakbo ng maraming mga pagkakataon ng Monkeypaste
+- Bagong Shared Value Editor (sa Plugin Browser kung saan naaangkop)</value>
   </data>
 </root>

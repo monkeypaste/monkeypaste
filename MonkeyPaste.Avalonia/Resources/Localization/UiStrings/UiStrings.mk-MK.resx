@@ -2895,4 +2895,60 @@ Monkeypaste на уредот
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;Паста на: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Непозната грешка {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Вашата набавка не може да се заврши. Причина: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Додадете домен</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Додадете страница</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Доменот за оваа страница е одбиен. За да дозволите оваа страница, ќе треба да го отстраните отфрлањето за '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Доменот '{0}' е веќе отфрлен</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домени</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Оваа страница е веќе одбиена.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Страници</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Синхронизација</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Уште еден пример на MonkeyPaste веќе работи. Дали сте сигурни дека сакате да отворите нов пример?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Конфигурирај</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Глобалните кратенки на глувчето и тастатурата се оневозможени.
+
+Глобалните кратенки сега можат да бидат овозможени во менито за системски послужавник</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Глобални кратенки оневозможени: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Овозможени се глобални кратенки на глувчето и тастатурата.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Експериментални) Овозможени глобални кратенки: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Вклучете ги глобалните кратенки</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Вклучете ги глобалните кратенки на</value>
+  </data>
 </root>

@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>無限 - 每年</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>初始發行</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>通過此訂閱，您將收到：
 ●無限能力</value>
@@ -268,5 +265,17 @@
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>安全、可靠和私密的本地數據存儲，可選的 2 因素密碼保護</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>截至此版本，MonkeyPaste現在完全免費！！
+
+所有限制（在應用程序訂閱中）已被刪除，因為Monkeypaste現在正在轉變為開源項目。因此，如果您有興趣貢獻，請密切注意我們的github（github.com/monkeypaste）。
+
+更新：
+
+ - 消除了所有容量限制！
+ - 拒絕的URL編輯器UI改進
+ - 為運行多個實例的MonkePaste的支持
+ - 新的共享價值編輯器（在適用的插件瀏覽器中）</value>
   </data>
 </root>

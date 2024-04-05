@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Неограничено - годишње</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Иницијално издање</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Помоћу ове претплате ћете добити:
 ● Неограничени капацитет</value>
@@ -268,5 +265,17 @@ vaša ostava se ikada prati ili skladišti bilo gde izvan vaše mašine. Menstru
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>Bezbedno, bezbedno i privatno lokalno skladištenje podataka sa opcionalnom zaštitom lozinke 2 - faktor zaštite lozinkom</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Монкеипасте је сада у потпуности слободан од овог издања !!
+
+Сва ограничења (у претплатама апликација) су уклоњене док се монкеапасте сада прелази на постанак пројекта отвореног кода. Зато пазите на наше ГитХуб (ГитХуб.цом / Монкеапасте) ако вас занима да допринесете.
+
+Ажурирања:
+
+- Сва ограничења капацитета уклоњена!
+- Одбијени УРЛ уредник УИ-а побољшања
+- Основна подршка за покретање више инстанци монкеупасте
+- Нови уређивач дељених вредности (у прегледачу додатака, где је применљиво)</value>
   </data>
 </root>

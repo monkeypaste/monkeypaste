@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             InitStartupTray();
         }
-        private static void InitActualTray() {
+        public static void InitActualTray() {
             var rootIcon = CreateTrayIcon();
             rootIcon.Menu = CreateNativeMenu();
 

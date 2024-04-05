@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>چەكلىمىسىز - يىل</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>دەسلەپكى تارقىتىلدى</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>سىز تاپشۇرۇۋالىدىغان بۇ مۇشتەرىلىك بىلەن:
 ● چەكسىز ئىقتىدار</value>
@@ -268,5 +265,17 @@
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>بىخەتەر، بىخەتەر ۋە شەخسىي يەرلىك سانلىق مەلۇمات ساقلاشتا ئىختىيارىي 2 - ئامىللىق شىفىرنى قوغداش</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkypaste ھازىر بۇ ئېلان قىلىنغانغا قەدەر پۈتۈنلەي ھەقسىز !!
+
+بارلىق چەكلىمىلەر (ئەپ مۇشتەرىلىكى) monypaste ھازىر ئېچىلغاندا ئېلىۋېتىلدى, ھازىر ئوچۇق مەنبەلىك تۈر بولۇشنى ئۆتۈندى. شۇڭا بىزنىڭ GitHub (Github Pray.com/monkepast) غا دىققەت قىلىڭ.
+
+يېڭىلانمىلار:
+
+- بارلىق سىغىمى ئىقتىدار چىقىرىۋېتىلدى!
+- URL تەھرىرلىگۈچ UI نى ياخشىلاش
+- Monkeypaste نىڭ كۆپ خىل ئەھۋاللىرىنى ئىجرا قىلىشنىڭ ئاساسى قوللاش
+- يېڭى ئورتاق قىممەت تەھرىرلىگۈچىسى (قىستۇرما توركۆرگۈدە)</value>
   </data>
 </root>

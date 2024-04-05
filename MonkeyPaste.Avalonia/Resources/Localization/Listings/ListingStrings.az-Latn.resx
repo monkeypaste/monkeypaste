@@ -228,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Limitsiz - illik</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>İlkin buraxılış</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Bu abunə ilə alacaqsınız:
 ● Limitsiz tutum</value>
@@ -268,5 +265,17 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>İsteğe bağlı 2 faktorlu parol qorunması ilə təhlükəsiz, təhlükəsiz və özəl yerli məlumat saxlama</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeyte indi bu buraxılışdan tamamilə azaddır!
+
+Artıq bütün məhdudiyyətlər (App abunəçiləri) çıxarıldığı kimi, artıq açıq mənbəli bir layihə olmağa keçid kimi çıxdı. Buna görə töhfə vermək istəyirsinizsə, Github (Github.com/monkeyte).
+
+Yeniləmələr:
+
+- Bütün tutum məhdudiyyətləri silindi!
+- URL redaktoru UI təkmilləşdirmələrini rədd etdi
+- Monkeytaste birdən çox hallarını işlətmək üçün əsas dəstək
+- Yeni paylaşılan dəyər redaktoru (tətbiq olunan plugin brauzerində)</value>
   </data>
 </root>

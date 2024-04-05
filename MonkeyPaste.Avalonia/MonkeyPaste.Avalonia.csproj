@@ -469,6 +469,7 @@
     <None Remove="Assets\Images\minus2.png" />
     <None Remove="Assets\Images\missingfile.png" />
     <None Remove="Assets\Images\monkey.png" />
+    <None Remove="Assets\Images\monkeypaused.png" />
     <None Remove="Assets\Images\monkeyupdate.png" />
     <None Remove="Assets\Images\monkeywink.png" />
     <None Remove="Assets\Images\mousebothclick.png" />
@@ -1598,6 +1599,9 @@
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\missingfile.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\monkeypaused.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\monkeyupdate.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

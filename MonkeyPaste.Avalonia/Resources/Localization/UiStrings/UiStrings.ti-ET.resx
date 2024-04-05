@@ -2895,4 +2895,60 @@
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>&lt;span&gt;ለበዋ ፦ &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
   </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>ዘይፍለጥ ጌጋ {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>ዕድጊኻ ክዛዘም ኣይከኣለን። ምኽንያት፡ {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ዶሜይን ምውሳኽ .</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>ገጽ ምውሳኽ .</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>ናይዚ ገጽ ዓውዲ ይንጸግ። ነዚ ገጽ ንምፍቃድ ን '{0}' ዝብል ምንጻግ ከተውጽኦ ከድልየካ እዩ።</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>እቲ ዶሜይን '{0}' ድሮ ተነጺጉ ኣሎ።</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ዶመይናት .</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>እዚ ገጽ እዚ ድሮ ተነጺጉ ኣሎ።</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>ገጻት</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>sync .</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>ካልእ ኣብነት ናይ ሞንኪፓስቲ ድሮ ይጎዪ ኣሎ። ርግጸኛ ዲኻ ሓድሽ ምሳሌ ክትከፍት ከም እትደሊ?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>ምውቃር</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ዓለምለኻዊ ኣቋራጭ ማውስን ኪቦርድን ተሰናኺሉ ኣሎ።
+
+ዓለምለኻዊ ኣቋራጭ መንገዲ ሕጂ ኣብቲ ናይ ስርዓት ትሬይ ዝርዝር ክኽፈት ይኽእል</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ዓለምለኻዊ ኣቋራጭ መንገዲ ስንኩል: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ዓለምለኻዊ ኣቋራጭ ማውስን ኪቦርድን ተኸፊቱ ኣሎ።</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ፈተነ) ዓለምለኻዊ ኣቋራጭ መንገዲ ተኸፊቱ: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ዓለምለኻዊ ኣቋራጭ መንገዲ ቶግለ</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>ዓለምለኻዊ ኣቋራጭ መንገዲ ኣብ ልዕሊ</value>
+  </data>
 </root>

@@ -228,9 +228,6 @@ U ଅସୀମିତ ଆବର୍ଜନା ଏବଂ ଅଭିଲେଖାଗା
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>ଅସୀମିତ - ବାର୍ଷିକ |</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>ପ୍ରାରମ୍ଭିକ ପ୍ରକାଶନ |</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>ଏହି ସଦସ୍ୟତା ସହିତ ଆପଣ ପାଇବେ:
 U ଅସୀମିତ କ୍ଷମତା |</value>
@@ -268,5 +265,17 @@ U ଅସୀମିତ କ୍ଷମତା |</value>
   </data>
   <data name="ssCaption7" xml:space="preserve">
     <value>ବିକଳ୍ପ 2 - ଫ୍ୟାକ୍ଟର ପାସୱାର୍ଡ ସୁରକ୍ଷା ସହିତ ସୁରକ୍ଷିତ, ସୁରକ୍ଷିତ ଏବଂ ବ୍ୟକ୍ତିଗତ ସ୍ଥାନୀୟ ଡାଟା ଷ୍ଟୋରେଜ୍</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>ମାଙ୍କଡ଼ପେଷ୍ଟ ବର୍ତ୍ତମାନ ଏହି ପ୍ରକାଶନ ପରି ସମ୍ପୁର୍ଣ୍ଣ ଭାବରେ ମାଗଣା !!
+
+ମାଙ୍କଡପଷ୍ଟରେ ସମସ୍ତ ପ୍ରତିବନ୍ଧକ (ଆପର ସବସ୍କ୍ରିପସନ୍) ପରି ସମସ୍ତ ପ୍ରତିବନ୍ଧକକୁ ଅପସାରଣ କରାଯାଇଛି ଭାବରେ ଅପସାରଣ କରାଯାଇଛି | ତେଣୁ ଯଦି ଆପଣ ଯୋଗଦାନ କରିବାକୁ ଆଗ୍ରହୀ ତେବେ ଆମର Github (Github.com/monekepaTe) ଉପରେ ଧ୍ୟାନ ଦିଅନ୍ତୁ |
+
+ଅଦ୍ୟତନଗୁଡ଼ିକ:
+
+- ସମସ୍ତ କ୍ଷମତା ପ୍ରତିବନ୍ଧକ ଅପସାରିତ ହୋଇଛି!
+- ଉର୍ସନ୍ URL ସମ୍ପାଦକ ui ଉନ୍ନତି |
+- Mankeypaste ର ଏକାଧିକ ଉଦାହରଣ ଚଲାଇବା ପାଇଁ ନୋମଲାଇନ୍ ସମର୍ଥନ |
+- ନୂତନ ଅଂଶୀଦାର ମୂଲ୍ୟ ସମ୍ପାଦକ (ପ୍ଲଗଇନ୍ ବ୍ରାଉଜରରେ ଯେଉଁଠାରେ ପ୍ରଯୁଜ୍ୟ)</value>
   </data>
 </root>
