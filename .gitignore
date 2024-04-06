@@ -356,6 +356,7 @@ MigrationBackup/
 # My Stuff
 # #########################################################################################################
 
+/ext
 /MonkeyPaste.Desktop/cef
 /legal_docs
 /auth
@@ -364,4 +365,6 @@ MigrationBackup/
 /file_templates
 /notes
 /win_sandbox
+/Build/Ledger/
+/Plugins/
 /MonkeyPaste.com/src/config/secrets.php
