@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>cóip</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>greab</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>bainisteoir gearrthaisce</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>úsáid</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Go hiomlán - Eagarthóir gearrthóg le fáil le Find/Replace, Téacs Saibhir (Táblaí, Liostaí, Naisc, etc.) Teimpléad Téacs le haghaidh Greamaithe Tapa, Dinimiciúla Ó do Bhailiúchán Snippet</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Stóráil Sonraí Áitiúla Sábháilte, Slán agus Príobháideacha le Cosaint Roghnach 2 - Fachtóir Pasfhocal</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Tógtha - I mbrabhsálaí plugin le leabharlann forlíontáin atá ag fás i gcónaí</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Is bainisteoir gearrthaisce, uirlis uathoibrithe agus táirgiúlachta é Monkeypaste mar aon cheann eile. Feabhas a chur ar do ghearrthaisce i gcuid shaibhrithe agus eagraithe de do shreabhadh oibre,
-ina bhfuil comhéadan iomasach agus ísealphróifíle a thacaíonn le téacs, comhaid agus íomhánna. Tá sé deartha le haghaidh solúbthachta, le pobal atá ag fás i gcónaí - leabharlann na mbreiseán.
-
-Thosaigh sé mar thurgnamh ag ríomhchláraitheoir ar mian leis níos mó ná cóipeáil agus greamaigh amach as an ghearrthaisce. Theastaigh uaidh ordú simplí cosúil le Ctrl+C a chuirfeadh 'leis' ina ionad
-de 'athsholáthar' cad a bhí ar an ghearrthaisce. Agus d'oibrigh an turgnamh. Bhí an uirlis bheag an -áisiúil. Chuir sé seo níos mó smaointe agus níos mó turgnaimh ar an ríomhchláraitheoir, sin
-Anois tá "monkeypaste" anois.
-
-Ós rud é go bhfuil an deasc ar do chuid comhad, tá sé i gceist ag monkeypaste a bheith i do ghearrthaisce. Is sraith uirlisí é atá deartha go cúramach chun comhtháthú agus idirghníomhú go cúramach le
-aon iarratas nó formáid an ábhair. Tá Ctrl+C agus Ctrl+V i bhfad níos mó ná aicearraí amháin. Is iad na calafoirt iontrála iad gach scair iarratas, ag iompar a
-Saibhreas luacha agus brí atá tuillte agat a bheith ar fáil ar do mhéar. Ní hamháin go gcaithfear ar shiúl é tar éis an chéad Ctrl+C eile.
-
-Is mise an ríomhchláraitheoir sin a luadh níos luaithe agus ba mhaith liom go mbeadh gach duine in ann úsáid a bhaint as monkeypaste. Mar sin tá sé féin agus a ghnéithe go léir saor in aisce a úsáid.
-Ba mhaith liom freisin go mbraithfeá compordach é a úsáid. Mar sin geallaim duit, mar an t -aon fhórsa atá taobh thiar dá chruthú, nach bhfuil aon cheann den fhaisnéis phearsanta (an -mhaith) is féidir a thagann chun cinn
-Déantar do ghearrthaisce a rianú nó a stóráil riamh in áit ar bith thar do mheaisín féin. Tréimhse.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Déantar do ghearrthaisce a rianú nó a stóráil riamh in áit ar bith thar do
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Is jungle an gearrthaisce. Is é Monkeypaste an Rí! Swing ó app go app, é seo a chóipeáil agus a ghreamú mar nach raibh riamh roimhe seo le monkeypaste !! Branda - gearrthaisce nua, ceannródaíoch agus uirlis uathoibrithe anailíseach !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Sampla de mhonagáin i ngníomh!</value>
   </data>
@@ -258,9 +228,6 @@ Déantar do ghearrthaisce a rianú nó a stóráil riamh in áit ar bith thar do
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Unlimited - Bliantúil</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Scaoileadh tosaigh</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Leis an síntiús seo gheobhaidh tú:
 ● Cumas neamhtheoranta</value>
@@ -270,5 +237,45 @@ Déantar do ghearrthaisce a rianú nó a stóráil riamh in áit ar bith thar do
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Níos mó ardáin agus gnéithe ag teacht go luath! Táimid díreach tar éis tús a chur le gettings 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Cuardach tapa a shoilsiú agus a aibhsiú, ach tús a chur le clóscríobh!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Stóráil Téacs, Íomhá agus Comhad Gearrthóga lena fhoinse go léir (an aip, an láithreán gréasáin, an t -am, agus an i bhfad níos mó) go huathoibríoch faisnéis go huathoibríoch</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>Is bainisteoir gearrthaisce, uathoibriú agus uirlis táirgiúlachta é MonkeyPaste cosúil le haon cheann eile. Feabhas a chur ar do ghearrthaisce i gcuid saibhrithe agus eagraithe de do shreabhadh oibre,
+featuring iomasach agus íseal - comhéadan próifíl a thacaíonn téacs, comhaid agus íomhánna. Deartha le haghaidh solúbthachta, le pobal atá ag fás i gcónaí - libray tiomáinte breiseáin.
+
+Thosaigh sé mar thurgnamh ag ríomhchláraitheoir ar mian leis níos mó ná cóipeáil agus greamaigh amach as an ngearrthaisce. Theastaigh ordú simplí uaidh mar Ctrl+C a chuirfeadh 'leis' ina áit 
+'ionadaigh' an méid a bhí ar an ngearrthaisce. Agus d'oibrigh an turgnamh. Bhí an uirlis bheag an-áisiúil. Chuir sé seo isteach ar an ríomhchláraitheoir le níos mó smaointe agus níos mó turgnaimh, 
+anois tar éis éirí "MoncaíPaste". 
+
+Ós rud é go bhfuil an deasc ar do chuid comhad, tá sé i gceist ag MonkeyPaste a bheith ar do ghearrthaisce. Tá a sraith uirlisí deartha go cúramach chun comhtháthú agus idir-inoibritheach gan dealramh le 
+aon chur i bhfeidhm nó formáid inneachair. Tá Ctrl+C agus Ctrl+V i bhfad níos mó ná aicearraí amháin. Is iad na calafoirt iontrála a roinneann gach iarratas, agus 
+saibhreas luacha agus brí atá tuillte agat a bheith ar fáil ar do mhéar. Ní hamháin gur caitheadh amach é tar éis an chéad Ctrl+C eile.
+
+Is mise an ríomhchláraitheoir sin a luadh níos luaithe agus ba mhaith liom go mbeadh gach duine in ann úsáid a bhaint as MonkeyPaste. Mar sin, tá sé agus gach ceann dá ghnéithe go hiomlán saor in aisce le húsáid. 
+Ba mhaith liom freisin go mbraitheann tú compordach á úsáid. Mar sin, geallaim duit, mar an t-aon fhórsa atá taobh thiar dá chruthú, nach bhfuil aon chuid den fhaisnéis phearsanta (an-) a d'fhéadfadh teacht chun cinn ar 
+déantar do ghearrthaisce a rianú nó a stóráil riamh ÁIT AR BITH thar do mheaisín féin. Tréimhse.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>gearrthaisce</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Stóráil sonraí áitiúla sábháilte, slán agus príobháideach le cosaint roghnach 2 - cosaint focal faire fachtóir</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Tá Monkeypaste go hiomlán saor in aisce anois mar an scaoileadh seo !!
+
+Baineadh na srianta go léir (i suibscríbhinní app) as mar go bhfuil monkeypaste ag aistriú go tionscadal foinse oscailte anois. Mar sin, coinnigh súil ar ár Github (github.com/monkeypaste) má tá suim agat cur leis.
+
+Nuashonruithe:
+
+- Gach srian acmhainne a bhaint!
+- Feabhsuithe Chomhéadain an Eagarthóra URL diúltaithe
+- Tacaíocht bhunlíne chun il -chásanna de monkeypaste a reáchtáil
+- Eagarthóir Luach Comhroinnte Nua (i mbrabhsálaí plugin nuair is infheidhme)</value>
   </data>
 </root>

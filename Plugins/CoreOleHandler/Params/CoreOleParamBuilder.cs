@@ -7,20 +7,20 @@ namespace CoreOleHandler {
         string PluginGuid => "cf2ec03f-9edd-45e9-a605-2a2df71e03bd";
         string IconDir => @".\Resources\Images";
 
-        (string, string, int, string)[] _formats;
+        (string formatName, string label, int max_len, string icon_path)[] _formatModels;
         public MpClipboardComponent GetFormats(MpHeadlessComponentFormatRequest request) {
             CoreOleHelpers.SetCulture(request);
             // create format models AFTER culture set 
-            _formats = GetFormatModels();
-
+            _formatModels = GetFormatModels();
+            
             return new MpClipboardComponent() {
-                readers = _formats.Select(x => GetFormat(x.Item1, true)).ToList(),
-                writers = _formats.Select(x => GetFormat(x.Item1, false)).ToList()
+                readers = _formatModels.Select(x => GetFormat(x.formatName, true)).ToList(),
+                writers = _formatModels.Select(x => GetFormat(x.formatName, false)).ToList()
             };
         }
 
-        private (string, string, int, string)[] GetFormatModels() {
-            return new (string, string, int, string)[] {
+        private (string formatName, string label, int max_len, string icon_path)[] GetFormatModels() {
+            return [
                 (MpPortableDataFormats.Text,Resources.TextFormatLabel,DEF_MAX_TEXT,"text.png"),
                 (MpPortableDataFormats.MimeText,Resources.MimeTextFormatLabel,DEF_MAX_TEXT,"text.png"),
                 (MpPortableDataFormats.Rtf,Resources.RtfFormatLabel,DEF_MAX_TEXT,"rtf.png"),
@@ -28,18 +28,21 @@ namespace CoreOleHandler {
                 (MpPortableDataFormats.Html,Resources.MimeHtmlFormatLabel,-1,"html.png"),
                 (MpPortableDataFormats.MimeMozUrl,Resources.MozUrlFormatLabel,-1,"html.png"),
                 (MpPortableDataFormats.Image,Resources.PngFormatLabel,-1,"png.png"),
+#if MAC
+		        (MpPortableDataFormats.Image2,"TIFF",-1,"png.png"),
+#endif
                 (MpPortableDataFormats.Csv,Resources.CsvFormatLabel,DEF_MAX_TEXT,"csv.png"),
                 (MpPortableDataFormats.Files,Resources.FilesFormatLabel,-1,"files.png"),
                 //("x-special/gnome-copied-files","Files (Linux)"),
-        };
+        ];
         }
 
         private MpClipboardHandlerFormat GetFormat(string format, bool isReader) {
             var hf = new MpClipboardHandlerFormat() {
                 formatGuid = $"{PluginGuid}-{format}-{(isReader ? "READ" : "WRITE")}",
-                iconUri = Path.Combine(IconDir, $"{_formats.FirstOrDefault(x => x.Item1 == format).Item4}"),
+                iconUri = Path.Combine(IconDir, $"{_formatModels.FirstOrDefault(x => x.formatName == format).icon_path}"),
                 formatName = format,
-                displayName = _formats.FirstOrDefault(x => x.Item1 == format).Item2,
+                displayName = _formatModels.FirstOrDefault(x => x.formatName == format).label,
                 parameters = GetFormatParameters(format, isReader),
 
             };
@@ -47,20 +50,20 @@ namespace CoreOleHandler {
         }
 
         private List<MpParameterFormat> GetFormatParameters(string format, bool isReader) {
-            var tup = _formats.FirstOrDefault(x => x.Item1 == format);
+            var tup = _formatModels.FirstOrDefault(x => x.formatName == format);
             var pfl = new List<MpParameterFormat>();
             // DEFAULT PARAMS
 
+            // IGNORE PARAM
             pfl.Add(new MpParameterFormat() {
                 label = Resources.CommonIgnoreLabel,
-                //description = $"When checked {format} format will not be {(isReader ? "read from" : "written to")} the clipboard or drag-and-drop data.",
                 description = string.Format(isReader ? Resources.CommonIgnoreReaderHint : Resources.CommonIgnoreWriterHint, format),
                 controlType = MpParameterControlType.CheckBox,
                 unitType = MpParameterValueUnitType.Bool,
                 value = new MpParameterValueFormat(false.ToString()),
                 paramId = GetParamId(format, isReader, Resources.CommonIgnoreLabel)
             });
-            if (tup.Item3 >= 0) {
+            if (tup.max_len >= 0) {
                 pfl.Add(new MpParameterFormat() {
                     label = Resources.MaxCharsLabel,
                     description = Resources.MaxCharsHint,
@@ -68,7 +71,7 @@ namespace CoreOleHandler {
                     unitType = MpParameterValueUnitType.Integer,
                     minimum = 1,
                     maximum = MAX_MAX_TEXT,
-                    value = new MpParameterValueFormat(tup.Item3.ToString(), true),
+                    value = new MpParameterValueFormat(tup.max_len.ToString(), true),
                     paramId = GetParamId(format, isReader, "maxcharcount")
                 });
             }
@@ -162,6 +165,27 @@ namespace CoreOleHandler {
                                 new[] { "bmp", "png", "jpg" }
                                 .Select(x => new MpParameterValueFormat(x, x == "png"))
                                 .ToList()
+                        });
+                        
+                        pfl.Add(new MpParameterFormat() {
+                            label = Resources.TextToImageLabel,
+                            description = Resources.TextToImageHint,
+                            controlType = MpParameterControlType.MultiSelectList,
+                            unitType = MpParameterValueUnitType.PlainText,
+                            paramId = GetParamId(format, isReader, "fromtextformats"),
+                            values =
+                                _formatModels
+                                .Where(x=>MpPortableDataFormats.IsTextFormat(x.formatName) is true)
+                                .Select(x => new MpParameterValueFormat(x.formatName,x.label, false))
+                                .ToList()
+                        });
+                        pfl.Add(new MpParameterFormat() {
+                            label = Resources.ImageToTextLabel,
+                            description = Resources.ImageToTextHint,
+                            controlType = MpParameterControlType.CheckBox,
+                            unitType = MpParameterValueUnitType.Bool,
+                            paramId = GetParamId(format, isReader, "asciiart"),
+                            value = new MpParameterValueFormat(true.ToString(), true)
                         });
                     }
                     break;

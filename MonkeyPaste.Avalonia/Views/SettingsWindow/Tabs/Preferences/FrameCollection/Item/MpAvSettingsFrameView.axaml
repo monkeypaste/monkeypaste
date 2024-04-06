@@ -19,7 +19,7 @@
     <local:MpAvClipBorder Padding="5"
                           BorderThickness="0"
                           CornerRadius="10"
-                          BorderBrush="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}">
+                          BorderBrush="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}">
         <Grid RowDefinitions="Auto,*">
             <StackPanel Orientation="Vertical"
                         Spacing="5">

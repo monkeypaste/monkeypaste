@@ -5,7 +5,7 @@
     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <Platforms>$(DefaultPlatforms)</Platforms>
     <UserSecretsId>76007d6d-3b32-4d7d-a98b-36f9c70b1848</UserSecretsId>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <!--<GeneratePackageOnBuild>True</GeneratePackageOnBuild>-->
     <Title>MonkeyPaste.Common</Title>
     <Authors>Monkey</Authors>
     <PackageProjectUrl>https://github.com/monkeypaste/MonkeyPaste.Common.Plugin</PackageProjectUrl>
@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.57" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
@@ -51,10 +52,6 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -77,6 +74,10 @@
     <AssemblyAttribute Include="MonkeyPaste.Common.MpAppVersionAttribute">
       <_Parameter1>$(ApplicationVersion)</_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
   </ItemGroup>
 
 </Project>

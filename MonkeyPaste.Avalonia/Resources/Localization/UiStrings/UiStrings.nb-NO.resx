@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lær mer om planer</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Lim inn til: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Ved hjelp av tilgjengelige kontakter (krever en plugin-modul for henteren) vil dette feltet bli brukt for alle forekomster av denne malen på tvers av dette dokumentet, eller i alle tilfeller det vil bli referert til senere.&lt;/p&gt;&lt;p&gt; Så hvis du for eksempel velger e-postadresse her, vil e-postfeltet til kontakten du velger, bli brukt for alle forekomster i dette dokumentet.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Total restaurering kan ikke garanteres og kan redusere ytelsen eller til og med 
     <value>Kan ikke angi delte verdiparametere i forhåndsinnstillinger. Paramid '{0}' i forhåndsinnstilling '{1}' for plugin '{2}' må fjernes eller paramvalue kan spesifiseres i parameterdefinisjonsdelen.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Forhåndsinnstillinger må ha unike guider. Duplikat forhåndsinnstilt guid '{0}' ble oppdaget i plugin '{1}' for forhåndsinnstillinger: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin -parsingfeil, på banen '{0}' null, sannsynligvis feil parsing json. Ignorerer plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Total restaurering kan ikke garanteres og kan redusere ytelsen eller til og med 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' inneholder delte verdier. Vil du tilbakestille dem også?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Forhåndsinnstillinger må ha unike guider. Duplikatforhåndsinnstilt guid '{0}' ble oppdaget i plugin '{1}' for forhåndsinnstillinger: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Lim inn til: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Ukjent feil {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Kjøpet ditt kunne ikke fullføres. Årsak: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Legg til domene</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Legg til side</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domenet for denne siden blir avvist. For å tillate denne siden må du fjerne avvisningen for '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domenet '{0}' er allerede avvist</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domener</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Denne siden er allerede avvist.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Sider</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synkronisering</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>En annen forekomst av MonkeyPaste kjører allerede. Er du sikker på at du vil åpne en ny forekomst?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurere</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globale snarveier for mus og tastatur er deaktivert.
+
+Globale snarveier kan nå aktiveres i systemskuffenyen</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globale snarveier deaktivert: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globale snarveier for mus og tastatur er aktivert.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimentell) Globale snarveier aktivert: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Veksler globale snarveier av</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Veksle globale snarveier på</value>
   </data>
 </root>

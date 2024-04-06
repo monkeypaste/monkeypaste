@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>بلا عنوان</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>من أجل المتعة، عندما يتم تحديد ذلك، سيتم تحويل الصورة الموجودة في الحافظة بشكل فظ إلى صورة فنية بتنسيق ascii (نص عادي) 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>صورة إلى نص</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>عند توفرها، سيتم تحويل بيانات تنسيق النص المحدد الأول إلى صورة وإضافتها إلى الحافظة.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>تنسيقات النص إلى الصورة</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>الصورة (المشاجرة)</value>
+  </data>
 </root>

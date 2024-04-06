@@ -32,13 +32,16 @@ namespace MonkeyPaste.Common {
         #region Statics
         public static MpPortableProcessInfo FromPath(string path) {
             if (path.IsFile()) {
-                return new MpPortableProcessInfo() { ProcessPath = path };
+                return new MpPortableProcessInfo() {
+                    ProcessPath = path
+                };
             }
             return null;
         }
         public static MpPortableProcessInfo FromHandle(nint handle) {
-            if (handle != 0) {
-                return new MpPortableProcessInfo() { Handle = handle };
+            if (MpCommonTools.Services != null &&
+                MpCommonTools.Services.ProcessWatcher != null) {
+                return MpCommonTools.Services.ProcessWatcher.GetProcessInfoFromHandle(handle);
             }
             return null;
         }
@@ -47,7 +50,6 @@ namespace MonkeyPaste.Common {
         #region Constructors
 
         public MpPortableProcessInfo() { }
-        public MpPortableProcessInfo(string path) { ProcessPath = path; }
         #endregion
 
         #region Public Methods

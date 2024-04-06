@@ -2639,9 +2639,6 @@ adborth@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Dysgu mwy am gynlluniau</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Gludwch i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Gan ddefnyddio cysylltiadau sydd ar gael (mae angen ategyn fetcher) bydd y maes hwn yn cael ei ddefnyddio ar gyfer pob achos o'r templed hwn ar draws y ddogfen hon neu mewn unrhyw un y cyfeirir ato yn ddiweddarach.&lt;/p&gt;&lt;p&gt; Felly, er enghraifft, os dewiswch gyfeiriad e-bost yma, bydd maes e-bost y cyswllt a ddewiswch yn cael ei ddefnyddio ar gyfer pob achos yn y ddogfen hon.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Ni ellir gwarantu adfer cyfanswm a gall leihau perfformiad neu hyd yn oed damwai
     <value>Ni all osod paramedrau gwerth a rennir mewn rhagosodiadau. Mae angen dileu paramid '{0}' yn rhagosodiad '{1}' ar gyfer ategyn '{2}' neu gellir nodi paramvalue yn yr adran diffiniad paramedr.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Rhaid i ragosodiadau fod â guidau unigryw. Canfuwyd rhagosodiad dyblyg '{0}' mewn ategyn '{1}' ar gyfer rhagosodiadau: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Gwall dosrannu ategyn, yn y llwybr '{0}' null, gwall tebygol yn dosrannu json. Anwybyddu ategyn</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Ni ellir gwarantu adfer cyfanswm a gall leihau perfformiad neu hyd yn oed damwai
   <data name="SharedValNtfText" xml:space="preserve">
     <value>Mae '{0}' yn cynnwys gwerthoedd a rennir. Hoffech chi ailosod y rheini hefyd?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Rhaid i ragosodiadau gael canllawiau unigryw. Canfuwyd canllaw rhagosodedig dyblyg '{0}' yn ategyn '{1}' ar gyfer rhagosodiadau: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Gludwch i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Gwall Anhysbys {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Nid oedd modd cwblhau eich pryniant. Rheswm: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Ychwanegu Parth</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Ychwanegu Tudalen</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Mae'r parth ar gyfer y dudalen hon yn cael ei wrthod. I ganiatáu'r dudalen hon bydd angen i chi ddileu'r gwrthodiad ar gyfer '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Mae'r parth '{0}' eisoes wedi'i wrthod</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Parthau</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Mae'r dudalen hon eisoes wedi'i gwrthod.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Tudalennau</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Cysoni</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Mae enghraifft arall o MonkeyPaste eisoes yn rhedeg. Ydych chi'n siŵr eich bod am agor enghraifft newydd?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Ffurfweddu</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Mae llwybrau byr llygoden a bysellfwrdd byd-eang wedi'u hanalluogi.
+
+Bellach gellir galluogi Llwybrau Byr Byd-eang yn y Ddewislen Hambwrdd System</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Analluogwyd llwybrau byr byd-eang: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Mae llwybrau byr llygoden a bysellfwrdd byd-eang wedi'u galluogi.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Arbrofol) Llwybrau Byr Byd-eang wedi'u galluogi: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Toglo llwybrau byr byd-eang i ffwrdd</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Toglo Llwybrau Byr Byd-eang Ymlaen</value>
   </data>
 </root>

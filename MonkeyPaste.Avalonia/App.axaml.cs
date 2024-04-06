@@ -6,6 +6,9 @@ using Avalonia.Logging;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
+#if SUGAR_WV
+using AvaloniaWebView;
+#endif
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
@@ -31,6 +34,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+        private static string _instanceGuid;
+        public static string InstanceGuid => _instanceGuid ?? (_instanceGuid = System.Guid.NewGuid().ToString());
         public static string[] Args { get; set; } = new string[] { };
 
         private static App _instance;
@@ -120,6 +125,16 @@ namespace MonkeyPaste.Avalonia {
         public override void Initialize() {
             AvaloniaXamlLoader.Load(this);
         }
+#if SUGAR_WV
+        public override void RegisterServices() {
+            base.RegisterServices();
+            AvaloniaWebViewBuilder.Initialize((config) => {
+                MpAvWebView.ConfigureWebViewCreationProperties(config);
+            });
+        }
+
+#endif
+
         public override async void OnFrameworkInitializationCompleted() {
             DateTime startup_datetime = DateTime.Now;
 #if DEBUG
@@ -133,8 +148,6 @@ namespace MonkeyPaste.Avalonia {
 
             ReportCommandLineArgs(Args);
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
-
-            MpAvAppRestarter.RemoveRestartTask();
 
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
@@ -178,7 +191,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Desktop_ShutdownRequested(object sender, ShutdownRequestedEventArgs e) {
-
             Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.FrameworkExit, "ShutdownRequested triggered");
         }
         #endregion

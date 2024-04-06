@@ -4,6 +4,15 @@ function onContentLoaded_ntf(conentMsg) {
 	let msgStr = toBase64FromJsonObj(conentMsg);
 	sendMessage('notifyLoadComplete', msgStr);
 }
+function onContentImageLoaded_ntf(w, h) {
+	// output 'MpQuillContentImageLoadedNotification'
+	let msg = {
+		width: w,
+		height: h
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyContentImageLoaded', msgStr);
+}
 
 function onAnnotationSelected_ntf(ann_guid, dblClick) {
 	// output 'MpQuillAnnotationSelectedMessage'
@@ -168,13 +177,23 @@ function onFindReplaceVisibleChange_ntf(isVisible) {
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyFindReplaceVisibleChange', msgStr);
 }
-function appendStateChangeComplete_ntf() {
-	sendMessage('notifyAppendStateChangeComplete', '');
-}
-function onQuerySearchRangesChanged_ntf(range_count) {
-	// output 'MpQuillContentFindReplaceVisibleChanedotificationMessage'
+function onAppendStateChangeComplete_ntf(handle, rng) {
+	// output 'MpQuillAppendStateChangeCompletedMessage'
+	rng = isNullOrUndefined(rng) ? { index: 0, length: -1 } : rng;
 	let msg = {
-		rangeCount: range_count
+		appendContentHandle: handle,
+		appendDocIdx: rng.index,
+		appendDocLength: rng.length
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyAppendStateChangeComplete', msgStr);
+}
+function onQuerySearchRangesChanged_ntf(range_count,hl_html,range_offsets_csv) {
+	// output 'MpQuillContentQuerySearchRangesChangedNotificationMessage'
+	let msg = {
+		rangeCount: range_count,
+		highlightHtmlFragment: utf8_to_b64(hl_html),
+		matchOffsetsCsvFragment: range_offsets_csv
 	};
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyQuerySearchRangesChanged', msgStr);
@@ -191,7 +210,9 @@ function onInitComplete_ntf() {
 	}
 	sendMessage('notifyInitComplete', resp);
 }
-
+function onDevToolsRequested_ntf() {
+	sendMessage('notifyDevToolsRequested', '');
+}
 function onShowCustomColorPicker_ntf(dotnetHexStr,title) {
 	// output 'MpQuillShowCustomColorPickerNotification'
 	let msg = {
@@ -312,5 +333,18 @@ function onAppendStateChanged_ntf(appendDataStr = null) {
 }
 
 function onAnnDblClick_ntf(annGuid) {
+
+}
+
+function onPointerEvent_ntf(evtType, mp, is_left) {
+	// output 'MpQuillPointerEventMessage'
+	let msg = {
+		clientX: mp.x,
+		clientY: mp.y,
+		eventType: evtType,
+		isLeft: is_left
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyPointerEvent', msgStr);
 
 }

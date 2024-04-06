@@ -10,7 +10,7 @@ namespace MonkeyPaste {
         Task<List<MpTransactionSource>> AddTransactionSourcesAsync(int copyItemTransactionId, IEnumerable<MpISourceRef> transactionSources);
         Task<MpISourceRef> FetchOrCreateSourceAsync(string uri, object arg = null);
 
-        Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(object mpOrAvDataObj);
+        Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(object mpOrAvDataObj, bool enforce_rejection = false);
         bool IsAnySourceRejected(IEnumerable<MpISourceRef> refs);
         string ConvertToInternalUrl(MpISourceRef sr);
         string ConvertToInternalUrl(MpTransactionSourceType sourceType, int sourceId);

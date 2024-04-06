@@ -1,60 +1,82 @@
 import React, { Component } from "react";
-import clsx from 'clsx';
-import styles from './styles.module.css';
-import { useHistory, useLocation } from '@docusaurus/router';
+import clsx from "clsx";
+import styles from "./styles.module.css";
+import { useHistory, useLocation } from "@docusaurus/router";
 
 var idx = -1;
 
 const ExampleList = [
   {
-    imgSrc: require('@site/static/img/ss/win/ss1.png').default,
+    imgSrc: require("@site/static/img/ss/win/ss4.png").default,
     description: (
       <>
         <br />
         <br />
-        ● <a href="./docs/triggers">Trigger & Action designer</a> for custom automations and action chaining
+        ● Store text, image and file clips with all of its source (the app,
+        website, time, and much more) information automatically
+        <br />
       </>
     ),
   },
   {
-    imgSrc: require('@site/static/img/ss/win/ss5.png').default,
+    imgSrc: require("@site/static/img/ss/win/ss6.png").default,
     description: (
       <>
         <br />
-        <br />
-        ● Ever-growing collection of <a href="https://github.com/monkeypaste/ledger">community-driven plugins</a><br />
+        <br />● Lighting fast search and highlighting, just start typing!
       </>
     ),
   },
   {
-    imgSrc: require('@site/static/img/ss/win/ss3.png').default,
+    imgSrc: require("@site/static/img/ss/win/ss1.png").default,
     description: (
       <>
-        ● Works with rich text (tables, lists, links, etc.)<br />
-        ● Fully-featured clip editor with find/replace and highlighting<br />
-        ● Store your images in the secure database, ready to use as files anytime on-demand just drag-and-drop!<br />
-        ● Powerful <a href="./docs/templates">text templating</a> for quick, dynamic pasting from your snippet collection<br />
+        <br />
+        <br />● <a href="./docs/triggers">Trigger & Action designer</a> for
+        custom automations and action chaining
       </>
     ),
   },
   {
-    imgSrc: require('@site/static/img/ss/win/ss2.png').default,
+    imgSrc: require("@site/static/img/ss/win/ss5.png").default,
     description: (
       <>
         <br />
-        ● Simple and friendly interface<br />
-        ● Horizontal/vertical layouts, list/grid view and multi-monitor support<br />
-        ● Both light & dark themes are completely dynamic<br />
+        <br />● Ever-growing collection of{" "}
+        <a href="https://github.com/monkeypaste/ledger">
+          community-driven plugins
+        </a>
+        <br />
       </>
     ),
   },
   {
-    imgSrc: require('@site/static/img/ss/win/ss4.png').default,
+    imgSrc: require("@site/static/img/ss/win/ss3.png").default,
+    description: (
+      <>
+        ● Works with rich text (tables, lists, links, etc.)
+        <br />
+        ● Fully-featured clip editor with find/replace and highlighting
+        <br />
+        ● Store your images in the secure database, ready to use as files
+        anytime on-demand just drag-and-drop!
+        <br />● Powerful <a href="./docs/templates">text templating</a> for
+        quick, dynamic pasting from your snippet collection
+        <br />
+      </>
+    ),
+  },
+  {
+    imgSrc: require("@site/static/img/ss/win/ss2.png").default,
     description: (
       <>
         <br />
+        ● Simple and friendly interface
         <br />
-        ● Optional 2-factor password protection<br />
+        ● Horizontal/vertical layouts, list/grid view and multi-monitor support
+        <br />
+        ● Both light & dark themes are completely dynamic
+        <br />
       </>
     ),
   },
@@ -65,8 +87,10 @@ function Example({ imgSrc, description }) {
   if (idx % 2 == 0) {
     return (
       <div className={styles.exampleContainer}>
-        <div className={clsx('example', styles.example)}>
-          <div><img className="zoom" src={imgSrc} role="img" /></div>
+        <div className={clsx("example", styles.example)}>
+          <div>
+            <img className="zoom" src={imgSrc} role="img" />
+          </div>
           <p>{description}</p>
         </div>
         <hr />
@@ -75,9 +99,11 @@ function Example({ imgSrc, description }) {
   }
   return (
     <div className={styles.exampleContainer}>
-      <div className={clsx('example', styles.example)}>
+      <div className={clsx("example", styles.example)}>
         <p>{description}</p>
-        <div><img className="zoom" src={imgSrc} role="img" /></div>
+        <div>
+          <img className="zoom" src={imgSrc} role="img" />
+        </div>
       </div>
       <hr />
     </div>
@@ -90,7 +116,7 @@ export default function HomepageCarousel() {
       <hr />
       <p align="center">
         <video id="teaserVid" controls height="300">
-          <source src={require('/videos/teaser.mp4').default} />
+          <source src={require("/videos/teaser.mp4").default} />
         </video>
       </p>
       <hr />
@@ -99,9 +125,9 @@ export default function HomepageCarousel() {
           {ExampleList.map((props, idx) => (
             <Example key={idx} {...props} />
           ))}
-        </div><br />
+        </div>
+        <br />
       </div>
     </section>
   );
 }
-

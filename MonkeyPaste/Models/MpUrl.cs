@@ -67,7 +67,7 @@ namespace MonkeyPaste {
         [Ignore]
         public bool IsUrlRejected {
             get {
-                return IsDomainRejected || UrlRejected == 1;
+                return UrlRejected == 1;
             }
             set {
                 UrlRejected = value ? 1 : 0;
@@ -117,12 +117,6 @@ namespace MonkeyPaste {
             int iconId = 0,
             int appId = 0,
             bool suppressWrite = false) {
-            var dupCheck = await MpDataModelProvider.GetUrlByPathAsync(urlPath);
-            if (dupCheck != null) {
-                dupCheck = await MpDataModelProvider.GetItemAsync<MpUrl>(dupCheck.Id);
-                dupCheck.WasDupOnCreate = true;
-                return dupCheck;
-            }
 
             if (Mp.Services.SourceRefTools.IsInternalUrl(urlPath)) {
                 MpDebug.Break($"MpUrl error. Attempting to add Internal Url '{urlPath}' which should only be determined at runtime.");

@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopya</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>I -paste</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Clipboard Manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>tool</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Ganap - Itinatampok na Clip Editor na may Find/Palitan, Rich Text (Tables, Listahan, Mga Link, atbp.) Text Templating Para sa Mabilis, Dynamic na Pag -paste mula sa Iyong Koleksyon ng Snippet</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Ligtas, ligtas at pribadong lokal na imbakan ng data na may opsyonal na 2 - Proteksyon ng Password ng Factor</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Itinayo - Sa Plugin Browser na may kailanman - Lumalagong Komunidad - hinimok na library ng mga plugin</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Ang Monkeypaste ay isang clipboard manager, automation at tool ng pagiging produktibo tulad ng walang iba. Pagpapahusay ng iyong clipboard sa isang enriched at organisadong bahagi ng iyong daloy ng trabaho,
-Nagtatampok ng isang madaling maunawaan at mababa - interface ng profile na sumusuporta sa teksto, mga file at imahe. Dinisenyo para sa kakayahang umangkop, na may isang kailanman - lumalagong komunidad - hinimok na libray ng mga plugin.
-
-Nagsimula ito bilang isang eksperimento sa pamamagitan ng isang programmer na nais ng higit pa sa kopya at i -paste sa labas ng clipboard. Gusto niya ng isang simpleng utos tulad ng Ctrl+C na 'idagdag' sa halip
-ng 'palitan' kung ano ang nasa clipboard. At nagtrabaho ang eksperimento. Ang maliit na tool ay napaka -madaling gamiting. Ito ang nagpasok sa programmer na may higit pang mga ideya at higit pang mga eksperimento, na
-Ngayon ay naging "Monkeypaste".
-
-Tulad ng desktop ay sa iyong mga file, ang Monkeypaste ay nagnanais na maging sa iyong clipboard. Ito ay isang suite ng mga tool na maingat na idinisenyo upang tila isama at makialam
-anumang application o format ng nilalaman. Ang Ctrl+C at Ctrl+V ay higit pa sa mga shortcut. Sila ang mga port ng pagpasok sa lahat ng mga application na nagbabahagi, nagdadala ng a
-Kayamanan ng halaga at kahulugan na nararapat kang magkaroon ng magagamit sa iyong mga daliri. Hindi lamang itinapon pagkatapos ng susunod na Ctrl+c.
-
-Nauna akong nabanggit ang programmer at nais kong mahanap ang lahat na magamit sa labas ng unggoy. Kaya ito at ang lahat ng mga tampok nito ay ganap na libre upang magamit.
-Nais ko ring komportable ka sa paggamit nito. Kaya't sinisiguro ko sa iyo, bilang ang tanging puwersa sa likod ng paglikha nito, na wala sa (napaka) personal na impormasyon na maaaring lumitaw
-Ang iyong clipboard ay kailanman sinusubaybayan o naka -imbak kahit saan lampas sa iyong sariling makina. Panahon</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Ang iyong clipboard ay kailanman sinusubaybayan o naka -imbak kahit saan lampas 
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Ang clipboard ay isang gubat. Ang Monkeypaste ay ang hari! Swing mula sa app hanggang sa app, pagkopya nito at pag -paste na tulad ng hindi pa bago sa Monkeypaste !! Isang tatak - bago, pagputol ng clipboard ng gilid at tool ng analytic automation !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Halimbawang Monkeypaste sa Aksyon!</value>
   </data>
@@ -258,9 +228,6 @@ Ang iyong clipboard ay kailanman sinusubaybayan o naka -imbak kahit saan lampas 
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Walang limitasyong - taun -taon</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Paunang Paglabas</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Sa subscription na ito ay matatanggap mo:
 ● Walang limitasyong kapasidad</value>
@@ -270,5 +237,45 @@ Ang iyong clipboard ay kailanman sinusubaybayan o naka -imbak kahit saan lampas 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Higit pang mga platform at tampok na paparating! Nagsimula lang kami 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Pag -iilaw ng mabilis na paghahanap at pag -highlight, simulan lamang ang pag -type!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Mag -imbak ng teksto, imahe at file clip kasama ang lahat ng pinagmulan nito (ang app, website, oras, at marami pa) na impormasyon</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>Ang MonkeyPaste ay isang clipboard manager, automation at tool sa pagiging produktibo tulad ng walang iba pa. Pagpapahusay ng iyong clipboard sa isang enriched at organisadong bahagi ng iyong daloy ng trabaho,
+Nagtatampok ng intuitive at low profile interface na sumusuporta sa teksto, mga file at mga imahe. Dinisenyo para sa kakayahang umangkop, na may patuloy na lumalagong komunidad - driven libray ng mga plugin.
+
+Nagsimula ito bilang isang eksperimento ng isang programmer na nagnanais ng higit pa sa kopyahin at i paste sa labas ng clipboard. Gusto niya ng simpleng utos tulad ng Ctrl+C na 'magdaragdag' sa halip 
+ng 'palitan' ang nasa clipboard. At ang eksperimento ay nagtrabaho. Ang maliit na tool ay napaka madaling gamitin. Ito entrigued ang programmer na may higit pang mga ideya at higit pang mga eksperimento, na 
+ngayon ay naging "MonkeyPaste". 
+
+Tulad ng desktop ay sa iyong mga file, ang MonkeyPaste ay nagnanais na maging sa iyong clipboard. Ito ay isang suite ng mga tool na maingat na dinisenyo upang tila walang putol na pagsamahin at interoperate sa 
+anumang application o format ng nilalaman. Ctrl+C at Ctrl+V ay higit pa sa mga shortcut lamang. Ang mga ito ay ang mga port ng entry lahat ng mga application ibahagi, nagdadala ng isang 
+kayamanan ng halaga at kahulugan karapat dapat kang magkaroon ng magagamit sa iyong mga daliri. Hindi basta basta itatapon pagkatapos ng susunod na Ctrl+C.
+
+Ako na programmer nabanggit mas maaga at gusto ko lahat ng tao ay magagawang upang mahanap ang paggamit out ng MonkeyPaste. Kaya ito at ang lahat ng mga tampok nito ay ganap na libre upang gamitin. 
+Gusto ko rin na maging komportable ka sa paggamit nito. Kaya tinitiyak ko sa iyo, bilang ang tanging puwersa sa likod ng paglikha nito, na WALA sa (napaka) personal na impormasyon na maaaring lumitaw sa 
+ang iyong clipboard ay kailanman sinusubaybayan o naka imbak SAANMAN lampas sa iyong sariling makina. Panahon.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>clipboard</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Ligtas, ligtas at pribadong lokal na imbakan ng data na may opsyonal na 2 - factor na proteksyon ng password</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Ang Monkeypaste ay ganap na libre sa paglabas na ito !!
+
+Ang lahat ng mga paghihigpit (sa mga subscription sa app) ay tinanggal dahil ang Monkeypaste ay lumilipat na ngayon sa pagiging isang bukas na mapagkukunan na proyekto. Kaya pagmasdan ang aming github (github.com/monkeypaste) kung interesado kang mag -ambag.
+
+Mga Update:
+
+- Lahat ng mga paghihigpit sa kapasidad ay tinanggal!
+- tinanggihan ang mga pagpapabuti ng URL editor ng UI
+- Suporta sa Baseline para sa pagpapatakbo ng maraming mga pagkakataon ng Monkeypaste
+- Bagong Shared Value Editor (sa Plugin Browser kung saan naaangkop)</value>
   </data>
 </root>

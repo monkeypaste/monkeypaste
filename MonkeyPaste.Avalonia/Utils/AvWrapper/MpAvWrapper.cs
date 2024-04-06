@@ -1,7 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input.Platform;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System.IO;
@@ -11,7 +8,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
 
     public interface MpIDeviceWrapper {
-        IClipboard DeviceClipboard { get; }
+        MpIClipboard DeviceClipboard { get; }
         MpIJsImporter JsImporter { get; }
         MpIPlatformInfo PlatformInfo { get; }
         MpIPlatformScreenInfoCollection ScreenInfoCollection { get; }
@@ -35,6 +32,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Startup Set Services 
+        public MpISingleInstanceTools SingleInstanceTools { get; set; }
+        public MpIFilesToHtmlConverter FilesToHtmlConverter { get; set; }
+        public MpIPointerSimulator PointerSimulator { get; set; }
         public MpICultureInfo UserCultureInfo { get; set; }
         public MpIUiStringToEnumConverter UiStrEnumConverter { get; set; }
         public MpIDebugBreakHelper DebugBreakHelper { get; set; }
@@ -51,7 +51,6 @@ namespace MonkeyPaste.Avalonia {
         public MpIShortcutGestureLocator ShortcutGestureLocator { get; set; }
 
         #endregion 
-        public MpISslInfo SslInfo { get; set; }
         public MpIWelcomeSetupInfo WelcomeSetupInfo { get; set; }
         public MpIUserDeviceInfo ThisDeviceInfo { get; set; }
 
@@ -93,12 +92,11 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
 
-        private IClipboard _deviceClipboard;
-        public IClipboard DeviceClipboard {
+        private MpIClipboard _deviceClipboard;
+        public MpIClipboard DeviceClipboard {
             get {
-                if (_deviceClipboard == null &&
-                    Application.Current.GetMainTopLevel() is TopLevel tl) {
-                    _deviceClipboard = tl.Clipboard;
+                if (_deviceClipboard == null) {
+                    _deviceClipboard = new MpAvClipboardWrapper();
                 }
                 return _deviceClipboard;
             }
@@ -140,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
 
             DefaultDataCreator = new MpAvDefaultDataCreator();
             UserAgentProvider = MpAvPlainHtmlConverter.Instance;
-            SslInfo = MpAvPrefViewModel.Instance;
+
             WelcomeSetupInfo = MpAvPrefViewModel.Instance;
             ThisDeviceInfo = MpAvPrefViewModel.Instance;
             ContentViewLocator = new MpAvContentViewLocator();
@@ -159,6 +157,7 @@ namespace MonkeyPaste.Avalonia {
             SourceRefTools = new MpAvSourceRefTools();
             TransactionBuilder = new MpAvTransactionReporter();
             DebugBreakHelper = new MpAvDebugBreakHelper();
+            PointerSimulator = new MpAvPointerSimulator();
 
             FocusMonitor = MpAvFocusManager.Instance as MpIFocusMonitor;
 
@@ -169,6 +168,8 @@ namespace MonkeyPaste.Avalonia {
 
             KeyStrokeSimulator = new MpAvKeyStrokeSimulator();
             PlatformResource = new MpAvPlatformResource();
+
+            FilesToHtmlConverter = new MpAvFilesToHtmlConverter();
 
             MainThreadMarshal = new MpAvMainThreadMarshal();
             StringTools = new MpAvStringTools();
@@ -192,8 +193,19 @@ namespace MonkeyPaste.Avalonia {
             MpAvCommonTools.Init(this);
             MpAvCurrentCultureViewModel.Instance.Init();
             UserCultureInfo = MpAvCurrentCultureViewModel.Instance;
-        }
 
+            SingleInstanceTools = new MpAvAppInstanceTools();
+            if(!SingleInstanceTools.IsFirstInstance) {
+                // this is not the first instance
+                var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                    notificationType: MpNotificationType.SingleInstanceWarning,
+                    body: UiStrings.SingInstanceCheckNtfText);
+                if(result == MpNotificationDialogResultType.Shutdown) {
+                    // block for shutdown to kill process
+                    await Task.Delay(3_000);
+                }
+            }
+        }
 
         #endregion
     }

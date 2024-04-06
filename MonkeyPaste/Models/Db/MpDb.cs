@@ -238,7 +238,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static async Task<int> ExeucuteAsync(string query, params object[] args) {
+        public static async Task<int> ExeucuteCommandAsync(string query, params object[] args) {
             if (_connectionAsync == null) {
                 await CreateConnectionAsync();
             }
@@ -401,7 +401,7 @@ namespace MonkeyPaste {
             if (dt != null && dt.Count > 0) {
                 return dt[0];
             }
-            var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(tableName);
+            var dbot = new MpStringToSyncObjectTypeConverter().Convert(tableName);
 
             var dbo = Activator.CreateInstance(dbot);
             return dbo;
@@ -1040,7 +1040,7 @@ Mp.Services.SourceRefTools.ContentItemQueryUriPrefix)
                 foreach (var dbl in ckvp.Value) {
                     dbl.PrintLog();
                 }
-                var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
+                var dbot = new MpStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var deleteMethod = typeof(MpDb).GetMethod(nameof(DeleteItemAsync));
                 var deleteByDboTypeMethod = deleteMethod.MakeGenericMethod(new[] { dbot });
                 var dbo = await GetDbObjectByTableGuidAsync(ckvp.Value[0].DbTableName, ckvp.Key.ToString());
@@ -1054,7 +1054,7 @@ Mp.Services.SourceRefTools.ContentItemQueryUriPrefix)
                 foreach (var dbl in ckvp.Value) {
                     dbl.PrintLog();
                 }
-                var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
+                var dbot = new MpStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
                 dbo = await (dbo as MpISyncableDbObject).CreateFromLogsAsync(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
@@ -1069,7 +1069,7 @@ Mp.Services.SourceRefTools.ContentItemQueryUriPrefix)
                 foreach (var dbl in ckvp.Value) {
                     dbl.PrintLog();
                 }
-                var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
+                var dbot = new MpStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
                 dbo = await (dbo as MpISyncableDbObject).CreateFromLogsAsync(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
@@ -1111,9 +1111,19 @@ Mp.Services.SourceRefTools.ContentItemQueryUriPrefix)
             }
             return customSortedValues;
         }
-
+        static string[] DbTableSyncOrder { get; } = new string[] {
+            nameof(MpDbImage),
+            nameof(MpIcon),
+            nameof(MpUserDevice),
+            nameof(MpUrl),
+            nameof(MpApp),
+            nameof(MpCopyItem),
+            nameof(MpTag),
+            nameof(MpTextTemplate),
+            nameof(MpCopyItemTag)
+        };
         private static int GetDbTableOrder(MpDbLog log) {
-            var orderedLogs = MpSyncManager.DbTableSyncOrder.ToList();
+            var orderedLogs = DbTableSyncOrder.ToList();
             var idx = orderedLogs.IndexOf(log.DbTableName);
             if (idx < 0) {
                 throw new Exception(@"Unknown dblog table type: " + log.DbTableName);
@@ -1122,15 +1132,15 @@ Mp.Services.SourceRefTools.ContentItemQueryUriPrefix)
         }
 
         public static MpIStringToSyncObjectTypeConverter GetTypeConverter() {
-            return new MpXamStringToSyncObjectTypeConverter();
+            return new MpStringToSyncObjectTypeConverter();
         }
 
-        public static ObservableCollection<MpRemoteDevice> GetRemoteDevices() {
-            _rdLock = new object();
-            var rdoc = new ObservableCollection<MpRemoteDevice>();
-            //Xamarin.Forms.BindingBase.EnableCollectionSynchronization(rdoc, null, ObservableCollectionCallback);
-            return rdoc;
-        }
+        //public static ObservableCollection<MpRemoteDevice> GetRemoteDevices() {
+        //    _rdLock = new object();
+        //    var rdoc = new ObservableCollection<MpRemoteDevice>();
+        //    //Xamarin.Forms.BindingBase.EnableCollectionSynchronization(rdoc, null, ObservableCollectionCallback);
+        //    return rdoc;
+        //}
 
         private static void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess) {
             // `lock` ensures that only one thread access the collection at a time

@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Intitulado</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Por diversión, cuando esto se verifica, la imagen en el portapapeles se convertirá en ASCII (texto plano) de la imagen 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Imagen al texto</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Cuando esté disponible, los datos del primer formato de texto seleccionado se convertirán en una imagen y se agregarán al portapapeles.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Formatos de texto a imagen</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Imagen (TIFF)</value>
+  </data>
 </root>

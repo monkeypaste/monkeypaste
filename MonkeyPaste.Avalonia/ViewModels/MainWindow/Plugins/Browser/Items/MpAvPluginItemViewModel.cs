@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Avalonia.Threading;
+using HtmlAgilityPack;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -24,10 +25,10 @@ namespace MonkeyPaste.Avalonia {
         static string ABUSE_BASE_URL =
             $"{MpServerConstants.PLUGINS_BASE_URL}/abuse?id=";
 
-
         #endregion
 
         #region Statics
+        static DispatcherPriority DOWNLOAD_PRIORITY = DispatcherPriority.Default;
         #endregion
 
         #region Interfaces
@@ -81,7 +82,8 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-        public MpAvCommonCancelableProgressIndicatorViewModel ProgressViewModel { get; set; }
+        public MpAvCommonCancelableProgressIndicatorViewModel InstallProgressViewModel { get; set; }
+        public MpAvCommonCancelableProgressIndicatorViewModel UpdateProgressViewModel { get; set; }
         public MpAvPluginDependencyViewModel RootDependencyViewModel =>
             RootDependencyCollection.FirstOrDefault();
 
@@ -96,6 +98,32 @@ namespace MonkeyPaste.Avalonia {
                     };
                 }
                 return _rootDependencyCollection;
+            }
+        }
+
+        public IEnumerable<MpAvAnalyticItemPresetViewModel> InstalledPluginDefaultPresetViewModels {
+            get {
+                if(!HasInstallation) {
+                    yield break;
+                }
+                if(MpAvAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x=>x.PluginGuid == PluginGuid) is { } aivm) {
+                    // can really return any preset since only worried about shared params but to avoid being arbitrary try to use default preset
+                    if(aivm.Items.FirstOrDefault(x=>x.IsSystemPreset) is { } aipvm) {
+                        yield return aipvm;
+                    } else {
+                        yield return aivm.Items.FirstOrDefault();
+                    }
+                }
+                
+                //if(MpAvClipboardHandlerCollectionViewModel.Instance.Items.FirstOrDefault(x=>x.PluginGuid == PluginGuid) is { } chvm) {
+                //    // can really return any preset since only worried about shared params but to avoid being arbitrary try to use default preset
+                //    foreach(var cfvm in chvm.Items) {
+                //        if(cfvm.Items.FirstOrDefault(x=>x.IsDefault) is { } def_chpvm) {
+                //            yield return def_chpvm;
+                //        }
+                //        yield return cfvm.Items.FirstOrDefault();
+                //    }
+                //}
             }
         }
         #endregion
@@ -165,7 +193,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public bool IsDownloading =>
-            ProgressViewModel != null;
+            InstallProgressViewModel != null;
         public bool ShowDisabledInstallTooltip =>
             IsUninstallPending || IsUpdatePending || IsCorePlugin;
         public bool ShowDisabledUpdateTooltip =>
@@ -226,6 +254,11 @@ namespace MonkeyPaste.Avalonia {
             HasInstallation &&
             !IsUpdatePending &&
             !IsCorePlugin;
+
+        public bool CanConfigure =>
+            InstalledPluginDefaultPresetViewModels.Any(x => x.SharedItems.Any());
+
+        public bool IsConfigurePanelOpen { get; private set; }
 
         public bool CanUpdate {
             get {
@@ -472,6 +505,10 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
         public void RefreshState() {
+            if(!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(RefreshState);
+                return;
+            }
             OnPropertyChanged(nameof(PluginFormat));
             OnPropertyChanged(nameof(HasInstallation));
             OnPropertyChanged(nameof(CanUninstall));
@@ -484,6 +521,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(DisabledUpdateTooltip));
             OnPropertyChanged(nameof(InstallButtonText));
             OnPropertyChanged(nameof(UpdateButtonText));
+            OnPropertyChanged(nameof(CanConfigure));
+            OnPropertyChanged(nameof(InstalledPluginDefaultPresetViewModels));
         }
 
         public override string ToString() {
@@ -642,14 +681,14 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand InstallPluginCommand => new MpAsyncCommand(
             async () => {
+                // await Dispatcher.UIThread.InvokeAsync(async () => {
                 if (PluginFormat.GetComponentManager() is not { } cm) {
                     return;
                 }
 
+                InstallProgressViewModel = new MpAvCommonCancelableProgressIndicatorViewModel(this);
                 IsBusy = true;
-                ProgressViewModel = new MpAvCommonCancelableProgressIndicatorViewModel(this);
-                bool success = await cm.InstallAsync(PluginGuid, SelectedRemotePackageUrl, ProgressViewModel);
-                ProgressViewModel = null;
+                bool success = await cm.InstallAsync(PluginGuid, SelectedRemotePackageUrl, InstallProgressViewModel);
 
                 // TODO success should only return true if plugin installs fine but it gets gummed up w/
                 // all the nested exception handling...this shouldn't be done here
@@ -668,10 +707,34 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 IsBusy = false;
+                InstallProgressViewModel = null;
                 Parent.PerformFilterCommand.Execute("Refresh");
+                // }, DOWNLOAD_PRIORITY);
             }, () => {
                 return CanInstall;
             });
+
+        public ICommand UpdatePluginCommand => new MpAsyncCommand(
+            async () => {
+                //await Dispatcher.UIThread.InvokeAsync(async () => {
+                if (PluginFormat.GetComponentManager() is not { } cm) {
+                    return;
+                }
+
+                IsBusy = true;
+                UpdateProgressViewModel = new MpAvCommonCancelableProgressIndicatorViewModel(this);
+                bool success = await cm.BeginUpdateAsync(PluginGuid, SelectedRemotePackageUrl, UpdateProgressViewModel);
+                IsBusy = false;
+
+                UpdateProgressViewModel = null;
+                Parent.PerformFilterCommand.Execute("Refresh");
+                //}, DOWNLOAD_PRIORITY);
+
+
+            }, () => {
+                return CanUpdate && !IsBusy;
+            });
+
 
         public ICommand UninstallPluginCommand => new MpAsyncCommand(
             async () => {
@@ -696,24 +759,6 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 return CanUninstall;
             });
-
-        public ICommand UpdatePluginCommand => new MpAsyncCommand(
-            async () => {
-                if (PluginFormat.GetComponentManager() is not { } cm) {
-                    return;
-                }
-
-                IsBusy = true;
-                ProgressViewModel = new MpAvCommonCancelableProgressIndicatorViewModel(this);
-                bool success = await cm.BeginUpdateAsync(PluginGuid, SelectedRemotePackageUrl, ProgressViewModel);
-                ProgressViewModel = null;
-                IsBusy = false;
-
-                Parent.PerformFilterCommand.Execute("Refresh");
-            }, () => {
-                return CanUpdate && !IsBusy;
-            });
-
         public ICommand ToggleIsPluginInstalledCommand => new MpCommand(
             () => {
                 if (HasInstallation) {
@@ -730,6 +775,23 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     return InstallPluginCommand.CanExecute(null);
                 }
+            });
+
+        public ICommand ShowConfigurePanelCommand => new MpCommand(
+            () => {
+                //if(!CanConfigure) {
+                //    return;
+                //}
+                IsConfigurePanelOpen = true;
+                InstalledPluginDefaultPresetViewModels.ForEach(x => x.OnPropertyChanged(nameof(x.SharedItems)));
+            });
+        
+        public ICommand HideConfigurePanelCommand => new MpCommand(
+            () => {
+                //if(!IsConfigurePanelOpen) {
+                //    return;
+                //}
+                IsConfigurePanelOpen = false;
             });
         #endregion
 

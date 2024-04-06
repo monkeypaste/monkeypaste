@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>পৰিকল্পনাৰ বিষয়ে অধিক জানক</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>লেপন কৰক: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;উপলব্ধ সম্পৰ্কসমূহ ব্যৱহাৰ কৰি (ফেচাৰ প্লাগিনৰ প্ৰয়োজন) এই ফিল্ডটো এই ডকুমেণ্টত এই টেমপ্লেটৰ সকলো উদাহৰণৰ বাবে ব্যৱহাৰ কৰা হ'ব বা যিকোনো এটাত ইয়াক পিছত উল্লেখ কৰা হ'ব।&lt;/p&gt;&lt;p&gt; গতিকে উদাহৰণ স্বৰূপে যদি ইয়াত ইমেইল ঠিকনা বাছনি কৰক তেন্তে আপুনি বাছনি কৰা সম্পৰ্কৰ ইমেইল ক্ষেত্ৰটো এই ডকুমেণ্টৰ সকলো উদাহৰণৰ বাবে ব্যৱহাৰ কৰা হ'ব।&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@
     <value>প্ৰিছেটত ভাগ বতৰা কৰা মূল্যৰ প্ৰাচলসমূহ ছেট কৰিব নোৱাৰি। প্লাগিন '{2}'ৰ বাবে পূৰ্বনিৰ্ধাৰিত '{1}'ত পৰমিড '{0}' আঁতৰাব লাগিব বা পেৰামাউণ্ট সংজ্ঞা শাখাত পৰমমূল্য নিৰ্ধাৰণ কৰিব পাৰি।</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>প্ৰিছেটত অনন্য GUIDs থাকিব লাগিব। Presets ৰ বাবে প্লাগইন '{1}' ত ডুপ্লিকেট প্ৰিছেট guid '{0}' ধৰা পৰিছিল: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>প্লাগইন পাৰ্চিং ত্ৰুটি, পথত '{0}' NULL, সম্ভাৱ্য ভুল json বিশ্লেষণ কৰা। প্লাগইনক আওকাণ কৰা</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ত অংশীদাৰী মান আছে। সেইবোৰো ৰিছেট কৰিব বিচাৰিবনে?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>প্ৰিছেটসমূহৰ একক গাইড থাকিব লাগিব। প্ৰিছেটসমূহৰ বাবে প্লাগইন '{1}' ত ডুপ্লিকেট প্ৰিছেট গাইড '{0}' ধৰা পৰিছে: {2} ।</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;লেপন কৰক: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>অজ্ঞাত ত্ৰুটি {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>আপোনাৰ ক্ৰয় সম্পূৰ্ণ কৰিব পৰা নগ'ল। কাৰণ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ডমেইন যোগ কৰক</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>পৃষ্ঠা যোগ কৰক</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>এই পৃষ্ঠাৰ বাবে ডমেইন নাকচ কৰা হৈছে। এই পৃষ্ঠাৰ অনুমতি দিবলৈ আপুনি '{0}' ৰ বাবে প্ৰত্যাখ্যান আঁতৰাব লাগিব।</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>'{0}' ডমেইন ইতিমধ্যে নাকচ কৰা হৈছে</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ডমেইনসমূহ</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>এই পৃষ্ঠাটো ইতিমধ্যে নাকচ কৰা হৈছে।</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>পৃষ্ঠাসমূহ</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>ছিঙ্ক কৰক</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>MonkeyPaste ৰ আন এটা উদাহৰণ ইতিমধ্যে চলি আছে। আপুনি নিশ্চিত নেকি যে আপুনি এটা নতুন উদাহৰণ খোলিব বিচাৰে?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>বিন্যাস কৰক</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>গ্লোবেল মাউছ আৰু কিবৰ্ড চৰ্টকাটসমূহ নিষ্ক্ৰিয় কৰা হৈছে।
+
+গোলকীয় চৰ্টকাটসমূহ এতিয়া চিস্টেম ট্ৰে মেনুত সামৰ্থবান কৰিব পাৰি</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>গ্লোবেল চৰ্টকাটসমূহ নিষ্ক্ৰিয় কৰা হৈছে: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>গ্লোবেল মাউছ আৰু কিবৰ্ড চৰ্টকাটসমূহ সামৰ্থবান কৰা হৈছে।</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(পৰীক্ষামূলক) গ্লোবেল চৰ্টকাটসমূহ সামৰ্থবান কৰা হৈছে: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>গ্লোবেল চৰ্টকাটসমূহ অফ কৰক</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>গ্লোবেল চৰ্টকাটসমূহ অন কৰক</value>
   </data>
 </root>

@@ -12,17 +12,18 @@
 
 // #region State
 
+function isRunningOnWebKit() {
+	if (window &&
+		window.webkit) {
+		return true;
+	}
+	return false;
+}
 function isRunningOnWebView2() {
 	if (window &&
 		window.chrome &&
 		window.chrome.webview &&
 		typeof window.chrome.webview.postMessage === 'function') {
-		return true;
-	}
-	return false;
-}
-function isRunningOnHost() {
-	if (isRunningOnCef() || isRunningOnXam()) {
 		return true;
 	}
 	return false;
@@ -43,6 +44,16 @@ function isRunningInIframe() {
 	return window.parent != window;
 }
 
+function isRunningOnHost() {
+	if (isRunningOnWebKit() ||
+		isRunningOnWebView2() ||
+		isRunningOnCef() ||
+		isRunningOnOutSys() ||
+		isRunningOnXam()) {
+		return true;
+	}
+	return false;
+}
 function isDesktop() {
 	return
 		globals.EnvName == globals.WindowsEnv ||
@@ -56,15 +67,22 @@ function isDesktop() {
 
 function sendMessage(fn, msg) {
 	if (isRunningOnWebView2()) {
-		log('webview2 host detected!')
 		// output 'MpQuillPostMessageResponse'
 		let resp = {
 			msgType: fn,
 			msgData: msg,
 			handle: globals.ContentHandle
 		}; 
-		log(JSON.stringify(resp));
 		window.chrome.webview.postMessage(JSON.stringify(resp));
+		return;
+	}
+	if (isRunningOnWebKit()) {
+		let resp = {
+			msgType: fn,
+			msgData: msg,
+			handle: globals.ContentHandle
+		}; 
+		window.webkit.messageHandlers.webview.postMessage(JSON.stringify(resp));
 		return;
 	}
 	if (isRunningOnCef()) {

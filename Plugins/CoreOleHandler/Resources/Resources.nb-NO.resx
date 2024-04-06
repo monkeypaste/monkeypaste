@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Uten navn</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>For moro skyld, når dette er sjekket, vil bildet på utklippstavlen bli grovt konvertert til ASCII (vanlig tekst) kunst av bildet 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Bilde til tekst</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Når det er tilgjengelig, vil det første valgte tekstformatets data bli konvertert til et bilde og lagt til utklippstavlen.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Tekst til bildeformater</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Bilde (tiff)</value>
+  </data>
 </root>

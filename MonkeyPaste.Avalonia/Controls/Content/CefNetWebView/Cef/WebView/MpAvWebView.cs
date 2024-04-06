@@ -1,22 +1,34 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
-using CefNet;
 using System.Collections.Generic;
-#if DEBUG
-using MonkeyPaste.Common.Plugin;
-#endif
+using Avalonia.Controls;
+using Avalonia.Threading;
+using System.Threading.Tasks;
+using System.IO;
+using Avalonia.VisualTree;
+using System.Diagnostics;
+using System.Collections.Concurrent;
 
 #if CEFNET_WV
+using CefNet;
 using CefNet.Avalonia;
 using CefNet.Internal;
 #elif OUTSYS_WV
 using WebViewControl;
+#elif SUGAR_WV
+#if MAC
+using Foundation;
+using WkWebview = WebKit.WKWebView;
+using Avalonia.WebView.MacCatalyst.Core;
+#endif
+using WebViewCore.Configurations;
+using AvaloniaWebView;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -27,6 +39,8 @@ namespace MonkeyPaste.Avalonia {
         WebView
 #elif OUTSYS_WV
         WebView, MpIWebViewNavigator
+#elif SUGAR_WV
+        UserControl
 #else
         MpAvNativeWebViewHost
 #endif
@@ -40,7 +54,6 @@ namespace MonkeyPaste.Avalonia {
 #if CEFNET_WV
         private bool _isBrowserCreated = false;
 #endif
-        protected List<IDisposable> _disposables = [];
         #endregion
 
         #region Constants
@@ -52,12 +65,36 @@ namespace MonkeyPaste.Avalonia {
             WebView.Settings.OsrEnabled = true;
             WebView.Settings.AddCommandLineSwitch("use-mock-keychain", null);
             WebView.Settings.AddCommandLineSwitch("process-per-site", null);
+#elif SUGAR_WV
+
+
 #endif
         }
+
+#if SUGAR_WV
+        public static void ConfigureWebViewCreationProperties(WebViewCreationProperties config) {
+            config.AreDevToolEnabled =
+#if DEBUG
+            true;
+#else
+            false; 
+#endif
+            config.AreDefaultContextMenusEnabled = false;
+            config.IsStatusBarEnabled = false;
+            config.DefaultWebViewBackgroundColor = System.Drawing.Color.FromArgb(System.Drawing.Color.Transparent.ToArgb());
+            config.AdditionalBrowserArguments = MpAvCefCommandLineArgs.ToArgString();
+            config.BrowserExecutableFolder = Path.GetDirectoryName(new MpAvPlatformInfo_desktop().EditorPath);
+            MpConsole.WriteLine($"Cef args: '{config.AdditionalBrowserArguments}'");
+            //config.UserDataFolder = _creationProperties.UserDataFolder;
+            //config.Language = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name;
+            //config.ProfileName = _creationProperties.ProfileName;
+            //config.IsInPrivateModeEnabled = _creationProperties.IsInPrivateModeEnabled;
+        }
+#endif
         #endregion
 
         #region Interfaces
-#if CEFNET_WV || OUTSYS_WV
+#if CEFNET_WV || OUTSYS_WV || SUGAR_WV
         public void OpenDevTools() {
 #if RELEASE
             return;
@@ -65,7 +102,35 @@ namespace MonkeyPaste.Avalonia {
             ShowDeveloperTools();
             return;
 #elif CEFNET_WV
+            if (!_isBrowserCreated) {
+                Dispatcher.UIThread.Post(async () => {
+                    while (!_isBrowserCreated) {
+                        await Task.Delay(100);
+                    }
+                    base.ShowDevTools();
+                });
+                return;
+            }
             base.ShowDevTools();
+            return;
+#elif SUGAR_WV
+            if (InnerWebView != null) {
+#if MAC
+                Dispatcher.UIThread.Post(async () => {
+                    InnerWebView.Focus();
+                    Mp.Services.PointerSimulator.SimulateRightClick(InnerWebView);
+                    await Task.Delay(300);
+                    Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence("Down");
+                    await Task.Delay(50);
+                    Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence("Down");
+                    await Task.Delay(50);
+                    Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence("Enter");
+                });
+
+#else
+                InnerWebView.OpenDevToolsWindow(); 
+#endif
+            }
             return;
 #endif
         }
@@ -74,7 +139,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIWebViewBindingResponseHandler Implemention
 
 #if CEFNET_WV
-#elif OUTSYS_WV
+#elif OUTSYS_WV || SUGAR_WV
         public MpAvIWebViewBindingResponseHandler BindingHandler =>
             this;
 #else
@@ -83,8 +148,8 @@ namespace MonkeyPaste.Avalonia {
 #endif
 
         public virtual void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
-
 #if DEBUG
+            LogResponse(notificationType, msgJsonBase64Str);
             object ntf = null;
             switch (notificationType) {
                 case MpEditorBindingFunctionType.notifyShowDebugger:
@@ -109,25 +174,201 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIWebViewNavigator 
-#if OUTSYS_WV
-        public void Navigate(string url) {
+#if OUTSYS_WV || SUGAR_WV
+        public virtual void Navigate(string urlStr) {
             // NOTE outsys has an address prop, this does nothing but is called when address changes
             // so treating it like Navigating cefnet event
+
+#if OUTSYS_WV
             IsNavigating = true;
+#elif SUGAR_WV
+            if (!Uri.IsWellFormedUriString(urlStr, UriKind.Absolute)) {
+                return;
+            }
+
+#if MAC
+            /*
+            from https://stackoverflow.com/a/57756238/105028
+            [wkwebView.configuration.preferences setValue:@"TRUE" forKey:@"allowFileAccessFromFileURLs"];
+        NSURL *url = [NSURL fileURLWithPath:YOURFILEPATH];
+        [wkwebView loadFileURL:url allowingReadAccessToURL:url.URLByDeletingLastPathComponent];
+            */
+            //Dispatcher.UIThread.Post(async () => {
+            //    while (true) {
+            //        // wait for webview to get attached to visual tree (where PlatformWebView is assigned)
+            //        if (InnerWebView == null || InnerWebView.PlatformWebView == null) {
+            //            await Task.Delay(100);
+            //            continue;
+            //        }
+            //        break;
+            //    }
+            //    if (InnerWebView.PlatformWebView is MacCatalystWebViewCore wvc &&
+            //        wvc.WebView is WkWebview wv &&
+            //        urlStr.ToPathFromUri() is string url_path) {
+            //        wv.Configuration.Preferences.SetValueForKey(NSObject.FromObject(true), new NSString("allowFileAccessFromFileURLs"));
+            //        NSUrl url = NSUrl.FromFilename(url_path);
+            //        NSUrl url_dir = NSUrl.FromFilename(Path.GetDirectoryName(url_path));
+            //        wv.LoadFileUrl(url, url_dir);
+            //    }
+            //});
+            InnerWebView.Url = new Uri(urlStr, UriKind.Absolute);
+#else
+            InnerWebView.Url = new Uri(urlStr, UriKind.Absolute);
+#endif
+#endif
         }
 #endif
         #endregion
 
         #region MpICanExecuteJavascript 
+#if SUGAR_WV
+        async 
+#endif
         void MpICanExecuteJavascript.ExecuteJavascript(string script) {
 #if CEFNET_WV
             this.GetMainFrame().ExecuteJavaScript(script, this.GetMainFrame().Url, 0);
+#elif SUGAR_WV
+            var sw = Stopwatch.StartNew();
+            bool needed_wait = !CanMakeRequest(script);
+            while (!CanMakeRequest(script)) {
+                await Task.Delay(50);
+                //MpConsole.WriteLine($"{DataContext} Waiting to execute script: {script}");
+                if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                    //MpConsole.WriteLine($"{DataContext} Wait to executeJavascript timeout for script: {script}");
+                    return;
+                }
+            }
+            if (needed_wait) {
+                //MpConsole.WriteLine($"{DataContext} Wait complete ({sw.ElapsedMilliseconds}ms) for script: {script}");
+            }
+            try {
+                LogRequest(script);
+
+                if (DataContext is MpAvClipTileViewModel ctvm &&
+                    ctvm.CopyItemTitle == "Text12" &&
+                    ctvm.IsWindowOpen) {
+                    //return;
+                }
+                Dispatcher.UIThread.Invoke(() => InnerWebView.ExecuteScriptAsync(script).FireAndForgetSafeAsync());
+            }
+            catch (Exception ex) {
+                MpConsole.WriteLine($"Error executing script!", true);
+                MpConsole.WriteLine($"Script: '{script}'");
+                MpConsole.WriteLine($"Ex: {ex}", false, true);
+
+            }
 #endif
         }
+#if SUGAR_WV
+        public async Task<string> ExecuteJavascriptAsync(string msgJsonBase64Str) {
+            try {
+
+                string result = await InnerWebView.ExecuteScriptAsync(msgJsonBase64Str);
+                return result.Replace("\"", string.Empty).ToStringFromBase64();
+            }
+            catch (Exception ex) {
+
+                MpConsole.WriteLine($"Error executing script!", true);
+                MpConsole.WriteLine($"Script: '{msgJsonBase64Str}'");
+                MpConsole.WriteLine($"Ex: {ex}", false, true);
+            }
+            return string.Empty;
+        }
+#endif
         #endregion
         #endregion
 
         #region Properties
+
+#if SUGAR_WV
+        protected WebView InnerWebView =>
+            Content as WebView;
+#endif
+
+        #region State
+
+        protected ConcurrentDictionary<string, List<string>> RequestLookup { get; set; } = [];
+        protected ConcurrentDictionary<string, List<string>> ResponseLookup { get; set; } = [];
+        protected void LogRequest(string script) {
+            if (script.SplitNoEmpty("(") is not { } script_parts ||
+                        script_parts.Length < 1 ||
+                    script_parts[0] is not string reqTypeName ||
+                    script_parts[1] is not string reqData_raw ||
+                    reqData_raw.Replace("'", string.Empty).Replace(")", string.Empty) is not string reqData) {
+                return;
+            }
+            if (!this.RequestLookup.TryGetValue(reqTypeName, out var requests)) {
+                requests = [];
+                if (!this.RequestLookup.TryAdd(reqTypeName, requests)) {
+                    return;
+                }
+            }
+            requests.Add(reqData);
+        }
+
+        protected void LogResponse(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
+            if (!this.ResponseLookup.TryGetValue(notificationType.ToString(), out var responses)) {
+                responses = [];
+                if (!this.ResponseLookup.TryAdd(notificationType.ToString(), responses)) {
+                    return;
+                }
+            }
+            responses.Add(msgJsonBase64Str);
+        }
+
+        protected bool CanMakeRequest(string script) {
+            if (script.SplitNoEmpty("(") is not { } script_parts ||
+                        script_parts.Length == 0 ||
+                        script_parts[0] is not string reqTypeName) {
+                return false;
+            }
+
+#if SUGAR_WV
+            if (this.InnerWebView == null ||
+                        !this.InnerWebView.IsLoaded ||
+                        this.InnerWebView.Url == null ||
+                        this.InnerWebView.Url.AbsoluteUri != Address) {
+                // webview not loaded
+                return false;
+            } 
+#endif
+            if (this is MpAvContentWebView cwv2 &&
+                !cwv2.IsDomLoaded) {
+                // dom not loaded
+                return false;
+            }
+            string main_req_name = "initMain_ext";
+            string content_req_name = "loadContentAsync_ext";
+
+            bool is_main_loaded = RequestLookup.ContainsKey(main_req_name);
+            if (reqTypeName == main_req_name) {
+                // should be initial setup request
+                if (is_main_loaded) {
+                    // already made initial setup request, which can be resent but shouldn't that often
+                    //MpConsole.WriteLine($"Warning! WebView {DataContext} has already made a '{reqTypeName}'. Should not need repeating but allowing");
+                }
+                return true;
+            }
+            if (this is MpAvPlainHtmlConverterWebView) {
+                // no further checks needed
+                return true;
+            }
+            if (is_main_loaded) {
+                if (this is not MpAvContentWebView cwv) {
+                    return true;
+                }
+                if (reqTypeName == content_req_name && cwv.IsEditorInitialized) {
+                    // only allow loadContent when editor initialized
+                    return true;
+                }
+                if (cwv.IsEditorInitialized && cwv.IsEditorLoaded) {
+                    // allow any other request after init and load are complete
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion
 
         #region Address
 
@@ -163,10 +404,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
             _isBrowserCreated = false;
-            if (_disposables != null) {
-                _disposables.ForEach(x => x.Dispose());
-                _disposables.Clear();
-            }
+            this.ClearDisposables();
         }
 #endif
         #endregion
@@ -227,10 +465,18 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
+
         #region Constructors
         public MpAvWebView() : base() {
-            this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged()).AddDisposable(_disposables);
-#if CEFNET_WV
+            this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged()).AddDisposable(this);
+#if SUGAR_WV
+            this.Content = new WebView();
+            InnerWebView.WebViewCreated += InnerWebView_WebViewCreated;
+            InnerWebView.NavigationStarting += InnerWebView_NavigationStarting;
+            InnerWebView.NavigationCompleted += InnerWebView_NavigationCompleted;
+            InnerWebView.WebMessageReceived += InnerWebView_WebMessageReceived;
+#elif CEFNET_WV
             Navigating += MpAvWebView_Navigating;
             Navigated += MpAvWebView_Navigated;
             LoadError += MpAvWebView_LoadError;
@@ -255,24 +501,18 @@ namespace MonkeyPaste.Avalonia {
 #endif
 
         }
-
-
-
         #endregion
 
         #region Public Methods
 
-#if OUTSYS_WV
+#if OUTSYS_WV || SUGAR_WV
         public virtual void OnNavigated(string url) { }
 #endif
         #endregion
 
         #region Protected Methods
 
-        protected override void OnDocumentTitleChanged(DocumentTitleChangedEventArgs e) {
-            base.OnDocumentTitleChanged(e);
-            DocumentTitle = e.Title;
-        }
+
         protected override void OnPointerReleased(PointerReleasedEventArgs e) {
             base.OnPointerReleased(e);
             if (!e.IsMiddleRelease(this)) {
@@ -282,6 +522,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
 #if CEFNET_WV
+        protected override void OnDocumentTitleChanged(DocumentTitleChangedEventArgs e) {
+            base.OnDocumentTitleChanged(e);
+            DocumentTitle = e.Title;
+        }
         protected override WebViewGlue CreateWebViewGlue() {
             return new MpAvCefNetWebViewGlue(this);
         }
@@ -321,6 +565,18 @@ namespace MonkeyPaste.Avalonia {
             }
 #endif
         }
+        protected override void OnUnloaded(global::Avalonia.Interactivity.RoutedEventArgs e) {
+            base.OnUnloaded(e);
+#if SUGAR_WV
+            if (InnerWebView == null) {
+                return;
+            }
+            InnerWebView.WebViewCreated -= InnerWebView_WebViewCreated;
+            InnerWebView.NavigationStarting -= InnerWebView_NavigationStarting;
+            InnerWebView.NavigationCompleted -= InnerWebView_NavigationCompleted;
+            InnerWebView.WebMessageReceived -= InnerWebView_WebMessageReceived;
+#endif
+        }
         #endregion
 
         #region Private Methods
@@ -353,6 +609,36 @@ namespace MonkeyPaste.Avalonia {
                 LoadErrorInfo = null;
             }
             OnNavigated(url);
+        }
+#elif SUGAR_WV
+
+        private void InnerWebView_WebViewCreated(object sender, WebViewCore.Events.WebViewCreatedEventArgs e) {
+#if MAC
+            if (InnerWebView.PlatformWebView is MacCatalystWebViewCore wvc &&
+                    wvc.WebView is WkWebview wv) {
+                //wv.SetValueForKey(NSObject.FromObject(true), new NSString("drawsTransparentBackground"));
+                wv.SetValueForKey(NSObject.FromObject(false), new NSString("drawsBackground"));
+            } else {
+
+            }
+#endif
+        }
+        private void InnerWebView_NavigationCompleted(object sender, WebViewCore.Events.WebViewUrlLoadedEventArg e) {
+            IsNavigating = false;
+            OnNavigated(InnerWebView.Url.AbsoluteUri);
+        }
+
+        private void InnerWebView_NavigationStarting(object sender, WebViewCore.Events.WebViewUrlLoadingEventArg e) {
+            IsNavigating = true;
+        }
+
+        private void InnerWebView_WebMessageReceived(object sender, WebViewCore.Events.WebViewMessageReceivedEventArgs e) {
+            if (e.Message is not string jsonStr ||
+                    string.IsNullOrEmpty(jsonStr)) {
+                return;
+            }
+            var msg = jsonStr.DeserializeObject<MpQuillPostMessageResponse>();
+            HandleBindingNotification(msg.msgType, msg.msgData, msg.handle);
         }
 #endif
         #endregion

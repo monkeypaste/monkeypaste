@@ -2639,9 +2639,6 @@ aisckback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Níos mó a fhoghlaim faoi phleananna</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Greamaigh go: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Ag baint úsáide as teagmhálacha atá ar fáil (éilíonn breiseán fetcher) Beidh an réimse seo a úsáid le haghaidh gach cás den teimpléad seo ar fud an doiciméad seo nó in aon beidh sé tagairt i níos déanaí.&lt;/p&gt;&lt;p&gt; Mar sin, mar shampla má roghnaíonn tú seoladh ríomhphoist anseo, úsáidfear réimse ríomhphoist na teagmhála a roghnaíonn tú do gach cás sa doiciméad seo.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Ní féidir athchóiriú iomlán a ráthú agus d'fhéadfadh sé feidhmíocht a 
     <value>Ní féidir paraiméadair luacha chomhroinnte a shocrú i réamhshocruithe. Ní mór paramid '{0}' in réamhshocrú '{1}' le haghaidh plugin '{2}' a bhaint nó is féidir paramvalue a shonrú sa rannóg sainmhínithe paraiméadair.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Ní mór go mbeadh treoir uathúla ag réamhshocruithe. Braitheadh ​​Dúblach réamhshocraithe '{0}' i mbreiseán '{1}' le haghaidh réamhshocruithe: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Earráid pharsála plugin, ag an gcosán '{0}' null, earráid is dócha a pharsálann JSON. Breiseán neamhaird</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Ní féidir athchóiriú iomlán a ráthú agus d'fhéadfadh sé feidhmíocht a 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>Tá luachanna comhroinnte i '{0}'. Ar mhaith leat iad siúd a athshocrú chomh maith?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Ní mór guids uathúla a bheith ag réamhshocruithe. Braitheadh guid réamhshocraithe dúblach '{0}' sa bhreiseán '{1}' le haghaidh réamhshocruithe: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Greamaigh go: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Earráid anaithnid {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Níorbh fhéidir do cheannach a chomhlánú. Cúis: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Cuir fearann ​​leis</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Cuir Leathanach leis</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Diúltaítear don réimse don leathanach seo. Chun an leathanach seo a cheadú beidh ort an diúltú do '{0}' a bhaint.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Diúltaítear don fhearann ​​'{0}' cheana féin</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Réimsí</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Diúltaítear don leathanach seo cheana féin.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Leathanaigh</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Comhionannas</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Tá cás eile de monkeypaste ag rith cheana féin. An bhfuil tú cinnte gur mhaith leat cás nua a oscailt?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Cumraigh</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Tá aicearraí luiche agus méarchláir dhomhanda faoi mhíchumas.
+
+Is féidir aicearraí domhanda a chumasú anois sa roghchlár tráidire córais</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Aicearraí domhanda faoi mhíchumas: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Cumasaíodh aicearraí luiche agus méarchláir domhanda.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>Aicearraí Domhanda (Turgnamhach) Cumasaithe: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Aicearraí Domhanda a scor</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Aicearraí Domhanda a scor ar aghaidh</value>
   </data>
 </root>

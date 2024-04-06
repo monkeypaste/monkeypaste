@@ -1,4 +1,6 @@
 ﻿using System;
+using MonkeyPaste.Common.Plugin;
+
 
 #if WINDOWS
 
@@ -7,20 +9,12 @@ using MonkeyPaste.Common.Wpf;
 #endif
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvStringExtensions {
-        public static string ToHtmlImageDoc(this string imgBase64) {
-            return $"<html><head></head><body><img src=\"{imgBase64.ToBase64ImageUrl()}\"></body></html>";
-        }
+        
         public static bool IsAvResourceString(this string str) {
-            if (str.IsNullOrEmpty()) {
+            if (string.IsNullOrEmpty(str)) {
                 return false;
             }
             return str.ToLowerInvariant().StartsWith("avares://");
-        }
-        public static bool IsValidUrl(this string str, UriKind kind = UriKind.Absolute) {
-            if (string.IsNullOrWhiteSpace(str)) {
-                return false;
-            }
-            return Uri.IsWellFormedUriString(str, kind);
         }
         public static bool IsRichHtmlMixedMedia(this string qhtml) {
             string imgTagStartStr = @"<img src='";
@@ -107,6 +101,30 @@ namespace MonkeyPaste.Common.Avalonia {
                 str = str.Substring(0, tokenIdx);
             }
             return str;
+        }
+
+        public static string ToRichHtmlDocument(this string source_data, string source_format) {
+            string result = source_data;
+            if (MpPortableDataFormats.IsRtfFormat(source_format) is true) {
+                result = RtfToHtml(source_data);
+            } else if (MpPortableDataFormats.IsCsvFormat(source_format) is true) {
+                result = MpCsvRichHtmlTableConverter.CsvToRichHtmlTable(source_data).ToHtmlDocumentFromTextOrPartialHtml();
+            } else if (MpPortableDataFormats.IsImageFormat(source_format) is true) {
+                result = source_data.ToHtmlImageDoc();
+            } else if (MpPortableDataFormats.IsFilesFormat(source_format) is true) {
+                if(MpCommonTools.Services != null &&
+                    MpCommonTools.Services.FilesToHtmlConverter != null &&
+                    source_data.Split(new string[] {Environment.NewLine},StringSplitOptions.None) is { } paths) {
+                    result = MpCommonTools.Services.FilesToHtmlConverter.ConvertToHtml(paths);
+                }
+            } else if (MpPortableDataFormats.IsHtmlFormat(source_format) is not true) {
+                // should be some plain text format
+                result = source_data.ToHtmlDocumentFromTextOrPartialHtml();
+            } else {
+                // assert to keep formats in order
+                MpDebug.Assert(MpPortableDataFormats.IsHtmlFormat(source_format) is true, $"Warning, unhandled text format '{source_format}'");
+            }
+            return result;
         }
     }
 }

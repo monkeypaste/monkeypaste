@@ -132,7 +132,7 @@ namespace MonkeyPaste.Avalonia {
                 OwnerObj = owner
             };
             var nvm = await CreateNotifcationViewModelAsync(nf);
-            if (nvm is MpAvUserActionNotificationViewModel uanvm) {
+            if (nvm is MpAvPopUpNotificationViewModel uanvm) {
                 string result = await uanvm.ShowInputResultNotificationAsync();
                 return result;
             }
@@ -161,7 +161,7 @@ namespace MonkeyPaste.Avalonia {
                 OwnerObj = owner
             };
             var nvm = await CreateNotifcationViewModelAsync(nf);
-            if (nvm is not MpAvUserActionNotificationViewModel uanvm) {
+            if (nvm is not MpAvPopUpNotificationViewModel uanvm) {
                 return default;
             }
             string result = await uanvm.ShowInputResultNotificationAsync();
@@ -212,7 +212,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationLayoutType.ErrorWithOption:
                 case MpNotificationLayoutType.ErrorAndShutdown:
                 case MpNotificationLayoutType.ErrorWithFixAndDelete:
-                    nvmb = new MpAvUserActionNotificationViewModel();
+                    nvmb = new MpAvPopUpNotificationViewModel();
                     break;
                 default:
                     throw new Exception("Unhandled notification type: " + nf.NotificationType);

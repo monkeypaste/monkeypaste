@@ -69,6 +69,7 @@ function convertPlainHtml_ext_ntf(convertPlainHtmlReqMsgBase64Str) {
 
 		respObj = {
 			html: toBase64FromJsonObj(plainHtml),
+			themedHtml: toBase64FromJsonObj(convert_result.themed_html),
 			quillHtml: toBase64FromJsonObj(convert_result.html),
 			quillDelta: toBase64FromJsonObj(convert_result.delta),
 			sourceUrl: url,

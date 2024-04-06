@@ -9,15 +9,15 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 	//hljs.configure({   // optionally configure hljs
 	//	languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml']
 	//});
-
+	Quill.debug('error');
 	let quillOptions = {
 		//debug: true,
 		//allowReadOnlyEdits: true,
 		theme: "snow",
-		formula: true,
+		formula: false,
 		history: {
 			delay: 1000,
-			userOnly: false,
+			userOnly: true,
 			maxStack: globals.MaxUndoLimit < 0 ? Number.MAX_SAFE_INTEGER : globals.MaxUndoLimit
 		},
 		formats: 'background',
@@ -80,7 +80,7 @@ function getRootHtml() {
 	return globals.quill.root.innerHTML;
 }
 
-function getHtml(range, encodeHtmlEntities = true) {
+function getHtml(range, encodeHtmlEntities = true, restoreContentColors = true, useInlineStyles = false, convertLineBreaks = true) {
 	if (globals.ContentItemType != 'Text' ||
 		(isTableInDocument() && isNullOrUndefined(range))) {
 		let root_html = getRootHtml();
@@ -92,13 +92,46 @@ function getHtml(range, encodeHtmlEntities = true) {
 
 	range = isNullOrUndefined(range) ? { index: 0, length: getDocLength() } : range;
 	let delta = getDelta(range);
-	delta = restoreContentColorsFromDelta(delta);
+	delta = restoreContentColors ? restoreContentColorsFromDelta(delta) : delta;
 
 	if (encodeHtmlEntities) {
 		delta = encodeHtmlEntitiesInDeltaInserts(delta);
 	}
 	let htmlStr = convertDeltaToHtml(delta, false);
+	if (useInlineStyles) {
+		htmlStr = getHtmlWithInlineStyles(htmlStr);
+	}
+	if (convertLineBreaks) {
+		htmlStr = convertHtmlLineBreaks(htmlStr);
+	}
 	return htmlStr;
+}
+
+function convertHtmlLineBreaks(htmlStr) {
+	htmlStr = htmlStr.replaceAll('<br>', '</p><p>').replaceAll('<br/>', '</p><p>');
+	return htmlStr;
+}
+
+function getHtmlWithInlineStyles(htmlStr) {
+	let html_doc = globals.DomParser.parseFromString(htmlStr, 'text/html');
+
+	// font size
+	html_doc.body.querySelectorAll("[class^='ql-size']").forEach(elm => {
+		let fs_class_name = Array.from(elm.classList).find(x => x.startsWith('ql-size'));
+		elm.style.fontSize = fs_class_name.split('ql-size-')[1];
+	});
+	// font family
+	html_doc.body.querySelectorAll("[class^='ql-font']").forEach(elm => {
+		let fs_class_name = Array.from(elm.classList).find(x => x.startsWith('ql-font'));
+		elm.style.fontFamily = toTitleCase(fs_class_name.split('ql-font-')[1].replace('-',' '));
+	});
+	// links
+	html_doc.body.querySelectorAll("a").forEach(elm => {
+		elm.style.color = getElementComputedStyleProp(document.body, '--linkcolor');
+	});
+
+	let output_html = html_doc.body.innerHTML;
+	return output_html;
 }
 
 
@@ -234,7 +267,7 @@ function formatSelection(format, value, source = 'api') {
 
 function replaceFormatInDocRange(range, format, source = 'api') {
 
-	// BUG if format differs after selection start it the change
+	// BUG if format differs after selection start the change
 	// won't affect that different place so applying format to each
 	// idx by itself
 	for (var idx = range.index; idx < range.index+range.length-1; idx++) {

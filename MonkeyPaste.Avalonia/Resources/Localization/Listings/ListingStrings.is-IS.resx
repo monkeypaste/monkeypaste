@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Afritaðu</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>Límu</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Klemmuspjaldastjóri</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>Tól</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Að fullu - Valinn Clip Editor með Find/Skiptu um, ríkur texti (töflur, listar, tenglar osfrv.) Texti sniðmát fyrir skjótan, kraftmikla líma úr snippet safninu þínu</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Örugg, örugg og einkarekin staðbundin gagnageymsla með valfrjálsri 2 - Þátt</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Innbyggt - Í viðbótarvafra með sífellt vaxandi samfélagi - Driven Library of Plugins</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste er klemmuspjaldastjóri, sjálfvirkni og framleiðni tól eins og enginn annar. Auka klemmuspjaldið þitt í auðgaðan og skipulagðan hluta af vinnuflæðinu þínu,
-Með innsæi og lágt og sniðviðmóti sem styður texta, skrár og myndir. Hannað fyrir sveigjanleika, með sífellt vaxandi samfélagi - ekið libray af viðbótum.
-
-Það byrjaði sem tilraun forritara sem vildi meira en bara afritun og líma út úr klemmuspjaldinu. Hann vildi einfalda skipun eins og Ctrl+C sem myndi 'bæta við' í staðinn
-að „skipta um“ það sem var á klemmuspjaldinu. Og tilraunin virkaði. Litla tólið var mjög vel. Þetta fagnaði forritaranum með fleiri hugmyndum og fleiri tilraunum, að
-Nú er orðið „acepyaste“.
-
-Eins og skjáborðið er á skrárnar þínar, þá ætlar Monkeysta að vera á klemmuspjaldinu þínu. Það er föruneyti af verkfærum sem eru vandlega hönnuð til að virðast virðast samþætta og tengja saman við
-Sérhvert forrit eða snið af innihaldi. Ctrl+C og Ctrl+V eru miklu meira en bara flýtileiðir. Þær eru hafnir aðgangs allra umsókna deila, með a
-Auður gildi og merking sem þú átt skilið að hafa tiltækt innan seilingar. Ekki bara hent eftir næsta Ctrl+c.
-
-Ég er sá forritari sem nefndur var áðan og ég vil að allir geti fundið notkun úr monkeypaste. Svo það og allir eiginleikar þess eru alveg frjálsir í notkun.
-Ég vil líka að þér líði vel með að nota það. Svo ég fullvissa þig, sem eini krafturinn að baki sköpun sinni, að engar af (mjög) persónulegu upplýsingum sem geta komið upp á
-Klemmuspjaldið þitt er nokkru sinni rakið eða geymt hvar sem er handan eigin vélar. Tímabil.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Klemmuspjaldið þitt er nokkru sinni rakið eða geymt hvar sem er handan eigin
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Klemmuspjaldið er frumskógur. Monkeysta er konungur! Sveifla frá appi til app, afrita þetta og líma það eins og aldrei áður með MonkeyPaste !! Vörumerki - Nýtt, fremsta klemmuspjald og greinandi sjálfvirkni tól !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Sýnishorn af monkeypaste í aðgerð!</value>
   </data>
@@ -258,9 +228,6 @@ Klemmuspjaldið þitt er nokkru sinni rakið eða geymt hvar sem er handan eigin
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Ótakmarkað - Árlega</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Upphafleg útgáfa</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Með þessari áskrift færðu:
 ● Ótakmarkað afkastageta</value>
@@ -270,5 +237,45 @@ Klemmuspjaldið þitt er nokkru sinni rakið eða geymt hvar sem er handan eigin
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Fleiri pallar og eiginleikar koma fljótlega! Við erum bara að hefja byrjað 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Lýsing Fast leit og auðkenndu, byrjaðu bara að slá!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Geymið texta, mynd og skráarbúðir með öllum uppruna sínum (appinu, vefsíðunni, tíma og margt fleira) upplýsingar sjálfkrafa</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste er klemmuspjald framkvæmdastjóri, sjálfvirkni og framleiðni tól eins og enginn annar. Að bæta klemmuspjaldið þitt í auðgaðan og skipulagðan hluta vinnuflæðisins þíns,
+Featuring leiðandi og lágt - snið tengi sem styður texta, skrár og myndir. Hannað fyrir sveigjanleika, með sífellt vaxandi samfélagi - ekið bókasafn tappi.
+
+Það byrjaði sem tilraun með forritara sem vildi meira en bara afrita og líma út af klemmuspjaldinu. Hann vildi einfalda skipun eins og Ctrl + C sem myndi 'bæta við' í staðinn 
+af 'skipta út' það sem var á klemmuspjaldinu. Og tilraunin heppnađist. Litla verkfærið var mjög handhægt. Þetta heillaði forritarann með fleiri hugmyndum og fleiri tilraunum, sem 
+nú er orðið "MonkeyPaste". 
+
+Þar sem skjáborðið er fyrir skrárnar þínar ætlar MonkeyPaste að vera á klemmuspjaldið þitt. Það er föruneyti af verkfærum sem eru vandlega hönnuð til að virðast samþætta og vinna með 
+hvaða forrit eða snið efnis. Ctrl + C og Ctrl + V eru miklu meira en bara flýtileiðir. Þeir eru inngönguhafnir sem öll forrit deila, með 
+Auður af verðmæti og merkingu sem þú átt skilið að hafa tiltækt innan seilingar. Ekki bara hent eftir næsta Ctrl+C.
+
+ÉG er þessi forritari umtal áðan og ÉG vilja allir til vera fær til finna nota út af MonkeyPaste. Svo það og allir eiginleikar þess eru algjörlega ókeypis í notkun. 
+Ég vil líka að þér líði vel með að nota það. Svo ég fullvissa þig, eins og að vera eina aflið á bak við stofnun þess, að EKKERT af (mjög) persónulegum upplýsingum sem geta komið upp á 
+þinn klemmuspjald er alltaf rekja spor einhvers eða birgðir EINHVERS staðar fyrir handan þinn eiga vél. Tímabil.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>klemmuspjald</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Örugg, örugg og einkarekin staðbundin gagnageymsla með valfrjálsri 2 - þátta lykilorðsvörn</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeysta er nú alveg ókeypis frá og með þessari útgáfu !!
+
+Allar takmarkanir (í APP-áskriftum) hafa verið fjarlægðar þar sem MonkeyPaste er nú að breytast yfir í að verða opið verkefni. Svo fylgstu með Github okkar (github.com/monkeypaste) ef þú hefur áhuga á að leggja sitt af mörkum.
+
+Uppfærslur:
+
+- Allar getu takmarkanir fjarlægðar!
+- Hafnar endurbætur á UI ritstjóra
+- Grunnstuðningur við að keyra mörg tilvik af acpryduce
+- Nýr ritstjóri sameiginlegs verðmæta (í viðbótarvafra þar sem við á)</value>
   </data>
 </root>

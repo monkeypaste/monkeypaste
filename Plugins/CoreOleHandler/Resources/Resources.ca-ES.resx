@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Deslligat</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Per divertir-se, quan això està marcat, la imatge del porta-retalls es convertirà de manera grossa en art ascii (text sense format) de la imatge 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Imatge a text</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Quan estiguin disponibles, les dades del primer format de text seleccionat es convertiran en una imatge i s'afegiran al porta-retalls.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Formats de text a imatge</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Imatge (tiff)</value>
+  </data>
 </root>

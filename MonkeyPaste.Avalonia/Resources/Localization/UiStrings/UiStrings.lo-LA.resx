@@ -2639,9 +2639,6 @@ monkeypaste ໃນອຸປະກອນ
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ຮຽນຮູ້ເພີ່ມເຕີມກ່ຽວກັບແຜນການ</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;ການນໍາໃຊ້ການຕິດຕໍ່ທີ່ມີຢູ່ (ຮຽກຮ້ອງplugin fetcher) ທົ່ງນານີ້ຈະຖືກນໍາໃຊ້ສໍາລັບທຸກກໍລະນີຂອງtemplate ນີ້ໃນເອກະສານນີ້ຫຼືໃນສິ່ງໃດກໍຕາມທີ່ມັນຈະໄດ້ຮັບການອ້າງອີງໃນເວລາຕໍ່ມາ.&lt;/p&gt;&lt;p&gt; ດັ່ງນັ້ນຕົວຢ່າງຖ້າເລືອກທີ່ຢູ່ອີເມວທີ່ນີ້ແລ້ວເຂດອີເມວຂອງຜູ້ຕິດຕໍ່ທີ່ທ່ານເລືອກຈະຖືກນໍາໃຊ້ສໍາລັບທຸກກໍລະນີໃນເອກະສານນີ້.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ monkeypaste ໃນອຸປະກອນ
     <value>ບໍ່ສາມາດກໍານົດຕົວກໍານົດທີ່ໄດ້ແບ່ງປັນໃນ presets. Paramid '{0}' ໃນ preset '{1}' ສໍາລັບ Plugin 'ສໍາລັບ Plugin' ສໍາລັບໂປແກຼມ Plugin '{2}' ຕ້ອງຖືກກໍານົດໄວ້ໃນພາກສ່ວນຄໍານິຍາມ.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>presets ຕ້ອງມີຄວາມກົດດັນທີ່ເປັນເອກະລັກ. {0 {0 {0} 'ຖືກກວດພົບໃນປັ in plugin' {1} 'ສໍາລັບ presets: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin ແຍກຄວາມຜິດພາດ, ຢູ່ໃນເສັ້ນທາງ '{0}' null, ອາດຈະຜິດພາດໃນການແຍກຄວາມຜິດພາດຂອງ JSON. ບໍ່ສົນໃຈ plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ monkeypaste ໃນອຸປະກອນ
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ມີຄຸນຄ່າທີ່ໃຊ້ຮ່ວມກັນ. ທ່ານຕ້ອງການຕັ້ງຄ່າເຫຼົ່ານັ້ນເຊັ່ນກັນບໍ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Presets ຕ້ອງມີguids ພິເສດ. ຕົວຊີ້ວັດທີ່ຊ້ໍາກັນ '{0}' ໄດ້ຖືກຄົ້ນພົບໃນ plugin '{1}' ສໍາລັບການລ່ວງຫນ້າ: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>ຂໍ້ຜິດພາດທີ່ບໍ່ຮູ້ຈັກ {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>ການຊື້ຂອງທ່ານບໍ່ສາມາດເຮັດສໍາເລັດໄດ້. ເຫດຜົນ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ເພີ່ມໂດເມນ</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Add Page</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>ໂດເມນສໍາລັບຫນ້ານີ້ຖືກປະຕິເສດ. ເພື່ອອະນຸຍາດໃຫ້ຫນ້ານີ້ທ່ານຈະຕ້ອງກໍາຈັດການປະຕິເສດສໍາລັບ '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>ໂດເມນ '{0}' ຖືກປະຕິເສດແລ້ວ</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ເຂດນ້ໍາ</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>ຫນ້ານີ້ຖືກປະຕິເສດແລ້ວ.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>ຫນ້າທີ່</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>ການລະເມີດ</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>ຕົວຢ່າງອື່ນຂອງ monkeypaste ແມ່ນແລ່ນແລ້ວ. ທ່ານແນ່ໃຈບໍ່ວ່າທ່ານຕ້ອງການເປີດຕົວຢ່າງໃຫມ່?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>ການຕັ້ງຄ່າ</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ທາງລັດແລະແປ້ນພິມທົ່ວໂລກແລະແປ້ນພິມໄດ້ຖືກປິດໃຊ້ງານແລ້ວ.
+
+ໄລຍະທໍາອິດຂອງໂລກສາມາດເປີດໃຊ້ງານໃນເມນູ Tray System</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ທາງລັດໃນໂລກພິການ: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ທາງລັດແລະແປ້ນພິມທົ່ວໂລກແລະຄີບອດໄດ້ຖືກເປີດໃຊ້ງານ.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ທົດລອງ) ການໃຊ້ລັດໂລກທີ່ໃຊ້ໃນໂລກ: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ສະຫຼັບສັ້ນໃນທາງລັດໂລກໄປ</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>ສະຫຼັບທາງລັດທົ່ວໂລກກ່ຽວກັບ</value>
   </data>
 </root>

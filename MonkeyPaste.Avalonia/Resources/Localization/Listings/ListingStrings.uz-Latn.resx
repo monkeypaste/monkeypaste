@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>nusxa ko'chirmoq</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pastroq qilmoq</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Clipboard menejeri</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>asbob</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>To'liq - taniqli klip muharriri, boy matn (stollar, ro'yxatlar, havolalar, havolalar va boshqalar) Sizning Forppet to'plamingizdan tezkor, dinamik o'yin-kulgi uchun mo'ljallangan matnlar</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Xavfsiz, xavfsiz va xususiy ma'lumotlarni saqlash Ixtiyoriy 2 - parolni himoya qilish</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>O'rnatilgan - plagin brauzerida tobora ortib borayotgan jamoatchilik plaginlari kutubxonasi</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypste - bu klipboard menejer, boshqa boshqa bo'lmagan avtomatlashtirish va unumdorlik vositasi. Klipbordni ish oqimingizning boyitilgan va tashkillashtirilgan qismiga aylantirish,
-Matn, fayllar va rasmlarni qo'llab-quvvatlaydigan intuitiv va past darajadagi interfeys. Plaginlar kutubxonasini boshqargan holda moslashuvchanlik uchun mo'ljallangan.
-
-Bu dasturchi tomonidan shunchaki nusxa ko'chirish va pleymdan chiqib ketishni istagan dasturchi tomonidan tajriba sifatida boshlandi. U Ctrl + C kabi oddiy buyruqni xohlagan
-Klipboard nima bo'lganini 'almashtiring. Va tajriba ishladi. Kichkina asbob juda qulay edi. Bu dasturchini yanada g'oyalar va qo'shimcha tajribalar bilan to'ldirdi
-Endi "maymun past" ga aylandi.
-
-Ish stolingiz sizning fayllaringiz uchun, maykeyp pastroq sizning rozetkangizga tegishli bo'lish niyatida. Uning to'plami, ehtimol, birlashishga va o'zaro bog'liqlik bilan ajralib turishi mumkin
-har qanday kontent yoki tarkib formati. CTRL + C va CTRL + v - bu shunchaki yorliqlardan ancha ko'p. Ular barcha ilovalarning barcha ulushini olish, olib yurish portlari
-Sizning boylik boyligi va sizning barmoqlaringizingizda mavjud bo'lishga loyiqdir. Keyingi Ctrl + C dan keyin shunchaki tashlanmaydi.
-
-Men ilgari bu dasturchiman va men hamma narsani maymun pastasidan foydalanishni istayman. Shunday qilib, uning barcha xususiyatlari to'liq bepul foydalanish mumkin.
-Bundan tashqari, men uni qulay his qilishingizni xohlayman. Shunday qilib, men sizni yaratgan yagona kuch sifatida, bu erda yuzaga keladigan shaxsiy ma'lumotlar emas
-Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi yoki saqlanadi. Davr.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi 
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard - bu o'rmon. Monkeypste - bu shoh! Ilovadan ilova qilish uchun, buni nusxalash va o't qo'yishdan oldin Monkeyp bilan hech qachon emas !! Brend - yangi, kesish qirrali pleyboard va analitik avtomatlashtirish vositalari !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Monkeypaste namunasi harakatda!</value>
   </data>
@@ -258,9 +228,6 @@ Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi 
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Cheksiz - Har yili</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Dastlabki reliz</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Ushbu obuna bilan siz olasiz:
 ● Cheksiz sig'im</value>
@@ -270,5 +237,45 @@ Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Yaqin orada ko'proq platformalar va xususiyatlar keladi! Biz shunchaki arting</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Tezkor qidiruv va ta'kidlash, shunchaki yozishni boshlang!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Matn, rasm va faylli kliplarni saqlang (ilova, veb-sayt, vaqt, vaqt va undan ko'p) ma'lumot avtomatik ravishda</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>Monkeypste - bu klipboard menejer, boshqa boshqa bo'lmagan avtomatlashtirish va unumdorlik vositasi. Klipbordni ish oqimingizning boyitilgan va tashkillashtirilgan qismiga aylantirish,
+Matn, fayllar va rasmlarni qo'llab-quvvatlaydigan intuitiv va past darajadagi interfeys. Plaginlar kutubxonasini boshqargan holda moslashuvchanlik uchun mo'ljallangan.
+
+Bu dasturchi tomonidan shunchaki nusxa ko'chirish va pleymdan chiqib ketishni istagan dasturchi tomonidan tajriba sifatida boshlandi. U Ctrl + C kabi oddiy buyruqni xohlagan
+Klipboard nima bo'lganini 'almashtiring. Va tajriba ishladi. Kichkina asbob juda qulay edi. Bu dasturchini yanada g'oyalar va qo'shimcha tajribalar bilan to'ldirdi
+Endi "maymun past" ga aylandi.
+
+Ish stolingiz sizning fayllaringiz uchun, maykeyp pastroq sizning rozetkangizga tegishli bo'lish niyatida. Uning to'plami, ehtimol, birlashishga va o'zaro bog'liqlik bilan ajralib turishi mumkin
+har qanday kontent yoki tarkib formati. CTRL + C va CTRL + v - bu shunchaki yorliqlardan ancha ko'p. Ular barcha ilovalarning barcha ulushini olish, olib yurish portlari
+Sizning boylik boyligi va sizning barmoqlaringizingizda mavjud bo'lishga loyiqdir. Keyingi Ctrl + C dan keyin shunchaki tashlanmaydi.
+
+Men ilgari bu dasturchiman va men hamma narsani maymun pastasidan foydalanishni istayman. Shunday qilib, uning barcha xususiyatlari to'liq bepul foydalanish mumkin.
+Bundan tashqari, men uni qulay his qilishingizni xohlayman. Shunday qilib, men sizni yaratgan yagona kuch sifatida, bu erda yuzaga keladigan shaxsiy ma'lumotlar emas
+Sizning clipboard har doim o'zingizning mashinangizning boshqa joyga kuzatiladi yoki saqlanadi. Davr.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>almashish buferi</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Ixtiyoriy 2 faktorli parol bilan himoyalangan xavfsiz, xavfsiz va shaxsiy mahalliy ma'lumotlarni saqlash</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypast endi ushbu nashrdan butunlay bepul !!
+
+Barcha cheklovlar (ilova obunalarida) Moneypaste ochiq foydalanuvchilar loyihasi bo'lishga o'tishi bilan olib tashlandi. Shunday qilib, bizning Githuber.com/monkeKepeaste-ga diqqat bilan qarang, agar hissangizni qiziqtirsangiz.
+
+Yangilanishlar:
+
+- Barcha qobiliyat cheklovlar olib tashlandi!
+- US muharriri UVni yaxshilash
+- Monkeypaste-ning bir nechta misollarini ishga tushirish uchun dastlabki qo'llab-quvvatlash
+- Yangi umumiy qiymat muharriri (agar ilova qilinadigan plagin brauzerida)</value>
   </data>
 </root>

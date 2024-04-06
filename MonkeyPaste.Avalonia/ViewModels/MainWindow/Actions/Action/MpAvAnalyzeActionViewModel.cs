@@ -235,7 +235,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IconResourceObj));
                     break;
                 case nameof(IsPerformingAction):
-                    MpConsole.WriteLine($"Analyzer '{this}' IsPerformingAction: {IsPerformingAction}");
+                    //MpConsole.WriteLine($"Analyzer '{this}' IsPerformingAction: {IsPerformingAction}");
                     break;
             }
         }

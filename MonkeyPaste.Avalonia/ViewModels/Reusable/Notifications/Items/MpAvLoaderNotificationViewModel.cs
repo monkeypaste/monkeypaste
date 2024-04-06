@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -8,6 +9,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
+        #region View Models
+        public override MpAvMenuItemViewModel PopupMenuViewModel {
+            get {
+                var cmvm = base.PopupMenuViewModel;
+                var cmvm_sil = cmvm.SubItems.ToList();
+                cmvm_sil.Add(new MpAvMenuItemViewModel() {
+                    HasLeadingSeparator = true,
+                    Header = UiStrings.CommonCancelLabel,
+                    IconResourceKey = "SignOutImage",
+                    Command = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand,
+                    CommandParameter = "loader cancel click"
+                });
+                cmvm.SubItems = cmvm_sil;
+                return cmvm;
+            }
+        }
+        #endregion
 
         #region Appearance
 

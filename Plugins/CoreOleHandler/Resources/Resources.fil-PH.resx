@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Hindi pamagat</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Para sa kasiyahan, kapag ito ay sinuri ang imahe sa clipboard ay magiging crudely na ma -convert sa ASCII (Plain Text) Art of the Image 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Imahe sa text</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Kapag magagamit, ang unang napiling data ng format ng teksto ay mai -convert sa isang imahe at idinagdag sa clipboard.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Teksto sa mga format ng imahe</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Larawan (TIFF)</value>
+  </data>
 </root>

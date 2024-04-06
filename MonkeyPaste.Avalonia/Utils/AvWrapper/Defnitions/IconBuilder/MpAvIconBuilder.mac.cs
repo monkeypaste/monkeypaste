@@ -7,6 +7,7 @@ using MonoMac.Foundation;
 using MonoMac.WebKit;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvIconBuilder {
@@ -28,11 +29,6 @@ namespace MonkeyPaste.Avalonia {
                 return string.Empty;
             }
 
-            MpAvMacHelpers.EnsureInitialized();
-            if (MpAvMacHelpers.IsPathExecutableUnderAppBundle(path)) {
-                path = MpAvMacHelpers.GetAppBundlePathOrDefault(path);
-            }
-
             var icon = NSWorkspace.SharedWorkspace.IconForFile(path);
             var data = icon.AsTiff();
             var bitmap = new NSBitmapImageRep(data);
@@ -41,11 +37,17 @@ namespace MonkeyPaste.Avalonia {
                 using (var memStream = new MemoryStream()) {
                     stream.CopyTo(memStream);
                     var bytes = memStream.ToArray();
-                    string base64 = Convert.ToBase64String(bytes);
+                    string base64 = bytes.ToAvBitmap().ResizeKeepAspect(GetSize(iconSize), true).ToBase64String();
                     return base64;
                 }
             }
         }
-
+        private MpSize GetSize(MpIconSize ics) {
+            if (ics.ToString().Split("Icon").Last() is { } len_str &&
+                int.Parse(len_str) is int len) {
+                return new MpSize(len, len);
+            }
+            return new MpSize(32, 32);
+        }
     }
 }

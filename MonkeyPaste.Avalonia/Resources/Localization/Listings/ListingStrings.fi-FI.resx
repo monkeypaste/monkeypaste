@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopio</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>liittää</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>leikepöydän hallinta</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>työkalu</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Täysin - esitelty Clip Editor, jossa on Find/Korvaa, rikas teksti (taulukot, luettelot, linkit jne.) Tekstin mallintaminen nopeaan, dynaamiseen liittämiseen katkelmakokoelmastasi</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Turvallinen, turvallinen ja yksityinen paikallinen tietojen tallennus valinnaisella 2 - tekijä salasanan suojaus</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Rakennettu - Laajennusselain, jolla on jatkuvasti kasvava yhteisö - ohjaava laajennuskirjasto</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste on leikepöydän hallinta-, automaatio- ja tuottavuustyökalu kuin mikään muu. Leikepöydän parantaminen rikastettuun ja järjestäytyneeseen osaan työnkulkuasi,
-Mukana intuitiivisen ja matalan profiilin käyttöliittymän, joka tukee tekstiä, tiedostoja ja kuvia. Suunniteltu joustavuuteen, ja jatkuvasti kasvava yhteisö - ohjaavat libray -laajennuksia.
-
-Se alkoi ohjelmoijan kokeiluna, joka haluaa enemmän kuin vain kopioida ja liittää leikepöydältä. Hän halusi Ctrl+C: n kaltaisen yksinkertaisen komennon, joka "lisää"
-"Korvaa", mikä oli leikepöydällä. Ja kokeilu toimi. Pieni työkalu oli erittäin kätevä. Tämä tarttui ohjelmoijaan lisää ideoita ja enemmän kokeita, että
-Nyt on tullut "monkepaste".
-
-Kuten työpöytä on tiedostosi, MonkeyPaste aikoo olla leikepöydällesi. Sen sarja työkaluja, jotka on huolellisesti suunniteltu integroimaan ja yhteistyöhön
-kaikki sisällön sovellukset tai muoto. Ctrl+C ja Ctrl+V ovat paljon enemmän kuin vain pikakuvakkeita. Ne ovat kaikkien sovellusten jakamisen sisäänkäynnin satamat, jotka kantavat a
-Rikkaus arvo ja merkitys, jonka ansaitset, että sinulla on käytettävissä sormenpäässäsi. Ei vain heitetty pois seuraavan Ctrl+c: n jälkeen.
-
-Olen se aiemmin mainittu ohjelmoija ja haluan, että kaikki voivat löytää käytön monkepasteista. Joten se ja kaikki sen ominaisuudet ovat täysin ilmaisia.
-Haluan myös sinun olevan mukava käyttää sitä. Joten vakuutan teille, että se on ainoa voima sen luomisen takana, ettei mikään (erittäin) henkilökohtaista tietoa, joka voi syntyä
-Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ulkopuolella. Ajanjakso.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ul
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Leikepöytä on viidakko. Monkepaste on kuningas! Käännä sovelluksesta sovellukseen, kopioimalla tämä ja liittämällä, joka ei ole koskaan ennen Monkeypasten kanssa !! Tuotemerkki - uusi, huippuluokan leikepöytä ja analyyttinen automaatiotyökalu !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Näyte Monkeypasten toiminnasta!</value>
   </data>
@@ -258,9 +228,6 @@ Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ul
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Rajoittamaton - vuosittain</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Alkuperäinen julkaisu</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Tällä tilauksella saat:
 ● Rajoittamaton kapasiteetti</value>
@@ -270,5 +237,45 @@ Leikepöytäsi on koskaan seurattu tai tallennettu missä tahansa oman koneen ul
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Lisää alustoja ja ominaisuuksia tulossa pian! Olemme juuri aloittamassa 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Valaistus nopea haku ja korostaminen, aloita vain kirjoittaminen!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Tallenna teksti-, kuva- ja tiedostoleikkeet kaikki lähteensä (sovellus, verkkosivusto, aika ja paljon muuta) tietoja automaattisesti</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste on leikepöydän hallinta-, automaatio- ja tuottavuustyökalu kuin mikään muu. Leikepöydän parantaminen rikastetuksi ja organisoiduksi osaksi työnkulkua,
+sisältää intuitiivisen ja matalan profiilin käyttöliittymän, joka tukee tekstiä, tiedostoja ja kuvia. Suunniteltu joustavuuteen, jatkuvasti kasvavalla yhteisövetoisella laajennusvalikoimalla.
+
+Se alkoi ohjelmoijan kokeiluna, joka halusi enemmän kuin vain kopioida ja liittää leikepöydältä. Hän halusi yksinkertaisen komennon, kuten Ctrl+C, joka "lisäisi" sen sijaan 
+"korvata" leikepöydällä ollut. Ja kokeilu toimi. Pieni työkalu oli erittäin kätevä. Tämä kiehtoi ohjelmoijaa enemmän ideoita ja kokeita, jotka 
+nyt on tullut "MonkeyPaste". 
+
+Koska työpöytä on tiedostoillesi, MonkeyPaste aikoo olla leikepöydällesi. Se on joukko työkaluja, jotka on suunniteltu huolellisesti näennäisesti integroimaan ja toimimaan yhdessä 
+mikä tahansa sovellus tai sisällön muoto. Ctrl+C ja Ctrl+V ovat paljon enemmän kuin vain pikanäppäimiä. Ne ovat kaikkien sovellusten yhteisiä maahantulosatamia, joissa on 
+Arvon ja merkityksen rikkaus, jonka ansaitset olla käden ulottuvilla. Ei vain heitetty pois seuraavan Ctrl+C: n jälkeen.
+
+Olen aiemmin mainittu ohjelmoija ja haluan, että jokainen voi löytää käyttöä MonkeyPastesta. Joten se ja kaikki sen ominaisuudet ovat täysin ilmaisia käyttää. 
+Haluan myös, että tunnet olosi mukavaksi käyttää sitä. Joten vakuutan teille, ainoana voimana sen luomisen takana, että MIKÄÄN (erittäin) henkilökohtaisista tiedoista, joita voi syntyä 
+leikepöytääsi seurataan tai tallennetaan MIHIN tahansa oman koneesi ulkopuolelle. Jakso.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>leikepöytä</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Turvallinen, suojattu ja yksityinen paikallinen tietojen tallennus valinnaisella 2-vaiheisella salasanasuojauksella</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkepaste on nyt täysin vapaa tästä julkaisusta !!
+
+Kaikki rajoitukset (APP-tilauksissa) on poistettu, koska Monkeypaste on nyt siirtymässä avoimen lähdekoodin projektiin. Joten pidä silmällä GitHubia (github.com/monkeypaste), jos olet kiinnostunut osallistumaan.
+
+Päivitykset:
+
+- Kaikki kapasiteettirajoitukset on poistettu!
+- hylätty URL -URL -editorin käyttöliittymäparannukset
+- Perustuki monkeparten useiden tapausten suorittamiseen
+- Uusi jaettu arvoeditori (laajennusselaimessa tarvittaessa)</value>
   </data>
 </root>

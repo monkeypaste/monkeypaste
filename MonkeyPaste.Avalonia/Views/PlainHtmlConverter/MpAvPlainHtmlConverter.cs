@@ -9,6 +9,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -18,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncObject,
         MpIAsyncCollectionObject {
         #region Private Variables
+        private MpAvWindow _convWindow;
 
         #endregion
 
@@ -36,10 +38,11 @@ namespace MonkeyPaste.Avalonia {
 
         private string _userAgent = MpFileIo.GetDefaultUserAgent();
         public string UserAgent =>
-            ConverterWebView == null ||
-            string.IsNullOrEmpty(ConverterWebView.UserAgent) ?
-                _userAgent :
-                ConverterWebView.UserAgent;
+            //ConverterWebView == null ||
+            //string.IsNullOrEmpty(ConverterWebView.UserAgent) ?
+            //    _userAgent :
+            //    ConverterWebView.UserAgent;
+            _userAgent;
         #endregion
 
         #region MpIAsyncObject Implementation
@@ -121,94 +124,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpRichHtmlContentConverterResult> FinishHtmlConversionAsync(MpRichHtmlContentConverterResult cr, string verifyStr) {
-            if (cr == null ||
-                string.IsNullOrWhiteSpace(cr.InputHtml) ||
-                cr.DeterminedFormat != MpPortableDataFormats.Html) {
-                return cr;
-            }
-            var html_doc = new HtmlDocument();
-            html_doc.LoadHtml(cr.InputHtml);
-            if (html_doc.DocumentNode != null &&
-                html_doc.DocumentNode.FirstChild.Name == "img" &&
-                html_doc.DocumentNode.FirstChild.GetAttributeValue("src", string.Empty) is string src_str &&
-                !string.IsNullOrWhiteSpace(src_str)) {
-                string img_base64 = null;
-
-                if (src_str.ToLowerInvariant().StartsWith("data:image/")) {
-                    string src_data_str = src_str.Substring("data:image/".Length);
-                    if (src_data_str.ToLowerInvariant().StartsWith("svg")) {
-                        MpDebug.Break($"Need to handle svg img src.");
-                    } else {
-                        img_base64 = src_data_str.Split(",")[1];
-                    }
-                } else if (Uri.IsWellFormedUriString(src_str, UriKind.Absolute)) {
-                    // TODO could fallback to relative uri by combining source url...
-                    byte[] img_bytes = await MpFileIo.ReadBytesFromUriAsync(src_str);
-                    img_base64 = img_bytes.ToBase64String();
-                }
-                if (!img_base64.IsStringBase64()) {
-                    MpDebug.Assert(img_base64 == null, $"What went wrong parsing img html: '{src_str}'");
-                    return cr;
-                }
-                cr.DeterminedFormat = MpPortableDataFormats.Image;
-                cr.OutputData = img_base64;
-            }
-            return cr;
-        }
-        private async Task CreateWebViewConverterAsync() {
-            IsBusy = true;
-            if (OperatingSystem.IsBrowser()) {
-                await MpDeviceWrapper.Instance.JsImporter.ImportAllAsync();
-                if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime mobile
-                        && mobile.MainView != null) {
-                    Mp.Services.ScreenInfoCollection = new MpAvScreenInfoCollectionBase(new[] { new MpAvDesktopScreenInfo(mobile.MainView.GetVisualRoot().AsScreen()) });
-                }
-            }
-
-            ConverterWebView = new MpAvPlainHtmlConverterWebView() {
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-            };
-
-
-            if (Mp.Services.PlatformInfo.IsDesktop) {
-                var sw = Stopwatch.StartNew();
-                var quillWindow = new MpAvHiddenWindow();
-
-                quillWindow.Content = ConverterWebView;
-                ConverterWebView.AttachedToVisualTree += async (s, e) => {
-                    if (OperatingSystem.IsWindows()) {
-                        // hide converter window from windows alt-tab menu
-                        MpAvToolWindow_Win32.SetAsToolWindow(quillWindow.TryGetPlatformHandle().Handle);
-                    }
-
-                    while (!ConverterWebView.IsEditorInitialized) {
-                        MpConsole.WriteLine("[loader] waiting for html converter init...");
-                        await Task.Delay(100);
-                    }
-                    quillWindow.Hide();
-                    quillWindow.WindowState = WindowState.Minimized;
-                    sw.Stop();
-                    MpConsole.WriteLine($"Html converter initialized. Load time: {sw.ElapsedMilliseconds}ms");
-                    IsLoaded = true;
-                };
-                quillWindow.Show();
-            } else if (App.PrimaryView is MpAvMainView mv) {
-                ConverterWebView.AttachedToLogicalTree += (s, e) => {
-                    ConverterWebView.IsVisible = false;
-                };
-                mv.RootGrid.Children.Add(ConverterWebView);
-            }
-
-            IsBusy = false;
-        }
-
-        private MpRichHtmlContentConverterResult ConvertWithFallback(string htmlDataStr, string verifyText) {
-            var result = MpRichHtmlContentConverterResult.Parse(htmlDataStr.ToString());
-            return result;
-        }
-
         private async Task<MpRichHtmlContentConverterResult> ConvertWithWebViewAsync(
             MpDataFormatType inputFormatType,
             string htmlDataStr,
@@ -249,18 +164,175 @@ namespace MonkeyPaste.Avalonia {
 
             return new MpRichHtmlContentConverterResult() {
                 InputHtml = resp.html.ToStringFromBase64(),
-                OutputData = resp.quillHtml.ToStringFromBase64(),
+#if SUGAR_WV
+                OutputData = resp.themedHtml.ToStringFromBase64(),
+#else
+                OutputData = resp.quillHtml.ToStringFromBase64(), 
+#endif
                 Delta = resp.quillDelta.ToStringFromBase64(),
                 SourceUrl = resp.sourceUrl
             };
         }
+        private async Task<MpRichHtmlContentConverterResult> FinishHtmlConversionAsync(MpRichHtmlContentConverterResult cr, string verifyStr) {
+            if (cr == null ||
+                string.IsNullOrWhiteSpace(cr.InputHtml) ||
+                cr.DeterminedFormat != MpPortableDataFormats.Html) {
+                return cr;
+            }
+            var html_doc = new HtmlDocument();
+            html_doc.LoadHtml(cr.InputHtml);
+            if (html_doc.DocumentNode != null &&
+                html_doc.DocumentNode.FirstChild.Name == "img" &&
+                html_doc.DocumentNode.FirstChild.GetAttributeValue("src", string.Empty) is string src_str &&
+                !string.IsNullOrWhiteSpace(src_str)) {
+                string img_base64 = null;
+
+                if (src_str.ToLowerInvariant().StartsWith("data:image/")) {
+                    string src_data_str = src_str.Substring("data:image/".Length);
+                    if (src_data_str.ToLowerInvariant().StartsWith("svg")) {
+                        MpDebug.Break($"Need to handle svg img src.");
+                    } else {
+                        img_base64 = src_data_str.Split(",")[1];
+                    }
+                } else if (Uri.IsWellFormedUriString(src_str, UriKind.Absolute)) {
+                    // TODO could fallback to relative uri by combining source url...
+                    byte[] img_bytes = await MpFileIo.ReadBytesFromUriAsync(src_str);
+                    img_base64 = img_bytes.ToBase64String();
+                }
+                if (!img_base64.IsStringBase64()) {
+                    MpDebug.Assert(img_base64 == null, $"What went wrong parsing img html: '{src_str}'");
+                    return cr;
+                }
+                cr.DeterminedFormat = MpPortableDataFormats.Image;
+                cr.OutputData = img_base64;
+            }
+            return cr;
+        }
+        private string ApplyTheme(string html) {
+            if (html.ToHtmlDocument() is not { } doc ||
+                doc.DocumentNode.SelectNodes("//*[@style]") is not { } styled_nodes) {
+                return html;
+            }
+            bool is_dark = MpAvThemeViewModel.Instance.IsThemeDark;
+            string fallback_fg = is_dark ?
+                Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeWhiteColor.ToString()) :
+                Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeBlackColor.ToString());
+            foreach (var node in styled_nodes) {
+                string style_val = node.GetAttributeValue("style", string.Empty).Trim();
+
+                var style_props =
+                    style_val
+                    .SplitNoEmpty(";")
+                    .Select(x => x.Trim());
+                // fg
+                if (style_props.FirstOrDefault(x => x.StartsWith("color")) is { } color_prop) {
+                    string color_val = color_prop.SplitNoEmpty(":").LastOrDefault().ToStringOrEmpty().Trim();
+                    var c = new MpColor(color_val, fallback_fg);
+                    MpColorHelpers.ColorToHsl(c, out double h, out double s, out double l);
+                    if (is_dark) {
+                        l = Math.Max(l == 0 ? 1 : l, 0.75);
+                    } else {
+                        l = Math.Min(l == 1 ? 0 : 0, 0.25);
+                    }
+                    var tc = MpColorHelpers.ColorFromHsl(h, s, l);
+                    tc.A = 255;
+                    string new_color_prop = $"color: {tc.ToHex(true)}";
+                    style_val = style_val.Replace(color_prop, new_color_prop);
+                }
+                // bg
+                string new_bg_color_prop = "background-color: transparent";
+                string bg_color_prop = style_props.FirstOrDefault(x => x.StartsWith("background-color"));
+                if (!bg_color_prop.IsNullOrEmpty()) {
+                    style_val = style_val.Replace(bg_color_prop, new_bg_color_prop);
+                } else {
+                    new_bg_color_prop += ";";
+                    if (!style_val.IsNullOrEmpty() && !style_val.EndsWith(";")) {
+                        style_val += ";";
+                    }
+                    style_val += new_bg_color_prop;
+                }
+                node.SetAttributeValue("style", style_val);
+            }
+            return doc.DocumentNode.OuterHtml;
+        }
+        private async Task CreateWebViewConverterAsync() {
+            IsBusy = true;
+            if (OperatingSystem.IsBrowser()) {
+                await MpDeviceWrapper.Instance.JsImporter.ImportAllAsync();
+                if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime mobile
+                        && mobile.MainView != null) {
+                    Mp.Services.ScreenInfoCollection = new MpAvScreenInfoCollectionBase(new[] { new MpAvDesktopScreenInfo(mobile.MainView.GetVisualRoot().AsScreen()) });
+                }
+            }
+
+            ConverterWebView = new MpAvPlainHtmlConverterWebView() {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+            };
+
+
+            if (Mp.Services.PlatformInfo.IsDesktop) {
+                _convWindow = new MpAvHiddenWindow() {
+                    Width = 10,
+                    Height = 10
+                };
+
+                _convWindow.Content = ConverterWebView;
+                ConverterWebView.AttachedToVisualTree += async (s, e) => {
+                    var sw = Stopwatch.StartNew();
+                    if (OperatingSystem.IsWindows()) {
+                        // hide converter window from windows alt-tab menu
+                        MpAvToolWindow_Win32.SetAsToolWindow(_convWindow.TryGetPlatformHandle().Handle);
+                    }
+
+                    while (!ConverterWebView.IsEditorInitialized) {
+                        if (sw.Elapsed > TimeSpan.FromSeconds(60)) {
+                            // TODO should fallback here 
+                        }
+                        MpConsole.WriteLine("[loader] waiting for html converter init...");
+                        await Task.Delay(100);
+                    }
+                    _convWindow.Hide();
+                    _convWindow.WindowState = WindowState.Minimized;
+                    sw.Stop();
+                    MpConsole.WriteLine($"Html converter initialized. ({_convWindow.Bounds.Width}x{_convWindow.Bounds.Height}) Load time: {sw.ElapsedMilliseconds}ms");
+                    IsLoaded = true;
+                };
+                _convWindow.Show();
+            } else if (App.PrimaryView is MpAvMainView mv) {
+                ConverterWebView.AttachedToLogicalTree += (s, e) => {
+                    ConverterWebView.IsVisible = false;
+                };
+                mv.RootGrid.Children.Add(ConverterWebView);
+            }
+
+            IsBusy = false;
+        }
+
+        private MpRichHtmlContentConverterResult ConvertWithFallback(string htmlDataStr, string verifyText) {
+            var result = MpRichHtmlContentConverterResult.Parse(htmlDataStr.ToString());
+            if (result != null && result.DeterminedFormat == MpPortableDataFormats.Html) {
+                result.OutputData = ApplyTheme(result.OutputData);
+            }
+            return result;
+        }
+
         #endregion
 
         #region Commands
 
         public ICommand ShowConverterDevTools => new MpCommand(
             () => {
+#if SUGAR_WV && MAC
+                // NOTE WKWebView doesn't have a 'show dev tools' only right-click context option so s
+                // showing the conv window
+                if (_convWindow is not MpAvHiddenWindow cw) {
+                    return;
+                }
+                cw.Unhide();
+#else
                 ConverterWebView.OpenDevTools();
+#endif
             });
 
         #endregion

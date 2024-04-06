@@ -60,6 +60,7 @@
 
 
 #editor.no-select > .ql-editor {
+    -webkit-user-select: none;
     user-select: none;
     pointer-events: none;
 }
@@ -79,6 +80,7 @@
     }
 
 .sub-select {
+    -webkit-user-select: auto;
     user-select: auto;
     overflow: auto;
     cursor: text;
@@ -103,6 +105,7 @@ body:has(.sub-select) {
 }
 
 .editable {
+    -webkit-user-select: auto;
     user-select: auto;
     white-space: unset;
     cursor: text;
@@ -122,4 +125,29 @@ body:has(.editable) {
 
 #editor:not(.no-select) a {
     cursor: pointer;
+}
+
+.ql-editor h1 {
+    line-height: 84px !important;
+    font-size: 42px !important;
+}
+.ql-editor h2 {
+    line-height: 64px !important;
+    font-size: 32px !important;
+}
+.ql-editor h3  {
+    line-height: 64px !important;
+    font-size: 32px !important;
+}
+.ql-editor h4 {
+    line-height: 48px !important;
+    font-size: 24px !important;
+}
+.ql-editor h5 {
+    line-height: 48px !important;
+    font-size: 24px !important;
+}
+.ql-editor h6 {
+    line-height: 40px !important;
+    font-size: 20px !important;
 }

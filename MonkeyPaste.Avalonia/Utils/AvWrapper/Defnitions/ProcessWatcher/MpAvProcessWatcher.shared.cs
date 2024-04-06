@@ -57,10 +57,10 @@ namespace MonkeyPaste.Avalonia {
         public bool IsWatching =>
             _timer != null && _timer.IsEnabled;
 
-        private nint _thisAppHandle = nint.Zero;
+        private nint _thisAppHandle = IntPtr.Zero;
         protected nint ThisAppHandle {
             get {
-                if (_thisAppHandle == nint.Zero) {
+                if (_thisAppHandle == IntPtr.Zero) {
                     _thisAppHandle = GetThisAppHandle();
                 }
                 return _thisAppHandle;
@@ -75,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
         public MpPortableProcessInfo LastProcessInfo {
             get {
                 if (_lastProcessInfo == null) {
-                    if (_lastActiveHandle == nint.Zero) {
+                    if (_lastActiveHandle == IntPtr.Zero) {
                         return ThisAppProcessInfo;
                     }
                     _lastProcessInfo = GetProcessInfoByHandle(_lastActiveHandle);
@@ -141,6 +141,9 @@ namespace MonkeyPaste.Avalonia {
             var handle = GetParentHandleAtPoint(pixelPoint);
             return GetProcessInfoByHandle(handle);
         }
+        public MpPortableProcessInfo GetProcessInfoFromHandle(nint handle) {
+            return GetProcessInfoByHandle(handle);
+        }
 
 
 
@@ -154,7 +157,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected virtual MpPortableProcessInfo GetProcessInfoByHandle(nint handle, bool minimal = false) {
-            if (handle == nint.Zero) {
+            if (handle == IntPtr.Zero) {
                 return null;
             }
             var ppi = new MpPortableProcessInfo() {
@@ -199,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
             //            }
             //#else
             nint activeHandle = GetActiveProcessHandle();
-            if (activeHandle == nint.Zero ||
+            if (activeHandle == IntPtr.Zero ||
                 activeHandle == _lastActiveHandle) {
                 return;
             }

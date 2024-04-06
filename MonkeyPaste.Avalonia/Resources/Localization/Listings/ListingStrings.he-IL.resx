@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>עותק</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>לְהַדבִּיק</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>מנהל הלוח</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>כְּלִי</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>מלא - עורך קליפ מוצג עם למצוא/החלף, טקסט עשיר (טבלאות, רשימות, קישורים וכו ') תבנית טקסט להדבקה מהירה ודינאמית מאוסף הקטע שלך</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>אחסון נתונים מקומי בטוח, מאובטח ופרטי עם אופציונלי 2 - הגנה על סיסמא</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>נבנה - בדפדפן תוסף עם קהילה הולכת וגדלה - ספריית תוספים מונעת</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste הוא מנהל לוח, כלי אוטומציה ופרודוקטיביות כמו לא אחר. שיפור הלוח שלך לחלק מועשר ומאורגן של זרימת העבודה שלך,
-הכולל ממשק אינטואיטיבי ונמוך - פרופיל התומך בטקסט, קבצים ותמונות. מיועד לגמישות, עם קהילה הולכת וגוברת - ספרייה מונעת של תוספים.
-
-זה התחיל כניסוי של מתכנת שרוצה יותר מסתם העתק והדבק מהלוח. הוא רצה פקודה פשוטה כמו Ctrl+C שת 'תוסיף' במקום זאת
-של 'החלף' את מה שהיה על הלוח. והניסוי עבד. הכלי הקטן היה שימושי מאוד. זה הפיל את המתכנת עם יותר רעיונות ועוד ניסויים, זה
-עכשיו הפך ל"קוף -קוף ".
-
-מכיוון ששולחן העבודה הוא לקבצים שלך, Conkeypaste מתכוון להיות ללוח שלך. זה חבילת כלים שתוכננה בקפידה לשלב וללא -אסיפה ללא כביכול
-כל יישום או פורמט של תוכן. Ctrl+C ו- Ctrl+V הם הרבה יותר מסתם קיצורי דרך. הם נמלי הכניסה שכל היישומים חולקים, הנושאים א
-עושר של ערך ומשמעות מגיע לך להיות זמין בהישג ידך. לא סתם נזרק אחרי ה- Ctrl+C הבא.
-
-אני המתכנת הזה שהוזכר קודם לכן ואני רוצה שכולם יוכלו למצוא שימוש מחוץ לקוף. אז זה וכל התכונות שלה חופשיות לחלוטין לשימוש.
-אני גם רוצה שתרגיש בנוח להשתמש בזה. אז אני מבטיח לך, ככוח היחיד מאחורי יצירתו, שאף אחד מהמידע האישי (מאוד) שיכול להתעורר עליו
-הלוח שלך אי פעם עוקב או מאוחסן בכל מקום מעבר למכונה שלך. פרק זמן.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>הלוח הוא ג'ונגל. Monkeypaste הוא המלך! התנדנדו מאפליקציה לאפליקציה, העתקת זאת והדביקו את זה שאוהב מעולם עם קופיפסטה !! מותג - לוח חדש, חדיש את הלוח וכלי אוטומציה אנליטית !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>מדגם של קופיפסטה בפעולה!</value>
   </data>
@@ -258,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>ללא הגבלה - שנתי</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>שיחרור ראשוני</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>עם מנוי זה תקבל:
 ● קיבולת בלתי מוגבלת</value>
@@ -270,5 +237,45 @@
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● עוד פלטפורמות ותכונות בקרוב! אנחנו רק מתחילים 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>תאורת חיפוש מהיר והדגשה, פשוט התחל להקליד!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>אחסן קטעי טקסט, תמונה וקבצים עם כל המקור שלו (האפליקציה, האתר, הזמן ועוד הרבה) באופן אוטומטי</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste הוא מנהל לוח, אוטומציה וכלי פרודוקטיביות שאין כמותו. שיפור הלוח שלך לחלק מועשר ומאורגן של זרימת העבודה שלך,
+כולל ממשק אינטואיטיבי בפרופיל נמוך התומך בטקסט, קבצים ותמונות. מתוכנן לגמישות, עם קהילה הולכת וגדלה של תוספים המונעים על ידי ליבריי.
+
+זה התחיל כניסוי של מתכנת שרצה יותר מסתם להעתיק ולהדביק מהלוח. הוא רצה פקודה פשוטה כמו Ctrl+C ש'תוסיף' במקום זאת 
+של 'להחליף' את מה שהיה על הלוח. והניסוי עבד. הכלי הקטן היה שימושי מאוד. זה סיקרן את המתכנת עם עוד רעיונות ועוד ניסויים, כי 
+עכשיו הפך להיות "משחת קוף". 
+
+כמו שולחן העבודה הוא לקבצים שלך, MonkeyPaste מתכוון להיות הלוח שלך. זוהי חבילת כלים שתוכננה בקפידה כדי להשתלב ולשתף פעולה עם 
+כל יישום או פורמט של תוכן. Ctrl+C ו- Ctrl+V הם הרבה יותר מסתם קיצורי דרך. הם נמלי הכניסה המשותפים לכל היישומים, הנושאים 
+עושר של ערך ומשמעות שמגיע לך להיות זמין בקצות אצבעותיך. לא סתם נזרק אחרי Ctrl+C הבא.
+
+אני המתכנת שהוזכר קודם ואני רוצה שכולם יוכלו למצוא שימוש ב-MonkeyPaste. אז זה וכל התכונות שלה הם לגמרי בחינם לשימוש. 
+אני גם רוצה שתרגישו בנוח להשתמש בו. אז אני מבטיח לכם, בתור הכוח היחיד מאחורי יצירתו, שאף אחד מהמידע האישי (מאוד) שיכול לצוץ 
+אי פעם עוקבים אחר הלוח שלך או מאחסנים אותו בכל מקום מעבר למחשב שלך. תקופה.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>הלוח</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>אחסון נתונים מקומי בטוח, מאובטח ופרטי עם הגנה אופציונלית באמצעות סיסמה דו-שלבית</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste כעת בחינם לגמרי נכון לשחרור זה !!
+
+כל ההגבלות (במנויים לאפליקציות) הוסרו מכיוון שה- Monkeypaste עובר כעת להפוך לפרויקט קוד פתוח. אז השגיח על GitHub שלנו (github.com/monkeypaste) אם אתה מעוניין לתרום.
+
+עדכונים:
+
+- כל מגבלות הקיבולת הוסרו!
+- שיפורי ממשק משתמש של עורך URL נדחה
+- תמיכה בסיסית בהפעלת מקרים מרובים של קופיפסטה
+- עורך ערך משותף חדש (בדפדפן תוסף במידת הצורך)</value>
   </data>
 </root>

@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Исемсез</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Күңел ачу өчен, бу буфердагы рәсемне тикшергәндә, образның АСКИМ (гади текст) сәнгатенә әверелелер.</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Текстка образ</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Булгач, беренче сайланган текст форматының мәгълүматлары образга әйләнәчәк һәм буферга өстәлде.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Рәсем форматына текст</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Рәсем (Тифф)</value>
+  </data>
 </root>

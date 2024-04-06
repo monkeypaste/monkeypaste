@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Sem título</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Por diversão, quando isso é verificado, a imagem na área de transferência será grosseiramente convertida em ASCII (texto simples) arte da imagem 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Imagem para texto</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Quando disponível, os primeiros dados do formato de texto selecionados serão convertidos em uma imagem e adicionados à área de transferência.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Texto para formatos de imagem</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Imagem (TIFF)</value>
+  </data>
 </root>

@@ -2639,9 +2639,6 @@ feedback@monkepte.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Իմացեք ավելին պլանների մասին</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Օգտագործելով մատչելի կոնտակտներ (պահանջվում է fetcher plugin) այս դաշտը կօգտագործվի այս մոդելի բոլոր դեպքերի համար այս փաստաթղթում կամ ցանկացած դեպքում այն կներկայացվի ավելի ուշ:&lt;/p&gt;&lt;p&gt; Այսպիսով, օրինակ, եթե այստեղ ընտրեք էլփոստի հասցեն, ապա ձեր ընտրած կապի էլփոստի դաշտը կօգտագործվի այս փաստաթղթում բոլոր դեպքերի համար:&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ feedback@monkepte.com</value>
     <value>Չի կարող սահմանել բաժնետիրական արժեքի պարամետրեր: «{0}» պարամետրը «{1}» plugin- ի համար անհրաժեշտ է հեռացնել կամ պարամվալուի համար կարելի է նշել պարամետրերի սահմանման բաժնում:</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Նախադրվածները պետք է ունենան յուրօրինակ ուղեցույցներ: Կրկնօրինակված նախադրված «{0}» - ը հայտնաբերվել է «{1}» pluget- ի համար. {2</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin Parsing Error, «{0}» ուղու վրա, հավանաբար, սխալ է վերլուծել JSON- ը: Անտեսելով plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ feedback@monkepte.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>«{0}» պարունակում է ընդհանուր արժեքներ: Կցանկանայիք նաեւ դրանք վերափոխել:</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Պրեսետները պետք է առանձնահատուկ առաջնորդություն ունենան ։ «{0}» պրեսետների համար plugin '{1}' -ում հայտնաբերվել է կրկնակի նախնական ուղեցույց՝ {2}:</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Անհայտ սխալ {0</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ձեր գնումը հնարավոր չէ լրացնել: Պատճառը, {0</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Ավելացնել տիրույթ</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Ավելացնել էջ</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Այս էջի դոմենը մերժվում է: Այս էջը թույլ տալու համար ձեզ հարկավոր է հեռացնել մերժումը «{0}» - ի համար:</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>«{0}» տիրույթը արդեն մերժվում է</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Տիրույթներ</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Այս էջն արդեն մերժված է:</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Էջեր</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Սինկկ</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Monkepaste- ի մեկ այլ դեպք արդեն գործում է: Համոզված եք, որ ցանկանում եք նոր օրինակ բացել:</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Ձեվակերպել</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Մկնիկի եւ ստեղնաշարի գլոբալ դյուրանցումները անջատված են:
+
+Համաշխարհային դյուրանցումները այժմ կարող են միացված լինել համակարգի սկուտեղի ընտրացանկում</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Համաշխարհային դյուրանցումները անջատված են. {0</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Մկնիկի եւ ստեղնաշարի գլոբալ դյուրանցումները միացված են:</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Փորձարարական) Համաշխարհային դյուրանցումներ Միացված. {0</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Անջատեք գլոբալ դյուրանցումները</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Միացրեք գլոբալ դյուրանցումները</value>
   </data>
 </root>

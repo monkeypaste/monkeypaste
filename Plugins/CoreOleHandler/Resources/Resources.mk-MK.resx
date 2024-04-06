@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Без наслов</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>За забава, кога ова ќе се провери сликата на таблата со клип, ќе биде грубо претворена во уметност на ASCII (обичен текст) на сликата 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Слика до текст</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Кога се достапни, податоците од првиот избран формат на текст ќе бидат конвертирани на слика и ќе се додадат во таблата со исечоци.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Формати на текст до слика</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Слика (TIFF)</value>
+  </data>
 </root>

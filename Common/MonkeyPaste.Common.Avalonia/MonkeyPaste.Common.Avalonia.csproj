@@ -9,13 +9,6 @@
     <TargetFramework>$(CommonTargetFramework)</TargetFramework>
     <Platforms>$(DefaultPlatforms)</Platforms>
   </PropertyGroup>
-  
-  <PropertyGroup>
-    <NoWarn>CS8632</NoWarn>
-    <NoWarn>CS8073</NoWarn>
-    <NoWarn>$(NoWarn),IDE1006</NoWarn>
-    <NoWarn>$(NoWarn),CA1401</NoWarn>
-  </PropertyGroup>
 
   <ItemGroup>
     <AvaloniaXaml Remove="Utils\Input\Platform\Win32\COM\**" />
@@ -47,9 +40,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.7" />
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
-    <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
     <PackageReference Include="PreMailer.Net" Version="2.5.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="SharpHook" Version="5.2.2" />
@@ -73,6 +65,7 @@
     <ProjectReference Remove="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
     <Compile Remove="Utils\Input\Platform\X11\*.*" />
     <Compile Remove="Utils\Input\Platform\Win32\*.*" />
+    <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
@@ -85,6 +78,7 @@
 
   <ItemGroup>
     <Compile Remove="Utils\Extensions\DataObject\**" />
+    <Compile Include="Utils\Extensions\DataObject\Mac\MpAvMacDataFormatReader.cs" />
     <Compile Include="Utils\Extensions\DataObject\MpAvPlatformDataObjectExtensions.shared.cs" />
     <Compile Include="Utils\Extensions\DataObject\MpAvPlatformDataObjectExtensions.$(PlatformShortName).cs" />
   </ItemGroup>

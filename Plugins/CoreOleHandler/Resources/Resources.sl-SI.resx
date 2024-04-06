@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Brez naslova</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Za zabavo se bo slika na odložišču grobo pretvorila v ASCII (navadno besedilo) umetnost slike 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Slika v besedilo</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Ko so na voljo, se podatki prvega izbranega besedila pretvorijo v sliko in dodani v odložišče.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Besedilo do formatov slike</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Slika (tiff)</value>
+  </data>
 </root>

@@ -2639,9 +2639,6 @@ FEEDBOWY@monkeypue.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Төлөвлөгөөний талаар илүү ихийг олж мэдэх</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ᠨᠠᠭᠠᠯᠲᠠ ᠄ &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt; ᠃&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;ᠬᠡᠷᠡᠭᠯᠡᠵᠦ ᠪᠣᠯᠬᠤ ᠬᠠᠷᠢᠯᠴᠠᠬᠤ ᠬᠥᠮᠦᠨ ( ᠭᠠᠷᠭᠠᠵᠤ ᠠᠪᠬᠤ ᠮᠠᠰᠢᠨ ᠤ ᠬᠠᠪᠴᠢᠭᠤᠷ ᠬᠡᠷᠡᠭᠰᠡᠬᠦ ) ᠂ ᠡᠨᠡ ᠦᠰᠦᠭ ᠢ ᠲᠤᠰ ᠵᠣᠬᠢᠶᠠᠯ ᠤᠨ ᠳᠠᠩᠰᠠ ᠡᠪᠬᠡᠮᠡᠯ ᠳᠣᠲᠣᠷᠠᠬᠢ ᠡᠨᠡ ᠬᠡᠪ ᠵᠠᠭᠪᠤᠷ ᠤᠨ ᠠᠯᠢᠪᠠ ᠪᠣᠳᠠᠲᠤ ᠵᠢᠱᠢᠶ᠎ᠡ ᠳᠦ ᠬᠡᠷᠡᠭᠯᠡᠨ᠎ᠡ ᠂ ᠡᠰᠡᠭᠦᠯ᠎ᠡ ᠵᠢᠭᠠᠬᠠᠨ ᠤ ᠳᠠᠷᠠᠭ᠎ᠠ ᠡᠰᠢᠯᠡᠨ ᠬᠡᠷᠡᠭᠯᠡᠨ᠎ᠡ ᠃&lt;/p&gt;&lt;p&gt; ᠡᠶᠢᠮᠦ ᠡᠴᠡ ᠂ ᠵᠢᠱᠢᠶᠡᠯᠡᠪᠡᠯ ᠂ ᠬᠡᠷᠪᠡ ᠡᠨᠳᠡ ᠡᠯᠧᠺᠲ᠋ᠷᠣᠨ ᠰᠢᠤᠳᠠᠨ ᠤ ᠬᠠᠶᠢᠭ ᠢ ᠰᠣᠩᠭᠣᠪᠠᠯ ᠂ ᠲᠠᠨ ᠤ ᠰᠤᠩᠭᠤᠭᠰᠠᠨ ᠬᠠᠷᠢᠯᠴᠠᠬᠤ ᠬᠥᠮᠦᠨ ᠦ ᠡᠯᠧᠺᠲ᠋ᠷᠣᠨ ᠰᠢᠤᠳᠠᠨ ᠤ ᠦᠰᠦᠭ ᠦᠨ ᠬᠡᠰᠡᠭ ᠢ ᠲᠤᠰ ᠵᠣᠬᠢᠶᠠᠯ ᠤᠨ ᠳᠡᠰ ᠦᠨ ᠳᠣᠲᠣᠷᠠᠬᠢ ᠪᠤᠳᠠᠲᠤ ᠵᠢᠱᠢᠶ᠎ᠡ ᠳᠦ ᠬᠡᠷᠡᠭᠯᠡᠨ᠎ᠡ ᠃&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ FEEDBOWY@monkeypue.com</value>
     <value>Урьдчилан тохируулалт дотор хуваалцсан утгын параметрүүдийг тохируулах боломжгүй. '{2}' залгаасын урьдчилан тохируулсан '{1}' доторх ParamId '{0}'-г хасах шаардлагатай эсвэл параметрийн тодорхойлолтын хэсэгт paramValue-г зааж өгч болно.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Урьдчилан бэлтгэх нь өвөрмөц удирдамжтай байх ёстой. Prongin '{{0 {{0}' -ийг Prongin '{1}}' Хүснэгтэнд илэрсэн: {1} {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin Parsing Apront нь '{0 {0}' NULL, JSON-ийг задлах магадлалтай. Залгаасыг үл тоомсорлох</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ FEEDBOWY@monkeypue.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' нь хуваалцсан утгыг агуулдаг. Та эдгээрийг бас дахин тохируулахыг хүсч байна уу?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ᠤᠷᠢᠳᠴᠢᠯᠠᠨ ᠲᠥᠰᠥᠭᠡᠯᠡᠬᠦ ᠳᠦ ᠡᠷᠬᠡᠪᠰᠢ ᠴᠤᠷ ᠤᠨ ᠭᠠᠭᠴᠠ ᠭᠧᠨᠳ᠋ ᠪᠠᠶᠢᠬᠤ ᠬᠡᠷᠡᠭᠲᠡᠢ ᠃ ᠬᠠᠪᠴᠢᠭᠤᠯᠤᠯ ᠤᠨ 《 {1} 》 ᠳᠤ ᠳᠠᠪᠬᠤᠷᠳᠠᠭᠤᠯᠤᠭᠰᠠᠨ ᠤᠷᠢᠳᠴᠢᠯᠠᠨ ᠲᠥᠰᠦᠭᠡᠯᠡᠭᠰᠡᠨ guid 〉 {0} ᠢ ᠪᠠᠶᠢᠴᠠᠭᠠᠨ ᠰᠢᠯᠭᠠᠵᠤ ᠣᠯᠵᠠᠢ ᠄ {2} ᠃</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;ᠨᠠᠭᠠᠯᠲᠠ ᠄ &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt; ᠃&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Үл мэдэгдэх алдаа {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Таны худалдан авалт дуусах боломжгүй байсан. Шалтгаан: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Нэмэх</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Хуудааны нэмэх</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Энэ хуудасны домэйн татгалзсан байна. Энэ хуудсыг зөвшөөрөхийн тулд та '{0}' -ийн татгалзлыг арилгах хэрэгтэй болно.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Домэйн '{0}' аль хэдийн татгалзсан байна</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домайн</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Энэ хуудсыг аль хэдийн татгалзсан байна.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Ойсний хуудас</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Нэмэх</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Сармагчингийн бас нэг жишээ аль хэдийн ажиллаж байгаа. Та шинэ жишээ нээхийг хүсч байна уу?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Эвлүүл</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Дэлхийн хулгана ба гарын товчлолыг идэвхгүй болгосон байна.
+
+Дэлхийн товчлолуудыг одоо системийн токс цэсээр идэвхжүүлж болно</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Глобал товчлолууд идэвхгүй болсон: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Глобал хулгана ба гарын товчлол идэвхжсэн байна.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Туршилтын) Глобал товчлолыг идэвхжүүлсэн: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Глобал товчлолуудыг унтраах</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Globle Globle товчлолуудыг асаана уу</value>
   </data>
 </root>

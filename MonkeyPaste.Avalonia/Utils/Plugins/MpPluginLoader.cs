@@ -1,9 +1,8 @@
-﻿using AngleSharp.Common;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
+using McMaster.NETCore.Plugins;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,6 +11,9 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.Loader;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,7 +37,48 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+        private static Type[] _sharedTypes;
+        //private static Type[] _sharedTypes = [
+        //    typeof(MpIPluginComponentBase),
+        //    typeof(MpISupportHeadlessAnalyzerFormat),
+        //    typeof(MpISupportHeadlessClipboardComponentFormat),
+        //    typeof(MpIAnalyzeComponent),
+        //    typeof(MpIAnalyzeComponentAsync),
+        //    typeof(MpISupportDeferredValue),
+        //    typeof(MpISupportDeferredValueAsync),
+        //    typeof(MpISupportDeferredParameterCommand),
+        //    typeof(MpIUnloadPluginComponent),
+        //    typeof(MpIOlePluginComponent),
+        //    typeof(MpIOleReaderComponent),
+        //    typeof(MpIOleWriterComponent),
+        //    typeof(MpIParamterValueProvider),
+        //    typeof(MpIParamterValueProvider),
+        //    typeof(MpOlePluginRequest),
+        //    typeof(MpOlePluginResponse),
+        //    typeof(MpHeadlessComponentFormatRequest),
+        //    typeof(MpParameterFormat),
+        //    typeof(MpParameterValueFormat),
+        //    ];
+        private static Type[] sharedTypes {
+            get {
+                if (_sharedTypes == null) {
+                    _sharedTypes =
+                        typeof(MpIPluginComponentBase).Assembly.ExportedTypes
+                        //.Union(typeof(MpCommonTools).Assembly.ExportedTypes)
+                        // .Union(typeof(MpAvCommonTools).Assembly.ExportedTypes)
+#if WINDOWS
+                        //.Union(typeof(MpWpfHtmlToRtfConverter).Assembly.ExportedTypes)
+#endif
+                        .OrderBy(x => x.Name)
+                        .ToArray();
+                }
+                return _sharedTypes;
+            }
+        }
 
+        public static bool USE_LOADERS => true;
+
+        private static Dictionary<string, PluginLoader> _loaders = [];
         static string PLUGIN_INFO_URL =>
             $"{MpServerConstants.PLUGINS_BASE_URL}/plugin-info-check.php";
         static string MANIFEST_INVARIANT_FILE_NAME =>
@@ -75,6 +118,9 @@ namespace MonkeyPaste.Avalonia {
             CoreClipboardHandlerGuid,
             CoreAnnotatorGuid
         };
+
+        static string SharedAssemblyQualifiedName =>
+            typeof(MpIPluginComponentBase).AssemblyQualifiedName;
 
         #endregion
 
@@ -133,22 +179,26 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
         }
-        public static async Task<bool> DeletePluginByGuidAsync(string plugin_guid, bool needs_restart = true) {
-            // NOTE this won't work with LoadFrom, maybe this can be used to load into sep domain then unload then delete
-            // https://stackoverflow.com/a/62018508/105028
+        public static async Task<bool> DeletePluginByGuidAsync(string plugin_guid) {
+            // for browser update/uninstall
             if (!PluginGuidLookup.TryGetValue(plugin_guid, out var plugin)) {
                 return true;
             }
-            bool success = await DetachPluginByGuidAsync(plugin_guid);
-
+            bool success = await DeletePluginAsync_internal(plugin);
+            return success;
+        }
+        private static async Task<bool> DeletePluginAsync_internal(MpRuntimePlugin plugin) {
+            // returns true if plugin folder DELETED
+            // when declined terms no restart
+            bool needs_restart_on_unload_fail = PluginGuidLookup.ContainsKey(plugin.guid);
+            bool success = await DetachPluginAsync(plugin);
             AddPluginToDeleteList(plugin);
-            plugin = null;
+            if (success) {
+                // ATTEMPT to delete plugin dir
+                success = MpStartupCleaner.UnloadAll(clearFailures: false);
+            }
 
-            //if (success) {
-            //    bool test = MpStartupCleaner.UnloadAll(false);
-            //    MpConsole.WriteLine($"Plugin '{plugin_guid}' delete was {test.ToTestResultLabel()}");
-            //}
-            if (success && needs_restart) {
+            if (!success && needs_restart_on_unload_fail) {
                 // NOTE this won't return if they choose restart
                 await Mp.Services.PlatformMessageBox.ShowRestartNowOrLaterMessageBoxAsync(
                     title: UiStrings.NtfPluginUninstallPendingTitle,
@@ -159,6 +209,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static async Task<bool> BeginUpdatePluginAsync(string plugin_guid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm) {
+
             string plugin_update_dir = await DownloadAndExtractPluginToDirAsync(plugin_guid, packageUrl, PluginUpdatesDir, cpivm);
             if (!plugin_update_dir.IsDirectory()) {
                 // update failed, only returns if no restart
@@ -168,12 +219,53 @@ namespace MonkeyPaste.Avalonia {
                     iconResourceObj: "ErrorImage");
                 return false;
             }
+            // plugin downloaded to update dir, 
+
+            // create backup of current so if anything fails it can be merged back in and coll vm can always reload item
+            string backup_dir = CreatePluginBackup(plugin_guid);
+            //ATTEMPT to delete current plugin
+            bool success = await DeletePluginByGuidAsync(plugin_guid);
+            if (success) {
+                // install plugin from update dir
+                success = await InstallPluginAsync(plugin_guid, plugin_update_dir.ToFileSystemUriFromPath(), false, cpivm);
+                if (success) {
+                    // clean up everything
+                    MpFileIo.DeleteDirectory(backup_dir);
+                    MpFileIo.DeleteDirectory(plugin_update_dir);
+                    return true;
+                }
+            }
+            // at this point either active dir couldn't be deleted (or SOMETHING couldn't be deleted) or install failed
+            // so try to restore plugin dir and reload
+            bool was_reloaded = false;
+            try {
+                // copy any missing files over
+                string root_plugin_dir = Path.Combine(PluginRootDir, plugin_guid);
+                MpFileIo.CreateDirectory(root_plugin_dir);
+                MpFileIo.CopyContents(backup_dir, root_plugin_dir, overwrite: false);
+                // find manifest
+                if (FindInvariantManifestPaths(root_plugin_dir) is { } inv_mf_paths &&
+                    inv_mf_paths.FirstOrDefault() is { } inv_mf_path &&
+                    ResolveLocalizedManifestPath(inv_mf_path) is { } mf_path) {
+                    // load and validate
+                    was_reloaded = await LoadPluginAsync(mf_path);
+                    await ValidateLoadedPluginsAsync();
+                    // confirm it was loaded
+                    was_reloaded = PluginGuidLookup.ContainsKey(plugin_guid);
+                }
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error restoring plugin backup for plugin '{plugin_guid}'.", ex);
+            }
+            // remove backup but keep update for next startup
+            MpFileIo.DeleteDirectory(backup_dir);
+
             // NOTE this won't return if they choose restart
             await Mp.Services.PlatformMessageBox.ShowRestartNowOrLaterMessageBoxAsync(
                 title: UiStrings.NtfPluginUpdateReadyTitle,
                 message: UiStrings.NtfPluginUpdateReadyText,
                 iconResourceObj: "ResetImage");
-            return true;
+            return was_reloaded;
         }
         public static MpNotificationFormat CreateInvalidPluginNotification(string msg, MpRuntimePlugin pf) {
             return new MpNotificationFormat() {
@@ -290,12 +382,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             foreach (var core_guid in missing_core_plugin_guids) {
-                //string core_plugin_zip_path = Path.Combine(CoreDatDir, $"{core_guid}.zip");
-                //string core_plugin_uri = core_plugin_zip_path.ToFileSystemUriFromPath();
-                //if (!core_plugin_zip_path.IsFile()) {
-                //    core_plugin_uri = $"https://www.monkeypaste.com/dat/{core_guid}/latest.zip";
-                //}
-                //MpDebug.Assert(core_plugin_zip_path.IsFile(), $"Dat zip error, core plugin not found at '{core_plugin_zip_path}'");
                 string core_plugin_uri = $"avares://MonkeyPaste.Avalonia/Assets/dat/{core_guid}.zip";
                 _ = await InstallPluginAsync(core_guid, core_plugin_uri, true, null);
                 MpConsole.WriteLine($"Core plugin '{core_guid}' installed.");
@@ -370,7 +456,7 @@ namespace MonkeyPaste.Avalonia {
                                 MpAvShortcutCollectionViewModel.Instance.ToggleGlobalHooksCommand.Execute(false);
                             }
                         }
-                        await MpAvPluginAssemblyHelpers.LoadComponentsAsync(plugin.ManifestPath, plugin);
+                        await LoadComponentsAsync(plugin.ManifestPath, plugin);
                         ValidatePluginComponents(plugin);
                     }
                     catch (Exception ex) {
@@ -417,9 +503,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (!agreed) {
                     // uninstall here
-                    string plugin_guid = plugin.guid;
-                    plugin = null;
-                    bool success = await DeletePluginByGuidAsync(plugin_guid, false);
+                    bool success = await DeletePluginAsync_internal(plugin);
                     MpDebug.Assert(success, $"Error deleting unaccepted plugin '{plugin}'");
                     return false;
                 }
@@ -451,11 +535,12 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
             bool success = Plugins.Remove(plugin);
-            await plugin.UnloadAsync();
-            plugin = null;
+            if (success) {
+                success = await UnloadPluginAsync(plugin);
+            }
 
             // NOTE always returning true for now since unload/update happens passively
-            return true;
+            return success;
         }
         private static bool ValidatePluginManifest(MpRuntimePlugin plugin, string manifestPath) {
             if (plugin == null) {
@@ -637,7 +722,8 @@ namespace MonkeyPaste.Avalonia {
 
             if (!temp_package_zip_path.IsFile() ||
                     MpFileIo.ReadBytesFromFile(temp_package_zip_path) is not { } package_bytes) {
-                // download error
+                // download error, remove broken plugin dir
+                MpFileIo.DeleteDirectory(target_dir);
                 return null;
             }
 
@@ -695,6 +781,256 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
+        private static string CreatePluginBackup(string guid) {
+            if (!PluginGuidLookup.TryGetValue(guid, out var plugin) ||
+                !plugin.RootDirectory.IsDirectory()) {
+                // not found
+                return null;
+            }
+            string original_dir = plugin.RootDirectory;
+            string dir_to_backup = Path.GetDirectoryName(original_dir);
+            string backup_path = Path.Combine(PluginBackupDir, Path.GetFileName(dir_to_backup));
+            if (backup_path.IsFileOrDirectory()) {
+                if (!MpFileIo.DeleteFileOrDirectory(backup_path)) {
+                    MpDebug.Break($"Error deleting existing backup dir '{backup_path}'");
+                    return null;
+                }
+            }
+            try {
+                MpFileIo.CopyDirectory(dir_to_backup, backup_path);
+            }
+            catch (Exception ex) {
+                Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                    notificationType: MpNotificationType.FileIoWarning,
+                    body: string.Format(UiStrings.PluginLoaderBackupErrorText, dir_to_backup, backup_path, ex.Message)).FireAndForgetSafeAsync();
+                backup_path = null;
+            }
+            return backup_path;
+        }
+        #region Assembly
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        static async Task<bool> UnloadPluginAsync(MpRuntimePlugin plugin) {
+            await plugin.UnloadComponentsAsync();
+
+            if (USE_LOADERS) {
+                if (!_loaders.TryGetValue(plugin.guid, out var pl)) {
+                    // not found
+                    return true;
+                }
+                if (!pl.IsUnloadable) {
+                    return false;
+                }
+                pl.Dispose();
+                _loaders.Remove(plugin.guid);
+            }
+
+            return false;
+        }
+
+        //[MethodImpl(MethodImplOptions.NoInlining)]
+        static async Task LoadComponentsAsync(string manifestPath, MpRuntimePlugin plugin) {
+            AssemblyLoadContext alc = null;
+            plugin.manifestLastModifiedDateTime = File.GetLastWriteTime(manifestPath);
+            string bundle_path = GetBundlePath(manifestPath, plugin);
+            switch (plugin.packageType) {
+                default:
+                case MpPluginPackageType.Dll:
+                    plugin.Components = LoadDll<MpIPluginComponentBase>(bundle_path, plugin.guid, out alc);
+                    break;
+                case MpPluginPackageType.Nuget:
+                    if (LoadNuget(bundle_path, out alc) is { } nuget_assembly) {
+                        plugin.Components = nuget_assembly.FindSubTypes<MpIPluginComponentBase>().ToArray();
+
+                    }
+                    break;
+                case MpPluginPackageType.Python:
+                    //component_assembly = Assembly.GetAssembly(typeof(MpPythonAnalyzerPlugin));
+                    plugin.Components = new MpIPluginComponentBase[] { new MpPythonAnalyzerPlugin(bundle_path) };
+                    break;
+                    //case MpPluginPackageType.Http:
+                    //    component_assembly = Assembly.GetAssembly(typeof(MpHttpAnalyzerPlugin));
+                    //    components = new MpIPluginComponentBase[] { new MpHttpAnalyzerPlugin(plugin.analyzer.http) };
+                    //    break;
+            }
+
+            plugin.LoadContext = alc;
+
+            if (plugin.SharedAssemblyQualifiedName != SharedAssemblyQualifiedName) {
+                MpConsole.WriteLine($"Warning! Plugin '{plugin.title}' has shared assembly mismatch.");
+                MpConsole.WriteLine($"Expected: '{SharedAssemblyQualifiedName}'");
+                MpConsole.WriteLine($"Actual: '{plugin.SharedAssemblyQualifiedName}'");
+            }
+            switch (plugin.pluginType) {
+                case MpPluginType.Analyzer:
+                    if (plugin.analyzer != null) {
+                        break;
+                    }
+                    plugin.analyzer =
+                        await plugin.IssueRequestAsync<MpAnalyzerComponent>(
+                            nameof(MpISupportHeadlessAnalyzerFormat.GetFormat),
+                            typeof(MpISupportHeadlessAnalyzerFormat).FullName,
+                            new MpHeadlessComponentFormatRequest(), sync_only: true);
+                    break;
+                case MpPluginType.Clipboard:
+                    if (plugin.oleHandler != null) {
+                        break;
+                    }
+                    plugin.oleHandler =
+                        await plugin.IssueRequestAsync<MpClipboardComponent>(
+                            nameof(MpISupportHeadlessClipboardComponentFormat.GetFormats),
+                            typeof(MpISupportHeadlessClipboardComponentFormat).FullName,
+                            new MpHeadlessComponentFormatRequest(), sync_only: true);
+                    break;
+            }
+        }
+        private static IEnumerable<T> LoadDll<T>(string targetDllPath, string guid, out AssemblyLoadContext alc) {
+            alc = null;
+            try {
+                if (USE_LOADERS) {
+                    bool is_core = CorePluginGuids.Contains(guid);
+                    if (PluginLoader.CreateFromAssemblyFile(
+                        assemblyFile: targetDllPath,
+                        sharedTypes: sharedTypes,
+                        isUnloadable: true,
+                        configure: (config) => {
+                            config.DefaultContext = new MpPluginAssemblyLoadContext(targetDllPath);
+                            config.PreferSharedTypes = true;
+                        }) is { } pl) {
+                        var objs = new List<T>();
+                        var plugin_types = pl.LoadDefaultAssembly().GetTypes().Where(t => typeof(T).IsAssignableFrom(t) && !t.IsAbstract);
+                        foreach (var pluginType in plugin_types) {
+                            if (Activator.CreateInstance(pluginType) is T pcb) {
+                                objs.Add(pcb);
+                            }
+                        }
+                        _loaders.AddOrReplace(guid, pl);
+                        return objs;
+                    }
+                }
+                alc = new MpPluginAssemblyLoadContext(targetDllPath);
+                var assembly = alc.LoadFromAssemblyPath(targetDllPath);
+                var result = assembly.FindSubTypes<T>().ToArray();
+                return result;
+                //return Assembly.LoadFrom(targetDllPath);
+
+                //return Assembly.Load(MpFileIo.ReadBytesFromFile(targetDllPath));
+
+                //Assembly result = null;
+                //var dir_dlls = Directory.GetFiles(Path.GetDirectoryName(targetDllPath)).Where(x => x.ToLower().EndsWith("dll"));
+                //foreach (var dll_path in dir_dlls) {
+                //    var assembly = Assembly.Load(MpFileIo.ReadBytesFromFile(dll_path));
+                //    MpConsole.WriteLine($"{Path.GetFileNameWithoutExtension(targetDllPath)} loaded: {assembly.FullName}");
+                //    if (dll_path == targetDllPath) {
+                //        result = assembly;
+                //    }
+                //}
+                //return result;
+
+            }
+            catch (Exception ex) {
+                //throw new MpUserNotifiedException($"Plugin Linking error '{nupkgPath}':{Environment.NewLine}{ex}");
+                throw new MpUserNotifiedException(UiStrings.InvalidParamEx6.Format(targetDllPath, Environment.NewLine, ex.Message));
+            }
+        }
+        public static IDisposable GetPluginContext(string plugin_guid) {
+            if (!_loaders.TryGetValue(plugin_guid, out var pl)) {
+                return null;
+            }
+            return pl.EnterContextualReflection();
+        }
+        private static Assembly LoadNuget(string nupkgPath, out AssemblyLoadContext alc) {
+            alc = null;
+
+            try {
+                using var archive = ZipFile.OpenRead(nupkgPath);
+                string entryName = Path.GetFileNameWithoutExtension(Path.GetDirectoryName(nupkgPath)) + ".dll";
+                var entry = archive.Entries.FirstOrDefault(x => x.Name.EndsWith(entryName));
+
+                using var target = new MemoryStream();
+                using var source = entry.Open();
+                source.CopyTo(target);
+                return Assembly.Load(target.ToArray());
+            }
+            catch (Exception ex) {
+                //throw new MpUserNotifiedException($"Plugin Linking error '{nupkgPath}':{Environment.NewLine}{ex}");
+                throw new MpUserNotifiedException(UiStrings.InvalidParamEx6.Format(nupkgPath, Environment.NewLine, ex.Message));
+            }
+        }
+
+        private static string GetBundlePath(string manifestPath, MpRuntimePlugin plugin) {
+            string bundle_ext = GetBundleExt(plugin.packageType, plugin.version);
+            string bundle_dir = Path.GetDirectoryName(manifestPath);
+            string bundle_file_name = Path.GetFileName(bundle_dir);
+            string bundle_path = Path.Combine(bundle_dir, $"{bundle_file_name}.{bundle_ext}");
+
+            if (plugin.packageType != MpPluginPackageType.Http && !bundle_path.IsFile()) {
+                // not found
+                //throw new MpUserNotifiedException($"Error, Plugin '{plugin.title}' is flagged as {bundle_ext} type in '{manifestPath}' but does not have a matching '{bundle_file_name}.{bundle_ext}' in its folder.");
+                throw new MpUserNotifiedException(UiStrings.InvalidParamEx7.Format(plugin.title, bundle_ext, manifestPath, bundle_file_name, bundle_ext));
+            }
+            return bundle_path;
+        }
+        private static string GetBundleExt(MpPluginPackageType bt, string version) {
+            switch (bt) {
+                case MpPluginPackageType.Nuget:
+                    return $".{version}.nupkg";
+                case MpPluginPackageType.Python:
+                    return "py";
+                case MpPluginPackageType.Javascript:
+                    return "js";
+                default:
+                case MpPluginPackageType.Dll:
+                    return "dll";
+            }
+        }
+
+        #region Extensions
+
+        private static IEnumerable<T> FindSubTypes<T>(this Assembly pluginAssembly) {
+            if (pluginAssembly == null) {
+                return null;
+            }
+
+            IEnumerable<Type> avail_types = null;
+            try {
+                avail_types = pluginAssembly.ExportedTypes;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine("Exported types exception: ", ex);
+                //throw new MpUserNotifiedException($"Plugin dependency error for plugin '{pluginAssembly.FullName}': {Environment.NewLine}{ex.Message}");
+                throw new MpUserNotifiedException(UiStrings.InvalidParamEx8.Format(pluginAssembly.FullName, Environment.NewLine, ex.Message));
+            }
+            if (avail_types == null) {
+                return null;
+            }
+            IEnumerable<Type> obj_types = null;
+            if (typeof(T).IsInterface) {
+                string interfaceName = $"{typeof(T).Namespace}.{typeof(T).Name}";
+                obj_types = avail_types.Where(x => x.GetInterface(interfaceName) != null);
+            } else {
+                obj_types = avail_types.Where(x => x is T);
+            }
+            if (!obj_types.Any()) {
+                return null;
+            }
+            var objs = new List<T>();
+            foreach (var obj_type in obj_types) {
+                try {
+                    if (Activator.CreateInstance(obj_type) is T pcb) {
+                        objs.Add(pcb);
+                    }
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine("Exported types exception: ", ex);
+                    //throw new MpUserNotifiedException($"Plugin activation error for plugin '{pluginAssembly.FullName}': {Environment.NewLine}{ex}");
+                    throw new MpUserNotifiedException(UiStrings.InvalidParamEx8.Format(pluginAssembly.FullName, Environment.NewLine, ex.Message));
+                }
+            }
+            return objs;
+        }
+        #endregion
+        #endregion
 
         #region Component
         private static bool ValidateParametersAndPresets(MpPresetParamaterHostBase host, string plugin_label) {

@@ -7,6 +7,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -96,10 +97,11 @@ namespace MonkeyPaste.Avalonia {
                     // remove ext if there 
                     mpdo.Remove(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT);
                     // add file explorer as source
-                    mpdo.SetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, new MpPortableProcessInfo(Mp.Services.PlatformInfo.OsFileManagerPath));
+                    mpdo.SetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, MpPortableProcessInfo.FromPath(Mp.Services.PlatformInfo.OsFileManagerPath));
                     break;
                 case MpDataObjectSourceType.PluginResponse:
                 case MpDataObjectSourceType.ShortcutTrigger:
+                case MpDataObjectSourceType.ClipTileClone:
                     // always remove external source
                     remove_ext = true;
                     break;
@@ -801,8 +803,6 @@ namespace MonkeyPaste.Avalonia {
         public int HeadQueryIdx => !SortOrderedItems.Any() ? -1 : SortOrderedItems.Min(x => x.QueryOffsetIdx);
 
         public int TailQueryIdx => !SortOrderedItems.Any() ? -1 : Items.Max(x => x.QueryOffsetIdx);
-        public int FirstPlaceholderItemIdx =>
-            Items.IndexOf(PlaceholderItems.FirstOrDefault());
 
         public int LastNonVisibleItemIdx {
             get {
@@ -877,8 +877,6 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvClipTileViewModel> SortOrderedItems =>
             Items.Where(x => x.QueryOffsetIdx >= 0).OrderBy(x => x.QueryOffsetIdx);
 
-        public IEnumerable<MpAvClipTileViewModel> PlaceholderItems =>
-            Items.Where(x => x.IsPlaceholder);
         public IEnumerable<MpAvClipTileViewModel> AllItems =>
             Items.Union(PinnedItems);
         public IEnumerable<MpAvClipTileViewModel> AllActiveItems =>
@@ -901,7 +899,7 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem.CopyItemId;
             }
         }
-
+        public MpAvClipTileViewModel PinTrayCachePlaceholder { get; set; }
         public MpAvClipTileViewModel SelectedItem {
             get {
                 //if (MpAvAppendNotificationWindow.Instance != null &&
@@ -1241,9 +1239,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        bool IgnoreContentDelete { get; set; }
+        List<string> PendingRejectedItemGuids { get; set; } = [];
         public int PinOpCopyItemId { get; set; } = -1;
-
         public bool IsAutoEditEnabled =>
             !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled;
 
@@ -1262,6 +1259,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsRestoringSelection { get; set; }
 
         #region Append
+
+        ConcurrentDictionary<string,MpRecentAppendItemInfo> RecentAppendItemLookup { get; set; } = [];
 
         private MpAppendModeFlags _appendModeFlags = MpAppendModeFlags.None;
         public MpAppendModeFlags AppendModeStateFlags =>
@@ -1432,7 +1431,14 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSubQuerying { get; set; } = false;
         public int SparseLoadMoreRemaining { get; set; }
 
+        #region Paste Button
+
+        public string PasteButtonIconBase64 { get; set; }
+        public string PasteButtonTooltipHtml { get; set; }
+        public bool IsPasteDefault { get; set; }
+        public MpPortableProcessInfo PasteProcessInfo { get; set; }
         public MpQuillPasteButtonInfoMessage CurPasteInfoMessage { get; private set; } = new MpQuillPasteButtonInfoMessage();
+        #endregion
 
         #region Drag Drop
         public bool IsAnyDropOverTrays { get; private set; }
@@ -1519,7 +1525,9 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.ClipboardMonitor.OnClipboardChanged += ClipboardWatcher_OnClipboardChanged;
             Mp.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
 
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
+            _copyItemBuilder.OnSourceInfoGathered += CopyItemBuilder_OnSourceInfoGathered;
+
+            SetupDropHelpers();
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
@@ -1544,12 +1552,15 @@ namespace MonkeyPaste.Avalonia {
 
             await ProcessAccountCapsAsync(MpAccountCapCheckType.Init);
             await UpdateEmptyPropertiesAsync();
+            await CreatePinTrayCachePlaceholderAsync();
 
             SetCurPasteInfoMessage(Mp.Services.ProcessWatcher.LastProcessInfo);
 
             OnPropertyChanged(nameof(SelectedItem));
             IsBusy = false;
         }
+
+
         public async Task<MpAvClipTileViewModel> CreateClipTileViewModelAsync(MpCopyItem ci, int queryOffsetIdx = -1) {
             MpAvClipTileViewModel ctvm = new MpAvClipTileViewModel(this);
             await ctvm.InitializeAsync(ci, queryOffsetIdx);
@@ -1715,23 +1726,7 @@ namespace MonkeyPaste.Avalonia {
                 ObservedQueryTrayScreenHeight - pad_extent);
 
             MpRect ctvm_rect = ctvm.ScreenRect;
-            MpPoint delta_scroll_offset = new MpPoint();
-
-            if (ctvm_rect.Left < svr.Left) {
-                //item is outside on left
-                delta_scroll_offset.X = ctvm_rect.Left - svr.Left;
-            } else if (ctvm_rect.Right > svr.Right) {
-                //item is outside on right
-                delta_scroll_offset.X = ctvm_rect.Right - svr.Right;
-            }
-
-            if (ctvm_rect.Top < svr.Top) {
-                //item is outside above
-                delta_scroll_offset.Y = ctvm_rect.Top - svr.Top;
-            } else if (ctvm_rect.Bottom > svr.Bottom) {
-                //item is outside below
-                delta_scroll_offset.Y = ctvm_rect.Bottom - svr.Bottom;
-            }
+            MpPoint delta_scroll_offset = svr.FindTranslation(ctvm_rect);
 
             var target_offset = ScrollOffset + delta_scroll_offset;
             ScrollVelocity = MpPoint.Zero;
@@ -2070,7 +2065,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (e is MpCopyItem ci && !IgnoreContentDelete) {
+            if (e is MpCopyItem ci) {
                 if (AppendClipTileViewModel != null &&
                     ci.Id == AppendClipTileViewModel.CopyItemId &&
                     IsAnyAppendMode) {
@@ -2486,8 +2481,119 @@ namespace MonkeyPaste.Avalonia {
                         cwv.SendMessage($"pasteOrDropCompleteResponse_ext()");
                     }
                     CurPasteOrDragItem = null;
+                    if (msg == MpMessageType.ItemDragEnd || msg == MpMessageType.ItemDragCanceled) {
+                        ResetDndAsync().FireAndForgetSafeAsync();
+                    }
                     break;
             }
+        }
+
+        private void CopyItemBuilder_OnSourceInfoGathered(
+            object sender, 
+            (string ci_guid,int icon_id, bool rejected) info_props) {
+            string ci_guid = info_props.ci_guid;
+            int icon_id = info_props.icon_id;
+            bool rejected = info_props.rejected;
+            Dispatcher.UIThread.Post(async () => {
+                if(!IsAnyAppendMode && rejected) {
+                    if(!PendingRejectedItemGuids.Contains(ci_guid)) {
+                        PendingRejectedItemGuids.Add(ci_guid);
+                    }
+                    return;
+                }
+
+                if(IsAnyAppendMode) {
+                    /*
+                    When append active and no 
+                    rari found OR its range is default, wait for rari and 
+                    range before handling the case
+                    */
+                    var sw = Stopwatch.StartNew();
+                    while(true) {
+                        if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                            MpConsole.WriteLine($"Append timeout waiting for recent append info...ignoring");
+                            break;
+                        }
+                        bool wait_for_rari =
+                                    !RecentAppendItemLookup.ContainsKey(ci_guid) ||
+                                    RecentAppendItemLookup[ci_guid] == null ||
+                                    RecentAppendItemLookup[ci_guid].doc_append_length < 0; 
+                        if(wait_for_rari) {
+                            await Task.Delay(30);
+                            continue;
+                        }
+                        break;
+                    } 
+
+                }
+                // find ciid
+                int ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
+                if (ciid <= 0) {
+                    var sw = Stopwatch.StartNew();
+                    while (ciid <= 0) {
+                        if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                            MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Timed out, shouldn't happen...");
+                            return;
+                        }
+                        MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Will retry...");
+                        await Task.Delay(100);
+                        ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
+                    }
+                }
+                if (rejected) {
+                    // has to be append
+                    /*
+                            If the reject id matches a rari.handle send a 
+                            range delete req to editor and then remove that rari. 
+                            (May need to add or create new entry of that items merged transaction 
+                            source ids to rari in the merge sources subtask then delete those 
+                            items along with range delete req)
+                            */
+                    if (RecentAppendItemLookup.TryGetValue(ci_guid, out var rari)) {
+                        await MpDataModelProvider.DeleteItemAsync<MpCopyItemTransaction>(rari.trans_id);
+
+                        if (AppendClipTileViewModel != null) {
+                            if (AppendClipTileViewModel.GetContentView() is { } cv) {
+                                var req = new MpQuillRemoveAppendRangeMessage() { index = rari.doc_index, length = rari.doc_append_length };
+                                cv.SendMessage($"deleteDocRange_ext('{req.SerializeObjectToBase64()}')");
+                            }
+                            await AppendClipTileViewModel.TransactionCollectionViewModel.InitializeAsync(AppendClipTileViewModel.CopyItemId);
+                        }
+                        RecentAppendItemLookup.Remove(ci_guid, out _);
+                    }
+
+                    await MpDataModelProvider.DeleteItemAsync<MpCopyItem>(ciid);
+                    MpConsole.WriteLine($"Rejected source CopyItem w/ guid '{ci_guid}' successfully removed");
+                    return;
+                }
+                RecentAppendItemLookup.Remove(ci_guid, out _);
+
+                if(icon_id > 0) {
+                    // should only happen for new items
+                    bool success = await MpDataModelProvider.SetCopyItemIconIdByIdAsync(ciid, icon_id);
+                    if (!success) {
+                        MpConsole.WriteLine($"Error updating ci icon. ci_guid: {ci_guid} icon_id: {icon_id}");
+                    }
+                }
+
+                if (AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid) is not { } ctvm_to_ntf) {
+                    if(icon_id > 0 && PendingNewModels.FirstOrDefault(x=>x.Id == ciid) is { } ci_to_ntf) {      
+                        // set pending item's iconId directly
+                        ci_to_ntf.IconId = icon_id;
+                    }
+                    // if no tile found refresh wont be necessary
+                    return;
+                } else if(icon_id > 0) {
+                    ctvm_to_ntf.CopyItem.IconId = icon_id;
+                    ctvm_to_ntf.OnPropertyChanged(nameof(ctvm_to_ntf.IconResourceObj));
+                }
+
+                await ctvm_to_ntf.TransactionCollectionViewModel.InitializeAsync(ciid);
+                if(icon_id > 0) {
+                    // ensure layers are pseudo (not just) random
+                    await ctvm_to_ntf.InitTitleLayersAsync();
+                }
+            });            
         }
 
         private void Instance_OnGlobalMouseReleased(object sender, bool e) {
@@ -2504,6 +2610,64 @@ namespace MonkeyPaste.Avalonia {
             // Both should never get called, cut cef out of dnd.
             // Render/browser process crap is jamming it up, too many layers  
 
+        }
+        private void SetupDropHelpers() {
+            bool was_drag_in_progress = false;
+
+            void Instance_OnGlobalDrag(object sender, object e) {
+                var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalUnscaledMouseLocation;
+                var drop_ctvml = AllActiveItems.Where(x => !x.IsWindowOpen);
+                var lbil =
+                    MpAvQueryTrayView.Instance.ClipTrayListBox.GetLogicalDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext))
+                    .Union(MpAvPinTrayView.Instance.PinTrayListBox.GetLogicalDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext)));
+                foreach (var lbi in lbil) {
+                    if (lbi.DataContext is not MpAvClipTileViewModel ctvm ||
+                        lbi.GetLogicalDescendant<MpAvContentWebViewContainer>() is not { } cwv ||
+                        cwv.GetLogicalDescendant<MpAvContentWebView>() is not { } ctwv) {
+                        continue;
+                    }
+                    if (new PixelRect(lbi.PointToScreen(new Point()), lbi.PointToScreen(lbi.Bounds.BottomRight)).Contains(gmp)) {
+                        // drag over this tile
+                        continue;
+                    }
+                    if (!ctvm.IsDropOverTile) {
+                        // not stale 
+                        continue;
+                    }
+                    was_drag_in_progress = true;
+                    /// drag left this tile
+                    MpConsole.WriteLine($"Clearing drop on '{ctvm}'");
+                    //ctwv.RelayDndMsg(MpDragDropOpType.dragleave, null, MpAvDoDragDropWrapper.DragDataObject, gmp);
+                    ctvm.IsDropOverTile = false;
+                    ctvm.IsSubSelectionEnabled = !ctvm.IsContentReadOnly;
+                    ReloadContentAsync(new[] { ctvm }).FireAndForgetSafeAsync();
+
+                    // BUG i think since dnd thread is active style selectors aren't updating during change
+                    // (webview is supposed to go back to empty size)
+                    //cwv.IsVisible = false;
+                    MpConsole.WriteLine($"rwwv size cleared! {cwv.Bounds} {cwv.Width} {cwv.Height}");
+                }
+            }
+
+            void Instance_OnGlobalDragEnd(object sender, object e) {
+                Dispatcher.UIThread.Post(async () => {
+                    if ((MpAvDoDragDropWrapper.LastDragCompletedDateTime.HasValue &&
+                        DateTime.Now - MpAvDoDragDropWrapper.LastDragCompletedDateTime < TimeSpan.FromSeconds(2)) ||
+                        was_drag_in_progress) {
+                        await ResetDndAsync();
+                    }
+                });
+            }
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalDrag += Instance_OnGlobalDrag;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalDragEnd += Instance_OnGlobalDragEnd;
+        }
+        private async Task ResetDndAsync() {
+            AllItems.Where(x => x.IsDropOverTile).ForEach(x => x.IsDropOverTile = false);
+            AllItems.Where(x => x.IsTileDragging).ForEach(x => x.IsTileDragging = false);
+            IsAnyDropOverTrays = false;
+            await Task.Delay(1_000);
+            ReloadAllContentCommand.Execute(null);
         }
         private void ProcessWatcher_OnAppActivated(object sender, MpPortableProcessInfo e) {
             Dispatcher.UIThread.Post(() => SetCurPasteInfoMessage(e), DispatcherPriority.Background);
@@ -2545,6 +2709,10 @@ namespace MonkeyPaste.Avalonia {
                     isFormatDefault = !is_custom
                 };
             }
+            PasteButtonIconBase64 = CurPasteInfoMessage.pasteButtonIconBase64;
+            PasteButtonTooltipHtml = CurPasteInfoMessage.pasteButtonTooltipHtml;
+            PasteProcessInfo = MpPortableProcessInfo.FromPath(CurPasteInfoMessage.infoId);
+            IsPasteDefault = CurPasteInfoMessage.isFormatDefault;
 
             string msg = $"enableSubSelection_ext('{CurPasteInfoMessage.SerializeObjectToBase64()}')";
 
@@ -2942,7 +3110,7 @@ namespace MonkeyPaste.Avalonia {
             if (ctvm.IsPinned) {
                 return
                         InternalPinnedItems
-                            .Where(x => is_next ? x.ObservedBounds.Y > ctvm.ObservedBounds.Y : x.ObservedBounds.Y < ctvm.ObservedBounds.Y)
+                            .Where(x => x.ObservedBounds != null && is_next ? x.ObservedBounds.Y > ctvm.ObservedBounds.Y : x.ObservedBounds.Y < ctvm.ObservedBounds.Y)
                             .OrderBy(x => x.ObservedBounds.Location.Distance(ctvm.ObservedBounds.Location))
                             .FirstOrDefault();
             }
@@ -3195,6 +3363,42 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(keys);
         }
 
+        private MpAvClipTileView PinToCachedPlaceholder(MpAvClipTileViewModel ctvm_to_pin, MpPinType pinType, int pin_to_idx = 0) {
+            int cache_idx = PinTrayCachePlaceholder == null ? -1 : PinnedItems.IndexOf(PinTrayCachePlaceholder);
+            if (//pinType != MpPinType.Internal ||
+                PinTrayCachePlaceholder == null ||
+                PinTrayCachePlaceholder.IsAnyBusy ||
+                pin_to_idx > 0 ||
+                cache_idx < 0
+                ) {
+                if (pin_to_idx >= PinnedItems.Count) {
+                    PinnedItems.Add(ctvm_to_pin);
+                } else {
+                    PinnedItems.Insert(pin_to_idx, ctvm_to_pin);
+                }
+                return null;
+            }
+            MpAvClipTileView cached_view = null;
+            PinnedItems[cache_idx] = ctvm_to_pin;
+            if (pinType != MpPinType.Internal &&
+                MpAvPinTrayView.Instance != null &&
+                MpAvPinTrayView.Instance.PinTrayListBox != null &&
+                MpAvPinTrayView.Instance.PinTrayListBox.ContainerFromIndex(cache_idx) is Control cache_cont
+                ) {
+                cached_view = cache_cont.GetVisualDescendant<MpAvClipTileView>();
+            }
+            CreatePinTrayCachePlaceholderAsync().FireAndForgetSafeAsync(this);
+            return cached_view;
+        }
+        private async Task CreatePinTrayCachePlaceholderAsync() {
+            if (PinTrayCachePlaceholder == null) {
+                PinTrayCachePlaceholder = await CreateClipTileViewModelAsync(null);
+            }
+            if (InternalPinnedItems.FirstOrDefault() != PinTrayCachePlaceholder) {
+                MpDebug.Assert(PinnedItems.All(x => x != PinTrayCachePlaceholder), $"Pin Tray Cache item misplaced");
+                PinnedItems.Insert(0, PinTrayCachePlaceholder);
+            }
+        }
         #endregion
 
         #region Commands
@@ -3387,6 +3591,7 @@ namespace MonkeyPaste.Avalonia {
                      ctvm_to_pin = temp_ctvm;
                  }
 
+                 MpAvClipTileView cached_view = null;
                  if (ctvm_to_pin.IsPinned) {
                      // cases:
                      // 1. drop from pin tray (sort)
@@ -3403,17 +3608,28 @@ namespace MonkeyPaste.Avalonia {
                      PinnedItems.Move(cur_pin_idx, pin_idx);
                  } else if (pin_idx == PinnedItems.Count) {
                      // new item or user pinned query item
-                     PinnedItems.Add(ctvm_to_pin);
+                     cached_view = PinToCachedPlaceholder(ctvm_to_pin, pinType);
+                     //PinnedItems.Add(ctvm_to_pin);
                  } else {
                      // for drop from external or query tray
-                     PinnedItems.Insert(pin_idx, ctvm_to_pin);
+                     //PinnedItems.Insert(pin_idx, ctvm_to_pin);
+                     cached_view = PinToCachedPlaceholder(ctvm_to_pin, pinType, pin_idx);
                  }
 
                  if (pinType == MpPinType.Window || pinType == MpPinType.Append) {
+                     // pin to popout
+
+#if MAC
+                     // re-parenting web view crashes on mac
+                     // NOTE omitting cause i don't think this was the problem
+                     //cached_view = null;
+#endif
+
                      ctvm_to_pin.OpenPopOutWindow(
                          pinType == MpPinType.Window ?
                             MpAppendModeType.None :
-                            appendType);
+                            appendType,
+                         cached_view);
                      var sw = Stopwatch.StartNew();
                      while (true) {
                          // wait for window to actually open
@@ -3426,6 +3642,11 @@ namespace MonkeyPaste.Avalonia {
                              break;
                          }
                          await Task.Delay(100);
+                     }
+                     if (pin_as_editable.IsTrue() && ctvm_to_pin.IsContentReadOnly) {
+                         // BUG toggling to edit from pinned item doesn't switch to editable cause the 
+                         // datacontext doesn't re-initialize
+                         ctvm_to_pin.DisableContentReadOnlyCommand.Execute(null);
                      }
                  } else {
                      // reset pinned item size (may have been missed if init was before adding to 1 of the item collections)
@@ -3611,16 +3832,7 @@ namespace MonkeyPaste.Avalonia {
             });
         public MpIAsyncCommand UnpinAllCommand => new MpAsyncCommand(
             async () => {
-                //int pin_count = PinnedItems.Count;
-                //while (pin_count > 0) {
-                //    var to_unpin_ctvm = PinnedItems[--pin_count];
-                //    if (to_unpin_ctvm.IsWindowOpen ||
-                //        to_unpin_ctvm.IsAppendNotifier) {
-                //        continue;
-                //    }
-                //    await UnpinTileCommand.ExecuteAsync(to_unpin_ctvm);
-                //}
-                var to_unpin_ciidl = InternalPinnedItems.Select(x => x.CopyItemId).ToList();
+                var to_unpin_ciidl = InternalPinnedItems.Where(x => x != PinTrayCachePlaceholder).Select(x => x.CopyItemId).ToList();
                 for (int i = 0; i < to_unpin_ciidl.Count; i++) {
                     if (PinnedItems.FirstOrDefault(x => x.CopyItemId == to_unpin_ciidl[i]) is { } to_unpin_ctvm) {
                         PinnedItems.Remove(to_unpin_ctvm);
@@ -3641,8 +3853,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DuplicateSelectedClipsCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
-                var avdo = SelectedItem.CopyItem.ToAvDataObject();
-                await BuildFromDataObjectAsync(avdo, true);
+                var avdo = SelectedItem.CopyItem.ToAvDataObject(true, true);
+                await BuildFromDataObjectAsync(avdo, true, MpDataObjectSourceType.ClipTileClone);
 
                 IsBusy = false;
             }, () => SelectedItem != null && SelectedItem.IsContentReadOnly);
@@ -3657,6 +3869,17 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                 }
+
+                // remove any rejected items here its too messy blocking and trying to snatch it..
+                var to_remove_ciidl = PendingNewModels.Where(x => PendingRejectedItemGuids.Contains(x.Guid)).Select(x=>x.Id).ToList();
+                foreach(var to_remove_ciid in to_remove_ciidl) {
+                    await MpDataModelProvider.DeleteItemAsync<MpCopyItem>(to_remove_ciid);
+                    if(PendingNewModels.FirstOrDefault(x=>x.Id == to_remove_ciid) is { } pnm_to_remove) {
+                        PendingNewModels.Remove(pnm_to_remove);
+                        PendingRejectedItemGuids.Remove(pnm_to_remove.Guid);
+                    }
+                }
+
                 if (!PendingNewModels.Any()) {
                     // nothing to add (at least now)
                     return;
@@ -4608,6 +4831,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleIsAppPausedCommand => new MpCommand<object>(
             (args) => {
                 IsIgnoringClipboardChanges = !IsIgnoringClipboardChanges;
+                MpMessenger.SendGlobal(MpMessageType.ClipboardListenerToggled);
+
                 if (args != null) {
                     // sys tray click
                     return;
@@ -4799,29 +5024,33 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
 
+        private async Task ReloadContentAsync(IEnumerable<MpAvClipTileViewModel> ctvml) {
+            // store all items content state
+            await Task.WhenAll(
+                ctvml
+                .Select(x => x.PersistContentStateCommand.ExecuteAsync(null)));
+
+            ctvml.ForEach(x => x.IsEditorLoaded = false);
+            ctvml.ForEach(x => x.OnPropertyChanged(nameof(x.IsAnyBusy)));
+
+            // get all content content controls
+            var ctccl =
+                MpAvWindowManager.AllWindows
+                    .SelectMany(x => x.GetVisualDescendants<MpAvClipTileContentView>())
+                    .Where(x => ctvml.Contains(x.DataContext))
+                    .Select(x => x.FindControl<ContentControl>("ClipTileContentControl"));
+
+            // trigger data context change
+            ctccl.ForEach(x => x.ReloadDataContext());
+
+
+            while (ctvml.Any(x => x.IsAnyBusy)) {
+                await Task.Delay(100);
+            }
+        }
         public ICommand ReloadAllContentCommand => new MpAsyncCommand(
             async () => {
-                // store all items content state
-                await Task.WhenAll(
-                    AllActiveItems
-                    .Select(x => x.PersistContentStateCommand.ExecuteAsync(null)));
-
-                AllActiveItems.ForEach(x => x.IsEditorLoaded = false);
-                AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsAnyBusy)));
-
-                // get all content content controls
-                var ctccl =
-                    MpAvWindowManager.AllWindows
-                        .SelectMany(x => x.GetVisualDescendants<MpAvClipTileContentView>())
-                        .Select(x => x.FindControl<ContentControl>("ClipTileContentControl"));
-
-                // trigger data context change
-                ctccl.ForEach(x => x.ReloadDataContext());
-
-
-                while (AllActiveItems.Any(x => x.IsAnyBusy)) {
-                    await Task.Delay(100);
-                }
+                await ReloadContentAsync(AllActiveItems.ToList());
 
             });
         public MpIAsyncCommand ReloadAllCommand => new MpAsyncCommand(
@@ -4886,14 +5115,15 @@ namespace MonkeyPaste.Avalonia {
             });
 
         #region Append
-        public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data) {
+        public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data, string handle) {
             return new MpQuillAppendStateChangedMessage() {
                 isAppendLineMode = IsAppendLineMode,
                 isAppendInsertMode = IsAppendInsertMode,
                 isAppendManualMode = IsAppendManualMode,
                 isAppendPaused = IsAppendPaused,
                 isAppendPreMode = IsAppendPreMode,
-                appendData = data
+                appendData = data,
+                appendContentHandle = handle
             };
         }
         private bool IsCopyItemAppendable(MpCopyItem ci) {
@@ -4928,8 +5158,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvWindowManager.ActiveWindow.DataContext is MpAvClipTileViewModel active_ctvm) {
                 MpDebug.Assert(SelectedItem == active_ctvm, $"Append activate sel/active item mismatch");
                 append_ctvm = active_ctvm;
-            }
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+            } else if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
                 if (SelectedItem != null) {
                     append_ctvm = SelectedItem;
                 }
@@ -4990,7 +5219,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (AppendClipTileViewModel != null &&
                 AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
-                await wv.ProcessAppendStateChangedMessageAsync(GetAppendStateMessage(null), source);
+                await wv.ProcessAppendStateChangedMessageAsync(GetAppendStateMessage(null,null), source);
             }
         }
 
@@ -5111,6 +5340,21 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public void AddOrUpdateRecentAppendInfo(string handle, (int,int) appended_range = default, int trans_id = 0) {
+            
+            if(!RecentAppendItemLookup.TryGetValue(handle,out var rai)) {
+                rai = new MpRecentAppendItemInfo();
+            }
+            if(!appended_range.IsDefault()) {
+                rai.doc_index = appended_range.Item1;
+                rai.doc_append_length = appended_range.Item2;
+            }
+            if(trans_id > 0) {
+                rai.trans_id = trans_id;
+            }
+            RecentAppendItemLookup.TryAddOrReplace(handle, rai);
+        }
+
         private bool IsModelToBeAdded(MpCopyItem aci) {
             // this prevents cap from treating temporary append only items from 'Add' processing
             if (aci.WasDupOnCreate) {
@@ -5153,36 +5397,61 @@ namespace MonkeyPaste.Avalonia {
             }
 
             bool isNew = !aci.WasDupOnCreate;
+            string append_handle = aci.Guid;
             string append_data = aci.ItemData;
             if (AppendClipTileViewModel.CopyItemType == MpCopyItemType.FileList) {
-                append_data = await MpAvFileItemCollectionViewModel.CreateFileListEditorFragment(aci);
+                // create file fragment
+                append_data = aci.ToFileListDataFragmentMessage().SerializeObjectToBase64();
             }
+            // add stub for this append
+            AddOrUpdateRecentAppendInfo(append_handle);
 
             if (AppendClipTileViewModel.CopyItemId != aci.Id) {
                 Dispatcher.UIThread.Post(async () => {
-                    // no need to wait for source updates
-                    // get appended items transactions which should be only 1 since new and add a paste transaction to append item with its create sources
+                    // get appended items transactions which should be only 1
+                    // if new and add a paste transaction to append item with its create sources
                     var aci_citl = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(aci.Id);
-
-                    var aci_create_cit = aci_citl.FirstOrDefault(x => x.TransactionType == MpTransactionType.Created);
-                    if (aci_create_cit == null) {
-                        MpDebug.Break($"append error, no create transaction found for appened item");
-                    } else {
-                        var aci_create_sources = await MpDataModelProvider.GetSourceRefsByCopyItemTransactionIdAsync(aci_create_cit.Id);
-
-                        if (isNew || !MpAvPrefViewModel.Instance.IgnoreAppendedItems) {
-                            // if item is not new or will persist include ref to it
-                            // NOTE item ref is added to END to keep primary source at front
-                            aci_create_sources.Add(aci);
+                    bool is_still_building = !aci_citl.Any();
+                    if(is_still_building) {
+                        var sw = Stopwatch.StartNew();
+                        while (is_still_building) {
+                            // wait for sources to be gathered
+                            if(sw.Elapsed >= TimeSpan.FromSeconds(30)) {
+                                MpConsole.WriteLine($"Append source gather timeout. Ignoring sources.");
+                                break;
+                            }
+                            await Task.Delay(100);
+                            aci_citl = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(aci.Id);
+                            is_still_building = !aci_citl.Any();
                         }
-                        //// NOTE ignoring msg data here since its only used for analyze transactions for now
-                        await Mp.Services.TransactionBuilder.ReportTransactionAsync(
-                            copyItemId: AppendClipTileViewModel.CopyItemId,
-                            reqType: MpJsonMessageFormatType.DataObject,
-                            respType: MpJsonMessageFormatType.Delta,
-                            ref_uris: aci_create_sources.Select(x => x.ToSourceUri()),
-                            transType: MpTransactionType.Appended);
                     }
+                    if(aci_citl.Any()) {
+                        var aci_create_cit = aci_citl.FirstOrDefault(x => x.TransactionType == MpTransactionType.Created);
+                        if (aci_create_cit == null && aci_citl.FirstOrDefault(x => x.TransactionType == MpTransactionType.Dropped) is { } drop_cit) {
+                            // this occurs when append tile was a drop created
+                            aci_create_cit = drop_cit;
+                        }
+                        if (aci_create_cit != null) {
+                            var aci_create_sources = await MpDataModelProvider.GetSourceRefsByCopyItemTransactionIdAsync(aci_create_cit.Id);
+
+                            if (isNew || !MpAvPrefViewModel.Instance.IgnoreAppendedItems) {
+                                // if item is not new or will persist include ref to it
+                                // NOTE item ref is added to END to keep primary source at front
+                                aci_create_sources.Add(aci);
+                            }
+
+                            //// NOTE ignoring msg data here since its only used for analyze transactions for now
+                            var append_ci_trans = await Mp.Services.TransactionBuilder.ReportTransactionAsync(
+                                copyItemId: AppendClipTileViewModel.CopyItemId,
+                                reqType: MpJsonMessageFormatType.DataObject,
+                                respType: MpJsonMessageFormatType.Delta,
+                                ref_uris: aci_create_sources.Select(x => x.ToSourceUri()),
+                                transType: MpTransactionType.Appended);
+                            if(append_ci_trans != null) {
+                                AddOrUpdateRecentAppendInfo(append_handle, default, append_ci_trans.Id);
+                            }
+                        }
+                    }                    
 
                     if (isNew &&
                         MpAvPrefViewModel.Instance.IgnoreAppendedItems) {
@@ -5191,7 +5460,7 @@ namespace MonkeyPaste.Avalonia {
                 });
             }
 
-            AppendDataCommand.Execute(append_data);
+            AppendDataCommand.Execute(new object[] { append_data, append_handle });
             return true;
         }
         public MpIAsyncCommand DeactivateAppendModeCommand => new MpAsyncCommand(
@@ -5267,17 +5536,25 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> AppendDataCommand => new MpAsyncCommand<object>(
             async (args) => {
+                if(args is not object[] argParts ||
+                argParts.Length < 2 ||
+                argParts[0] is not string append_data_str ||
+                argParts[1] is not string append_content_handle) {
+                    return;
+                }
                 AppendClipTileViewModel.IsWindowOpen = true;
                 AppendClipTileViewModel.AppendCount++;
                 if (AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
-                    await wv.ProcessAppendStateChangedMessageAsync(GetAppendStateMessage(args as string), "command");
+                    await wv.ProcessAppendStateChangedMessageAsync(GetAppendStateMessage(append_data_str,append_content_handle), "command");
                 }
 
             }, (args) => {
                 if (AppendClipTileViewModel == null || !IsAnyAppendMode) {
                     return false;
                 }
-                return args is string argStr && !string.IsNullOrEmpty(argStr);
+
+                //return args is string argStr && !string.IsNullOrEmpty(argStr);
+                return true;
             });
 
         public ICommand ShowDevToolsCommand => new MpAsyncCommand(
@@ -5329,5 +5606,11 @@ namespace MonkeyPaste.Avalonia {
         //    });
 
         #endregion
+    }
+
+    public class MpRecentAppendItemInfo {
+        public int doc_index { get; set; }
+        public int doc_append_length { get; set; } = -1;
+        public int trans_id { get; set; }
     }
 }

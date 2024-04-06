@@ -2639,9 +2639,6 @@ MonkeyPaste روی دستگاه
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>درباره برنامه ها بیشتر بدانید</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>چسباندن به: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;با استفاده از اشناهای موجود ) نیاز به وصلۀ واکشی ( این زمینه برای همۀ نمونههای این قالب در سراسر این سند یا در هر موردی که بعدا به ان ارجاع داده خواهد شد ، استفاده خواهد شد.&lt;/p&gt;&lt;p&gt; بنابراین به عنوان مثال اگر ادرس ایمیل را در اینجا انتخاب کنید، فیلد ایمیل مخاطبی که انتخاب می کنید برای همه موارد موجود در این سند استفاده می شود.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ MonkeyPaste روی دستگاه
     <value>نمی توان پارامترهای ارزش مشترک را در پیش تنظیم تنظیم کرد. PARAMID '{0}' در پیش تنظیم '{1}' برای افزونه '{2}' باید حذف شود یا paramvalue در بخش تعریف پارامتر مشخص شود.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>از پیش تنظیم شده باید راهنماهای منحصر به فرد داشته باشد. Duplication Premet Guid '{0}' در افزونه '{1}' برای پیش تنظیم شده شناسایی شد: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>خطای تجزیه پلاگین ، در مسیر '{0}' تهی ، احتمالاً خطای تجزیه JSON. نادیده گرفتن افزونه</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ MonkeyPaste روی دستگاه
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' حاوی مقادیر مشترک است. آیا دوست دارید آن را دوباره تنظیم کنید؟</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ایستگاه از پیش تنظیم باید guids منحصر به فرد داشته باشد. تکراری هدایت از پیش تعیین شده '{0}' در پلاگین '{1}' برای ایستگاه از پیش تنظیم شناسایی شد: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;چسباندن به: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>خطای ناشناخته {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>خرید شما نمی تواند تکمیل شود. دلیل: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>دامنه را اضافه کنید</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>اضافه کردن صفحه</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>دامنه این صفحه رد می شود. برای اجازه این صفحه ، باید رد "{0}" را حذف کنید.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>دامنه '{0}' از قبل رد شده است</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>دامنه</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>این صفحه قبلاً رد شده است.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>صفحات</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>همگام سازی</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>نمونه دیگر Monkeypaste در حال اجرا است. آیا مطمئن هستید که می خواهید نمونه جدیدی را باز کنید؟</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>پیکربندی کردن</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>میانبرهای جهانی ماوس و صفحه کلید غیرفعال شده اند.
+
+میانبرهای جهانی اکنون می توانند در منوی سینی سیستم فعال شوند</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>میانبرهای جهانی غیرفعال است: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>میانبرهای جهانی ماوس و صفحه کلید فعال شده است.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(تجربی) میانبرهای جهانی فعال شده: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>میانبرهای جهانی را خاموش کنید</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>میانبرهای جهانی را تغییر دهید</value>
   </data>
 </root>

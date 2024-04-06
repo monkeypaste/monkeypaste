@@ -5,7 +5,7 @@
     <Nullable>disable</Nullable>
     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <Platforms>$(DefaultPlatforms)</Platforms>
+    <Platforms>AnyCpu;x64</Platforms>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <RuntimeIdentifier>$(TargetRuntimeIdentifiers)</RuntimeIdentifier>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -14,11 +14,7 @@
     <Authors>$(ApplicationAuthor)</Authors>
     <AssemblyVersion>$(ApplicationVersion)</AssemblyVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <!--<AssemblyName>$(ApplicationName)</AssemblyName>-->
-    <!--<TargetName>$(ApplicationName)</TargetName>-->
-    
-    <!-- This remove extra runtime folders see https://stackoverflow.com/a/70144716/105028 -->
-    <!--<SelfContained>False</SelfContained>-->
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
@@ -55,9 +51,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.7" />
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
-    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
   </ItemGroup>
@@ -68,19 +63,17 @@
   
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
-    <ProjectReference Include="..\_build\_build.csproj" />
   </ItemGroup>
 
-  <!--<ItemGroup Condition="$(UseCefNet) == 'True' And '$(Configuration)' == 'Debug'">
-    <Content Include="$(CefPlatformDir)\Debug\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>-->
+  <ItemGroup Condition="$(BuildOs) == 'MAC'">
+    <ProjectReference Include="..\MonkeyPaste.Desktop.Launcher\MonkeyPaste.Desktop.Launcher.csproj" />
+  </ItemGroup>
 
 
   <ItemGroup>
-    <None Remove="cef\**"/>
+    <None Remove="cef\**" />
   </ItemGroup>
+  
   <ItemGroup Condition="$(UseCefNet) == 'True'">
     <Content Include="$(CefPlatformDir)\Release\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -96,19 +89,16 @@
     </Content>
   </ItemGroup>
 
-  <!--<ItemGroup>
-    <Content Include="$(CefPlatformDir)\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>-->
-  
-
-  <ItemGroup>
+  <ItemGroup Condition="$(UseCefNet) == 'True'">
     <Reference Include="CefNet">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
+      <HintPath>..\ext\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
     </Reference>
     <Reference Include="CefNet.Avalonia">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
+      <HintPath>..\ext\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="$(UseSugarWv) == 'True'">
+    <PackageReference Include="WebView.Avalonia.Desktop" Version="11.0.0.4" />
   </ItemGroup>
 </Project>

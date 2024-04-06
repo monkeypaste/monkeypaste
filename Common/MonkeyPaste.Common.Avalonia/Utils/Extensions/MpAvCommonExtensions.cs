@@ -221,6 +221,13 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             return result;
         }
+        public static T GetLogicalDescendant<T>(this ILogical logical, bool includeSelf = true) where T : ILogical {
+            IEnumerable<T> result = logical.GetLogicalDescendants().OfType<T>();
+            if (includeSelf && logical is T t) {
+                result.Prepend(t);
+            }
+            return result.FirstOrDefault();
+        }
         public static bool TryGetVisualAncestor<T>(this Visual control, out T ancestor) where T : Visual {
             ancestor = control.GetVisualAncestor<T>();
             return ancestor != null;
@@ -239,6 +246,7 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
         #region Control
+        
         public static RenderTargetBitmap RenderToBitmap(this Control target) {
             if (target is TemplatedControl tc) {
                 MpDebug.Assert(tc.Background != null, $"Needs bg");
@@ -246,8 +254,8 @@ namespace MonkeyPaste.Common.Avalonia {
                     MpDebug.Assert(scb.Opacity >= 1, $"Needs solid bg");
                 }
             }
-            var pixelSize = new PixelSize((int)target.Width, (int)target.Height);
-            var size = new Size(target.Width, target.Height);
+            var pixelSize = new PixelSize((int)target.Bounds.Width, (int)target.Bounds.Height);
+            var size = new Size(target.Bounds.Width, target.Bounds.Height);
             using (RenderTargetBitmap bitmap = new RenderTargetBitmap(pixelSize, new Vector(96, 96))) {
                 target.Measure(size);
                 target.Arrange(new Rect(size));

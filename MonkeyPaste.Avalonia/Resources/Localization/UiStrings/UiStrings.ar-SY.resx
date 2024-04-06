@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>تعرف على المزيد حول الخطط</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>لصق إلى: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;باستخدام جهات الاتصال المتاحة (يتطلب مكونا إضافيا للجلب) ، سيتم استخدام هذا الحقل لجميع مثيلات هذا القالب عبر هذا المستند أو في أي منها سيتم الرجوع إليه لاحقا.&lt;/p&gt;&lt;p&gt; على سبيل المثال ، إذا حدد عنوان البريد الإلكتروني هنا ، استخدام حقل البريد الإلكتروني لجهة الاتصال التي تحددها لجميع الحالات في هذا المستند.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ feedback@monkeypaste.com</value>
     <value>لا يمكن تعيين معلمات القيمة المشتركة في الإعدادات المسبقة. يجب إزالة الباراميد '{0}' في الإعداد المسبق "{1} 'للمكون الإضافي {2}' أو يمكن تحديد paramValue في قسم تعريف المعلمة.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>يجب أن يكون لدى الإعدادات المسبقة Guids فريدة من نوعها. تم اكتشاف GUID PRESET DIDET المكررة في البرنامج المساعد "{1}" للإعداد المسبق: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>خطأ في تحليل البرنامج المساعد ، في Path '{0}' NULL ، من المحتمل أن يكون هناك خطأ في تحليل JSON. تجاهل البرنامج المساعد</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ feedback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>يحتوي '{0}' على قيم مشتركة. هل ترغب في إعادة ضبط هؤلاء أيضًا؟</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>يجب أن تحتوي الإعدادات المسبقة على أدلة فريدة. تم اكتشاف دليل الإعداد المسبق المكرر '{0}' في البرنامج المساعد '{1}' للإعدادات المسبقة: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;لصق إلى: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>خطأ غير معروف {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>تعذر إكمال الشراء. السبب: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>أضف المجال</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>إضافة صفحة</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>تم رفض المجال لهذه الصفحة. للسماح بهذه الصفحة، ستحتاج إلى إزالة الرفض لـ '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>تم رفض النطاق '{0}' بالفعل</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>المجالات</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>تم رفض هذه الصفحة بالفعل.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>الصفحات</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>مزامنة</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>هناك مثيل آخر لـ MonkeyPaste قيد التشغيل بالفعل. هل أنت متأكد أنك تريد فتح مثيل جديد؟</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>تهيئة</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>تم تعطيل اختصارات الماوس ولوحة المفاتيح العالمية.
+
+يمكن الآن تمكين الاختصارات العامة في قائمة علبة النظام</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>تم تعطيل الاختصارات العامة: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>تم تمكين اختصارات الماوس ولوحة المفاتيح العالمية.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(تجريبي) تم تمكين الاختصارات العامة: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>تبديل الاختصارات العالمية إلى إيقاف التشغيل</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>تفعيل الاختصارات العالمية</value>
   </data>
 </root>

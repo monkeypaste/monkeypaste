@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>योजनाहरूको बारेमा अधिक जान्नुहोस्</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>यसमा टाँस्नुहोस्: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;उपलब्ध सम्पर्कहरू प्रयोग गरेर (फेचर प्लगइन आवश्यक पर्दछ) यो फिल्ड यो कागजातमा यो टेम्प्लेटको सबै उदाहरणका लागि प्रयोग गरिनेछ वा कुनै पनि मा यो पछि सन्दर्भित गरिनेछ।&lt;/p&gt;&lt;p&gt; त्यसैले उदाहरणका लागि यदि यहाँ इमेल ठेगाना चयन गर्नुहोस् भने तपाईले चयन गर्नुभएको सम्पर्कको इमेल फिल्ड यस कागजातमा सबै उदाहरणहरूको लागि प्रयोग गरिनेछ।&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@
     <value>प्रिसेटहरूमा साझा मान प्यारामिटरहरू सेट गर्न सकिँदैन। प्लगइन '{2}' को लागि प्रिसेट '{1}' मा ParamId '{0}' हटाउन आवश्यक छ वा paramValue प्यारामिटर परिभाषा खण्डमा निर्दिष्ट गर्न सकिन्छ।</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>प्रिसेटहरूमा अद्वितीय गाइडहरू हुनुपर्छ। प्रिसेटहरूको लागि प्लगइन '{1}' मा नक्कल प्रिसेट गाइड '{0}' पत्ता लाग्यो: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>प्लगइन पार्सन त्रुटि, पथ '{0}' शून्य, सम्भवतः JOSS parsing त्रुटि। प्लगइनलाई बेवास्ता गर्दै</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' साझा मानहरू समावेश गर्दछ। के तपाइँ तीसँग रिसेट गर्न चाहानुहुन्छ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>प्रिसेटहरूमा अद्वितीय गाइडहरू हुनुपर्दछ। पूर्वनिर्धारितहरूका लागि प्लगइन '{1}' मा डुप्लिकेट पूर्वनिर्धारित गाइड '{0}' पत्ता लगाइएको थियो: {2}।</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;यसमा टाँस्नुहोस्: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>अज्ञात त्रुटि {0 0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>तपाईंको खरीद पूरा गर्न सकिएन। कारण: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>डोमेन जोड्नुहोस्</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>पृष्ठ थप्नुहोस्</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>यस पृष्ठको लागि डोमेन अस्वीकृत गरिएको छ। यस पृष्ठलाई अनुमति दिनको लागि तपाइँ '{0}' को लागी अस्वीकार हटाउन आवश्यक छ।</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>डोमेन '{0}' पहिले नै अस्वीकृत गरिएको छ</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>डोमेन</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>यो पृष्ठ पहिले नै अस्वीकृत गरिएको छ।</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>पृष्ठहरु</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>प्रशियकर्साउनु</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>बाँधिइपसासासको अर्को उदाहरण पहिले नै चलिरहेको छ। के तपाईं पक्का नयाँ उदाहरण खोल्न चाहनुहुन्छ?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>अनुकुल</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ग्लोबल माउस र कुञ्जीपाटी सर्टकटहरू असक्षम पारिएको छ।
+
+विश्वव्यापी सर्टकट अब प्रणाली ट्रे मेनूमा सक्षम हुन सक्छ</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ग्लोबल सर्टकट असक्षम गरियो: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ग्लोबल माउस र कुञ्जीपाटी सर्टकटहरू सक्षम पारिएको छ।</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(प्रयोगात्मक) ग्लोबल सर्टकटहरू सक्षम: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>टगल विश्वव्यापी सर्टकट बन्द</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>वैश्थाल विश्वव्यापी सर्टकटहरू टगल गर्नुहोस्</value>
   </data>
 </root>

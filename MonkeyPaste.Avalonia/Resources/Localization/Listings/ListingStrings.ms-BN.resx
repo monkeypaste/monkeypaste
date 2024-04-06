@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>salinan</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>tampal</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Pengurus Clipboard</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>alat</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>EDITOR CLIP DENGAN PELANGGAN DENGAN Cari/Ganti, Teks Kaya (Jadual, Senarai, Pautan, dan lain -lain)</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Penyimpanan data tempatan yang selamat, selamat dan peribadi dengan pilihan 2 - Faktor Kata Laluan Perlindungan</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Dibina - Penyemak Imbas Plugin Dengan Komuniti Pernah - Perpustakaan Plugin yang Didorong</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste adalah pengurus klip, alat automasi dan produktiviti seperti yang lain. Meningkatkan papan klip anda ke bahagian aliran kerja anda yang diperkaya dan teratur,
-Menampilkan antara muka profil intuitif dan rendah yang menyokong teks, fail dan imej. Direka untuk fleksibiliti, dengan komuniti yang semakin berkembang - libray plugin yang didorong.
-
-Ia bermula sebagai eksperimen oleh seorang programmer yang ingin lebih daripada sekadar salinan dan tampal dari papan klip. Dia mahukan arahan mudah seperti Ctrl+C yang akan 'menambah' sebaliknya
-daripada 'menggantikan' apa yang ada di papan klip. Dan eksperimen itu berfungsi. Alat kecil itu sangat berguna. Ini menimbulkan pengaturcara dengan lebih banyak idea dan lebih banyak eksperimen, itu
-Sekarang telah menjadi "monkeypaste".
-
-Sebagai desktop untuk fail anda, monkeypaste berhasrat untuk berada di papan klip anda. Ini adalah alat alat yang direka dengan teliti untuk mengintegrasikan dan berinteraksi dengan seolah -olah
-Sebarang aplikasi atau format kandungan. Ctrl+C dan Ctrl+V adalah lebih daripada sekadar pintasan. Mereka adalah pelabuhan kemasukan semua aplikasi, membawa a
-Kekayaan nilai dan makna yang anda patut ada di hujung jari anda. Bukan hanya dibuang selepas Ctrl+C seterusnya.
-
-Saya adalah programmer yang disebut tadi dan saya mahu semua orang dapat mencari penggunaan daripada monkeypaste. Jadi ia dan semua ciri -cirinya benar -benar bebas untuk digunakan.
-Saya juga mahu anda berasa selesa menggunakannya. Oleh itu, saya memberi jaminan kepada anda, sebagai satu -satunya kekuatan di sebalik penciptaannya, bahawa tidak ada maklumat peribadi yang boleh timbul
-Papan klip anda pernah dikesan atau disimpan di mana -mana di luar mesin anda sendiri. Tempoh.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Papan klip anda pernah dikesan atau disimpan di mana -mana di luar mesin anda se
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Papan klip adalah hutan. Monkeypaste adalah raja! Swing dari aplikasi ke aplikasi, menyalin ini dan menampal yang tidak pernah seperti sebelumnya dengan Monkeypaste !! A jenama - clipboard baru, canggih dan alat automasi analitik !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Contoh monkeypaste dalam tindakan!</value>
   </data>
@@ -258,9 +228,6 @@ Papan klip anda pernah dikesan atau disimpan di mana -mana di luar mesin anda se
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Tanpa Had - Tahunan</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Pelepasan awal</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Dengan langganan ini anda akan terima:
 ● Kapasiti tanpa had</value>
@@ -270,5 +237,45 @@ Papan klip anda pernah dikesan atau disimpan di mana -mana di luar mesin anda se
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Lebih banyak platform dan ciri yang akan datang! Kami baru sahaja bermula 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Pencarian Cepat Carian dan Sorotan, hanya mula menaip!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Simpan teks, imej dan klip fail dengan semua sumbernya (aplikasi, laman web, masa, dan banyak lagi) maklumat secara automatik</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste adalah pengurus papan keratan, automasi dan alat produktiviti seperti yang lain. Meningkatkan papan klip anda ke dalam bahagian aliran kerja anda yang diperkaya dan teratur,
+menampilkan antara muka intuitif dan rendah profil yang menyokong teks, fail dan imej. Direka untuk fleksibiliti, dengan komuniti yang semakin meningkat - didorong oleh libray plugin.
+
+Ia bermula sebagai percubaan oleh pengaturcara yang mahu lebih daripada sekadar menyalin dan menampal keluar dari papan keratan. Dia mahukan arahan mudah seperti Ctrl + C yang akan 'menambah' sebaliknya 
+daripada 'menggantikan' apa yang ada di papan keratan. Dan percubaan itu berjaya. Alat kecil itu sangat berguna. Ini menarik pengaturcara dengan lebih banyak idea dan lebih banyak eksperimen, bahawa 
+kini telah menjadi "MonkeyPaste". 
+
+Oleh kerana desktop adalah untuk fail anda, MonkeyPaste berhasrat untuk berada di papan klip anda. Satu set alatan yang direka dengan teliti untuk kelihatan bersepadu dan saling beroperasi 
+sebarang aplikasi atau format kandungan. Ctrl+C dan Ctrl+V adalah lebih daripada sekadar pintasan. Mereka adalah pelabuhan masuk semua bahagian aplikasi, membawa a 
+kekayaan nilai dan makna yang anda layak boleh didapati di hujung jari anda. Bukan hanya dibuang selepas Ctrl + C seterusnya.
+
+Saya adalah pengaturcara yang disebutkan tadi dan saya mahu semua orang dapat mengetahui penggunaan MonkeyPaste. Jadi ia dan semua ciri-cirinya adalah percuma untuk digunakan. 
+Saya juga mahu anda berasa selesa menggunakannya. Oleh itu, saya memberi jaminan kepada anda, sebagai satu-satunya kuasa di sebalik penciptaannya, bahawa TIDAK ADA maklumat peribadi (sangat) yang boleh timbul 
+papan keratan anda pernah dijejaki atau disimpan DI MANA-MANA di luar mesin anda sendiri. Tempoh.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Papanklip</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Penyimpanan data tempatan yang selamat, selamat dan peribadi dengan perlindungan kata laluan 2 faktor pilihan</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste kini bebas sepenuhnya seperti pelepasan ini !!
+
+Semua sekatan (dalam langganan APP) telah dikeluarkan kerana monkeypaste kini beralih untuk menjadi projek sumber terbuka. Oleh itu, perhatikan github kami (github.com/monkeypaste) jika anda berminat untuk menyumbang.
+
+Kemas kini:
+
+- Semua sekatan kapasiti dikeluarkan!
+- Penambahbaikan UI Editor URL yang ditolak
+- Sokongan asas untuk menjalankan pelbagai contoh monkeypaste
+- Editor Nilai Dikongsi Baru (dalam Pelayar Plugin di mana berkenaan)</value>
   </data>
 </root>

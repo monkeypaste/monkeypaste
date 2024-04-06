@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Nakala</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>Bandika</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Meneja wa Clipboard</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>chombo</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Mhariri wa kipande cha picha kamili - na Pata/Badilisha, Nakala Tajiri (Jedwali, Orodha, Viungo, nk) Maombi ya maandishi kwa uchungaji wa haraka, wenye nguvu kutoka kwa mkusanyiko wako wa snippet</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Hifadhi salama, salama na ya kibinafsi ya ndani na hiari 2 - Factor Nenosiri ulinzi</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Imejengwa - katika kivinjari cha programu -jalizi na jamii inayokua - maktaba inayoendeshwa ya programu -jalizi</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste ni meneja wa clipboard, zana ya automatisering na tija kama hakuna mwingine. Kuongeza clipboard yako kuwa sehemu yenye utajiri na iliyopangwa ya utiririshaji wako,
-Inashirikiana na interface ya angavu na ya chini - ambayo inasaidia maandishi, faili na picha. Iliyoundwa kwa ajili ya kubadilika, na jamii inayokua - inayoendeshwa kwa programu -jalizi za programu -jalizi.
-
-Ilianza kama jaribio la programu inayotaka zaidi ya kunakili tu na kubandika nje ya clipboard. Alitaka amri rahisi kama Ctrl+C ambayo 'ingeongeza' badala yake
-ya 'Badilisha' kile kilichokuwa kwenye clipboard. Na majaribio yalifanya kazi. Chombo kidogo kilikuwa kizuri sana. Hii ilisababisha programu na maoni zaidi na majaribio zaidi, ambayo
-Sasa imekuwa "Monkeypaste".
-
-Kama desktop ilivyo kwa faili zako, Monkeypaste inakusudia kuwa kwenye clipboard yako. Suite yake ya zana iliyoundwa kwa uangalifu ili kujumuisha na kushirikiana na
-matumizi yoyote au muundo wa yaliyomo. Ctrl+C na Ctrl+V ni zaidi ya njia za mkato tu. Ni bandari za kuingia kwa matumizi yote ya kushiriki, kubeba
-Utajiri wa thamani na maana unastahili kupatikana kwa vidole vyako. Sio tu kutupwa mbali baada ya Ctrl+C ijayo.
-
-Mimi ndiye programu iliyotajwa hapo awali na ninataka kila mtu aweze kupata matumizi ya Monkeypaste. Kwa hivyo na huduma zake zote ni bure kabisa kutumia.
-Pia nataka ujisikie vizuri kuitumia. Kwa hivyo ninakuhakikishia, kama nguvu pekee nyuma ya uumbaji wake, kwamba hakuna habari yoyote ya kibinafsi (sana) ambayo inaweza kutokea
-Clipboard yako inafuatiliwa au kuhifadhiwa mahali popote zaidi ya mashine yako mwenyewe. Kipindi.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Clipboard yako inafuatiliwa au kuhifadhiwa mahali popote zaidi ya mashine yako m
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard ni msitu. Monkeypaste ndiye mfalme! Swing kutoka kwa programu hadi programu, kunakili hii na kubandika kama hapo awali na Monkeypaste !! Chapa - mpya, ya kukata clipboard na zana ya uchanganuzi wa vifaa !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Mfano wa Monkeypaste katika hatua!</value>
   </data>
@@ -258,9 +228,6 @@ Clipboard yako inafuatiliwa au kuhifadhiwa mahali popote zaidi ya mashine yako m
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Isiyo na kikomo - kila mwaka</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Kutolewa kwa awali</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Na usajili huu utapokea:
 ● Uwezo usio na kikomo</value>
@@ -270,5 +237,45 @@ Clipboard yako inafuatiliwa au kuhifadhiwa mahali popote zaidi ya mashine yako m
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Majukwaa zaidi na huduma zinakuja hivi karibuni! Tunaanza tu 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Kutafutia haraka na kuonyesha, anza tu kuandika!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Hifadhi maandishi, picha na sehemu za faili na chanzo chake chote (programu, wavuti, wakati, na mengi zaidi) habari moja kwa moja</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste ni meneja wa ubao wa kunakili, kiotomatiki na zana ya uzalishaji kama hakuna nyingine. Kuimarisha ubao wako wa kunakili kuwa sehemu iliyotajirishwa na iliyopangwa ya mtiririko wako wa kazi,
+akishirikiana na kiolesura cha angavu na cha chini cha wasifu ambacho kinaunga mkono maandishi, faili na picha. Iliyoundwa kwa kubadilika, na jamii inayokua - inayoendeshwa na programu-jalizi.
+
+Ilianza kama jaribio na programu inayotaka zaidi ya nakala tu na kubandika nje ya ubao wa kunakili. Alitaka amri rahisi kama Ctrl+C ambayo 'itaongeza' badala yake 
+ya 'kubadilisha' kile kilichokuwa kwenye ubao wa kunakili. Na jaribio hilo lilifanya kazi. Chombo kidogo kilikuwa rahisi sana. Hii ilichochea programu na mawazo zaidi na majaribio zaidi, kwamba 
+sasa imekuwa "MonkeyPaste". 
+
+Kama desktop ni kwa faili zako, MonkeyPaste inatarajia kuwa kwenye ubao wako wa kunakili. Ni safu ya zana iliyoundwa kwa uangalifu ili kuunganisha na kushirikiana na 
+Programu yoyote au muundo wa yaliyomo. Ctrl+C na Ctrl+V ni zaidi ya njia za mkato tu. Ni bandari za kuingia maombi yote kushiriki, kubeba a 
+utajiri wa thamani na maana unayostahili kuwa nayo kwenye vidole vyako. Sio tu kutupwa mbali baada ya Ctrl + C inayofuata.
+
+Mimi ni programu hiyo iliyotajwa hapo awali na ninataka kila mtu aweze kupata matumizi kutoka kwa MonkeyPaste. Kwa hivyo na huduma zake zote ni bure kabisa kutumia. 
+Pia nataka kujisikia vizuri kutumia. Kwa hivyo ninakuhakikishia, kama kuwa nguvu pekee nyuma ya uumbaji wake, kwamba hakuna habari yoyote ya kibinafsi ambayo inaweza kutokea 
+ubao wako wa kunakili unafuatiliwa au kuhifadhiwa popote zaidi ya mashine yako mwenyewe. Kipindi cha.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Ubaoklipu</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Hifadhi salama, salama na ya kibinafsi ya data ya ndani na hiari 2 - ulinzi wa nenosiri</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste sasa ni bure kabisa kama ya kutolewa hii !!
+
+Vizuizi vyote (katika usajili wa APP) vimeondolewa kama Monkeypaste sasa inabadilika kuwa mradi wa chanzo wazi. Kwa hivyo weka macho kwenye github yetu (github.com/monkeypaste) ikiwa una nia ya kuchangia.
+
+Sasisho:
+
+- Vizuizi vyote vya uwezo vimeondolewa!
+- Uboreshaji wa UI wa URL uliokataliwa
+- Msaada wa kimsingi kwa kuendesha hali nyingi za Monkeypaste
+- Mhariri mpya wa Thamani ya Pamoja (katika kivinjari cha programu -jalizi inapotumika)</value>
   </data>
 </root>

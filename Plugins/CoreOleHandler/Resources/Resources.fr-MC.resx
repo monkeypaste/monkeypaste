@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Sans titre</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Pour le plaisir, lorsque cela sera vérifié, l'image sur le presse-papiers sera grossièrement convertie en art ASCII (texte brut) de l'image 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Image du texte</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Une fois disponibles, les données du premier format de texte sélectionnées seront converties en une image et ajoutées au presse-papiers.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Formats de texte à l'image</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Image (TIFF)</value>
+  </data>
 </root>

@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Gan teideal</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Le haghaidh spraoi, nuair a sheiceáiltear é seo déanfar an íomhá ar an ghearrthaisce a thiontú go héadrom ina ealaín ASCII (gnáth -théacs) an íomhá 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Íomhá chun téacs</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Nuair a bheidh sé ar fáil, déanfar sonraí an chéad fhormáid téacs roghnaithe a thiontú go híomhá agus cuirfear leis an ghearrthaisce é.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Téacs go formáidí íomhá</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Íomhá (TIFF)</value>
+  </data>
 </root>

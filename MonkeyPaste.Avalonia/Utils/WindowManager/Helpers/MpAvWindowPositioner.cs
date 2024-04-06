@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
             var time_for_this = w.OpenDateTime ?? DateTime.Now;
             double offsetY =
                 MpAvWindowManager.ToastNotifications
-                .Where(x => x.OpenDateTime < time_for_this)
+                .Where(x => x.OpenDateTime < time_for_this && x.WindowState != WindowState.Minimized)
                 .Sum(x => (GetWindowSize(x).Height + pad) * primaryScreen.Scaling);
 #if MAC
             y += offsetY;
@@ -72,6 +72,13 @@ namespace MonkeyPaste.Avalonia {
             }
             return pos;
         }
+
+        public static double GetWindowTitleHeight(Window w) {
+            if (w == null) {
+                return 0;
+            }
+            return w.FrameSize.HasValue ? w.FrameSize.Value.Height - w.ClientSize.Height : 0;
+        }
         #endregion
 
         #region Properties
@@ -93,18 +100,12 @@ namespace MonkeyPaste.Avalonia {
             }
             double width = w.Bounds.Width.IsNumber() && w.Bounds.Width != 0 ? w.Bounds.Width : fallback_w;
             double height = w.Bounds.Height.IsNumber() && w.Bounds.Height != 0 ? w.Bounds.Height : fallbach_h;
-            if (w.DataContext is MpAvMessageNotificationViewModel mnvm) {
+            if (w.DataContext is MpAvPopUpNotificationViewModel mnvm) {
                 width = 350;// mnvm.MessageWindowFixedWidth;
             }
             return new Size(width, height + th);
         }
 
-        private static double GetWindowTitleHeight(Window w) {
-            if (w == null) {
-                return 0;
-            }
-            return w.FrameSize.HasValue ? w.FrameSize.Value.Height - w.ClientSize.Height : 0;
-        }
 
         #endregion
 

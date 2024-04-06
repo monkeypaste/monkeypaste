@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Pealkirjata</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Lõbutseks, kui seda kontrollitakse, teisendatakse lõikelaua pilt jämedalt pildi ASCII (lihtteksti) kunstiks 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Pilt teksti saamiseks</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Kui see on saadaval, teisendatakse esimese valitud tekstivormingu andmed pildile ja lisatakse lõikelauale.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Tekst kujutise vormingutele</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Pilt (tiff)</value>
+  </data>
 </root>

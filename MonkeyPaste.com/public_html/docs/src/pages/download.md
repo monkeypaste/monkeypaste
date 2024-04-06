@@ -7,12 +7,12 @@ hide_table_of_contents: true
 # Download
 
 <p class="dl-btn">
-<a class="fancy-hover" href="ms-windows-store://pdp/?productid=9MZRBMH3JT75"><img src={require('/img/download_win.png').default}/></a><br/>
+<a class="fancy-hover" href="https://www.microsoft.com/store/apps/9MW0FPDSHMJK"><img src={require('/img/download_win.png').default}/></a><br/>
 <span>Windows 10 (version 22H2 19045.4046) and higher</span><br/>
 </p>
 
-
 ## Coming Soon!
+
 <p class=" dl-btn coming-soon">
 <a><img src={require('/img/download_mac.png').default}/></a>
 <a><img src={require('/img/download_linux.png').default}/></a><br/>

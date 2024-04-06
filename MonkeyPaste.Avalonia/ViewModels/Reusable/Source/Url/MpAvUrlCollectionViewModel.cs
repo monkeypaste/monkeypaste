@@ -25,9 +25,12 @@ namespace MonkeyPaste.Avalonia {
             .OrderBy(x => x.UrlDomainPath)
             .ThenBy(x => x.UrlTitle);
 
-        public IEnumerable<MpAvUrlViewModel> RejectedItems =>
+        public IEnumerable<MpAvUrlViewModel> RejectedDomains =>
             FilteredItems
-            .Where(x => x.IsDomainRejected || x.IsUrlRejected);
+            .Where(x => x.IsDomainRejected).DistinctBy(x => x.UrlDomainPath);
+        public IEnumerable<MpAvUrlViewModel> RejectedPages =>
+            FilteredItems
+            .Where(x => x.IsUrlRejected);
 
         #endregion
 
@@ -84,11 +87,19 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool IsUrlRejected(string url) {
-            return Items.FirstOrDefault(x => x.UrlPath.ToLower() == url.ToLower() && x.IsUrlRejected) != null;
+            return IsUrlDomainRejected(url) || 
+                Items.Where(x=>x.IsUrlRejected).FirstOrDefault(x => x.UrlPath.ToLower() == url.ToLower()) != null;
+        }
+        
+        public bool IsUrlDomainRejected(string url) {
+            return Items.Where(x=>x.IsDomainRejected).FirstOrDefault(x => x.UrlDomainPath.ToLower() == MpUrlHelpers.GetUrlDomain(url.ToLower())) != null;
         }
 
-        public void Remove(MpAvUrlViewModel avm) {
-            Items.Remove(avm);
+        public void RefreshItemSources() {
+            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(FilteredItems));
+            OnPropertyChanged(nameof(RejectedDomains));
+            OnPropertyChanged(nameof(RejectedPages));
         }
 
         #endregion
@@ -103,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = true;
                     var uvm = await CreateUrlViewModel(url);
                     Items.Add(uvm);
-                    OnPropertyChanged(nameof(Items));
+                    IsBusy = false;
                 });
             }
         }
@@ -124,7 +135,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             ValidateUrlViewModels();
-            OnPropertyChanged(nameof(Items));
+            RefreshItemSources();
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
@@ -135,9 +146,12 @@ namespace MonkeyPaste.Avalonia {
         }
         private void ValidateUrlViewModels() {
             var dups = Items.Where(x => Items.Any(y => y != x && x.IsValueEqual(y)));
-            if (dups.Any()) {
-                // dup app view models, check db to see if dup app model
-                MpDebug.Break();
+            if (dups.LastOrDefault() is { } dup_uvm) {
+                MpDebug.Break($"Url collection error, dups detected (removing newest ones!): {string.Join(Environment.NewLine,dups.Select(x=>x.UrlPath).Distinct())}",silent: true);
+                //Dispatcher.UIThread.Post(async () => {
+                //    await dup_uvm.Url.DeleteFromDatabaseAsync();
+                //    Items.Remove(dup_uvm);
+                //});
             }
 
         }
@@ -146,24 +160,30 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand AddUrlCommand => new MpAsyncCommand(
-            async () => {
-                string urlPath = null;
+        public MpIAsyncCommand<object> AddRejectUrlCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (args is not string rejectType) {
+                    return;
+                }
+                string url_or_domain_path = null;
 
-                while (urlPath == null) {
-                    urlPath = await Mp.Services.PlatformMessageBox.ShowTextBoxMessageBoxAsync(
+                // show url entry box until valid result or cancel
+                while (url_or_domain_path == null) {
+                    url_or_domain_path = await Mp.Services.PlatformMessageBox.ShowTextBoxMessageBoxAsync(
                         title: UiStrings.AddUrlNtfTitle,
                         message: UiStrings.AddUrlNtfText,
                         iconResourceObj: "WebImage");
-                    if (urlPath == null) {
+                    if (url_or_domain_path == null) {
                         // canceled, break
                         break;
                     }
-                    if (!Uri.IsWellFormedUriString(urlPath, UriKind.Absolute)) {
+                    url_or_domain_path = MpUrlHelpers.GetFullyFormattedUrl(url_or_domain_path);
+
+                    if (!Uri.IsWellFormedUriString(url_or_domain_path, UriKind.Absolute)) {
                         var invalid_result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                             title: UiStrings.CommonErrorLabel,
                             message: UiStrings.AddUrlNtfErrorText);
-                        urlPath = null;
+                        url_or_domain_path = null;
                         if (invalid_result) {
                             // try again
                         } else {
@@ -173,22 +193,41 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
-                if (string.IsNullOrEmpty(urlPath)) {
+                if (string.IsNullOrEmpty(url_or_domain_path)) {
                     return;
                 }
+                bool is_domain_reject = rejectType == "domain";
+                url_or_domain_path = is_domain_reject ? MpUrlHelpers.GetUrlDomain(url_or_domain_path) : url_or_domain_path;
 
-                var uvm = Items.FirstOrDefault(x => x.UrlPath.ToLower() == urlPath.ToLower());
+                MpAvUrlViewModel uvm = is_domain_reject ?
+                    Items.FirstOrDefault(x => x.UrlDomainPath.ToLowerInvariant() == url_or_domain_path.ToLowerInvariant()) :
+                    Items.FirstOrDefault(x => x.UrlPath.ToLowerInvariant() == url_or_domain_path.ToLowerInvariant());
+
                 if (uvm == null) {
-                    var url = await Mp.Services.UrlBuilder.CreateAsync(urlPath);
+                    // if url or domain not found create new entry and wait for it to be added
+                    var url = await Mp.Services.UrlBuilder.CreateAsync(url_or_domain_path);
                     while (uvm == null) {
-                        uvm = Items.FirstOrDefault(x => x.UrlPath.ToLower() == urlPath.ToLower());
+                        uvm = Items.FirstOrDefault(x => x.UrlId == url.Id);
                         await Task.Delay(300);
                     }
-                } else {
+                } 
+                if(uvm == null) {
+                    return;
+                }
+                bool is_already_rejected = is_domain_reject ? uvm.IsDomainRejected : uvm.IsUrlRejected;
+                if(is_already_rejected) {
+                    // warn that page/domain already rejected
+                    string warning_msg = is_domain_reject ?
+                        UiStrings.InteropDomainAlreadyRejectedText.Format(url_or_domain_path) :
+                        UiStrings.InteropPageAlreadyRejectedText;
+
                     await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
                             title: UiStrings.CommonDuplicateLabel,
-                            message: string.Format(UiStrings.AddUrlNtfDupText, urlPath),
+                            message: warning_msg,
                             iconResourceObj: "WarningImage");
+                } else {
+                    // reject page/domain
+                    await uvm.RejectCommand.ExecuteAsync(is_domain_reject ? "domain" : "page");
                 }
 
                 SelectedItem = uvm;

@@ -142,6 +142,7 @@ function updateFontColorToolbarItemsToSelection() {
 // #region Event Handlers
 
 function onFontColorOrBgColorPaletteItemClick(chex) {
+	log('color palette clicked');
 	if (globals.ColorPaletteAnchorElement == null) {
 		return;
 	}

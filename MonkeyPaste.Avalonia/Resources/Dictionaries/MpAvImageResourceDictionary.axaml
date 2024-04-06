@@ -1,6 +1,8 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="SyncImage">avares://MonkeyPaste.Avalonia/Assets/Images/sync.png</sys:String>
+    <sys:String x:Key="StackImage">avares://MonkeyPaste.Avalonia/Assets/Images/stack.png</sys:String>
     <sys:String x:Key="BugImage">avares://MonkeyPaste.Avalonia/Assets/Images/bug.png</sys:String>
     <sys:String x:Key="LogImage">avares://MonkeyPaste.Avalonia/Assets/Images/log.png</sys:String>
     <sys:String x:Key="BooksImage">avares://MonkeyPaste.Avalonia/Assets/Images/books.png</sys:String>
@@ -18,6 +20,7 @@
     <sys:String x:Key="MegaPhoneImage">avares://MonkeyPaste.Avalonia/Assets/Images/megaphone.png</sys:String>
     <sys:String x:Key="LifePreserverImage">avares://MonkeyPaste.Avalonia/Assets/Images/lifepreserver.png</sys:String>
     <sys:String x:Key="ReadImage">avares://MonkeyPaste.Avalonia/Assets/Images/read.png</sys:String>
+    <sys:String x:Key="MonkeyPausedImage">avares://MonkeyPaste.Avalonia/Assets/Images/monkeypaused.png</sys:String>
     <sys:String x:Key="MonkeyUpdateImage">avares://MonkeyPaste.Avalonia/Assets/Images/monkeyupdate.png</sys:String>
     <sys:String x:Key="RateImage">avares://MonkeyPaste.Avalonia/Assets/Images/rate.png</sys:String>
     <sys:String x:Key="SelectImage">avares://MonkeyPaste.Avalonia/Assets/Images/select.png</sys:String>

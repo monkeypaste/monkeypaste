@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -136,6 +137,7 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"App Version: '{Mp.Services.ThisAppInfo.ThisAppProductVersion}'", true);
             MpConsole.WriteLine($"Account Type: {MpAvAccountViewModel.Instance.AccountType} {MpAvAccountViewModel.Instance.BillingCycleType}");
             MpConsole.WriteLine($"Local Storage Dir: '{MpPlatformHelpers.GetStorageDir()}'");
+            MpConsole.WriteLine($"Is Admin: '{Mp.Services.PlatformInfo.IsAdmin}'");
             MpConsole.WriteLine($"Package Cache Dir: '{MpPlatformHelpers.GetStorageDir().LocalStoragePathToPackagePath()}'");
 #if DEBUG
             MpConsole.WriteLine($"Pref Password: '{MpAvPrefViewModel.arg1}'");
@@ -173,13 +175,15 @@ namespace MonkeyPaste.Avalonia {
 
             CoreItems.AddRange(
                new List<MpAvLoaderItemViewModel>() {
-                    //new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), "Content Converters"),
+                    new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),
                     //new MpAvLoaderItemViewModel(typeof(MpAvNotificationWindowManager),"Notifications"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
                     new MpAvLoaderItemViewModel(typeof(MpPortableDataFormats),UiStrings.LoaderClipboardLabel, Mp.Services.DataObjectRegistrar),
                     //new MpAvLoaderItemViewModel(typeof(MpAvTemplateModelHelper), "Templates"),
                     new MpAvLoaderItemViewModel(typeof(MpPluginLoader), UiStrings.LoaderAnalyzersLabel),
-                    new MpAvLoaderItemViewModel(typeof(MpAvTaskbarViewModel), UiStrings.LoaderTaskbarLabel),
+#if WINDOWS
+		new MpAvLoaderItemViewModel(typeof(MpAvTaskbarViewModel), UiStrings.LoaderTaskbarLabel),  
+#endif
                     new MpAvLoaderItemViewModel(typeof(MpAvSoundPlayerViewModel), UiStrings.LoaderSoundLabel),
                     new MpAvLoaderItemViewModel(typeof(MpAvIconCollectionViewModel), UiStrings.LoaderIconsLabel),
                     new MpAvLoaderItemViewModel(typeof(MpAvAppCollectionViewModel), UiStrings.LoaderAppLabel),
@@ -205,9 +209,6 @@ namespace MonkeyPaste.Avalonia {
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 PlatformItems.AddRange(
                    new List<MpAvLoaderItemViewModel>() {
-#if OUTSYS_WV || CEFNET_WV || MOBILE
-		                new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),  
-#endif
                         new MpAvLoaderItemViewModel(typeof(MpAvMenuView),  UiStrings.LoaderMainWindowLabel),
                         new MpAvLoaderItemViewModel(typeof(MpAvMainView), UiStrings.LoaderMainWindowLabel),
                         new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel),  UiStrings.LoaderMainWindowLabel)
@@ -216,7 +217,7 @@ namespace MonkeyPaste.Avalonia {
                 PlatformItems.AddRange(
                    new List<MpAvLoaderItemViewModel>() {
                         new MpAvLoaderItemViewModel(typeof(MpAvMainView),  UiStrings.LoaderMainWindowLabel),
-#if OUTSYS_WV || CEFNET_WV || MOBILE
+#if OUTSYS_WV || CEFNET_WV || MOBILE || SUGAR_WV
 		                new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),  
 #endif
                         new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel),  UiStrings.LoaderMainWindowLabel)

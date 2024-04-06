@@ -2639,9 +2639,6 @@ terugvoer@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lees meer oor planne</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Plak aan: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Met behulp van beskikbare kontakte (benodig 'n fetcher-inprop) sal hierdie veld gebruik word vir alle gevalle van hierdie sjabloon in hierdie dokument of in enige plek waarna later verwys sal word.&lt;/p&gt;&lt;p&gt; As u byvoorbeeld e-posadres hier kies, sal die e-posveld van die kontak wat u kies, vir alle gevalle in hierdie dokument gebruik word.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Totale herstel kan nie gewaarborg word nie en kan prestasie verminder of selfs M
     <value>Kan nie gedeelde waardeparameters in voorafinstellings instel nie. Paramid '{0}' in vooraf ingestelde '{1}' vir inprop '{2}' moet verwyder word, of paramValue kan in die parameterdefinisie -afdeling gespesifiseer word.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Voorinstellings moet unieke GUID's hê. Duplikaat vooraf ingestelde gids '{0}' is opgespoor in plugin '{1}' vir voorafinstellings: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Inprop -ontledingfout, by die pad '{0}' nul, waarskynlik foute om JSON te ontleed. Ignoreer inprop</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Totale herstel kan nie gewaarborg word nie en kan prestasie verminder of selfs M
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' bevat gedeelde waardes. Wil u dit ook herstel?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Voorinstellings moet unieke gidse hê. Duplikaatvoorinstellinggids '{0}' is in inprop '{1}' bespeur vir voorafinstellings: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Plak na: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Onbekende fout {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Jou aankoop kon nie voltooi word nie. Rede: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Voeg domein by</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Voeg bladsy by</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Die domein vir hierdie bladsy is afgekeur. Om hierdie bladsy toe te laat, sal jy die verwerping vir '{0}' moet verwyder.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Die domein '{0}' is reeds afgekeur</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domeine</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Hierdie bladsy is reeds afgekeur.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Bladsye</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinkroniseer</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Nog 'n voorbeeld van MonkeyPaste loop reeds. Is jy seker jy wil 'n nuwe instansie oopmaak?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Stel op</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globale muis- en sleutelbordkortpaaie is gedeaktiveer.
+
+Globale kortpaaie kan nou in die System Tray Menu geaktiveer word</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globale kortpaaie gedeaktiveer: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globale muis- en sleutelbordkortpaaie is geaktiveer.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimenteel) Globale kortpaaie geaktiveer: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Skakel globale kortpaaie af</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Skakel globale kortpaaie aan</value>
   </data>
 </root>

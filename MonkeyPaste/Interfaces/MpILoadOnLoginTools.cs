@@ -1,6 +1,8 @@
-﻿namespace MonkeyPaste {
+﻿using System.Threading.Tasks;
+
+namespace MonkeyPaste {
     public interface MpILoadOnLoginTools {
         bool IsLoadOnLoginEnabled { get; }
-        void SetLoadOnLogin(bool isLoadOnLogin, bool silent = false);
+        Task SetLoadOnLoginAsync(bool isLoadOnLogin, bool silent = false);
     }
 }

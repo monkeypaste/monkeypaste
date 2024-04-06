@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ብዛዕባ ውጥናት ዝያዳ ክትፈልጡ</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ለቕላቕ ፦ &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;እዚ ዓውዲ እዚ በቲ ኽርከብ ዝከኣል ኣድራሻታት (ናይ ፈልቸር ፕላግ የድልዮ) ገይርካ ኣብ ኵሉ ኣጋጣሚታት ናይዚ ንድፊ እዚ ኣብ ብምሉኡ እዚ ሰነድ እዚ ወይ ኣብ ዝዀነ ይኹን ጸኒሑ ክጥቀስ ኢዩ።&lt;/p&gt;&lt;p&gt; ስለዚ ንኣብነት ኣብዚ ኢ-መይል ኣድራሻ እንተ መሪጽካ እቲ ዝመረጽካዮ ኣድራሻ ኢ-መይል ንዅሉ እቲ ኣብዚ ሰነድ እዚ ዘሎ ኣጋጣሚታት ክትጥቀመሉ ኢኻ።&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@
     <value>ኣብ ቅድመ-ምድላዋት ዝተኻፈለ ዋጋ መለክዒታት ከቐምጥ ኣይክእልን። ፓራሚድ '{0}' ኣብ ቅድመ-ምድላው '{1}' ንፕላግኢን '{2}' ምእላይ የድልዮ ወይ ኣብ ክፍሊ ትርጉም መለክዒ ፓራምቫሉ ክግለጽ ይኽእል።</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ቅድመ-ምድላዋት ፍሉይ ጓይድ ክህልዎም ኣለዎ። ድፕሊኬት ቅድመ-ምድላው guid '{0}' ኣብ ፕላግ-ኢን '{1}' ንቅድመ-ምድላው ተረኺቡ: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>ስሕተት ምትንታን ፕላግ-ኢን፡ ኣብ መንገዲ '{0}' null፡ ምናልባት ጌጋ ምጽናዕ ንJSON. ንፕላግ-ኢን ሸለል ምባል</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ናይ ሓባር ክብርታት ዝሓዘ እዩ። ነቶም ውን ዳግማይ ክትሰርዖም ትደሊ ዶ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ኣቐዲምካ ምድላው ፍሉይ መምርሒ ኺህልዎ ኣለዎ ። ኣቐዲምካ ናይ ምድላው መምርሒ '{0}' ኣብ ፕለጊን '{1}' ኣቐዲምካ ምድላው ከም {2} ተፈልጠ።</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;ለበዋ ፦ &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>ዘይፍለጥ ጌጋ {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>ዕድጊኻ ክዛዘም ኣይከኣለን። ምኽንያት፡ {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ዶሜይን ምውሳኽ .</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>ገጽ ምውሳኽ .</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>ናይዚ ገጽ ዓውዲ ይንጸግ። ነዚ ገጽ ንምፍቃድ ን '{0}' ዝብል ምንጻግ ከተውጽኦ ከድልየካ እዩ።</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>እቲ ዶሜይን '{0}' ድሮ ተነጺጉ ኣሎ።</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ዶመይናት .</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>እዚ ገጽ እዚ ድሮ ተነጺጉ ኣሎ።</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>ገጻት</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>sync .</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>ካልእ ኣብነት ናይ ሞንኪፓስቲ ድሮ ይጎዪ ኣሎ። ርግጸኛ ዲኻ ሓድሽ ምሳሌ ክትከፍት ከም እትደሊ?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>ምውቃር</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ዓለምለኻዊ ኣቋራጭ ማውስን ኪቦርድን ተሰናኺሉ ኣሎ።
+
+ዓለምለኻዊ ኣቋራጭ መንገዲ ሕጂ ኣብቲ ናይ ስርዓት ትሬይ ዝርዝር ክኽፈት ይኽእል</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ዓለምለኻዊ ኣቋራጭ መንገዲ ስንኩል: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ዓለምለኻዊ ኣቋራጭ ማውስን ኪቦርድን ተኸፊቱ ኣሎ።</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ፈተነ) ዓለምለኻዊ ኣቋራጭ መንገዲ ተኸፊቱ: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ዓለምለኻዊ ኣቋራጭ መንገዲ ቶግለ</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>ዓለምለኻዊ ኣቋራጭ መንገዲ ኣብ ልዕሊ</value>
   </data>
 </root>

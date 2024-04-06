@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopja</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pasta</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Clipboard Manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>għodda</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Kompletament - Editur tal-Klipp Dehru ma 'Find / Sostituzzjoni, Test Rich (Tabelli, Listi, Links, eċċ.) Templating ta' test għal pasta ta 'malajr u dinamiku mill-kollezzjoni tas-snippet tiegħek</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Ħażna tad-dejta lokali sikura, sigura u privata bi protezzjoni fakultattiva ta '2 - fattur tal-password</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Mibni - fil-plugin browser b'komunità dejjem tikber - librerija mmexxija mill-plugins</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste huwa maniġer tal-clipboard, awtomazzjoni u għodda ta 'produttività bħal ħadd ieħor. Titjib il-clipboard tiegħek f'parti arrikkita u organizzata mill-fluss tax-xogħol tiegħek,
-Jidhru interface intuwittiv u baxx ta 'profil li jappoġġja test, fajls u immaġini. Iddisinjat għall-flessibilità, bi librerija ta 'plugins immexxija mill-komunità dejjem tikber.
-
-Dan beda bħala esperiment minn programmatur li jkun irid iktar milli sempliċement jikkopja u jippejstja mill-clipboard. Ried kmand sempliċi bħal Ctrl + C li "jżid ma '" minflok
-ta '' Ibdel 'dak li kien fuq il-clipboard. U l-esperiment ħadem. L-għodda żgħira kienet ferm utli. Dan iddaħħal lill-programmatur b'aktar ideat u aktar esperimenti, li
-Issa sar "Monkeypaste".
-
-Peress li d-desktop huwa għall-fajls tiegħek, MonkeyPaste għandu l-intenzjoni li jkun għall-clipboard tiegħek. Is-suite tagħha ta 'għodod iddisinjati bir-reqqa biex apparentement jintegraw u jinteroperaw ma'
-kwalunkwe applikazzjoni jew format tal-kontenut. Ctrl + C u Ctrl + V huma ħafna iktar minn sempliċement shortcuts. Huma l-portijiet tad-dħul li l-applikazzjonijiet kollha jaqsmu, li jġorru
-ġid ta 'valur u tifsira li ħaqqek li jkollok disponibbli fuq ponot subgħajk. Mhux biss mitfugħa wara s-Ctrl + C li jmiss.
-
-Jiena dak il-programmatur imsemmi qabel u nixtieq li kulħadd ikun jista 'jsib użu mill-monkeypaste. Allura huwa u l-karatteristiċi kollha tiegħu huma kompletament ħielsa li jintużaw.
-Irrid ukoll li tħossok komdu tużah. Allura nassigurak, bħala l-unika forza wara l-ħolqien tagħha, li l-ebda waħda mill-informazzjoni personali (ħafna) li tista 'tinqala' fuqha
-Il-clipboard tiegħek huwa dejjem traċċat jew maħżun kullimkien lil hinn mill-magna tiegħek stess. Perjodu.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Il-clipboard tiegħek huwa dejjem traċċat jew maħżun kullimkien lil hinn mil
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Il-clipboard huwa ġungla. Monkeypaste huwa r-re! Tbandal mill-app għall-app, tikkopja dan u twaħħal dak li qatt qabel ma 'MonkeyPaste !! A marka - clipboard ġdid, avvanzat u għodda ta 'awtomazzjoni analitika !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Kampjun ta 'MonkeyPaste fl-Azzjoni!</value>
   </data>
@@ -258,9 +228,6 @@ Il-clipboard tiegħek huwa dejjem traċċat jew maħżun kullimkien lil hinn mil
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Unlimited - kull sena</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Rilaxx inizjali</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>B'dan l-abbonament tirċievi:
 ● Kapaċità Unlimited</value>
@@ -270,5 +237,45 @@ Il-clipboard tiegħek huwa dejjem traċċat jew maħżun kullimkien lil hinn mil
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Aktar pjattaformi u karatteristiċi dalwaqt! Aħna biss bdew gettings 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Dawl ta 'tfittxija mgħaġġla u enfasi, ibda biss ittajpja!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Aħżen it-test, l-immaġni u l-klipps tal-fajl mas-sors kollu tagħha (l-app, il-websajt, il-ħin, u ħafna iktar) informazzjoni awtomatikament</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste huwa maniġer tal-clipboard, awtomazzjoni u għodda ta 'produttività bħal ħaddieħor. It-titjib tal-klibbord tiegħek f'parti arrikkita u organizzata tal-fluss tax-xogħol tiegħek,
+Jidhru interface intuwittiv u baxx - profil li jappoġġja test, fajls u stampi. Iddisinjat għall-flessibilità, b'komunità dejjem tikber - immexxija mill-libray ta 'plugins.
+
+Beda bħala esperiment minn programmatur li jrid aktar minn sempliċement kopja u paste mill-clipboard. Huwa ried kmand sempliċi bħal Ctrl + C li 'jżid ma' minflok 
+ta' 'ibdel' dak li kien fuq il-clipboard. U l-esperiment ħadem. L-għodda żgħira kienet utli ħafna. Dan daħal fil-programmatur b'aktar ideat u aktar esperimenti, li 
+issa sar "MonkeyPaste". 
+
+Peress li d-desktop huwa għall-fajls tiegħek, MonkeyPaste beħsiebu jkun fil-klibbord tiegħek. Is-sett ta 'għodod tiegħu ddisinjat bir-reqqa biex jidher li jintegra u jinteropera bla dubju ma' 
+kwalunkwe applikazzjoni jew format tal-kontenut. Ctrl+C u Ctrl+V huma ħafna aktar minn sempliċement shortcuts. Huma l-portijiet tad-dħul li jaqsmu l-applikazzjonijiet kollha, li jġorru 
+ġid ta' valur u tifsira li jistħoqqlek li jkollok disponibbli fuq ponot subgħajk. Mhux biss mormi wara l-Ctrl+C li jmiss.
+
+Jien dak il-programmatur imsemmi qabel u nixtieq li kulħadd ikun jista 'jsib użu minn MonkeyPaste. Allura u l-karatteristiċi kollha tiegħu huma kompletament ħielsa li jintużaw. 
+Irrid ukoll li tħossok komdu tużah. Allura nassigurak, bħala l-unika forza wara l-ħolqien tagħha, li l-ebda informazzjoni personali (ħafna) li tista 'tinqala' fuq 
+il-klibbord tiegħek qatt jiġi traċċat jew maħżun KULLIMKIEN lil hinn mill-magna tiegħek stess. Perjodu.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Klibbord</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Ħażna ta 'dejta lokali sikura, sigura u privata b'protezzjoni fakultattiva tal-password tal-fattur 2 -</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste issa huwa kompletament ħieles minn dan ir-rilaxx !!
+
+Ir-restrizzjonijiet kollha (fis-sottoskrizzjonijiet tal-app) tneħħew hekk kif il-monkeypaste issa qed jgħaddi biex isir proġett ta 'sors miftuħ. Allura żżomm għajnejk fuq il-github tagħna (github.com/monkeypaste) jekk int interessat li tikkontribwixxi.
+
+Aġġornamenti:
+
+- Ir-restrizzjonijiet kollha tal-kapaċità mneħħija!
+- Editur tal-URL rifjutat UI Titjib
+- Appoġġ fil-linja bażi għat-tħaddim ta 'każijiet multipli ta' monkeypaste
+- Editur tal-Valur Maqsum Ġdid (fil-plugin browser fejn applikabbli)</value>
   </data>
 </root>

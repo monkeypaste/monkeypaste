@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Heb deitl</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Er hwyl, pan fydd hyn yn cael ei wirio bydd y ddelwedd ar y clipfwrdd yn cael ei drawsnewid yn fras yn gelfyddyd ascii (testun plaen) o'r ddelwedd 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Delwedd i Destun</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Pan fydd ar gael, bydd data'r fformat testun a ddewiswyd gyntaf yn cael ei drawsnewid yn ddelwedd a'i ychwanegu at y clipfwrdd.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Fformatau Testun i Ddelwedd</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Delwedd (tiff)</value>
+  </data>
 </root>

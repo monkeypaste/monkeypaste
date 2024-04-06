@@ -1,7 +1,7 @@
 
 // #region Life Cycle
 
-async function loadContentAsync(
+function loadContentAsync(
 	isContentReadOnly,
 	isContentSubSelectionEnabled,
 	contentHandle,
@@ -13,12 +13,15 @@ async function loadContentAsync(
 	sel_state,
 	paste_button_info,
 	break_before_load,
-	editor_scale) {
+	editor_scale,
+	is_pop_out) {
 	if (break_before_load) {
 		log('breaking before load called...');
 		debugger;
 	}
 	// NOTE only called fromHost (or tester which calls _ext)
+
+	let sup_guid = suppressTextChanged();
 	globals.IsLoadingContent = true;
 
 	let is_reload = contentHandle == globals.ContentHandle;
@@ -27,6 +30,11 @@ async function loadContentAsync(
 
 	try {
 		setEditorZoom(editor_scale);
+		if (is_pop_out) {
+			document.body.classList.add('popOut');
+		} else {
+			document.body.classList.remove('popOut');
+		}
 
 		if (is_reload) {
 			was_sub_sel_enabled = isSubSelectionEnabled();
@@ -64,7 +72,7 @@ async function loadContentAsync(
 
 		deactivateFindReplace(false);
 
-		await loadContentDataAsync(contentData);
+		loadContentDataAsync(contentData);
 
 		updateQuill();
 		if (!is_reload) {
@@ -133,19 +141,22 @@ async function loadContentAsync(
 	}
 	if (was_editable != null && was_editable) {
 		disableReadOnly();
-	}
-
-	
-	if (is_reload) {
-		log('Editor re-loaded');
-	} else {
-		log('Editor loaded');
-	}
+	}	
 
 	globals.IsLoadingContent = false;
 	setEditorPlaceholderText('');
 	// signal content loaded (atm used by scrollToAppendIdx)
 	getEditorContainerElement().dispatchEvent(globals.ContentLoadedEvent);
+
+	unsupressTextChanged(sup_guid);
+
+	if (is_reload) {
+		log('Editor re-loaded');
+	} else {
+		log('Editor loaded');
+		// clear any load history
+		globals.quill.history.clear();
+	}
 }
 
 function initContentClassStyle() {
@@ -401,12 +412,12 @@ function appendContentData(data) {
 	}
 }
 
-async function loadContentDataAsync(contentData) {
+function loadContentDataAsync(contentData) {
 	// enusre globals.IsLoaded is false so msg'ing doesn't get clogged up
 	setEditorIsLoaded(false);
 
 	if (globals.ContentItemType == 'Image') {
-		await loadImageContentAsync(contentData);
+		loadImageContentAsync(contentData);
 	} else if (globals.ContentItemType == 'FileList') {
 		loadFileListContent(contentData);
 	} else if (globals.ContentItemType == 'Text') {

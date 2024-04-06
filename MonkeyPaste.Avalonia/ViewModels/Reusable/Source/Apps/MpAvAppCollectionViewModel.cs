@@ -489,7 +489,7 @@ namespace MonkeyPaste.Avalonia {
                         // canceled
                         return;
                     }
-                    pi_to_add = new MpPortableProcessInfo(appPath);
+                    pi_to_add = MpPortableProcessInfo.FromPath(appPath);
                 }
                 if (pi_to_add == null) {
                     return;
@@ -558,19 +558,22 @@ namespace MonkeyPaste.Avalonia {
                     placementMode: PlacementMode.RightEdgeAlignedTop,
                     popupAnchor: PopupAnchor.TopLeft);
             });
+        public MpAvAppOleRootMenuViewModel CurAppOleMenuViewModel =>
+            GetPasteInfoMenuItemsByProcessInfo(MpAvClipTrayViewModel.Instance.PasteProcessInfo, "full");
 
         public ICommand ShowAppPresetsContextMenuCommand => new MpCommand<object>(
             (args) => {
                 string show_type = "full";
-                if (args is not object[] argParts ||
+                if (args is not IEnumerable<object> args2 ||
+                    args2.ToArray() is not { } argParts ||
                     argParts[0] is not Control source_control ||
-                    argParts[1] is not MpPortableProcessInfo pi ||
-                    argParts[2] is not MpPoint offset) {
+                    argParts[1] is not MpPortableProcessInfo pi) {
                     return;
                 }
-                if (argParts.Length == 4) {
-                    show_type = argParts[3] as string;
+                if (argParts.OfType<string>().FirstOrDefault() is { } show_arg) {
+                    show_type = show_arg;
                 }
+                MpPoint offset = argParts.OfType<MpPoint>().FirstOrDefault() ?? MpPoint.Zero;
 
                 MpAvAppOleRootMenuViewModel mivm = GetPasteInfoMenuItemsByProcessInfo(pi, show_type);
                 Control anchor_control = source_control;

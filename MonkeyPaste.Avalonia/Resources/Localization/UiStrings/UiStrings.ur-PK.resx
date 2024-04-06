@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>منصوبوں کے بارے میں مزید معلومات حاصل کریں</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>پیسٹ کریں: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;دستیاب رابطوں کا استعمال کرتے ہوئے (فیچر پلگ ان کی ضرورت ہوتی ہے) یہ فیلڈ اس دستاویز میں اس ٹیمپلیٹ کی تمام مثالوں کے لئے استعمال کی جائے گی یا کسی میں بھی بعد میں اس کا حوالہ دیا جائے گا۔&lt;/p&gt;&lt;p&gt; لہذا مثال کے طور پر اگر یہاں ای میل ایڈریس منتخب کریں تو آپ کے منتخب کردہ رابطے کا ای میل فیلڈ اس دستاویز میں تمام مثالوں کے لئے استعمال کیا جائے گا۔&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@
     <value>پریسیٹس میں مشترکہ قدر کے پیرامیٹرز کو مقرر نہیں کرسکتے ہیں۔ پیرامڈ '{0}' میں پریسیٹ '{1}' پلگ ان '{2}' کے لئے '{2}' کو ختم کرنے کی ضرورت ہے یا پیرامیٹر کی تعریف کے حصے میں پیرامولیو کی وضاحت کی جاسکتی ہے۔</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>پریسیٹس کے پاس انوکھا گائڈ ہونا ضروری ہے۔ ڈپلیکیٹ پریسیٹ گائڈ '{0}' کا پتہ لگانے کے لئے پلگ ان '{1}' میں پایا گیا: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>پلگ ان پارسنگ کی خرابی ، راستے پر '{0}' null ، JSON کی تجزیہ کرنے میں ممکنہ غلطی۔ پلگ ان کو نظرانداز کرنا</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' میں مشترکہ اقدار شامل ہیں۔ کیا آپ ان کو بھی دوبارہ ترتیب دینا چاہیں گے؟</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>پریسیٹس میں منفرد گائیڈز ہونا ضروری ہے۔ پری سیٹ کے لئے پلگ ان '{1}' میں ڈپلیکیٹ پری سیٹ گائیڈ '{0}' کا پتہ چلا: {2}۔</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;پیسٹ کریں: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>نامعلوم غلطی {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>آپ کی خریداری مکمل نہیں ہوسکی۔ وجہ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ڈومین شامل کریں</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>صفحہ شامل کریں</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>اس صفحے کے لئے ڈومین کو مسترد کردیا گیا ہے۔ اس صفحے کی اجازت دینے کے ل you آپ کو '{0}' کے لئے مسترد کرنے کی ضرورت ہوگی۔</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>ڈومین '{0}' پہلے ہی مسترد ہوچکا ہے</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ڈومینز</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>اس صفحے کو پہلے ہی مسترد کردیا گیا ہے۔</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>صفحات</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>مطابقت پذیری</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>مانکی پیسٹ کی ایک اور مثال پہلے ہی چل رہی ہے۔ کیا آپ واقعی کوئی نئی مثال کھولنا چاہتے ہیں؟</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>تشکیل</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>عالمی ماؤس اور کی بورڈ شارٹ کٹ غیر فعال کردیئے گئے ہیں۔
+
+اب سسٹم ٹرے مینو میں عالمی شارٹ کٹ کو فعال کیا جاسکتا ہے</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>عالمی شارٹ کٹ غیر فعال: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>عالمی ماؤس اور کی بورڈ شارٹ کٹ کو فعال کردیا گیا ہے۔</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(تجرباتی) عالمی شارٹ کٹ فعال: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ٹوگل گلوبل شارٹ کٹ آف</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>گلوبل شارٹ کٹ آن ٹوگل کریں</value>
   </data>
 </root>

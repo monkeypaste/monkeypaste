@@ -2639,9 +2639,6 @@ Feehlibes@monkePase.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Meýilnamalar barada has giňişleýin öwreniň</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Elýeterli kontaktlary ulanmak (fetcher plýonkasyny talap edýär) bu ugur bu resminamanyň ähli ýagdaýlary üçin ýa-da onuň soňsalgylanjak islendik ýerinde ulanylar.&lt;/p&gt;&lt;p&gt; Mysal üçin, eger bu ýerde e-poçta adresini saýlasaňyz, onda saýlan kontaktyňyzyň e-mail meýdançasy şu dokumentdäki ähli ýagdaýlar üçin ulanylar.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Umumy dikeldiş işlerine kepil geçip bolmaýar we maglumatlaryň çeşmesine b
     <value>Öňünden kesgitlenen baha parametrlerini düzüp bolmaýar. “{2}” plugin üçin deslapky “{1}” -de ParamId '{0}' aýrylmaly ýa-da parametr kesgitlemek bölüminde paramValue görkezilip bilner.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Deslapky gollanmalar bolmaly. Öňünden kesgitlenen gollanma '{0}' deslapky bellikler üçin '{1}' plugininde tapyldy: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>PLUIN SÖ .GI ALMAK: "{0} 'pyçakda, jsony derňemek ähtimallygy. Plugini äsgermezlik etmek</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Umumy dikeldiş işlerine kepil geçip bolmaýar we maglumatlaryň çeşmesine b
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}'-de umumy bahalary öz içine alýar. Bulary täzeden düzmek isleýärsiňizmi?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Öňki setlerde üýtgeşik guidler bolmaly. {0} üçin '{1}' plýonkasynda ýene-de bir preset guid anyklandy: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;{0} &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Näbelli säwlik {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Satyn almagyňyz tamamlanyp bilinmedi. Sebäp: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Domen goşuň</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Sahypa goşuň</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Bu sahypa üçin domen ret edilýär. Bu sahypanyň "ч 0}" ret edilmegine rugsat bermek zerur, "{0} 'üçin ret edilmeli bolarsyňyz.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domen '{0}' eýýäm ret edildi</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domenler</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Bu sahypa eýýäm ret edildi.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Sahypalara</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinhronlamak</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Maýerpase başga bir mysaly eýýäm işleýär. Täze mysal açmak isleýändigiňize ynanýarsyňyzmy?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Sazlamak</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Global Syçan we klawiatura salgylanmalary ýapyldy.
+
+Global gysga ýollar ulgam tromy menýusynda başlap biler</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Global gysga ýollar ýapyk: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Global Syçan we klawiatura salgylanmalary açykdy.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Synag) Global gysga ýollar açyk: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Global gysga ýollary üýtgetmek</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Global gysga ýollary üýtgetmek</value>
   </data>
 </root>

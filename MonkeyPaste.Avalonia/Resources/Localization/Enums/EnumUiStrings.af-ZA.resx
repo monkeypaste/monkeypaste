@@ -1197,4 +1197,13 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>Almal</value>
   </data>
+  <data name="MpNotificationType_SingleInstanceWarning" xml:space="preserve">
+    <value>Enkelgeval waarskuwing</value>
+  </data>
+  <data name="MpNotificationType_ModalShutdownLater" xml:space="preserve">
+    <value>Modale afskakeling later</value>
+  </data>
+  <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
+    <value>Wissel Global Hooks</value>
+  </data>
 </root>

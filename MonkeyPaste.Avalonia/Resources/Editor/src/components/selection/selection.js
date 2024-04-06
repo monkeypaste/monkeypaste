@@ -81,7 +81,7 @@ function getDocumentSelectionHtml(docSel) {
 	return htmlStr;
 }
 
-function getCaretLine(forceDocIdx = -1) {
+function getCaretLine(forceDocIdx = -1, byLineHight = false) {
 	let caret_doc_idx = forceDocIdx;
 	if (caret_doc_idx < 0) {
 		let sel = getDocSelection();
@@ -98,7 +98,7 @@ function getCaretLine(forceDocIdx = -1) {
 	}
 
 	let editor_rect = getEditorContainerRect();
-	let caret_rect = getCharacterRect(caret_doc_idx);
+	let caret_rect = getCharacterRect(caret_doc_idx, true, byLineHight, true);
 
 	let caret_line = { x1: caret_rect.left, y1: caret_rect.top, x2: caret_rect.left, y2: caret_rect.bottom };
 	let left_clamp = 0;
@@ -217,11 +217,27 @@ function isDomRangeEqual(dom_range_1, dom_range_2) {
 		return false;
 	}
 
-	return
+	let result = 
 		dom_range_1.startContainer == dom_range_2.startContainer &&
 		dom_range_1.endContainer == dom_range_2.endContainer &&
 		dom_range_1.startOffset == dom_range_2.startOffset &&
 		dom_range_1.endOffset == dom_range_2.endOffset;
+	return result;
+}
+function isDocRangeEqual(doc_range_1, doc_range_2) {
+	if (!doc_range_1 && !doc_range_2) {
+		return true;
+	}
+	if (!doc_range_1) {
+		return false;
+	}
+	if (!doc_range_2) {
+		return false;
+	}
+
+	let result =
+		doc_range_1.index == doc_range_2.index &&
+		doc_range_1.length == doc_range_2.length;
 }
 
 function isNavJump() {

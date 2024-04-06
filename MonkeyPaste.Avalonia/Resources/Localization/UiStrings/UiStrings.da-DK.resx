@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lær mere om planer</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Sæt ind i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Ved hjælp af tilgængelige kontakter (kræver et hentningsplugin) vil dette felt blive brugt til alle forekomster af denne skabelon på tværs af dette dokument eller i nogen, der vil blive refereret til senere.&lt;/p&gt;&lt;p&gt; Så hvis du f.eks. vælger e-mail-adresse her, vil e-mail-feltet for den kontakt, du vælger, blive brugt til alle forekomster i dette dokument.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Total gendannelse kan ikke garanteres og kan reducere ydeevnen eller endda gå n
     <value>Kan ikke indstille delte værdiparametre i forudindstillinger. Paramid '{0}' i forudindstillet '{1}' til plugin '{2}' skal fjernes, eller paramvalue kan specificeres i afsnittet om parameterdefinition.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Forudindstillinger skal have unikke guider. Dupliceret forudindstillet Guid '{0}' blev detekteret i plugin '{1}' for forudindstillinger: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin -parsingfejl, ved sti '{0}' null, sandsynligvis fejl parsing JSON. Ignorerer plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Total gendannelse kan ikke garanteres og kan reducere ydeevnen eller endda gå n
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' indeholder delte værdier. Vil du også nulstille dem?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Forudindstillinger skal have unikke guider. Dublet forudindstillet guide '{0}' blev fundet i plugin '{1}' for forudindstillinger: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Sæt ind i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Ukendt fejl {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Dit køb kunne ikke gennemføres. Årsag: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Tilføj domæne</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Tilføj side</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domænet for denne side er afvist. For at tillade denne side skal du fjerne afvisningen for '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domænet '{0}' er allerede afvist</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domæner</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Denne side er allerede afvist.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>sider</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synkronisere</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>En anden forekomst af MonkeyPaste kører allerede. Er du sikker på, at du vil åbne en ny forekomst?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurer</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globale mus- og tastaturgenveje er blevet deaktiveret.
+
+Globale genveje kan nu aktiveres i systembakkemenuen</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globale genveje deaktiveret: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globale mus- og tastaturgenveje er blevet aktiveret.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimentel) Globale genveje aktiveret: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Slå globale genveje fra</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Slå globale genveje til</value>
   </data>
 </root>

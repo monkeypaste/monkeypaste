@@ -104,7 +104,7 @@ namespace MonkeyPaste {
                 var count_args = sub_queries.SelectMany(x => x.Item3).ToArray();
                 int total_count = await MpDb.QueryScalarAsync<int>(count_query, count_args);
 
-                MpConsole.WriteLine($"Count Query: {Environment.NewLine}{MpDb.GetParameterizedQueryString(count_query, count_args)}{Environment.NewLine}");
+                //MpConsole.WriteLine($"Count Query: {Environment.NewLine}{MpDb.GetParameterizedQueryString(count_query, count_args)}{Environment.NewLine}");
                 return total_count;
             }
 
@@ -113,7 +113,7 @@ namespace MonkeyPaste {
             string fetch_query = $"SELECT DISTINCT RootId FROM ({inner_query}) LIMIT {limit} OFFSET {offset}";
 
             var args = sub_queries.SelectMany(x => x.Item3).ToArray();
-            MpConsole.WriteLine($"Fetch Query: {Environment.NewLine}{MpDb.GetParameterizedQueryString(fetch_query, args)}{Environment.NewLine}");
+            //MpConsole.WriteLine($"Fetch Query: {Environment.NewLine}{MpDb.GetParameterizedQueryString(fetch_query, args)}{Environment.NewLine}");
             var result = await MpDb.QueryScalarsAsync<int>(fetch_query, args);
             return result;
         }

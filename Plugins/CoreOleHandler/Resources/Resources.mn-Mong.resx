@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Гарчиггүй</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Зугаацахын тулд энэ зургийг шалгаж үзэхэд энэ зургийг нь ofcii (энгийн текст) хөрвүүлэх болно 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Зураг руу текст оруулах</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Боломжтой бол эхний сонгосон текст форматын мэдээллийг зураг руу хөрвүүлж, санах ойд нэмнэ.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Зургийн формат руу текст</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Зураг (tiff)</value>
+  </data>
 </root>

@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
         private static void HandleBoundTextChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (element is TextBox tb &&
                 e.NewValue is string boundText) {
-                tb.Text = boundText;
+                tb.SetCurrentValue(TextBox.TextProperty, boundText);
             }
 
         }

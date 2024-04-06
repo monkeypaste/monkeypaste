@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    <Platforms>$(DefaultPlatforms)</Platforms>
+  </PropertyGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'ANDROID'">
+    <!--<Exec Command="call $(ProjectDir)scripts\android\adb_wake.bat" />-->
+    <!--<Exec Command="call $(ProjectDir)scripts\android\adb_kill_mpav.bat $(AndroidPackageName)" />-->
+    <!--<Exec Command="call $(ProjectDir)scripts\android\adb_editor_to_android.bat" />-->
+  </Target>
+  
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" AfterTargets="PreBuild_reset" Condition="'$(BuildOs)' == 'WINDOWS'">
+    <Exec Command="$(ProjectDir)scripts\windows\kill_mpav_processes.bat $(MainProjectName)" />
+    <!--<Exec Command="$(ProjectDir)scripts\windows\move_declarative_plugins_to_bin.bat $(DeclarativePluginBaseDir) $(PluginTargetDir)" />-->
+  </Target>
+  
+  <Target Name="PreBuild_reset" BeforeTargets="PreBuildEvent" Condition="!Exists('$(PluginTargetDir)') And '$(BuildOs)' == 'WINDOWS'">
+    <!-- NOTE This ony runs when no plug dir exists, like after manually running 'reset_all.bat' -->
+    <!--<Exec Command="$(ProjectDir)scripts\windows\build_and_move_required_plugins.bat $(PluginTargetDir)" />-->
+  </Target>
+</Project>

@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Matuto nang higit pa tungkol sa mga plano</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Idikit sa: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Gamit ang magagamit na mga contact (nangangailangan ng isang fetcher plugin) ang patlang na ito ay gagamitin para sa lahat ng mga pagkakataon ng template na ito sa buong dokumentong ito o sa anumang ito ay sanggunian sa mamaya.&lt;/p&gt;&lt;p&gt; Kaya halimbawa kung piliin ang email address dito pagkatapos ay ang email field ng contact na iyong pinili ay gagamitin para sa lahat ng mga pagkakataon sa dokumentong ito.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Ang kabuuang pagpapanumbalik ay hindi maaaring garantisadong at maaaring mabawas
     <value>Hindi maaaring itakda ang mga ibinahaging mga parameter ng halaga sa mga preset. Ang Paramid '{0}' sa preset '{1}' para sa plugin '{2}' ay kailangang alisin o ang ParamValue ay maaaring matukoy sa seksyon ng Kahulugan ng Parameter.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Ang mga preset ay dapat magkaroon ng natatanging mga gabay. Ang dobleng preset na gabay na '{0}' ay napansin sa plugin '{1}' para sa mga preset: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Error sa pag -parse ng plugin, sa landas '{0}' null, malamang na error sa pag -parse ng json. Hindi papansin ang plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Ang kabuuang pagpapanumbalik ay hindi maaaring garantisadong at maaaring mabawas
   <data name="SharedValNtfText" xml:space="preserve">
     <value>Ang '{0}' ay naglalaman ng mga ibinahaging halaga. Nais mo bang i -reset ang mga iyon?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Ang mga preset ay dapat magkaroon ng natatanging mga guids. Duplicate preset guid '{0}' ay natukoy sa plugin '{1}' para sa mga preset: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Idikit sa: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Hindi kilalang error {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ang iyong pagbili ay hindi makumpleto. Dahilan: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Magdagdag ng domain</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Magdagdag ng Pahina</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Ang domain para sa pahinang ito ay tinanggihan. Upang payagan ang pahinang ito kakailanganin mong alisin ang pagtanggi para sa '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Ang domain '{0}' ay tinanggihan na</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Mga domain</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Ang pahinang ito ay tinanggihan na.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Mga pahina</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>I -sync</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Ang isa pang halimbawa ng Monkeypaste ay tumatakbo na. Sigurado ka bang nais mong magbukas ng isang bagong halimbawa?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>I -configure</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Ang mga global mouse at keyboard shortcut ay hindi pinagana.
+
+Maaari na ngayong paganahin ang mga global shortcut sa menu ng System Tray</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Hindi pinagana ang mga pandaigdigang shortcut: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Pinagana ang mga global mouse at keyboard shortcut.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimental) Pinagana ang mga pandaigdigang shortcut: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Toggle global shortcut off</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>I -toggle ang mga pandaigdigang shortcut sa</value>
   </data>
 </root>

@@ -29,6 +29,7 @@
         <SolidColorBrush x:Key="NextTrashOverlayBrush">Yellow</SolidColorBrush>
         <SolidColorBrush x:Key="NextRemoveOverlayBrush">Red</SolidColorBrush>
 
+
         <!--  COLORS  -->
 
         <Color x:Key="ThemeBlackColor">Black</Color>
@@ -72,6 +73,18 @@
         <Color x:Key="ThemeGrayAccent1Color">DimGray</Color>
         <Color x:Key="ThemeGrayAccent2Color">Silver</Color>
         <Color x:Key="ThemeGrayAccent3Color">Gainsboro</Color>
+
+        <Color x:Key="PasteToolbarBgColor">Teal</Color>
+        <Color x:Key="PasteButtonDefaultBgColor">DodgerBlue</Color>
+        <Color x:Key="PasteButtonCustomBgColor">Fuchsia</Color>
+
+        <Color x:Key="PasteToolbarBgColor_dark">DarkSlateGray</Color>
+        <Color x:Key="PasteButtonDefaultBgColor_dark">DarkBlue</Color>
+        <Color x:Key="PasteButtonCustomBgColor_dark">Fuchsia</Color>
+
+        <Color x:Key="ThemePasteToolbarBgColor">Teal</Color>
+        <Color x:Key="ThemePasteButtonDefaultBgColor">DodgerBlue</Color>
+        <Color x:Key="ThemePasteButtonCustomBgColor">Fuchsia</Color>
 
         <!--  BRUSHES  -->
 
@@ -226,8 +239,15 @@
         <!--  GENERAL  -->
 
 
-        <SolidColorBrush x:Key="HighlightBrush_inactive" Color="{DynamicResource ThemeAccent1BgColor}" Opacity="0.5" />
-        <SolidColorBrush x:Key="HighlightBrush_active" Color="{DynamicResource ThemeAccent3BgColor}" Opacity="0.5" />
+        <SolidColorBrush x:Key="ThemeHighlightInactiveColor" Color="{DynamicResource ThemeAccent1BgColor}" Opacity="0.5" />
+        <SolidColorBrush x:Key="ThemeHighlightActiveColor" Color="{DynamicResource ThemeAccent3BgColor}" Opacity="0.5" />
+
+        <SolidColorBrush x:Key="ThemeContentLinkColor" Color="Blue" />
+        <SolidColorBrush x:Key="ThemeContentLinkHoverColor" Color="Red" />
+        <SolidColorBrush x:Key="ContentLinkColor_light" Color="Blue" />
+        <SolidColorBrush x:Key="ContentLinkHoverColor_light" Color="Red" />
+        <SolidColorBrush x:Key="ContentLinkColor_dark" Color="Cyan" />
+        <SolidColorBrush x:Key="ContentLinkHoverColor_dark" Color="Salmon" />
 
         <SolidColorBrush x:Key="MainWindowBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 

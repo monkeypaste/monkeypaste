@@ -48,6 +48,9 @@
         notifyShowDebugger,
         notifyScrollBarVisibilityChanged,
         notifyPasteInfoFormatsClicked,
-        notifyAppendStateChangeComplete
+        notifyAppendStateChangeComplete,
+        notifyPointerEvent,
+        notifyContentImageLoaded,
+        notifyDevToolsRequested
     }
 }

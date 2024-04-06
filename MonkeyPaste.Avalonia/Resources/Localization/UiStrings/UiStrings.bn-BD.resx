@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>পরিকল্পনা সম্পর্কে আরও জানুন</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>পেস্ট করুন: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;উপলভ্য পরিচিতিগুলি ব্যবহার করে (একটি ফেচার প্লাগইন প্রয়োজন) এই ক্ষেত্রটি এই দস্তাবেজ জুড়ে এই টেমপ্লেটের সমস্ত উদাহরণের জন্য ব্যবহার করা হবে বা যে কোনও ক্ষেত্রে এটি পরে উল্লেখ করা হবে।&lt;/p&gt;&lt;p&gt; সুতরাং উদাহরণস্বরূপ, যদি এখানে ইমেল ঠিকানা নির্বাচন করা হয় তবে আপনার নির্বাচন করা পরিচিতির ইমেল ক্ষেত্রটি এই দস্তাবেজের সমস্ত দৃষ্টান্তের জন্য ব্যবহৃত হবে।&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@
     <value>প্রিসেটগুলিতে ভাগ করা মান পরামিতি সেট করতে পারে না। প্লাগইন '{2}' এর জন্য প্রিসেট '{1}' তে প্যারামিড '{0}' অপসারণ করা দরকার বা প্যারামভ্যালু প্যারামিটার সংজ্ঞা বিভাগে নির্দিষ্ট করা যেতে পারে।</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>প্রিসেটগুলির অবশ্যই অনন্য গাইড থাকতে হবে। ডুপ্লিকেট প্রিসেট গুইড '{0}' প্রিসেটগুলির জন্য প্লাগইন '{1}' তে সনাক্ত করা হয়েছিল: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>প্লাগইন পার্সিং ত্রুটি, পাথ '{0}' নাল, সম্ভবত ত্রুটি json পার্সিং। প্লাগইন উপেক্ষা</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' এর ভাগ করা মান রয়েছে। আপনি কি সেগুলি পুনরায় সেট করতে চান?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>প্রিসেটের অনন্য গাইড থাকতে হবে। প্রিসেটের জন্য প্লাগইন '{1}'-এ ডুপ্লিকেট প্রিসেট গাইড '{0}' সনাক্ত করা হয়েছে: {2}।</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;পেস্ট করুন: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>অজানা ত্রুটি {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>আপনার ক্রয় সম্পূর্ণ করা যায়নি. কারণ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ডোমেন যোগ করুন</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>পাতা যোগ কর</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>এই পৃষ্ঠার জন্য ডোমেন প্রত্যাখ্যান করা হয়েছে. এই পৃষ্ঠাটিকে অনুমতি দেওয়ার জন্য আপনাকে '{0}'-এর জন্য প্রত্যাখ্যানটি সরাতে হবে।</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>ডোমেন '{0}' ইতিমধ্যেই প্রত্যাখ্যান করা হয়েছে৷</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ডোমেইন</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>এই পৃষ্ঠাটি ইতিমধ্যেই প্রত্যাখ্যান করা হয়েছে।</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>পাতা</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>সুসংগত</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>MonkeyPaste এর আরেকটি উদাহরণ ইতিমধ্যেই চলছে। আপনি কি নিশ্চিত যে আপনি একটি নতুন উদাহরণ খুলতে চান?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>সজ্জিত করা</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>গ্লোবাল মাউস এবং কীবোর্ড শর্টকাট নিষ্ক্রিয় করা হয়েছে।
+
+গ্লোবাল শর্টকাটগুলি এখন সিস্টেম ট্রে মেনুতে সক্রিয় করা যেতে পারে</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>বিশ্বব্যাপী শর্টকাট নিষ্ক্রিয়: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>গ্লোবাল মাউস এবং কীবোর্ড শর্টকাট সক্রিয় করা হয়েছে।</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(পরীক্ষামূলক) গ্লোবাল শর্টকাট সক্রিয়: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>গ্লোবাল শর্টকাট বন্ধ টগল করুন</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>গ্লোবাল শর্টকাট চালু করুন</value>
   </data>
 </root>

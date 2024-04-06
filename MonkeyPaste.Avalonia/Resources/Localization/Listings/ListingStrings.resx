@@ -1,5 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -97,18 +156,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copy</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>paste</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>clipboard manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>tool</value>
@@ -127,9 +179,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Fully - featured clip editor with find/replace, rich text (tables, lists, links, etc.) text templating for quick, dynamic pasting from your snippet collection</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Safe, secure and private local data storage with optional 2 - factor password protection</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Built - in plugin browser with an ever - growing community - driven library of plugins</value>
@@ -153,22 +202,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste is a clipboard manager, automation and productivity tool like no other. Enhancing your clipboard into an enriched and organized part of your workflow,
-featuring an intuitive and low - profile interface that supports text, files and images. Designed for flexibility, with an ever - growing community - driven libray of plugins.
-
-It began as an experiment by a programmer wanting more than just copy and paste out of the clipboard. He wanted a simple command like Ctrl+C that would 'add to' instead 
-of 'replace' what was on the clipboard. And the experiment worked. The little tool was very handy. This entrigued the programmer with more ideas and more experiments, that 
-now has become "MonkeyPaste". 
-
-As the desktop is to your files, MonkeyPaste intends to be to your clipboard. Its a suite of tools carefully designed to seemlessly integrate and interoperate with 
-any application or format of content. Ctrl+C and Ctrl+V are much more than just shortcuts. They are the ports of entry all applications share, carrying a 
-wealth of value and meaning you deserve to have available at your fingertips. Not just thrown away after the next Ctrl+C.
-
-I am that programmer mentioned earlier and I want everyone to be able to find use out of MonkeyPaste. So it and all of its features are completely free to use. 
-I also want you to feel comfortable using it. So I assure you, as being the only force behind its creation, that NONE of the (very) personal information that can arise on 
-your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Period.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +264,6 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
   <data name="StoreShortDescription" xml:space="preserve">
     <value>The clipboard is a jungle. MonkeyPaste is the KING! Swing from app to app, copying this and pasting that like never before with MonkeyPaste!! A brand - new, cutting edge clipboard and analytic automation tool!!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Sample of MonkeyPaste in action!</value>
   </data>
@@ -258,9 +287,6 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Unlimited - Yearly</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Initial Release</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>With this subscription you will receive:
 ● unlimited capacity</value>
@@ -270,5 +296,73 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● More platforms and features coming soon! We're just gettings started 🎉</value>
+  </data>
+  <data name="ssSrc6" xml:space="preserve">
+    <value>{0}/ss6.png</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Lighting fast search and highlighting, just start typing!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Store text, image and file clips with all of its source (the app, website, time, and much more) information automatically</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste is a clipboard manager, automation and productivity tool like no other. Enhancing your clipboard into an enriched and organized part of your workflow,
+featuring an intuitive and low - profile interface that supports text, files and images. Designed for flexibility, with an ever - growing community - driven libray of plugins.
+
+It began as an experiment by a programmer wanting more than just copy and paste out of the clipboard. He wanted a simple command like Ctrl+C that would 'add to' instead 
+of 'replace' what was on the clipboard. And the experiment worked. The little tool was very handy. This entrigued the programmer with more ideas and more experiments, that 
+now has become "MonkeyPaste". 
+
+As the desktop is to your files, MonkeyPaste intends to be to your clipboard. Its a suite of tools carefully designed to seemlessly integrate and interoperate with 
+any application or format of content. Ctrl+C and Ctrl+V are much more than just shortcuts. They are the ports of entry all applications share, carrying a 
+wealth of value and meaning you deserve to have available at your fingertips. Not just thrown away after the next Ctrl+C.
+
+I am that programmer mentioned earlier and I want everyone to be able to find use out of MonkeyPaste. So it and all of its features are completely free to use. 
+I also want you to feel comfortable using it. So I assure you, as being the only force behind its creation, that NONE of the (very) personal information that can arise on 
+your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Period.</value>
+  </data>
+  <data name="StoreTitle" xml:space="preserve">
+    <value>Monkey Paste</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="StoreShortName" xml:space="preserve">
+    <value>Monkey Paste</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="StoreSortName" xml:space="preserve">
+    <value>Monkey Paste</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="StoreVoiceName" xml:space="preserve">
+    <value>Monkey Paste</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="SearchTerm1" xml:space="preserve">
+    <value>clipboard</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>clipboard</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Safe, secure and private local data storage with optional 2 - factor password protection</value>
+  </data>
+  <data name="ssSrc7" xml:space="preserve">
+    <value>{0}/ss7.png</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste is now entirely free as of this release!! 
+
+All restrictions (in app subscriptions) have been removed as MonkeyPaste is now transitioning to becoming an open-source project. So keep an eye on our github (github.com/monkeypaste) if you're interested in contributing.
+
+Updates:
+
+- all capacity restrictions removed!
+- rejected Url editor UI improvements
+- baseline support for running multiple instances of MonkeyPaste
+- new shared value editor (in plugin browser where applicable)</value>
   </data>
 </root>

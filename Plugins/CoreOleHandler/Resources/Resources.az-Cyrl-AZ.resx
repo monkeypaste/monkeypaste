@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Başsız</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Əyləncəli olsun ki, bu yoxlanılanda buferdəki şəkil kobud şəkildə təsvirin ascii (düz mətn) sənətinə çevriləcək 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Şəkildən Mətnə</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Mövcud olduqda, ilk seçilmiş mətn formatının məlumatları şəkilə çevriləcək və buferə əlavə olunacaq.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Şəkil Formatlarına Mətn</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Şəkil (tiff)</value>
+  </data>
 </root>

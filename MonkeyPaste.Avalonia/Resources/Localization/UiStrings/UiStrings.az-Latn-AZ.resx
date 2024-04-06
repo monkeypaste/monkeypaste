@@ -2639,10 +2639,6 @@ geribildirim@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Planlar haqqında daha çox məlumat əldə edin</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Yağlamaq: {0}</value>
-    <comment>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</comment>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>Mövcud kontaktlardan istifadə etmək (bu sahə bu sahə bu sənəddəki bu şablon nümunələri üçün istifadə ediləcək və ya sonradan istinad ediləcək.
  Beləliklə, məsələn, burada E-poçt ünvanı varsa, seçdiyiniz kontaktın e-poçt sahəsi bu sənəddəki bütün hallar üçün istifadə ediləcəkdir.</value>
@@ -2910,10 +2906,6 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>Paylaşılan dəyər parametrlərini hafızada təyin edə bilməz. Paramid '{0}' Plugin '{1}' üçün '{1}' üçün '{2}' çıxarılması və ya paramvalılar parametr tərifi bölməsində göstərilə bilər.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Hazırlıqların özünəməxsus bələdləri olmalıdır. Dublikat əvvəlcədən təyin edilmiş GUID '{0}' Plugin'də hafızası üçün '{1}' də aşkar edildi: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin analizi səhv, '{0}' null, JSON-ı təhlil etmək ehtimalı var. Pluginə məhəl qoymamaq</value>
     <comment>File Path</comment>
@@ -2961,5 +2953,67 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' paylaşılan dəyərləri ehtiva edir. Bunları da yenidən qurmaq istərdinizmi?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Hazırlıqların özünəməxsus bələdləri olmalıdır. Dublikat əvvəlcədən təyin edilmiş GUID '{0}' Plugin'də hafızası üçün '{1}' də aşkar edildi: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Yerləşdirin: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Naməlum Xəta {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Alışınız tamamlanmadı. Səbəb: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Domen əlavə edin</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Səhifə əlavə et</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Bu səhifə üçün domen rədd edildi. Bu səhifəyə icazə vermək üçün siz '{0}' üçün rəddi silməlisiniz.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>'{0}' domeni artıq rədd edilib</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domenlər</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Bu səhifə artıq rədd edilib.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Səhifələr</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinxronizasiya</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>MonkeyPaste-in başqa bir nümunəsi artıq işləyir. Yeni nümunə açmaq istədiyinizə əminsiniz?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfiqurasiya edin</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Qlobal siçan və klaviatura qısa yolları deaktiv edilib.
+
+Qlobal Qısayolları indi Sistem Tablası Menyusunda aktivləşdirmək olar</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Qlobal Qısayollar deaktiv edilib: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Qlobal siçan və klaviatura qısa yolları aktivləşdirilib.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimental) Qlobal Qısayollar aktiv edildi: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Qlobal Qısayolları söndürün</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Qlobal Qısayolları Aktivləşdirin</value>
   </data>
 </root>

@@ -17,10 +17,29 @@
     </local:MpAvUserControl.RenderTransform>
     <local:MpAvUserControl.Styles>
 
+        <!--  OUTER BORDER EFFECT  -->
+        <Style Selector="Border#TooltipOuterContainer">
+            <Setter Property="BoxShadow"
+                    Value="inset 0 0 5 5 #12000000" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeBlackBrush}" />
+        </Style>
+
+        <Style Selector="Border#TooltipOuterContainer.bright-fg">
+            <Setter Property="BoxShadow"
+                    Value="inset 0 0 5 5 #12FFFFFF" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeWhiteBrush}" />
+        </Style>
+
         <!--  SHORTCUT TOOLTIP  -->
+        <Style Selector="Border#TooltipOuterContainer TextBlock#ToolTipTextBlock">
+            <Setter Property="TextAlignment"
+                    Value="Center" />
+        </Style>
         <Style Selector="Border#TooltipOuterContainer.text.gesture TextBlock#ToolTipTextBlock">
-            <Setter Property="TextWrapping"
-                    Value="NoWrap" />
+            <Setter Property="TextAlignment"
+                    Value="Left" />
         </Style>
 
         <Style Selector="Border#TooltipOuterContainer.text:not(.gesture) TextBlock#InputGestureTextBlock">
@@ -35,6 +54,7 @@
             Classes.gesture="{Binding InputGestureText, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
             Classes.html="{Binding IsHtml, ElementName=ToolTipView}"
             Classes.text="{Binding !IsHtml, ElementName=ToolTipView}"
+            Classes.bright-fg="{Binding $self.Foreground, Converter={x:Static local:MpAvBrushToIsBrightBoolConverter.Instance}}"
             CornerRadius="10">
         <DockPanel x:Name="ToolTipTextContainer">
             <local:MpAvShortcutLabel Margin="5,0,0,0"
@@ -45,19 +65,21 @@
                                      KeyGesture="{Binding InputGestureText, ElementName=ToolTipView}" />
             <Grid>
                 <TextBlock x:Name="ToolTipTextBlock"
-                           MaxWidth="300"
                            Margin="0"
+                           MaxWidth="300"
+                           TextWrapping="Wrap"
                            VerticalAlignment="Center"
                            FontSize="14"
-                           Foreground="{Binding Background, ElementName=TooltipOuterContainer, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                           Foreground="{Binding Background, ElementName=TooltipOuterContainer, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                            IsVisible="{Binding !IsHtml, ElementName=ToolTipView}"
-                           Text="{Binding ToolTipText, ElementName=ToolTipView}"
-                           TextWrapping="WrapWithOverflow" />
+                           Text="{Binding ToolTipText, ElementName=ToolTipView}" />
                 <av:HtmlLabel x:Name="ToolTipHtmlPanel"
                               MaxWidth="600"
                               IsVisible="{Binding IsHtml, ElementName=ToolTipView}"
+                              local:MpAvHtmlStylerExtension.HtmlStyleType="Tooltip"
+                              local:MpAvHtmlStylerExtension.IsUniqueStyleRequired="True"
                               local:MpAvHtmlStylerExtension.DefaultFontSize="14"
-                              local:MpAvHtmlStylerExtension.DefaultHexColor="{Binding Foreground, ElementName=ToolTipTextBlock, Converter={x:Static local:MpAvBrushToHexStringConverter.Instance}}"
+                              local:MpAvHtmlStylerExtension.DefaultHexColor="{Binding Background, ElementName=TooltipOuterContainer, ConverterParameter=hex, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                               local:MpAvHtmlStylerExtension.IsEnabled="True"
                               Text="{Binding ToolTipText, ElementName=ToolTipView, Converter={x:Static local:MpAvStringTextToHtmlDocTextConverter.Instance}}" />
             </Grid>

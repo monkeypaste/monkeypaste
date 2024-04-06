@@ -16,7 +16,6 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvPrefViewModel :
         MpAvViewModelBase,
-        MpISslInfo,
         MpICustomCsvFormat,
         MpIUserProvidedFileExts,
         MpIWelcomeSetupInfo,
@@ -44,11 +43,7 @@ namespace MonkeyPaste.Avalonia {
             //nameof(AccountBillingCycleType),
             //nameof(AccountPassword),
             nameof(DbCreateDateTime),
-            nameof(IsWelcomeComplete),
-            nameof(SslPrivateKey),
-            nameof(SslPublicKey),
-            nameof(SslCertExpirationDateTime),
-            nameof(SyncPort)
+            nameof(IsWelcomeComplete)
         };
         #endregion
 
@@ -193,14 +188,6 @@ namespace MonkeyPaste.Avalonia {
         #region Editor
         #endregion
 
-        #region Encyption
-        [JsonIgnore]
-        public string SslAlgorithm { get; set; } = "SHA256WITHRSA";
-        [JsonIgnore]
-        public string SslCASubject { get; set; } = "CN=MPCA";
-        [JsonIgnore]
-        public string SslCertSubject { get; set; } = "CN=127.0.01";
-        #endregion
 
 
         #region Db        
@@ -216,20 +203,8 @@ namespace MonkeyPaste.Avalonia {
         public DateTime? DbCreateDateTime { get; set; }
 
         #region Sync
-        [JsonIgnore]
-        public string SyncCertFolderPath => Path.Combine(MpPlatformHelpers.GetStorageDir(), "SyncCerts");
-        [JsonIgnore]
-        public string SyncCaPath => Path.Combine(SyncCertFolderPath, @"MPCA.cert");
-        [JsonIgnore]
-        public string SyncCertPath => Path.Combine(SyncCertFolderPath, @"MPSC.cert");
-        [JsonIgnore]
-        public string SyncServerProtocol => @"https://";
-        [JsonIgnore]
-        public string SyncServerHostNameOrIp => "monkeypaste.com";
-        [JsonIgnore]
-        public int SyncServerPort { get; set; } = 44376;
-        [JsonIgnore]
-        public string SyncServerEndpoint => $"{SyncServerProtocol}{SyncServerHostNameOrIp}:{SyncServerPort}";
+
+        
 
         #endregion
 
@@ -441,7 +416,7 @@ namespace MonkeyPaste.Avalonia {
         // requires restart and only used to trigger convert on exit (may not be necessary to restart)
 
         public string RememberedDbPassword { get; set; }
-        //public string DbPassword { get; set; } = ENCRYPT_DB ? MpPasswordGenerator.GetRandomPassword() : null;
+
         #endregion
 
         #region Shortcuts
@@ -502,23 +477,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Encrytion
-
-        public string SslPrivateKey { get; set; } = string.Empty;
-
-        public string SslPublicKey { get; set; } = string.Empty;
-
-        public DateTime SslCertExpirationDateTime { get; set; } = DateTime.UtcNow.AddDays(-1);
-
-        #endregion
-
-        #region Db
-        #endregion
-
-        #region Sync
-        public int SyncPort { get; set; } = 11000;
-        #endregion
-
         #region Search Filters
 
         public bool SearchByIsCaseSensitive { get; set; }
@@ -540,8 +498,6 @@ namespace MonkeyPaste.Avalonia {
         public bool SearchByAnnotation { get; set; }
 
         public bool SearchByRegex { get; set; }
-
-        //public string LastQueryInfoJson { get; set; } = string.Empty;
 
         #endregion
 

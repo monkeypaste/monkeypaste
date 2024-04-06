@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
                 if (this.TryGetPlatformHandle() is { } ph) {
                     return ph.Handle;
                 }
-                return nint.Zero;
+                return IntPtr.Zero;
             }
         }
 
@@ -130,6 +130,10 @@ namespace MonkeyPaste.Avalonia {
                 _openingWindows.Remove(this);
             });
         }
+        protected override void OnClosed(EventArgs e) {
+            _openingWindows.Remove(this);
+            base.OnClosed(e);
+        }
 
         public new void Show(Window owner = null) {
             //if (silentLock) {
@@ -170,6 +174,12 @@ namespace MonkeyPaste.Avalonia {
             return $"MpAvWindow = '{this.Title}'";
         }
 
+        public void ShowDevTools() {
+#if DEBUG
+            this.Focus();
+            Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence("F12");
+#endif
+        }
         #endregion
 
         #region Protected Methods

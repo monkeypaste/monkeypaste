@@ -2639,9 +2639,6 @@ povratne informacije@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Saznajte više o planovima</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Zalijepi u: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Korištenjem dostupnih kontakata (potreban je dodatak za dohvaćanje) ovo će se polje koristiti za sve instance ovog predloška u ovom dokumentu ili u bilo kojem na koje će se kasnije referencirati.&lt;/p&gt;&lt;p&gt; Tako, na primjer, ako ovdje odaberete adresu e-pošte, polje e-pošte odabranog kontakta koristit će se za sve instance u ovom dokumentu.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Potpuna obnova ne može biti zajamčena i može smanjiti performanse ili čak sr
     <value>Ne mogu postaviti parametre zajedničke vrijednosti u unaprijed postavljenim postavkama. PAMAMID '{0}' U unaprijed postavljenom '{1}' za dodatak '{2}' treba ukloniti ili se paramValue može odrediti u odjeljku definicije parametra.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Pretpostavljene postavke moraju imati jedinstvene upute. Duplikat unaprijed GUID '{0}' otkriven je u dodatku '{1}' za unaprijed postavljene: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Pogreška raščlanjivanja dodatka, na putu '{0}' null, vjerojatno raščlanjivanje pogreške JSON. Zanemarivanje dodatka</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Potpuna obnova ne može biti zajamčena i može smanjiti performanse ili čak sr
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' sadrži zajedničke vrijednosti. Želite li ih resetirati?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Gotove konfiguracije moraju imati jedinstvene GUID-ove. U dodatku '{1}' za gotove konfiguracije otkriven je dvostruki unaprijed postavljeni GUID '{0}' za unaprijed postavljene konfiguracije: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Zalijepi u: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Nepoznata pogreška {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Vaša kupnja nije mogla biti dovršena. Razlog: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Dodajte domenu</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Dodajte stranicu</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domena za ovu stranicu je odbijena. Da biste omogućili ovu stranicu, morat ćete ukloniti odbijanje za '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domena '{0}' već je odbijena</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domene</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Ova je stranica već odbijena.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Stranice</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinkronizirati</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Drugi slučaj Monkeypaste već se pokreće. Jeste li sigurni da želite otvoriti novu instancu?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurirati</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globalni prečaci za miš i tipkovnicu onemogućeni su.
+
+Globalni prečaci sada mogu biti omogućeni u izborniku Sistemske ladice</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globalni prečaci onemogućeni: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Omogućeni su globalni prečaci za miš i tipkovnicu.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimentalni) Omogućeni globalni prečaci: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Prebacite globalne prečace</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Prebacite globalne prečace na</value>
   </data>
 </root>

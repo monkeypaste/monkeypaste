@@ -10,6 +10,9 @@ function initMouse() {
 
 	window.addEventListener('dblclick', onWindowDoubleClick, capture);
 	window.addEventListener("click", onWindowClick, capture);
+
+	document.documentElement.addEventListener("pointerenter", onPointerEnter, false);
+	document.documentElement.addEventListener("pointerleave", onPointerLeave, false);
 }
 
 // #endregion Life Cycle
@@ -74,12 +77,23 @@ function updateWindowMouseState(e, eventType) {
 			(eventType == 'down' || eventType == 'dragStart')) {
 			globals.WindowMouseDownLoc = globals.WindowMouseLoc;
 		}
+		sendHostMouseState(eventType, true);
 	}
 	
 	if (globals.WindowMouseDownLoc &&
 		(eventType == 'up' || eventType == 'dragEnd' || eventType == 'dragLeave' || eventType == 'drop')) {
 		globals.WindowMouseDownLoc = null;
 	}
+}
+
+function sendHostMouseState(eventType, isLeft) {
+	if (isRunningOnCef()) {
+		return;
+	}
+	if (eventType != 'enter' && eventType != 'leave' && eventType != 'up' && eventType != 'down' && eventType != 'move') {
+		return;
+	}
+	onPointerEvent_ntf(eventType, globals.WindowMouseLoc, isLeft);
 }
 
 // #endregion Actions
@@ -131,6 +145,10 @@ function onWindowDoubleClick(e) {
 }
 
 function onWindowContextMenu(e) {
+	// NOTE using this for right mouse button clicks not normal events since
+	// mouse can have N buttons 
+
+	sendHostMouseState('up', false);
 	if (!isRunningOnHost()) {
 		e.handled = false;
 		return;
@@ -169,8 +187,7 @@ function onWindowMouseDown(e) {
 		//onInternalContextMenuIsVisibleChanged_ntf(true);
 		globals.WasSupressRightMouseDownSentToHost = true;
 	}
-
-	//globals.WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
+	
 	updateWindowMouseState(e,'down');
 	globals.SelectionOnMouseDown = getDocSelection();
 	if (e.buttons !== 2 && hasEditableTable()) {
@@ -216,5 +233,12 @@ function onWindowMouseUp(e) {
 	updateWindowMouseState(e,'up');
 	globals.SelectionOnMouseDown = null;
 	updateTableDragState(null,'up');
+}
+
+function onPointerEnter(e) {
+	updateWindowMouseState(e, 'enter');
+}
+function onPointerLeave(e) {
+	updateWindowMouseState(e, 'leave');
 }
 // #endregion Event Handlers

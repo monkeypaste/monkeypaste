@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using SharpHook;
 using SharpHook.Native;
@@ -8,6 +9,29 @@ using System.Linq;
 //using Avalonia.Win32;
 
 namespace MonkeyPaste.Avalonia {
+    public class MpAvPointerSimulator : MpIPointerSimulator {
+        private EventSimulator _eventSimulator;
+
+        public MpAvPointerSimulator() {
+            _eventSimulator = new EventSimulator();
+        }
+        public void SimulateRightClick(Visual v) {
+            PixelPoint initial_gmp = default;
+            if (v != null) {
+                initial_gmp = MpAvShortcutCollectionViewModel.Instance.GlobalUnscaledMouseLocation;
+                var gmp = v.PointToScreen(v.Bounds.TopLeft + new Point(1, 1));
+                _eventSimulator.SimulateMouseMovement((short)gmp.X, (short)gmp.Y);
+            }
+            _eventSimulator.SimulateMousePress(MouseButton.Button2);
+
+            // Release the left mouse button
+            _eventSimulator.SimulateMouseRelease(MouseButton.Button2);
+            if (initial_gmp != default) {
+
+                _eventSimulator.SimulateMouseMovement((short)initial_gmp.X, (short)initial_gmp.Y);
+            }
+        }
+    }
     public class MpAvKeyStrokeSimulator : MpIKeyStrokeSimulator {
         #region Private Variable
         private object _simLock = new object();

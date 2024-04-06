@@ -61,14 +61,14 @@ function forceWindowFocus() {
 		window.focus();
 
 		log('document focus (after window focus toggle): ' + (document.hasFocus() ? "SUCCESS" : "FAILED"));
-		if (!document.hasFocus()) {
-			let test = document.activeElement;
-			console.table(test);
-			if (!document.hasFocus()) {
-				window.open('', globals.EDITOR_WINDOW_NAME).focus();
-				log('document focus (after window.open): ' + (document.hasFocus() ? "SUCCESS" : "FAILED"));
-			}
-		}
+		//if (!document.hasFocus()) {
+			//let test = document.activeElement;
+			//console.table(test);
+			//if (!document.hasFocus()) {
+			//	window.open('', globals.EDITOR_WINDOW_NAME).focus();
+			//	log('document focus (after window.open): ' + (document.hasFocus() ? "SUCCESS" : "FAILED"));
+			//}
+		//}
 	}
 }
 

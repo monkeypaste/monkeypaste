@@ -13,7 +13,10 @@ namespace CoreAnnotator {
             get {
                 if (_annRegExLookup == null) {
                     var regex_strs = new Dictionary<TextAnnotationType, string>(){
-                        { TextAnnotationType.Url,@"(https?://|www|https?://www|file://).\S+"},
+                        { TextAnnotationType.Url,
+                            //@"(https?://|www|https?://www|file://).\S+"
+                            @"(https?://|www|https?://www|file://).\S[-_.~!*'();:@&=+$,/?%#\[\]?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789]+"
+                        },
                         { TextAnnotationType.Email,@"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})"},
                         { TextAnnotationType.PhoneNumber,@"(\+?\d{1,3}?[ -.]?)?\(?(\d{3})\)?[ -.]?(\d{3})[ -.]?(\d{4})"},
                         { TextAnnotationType.Currency,@"[$£€¥][\d|\.]([0-9]{0,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.\d{0,2})?"},

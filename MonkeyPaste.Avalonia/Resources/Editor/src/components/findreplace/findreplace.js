@@ -3,6 +3,9 @@
 // #region Life Cycle
 
 function initFindReplaceToolbar() {
+	globals.HighlightAttrb = registerClassAttributor('highlight', 'highlight', globals.Parchment.Scope.INLINE);
+	//globals.ActiveHighlightAttrb = registerClassAttributor('highlightActive', 'highlight-active', globals.Parchment.Scope.INLINE);
+
 	addClickOrKeyClickEventListener(getFindReplaceEditorToolbarButton(), onFindReplaceToolbarButtonClick);
 
 	getIsReplaceInputElement().addEventListener('change', onFindOrReplaceInputChange);
@@ -27,7 +30,6 @@ function initFindReplaceIcons() {
 	getFindReplacePreviousButton().innerHTML = getSvgHtml('arrow-left',null,false);
 	getFindReplaceNextButton().innerHTML = getSvgHtml('arrow-right', null, false);
 }
-
 function loadFindReplace(searches) {
 	globals.Searches = searches;
 
@@ -44,7 +46,11 @@ function loadFindReplace(searches) {
 		showAllScrollbars();
 		//setFindReplaceInputState(searches);
 		populateFindReplaceResults();
-		onQuerySearchRangesChanged_ntf(globals.CurFindReplaceDocRanges.length);
+		let hl_html = getHighlightHtml();
+		let range_offsets =
+			globals.CurFindReplaceDocRangeRectIdxLookup.map(x =>
+				`${globals.CurFindReplaceDocRangesRects[x[0]].left}|${globals.CurFindReplaceDocRangesRects[x[0]].top}`).join(' ');
+		onQuerySearchRangesChanged_ntf(globals.CurFindReplaceDocRanges.length, hl_html, range_offsets);
 	}
 }
 
@@ -148,7 +154,35 @@ function getDefaultFindReplaceInputState() {
 		wrapAround: true,
 	};
 }
+function getHighlightHtml() {
+	let sup_guid = suppressTextChanged();
 
+	function toggleHighlighting(isEnabled) {
+		for (var i = 0; i < globals.CurFindReplaceDocRanges.length; i++) {
+			let tr = globals.CurFindReplaceDocRanges[i];
+			if (isEnabled) {
+				let hl_val =
+					i == globals.CurFindReplaceDocRangeIdx ? 'active' : 'inactive';
+				globals.quill.formatText(tr.index, tr.length, 'highlight', hl_val, 'user');
+				// remove inline styles or hl won't work in rowv
+				globals.quill.formatText(tr.index, tr.length, 'background-color', false, 'user');
+				globals.quill.formatText(tr.index, tr.length, 'color', false, 'user');
+			} else {
+				globals.quill.formatText(tr.index, tr.length, 'highlight', false, 'user');
+				let fmt = globals.quill.getFormat(tr.index, tr.length);
+				if (fmt.themecoloroverride) {
+					globals.quill.formatText(tr.index, tr.length, 'color', fmt.themecoloroverride, 'user');
+				}
+			}
+			
+		}
+	}
+	toggleHighlighting(true);
+	let result = convertHtmlLineBreaks(getRootHtml());
+	toggleHighlighting(false);
+	unsupressTextChanged(sup_guid);
+	return result;
+}
 // #endregion Getters
 
 // #region Setters

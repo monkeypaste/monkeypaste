@@ -978,7 +978,7 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowOpening = false;
             LastOpenedScreenInfo = MainWindowScreen;
 
-            MpConsole.WriteLine($"SHOW WINDOW DONE. MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
+            //MpConsole.WriteLine($"SHOW WINDOW DONE. MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
         }
         public void FinishMainWindowHide() {
 
@@ -1307,7 +1307,7 @@ namespace MonkeyPaste.Avalonia {
 
                  await ResetMainWindowAnimationStateAsync();
 
-                 MpConsole.WriteLine("Opening Main Window");
+                 //MpConsole.WriteLine("Opening Main Window");
 
                  StartMainWindowShow();
 

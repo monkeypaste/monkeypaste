@@ -2639,9 +2639,6 @@ Changeзгәрешләр өчен сылтамага иярегез
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Планнар турында күбрәк белү</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Паст: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Булган контактларны кулланып (шпр.-флэш таләп итә) бу кыр шушы документ аша бу шаблийның барлык инҗирләре өчен яки аннан соң да искә алыначак.&lt;/p&gt;&lt;p&gt; Мәсәлән, монда электрон почта адресын сайласа, сайлаган контактның электрон кыры бу документтагы барлык очраклар өчен кулланылыр.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Changeзгәрешләр өчен сылтамага иярегез
     <value>Пресетларда уртак кыйммәт параметрларын куя алмыйлар. ParamId '{0}' алдан билгеләнгән '{1}' плагин өчен '{2}' бетерелергә тиеш яки параметрны билгеләү бүлегендә paramValue күрсәтелергә мөмкин.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Предактларның уникаль гуитлары булырга тиеш. Тәкъдимнәр өчен "{1}" плагинга дубликат "{0} 'табылды: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Плагин анализлау хата, '{0}' nourult'та, мөгаен, Джсонны анализлый. Плагинны санга сукмау</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Changeзгәрешләр өчен сылтамага иярегез
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0} »уртак кыйммәтләр бар. Сез шулай ук ​​яңадан торгызырга телисезме?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Пресетларның уникаль гәүсәләре булырга тиеш. Председатлар өчен "{1}" плагинында председат "{0}"ны кабатлату ачыкланган: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Паст: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Билгесез хата {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Сезнең сатып алу тәмамланмады. Сәбәп: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Домен өстәргә</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Бит өстәргә</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Бу бит өчен домен кире кагыла. Бу биткә рөхсәт итәр өчен, "{0}" өчен кире кагуны бетерергә кирәк булачак.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>'{0}' домены инде кире кагылды</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Доменнар</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Бу бит инде кире кагылды.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Битләр</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Синхрон</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Майкипастының тагын бер мисалы эшли. Сез яңа мисал ачарга телисезме?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Конфигурацияләү</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Глобаль тычкан һәм клавиатура кыска юллары сүндерелгән.
+
+Глобаль кыска юллар хәзер система он менюсында кушылырга мөмкин</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Глобаль кыска юллар инвалид: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Глобаль тычкан һәм клавиатура кыска юллары кушылды.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Эксперименталь) глобаль кыска юллар кушылган: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Глобаль кыска юллар</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Глобаль кыска юллар</value>
   </data>
 </root>

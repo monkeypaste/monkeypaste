@@ -44,6 +44,7 @@
         ExecuteParametersRequest,
         DbPasswordInput,
         RateApp,
+        SingleInstanceWarning,
 
         // User Action (Modal) 
 
@@ -59,6 +60,7 @@
         ModalBusyMessageBox,
         ModalRestartIgnore,
         ModalRestartNowOrLater,
+        ModalShutdownLater,
 
         ConfirmEndAppend,
 

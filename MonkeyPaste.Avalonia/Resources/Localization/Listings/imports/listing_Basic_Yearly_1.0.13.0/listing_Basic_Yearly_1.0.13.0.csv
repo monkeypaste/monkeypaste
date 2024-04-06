@@ -1,0 +1,6 @@
+Field,ID,Type (Type),default,en-US
+Description,2,Text,,"With this subscription you will receive:
+● up to 1,000 clips of content 
+● unlimited trash & archive"
+Title,4,Text,,Basic - Yearly
+StoreLogo300x300,602,Relative path (or URL to file in Partner Center),,listing_Basic_Yearly_1.0.13.0/BasicLogo.png

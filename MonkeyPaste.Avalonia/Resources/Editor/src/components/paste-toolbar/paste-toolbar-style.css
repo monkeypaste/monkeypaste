@@ -1,14 +1,15 @@
 ﻿#pasteToolbar {
-    background-color: var(--pastetemplatebgcolor);
+    background-color: var(--pastetoolbarbgcolor);
     /*height: 10vh;*/
     min-height: 65px;
     min-width: 850px;
     bottom: -50px;
-    padding-bottom: 10px;
+    padding: 0 0 15px 0;
 }
 
 body.popOut #pasteToolbar {
-    padding-bottom: 0px;
+    padding: 0;
+    min-height: 55px;
 }
 
     #pasteToolbar button {

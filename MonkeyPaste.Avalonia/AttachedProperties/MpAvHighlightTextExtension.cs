@@ -2,93 +2,93 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Threading;
+using HtmlAgilityPack;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvHighlightTextExtension {
         #region Private Variables
-        private static Dictionary<Control, MpAvTextHighlightAdorner> _AttachedControlAdornerLookup = new Dictionary<Control, MpAvTextHighlightAdorner>();
+        private static Dictionary<Control, MpAvGeometryAdorner> _AttachedControlAdornerLookup = new Dictionary<Control, MpAvGeometryAdorner>();
+        const string HL_INACTIVE_CLASS = "highlight-inactive";
+        const string HL_ACTIVE_CLASS = "highlight-active";
+        const string HL_BASE_CLASS = "highlight";
+        private static IBrush _defaultInactiveHighlightBrush;
+        public static IBrush DefaultInactiveHighlightBrush {
+            get {
+                if (_defaultInactiveHighlightBrush == null &&
+                    Mp.Services != null &&
+                    Mp.Services.PlatformResource != null) {
+                    _defaultInactiveHighlightBrush = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightInactiveColor).AdjustOpacity(0.5);
+                }
+                return _defaultInactiveHighlightBrush;
+            }
+        }
 
-        public static IBrush DefaultInactiveHighlightBrush =>
-            Mp.Services == null ||
-            Mp.Services.PlatformResource == null ?
-                null :
-        //Brushes.Yellow;
-        Mp.Services.PlatformResource.GetResource<IBrush>("HighlightBrush_inactive");
+        private static IBrush _defaultActiveHighlightBrush;
+        public static IBrush DefaultActiveHighlightBrush {
+            get {
+                if (_defaultActiveHighlightBrush == null &&
+                    Mp.Services != null &&
+                    Mp.Services.PlatformResource != null) {
+                    _defaultActiveHighlightBrush = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).AdjustOpacity(0.5);
+                }
+                return _defaultActiveHighlightBrush;
+            }
+        }
 
-        public static IBrush DefaultActiveHighlightBrush =>
-        Mp.Services == null || Mp.Services.PlatformResource == null ?
-            null :
-        //Brushes.Lime;
-        Mp.Services.PlatformResource.GetResource<IBrush>("HighlightBrush_active");
         #endregion
 
         #region Statics
         static MpAvHighlightTextExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
-            RangesInfoViewModelProperty.Changed.AddClassHandler<Control>((x, y) => HandleRangesInfoViewModelChanged(x, y));
+            HighlightRangesProperty.Changed.AddClassHandler<Control>((x, y) => UpdateHighlights(x, nameof(HighlightRangesProperty)));
+            ActiveHighlightIdxProperty.Changed.AddClassHandler<Control>((x, y) => UpdateHighlights(x, nameof(ActiveHighlightIdxProperty)));
         }
 
         #endregion
 
         #region Properties
 
-        #region RangesInfoViewModel AvaloniaProperty
-        public static MpIHighlightTextRangesInfoViewModel GetRangesInfoViewModel(AvaloniaObject obj) {
-            if (obj.GetValue(RangesInfoViewModelProperty) is not MpIHighlightTextRangesInfoViewModel bound_htrvm) {
-                if (obj is not Control c ||
-                        c.DataContext == null) {
-                    return null;
-                }
-                if (c.DataContext is not MpIHighlightTextRangesInfoViewModel dc_htrvm) {
-                    throw new NotImplementedException($"Highlight ext needs highlight vm by datacontext or property binding");
-                }
-                // manually set hlr to trigger prop change attach
-                SetRangesInfoViewModel(obj, dc_htrvm);
-                return dc_htrvm;
-            }
-            return bound_htrvm;
+        #region HighlightRanges AvaloniaProperty
+        public static object GetHighlightRanges(AvaloniaObject obj) {
+            return obj.GetValue(HighlightRangesProperty);
         }
 
-        public static void SetRangesInfoViewModel(AvaloniaObject obj, MpIHighlightTextRangesInfoViewModel value) {
-            obj.SetValue(RangesInfoViewModelProperty, value);
+        public static void SetHighlightRanges(AvaloniaObject obj, object value) {
+            obj.SetValue(HighlightRangesProperty, value);
         }
 
-        public static readonly AttachedProperty<MpIHighlightTextRangesInfoViewModel> RangesInfoViewModelProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, MpIHighlightTextRangesInfoViewModel>(
-                "RangesInfoViewModel");
+        public static readonly AttachedProperty<object> HighlightRangesProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "HighlightRanges",
+                defaultValue: null);
 
-        private static void HandleRangesInfoViewModelChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
-            void HighlightRanges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-                UpdateHighlights(element);
-            }
+        #endregion
 
-            void RangeInfoViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-                if (e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel)) ||
-                    e.PropertyName == nameof(MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx) ||
-                    e.PropertyName == nameof(MpIHighlightTextRangesInfoViewModel.HighlightRanges)) {
-                    UpdateHighlights(element);
-                }
-                //MpConsole.WriteLine($"highlight prop changed: '{e.PropertyName}'");
-            }
-
-            if (e.OldValue is MpIHighlightTextRangesInfoViewModel old_htrivm) {
-                old_htrivm.PropertyChanged -= RangeInfoViewModel_PropertyChanged;
-                old_htrivm.HighlightRanges.CollectionChanged -= HighlightRanges_CollectionChanged;
-            }
-            if (e.NewValue is MpIHighlightTextRangesInfoViewModel new_htrivm) {
-                new_htrivm.PropertyChanged += RangeInfoViewModel_PropertyChanged;
-                new_htrivm.HighlightRanges.CollectionChanged += HighlightRanges_CollectionChanged;
-            }
-            UpdateHighlights(element);
+        #region ActiveHighlightIdx AvaloniaProperty
+        public static int GetActiveHighlightIdx(AvaloniaObject obj) {
+            return obj.GetValue(ActiveHighlightIdxProperty);
         }
 
+        public static void SetActiveHighlightIdx(AvaloniaObject obj, int value) {
+            obj.SetValue(ActiveHighlightIdxProperty, value);
+        }
+
+        public static readonly AttachedProperty<int> ActiveHighlightIdxProperty =
+            AvaloniaProperty.RegisterAttached<int, Control, int>(
+                "ActiveHighlightIdx",
+                defaultValue: -1);
 
         #endregion
 
@@ -155,26 +155,25 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
         private static void Attached_control_Loaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if (sender is not Control attached_control ||
-                _AttachedControlAdornerLookup.ContainsKey(attached_control)) {
-                return;
-            }
-            var tha = new MpAvTextHighlightAdorner(attached_control);
-            _AttachedControlAdornerLookup.Add(attached_control, tha);
-            Dispatcher.UIThread.Post(async () => {
-                //AddVisualAdorner(attached_control, tha, AdornerLayer.GetAdornerLayer(attached_control));
-                await attached_control.AddOrReplaceAdornerAsync(tha);
-
-                UpdateHighlights(attached_control);
-            });
-        }
-
-        private static void Attached_control_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
             if (sender is not Control attached_control) {
                 return;
             }
-            UpdateHighlights(attached_control);
+            if (!_AttachedControlAdornerLookup.ContainsKey(attached_control)) {
+                var tha = new MpAvGeometryAdorner(attached_control);
+                _AttachedControlAdornerLookup.Add(attached_control, tha);
+            }
+
+            UpdateHighlights(attached_control, null);
+        }
+
+        private static void Attached_control_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
+            if (sender is not Control attached_control ||
+                sender is HtmlPanel) {
+                return;
+            }
+            UpdateHighlights(attached_control, null);
         }
 
         private static void Attached_control_Unloaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
@@ -183,10 +182,9 @@ namespace MonkeyPaste.Avalonia {
             }
             attached_control.Loaded += Attached_control_Loaded;
             attached_control.Unloaded += Attached_control_Unloaded;
-            if (!_AttachedControlAdornerLookup.ContainsKey(attached_control)) {
+            if (!_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha)) {
                 return;
             }
-            RemoveVisualAdorner(attached_control, _AttachedControlAdornerLookup[attached_control], AdornerLayer.GetAdornerLayer(attached_control));
             _AttachedControlAdornerLookup.Remove(attached_control);
         }
         #endregion
@@ -194,17 +192,65 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        private static void UpdateHighlights(Control attached_control) {
-            if (!_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha) ||
-                GetRangesInfoViewModel(attached_control) is not MpIHighlightTextRangesInfoViewModel hrivm) {
+        private static void UpdateHighlights(Control attached_control, string sourcePropertyName) {
+            if (!GetIsEnabled(attached_control)) {
                 return;
             }
             if (attached_control is MpAvMarqueeTextBox mtb) {
-                mtb.HighlightRanges = hrivm.HighlightRanges;
-                mtb.ActiveHighlightIdx = hrivm.ActiveHighlightIdx < 0 ? null : hrivm.ActiveHighlightIdx;
+                mtb.HighlightRanges = GetHighlightRanges(attached_control) as IEnumerable<MpTextRange>;
+                mtb.ActiveHighlightIdx = GetActiveHighlightIdx(attached_control);
                 mtb.Redraw();
                 return;
             }
+            HighlightTextControl(attached_control);
+        }
+
+        private static void HighlightTextControl(Control attached_control) {
+            if (GetHighlightRanges(attached_control) is not IEnumerable<MpTextRange> trl ||
+                trl.ToArray() is not { } HighlightRanges) {
+                return;
+            }
+            int ActiveHighlightIdx = GetActiveHighlightIdx(attached_control);
+
+            void FinishUpdate(IEnumerable<(IBrush, Geometry)> gl) {
+                //if (!_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha)) {
+                //    return;
+                //}
+                //tha.DrawGeometry(gl);
+                if (attached_control is not TextBlock tb ||
+                    string.IsNullOrEmpty(tb.Text)) {
+                    return;
+                }
+                string text = tb.Text;
+                tb.SetCurrentValue(TextBox.TextProperty, string.Empty);
+                tb.Inlines.Clear();
+                if (gl == null || !HighlightRanges.Any()) {
+                    // reset inlines
+                    tb.Text = text;
+                    tb.SetCurrentValue(TextBox.TextProperty, text);
+                    return;
+                }
+                var gll = gl.ToList();
+                foreach (var (tr, idx) in HighlightRanges.WithIndex()) {
+                    IBrush fg = tb.Foreground;
+                    IBrush bg = gll[idx].Item1;
+                    if (bg is SolidColorBrush scb) {
+                        fg = scb.ToHex().ToContrastForegoundColor().ToAvBrush();
+                    }
+                    if (idx == 0 && tr.StartIdx > 0) {
+                        tb.Inlines.Add(new Run(text.Substring(0, tr.StartIdx)));
+                    }
+                    tb.Inlines.Add(new Run(text.Substring(tr.StartIdx, tr.Count)) { Foreground = fg, Background = bg });
+
+                    int end_idx = tr.StartIdx + tr.Count;
+                    if (idx == HighlightRanges.Length - 1) {
+                        tb.Inlines.Add(new Run(text.Substring(end_idx, text.Length - end_idx)));
+                    } else if (HighlightRanges[idx + 1].StartIdx - end_idx > 1) {
+                        tb.Inlines.Add(new Run(text.Substring(end_idx + 1, HighlightRanges[idx + 1].StartIdx - end_idx)));
+                    }
+                }
+            }
+            // create formatted text
             FormattedText ft = null;
             bool is_empty = false;
             if (attached_control.TryGetVisualDescendant<TextBox>(out var tb)) {
@@ -219,20 +265,21 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (is_empty ||
-                hrivm.HighlightRanges.Where(x => x.Document == null || x.Document == attached_control) is not IEnumerable<MpTextRange> hlrl ||
+                HighlightRanges.Where(x => x.Document == null || x.Document == attached_control) is not IEnumerable<MpTextRange> hlrl ||
                 !hlrl.Any()) {
-                FinishUpdate(attached_control, tha, null);
+                // no text or no highlights
+                FinishUpdate(null);
                 return;
             }
 
+            // create brushes/geometry
             var all_brl =
-                hrivm
-                .HighlightRanges
+                HighlightRanges
                 .Select((x, idx) =>
                     (
-                        idx == hrivm.ActiveHighlightIdx ?
-                            GetActiveHighlightBrush(attached_control) ?? DefaultActiveHighlightBrush :
-                            GetInactiveHighlightBrush(attached_control) ?? DefaultInactiveHighlightBrush,
+                        idx == ActiveHighlightIdx ?
+                            /*GetActiveHighlightBrush(attached_control) ?? */DefaultActiveHighlightBrush :
+                            /*GetInactiveHighlightBrush(attached_control) ?? */DefaultInactiveHighlightBrush,
                         x));
             var gl =
                 all_brl
@@ -241,83 +288,8 @@ namespace MonkeyPaste.Avalonia {
                     x.Item1.ToHex().ToAvBrush() as IBrush,
                     ft.BuildHighlightGeometry(new Point(), x.Item2.StartIdx, x.Item2.Count)));
 
-            FinishUpdate(attached_control, tha, gl);
+            FinishUpdate(gl);
         }
 
-        private static void FinishUpdate(Control attached_control, MpAvTextHighlightAdorner tha, IEnumerable<(IBrush, Geometry)> gl) {
-            tha.DrawHighlights(gl);
-            if (attached_control is not TextBlock tb ||
-                string.IsNullOrEmpty(tb.Text) ||
-                GetRangesInfoViewModel(attached_control) is not MpIHighlightTextRangesInfoViewModel hrivm) {
-                return;
-            }
-
-            if (attached_control != null &&
-                attached_control.GetVisualAncestor<MpAvAnalyticItemSelectorView>() != null) {
-
-            }
-            string text = tb.Text;
-            tb.Text = string.Empty;
-            tb.Inlines.Clear();
-            if (gl == null || !hrivm.HighlightRanges.Any()) {
-                // reset inlines
-                tb.Text = text;
-                return;
-            }
-
-            if (attached_control != null &&
-                attached_control.GetVisualAncestor<MpAvAnalyticItemSelectorView>() != null) {
-
-            }
-            var gll = gl.ToList();
-            foreach (var (tr, idx) in hrivm.HighlightRanges.WithIndex()) {
-                IBrush fg = tb.Foreground;
-                IBrush bg = gll[idx].Item1;
-                if (bg is SolidColorBrush scb) {
-                    fg = scb.ToHex().ToContrastForegoundColor().ToAvBrush();
-                }
-                if (idx == 0 && tr.StartIdx > 0) {
-                    tb.Inlines.Add(new Run(text.Substring(0, tr.StartIdx)));
-                }
-                tb.Inlines.Add(new Run(text.Substring(tr.StartIdx, tr.Count)) { Foreground = fg, Background = bg });
-
-                int end_idx = tr.StartIdx + tr.Count;
-                if (idx == hrivm.HighlightRanges.Count - 1) {
-                    tb.Inlines.Add(new Run(text.Substring(end_idx, text.Length - end_idx)));
-                } else if (hrivm.HighlightRanges[idx + 1].StartIdx - end_idx > 1) {
-                    tb.Inlines.Add(new Run(text.Substring(end_idx + 1, hrivm.HighlightRanges[idx + 1].StartIdx - end_idx)));
-                }
-            }
-        }
-
-        private static void RemoveVisualAdorner(Visual visual, Control? adorner, AdornerLayer? layer) {
-            if (adorner is null || layer is null || !layer.Children.Contains(adorner)) {
-                return;
-            }
-
-            layer.Children.Remove(adorner);
-            ((ISetLogicalParent)adorner).SetParent(null);
-        }
-    }
-
-    internal class MpAvTextHighlightAdorner : MpAvAdornerBase {
-        private IEnumerable<(IBrush, Geometry)> _gl;
-        public MpAvTextHighlightAdorner(Control adornedControl) : base(adornedControl) { }
-
-        public void Clear() {
-            IsVisible = false;
-            this.Redraw();
-        }
-        public void DrawHighlights(IEnumerable<(IBrush, Geometry)> gl) {
-            _gl = gl;
-            IsVisible = _gl != null && _gl.Any();
-            this.Redraw();
-        }
-        public override void Render(DrawingContext context) {
-            if (IsVisible) {
-                _gl.Where(x => x.Item2 != null).ForEach(x => context.DrawGeometry(x.Item1, null, x.Item2));
-            }
-            base.Render(context);
-        }
     }
 }

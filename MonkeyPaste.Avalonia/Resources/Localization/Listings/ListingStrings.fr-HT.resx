@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copie</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pâte</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>responsable du presse-papiers</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>outil</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Entièrement - Éditeur de clip avec Find / Remplace, Rich Text (tableaux, listes, liens, etc.) Texte de texte pour une collation rapide et dynamique de votre collection d'extraits</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Stockage de données local sécurisé, sécurisé et privé avec une protection en option 2 - Facteur de mot de passe</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Construit - dans le navigateur de plugin avec une bibliothèque de plugins en pleine communauté en pleine croissance</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste est un gestionnaire de presse-papiers, l'outil d'automatisation et de productivité comme aucun autre. Améliorer votre presse-papiers en une partie enrichie et organisée de votre flux de travail,
-Doté d'une interface intuitive et bas - Profile qui prend en charge le texte, les fichiers et les images. Conçu pour la flexibilité, avec une bibliothèque de plugins en pleine communauté en pleine croissance.
-
-Il a commencé comme une expérience d'un programmeur voulant plus que copier et coller hors du presse-papiers. Il voulait une commande simple comme Ctrl + C qui «ajouterait à» plutôt
-de «remplacer» ce qui était dans le presse-papiers. Et l'expérience a fonctionné. Le petit outil était très pratique. Cela a entré le programmeur avec plus d'idées et plus d'expériences, que
-est maintenant devenu "Monkeypaste".
-
-Comme le bureau est à vos fichiers, Monkeypaste a l'intention d'être dans votre presse-papiers. C'est une suite d'outils soigneusement conçus pour intégrer et interopérer sans apparemment
-toute application ou format de contenu. Ctrl + C et Ctrl + V sont bien plus que des raccourcis. Ce sont les ports d'entrée toutes les applications partagent, transportant un
-richesse de valeur et signifiant que vous méritez d'avoir disponible à portée de main. Pas seulement jeté après le prochain Ctrl + c.
-
-Je suis ce programmeur mentionné plus tôt et je veux que tout le monde puisse trouver l'utilisation de Monkeypaste. Ainsi et toutes ses fonctionnalités sont entièrement gratuites à utiliser.
-Je veux aussi que vous vous sentiez à l'aise de l'utiliser. Je vous assure donc, comme étant la seule force derrière sa création, qu'aucune des (très) informations personnelles qui peuvent survenir
-Votre presse-papiers est toujours suivi ou stocké n'importe où au-delà de votre propre machine. Période.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Votre presse-papiers est toujours suivi ou stocké n'importe où au-delà de vot
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Le presse-papiers est une jungle. Monkeypaste est le roi! Passer de l'application à l'application, copiant ceci et coller cela comme jamais auparavant avec MonkeyPaste !! Une marque - un nouvel outil d'automatisation du presse-papiers et analytique de pointe !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Échantillon de Monkeypaste en action!</value>
   </data>
@@ -258,9 +228,6 @@ Votre presse-papiers est toujours suivi ou stocké n'importe où au-delà de vot
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Illimité - annuel</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Première version</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Avec cet abonnement, vous recevrez:
 ● Capacité illimitée</value>
@@ -270,5 +237,45 @@ Votre presse-papiers est toujours suivi ou stocké n'importe où au-delà de vot
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Plus de plates-formes et de fonctionnalités à venir bientôt! Nous commençons juste à commencer 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Éclairage de la recherche et de la mise en évidence rapides, commencez simplement à taper!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Stocker le texte, l'image et les clips de fichiers avec toutes ses informations sur la source (application, site Web, temps et bien plus)</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste est un gestionnaire de presse-papiers, un outil d’automatisation et de productivité pas comme les autres. Transformer votre presse-papiers en une partie enrichie et organisée de votre flux de travail,
+Doté d’une interface intuitive et discrète qui prend en charge le texte, les fichiers et les images. Conçu pour la flexibilité, avec une bibliothèque de plugins toujours plus nombreuse.
+
+Cela a commencé comme une expérience par un programmeur qui voulait plus qu’un simple copier-coller du presse-papiers. Il voulait une commande simple comme Ctrl+C qui « ajouterait à » à la place 
+de 'remplacer' ce qui était dans le presse-papiers. Et l’expérience a fonctionné. Le petit outil était très pratique. Cela a piégé le programmeur avec plus d’idées et plus d’expériences, 
+est maintenant devenu « MonkeyPaste ». 
+
+Comme le bureau l’est à vos fichiers, MonkeyPaste a l’intention d’être à votre presse-papiers. Il s’agit d’une suite d’outils soigneusement conçus pour s’intégrer et interagir de manière transparente avec 
+toute application ou tout format de contenu. Ctrl+C et Ctrl+V sont bien plus que de simples raccourcis. Ce sont les points d’entrée que toutes les applications partagent, 
+Une richesse de valeur et de sens que vous méritez d’avoir à portée de main. Pas seulement jeté après le prochain Ctrl+C.
+
+Je suis le programmeur mentionné plus tôt et je veux que tout le monde puisse trouver une utilisation de MonkeyPaste. Ainsi, son utilisation et toutes ses fonctionnalités sont entièrement gratuites. 
+Je veux aussi que vous vous sentiez à l’aise de l’utiliser. Je vous assure donc, en tant que seule force derrière sa création, qu’AUCUNE des informations (très) personnelles qui peuvent survenir sur 
+votre presse-papiers n’est jamais suivi ou stocké N’IMPORTE OÙ au-delà de votre propre machine. Période.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Presse-papiers</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Stockage de données local sûr, sécurisé et privé avec protection par mot de passe à 2 facteurs en option</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste est maintenant entièrement libre à partir de cette version !!
+
+Toutes les restrictions (dans les abonnements APP) ont été supprimées car Monkeypaste passe maintenant à devenir un projet open-source. Alors gardez un œil sur notre github (github.com/monkeypaste) si vous êtes intéressé à contribuer.
+
+Mises à jour:
+
+- Toutes les restrictions de capacité supprimées!
+- Éditeur d'URL rejeté Améliorations
+- Support de base pour l'exécution de plusieurs instances de Monkeypaste
+- Nouvel éditeur de valeur partagée (dans le navigateur de plugin, le cas échéant)</value>
   </data>
 </root>

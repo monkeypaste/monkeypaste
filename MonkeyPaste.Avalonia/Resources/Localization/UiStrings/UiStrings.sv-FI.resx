@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lär dig mer om planer</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Klistra in i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Med hjälp av tillgängliga kontakter (kräver ett hämtningsplugin) kommer det här fältet att användas för alla instanser av den här mallen i det här dokumentet eller i alla som det kommer att refereras till senare.&lt;/p&gt;&lt;p&gt; Om du till exempel väljer e-postadress här kommer e-postfältet för den kontakt du väljer att användas för alla förekomster i det här dokumentet.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Total återställning kan inte garanteras och kan minska prestandan eller till o
     <value>Det går inte att ställa in delade värdeparametrar i förinställningar. Paramid '{0}' i förinställd '{1}' för plugin '{2}' måste tas bort eller paramValue kan anges i avsnittet Parameter Definition.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Förinställningar måste ha unika GUID. Duplikat förinställningsguid '{0}' upptäcktes i plugin '{1}' för förinställningar: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin parsing -fel, vid sökvägen '{0}' null, troligt fel parsing json. Ignorera plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Total återställning kan inte garanteras och kan minska prestandan eller till o
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' innehåller delade värden. Vill du också återställa dem?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Förinställningar måste ha unika guider. Duplicerat förinställt guid "{0}" identifierades i plugin-programmet "{1}" för förinställningar: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Klistra in i: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Okänt fel {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ditt köp kunde inte slutföras. Anledning: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Lägg till domän</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Lägg till sidan</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domänen för denna sida avvisas. För att tillåta den här sidan måste du ta bort avslaget för '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domänen '{0}' avvisas redan</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domäner</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Denna sida avvisas redan.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Sidor</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synkronisera</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>En annan instans av monkeypaste körs redan. Är du säker på att du vill öppna en ny instans?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurera</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globala mus- och tangentbordsgenvägar har inaktiverats.
+
+Globala genvägar kan nu vara aktiverade i systemfack -menyn</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globala genvägar inaktiverade: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globala mus- och tangentbordsgenvägar har aktiverats.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimental) Globala genvägar aktiverade: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Växla globala genvägar</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Växla globala genvägar på</value>
   </data>
 </root>

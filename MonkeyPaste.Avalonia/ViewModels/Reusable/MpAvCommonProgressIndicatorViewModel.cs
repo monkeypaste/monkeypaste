@@ -30,8 +30,8 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvCommonProgressIndicatorViewModel : MpAvViewModelBase<MpAvViewModelBase>, MpIProgressIndicatorViewModel {
         public long TotalCount { get; set; }
         public long CurrentCount { get; set; }
-        public double PercentLoaded =>
-            TotalCount == 0 ? 1 : (double)CurrentCount / (double)TotalCount;
+        public virtual double PercentLoaded =>
+            TotalCount == 0 ? 0 : (double)CurrentCount / (double)TotalCount;
         public override bool IsLoaded =>
             PercentLoaded >= 1;
 

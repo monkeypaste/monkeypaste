@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopiere</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>lim inn</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Utklippstavle manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>verktøy</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Fullt - Utvalgt Clip Editor med Find/erstatt, rik tekst (tabeller, lister, lenker, etc.) Teksttemplering for rask, dynamisk liming fra utdraget</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Sikker, sikker og privat lokal datalagring med valgfri 2 - Faktor passordbeskyttelse</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Bygget - i plugin -nettleser med et stadig - voksende fellesskap - drevet bibliotek med plugins</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste er en utklippsbehandler, automatisering og produktivitetsverktøy som ingen andre. Forbedre utklippstavlen til en beriket og organisert del av arbeidsflyten din,
-Med et intuitivt og lavt profilgrensesnitt som støtter tekst, filer og bilder. Designet for fleksibilitet, med et stadig - voksende fellesskap - drevet libray av plugins.
-
-Det begynte som et eksperiment av en programmerer som ønsket mer enn bare å kopiere og lime ut av utklippstavlen. Han ønsket en enkel kommando som Ctrl+C som ville 'legge til' i stedet
-av 'erstatt' hva som var på utklippstavlen. Og eksperimentet fungerte. Det lille verktøyet var veldig nyttig. Dette medførte programmereren med flere ideer og flere eksperimenter, det
-Nå har blitt "Monkeypaste".
-
-Som skrivebordet er på filene dine, har MonkeyPaste til hensikt å være på utklippstavlen. Det er en serie verktøy som er nøye designet for å tilsynelatende integrere og interoperere med
-Enhver applikasjon eller format for innhold. Ctrl+C og Ctrl+V er mye mer enn bare snarveier. De er inngangsportene alle applikasjoner deler, og bærer en
-Value av verdi og mening du fortjener å ha tilgjengelig til fingerspissene. Ikke bare kastet etter neste Ctrl+c.
-
-Jeg er den programmereren som er nevnt tidligere, og jeg vil at alle skal kunne finne bruk av MonkeyPaste. Så det og alle funksjonene er helt gratis å bruke.
-Jeg vil også at du skal føle deg komfortabel med å bruke det. Så jeg forsikrer deg, som den eneste kraften bak opprettelsen, at ingen av de (veldig) personlige informasjonen som kan oppstå
-Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din egen maskin. Periode.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din 
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Utklippstavlen er en jungel. Monkeypaste er kongen! Sving fra app til app, kopiere dette og lim inn det som aldri før med MonkeyPaste !! Et helt nytt, ny, banebrytende utklippstavle og analytisk automatiseringsverktøy !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Eksempel på MonkeyPaste i aksjon!</value>
   </data>
@@ -258,9 +228,6 @@ Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din 
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Ubegrenset - årlig</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Første utgivelse</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Med dette abonnementet vil du motta:
 ● Ubegrenset kapasitet</value>
@@ -270,5 +237,45 @@ Utklippstavlen din blir noen gang sporet eller lagret hvor som helst utover din 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Flere plattformer og funksjoner kommer snart! Vi er bare startet 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Belysning Rask søk ​​og utheving, bare begynn å skrive!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Lagre tekst, bilde og filklipp med all sin kilde (appen, nettstedet, tiden og mye mer) informasjon automatisk</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste er et utklippstavlebehandling, automatiserings- og produktivitetsverktøy som ingen andre. Forbedre utklippstavlen til en beriket og organisert del av arbeidsflyten din,
+Med et intuitivt og lavprofilgrensesnitt som støtter tekst, filer og bilder. Designet for fleksibilitet, med en stadig voksende fellesskapsdrevet libray av plugins.
+
+Det begynte som et eksperiment av en programmerer som ønsket mer enn bare å kopiere og lime ut av utklippstavlen. Han ønsket en enkel kommando som Ctrl + C som ville "legge til" i stedet 
+av å "erstatte" det som var på utklippstavlen. Og eksperimentet fungerte. Det lille verktøyet var veldig praktisk. Dette fascinerte programmereren med flere ideer og flere eksperimenter, det 
+nå har blitt "MonkeyPaste". 
+
+Som skrivebordet er til filene dine, har MonkeyPaste til hensikt å være til utklippstavlen. Det er en pakke med verktøy nøye designet for å sømløst integrere og samhandle med 
+enhver applikasjon eller format av innhold. Ctrl + C og Ctrl + V er mye mer enn bare snarveier. De er inngangsportene alle applikasjoner deler, med en 
+Rikdom av verdi og mening du fortjener å ha tilgjengelig på fingertuppene. Ikke bare kastet bort etter neste Ctrl + C.
+
+Jeg er den programmereren som ble nevnt tidligere, og jeg vil at alle skal kunne finne bruk av MonkeyPaste. Så det og alle funksjonene er helt gratis å bruke. 
+Jeg vil også at du skal føle deg komfortabel med å bruke den. Så jeg forsikrer deg, som den eneste kraften bak opprettelsen, at INGEN av de (veldig) personlige opplysninger som kan oppstå på 
+utklippstavlen din blir noen gang sporet eller lagret hvor som helst utenfor din egen maskin. Periode.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>utklippstavle</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Sikker, sikker og privat lokal datalagring med valgfri 2-faktor passordbeskyttelse</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste er nå helt gratis fra denne utgivelsen !!
+
+Alle begrensninger (i appabonnement) er fjernet ettersom MonkeyPaste nå overgår til å bli et open source-prosjekt. Så følg med på vår github (github.com/monkeypaste) hvis du er interessert i å bidra.
+
+Oppdateringer:
+
+- Alle kapasitetsbegrensninger fjernet!
+- Avviste URL -redigeringsgrensesnittforbedringer
+- Baseline -støtte for å kjøre flere forekomster av MonkeyPaste
+- Ny delte verdiredaktør (i plugin nettleser der det er aktuelt)</value>
   </data>
 </root>

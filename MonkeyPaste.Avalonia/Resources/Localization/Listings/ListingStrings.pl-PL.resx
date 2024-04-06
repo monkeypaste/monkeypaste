@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>Kopiuj</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pasta</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Menedżer schowka</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>narzędzie</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>W pełni - wyróżniony edytor klipów z Find/Replain, Rich Tekst (tabele, listy, linki itp.) Szablony tekstu dla szybkiego, dynamicznego wklejania z kolekcji fragmentu</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Bezpieczne, bezpieczne i prywatne przechowywanie danych lokalnych z opcjonalną 2 - czynnik ochrona hasła</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Zbudowany - w przeglądarce wtyczki z wiecznie rozwijającą się społecznością wtycznymi wtyczkami</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste to menedżer schowka, narzędzie automatyzacji i produktywności jak żaden inny. Ulepszanie schowka w wzbogaconą i zorganizowaną część przepływu pracy,
-Wyposażony w intuicyjny i niski interfejs profilu, który obsługuje tekst, pliki i obrazy. Zaprojektowany pod kątem elastyczności, z wiecznie rozwijającą się społecznością napędzaną wtyczkami.
-
-Zaczęło się jako eksperyment programisty, który chce coś więcej niż tylko kopiować i wkleić ze schowka. Chciał prostego polecenia, takiego jak Ctrl+C, które zamiast tego dodałoby „do”
-„Wymień” to, co było w schowku. I eksperyment zadziałał. Małe narzędzie było bardzo przydatne. To pogrążyło programistę większą liczbą pomysłów i większej liczby eksperymentów, że
-Teraz stał się „małpą”.
-
-Ponieważ pulpit jest dla twoich plików, Monkeypaste zamierza być w schowku. Jest to pakiet narzędzi starannie zaprojektowany tak, aby pozornie się zintegrować i współpracować
-dowolna aplikacja lub format treści. Ctrl+C i Ctrl+V to znacznie więcej niż tylko skróty. Są to porty wejścia wszystkie aplikacje, które mają podzielić
-Bogactwo wartości i znaczenia, na które zasługujesz na dostępne na wyciągnięcie ręki. Nie tylko wyrzucony po następnym Ctrl+c.
-
-Jestem tym programistą wspomnianym wcześniej i chcę, aby wszyscy mogli dowiedzieć się z małpy. Tak więc i wszystkie jego funkcje są całkowicie bezpłatne.
-Chcę też, żebyś czuł się komfortowo, używając go. Zapewniam więc, że jesteś jedyną siłą stojącą za jego stworzeniem, że żadna z (bardzo) danych osobowych, która może się pojawić
-Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza własną maszyną. Okres.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza w�
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Schowek to dżungla. Małpa jest królem! Huśtaj się z aplikacji, kopiując to i wklejając, jak nigdy dotąd z małpą !! Marka - nowe, najnowocześniejsze narzędzie do automatyzacji schowka i analitycznej !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Próbka małpy w akcji!</value>
   </data>
@@ -258,9 +228,6 @@ Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza w�
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Nieograniczony - co roku</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Pierwsze wydanie</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Dzięki tej subskrypcji otrzymasz:
 ● Nieograniczona pojemność</value>
@@ -270,5 +237,45 @@ Twój schowek jest zawsze śledzony lub przechowywany w dowolnym miejscu poza w�
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Wkrótce pojawi się więcej platform i funkcji! Po prostu zaczęliśmy 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Szybkie wyszukiwanie i podświetlenie oświetlenia, po prostu zacznij pisać!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Przechowuj klipy tekstowe, obrazu i plików ze wszystkimi jego źródłem (aplikacja, strona internetowa, czas i wiele więcej) automatycznie</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste to menedżer schowka, narzędzie do automatyzacji i produktywności jak żadne inne. Wzbogacenie schowka w wzbogaconą i zorganizowaną część przepływu pracy,
+Wyposażony w intuicyjny i niskoprofilowy interfejs, który obsługuje tekst, pliki i obrazy. Zaprojektowany z myślą o elastyczności, z stale rosnącą biblioteką wtyczek kierowaną przez społeczność.
+
+Zaczęło się od eksperymentu programisty, który chciał czegoś więcej niż tylko kopiować i wklejać ze schowka. Chciał prostego polecenia, takiego jak Ctrl+C, które zamiast tego "dodawałoby do" 
+"zastąp" to, co było w schowku. I eksperyment się powiódł. Małe narzędzie było bardzo poręczne. To uwikłało programistę kolejnymi pomysłami i eksperymentami, które 
+teraz stał się "MonkeyPaste". 
+
+Ponieważ pulpit jest dla twoich plików, MonkeyPaste zamierza być w twoim schowku. Jest to zestaw narzędzi starannie zaprojektowanych, aby bezproblemowo integrować się i współpracować z 
+dowolne zastosowanie lub format treści. Ctrl+C i Ctrl+V to znacznie więcej niż tylko skróty. Są to porty wejścia, które są wspólne dla wszystkich aplikacji, 
+Bogactwo wartości i znaczenia, na które zasługujesz, aby mieć je na wyciągnięcie ręki. Nie tylko wyrzucone po następnym Ctrl+C.
+
+Jestem wspomnianym wcześniej programistą i chcę, aby każdy mógł znaleźć zastosowanie w MonkeyPaste. Tak więc on i wszystkie jego funkcje są całkowicie darmowe. 
+Chcę też, abyś czuł się komfortowo, korzystając z niego. Zapewniam więc Cię, jako jedyną siłę stojącą za jego stworzeniem, że ŻADNA z (bardzo) osobistych informacji, które mogą powstać na 
+Twój schowek jest zawsze śledzony lub przechowywany GDZIEKOLWIEK poza Twoim komputerem. Okres.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>schowek</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Bezpieczne i prywatne lokalne przechowywanie danych z opcjonalną 2-składnikową ochroną hasłem</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste jest teraz całkowicie wolny od tego wydania !!
+
+Wszystkie ograniczenia (w subskrypcjach aplikacji) zostały usunięte, ponieważ Monkeypaste przechodzi teraz na projekt typu open source. Więc miej oko na nasz github (github.com/monkeypaste), jeśli chcesz się przyczynić.
+
+Aktualizacje:
+
+- Wszystkie ograniczenia pojemności usunięte!
+- Ulepszenia interfejsu użytkownika edytora URL odrzuconych URL
+- Bazowa obsługa uruchamiania wielu instancji małpy
+- Nowy edytor współdzielonej wartości (w stosownych przypadkach w przeglądarce wtyczki)</value>
   </data>
 </root>

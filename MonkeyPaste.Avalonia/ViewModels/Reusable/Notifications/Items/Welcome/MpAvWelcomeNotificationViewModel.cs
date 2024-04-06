@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -90,6 +91,8 @@ namespace MonkeyPaste.Avalonia {
                 return _items;
             }
         }
+        public IEnumerable<MpAvWelcomeOptionGroupViewModel> VisibleItems =>
+            Items.Where(x => !x.NeedsSkip);
 
         public MpAvWelcomeOptionItemViewModel HoverItem =>
             CurOptGroupViewModel == null || CurOptGroupViewModel.Items == null ?
@@ -139,12 +142,16 @@ namespace MonkeyPaste.Avalonia {
         public MpWelcomePageType CurPageType { get; set; } = MpWelcomePageType.Greeting;
 
         public bool CanSelectPrevious =>
-            (int)CurPageType > 0;
+            //(int)CurPageType > 0;
+            CurOptGroupViewModel != VisibleItems.First();
         public bool CanSelectNext =>
-            (int)CurPageType + 1 < typeof(MpWelcomePageType).Length();
+            //(int)CurPageType + 1 < typeof(MpWelcomePageType).Length();
+
+            CurOptGroupViewModel != VisibleItems.Last();
 
         public bool CanFinish =>
-            (int)CurPageType + 1 >= typeof(MpWelcomePageType).Length();
+            //(int)CurPageType + 1 >= typeof(MpWelcomePageType).Length();
+            CurOptGroupViewModel == VisibleItems.Last();
         #endregion
 
         #region Appearance
@@ -383,14 +390,14 @@ namespace MonkeyPaste.Avalonia {
             DbPasswordViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.DbPassword) {
                 SplashIconSourceObj = "ShieldImage",
                 Title = UiStrings.WelcomeDbPasswordTitle,
-                Caption = UiStrings.WelcomeDbPasswordCaption,
+                Caption = UiStrings.WelcomeDbPasswordCaption
             };
             #endregion
 
         }
         private async Task BeginWelcomeSetupAsync() {
             IsWelcomeDone = false;
-            Mp.Services.LoadOnLoginTools.SetLoadOnLogin(false);
+            await Mp.Services.LoadOnLoginTools.SetLoadOnLoginAsync(false);
             bool is_pwd_already_set = await MpDb.CheckIsUserPasswordSetAsync();
             if (is_pwd_already_set) {
                 // this is not initial startup, user has reset ntf
@@ -465,7 +472,7 @@ namespace MonkeyPaste.Avalonia {
             // LOGIN LOAD
             bool loadOnLogin =
                 LoginLoadViewModel.Items.FirstOrDefault(x => x.OptionId is bool boolVal && boolVal).IsChecked;
-            Mp.Services.LoadOnLoginTools.SetLoadOnLogin(loadOnLogin);
+            await Mp.Services.LoadOnLoginTools.SetLoadOnLoginAsync(loadOnLogin);
             MpAvPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
 
             // SHORTCUT PROFILE

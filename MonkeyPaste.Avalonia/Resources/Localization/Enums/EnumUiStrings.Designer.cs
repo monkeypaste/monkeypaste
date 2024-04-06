@@ -1609,6 +1609,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modal Shutdown Later.
+        /// </summary>
+        public static string MpNotificationType_ModalShutdownLater {
+            get {
+                return ResourceManager.GetString("MpNotificationType_ModalShutdownLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modal Text Box Ok Cancel Message Box.
         /// </summary>
         public static string MpNotificationType_ModalTextBoxOkCancelMessageBox {
@@ -1704,6 +1713,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpNotificationType_RateApp {
             get {
                 return ResourceManager.GetString("MpNotificationType_RateApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single Instance Warning.
+        /// </summary>
+        public static string MpNotificationType_SingleInstanceWarning {
+            get {
+                return ResourceManager.GetString("MpNotificationType_SingleInstanceWarning", resourceCulture);
             }
         }
         
@@ -2793,6 +2811,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpShortcutType_ToggleFilterMenuVisible {
             get {
                 return ResourceManager.GetString("MpShortcutType_ToggleFilterMenuVisible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Global Hooks.
+        /// </summary>
+        public static string MpShortcutType_ToggleGlobalHooks {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ToggleGlobalHooks", resourceCulture);
             }
         }
         

@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Media;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -122,6 +123,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region Appearance
+
 
         public bool IsRtl {
             get =>
@@ -524,6 +526,37 @@ namespace MonkeyPaste.Avalonia {
 
             SetThemeValue(MpThemeResourceKey.ThemeLightColor, colors[27]);
             SetThemeValue(MpThemeResourceKey.ThemeDarkColor, colors[28]);
+
+
+
+            // NON-DYNAMIC COLORS
+            SetThemeValue(
+                MpThemeResourceKey.ThemeContentLinkColor,
+                tt == MpThemeType.Dark ?
+                    Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkColor_dark") :
+                    Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkColor_light"));
+
+            SetThemeValue(
+                MpThemeResourceKey.ThemeContentLinkHoverColor,
+                tt == MpThemeType.Dark ?
+                    Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkHoverColor_dark") :
+                    Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkHoverColor_light"));
+
+            SetThemeValue(
+                MpThemeResourceKey.ThemePasteToolbarBgColor,
+                tt == MpThemeType.Dark ?
+                    Mp.Services.PlatformResource.GetResource<Color>("PasteToolbarBgColor_dark") :
+                    Mp.Services.PlatformResource.GetResource<Color>("PasteToolbarBgColor"));
+            SetThemeValue(
+                MpThemeResourceKey.ThemePasteButtonDefaultBgColor,
+                tt == MpThemeType.Dark ?
+                    Mp.Services.PlatformResource.GetResource<Color>("PasteButtonDefaultBgColor_dark") :
+                    Mp.Services.PlatformResource.GetResource<Color>("PasteButtonDefaultBgColor"));
+            SetThemeValue(
+                MpThemeResourceKey.ThemePasteButtonCustomBgColor,
+                tt == MpThemeType.Dark ?
+                    Mp.Services.PlatformResource.GetResource<Color>("PasteButtonCustomBgColor_dark") :
+                    Mp.Services.PlatformResource.GetResource<Color>("PasteButtonCustomBgColor"));
 
             // FONT STUFF
             MpAvPrefViewModel.Instance.OnPropertyChanged(nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft));

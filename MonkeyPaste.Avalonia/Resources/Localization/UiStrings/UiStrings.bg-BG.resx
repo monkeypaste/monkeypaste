@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Научете повече за плановете</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Постави в: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Използване на наличните контакти (изисква fetcher плъгин) това поле ще се използва за всички екземпляри на този шаблон в този документ или във всеки от тях ще бъде посочен по-късно.&lt;/p&gt;&lt;p&gt; Така например, ако изберете имейл адрес тук, тогава имейл полето на контакта, който сте избрали, ще се използва за всички екземпляри в този документ.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ feedback@monkeypaste.com</value>
     <value>Не може да зададе параметри на споделена стойност в предварително зададени настройки. Paramid '{0}' в предварително зададен '{1}' за плъгин '{2}' трябва да бъде премахнат или paramvalue може да бъде посочен в раздела за дефиниция на параметъра.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Предварителните настройки трябва да имат уникални Guids. Дублиране на предварително зададен Guid '{0}' беше открит в плъгин '{1}' за предварително зададени настройки: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Грешка в анализа на приставката, по пътя '{0}' null, вероятно грешка при анализиране на json. Игнориране на плъгин</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ feedback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' съдържа споделени стойности. Искате ли да нулирате и тези?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Предварителните настройки трябва да имат уникални ръководства. Дублиран предварително зададен guid '{0}' беше открит в приставката '{1}' за предварително зададени настройки: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Постави в: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Неизвестна грешка {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Вашата покупка не можа да бъде завършена. Причина: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Добавете домейн</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Добавяне на страница</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Домейнът за тази страница е отхвърлен. За да разрешите тази страница, ще трябва да премахнете отказа за „{0}“.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Домейнът „{0}“ вече е отхвърлен</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домейни</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Тази страница вече е отхвърлена.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Страници</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Синхр</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Друг екземпляр на MonkeyPaste вече работи. Сигурни ли сте, че искате да отворите нов екземпляр?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Конфигуриране</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Глобалните клавишни комбинации за мишка и клавиатура са деактивирани.
+
+Глобалните преки пътища вече могат да бъдат активирани в менюто на системната област</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Деактивирани глобални преки пътища: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Глобалните клавишни комбинации за мишка и клавиатура са активирани.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Експериментално) Активирани глобални преки пътища: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Изключете глобалните преки пътища</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Включете глобалните преки пътища</value>
   </data>
 </root>

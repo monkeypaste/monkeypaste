@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>whakaahua</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>whakapiri</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Kaiwhakahaere topa</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>taputapu</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Katoa - Whakawhitinga Clip Whakaatu me te rapu / whakakapi, raarangi, raarangi, Hononga, me etahi atu)</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Haumaru, Haumaru Haumaru me te Taura Whiri me te Wahanga Motuhake me te Waitohu 2 - Tiaki Kupuhipa Factor</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Hanga - i roto i te kaitirotiro mono me tetahi hapori e tipu haere ana - i peia e te whare pukapuka o nga pragins</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Ko te Monkeypaste tetahi kaiwhakahaere topātuhi, automation me te taputapu hua kaore i rite ki tetahi atu. Te whakarei ake i to topenga ki te whakauru me te whakarite i to waahanga mahi,
-Kei te whakaatu i te atanga mohio me te iti - te tautoko i nga tuhinga, nga konae me nga whakaahua. I hangaia mo te ngawari, me te hapori e tipu haere ana - ka peia e koe nga monomai.
-
-I tiimata ano he whakamatautau na te kaitirotiro e hiahia ana kia nui ake i te kape me te whakapiri i te topenga. I hiahia ia ki te whakahau ngawari penei i te Ctrl + C tera ka 'tāpiri ki'
-Tuhinga o mua. Na ka mahi te whakamatautau. Ko te taputapu iti he tino pukumahi. I whakaputahia e tenei te kaitohu me etahi atu whakaaro me etahi atu whakamatautau, ara
-Inaianei kua "Monkeypaste".
-
-I te mea ko te papamahi ki o konae, e hiahia ana a Monkeypaste ki to topenga. Ko tana huinga o nga taputapu i hangaia kia kore ai e whakauru me te hono atu ki
-Tetahi tono me te whakatakotoranga ranei o te ihirangi. Ko Ctrl + C me Ctrl + v he nui ake i te poto noa iho. Ko ratou nga tauranga o te whakauru ki nga tono katoa, e kawe ana i te
-Te taonga o te uara me te tikanga e tika ana kia waatea koe ki o maihao. E kore noa i tukuna atu i muri i te CTRL + C.
-
-Ko ahau te kaiwhakaputa i whakahuahia i mua atu ka hiahia au kia kitea e te katoa te whakamahi i te monkeypaste. Na he tino kore katoa te whakamahi.
-Kei te hiahia hoki ahau kia pai koe ki te whakamahi i te reira. Na ko taku pono e mea ana ki a koe, ko te mea anake i muri i tana hanganga, kaore tetahi o nga korero mo te tangata ake ka puta
-Kei te tirotirohia to papamahi, ka penapena ranei i nga waahi katoa i tua atu i to ake miihini. Wā.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Kei te tirotirohia to papamahi, ka penapena ranei i nga waahi katoa i tua atu i 
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Ko te paparahi he ngahere. Ko Monkeypaste te Kingi! Swanging mai i te taupānga ki te taupānga, te kape i tenei me te whakaputa i tera penei me te Monkeypaste !! He waitohu - he hou, he tapahi i te topātuhi mata me te taputapu aunoa !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Tauira o Monkeypaste i te mahi!</value>
   </data>
@@ -258,9 +228,6 @@ Kei te tirotirohia to papamahi, ka penapena ranei i nga waahi katoa i tua atu i 
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Mutunga kore - tau</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Te tuku tuatahi</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Ma tenei ohaurunga ka whiwhi koe:
 ● Te kaha kore mutunga</value>
@@ -270,5 +237,45 @@ Kei te tirotirohia to papamahi, ka penapena ranei i nga waahi katoa i tua atu i 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● He maha atu nga waahanga me nga waahanga e haere mai ana! Ko matou noa nga tiimatanga 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Ma te rama tere tere me te miramira, ka tiimata noa te pato!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Rokiroki kuputuhi, te ahua me nga konae konae me te katoa o ona puna (te taupānga, te paetukutuku, te waa, me te maha atu) korero aunoa</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>He kaiwhakahaere papatopenga a MonkeyPaste, he utauta aunoatanga me te hua pēnei i tētahi atu. Mā te whakarite i tō papatopenga ki tētahi wāhi nui, whakaritea hoki o tō whiwhinga mahi,
+e whakaatu ana i tētahi atanga kōtaha, iti hoki - kōtaha e tautoko ana i ngā kuputuhi, ngā kōnae me ngā atahanga. I hoahoatia mō te ngāwari ake, me tētahi hapori tipu ake - i aia te taupoki o ngā monomai.
+
+I tīmata hei whakamātautau a tētahi kaiwhakahaere e hiahia ana kia neke atu i te tārua noa iho me te whakapiri i waho o te papatopenga. I pīrangi a ia ki tētahi tono ngāwari pēnei i Ctrl+C ka 'tāpiri kē' 
+o te 'wāhi' he aha i runga i te papatopenga. A, i mahi te whakamātautau. He tino whai take te utauta iti. Na tēnei i whakararuraru te kaihōtaka ki ētahi atu whakaaro me ētahi atu whakamātautau, arā 
+Kua noho ināianei ko "MonkeyPaste". 
+
+I te mea kei ō kōnae te papamahi, ko te tikanga kia noho a MonkeyPaste ki tō papatopenga. I āta hangaia ōna huinga utauta ki te whakauru me te whakakotahi ki 
+he taupānga, hōputu ihirangi rānei. He nui ake te Ctrl+C me te Ctrl+V i ngā pokatata noa iho. Ko rātou ngā tauranga o te tāurunga o ngā taupānga katoa tiritiri, e mau ana i tētahi 
+Ko te rawa o te uara me te tikanga e tika ana kia wātea koe i ō matimati. Kāore i makaia noatia i muri i te Ctrl+C panuku.
+
+Ko ahau tērā kaiwhakahaere i kōrerotia i mua, ā, e hiahia ana ahau kia kitea e te katoa te whakamahinga i roto i MonkeyPaste. Nā reira me ōna āhuahira katoa e wātea ana ki te whakamahi. 
+E hiahia ana hoki ahau kia rongo koe i te pai ki te whakamahi. Nā reira ka whakaū atu ahau ki a koe, he tōpana anake i muri i tōna hanganga, ko te NONE o ngā mōhiohio whaiaro (tino) ka puta ake 
+Kua aroturukitia tō papatopenga, kua penapenatia rānei te ANYWHERE ki tua atu i tō ake mīhini. Wā.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>papatopenga</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Rokiroki raraunga paetata haumaru, haumaru, tūmataiti hoki me te parenga kupuhipa 2 - āhuatanga</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Ko te Monkeypaste inaianei te tino kore utu i tenei tukunga !!
+
+Ko nga tikanga katoa (i roto i nga ohaurunga App kua tangohia i te Monkeypaste inaianei kei te whakawhiti i te kaupapa tuwhera. Na kia mau tonu to kanohi ki to maatau GitHub (GitHub.com/monkeypaste) Mena kei te hiahia koe ki te koha.
+
+Nga Whakahou:
+
+- Kua nekehia nga tikanga katoa!
+- Kua paopao i te URL Whakatikatika UI
+- Tautoko Bayline mo te whakahaere i nga waa maha o te monkeypaste
+- Ko te ētita uara hou (i roto i te pūtirotiro mono i reira e tika ana)</value>
   </data>
 </root>

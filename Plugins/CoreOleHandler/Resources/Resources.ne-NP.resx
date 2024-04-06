@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>हिचे</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>रमाईलोको लागि, जब यो क्लिपबोर्डमा छवि जाँच गरियो</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>पाठमा छवि</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>जब उपलब्ध हुन्छ, पहिलो चयनित पाठ ढाँचामा डाटालाई छविमा रूपान्तरण गरिन्छ र क्लिपबोर्डमा थपिनेछ।</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>छवि ढाँचामा पाठ</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>छवि (TIFF)</value>
+  </data>
 </root>

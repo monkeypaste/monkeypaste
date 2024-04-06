@@ -78,13 +78,13 @@ namespace MonkeyPaste.Avalonia {
         protected nint GetParentHandleAtPoint(MpPoint p) {
             // Get the window/control that the mouse is hovering over...
             nint hwnd = WinApi.WindowFromPoint(new System.Drawing.Point((int)p.X, (int)p.Y));
-            if (hwnd == nint.Zero) {
-                return nint.Zero;
+            if (hwnd == IntPtr.Zero) {
+                return IntPtr.Zero;
             }
             // Continue to get the parent until we reach the top-level window (with parent of NULL)...
             while (true) {
                 nint p_hwnd = WinApi.GetParent(hwnd);
-                if (p_hwnd == nint.Zero) {
+                if (p_hwnd == IntPtr.Zero) {
                     return hwnd;
                 }
                 hwnd = p_hwnd;
@@ -93,9 +93,9 @@ namespace MonkeyPaste.Avalonia {
 
         public nint SetActiveProcess(MpPortableProcessInfo p) {
             // details here https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow#remarks
-            if (p.Handle == nint.Zero) {
-                MpConsole.WriteLine("Warning cannot set active process to nint.Zero, ignoring");
-                return nint.Zero;
+            if (p.Handle == IntPtr.Zero) {
+                MpConsole.WriteLine("Warning cannot set active process to IntPtr.Zero, ignoring");
+                return IntPtr.Zero;
             }
             //MpDebug.Assert(MpAvWindowManager.IsAnyActive, $"Must be active window to set fg window");
             //nint lastActive = WinApi.SetActiveWindow(ThisAppHandle);
@@ -121,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected string GetProcessTitle(nint hWnd) {
             try {
-                if (hWnd == nint.Zero) {
+                if (hWnd == IntPtr.Zero) {
                     return "Unknown Application";
                 }
                 int length = WinApi.GetWindowTextLength(hWnd);
@@ -141,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
 
         private Func<nint, string>[] _getProcessMeths;
         protected string GetProcessPath(nint hWnd) {
-            if (hWnd == nint.Zero) {
+            if (hWnd == IntPtr.Zero) {
                 return string.Empty;
             }
             if (_getProcessMeths == null) {
@@ -237,7 +237,7 @@ namespace MonkeyPaste.Avalonia {
                     //MpConsole.WriteTraceLine($"Active process '{proc.ProcessName}' is on ignored list, using fallback '{fallback}'");
                     return null;
                 }
-                if (proc.MainWindowHandle == nint.Zero) {
+                if (proc.MainWindowHandle == IntPtr.Zero) {
                     return null; //null;
                 }
 
@@ -315,7 +315,7 @@ namespace MonkeyPaste.Avalonia {
         protected nint GetThisAppHandle() {
             if (MpAvWindowManager.MainWindow is not { } mw ||
                 mw.TryGetPlatformHandle() is not IPlatformHandle ph) {
-                return nint.Zero;
+                return IntPtr.Zero;
             }
             return ph.Handle;
         }
@@ -327,13 +327,13 @@ namespace MonkeyPaste.Avalonia {
         #region Unused
 
         private bool IsProcessAdmin(nint handle) {
-            if (handle == nint.Zero) {
+            if (handle == IntPtr.Zero) {
                 return false;
             }
             try {
                 WinApi.GetWindowThreadProcessId(handle, out uint pid);
                 using (Process proc = Process.GetProcessById((int)pid)) {
-                    nint ph = nint.Zero;
+                    nint ph = IntPtr.Zero;
                     WinApi.OpenProcessToken(proc.Handle, WinApi.TOKEN_ALL_ACCESS, out ph);
                     WindowsIdentity iden = new WindowsIdentity(ph);
                     bool result = false;
@@ -363,7 +363,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         //protected override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
-        //    nint handle = nint.Zero;
+        //    nint handle = IntPtr.Zero;
         //    if (handleIdOrTitle is nint) {
         //        handle = (nint)handleIdOrTitle;
         //    } else {

@@ -8,7 +8,9 @@
      <LangVersion>$(DefaultLangVersion)</LangVersion>
      <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
-    <Platforms>$(DefaultPlatforms)</Platforms>
+
+     <WarningsAsErrors>CS4014;</WarningsAsErrors>
+     <Platforms>$(DefaultPlatforms)</Platforms>
      <!--<RuntimeIdentifiers>$(TargetRuntimeIdentifiers)</RuntimeIdentifiers>-->
      <!--<AvaloniaNameGeneratorIsEnabled>true</AvaloniaNameGeneratorIsEnabled>-->
     <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
@@ -22,16 +24,6 @@
   
   <PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
     <UseWPF>True</UseWPF>
-  </PropertyGroup>
-
-
-  <PropertyGroup>
-    <NoWarn>CS8632</NoWarn>
-    <NoWarn>CS8073</NoWarn>
-    <NoWarn>$(NoWarn),IDE1006</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup>
-    <WarningsAsErrors>CS4014;</WarningsAsErrors>
   </PropertyGroup>
   
   <ItemGroup>
@@ -282,6 +274,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\RadioButton.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ScrollViewer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\SelectingItemsControl.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\SplitButton.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
@@ -294,11 +287,8 @@
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\AppMode\MpAvAppModeFlyoutView2.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\ContextMenu\MpAvContextMenuView.axaml" />
-    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\Loader\MpAvLoaderView.axaml" />
-    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\Message\MpAvMessageNotificationView.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationContainerView.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml" />
-    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml" />
     <AvaloniaXaml Remove="Views\SettingsWindow\MpAvSettingsWindow.axaml" />
     <None Remove="Assets\Cursors\copy.png" />
     <None Remove="Assets\Cursors\hand_closed.png" />
@@ -479,6 +469,7 @@
     <None Remove="Assets\Images\minus2.png" />
     <None Remove="Assets\Images\missingfile.png" />
     <None Remove="Assets\Images\monkey.png" />
+    <None Remove="Assets\Images\monkeypaused.png" />
     <None Remove="Assets\Images\monkeyupdate.png" />
     <None Remove="Assets\Images\monkeywink.png" />
     <None Remove="Assets\Images\mousebothclick.png" />
@@ -539,11 +530,13 @@
     <None Remove="Assets\Images\spellcheck.png" />
     <None Remove="Assets\Images\spinner.png" />
     <None Remove="Assets\Images\spreadsheet.png" />
+    <None Remove="Assets\Images\stack.png" />
     <None Remove="Assets\Images\stargold.png" />
     <None Remove="Assets\Images\staroutline.png" />
     <None Remove="Assets\Images\starsolid.png" />
     <None Remove="Assets\Images\staryellow.png" />
     <None Remove="Assets\Images\staryellow2.png" />
+    <None Remove="Assets\Images\sync.png" />
     <None Remove="Assets\Images\tag.png" />
     <None Remove="Assets\Images\tagcolor.png" />
     <None Remove="Assets\Images\text.png" />
@@ -610,6 +603,7 @@
     <None Remove="Resources\Editor\src\components\localizer\UiStrings.js" />
     <None Remove="resources\editor\src\components\quill-wrapper\parchment\parchment-wrapper.js" />
     <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
+    <None Remove="Resources\Editor\test.html" />
     <None Remove="Resources\Legal\credits.html" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
@@ -657,11 +651,8 @@
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\CheckBox\MpCheckBoxParameterView.axaml.cs" />
     <Compile Remove="Views\Reusable\ContextMenu\MpAvContextMenuView.axaml.cs" />
-    <Compile Remove="Views\Reusable\Notifications\Toast\Loader\MpAvLoaderView.axaml.cs" />
-    <Compile Remove="Views\Reusable\Notifications\Toast\Message\MpAvMessageNotificationView.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationContainerView.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />
-    <Compile Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs" />
     <Compile Remove="Views\SettingsWindow\MpAvSettingsWindow.axaml.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1609,6 +1600,9 @@
     <AvaloniaResource Include="Assets\Images\missingfile.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\monkeypaused.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\monkeyupdate.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -1667,6 +1661,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\spinner.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\stack.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\stargold.png">
@@ -1961,6 +1958,9 @@
     <AvaloniaResource Include="Assets\Images\staryellow2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\sync.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\tag.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -2072,6 +2072,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\ContextMenu.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPluginBrowser.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltipHint.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\SplitButton.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TopLevel.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Nav\TabNav.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Image.axaml" />
@@ -2180,6 +2181,12 @@
     <Compile Update="Views\ExternalDropWindow\MpAvExternalDropView.axaml.cs">
       <DependentUpon>MpAvExternalDropView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CompatabilityViewers\MpAvClipTileCompatibilityView.axaml.cs">
+      <DependentUpon>MpAvClipTileCompatibilityView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CompositeContentView\PasteToolbar\MpAvPasteToolbarView.axaml.cs">
+      <DependentUpon>MpAvPasteToolbarView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\ContentWebViewContainer\MpAvContentWebViewContainer.axaml.cs">
       <DependentUpon>MpAvContentWebViewContainer.axaml</DependentUpon>
     </Compile>
@@ -2237,6 +2244,9 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Analytics\Presets\MpAvAnalyticItemPresetDataGridView.axaml.cs">
       <DependentUpon>MpAvAnalyticItemPresetDataGridView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Browser\Item\Configure\MpAvPluginConfigureView.axaml.cs">
+      <DependentUpon>MpAvPluginConfigureView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Browser\Item\Detail\MpAvPluginDetailView.axaml.cs">
       <DependentUpon>MpAvPluginDetailView.axaml</DependentUpon>
     </Compile>
@@ -2266,9 +2276,6 @@
     </Compile>
     <Compile Update="Views\MainWindow\TitleMenu\ZoomSlider\MpAvZoomFactorView.axaml.cs">
       <DependentUpon>MpAvZoomFactorView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Mobile\Notifications\Loader\MpAvMobileLoaderView.axaml.cs">
-      <DependentUpon>MpAvMobileLoaderView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Buttons\PopupSelector\MpAvPopupMenuSelector.axaml.cs">
       <DependentUpon>MpAvPopupMenuSelector.axaml</DependentUpon>
@@ -2330,6 +2337,9 @@
     <Compile Update="Views\SettingsWindow\Menu\MpAvSettingsMenuView.axaml.cs">
       <DependentUpon>MpAvSettingsMenuView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Sync\MpAvSyncView.axaml.cs">
+      <DependentUpon>MpAvSyncView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Account\MpAvAccountView.axaml.cs">
       <DependentUpon>MpAvAccountView.axaml</DependentUpon>
     </Compile>
@@ -2373,31 +2383,30 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
-    <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin.Localizer\Localizer.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
-    <ProjectReference Include="..\_build\_build.csproj" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.7" />
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.17" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.6" />
-    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
     <PackageReference Include="Markdig" Version="0.34.0" />
+    <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" NoWarn="NU1701" />
     <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="ResXResourceReader.NetStandard" Version="1.2.0" />
     <PackageReference Include="SharpHook" Version="5.2.2" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
     <PackageReference Include="System.Management" Version="8.0.0" />
-    <PackageReference Include="NetCoreAudio" Version="2.0.0" />
+    <PackageReference Include="NetCoreAudio" Version="2.0.0" NoWarn="NU1701" />
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
     <PackageReference Include="System.Speech" Version="8.0.0" />
     <PackageReference Include="TaskScheduler" Version="2.10.1" />
@@ -2407,8 +2416,12 @@
   <ItemGroup Condition="'$(UseOutSysCef)' == 'True'">
     <PackageReference Include="WebViewControl-Avalonia" Version="2.117.7-avalonia11" />
     <PackageReference Include="CefGlue.Avalonia" Version="117.5938.8-avalonia11" />
-    <PackageReference Include="CefGlue.Common" Version="117.5938.8-avalonia11" />
-    
+    <PackageReference Include="CefGlue.Common" Version="117.5938.8-avalonia11" />    
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(UseSugarWv)' == 'True'">
+    <PackageReference Include="WebView.Avalonia" Version="11.0.0.4" />
+    <PackageReference Include="WebView.Avalonia.MacCatalyst" Version="11.0.0.4" Condition="'$(BuildOs)' == 'MAC'" />
   </ItemGroup>
     
   <ItemGroup Condition="$(IsDesktop) == 'true'">
@@ -2447,6 +2460,8 @@
   </ItemGroup>
   <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
     <Compile Include="Utils\Helpers\MpAvAppleScripts.cs" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ScreenInfo\Collection\Item\Desktop\MpAvTaskbar.uwp.cs" />
+    <Compile Remove="Utils\Helpers\MpPngToIcoConverter.uwp.cs" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\Images\radar.png">
@@ -2483,16 +2498,20 @@
     <Folder Include="Utils\Plugins\Headless\" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(UseCefNet)' == 'True'">
     <Reference Include="CefNet">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
+      <HintPath>..\ext\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
     </Reference>
     <Reference Include="CefNet.Avalonia">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
+      <HintPath>..\ext\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
     </Reference>
   </ItemGroup>
+  
 
   <ItemGroup>
+    <Content Update="Resources\Editor\test.html">
+      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
+    </Content>
     <Content Update="Resources\Editor\lib\jquery-context-menus\src\context-menu.css">
       <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
     </Content>

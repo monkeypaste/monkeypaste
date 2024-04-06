@@ -2639,9 +2639,6 @@ FANDUCE@ONKEYPASTET.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ଯୋଜନା ବିଷୟରେ ଅଧିକ ଜାଣନ୍ତୁ |</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ପେଷ୍ଟ: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;ଉପଲବ୍ଧ ସମ୍ପର୍କଗୁଡିକ ବ୍ୟବହାର କରି (ଏକ ଫ୍ଲାଚର୍ ପ୍ଲଗଇନ୍ ଆବଶ୍ୟକ କରେ) ଏହି କ୍ଷେତ୍ର ଏହି ଦସ୍ତାବିଜରେ ଏହି ଟେମ୍ପଲେଟ୍ ର ସମସ୍ତ ଉଦାହରଣ ପାଇଁ ବ୍ୟବହୃତ ହେବ କିମ୍ବା ଏହା ପରେ ଉଲ୍ଲେଖ କରାଯିବ।&lt;/p&gt;&lt;p&gt; ତେଣୁ ଉଦାହରଣ ସ୍ୱରୂପ ଯଦି ଏଠାରେ ଇମେଲ୍ ଠିକଣା ଚୟନ କରନ୍ତୁ ତେବେ ଆପଣ ଚୟନ କରିଥିବା ସମ୍ପର୍କର ଇମେଲ୍ ଫିଲ୍ଡ ଏହି ଦସ୍ତାବିଜରେ ଥିବା ସମସ୍ତ ଉଦାହରଣ ପାଇଁ ବ୍ୟବହୃତ ହେବ।&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ FANDUCE@ONKEYPASTET.com</value>
     <value>ପ୍ରେସେଟ୍ ରେ ଅଂଶୀଦାର ମୂଲ୍ୟ ପାରାମିଟର ସେଟ୍ କରିପାରିବେ ନାହିଁ। ପ୍ଲଗଇନ୍ '{2}' ପାଇଁ ପ୍ରିସେଟ୍ '{1}'ରେ ପାରାମିଡ୍ '{0}' ଅପସାରଣ କରିବା ଆବଶ୍ୟକ କିମ୍ବା ପାରାମିଟର ସଂଜ୍ଞା ବିଭାଗରେ ପାରାମ୍ଭାଲ୍ୟୁ ନିର୍ଦ୍ଦିଷ୍ଟ କରାଯାଇପାରିବ।</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ପ୍ରିସେଟ୍ ଗୁଡିକରେ ଅନନ୍ୟ ଗାଇଡ୍ ରହିବା ଜରୁରୀ | ପ୍ରିସେଟ୍ ପାଇଁ ପ୍ଲଗଇନ୍ '{1}' ରେ ନକଲ ପ୍ରିସେଟ୍ ଗାଇଡ୍ '{0}' ଚିହ୍ନଟ ହେଲା: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>ପ୍ଲଗଇନ୍ ତ୍ରୁଟି, ପଥ '{0}' nols, ସମ୍ଭବତ J ଜୋନ୍ ପାର୍ସ କରିବା | ପ୍ଲଗଇନ୍ କୁ ଅଣଦେଖା କରିବା |</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ FANDUCE@ONKEYPASTET.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ଅଂଶୀଦାର ମୂଲ୍ୟ ଧାରଣ କରେ | ଆପଣ ସେଗୁଡିକୁ ପୁନ res ସେଟ୍ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ପ୍ରେସେଟ୍ ରେ ଅନନ୍ୟ ଗୁଇଡ୍ ରହିବା ଆବଶ୍ୟକ। ପ୍ରିସେଟ୍ ପାଇଁ ପ୍ଲଗଇନ୍ '{1}'ରେ ଡୁପ୍ଲିକେଟ୍ ପ୍ରିସେଟ୍ ଗିଲ୍ଡ '{0}' ଚିହ୍ନଟ ହୋଇଥିଲା: {2}।</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;ପେଷ୍ଟ: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>ଅଜ୍ଞାତ ତ୍ରୁଟି {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>ତୁମର କ୍ରୟ ସମାପ୍ତ ହୋଇପାରିଲା ନାହିଁ | କାରଣ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ଡୋମେନ୍ ଯୋଡନ୍ତୁ |</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>ପୃଷ୍ଠା ଯୋଡନ୍ତୁ |</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>ଏହି ପୃଷ୍ଠା ପାଇଁ ଡୋମେନ୍ ପ୍ରତ୍ୟାଖ୍ୟାନ | ଏହି ପୃଷ୍ଠାକୁ ଅନୁମତି ଦେବାକୁ ଆପଣଙ୍କୁ '{0}' ପାଇଁ ପ୍ରତ୍ୟାଖ୍ୟାନ ଅପସାରଣ କରିବାକୁ ପଡିବ |</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>ଡୋମେନ୍ '{0}' ପୂର୍ବରୁ ପ୍ରତ୍ୟାଖ୍ୟାନ ହୋଇଛି |</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ଭାଷଣଗୁଡିକ |</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>ଏହି ପୃଷ୍ଠାଟି ପୂର୍ବରୁ ପ୍ରତ୍ୟାଖ୍ୟାନ ହୋଇଛି |</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>ପୃଷ୍ଠାଗୁଡ଼ିକ |</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>ସିଙ୍କ୍</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>ମାଙ୍କଡ଼ପେଷ୍ଟର ଅନ୍ୟ ଏକ ଉଦାହରଣ ପୂର୍ବରୁ ଚାଲୁଛି | ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ଏକ ନୂତନ ଉଦାହରଣ ଖୋଲିବାକୁ ଚାହୁଁଛନ୍ତି?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>ବିନ୍ୟାସ କର</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ସର୍ବଭାରନକାରୀ ମାଉସ୍ ଏବଂ କୀବୋର୍ଡ୍ ସର୍ଟକଟ୍ ଅକ୍ଷମ ହୋଇଛି।
+
+ସିଷ୍ଟମ୍ ଟ୍ରେ ମେନୁରେ ଗ୍ଲୋବାଲ୍ ସର୍ଟକଟ୍ ବର୍ତ୍ତମାନ ସକ୍ଷମ ହୋଇପାରିବ |</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ଗ୍ଲୋବାଲ୍ ସର୍ଟକଟ୍ ଅକ୍ଷମ: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ସର୍ବଭାରନକାରୀ ମାଉସ୍ ଏବଂ କୀବୋର୍ଡ୍ ସର୍ଟକଟ୍ ସକ୍ଷମ ହୋଇଛି |</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ପରୀକ୍ଷାମୂଳକ) ଗ୍ଲୋବାଲ୍ ସର୍ଟକଟ୍ ସକ୍ଷମ: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ଗ୍ଲୋବାଲ୍ ସର୍ଟକଟ୍ ଟୋଗଲ୍ କରନ୍ତୁ |</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>ଗ୍ଲୋବାଲ୍ ସର୍ଟକଟ୍ ଟୋଗଲ୍ କରନ୍ତୁ |</value>
   </data>
 </root>

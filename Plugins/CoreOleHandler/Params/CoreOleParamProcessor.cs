@@ -1,16 +1,22 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Media.Imaging;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace CoreOleHandler {
     public static class CoreOleParamProcessor {
-        public static string CurImageExtVal { get; private set; } = "png";
+        #region Private Variables
+        #endregion
+
+        public static string CurImageExtVal { get; set; } = "png";
         public static object ProcessParam(
             MpParameterRequestItemFormat paramInfo,
             string format,
             object data,
-            IEnumerable<string> all_formats,
+            Dictionary<string, object> all_source_data,
             MpOlePluginRequest req,
+            bool allow_null_data,
             out Dictionary<string, object> convData,
             out Exception ex,
             out List<MpUserNotification> ntfl) {
@@ -19,9 +25,14 @@ namespace CoreOleHandler {
             ntfl = null;
 
             if (data == null || paramInfo == null) {
-                // already omitted
-                return data;
+                if(allow_null_data) {
+                    // must be a pseudo format
+                } else {
+                    // already omitted
+                    return data;
+                }
             }
+            IEnumerable<string> all_formats = all_source_data.Select(x => x.Key);
             string paramVal = paramInfo.paramValue;
             try {
                 // NOTE by internal convention 'paramId' is an int.
@@ -50,7 +61,7 @@ namespace CoreOleHandler {
                             case CoreOleParamType.RICHTEXTFORMAT_R_TOHTML: {
                                     if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT) &&
                                         data is string rtf &&
-                                        rtf.RtfToHtml() is string html) {
+                                        rtf.RtfToHtml() is { } html) {
                                         convData = new() {
                                             { MpPortableDataFormats.Html, html },
                                             { MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT, true } };
@@ -82,7 +93,7 @@ namespace CoreOleHandler {
                             case CoreOleParamType.HTMLFORMAT_R_TORTF: {
                                     if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT) &&
                                         data is string html_str &&
-                                        html_str.ToRtfFromHtmlFragment() is string rtf) {
+                                        html_str.ToRtfFromHtmlFragment() is { } rtf) {
                                         convData = new() {
                                             { MpPortableDataFormats.Rtf, rtf },
                                             { MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT, true } };
@@ -114,7 +125,7 @@ namespace CoreOleHandler {
                             case CoreOleParamType.TEXTHTML_R_TORTF: {
                                     if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT) &&
                                         data is string html_str &&
-                                        html_str.HtmlToRtf() is string rtf) {
+                                        html_str.HtmlToRtf() is { } rtf) {
                                         convData = new() {
                                             { MpPortableDataFormats.Rtf, rtf },
                                             { MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT, true } };
@@ -216,6 +227,44 @@ namespace CoreOleHandler {
                         break;
                     case MpPortableDataFormats.Image:
                         switch (paramType) {
+                            case CoreOleParamType.PNG_W_FROMTEXTFORMATS: {
+                                    // text->image
+                                    if(data != null) {
+                                        // avoid replacing any present images
+                                        break;
+                                    }
+                                    // select highest fidelity text format that is available
+                                    string text_format_to_conv =
+                                        all_formats
+                                        .Where(x => MpPortableDataFormats.IsTextFormat(x) is true)
+                                        .OrderByDescending(x => MpPortableDataFormats.SortedTextFormats.IndexOf(x))
+                                        .FirstOrDefault();
+                                    if(!all_source_data.TryGetValue(text_format_to_conv,out string text_data)) {
+                                        break;
+                                    }
+                                    text_data = text_data.ToRichHtmlDocument(text_format_to_conv);
+                                    data = HtmlRender.RenderToImage(text_data).ToBase64String();
+                                    break;
+                                }
+                                
+                            case CoreOleParamType.PNG_W_ASCIIART: {
+                                    // Image->text
+                                    if (all_formats.Any(x => MpPortableDataFormats.IsPlainTextFormat(x) is true)) {
+                                        // already has text ignore ascii art
+                                        break;
+                                    }
+                                    if (data is not string base64 || base64.ToAvBitmap() is not { } bmp) {
+                                        // no image or corrupt
+                                        break;
+                                    }
+                                    // add ascii plain text to conv_results
+                                    convData = new() {
+                                    { MpPortableDataFormats.Text, bmp.ToAsciiImage() }
+                                };
+
+                                    break;
+                                }
+                                
                             case CoreOleParamType.PNG_R_SCALEOVERSIZED: {
                                     // NOTE this also handles maxw,maxh,scale,empty since they are dependant and for perf
                                     if (data is not string base64 || base64.ToAvBitmap() is not { } bmp) {

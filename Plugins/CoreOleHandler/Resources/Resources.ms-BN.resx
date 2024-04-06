@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Untitled</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Untuk bersenang -senang, apabila ini diperiksa imej di papan klip akan ditukar dengan kasar ke dalam ascii (teks biasa) seni imej 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Gambar ke teks</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Apabila tersedia, data format teks yang dipilih pertama akan ditukar kepada imej dan ditambah ke papan klip.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Teks ke format gambar</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Imej (TIFF)</value>
+  </data>
 </root>

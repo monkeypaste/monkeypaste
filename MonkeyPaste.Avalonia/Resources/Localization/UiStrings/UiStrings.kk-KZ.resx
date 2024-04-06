@@ -2639,9 +2639,6 @@ feedback@monkeyptaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Жоспарлар туралы көбірек біліңіз</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Қою: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Қол жетімді контактілерді пайдалану (fetcher плагинін қажет етеді) бұл өріс осы құжаттағы үлгінің барлық нұсқалары үшін қолданылады немесе кейінірек сілтеме жасалатын болады.&lt;/p&gt;&lt;p&gt; Мысалы, осында электрондық пошта мекенжайын таңдасаңыз, таңдалған контактінің электрондық пошта өрісі осы құжаттағы барлық нұсқалар үшін пайдаланылады.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ feedback@monkeyptaste.com</value>
     <value>Ортақ мән параметрлерін алдын-ала орната алмайды. «{0}» параметрі «{2}» PLOSET '{1}' ішінде «{2}» пленкуляциясын алу керек немесе Параметрді анықтау бөлімінде параметрлерді жою керек.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Алдын ала орнатуларда бірегей бағыттаушылар болуы керек. Алдын ала орнату нұсқаулығының қайталанатын "{0}" "{1}" плагинінде алдын ала орнатулар үшін анықталды: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Плагинді талдау қатесі, «{0}» жолында «{0}» жолында, мүмкін, JSON-ді талдау. Плагинді елемеу</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ feedback@monkeyptaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ортақ мәндерден тұрады. Сіздерді де қалпына келтіргіңіз келе ме?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Прецеденттердің бірегей бағыттаушылары болуы тиіс. «{1}» плагин модулінде алдын ала орнатылған «{0}» гидының қайталануы анықталды: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Қою: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>{0} белгісіз қате</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Сіздің сатып алуыңыз аяқталмады. Себеп: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Домен қосыңыз</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Бет қосу</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Бұл беттің домені қабылданбады. Бұл беттің рұқсат беру үшін '{0}' үшін қабылдамауды жою қажет.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>'{0} домені қабылданбады</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домендер</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Бұл бет бұрын қабылданбады.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Беттер</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Ынталандыру</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Монкефондағы тағы бір мысал қазірдің өзінде жұмыс істеп жатыр. Сіз жаңа дананы ашқыңыз келе ме?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Теңшеу</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Ғаламдық тінтуір және пернелер тіркесімдері өшірілген.
+
+Енді ғаламдық төте жолдарды жүйелік науа мәзірінде қосу мүмкін</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Ғаламдық сілтемелер өшірілген: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Ғаламдық тінтуір және пернелер тіркесімдері қосылды.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Эксперименттік) ғаламдық төте жолдар қосылған: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Ғаламдық төте жолдарды өшіру</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Ғаламдық тіркесімдерді қосыңыз</value>
   </data>
 </root>

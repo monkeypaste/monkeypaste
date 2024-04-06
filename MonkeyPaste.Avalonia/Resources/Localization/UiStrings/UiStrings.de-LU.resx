@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Erfahren Sie mehr über Pläne</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Einfügen in: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Bei Verwendung verfügbarer Kontakte (erfordert ein Fetcher-Plugin) wird dieses Feld für alle Instanzen dieser Vorlage in diesem Dokument oder in jedem Dokument verwendet, auf das später verwiesen wird.&lt;/p&gt;&lt;p&gt; Wenn Sie hier beispielsweise eine E-Mail-Adresse auswählen, wird das E-Mail-Feld des von Ihnen ausgewählten Kontakts für alle Instanzen in diesem Dokument verwendet.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Eine vollständige Wiederherstellung kann nicht garantiert werden und kann je na
     <value>Die gemeinsam genutzten Wertparameter in Voreinstellungen können nicht festgelegt werden. Paramid '{0}' in voreingestellter '{1}' für Plugin '{2}' muss entfernt werden oder ParamValue kann im Abschnitt Parameterdefinition angegeben werden.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Voreinstellungen müssen einzigartige Richtlinien haben. Douplicate Preset Guid '{0}' wurde in Plugin '{1}' für Voreinstellungen erkannt: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin -Parsenfehler, bei Pfad '{0}' null, wahrscheinlich Fehler analysieren JSON. Plugin ignorieren</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Eine vollständige Wiederherstellung kann nicht garantiert werden und kann je na
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' enthält gemeinsame Werte. Möchten Sie diese auch zurücksetzen?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Voreinstellungen müssen eindeutige Anleitungen haben. Im Plugin „{1}“ wurde eine doppelte Voreinstellungs-GUID „{0}“ für die Voreinstellungen „{2}“ erkannt.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Einfügen in: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Unbekannter Fehler {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ihr Kauf konnte nicht abgeschlossen werden. Grund: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Domäne hinzufügen</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Seite hinzufügen</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Die Domäne für diese Seite wurde abgelehnt. Um diese Seite zuzulassen, müssen Sie die Ablehnung für „{0}“ entfernen.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Die Domäne „{0}“ wurde bereits abgelehnt</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domänen</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Diese Seite wurde bereits abgelehnt.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Seiten</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synchronisieren</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Eine andere Instanz von MonkeyPaste wird bereits ausgeführt. Möchten Sie wirklich eine neue Instanz öffnen?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurieren</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globale Maus- und Tastaturkürzel wurden deaktiviert. 
+
+Globale Kürzel können jetzt im Taskleistenmenü aktiviert werden.</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globale Verknüpfungen deaktiviert: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globale Maus- und Tastaturkürzel wurden aktiviert.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimentell) Globale Verknüpfungen aktiviert: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Globale Tastenkombinationen ausschalten</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Globale Tastenkombinationen einschalten</value>
   </data>
 </root>

@@ -79,6 +79,8 @@ namespace MonkeyPaste.Common {
 
         #region Constructors
         public MpPoint() { }
+
+        public MpPoint(double[] p) : this(p[0], p[1]) { }
         public MpPoint(double x, double y) {
             X = x;
             Y = y;

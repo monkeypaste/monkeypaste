@@ -295,10 +295,13 @@ namespace MonkeyPaste.Avalonia {
             return ido.Contains(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT);
         }
         public static bool TryGetDragTagViewModel(this IDataObject avdo, out MpAvTagTileViewModel ttvm) {
-            //ttvm = null;
-            //if (!avdo.ContainsTagItem()) {
-            //    return false;
-            //}
+#if MAC
+            // on mac, doing .Get when not present creates com exception
+            ttvm = null;
+            if (!avdo.ContainsTagItem()) {
+                return false;
+            }
+#endif
             ttvm = avdo.Get(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) as MpAvTagTileViewModel;
             return ttvm != null;
         }

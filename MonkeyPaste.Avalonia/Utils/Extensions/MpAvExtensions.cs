@@ -2,6 +2,8 @@
 using Avalonia.Controls;
 using Avalonia.Platform;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
+using HtmlAgilityPack;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -10,14 +12,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvExtensions {
+        #region Private Variables
+        private static Dictionary<AvaloniaObject, List<IDisposable>> _disposableLookup = [];
+        #endregion
+
         #region Plugins
 
         public static MpIManagePluginComponents GetComponentManager(this MpManifestFormat mf) {
             if (mf == null) {
-                return new MpPluginFallbackComponentManager();
+                return null;
             }
             switch (mf.pluginType) {
                 case MpPluginType.Clipboard:
@@ -26,12 +33,11 @@ namespace MonkeyPaste.Avalonia {
                 case MpPluginType.Fetcher:
                     return MpAvAnalyticItemCollectionViewModel.Instance;
                 default:
-                    return new MpPluginFallbackComponentManager();
+                    return null;
 
             }
         }
         #endregion
-
 
         #region Adorners        
         public static async Task<IEnumerable<MpAvAdornerBase>> GetControlAdornersAsync(this Control control, int timeout_ms = 1000) {
@@ -111,6 +117,31 @@ namespace MonkeyPaste.Avalonia {
             }
             return default;
         }
+
+        public static void SetHtml(this HtmlControl hc, string html) {
+            hc.SetCurrentValue(HtmlControl.TextProperty, html);
+        }
+
+        public static void AddDisposable(this IDisposable disp, AvaloniaObject hostObject) {
+            if (!_disposableLookup.TryGetValue(hostObject, out var displ)) {
+                displ = [];
+            }
+            if (!displ.Contains(disp)) {
+                displ.Add(disp);
+            }
+        }
+
+        public static void ClearDisposables(this AvaloniaObject hostObject) {
+            if (!_disposableLookup.TryGetValue(hostObject, out var displ)) {
+                // none found
+                return;
+            }
+            foreach (var disp in displ) {
+                disp.Dispose();
+            }
+            displ.Clear();
+            _disposableLookup.Remove(hostObject);
+        }
         #endregion
 
         #region Strings
@@ -183,6 +214,7 @@ namespace MonkeyPaste.Avalonia {
         public static IEnumerable<(int, int)> QueryText(this string search_text, MpITextMatchInfo tmi) {
             return search_text.QueryText(tmi.MatchValue, tmi.CaseSensitive, tmi.WholeWord, tmi.UseRegex);
         }
+
         #endregion
     }
 }

@@ -34,11 +34,10 @@ namespace MonkeyPaste.Common {
 
         #region Encoding Extensions
         public static string ToBase64ImageUrl(this string base64Str) {
-            if (base64Str.Contains(",")) {
-                MpDebug.Break($"Base64 conv error, string already is url");
+            string prefix = @"data:image/png;base64,";
+            if (base64Str.StartsWith(prefix)) {
                 return base64Str;
             }
-            string prefix = @"data:image/png;base64,";
             return prefix + base64Str;
         }
 
@@ -63,6 +62,10 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Converters
+        public static string ToErrorCode(this object obj) {
+            // obj should be a number..
+            return "0x" + int.Parse(obj.ToStringOrEmpty()).ToString().PadLeft(2,'0');
+        }
 
         public static string ToCommaSeperatedIntString(this int value) {
             return $"{value:n0}";
@@ -206,7 +209,7 @@ namespace MonkeyPaste.Common {
                 var word_str = whole_word ? "\\b" : "";
                 regex = new Regex($"{word_str}{Regex.Escape(match_value)}{word_str}", flags);
             }
-            var mc = regex.Matches(search_text);
+            var mc = regex.Matches(search_text.ToStringOrEmpty());
             foreach (Match m in mc) {
                 foreach (Group mg in m.Groups) {
                     foreach (Capture c in mg.Captures) {
@@ -292,14 +295,14 @@ namespace MonkeyPaste.Common {
             return Uri.IsWellFormedUriString(str, UriKind.Absolute);
         }
 
-        public static bool IsStringNullOrEmpty(this string str) {
+        public static bool IsNullOrEmpty(this string str) {
             return string.IsNullOrEmpty(str);
         }
         public static string Format(this string str, params object[] paramObjs) {
             return string.Format(str, paramObjs);
         }
 
-        public static bool IsStringNullOrWhiteSpace(this string str) {
+        public static bool IsNullOrWhiteSpace(this string str) {
             return string.IsNullOrWhiteSpace(str);
         }
 
@@ -607,22 +610,29 @@ namespace MonkeyPaste.Common {
             return false;
         }
 
-        public static Dictionary<char, string> HtmlEntityLookup =>
-            new Dictionary<char, string>() {
-                {'&',"&amp;" },
-                {' ',"&nbsp;" },
-                {'\"',"&quot;" },
-                {'\'',"&apos;" },
-                {'>',"&gt;" },
-                {'¢',"&cent;" },
-                {'£',"&pound;" },
-                {'¥',"&yen;" },
-                {'€',"&euro;" },
-                {'©',"&copy;" },
-                {'®',"&reg;" },
-                {'™',"&trade;" },
-                {'<',"&lt;" }
-            };
+        private static Dictionary<char, string> _htmlEntityLookup;
+        public static Dictionary<char, string> HtmlEntityLookup {
+            get {
+                if (_htmlEntityLookup == null) {
+                    _htmlEntityLookup = new Dictionary<char, string>() {
+                        {'&',"&amp;" },
+                        {' ',"&nbsp;" },
+                        {'\"',"&quot;" },
+                        {'\'',"&apos;" },
+                        {'>',"&gt;" },
+                        {'¢',"&cent;" },
+                        {'£',"&pound;" },
+                        {'¥',"&yen;" },
+                        {'€',"&euro;" },
+                        {'©',"&copy;" },
+                        {'®',"&reg;" },
+                        {'™',"&trade;" },
+                        {'<',"&lt;" }
+                    };
+                }
+                return _htmlEntityLookup;
+            }
+        }
 
         private static Regex _AmpNotSpecialEntityRegex;
         public static string EncodeSpecialHtmlEntities(this string str) {
@@ -640,8 +650,12 @@ namespace MonkeyPaste.Common {
             return str;
         }
 
-        public static string DecodeSpecialHtmlEntities(this string str) {
-            foreach (var pattern in HtmlEntityLookup) {
+        public static string DecodeSpecialHtmlEntities(this string str, char[] entityFilter = default) {
+            var patterns =
+                entityFilter == default ?
+                    HtmlEntityLookup :
+                    HtmlEntityLookup.Where(x => entityFilter.Contains(x.Key));
+            foreach (var pattern in patterns) {
                 str = str.Replace(pattern.Value, pattern.Key.ToString());
             }
             return str;
@@ -663,7 +677,7 @@ namespace MonkeyPaste.Common {
             //    str = str.Replace(replacement.Key, replacement.Value);
             //}
             //return str;
-            if (html.IsNullOrEmpty()) {
+            if (string.IsNullOrEmpty(html)) {
                 return html;
             }
             //var regex = MpRegEx.RegExLookup[MpRegExType.HexEncodedHtmlEntity];
@@ -825,6 +839,13 @@ namespace MonkeyPaste.Common {
             }
             return text;
         }
+
+        public static bool IsValidUrl(this string str, UriKind kind = UriKind.Absolute) {
+            if (string.IsNullOrWhiteSpace(str)) {
+                return false;
+            }
+            return Uri.IsWellFormedUriString(str, kind);
+        }
         public static bool IsStringHtmlDocument(this string text) {
             if (text == null) {
                 return false;
@@ -832,6 +853,12 @@ namespace MonkeyPaste.Common {
             return
                 text.Trim().StartsWith("<html>", StringComparison.InvariantCultureIgnoreCase) &&
                 text.Trim().EndsWith("</html>", StringComparison.InvariantCultureIgnoreCase);
+        }
+        public static string ToHtmlImage(this string imgBase64) {
+            return $"<img src=\"{imgBase64.ToBase64ImageUrl()}\">";
+        }
+        public static string ToHtmlImageDoc(this string imgBase64) {
+            return imgBase64.ToHtmlImage().ToHtmlDocumentFromTextOrPartialHtml();
         }
         public static string ToHtmlDocumentFromTextOrPartialHtml(this string text) {
             return $"<html><body>{text}</body></html>";

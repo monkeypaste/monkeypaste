@@ -2639,9 +2639,6 @@ palaute@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Lisätietoja suunnitelmista</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Liitä: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Käytettävissä olevien yhteystietojen avulla (vaatii fetcher-laajennuksen) tätä kenttää käytetään kaikissa tämän mallin esiintymissä tässä asiakirjassa tai missä tahansa, johon siihen viitataan myöhemmin.&lt;/p&gt;&lt;p&gt; Jos esimerkiksi valitset sähköpostiosoitteen tässä, valitsemasi yhteyshenkilön sähköpostikenttää käytetään kaikissa tämän asiakirjan esiintymissä.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Täydellistä palauttamista ei voida taata, ja se voi heikentää suorituskykyä
     <value>Esiasetuksissa ei voida asettaa jaettuja arvoparametreja. Paramid '{0}' esiasetuksessa '{1}' laajennukselle '{2}' on poistettava tai parametrimääritysosassa voidaan määrittää parametrimääritysosassa.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Esiasetuksissa on oltava ainutlaatuiset GUIDS. Duplikate esiasetettu GUID '{0}' havaittiin laajennuksessa '{1}' esiasetuksista: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Laajennuksen jäsentämisvirhe, polulla '{0}' NULL, todennäköisesti virheen jäsentäminen JSON. Sivuuttaa laajennus</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Täydellistä palauttamista ei voida taata, ja se voi heikentää suorituskykyä
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' sisältää jaettuja arvoja. Haluatko myös nollata ne?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Esiasetuksilla on oltava yksilölliset tunnukset. Esiasetetun esiasetetun tunnuksen '{0}' kaksoiskappale havaittiin esiasetusten laajennuksessa '{1}': {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Liitä: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Tuntematon virhe {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ostoasi ei voitu suorittaa. Syy: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Lisää verkkotunnus</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Lisää sivu</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Tämän sivun verkkotunnus hylätään. Tämän sivun sallimiseksi sinun on poistettava hylkääminen '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Verkkotunnus '{0}' on jo hylätty</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Verkkotunnukset</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Tämä sivu on jo hylätty.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Sivut</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synkronoida</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Toinen monkepaste -esimerkki on jo käynnissä. Oletko varma, että haluat avata uuden ilmentymän?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Määrittää</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globaalit hiiri- ja pikanäppäimet on poistettu käytöstä.
+
+Globaalit pikakuvakkeet voidaan nyt ottaa käyttöön järjestelmälokero -valikossa</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globaalit pikakuvakkeet poistettu käytöstä: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globaalit hiiri- ja pikanäppäimet on otettu käyttöön.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Kokeellinen) Globaalit pikakuvakkeet käytössä: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Vaihda globaalit pikakuvakkeet pois</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Vaihtaa globaaleja pikakuvakkeita jhk</value>
   </data>
 </root>

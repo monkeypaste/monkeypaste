@@ -24,8 +24,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIHighlightTextRangesInfoViewModel Implementation
 
-        ObservableCollection<MpTextRange> MpIHighlightTextRangesInfoViewModel.HighlightRanges { get; } = new ObservableCollection<MpTextRange>();
-        int MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx { get; set; } = -1;
+        public ObservableCollection<MpTextRange> HighlightRanges { get; set; } = new ObservableCollection<MpTextRange>();
+        public int ActiveHighlightIdx { get; set; } = -1;
 
         #endregion
 
@@ -311,33 +311,23 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
         }
+        private void FocusSearchBox() {
+            if (MpAvMainView.Instance.GetVisualDescendant<MpAvSearchBoxView>() is not MpAvSearchBoxView sbv ||
+                   sbv.GetVisualDescendant<TextBox>() is not { } tb) {
+                return;
+            }
+            tb.TrySetFocusAsync(NavigationMethod.Pointer).FireAndForgetSafeAsync();
+        }
         #endregion
 
         #region Commands
 
-        public ICommand BeginAutoSearchCommand => new MpAsyncCommand<object>(
-            async (args) => {
+        public ICommand BeginAutoSearchCommand => new MpCommand<object>(
+            (args) => {
                 // NOTE expand before locating tb, if first expand it won't be found otherwise
                 bool needs_text = !HasExpanded;
                 IsExpanded = true;
-
-                if (MpAvMainView.Instance.GetVisualDescendant<MpAvSearchBoxView>() is MpAvSearchBoxView sbv &&
-                   //sbv.FindControl<AutoCompleteBox>("SearchBox") is AutoCompleteBox acb &&
-                   //acb.GetTemplateChildren().OfType<TextBox>().FirstOrDefault() is TextBox tb
-                   sbv.GetVisualDescendant<TextBox>() is { } tb
-                   ) {
-                    if (needs_text) {
-                        // when opening for first time from auto search it'll misss first character
-                        // (i think from hiding filter menus before tag selected?)
-                        //_searchText += args.ToStringOrEmpty();
-                    }
-                    // NOTE for best performance avoid using binding to set search text 
-                    // otherwise search would trigger on 1st character
-                    // so using actual control to mimic typical search
-
-                    bool success = await tb.TrySetFocusAsync(NavigationMethod.Pointer);
-                    MpConsole.WriteLine($"Auto search focus success: {success}");
-                }
+                FocusSearchBox();
 
             }, (args) => {
                 return MpAvTagTrayViewModel.Instance.IsAnyTagActive;
@@ -385,6 +375,9 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleIsSearchBoxExpandedCommand => new MpCommand(
             () => {
                 IsExpanded = !IsExpanded;
+                if (IsExpanded) {
+                    FocusSearchBox();
+                }
             });
 
         public ICommand ClearTextCommand => new MpCommand<object>(

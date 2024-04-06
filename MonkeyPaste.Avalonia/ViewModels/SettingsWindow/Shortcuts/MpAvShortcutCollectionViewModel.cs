@@ -444,6 +444,12 @@ namespace MonkeyPaste.Avalonia {
                             MpShortcutType.ClearPinTray,
                             MpAvClipTrayViewModel.Instance.UnpinAllCommand
                         },
+#if DEBUG
+		                {
+                            MpShortcutType.ToggleGlobalHooks,
+                            ToggleGlobalHooksCommand
+                        },  
+#endif
                     };
                 }
                 return _appCommandLookup;
@@ -548,7 +554,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
         public string HookPauseLabel =>
-            $"Toggle Global Hooks {(IsGlobalHooksPaused ? "ON" : "OFF")}";
+            IsGlobalHooksPaused ? UiStrings.HookResumeLabel : UiStrings.HookPauseLabel;
         #endregion
 
         #endregion
@@ -1077,7 +1083,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            MpConsole.WriteTraceLine("Unknown mouse button pressed: SharpButton: " + e.Data.Button + " PortableButton: " + button);
+            //MpConsole.WriteTraceLine("Unknown mouse button pressed: SharpButton: " + e.Data.Button + " PortableButton: " + button);
         }
         private void Hook_MouseReleased(object sender, MouseHookEventArgs e) {
             // NOTE: SharpHook Release event shows Button released
@@ -1101,7 +1107,7 @@ namespace MonkeyPaste.Avalonia {
                     e.SuppressEvent = true;
                 }
             } else {
-                MpConsole.WriteTraceLine("Unknown mouse button released: SharpButton: " + e.Data.Button + " PortableButton: " + button);
+                //MpConsole.WriteLine("Unknown mouse button released: SharpButton: " + e.Data.Button + " PortableButton: " + button);
             }
         }
 
@@ -1115,7 +1121,7 @@ namespace MonkeyPaste.Avalonia {
                     e.SuppressEvent = true;
                 }
             } else {
-                MpConsole.WriteTraceLine("Unknown mouse button clicked: " + e.Data.Button);
+                //MpConsole.WriteLine("Unknown mouse button clicked: " + e.Data.Button);
             }
         }
 
@@ -1395,25 +1401,41 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand ToggleGlobalHooksCommand => new MpCommand<object>(
             (args) => {
+                string title = string.Empty;
+                string msg = string.Empty;
                 if (args is bool boolArg &&
                     boolArg == IsGlobalHooksPaused) {
                     // already in debug state
 
-                    MpConsole.WriteLine($"Global hook change rejected. State: {IsGlobalHooksPaused} args: {args}");
+                    msg = $"Global hook change rejected. State: {IsGlobalHooksPaused} args: {args}";
                     return;
-                }
-                if (IsGlobalHooksPaused) {
+                } else if (IsGlobalHooksPaused) {
                     //resume
                     StartInputListener();
-                    MpConsole.WriteLine($"Global hooks resumed: {(!IsGlobalHooksPaused).ToTestResultLabel()}");
+                    //msg = $"Global hooks resumed: {(!IsGlobalHooksPaused).ToTestResultLabel()}";
+                    title = UiStrings.GlobalHooksResumedTitle.Format((!IsGlobalHooksPaused).ToTestResultLabel());
+                    msg = UiStrings.GlobalHooksResumedText;
                 } else {
                     // pause
                     StopInputListener();
                     _keyboardGestureHelper.ClearCurrentGesture();
-                    MpConsole.WriteLine($"Global hooks paused: {IsGlobalHooksPaused.ToTestResultLabel()}");
+                    //msg = $"Global hooks paused: {IsGlobalHooksPaused.ToTestResultLabel()}";
+
+                    title = UiStrings.GlobalHooksPausedTitle.Format((IsGlobalHooksPaused).ToTestResultLabel());
+                    msg = UiStrings.GlobalHooksPausedText;
                 }
                 OnPropertyChanged(nameof(IsGlobalHooksPaused));
                 OnPropertyChanged(nameof(HookPauseLabel));
+                MpConsole.WriteLine(msg);
+                MpMessenger.SendGlobal(MpMessageType.GlobalHooksToggled);
+                if(args is null) {
+                    // from hotkey show ntf
+                    Mp.Services.NotificationBuilder.ShowMessageAsync(MpNotificationType.Message,
+                        title: title,
+                        body: msg,
+                        iconSourceObj: "KeyboardColorImage").FireAndForgetSafeAsync();
+                }
+
             }, (args) => {
 #if MOBILE
                 return false;

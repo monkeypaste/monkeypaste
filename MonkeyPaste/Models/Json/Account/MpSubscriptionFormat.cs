@@ -22,7 +22,12 @@ namespace MonkeyPaste {
             get {
                 if (_default == null) {
                     _default = new MpSubscriptionFormat() {
+#if DEBUG
+                        //AccountType = MpUserAccountType.Unlimited,
                         AccountType = MpUserAccountType.Free,
+#else
+                        AccountType = MpUserAccountType.Free,
+#endif
                         IsActive = true,
                         ExpireOffsetUtc = DateTimeOffset.MaxValue
                     };

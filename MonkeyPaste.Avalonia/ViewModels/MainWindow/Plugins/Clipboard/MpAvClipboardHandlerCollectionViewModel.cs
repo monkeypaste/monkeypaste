@@ -10,6 +10,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#if WINDOWS
+using MonkeyPaste.Common.Wpf; 
+#endif
+
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardHandlerCollectionViewModel :
         MpAvTreeSelectorViewModelBase<object, MpAvClipboardHandlerItemViewModel>,
@@ -601,8 +605,19 @@ namespace MonkeyPaste.Avalonia {
             }
             // if ido provided carry use provided pi if exits
             MpPortableProcessInfo active_pi =
-                ido == null ? null : ido.Get(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) as MpPortableProcessInfo;
+                ido == null ? null :
+                ido.Contains(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) ?
+                    ido.Get(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) as MpPortableProcessInfo :
+                    null;
 
+#if WINDOWS
+            if (attachActiveProcessIfNone && isRead && !isDnd && active_pi == null && !ignorePlugins) {
+                // on clipboard change (windows) get clipboard override process watcher and use clipboard owner 
+                // NOTE only doing this on change (ignorePlugins === false) for perf
+                nint cb_owner_handle = WinApi.GetOpenClipboardWindow();
+                active_pi = MpPortableProcessInfo.FromHandle(cb_owner_handle);
+            }
+#endif
             int[] custom_preset_ids = ignorePlugins ? null :
                     MpAvAppCollectionViewModel.Instance
                     .GetAppCustomOlePresetsByWatcherState(
@@ -656,6 +671,7 @@ namespace MonkeyPaste.Avalonia {
                 // req to component contains unprocessed input ido
                 // with only the formats/params for the custom or def enabled presets 
                 var req = new MpOlePluginRequest() {
+                    Clipboard = Mp.Services.DeviceClipboard,
                     dataObjectLookup = dataLookup,
                     isDnd = isDnd,
                     ignoreParams = ignorePlugins,

@@ -2639,9 +2639,6 @@ feedback@monkyepaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Obtenga más información sobre los planes</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Pegar en: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Usando los contactos disponibles (requiere un complemento de búsqueda), este campo se utilizará para todas las instancias de esta plantilla en este documento o en cualquiera de las que se haga referencia más adelante.&lt;/p&gt;&lt;p&gt; Entonces, por ejemplo, si selecciona la dirección de correo electrónico aquí, el campo de correo electrónico del contacto que seleccione se utilizará para todas las instancias de este documento.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ No se puede garantizar la restauración total y puede reducir el rendimiento o i
     <value>No se puede establecer parámetros de valor compartido en presets. Paramid '{0}' en preet '{1}' para complementar {2} 'debe eliminarse o ParamValue se puede especificar en la sección Definición de parámetros.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Los presets deben tener GUID únicos. Duplicado Preset Guid '{0}' se detectó en el complemento {1} 'para preajuste: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Error de análisis de complementos, en ruta '{0}' NULL, probable error de error JSON. Ignorando el complemento</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ No se puede garantizar la restauración total y puede reducir el rendimiento o i
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' contiene valores compartidos. ¿Te gustaría restablecerlos también?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Los ajustes preestablecidos deben tener guids únicos. Se detectó el guid preestablecido duplicado '{0}' en el complemento '{1}' para los ajustes preestablecidos: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Pegar en: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Error desconocido {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Su compra no pudo ser completada. Razón: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Agregar dominio</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Añadir página</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>El dominio de esta página es rechazado. Para permitir esta página, deberá eliminar el rechazo de '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>El dominio '{0}' ya está rechazado</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Dominio</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Esta página ya está rechazada.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Páginas</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sincronización</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Otra instancia de Monkipaste ya está ejecutando. ¿Estás seguro de que quieres abrir una nueva instancia?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Configurar</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Se han deshabilitado los atajos globales para el mouse y el teclado.
+
+Los atajos globales ahora se pueden habilitar en el menú de la bandeja del sistema</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Actualizados globales deshabilitados: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Se han habilitado los atajos globales para el mouse y el teclado.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimental) Accesos directos globales habilitados: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Termine los accesos directos globales apagados</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Alternar atajos globales en</value>
   </data>
 </root>

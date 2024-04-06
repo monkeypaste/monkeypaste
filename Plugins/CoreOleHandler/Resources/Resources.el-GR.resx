@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Χωρίς τίτλο</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Για πλάκα, όταν ελέγχεται αυτό, η εικόνα στο πρόχειρο θα μετατραπεί ωμά σε ascii (απλό κείμενο) τέχνη της εικόνας 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Εικόνα σε κείμενο</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Όταν είναι διαθέσιμα, τα δεδομένα της πρώτης επιλεγμένης μορφής κειμένου θα μετατραπούν σε εικόνα και θα προστεθούν στο πρόχειρο.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Μορφές κειμένου σε εικόνα</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Εικόνα (tiff)</value>
+  </data>
 </root>

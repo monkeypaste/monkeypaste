@@ -18,10 +18,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Remove="Controls\**" />
+    <AvaloniaXaml Remove="Models\Db\Log\Sync\**" />
     <AvaloniaXaml Remove="ViewModels\**" />
     <Compile Remove="Controls\**" />
     <Compile Remove="Converters\**" />
     <Compile Remove="Models\Db\ContentQuery\**" />
+    <Compile Remove="Models\Db\Log\Sync\**" />
     <Compile Remove="Models\Db\SQLite\**" />
     <Compile Remove="Models\Json\Contact\**" />
     <Compile Remove="Models\PreferenceModels\**" />
@@ -35,6 +38,7 @@
     <EmbeddedResource Remove="Controls\**" />
     <EmbeddedResource Remove="Converters\**" />
     <EmbeddedResource Remove="Models\Db\ContentQuery\**" />
+    <EmbeddedResource Remove="Models\Db\Log\Sync\**" />
     <EmbeddedResource Remove="Models\Db\SQLite\**" />
     <EmbeddedResource Remove="Models\Json\Contact\**" />
     <EmbeddedResource Remove="Models\PreferenceModels\**" />
@@ -48,6 +52,7 @@
     <None Remove="Controls\**" />
     <None Remove="Converters\**" />
     <None Remove="Models\Db\ContentQuery\**" />
+    <None Remove="Models\Db\Log\Sync\**" />
     <None Remove="Models\Db\SQLite\**" />
     <None Remove="Models\Json\Contact\**" />
     <None Remove="Models\PreferenceModels\**" />
@@ -92,7 +97,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Converters\MpXamStringToSyncObjectTypeConverter.cs" />
+    <Compile Include="Converters\MpStringToSyncObjectTypeConverter.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -100,7 +105,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.7" />
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />    
     <PackageReference Include="Nager.PublicSuffix" Version="2.4.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
@@ -125,7 +130,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controls\" />
+    <Folder Include="Models\Db\Log\Sync\NetworkIO\" />
     <Folder Include="Resources\Data\" />
     <Folder Include="Utils\Builders\Bases\" />
     <Folder Include="Utils\Helpers\Graphics\Animation\" />

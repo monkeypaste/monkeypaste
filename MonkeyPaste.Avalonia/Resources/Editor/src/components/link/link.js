@@ -103,10 +103,11 @@ function getLinkTooltipText(a_elm, includeContext = false) {
             result += 'remove item';
         }
     } else {
-        if (includeContext) {
-            result += `goto '<em>${a_elm.getAttribute('href')}</em>'...`;
-        } else {
+        let link_uri = a_elm.getAttribute('href');
+        if (isNullOrEmpty(link_uri)) {
             result += 'to follow...'
+        } else {
+            result += `goto '<em>${a_elm.getAttribute('href')}</em>'...`;
         }
     }
     return result;

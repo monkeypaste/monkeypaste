@@ -99,7 +99,7 @@
         </Style>
         <Style Selector="TextBlock.header">
             <!--<Setter Property="Foreground"
-                    Value="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />-->
+                    Value="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />-->
             <Setter Property="Foreground"
                     Value="{DynamicResource ThemeWhiteBrush}" />
             <Setter Property="VerticalAlignment"
@@ -107,7 +107,7 @@
         </Style>
         <Style Selector="TextBlock.expander.header">
             <!--<Setter Property="Foreground"
-                    Value="{Binding $parent[ToggleButton].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />-->
+                    Value="{Binding $parent[ToggleButton].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />-->
 
             <Setter Property="VerticalAlignment"
                     Value="Bottom" />
@@ -228,7 +228,7 @@
             <Setter Property="SelectViewModelOnFocus"
                     Value="False" />
             <Setter Property="ReadOnlyForeground"
-                    Value="{Binding $parent[DataGridRow].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                    Value="{Binding $parent[DataGridRow].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />
         </Style>
 
         <Style Selector="DataGrid Grid.marqueeContainer">
@@ -498,7 +498,8 @@
 
                     <local:MpAvSettingsTabDataTemplateSelector>
                         <DataTemplate x:Key="AccountTemplate">
-                            <local:MpAvAccountView />
+                            <!--<local:MpAvAccountView />-->
+                            <local:MpAvSyncView />
                         </DataTemplate>
                         <DataTemplate x:Key="PreferencesTemplate"
                                       x:DataType="local:MpAvSettingsViewModel">

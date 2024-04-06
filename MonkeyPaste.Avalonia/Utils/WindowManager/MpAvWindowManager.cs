@@ -5,12 +5,15 @@ using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+
+#if WINDOWS
+using MonkeyPaste.Common.Wpf;
+#endif
 
 namespace MonkeyPaste.Avalonia {
 
@@ -31,10 +34,17 @@ namespace MonkeyPaste.Avalonia {
             AllWindows.Any() ? AllWindows.FirstOrDefault().Screens : null;
         public static ObservableCollection<MpAvWindow> AllWindows { get; private set; } = new ObservableCollection<MpAvWindow>();
         public static IReadOnlyList<MpAvWindow> TopmostWindowsByZOrder =>
-            AllWindows
-                .Where(x => x.Owner == null && x.WantsTopmost && x.WindowState != WindowState.Minimized)
+#if MAC
+        AllWindows
+                .Where(x => x.WantsTopmost && x.WindowState != WindowState.Minimized)
                 .OrderBy(x => (int)x.BindingContext.WindowType)
                 .ToList();
+#else
+        AllWindows
+                .Where(x => x.Owner == null && x.WantsTopmost && x.WindowState != WindowState.Minimized)
+                .OrderBy(x => (int)x.BindingContext.WindowType)
+                .ToList(); 
+#endif
 
         public static bool IsAnyChildWindowOpening =>
             MpAvWindow.OpeningWindows.Where(x => x is not MpAvMainWindow).Any();
@@ -73,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
                     w = ow;
                 }
                 if (w == null) {
-                    return nint.Zero;
+                    return IntPtr.Zero;
                 }
                 return w.TryGetPlatformHandle().Handle;
             }
@@ -133,13 +143,16 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvWindow LocateWindow(MpPoint gmp) {
             return AllWindows.FirstOrDefault(x => x.ScaledScreenRect().Contains(gmp));
         }
-        public static MpAvWindow LocateWindow(object dataContext) {
+        public static MpAvWindow LocateWindow(object dataContext, bool scanDescendants = false) {
             if (!Dispatcher.UIThread.CheckAccess()) {
                 var result = Dispatcher.UIThread.Invoke(() => LocateWindow(dataContext));
                 return result;
             }
             if (AllWindows.FirstOrDefault(x => x.DataContext == dataContext) is MpAvWindow w) {
                 return w;
+            }
+            if (!scanDescendants) {
+                return null;
             }
             // search whole tree
             foreach (var cw in AllWindows) {
@@ -439,14 +452,17 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 #else
-            var mw = AllWindows.FirstOrDefault(x => x is MpAvMainWindow);
+            //var mw = AllWindows.FirstOrDefault(x => x is MpAvMainWindow);
 
-            // activate windows wanting top most from highest to lowestpriority
+            //// activate windows wanting top most from highest to lowestpriority
 
-            if (TopmostWindowsByZOrder.Contains(mw)) {
-                mw.Topmost = true;
-            } else if (mw != null) {
-                mw.Topmost = false;
+            //if (TopmostWindowsByZOrder.Contains(mw)) {
+            //    mw.Topmost = true;
+            //} else if (mw != null) {
+            //    mw.Topmost = false;
+            //}
+            if (MainWindow != null) {
+                MainWindow.Topmost = TopmostWindowsByZOrder.Contains(MainWindow);
             }
 
             TopmostWindowsByZOrder

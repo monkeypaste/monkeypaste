@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copïan</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pastia</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Rheolwr Clipfwrdd</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>offeryn</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Golygydd clip llawn - dan sylw gyda Find/Amnewid, testun cyfoethog (tablau, rhestrau, dolenni, ac ati) testun yn templedi ar gyfer pastio cyflym, deinamig o'ch casgliad pytiau</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Storio data lleol diogel, diogel a phreifat gyda diogelu cyfrinair dewisol 2 - Ffactor</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Wedi'i adeiladu - mewn porwr ategion gyda llyfrgell o ategion sy'n cael ei yrru gan gymuned sy'n tyfu erioed</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Mae MonkeyPaste yn rheolwr clipfwrdd, offeryn awtomeiddio a chynhyrchedd fel dim arall. Gwella'ch clipfwrdd i mewn i ran gyfoethog a threfnus o'ch llif gwaith,
-Yn cynnwys rhyngwyneb greddfol ac proffil isel sy'n cefnogi testun, ffeiliau a delweddau. Wedi'i gynllunio ar gyfer hyblygrwydd, gyda Libray o ategion sy'n cael ei yrru gan gymuned sy'n tyfu erioed.
-
-Dechreuodd fel arbrawf gan raglennydd eisiau mwy na chopïo a gludo allan o'r clipfwrdd yn unig. Roedd eisiau gorchymyn syml fel Ctrl+C a fyddai'n 'ychwanegu at' yn lle
-o 'Amnewid' beth oedd ar y clipfwrdd. Ac roedd yr arbrawf yn gweithio. Roedd yr offeryn bach yn ddefnyddiol iawn. Roedd hyn yn ymroi i'r rhaglennydd gyda mwy o syniadau a mwy o arbrofion, hynny
-Nawr mae wedi dod yn "monkeypaste".
-
-Gan fod y bwrdd gwaith i'ch ffeiliau, mae MonkeyPaste yn bwriadu bod i'ch clipfwrdd. Mae'n gyfres o offer sydd wedi'u cynllunio'n ofalus i integreiddio a rhyngweithio yn ddi -ymddangos
-unrhyw gymhwysiad neu fformat o gynnwys. Mae Ctrl+C a Ctrl+V yn llawer mwy na llwybrau byr yn unig. Nhw yw'r porthladdoedd mynediad y mae pob cais yn eu rhannu, gan gario a
-Cyfoeth o werth ac ystyr rydych chi'n haeddu bod ar gael ar flaenau eich bysedd. Nid dim ond ei daflu ar ôl y Ctrl+c nesaf.
-
-Fi yw'r rhaglennydd hwnnw y soniwyd amdano yn gynharach ac rwyf am i bawb allu dod o hyd i ddefnydd allan o MonkeyPaste. Felly mae hi a phob un o'i nodweddion yn hollol rhydd i'w defnyddio.
-Rwyf hefyd eisiau ichi deimlo'n gyffyrddus yn ei ddefnyddio. Felly fe'ch sicrhaf, fel yr unig rym y tu ôl i'w greu, nad oes yr un o'r wybodaeth bersonol (iawn) a all godi arni
-Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt i'ch peiriant eich hun. Cyfnod.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt 
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Jyngl yw'r clipfwrdd. MonkeyPaste yw'r brenin! Swing o app i app, copïo hwn a gludo hynny fel erioed o'r blaen gyda monkeyPaste !! Clipfwrdd Brand - Newydd, Cutting Edge ac Offeryn Awtomeiddio Dadansoddol !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Sampl o MonkeyPaste ar waith!</value>
   </data>
@@ -258,9 +228,6 @@ Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt 
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Diderfyn - blynyddol</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Rhyddhau Cychwynnol</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Gyda'r tanysgrifiad hwn byddwch yn derbyn:
 ● Capasiti diderfyn</value>
@@ -270,5 +237,45 @@ Mae eich clipfwrdd byth yn cael ei olrhain neu ei storio yn unrhyw le y tu hwnt 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Mwy o lwyfannau a nodweddion yn dod yn fuan! Rydyn ni'n cychwyn 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Goleuo Chwilio ac Uchafbwynt Cyflym, Dechreuwch deipio!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Storio clipiau testun, delwedd a ffeiliau gyda'i holl wybodaeth ffynhonnell (yr ap, gwefan, amser, a llawer mwy) yn awtomatig</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>Mae MonkeyPaste yn rheolwr clipfwrdd, offeryn awtomeiddio a chynhyrchiant fel dim arall. Gwella eich clipfwrdd i mewn i ran gyfoethog a threfnus o'ch llif gwaith,
+Yn cynnwys rhyngwyneb proffil greddfol ac isel sy'n cefnogi testun, ffeiliau a delweddau. Wedi'i gynllunio ar gyfer hyblygrwydd, gyda chymuned sy'n tyfu erioed - libray o ategion.
+
+Dechreuodd fel arbrawf gan raglennydd eisiau mwy na dim ond copïo a gludo allan o'r clipfwrdd. Roedd eisiau gorchymyn syml fel Ctrl + C a fyddai'n 'ychwanegu at' yn lle hynny 
+o 'replace' beth oedd ar y clipfwrdd. Ac mae'r arbrawf yn gweithio. Roedd y teclyn bach yn ddefnyddiol iawn. Roedd hyn yn ennyn diddordeb y rhaglennydd gyda mwy o syniadau a mwy o arbrofion, bod 
+bellach wedi dod yn "MonkeyPaste". 
+
+Gan fod y bwrdd gwaith i'ch ffeiliau, mae MonkeyPaste yn bwriadu bod i'ch clipfwrdd. Mae'n gyfres o offer sydd wedi'u cynllunio'n ofalus i integreiddio a rhyngweithio â nhw yn ddi-baid 
+unrhyw gais neu fformat y cynnwys. Mae Ctrl + C a Ctrl + V yn llawer mwy na llwybrau byr yn unig. Nhw yw'r porthladdoedd mynediad y mae pob cais yn eu rhannu, gan gario a 
+cyfoeth o werth ac ystyr rydych chi'n haeddu ei gael ar flaenau eich bysedd. Nid yn unig ar ôl y Ctrl + C nesaf.
+
+Fi yw'r rhaglennydd hwnnw a grybwyllwyd yn gynharach ac rwyf am i bawb allu dod o hyd i ddefnydd allan o MonkeyPaste. Felly mae'n a'i holl nodweddion yn hollol rhad ac am ddim i'w defnyddio. 
+Rwyf am i chi deimlo'n gyfforddus yn ei ddefnyddio hefyd. Felly, rwy'n eich sicrhau, fel yr unig rym y tu ôl i'w greu, bod NONE o'r wybodaeth bersonol (iawn) a all godi ar 
+Mae eich clipfwrdd yn cael ei olrhain neu ei storio UNRHYW le y tu hwnt i'ch peiriant eich hun. Cyfnod.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>clipfwrdd</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Storio data lleol diogel, diogel a phreifat gyda diogelwch cyfrinair 2 ffactor dewisol</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Mae MonkeyPaste bellach yn hollol rhad ac am ddim o'r datganiad hwn !!
+
+Mae'r holl gyfyngiadau (mewn tanysgrifiadau ap) wedi'u dileu gan fod MonkeyPaste bellach yn trosglwyddo i ddod yn brosiect ffynhonnell agored. Felly cadwch lygad ar ein github (github.com/monkeypaste) os oes gennych chi ddiddordeb mewn cyfrannu.
+
+Diweddariadau:
+
+- dileu'r holl gyfyngiadau capasiti!
+- gwelliannau UI golygydd Url a wrthodwyd
+- cefnogaeth sylfaenol ar gyfer rhedeg sawl achos o MonkeyPaste
+- golygydd gwerth a rennir newydd (mewn porwr ategyn lle bo'n berthnasol)</value>
   </data>
 </root>

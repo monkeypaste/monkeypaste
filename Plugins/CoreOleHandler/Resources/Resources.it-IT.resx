@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Senza titolo</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Per divertimento, quando questo viene controllato l'immagine sugli appunti verrà convertita in modo rozzo in arte ASCII (testo normale) dell'immagine 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Immagine al testo</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Se disponibile, i dati del primo formato di testo selezionato verranno convertiti in un'immagine e aggiunti negli appunti.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Testo ai formati di immagine</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Immagine (TIFF)</value>
+  </data>
 </root>

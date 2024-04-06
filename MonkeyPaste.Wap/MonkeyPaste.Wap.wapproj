@@ -55,8 +55,7 @@
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
-    <NoWarn>$(NoWarn);NU1702</NoWarn>
-    <EntryPointProjectUniqueName>..\MonkeyPaste.Desktop\MonkeyPaste.Desktop.csproj</EntryPointProjectUniqueName>
+    <NoWarn>$(NoWarn)</NoWarn>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
@@ -64,7 +63,9 @@
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+    <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
+    <AppxPackageDir>C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Wap\AppPackages\</AppxPackageDir>
+    <EntryPointProjectUniqueName>..\MonkeyPaste.Desktop\MonkeyPaste.Desktop.csproj</EntryPointProjectUniqueName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <AppxBundle>Always</AppxBundle>
@@ -165,10 +166,11 @@
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste.Desktop\MonkeyPaste.Desktop.csproj" />
+    <_CopyItems Include="$(MainTargetDir)cef\**\*.*" />
   </ItemGroup>
   <ItemGroup>
-    <_CopyItems Include="$(MainTargetDir)cef\**\*.*" />
+    <ProjectReference Include="..\MonkeyPaste.Desktop.Launcher\MonkeyPaste.Desktop.Launcher.csproj" />
+    <ProjectReference Include="..\MonkeyPaste.Desktop\MonkeyPaste.Desktop.csproj" />
   </ItemGroup>
   <Target Name="AfterBuild">
     <Copy SourceFiles="@(_CopyItems)" DestinationFiles="@(_CopyItems->'$(TargetDir)\AppX\$(MainProjectName)\cef\%(RecursiveDir)%(Filename)%(Extension)')" />

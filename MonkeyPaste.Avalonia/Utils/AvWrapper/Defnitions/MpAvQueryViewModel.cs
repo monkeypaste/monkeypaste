@@ -253,8 +253,6 @@ namespace MonkeyPaste.Avalonia {
         #region Properties     
 
         #region State
-
-
         #endregion
 
         #endregion

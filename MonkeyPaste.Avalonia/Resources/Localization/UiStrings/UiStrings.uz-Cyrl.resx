@@ -2639,10 +2639,6 @@ Filbir@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Rejalar haqida ko'proq ma'lumot oling</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Pasting: {0}</value>
-    <comment>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</comment>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>Mavjud kontaktlar yordamida ushbu soha ushbu hujjatda yoki boshqa biron bir joyda ushbu shablonning barcha holatlarida qo'llanilishi kerak.
  Shunday qilib, masalan, agar siz bu erda elektron pochta manzilini tanlasangiz, siz tanlagan elektron pochta aloqasi ushbu hujjatdagi barcha instansiyalar uchun foydalaniladi.</value>
@@ -2910,10 +2906,6 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>Presets-da umumiy qiymat parametrlarini oʻrnatib boʻlmadi. "{2}" plaginining "{1}" oldindan o'rnatilgan parametridagi "{0}" parametrini o'chirish kerak yoki parametrlarni aniqlash bo'limida paramValue ko'rsatilishi mumkin.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Oldindan o'rnatilgan sozlamalar noyob yo'riqnomalarga ega bo'lishi kerak. Oldindan sozlash uchun “{1}” plaginida “{0}” takroriy oldindan oʻrnatilgan qoʻllanma aniqlandi: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plaginni taqqoslash xatosi, {0} 'Noll, ehtimol Jsonni tahlil qilishda xato. Plaginni e'tiborsiz qoldiring</value>
     <comment>File Path</comment>
@@ -2961,5 +2953,67 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' umumiy qiymatlar mavjud. Bularni ham tiklamoqchimisiz?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Oldindan o'rnatilgan sozlamalar noyob yo'riqnomalarga ega bo'lishi kerak. Oldindan oʻrnatilgan “{0}” qoʻllanmasining ikki nusxasi “{1}” plaginida oldindan oʻrnatilgan sozlamalar uchun aniqlandi: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Buga joylashtirish: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Noma'lum xato {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Xaridingiz tugallanmadi. Sababi: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Domen qo'shing</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Sahifani qo'shish</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Ushbu sahifa uchun domen rad etiladi. Ushbu sahifaga ruxsat berish uchun "{0}" uchun rad qilishni olib tashlashingiz kerak.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>"{0}" domeni allaqachon rad etilgan</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domenlar</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Ushbu sahifa allaqachon rad etilgan.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Sahifalar</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinxronlashtirmoq</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Monkeypastening yana bir misoli allaqachon ishlamoqda. Ishonchim komilki, siz yangi namunani ochmoqchimisiz?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Sozlamoq</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Global sichqoncha va klaviatura yorliqlari o'chirilgan.
+
+Hozirgi kunda tizimning trafik menyusida global yorliq yoqilishi mumkin</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Global yorliqlar o'chirilgan: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Sichqoncha va klaviatura yorliqlari yoqilgan.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimental) Global yorliqlar yoqilgan: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Global yorliqlarni o'chiring</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Global yorliqlarni yoqing</value>
   </data>
 </root>

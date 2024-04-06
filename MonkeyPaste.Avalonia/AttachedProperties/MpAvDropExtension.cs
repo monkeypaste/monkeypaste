@@ -351,7 +351,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Drop Extensions
         public static DragDropEffects ToValidDropEffect(this DragEventArgs e) {
+#if MAC
+            return DragDropEffects.Copy;
+#else
             return e.DragEffects & (e.KeyModifiers.HasFlag(KeyModifiers.Control) ? DragDropEffects.Copy : e.KeyModifiers.HasFlag(KeyModifiers.Alt) ? DragDropEffects.Link : DragDropEffects.Move);
+#endif
         }
         #endregion
     }

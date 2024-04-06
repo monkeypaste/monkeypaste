@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopieër</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>plak</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Clipboard Manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>werktuig</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Volledig - 'n voorgestelde clip -redakteur met Find/vervang, ryk teks (tabelle, lyste, skakels, ens.) Tekstemplasering vir vinnige, dinamiese plak van u brokkieversameling</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Veilige, veilige en privaat plaaslike databerging met opsionele 2 - Faktor -wagwoordbeskerming</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Gebou - in plugin -blaaier met 'n steeds groeiende gemeenskap - gedrewe biblioteek met plugins</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste is 'n klembordbestuurder, outomatisering en produktiwiteitsinstrument soos geen ander nie. Verbeter u knipbord in 'n verrykte en georganiseerde deel van u werkvloei,
-Met 'n intuïtiewe en lae -profiel -koppelvlak wat teks, lêers en beelde ondersteun. Ontwerp vir buigsaamheid, met 'n steeds groeiende gemeenskap - gedrewe libray van plugins.
-
-Dit het begin as 'n eksperiment deur 'n programmeerder wat meer as net uit die knipbord wil kopieer en plak. Hy wou 'n eenvoudige opdrag soos Ctrl+C hê wat eerder sou 'byvoeg'
-van 'Vervang' wat op die knipbord was. En die eksperiment het gewerk. Die klein werktuig was baie handig. Dit het die programmeerder met meer idees en meer eksperimente aangepak
-het nou 'Monkeypaste' geword.
-
-Aangesien die lessenaar by u lêers is, is MonkeyPaste van plan om na u knipbord te wees. Dit is 'n reeks gereedskap wat noukeurig ontwerp is om oënskynlik te integreer en saam te werk
-enige toepassing of formaat van inhoud. Ctrl+C en Ctrl+V is veel meer as net kortpaaie. Dit is die hawens van toegang alle aansoeke wat deel, dra 'n
-rykdom van waarde en betekenis wat u verdien om binne u vingers beskikbaar te wees. Nie net weggegooi na die volgende Ctrl+c.
-
-Ek is daardie programmeerder wat vroeër genoem is en ek wil hê dat almal uit Monkeypaste kan gebruik. Dus is dit en al sy funksies heeltemal gratis om te gebruik.
-Ek wil ook hê dat u gemaklik moet voel om dit te gebruik. Dus kan ek u verseker dat dit die enigste krag agter die skepping daarvan is, dat geeneen van die (baie) persoonlike inligting waarop u kan ontstaan ​​nie
-U knipbord word ooit opgespoor of gestoor op enige plek buite u eie masjien. Periode.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ U knipbord word ooit opgespoor of gestoor op enige plek buite u eie masjien. Per
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Die knipbord is 'n oerwoud. Monkeypaste is die koning! Swaai van app na app, kopieer dit en plak dit soos nog nooit tevore met Monkeypaste nie !! 'N Brand - nuwe, vooraanstaande knipbord en analitiese outomatiseringsinstrument !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Voorbeeld van Monkeypaste in aksie!</value>
   </data>
@@ -258,9 +228,6 @@ U knipbord word ooit opgespoor of gestoor op enige plek buite u eie masjien. Per
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Onbeperk - Jaarliks</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Aanvanklike vrystelling</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Met hierdie intekening sal u ontvang:
 ● Onbeperkte kapasiteit</value>
@@ -270,5 +237,45 @@ U knipbord word ooit opgespoor of gestoor op enige plek buite u eie masjien. Per
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Meer platforms en funksies kom binnekort! Ons is net begin begin 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Lig vinnige soektog en uitlig, begin net tik!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Stoor teks, beeld- en lêerknipsels met al die bron (die app, webwerf, tyd en nog baie meer) outomaties</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste is 'n knipbordbestuurder, outomatiserings- en produktiwiteitsinstrument soos geen ander nie. Verbeter u knipbord tot 'n verrykte en georganiseerde deel van u werkvloei,
+Met 'n intuïtiewe en lae profiel koppelvlak wat teks, lêers en beelde ondersteun. Ontwerp vir buigsaamheid, met 'n steeds groeiende gemeenskap - gedrewe libray van plugins.
+
+Dit het begin as 'n eksperiment deur 'n programmeerder wat meer wil hê as om net uit die knipbord te kopieer en te plak. Hy wou 'n eenvoudige opdrag soos Ctrl +C hê wat eerder sou 'byvoeg' 
+van 'vervang' wat op die knipbord was. En die eksperiment het gewerk. Die klein gereedskap was baie handig. Dit het die programmeerder betower met meer idees en meer eksperimente, wat 
+het nou "MonkeyPaste" geword. 
+
+Aangesien die lessenaar vir u lêers is, is MonkeyPaste van plan om op u knipbord te wees. Dit is 'n reeks gereedskap wat noukeurig ontwerp is om skynbaar te integreer en met mekaar te interopereer 
+enige toepassing of formaat van inhoud. Ctrl+C en Ctrl+V is veel meer as net kortpaaie. Dit is die toegangshawe wat alle aansoeke deel, met 'n 
+rykdom van waarde en betekenis wat jy verdien om binne jou vingers beskikbaar te hê. Nie net weggegooi na die volgende Ctrl+C nie.
+
+Ek is die programmeerder wat vroeër genoem is en ek wil hê almal moet gebruik kan vind uit MonkeyPaste. Dit en al sy funksies is dus heeltemal gratis om te gebruik. 
+Ek wil ook hê jy moet gemaklik voel om dit te gebruik. Ek verseker u dus, as die enigste krag agter die skepping daarvan, dat GEEN van die (baie) persoonlike inligting wat op 
+jou knipbord word ooit opgespoor of gestoor ENIGE plek buite jou eie masjien. Tydperk.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Knipbord</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Veilige, veilige en private plaaslike databerging met opsionele 2-faktor wagwoordbeskerming</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste is nou heeltemal gratis vanaf hierdie vrystelling!!
+
+Alle beperkings (in app-intekeninge) is verwyder aangesien MonkeyPaste nou oorgaan om 'n oopbronprojek te word. Hou dus ons github (github.com/monkeypaste) dop as jy belangstel om by te dra.
+
+Opdaterings:
+
+- alle kapasiteitsbeperkings verwyder!
+- verwerp URL-redakteur UI verbeterings
+- Basislynondersteuning vir die uitvoer van verskeie gevalle van MonkeyPaste
+- nuwe gedeelde waarderedigeerder (in plugin-blaaier waar van toepassing)</value>
   </data>
 </root>

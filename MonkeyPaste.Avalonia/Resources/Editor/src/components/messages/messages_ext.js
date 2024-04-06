@@ -21,9 +21,9 @@ function prepareForReload_ext() {
 	globals.IsReloading = true;
 }
 
-async function loadContentAsync_ext(loadContentMsgStr_base64) {
+function loadContentAsync_ext(loadContentMsgStr_base64) {
 	// input 'MpQuillLoadContentRequestMessage'
-	//log('loadContentAsync_ext: ' + loadContentMsgStr_base64);
+	//log('loadContentAsync_ext: ' + loadContentMsgStr_base64);s	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
 
 	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
 
@@ -48,7 +48,8 @@ async function loadContentAsync_ext(loadContentMsgStr_base64) {
 		paste_button_info = toJsonObjFromBase64Str(req.pasteButtonInfoFragment);
 	}
 
-	await loadContentAsync(
+	//let result;
+	loadContentAsync(
 		req.isReadOnly,
 		req.isSubSelectionEnabled,
 		req.contentHandle,
@@ -60,13 +61,19 @@ async function loadContentAsync_ext(loadContentMsgStr_base64) {
 		sel_state,
 		paste_button_info,
 		req.breakBeforeLoad,
-		req.editorScale);
-
+		req.editorScale,
+		req.isPopOut);
+	//	.then(x => {
+	//		result = x;
+	//	});
+	//while (result === undefined) {
+	//	sleep(100);
+	//}
 }
 
 function contentChanged_ext(contentChangedMsgStr_base64) {
 	// input 'MpQuillIsHostFocusedChangedMessage'
-	log('content changed from host: ' + contentChangedMsgStr_base64);
+	//log('content changed from host: ' + contentChangedMsgStr_base64);
 	let msg = toJsonObjFromBase64Str(contentChangedMsgStr_base64);
 
 	// only update if changed
@@ -76,14 +83,14 @@ function contentChanged_ext(contentChangedMsgStr_base64) {
 		log('rejecting content changed, no change for me. appender: ' + isAnyAppendEnabled() + ' appendee: ' + isAnyAppendEnabled());
 		return;
 	}
-	log('');
-	log('content change accepted. appender: ' + isAnyAppendEnabled() + ' appendee: ' + isAnyAppendEnabled());
-	log('mine:')
-	log(cur_data);
-	log('');
-	log('incoming: ');
-	log(msg.itemData);
-	log('');
+	//log('');
+	//log('content change accepted. appender: ' + isAnyAppendEnabled() + ' appendee: ' + isAnyAppendEnabled());
+	//log('mine:')
+	//log(cur_data);
+	//log('');
+	//log('incoming: ');
+	//log(msg.itemData);
+	//log('');
 	loadContentDataAsync(msg.itemData);
 }
 
@@ -222,6 +229,16 @@ function appendStateChanged_ext(reqMsgBase64Str) {
 
 	updateAppendModeStateFromHost(req, true);	
 }
+
+function deleteDocRange_ext(reqDeleteDocRangeBase64Str) {
+	// input 'MpQuillRemoveAppendRangeMessage'
+	let req = toJsonObjFromBase64Str(reqDeleteDocRangeBase64Str);
+	if (req &&
+		!isNullOrUndefined(req.index) &&
+		!isNullOrUndefined(req.length)) {
+		deleteText(req, 'silent');
+	}
+ } 
 
 function annotationSelected_ext(reqMsgBase64Str) {
 	// output 'MpQuillAnnotationSelectedMessage'

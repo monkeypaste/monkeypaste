@@ -4,6 +4,7 @@ using System.Diagnostics;
 namespace MonkeyPaste.Common {
 
     public interface MpIPlatformInfo {
+        bool IsAdmin { get; }
         string OsMachineName { get; }
         string OsVersion { get; }
         string OsFileManagerPath { get; }

@@ -133,7 +133,11 @@ namespace MonkeyPaste.Avalonia {
                 return no_match_result;
             }
             MpTransactionSourceType source_type = param_lookup["type"].ToEnum<MpTransactionSourceType>();
-            int source_id = param_lookup.ContainsKey("id") ? int.Parse(param_lookup["id"]) : 0;
+            int source_id = 0;
+            if (param_lookup.ContainsKey("id") &&
+                int.TryParse(param_lookup["id"], out int sid)) {
+                source_id = sid;
+            }
 
             if (source_id == 0) {
                 if (source_type == MpTransactionSourceType.CopyItem) {
@@ -175,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
             return sources;
         }
 
-        public async Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(object mpOrAvDataObj) {
+        public async Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(object mpOrAvDataObj, bool enforce_rejection = false) {
             MpAvDataObject avdo = null;
             if (mpOrAvDataObj is IDataObject ido) {
                 avdo = ido.ToPlatformDataObject();
@@ -261,9 +265,21 @@ namespace MonkeyPaste.Avalonia {
         }
         private string FindSourceUrl(MpAvDataObject avdo) {
             string cb_html_or_fragment = null;
-            if (avdo.ContainsData(MpPortableDataFormats.MimeMozUrl) &&
-                       avdo.GetData(MpPortableDataFormats.MimeMozUrl) is byte[] url_bytes &&
-                       url_bytes.ToDecodedString(Encoding.ASCII, true) is string source_url_str) {
+#if MAC
+            if (avdo.TryGetData(MpPortableDataFormats.MacChromeUrl, out string chrome_url)) {
+                return chrome_url;
+            }
+            if (avdo.TryGetData(MpPortableDataFormats.MacChromeUrl2, out string chrome_url2)) {
+                return chrome_url2;
+            }
+            if (avdo.TryGetData(MpPortableDataFormats.MacUrl, out string mac_url)) {
+                return mac_url;
+            }
+            if (avdo.TryGetData(MpPortableDataFormats.MacUrl2, out string mac_url2)) {
+                return mac_url2;
+            }
+#endif
+            if (avdo.TryGetData(MpPortableDataFormats.MimeMozUrl, out string source_url_str)) {
                 // on linux html is not in fragment format like windows and firefox supports this format
                 // but chrome doesn't
                 return source_url_str;
@@ -272,9 +288,8 @@ namespace MonkeyPaste.Avalonia {
                 urlBytes.ToDecodedString(Encoding.ASCII, true) is string urlRef) {
                 return urlRef;
             }
-            if (avdo.ContainsData(MpPortableDataFormats.Xhtml) &&
-                        avdo.GetData(MpPortableDataFormats.Xhtml) is byte[] htmlBytes &&
-                        htmlBytes.ToDecodedString() is string avhtmlStr) {
+            if (avdo.TryGetData(MpPortableDataFormats.Xhtml, out byte[] htmlBytes) &&
+                htmlBytes.ToDecodedString() is string avhtmlStr) {
 
                 // HTML
                 cb_html_or_fragment = avhtmlStr;
@@ -293,8 +308,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnySourceRejected(IEnumerable<MpISourceRef> refs) {
             foreach (var source_ref in refs) {
-                if (source_ref is MpUrl url &&
-                    (url.IsDomainRejected || url.IsUrlRejected)) {
+                if (source_ref is MpUrl url && 
+                    MpAvUrlCollectionViewModel.Instance.IsUrlRejected(url.UrlPath)) {
                     MpConsole.WriteLine($"Rejected url detected. Url: '{url}'");
                     return true;
                 } else if (source_ref is MpApp app &&

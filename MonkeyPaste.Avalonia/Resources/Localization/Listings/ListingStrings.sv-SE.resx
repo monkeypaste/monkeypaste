@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>kopiera</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>klistra</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>urklippshanterare</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>verktyg</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Helt - Featured Clip Editor med Find/Replay, Rich Text (tabeller, listor, länkar, etc.) Text Mallande för snabb, dynamisk klistra från din utdragskollektion</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Säker, säker och privat lokal datalagring med valfritt 2 - Faktorlösenordsskydd</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Byggd - i plugin -webbläsare med ett ständigt växande samhälle - Driven Library of Plugins</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste är ett urklippshanterare, automatiserings- och produktivitetsverktyg som ingen annan. Förbättra ditt urklipp till en berikad och organiserad del av ditt arbetsflöde,
-Med ett intuitivt och lågt profilgränssnitt som stöder text, filer och bilder. Designad för flexibilitet, med ett ständigt växande samhälle - driven libray av plugins.
-
-Det började som ett experiment av en programmerare som vill ha mer än bara kopiera och klistra in ur urklippet. Han ville ha ett enkelt kommando som ctrl+c som skulle "lägga till" istället
-av "ersätt" vad som fanns på urklippet. Och experimentet fungerade. Det lilla verktyget var mycket praktiskt. Detta har en programmerare med fler idéer och fler experiment, det
-Nu har blivit "monkeypaste".
-
-Eftersom skrivbordet är för dina filer avser monkeypasta att vara till ditt urklipp. Det är en svit med verktyg som är försiktigt utformade för att till synes integreras och interopera med
-Alla applikationer eller format av innehåll. Ctrl+C och Ctrl+V är mycket mer än bara genvägar. De är inträdesportarna som alla ansökningar delar, som bär en
-Rikedom av värde och vilket innebär att du förtjänar att ha tillgängligt till hands. Inte bara kastas efter nästa Ctrl+c.
-
-Jag är den programmeraren som nämns tidigare och jag vill att alla ska kunna använda av monkeypasta. Så det och alla dess funktioner är helt gratis att använda.
-Jag vill också att du ska känna dig bekväm att använda den. Så jag försäkrar er, som den enda kraften bakom skapandet, att ingen av den (mycket) personliga informationen som kan uppstå på
-Din urklipp spåras eller lagras någonstans bortom din egen maskin. Period.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Din urklipp spåras eller lagras någonstans bortom din egen maskin. Period.</va
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Urklippet är en djungel. Monkeypaste är kungen! Sväng från app till app, kopiera detta och klistra in det som aldrig tidigare med monkeypasta !! Ett helt - nytt, banbrytande urklipp och analytiskt automatiseringsverktyg !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Exempel på monkeypaste i aktion!</value>
   </data>
@@ -258,9 +228,6 @@ Din urklipp spåras eller lagras någonstans bortom din egen maskin. Period.</va
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Obegränsat - årligen</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Första frisläppande</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Med detta prenumeration får du:
 ● Obegränsad kapacitet</value>
@@ -270,5 +237,45 @@ Din urklipp spåras eller lagras någonstans bortom din egen maskin. Period.</va
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Fler plattformar och funktioner kommer snart! Vi kommer bara igång 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Belysning snabb sökning och markering, börja bara skriva!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Förvara text, bild och filklipp med alla dess källa (appen, webbplatsen, tiden och mycket mer) information automatiskt</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste är ett urklippshanterare, automatiserings- och produktivitetsverktyg som inget annat. Förbättra ditt urklipp till en berikad och organiserad del av ditt arbetsflöde,
+Med ett intuitivt gränssnitt med låg profil som stöder text, filer och bilder. Designad för flexibilitet, med en ständigt växande community-driven libray av plugins.
+
+Det började som ett experiment av en programmerare som ville ha mer än att bara kopiera och klistra in från urklippet. Han ville ha ett enkelt kommando som Ctrl+C som skulle "lägga till" istället 
+av "ersätt" det som stod på urklippet. Och experimentet fungerade. Det lilla verktyget var mycket praktiskt. Detta lockade programmeraren med fler idéer och fler experiment, som 
+har nu blivit "MonkeyPaste". 
+
+Eftersom skrivbordet är till dina filer, har MonkeyPaste för avsikt att vara till ditt urklipp. Det är en uppsättning verktyg som är noggrant utformade för att sömlöst integrera och samverka med 
+Alla tillämpningar eller format för innehåll. Ctrl+C och Ctrl+V är mycket mer än bara genvägar. De är de införselhamnar som alla applikationer delar och har en 
+rikedom av värde och mening som du förtjänar att ha till hands. Inte bara kastas bort efter nästa Ctrl+C.
+
+Jag är den programmerare som nämndes tidigare och jag vill att alla ska kunna använda MonkeyPaste. Så den och alla dess funktioner är helt gratis att använda. 
+Jag vill också att du ska känna dig bekväm med att använda den. Så jag försäkrar er, som den enda kraften bakom dess skapande, att INGEN av den (mycket) personliga information som kan uppstå på 
+ditt urklipp spåras eller lagras VAR som helst utanför din egen maskin. Period.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Urklipp</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Trygg, säker och privat lokal datalagring med valfritt 2-faktors lösenordsskydd</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste är nu helt gratis från och med denna utgåva !!
+
+Alla begränsningar (i APP-prenumerationer) har tagits bort eftersom monkeypasta nu övergår till att bli ett open source-projekt. Så håll ett öga på vår github (github.com/monkeypaste) om du är intresserad av att bidra.
+
+Uppdateringar:
+
+- Alla kapacitetsbegränsningar borttagna!
+- Avvisade UI -förbättringar av UI
+- Baslinjestöd för att köra flera instanser av monkeypasta
+- Ny delad Value Editor (i plugin -webbläsare där det är tillämpligt)</value>
   </data>
 </root>

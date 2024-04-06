@@ -18,6 +18,8 @@
         ResetAllResetSharedResetUnsharedCancel,
         RestartIgnoreCancel,
         RestartNowLater,
-        DeleteIgnoreFix
+        ModalShutdownLater,
+        DeleteIgnoreFix,
+        YesShutdown
     }
 }

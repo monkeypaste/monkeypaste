@@ -34,13 +34,15 @@ namespace MonkeyPaste.Avalonia {
             Instance = this;
 
             InitializeComponent();
-            InitDnd();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
             var ptrlb = this.FindControl<ListBox>("PinTrayListBox");
             ptrlb.AddHandler(KeyDownEvent, PinTrayListBox_KeyDown, RoutingStrategies.Tunnel);
         }
-
+        protected override void OnLoaded(RoutedEventArgs e) {
+            base.OnLoaded(e);
+            InitDnd();
+        }
         private void PinTrayListBox_KeyDown(object sender, KeyEventArgs e) {
             // prevent default list arrow navigation (it doesn't account for row nav)
             if (e.Key != Key.Left &&
@@ -78,9 +80,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragEnter(object sender, DragEventArgs e) {
             //MpConsole.WriteLine("[DragEnter] PinTrayListBox: ");
-            Dispatcher.UIThread.Post(() => {
-                BindingContext.IsDragOverPinTray = true;
-            });
+            BindingContext.IsDragOverPinTray = true;
         }
 
         private void DragOver(object sender, DragEventArgs e) {
@@ -94,11 +94,13 @@ namespace MonkeyPaste.Avalonia {
             //MpConsole.WriteLine("[DragOver] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
 
             if (is_drop_valid) {
+                MpConsole.WriteLine("valid drop (over)");
                 //e.DragEffects = DragDropEffects.Copy;
                 e.DragEffects = e.ToValidDropEffect();
                 MpLine dropLine = CreateDropLine(drop_idx, is_copy);
                 DrawAdorner(dropLine);
             } else {
+                MpConsole.WriteLine("invalid drop (over)");
                 ClearAdorner();
                 e.DragEffects = DragDropEffects.None;
             }
@@ -117,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
 
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
             bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
-            // MpConsole.WriteLine("[Drop] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
+            MpConsole.WriteLine("[Drop] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
 
             if (!is_drop_valid) {
                 e.DragEffects = DragDropEffects.None;
@@ -164,6 +166,16 @@ namespace MonkeyPaste.Avalonia {
             ptrlb.AddHandler(DragDrop.DragOverEvent, DragOver);
             ptrlb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
             ptrlb.AddHandler(DragDrop.DropEvent, Drop);
+
+            ptrlb.Loaded += PinTrayListBox_Loaded;
+            if (ptrlb.IsLoaded) {
+                PinTrayListBox_Loaded(ptrlb, null);
+            }
+        }
+        private void PinTrayListBox_Loaded(object sender, RoutedEventArgs e) {
+            if (sender is not Control ptrlb) {
+                return;
+            }
             InitAdorner(ptrlb);
         }
 
@@ -177,9 +189,11 @@ namespace MonkeyPaste.Avalonia {
             if (drop_idx < 0) {
                 return false;
             }
-            string drag_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT) as string;
+            string drag_ctvm_pub_handle = avdo.Contains(MpPortableDataFormats.INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT) ?
+                avdo.Get(MpPortableDataFormats.INTERNAL_CONTENT_PARTIAL_HANDLE_FORMAT) as string :
+                null;
             if (string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
-                // Tile drop is always valid
+                // non-Tile drop is always valid
                 return true;
             }
 
@@ -275,16 +289,7 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break();
             }
 
-            Dispatcher.UIThread.Post(async () => {
-                while (!Mp.Services.StartupState.IsReady) {
-                    await Task.Delay(100);
-                }
-                _dropAdorner = new MpAvDropHostAdorner(adornedControl);
-                await adornedControl
-                    .AddOrReplaceAdornerAsync(_dropAdorner);
-            });
-
-            //MpConsole.WriteLine("Adorner added to control: " + adornedControl);
+            _dropAdorner = new MpAvDropHostAdorner(adornedControl);
         }
 
         #endregion

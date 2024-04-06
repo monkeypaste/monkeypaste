@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ስለ እቅዶች የበለጠ ይረዱ</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>paste ወደ &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;የሚገኙ አገናኞችን በመጠቀም (fetcher plugin) ይህ መስክ በዚህ ሰነድ ላይ ለሁሉም አጋጣሚዎች ጥቅም ላይ ይውላል ወይም በማንኛውም ጊዜ በኋላ ላይ ይጠቀሳሉ.&lt;/p&gt;&lt;p&gt; ስለዚህ ለምሳሌ እዚህ የኢሜይል አድራሻን ከመረጡ የመረጣችሁት የኢሜይል አድራሻ በዚህ ሰነድ ውስጥ ለሁሉም አጋጣሚዎች ጥቅም ላይ ይውላል።&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@
     <value>በቅድመ-ቅጥር ውስጥ የተጋራ እሴት መለኪያዎች ማዘጋጀት አልተቻለም. {0} 'ቅድመ-}' {1} '{1}' {1} '{1}' {1} '{2} የመነሻ ወይም የእኩልነት መወገድ አለባቸው.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ቅድመ-ቅምጦች ልዩ ግልገሎች ሊኖራቸው ይገባል. የተባዛ የቀደመ መመሪያ መመሪያ '{0}' ለቅድመ-ቅምጦች 'በፕኪሊን' {1} ተገኝቷል: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plakin ይተላለፋል, በመንገድ '{0}' NAL '{0 {0 {0 {0} ተሰኪን ችላ ማለት</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0} የጋራ እሴቶችን ይ contains ል. እንዲሁም እነዚህን እንደገና ማስጀመር ይፈልጋሉ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ቅድመ-ቅምጦች ልዩ መመሪያዎች ሊኖራቸው ይገባል። የተባዛ ቅድመ-ቅምጥ መመሪያ «{0}» በፕለጊን «{1}» ውስጥ ለቅድመ-ቅምጦች፡ {2} ተገኝቷል።</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;paste ወደ &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>ያልታወቀ ስህተት {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>ግዢዎ ሊጠናቀቅ አልቻለም። ምክንያት፡ {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ጎራ አክል</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>ገጽ ያክሉ</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>የዚህ ገጽ ጎራ ተቀባይነት አላገኘም። ይህን ገጽ ለመፍቀድ የ«{0}»ን ውድቅ ማድረግ ያስፈልግዎታል።</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>የ«{0}» ጎራ አስቀድሞ ውድቅ ተደርጓል</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ጎራዎች</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>ይህ ገጽ አስቀድሞ ተቀባይነት አላገኘም።</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>ገፆች</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>አመሳስል</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>ሌላ የ MonkeyPaste ምሳሌ አስቀድሞ እየሰራ ነው። እርግጠኛ ነዎት አዲስ ምሳሌ መክፈት ይፈልጋሉ?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>አዋቅር</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>የአለምአቀፍ መዳፊት እና የቁልፍ ሰሌዳ አቋራጮች ተሰናክለዋል።
+
+አለምአቀፍ አቋራጮች አሁን በስርዓት ትሪው ሜኑ ውስጥ ሊነቁ ይችላሉ።</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ሁለንተናዊ አቋራጮች ተሰናክለዋል፡ {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>የአለምአቀፍ መዳፊት እና የቁልፍ ሰሌዳ አቋራጮች ነቅተዋል።</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(የሙከራ) አለምአቀፍ አቋራጮች ነቅተዋል፡ {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ዓለም አቀፍ አቋራጮችን ቀይር</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>አለምአቀፍ አቋራጮችን አብራ</value>
   </data>
 </root>

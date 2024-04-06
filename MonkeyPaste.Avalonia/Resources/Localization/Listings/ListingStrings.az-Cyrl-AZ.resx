@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>surətini çıxarmaq</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>yapışdır</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>paneli meneceri</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>alət</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Tamamilə - For, Zəngin Mətn (Masalar, Siyahılar, Links, Links və s.) Sürətli, dinamik yastığı üçün mətn şablonu olan, zəngin mətni (masalar, siyahılar və s.) Olan xüsusiyyətli klip redaktoru</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Könüllü 2 ilə təhlükəsiz, təhlükəsiz və özəl yerli məlumat saxlama - Faktor parol qorunması</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>İnkişaf etmiş - həmişəlik böyüyən bir cəmiyyət - pluginlərin idarə olunan kitabxanası olan plugin brauzerində</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeySaste, digərləri kimi bir panoya meneceri, avtomatlaşdırma və məhsuldarlıq vasitəsidir. Panoya işləmə axınınızın zənginləşdirilmiş və mütəşəkkil bir hissəsinə keçin,
-Mətn, faylları və şəkilləri dəstəkləyən intuitiv və aşağı profilli interfeys təqdim olunur. İndiyə qədər böyüyən bir cəmiyyətlə rahatlıq üçün hazırlanmışdır - pluginlərin idarə olunan tərbiyəsi.
-
-Panoya çıxmaq və yapışdırmaqdan daha çox istəyən bir proqramçı tərəfindən bir təcrübə olaraq başladı. Bunun əvəzinə 'əlavə edər' Ctrl + C kimi sadə bir əmr istədi
-panoya nə olduğunu 'dəyişdirin'. Və təcrübə işlədi. Kiçik vasitə çox əlverişli idi. Bu, proqramçıya daha çox fikir və daha çox təcrübə ilə yazdı
-İndi "Monkeytast" oldu.
-
-Masaüstü sənədlərinizdəki kimi, Monkeypaste panoya getmək niyyətindədir. Görünürlük bir şəkildə inteqrasiya və müdaxilə etmək üçün diqqətlə hazırlanmış alətlər dəsti
-hər hansı bir tətbiq və ya məzmun formatı. CTRL + C və CTRL + V yalnız qısa yollardan daha çox şeydir. Onlar a aparan bütün ərizələrin paylaşımının portlarıdır
-Parmaklarınızın ucunda olmağa layiq olduğunuz dəyər və məna var. Növbəti Ctrl + c-dən sonra yalnız atılmadı.
-
-Mən əvvəlki proqramçıyam və hər kəsin meymundan istifadə edə bilməyəcəyimi istəyirəm. Beləliklə, onun bütün xüsusiyyətləri istifadə etmək üçün tamamilə pulsuzdur.
-İstəyirəm ki, onu da istifadə edərək rahat hiss etməyinizi istəyirəm. Buna görə sizi inandırıram, yaradılışının yeganə qüvvəsi olduğu kimi, ortaya çıxa biləcək şəxsi məlumatların heç biri
-Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır. Dövr.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Panoya bir cəngəllikdir. Monkeytaste padşahdır! App-dən tətbiqə, bu və yapışdırmaqdan əvvəl Monkeyte ilə heç vaxt olmadığını kopyalayın! Bir marka - yeni, qabaqcıl panoya və analitik avtomatlaşdırma vasitəsi !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Fəaliyyətdə Monkeysaste nümunəsi!</value>
   </data>
@@ -258,9 +228,6 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Limitsiz - illik</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>İlkin buraxılış</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Bu abunə ilə alacaqsınız:
 ● Limitsiz tutum</value>
@@ -270,5 +237,45 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Daha çox platforma və xüsusiyyətlər tezliklə! Biz yalnız gettings 🎉 başlamışıq</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Sürətli axtarış və işıqlandırmanın işıqlandırılması, yalnız yazmağa başlayın!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Mətn, şəkil və fayl klipləri bütün mənbəyi (tətbiq, veb, vaxt, vaxt və daha çox) məlumat avtomatik olaraq</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeySaste, digərləri kimi bir panoya meneceri, avtomatlaşdırma və məhsuldarlıq vasitəsidir. Panoya işləmə axınınızın zənginləşdirilmiş və mütəşəkkil bir hissəsinə keçin,
+Mətn, faylları və şəkilləri dəstəkləyən intuitiv və aşağı profilli interfeys təqdim olunur. İndiyə qədər böyüyən bir cəmiyyətlə rahatlıq üçün hazırlanmışdır - pluginlərin idarə olunan tərbiyəsi.
+
+Panoya çıxmaq və yapışdırmaqdan daha çox istəyən bir proqramçı tərəfindən bir təcrübə olaraq başladı. Bunun əvəzinə 'əlavə edər' Ctrl + C kimi sadə bir əmr istədi
+panoya nə olduğunu 'dəyişdirin'. Və təcrübə işlədi. Kiçik vasitə çox əlverişli idi. Bu, proqramçıya daha çox fikir və daha çox təcrübə ilə yazdı
+İndi "Monkeytast" oldu.
+
+Masaüstü sənədlərinizdəki kimi, Monkeypaste panoya getmək niyyətindədir. Görünürlük bir şəkildə inteqrasiya və müdaxilə etmək üçün diqqətlə hazırlanmış alətlər dəsti
+hər hansı bir tətbiq və ya məzmun formatı. CTRL + C və CTRL + V yalnız qısa yollardan daha çox şeydir. Onlar a aparan bütün ərizələrin paylaşımının portlarıdır
+Parmaklarınızın ucunda olmağa layiq olduğunuz dəyər və məna var. Növbəti Ctrl + c-dən sonra yalnız atılmadı.
+
+Mən əvvəlki proqramçıyam və hər kəsin meymundan istifadə edə bilməyəcəyimi istəyirəm. Beləliklə, onun bütün xüsusiyyətləri istifadə etmək üçün tamamilə pulsuzdur.
+İstəyirəm ki, onu da istifadə edərək rahat hiss etməyinizi istəyirəm. Buna görə sizi inandırıram, yaradılışının yeganə qüvvəsi olduğu kimi, ortaya çıxa biləcək şəxsi məlumatların heç biri
+Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır. Dövr.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>bufer</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>İsteğe bağlı 2 faktorlu parol mühafizəsi ilə təhlükəsiz, təhlükəsiz və özəl yerli məlumat saxlama</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeyte indi bu buraxılışdan tamamilə azaddır!
+
+Artıq bütün məhdudiyyətlər (App abunəçiləri) çıxarıldığı kimi, artıq açıq mənbəli bir layihə olmağa keçid kimi çıxdı. Buna görə töhfə vermək istəyirsinizsə, Github (Github.com/monkeyte).
+
+Yeniləmələr:
+
+- Bütün tutum məhdudiyyətləri silindi!
+- URL redaktoru UI təkmilləşdirmələrini rədd etdi
+- Monkeytaste birdən çox hallarını işlətmək üçün əsas dəstək
+- Yeni paylaşılan dəyər redaktoru (tətbiq olunan plugin brauzerində)</value>
   </data>
 </root>

@@ -7,7 +7,6 @@ function initPlainHtmlConverter() {
 
 	if (!isRunningOnHost()) {
 		document.head.getElementsByTagName('title')[0].innerText = 'Editor (converter)';
-		getEditorContainerElement().classList.add('html-converter');
 	}
 
 	globals.quill = initQuill();
@@ -33,7 +32,7 @@ function initPlainHtmlConverter() {
 // #region State
 
 function isPlainHtmlConverter() {
-	return getEditorContainerElement().classList.contains('html-converter');
+	return getEditorElement().classList.contains('ql-editor-converter');
 }
 // #endregion State
 
@@ -87,6 +86,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 		// fallback and use delta2html, i think its a problem when there's only 1 block and content was plain text
 		output_html = getHtml(null, needs_encoding);
 	}
+	// swap pre's for spans cause it screws stuf upf
 
 	let is_conv_html_valid = true;
 
@@ -139,13 +139,16 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 			output_html = encodeHtmlSpecialEntitiesFromPlainText(verifyText);
 		}
 	}
+	setEditorHtml(output_html);
 	let output_delta = convertHtmlToDelta(output_html);
-		
+	let themed_html = getHtml(null, true, false, true, true);
+	output_html = convertHtmlLineBreaks(output_html);
 	//log('');
 	//log('RichHtml: ');
 	//log(output_html);
 	stop();
 	return {
+		themed_html: themed_html,
 		html: output_html,
 		delta: output_delta,
 		valid: is_conv_html_valid

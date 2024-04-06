@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copie</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pastă</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Clipboard Manager</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>instrument</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Complet - editor de clipuri prezentat cu descoperire/înlocuire, text bogat (tabele, liste, link -uri, etc.) Text Text Text pentru lipirea rapidă și dinamică din colecția de fragmente</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Stocare de date locale sigure, sigure și private cu protecție opțională a parolei cu 2 - factor</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Construit - în browserul de pluginuri cu o comunitate în creștere - Biblioteca de pluginuri conduse</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste este un manager de clipboard, un instrument de automatizare și productivitate ca niciun altul. Îmbunătățirea clipboard -ului într -o parte îmbogățită și organizată din fluxul dvs. de lucru,
-Prezentând o interfață intuitivă și scăzută de profil care acceptă text, fișiere și imagini. Proiectat pentru flexibilitate, cu o comunitate în creștere - o libray de plugin -uri conduse în permanență.
-
-A început ca un experiment de către un programator care dorește mai mult decât să copieze și să lipească din clipboard. El a vrut o comandă simplă precum Ctrl+C, care să „adauge la” în schimb
-din „înlocuiți” ceea ce a fost pe clipboard. Iar experimentul a funcționat. Micul instrument era foarte la îndemână. Acest lucru a înregistrat programatorul cu mai multe idei și mai multe experimente, care
-Acum a devenit „Monkeypaste”.
-
-Deoarece desktopul este la fișierele dvs., Monkeypaste intenționează să fie la clipboard. Este o suită de instrumente concepute cu atenție pentru a se integra și a se interopa pe aparent cu
-orice aplicație sau format de conținut. Ctrl+C și Ctrl+V sunt mult mai mult decât doar comenzile rapide. Sunt porturile de intrare toate aplicațiile, care transportă un
-Bogăția de valoare și sensul pe care meritați să îl aveți la dispoziție la îndemână. Nu doar aruncat după următorul Ctrl+C.
-
-Sunt acel programator menționat mai devreme și vreau ca toată lumea să poată găsi utilizarea din Monkeypaste. Deci și toate caracteristicile sale sunt complet gratuite de utilizat.
-De asemenea, vreau să vă simțiți confortabil folosindu -l. Așa că vă asigur, ca fiind singura forță din spatele creației sale, că niciuna dintre informațiile personale (foarte) personale nu pot apărea
-Clipboard -ul dvs. este urmărit sau păstrat oriunde dincolo de propria mașină. Perioadă.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Clipboard -ul dvs. este urmărit sau păstrat oriunde dincolo de propria mașin�
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Clipboard -ul este o junglă. Monkeypaste este regele! Swing de la aplicație în aplicație, copierea acestui lucru și lipirea asta ca niciodată cu Monkeypaste !! Un brand - instrument nou, clipboard de ultimă oră și automatizare analitică !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Eșantion de Monkeypaste în acțiune!</value>
   </data>
@@ -258,9 +228,6 @@ Clipboard -ul dvs. este urmărit sau păstrat oriunde dincolo de propria mașin�
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Nelimitat - anual</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Eliberare inițială</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Cu acest abonament veți primi:
 ● Capacitate nelimitată</value>
@@ -270,5 +237,45 @@ Clipboard -ul dvs. este urmărit sau păstrat oriunde dincolo de propria mașin�
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Mai multe platforme și funcții în curând! Suntem doar getsings a început 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Iluminarea căutării rapide și evidențierea, începeți doar să tastați!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Stocați clipuri de text, imagine și fișiere cu toate informațiile sursei sale (aplicația, site -ul, timpul și multe altele) automat</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste este un manager de clipboard, instrument de automatizare și productivitate ca nimeni altul. Îmbunătățirea clipboard-ului într-o parte îmbogățită și organizată a fluxului de lucru,
+Dispunând de o interfață intuitivă și cu profil redus, care acceptă text, fișiere și imagini. Proiectat pentru flexibilitate, cu o bibliotecă de plugin-uri în continuă creștere, condusă de comunitate.
+
+A început ca un experiment al unui programator care dorea mai mult decât să copieze și să lipească din clipboard. El a vrut o comandă simplă, cum ar fi Ctrl + C, care să "adauge la" în schimb 
+de a "înlocui" ceea ce era în clipboard. Și experimentul a funcționat. Micul instrument a fost foarte util. Acest lucru a atras programatorul cu mai multe idei și mai multe experimente, care 
+acum a devenit "MonkeyPaste". 
+
+Așa cum desktopul este pentru fișierele dvs., MonkeyPaste intenționează să fie pentru clipboard. Este o suită de instrumente proiectate cu atenție pentru a se integra și a interacționa aparent cu 
+orice aplicație sau format de conținut. Ctrl + C și Ctrl + V sunt mult mai mult decât simple comenzi rapide. Acestea sunt porturile de intrare pe care le partajează toate aplicațiile, purtând un 
+bogăție de valoare și semnificație pe care meritați să o aveți la îndemână. Nu doar aruncat după următorul Ctrl + C.
+
+Sunt acel programator menționat mai devreme și vreau ca toată lumea să poată găsi utilizare din MonkeyPaste. Deci, acesta și toate caracteristicile sale sunt complet gratuite. 
+De asemenea, vreau să vă simțiți confortabil folosind-o. Așa că vă asigur, ca fiind singura forță din spatele creării sale, că NICIUNA dintre informațiile (foarte) personale care pot apărea pe 
+clipboard-ul dvs. este urmărit sau stocat ORIUNDE în afara propriei mașini. Perioadă.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Stocare sigură, securizată și privată a datelor locale cu protecție opțională cu parolă cu 2 factori</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste este acum complet liber de la această versiune !!
+
+Toate restricțiile (în abonamentele APP) au fost eliminate, deoarece MonkeyPaste trece acum la a deveni un proiect open-source. Așadar, urmăriți github -ul nostru (github.com/monkeypaste) dacă sunteți interesat să contribuiți.
+
+Actualizări:
+
+- Toate restricțiile de capacitate eliminate!
+- Respingerea URL -ului URL AM INFORMAȚII
+- Suport de bază pentru rularea mai multor cazuri de Monkeypaste
+- nou editor de valori partajate (în browserul de pluginuri, după caz)</value>
   </data>
 </root>

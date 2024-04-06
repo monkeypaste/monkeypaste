@@ -21,6 +21,8 @@
                               local:MpAvDropExtension.SourceType="ClipTileDrop"
                               local:MpAvTextControlDragExtension.IsDragging="{Binding IsTileDragging, Mode=TwoWay}"
                               local:MpAvHighlightTextExtension.IsEnabled="True"
+                              local:MpAvHighlightTextExtension.HighlightRanges="{Binding HighlightRanges}"
+                              local:MpAvHighlightTextExtension.ActiveHighlightIdx="{Binding ActiveHighlightIdx}"
                               BorderThickness="0"
                               TextWrapping="Wrap"
                               AcceptsReturn="True"

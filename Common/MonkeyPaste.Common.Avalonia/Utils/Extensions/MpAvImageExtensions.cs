@@ -45,7 +45,7 @@ namespace MonkeyPaste.Common.Avalonia {
                     return bmp.Scale(new MpSize(scale, scale));
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine("Error creating bitmap from bytes ", ex);
+                    MpConsole.WriteTraceLine($"Error creating bitmap from bytes '{bytes.ToBase64String()}'", ex);
                     return null;
                 }
             }
@@ -67,6 +67,15 @@ namespace MonkeyPaste.Common.Avalonia {
         public static Bitmap ToAvBitmap(this WriteableBitmap wbmp, int quality = 100) {
             using (var outStream = new MemoryStream()) {
                 wbmp.Save(outStream, quality);
+                outStream.Seek(0, SeekOrigin.Begin);
+                var outBmp = new Bitmap(outStream);
+                return outBmp;
+            }
+        }
+
+        public static Bitmap ToAvBitmap(this RenderTargetBitmap rtbmp, int quality = 100) {
+            using (var outStream = new MemoryStream()) {
+                rtbmp.Save(outStream, quality);
                 outStream.Seek(0, SeekOrigin.Begin);
                 var outBmp = new Bitmap(outStream);
                 return outBmp;
@@ -151,6 +160,13 @@ namespace MonkeyPaste.Common.Avalonia {
             var bmpTarget = bmpSrc.CreateScaledBitmap(new PixelSize((int)size.Width, (int)size.Height));
             return bmpTarget;
         }
+
+        public static Bitmap? ResizeKeepAspect(this Bitmap bmpSrc, MpSize size, bool enlarge) {
+
+            var new_size = bmpSrc.Size.ToPortableSize().ResizeKeepAspect(size.Width, size.Height, enlarge).ToAvPixelSize(1);
+            var bmpTarget = bmpSrc.CreateScaledBitmap(new_size);
+            return bmpTarget;
+        }
         public static MpSize ResizeKeepAspect(this MpSize src, double maxWidth, double maxHeight, bool enlarge = false) {
             maxWidth = enlarge ? maxWidth : Math.Min(maxWidth, src.Width);
             maxHeight = enlarge ? maxHeight : Math.Min(maxHeight, src.Height);
@@ -225,7 +241,6 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
-        // public static unsafe IEnumerable<(MpColor, int)> GetStatistics(this Bitmap bmpSrc) {
         public static unsafe IEnumerable<(MpColor, int)> GetStatistics(this string imgBase64) {
             lock (_statsLock) {
                 try {

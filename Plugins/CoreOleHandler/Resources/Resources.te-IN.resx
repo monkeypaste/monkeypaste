@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>పేరులేనిది</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>వినోదం కోసం, ఇది తనిఖీ చేయబడినప్పుడు క్లిప్‌బోర్డ్‌లోని చిత్రం చిత్రం యొక్క ASCII (సాదా వచనం) కళగా క్రూరంగా మార్చబడుతుంది</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>చిత్రం టెక్స్ట్</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>అందుబాటులో ఉన్నప్పుడు, మొదటి ఎంచుకున్న టెక్స్ట్ ఫార్మాట్ యొక్క డేటా ఒక చిత్రంగా మార్చబడుతుంది మరియు క్లిప్‌బోర్డ్‌కు జోడించబడుతుంది.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>చిత్ర ఆకృతులకు వచనం</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>చిత్రం (టిఫ్)</value>
+  </data>
 </root>

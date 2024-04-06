@@ -2639,9 +2639,6 @@ Monkeypaste მოწყობილობაზე
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>შეიტყვეთ მეტი გეგმების შესახებ</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ჩასვით: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;ხელმისაწვდომი კონტაქტების გამოყენებით (მოითხოვს fetcher მოდულს) ეს ველი გამოყენებული იქნება ამ შაბლონის ყველა შემთხვევისთვის ამ დოკუმენტის გასწვრივ ან ნებისმიერ შემთხვევაში ის მოგვიანებით იქნება მითითებული.&lt;/p&gt;&lt;p&gt; მაგალითად, თუ აქ აირჩიეთ ელ.ფოსტის მისამართი, მაშინ თქვენ მიერ არჩეული კონტაქტის ელ.ფოსტის ველი გამოყენებული იქნება ამ დოკუმენტის ყველა შემთხვევისთვის.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Monkeypaste მოწყობილობაზე
     <value>ვერ დააწესეთ საერთო ღირებულების პარამეტრები წინასწარ. Paramid '{0}' წინასწარ '{1}' მოდულისთვის '{2}' უნდა ამოიღოთ ან პარამეტრის დაზუსტება შესაძლებელია პარამეტრის განსაზღვრის განყოფილებაში.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>წინასწარ უნდა ჰქონდეს უნიკალური სახელმძღვანელო. დუბლიკატი წინასწარ განსაზღვრული სახელმძღვანელო '{0}' დაფიქსირდა მოდულში '{1}' წინასწარ: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>დანამატის გაანალიზების შეცდომა, ბილიკზე '{0}' null, სავარაუდოდ, შეცდომების გაანალიზება JSON. მოდულის უგულებელყოფა</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Monkeypaste მოწყობილობაზე
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' შეიცავს საერთო მნიშვნელობებს. გსურთ აღადგინოთ ისინი?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Presets უნდა ჰქონდეს უნიკალური guids. დუბლიკატი წინასწარ დაყენებული guid '{0}' გამოვლინდა მოდულის "{1}" წინასწარ დაყენებებისთვის: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;ჩასვით: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>უცნობი შეცდომა {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>თქვენი შენაძენი ვერ დასრულდა. მიზეზი: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>დომენის დამატება</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>გვერდის დამატება</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>ამ გვერდის დომენი უარყოფილია. ამ გვერდის დასაშვებად, თქვენ უნდა ამოიღოთ უარი "{0}".</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>დომენი '{0}' უკვე უარყოფილია</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>დომენები</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>ეს გვერდი უკვე უარყოფილია.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>გვერდები</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>სმერვა</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Monkeypaste- ის კიდევ ერთი შემთხვევა უკვე მუშაობს. დარწმუნებული ხართ, რომ გსურთ ახალი ინსტანციის გახსნა?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>კონფიგურაცია</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>მაუსის და კლავიშების გლობალური მალსახმობები გამორთულია.
+
+გლობალური მალსახმობების ჩართვა შესაძლებელია სისტემის უჯრის მენიუში</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>გლობალური მალსახმობები გამორთულია: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ჩართულია მაუსის და კლავიშების გლობალური მალსახმობები.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ექსპერიმენტული) გლობალური მალსახმობები ჩართულია: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>შეცვალეთ გლობალური მალსახმობები</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>გადარიცხეთ გლობალური მალსახმობები</value>
   </data>
 </root>

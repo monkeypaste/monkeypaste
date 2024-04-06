@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Nimettömä</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Hauskanpitoa varten, kun tämä tarkistetaan, leikepöydän kuva muunnetaan raa'asti kuvan ASCII (tavallinen teksti) taiteen 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Kuva tekstiin</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Kun saatavana on, ensimmäisen valittu tekstimuodon tiedot muunnetaan kuvaksi ja lisätään leikepöydälle.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Teksti kuvamuotoihin</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Kuva (TIFF)</value>
+  </data>
 </root>

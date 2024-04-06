@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>En savoir plus sur les plans</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Coller dans : &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;En utilisant les contacts disponibles (nécessite un plugin fetcher), ce champ sera utilisé pour toutes les instances de ce modèle dans ce document ou dans tout autre document dans lequel il sera référencé ultérieurement.&lt;/p&gt;&lt;p&gt; Ainsi, par exemple, si vous sélectionnez l’adresse e-mail ici, le champ e-mail du contact que vous sélectionnez sera utilisé pour toutes les instances de ce document.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ La restauration totale ne peut pas être garantie et peut réduire les performan
     <value>Impossible de définir les paramètres de valeur partagés dans les préréglages. Parcid '{0}' dans préset '{1}' pour le plugin '{2}' doit être supprimé ou paramvalue peut être spécifié dans la section de définition des paramètres.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Les préréglages doivent avoir des guids uniques. Duplicate Preset Guid '{0}' a été détecté dans le plugin '{1}' pour les préréglages: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Erreur d'analyse du plugin, au chemin '{0}' null, error-erreur d'analyse JSON. Ignorer le plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ La restauration totale ne peut pas être garantie et peut réduire les performan
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' contient des valeurs partagées. Souhaitez-vous également les réinitialiser?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Les préréglages doivent avoir des guides uniques. Un guid de préréglage en double '{0}' a été détecté dans le plugin '{1}' pour les préréglages : {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Coller dans : &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Erreur inconnue {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Votre achat n'a pas pu être effectué. Raison: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Ajouter un domaine</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Ajouter une page</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Le domaine de cette page est rejeté. Pour autoriser cette page, vous devrez supprimer le rejet pour '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Le domaine '{0}' est déjà rejeté</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domaines</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Cette page est déjà rejetée.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Pages</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synchronisation</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Une autre instance de Monkeypaste est déjà en cours d'exécution. Êtes-vous sûr d'ouvrir une nouvelle instance?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Configurer</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Les raccourcis mondiaux de souris et de clavier ont été désactivés.
+
+Les raccourcis mondiaux peuvent désormais être activés dans le menu du plateau système</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Raccourcis mondiaux désactivés: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Les raccourcis mondiaux de souris et de clavier ont été activés.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Expérimental) Les raccourcis mondiaux activés: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Basculer les raccourcis mondiaux</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Basculer les raccourcis mondiaux sur</value>
   </data>
 </root>

@@ -23,14 +23,29 @@
                 Value="Transparent" />
     </Style>
     <!--  LINK TEXT  -->
-    <Style Selector="Button.link TextBlock">
+    <Style Selector="Button.link :is(TextBlock)">
         <Setter Property="Foreground"
                 Value="{DynamicResource ThemeAccent5BgColor}" />
         <Setter Property="TextDecorations"
                 Value="Underline" />
     </Style>
-    <Style Selector="Button.link:pointerover TextBlock">
+    <Style Selector="Button.link:pointerover :is(TextBlock)">
         <Setter Property="Foreground"
+                Value="{DynamicResource ThemeAccent5Color}" />
+    </Style>
+
+    <Style Selector="Button.link local|MpAvMarqueeTextBox">
+        <Setter Property="EditOnFocus"
+                Value="False" />
+        <Setter Property="SelectViewModelOnFocus"
+                Value="False" />
+        <Setter Property="NavigateUriCommand"
+                Value="{Binding $parent[Button].Command}" />
+        <Setter Property="NavigateUriCommandParameter"
+                Value="{Binding $parent[Button].CommandParameter}" />
+        <Setter Property="ReadOnlyForeground"
+                Value="{DynamicResource ThemeAccent5BgColor}" />
+        <Setter Property="HoverBrush"
                 Value="{DynamicResource ThemeAccent5Color}" />
     </Style>
 

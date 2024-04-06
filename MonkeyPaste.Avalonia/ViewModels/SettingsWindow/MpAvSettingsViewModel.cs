@@ -143,9 +143,10 @@ namespace MonkeyPaste.Avalonia {
         public MpSettingsTabType DefaultSelectedTab {
             get {
                 if (string.IsNullOrEmpty(MpAvPrefViewModel.Instance.LastSelectedSettingsTabTypeStr)) {
-                    if (MpAvAccountViewModel.Instance.IsFree) {
-                        return MpSettingsTabType.Account;
-                    }
+                    // NOTE below should be added back in when sync implemented
+                    //if (MpAvAccountViewModel.Instance.IsFree) {
+                    //    return MpSettingsTabType.Account;
+                    //}
                     return MpSettingsTabType.Preferences;
                 }
                 return MpAvPrefViewModel.Instance.LastSelectedSettingsTabTypeStr.ToEnum<MpSettingsTabType>();
@@ -227,12 +228,9 @@ namespace MonkeyPaste.Avalonia {
             UpdateFilters();
             InitRuntimeParams();
         }
-
-
         #endregion
 
         #region Private Methods
-
         private async Task InitSettingFramesAsync() {
             TabLookup = new Dictionary<MpSettingsTabType, IEnumerable<MpAvSettingsFrameViewModel>>() {
                 {
@@ -1402,6 +1400,7 @@ namespace MonkeyPaste.Avalonia {
                     ftb.Focus();
                 }
             }
+
             void Sw_Closed(object sender, EventArgs e) {
                 sw.Opened -= Sw_Opened;
                 sw.Closed -= Sw_Closed;
@@ -1409,11 +1408,9 @@ namespace MonkeyPaste.Avalonia {
 
             sw.Opened += Sw_Opened;
             sw.Closed += Sw_Closed;
+
             return sw;
         }
-
-
-
         private void UpdateFilters() {
 
             TabLookup.ForEach(x => x.Value.ForEach(y => y.OnPropertyChanged(nameof(y.FilteredItems))));
@@ -1432,7 +1429,6 @@ namespace MonkeyPaste.Avalonia {
 
             AddOrUpdateRecentFilterTextsAsync(FilterText).FireAndForgetSafeAsync();
         }
-
         private async Task AddOrUpdateRecentFilterTextsAsync(string st) {
             while (MpAvPrefViewModel.Instance == null) {
                 await Task.Delay(100);
@@ -1494,9 +1490,10 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (_reinitContentParams.Any(x => x.ToLowerInvariant() == e.PropertyName.ToLowerInvariant())) {
-                Task.WhenAll(MpAvClipTrayViewModel.Instance.AllActiveItems
-                    .Where(x => x.GetContentView() != null)
-                    .Select(x => x.GetContentView().ReloadAsync())).FireAndForgetSafeAsync();
+                //Task.WhenAll(MpAvClipTrayViewModel.Instance.AllActiveItems
+                //    .Where(x => x.GetContentView() != null)
+                //    .Select(x => x.GetContentView().ReloadAsync())).FireAndForgetSafeAsync();
+                MpAvClipTrayViewModel.Instance.ReloadAllContentCommand.Execute(null);
             }
 
             if (_restartContentParams.Any(x => x.ToLowerInvariant() == e.PropertyName.ToLowerInvariant())) {
@@ -1538,10 +1535,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void SetLoadOnLogin(bool loadOnLogin) {
-            Mp.Services.LoadOnLoginTools.SetLoadOnLogin(loadOnLogin);
-            MpAvPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
+            Dispatcher.UIThread.Post(async () => {
+                await Mp.Services.LoadOnLoginTools.SetLoadOnLoginAsync(loadOnLogin);
+                MpAvPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
 
-            MpConsole.WriteLine($"Load At Login: {(MpAvPrefViewModel.Instance.LoadOnLogin ? "ON" : "OFF")}");
+                MpConsole.WriteLine($"Load At Login: {(MpAvPrefViewModel.Instance.LoadOnLogin ? "ON" : "OFF")}");
+            });
         }
 
         #region Theme Button Color
@@ -1639,17 +1638,9 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #endregion
+
         #region Param Locators
-
-        private T GetParameterControlByParamId<T>(string paramId) where T : Control {
-            if (MpAvSettingsFrameView.ParamViews
-                .FirstOrDefault(x => x.DataContext != null && x.BindingContext.ParamId.ToString() == paramId)
-                    is not MpAvPluginParameterItemView piv) {
-                return default;
-            }
-            return piv.GetVisualDescendant<T>();
-        }
-
         public Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameViewModelsByParamId(string paramId, MpSettingsFrameType frameType = MpSettingsFrameType.None) {
             if (Items == null) {
                 return null;
@@ -1668,16 +1659,25 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
         }
-        public bool TryGetParamAndFrameViewModelsByParamId(string paramId, out Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> result) {
-            result = GetParamAndFrameViewModelsByParamId(paramId);
-            return result != null && result.Item1 != null && result.Item2 != null;
-        }
+
         public bool TryGetParamAndFrameViewModelsByParamId(MpSettingsFrameType frameType, string paramId, out Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> result) {
             result = GetParamAndFrameViewModelsByParamId(paramId, frameType);
             return result != null && result.Item1 != null && result.Item2 != null;
         }
-        #endregion
-
+        private T GetParameterControlByParamId<T>(string paramId) where T : Control {
+            if (MpAvSettingsFrameView.ParamViews
+                .FirstOrDefault(x => x.DataContext != null && x.BindingContext.ParamId.ToString() == paramId)
+                    is not MpAvPluginParameterItemView piv) {
+                return default;
+            }
+            return piv.GetVisualDescendant<T>();
+        }
+               
+        private bool TryGetParamAndFrameViewModelsByParamId(string paramId, out Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> result) {
+            result = GetParamAndFrameViewModelsByParamId(paramId);
+            return result != null && result.Item1 != null && result.Item2 != null;
+        }
+        
         #endregion
 
         #region Commands
@@ -1766,6 +1766,7 @@ namespace MonkeyPaste.Avalonia {
                     IsWindowActive = true;
                 } else if (Mp.Services.PlatformInfo.IsDesktop) {
                     var sw = CreateSettingsWindow();
+
                     sw.Show();
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }
@@ -1979,12 +1980,10 @@ namespace MonkeyPaste.Avalonia {
 
                 }
             });
-
         public ICommand ClearFilterTextCommand => new MpCommand(
             () => {
                 FilterText = string.Empty;
             });
-
         public ICommand RestoreDefaultsCommand => new MpAsyncCommand(
             async () => {
                 var result = await Mp.Services.PlatformMessageBox.ShowYesNoMessageBoxAsync(
@@ -1999,7 +1998,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPrefViewModel.Instance.RestoreDefaults();
                 IsBatchUpdate = false;
 
-                MpAvAppRestarter.ShutdownWithRestartTask("Restoring Default Preferences");
+                MpAvAppRestarter.ShutdownWithRestartTaskAsync("Restoring Default Preferences").FireAndForgetSafeAsync();
 
             });
         #endregion

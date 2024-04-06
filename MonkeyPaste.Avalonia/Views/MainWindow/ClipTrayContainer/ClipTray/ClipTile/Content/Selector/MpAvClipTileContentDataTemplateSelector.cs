@@ -9,33 +9,19 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         Control ITemplate<object, Control>.Build(object param) {
-            string key = "ContentWebViewTemplate";
-            bool needs_fallback = !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled;
-
-#if CEFNET_WV
-            if(!MpAvCefNetApplication.IsCefNetLoaded) {
-                needs_fallback = true;
+            if (param is not MpAvClipTileViewModel ctvm) {
+                return null;
             }
+            string key;
+            if (MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+#if SUGAR_WV
+                key = "CompositeWebViewTemplate";
+#else
+                key = "ContentWebViewTemplate";
 #endif
-            if (needs_fallback &&
-                param is MpAvClipTileViewModel ctvm) {
-                ctvm.IsEditorLoaded = true;
-                switch (ctvm.CopyItemType) {
-                    default:
-                    case MpCopyItemType.Text:
-                        key = "PlainTextTemplate";
-                        break;
-                    case MpCopyItemType.Image:
-                        key = "ImageTemplate";
-                        break;
-                    case MpCopyItemType.FileList:
-                        key = "FileListTemplate";
-                        break;
-                }
             } else {
-
+                key = "CompatibilityViewTemplate";
             }
-
             return AvailableTemplates[key].Build(param);
         }
 

@@ -135,7 +135,7 @@
                 <!--  ACTION HEADER  -->
 
                 <local:MpAvActionPropertyHeaderView CornerRadius="10"
-                                                    BorderBrush="{Binding $self.Background, ConverterParameter=compliment, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                                                    BorderBrush="{Binding $self.Background, ConverterParameter=compliment, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                                                     Background="{Binding ActionBackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                                     Padding="5,0"
                                                     Margin="0,0,0,10"

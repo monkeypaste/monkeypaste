@@ -1,7 +1,7 @@
 {
   "title": "핵심 클립 보드 핸들러",
   "description": "기본 클립 보드 형식을 처리합니다",
-  "version": "1.0.0.0",
+  "version": "1.0.1.0",
   "author": "Monkey",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "projectUrl": "https://www.monkeypaste.com",

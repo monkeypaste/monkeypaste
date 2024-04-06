@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>無標題</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>為了娛樂，當檢查一下時，剪貼板上的圖像將粗略地轉換為ASCII（純文本）圖像的藝術🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>圖像到文字</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>如果有的話，第一個選擇的文本格式的數據將轉換為圖像並添加到剪貼板中。</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>文字到圖像格式</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>圖像（TIFF）</value>
+  </data>
 </root>

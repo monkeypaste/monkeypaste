@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>بلا عنوان</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>تفریح ​​کے ل ، ، جب اس کی جانچ پڑتال کی جاتی ہے تو کلپ بورڈ پر شبیہہ کو شبیہہ کے ساتھ ASCII (سادہ متن) آرٹ میں تبدیل کردیا جائے گا۔</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>متن کی تصویر</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>جب دستیاب ہو تو ، پہلے منتخب کردہ ٹیکسٹ فارمیٹ کا ڈیٹا کسی شبیہہ میں تبدیل ہوجائے گا اور کلپ بورڈ میں شامل کیا جائے گا۔</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>تصویر کے فارمیٹس کا متن</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>تصویر (TIFF)</value>
+  </data>
 </root>

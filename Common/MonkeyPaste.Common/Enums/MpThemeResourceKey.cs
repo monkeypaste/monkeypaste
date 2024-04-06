@@ -51,6 +51,16 @@
         ThemeGrayAccent2Color,
         ThemeGrayAccent3Color,
 
+        ThemePasteToolbarBgColor,
+        ThemePasteButtonDefaultBgColor,
+        ThemePasteButtonCustomBgColor,
+
+        ThemeContentLinkColor,
+        ThemeContentLinkHoverColor,
+
+        ThemeHighlightInactiveColor,
+        ThemeHighlightActiveColor,
+
         PostThemeIdx,
         #endregion
 

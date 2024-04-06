@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>ಶೀರ್ಷಿಕೆ ಇಲ್ಲದ</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>ವಿನೋದಕ್ಕಾಗಿ, ಇದನ್ನು ಪರಿಶೀಲಿಸಿದಾಗ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಲ್ಲಿರುವ ಚಿತ್ರವನ್ನು ಕ್ರೂರವಾಗಿ ASCII (ಸರಳ ಪಠ್ಯ) ಚಿತ್ರದ ಕಲೆ ಆಗಿ ಪರಿವರ್ತಿಸಲಾಗುತ್ತದೆ</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>ಚಿತ್ರಕ್ಕೆ ಚಿತ್ರ</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>ಲಭ್ಯವಿರುವಾಗ, ಮೊದಲ ಆಯ್ದ ಪಠ್ಯ ಸ್ವರೂಪದ ಡೇಟಾವನ್ನು ಚಿತ್ರವಾಗಿ ಪರಿವರ್ತಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ಸೇರಿಸಲಾಗುತ್ತದೆ.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>ಚಿತ್ರ ಸ್ವರೂಪಗಳಿಗೆ ಪಠ್ಯ</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>ಚಿತ್ರ (ಟಿಐಎಫ್ಎಫ್)</value>
+  </data>
 </root>

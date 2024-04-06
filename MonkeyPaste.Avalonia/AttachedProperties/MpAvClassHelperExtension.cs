@@ -85,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
                     // ClassesToRemove
                     attached_control.Classes.Remove(new_class);
                 }
-                MpConsole.WriteLine($"Mutable Class '{new_class}' {op} to '{attached_control}'");
+                //MpConsole.WriteLine($"Mutable Class '{new_class}' {op} to '{attached_control}'");
             }
         }
 

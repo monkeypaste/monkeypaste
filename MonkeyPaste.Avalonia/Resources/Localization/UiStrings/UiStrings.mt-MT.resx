@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Tgħallem aktar dwar il-pjanijiet</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Ippejstja għal: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Bl-użu ta' kuntatti disponibbli (jeħtieġ plugin tal-fetcher) dan il-qasam se jintuża għall-każijiet kollha ta' dan il-mudell f'dan id-dokument kollu jew fi kwalunkwe wieħed minnhom se jiġi referenzjat aktar tard.&lt;/p&gt;&lt;p&gt; Allura per eżempju jekk tagħżel l-indirizz elettroniku hawn allura l-qasam tal-email tal-kuntatt li tagħżel se jintuża għall-istanzi kollha f'dan id-dokument.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Ir-restawr totali ma jistax jiġi garantit u jista 'jnaqqas il-prestazzjoni jew 
     <value>Ma jistgħux jistabbilixxu parametri ta 'valur maqsum fil-presets. Paramid "{0}" fil-preset "{1}" għall-plugin "{2}" jeħtieġ li jitneħħa jew ParamValue jista 'jiġi speċifikat fit-taqsima tad-definizzjoni tal-parametru.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Il-presets għandu jkollhom gwida uniċi. GUID PRESETT DUPLIKAT "{0}" ġie skopert fil-plugin "{1}" għall-presets: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Żball ta 'parsing tal-plugin, fil-passaġġ "{0}" null, x'aktarx żball ta' parsing json. Injorat plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Ir-restawr totali ma jistax jiġi garantit u jista 'jnaqqas il-prestazzjoni jew 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>"{0}" fih valuri maqsuma. Tixtieq tirrisettja dawk ukoll?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Il-presets għandu jkollhom guids uniċi. Duplikat preset guid '{0}' instab fil-plugin '{1}' għal presets: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Ippejstja għal: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Żball mhux magħruf {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ix-xiri tiegħek ma setax jitlesta. Raġuni: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Żid id-dominju</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Żid il-paġna</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Id-dominju għal din il-paġna huwa rifjutat. Biex tippermetti din il-paġna ser ikollok bżonn tneħħi r-rifjut għal '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Id-dominju "{0}" huwa diġà rifjutat</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Oqsma</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Din il-paġna hija diġà rifjutata.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Paġni</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinkronizzazzjoni</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Istanza oħra ta 'monkeypaste diġà qed taħdem. Int żgur li trid tiftaħ istanza ġdida?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Ikkonfigura</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Il-shortcuts globali tal-ġurdien u tat-tastiera ġew diżattivati.
+
+Shortcuts globali issa jistgħu jiġu attivati ​​fil-menu tat-trej tas-sistema</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Shortcuts globali b'diżabilità: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Il-shortcuts globali tal-ġurdien u tat-tastiera ġew attivati.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Sperimentali) Shortcuts globali attivati: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Toggle Global Shortcuts Off</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Toggle shortcuts globali fuq</value>
   </data>
 </root>

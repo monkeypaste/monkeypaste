@@ -53,10 +53,7 @@ namespace MonkeyPaste {
         #region Guid Query
 
         public static async Task<int> GetItemIdByGuidAsync<T>(string guid) where T : new() {
-            string table_name = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
-            string pk_name = $"pk_{table_name}Id";
-            string guid_name = $"{table_name}Guid";
-            string query = $"select {pk_name} from {table_name} where {guid_name}=?";
+            string query = $"select pk_{typeof(T).Name}Id from {typeof(T).Name} where {typeof(T).Name}Guid=?";
             var result = await MpDb.QueryScalarAsync<int>(query, guid);
             return result;
         }
@@ -261,6 +258,14 @@ namespace MonkeyPaste {
             }
             return result[0];
         }
+        public static async Task<MpUrl> GetUrlByPathAndAppIdAsync(string url, int appId) {
+            string query = $"select * from MpUrl where UrlPath=? and fk_MpAppId=?";
+            var result = await MpDb.QueryAsync<MpUrl>(query, url, appId);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
 
         #endregion MpUrl
 
@@ -302,7 +307,7 @@ namespace MonkeyPaste {
 
             int rows_deleted = 0;
             foreach (string query in querys) {
-                int cur_del = await MpDb.ExeucuteAsync(query);
+                int cur_del = await MpDb.ExeucuteCommandAsync(query);
                 rows_deleted += cur_del;
             }
 
@@ -336,6 +341,12 @@ namespace MonkeyPaste {
             var result = await MpDb.QueryAsync<MpCopyItem>(query, checkSum);
             return result;
         }
+        public static async Task<bool> SetCopyItemIconIdByIdAsync(int ciid, int icon_id) {
+            string query = $"update MpCopyItem set fk_MpIconId={icon_id} where pk_MpCopyItemId={ciid}";
+            int result = await MpDb.ExeucuteCommandAsync(query);            
+            return result == 1;
+        }
+        
         public static async Task<MpCopyItem> GetCopyItemByDataAsync(string text) {
             string query = "select * from MpCopyItem where ItemData=?";
             var result = await MpDb.QueryAsync<MpCopyItem>(query, text);

@@ -1,5 +1,8 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
+#if SUGAR_WV
+using Avalonia.WebView.Desktop;
+#endif
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -12,8 +15,6 @@ using System.Threading;
 
 namespace MonkeyPaste.Avalonia {
     internal class Program {
-        static bool CLEAR_STORAGE = false;
-        const string THIS_APP_GUID = "252C6489-DFF3-4CFF-A419-7D3770461FFE";
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
         // yet and stuff might break.
@@ -42,63 +43,25 @@ namespace MonkeyPaste.Avalonia {
             //.With(new AvaloniaNativePlatformOptions { UseGpu = false }
 
             .UsePlatformDetect()
+#if SUGAR_WV
+            .UseDesktopWebView()
+#endif
             //.WithInterFont()
             .UseReactiveUI()
                 .LogToTrace()// LogEventLevel.Verbose)
                 ;
         static void HandleSingleInstanceLaunch(object[] args) {
-            //bool success = MpFileIo.DeleteDirectory(Path.Combine(@"C:\Users\tkefauver\AppData\Local", "MonkeyPaste_DEBUG", "Plugins", "cf2ec03f-9edd-45e9-a605-2a2df71e03bd"));
-            if (CLEAR_STORAGE) {
-                // NOTE use this when local storage folder won't go away
-                string path1 = MpPlatformHelpers.GetStorageDir();
-                bool success1 = MpFileIo.DeleteDirectory(path1);
-                Console.WriteLine($"Deleted '{path1}': {success1.ToTestResultLabel()}");
-            }
 #if CEFNET_WV
             // NOTE if implementing mutex this NEEDS to be beforehand or webviews never load
             MpAvCefNetApplication.Init();
 #endif
-            // from https://stackoverflow.com/a/19128246/105028
-
-            // get application GUID as defined in AssemblyInfo.cs
-            //string appGuid = ((GuidAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), false).GetValue(0)).Value.ToString();
-            //string appGuid = THIS_APP_GUID;
-
-            //// unique id for global mutex - Global prefix means it is global to the machine
-            //string mutexId = string.Format("Global\\{{{0}}}", appGuid);
-
-            //using (var mutex = new Mutex(false, mutexId)) {
-            //    try {
-            //        if (!mutex.WaitOne(0, false)) {
-            //            //signal existing app via named pipes
-
-            //            MpNamedPipe<string>.Send(MpNamedPipeTypes.SourceRef, "test");
-            //            //MpNamedPipe<string>.Send(MpNamedPipeTypes.SourceRef, args == null ? string.Empty : string.Join(Environment.NewLine,args));
-
-            //            Environment.Exit(0);
-            //        } else {
-            // handle protocol with this instance   
             BuildAndLaunch(args);
-
-            //        }
-            //    }
-            //    finally {
-            //        mutex.ReleaseMutex();
-            //    }
-            //}
         }
         private static void BuildAndLaunch(object[] args) {
             Exception top_level_ex = null;
             try {
-
-                //App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
-        //#if CEFNET_WV
-        //        .StartWithCefNetApplicationLifetime(App.Args);
-        //#else
-        .StartWithClassicDesktopLifetime(App.Args);
-                //#endif
-                // 
+                    .StartWithClassicDesktopLifetime(App.Args);
             }
             catch (Exception ex) {
                 top_level_ex = ex;
@@ -112,7 +75,6 @@ namespace MonkeyPaste.Avalonia {
             finally {
                 // This block is optional. 
                 // Use the finally-block if you need to clean things up or similar
-                //Log.CloseAndFlush();
                 if (Mp.Services != null &&
                     Mp.Services.ShutdownHelper != null) {
                     Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.TopLevelException, top_level_ex == null ? "NONE" : top_level_ex.ToString());
@@ -121,13 +83,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private static void WaitForDebug(object[] args) {
-            bool is_debug =
-#if DEBUG
-                true;
-#else
-                false;
-#endif
-            if (args.Contains(App.WAIT_FOR_DEBUG_ARG) || (args.Contains(App.RESTART_ARG) && is_debug)) {
+            if (args.Contains(App.WAIT_FOR_DEBUG_ARG)) {
                 Console.WriteLine("Attach debugger and use 'Set next statement'");
                 while (true) {
                     Thread.Sleep(100);

@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>เรียนรู้เพิ่มเติมเกี่ยวกับแผนการ</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>วางบน: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;การใช้ผู้ติดต่อที่มีอยู่ (ต้องใช้ปลั๊กอินตัวดึงข้อมูล) ฟิลด์นี้จะใช้สําหรับอินสแตนซ์ทั้งหมดของเทมเพลตนี้ในเอกสารนี้หรือในการอ้างอิงในภายหลัง&lt;/p&gt;&lt;p&gt; ตัวอย่างเช่น หากเลือกที่อยู่อีเมลที่นี่ ช่องอีเมลของผู้ติดต่อที่คุณเลือกจะถูกใช้สําหรับทุกอินสแตนซ์ในเอกสารนี้&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ feedback@monkeypaste.com</value>
     <value>ไม่สามารถตั้งค่าพารามิเตอร์ค่าที่ใช้ร่วมกันในที่ตั้งไว้ล่วงหน้า paramid '{0}' ในที่ตั้งไว้ล่วงหน้า '{1}' สำหรับปลั๊กอิน '{2}' จะต้องถูกลบออกหรือสามารถระบุ paramValue ในส่วนนิยามพารามิเตอร์</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ค่าที่ตั้งไว้ล่วงหน้าจะต้องมี GUID ที่ไม่ซ้ำกัน ตรวจพบ Guid '{0}' ซ้ำในปลั๊กอิน '{1}' สำหรับที่ตั้งไว้ล่วงหน้า: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>ข้อผิดพลาดในการแยกวิเคราะห์ปลั๊กอินที่เส้นทาง '{0}' เป็นโมฆะข้อผิดพลาดที่น่าจะแยกวิเคราะห์ JSON ไม่สนใจปลั๊กอิน</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ feedback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' มีค่าที่ใช้ร่วมกัน คุณต้องการรีเซ็ตสิ่งเหล่านั้นด้วยหรือไม่?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ค่าที่ตั้งไว้ล่วงหน้าต้องมีคําแนะนําที่ไม่ซ้ํากัน ตรวจพบ guid ที่ตั้งไว้ล่วงหน้าซ้ํากัน '{0}' ในปลั๊กอิน '{1}' สําหรับค่าที่ตั้งไว้ล่วงหน้า: {2}</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;วางบน: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>ข้อผิดพลาดที่ไม่รู้จัก {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>การซื้อของคุณไม่สมบูรณ์ เหตุผล: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>เพิ่มโดเมน</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>เพิ่มหน้า</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>โดเมนสำหรับหน้านี้ถูกปฏิเสธ ในการอนุญาตให้หน้านี้คุณจะต้องลบการปฏิเสธสำหรับ '{0}'</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>โดเมน '{0}' ถูกปฏิเสธแล้ว</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>โดเมน</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>หน้านี้ถูกปฏิเสธแล้ว</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>หน้า</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>ซิงค์</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>อีกตัวอย่างหนึ่งของ monkeypaste กำลังทำงานอยู่แล้ว แน่ใจหรือว่าต้องการเปิดอินสแตนซ์ใหม่?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>กำหนดค่า</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ทางลัดของเมาส์และแป้นพิมพ์ทั่วโลกถูกปิดใช้งาน
+
+สามารถเปิดใช้งานทางลัดทั่วโลกในเมนูถาดระบบ</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ปิดใช้งานทางลัดทั่วโลก: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>มีการเปิดใช้งานทางลัดเมาส์และแป้นพิมพ์ทั่วโลกแล้ว</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ทดลอง) เปิดใช้งานทางลัดทั่วโลก: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>สลับทางลัดทั่วโลก</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>สลับทางลัดทั่วโลก</value>
   </data>
 </root>

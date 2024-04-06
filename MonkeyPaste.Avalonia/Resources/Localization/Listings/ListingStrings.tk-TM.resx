@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>göçürmek</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>çökdürmek</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>paneli dolandyryjy</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>gural</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Doly - "Picipet Collect" -iň çalt, çaltlyk synagyndan çalt, baý tekste, baý tekst (tablisalar, sanawlar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar, baglanyşyklar we we ş.m.) Tekstiň tekst şazury</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>IEST GOWY, Howpsuz we hususy ýerli maglumatlary goramak</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Gurlan - Her gezek popin brauzerde - ösýän jemgyýetde - pluginleriň kitaphanasy bilen sürtüň</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Maýmaýfase başga hiç kim ýaly laýyk oturgyç we öndürijilik guraldyr. Paneli güýçlendirmek we iş meýdanyňyzyň baýlaşdyrylan we guramaçylykly bölegine güýçlendirmek,
-Salgyly we pes - tekst, faýllary we şekilleri görkezýän profil we pes profilini görkezmek. Hiç haçan ösýän jemgyýeti üçin çeýeligi üçin niýetlenendir, barha köprülendiriň.
-
-Diňe bir bitewi göçürip almak we paneli göçürmekden has köp isleýän önümçiligiň synagyny synamak hökmünde başlandy. CTRL + C ýaly ýönekeý buýruk isledi, bu ýerine "goşjak" ýaly
-buferde näme bolandygyny "çalyşmak". Synag işledi. Kiçijik gural gaty amatlydy. Bu, bu maksatnama has köp pikir we has köp synag bilen girdi
-Indi "Maýkype" boldy.
-
-Iş stoluňyza çenli faýllaryňyzyň, maýmaýpaste paneliňize bolmagy mümkin. Bilen seresaplylyk bilen düzülmedik ýaly düzülen gurallaryň bir bölegi
-mazmuny ýa-da mazmuny görkezmek. Ctrl + C we Ctrl + v diňe gysga ýollardan has köp. Alyp, ähli programmalary girizmegiň portlarynyň portlarydyr
-Gymmatlyklaryň baýlygy we nobatymyň ujunda elýeterli bolmaga mynasypdygyňyza mynasyp. Indiki Ctrl + C-den soň diňe zyňylmaýar.
-
-Men öňküsi ýaly agzalýan şol programmist, her kimiň maýynjadan peýdalanmagyny isläp bilmegini isleýärin. Şeýlelik bilen, bu aýratynlyklaryň hemmesi ulanmak üçin doly satdyr.
-Şeýle hem, ony öz-özümi öz-özümi öz-özüne özümi rahat duýmagyňyzy isleýärin. Şonuň üçin döreden şahsy maglumatlaryň hiç biriniň (gaty) degişli maglumatlaryň hiç biriniň hiç biriniň hiç biriniň hiç biriniň ýokdugyny kesgitlemek üçin ýeke-täk güýji ýaly ediň
-SÖ .GI BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLANOK Döwür.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ SÖ .GI BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN 
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Paneli jeňňeldir. Maýmpasta patyşa! Programmadan programmadan göçürmek, bu monalpasta-da hiç haçan basseýklemek we hiç haçan biperwaýlygy göçürmek !! Marka - Täze, kesmek banky we analitiki enjam guraly !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Hereketde maýmpastyň nusgasy!</value>
   </data>
@@ -258,9 +228,6 @@ SÖ .GI BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN 
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Çäklendirilmedik - ýyllyk</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Başlangyç neşir</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Bu abunalygy bilen alarsyňyz:
 ● Çäklendirilmedik kuwwat</value>
@@ -270,5 +237,45 @@ SÖ .GI BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN BOLAN 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>Basym ýakyn wagtda gidýän has köp platformalar we aýratynlyklar! Biz ýaňy başlaýarys</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Çalt gözlemek we bellemek, diňe ýazyp başlaň!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Teklipi saklaň, surat we faýl klipleri (programma, web sahypasy, wagtym we köp) salgysy awtomatiki usulda</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste – klipboard menejder, awtomatlaşdyrma we öndürijilik guraly, edil beýleki ler ýaly. Klipiňizi iş aklawyňyzyň baýlaşdyrylan we guramaçylykly bölegine kämilleşdirmek,
+onda teksti, faýllary we suratlary goldaýan düşnükli we pes profilli interfeýs görkezilýär. Bu ýerde tehniki enjamlar has - da ösýär.
+
+Ol diňe bir klipden göçürmek we goýmak bilen çäklenmän, eýsem, programmaçynyň ekspertizasy hökmünde başlandy. Ol ýerine 'goşmak' üçin Ctrl+C ýaly ýönekeý buýruk isledi 
+klipde bar zady 'çalyşmak'. Ekspertiza hem netije berdi. Kiçijik gural örän peýdaly bolupdyr. Bu bolsa programmany köp pikirler we köp barlaglar bilen gyzyklandyrdy, bu 
+indi "MonkeyPaste" boldy. 
+
+Desktop siziň faýllaryňyza bolşy ýaly, MonkeyPaste siziň klipiňize bolmagy maksat edinýär. Onuň dykgatly niýetlenen gurallarynyň paketi göze görünmeýän we özara hyzmatdaşlyk etmek üçin niýetlenendir 
+mazmunyň islendik bir anketa ýa-da formaty. Ctrl+C we Ctrl+V – diňe bir gysgaldylan ýollardan has köp. Olar ähli programmalaryň paýlaşýan, göterýän giriş portlary 
+gymmatlyk baýlygy we barmaklaryňyzyň ujunda elýeterli bolmaga mynasypdygyňyzy aňladýar. Diňe indiki Ctrl+C-den soň zyňylman.
+
+Men ýokarda agzalan programmaçy we her bir adamyň MonkeyPaste-den peýdalanyp bilmegini isleýärin. Görşümiz ýaly, ol we onuň ähli aýratynlyklaryny ulanmak doly mugtdyr. 
+Şeýle-de ony ulanmaga özüňizi oňaýsyz duýmagyňyzy isleýärin. Şonuň üçin men size ynandyrýaryn, onuň döredilmeginiň arkasynda duran ýeke-täk güýç hökmünde, ýüze çykyp biljek (köp) şahsy maglumatlaryň hiç biri 
+klipiňiz hiç haçan öz maşynyňyzdan başga islendik ýerde yzarlanýar ýa-da saklanýar. Döwri.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>gonşy</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Saýlama 2 - faktorly parol goragy bilen howpsuz, howpsuz we hususy ýerli maglumat saklaýyş</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Maýminiň güýji indi bu boşadylyşy ýaly mugt. !!
+
+Allhli çäklendirmeler (APP abunalaryna) "ApplePase" ady bilen aýryldy Indi açyk çeşme boýunça açyk taslama öwrülmegi üçin çykyş edildi. Şonuň üçin seretmek bilen gyzyklanmak isleýän bolsaňyz, "Github.com" -a gözüme göz aýlaň.
+
+Täzelenýär:
+
+- ähli mümkinçilik çäklendirmeleri aýryldy!
+- URL redaktory UI Redaktor UI gowulandyrmalar
+- Maýmilpaste birnäçe infeltiň köp ädimini işlemek üçin esasy goldaw
+- Täze umumy baha redaktory (ulanylýan ýerlerde plugin brauzerinde)</value>
   </data>
 </root>

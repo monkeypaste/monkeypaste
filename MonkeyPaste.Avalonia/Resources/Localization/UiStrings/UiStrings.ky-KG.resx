@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Пландары жөнүндө көбүрөөк билүү</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Паста: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Жеткиликтүү контакттарды колдонуу (фетчер плагинди талап кылат) бул талаа ушул документ боюнча бул шаблондун бардык учурлары үчүн колдонулат же кийин шилтеме кылынат.&lt;/p&gt;&lt;p&gt; Мисалы, бул жерде электрондук почта дарегин тандап алсаңар, анда сиз тандаган контакттын электрондук почта талаасы бул документте бардык учурлар үчүн колдонулат.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ feedback@monkeypaste.com</value>
     <value>Алдын ала орнотууларда бөлүшүлгөн маани параметрлерин коюу мүмкүн эмес. '{2}' плагини үчүн алдын ала коюлган '{1}' параметриндеги '{0}' ParamId алынып салынышы керек же paramValue параметрин аныктоо бөлүмүндө көрсөтүлүшү мүмкүн.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Орнотулган уникалдуу гейддер болушу керек. "{0}" Плагинде "{1}" температурасында орнотулган жана Plugin '{2 {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin талдоо катасы, '{0}' нөлүндө, кыязы, JSON менен байланышкан ката. Плагинге көңүл бурбоо</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ feedback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' Бөлүшүлгөн маанилерди камтыйт. Ошондой эле сиздерди баштапкы абалга келтиргиңиз келеби?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Прецеденттер уникалдуу жетекчиликке ээ болушу керек. Алдын ала аныктамалар үчүн «{1}» плагининде алдын ала белгиленген «{0}» дубликаты аныкталды: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Паста: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Белгисиз ката {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Сатып алууңуз аяктаган жок. Себеби: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Домен кошуу</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Барак кошуу</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Бул баракча үчүн домен четке кагылды. Бул баракчага уруксат берүү үчүн сиз "{0}" үчүн баш тартууну алып салышыңыз керек.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Домен '{0}' домени буга чейин четке кагылды</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домендер</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Бул барак мурунтан эле четке кагылды.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Барактар</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Шайкештештирүү</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>MonkeyPaste дагы бир мисалы буга чейин иштеп жатат. Сиз жаңы инстанцияны ачкыңыз келеби?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Конфигурациялоо</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Дүйнөлүк чычкан жана баскычтоптун жарлыктары өчүрүлгөн.
+
+Дүйнөлүк жарлыктарды азыр тутумдагы жайма менюсуна иштетсе болот</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Глобалдык жарлыктар иштен чыгарылган: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Дүйнөлүк чычкан жана баскычтоптун жарлыктары иштетилген.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Эксперименталдык) Глобалдык жарлыктар иштетилген: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Дүйнөлүк жарлыктарды өчүрүү</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Дүйнөлүк жарлыктарды күйгүзүү</value>
   </data>
 </root>

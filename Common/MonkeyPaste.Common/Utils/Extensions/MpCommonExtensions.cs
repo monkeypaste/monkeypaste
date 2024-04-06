@@ -1,6 +1,8 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using HtmlAgilityPack;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -9,6 +11,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
@@ -23,15 +26,6 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Collections
-        public static void AddDisposable(this IDisposable disp, IList<IDisposable> list) {
-            if (disp == null || list == null) {
-                if (list == null) {
-                    MpDebug.Break($"List should exist");
-                }
-                return;
-            }
-            list.Add(disp);
-        }
         public static void AddRangeOrDefault<T>(this IList<T> list, IEnumerable<T> range) {
             if (range == null) {
                 return;
@@ -170,6 +164,15 @@ namespace MonkeyPaste.Common {
             }
             d.Add(key, value);
             return true;
+        }
+        public static bool TryAddOrReplace<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> d, TKey key, TValue value) {
+            //returns true if kvp was added
+            //returns false if kvp was replaced
+            if (d.ContainsKey(key)) {
+                d[key] = value;
+                return false;
+            }
+            return d.TryAdd(key, value);
         }
 
         public static int FastIndexOf<T>(this IList<T> list, T value) {
@@ -352,6 +355,274 @@ namespace MonkeyPaste.Common {
         //public static ObservableCollection<T> ToObservableCollection<T>(this T obj) where T : class {
         //    return new ObservableCollection<T>() { obj };
         //}
+        #endregion
+
+        #region HtmlAgility
+
+        public static HtmlDocument ToHtmlDocument(this string html) {
+            try {
+                var doc = new HtmlDocument();
+                doc.LoadHtml(html.ToStringOrEmpty());
+                return doc;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error creating html doc.", ex);
+            }
+            return new HtmlDocument();
+        }
+        public static HtmlNodeCollection SelectNodesSafe(this HtmlNode node, string xpath) {
+            if (node.SelectNodes(xpath) is not { } hnc) {
+                return new(node);
+            }
+            return hnc;
+        }
+
+        public static bool IsBlockElement(this HtmlNode node) {
+            return Regex.IsMatch(node.Name, "^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr)");
+        }
+        public static HtmlNode CloneEmpty(this HtmlNode node) {
+            var empty_clone = node.Clone();
+            empty_clone.RemoveAllChildren();
+            return empty_clone;
+        }
+        public static HtmlNode CreateElement(this HtmlDocument doc, string name, HtmlNode firstChild) {
+            HtmlNode elm = doc.CreateElement(name);
+            elm.AppendChild(firstChild);
+            return elm;
+        }
+
+        public static IEnumerable<HtmlNode> SplitTextRanges(
+            this HtmlDocument doc,
+            (int idx, int len)[] ranges,
+            string split_class = "",
+            string[] assert_match_texts = default) {
+            // NOTE idx,len should be based on plain text, no special entities or line breaks
+
+            var text_nodes = doc.DocumentNode.SelectNodesSafe("//text()");
+
+            if (!text_nodes.Any()) {
+                return [];
+            }
+            string assert_total_text = string.Empty;
+            if (assert_match_texts != default) {
+                assert_total_text = doc.DocumentNode.InnerText.DecodeSpecialHtmlEntities();
+            }
+
+            List<HtmlNode> splitNodes = [];
+            int cur_text_node_idx = 0;
+            int cur_range_idx = -1;
+            int cur_pt_idx = 0;
+            int match_start_idx = 0;
+            int match_end_idx = 0;
+            int len = 0;
+            HtmlNode splitNode = null;
+            StringBuilder sb = new StringBuilder();
+
+            bool SelectNextRange() {
+                // returns false if no more ranges
+                if (splitNode != null) {
+                    splitNode.AppendChild(doc.CreateTextNode(sb.ToString().EncodeSpecialHtmlEntities()));
+                    splitNode.AddClass(split_class);
+                    splitNodes.Add(splitNode);
+
+                    if (cur_range_idx < assert_match_texts.Length) {
+                        string assert_match_text = assert_match_texts[cur_range_idx];
+                        MpDebug.Assert(assert_match_text != null, $"Error assert_text/range count mismatch", true);
+                        MpDebug.Assert(splitNode != null, $"Error '{assert_match_text.ToStringOrEmpty()}' not found", true);
+                        MpDebug.Assert(splitNode.InnerText.DecodeSpecialHtmlEntities() == assert_match_text.ToStringOrEmpty(), $"Error split text '{splitNode.InnerText.DecodeSpecialHtmlEntities()}' does not equal assert text '{assert_match_text.ToStringOrEmpty()}'", true);
+                    }
+                }
+                cur_range_idx++;
+                if (cur_range_idx >= ranges.Length) {
+                    return false;
+                }
+                match_start_idx = ranges[cur_range_idx].idx;
+                len = ranges[cur_range_idx].len;
+                match_end_idx = match_start_idx + len;
+                splitNode = null;
+                sb.Clear();
+                return true;
+            }
+            if (!SelectNextRange()) {
+                // must be no ranges
+                return [];
+            }
+            while (true) {
+                int last_text_node_idx = cur_text_node_idx;
+                if (cur_text_node_idx >= text_nodes.Count) {
+                    break;
+                }
+                var n = text_nodes[cur_text_node_idx];
+                if (n is not HtmlTextNode tn) {
+                    cur_text_node_idx++;
+                    continue;
+                }
+
+                string tn_text = tn.Text.DecodeSpecialHtmlEntities();
+                int next_idx = cur_pt_idx + tn_text.Length;
+
+                if (splitNode == null) {
+                    // looking for start
+                    if (match_start_idx >= cur_pt_idx && match_start_idx < next_idx) {
+                        // match starts in this text node
+                        int rel_split_start_idx = match_start_idx - cur_pt_idx;
+                        int rel_split_start_len = tn_text.Length - rel_split_start_idx;
+                        int start_split_len = Math.Min(len, rel_split_start_len);
+                        string start_split_text = tn_text.Substring(rel_split_start_idx, start_split_len);
+                        // update text for pre split node
+                        tn.Text = tn_text.Substring(0, rel_split_start_idx).EncodeSpecialHtmlEntities();
+                        // create split node with pre match text
+                        sb.Append(start_split_text);
+                        splitNode = doc.CreateElement("span");
+                        tn.ParentNode.InsertAfter(splitNode, tn);
+
+                        int post_split_idx = rel_split_start_idx + start_split_len;
+                        if (post_split_idx < tn_text.Length) {
+                            // range is entirely within start node and start node has more text after match
+                            // create post match node
+                            string post_match_text = tn_text.Substring(post_split_idx, tn_text.Length - post_split_idx);
+                            tn.ParentNode.InsertAfter(doc.CreateTextNode(post_match_text.EncodeSpecialHtmlEntities()), splitNode);
+                            // all done
+                            if (!SelectNextRange()) {
+                                break;
+                            }
+                        } else if (start_split_text.Length == len) {
+                            // was whole node so all done
+                            if (!SelectNextRange()) {
+                                break;
+                            }
+                            cur_text_node_idx++;
+                        } else {
+                            // need to continue appending text nodes to split node
+                            cur_text_node_idx++;
+                        }
+                    } else {
+                        // no start in this node
+                        cur_text_node_idx++;
+                    }
+                } else {
+                    if (match_end_idx < next_idx) {
+                        // match ends in this text node
+                        int rel_split_end_idx = len - sb.ToString().Length;
+                        sb.Append(tn_text.Substring(0, rel_split_end_idx));
+                        tn.Text = tn_text.Substring(rel_split_end_idx, tn_text.Length - rel_split_end_idx);
+                        // all done
+                        if (!SelectNextRange()) {
+                            break;
+                        }
+                    } else {
+                        // match is across this entire text node
+                        sb.Append(tn_text);
+                        // clear nodes text
+                        tn.Text = string.Empty;
+                        if (!SelectNextRange()) {
+                            break;
+                        }
+                        cur_text_node_idx++;
+                    }
+                }
+
+                if (cur_text_node_idx != last_text_node_idx) {
+                    // shifting to next text node
+                    cur_pt_idx += tn_text.Length;
+                }
+            }
+
+            if (assert_match_texts != default) {
+                MpDebug.Assert(doc.DocumentNode.InnerText.DecodeSpecialHtmlEntities() == assert_total_text, $"Error total text mismatch. original '{assert_total_text.DecodeSpecialHtmlEntities()}' after split '{doc.DocumentNode.InnerText.DecodeSpecialHtmlEntities()}'", true);
+            }
+            return splitNodes;
+        }
+
+        public static HtmlNode SplitTextRange(this HtmlDocument doc, int idx, int len, HtmlNodeCollection text_nodes = default, string assert_match_text = default) {
+            // NOTE idx,len should be based on plain text, no special entities or line breaks
+            text_nodes = text_nodes == default ?
+                doc.DocumentNode.SelectNodesSafe("//text()") :
+                text_nodes;
+
+            if (!text_nodes.Any()) {
+                return default;
+            }
+#if DEBUG
+            string assert_total_text = doc.DocumentNode.InnerText.DecodeSpecialHtmlEntities();
+#endif
+            int cur_idx = 0;
+            int match_start_idx = idx;
+            int match_end_idx = idx + len;
+            HtmlNode splitNode = null;
+            var sb = new StringBuilder();
+            // split start
+            foreach (var n in text_nodes) {
+                if (n is not HtmlTextNode tn) {
+                    continue;
+                }
+                string tn_raw_text = tn.Text;
+                string tn_text = tn.Text.DecodeSpecialHtmlEntities();
+                int next_idx = cur_idx + tn_text.Length;
+
+                if (splitNode == null) {
+                    // looking for start
+                    if (match_start_idx >= cur_idx && match_start_idx < next_idx) {
+                        // match starts in this text node
+                        int rel_split_start_idx = match_start_idx - cur_idx;
+                        int rel_split_start_len = tn_text.Length - rel_split_start_idx;
+                        int start_split_len = Math.Min(len, rel_split_start_len);
+                        string start_split_text = tn_text.Substring(rel_split_start_idx, start_split_len);
+                        // update text for pre split node
+                        tn.Text = tn_text.Substring(0, rel_split_start_idx).EncodeSpecialHtmlEntities();
+                        // create split node with pre match text
+                        sb.Append(start_split_text);
+                        splitNode = doc.CreateElement("span");
+                        tn.ParentNode.InsertAfter(splitNode, tn);
+
+                        int post_split_idx = rel_split_start_idx + start_split_len;
+                        if (post_split_idx < tn_text.Length) {
+                            // range is entirely within start node and start node has more text after match
+                            // create post match node
+                            string post_match_text = tn_text.Substring(post_split_idx, tn_text.Length - post_split_idx);
+                            tn.ParentNode.InsertAfter(doc.CreateTextNode(post_match_text.EncodeSpecialHtmlEntities()), splitNode);
+                            // all done
+                            break;
+                        }
+                        if (start_split_text.Length == len) {
+                            // was whole node so all done
+                            break;
+                        }
+
+                        // need to continue appending text nodes to split node
+                    }
+                } else {
+                    HtmlTextNode split_text_node = splitNode.FirstChild as HtmlTextNode;
+                    if (match_end_idx < next_idx) {
+                        // match ends in this text node
+                        int rel_split_end_idx = len - sb.ToString().Length;
+                        sb.Append(tn_text.Substring(0, rel_split_end_idx));
+                        tn.Text = tn_text.Substring(rel_split_end_idx, tn_text.Length - rel_split_end_idx);
+                        // all done
+                        break;
+                    } else {
+                        // match is across this entire text node
+                        sb.Append(tn_text);
+                        // clear nodes text
+                        tn.Text = string.Empty;
+                    }
+                }
+
+                cur_idx += tn_text.Length;
+            }
+
+            if (splitNode != null) {
+                splitNode.AppendChild(doc.CreateTextNode(sb.ToString().EncodeSpecialHtmlEntities()));
+            }
+            //            if (assert_match_text != default) {
+            //                MpDebug.Assert(splitNode != null, $"Error '{assert_match_text}' not found", true);
+            //                MpDebug.Assert(splitNode.InnerText.DecodeSpecialHtmlEntities() == assert_match_text, $"Error split text '{splitNode.InnerText.DecodeSpecialHtmlEntities()}' does not equal assert text '{assert_match_text}'", true);
+            //            }
+            //#if DEBUG
+            //            MpDebug.Assert(doc.DocumentNode.InnerText.DecodeSpecialHtmlEntities() == assert_total_text, $"Error total text mismatch. original '{assert_total_text.DecodeSpecialHtmlEntities()}' after split '{doc.DocumentNode.InnerText.DecodeSpecialHtmlEntities()}'", true);
+            //#endif
+            return splitNode;
+        }
         #endregion
 
         #region Enums

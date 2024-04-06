@@ -108,7 +108,7 @@ namespace AltOleHandler {
                         }
                     }
                 }
-                await AltOleHelpers.ClipboardRef.SetDataObjectSafeAsync(write_output);
+                //await AltOleHelpers.ClipboardRef.SetDataObjectSafeAsync(write_output);
             }
 
             return new MpOlePluginResponse() {

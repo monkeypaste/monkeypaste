@@ -336,7 +336,7 @@ async function convertFileListContentToFormatsAsync(selectionOnly, formats) {
 			}
 		} else if (isPlainTextFormat(lwc_format)) {
 			data = getFileListContentData(selectionOnly);
-		} else if (isImageFormat(lwc_format)) {
+		} //else if (isImageFormat(lwc_format)) {
 			// BUG this ignores selected items cause its confusing and won't really be needed
 
 			// trigger async screenshot notification where host needs
@@ -346,8 +346,9 @@ async function convertFileListContentToFormatsAsync(selectionOnly, formats) {
 			//		onCreateContentScreenShot_ntf(result);
 			//	});
 			//data = globals.PLACEHOLDER_DATAOBJECT_TEXT;
-			data = await getDocRangeAsImageAsync(getContentRange());
-		} else if (isCsvFormat(lwc_format)) {
+			//data = await getDocRangeAsImageAsync(getContentRange());
+		//}
+		else if (isCsvFormat(lwc_format)) {
 			data = getFileListContentData(selectionOnly).split(globals.DefaultCsvProps.RowSeparator).join(',');
 		} else if (isFileListFormat(lwc_format)) {
 			// need to provide if partial selection and text is not included

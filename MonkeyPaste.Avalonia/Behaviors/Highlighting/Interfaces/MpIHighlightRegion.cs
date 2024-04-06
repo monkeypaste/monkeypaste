@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public interface MpIHighlightRegion {
         event EventHandler<int> MatchCountChanged;
-        event EventHandler<int> SelIdxChanged;
         int Priority { get; }
 
         MpHighlightType HighlightType { get; }
@@ -14,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
         bool IsVisible { get; }
 
         int MatchCount { get; }
-        int SelectedIdx { get; set; }
+        int SelectedIdx { get; }
         //int ContentItemIdx { get; }
 
         Task FindHighlightingAsync();

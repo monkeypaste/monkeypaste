@@ -51,6 +51,8 @@
                        Grid.Column="0"
                        DockPanel.Dock="Left"
                        local:MpAvHighlightTextExtension.IsEnabled="True"
+                       local:MpAvHighlightTextExtension.HighlightRanges="{Binding HighlightRanges}"
+                       local:MpAvHighlightTextExtension.ActiveHighlightIdx="{Binding ActiveHighlightIdx}"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Top"
                        FontSize="12"
@@ -63,12 +65,12 @@
             <!--  DESCRIPTION  -->
 
             <local:MpAvToolTipHintView Grid.Column="1"
-                                           DockPanel.Dock="Right"
-                                           Margin="0,5,2,0"
-                                           IsVisible="{Binding Description, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                           VerticalAlignment="Top"
-                                           HorizontalAlignment="Right"
-                                           ToolTipText="{Binding Description}" />
+                                       DockPanel.Dock="Right"
+                                       Margin="0,5,2,0"
+                                       IsVisible="{Binding Description, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                       VerticalAlignment="Top"
+                                       HorizontalAlignment="Right"
+                                       ToolTipText="{Binding Description}" />
 
 
             <!--  PARAMETER  -->

@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>계획에 대해 자세히 알아보십시오</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>붙여넣기: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;사용 가능한 연락처(fetcher 플러그인 필요)를 사용하여 이 필드는 이 문서 전체에서 이 템플릿의 모든 인스턴스에 사용되거나 나중에 참조될 모든 인스턴스에 사용됩니다.&lt;/p&gt;&lt;p&gt; 예를 들어 여기에서 전자 메일 주소를 선택하면 선택한 연락처의 전자 메일 필드가 이 문서의 모든 인스턴스에 사용됩니다.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@
     <value>사전 설정에서 공유 값 매개 변수를 설정할 수 없습니다. 플러그인의 경우 Preset '{1}'의 Paramid '{0}' '{2}'를 제거해야하거나 매개 변수 정의 섹션에 매개 변수를 지정할 수 있습니다.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>사전 설정에는 고유 한 안내가 있어야합니다. 사전 설정의 경우 플러그인 '{1}'에서 Deplicate Preset Guid '{0}'가 감지되었습니다 : {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>PATH '{0}'NULL에서 플러그인 구문 분석 오류가 JSON을 구문 분석 할 수 있습니다. 플러그인을 무시합니다</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}'에는 공유 값이 포함됩니다. 그것들도 재설정 하시겠습니까?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>사전 설정에는 고유한 GUID가 있어야 합니다. 사전 설정: {2}에 대한 플러그인 '{1}'에서 중복된 사전 설정 guid '{0}'가 감지되었습니다.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;붙여넣기: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>알 수없는 오류 {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>구매를 완료 할 수 없습니다. 이유 : {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>도메인 추가</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>페이지 추가</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>이 페이지의 도메인이 거부됩니다. 이 페이지를 허용하려면 '{0}'에 대한 거부를 제거해야합니다.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>도메인 '{0}'은 이미 거부되었습니다.</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>도메인</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>이 페이지는 이미 거부되었습니다.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>페이지</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>동조</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Monkeypaste의 또 다른 사례가 이미 실행 중입니다. 새 인스턴스를 열고 싶습니까?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>구성</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>글로벌 마우스 및 키보드 바로 가기가 비활성화되었습니다.
+
+이제 시스템 트레이 메뉴에서 글로벌 바로 가기를 활성화 할 수 있습니다.</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>글로벌 바로 가기 비활성화 : {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>글로벌 마우스 및 키보드 바로 가기가 활성화되었습니다.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(실험) 글로벌 바로 가기 활성화 : {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>글로벌 단축키를 전환합니다</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>글로벌 단축키를 전환합니다</value>
   </data>
 </root>

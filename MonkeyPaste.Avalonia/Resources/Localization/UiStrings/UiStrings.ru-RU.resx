@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Узнайте больше о планах</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Вставить в: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;При использовании доступных контактов (требуется плагин fetcher) это поле будет использоваться для всех экземпляров этого шаблона в этом документе или в любом другом документе, на который он будет ссылаться позже.&lt;/p&gt;&lt;p&gt; Так, например, если здесь выбран адрес электронной почты, то поле электронной почты выбранного вами контакта будет использоваться для всех экземпляров в этом документе.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@
     <value>Не может установить параметры общего значения в пресетах. Paramid '{0}' в Preset '{1}' для плагина '{2}' должен быть удален или параметра может быть указана в разделе «Определение параметра».</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Престоны должны иметь уникальные гииды. Duplicate Preset Guid '{0}' был обнаружен в плагине '{1}' для пресетов: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Ошибка анализа плагина, по пути '{0}' NULL, вероятно, анализ ошибок JSON. Игнорируя плагин</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' содержит общие значения. Хотели бы вы их сбросить?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Пресеты должны иметь уникальные идентификаторы. В плагине '{1}' для пресетов: {2} обнаружен дубликат guid пресета '{0}'.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Вставить в: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Неизвестная ошибка {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ваша покупка не может быть завершена. Причина: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Добавить домен</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Добавить страницу</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Домен для этой страницы отклоняется. Чтобы разрешить эту страницу, вам нужно будет удалить отклонение для '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Домен '{0}' уже отклоняется</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Домены</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Эта страница уже отвергается.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Страницы</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Синхронизированный</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Другой экземпляр Monkeypaste уже работает. Вы уверены, что хотите открыть новый экземпляр?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Настройка</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Глобальные сочетания мышей и клавиш были отключены.
+
+Глобальные ярлыки теперь могут быть включены в меню системного лотка</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Глобальные ярлыки отключены: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Глобальные сочетания мыши и клавиатуры были включены.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Экспериментальный) Глобальные ярлыки включены: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Переключить глобальные ярлыки</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Переключить глобальные ярлыки на</value>
   </data>
 </root>

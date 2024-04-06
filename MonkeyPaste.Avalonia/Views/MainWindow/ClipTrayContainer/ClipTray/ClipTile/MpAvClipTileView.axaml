@@ -83,6 +83,12 @@
                     Value="5" />
         </Style>
 
+        <!--  POPOUT MARGIN  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout local|MpAvClipTileContentView">
+            <Setter Property="Margin"
+                    Value="2,2,2,15" />
+        </Style>
+
         <!--  TILE BORDER  -->
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder">
             <Setter Property="BorderThickness"
@@ -197,8 +203,8 @@
                           local:MpAvPointerCommandExtension.IsEnabled="True"
                           local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
                           local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding DoubleLeftClickHandlerCommand}"
-                          local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowContextMenuCommand}"
-                          local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
+                          local:MpAvPointerCommandExtension.RightReleaseCommand="{Binding ShowContextMenuCommand}"
+                          local:MpAvPointerCommandExtension.RightReleaseCommandParameter="{Binding $self}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="{StaticResource TileCornerRadius}">
@@ -321,6 +327,11 @@
                   Grid.RowSpan="3"
                   RowDefinitions="0.5*,0.5*"
                   IsVisible="{Binding IsPinPlaceholder}"
+                  local:MpAvDropExtension.IsEnabled="{Binding $self.IsVisible}"
+                  local:MpAvDropExtension.DragEnterCommand="{Binding DragEnterCommand}"
+                  local:MpAvDropExtension.DragLeaveCommand="{Binding DragLeaveCommand}"
+                  local:MpAvDropExtension.IsDragOverHandled="False"
+                  local:MpAvDropExtension.IsDropHandled="False"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
                 <Grid.Transitions>
@@ -436,7 +447,7 @@
                            FontSize="10"
                            Margin="0,0,0,1"
                            TextAlignment="Center"
-                           Foreground="{Binding BorderBrush, ElementName=ClipTileContainerBorder, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                           Foreground="{Binding BorderBrush, ElementName=ClipTileContainerBorder, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                            IsHitTestVisible="False"
                            Text="{Binding DetailText}" />
             </Grid>

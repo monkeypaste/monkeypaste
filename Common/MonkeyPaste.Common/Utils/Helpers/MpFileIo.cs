@@ -75,32 +75,32 @@ namespace MonkeyPaste.Common {
             string forceNamePrefix = "",
             string forceExt = "",
             bool overwrite = false) {
-            if (!string.IsNullOrEmpty(forcePath)) {
-                // parse full path and override parts
-                forceDir = Path.GetDirectoryName(forcePath);
-                forceNamePrefix = Path.GetFileNameWithoutExtension(forcePath);
-                forceExt = Path.GetExtension(forcePath);
-            }
-            // NOTE overwrite msgbox only shows up if not temporary
-            // NOTE2 csv is too annoying to discern (probably all are) need to check before and force/convert
-            forceExt = string.IsNullOrEmpty(forceExt) ? forceExt : forceExt.Replace(".", string.Empty);
-
-            if (string.IsNullOrEmpty(forceExt)) {
-                // when ext is not given infer from content
-                forceExt = MpCommonTools.Services.StringTools.DetectStringFileExt(fileData);
-            } else {
-                if (forceExt.ToLowerInvariant().Equals("rtf")) {
-                    fileData = MpCommonTools.Services.StringTools.ToRichText(fileData);
-                } else if (forceExt.ToLowerInvariant().Equals("txt")) {
-                    fileData = MpCommonTools.Services.StringTools.ToPlainText(fileData);
-                } else if (forceExt.ToLowerInvariant().Equals("csv")) {
-                    fileData = MpCommonTools.Services.StringTools.ToCsv(fileData);
-                } else if (forceExt.ToLowerInvariant().Equals("html")) {
-                    fileData = MpCommonTools.Services.StringTools.ToHtml(fileData);
-                }
-            }
 
             try {
+                if (!string.IsNullOrEmpty(forcePath)) {
+                    // parse full path and override parts
+                    forceDir = Path.GetDirectoryName(forcePath);
+                    forceNamePrefix = Path.GetFileNameWithoutExtension(forcePath);
+                    forceExt = Path.GetExtension(forcePath);
+                }
+                // NOTE overwrite msgbox only shows up if not temporary
+                // NOTE2 csv is too annoying to discern (probably all are) need to check before and force/convert
+                forceExt = string.IsNullOrEmpty(forceExt) ? forceExt : forceExt.Replace(".", string.Empty);
+
+                if (string.IsNullOrEmpty(forceExt)) {
+                    // when ext is not given infer from content
+                    forceExt = MpCommonTools.Services.StringTools.DetectStringFileExt(fileData);
+                } else {
+                    if (forceExt.ToLowerInvariant().Equals("rtf")) {
+                        fileData = MpCommonTools.Services.StringTools.ToRichText(fileData);
+                    } else if (forceExt.ToLowerInvariant().Equals("txt")) {
+                        fileData = MpCommonTools.Services.StringTools.ToPlainText(fileData);
+                    } else if (forceExt.ToLowerInvariant().Equals("csv")) {
+                        fileData = MpCommonTools.Services.StringTools.ToCsv(fileData);
+                    } else if (forceExt.ToLowerInvariant().Equals("html")) {
+                        fileData = MpCommonTools.Services.StringTools.ToHtml(fileData);
+                    }
+                }
                 string tfp;
                 if (fileData.IsFileOrDirectory()) {
                     tfp = fileData;
@@ -336,17 +336,50 @@ namespace MonkeyPaste.Common {
                 directory.CopyContents(targetDir.CreateSubdirectory(directory.Name), recursive, overwrite);
             }
         }
-        public static double GetFileSizeInBytes(string filePath) {
+
+        public static double GetPathsSizeInMegaBytes(IEnumerable<string> paths) {
+            double total_bytes = paths.Select(x => GetPathSizeInBytes(x)).Sum();
+            double total_mega_bytes = Math.Round(total_bytes / Math.Pow(1024.0, 2), 2);
+            return total_mega_bytes;
+        }
+        private static double GetPathSizeInBytes(string path) {
+            if (path == null) {
+                return 0;
+            }
+            bool is_file = path.IsFile();
+            bool is_dir = path.IsDirectory();
+            if (!is_file && !is_dir) {
+                return 0;
+            }
+            double bytes = is_file ?
+                    GetFileSizeInBytes(path) : GetDirectorySizeInBytes(path);
+            return 0;
+        }
+        private static double GetFileSizeInBytes(string filePath) {
             try {
-                if (File.Exists(filePath)) {
-                    FileInfo fi = new FileInfo(filePath);
-                    return fi.Length;
-                }
+                FileInfo fi = new FileInfo(filePath);
+                return fi.Length;
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error checking size of path {filePath}", ex);
             }
-            return -1;
+            return 0;
+        }
+        private static double GetDirectorySizeInBytes(string path) {
+            // from https://stackoverflow.com/a/51942249/105028
+            try {
+                double total_bytes = Directory.GetFiles(path, "*", SearchOption.AllDirectories)
+                    .Select(d => new FileInfo(d))
+                    .Select(d => new { Directory = d.DirectoryName, FileSize = d.Length })
+                    .ToLookup(d => d.Directory)
+                    .Select(d => d.Select(x => x.FileSize).Sum())
+                    .Sum();
+                return total_bytes;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error calculating dir size.", ex);
+                return 0;
+            }
         }
 
         public static string CopyFileOrDirectory(string sourcePath, string targetPath, bool recursive = true, bool forceOverwrite = false) {
@@ -437,34 +470,31 @@ namespace MonkeyPaste.Common {
         }
 
         public static string GetUniqueFileOrDirectoryPath(
-            string dir,
-            string fileOrDirectoryName,
+            string force_dir = default,
+            string force_name = default,
             string instanceSeparator = "_") {
 
-            string fp = string.IsNullOrEmpty(dir) ? GetThisAppRandomTempDir() : dir;
-            string fn = string.IsNullOrEmpty(fileOrDirectoryName) ? Path.GetRandomFileName() : fileOrDirectoryName;
-            if (string.IsNullOrEmpty(fn)) {
-                fn = Path.GetRandomFileName();
-            }
-            if (!dir.IsDirectory()) {
-                MpConsole.WriteLine($"Directory '{dir}' does not exist, creating..");
-                dir = dir.RemoveSpecialCharacters();
-                Directory.CreateDirectory(dir);
+            string fd = force_dir ?? GetThisAppRandomTempDir();
+            string fn = string.IsNullOrEmpty(force_name) ? Path.GetRandomFileName() : force_name;
+            if (!fd.IsDirectory()) {
+                MpConsole.WriteLine($"Directory '{fd}' does not exist, creating..");
+                fd = fd.RemoveSpecialCharacters();
+                Directory.CreateDirectory(fd);
             }
 
             string fe = string.Empty;
-            if (fileOrDirectoryName.Contains(".")) {
+            if (fn.Contains(".")) {
                 //is file name                
                 fe = Path.GetExtension(fn);
-                fn = Path.GetFileNameWithoutExtension(fileOrDirectoryName);
+                fn = Path.GetFileNameWithoutExtension(force_name);
             }
 
             int count = 1;
 
-            string newFullPath = Path.Combine(dir, fn + fe);
+            string newFullPath = Path.Combine(fd, fn + fe);
 
             while (newFullPath.IsFileOrDirectory()) {
-                newFullPath = Path.Combine(dir, fn + instanceSeparator + count + fe);
+                newFullPath = Path.Combine(fd, fn + instanceSeparator + count + fe);
                 count++;
             }
             return newFullPath;
@@ -826,7 +856,8 @@ namespace MonkeyPaste.Common {
         }
 
         public static string GetDefaultUserAgent() {
-            string user_agent_str = $"Mozilla/5.0 (compatible; {MpCommonTools.Services.ThisAppInfo.ThisAppProductName}/{MpCommonTools.Services.ThisAppInfo.ThisAppProductVersion})";
+            //string user_agent_str = $"Mozilla/5.0 (compatible; {MpCommonTools.Services.ThisAppInfo.ThisAppProductName}/{MpCommonTools.Services.ThisAppInfo.ThisAppProductVersion})";
+            string user_agent_str = $"{MpCommonTools.Services.ThisAppInfo.ThisAppProductName})";
             return user_agent_str;
         }
 
@@ -834,7 +865,8 @@ namespace MonkeyPaste.Common {
             //httpClient.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
             //httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(MpCommonTools.Services.ThisAppInfo.ThisAppProductName);
             string ua = MpCommonTools.Services.UserAgentProvider.UserAgent;
-            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(ua);
+            //httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(ua);
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "C# App");
         }
     }
 

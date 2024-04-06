@@ -30,7 +30,7 @@ body {
     --highlightopacity: 0.5;
     --defaultFontFamily: Helvetica;
     --defaultFontSize: 12px;
-    --pastetemplatebgcolor: teal;
+    --pastetoolbarbgcolor: teal;
     --pastetoolbarbuttoncolor: dodgerblue;
     --pastetoolbarcustominfobuttoncolor: fuchsia;
     --pastetoolbarbuttoncolor_checked: blue;
@@ -43,6 +43,8 @@ body {
     --appendpad: 15px;
     --maxfontsize: 98px;
     --editorzoom: 100%;
+    --linkcolor: 'blue';
+    --linkhovercolor: 'red';
     margin: 0px;
     padding: 0px;
     font-family: var(--defaultFontFamily);
@@ -128,6 +130,7 @@ textarea {
     cursor: not-allowed !important;
     border-color: darkgray !important;
     user-select: none !important;
+    -webkit-user-select: none !important;
 }
 
 button {
@@ -144,6 +147,7 @@ button {
     align-items: center;
     cursor: pointer;
     user-select: none;
+    -webkit-user-select: none;
 }
     button:hover:not(.disabled),
     button:focus:not(.disabled) {

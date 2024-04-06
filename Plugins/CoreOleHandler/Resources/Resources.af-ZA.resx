@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Ongetitel</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Vir die pret, wanneer dit gemerk is, sal die prent op die knipbord kru omgeskakel word na ascii (plain text) kuns van die prent 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Beeld na teks</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Wanneer beskikbaar, sal die eerste gekose teksformaat se data omgeskakel word na 'n prent en by die knipbord gevoeg word.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Teks na beeld formate</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Prent (tiff)</value>
+  </data>
 </root>

@@ -13,7 +13,6 @@
         x:DataType="local:MpAvLoaderNotificationViewModel"
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvLoaderNotificationWindow"
-        d:DataContext="{x:Static dd:DesignData.ExampleViewModel}"
         Classes="notificationWindow loader"
         Width="350"
         Height="140">
@@ -140,7 +139,7 @@
                            FontSize="26"
                            VerticalAlignment="Bottom"
                            HorizontalAlignment="Left"
-                           Foreground="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                           Foreground="{Binding $parent[Border].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                            FontWeight="SemiBold"
                            Text="{Binding Title, Converter={x:Static local:MpAvStringToUpperCaseStringConverter.Instance}}" />
                 <Border Grid.Row="0"
@@ -175,7 +174,7 @@
                             Width="220"
                             ClipToBounds="True"
                             BorderThickness="1"
-                            BorderBrush="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                            BorderBrush="{Binding $parent[Border].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                             Background="Transparent"
                             Margin="0"
                             Padding="0">
@@ -245,7 +244,7 @@
                                        FontSize="12"
                                        VerticalAlignment="Bottom"
                                        TextAlignment="Right"
-                                       Foreground="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                                       Foreground="{Binding $parent[Border].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                                        Text="{Binding}" />
                         </DataTemplate>
                     </TransitioningContentControl.ContentTemplate>
@@ -255,7 +254,7 @@
             <local:MpAvOptionsButton x:Name="OptsButton"
                                      Grid.Column="1"
                                      Classes="loader"
-                                     Foreground="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                                     Foreground="{Binding $parent[Border].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                                      Command="{Binding ShowOptionsPopupCommand}"
                                      CommandParameter="{Binding $self}" />
         </Grid>

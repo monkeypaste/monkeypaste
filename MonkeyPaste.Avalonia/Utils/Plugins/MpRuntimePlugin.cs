@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
         public AssemblyLoadContext LoadContext { private get; set; }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public async Task UnloadAsync() {
+        public async Task UnloadComponentsAsync() {
             // BUG plugin unload doesn't work don't know why 
             //if (Components.OfType<MpIUnloadPluginComponent>().Any()) {
             //    try {
@@ -74,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public async Task<object> IssueRequestAsync(string methodName, string typeName, MpMessageRequestFormatBase req, bool sync_only = false) {
+        private async Task<object> IssueRequestAsync(string methodName, string typeName, MpMessageRequestFormatBase req, bool sync_only = false) {
             if (req != null && req.culture == null) {
                 // always proivde current culture in every request
                 req.culture = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name;
@@ -89,18 +90,28 @@ namespace MonkeyPaste.Avalonia {
                      comp.GetType().GetMethod(methodName) is not { } mi) {
                     continue;
                 }
-                // NOTE this prevents exception since unload has NO args
-                // NOTE2 this presumes all other components have ONE req arg
-
-                object[] args = mi.GetParameters().Length == 0 ? null : new[] { req };
-                object result = null;
-                if (methodName.EndsWith("Async")) {
-                    dynamic task = mi.Invoke(comp, args);
-                    result = await task;
-                } else {
-                    result = mi.Invoke(comp, args);
+                try {
+                    IDisposable loader_context = MpPluginLoader.GetPluginContext(guid);
+                    // NOTE this prevents exception since unload has NO args
+                    // NOTE2 this presumes all other components have ONE req arg
+                    object[] args = mi.GetParameters().Length == 0 ? null : new[] { req };
+                    object result = null;
+                    if (methodName.EndsWith("Async")) {
+                        dynamic task = mi.Invoke(comp, args);
+                        result = await task;
+                    } else {
+                        result = mi.Invoke(comp, args);
+                    }
+                    if (loader_context != null) {
+                        loader_context.Dispose();
+                    }
+                    return result;
                 }
-                return result;
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Plugin request error '{typeName}' '{methodName}'.", ex);
+                    return null;
+                }
+
             }
             if (!methodName.EndsWith("Async") && !sync_only) {
                 // re issue async
@@ -194,6 +205,19 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                 }
+            }
+        }
+        private string _sharedAssemblyQualifiedName;
+        [JsonIgnore]
+        public string SharedAssemblyQualifiedName {
+            get {
+                if (_sharedAssemblyQualifiedName == null &&
+                    Components != null &&
+                    Components.OfType<MpIPluginComponentBase>().FirstOrDefault() is { } pcb) {
+                    _sharedAssemblyQualifiedName = pcb.GetType().GetInterface(nameof(MpIPluginComponentBase)).AssemblyQualifiedName;
+                }
+                return _sharedAssemblyQualifiedName;
+
             }
         }
     }

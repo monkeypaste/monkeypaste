@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Learn more about plans</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>Cannot set shared value parameters in Presets. ParamId '{0}' in Preset '{1}' for Plugin '{2}' needs to be removed or paramValue can be specified in the parameter definition section.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Presets must have unique guids. Duplicate preset guid '{0}' was detected in plugin '{1}' for presets: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Plugin parsing error, at path '{0}' null, likely error parsing json. Ignoring plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' contains shared values. Would you like to reset those as well?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Presets must have unique guids. Duplicate preset guid '{0}' was detected in plugin '{1}' for presets: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Unknown Error {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Your purchase could not be completed. Reason: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Add Domain</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Add Page</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>The domain for this page is rejected. To allow this page you will need to remove the rejection for '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>The domain '{0}' is already rejected</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Domains</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>This page is already rejected.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Pages</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sync</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Another instance of MonkeyPaste is already running. Are you sure you want to open a new instance?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Configure</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Global mouse and keyboard shortcuts have been disabled. 
+
+Global Shortcuts can now be enabled in the System Tray Menu</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Global Shortcuts disabled: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Global mouse and keyboard shortcuts have been enabled.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimental) Global Shortcuts enabled: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Toggle Global Shortcuts Off</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Toggle Global Shortcuts On</value>
   </data>
 </root>

@@ -1,5 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -26,6 +28,27 @@ namespace MonkeyPaste {
             if (Mp.Services.SourceRefTools.IsInternalUrl(url)) {
                 MpDebug.Break($"Should not be adding internal urls, check stack and fix case");
                 return null;
+            }
+
+            var dupCheck = await MpDataModelProvider.GetUrlByPathAndAppIdAsync(url,appId);
+
+            if (dupCheck == null && !Mp.Services.SingleInstanceTools.IsFirstInstance) {
+                // only let initial instance create sources to avoid duplicates
+                var sw = Stopwatch.StartNew();
+                while (dupCheck == null) {
+                    dupCheck = await MpDataModelProvider.GetUrlByPathAndAppIdAsync(url, appId);
+                    await Task.Delay(100);
+                    if (sw.Elapsed > TimeSpan.FromSeconds(5)) {
+                        // first instance not adding so just add it
+                        break;
+                    }
+                }
+
+            }
+            if (dupCheck != null) {
+                dupCheck = await MpDataModelProvider.GetItemAsync<MpUrl>(dupCheck.Id);
+                dupCheck.WasDupOnCreate = true;
+                return dupCheck;                
             }
 
             var urlProps = await MpUrlHelpers.DiscoverUrlPropertiesAsync(url);

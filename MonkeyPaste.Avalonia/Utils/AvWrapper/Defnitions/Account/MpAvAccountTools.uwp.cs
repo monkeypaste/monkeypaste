@@ -5,18 +5,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+#if WAP
 using Windows.Services.Store;
+#endif
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvAccountTools {
+#if WAP
         #region Private Variables
         private bool _isContextWindowInitialized = false;
-        private string _WindowsStoreId = "9MZRBMH3JT75";
-
-        //StoreProduct subscriptionStoreProduct;
-
-        // Assign this variable to the Store ID of your subscription add-on.
-        //private string subscriptionStoreId = "9N5X8R1C9CR4"; // unlimited-monthly
+        //private string _WindowsStoreId = "9MZRBMH3JT75";
+        private string _WindowsStoreId = "9MW0FPDSHMJK";
         #endregion
 
         #region Constants
@@ -28,6 +28,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
         #endregion
 
+
         #region Properties
 
         StoreContext _context;
@@ -38,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (!_isContextWindowInitialized &&
-                    MpAvWindowManager.PrimaryHandle != nint.Zero) {
+                    MpAvWindowManager.PrimaryHandle != IntPtr.Zero) {
                     // from https://learn.microsoft.com/en-us/windows/uwp/monetize/in-app-purchases-and-trials#desktop
                     WinRT.Interop.InitializeWithWindow.Initialize(_context, MpAvWindowManager.PrimaryHandle);
                     _isContextWindowInitialized = true;
@@ -48,17 +49,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string RateAppUri {
-            get {
-                return $"ms-windows-store://review/?PFN={Windows.ApplicationModel.Package.Current.Id.FamilyName}";
-            }
-        }
+        public string RateAppUri =>
+            $"ms-windows-store://review/?PFN={Windows.ApplicationModel.Package.Current.Id.FamilyName}";
 
-        public string ThisProductUri {
-            get {
-                return $"ms-windows-store://pdp/?productid={_WindowsStoreId}";
-            }
-        }
+        public string ThisProductUri =>
+            $"ms-windows-store://pdp/?productid={_WindowsStoreId}";
 
         #endregion
 
@@ -76,7 +71,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<bool> RefreshAddOnInfoAsync() {
-
             AccountTypeTrialAvailabilityLookup.Clear();
             AccountTypePriceLookup.Clear();
 
@@ -169,6 +163,7 @@ namespace MonkeyPaste.Avalonia {
             // available for this customer. If they previously acquired a trial they won't 
             // be able to get a trial again, and the StoreProduct.Skus property will 
             // only contain one SKU.
+
             StoreProductQueryResult result =
                 await context.GetAssociatedStoreProductsAsync(new string[] { "Durable" });
 
@@ -204,17 +199,30 @@ namespace MonkeyPaste.Avalonia {
 
             var storeid_kvp = AccountTypeAddOnStoreIdLookup.FirstOrDefault(x => x.Value == (uat, isMonthly));
             if (string.IsNullOrEmpty(storeid_kvp.Key)) {
+                // shouldn't happen, 
+                Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                        title: UiStrings.CommonErrorLabel,
+                        message: UiStrings.CommonErrorCodeText.Format(3.ToErrorCode()),
+                        iconResourceObj: "WarningImage").FireAndForgetSafeAsync();
                 return false;
             }
 
             StoreProduct sp = await GetAddOnByStoreIdAsync(storeid_kvp.Key);
             if (sp == null) {
                 // likely offline
+                Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                        title: UiStrings.CommonErrorLabel,
+                        message: UiStrings.CommonErrorCodeText.Format(UiStrings.AccountOfflineLabel),
+                        iconResourceObj: "WarningImage").FireAndForgetSafeAsync();
                 return false;
             }
             MpDebug.Assert(_isContextWindowInitialized, "StoreContext not initialized");
             if (!_isContextWindowInitialized) {
                 // window handle error, should probably not happen but dunno
+                Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                        title: UiStrings.CommonErrorLabel,
+                        message: UiStrings.CommonErrorCodeText.Format(4.ToErrorCode()),
+                        iconResourceObj: "WarningImage").FireAndForgetSafeAsync();
                 return false;
             }
             // Request a purchase of the subscription product. If a trial is available it will be offered 
@@ -226,20 +234,30 @@ namespace MonkeyPaste.Avalonia {
             if (result.ExtendedError != null) {
                 extendedError = result.ExtendedError.Message;
             }
+            MpConsole.WriteLine($"Purchase for {uat} Monthly: {isMonthly} result: {result.Status}");
 
             switch (result.Status) {
                 case StorePurchaseStatus.Succeeded:
                     // Show a UI to acknowledge that the customer has purchased your subscription 
                     // and unlock the features of the subscription. 
-                    //SetAccountType(uat);
                     return true;
 
                 case StorePurchaseStatus.AlreadyPurchased:
                     MpConsole.WriteLine("The customer already owns this subscription. ExtendedError: " + extendedError);
-                    //SetAccountType(uat);
                     return true;
                 case StorePurchaseStatus.NotPurchased:
+                    // NOTE This can happen for a lot of reasons apparently like:
+                    // clicked cancel
+                    // using a gift card
+                    // pay pal
+                    // has overdue payments
+                    // virus protection
+
                     MpConsole.WriteLine("The purchase did not complete. The customer may have cancelled the purchase. ExtendedError: " + extendedError);
+                    //Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                    //    title: UiStrings.CommonErrorLabel,
+                    //    message: UiStrings.PurchaseFailureText.Format(extendedError),
+                    //    iconResourceObj: "WarningImage").FireAndForgetSafeAsync();
                     return null;
                 default:
                 case StorePurchaseStatus.ServerError:
@@ -259,6 +277,31 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
         #endregion
+#else
+        public string RateAppUri =>
+            "https://localhost";
+        public string ThisProductUri =>
+            "https://localhost";
+
+        public string GetStoreSubscriptionUrl(MpUserAccountType uat, bool isMonthly) {
+            return "https://localhost";
+        }
+
+        public async Task<bool> RefreshAddOnInfoAsync() {
+            await Task.Delay(1);
+            return false;
+        }
+
+        public async Task<MpSubscriptionFormat> GetStoreUserLicenseInfoAsync() {
+            await Task.Delay(1);
+            return MpSubscriptionFormat.Default;
+        }
+
+        public async Task<bool?> PurchaseSubscriptionAsync(MpUserAccountType uat, bool isMonthly) {
+            await Task.Delay(1);
+            return true;
+        }
+#endif
 
     }
 }

@@ -1,19 +1,31 @@
-﻿using Avalonia.Input;
+﻿using Avalonia;
+using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin;
+using System.Runtime.Intrinsics.X86;
+
+
 
 
 #if WINDOWS
 
 using MonkeyPaste.Common.Wpf;
+
+#endif
+
+#if MAC
+
+using MonoMac.AppKit;
+using MonoMac.Foundation;
 
 #endif
 
@@ -26,17 +38,74 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
+        static Dictionary<string, string> _MacFormatMap;
+        static Dictionary<string, string> MacFormatMap {
+            get {
+                if (_MacFormatMap == null) {
+                    _MacFormatMap = new() {
+                        {MpPortableDataFormats.MacRtf1, MpPortableDataFormats.WinRtf },
+                        {MpPortableDataFormats.MacImage1, MpPortableDataFormats.AvImage },
+                        {MpPortableDataFormats.MacImage2, MpPortableDataFormats.AvImage },
+                        {MpPortableDataFormats.MacHtml1, MpPortableDataFormats.MimeHtml },
+                        {MpPortableDataFormats.MacChromeUrl, MpPortableDataFormats.MimeMozUrl },
+                        {MpPortableDataFormats.MacChromeUrl2, MpPortableDataFormats.MimeMozUrl },
+                    };
+                }
+                return _MacFormatMap;
+            }
+        }
+
+        public static async Task<Dictionary<string, object>> ReadClipboardAsync(string[] formatFilter = default, int retryCount = 0) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                var output = await Dispatcher.UIThread.InvokeAsync(async() => { 
+                    var result = await ReadClipboardAsync(formatFilter, retryCount); 
+                    return result; 
+                });
+                return output;
+            }
+
+            if (Application.Current.GetMainTopLevel() is not { } tl ||
+                tl.Clipboard is not { } cb) {
+                return new();
+            }
+            var result = await cb.ToDataObjectAsync(formatFilter, retryCount);
+            return result.DataFormatLookup.ToDictionary(x => x.Key, x => x.Value);
+        }
+        public static async Task WriteToClipboardAsync(Dictionary<string, object> dataFormatLookup) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                await Dispatcher.UIThread.InvokeAsync(() => WriteToClipboardAsync(dataFormatLookup));
+                return;
+            }
+
+            if (Application.Current.GetMainTopLevel() is not { } tl ||
+                tl.Clipboard is not { } cb) {
+                return;
+            }
+            await cb.SetDataObjectAsync(new MpAvDataObject(dataFormatLookup));
+        }
+
+
         public static async Task<MpAvDataObject> ToDataObjectAsync(this IClipboard cb, string[] formatFilter = default, int retryCount = 0) {
             var avdo = new MpAvDataObject();
             if (cb == null) {
                 return avdo;
             }
             var actualFormats = await cb.GetFormatsSafeAsync();
+            // <PlatformFormatName,CommonFormatName>
+            var mappedFormats = actualFormats.ToDictionary(x => x, x => x);
+
+#if MAC
+            for (int i = 0; i < actualFormats.Length; i++) {
+                if (MacFormatMap.TryGetValue(actualFormats[i], out string mapped_format)) {
+                    mappedFormats[actualFormats[i]] = mapped_format;
+                }
+            }
+#endif
 
             if (formatFilter == null) {
-                formatFilter = actualFormats;
+                formatFilter = mappedFormats.Keys.ToArray();
             } else {
-                formatFilter = formatFilter.Where(x => actualFormats.Contains(x)).ToArray();
+                formatFilter = mappedFormats.Where(x => formatFilter.Contains(x.Value)).Select(x => x.Key).ToArray();
             }
 
             foreach (string format in formatFilter) {
@@ -44,7 +113,16 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (data == null) {
                     continue;
                 }
-                avdo.SetData(format, data);
+#if MAC
+                if (MpAvMacDataFormatReader.TryRead(format, data, out string mac_data_str)) {
+                    data = mac_data_str;
+                }
+#endif
+                if (mappedFormats.TryGetValue(format, out string common_format_name)) {
+                    avdo.SetData(common_format_name, data);
+                } else {
+                    MpConsole.WriteLine($"Could not find commong format for: '{format}'");
+                }
             }
             return avdo;
         }
@@ -60,7 +138,8 @@ namespace MonkeyPaste.Common.Avalonia {
             await WaitForClipboardAsync();
             if (!Dispatcher.UIThread.CheckAccess()) {
                 var result = await Dispatcher.UIThread.InvokeAsync(async () => {
-                    return await cb.GetFormatsSafeAsync(retryCount);
+                    var formats = await cb.GetFormatsSafeAsync(retryCount);
+                    return formats;
                 });
                 return result;
             }
@@ -85,19 +164,21 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static async Task<object> GetDataSafeAsync(this IClipboard cb, string format, int retryCount = OLE_RETRY_COUNT) {
             await WaitForClipboardAsync();
-            //if (!Dispatcher.UIThread.CheckAccess()) {
-            //    var result = await Dispatcher.UIThread.InvokeAsync(async () => {
-            //        return await cb.GetDataSafeAsync(format, retryCount);
-            //    });
-            //    return result;
-            //}
+            // 
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                var result = await Dispatcher.UIThread.InvokeAsync(async () => {
+                    var cb_data = await cb.GetDataSafeAsync(format, retryCount);
+                    return cb_data;
+                });
+                return result;
+            }
             try {
                 object result = await cb.GetDataAsync(format).TimeoutAfter(TimeSpan.FromSeconds(1));
                 CloseClipboard();
                 return result;
             }
-            catch (SerializationException ex) {
-                MpConsole.WriteTraceLine($"Error reading cb format: '{format}'.", ex);
+            catch (SerializationException serx) {
+                MpConsole.WriteTraceLine($"Error reading cb format: '{format}'.", serx);
                 CloseClipboard();
                 return null;
             }
@@ -115,18 +196,23 @@ namespace MonkeyPaste.Common.Avalonia {
                 CloseClipboard();
                 return null;
             }
+            catch(Exception ex) {
+                MpConsole.WriteTraceLine($"Error reading cb format: '{format}'.", ex);
+                CloseClipboard();
+                return null;
+            }
         }
 
         public static async Task SetDataObjectSafeAsync(this IClipboard cb, IDataObject ido, int retryCount = 0) {
             await WaitForClipboardAsync();
 
             try {
-#if MAC
-                await ido.WriteToPasteboardAsync(false);
-#else
+                //#if MAC
+                //                await ido.WriteToPasteboardAsync(false);
+                //#else
 
                 await cb.SetDataObjectAsync(ido);
-#endif
+                //#endif
                 CloseClipboard();
             }
             catch (COMException) {
@@ -181,10 +267,14 @@ namespace MonkeyPaste.Common.Avalonia {
             await Task.Delay(0);
 #if WINDOWS
             if (OperatingSystem.IsWindows()) {
-                bool canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
-                while (!canOpen) {
-                    await Task.Delay(OLE_RETRY_DELAY_MS);
-                    canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
+                try {
+                    bool canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
+                    while (!canOpen) {
+                        await Task.Delay(OLE_RETRY_DELAY_MS);
+                        canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
+                    }
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine($"WaitForClipboard async error.", ex);
                 }
             }
 #endif

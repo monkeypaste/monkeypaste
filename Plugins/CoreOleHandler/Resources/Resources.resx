@@ -164,6 +164,12 @@
   <data name="IgnoredFileExtWriterHint" xml:space="preserve">
     <value>These file types will not be written to the clipboard or drag-and-drop data.</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>For fun, when this is checked the image on the clipboard will be crudely converted into ascii (plain text) art of the image 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Image To Text</value>
+  </data>
   <data name="ImgDoScaleHint" xml:space="preserve">
     <value>When checked, images larger than max dimension will be scaled while retaining aspect ratio. This does not affect the image on the clipboard.</value>
   </data>
@@ -256,6 +262,15 @@
   </data>
   <data name="TextFormatLabel" xml:space="preserve">
     <value>Text</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>When available, the first selected text format's data will be converted to an image and added to the clipboard.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Text To Image Formats</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Image (tiff)</value>
   </data>
   <data name="UntitledLabel" xml:space="preserve">
     <value>Untitled</value>

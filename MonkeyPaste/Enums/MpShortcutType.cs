@@ -57,9 +57,11 @@
         ZoomOutOnSelection,
         ResetSelectionZoom,
         ClearPinTray,
+        ToggleGlobalHooks,
+
         // CUT-OFF 
         MAX_APP_SHORTCUT,
-        //remaining are data (not context) driven using commandId
+        // remaining are data (not context) driven using commandId
         PasteCopyItem = 101,
         SelectTag = 102,
         AnalyzeCopyItemWithPreset = 103,

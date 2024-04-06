@@ -196,6 +196,24 @@ namespace CoreOleHandler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For fun, when this is checked the image on the clipboard will be crudely converted into ascii (plain text) art of the image 🤓.
+        /// </summary>
+        public static string ImageToTextHint {
+            get {
+                return ResourceManager.GetString("ImageToTextHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image To Text.
+        /// </summary>
+        public static string ImageToTextLabel {
+            get {
+                return ResourceManager.GetString("ImageToTextLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When checked, images larger than max dimension will be scaled while retaining aspect ratio. This does not affect the image on the clipboard..
         /// </summary>
         public static string ImgDoScaleHint {
@@ -462,6 +480,33 @@ namespace CoreOleHandler {
         public static string TextFormatLabel {
             get {
                 return ResourceManager.GetString("TextFormatLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When available, the first selected text format&apos;s data will be converted to an image and added to the clipboard..
+        /// </summary>
+        public static string TextToImageHint {
+            get {
+                return ResourceManager.GetString("TextToImageHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text To Image Formats.
+        /// </summary>
+        public static string TextToImageLabel {
+            get {
+                return ResourceManager.GetString("TextToImageLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image (tiff).
+        /// </summary>
+        public static string TiffFormatLabel {
+            get {
+                return ResourceManager.GetString("TiffFormatLabel", resourceCulture);
             }
         }
         

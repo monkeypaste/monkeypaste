@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>למידע נוסף על תוכניות</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>הדבק אל: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;באמצעות אנשי קשר זמינים (דורש תוסף fetcher) שדה זה ישמש עבור כל המופעים של תבנית זו במסמך זה או בכל אחד מהם הוא יופנה מאוחר יותר.&lt;/p&gt;&lt;p&gt; כך, לדוגמה, אם תבחר כתובת דוא"ל כאן, שדה הדוא"ל של איש הקשר שתבחר ישמש עבור כל המופעים במסמך זה.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ feedback@monkeypaste.com</value>
     <value>לא ניתן להגדיר פרמטרים של ערך משותף בהגדרות קביעות מוגדרות מראש. PARAMID '{0}' בקביעה מוגדרת מראש '{1}' לתוסף '{2}' יש להסיר או ניתן לציין את ParamValue בסעיף הגדרת הפרמטר.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>קביעות מוגדרות מראש חייבות להיות בעלות מדריכים ייחודיים. כפולים מוגדרים מראש מדויקים '{0}' התגלה בתוסף '{1}' עבור קביעות מוגדרות מראש: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>שגיאת ניתוח תוסף, בנתיב '{0}' null, ככל הנראה שגיאה בניתוח JSON. התעלמות מתוסף</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ feedback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' מכיל ערכים משותפים. האם תרצה לאפס גם את אלה?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>קביעות מוגדרות מראש חייבות להיות בעלות קווי מנחים ייחודיים. גאיד קבוע מראש כפול '{0}' זוהה בתוסף '{1}' עבור קביעות מוגדרות מראש: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;הדבק אל: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>שגיאה לא ידועה {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>רכישתך לא הושלמה. סיבה: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>הוסף תחום</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>הוסף עמוד</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>התחום של דף זה נדחה. כדי לאפשר דף זה תצטרך להסיר את הדחייה עבור '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>הדומיין '{0}' כבר נדחה</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>דומיינים</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>דף זה כבר נדחה.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>עמודים</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>סינכרון</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>מופע נוסף של Monkeypaste כבר פועל. האם אתה בטוח שאתה רוצה לפתוח מופע חדש?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>הגדר</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>קיצורי דרך עכברים ומקלדת גלובליים הושבתו.
+
+כעת ניתן להפעיל קיצורי דרך גלובליים בתפריט מגש המערכת</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>קיצורי דרך גלובליים מושבתים: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>קיצורי דרך עכברים ומקלדת גלובליים הופעלו.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ניסיוני) קיצורי דרך גלובליים מופעלים: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>החלף קיצורי דרך גלובליים</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>החלף קיצורי דרך גלובליים ב</value>
   </data>
 </root>

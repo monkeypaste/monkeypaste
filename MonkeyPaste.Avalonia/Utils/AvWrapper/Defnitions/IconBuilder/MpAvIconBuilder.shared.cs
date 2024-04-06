@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,7 +23,8 @@ namespace MonkeyPaste.Avalonia {
         public List<string> CreatePrimaryColorList(string iconBase64, int palleteSize = 5) {
             ////var sw = new Stopwatch();
             ////sw.Start();
-            var bmp = iconBase64.ToAvBitmap();
+            //var bmp = iconBase64.ToAvBitmap();
+            //MpConsole.WriteLine($"Icon Str: '{iconBase64}'");
             var primaryIconColorList = new List<string>();
             var hist = MpAvImageExtensions.GetStatistics(iconBase64);
             //var hist = bmp.GetStatistics();

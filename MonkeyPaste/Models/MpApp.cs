@@ -116,7 +116,7 @@ namespace MonkeyPaste {
             string guid = "",
             bool hasOleFormats = false,
             bool suppressWrite = false) {
-            if (appPath.IsNullOrEmpty()) {
+            if (string.IsNullOrEmpty(appPath)) {
                 throw new Exception("App must have path");
             }
             if (appPath != null) {

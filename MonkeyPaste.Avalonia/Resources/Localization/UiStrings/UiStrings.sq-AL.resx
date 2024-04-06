@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Mësoni më shumë rreth planeve</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Paste për: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Duke përdorur kontaktet në dispozicion (kërkon një plugin fetcher) kjo fushë do të përdoret për të gjitha instancat e këtij template në të gjithë këtë dokument ose në çdo gjë që do të referohet më vonë.&lt;/p&gt;&lt;p&gt; Pra, për shembull, nëse zgjidhni adresën e emailit këtu atëherë fusha e email-it e kontaktit që zgjidhni do të përdoret për të gjitha instancat në këtë dokument.&lt;/p&gt;</value>
   </data>
@@ -2844,16 +2841,12 @@ Restaurimi total nuk mund të garantohet dhe mund të zvogëlojë performancën 
     <value>Nuk mund të vendosë parametrat e vlerës së përbashkët në paravendosjet. Paramid '{0}' në paracaktim '{1}' për plugin '{2}' duhet të hiqet ose paramvalue mund të specifikohet në seksionin e përcaktimit të parametrave.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Paravendosjet duhet të kenë udhëzime unike. Dublikoni udhëzimin e paracaktuar '{0}' u zbulua në shtojcë '{1}' për paracaktimet: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Gabim i analizimit të pluginit, në shtegun '{0}' null, gabimi i mundshëm duke analizuar JSON. Injorimi i shtojcës</value>
     <comment>File Path</comment>
   </data>
   <data name="InvalidPluginEx2" xml:space="preserve">
-    <value>Gabim i titullit të pluginit, në shtegun '{0}' duhet të ketë pronë 'Titulli' me jo më shumë se karaktere {1. Injorimi i shtojcës</value>
+    <value>Gabim i titullit të pluginit, në shtegun '{0}' duhet të ketë pronë 'Titulli' me jo më shumë se karaktere {1}. Injorimi i shtojcës</value>
     <comment>File Path, Number</comment>
   </data>
   <data name="InvalidPluginEx3" xml:space="preserve">
@@ -2895,5 +2888,67 @@ Restaurimi total nuk mund të garantohet dhe mund të zvogëlojë performancën 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' përmban vlera të përbashkëta. Dëshironi të rivendosni ato gjithashtu?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Presetet duhet të kenë guida unike. Duplikimi i guidës preset '{0}' u zbulua në plugin '{1}' për preset: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Paste për: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Gabim i panjohur {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Blerja juaj nuk mund të përfundonte. Arsyeja: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Shto skafinë</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Shto faqe</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Domain për këtë faqe është refuzuar. Për të lejuar këtë faqe do t'ju duhet të hiqni refuzimin për '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Domain '{0}' tashmë është refuzuar</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Fusha</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Kjo faqe është refuzuar tashmë.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Faqe</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Sinkronizoj</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Një shembull tjetër i MonkeyPaste tashmë po funksionon. A jeni i sigurt që doni të hapni një shembull të ri?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfiguroj</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Shkurtoret globale të miut dhe tastierave janë çaktivizuar.
+
+Shkurtoret globale tani mund të aktivizohen në menunë e tabaka të sistemit</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Shkurtore globale me aftësi të kufizuara: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Shkurtoret globale të miut dhe tastierave janë aktivizuar.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Eksperimentale) Shkurtore globale të aktivizuara: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Ndaloni shkurtesat globale</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Ndërroni shkurtesat globale në</value>
   </data>
 </root>

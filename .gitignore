@@ -351,14 +351,19 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-/MpWpfApp/Resources/Icons/Silk/icons
-/MonkeyPaste.Avalonia/cef
-/MonkeyPaste.Avalonia/cef_old/win
-/MonkeyPaste.Editor/lib
-/WebTest
-/cefnet11
-/MonkeyPaste.Avalonia/dat
+
+# #########################################################################################################
+# My Stuff
+# #########################################################################################################
+
+/ext
 /MonkeyPaste.Desktop/cef
-/MonkeyPaste.com/login/config.php
-/MonkeyPaste.com/accounts/config.php
 /legal_docs
+/auth
+/db
+/doc_samples
+/file_templates
+/notes
+/win_sandbox
+/MonkeyPaste.com/src/config/secrets.php
+/MonkeyPaste.Avalonia/README.md

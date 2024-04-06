@@ -143,7 +143,12 @@ function showTemplateToolbarContextMenu() {
                     cm.push(tmi);
                     continue;
                 }
-                if (tmi.id == 'MoreLink') {
+                if (isNullOrEmpty(tmi.label)) {
+                    // for some reason template names aren't getting populated in webview2 so rebuild them
+                    localizeTemplates();
+                    tmi = globals.TemplateTypesMenuOptions[i];
+                }
+                if (tmi.moreLink) {
                     tmi.action = function () {
                         onNavigateUriRequested_ntf(tmi.url, 'uri', -1, '', null, true);
                     }

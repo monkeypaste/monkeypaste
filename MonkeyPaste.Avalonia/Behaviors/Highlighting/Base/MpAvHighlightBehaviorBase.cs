@@ -4,6 +4,8 @@ using Avalonia.Xaml.Interactivity;
 using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,9 +24,11 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         #endregion
 
-        #region Properties
+        protected static MpTextRangeComparer TextRangeComparer = new MpTextRangeComparer();
 
+        #region Properties
         public bool IsVisible => MatchCount > 0;
+        protected MpAvHighlightSelectorBehavior ParentSelector { get; private set; }
 
         protected abstract MpTextRange ContentRange { get; }
 
@@ -33,14 +37,13 @@ namespace MonkeyPaste.Avalonia {
 
         public int Priority => (int)HighlightType;
 
-        private int _selectedIdx = -1;
         public int SelectedIdx {
-            get => _selectedIdx;
-            set {
-                if (SelectedIdx != value) {
-                    _selectedIdx = value;
-                    SelIdxChanged?.Invoke(this, SelectedIdx);
+            get {
+                if (ParentSelector == null ||
+                    ParentSelector.SelectedHighlight.region != this) {
+                    return -1;
                 }
+                return ParentSelector.SelectedHighlight.idx;
             }
         }
 
@@ -52,7 +55,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Events
         public event EventHandler<int> MatchCountChanged;
-        public event EventHandler<int> SelIdxChanged;
         #endregion
 
         #region Constructors
@@ -66,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
         public void Reset() {
             ClearHighlighting();
             SetMatchCount(0);
-            SelectedIdx = -1;
+            //SelectedIdx = -1;
         }
 
         public abstract Task FindHighlightingAsync();
@@ -75,6 +77,15 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual async Task ApplyHighlightingAsync() {
             await Task.Delay(1);
+            int all_region_active_idx =
+                ParentSelector == null ? -1 :
+                ParentSelector.SelectedHighlightIdx;
+
+            if (AssociatedObject != null &&
+                AssociatedObject.DataContext is MpIHighlightTextRangesInfoViewModel htrivm &&
+                htrivm.ActiveHighlightIdx != all_region_active_idx) {
+                htrivm.ActiveHighlightIdx = all_region_active_idx;
+            }
         }
 
         #endregion
@@ -82,6 +93,9 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override void OnAttached() {
+            if (this is MpAvContentWebViewHighlightBehavior) {
+
+            }
             base.OnAttached();
             AssociatedObject.Loaded += AssociatedObject_Initialized;
         }
@@ -94,7 +108,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnDetaching() {
             base.OnDetaching();
             Reset();
-            DetachToSelectorAsync().FireAndForgetSafeAsync();
+            DetachFromSelectorAsync().FireAndForgetSafeAsync();
         }
         protected void SetMatchCount(int count) {
             bool changed = _matchCount != count;
@@ -106,15 +120,28 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected async Task AttachToSelectorAsync() {
-            var hsb = await FindSelectorAsync();
-            if (hsb == null) {
+        protected void FinishFind(List<MpTextRange> matches) {
+            if (AssociatedObject == null ||
+                AssociatedObject.DataContext is not MpIHighlightTextRangesInfoViewModel hrivm) {
                 return;
             }
-            hsb.AddHighlighter(this);
+            var old_ranges = hrivm.HighlightRanges.Where(x => x.Document == ContentRange.Document).ToList();
+            if (old_ranges.Difference(matches, TextRangeComparer).Any()) {
+                hrivm.HighlightRanges = new(matches.Union(hrivm.HighlightRanges.Where(x => !old_ranges.Contains(x))));
+            }
+            SetMatchCount(matches.Count);
         }
-        protected async Task DetachToSelectorAsync() {
-            var hsb = await FindSelectorAsync();
+
+        protected async Task AttachToSelectorAsync() {
+            ParentSelector = await FindSelectorAsync();
+            if (ParentSelector == null) {
+                return;
+            }
+            ParentSelector.AddHighlighter(this);
+        }
+        protected async Task DetachFromSelectorAsync() {
+            var hsb = ParentSelector ?? await FindSelectorAsync();
+            ParentSelector = null;
             if (hsb == null) {
                 return;
             }
@@ -122,38 +149,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected async Task<MpAvHighlightSelectorBehavior> FindSelectorAsync(int timeout = 10_000) {
-            //var sw = Stopwatch.StartNew();
-            //while (true) {
-            //    if (AssociatedObject != null && AssociatedObject.DataContext != null) {
-            //        break;
-            //    }
-            //    if (sw.ElapsedMilliseconds >= 10_000) {
-            //        break;
-            //    }
-            //    await Task.Delay(100);
-            //}
-            //MpAvClipTileView ctv = null;
-            //var parent = AssociatedObject.Parent;
-            //while (true) {
-            //    if (parent is MpAvClipTileView parent_ctv) {
-            //        ctv = parent_ctv;
-            //        break;
-            //    }
-            //    if (parent == null) {
-            //        break;
-            //    }
-            //    parent = parent.Parent;
-            //}
             await Task.Delay(0);
             if (AssociatedObject == null ||
                 AssociatedObject.GetLogicalAncestors().OfType<MpAvClipTileView>().FirstOrDefault()
                     is not MpAvClipTileView ctv) {
                 return null;
             }
-            //}
-            //if ( ctv == null) {
-            //    return null;
-            //}
             if (Interaction.GetBehaviors(ctv).OfType<MpAvHighlightSelectorBehavior>()
                 .FirstOrDefault() is MpAvHighlightSelectorBehavior hsb) {
                 return hsb;

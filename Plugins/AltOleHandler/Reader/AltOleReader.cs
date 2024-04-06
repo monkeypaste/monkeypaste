@@ -4,7 +4,6 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using System.Text;
 
 namespace AltOleHandler {
     public class AltOleReader : MpIOleReaderComponent, MpIUnloadPluginComponent {
@@ -33,9 +32,7 @@ namespace AltOleHandler {
             // only actually read formats found for data
             if (request.dataObjectLookup == null) {
                 // clipboard read
-                //await Util.WaitForClipboard();
-                availableFormats = await AltOleHelpers.ClipboardRef.GetFormatsSafeAsync();
-                //Util.CloseClipboard();
+                //availableFormats = await AltOleHelpers.ClipboardRef.GetFormatsSafeAsync();
             } else {
                 avdo = request.dataObjectLookup.ToDataObject();
 
@@ -107,24 +104,25 @@ namespace AltOleHandler {
             };
         }
         private async Task<object> ReadDataObjectFormat(string format, IDataObject avdo) {
+            await Task.Delay(1);
             object format_data = null;
 
-            if (avdo == null) {
-                //await Util.WaitForClipboard();
-                format_data = await AltOleHelpers.ClipboardRef.GetDataSafeAsync(format);
-                if (format == "Dat funky format" && format_data is byte[] byteData) {
-                    format_data = byteData.ToDecodedString();
-                }
-            } else {
-                if (format == MpPortableDataFormats.Files) {
-                    if (avdo.GetFilesAsPaths() is IEnumerable<string> paths &&
-                        paths.Any()) {
-                        format_data = paths;
-                    }
-                } else {
-                    format_data = avdo.Get(format);
-                }
-            }
+            //if (avdo == null) {
+            //    //await Util.WaitForClipboard();
+            //    format_data = await AltOleHelpers.ClipboardRef.GetDataSafeAsync(format);
+            //    if (format == "Dat funky format" && format_data is byte[] byteData) {
+            //        format_data = byteData.ToDecodedString();
+            //    }
+            //} else {
+            //    if (format == MpPortableDataFormats.Files) {
+            //        if (avdo.GetFilesAsPaths() is IEnumerable<string> paths &&
+            //            paths.Any()) {
+            //            format_data = paths;
+            //        }
+            //    } else {
+            //        format_data = avdo.Get(format);
+            //    }
+            //}
             string dataStr = null;
 
             if (format_data is string) {
@@ -142,7 +140,7 @@ namespace AltOleHandler {
         }
 
         public void Unload() {
-            AltOleHelpers.ClipboardRef = null;
+            //AltOleHelpers.ClipboardRef = null;
         }
 
         #endregion

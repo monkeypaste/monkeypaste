@@ -111,6 +111,14 @@ function cleanModKeys(e) {
 	return e;
 }
 
+function isAnyModKeyDown() {
+	let result =
+		globals.ModKeys.IsCtrlDown ||
+		globals.ModKeys.IsAltDown ||
+		globals.ModKeys.IsMetaDown ||
+		globals.ModKeys.IsShiftDown;
+	return result;
+}
 function updateGlobalModKeys(e) {
 	e = cleanModKeys(e);
 
@@ -156,10 +164,26 @@ function handleWindowKeyDown(e) {
 }
 
 function handleWindowKeyUp(e) {
+	if (globals.IsDebug && e.code == 'F12') {
+		onDevToolsRequested_ntf();
+	}
 	if (!isWindowFocused()) {
 		return;
 	}
 	updateGlobalModKeys(e);
+
+	if (e.code == 'Enter' && !isAnyModKeyDown() && !isReadOnly() && isEditorFocused()) {
+		// BUG on webview2 at least if you add a new line (press enter) it doesn't scroll to it if its outside view
+		delay(300)
+			.then(() => {
+				// wait for text change...
+				let opts = {
+					start: { behavior: 'instant', block: 'nearest', inline: 'nearest' },
+					end: { behavior: 'instant', block: 'nearest', inline: 'nearest' }
+				};
+				scrollDocRangeIntoView(getDocSelection(),opts);
+			});
+	} 
 
 	if (e.code == globals.DecreaseFocusLevelKey) {
 		if (isDragging() || isDropping()) {// || WasDragCanceled) {

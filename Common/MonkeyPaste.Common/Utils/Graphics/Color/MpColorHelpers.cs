@@ -28,7 +28,11 @@ namespace MonkeyPaste.Common {
                 return hexChannelsOrNamedColorStr.IncludeOrRemoveHexAlpha(!includeAlpha);
             }
             if (hexChannelsOrNamedColorStr.Contains(",") &&
-                hexChannelsOrNamedColorStr.Replace("(", string.Empty).Replace(")", string.Empty) is string cleanStr &&
+                hexChannelsOrNamedColorStr
+                .Replace("(", string.Empty)
+                .Replace(")", string.Empty)
+                .Replace("rgba", string.Empty)
+                .Replace("rgb", string.Empty) is string cleanStr &&
                 cleanStr.SplitNoEmpty(",") is string[] colorParts &&
                 (colorParts.Length == 3 || colorParts.Length == 4)) {
                 // NOTE presumes color is 3-4 decimal elements from 0.0-1.0 or 3-4 int elements from 0-255

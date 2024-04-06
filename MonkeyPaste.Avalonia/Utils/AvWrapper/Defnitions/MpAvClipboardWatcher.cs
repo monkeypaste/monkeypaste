@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
             return;
 #else
             if (_timer == null) {
-                _timer = new Timer(TimeSpan.FromMilliseconds(300));
+                _timer = new Timer(TimeSpan.FromMilliseconds(300).TotalMilliseconds);
                 _timer.Elapsed += _timer_Tick;
             }
             if (_timer.Enabled) {

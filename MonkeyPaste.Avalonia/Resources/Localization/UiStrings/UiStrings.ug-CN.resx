@@ -2639,9 +2639,6 @@ tempo@Monkepaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>پىلان ھەققىدىكى تەپسىلاتلار</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>چاپلاش: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;ئىشلىتىشكە بولىدىغان ئالاقىداش (fetcher قىستۇرمىسىنى تەلەپ قىلىدۇ) بۇ ساھە بۇ ھۆججەتتىكى ياكى ھەرقانداق بىر ھۆججەتتىكى بارلىق مىساللار ئۈچۈن كېيىن پايدىلىنىشقا بولىدۇ.&lt;/p&gt;&lt;p&gt; شۇڭا مەسىلەن، بۇ يەردە ئېلخەت ئادرېسىنى تاللىسىڭىز، ئۇنداقتا سىز تاللىغان ئالاقىداشنىڭ ئېلخەت ساھەسى بۇ ھۆججەتتىكى بارلىق مىساللار ئۈچۈن ئىشلىتىلىدۇ.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ tempo@Monkepaste.com</value>
     <value>ئالدىن بەلگىلەشتە ئورتاق قىممەت پارامېتىرلىرىنى تەڭشىگىلى بولمايدۇ. قىستۇرما '{2}' نىڭ ئالدىن بېكىتىلگەن '{1}' دىكى ParamId '{0}' نى چىقىرىۋېتىش كېرەك ياكى پارامېتىر ئېنىقلىما بۆلىكىدە paramValue نى بەلگىلىگىلى بولىدۇ.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ئالدىن بەلگىلەشتە چوقۇم ئۆزگىچە يېتەكچى بولۇشى كېرەك. ئالدىن بەلگىلەش قوللانمىسى '{0}' قىستۇرما '{1}' قىستۇرمىسىدا بايقالدى: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>قىستۇرما تەھدىد بۇزۇشتا خاتالىق, «{0} '] NSON نى ساقلاپ قېلىشتا خاتالىق كۆرۈلدى. قىستۇرما</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ tempo@Monkepaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' بار. بۇلارنىمۇ ئەسلىگە كەلتۈرمەكچىمۇ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ئالدىن بېكىتىشتە چوقۇم ئۆزگىچە گۈزىلى بولۇشى كېرەك. ئالدىن تەييارلاش ئۈچۈن قىستۇرما '{1}' قىستۇرمىسىدا ئالدىن بەلگىلەنگەن '{0}' بايقالدى: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;چاپلاش: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>نامەلۇم خاتالىق {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>سېتىۋېلىش تاماملانمىدى. سەۋەبى: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>دائىرە قوشۇڭ</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>بەت قوشۇڭ</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>بۇ بەتنىڭ تور بېتى رەت قىلىندى. بۇ بەتكە يول قويۇش ئۈچۈن «{0}» ئۈچۈن رەت قىلىشنى چىقىرىۋېتىشىڭىز كېرەك.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>{0} 'ئاللىقاچان رەت قىلىندى</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>دائىرە</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>بۇ بەت ئاللىقاچان رەت قىلىندى.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>بەت</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>ماسقەدەملەش</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Moneypaste نىڭ يەنە بىر مىسالى ئاللىقاچان ئىجرا بولۇۋاتىدۇ. يېڭى مىسال ئاچماقچىمۇ?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>سەپلەڭ</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>يەر شارى چاشقىنەك ۋە كۇنۇپكا تاختىسىنىڭ تېزلەتمىسى ئىناۋەتسىز ھالەتتە.
+
+يەرلىك تېزلەتمىلەر سىستېمىنى سىستېما تەخسىگە تىزىملاتقىلى بولىدۇ</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>يەرشارى تېزلەتمىسى چەكلەنگەن: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>يەر شارى مائېپ / كۇنۇپكا تاختىسىنىڭ تېزلەتمىسى قوزغىتىلدى.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(تەجرىبە) يەر شارى تېزلەتمىلەر قوزغىتىلدى: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>يەرشارىنىڭ تېزلەتمىسى</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>FORGLE FORGENT NOWN STORT</value>
   </data>
 </root>

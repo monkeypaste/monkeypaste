@@ -2639,9 +2639,6 @@ feathback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>了解有關計劃的更多信息</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>粘貼到： &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;使用可用嘅聯繫人（需要提取器插件），此字段將用于本文檔中此糢闆嘅所有實例，或稍後將引用嘅任何糢闆。&lt;/p&gt;&lt;p&gt; 因此，例如，如果在此处選擇電子郵件地址，則你揀嘅聯繫人嘅電子郵件字段將用于本文檔中嘅所有實例。&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ feathback@monkeypaste.com</value>
     <value>无法在预设中设置共享值参数。插入'{1}'中的paramid'{0}'需要在参数定义部分中删除插件'{2}'或ParamValue。</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>预设必须具有独特的指导。在插件'{1}'中检测到重复的预设guid'{0}'用于预设：{2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>插件解析错误，在路径'{0}'null，可能错误解析JSON。忽略插件</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ feathback@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}'包含共享值。您是否也想重置这些？</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>預設必須具有唯一嘅guid。 在插件“{1}”中檢測到重複嘅預設guid '{0}'：{2}。</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;粘貼到： &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>未知錯誤{0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>您的購買無法完成。原因：{0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>添加域</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>添加頁面</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>此頁面的域被拒絕。要允許此頁面，您將需要刪除“ {0}”的拒絕。</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>域'{0}'已經被拒絕</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>域</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>此頁面已經被拒絕。</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>頁面</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>同步</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>MonkePaste的另一個實例已經在運行。您確定要打開一個新實例嗎？</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>配置</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>全局鼠標和鍵盤快捷鍵已被禁用。
+
+現在可以在系統托盤菜單中啟用全局快捷方式</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>禁用全局快捷方式：{0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>全局鼠標和鍵盤快捷鍵已啟用。</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>（實驗）啟用了全局快捷方式：{0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>切換全局快捷方式</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>切換全局快捷方式</value>
   </data>
 </root>

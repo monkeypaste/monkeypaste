@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>ללא כותרת</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>בשביל הכיף, כאשר זה נבדק, התמונה על הלוח תומר בצורה גסה לאמנות ASCII (טקסט רגיל) של התמונה 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>תמונה לטקסט</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>כאשר הם זמינים, נתוני פורמט הטקסט הראשון שנבחרו יומרו לתמונה ויוספו ללוח.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>טקסט לפורמטים של תמונה</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>תמונה (טיף)</value>
+  </data>
 </root>

@@ -2639,9 +2639,6 @@ zpětná vazba@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Další informace o plánech</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Vložit do: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Při použití dostupných kontaktů (vyžaduje zásuvný modul pro načítání) bude toto pole použito pro všechny instance této šablony v tomto dokumentu nebo v jakémkoli dokumentu, ve kterém se bude odkazovat později.&lt;/p&gt;&lt;p&gt; Pokud tedy například zde vyberete e-mailovou adresu, použije se pole e-mailu vybraného kontaktu pro všechny výskyty v tomto dokumentu.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ zpětná vazba@monkeypaste.com</value>
     <value>Nelze nastavit parametry sdílené hodnoty v předvolbách. ParamId '{0}' v předvolbě '{1}' pro plugin '{2}' je třeba odstranit nebo v části Definice parametru lze zadat parametr.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Předvolby musí mít jedinečné GUID. Duplicitní předvolba GUID '{0}' byl detekován v pluginu '{1}' pro předvolby: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Chyba parsingu pluginu, na cestě '{0}' null, pravděpodobně chyba analýza JSON. Ignorování pluginu</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ zpětná vazba@monkeypaste.com</value>
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' obsahuje sdílené hodnoty. Chtěli byste je také resetovat?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Předvolby musí mít jedinečná vodítka. V pluginu '{1}' byla detekována duplicitní předvolba guid '{0}' pro předvolby: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Vložit do: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Neznámá chyba {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Vaše objednávka nemohla být dokončena. Důvod: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Přidat doménu</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Přidat stránku</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Doména pro tuto stránku je zamítnuta. Chcete-li tuto stránku povolit, budete muset odstranit odmítnutí pro '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Doména '{0}' je již zamítnuta</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>domény</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Tato stránka je již zamítnuta.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Stránky</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Synchronizovat</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Další instance MonkeyPaste již běží. Opravdu chcete otevřít novou instanci?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Konfigurovat</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Globální myši a klávesové zkratky byly zakázány.
+
+Globální zkratky lze nyní povolit v nabídce hlavního panelu</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Globální zkratky zakázány: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Globální myši a klávesové zkratky byly povoleny.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Experimentální) Aktivované globální zkratky: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Vypněte globální zkratky</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Zapněte globální zkratky</value>
   </data>
 </root>

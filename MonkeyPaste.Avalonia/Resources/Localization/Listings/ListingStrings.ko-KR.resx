@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>복사</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>반죽</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>클립 보드 관리자</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>도구</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>완전 - Find/Replace, Rich Text (테이블, 목록, 링크 등)가 포함 된 기능이있는 클립 편집기, 스 니펫 컬렉션에서 빠르고 역동적 인 붙여 넣기를위한 텍스트 템플릿</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>옵션이있는 안전하고 안전하며 개인 로컬 데이터 저장소 2- 팩터 암호 보호</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>구축 - 영원히 성장하는 커뮤니티가있는 플러그인 브라우저에서 - 구동 플러그인 라이브러리</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste는 클립 보드 관리자, 자동화 및 생산성 도구입니다. 클립 보드를 워크 플로의 풍부하고 정리 된 부분으로 향상시킵니다.
-텍스트, 파일 및 이미지를 지원하는 직관적이고 낮은 프로필 인터페이스를 특징으로합니다. 끊임없이 성장하는 커뮤니티와 함께 ​​유연성을 위해 설계되었습니다.
-
-클립 보드 밖으로 복사하여 붙여 넣기를 원하는 프로그래머의 실험으로 시작되었습니다. 그는 Ctrl+C와 같은 간단한 명령을 대신에 '추가'하는 것을 원했습니다.
-클립 보드에있는 '교체'의. 그리고 실험이 효과가있었습니다. 작은 도구는 매우 편리했습니다. 이것은 더 많은 아이디어와 더 많은 실험으로 프로그래머에게
-이제 "원숭이 스타"가되었습니다.
-
-데스크탑이 파일에 이르기 때문에 MonkeyPaste는 클립 보드에 가려고합니다. 그것의 도구 제품군은
-컨텐츠의 모든 응용 프로그램 또는 형식. Ctrl+C 및 Ctrl+V는 단순한 바로 가기 이상입니다. 그것들은 모든 응용 프로그램이 공유하는 입국 포트입니다.
-풍부한 가치와 의미 당신은 당신의 손가락 끝에서 이용할 자격이 있습니다. 다음 Ctrl+이후에 버려진 것이 아닙니다. c.
-
-나는 이전에 언급 된 프로그래머이며 모든 사람들이 monkeypaste에서 사용할 수 있기를 원합니다. 따라서 모든 기능은 완전히 무료로 사용할 수 있습니다.
-나는 또한 당신이 그것을 사용하는 편안함을 느끼기를 원합니다. 그래서 나는 당신이 창조의 배후에있는 유일한 힘으로서 당신을
-클립 보드는 자신의 컴퓨터 너머의 어느 곳에서나 추적되거나 저장됩니다. 기간.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>클립 보드는 정글입니다. Monkeypaste는 왕입니다! 앱에서 앱으로 스윙하고, 이것을 복사하고 monkeypaste와 함께 전에는 그와 같이 붙여 넣기 !! 브랜드 - 새롭고 최첨단 클립 보드 및 분석 자동화 도구 !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>행동중인 원숭이의 샘플!</value>
   </data>
@@ -258,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>무제한 - 매년</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>초판</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>이 구독을 사용하면 다음을 받게됩니다.
 ● 무제한 용량</value>
@@ -270,5 +237,45 @@
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● 더 많은 플랫폼과 기능이 곧 제공됩니다! 우리는 방금 시작하고 있습니다</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>빠른 검색 및 강조 표시를 조명하고 타이핑을 시작하십시오!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>모든 소스 (앱, 웹 사이트, 시간 등) 정보가 포함 된 텍스트, 이미지 및 파일 클립 저장 정보</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste는 다른 어떤 것과도 비교할 수 없는 클립보드 관리자, 자동화 및 생산성 도구입니다. 클립보드를 작업 흐름의 풍부하고 체계적인 부분으로 향상시키고,
+텍스트, 파일 및 이미지를 지원하는 직관적이고 로우 프로파일 인터페이스가 특징입니다. 계속 성장하는 커뮤니티 중심의 플러그인 라이브러리와 함께 유연성을 위해 설계되었습니다.
+
+그것은 클립보드에서 복사하여 붙여넣는 것 이상을 원하는 프로그래머의 실험으로 시작되었습니다. 그는 대신 '추가'하는 Ctrl+C와 같은 간단한 명령을 원했습니다 
+클립보드에 있던 것을 '교체'합니다. 그리고 그 실험은 성공적이었다. 작은 도구는 매우 편리했습니다. 이것은 프로그래머가 더 많은 아이디어와 더 많은 실험에 흥미를 갖도록 했습니다. 
+이제 "MonkeyPaste"가되었습니다. 
+
+바탕 화면이 파일에 있으므로 MonkeyPaste는 클립 보드에 있습니다. 겉보기에 통합되고 상호 운용되도록 신중하게 설계된 도구 모음입니다. 
+콘텐츠의 모든 응용 프로그램 또는 형식. Ctrl+C 및 Ctrl+V는 단순한 단축키 그 이상입니다. 그들은 모든 응용 프로그램이 공유하는 입국 항입니다. 
+손끝에서 사용할 수 있는 가치와 의미의 부. 다음 Ctrl+C 이후에 그냥 버리는 것이 아닙니다.
+
+저는 앞서 언급 한 프로그래머이며 모든 사람이 MonkeyPaste를 사용할 수 있기를 바랍니다. 따라서 모든 기능을 완전히 무료로 사용할 수 있습니다. 
+나도 당신이 그것을 편안하게 사용하기를 바랍니다. 그래서 나는 그 창조의 유일한 힘으로서 (매우) 개인 정보 중 어느 것도 발생할 수 없다고 확신합니다. 
+클립보드는 자신의 컴퓨터 이외의 어느 곳에서나 추적되거나 저장됩니다. 마침표.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>클립보드</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>안전하고 보안이 유지되는 개인 로컬 데이터 스토리지(2단계 암호 보호 옵션)</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste는 이제이 릴리스에서 완전히 무료입니다 !!
+
+MonkeyPaste가 이제 오픈 소스 프로젝트가되기 위해 전환함에 따라 모든 제한 (앱 구독)이 제거되었습니다. 기여에 관심이 있다면 Github (github.com/monkeypaste)를 주시하십시오.
+
+업데이트 :
+
+- 모든 용량 제한이 제거되었습니다!
+-URL 편집기 UI 개선을 거부했습니다
+- 여러 원숭이의 여러 인스턴스를 실행하기위한 기준 지원
+- 새로운 공유 가치 편집기 (해당되는 경우 플러그인 브라우저에서)</value>
   </data>
 </root>

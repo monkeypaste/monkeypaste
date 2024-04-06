@@ -2639,9 +2639,6 @@ urupare@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Ako atu mo nga mahere</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Whakapiri ki: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Mā te whakamahi i ngā hoapā e wātea ana (e hiahiatia ana he mono mai tiki) ka whakamahia tēnei āpure mō ngā tauira katoa o tēnei tātauira puta noa i tēnei tuhinga, ka tohutorotia rānei ā muri ake rānei.&lt;/p&gt;&lt;p&gt; Hei tauira, ki te tīpako wāhitau īmēra ki konei ka whakamahia te āpure īmēra o te hoapā ka tīpakohia e koe mō ngā tauira katoa o tēnei tuhinga.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Kāore e taea te whakaū i te whakaoratanga katoa, ā, ka whakaiti rānei i te m
     <value>Kaore e taea te whakarite i nga tohu uara kua tohatoha i nga whakaaturanga. Paramid '{0}' i mua i te tatūkē '{1}' mo te plgin '{{2}' me tango, he paramvalue ranei ka tohua i roto i te waahanga tohu tohu.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Me whiwhi nga kaiarahi ahurei. Whakahaahia te Tapahia te Guid '{0}' i kitea i roto i te mono '{1}' mo nga Preses: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Ko te hapa o te mononi mo te mono, i te huarahi '{0}' e kore e hapa te hapa a Json. Kei te warewarehia te mono</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Kāore e taea te whakaū i te whakaoratanga katoa, ā, ka whakaiti rānei i te m
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' Kei roto i nga uara tahi. Kei te hiahia koe ki te tautuhi ano i te hunga?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Me whai tohutohu ahurei nga huinga. I kitea te tohutohu tōmua '{0}' i te mono mai i te '{1}' mō ngā huinga: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Whakapiri ki: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Hapa kore mohiotia {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Kaore i taea te hokonga. Te take: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Tāpirihia te rohe</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Tāpiri whārangi</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Ko te rohe mo tenei whaarangi ka paopao. Hei tuku i tenei whaarangi me tango koe i te whakakahoretanga mo te '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Ko te rohe '{0}' kua paopao kē</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Nga Rohe</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Kua whakakahoretia tenei whaarangi.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Whārangi</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Tukutahi</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Ko tetahi atu tauira o Monkeypaste kei te rere kē. Kei te hiahia koe ki te whakatuwhera i tetahi tauira hou?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Whirihei</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Kua monokia nga kiore o te whare me nga papapātuhi papapātuhi.
+
+Ka taea e te waa poto poto te ao i roto i te tahua Tray punaha</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Kua monokia nga wa poto o te ao: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Kua whakahohea nga kiore o te whare me nga papapātuhi papapātuhi.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Whakamātautau) Kua Whakahohea nga Poto o te Ao: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Toggle Smforcts Sollect</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Toggle Poto Poto o te Ao ON</value>
   </data>
 </root>

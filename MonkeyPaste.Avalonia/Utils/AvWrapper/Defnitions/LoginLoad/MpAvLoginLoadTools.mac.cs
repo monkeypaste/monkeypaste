@@ -1,16 +1,19 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using MonoMac.Foundation;
 using MonoMac.ObjCRuntime;
 using MonoMac.ScriptingBridge;
 using System;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvLoginLoadTools {
         private bool _isLoginLoadEnabled = false;
         public bool IsLoadOnLoginEnabled => _isLoginLoadEnabled;
 
-        public void SetLoadOnLogin(bool isLoadOnLogin, bool silent = false) {
+        public async Task SetLoadOnLoginAsync(bool isLoadOnLogin, bool silent = false) {
+            await Task.Delay(1);
             if (isLoadOnLogin) {
                 //_isLoginLoadEnabled = EnableLoginLoad_deprecated();
                 return;

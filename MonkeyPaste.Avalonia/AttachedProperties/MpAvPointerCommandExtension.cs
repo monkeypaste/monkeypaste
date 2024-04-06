@@ -161,6 +161,40 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region RightReleaseCommand AvaloniaProperty
+        public static ICommand GetRightReleaseCommand(AvaloniaObject obj) {
+            return obj.GetValue(RightReleaseCommandProperty);
+        }
+
+        public static void SetRightReleaseCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(RightReleaseCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> RightReleaseCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "RightReleaseCommand",
+                null,
+                false);
+
+        #endregion
+
+        #region RightReleaseCommandParameter AvaloniaProperty
+        public static object GetRightReleaseCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(RightReleaseCommandParameterProperty);
+        }
+
+        public static void SetRightReleaseCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(RightReleaseCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> RightReleaseCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "RightReleaseCommandParameter",
+                null,
+                false);
+
+        #endregion
+
         #region RoutingStrategy AvaloniaProperty
         public static RoutingStrategies GetRoutingStrategy(AvaloniaObject obj) {
             return obj.GetValue(RoutingStrategyProperty);
@@ -292,7 +326,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
-                if (GetLeftReleaseCommand(control) != null) {
+                if (GetLeftReleaseCommand(control) != null || GetRightReleaseCommand(control) != null) {
                     control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, GetRoutingStrategy(control));
                 }
             }
@@ -428,6 +462,13 @@ namespace MonkeyPaste.Avalonia {
                 GetLeftReleaseCommand(control) is ICommand cmd) {
                 cmd.Execute(GetLeftReleaseCommandParameter(control));
                 e.Handled = GetIsEventHandled(control);
+                return;
+            }
+            if (e.IsRightRelease(control) &&
+                GetRightReleaseCommand(control) is ICommand cmd2) {
+                cmd2.Execute(GetRightReleaseCommandParameter(control));
+                e.Handled = GetIsEventHandled(control);
+                return;
             }
         }
         private static void Control_Holding(object sender, HoldingRoutedEventArgs e) {

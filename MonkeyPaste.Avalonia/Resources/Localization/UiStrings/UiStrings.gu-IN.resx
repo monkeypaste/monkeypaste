@@ -2639,9 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>યોજનાઓ વિશે વધુ જાણો</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ને ચોંટાડો: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;ઉપલબ્ધ સંપર્કોને વાપરી રહ્યા છે (લાવવાનું પ્લગઇન જરૂરી છે) આ ક્ષેત્ર આ દસ્તાવેજમાં આ ટેમ્પલેટના બધા દાખલાઓ માટે વપરાશે અથવા કોઇપણમાં તે પછીથી સંદર્ભિત થશે.&lt;/p&gt;&lt;p&gt; તેથી ઉદાહરણ તરીકે, જો અહીં ઇમેઇલ એડ્રેસ પસંદ કરો, તો તમે પસંદ કરો છો તે સંપર્કનું ઇમેઇલ ક્ષેત્ર આ દસ્તાવેજના તમામ દાખલાઓ માટે ઉપયોગમાં લેવામાં આવશે.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@
     <value>પ્રીસેટ્સમાં વહેંચાયેલ મૂલ્ય પરિમાણો સેટ કરી શકતા નથી. પેરામિડ '{0}' પ્રીસેટમાં '{1}' પ્લગઇન માટે '{2}' ને દૂર કરવાની જરૂર છે અથવા પરિમાણ વ્યાખ્યા વિભાગમાં પેરામવ al લ્યુનો ઉલ્લેખ કરી શકાય છે.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>પ્રીસેટ્સમાં અનન્ય જી.આઈ.ડી. હોવા આવશ્યક છે. ડુપ્લિકેટ પ્રીસેટ ગાઇડ '{0}' પ્રીસેટ્સ માટે પ્લગઇનમાં '{1}' મળી: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>પ્લગઇન પાર્સિંગ ભૂલ, પાથ '{0}' નલ પર, સંભવિત ભૂલ જેએસઓનને પાર્સિંગ કરવામાં આવે છે. અવગણીને</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' માં વહેંચાયેલ મૂલ્યો શામેલ છે. શું તમે તેને ફરીથી સેટ કરવા માંગો છો?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>પ્રિસેટમાં અનન્ય માર્ગદર્શન હોવું આવશ્યક છે. નકલી પૂર્વસુયોજિત માર્ગદર્શન '{0}' એ પૂર્વસુયોજનો માટે પ્લગઇન '{1}' માં શોધાયેલ હતુ: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;ને ચોંટાડો: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>અજ્ unknown ાત ભૂલ {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>તમારી ખરીદી પૂર્ણ થઈ શકી નથી. કારણ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ડોમેન ઉમેરો</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>પાનું ઉમેરો</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>આ પૃષ્ઠ માટેનું ડોમેન નકારી કા .વામાં આવ્યું છે. આ પૃષ્ઠને મંજૂરી આપવા માટે તમારે '{0}' માટે અસ્વીકાર દૂર કરવાની જરૂર રહેશે.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>ડોમેન '{0}' પહેલેથી જ નકારી કા .વામાં આવ્યું છે</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>હદ</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>આ પૃષ્ઠ પહેલાથી જ નકારી કા .્યું છે.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>પાના</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>સમતળ</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>વાંદરાનો બીજો દાખલો પહેલેથી જ ચાલી રહ્યો છે. શું તમને ખાતરી છે કે તમે કોઈ નવું દાખલો ખોલવા માંગો છો?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>પસંદ કરવું</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ગ્લોબલ માઉસ અને કીબોર્ડ શ shortc ર્ટકટ્સ અક્ષમ કરવામાં આવ્યા છે.
+
+ગ્લોબલ શ shortc ર્ટકટ્સ હવે સિસ્ટમ ટ્રે મેનૂમાં સક્ષમ કરી શકાય છે</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>વૈશ્વિક શ shortc ર્ટકટ્સ અક્ષમ: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ગ્લોબલ માઉસ અને કીબોર્ડ શ shortc ર્ટકટ્સ સક્ષમ કરવામાં આવ્યા છે.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(પ્રાયોગિક) વૈશ્વિક શ shortc ર્ટકટ્સ સક્ષમ: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ગ્લોબલ શોર્ટકટ્સ બંધ</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>ગ્લોબલ શ shortc ર્ટકટ્સ પર ટ g ગલ કરવું</value>
   </data>
 </root>

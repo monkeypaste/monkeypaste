@@ -2639,9 +2639,6 @@ Phản hồi@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Tìm hiểu thêm về các kế hoạch</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Dán vào: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Sử dụng các liên hệ có sẵn (yêu cầu plugin trình tải), trường này sẽ được sử dụng cho tất cả các trường hợp của mẫu này trên tài liệu này hoặc trong bất kỳ trường hợp nào sẽ được tham chiếu sau.&lt;/p&gt;&lt;p&gt; Vì vậy, ví dụ: nếu chọn địa chỉ email ở đây thì trường email của liên hệ bạn chọn sẽ được sử dụng cho tất cả các trường hợp trong tài liệu này.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Không thể đảm bảo khôi phục toàn bộ và có thể làm giảm hi�
     <value>Không thể đặt tham số giá trị được chia sẻ trong các cài đặt trước. Paramid '{0}' trong preset '{1}' cho plugin '{2}' cần được xóa hoặc paramValue có thể được chỉ định trong phần định nghĩa tham số.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Cài đặt trước phải có hướng dẫn độc đáo. Sao chép GUID GUID '{0}' đã được phát hiện trong plugin '{1}' cho các cài đặt trước: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Lỗi phân tích cú pháp plugin, tại đường dẫn '{0}' null, có thể là lỗi phân tích lỗi JSON. Bỏ qua plugin</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Không thể đảm bảo khôi phục toàn bộ và có thể làm giảm hi�
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' chứa các giá trị được chia sẻ. Bạn có muốn thiết lập lại những thứ đó không?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Cài đặt trước phải có hướng dẫn duy nhất. Hướng dẫn đặt trước trùng lặp '{0}' đã được phát hiện trong plugin '{1}' cho các cài đặt trước: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Dán vào: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Lỗi không xác định {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Mua hàng của bạn không thể được hoàn thành. Lý do: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Thêm tên miền</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Thêm trang</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Tên miền cho trang này bị từ chối. Để cho phép trang này, bạn sẽ cần xóa từ chối cho '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Miền '{0}' đã bị từ chối</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Miền</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Trang này đã bị từ chối.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Trang</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Đồng bộ hóa</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Một trường hợp khác của khỉ đã chạy. Bạn có chắc là bạn muốn mở một phiên bản mới?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Cấu hình</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Các phím tắt chuột và bàn phím toàn cầu đã bị vô hiệu hóa.
+
+Các phím tắt toàn cầu hiện có thể được bật trong menu khay hệ thống</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Các phím tắt toàn cầu bị vô hiệu hóa: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Các phím tắt chuột và bàn phím toàn cầu đã được bật.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Thử nghiệm) Các phím tắt toàn cầu được bật: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Tắt các phím tắt toàn cầu</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Chuyển đổi các phím tắt toàn cầu trên</value>
   </data>
 </root>

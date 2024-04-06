@@ -144,7 +144,7 @@
         </Style>
         <Style Selector="Button.navButton:pointerover PathIcon">
             <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeAccent1BgColor}" />
+                    Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
 
         <!--  CONVERT SIMPLE/ TOGGLE EXPAND ADV BUTTON  -->

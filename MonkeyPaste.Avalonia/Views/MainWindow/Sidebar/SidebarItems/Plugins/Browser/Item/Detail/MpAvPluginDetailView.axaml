@@ -84,17 +84,38 @@
 
         </Style>
 
+        <!--  PROGRESS SPINNERS  -->
+        <Style Selector="local|MpAvProgressSpinner">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+            <Setter Property="Height"
+                    Value="20" />
+            <Setter Property="Width"
+                    Value="20" />
+            <Setter Property="ArcWidth"
+                    Value="3.5" />
+            <Setter Property="RingBrush"
+                    Value="{DynamicResource ThemeAccent2Brush}" />
+            <Setter Property="PercentBrush"
+                    Value="{DynamicResource ThemeAccent3Brush}" />
+            <Setter Property="LabelBrush"
+                    Value="Transparent" />
+            <Setter Property="ShowBusyWhenDone"
+                    Value="True" />
+        </Style>
+
         <!--  INSTALL BUTTON  -->
-        <Style Selector="Button#ToggleInstallSelectedPluginButton local|MpAvProgressSpinner"
-               x:DataType="local:MpAvPluginItemViewModel">
+        <Style Selector="Button.progButton local|MpAvProgressSpinner">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Button#ToggleInstallSelectedPluginButton.installing local|MpAvProgressSpinner">
+        <Style Selector="Button.progButton.has-progress local|MpAvProgressSpinner">
             <Setter Property="IsVisible"
                     Value="True" />
         </Style>
-        <Style Selector="Button#ToggleInstallSelectedPluginButton.installing TextBlock.cmd-text">
+        <Style Selector="Button.progButton.has-progress TextBlock.cmd-text">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
@@ -102,271 +123,290 @@
     </local:MpAvUserControl.Styles>
 
     <ScrollViewer MinHeight="300">
-        <Grid x:Name="SelectedPluginContainer"
-              RowDefinitions="50,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
-              ColumnDefinitions="Auto,50,*"
-              Margin="10,10,20,10">
+        <Grid>
+            <Grid x:Name="SelectedPluginContainer"
+                  IsVisible="{Binding !IsVisible, ElementName=PluginConfigureView}"
+                  RowDefinitions="50,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                  ColumnDefinitions="Auto,50,*"
+                  Margin="10,10,20,10">
 
-            <!--  SELECTED HEADER  -->
-            <DockPanel Grid.Row="0"
-                       Grid.ColumnSpan="3"
-                       Margin="0,0,0,15">
-                <!--  PLUGIN ICON  -->
-                <Image x:Name="SelectedPluginIcon"
-                       DockPanel.Dock="Left"
-                       Width="40"
-                       Height="40"
-                       Source="{Binding IconBase64, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
+                <!--  SELECTED HEADER  -->
+                <DockPanel Grid.Row="0"
+                           Grid.ColumnSpan="3"
+                           Margin="0,0,0,15">
+                    <!--  PLUGIN ICON  -->
+                    <Image x:Name="SelectedPluginIcon"
+                           DockPanel.Dock="Left"
+                           Width="40"
+                           Height="40"
+                           Source="{Binding IconBase64, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
 
-                <!--  PLUGIN TITLE  -->
-                <SelectableTextBlock x:Name="SelectedPluginTitleBlock"
-                                     Grid.Row="0"
-                                     Grid.Column="1"
-                                     Foreground="{DynamicResource ThemeInteractiveColor}"
-                                     FontSize="24"
-                                     Margin="5,0,0,0"
-                                     FontWeight="SemiBold"
-                                     TextWrapping="NoWrap"
-                                     Text="{Binding PluginTitle}" />
-            </DockPanel>
+                    <!--  PLUGIN TITLE  -->
+                    <SelectableTextBlock x:Name="SelectedPluginTitleBlock"
+                                         Grid.Row="0"
+                                         Grid.Column="1"
+                                         Foreground="{DynamicResource ThemeInteractiveColor}"
+                                         FontSize="24"
+                                         Margin="5,0,0,0"
+                                         FontWeight="SemiBold"
+                                         TextWrapping="NoWrap"
+                                         Text="{Binding PluginTitle}" />
+                </DockPanel>
 
-            <StackPanel Orientation="Horizontal"
-                        Grid.Row="1"
-                        Spacing="20">
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="1"
+                            Spacing="20">
 
-                <!--  TOGGLE INSTALL BUTTON  -->
-                <Grid>
-                    <Button x:Name="ToggleInstallSelectedPluginButton"
-                            Classes.installed="{Binding HasInstallation}"
-                            Classes.installing="{Binding ProgressViewModel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                            Classes="defaultButton textOnlyButton manageButton"
-                            local:MpAvShowDisabledTooltipExtension.ShowOnDisabled="{Binding ShowDisabledInstallTooltip}"
-                            Command="{Binding ToggleIsPluginInstalledCommand}">
-                        <ToolTip.Tip>
-                            <local:MpAvToolTipView Classes="warning"
-                                                   ToolTipText="{Binding DisabledInstallTooltip}" />
-                        </ToolTip.Tip>
-
-                        <Grid>
-                            <TextBlock Classes="cmd-text"
-                                       Text="{Binding InstallButtonText}" />
-                            <local:MpAvProgressSpinner HorizontalAlignment="Center"
-                                                       VerticalAlignment="Stretch"
-                                                       MinHeight="20"
-                                                       Classes="squareByHeight"
-                                                       ArcWidth="3.5"
-                                                       RingBrush="{DynamicResource ThemeGrayAccent2Brush}"
-                                                       PercentBrush="{DynamicResource ThemeInteractiveBrush}"
-                                                       LabelBrush="Transparent"
-                                                       Percent="{Binding ProgressViewModel.PercentLoaded}" />
-                        </Grid>
-                    </Button>
-                </Grid>
-
-                <!--  DONATE BUTTON  -->
-                <Button x:Name="DonateToPluginButton"
-                        Classes="defaultButton textOnlyButton manageButton"
-                        Command="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                        CommandParameter="{Binding PluginDonateUri}"
-                        IsVisible="{Binding PluginDonateUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserDonateLabel}" />
-                </Button>
-            </StackPanel>
-
-            <!--  UPDATE BUTTON  -->
-            <Button x:Name="UpdateSelectedPluginButton"
-                    Grid.Row="2"
-                    Margin="0,10,0,0"
-                    Classes="defaultButton textOnlyButton manageButton"
-                    local:MpAvShowDisabledTooltipExtension.ShowOnDisabled="{Binding ShowDisabledUpdateTooltip}"
-                    IsVisible="{Binding HasInstallation}"
-                    Command="{Binding UpdatePluginCommand}">
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView Classes="warning"
-                                           ToolTipText="{Binding DisabledUpdateTooltip}" />
-                </ToolTip.Tip>
-                <Grid>
-
-                    <TextBlock IsVisible="{Binding !IsBusy}"
-                               Text="{Binding UpdateButtonText}" />
-                    <local:MpAvBusySpinnerView Width="15"
-                                               Height="15"
-                                               IsVisible="{Binding IsBusy}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
-                </Grid>
-            </Button>
-
-            <!--  DESCRIPTION  -->
-            <SelectableTextBlock Grid.Row="3"
-                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserDescriptionLabel}"
-                                 Classes="detailLabel" />
-            <SelectableTextBlock Grid.Row="4"
-                                 Grid.ColumnSpan="3"
-                                 FontStyle="Italic"
-                                 Text="{Binding PluginDescription}"
-                                 Classes="detailInfo" />
-
-            <!--  INSTALL COUNT  -->
-            <SelectableTextBlock Grid.Row="5"
-                                 Grid.Column="0"
-                                 Classes="detailLabel"
-                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserInstallsLabel}" />
-            <SelectableTextBlock Grid.Row="5"
-                                 Grid.Column="2"
-                                 Classes="detailInfo"
-                                 Text="{Binding InstallCount}" />
-
-            <!--  VERSION  -->
-            <SelectableTextBlock Grid.Row="6"
-                                 Grid.Column="0"
-                                 Classes="detailLabel"
-                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserVersionLabel}" />
-            <SelectableTextBlock Grid.Row="6"
-                                 Grid.Column="2"
-                                 Classes="detailInfo"
-                                 Text="{Binding PluginVersionText}" />
-
-            <!--  CREDITS  -->
-            <SelectableTextBlock Grid.Row="7"
-                                 Grid.Column="0"
-                                 Classes="detailLabel"
-                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserCreditsLabel}" />
-            <SelectableTextBlock Grid.Row="7"
-                                 Grid.Column="2"
-                                 Classes="detailInfo"
-                                 Text="{Binding PluginAuthor}" />
-
-            <!--  LICENSE URL  -->
-            <SelectableTextBlock Grid.Row="8"
-                                 Grid.Column="0"
-                                 Classes="detailLabel"
-                                 IsVisible="{Binding PluginLicenseUrl, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserLicenseLabel}" />
-            <local:MpAvMarqueeTextBox Grid.Row="8"
-                                      Grid.Column="2"
-                                      Classes="detailInfo link"
-                                      VerticalAlignment="Bottom"
-                                      NavigateUriRequiredKeyString="{x:Null}"
-                                      IsVisible="{Binding PluginLicenseUrl, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                      Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserSeeLicenseLinkText}"
-                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                                      NavigateUriCommandParameter="{Binding PluginLicenseUrl}">
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{Binding PluginLicenseUrl}" />
-                </ToolTip.Tip>
-            </local:MpAvMarqueeTextBox>
-
-            <!--  PUBLISHED  -->
-            <SelectableTextBlock Grid.Row="9"
-                                 Grid.Column="0"
-                                 Classes="detailLabel"
-                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserPublishedLabel}" />
-            <SelectableTextBlock x:Name="PublishedTextBlock"
-                                 Grid.Row="9"
-                                 Grid.Column="2"
-                                 Classes="detailInfo"
-                                 Classes.unpublished="{Binding PluginPublishedDateTime, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
-
-            <!--  PROJECT URL  -->
-            <SelectableTextBlock Grid.Row="10"
-                                 Grid.Column="0"
-                                 Classes="detailLabel"
-                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserProjectUrlLabel}" />
-            <local:MpAvMarqueeTextBox Grid.Row="10"
-                                      Grid.Column="2"
-                                      Classes="detailInfo link"
-                                      VerticalAlignment="Bottom"
-                                      NavigateUriRequiredKeyString="{x:Null}"
-                                      Text="{Binding PluginProjectUrl}"
-                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                                      NavigateUriCommandParameter="{Binding PluginProjectUrl}" />
-
-            <!--  ABUSE URL  -->
-            <SelectableTextBlock Grid.Row="11"
-                                 Grid.Column="0"
-                                 Classes="detailLabel"
-                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserReportAbuseLabel}" />
-            <local:MpAvMarqueeTextBox Grid.Row="11"
-                                      Grid.Column="2"
-                                      Classes="detailInfo link"
-                                      VerticalAlignment="Bottom"
-                                      Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserReportAbuseLinkText}"
-                                      NavigateUriRequiredKeyString="{x:Null}"
-                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                                      NavigateUriCommandParameter="{Binding PluginAbuseUrl}">
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{Binding PluginAbuseUrl}" />
-                </ToolTip.Tip>
-            </local:MpAvMarqueeTextBox>
-
-            <!--  TAGS  -->
-            <SelectableTextBlock Grid.Row="12"
-                                 Grid.Column="0"
-                                 Classes="detailLabel"
-                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserTagsLabel}" />
-            <SelectableTextBlock Grid.Row="12"
-                                 Grid.Column="2"
-                                 Classes="detailInfo"
-                                 Text="{Binding PluginTags}" />
-
-            <!--  DEPENDENCIES  -->
-            <SelectableTextBlock Grid.Row="13"
-                                 Grid.Column="0"
-                                 Classes="detailLabel"
-                                 Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserDependenciesLabel}" />
-
-            <TreeView Grid.Row="13"
-                      Grid.Column="2"
-                      Margin="0,10,0,0"
-                      ItemsSource="{Binding RootDependencyCollection}">
-                <TreeView.ItemTemplate>
-                    <TreeDataTemplate x:DataType="local:MpAvPluginDependencyViewModel"
-                                      ItemsSource="{Binding Items}">
-                        <SelectableTextBlock Classes="detailLabel"
-                                             Text="{Binding LabelText}" />
-                    </TreeDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
-
-            <!--  README VIEW  -->
-            <Expander Grid.Row="15"
-                      Grid.Column="0"
-                      Grid.ColumnSpan="3"
-                      Classes="header"
-                      HorizontalAlignment="Stretch"
-                      Padding="0"
-                      Margin="0,10,0,0"
-                      IsVisible="{Binding PluginReadMeUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                      IsExpanded="{Binding IsReadmeExpanded, Mode=TwoWay}">
-                <Expander.Resources>
-                    <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Left</HorizontalAlignment>
-                </Expander.Resources>
-                <Expander.Header>
-                    <SelectableTextBlock Classes="detailLabel"
-                                         Margin="0"
-                                         Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserReadMeLabel}" />
-                </Expander.Header>
-                <Expander.Content>
+                    <!--  TOGGLE INSTALL BUTTON  -->
                     <Grid>
-                        <local:MpAvBusySpinnerView x:Name="ReadmeBusyContainer"
-                                                   Grid.Row="1"
-                                                   Grid.Column="2"
-                                                   Width="30"
-                                                   Height="30"
-                                                   IsVisible="{Binding IsReadmeLoading}"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center" />
-                        <av:HtmlPanel HorizontalAlignment="Stretch"
-                                      VerticalAlignment="Stretch"
-                                      Background="{DynamicResource ThemeInteractiveBrush}"
-                                      MinHeight="150"
-                                      Opacity="{Binding IsVisible, ConverterParameter=0|1, ElementName=ReadmeBusyContainer, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
-                                      Text="{Binding ReadMeHtml}" />
+                        <Button x:Name="ToggleInstallSelectedPluginButton"
+                                Classes.installed="{Binding HasInstallation}"
+                                Classes.has-progress="{Binding InstallProgressViewModel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                Classes="defaultButton textOnlyButton manageButton progButton"
+                                local:MpAvShowDisabledTooltipExtension.ShowOnDisabled="{Binding ShowDisabledInstallTooltip}"
+                                Command="{Binding ToggleIsPluginInstalledCommand}">
+                            <ToolTip.Tip>
+                                <local:MpAvToolTipView Classes="warning"
+                                                       ToolTipText="{Binding DisabledInstallTooltip}" />
+                            </ToolTip.Tip>
+
+                            <Grid>
+                                <TextBlock Classes="cmd-text"
+                                           Text="{Binding InstallButtonText}" />
+                                <local:MpAvProgressSpinner Percent="{Binding InstallProgressViewModel.PercentLoaded}" />
+                            </Grid>
+                        </Button>
                     </Grid>
 
-                </Expander.Content>
-            </Expander>
+                    <!--  DONATE BUTTON  -->
+                    <Button x:Name="DonateToPluginButton"
+                            Classes="defaultButton textOnlyButton manageButton"
+                            Command="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                            CommandParameter="{Binding PluginDonateUri}"
+                            IsVisible="{Binding PluginDonateUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                        <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserDonateLabel}" />
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2"
+                            Orientation="Horizontal"
+                            Margin="0,10,0,0"
+                            Spacing="20">
+                    <!--  UPDATE BUTTON  -->
+                    <Button x:Name="UpdateSelectedPluginButton"
+                            Classes.installed="{Binding HasInstallation}"
+                            Classes.has-progress="{Binding UpdateProgressViewModel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                            Classes="defaultButton textOnlyButton manageButton progButton"
+                            local:MpAvShowDisabledTooltipExtension.ShowOnDisabled="{Binding ShowDisabledUpdateTooltip}"
+                            IsVisible="{Binding HasInstallation}"
+                            Command="{Binding UpdatePluginCommand}">
+                        <ToolTip.Tip>
+                            <local:MpAvToolTipView Classes="warning"
+                                                   ToolTipText="{Binding DisabledUpdateTooltip}" />
+                        </ToolTip.Tip>
+                        <Grid>
+
+                            <TextBlock Classes="cmd-text"
+                                       Text="{Binding UpdateButtonText}" />
+                            <local:MpAvProgressSpinner Percent="{Binding UpdateProgressViewModel.PercentLoaded}" />
+                        </Grid>
+                    </Button>
+
+                    <!--  CONFIGURE BUTTON  -->
+                    <Button x:Name="ConfigurePluginButton"
+                            Classes="defaultButton textOnlyButton manageButton"
+                            IsVisible="{Binding CanConfigure}"
+                            Command="{Binding ShowConfigurePanelCommand}">
+                        <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonConfigureLabel}" />
+                    </Button>
+                </StackPanel>
+
+
+
+                <!--  DESCRIPTION  -->
+                <SelectableTextBlock Grid.Row="3"
+                                     Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserDescriptionLabel}"
+                                     Classes="detailLabel" />
+                <SelectableTextBlock Grid.Row="4"
+                                     Grid.ColumnSpan="3"
+                                     FontStyle="Italic"
+                                     Text="{Binding PluginDescription}"
+                                     Classes="detailInfo" />
+
+                <!--  INSTALL COUNT  -->
+                <SelectableTextBlock Grid.Row="5"
+                                     Grid.Column="0"
+                                     Classes="detailLabel"
+                                     Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserInstallsLabel}" />
+                <SelectableTextBlock Grid.Row="5"
+                                     Grid.Column="2"
+                                     Classes="detailInfo"
+                                     Text="{Binding InstallCount}" />
+
+                <!--  VERSION  -->
+                <SelectableTextBlock Grid.Row="6"
+                                     Grid.Column="0"
+                                     Classes="detailLabel"
+                                     Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserVersionLabel}" />
+                <SelectableTextBlock Grid.Row="6"
+                                     Grid.Column="2"
+                                     Classes="detailInfo"
+                                     Text="{Binding PluginVersionText}" />
+
+                <!--  CREDITS  -->
+                <SelectableTextBlock Grid.Row="7"
+                                     Grid.Column="0"
+                                     Classes="detailLabel"
+                                     Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserCreditsLabel}" />
+                <SelectableTextBlock Grid.Row="7"
+                                     Grid.Column="2"
+                                     Classes="detailInfo"
+                                     Text="{Binding PluginAuthor}" />
+
+                <!--  LICENSE URL  -->
+                <SelectableTextBlock Grid.Row="8"
+                                     Grid.Column="0"
+                                     Classes="detailLabel"
+                                     IsVisible="{Binding PluginLicenseUrl, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                     Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserLicenseLabel}" />
+                <local:MpAvMarqueeTextBox Grid.Row="8"
+                                          Grid.Column="2"
+                                          Classes="detailInfo link"
+                                          VerticalAlignment="Bottom"
+                                          NavigateUriRequiredKeyString="{x:Null}"
+                                          IsVisible="{Binding PluginLicenseUrl, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                          Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserSeeLicenseLinkText}"
+                                          NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                          NavigateUriCommandParameter="{Binding PluginLicenseUrl}">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="{Binding PluginLicenseUrl}" />
+                    </ToolTip.Tip>
+                </local:MpAvMarqueeTextBox>
+
+                <!--  PUBLISHED  -->
+                <SelectableTextBlock Grid.Row="9"
+                                     Grid.Column="0"
+                                     Classes="detailLabel"
+                                     Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserPublishedLabel}" />
+                <SelectableTextBlock x:Name="PublishedTextBlock"
+                                     Grid.Row="9"
+                                     Grid.Column="2"
+                                     Classes="detailInfo"
+                                     Classes.unpublished="{Binding PluginPublishedDateTime, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
+
+                <!--  PROJECT URL  -->
+                <SelectableTextBlock Grid.Row="10"
+                                     Grid.Column="0"
+                                     Classes="detailLabel"
+                                     Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserProjectUrlLabel}" />
+                <local:MpAvMarqueeTextBox Grid.Row="10"
+                                          Grid.Column="2"
+                                          Classes="detailInfo link"
+                                          VerticalAlignment="Bottom"
+                                          NavigateUriRequiredKeyString="{x:Null}"
+                                          Text="{Binding PluginProjectUrl}"
+                                          NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                          NavigateUriCommandParameter="{Binding PluginProjectUrl}" />
+
+                <!--  ABUSE URL  -->
+                <SelectableTextBlock Grid.Row="11"
+                                     Grid.Column="0"
+                                     Classes="detailLabel"
+                                     Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserReportAbuseLabel}" />
+                <local:MpAvMarqueeTextBox Grid.Row="11"
+                                          Grid.Column="2"
+                                          Classes="detailInfo link"
+                                          VerticalAlignment="Bottom"
+                                          Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserReportAbuseLinkText}"
+                                          NavigateUriRequiredKeyString="{x:Null}"
+                                          NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                          NavigateUriCommandParameter="{Binding PluginAbuseUrl}">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="{Binding PluginAbuseUrl}" />
+                    </ToolTip.Tip>
+                </local:MpAvMarqueeTextBox>
+
+                <!--  TAGS  -->
+                <SelectableTextBlock Grid.Row="12"
+                                     Grid.Column="0"
+                                     Classes="detailLabel"
+                                     Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserTagsLabel}" />
+                <SelectableTextBlock Grid.Row="12"
+                                     Grid.Column="2"
+                                     Classes="detailInfo"
+                                     Text="{Binding PluginTags}" />
+
+                <!--  DEPENDENCIES  -->
+                <SelectableTextBlock Grid.Row="13"
+                                     Grid.Column="0"
+                                     Classes="detailLabel"
+                                     Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserDependenciesLabel}" />
+
+                <TreeView Grid.Row="13"
+                          Grid.Column="2"
+                          Margin="0,10,0,0"
+                          ItemsSource="{Binding RootDependencyCollection}">
+                    <TreeView.ItemTemplate>
+                        <TreeDataTemplate x:DataType="local:MpAvPluginDependencyViewModel"
+                                          ItemsSource="{Binding Items}">
+                            <SelectableTextBlock Classes="detailLabel"
+                                                 Text="{Binding LabelText}" />
+                        </TreeDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+
+                <!--  README VIEW  -->
+                <Expander Grid.Row="15"
+                          Grid.Column="0"
+                          Grid.ColumnSpan="3"
+                          Classes="header"
+                          HorizontalAlignment="Stretch"
+                          Padding="0"
+                          Margin="0,10,0,0"
+                          IsVisible="{Binding PluginReadMeUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                          IsExpanded="{Binding IsReadmeExpanded, Mode=TwoWay}">
+                    <Expander.Resources>
+                        <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Left</HorizontalAlignment>
+                    </Expander.Resources>
+                    <Expander.Header>
+                        <SelectableTextBlock Classes="detailLabel"
+                                             Margin="0"
+                                             Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserReadMeLabel}" />
+                    </Expander.Header>
+                    <Expander.Content>
+                        <Grid>
+                            <local:MpAvBusySpinnerView x:Name="ReadmeBusyContainer"
+                                                       Grid.Row="1"
+                                                       Grid.Column="2"
+                                                       Width="30"
+                                                       Height="30"
+                                                       IsVisible="{Binding IsReadmeLoading}"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" />
+                            <av:HtmlPanel HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch"
+                                          Background="{DynamicResource ThemeInteractiveBrush}"
+                                          MinHeight="150"
+                                          Opacity="{Binding IsVisible, ConverterParameter=0|1, ElementName=ReadmeBusyContainer, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                                          Text="{Binding ReadMeHtml}" />
+                        </Grid>
+
+                    </Expander.Content>
+                </Expander>
+            </Grid>
+
+            <local:MpAvPluginConfigureView x:Name="PluginConfigureView"
+                                           Margin="0,5,0,0"
+                                           Padding="0,0,0,10"
+                                           Width="{Binding Bounds.Width, ElementName=SelectedPluginContainer}"
+                                           VerticalAlignment="Top"
+                                           CornerRadius="5"
+                                           BorderThickness="1.5"
+                                           BorderBrush="{DynamicResource ThemeInteractiveColor}"
+                                           Background="Transparent"
+                                           Grid.ColumnSpan="3"
+                                           Grid.RowSpan="18"
+                                           IsVisible="{Binding IsConfigurePanelOpen}" />
         </Grid>
     </ScrollViewer>
 </local:MpAvUserControl>

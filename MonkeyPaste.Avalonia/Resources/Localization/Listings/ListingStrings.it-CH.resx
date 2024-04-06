@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>copia</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>impasto</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Manager degli appunti</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>attrezzo</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Completamente - Editor di clip in primo piano con Find/Sostituisci, Rich Testo (tabelle, elenchi, collegamenti, ecc.) Modello di testo per incollaggio rapido e dinamico dalla collezione di snippet</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Archiviazione dati locale sicura, sicura e privata con protezione da password 2 - fattore facoltativo</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Costruito - In browser di plug -in con una comunità in sempre più in crescita - Biblioteca di plugin guidata</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste è un gestore degli appunti, l'automazione e lo strumento di produttività come nessun altro. Migliorare gli appunti in una parte arricchita e organizzata del flusso di lavoro,
-Con un'interfaccia intuitiva e bassa - profilo che supporta testo, file e immagini. Progettato per la flessibilità, con una biblioteca di plugin in costante comunità.
-
-È iniziato come esperimento da un programmatore che desiderava molto più che copia e incolla dagli appunti. Voleva un semplice comando come ctrl+c che invece "si aggiungesse"
-di "Sostituisci" ciò che era negli appunti. E l'esperimento ha funzionato. Il piccolo strumento era molto utile. Ciò ha fatto entrare il programmatore con più idee e più esperimenti, quello
-Ora è diventato "Monkeypaste".
-
-Dato che il desktop è per i tuoi file, Monkeypaste intende essere negli appunti. È una suite di strumenti attentamente progettati per integrare e interabicare apparentemente con
-qualsiasi applicazione o formato di contenuto. CTRL+C e CTRL+V sono molto più di semplici scorciatoie. Sono i porti di voce che tutte le applicazioni condividono, che trasportano un
-ricchezza di valore e significato che meriti di avere a disposizione a portata di mano. Non solo gettato via dopo il prossimo Ctrl+C.
-
-Sono quel programmatore menzionato in precedenza e voglio che tutti siano in grado di trovare l'uso da Monkeypaste. Quindi e tutte le sue caratteristiche sono completamente gratuite da usare.
-Voglio anche che tu ti senta a tuo agio a usarlo. Quindi ti assicuro, come l'unica forza dietro la sua creazione, che nessuna delle (molto) informazioni personali che possono sorgere
-Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Periodo.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Peri
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Lo Appuntante è una giungla. Monkeypaste è il re! Swing da app a app, copiando questo e incollando che non prima con Monkeypaste !! Un marchio - Nuovo strumento di appunti e automazione analitica !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Esempio di Monkeypaste in azione!</value>
   </data>
@@ -258,9 +228,6 @@ Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Peri
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Unlimited - annuale</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Versione iniziale</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Con questo abbonamento riceverai:
 ● Capacità illimitata</value>
@@ -270,5 +237,45 @@ Gli appunti sono mai tracciati o memorizzati ovunque oltre la tua macchina. Peri
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Più piattaforme e funzionalità in arrivo! Stiamo appena iniziando 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Illuminazione di ricerca e evidenziazione rapida, inizia a digitare!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Memorizza le informazioni di testo, immagini e file con tutte le sue informazioni di origine (l'app, sito Web, tempo e molto altro) automaticamente</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste è uno strumento di gestione degli appunti, automazione e produttività come nessun altro. Migliorare gli appunti in una parte arricchita e organizzata del flusso di lavoro,
+Caratterizzato da un'interfaccia intuitiva e a basso profilo che supporta testo, file e immagini. Progettato per la flessibilità, con una libreria di plugin in continua crescita guidata dalla comunità.
+
+È iniziato come un esperimento di un programmatore che voleva qualcosa di più di un semplice copia e incolla dagli appunti. Voleva un comando semplice come Ctrl+C che invece 'aggiungesse a' 
+di 'sostituire' ciò che era negli appunti. E l'esperimento ha funzionato. Il piccolo strumento era molto utile. Questo ha coinvolto il programmatore con più idee e più esperimenti, che 
+ora è diventato "MonkeyPaste". 
+
+Come il desktop sta ai tuoi file, MonkeyPaste intende essere per i tuoi appunti. Si tratta di una suite di strumenti accuratamente progettati per integrarsi e interagire in modo semplice con 
+qualsiasi applicazione o formato di contenuto. Ctrl+C e Ctrl+V sono molto più che semplici scorciatoie. Sono le porte di ingresso condivise da tutte le applicazioni, che portano un 
+ricchezza di valore e significato che meriti di avere a portata di mano. Non solo buttato via dopo il prossimo Ctrl+C.
+
+Io sono quel programmatore menzionato prima e voglio che tutti siano in grado di trovare l'uso di MonkeyPaste. Quindi e tutte le sue funzionalità sono completamente gratuite. 
+Voglio anche che tu ti senta a tuo agio nell'usarlo. Quindi vi assicuro, essendo l'unica forza dietro la sua creazione, che NESSUNA delle informazioni (molto) personali che possono sorgere su 
+i tuoi appunti sono sempre tracciati o archiviati OVUNQUE oltre la tua macchina. Periodo.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Appunti</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Archiviazione dei dati locale sicura, protetta e privata con protezione con password opzionale a 2 fattori</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Monkeypaste è ora completamente libero da questa versione !!
+
+Tutte le restrizioni (negli abbonamenti alle app) sono state rimosse poiché Monkeypaste sta ora passando a diventare un progetto open source. Quindi tieni d'occhio il nostro GitHub (github.com/monkeypaste) se sei interessato a contribuire.
+
+Aggiornamenti:
+
+- Tutte le restrizioni di capacità rimosse!
+- Miglioramenti dell'interfaccia utente dell'Editor URL respinti
+- Supporto di base per l'esecuzione di più istanze di Monkeypaste
+- Nuovo editor di valori condivisi (nel browser plug -in ove applicabile)</value>
   </data>
 </root>

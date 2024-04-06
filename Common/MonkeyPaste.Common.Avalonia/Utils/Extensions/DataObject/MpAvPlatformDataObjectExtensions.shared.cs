@@ -212,10 +212,26 @@ namespace MonkeyPaste.Common.Avalonia {
             if (!ido.TryGetData(format, out object dataObj)) {
                 return false;
             }
+            data = ReadDataFormat<T>(format, dataObj);
+            return data != null;
+        }
+
+        public static bool TryGetValue<T>(this Dictionary<string, object> dict, string key, out T value) where T : class {
+            value = null;
+            if (key == null || !dict.TryGetValue(key, out object dataObj)) {
+                return false;
+            }
+            value = ReadDataFormat<T>(key, dataObj);
+            return value != null;
+        }
+
+        public static T ReadDataFormat<T>(string format, object dataObj) where T : class {
+            if (dataObj == null) {
+                return default;
+            }
             T typed_data = dataObj as T;
             if (typed_data != null) {
-                data = typed_data;
-                return true;
+                return typed_data;
             }
 
             if (typeof(T) == typeof(string)) {
@@ -231,9 +247,9 @@ namespace MonkeyPaste.Common.Avalonia {
                         if (format == MpPortableDataFormats.Xhtml) {
                             var detected_encoding = bytes.DetectTextEncoding(out string detected_text);
                             bytes = Encoding.UTF8.GetBytes(detected_text);
-                            if (detected_text.Contains("Â")) {
-                                MpDebug.Break();
-                            }
+                            //if (detected_text.Contains("Â")) {
+                            //    MpDebug.Break();
+                            //}
                         }
 #endif
                         typed_data = bytes.ToDecodedString() as T;
@@ -248,6 +264,8 @@ namespace MonkeyPaste.Common.Avalonia {
                 } else if (dataObj is int intVal) {
                     // int -> string (occurs internally putting actionId on clipboard)
                     typed_data = intVal.ToString() as T;
+                } else if (dataObj != null) {
+                    typed_data = dataObj.ToString() as T;
                 }
             } else if (typeof(T) == typeof(byte[])) {
                 // wants bytes
@@ -287,8 +305,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 MpDebug.Break($"Unhandled dataobj get, source is '{dataObj.GetType()}' target is '{format}'");
             }
 
-            data = typed_data;
-            return data != null;
+            return typed_data;
         }
 
         public static bool TryRemove(this IDataObject ido, string format) {

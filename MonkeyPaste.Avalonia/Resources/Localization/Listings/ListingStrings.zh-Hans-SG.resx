@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>复制</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>粘贴</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>剪贴板经理</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>工具</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>完全 - 具有查找/替换，丰富的文本（表，列表，链接等）的特色剪辑编辑器，以获取摘要集合的快速，动态粘贴的文本</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>可选2-因子密码保护安全，安全和私人本地数据存储</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>在插件浏览器中构建，并带有一个不断增长的社区 - 驱动的插件库</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkePaste是剪贴板经理，自动化和生产力工具，而不是其他工具。将剪贴板增强成丰富且有条理的工作流程，
-具有直观且低的配置界面，该接口支持文本，文件和图像。专为灵活性而设计，并具有不断增长的社区驱动插件的插件。
-
-它始于程序员的实验，而不仅仅是要复制和粘贴剪贴板。他想要一个像ctrl+c这样的简单命令，它会“添加到”
-“更换”剪贴板上的内容。实验奏效了。小工具非常方便。这使程序员拥有更多的想法和更多的实验，
-现在已成为“蒙基型”。
-
-由于桌面是您的文件，MonkePaste打算成为剪贴板。它是一套精心设计的工具，可与
-任何内容或内容格式。 CTRL+C和CTRL+V不仅仅是快捷方式。它们是所有应用程序共享的入口端口，
-您应该有大量的价值和意义。不仅在下一个Ctrl+c之后被扔掉。
-
-我是前面提到的程序员，我希望每个人都能从Monkeypaste中找到使用。因此，它及其所有功能都是完全免费的。
-我也希望您使用它感到舒适。因此，我向您保证，是其创造背后的唯一力量，没有任何（非常）的个人信息可以出现
-您的剪贴板是在您自己的机器之外的任何地方进行跟踪或存储的。时期。</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@
   <data name="StoreShortDescription" xml:space="preserve">
     <value>剪贴板是一个丛林。 Monkeypaste是国王！从应用到应用程序，复制此并粘贴以前从未与monkeypaste一起粘贴！品牌 - 新的，最前沿的剪贴板和分析自动化工具！！！</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>在行动中的Monkeypaste样本！</value>
   </data>
@@ -258,9 +228,6 @@
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>无限 - 每年</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>初始发行</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>通过此订阅，您将收到：
 ●无限能力</value>
@@ -270,5 +237,45 @@
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>●即将推出更多平台和功能！我们只是开始开始🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>照明快速搜索和突出显示，只需开始输入即可！</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>将其所有源（应用程序，网站，时间等）自动存储文本，图像和文件剪辑</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste 是一个与众不同的剪贴板管理器、自动化和生产力工具。将剪贴板增强为工作流程中丰富而有条理的部分，
+具有直观且低调的界面，支持文本、文件和图像。专为灵活性而设计，具有不断增长的社区驱动的插件库。
+
+它最初是一个程序员想要的不仅仅是从剪贴板中复制和粘贴的实验。他想要一个简单的命令，比如 Ctrl+C，可以“添加”来代替
+“替换”剪贴板上的内容。实验奏效了。这个小工具非常方便。这让程序员产生了更多的想法和更多的实验，这
+现在变成了“MonkeyPaste”。
+
+由于桌面是您的文件，MonkeyPaste 打算是您的剪贴板。它是一套精心设计的工具，可以无缝集成和互操作
+任何应用程序或内容格式。Ctrl+C 和 Ctrl+V 不仅仅是快捷键。它们是所有应用程序共享的入境口岸，携带
+您值得拥有的丰富价值和意义触手可及。不只是在下一个 Ctrl+C 之后扔掉。
+
+我就是前面提到的程序员，我希望每个人都能从 MonkeyPaste 中找到用途。因此，它及其所有功能都是完全免费使用的。
+我也希望你使用它时感到舒适。因此，我向您保证，作为其创建背后的唯一力量，任何（非常）个人信息都可能出现在
+您的剪贴板会被跟踪或存储在您自己的机器之外的任何地方。时期。</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>剪贴板</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>安全、可靠和私密的本地数据存储，可选的 2 因素密码保护</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>截至此版本，MonkeyPaste现在完全免费！！
+
+所有限制（在应用程序订阅中）已被删除，因为Monkeypaste现在正在转变为开源项目。因此，如果您有兴趣贡献，请密切注意我们的github（github.com/monkeypaste）。
+
+更新：
+
+ - 消除了所有容量限制！
+ - 拒绝的URL编辑器UI改进
+ - 为运行多个实例的MonkePaste的支持
+ - 新的共享价值编辑器（在适用的插件浏览器中）</value>
   </data>
 </root>

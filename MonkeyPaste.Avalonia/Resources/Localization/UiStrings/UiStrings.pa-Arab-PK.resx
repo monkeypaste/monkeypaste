@@ -2639,10 +2639,6 @@
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>ਯੋਜਨਾਵਾਂ ਬਾਰੇ ਹੋਰ ਜਾਣੋ</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>ਪੇਸਟ ਕਰੋ: {0}</value>
-    <comment>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</comment>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>ਉਪਲਬਧ ਸੰਪਰਕ ਦੀ ਵਰਤੋਂ ਕਰਨਾ (ਗ੍ਰਹਿ ਪਲੱਗਇਨ ਦੀ ਜ਼ਰੂਰਤ ਹੈ) ਇਹ ਖੇਤਰ ਇਸ ਟੈਂਪਲੇਟ ਦੇ ਸਾਰੇ ਉਦਾਹਰਣਾਂ ਲਈ ਇਸ ਦਸਤਾਵੇਜ਼ ਦੇ ਸਾਰੇ ਮਾਮਲਿਆਂ ਲਈ ਵਰਤਿਆ ਜਾਏਗਾ ਜਾਂ ਕਿਸੇ ਵੀ ਇਸ ਨੂੰ ਬਾਅਦ ਵਿਚ ਦੱਸਿਆ ਜਾਵੇਗਾ.
  ਇਸ ਲਈ ਉਦਾਹਰਣ ਦੇ ਤੌਰ ਤੇ ਜੇ ਇੱਥੇ ਈਮੇਲ ਪਤਾ ਚੁਣੋ ਅਤੇ ਇਸ ਦਸਤਾਵੇਜ਼ ਦੇ ਈਮੇਲ ਖੇਤਰ ਇਸ ਦਸਤਾਵੇਜ਼ ਦੇ ਸਾਰੇ ਉਦਾਹਰਣਾਂ ਲਈ ਵਰਤੇ ਜਾਣਗੇ.</value>
@@ -2910,10 +2906,6 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
     <value>ਪ੍ਰੀਸੈਟਸ ਵਿੱਚ ਸਾਂਝੇ ਮੁੱਲ ਮਾਪਦੰਡ ਨੂੰ ਸੈੱਟ ਨਹੀਂ ਕਰ ਸਕਦਾ. ਪਲੱਗਇਨ '{2}' ਲਈ ਅਰਜੀਡ '{0}' ਪਲੱਗਇਨ '{1}' ਲਈ PREACT '{1}' ਨੂੰ ਹਟਾਉਣ ਜਾਂ ਪੈਰਾਮੀਟਰ ਦੀ ਪਰਿਭਾਸ਼ਾ ਵਿੱਚ ਦਿੱਤਾ ਜਾ ਸਕਦਾ ਹੈ.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>ਪ੍ਰੀਸੈਟਸ ਦੇ ਵਿਲੱਖਣ GNDS ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ. ਡੁਪਲਿਕੇਟ ਪ੍ਰੀਸੈਟ ਗਾਈਡ '{0}' ਪ੍ਰੀਸੈਟਾਂ ਲਈ ਪਲੱਗਇਨ '{1}' ਵਿੱਚ ਖੋਜਿਆ ਗਿਆ: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>ਪਲੱਗਇਨ ਪਾਰਸਿੰਗ ਗਲਤੀ, ਮਾਰਗ '{0}' null, ਜੋ ਜੇਐਸਐਨ ਪਾਰ ਕਰਨ ਵਾਲੀ ਗਲਤੀ ਹੈ. ਪਲੱਗਇਨ ਨੂੰ ਅਣਡਿੱਠ ਕਰਨਾ</value>
     <comment>File Path</comment>
@@ -2961,5 +2953,67 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ਨੇ ਸ਼ੇਅਰ ਕੀਤੇ ਮੁੱਲ ਹਨ. ਕੀ ਤੁਸੀਂ ਉਨ੍ਹਾਂ ਨੂੰ ਰੀਸੈਟ ਕਰਨਾ ਚਾਹੋਗੇ?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>ਪ੍ਰੀਸੈਟਸ ਦੇ ਵਿਲੱਖਣ GNDS ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ. ਡੁਪਲਿਕੇਟ ਪ੍ਰੀਸੈਟ ਗਾਈਡ '{0}' ਪ੍ਰੀਸੈਟਾਂ ਲਈ ਪਲੱਗਇਨ '{1}' ਵਿੱਚ ਖੋਜਿਆ ਗਿਆ ਸੀ: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;ਇਸ ਵਿੱਚ ਪੇਸਟ ਕਰੋ: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>ਅਣਜਾਣ ਗਲਤੀ {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>ਤੁਹਾਡੀ ਖਰੀਦ ਪੂਰੀ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ. ਕਾਰਨ: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>ਡੋਮੇਨ ਸ਼ਾਮਲ ਕਰੋ</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>ਪੇਜ ਸ਼ਾਮਲ ਕਰੋ</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>ਇਸ ਪੇਜ ਲਈ ਡੋਮੇਨ ਰੱਦ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ. ਇਸ ਪੰਨੇ ਨੂੰ ਆਗਿਆ ਦੇਣ ਲਈ ਤੁਹਾਨੂੰ '{0}' ਲਈ ਰੱਦ ਕਰਨ ਲਈ ਰੱਦ ਕਰਨ ਦੀ ਜ਼ਰੂਰਤ ਹੋਏਗੀ.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>ਡੋਮੇਨ '{0}' ਪਹਿਲਾਂ ਹੀ ਰੱਦ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>ਡੋਮੇਨ</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>ਇਹ ਪੰਨਾ ਪਹਿਲਾਂ ਹੀ ਰੱਦ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>ਪੰਨੇ</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>ਸਿੰਕ</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>ਮੋਨਕੇਪਾਸਟ ਦੀ ਇਕ ਹੋਰ ਉਦਾਹਰਣ ਪਹਿਲਾਂ ਹੀ ਚੱਲ ਰਹੀ ਹੈ. ਕੀ ਤੁਹਾਨੂੰ ਯਕੀਨ ਹੈ ਕਿ ਤੁਸੀਂ ਕੋਈ ਨਵਾਂ ਉਦਾਹਰਣ ਖੋਲ੍ਹਣਾ ਚਾਹੁੰਦੇ ਹੋ?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>ਕੌਂਫਿਗਰ ਕਰੋ</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>ਗਲੋਬਲ ਮਾ mouse ਸ ਅਤੇ ਕੀਬੋਰਡ ਸ਼ੌਰਟਕਟਸ ਅਯੋਗ ਕਰ ਦਿੱਤੇ ਗਏ ਹਨ.
+
+ਗਲੋਬਲ ਸ਼ਾਰਟਕੱਟ ਹੁਣ ਸਿਸਟਮ ਟਰੇ ਮੀਨੂੰ ਵਿੱਚ ਯੋਗ ਹੋ ਸਕਦੇ ਹਨ</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>ਗਲੋਬਲ ਸ਼ੌਰਟਕਟ ਅਸਮਰਥਿਤ: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>ਗਲੋਬਲ ਮਾ mouse ਸ ਅਤੇ ਕੀਬੋਰਡ ਸ਼ੌਰਟਕਟ ਯੋਗ ਕੀਤੇ ਗਏ ਹਨ.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(ਪ੍ਰਯੋਗਾਤਮਕ) ਗਲੋਬਲ ਸ਼ੌਰਟਕਟ ਸਮਰੱਥ: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>ਗਲੋਬਲ ਸ਼ੌਰਟਕਟ ਆਫ ਟੌਗਲ ਕਰੋ</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>ਚਾਲੂ ਕਰੋ ਗਲੋਬਲ ਸ਼ੌਰਟਕਟ 'ਤੇ</value>
   </data>
 </root>

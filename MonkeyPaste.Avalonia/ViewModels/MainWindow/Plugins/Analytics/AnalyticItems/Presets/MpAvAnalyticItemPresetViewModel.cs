@@ -212,6 +212,9 @@ namespace MonkeyPaste.Avalonia {
             Items.Where(x => !x.IsExecuteParameter);
         public IEnumerable<MpAvParameterViewModelBase> ExecuteItems =>
             Items.Where(x => x.IsExecuteParameter);
+        
+        public IEnumerable<MpAvParameterViewModelBase> SharedItems =>
+            Items.Where(x => x.IsSharedValue);
 
         #endregion
 
@@ -262,7 +265,8 @@ namespace MonkeyPaste.Avalonia {
                 return Parent.Items.OrderBy(x => x.AnalyticItemPresetId).FirstOrDefault() == this;
             }
         }
-
+        public bool IsSystemPreset =>
+            IsManifestPreset || IsGeneratedDefaultPreset;
         #endregion
 
         #region Model 
@@ -519,7 +523,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool CanDelete(object args) {
             if (args == null) {
-                return !IsManifestPreset && !IsGeneratedDefaultPreset;
+                return !IsSystemPreset;
             }
             return false;
         }

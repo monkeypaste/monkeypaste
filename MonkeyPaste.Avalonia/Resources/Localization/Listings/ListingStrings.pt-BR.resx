@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>cópia de</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>colar</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Gerenciador da área de transferência</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>ferramenta</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Totalmente - Editor de clipes em destaque com Find/Substituir, Rich Text (Tabelas, Listas, Links etc.)</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Armazenamento de dados local seguro, seguro e privado com proteção de senha de 2 fator opcional</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Construído - no navegador do plug -in com uma comunidade de plugins, em crescimento - acionado por uma comunidade em crescimento</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>A Monkeypaste é um gerente de quadro de transferência, ferramenta de automação e produtividade como nenhuma outra. Aprimorando sua prancha em uma parte enriquecida e organizada do seu fluxo de trabalho,
-Apresentando uma interface intuitiva e baixa - que suporta texto, arquivos e imagens. Projetado para flexibilidade, com um Libray de plug -ins, orientado a uma comunidade em crescimento.
-
-Começou como um experimento de um programador querendo mais do que apenas copiar e colar fora da área de transferência. Ele queria um comando simples como Ctrl+C que 'adicionaria' em vez disso
-de 'substituir' o que estava na área de transferência. E o experimento funcionou. A pequena ferramenta foi muito útil. Isso entrou o programador com mais idéias e mais experimentos, que
-agora se tornou "macaco".
-
-Como o desktop é para seus arquivos, o MonkeyySaste pretende estar na sua área de transferência. É um conjunto de ferramentas cuidadosamente projetadas para integrar e integrar com aparecimento com
-qualquer aplicação ou formato de conteúdo. Ctrl+C e Ctrl+V são muito mais do que apenas atalhos. Eles são os portos de entrada, todos os aplicativos compartilham, carregando um
-Riqueza de valor e significado que você merece ter disponível na ponta dos dedos. Não apenas jogado fora após o próximo Ctrl+c.
-
-Eu sou o programador mencionado anteriormente e quero que todos possam encontrar o uso de Monkeyyyasaste. Então, e todos os seus recursos são totalmente gratuitos.
-Eu também quero que você se sinta confortável em usá -lo. Por isso, garanto -lhe, como sendo a única força por trás de sua criação, que nenhuma das informações (muito) pessoais que podem surgir
-Sua área de transferência é sempre rastreada ou armazenada em qualquer lugar além da sua própria máquina. Período.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Sua área de transferência é sempre rastreada ou armazenada em qualquer lugar 
   <data name="StoreShortDescription" xml:space="preserve">
     <value>A área de transferência é uma selva. Monkeypaste é o rei! Swing de aplicativo para aplicativo, copiando isso e colando isso como nunca antes com o MonkeyyySaste !! Uma marca - Ferramenta de transferência de arestas de ponta e ferramenta de automação analítica !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Amostra de macacão em ação!</value>
   </data>
@@ -258,9 +228,6 @@ Sua área de transferência é sempre rastreada ou armazenada em qualquer lugar 
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Ilimitado - anualmente</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Lançamento inicial</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Com esta assinatura, você receberá:
 ● Capacidade ilimitada</value>
@@ -270,5 +237,45 @@ Sua área de transferência é sempre rastreada ou armazenada em qualquer lugar 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Mais plataformas e recursos em breve! Estamos apenas começando</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Iluminar pesquisas rápidas e destaques, basta começar a digitar!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Armazene o texto, a imagem e os clipes de arquivos com toda a sua fonte (o aplicativo, site, tempo e muito mais) informações automaticamente</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste é um gerenciador de área de transferência, automação e ferramenta de produtividade como nenhum outro. Aprimorando sua área de transferência em uma parte enriquecida e organizada de seu fluxo de trabalho,
+Com uma interface intuitiva e de baixo perfil que suporta texto, arquivos e imagens. Projetado para flexibilidade, com uma comunidade cada vez maior - impulsionada libray de plugins.
+
+Começou como um experimento de um programador querendo mais do que apenas copiar e colar da área de transferência. Ele queria um comando simples como Ctrl+C que "adicionasse" em vez disso 
+de 'substituir' o que estava na prancheta. E o experimento deu certo. A pequena ferramenta foi muito útil. Isso intrigou o programador com mais ideias e mais experimentos, que 
+agora tornou-se "MonkeyPaste". 
+
+Como a área de trabalho está para seus arquivos, o MonkeyPaste pretende estar para sua área de transferência. É um conjunto de ferramentas cuidadosamente projetado para integrar e interoperar perfeitamente com 
+qualquer aplicação ou formato de conteúdo. Ctrl+C e Ctrl+V são muito mais do que apenas atalhos. Eles são as portas de entrada que todos os aplicativos compartilham, carregando um 
+riqueza de valor e significado que você merece ter disponível na ponta dos dedos. Não apenas jogado fora após o próximo Ctrl+C.
+
+Eu sou o programador mencionado anteriormente e quero que todos sejam capazes de encontrar o uso do MonkeyPaste. Assim, ele e todos os seus recursos são completamente gratuitos para usar. 
+Eu também quero que você se sinta confortável em usá-lo. Por isso, garanto-lhe, como sendo a única força por trás de sua criação, que NENHUMA das informações (muito) pessoais que podem surgir em 
+sua área de transferência é sempre rastreada ou armazenada em qualquer lugar além de sua própria máquina. Período.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>área de transferência</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Armazenamento de dados local seguro, seguro e privado com proteção opcional por senha de 2 fatores</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>O MonkeyyySaste agora está totalmente livre a partir deste lançamento !!
+
+Todas as restrições (nas assinaturas de aplicativos) foram removidas, pois agora a MonkeyyySaste está em transição para se tornar um projeto de código aberto. Portanto, fique de olho em nosso github (github.com/monkeypaste) se você estiver interessado em contribuir.
+
+Atualizações:
+
+- Todas as restrições de capacidade removidas!
+- Melhorias da UI do editor de URL rejeitadas
+- Suporte de linha de base para a execução de várias instâncias de macacão
+- Novo editor de valor compartilhado (no navegador do plug -in, quando aplicável)</value>
   </data>
 </root>

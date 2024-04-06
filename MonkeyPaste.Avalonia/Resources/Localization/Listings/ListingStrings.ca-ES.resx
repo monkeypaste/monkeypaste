@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>còpia</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pastar</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>Gestor de porta -retalls</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>eina</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>EDITOR DE CLIP COMPLETAT completament amb cerca/substitució, text ric (taules, llistes, enllaços, etc.) Plantilització de text per enganxar ràpid i dinàmic de la col·lecció de fragments</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Emmagatzematge de dades local segur, segur i privat amb opcional 2: protecció de contrasenya del factor</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Construït: en el navegador de plugins amb una comunitat en creixement - Biblioteca de plugins impulsada</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>MonkeyPaste és un gestor de porta -retalls, una eina d'automatització i productivitat com cap altra. Millora del porta -retalls en una part enriquida i organitzada del vostre flux de treball,
-Amb una interfície de perfil intuïtiva i baixa que admet text, fitxers i imatges. Dissenyat per a la flexibilitat, amb una comunitat en creixement, Libray de plugins impulsada.
-
-Va començar com un experiment d’un programador que volia més que copiar i enganxar fora del porta -retalls. Volia una ordre senzilla com Ctrl+C que s’afegiria a ’en lloc seu
-de "substituir" el que hi havia al porta -retalls. I l’experiment va funcionar. La petita eina era molt útil. Això va atraure el programador amb més idees i més experiments, això
-Ara s’ha convertit en "Monkeypaste".
-
-Com que l'escriptori és als vostres fitxers, MonkeyPaste té la intenció de ser al porta -retalls. És un conjunt d’eines dissenyades acuradament per integrar -se i interoperar -se sense
-qualsevol aplicació o format de contingut. Ctrl+C i Ctrl+V són molt més que les dreceres. Són els ports d'entrada que totes les aplicacions comparteixen, que porten un
-La riquesa de valor i el significat que mereixeu tenir a l’abast del vostre abast. No només llançat després del següent Ctrl+c.
-
-Sóc el programador esmentat anteriorment i vull que tothom pugui trobar ús fora de Monkeypaste. De manera que i totes les seves funcions són completament lliures d’utilitzar.
-També vull que us sentiu còmode fent -lo servir. Així que us asseguro, com a única força de la seva creació, que cap de les (molt) informació personal que pugui sorgir
-El vostre porta -retalls es fa un seguiment o emmagatzemat en qualsevol lloc més enllà de la vostra pròpia màquina. Període.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ El vostre porta -retalls es fa un seguiment o emmagatzemat en qualsevol lloc mé
   <data name="StoreShortDescription" xml:space="preserve">
     <value>El porta -retalls és una selva. Monkeypaste és el rei! Swing des de l'aplicació a l'aplicació, copiant això i enganxant això com mai abans amb Monkeypaste !! Una marca: porta -retalls de retallada i eina d’automatització analítica nova !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Mostra de Monkeypaste en acció!</value>
   </data>
@@ -258,9 +228,6 @@ El vostre porta -retalls es fa un seguiment o emmagatzemat en qualsevol lloc mé
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Il·limitat - anual</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Versió inicial</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Amb aquesta subscripció rebrà:
 ● Capacitat il·limitada</value>
@@ -270,5 +237,45 @@ El vostre porta -retalls es fa un seguiment o emmagatzemat en qualsevol lloc mé
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Més plataformes i funcions properament! Acabem de començar 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Il·luminació de cerca ràpida i destacada, només comenceu a escriure!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Emmagatzemeu els clips de text, imatge i fitxers amb tota la seva font (l'aplicació, el lloc web, el temps i molt més) informació automàticament</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste és un gestor de portapapers, automatització i eina de productivitat com cap altre. Millorar el porta-retalls en una part enriquida i organitzada del vostre flux de treball,
+Amb una interfície de perfil intuïtiva i baixa que admet text, fitxers i imatges. Dissenyat per a la flexibilitat, amb una comunitat en constant creixement impulsada per la biblioteca de connectors.
+
+Va començar com un experiment d'un programador que volia alguna cosa més que copiar i enganxar del porta-retalls. Volia una ordre simple com Ctrl+C que "s'afegeixi a" en el seu lloc 
+de 'substituir' el que hi havia al portapapers. I l'experiment va funcionar. La petita eina era molt útil. Això va atrapar el programador amb més idees i més experiments, que 
+ara s'ha convertit en "MonkeyPaste". 
+
+Com l'escriptori és per als seus arxius, MonkeyPaste té la intenció de ser al porta-retalls. És un conjunt d'eines acuradament dissenyades per integrar-se i interoperar sense problemes 
+qualsevol aplicació o format de contingut. Ctrl+C i Ctrl+V són molt més que dreceres. Són els ports d'entrada que totes les aplicacions comparteixen, portant un 
+riquesa de valor i significat que mereixes tenir disponible al teu abast. No només llençat després del següent Ctrl+C.
+
+Sóc aquest programador esmentat anteriorment i vull que tothom pugui trobar ús fora de MonkeyPaste. Per tant, i totes les seves funcions són completament gratuïtes. 
+També vull que et sentis còmode utilitzant-lo. Així que us asseguro, com a única força darrere de la seva creació, que cap de les (molt) dades personals que poden sorgir sobre 
+el porta-retalls es rastreja o s'emmagatzema EN QUALSEVOL lloc més enllà de la vostra pròpia màquina. Període.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>porta-retalls</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Emmagatzematge de dades local segur, segur i privat amb protecció amb contrasenya opcional de 2 factors</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>MonkeyPaste ara és totalment gratuït a partir d'aquest llançament!!
+
+Totes les restriccions (en les subscripcions d'aplicacions) s'han eliminat ja que MonkeyPaste està passant ara a convertir-se en un projecte de codi obert. Així que estigueu atents al nostre github (github.com/monkeypaste) si esteu interessats a contribuir.
+
+Actualitzacions:
+
+- S'han eliminat totes les restriccions de capacitat!
+- les millores de la interfície d'usuari de l'editor d'URL rebutjades
+- Suport bàsic per executar múltiples instàncies de MonkeyPaste
+- nou editor de valors compartits (al navegador de connectors si escau)</value>
   </data>
 </root>

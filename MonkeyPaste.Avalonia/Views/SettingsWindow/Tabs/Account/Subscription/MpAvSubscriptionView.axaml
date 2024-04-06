@@ -120,7 +120,7 @@
         <!--  TEXT COLOR  -->
         <Style Selector="TextBlock">
             <!--<Setter Property="Foreground"
-                    Value="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />-->
+                    Value="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />-->
             <Setter Property="Foreground"
                     Value="{DynamicResource ThemeWhiteBrush}" />
         </Style>
@@ -223,12 +223,13 @@
                     Value="Red" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Grid>
+    <Grid HorizontalAlignment="Center"
+          VerticalAlignment="Center">
         <!--  SUBSCRIPTION CONTAINER  -->
 
         <Grid RowDefinitions="Auto,*,Auto"
-              HorizontalAlignment="Stretch"
-              VerticalAlignment="Top"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
               Margin="10">
             <Grid.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -285,7 +286,7 @@
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Viewbox Stretch="UniformToFill"
+                        <Viewbox Stretch="Uniform"
                                  ClipToBounds="False">
                             <!--  ACCOUNT TYPE ITEM OUTER BORDER  -->
                             <local:MpAvClipBorder x:Name="OuterBorder"
@@ -444,8 +445,10 @@
                                                             DataContext="{Binding $parent[ListBoxItem].DataContext}"
                                                             Spacing="3">
                                                     <!--  RATE TEXT  -->
-                                                    <Viewbox Stretch="UniformToFill">
+                                                    <Viewbox Stretch="Uniform">
                                                         <TextBlock HorizontalAlignment="Left"
+                                                                   Margin="1"
+                                                                   Padding="1"
                                                                    ClipToBounds="False"
                                                                    VerticalAlignment="Center"
                                                                    TextWrapping="Wrap"
@@ -457,7 +460,8 @@
 
                                                     </Viewbox>
                                                     <!--  TRIAL BADGE  -->
-                                                    <Viewbox Stretch="UniformToFill">
+                                                    <Viewbox Stretch="Fill"
+                                                             Margin="1">
                                                         <Border Grid.Row="1"
                                                                 Margin="0"
                                                                 Classes="badge trial"
@@ -467,6 +471,7 @@
                                                                 IsVisible="{Binding TrialText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                                 Background="Crimson">
                                                             <TextBlock Foreground="White"
+                                                                       Margin="1"
                                                                        LineHeight="10"
                                                                        TextWrapping="WrapWithOverflow"
                                                                        Text="{Binding TrialText}" />

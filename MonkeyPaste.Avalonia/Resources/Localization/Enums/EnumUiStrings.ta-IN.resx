@@ -1186,4 +1186,13 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>எல்லாம்</value>
   </data>
+  <data name="MpNotificationType_SingleInstanceWarning" xml:space="preserve">
+    <value>ஒற்றை நிகழ்வு எச்சரிக்கை</value>
+  </data>
+  <data name="MpNotificationType_ModalShutdownLater" xml:space="preserve">
+    <value>பின்னர் மாதிரி பணிநிறுத்தம்</value>
+  </data>
+  <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
+    <value>உலகளாவிய கொக்கிகள் மாற்றவும்</value>
+  </data>
 </root>

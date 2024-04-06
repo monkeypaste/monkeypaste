@@ -128,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(EditableForeground),
                 o => o.EditableForeground,
                 (o, v) => o.EditableForeground = v,
-                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor.ToString())
+                Brushes.Black//Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor.ToString())
             );
 
         #endregion
@@ -147,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(EditableBackground),
                 o => o.EditableBackground,
                 (o, v) => o.EditableBackground = v,
-                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString())
+                Brushes.White// Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString())
             );
 
         #endregion
@@ -168,19 +168,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region HoverBrush AvaloniaProperty
 
-        private IBrush _hoverBrush = null;
         public IBrush HoverBrush {
-            get => _hoverBrush;
-            set => SetAndRaise(HoverBrushProperty, ref _hoverBrush, value);
+            get { return GetValue(HoverBrushProperty); }
+            set { SetValue(HoverBrushProperty, value); }
         }
 
-        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> HoverBrushProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+        public static readonly StyledProperty<IBrush> HoverBrushProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>
             (
                 nameof(HoverBrush),
-                o => o.HoverBrush,
-                (o, v) => o.HoverBrush = v,
-                null
+                defaultValue: null
             );
         #endregion
 
@@ -199,7 +196,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(NavigatedBrush),
                 o => o.NavigatedBrush,
                 (o, v) => o.NavigatedBrush = v,
-                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment4DarkColor.ToString())
+                Brushes.Blue//Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment4DarkColor.ToString())
             );
         #endregion
 
@@ -217,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(ActiveHighlightBrush),
                 o => o.ActiveHighlightBrush,
                 (o, v) => o.ActiveHighlightBrush = v,
-                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString())
+                MpAvHighlightTextExtension.DefaultActiveHighlightBrush//Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString())
             );
         #endregion
 
@@ -234,7 +231,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(InactiveHighlightBrush),
                 o => o.InactiveHighlightBrush,
                 (o, v) => o.InactiveHighlightBrush = v,
-                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent1BgColor.ToString())
+                MpAvHighlightTextExtension.DefaultInactiveHighlightBrush//Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent1BgColor.ToString())
             );
         #endregion
 
@@ -442,19 +439,16 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region SelectViewModelOnFocus AvaloniaProperty
-        private bool _selectViewModelOnFocus = true;
         public bool SelectViewModelOnFocus {
-            get => _selectViewModelOnFocus;
-            set => SetAndRaise(SelectViewModelOnFocusProperty, ref _selectViewModelOnFocus, value);
+            get { return GetValue(SelectViewModelOnFocusProperty); }
+            set { SetValue(SelectViewModelOnFocusProperty, value); }
         }
 
-        public static readonly DirectProperty<MpAvMarqueeTextBox, bool> SelectViewModelOnFocusProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, bool>
+        public static readonly StyledProperty<bool> SelectViewModelOnFocusProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>
             (
                 nameof(SelectViewModelOnFocus),
-                o => o.SelectViewModelOnFocus,
-                (o, v) => o.SelectViewModelOnFocus = v,
-                true
+                defaultValue: true
             );
         #endregion
 
@@ -505,14 +499,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region HighlightRanges AvaloniaProperty
         // FORMAT [index,count]
-        private ObservableCollection<MpTextRange> _highlightRanges;
-        public ObservableCollection<MpTextRange> HighlightRanges {
+        private IEnumerable<MpTextRange> _highlightRanges;
+        public IEnumerable<MpTextRange> HighlightRanges {
             get => _highlightRanges;
             set => SetAndRaise(HighlightRangesProperty, ref _highlightRanges, value);
         }
 
-        public static readonly DirectProperty<MpAvMarqueeTextBox, ObservableCollection<MpTextRange>> HighlightRangesProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, ObservableCollection<MpTextRange>>
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IEnumerable<MpTextRange>> HighlightRangesProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IEnumerable<MpTextRange>>
             (
                 nameof(HighlightRanges),
                 o => o.HighlightRanges,
@@ -910,7 +904,9 @@ namespace MonkeyPaste.Avalonia {
 
             // CLEAR BG
             ctx.FillRectangle(ReadOnlyBackground, this.Bounds);
-            double hl_x = GetActiveHighlighAdjOffset(ctx, _offsetX1);
+            MpTextRange[] hlr = HighlightRanges == null ? [] : HighlightRanges.Where(x => x.Document == this).ToArray();
+            int? active_idx = ActiveHighlightIdx.HasValue && ActiveHighlightIdx.Value < hlr.Length ? ActiveHighlightIdx.Value : null;
+            double hl_x = GetActiveHighlighAdjOffset(ctx, _offsetX1, hlr, active_idx);
 
 
             var origin1 = new Point(_offsetX1 + hl_x, 0);
@@ -927,13 +923,15 @@ namespace MonkeyPaste.Avalonia {
                 DrawReadOnlyText(ctx, fg, origin2, true);
             }
         }
-        private double GetActiveHighlighAdjOffset(DrawingContext ctx, double x_offset) {
-            if (HighlightRanges == null ||
-                HighlightRanges.Count == 0 ||
-                ActiveHighlightIdx == null) {
+        private double GetActiveHighlighAdjOffset(DrawingContext ctx, double x_offset, MpTextRange[] hlrl, int? active_idx) {
+            if (hlrl == null ||
+                active_idx == null ||
+                active_idx.Value < 0 ||
+                active_idx.Value >= hlrl.Length ||
+                hlrl[active_idx.Value].StartIdx >= this.Text.Length) {
                 return 0;
             }
-            var test_hl_geom = _ft.BuildHighlightGeometry(new Point(x_offset, 0), HighlightRanges[ActiveHighlightIdx.Value].StartIdx, 1);
+            var test_hl_geom = _ft.BuildHighlightGeometry(new Point(x_offset, 0), hlrl[active_idx.Value].StartIdx, 1);
             double delta_x = 0;
             double max_x = x_offset + GetRenderWidth();
             if (max_x < test_hl_geom.Bounds.Left) {
@@ -948,13 +946,16 @@ namespace MonkeyPaste.Avalonia {
             lock (_drawReadOnlyLock) {
                 if (showHighlight &&
                 HighlightRanges != null &&
-                HighlightRanges.Any()) {
-                    var brl = GetAllBrushes(ReadOnlyBackground, InactiveHighlightBrush, ActiveHighlightBrush, ActiveHighlightIdx, HighlightRanges.ToArray());
+                HighlightRanges.Where(x => x.Document == this) is { } hrl &&
+                hrl.ToArray() is { } hlr &&
+                hlr.Any()) {
+                    int? active_idx = ActiveHighlightIdx.HasValue && ActiveHighlightIdx.Value < hlr.Length ? ActiveHighlightIdx.Value : null;
+                    var brl = GetAllBrushes(ReadOnlyBackground, InactiveHighlightBrush, ActiveHighlightBrush, active_idx, hrl.ToArray());
                     foreach (var br_kvp in brl) {
-                        if (br_kvp.Key is not IBrush brush) {
+                        if (br_kvp.Key is not IBrush brush ||
+                            _ft.BuildHighlightGeometry(offset, br_kvp.Value.StartIdx, br_kvp.Value.Count) is not { } g) {
                             continue;
                         }
-                        var g = _ft.BuildHighlightGeometry(offset, br_kvp.Value.StartIdx, br_kvp.Value.Count);
                         ctx.DrawGeometry(brush, null, g);
                     }
 
@@ -1004,12 +1005,8 @@ namespace MonkeyPaste.Avalonia {
                 brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(ContentRange.Document, hl_ranges.Last().AfterEndIdx, Text.Length - hl_ranges.Last().AfterEndIdx)));
             }
 
-            var valid = brush_tuples.Where(x => x.Value.StartIdx < 0 || x.Value.EndIdx >= Text.Length);
-            if (valid.Any()) {
-                string test = Text;
-                MpDebug.Break();
-            }
-            return brush_tuples.ToArray();
+            var valid = brush_tuples.Where(x => x.Value.StartIdx >= 0 && x.Value.EndIdx < Text.Length);
+            return valid.ToArray();
         }
 
         private bool CanMarquee() {

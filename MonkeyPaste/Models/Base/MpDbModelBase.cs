@@ -142,7 +142,7 @@ namespace MonkeyPaste {
             var dbo = await MpDb.GetDbObjectByTableGuidAsync(tableName, dboGuid);
             if (dbo == null) {
                 //for add transactions
-                var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(tableName);
+                var dbot = new MpStringToSyncObjectTypeConverter().Convert(tableName);
                 dbo = Activator.CreateInstance(dbot);
             }
             if (actionType == MpDbLogActionType.Delete) {

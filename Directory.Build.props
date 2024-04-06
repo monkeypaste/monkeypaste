@@ -5,7 +5,7 @@
     <ApplicationAuthor>Monkey LLC</ApplicationAuthor>
     <ApplicationVersionMajor>1</ApplicationVersionMajor>
     <ApplicationVersionMinor>0</ApplicationVersionMinor>
-    <ApplicationVersionPatch>9</ApplicationVersionPatch>
+    <ApplicationVersionPatch>16</ApplicationVersionPatch>
     <ApplicationVersionRevision>0</ApplicationVersionRevision>
     <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch).$(ApplicationVersionRevision)</ApplicationVersion>
    </PropertyGroup>
@@ -26,19 +26,22 @@
     <BuildOs>WINDOWS</BuildOs>
     <CultureExt>en-US</CultureExt>
     <IncludeCultures>True</IncludeCultures>
+    <IsPublicBuild>False</IsPublicBuild>
     <PushPlugins>false</PushPlugins>
     <!-- NOTE when changing av version need to reset coreole, probably everything-->
-    <AvaloniaVersion>11.0.7</AvaloniaVersion>
+    <AvaloniaVersion>11.0.10</AvaloniaVersion>
+    <DefaultLangVersion>Latest</DefaultLangVersion>
+    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
   </PropertyGroup>
 
-  <!-- SYSTEM PROPERTIES -->
+  <!-- MSBUILD PROPERTIES -->
 
   <PropertyGroup>
-    <DefaultLangVersion>Latest</DefaultLangVersion>
     <Nullable>disable</Nullable>
-    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
+    <NoWarn>$(NoWarn);NU1701;NU1702;IDE1006;CA1401;</NoWarn>
+    <WarningsAsErrors>CS4014;</WarningsAsErrors>
   </PropertyGroup>
 
 
@@ -48,14 +51,15 @@
     <!-- DEFAULTS (MAYBE OVERRIDEN BY CONDITIONS) -->
     <IsDesktop>false</IsDesktop>
     <IsMobile>false</IsMobile>
-    <DefaultPlatforms>AnyCPU;x64;x86</DefaultPlatforms>
+    <DefaultPlatforms>x64</DefaultPlatforms>
     <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
     <UseCefNet>false</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
-    <DefaultFramework>net8.0</DefaultFramework>
+    <UseSugarWv>false</UseSugarWv>
+    <DefaultTargetFramework>net8.0</DefaultTargetFramework>
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
-    <BuildScriptsRootDir>$(SolutionDir)\_build\scripts</BuildScriptsRootDir>
+    <BuildScriptsRootDir>$(SolutionDir)\Build\_build\scripts</BuildScriptsRootDir>
     <DefineConstants>$(DefineConstants);TRACE;</DefineConstants>
   </PropertyGroup>
   
@@ -65,56 +69,75 @@
   
   <!-- DYNAMIC PROPERTIES-->
 
-  
+  <!-- WINDOWS -->
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
+    <!-- When changing this need to rebuild plugins -->
+    <UseWap>true</UseWap>
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
     <Tfm>10.0.22621.0</Tfm>
-    <MainTargetFramework>$(DefaultFramework)-windows$(Tfm)</MainTargetFramework>
-    <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;WAP;</DefineConstants>
+    <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
     <UseCefNet>true</UseCefNet>
+    <UseSugarWv>false</UseSugarWv>
     <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <PlatformShortName>uwp</PlatformShortName> 
     <StartupOutputType>WinExe</StartupOutputType>
     <BuildScriptsDir>$(BuildScriptsRootDir)\windows</BuildScriptsDir>
   </PropertyGroup>
-   
+
+  <PropertyGroup Condition="$(UseWap) == 'True' And $(BuildOs) == 'WINDOWS'">
+    <MainTargetFramework>$(DefaultTargetFramework)-windows$(Tfm)</MainTargetFramework>
+    <DefineConstants>$(DefineConstants);WAP;</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(UseWap) == 'False' And $(BuildOs) == 'WINDOWS'">
+    <DefaultTargetFramework>net6.0</DefaultTargetFramework>
+    <CommonTargetFramework>net6.0</CommonTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)-windows</MainTargetFramework>
+  </PropertyGroup>
+  
+  <!-- LINUX -->
+  
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'"> 
-    <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
-    <UseCefNet>true</UseCefNet>
+    <UseCefNet>false</UseCefNet>
+    <UseSugarWv>true</UseSugarWv>
     <PlatformShortName>linux</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\linux</BuildScriptsDir>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
-    <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
-    <CommonTargetFramework>$(DefaultFramework)</CommonTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
+    <CommonTargetFramework>$(DefaultTargetFramework)</CommonTargetFramework>
     <DefineConstants>$(DefineConstants);MAC;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
-    <UseOutSysCef>true</UseOutSysCef>
+    <UseOutSysCef>false</UseOutSysCef>
+    <UseCefNet>false</UseCefNet>
+    <UseSugarWv>true</UseSugarWv>
     <PlatformShortName>mac</PlatformShortName>
-    <TargetRuntimeIdentifiers>osx-x64;</TargetRuntimeIdentifiers>
+    <TargetRuntimeIdentifiers>osx-x64</TargetRuntimeIdentifiers>
     <BuildScriptsDir>$(BuildScriptsRootDir)\mac</BuildScriptsDir>
     <!-- NOTE RuntimeIdentifiers set in mp-bundle-osx-x64.sh -->
     <!--<RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>-->
   </PropertyGroup>
     
   <PropertyGroup Condition="$(BuildOs) == 'BROWSER'">
-    <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);BROWSER;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Web</MainProjectName>
     <PlatformShortName>wasm</PlatformShortName>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
-    <MainTargetFramework>$(DefaultFramework)-android</MainTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)-android</MainTargetFramework>
     <DefineConstants>$(DefineConstants);MOBILE;ANDROID;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Android</MainProjectName>
     <AndroidPackageName>com.Monkey.MonkeyPaste</AndroidPackageName>
@@ -125,7 +148,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">
-    <MainTargetFramework>$(DefaultFramework)-ios</MainTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)-ios</MainTargetFramework>
     <DefineConstants>$(DefineConstants);MOBILE;IOS;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
     <IsMobile>true</IsMobile>
@@ -157,6 +180,10 @@
     <TargetDatTempDir>$(TargetDatDir)\tmp</TargetDatTempDir>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(IsPublicBuild) == 'True'">
+    <DefineConstants>$(DefineConstants);PUBLIC_BUILD;</DefineConstants>
+  </PropertyGroup>
+    
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
     <TargetDatDir>$(MainProjectDir)\Assets\\dat</TargetDatDir>
   </PropertyGroup>
@@ -168,6 +195,11 @@
 
   <PropertyGroup Condition="'$(UseOutSysCef)' == 'True'">
     <DefineConstants>$(DefineConstants);OUTSYS_WV</DefineConstants>
+    <DefaultPlatforms>AnyCpu</DefaultPlatforms>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(UseSugarWv)' == 'True'">
+    <DefineConstants>$(DefineConstants);SUGAR_WV</DefineConstants>
     <DefaultPlatforms>AnyCpu</DefaultPlatforms>
   </PropertyGroup>
   

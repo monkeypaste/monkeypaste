@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>Ohne Titel</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>Wenn diese Option aktiviert ist, wird das Bild in der Zwischenablage nur aus Spaß in eine ASCII-Grafik (einfacher Text) umgewandelt 🤓</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>Bild zu Text</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>Sofern verfügbar, werden die Daten des ersten ausgewählten Textformats in ein Bild konvertiert und der Zwischenablage hinzugefügt.</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>Text-zu-Bild-Formate</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>Bild (tiff)</value>
+  </data>
 </root>

@@ -201,4 +201,19 @@
   <data name="UntitledLabel" xml:space="preserve">
     <value>शीर्षकहीन</value>
   </data>
+  <data name="ImageToTextHint" xml:space="preserve">
+    <value>मनोरंजन के लिए, जब यह चेक किया जाता है तो क्लिपबोर्ड पर छवि को क्रजय रूप से ASCII (सादे पाठ) की छवि में परिवर्तित किया जाएगा।</value>
+  </data>
+  <data name="ImageToTextLabel" xml:space="preserve">
+    <value>पाठ के लिए छवि</value>
+  </data>
+  <data name="TextToImageHint" xml:space="preserve">
+    <value>उपलब्ध होने पर, पहले चयनित पाठ प्रारूप का डेटा एक छवि में परिवर्तित हो जाएगा और क्लिपबोर्ड में जोड़ा जाएगा।</value>
+  </data>
+  <data name="TextToImageLabel" xml:space="preserve">
+    <value>छवि प्रारूपों के लिए पाठ</value>
+  </data>
+  <data name="TiffFormatLabel" xml:space="preserve">
+    <value>छवि (टीआईएफएफ)</value>
+  </data>
 </root>

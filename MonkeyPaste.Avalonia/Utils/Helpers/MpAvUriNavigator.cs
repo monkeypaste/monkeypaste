@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+
         private static MpAvUriNavigator _instance;
         public static MpAvUriNavigator Instance => _instance ?? (_instance = new MpAvUriNavigator());
         #endregion
@@ -22,6 +24,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
+        #region State
+        #endregion
 
         #endregion
 
@@ -118,10 +123,27 @@ namespace MonkeyPaste.Avalonia {
                 }
                 await NavigateToUriCommand.ExecuteAsync(args);
             });
+        public MpIAsyncCommand<object> NavigateToUriCtrlEnforcedCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (!NavigateToUriCommand.CanExecute(args) ||
+                    !MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown) {
+                    return;
+                }
+                await NavigateToUriCommand.ExecuteAsync(args);
+            });
+
+        public MpIAsyncCommand<object> NavigateToUriAltEnforcedCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (!NavigateToUriCommand.CanExecute(args) ||
+                    !MpAvShortcutCollectionViewModel.Instance.GlobalIsAltDown) {
+                    return;
+                }
+                await NavigateToUriCommand.ExecuteAsync(args);
+            });
         public MpIAsyncCommand<object> NavigateToUriCommand => new MpAsyncCommand<object>(
             async (args) => {
-                bool openFile = false;
                 bool needsConfirm = false;
+                bool openFile = false;
                 Uri uri = null;
                 if (args is Uri) {
                     uri = args as Uri;

@@ -2639,9 +2639,6 @@ feedback@monkeypaste.com</value>
   <data name="SubscriptionLearnMoreLinkText" xml:space="preserve">
     <value>Jifunze zaidi juu ya mipango</value>
   </data>
-  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Weka kwenye: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
-  </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
     <value>&lt;p&gt;Kutumia anwani zinazopatikana (inahitaji programu-jalizi ya fetcher) uwanja huu utatumika kwa matukio yote ya template hii katika hati hii au kwa yoyote itarejelewa baadaye.&lt;/p&gt;&lt;p&gt; Kwa hivyo kwa mfano ikiwa chagua anwani ya barua pepe hapa basi uwanja wa barua pepe wa mwasiliani unayechagua utatumika kwa matukio yote katika hati hii.&lt;/p&gt;</value>
   </data>
@@ -2844,10 +2841,6 @@ Marejesho ya jumla hayawezi kuhakikishiwa na inaweza kupunguza utendaji au hata 
     <value>Haiwezi kuweka vigezo vya thamani vilivyoshirikiwa katika vifaa. Paramid '{0}' katika preset '{1}' kwa programu -jalizi '{2}' inahitaji kuondolewa au paramValue inaweza kutajwa katika sehemu ya ufafanuzi wa parameta.</value>
     <comment>Parameter Variable Name, Preset Name, Plugin Name</comment>
   </data>
-  <data name="InvalidParamEx8" xml:space="preserve">
-    <value>Presets lazima ziwe na GUID za kipekee. Nakala mbili za preset '{0}' ziligunduliwa katika programu -jalizi '{1}' kwa presets: {2}</value>
-    <comment>Preset Name, Plugin Name, Preset Names</comment>
-  </data>
   <data name="InvalidPluginEx1" xml:space="preserve">
     <value>Kosa la kupandisha programu -jalizi, kwa njia '{0}' null, uwezekano wa kosa la kumweka JSON. Kupuuza programu -jalizi</value>
     <comment>File Path</comment>
@@ -2895,5 +2888,67 @@ Marejesho ya jumla hayawezi kuhakikishiwa na inaweza kupunguza utendaji au hata 
   <data name="SharedValNtfText" xml:space="preserve">
     <value>'{0}' ina maadili ya pamoja. Je! Ungependa kuweka upya hizo pia?</value>
     <comment>Preset Name</comment>
+  </data>
+  <data name="InvalidParamEx8" xml:space="preserve">
+    <value>Maandalizi lazima yawe na guids ya kipekee. Duplicate preset guid '{0}' iligunduliwa katika programu-jalizi '{1}' kwa presets: {2}.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
+    <value>&lt;span&gt;Weka kwenye: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;&lt;/span&gt;</value>
+  </data>
+  <data name="CommonErrorCodeText" xml:space="preserve">
+    <value>Kosa lisilojulikana {0}</value>
+  </data>
+  <data name="PurchaseFailureText" xml:space="preserve">
+    <value>Ununuzi wako haukuweza kukamilika. Sababu: {0}</value>
+  </data>
+  <data name="InteropAddDomainButtonText" xml:space="preserve">
+    <value>Ongeza kikoa</value>
+  </data>
+  <data name="InteropAddPageButtonText" xml:space="preserve">
+    <value>Ongeza ukurasa</value>
+  </data>
+  <data name="InteropDisabledUnrejectPageToolTip" xml:space="preserve">
+    <value>Kikoa cha ukurasa huu kimekataliwa. Ili kuruhusu ukurasa huu utahitaji kuondoa kukataliwa kwa '{0}'.</value>
+  </data>
+  <data name="InteropDomainAlreadyRejectedText" xml:space="preserve">
+    <value>Kikoa '{0}' tayari kimekataliwa</value>
+  </data>
+  <data name="InteropDomainsTitle" xml:space="preserve">
+    <value>Vikoa</value>
+  </data>
+  <data name="InteropPageAlreadyRejectedText" xml:space="preserve">
+    <value>Ukurasa huu tayari umekataliwa.</value>
+  </data>
+  <data name="InteropPagesTitle" xml:space="preserve">
+    <value>Kurasa</value>
+  </data>
+  <data name="SettingsSyncTabLabel" xml:space="preserve">
+    <value>Usawazishaji</value>
+  </data>
+  <data name="SingInstanceCheckNtfText" xml:space="preserve">
+    <value>Mfano mwingine wa Monkeypaste tayari unaendelea. Je! Una uhakika unataka kufungua mfano mpya?</value>
+  </data>
+  <data name="CommonConfigureLabel" xml:space="preserve">
+    <value>Sanidi</value>
+  </data>
+  <data name="GlobalHooksPausedText" xml:space="preserve">
+    <value>Njia za njia za mkato za ulimwengu na kibodi zimezimwa.
+
+Njia za mkato za ulimwengu sasa zinaweza kuwezeshwa kwenye menyu ya tray ya mfumo</value>
+  </data>
+  <data name="GlobalHooksPausedTitle" xml:space="preserve">
+    <value>Njia za mkato za ulimwengu zimezimwa: {0}</value>
+  </data>
+  <data name="GlobalHooksResumedText" xml:space="preserve">
+    <value>Njia za njia za mkato za ulimwengu na kibodi zimewezeshwa.</value>
+  </data>
+  <data name="GlobalHooksResumedTitle" xml:space="preserve">
+    <value>(Majaribio) Njia za mkato za ulimwengu zimewezeshwa: {0}</value>
+  </data>
+  <data name="HookPauseLabel" xml:space="preserve">
+    <value>Kubadilisha njia za mkato za ulimwengu</value>
+  </data>
+  <data name="HookResumeLabel" xml:space="preserve">
+    <value>Kubadilisha njia za mkato za ulimwengu</value>
   </data>
 </root>

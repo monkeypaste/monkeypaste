@@ -97,18 +97,11 @@
     <value>True</value>
     <comment>@Invariant</comment>
   </data>
-  <data name="SearchTerm1" xml:space="preserve">
-    <value>clipboard manager</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="SearchTerm2" xml:space="preserve">
     <value>koopia</value>
   </data>
   <data name="SearchTerm3" xml:space="preserve">
     <value>pasta</value>
-  </data>
-  <data name="SearchTerm4" xml:space="preserve">
-    <value>lõikelauahaldur</value>
   </data>
   <data name="SearchTerm5" xml:space="preserve">
     <value>tööriist</value>
@@ -127,9 +120,6 @@
   </data>
   <data name="ssCaption3" xml:space="preserve">
     <value>Täielikult - esitletud klambriredaktor koos leidmise/asendamise, rikkaliku tekstiga (tabelid, nimekirjad, lingid jne) tekstimallid, et teie katkendikogust kiireks, dünaamiliseks kleepimiseks</value>
-  </data>
-  <data name="ssCaption4" xml:space="preserve">
-    <value>Ohutu, turvaline ja privaatne kohalik andmete salvestamine koos valikulise 2 - faktori paroolide kaitsega</value>
   </data>
   <data name="ssCaption5" xml:space="preserve">
     <value>Ehitatud - pistikprogrammide brauseris, millel on pidevalt kasvav kogukond - juhitud pistikprogrammide raamatukogu</value>
@@ -153,22 +143,6 @@
   <data name="ssSrc5" xml:space="preserve">
     <value>{0}/ss5.png</value>
     <comment>@Invariant</comment>
-  </data>
-  <data name="StoreDescription" xml:space="preserve">
-    <value>Monkeypaste on lõikelauahaldur, automatiseerimise ja tootlikkuse tööriist nagu ükski teine. Lõikelaua täiustamine rikastatud ja organiseeritud osaks teie töövoogudest
-Intuitiivse ja madala profiililiidesega, mis toetab teksti, faile ja pilte. Mõeldud paindlikkusele, kus on pidevalt kasvav kogukond - juhitud pistikprogrammide teek.
-
-See algas kui programmeerija, kes soovis enamat kui lihtsalt lõikelauast välja kopeerida ja kleepida. Ta soovis lihtsat käsku nagu Ctrl+C, mis lisaks selle asemel
-„Asenda”, mis oli lõikelaual. Ja katse töötas. Väike tööriist oli väga mugav. See sisestas programmeerijale rohkem ideid ja rohkem katseid
-Nüüd on saanud "ahvivast".
-
-Kuna töölaud on teie failidele, kavatseb Monkeypaste olla teie lõikelauale. Selle tööriistade komplekt on hoolikalt loodud nii, et see näib integreeruma ja koos koostama
-mis tahes sisu või vorming. Ctrl+C ja Ctrl+V on palju enamat kui lihtsalt otseteed. Need on sisenemissadamad, mida kõik rakendused jagavad, kandes a
-Rikkalik väärtus ja tähendus, mida väärite, kui olete käeulatuses saadaval. Mitte ainult järgmise Ctrl+c pärast ära visatud.
-
-Olen see juba varem mainitud programmeerija ja soovin, et kõik saaksid kasutada kasutamist Monkeypaste'ist. Nii et see ja kõik selle funktsioonid on täiesti tasuta kasutamiseks.
-Samuti tahan, et tunneksite end selle kasutamisel mugavalt. Nii et ma kinnitan teile, et olete selle loomise ainus jõud, et ükski (väga) isiklik teave, mis võib tekkida
-Teie lõikelaua jälgitakse või hoitakse kunagi kuskil oma masinast kaugemale. Periood.</value>
   </data>
   <data name="StoreDevStudio" xml:space="preserve">
     <value>Thomas Kefauver</value>
@@ -231,10 +205,6 @@ Teie lõikelaua jälgitakse või hoitakse kunagi kuskil oma masinast kaugemale. 
   <data name="StoreShortDescription" xml:space="preserve">
     <value>Lõikelaud on džungel. Monkeypaste on kuningas! Kiikuke rakendusest rakenduseni, kopeerides selle ja kleepides, nagu kunagi varem ahveypastaga !! Bränd - uus tipptasemel lõikelaud ja analüütiline automatiseerimise tööriist !!!</value>
   </data>
-  <data name="StoreTitle" xml:space="preserve">
-    <value>MonkeyPaste</value>
-    <comment>@Invariant</comment>
-  </data>
   <data name="TeaserCaption" xml:space="preserve">
     <value>Ahvivast näidis tegevuses!</value>
   </data>
@@ -258,9 +228,6 @@ Teie lõikelaua jälgitakse või hoitakse kunagi kuskil oma masinast kaugemale. 
   <data name="UnlimitedYearlyTitle" xml:space="preserve">
     <value>Piiramatu - aastas</value>
   </data>
-  <data name="WhatsNew" xml:space="preserve">
-    <value>Esialgne väljalase</value>
-  </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>Selle tellimusega saate:
 ● Piiramatu võimsus</value>
@@ -270,5 +237,45 @@ Teie lõikelaua jälgitakse või hoitakse kunagi kuskil oma masinast kaugemale. 
   </data>
   <data name="StoreFeature20" xml:space="preserve">
     <value>● Rohkem platvorme ja funktsioone tulevad varsti! Me lihtsalt saame alguse 🎉</value>
+  </data>
+  <data name="ssCaption6" xml:space="preserve">
+    <value>Kiire otsimine ja esiletõstmine, lihtsalt hakake tippima!</value>
+  </data>
+  <data name="ssCaption4" xml:space="preserve">
+    <value>Salvestage teksti-, pildi- ja failiklippe kogu selle allikaga (rakendus, veebisait, aeg ja palju muud) automaatselt</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>MonkeyPaste on lõikelaua haldur, automatiseerimise ja tootlikkuse tööriist nagu ükski teine. lõikelaua täiustamine töövoo rikastatud ja korrastatud osaks,
+Sisaldab intuitiivset ja madala profiiliga liidest, mis toetab teksti, faile ja pilte. Loodud paindlikkuse tagamiseks koos üha kasvava kogukonna juhitud pluginate libray'ga.
+
+See algas programmeerija eksperimendina, kes soovis enamat kui lihtsalt lõikepuhvrist kopeerida ja kleepida. Ta tahtis lihtsat käsku nagu Ctrl+C, mis selle asemel "lisaks" 
+"asendada" see, mis oli lõikelaual. Ja eksperiment töötas. Väike tööriist oli väga mugav. See intrigeeris programmeerijat rohkemate ideede ja eksperimentidega, et 
+nüüd on saanud "MonkeyPaste". 
+
+Kuna töölaud on teie failide jaoks, kavatseb MonkeyPaste olla teie lõikelaual. See on tööriistade komplekt, mis on hoolikalt kavandatud näiliselt integreerima ja koostalitlema 
+mis tahes rakendus või sisuvorming. Ctrl+C ja Ctrl+V on palju enamat kui lihtsalt otseteed. Need on sisenemissadamad, mida kõik rakendused jagavad, kandes 
+väärtuse ja tähenduse rikkus, mida sa väärid, et see oleks sinu käeulatuses. Mitte lihtsalt ära visatud pärast järgmist Ctrl+C.
+
+Olen see varem mainitud programmeerija ja tahan, et kõik saaksid MonkeyPaste'ist kasutust leida. Nii et seda ja kõiki selle funktsioone on täiesti tasuta kasutada. 
+Samuti tahan, et tunneksite end seda kasutades mugavalt. Nii et ma kinnitan teile, olles ainus jõud selle loomise taga, et MITTE ÜKSKI (väga) isiklik teave, mis võib tekkida 
+teie lõikelauda jälgitakse või salvestatakse alati kõikjal väljaspool teie enda masinat. Perioodi.</value>
+  </data>
+  <data name="SearchTerm4" xml:space="preserve">
+    <value>Lõikelaud</value>
+  </data>
+  <data name="ssCaption7" xml:space="preserve">
+    <value>Turvaline, turvaline ja privaatne kohalik andmesalvestus valikulise 2 - teguri paroolikaitsega</value>
+  </data>
+  <data name="WhatsNew" xml:space="preserve">
+    <value>Ahvüüpasta on nüüd selle väljaande ajal täiesti tasuta !!
+
+Kõik piirangud (rakenduste tellimustes) on eemaldatud, kuna ahveypaste on nüüd üleminekul avatud lähtekoodiga projektiks. Nii et jälgige meie GitHubi (github.com/monkeypaste), kui olete huvitatud panustamisest.
+
+Värskendused:
+
+- Kõik võimsuse piirangud eemaldati!
+- tagasi lükatud URL -i toimetaja kasutajaliidese parandused
+- algtaseme tugi ahveypaste mitme juhtumi käitamiseks
+- Uus jagatud väärtuse redaktor (vajaduse korral pistikprogrammi brauseris)</value>
   </data>
 </root>

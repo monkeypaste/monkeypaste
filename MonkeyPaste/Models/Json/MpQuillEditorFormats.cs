@@ -42,6 +42,7 @@ namespace MonkeyPaste {
 
 
     public class MpQuillLoadContentRequestMessage {
+        public bool isPopOut { get; set; }
         public double editorScale { get; set; } = MpCopyItem.DEFAULT_ZOOM_FACTOR;
         public bool breakBeforeLoad { get; set; }
         public int contentId { get; set; }
@@ -100,6 +101,8 @@ namespace MonkeyPaste {
     }
     public class MpQuillContentQuerySearchRangesChangedNotificationMessage {
         public int rangeCount { get; set; }
+        public string highlightHtmlFragment { get; set; }
+        public string matchOffsetsCsvFragment { get; set; }
     }
 
     public class MpQuillContentSearchRangeNavigationMessage {
@@ -140,6 +143,11 @@ namespace MonkeyPaste {
 
         public string dataTransferCompletedRespFragment { get; set; }
     }
+
+    public class MpQuillContentImageLoadedNotification {
+        public double width { get; set; }
+        public double height { get; set; }
+    }
     public class MpQuillUserDeletedTemplateNotification {
         public string userDeletedTemplateGuid { get; set; }
     }
@@ -166,6 +174,7 @@ namespace MonkeyPaste {
 
     public class MpQuillConvertPlainHtmlToQuillHtmlResponseMessage {
         public string html { get; set; }
+        public string themedHtml { get; set; }
         public string quillHtml { get; set; }
         public string quillDelta { get; set; }
         public string sourceUrl { get; set; }
@@ -191,7 +200,7 @@ namespace MonkeyPaste {
         }
     }
     public class MpQuillFileListDataFragment {
-        public List<MpQuillFileListItemDataFragmentMessage> fileItems { get; set; }
+        public List<MpQuillFileListItemDataFragmentMessage> fileItems { get; set; } = [];
     }
     public class MpQuillFileListItemDataFragmentMessage {
         public string filePath { get; set; }
@@ -286,10 +295,22 @@ namespace MonkeyPaste {
         public int appendDocIdx { get; set; }
         public int appendDocLength { get; set; }
         public string appendData { get; set; }
+        public string appendContentHandle { get; set; }
 
 
     }
+    public class MpQuillAppendStateChangeCompletedMessage {
+        public int appendDocIdx { get; set; }
+        public int appendDocLength { get; set; }
+        public string appendContentHandle { get; set; }
 
+    }
+
+    public class MpQuillRemoveAppendRangeMessage {
+        public int index { get; set; }
+        public int length { get; set; }
+    }
+    
     public class MpQuillSelectionChangedMessage {
         public int index { get; set; }
         public int length { get; set; }
@@ -386,5 +407,11 @@ namespace MonkeyPaste {
     }
     public class MpQuillEditorScaleChangedMessage {
         public double editorScale { get; set; } = 1.0d;
+    }
+    public class MpQuillPointerEventMessage {
+        public double clientX { get; set; }
+        public double clientY { get; set; }
+        public string eventType { get; set; }
+        public bool isLeft { get; set; }
     }
 }
