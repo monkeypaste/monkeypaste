@@ -109,6 +109,8 @@ namespace MonkeyPaste.Avalonia {
             bool is_new,
             MpTransactionType transType,
             CancellationToken ct) {
+            // source (supplementals) gathering is off-loaded as a subtask to decrease load time
+
             IEnumerable<MpISourceRef> refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(avdo);
             
             if (Mp.Services.SourceRefTools.IsAnySourceRejected(refs)) {

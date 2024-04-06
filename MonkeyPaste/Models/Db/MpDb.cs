@@ -1111,9 +1111,19 @@ Mp.Services.SourceRefTools.ContentItemQueryUriPrefix)
             }
             return customSortedValues;
         }
-
+        static string[] DbTableSyncOrder { get; } = new string[] {
+            nameof(MpDbImage),
+            nameof(MpIcon),
+            nameof(MpUserDevice),
+            nameof(MpUrl),
+            nameof(MpApp),
+            nameof(MpCopyItem),
+            nameof(MpTag),
+            nameof(MpTextTemplate),
+            nameof(MpCopyItemTag)
+        };
         private static int GetDbTableOrder(MpDbLog log) {
-            var orderedLogs = MpSyncManager.DbTableSyncOrder.ToList();
+            var orderedLogs = DbTableSyncOrder.ToList();
             var idx = orderedLogs.IndexOf(log.DbTableName);
             if (idx < 0) {
                 throw new Exception(@"Unknown dblog table type: " + log.DbTableName);
@@ -1125,12 +1135,12 @@ Mp.Services.SourceRefTools.ContentItemQueryUriPrefix)
             return new MpXamStringToSyncObjectTypeConverter();
         }
 
-        public static ObservableCollection<MpRemoteDevice> GetRemoteDevices() {
-            _rdLock = new object();
-            var rdoc = new ObservableCollection<MpRemoteDevice>();
-            //Xamarin.Forms.BindingBase.EnableCollectionSynchronization(rdoc, null, ObservableCollectionCallback);
-            return rdoc;
-        }
+        //public static ObservableCollection<MpRemoteDevice> GetRemoteDevices() {
+        //    _rdLock = new object();
+        //    var rdoc = new ObservableCollection<MpRemoteDevice>();
+        //    //Xamarin.Forms.BindingBase.EnableCollectionSynchronization(rdoc, null, ObservableCollectionCallback);
+        //    return rdoc;
+        //}
 
         private static void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess) {
             // `lock` ensures that only one thread access the collection at a time

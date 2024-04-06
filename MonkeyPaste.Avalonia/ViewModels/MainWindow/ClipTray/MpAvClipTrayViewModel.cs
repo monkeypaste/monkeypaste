@@ -2577,7 +2577,8 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid) is not { } ctvm_to_ntf) {
-                    if(icon_id > 0 && PendingNewModels.FirstOrDefault(x=>x.Id == ciid) is { } ci_to_ntf) {                        
+                    if(icon_id > 0 && PendingNewModels.FirstOrDefault(x=>x.Id == ciid) is { } ci_to_ntf) {      
+                        // set pending item's iconId directly
                         ci_to_ntf.IconId = icon_id;
                     }
                     // if no tile found refresh wont be necessary
@@ -2588,6 +2589,10 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 await ctvm_to_ntf.TransactionCollectionViewModel.InitializeAsync(ciid);
+                if(icon_id > 0) {
+                    // ensure layers are pseudo (not just) random
+                    await ctvm_to_ntf.InitTitleLayersAsync();
+                }
             });            
         }
 
