@@ -256,7 +256,7 @@ namespace MonkeyPaste.Avalonia {
             !IsCorePlugin;
 
         public bool CanConfigure =>
-            InstalledPluginDefaultPresetViewModels.Any(x => x.Items.Any(y => y.IsSharedValue));
+            InstalledPluginDefaultPresetViewModels.Any(x => x.SharedItems.Any());
 
         public bool IsConfigurePanelOpen { get; private set; }
 

@@ -42,16 +42,16 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.TRANSLATE_RESX |
             //MpLedgerizerFlags.GEN_EMPTY_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
-            //MpLedgerizerFlags.GEN_PROD_LISTING |
+            MpLedgerizerFlags.GEN_PROD_LISTING |
             //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
-            MpLedgerizerFlags.DO_LOCAL_VERSIONS |
-            MpLedgerizerFlags.DO_REMOTE_VERSIONS |
-            MpLedgerizerFlags.DO_LOCAL_INDEX |
-            MpLedgerizerFlags.DO_REMOTE_INDEX |
-            MpLedgerizerFlags.DO_LOCAL_LEDGER |
-            MpLedgerizerFlags.DO_REMOTE_LEDGER |
+            //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
+            //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
+            //MpLedgerizerFlags.DO_LOCAL_INDEX |
+            //MpLedgerizerFlags.DO_REMOTE_INDEX |
+            //MpLedgerizerFlags.DO_LOCAL_LEDGER |
+            //MpLedgerizerFlags.DO_REMOTE_LEDGER |
                                    //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
                                    //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
                                    //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
@@ -247,7 +247,7 @@ namespace Ledgerizer {
         const string PROJ_URL_FORMAT = @"https://github.com/monkeypaste/{0}";
         const string ICON_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/icon.png";
         const string PUBLIC_PACKAGE_URL_FORMAT = @"https://github.com/monkeypaste/{0}/releases/download/{1}/{1}.zip";
-        const string PRIVATE_ICON_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}.png";
+        static string PRIVATE_ICON_URL_FORMAT = $"{Secrets["httpUrl"]}/dat/{0}.png";
 
         #endregion
 
@@ -1901,7 +1901,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     return string.Format(README_URL_FORMAT, plugin_name);
                 case "project":
                     if (CorePlugins.Contains(plugin_name)) {
-                        return "https://www.monkeypaste.com";
+                        return Secrets["httpUrl"];
                     }
                     return string.Format(PROJ_URL_FORMAT, plugin_name);
                 case "icon":

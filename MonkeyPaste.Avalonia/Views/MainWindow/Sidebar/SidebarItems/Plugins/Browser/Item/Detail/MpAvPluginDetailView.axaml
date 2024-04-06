@@ -215,7 +215,7 @@
                     <!--  CONFIGURE BUTTON  -->
                     <Button x:Name="ConfigurePluginButton"
                             Classes="defaultButton textOnlyButton manageButton"
-                            IsVisible="{Binding InstalledPluginDefaultPresetViewModels, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                            IsVisible="{Binding CanConfigure}"
                             Command="{Binding ShowConfigurePanelCommand}">
                         <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonConfigureLabel}" />
                     </Button>

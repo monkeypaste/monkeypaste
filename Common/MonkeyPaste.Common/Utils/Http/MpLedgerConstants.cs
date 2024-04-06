@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
         public const string REMOTE_LEDGER_INDEX_NAME = $"{LEDGER_PREFIX}{INDEX_SUFFIX}.{LEDGER_EXT}";
         public const string LOCAL_LEDGER_INDEX_NAME = $"{LEDGER_PREFIX}{LOCAL_SUFFIX}{INDEX_SUFFIX}.{LEDGER_EXT}";
 
-        public const string REMOTE_CORE_PLUGIN_BASE_URI = "https://www.monkeypaste.com/dat";
+        public static string REMOTE_CORE_PLUGIN_BASE_URI => $"{MpServerConstants.REMOTE_SERVER_URL}/dat";
 
         public static string LEDGER_PROJ_DIR = $"{MpPlatformHelpers.GetSolutionDir()}/Build/Ledger";
         public static string DEBUG_PACKAGES_DIR =>

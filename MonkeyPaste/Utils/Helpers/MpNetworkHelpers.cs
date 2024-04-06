@@ -42,34 +42,6 @@ namespace MonkeyPaste {
 
         }
 
-        public static bool IsMpServerAvailable() {
-            if (!IsConnectedToNetwork()) {
-                return false;
-            }
-            try {
-
-                using (var client = new WebClient()) {
-                    try {
-                        var stream = client.OpenRead(@"https://www.monkeypaste.com/");
-                        stream.Dispose();
-                        return true;
-                    }
-                    catch (System.AggregateException ex) {
-                        MpConsole.WriteTraceLine("Sync Server Unavailable", ex);
-                        return false;
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine("Sync Server Unavailable", ex);
-                        return false;
-                    }
-                }
-            }
-            catch (Exception e) {
-                MpConsole.WriteLine(e.ToString());
-                return false;
-            }
-        }
-
         public static string GetLocalIp4Address() {
             var ips = GetAllLocalIPv4(NetworkInterfaceType.Wireless80211);
             if (ips.Length > 0) {

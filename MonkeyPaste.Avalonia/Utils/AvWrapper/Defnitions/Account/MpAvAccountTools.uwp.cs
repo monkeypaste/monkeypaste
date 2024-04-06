@@ -279,12 +279,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 #else
         public string RateAppUri =>
-            "https://www.monkeypaste.com";
+            "https://localhost";
         public string ThisProductUri =>
-            "https://www.monkeypaste.com";
+            "https://localhost";
 
         public string GetStoreSubscriptionUrl(MpUserAccountType uat, bool isMonthly) {
-            return "https://www.monkeypaste.com";
+            return "https://localhost";
         }
 
         public async Task<bool> RefreshAddOnInfoAsync() {

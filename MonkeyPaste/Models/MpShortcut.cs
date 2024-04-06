@@ -93,7 +93,6 @@ namespace MonkeyPaste {
         #region Static Methods
 
         public static async Task<MpShortcut> CreateAsync(
-            //string shortcutLabel = "",
             string keyString = "",
             MpRoutingType routeType = MpRoutingType.Passive,
             MpShortcutType shortcutType = MpShortcutType.None,
@@ -103,9 +102,6 @@ namespace MonkeyPaste {
             bool isInternalOnly = false) {
             if (shortcutType == MpShortcutType.None) {
                 throw new Exception("Needs type");
-            }
-            if (string.IsNullOrEmpty(keyString)) {
-                throw new Exception("Needs keystring");
             }
 
             guid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid().ToString() : guid;

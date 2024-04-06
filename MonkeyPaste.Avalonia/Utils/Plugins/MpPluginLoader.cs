@@ -382,12 +382,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             foreach (var core_guid in missing_core_plugin_guids) {
-                //string core_plugin_zip_path = Path.Combine(CoreDatDir, $"{core_guid}.zip");
-                //string core_plugin_uri = core_plugin_zip_path.ToFileSystemUriFromPath();
-                //if (!core_plugin_zip_path.IsFile()) {
-                //    core_plugin_uri = $"https://www.monkeypaste.com/dat/{core_guid}/latest.zip";
-                //}
-                //MpDebug.Assert(core_plugin_zip_path.IsFile(), $"Dat zip error, core plugin not found at '{core_plugin_zip_path}'");
                 string core_plugin_uri = $"avares://MonkeyPaste.Avalonia/Assets/dat/{core_guid}.zip";
                 _ = await InstallPluginAsync(core_guid, core_plugin_uri, true, null);
                 MpConsole.WriteLine($"Core plugin '{core_guid}' installed.");

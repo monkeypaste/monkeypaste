@@ -83,7 +83,9 @@ namespace MonkeyPaste.Common {
             string url,
             Dictionary<string, string> keyValuePairs,
             int timeout_ms = 10_000,
-            bool add_debug = MpServerConstants.IS_SERVER_LOCAL) {
+            bool? add_debug = false
+            ) {
+            add_debug = add_debug.HasValue ? add_debug : MpServerConstants.IS_SERVER_LOCAL;
             // from https://stackoverflow.com/a/62640006/105028
             using (HttpClient httpClient = new HttpClient())
             using (MultipartFormDataContent formDataContent = new MultipartFormDataContent()) {
@@ -93,7 +95,7 @@ namespace MonkeyPaste.Common {
                             formDataContent.Add(new StringContent(keyValuePair.Value.ToStringOrEmpty()), keyValuePair.Key);
                         }
                     }
-                    if (add_debug) {
+                    if (add_debug is true) {
                         formDataContent.Add(new StringContent("1"), "XDEBUG_SESSION");
                         httpClient.Timeout = TimeSpan.FromMinutes(30);
                     } else {
@@ -118,7 +120,10 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public static async Task<string> SubmitGetDataToUrlAsync(string url, Dictionary<string, string> keyValuePairs, int timeout_ms = 10_000) {
+        public static async Task<string> SubmitGetDataToUrlAsync(
+            string url, 
+            Dictionary<string, string> keyValuePairs, 
+            int timeout_ms = 10_000) {
             var sb = new StringBuilder();
 
             if (keyValuePairs != null) {
