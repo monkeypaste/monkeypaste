@@ -365,6 +365,4 @@ MigrationBackup/
 /file_templates
 /notes
 /win_sandbox
-/Build/Ledger/
-/Plugins/
 /MonkeyPaste.com/src/config/secrets.php

@@ -18,6 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Remove="Controls\**" />
     <AvaloniaXaml Remove="Models\Db\Log\Sync\**" />
     <AvaloniaXaml Remove="ViewModels\**" />
     <Compile Remove="Controls\**" />
@@ -96,7 +97,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Converters\MpXamStringToSyncObjectTypeConverter.cs" />
+    <Compile Include="Converters\MpStringToSyncObjectTypeConverter.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -129,7 +130,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controls\" />
     <Folder Include="Models\Db\Log\Sync\NetworkIO\" />
     <Folder Include="Resources\Data\" />
     <Folder Include="Utils\Builders\Bases\" />

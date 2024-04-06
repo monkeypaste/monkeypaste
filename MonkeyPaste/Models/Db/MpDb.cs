@@ -401,7 +401,7 @@ namespace MonkeyPaste {
             if (dt != null && dt.Count > 0) {
                 return dt[0];
             }
-            var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(tableName);
+            var dbot = new MpStringToSyncObjectTypeConverter().Convert(tableName);
 
             var dbo = Activator.CreateInstance(dbot);
             return dbo;
@@ -1040,7 +1040,7 @@ Mp.Services.SourceRefTools.ContentItemQueryUriPrefix)
                 foreach (var dbl in ckvp.Value) {
                     dbl.PrintLog();
                 }
-                var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
+                var dbot = new MpStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var deleteMethod = typeof(MpDb).GetMethod(nameof(DeleteItemAsync));
                 var deleteByDboTypeMethod = deleteMethod.MakeGenericMethod(new[] { dbot });
                 var dbo = await GetDbObjectByTableGuidAsync(ckvp.Value[0].DbTableName, ckvp.Key.ToString());
@@ -1054,7 +1054,7 @@ Mp.Services.SourceRefTools.ContentItemQueryUriPrefix)
                 foreach (var dbl in ckvp.Value) {
                     dbl.PrintLog();
                 }
-                var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
+                var dbot = new MpStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
                 dbo = await (dbo as MpISyncableDbObject).CreateFromLogsAsync(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
@@ -1069,7 +1069,7 @@ Mp.Services.SourceRefTools.ContentItemQueryUriPrefix)
                 foreach (var dbl in ckvp.Value) {
                     dbl.PrintLog();
                 }
-                var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
+                var dbot = new MpStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
                 dbo = await (dbo as MpISyncableDbObject).CreateFromLogsAsync(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
@@ -1132,7 +1132,7 @@ Mp.Services.SourceRefTools.ContentItemQueryUriPrefix)
         }
 
         public static MpIStringToSyncObjectTypeConverter GetTypeConverter() {
-            return new MpXamStringToSyncObjectTypeConverter();
+            return new MpStringToSyncObjectTypeConverter();
         }
 
         //public static ObservableCollection<MpRemoteDevice> GetRemoteDevices() {

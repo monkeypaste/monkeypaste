@@ -4,13 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace CoreAnnotator {
-    public enum TextAnnotationType {
-        Currency,
-        Email,
-        HexColor,
-        PhoneNumber,
-        Url,
-    }
     public class CoreAnnotatorPlugin : MpIAnalyzeComponent, MpISupportHeadlessAnalyzerFormat {
 
         const string CONTENT_PARAM_ID = "content";

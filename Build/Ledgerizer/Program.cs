@@ -42,24 +42,23 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.TRANSLATE_RESX |
             //MpLedgerizerFlags.GEN_EMPTY_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
-            MpLedgerizerFlags.GEN_PROD_LISTING |
+            //MpLedgerizerFlags.GEN_PROD_LISTING |
             //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
-            //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
-            //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
-            //MpLedgerizerFlags.DO_LOCAL_INDEX |
-            //MpLedgerizerFlags.DO_REMOTE_INDEX |
-            //MpLedgerizerFlags.DO_LOCAL_LEDGER |
-            //MpLedgerizerFlags.DO_REMOTE_LEDGER |
-            //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
-            //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
-            //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
-            //| MpLedgerizerFlags.DO_LOCAL_VERSIONS
-            // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
-            //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
-            MpLedgerizerFlags.DEBUG // |
-                                   //MpLedgerizerFlags.RELEASE
+            MpLedgerizerFlags.DO_LOCAL_VERSIONS |
+            MpLedgerizerFlags.DO_REMOTE_VERSIONS |
+            MpLedgerizerFlags.DO_LOCAL_INDEX |
+            MpLedgerizerFlags.DO_REMOTE_INDEX |
+            MpLedgerizerFlags.DO_LOCAL_LEDGER |
+            MpLedgerizerFlags.DO_REMOTE_LEDGER |
+                                   //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+                                   //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
+                                   //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
+                                   // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
+                                   //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
+                                   //MpLedgerizerFlags.DEBUG // |
+                                   MpLedgerizerFlags.RELEASE
             ;
 
         #region Localizer Props
@@ -147,17 +146,17 @@ namespace Ledgerizer {
         #region General Props
 
         static string[] WorkingPluginNames => [
-            //"AzureComputerVision",
-            //"AzureTextTranslator",
-            //"ChatGpt",
-            //"CoreAnnotator",
+            "AzureComputerVision",
+            "AzureTextTranslator",
+            "ChatGpt",
+            "CoreAnnotator",
             "CoreOleHandler",
-            //"FileConverter",
-            //"GoogleLiteTextTranslator",
-            //"QrCoder",
-            //"TextToSpeech",
-            //"WebSearch",
-            //"YoloImageAnnotator",
+            "FileConverter",
+            "GoogleLiteTextTranslator",
+            "QrCoder",
+            "TextToSpeech",
+            "WebSearch",
+            "YoloImageAnnotator",
         ];
         static IEnumerable<string> WorkingCorePlugins =>
             WorkingPluginNames.Where(x => CorePlugins.Contains(x));
@@ -248,8 +247,6 @@ namespace Ledgerizer {
         const string PROJ_URL_FORMAT = @"https://github.com/monkeypaste/{0}";
         const string ICON_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/icon.png";
         const string PUBLIC_PACKAGE_URL_FORMAT = @"https://github.com/monkeypaste/{0}/releases/download/{1}/{1}.zip";
-
-        const string PRIVATE_PACKAGE_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}/{1}.zip";
         const string PRIVATE_ICON_URL_FORMAT = @"https://www.monkeypaste.com/dat/{0}.png";
 
         #endregion
@@ -1077,11 +1074,11 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     Path.Combine(
                         GetPluginProjDir(core_plugin_name),
                         "icon.png");
-
+                string url = Secrets["ftpDatUrlPrefix"].ToString();
                 string username = Secrets["ftpUserName"].ToString();
                 string password = Secrets["ftpPassword"].ToString();
                 var icon_result = MpFtpTools.FtpFileUpload(
-                    ftpUrl: $"ftp://ftp.monkeypaste.com//public_html/dat/{core_plugin_name}.png",
+                    ftpUrl: $"{url}/{core_plugin_name}.png",
                     userName: username,
                     password: password,
                     filePath: plugin_icon_path);
@@ -1089,7 +1086,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
                 // transfer package
                 var zip_result = MpFtpTools.FtpFileUpload(
-                    ftpUrl: $"ftp://ftp.monkeypaste.com/public_html/dat/{core_mf.guid}/v{core_mf.version}.zip",
+                    ftpUrl: $"{url}/{core_mf.guid}/v{core_mf.version}.zip",
                     userName: username,
                     password: password,
                     filePath: core_plugin_zip_path);
@@ -1098,7 +1095,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
                 // duplicate as latest
                 var latest_result = MpFtpTools.FtpFileUpload(
-                    ftpUrl: $"ftp://ftp.monkeypaste.com/public_html/dat/{core_mf.guid}/latest.zip",
+                    ftpUrl: $"{url}/{core_mf.guid}/latest.zip",
                     userName: username,
                     password: password,
                     filePath: core_plugin_zip_path);
@@ -1744,8 +1741,8 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             if (!source_package_path.IsFile()) {
                 // local package missing so pack local first
                 MpConsole.WriteLine($"Local package missing for {plugin_name}. Packing...");
-                string local_pack_path = PackPlugin(plugin_name, true);
-                MpDebug.Assert(local_pack_path == source_package_path, $"Remote publish error package path mismatch. Expected: '{source_package_path}' Found: '{local_pack_path}'");
+                string local_pack_path_uri = PackPlugin(plugin_name, true);
+                MpDebug.Assert(local_pack_path_uri.ToPathFromUri() == source_package_path, $"Remote publish error package path mismatch. Expected: '{source_package_path}' Found: '{local_pack_path_uri}'");
             }
             string target_tag_name = $"v{working_version}";
             string target_package_file_name = $"{target_tag_name}.zip";
