@@ -2410,6 +2410,7 @@
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
     <PackageReference Include="System.Speech" Version="8.0.0" />
     <PackageReference Include="TaskScheduler" Version="2.10.1" />
+    <PackageReference Include="WebView.Avalonia" Version="11.0.0.1" />
     <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
   </ItemGroup>
 
@@ -2420,7 +2421,6 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(UseSugarWv)' == 'True'">
-    <PackageReference Include="WebView.Avalonia" Version="11.0.0.4" />
     <PackageReference Include="WebView.Avalonia.MacCatalyst" Version="11.0.0.4" Condition="'$(BuildOs)' == 'MAC'" />
   </ItemGroup>
     

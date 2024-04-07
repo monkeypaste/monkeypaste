@@ -356,7 +356,12 @@ MigrationBackup/
 # My Stuff
 # #########################################################################################################
 
-
+/Plugins/AzureComputerVision/
+/Plugins/GoogleLiteTextTranslator
+/Plugins/MinimalExample
+/Plugins/QrCoder
+/Plugins/TextToSpeech
+/Plugins/WebSearch
 /ext
 /MonkeyPaste.Desktop/cef
 /MonkeyPaste.Avalonia.Desktop/cef

@@ -55,6 +55,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="WebView.Avalonia.Desktop" Version="11.0.0.1" />
   </ItemGroup>
   
   <ItemGroup Condition="$(BuildOs) == 'MAC'">
@@ -96,9 +97,5 @@
     <Reference Include="CefNet.Avalonia">
       <HintPath>..\ext\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  
-  <ItemGroup Condition="$(UseSugarWv) == 'True'">
-    <PackageReference Include="WebView.Avalonia.Desktop" Version="11.0.0.4" />
   </ItemGroup>
 </Project>
