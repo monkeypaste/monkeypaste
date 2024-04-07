@@ -134,7 +134,7 @@ namespace MonkeyPaste.Avalonia {
                 message: msg,
                 iconResourceObj: success ? "BananaImage" : "WarningImage").FireAndForgetSafeAsync();
         }
-    }
+    
 #endif
     }
 }

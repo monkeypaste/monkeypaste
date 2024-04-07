@@ -71,7 +71,7 @@
     <!-- When changing this not a bad idea to rebuild plugins -->
     <UseWap>false</UseWap>
     <!-- NOTE when ConfigForHotReload is enabled, UseWap must be false-->
-    <ConfigForHotReload>true</ConfigForHotReload>
+    <ConfigForHotReload>false</ConfigForHotReload>
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
     <Tfm>10.0.22621.0</Tfm>
     <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;</DefineConstants>
@@ -93,9 +93,11 @@
     <DefineConstants>$(DefineConstants);WAP;</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup Condition="$(UseWap) == 'False' And $(BuildOs) == 'WINDOWS' And $(ConfigForHotReload) == 'True'">
+  <PropertyGroup Condition="$(BuildOs) == 'WINDOWS' And $(ConfigForHotReload) == 'True'">
     <DefaultTargetFramework>net6.0</DefaultTargetFramework>
     <CommonTargetFramework>net6.0</CommonTargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(BuildOs) == 'WINDOWS' And $(UseWap) == 'False'">
     <MainTargetFramework>$(DefaultTargetFramework)-windows</MainTargetFramework>
   </PropertyGroup>
   
