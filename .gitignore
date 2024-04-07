@@ -358,6 +358,8 @@ MigrationBackup/
 
 /ext
 /MonkeyPaste.Desktop/cef
+/MonkeyPaste.Avalonia.Desktop/cef
+/Plugins
 /legal_docs
 /auth
 /db
@@ -367,3 +369,10 @@ MigrationBackup/
 /win_sandbox
 /MonkeyPaste.com/src/config/secrets.php
 /MonkeyPaste.Avalonia/README.md
+*.mp4
+*.mkv
+*.lib
+*/opencv_world411.dll
+*/libcef.dll
+*.weights
+*.zip
