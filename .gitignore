@@ -356,6 +356,14 @@ MigrationBackup/
 # My Stuff
 # #########################################################################################################
 
+/Plugins/unused
+/Plugins/AltOleHandler
+/Plugins/AvCodeClassifier
+/Plugins/AvProcessAutomator
+/Plugins/DeclaritivePlugins
+/Plugins/GoogleContactsFetcher
+/Plugins/WpfRtfClipboardHandler
+/Plugins/Yolo_framework
 /ext
 /MonkeyPaste.Desktop/cef
 /MonkeyPaste.Avalonia.Desktop/cef
