@@ -359,6 +359,7 @@ MigrationBackup/
 /ext
 /MonkeyPaste.Desktop/cef
 /MonkeyPaste.Avalonia.Desktop/cef
+/packages
 /Plugins
 /legal_docs
 /auth
@@ -369,6 +370,8 @@ MigrationBackup/
 /win_sandbox
 /MonkeyPaste.com/src/config/secrets.php
 /MonkeyPaste.Avalonia/README.md
+/MonkeyPaste.Avalonia/Resources/Listings/imports
+/MonkeyPaste.Avalonia/Resources/Listings/files
 *.mp4
 *.mkv
 *.lib
