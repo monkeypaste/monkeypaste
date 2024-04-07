@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "AvCoreClipboardHandler": {
-      "commandName": "Project",
-      "nativeDebugging": true
-    }
-  }
-}
