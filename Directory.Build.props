@@ -69,7 +69,7 @@
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
     <!-- (people not me should probably not set this to true) -->
     <!-- When changing this not a bad idea to rebuild plugins -->
-    <UseWap>false</UseWap>
+    <UseWap>true</UseWap>
     <!-- NOTE when ConfigForHotReload is enabled, UseWap must be false-->
     <ConfigForHotReload>false</ConfigForHotReload>
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
