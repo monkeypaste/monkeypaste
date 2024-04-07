@@ -1,3 +1,33 @@
 [submodule "Build/Ledger"]
 	path = Build/Ledger
 	url = https://github.com/monkeypaste/ledger/ledger.git
+[submodule "Plugins/AzureCompoterVision"]
+	path = Plugins/AzureCompoterVision
+	url = https://github.com/monkeypaste/azurecomputervision.git
+[submodule "Plugins/AzureTextTranslator"]
+	path = Plugins/AzureTextTranslator
+	url = https://github.com/monkeypaste/AzureTextTranslator.git
+[submodule "Plugins/ChatGpt"]
+	path = Plugins/ChatGpt
+	url = https://github.com/monkeypaste/ChatGpt.git
+[submodule "Plugins/FileConverter"]
+	path = Plugins/FileConverter
+	url = https://github.com/monkeypaste/FileConverter.git
+[submodule "Plugins/GoogleLiteTextTranslator"]
+	path = Plugins/GoogleLiteTextTranslator
+	url = https://github.com/monkeypaste/GoogleLiteTextTranslator.git
+[submodule "Plugins/MinimalExample"]
+	path = Plugins/MinimalExample
+	url = https://github.com/monkeypaste/MinimalExample.git
+[submodule "Plugins/QrCoder"]
+	path = Plugins/QrCoder
+	url = https://github.com/monkeypaste/QrCoder.git
+[submodule "Plugins/TextToSpeech"]
+	path = Plugins/TextToSpeech
+	url = https://github.com/monkeypaste/TextToSpeech.git
+[submodule "Plugins/WebSearch"]
+	path = Plugins/WebSearch
+	url = https://github.com/monkeypaste/WebSearch.git
+[submodule "Plugins/YoloImageAnnotator"]
+	path = Plugins/YoloImageAnnotator
+	url = https://github.com/monkeypaste/YoloImageAnnotator.git
