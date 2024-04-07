@@ -5,7 +5,7 @@
     <ApplicationAuthor>Monkey LLC</ApplicationAuthor>
     <ApplicationVersionMajor>1</ApplicationVersionMajor>
     <ApplicationVersionMinor>0</ApplicationVersionMinor>
-    <ApplicationVersionPatch>16</ApplicationVersionPatch>
+    <ApplicationVersionPatch>17</ApplicationVersionPatch>
     <ApplicationVersionRevision>0</ApplicationVersionRevision>
     <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch).$(ApplicationVersionRevision)</ApplicationVersion>
    </PropertyGroup>
@@ -13,9 +13,6 @@
   <PropertyGroup>
     <!-- This removes that AMD64 processor architecture warning -->
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-  </PropertyGroup>
-  
-  <PropertyGroup>
     <!-- This removes duplicate warnings for cef dylibs -->
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
@@ -24,9 +21,9 @@
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
     <BuildOs>WINDOWS</BuildOs>
-    <CultureExt>en-US</CultureExt>
     <IncludeCultures>True</IncludeCultures>
-    <IsPublicBuild>False</IsPublicBuild>
+    <!-- This property 'IsPublicBuild' ensures local webserver is used not remote-->
+    <IsPublicBuild>True</IsPublicBuild>
     <PushPlugins>false</PushPlugins>
     <!-- NOTE when changing av version need to reset coreole, probably everything-->
     <AvaloniaVersion>11.0.10</AvaloniaVersion>
@@ -60,7 +57,6 @@
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
     <BuildScriptsRootDir>$(SolutionDir)\Build\_build\scripts</BuildScriptsRootDir>
-    <DefineConstants>$(DefineConstants);TRACE;</DefineConstants>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -71,8 +67,11 @@
 
   <!-- WINDOWS -->
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
-    <!-- When changing this need to rebuild plugins -->
-    <UseWap>true</UseWap>
+    <!-- (people not me should probably not set this to true) -->
+    <!-- When changing this not a bad idea to rebuild plugins -->
+    <UseWap>false</UseWap>
+    <!-- NOTE when ConfigForHotReload is enabled, UseWap must be false-->
+    <ConfigForHotReload>true</ConfigForHotReload>
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
     <Tfm>10.0.22621.0</Tfm>
     <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;</DefineConstants>
@@ -80,8 +79,8 @@
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>true</UseCefNet>
-    <UseSugarWv>false</UseSugarWv>
+    <UseCefNet>false</UseCefNet>
+    <UseSugarWv>true</UseSugarWv>
     <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <PlatformShortName>uwp</PlatformShortName> 
@@ -94,7 +93,7 @@
     <DefineConstants>$(DefineConstants);WAP;</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup Condition="$(UseWap) == 'False' And $(BuildOs) == 'WINDOWS'">
+  <PropertyGroup Condition="$(UseWap) == 'False' And $(BuildOs) == 'WINDOWS' And $(ConfigForHotReload) == 'True'">
     <DefaultTargetFramework>net6.0</DefaultTargetFramework>
     <CommonTargetFramework>net6.0</CommonTargetFramework>
     <MainTargetFramework>$(DefaultTargetFramework)-windows</MainTargetFramework>
