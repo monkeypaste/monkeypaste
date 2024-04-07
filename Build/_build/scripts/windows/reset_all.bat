@@ -1,4 +1,4 @@
-@echo OFF
+rem @echo OFF
 taskkill /f /im "MonkeyPaste.Desktop.exe"
 
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Plugins\CoreOleHandler\obj\"
@@ -36,7 +36,8 @@ rmdir /S /Q "C:\Users\tkefauver\AppData\Local\MonkeyPaste_DEBUG"
 rmdir /S /Q "C:\Users\tkefauver\AppData\Roaming\MonkeyPaste" 
 rmdir /S /Q "C:\Users\tkefauver\AppData\Roaming\MonkeyPaste_DEBUG" 
 
-echo 1. Clean out solution file
+echo 0. Shutdown Visual Studio if open
+echo 1. Clean out solution file (remove everything inside 'GlobalSection(ProjectConfigurationPlatforms) = postSolution') before reopening.
 echo 2. Remove and add MonkeyPaste.Common ref to MonkeyPaste
 echo 3. Remove and add MonkeyPaste.Common.Plugin ref to MonkeyPaste.Common
 
