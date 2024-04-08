@@ -357,11 +357,15 @@ MigrationBackup/
 # #########################################################################################################
 
 /Plugins/AzureComputerVision/
+/Plugins/AzureTextTranslator/
+/Plugins/ChatGpt
+/Plugins/FileConverter
 /Plugins/GoogleLiteTextTranslator
 /Plugins/MinimalExample
 /Plugins/QrCoder
 /Plugins/TextToSpeech
 /Plugins/WebSearch
+/Plugins/YoloImageAnnotator
 /ext
 /MonkeyPaste.Desktop/cef
 /MonkeyPaste.Avalonia.Desktop/cef
