@@ -2951,4 +2951,43 @@ furedback@monkeypaste.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>உலகளாவிய குறுக்குவழிகளை மாற்றவும்</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>சொருகி இணைக்கும் பிழை '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' '{2}' இல் {1} தட்டச்சு செய்யப்படுகிறது, ஆனால் அதன் கோப்புறையில் பொருந்தக்கூடிய '{3}. {4}' இல்லை.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>சொருகி சொருகி சார்பு பிழை '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>கிளிக் செய்க</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>திருத்து '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>வண்ணத்தைத் திருத்து ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;em&gt; {0} &lt;/em&gt;' ஐ அகற்று ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>உருப்படியை அகற்று</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>பின்பற்ற ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>கோட்டோ '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>சேமிக்கவும்</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>இணைப்பை உள்ளிடவும்</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL ஐ உள்ளிடவும்</value>
+  </data>
 </root>

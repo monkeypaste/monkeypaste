@@ -27,6 +27,7 @@
     <PushPlugins>false</PushPlugins>
     <!-- NOTE when changing av version need to reset coreole, probably everything-->
     <AvaloniaVersion>11.0.10</AvaloniaVersion>
+    <SugarWvVersion>11.0.0.1</SugarWvVersion>
     <DefaultLangVersion>Latest</DefaultLangVersion>
     <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
   </PropertyGroup>

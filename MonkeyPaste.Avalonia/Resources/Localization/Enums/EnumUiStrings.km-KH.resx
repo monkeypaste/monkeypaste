@@ -1105,15 +1105,6 @@
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
     <value>កណ្តុរ</value>
   </data>
-  <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
-    <value />
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value>ច្បាស់</value>
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value>លុប</value>
-  </data>
   <data name="MpTagType_None" xml:space="preserve">
     <value />
   </data>

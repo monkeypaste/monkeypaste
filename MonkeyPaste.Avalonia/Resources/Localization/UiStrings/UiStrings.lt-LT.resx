@@ -2951,4 +2951,43 @@ Dabar „System Tray“ meniu galima įjungti globalius nuorodas</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Įjunkite pasaulinius klavišus</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Papildinio susiejimo klaida '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' pažymėtas kaip {1} tipo '{2}', tačiau jo aplanke nėra atitikimo '{3}. {4}'.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Papildinio priklausomybės klaida papildiniui '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Spustelėkite</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Redaguoti '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Redaguoti spalvą ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Pašalinti '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>pašalinti daiktą</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>Sekti ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Sutaupyti</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Įveskite nuorodą</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Įveskite URL</value>
+  </data>
 </root>

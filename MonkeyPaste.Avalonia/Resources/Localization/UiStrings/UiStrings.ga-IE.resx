@@ -2951,4 +2951,43 @@ Is féidir aicearraí domhanda a chumasú anois sa roghchlár tráidire córais<
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Aicearraí Domhanda a scor ar aghaidh</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Earráid Nasctha Breiseáin '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>Déantar '{0}' a bhratach mar {1} clóscríobh i '{2}' ach níl meaitseáil '{3}. {4}' ina fhillteán.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Earráid spleáchais breiseáin le haghaidh breiseán '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Cliceáil</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Athraigh '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Dath a chur in eagar ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Bain '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Bain an mhír</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>leanúint ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>Goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Spáráil</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Iontráil Nasc</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Iontráil URL</value>
+  </data>
 </root>

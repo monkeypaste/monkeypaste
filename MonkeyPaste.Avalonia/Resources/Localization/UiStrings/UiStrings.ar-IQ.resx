@@ -2951,4 +2951,43 @@ feedback@monkeypaste.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>تفعيل الاختصارات العالمية</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>خطأ ربط المكون الإضافي '{0}':{1}{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>تم وضع علامة على '{0}' كنوع {1} في '{2}' ولكن لا يحتوي على '{3}.{4}' مطابق في المجلد الخاص به.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>خطأ في تبعية المكون الإضافي للمكون الإضافي '{0}':{1}{2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>انقر</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>تحرير '&lt;em&gt;{0}&lt;/em&gt;'...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>تعديل اللون...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>إزالة '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>إزالة بند</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>للمتابعة ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>انتقل إلى "&lt;em&gt;{0}&lt;/em&gt;" ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>يحفظ</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>أدخل الرابط</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>إدخال عنوان الموقع</value>
+  </data>
 </root>

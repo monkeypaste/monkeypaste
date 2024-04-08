@@ -2951,4 +2951,43 @@ Globale kortpaaie kan nou in die System Tray Menu geaktiveer word</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Skakel globale kortpaaie aan</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Inprop-skakelfout '{0}':{1}{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' is gemerk as {1} tik in '{2}' maar het nie 'n ooreenstemmende '{3}.{4}' in sy vouer nie.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Inpropafhanklikheidsfout vir inprop '{0}':{1}{2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klik</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>wysig '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>wysig kleur...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>verwyder '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>item verwyder</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>te volg...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>gaan na '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Voer skakel in</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Voer URL in</value>
+  </data>
 </root>

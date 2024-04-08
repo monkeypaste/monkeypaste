@@ -2951,4 +2951,43 @@ Globaalsed otseteed saab nüüd süsteemialuse menüüs lubada</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Lülitage globaalsed otseteed sisse</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Pistikprogrammi linkimisviga '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' on märgitud kui {1} tüüp '{2}', kuid sellel pole kaustas sobivat '{3}. {4}'.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Pistikprogrammi {0} 'pistikprogrammi viga: {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klõpsama</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>redigeeri '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Redigeeri värvi ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Eemalda '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Eemaldage üksus</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>järgima ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>Goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Kokkuhoid</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Sisestage link</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Sisestage URL</value>
+  </data>
 </root>

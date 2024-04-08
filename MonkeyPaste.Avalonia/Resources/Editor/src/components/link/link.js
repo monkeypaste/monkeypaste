@@ -77,7 +77,8 @@ function getLinkToolbarPopupTextInputElement() {
 
 function getLinkMouseGestureHtml() {
     let gesture_parts = [
-        'Click',
+        //'Click',
+        UiStrings.EditorTt1,
         ...globals.RequiredNavigateUriModKeys
     ];
 
@@ -91,23 +92,29 @@ function getLinkTooltipText(a_elm, includeContext = false) {
     let result = getLinkMouseGestureHtml();
     if (a_elm.classList.contains('link-type-hexcolor')) {
         if (includeContext) {
-            result += `edit '<em>${a_elm.innerHTML}</em>'...`;
+            //result += `edit '<em>${a_elm.innerHTML}</em>'...`;
+            result += strFormat(UiStrings.EditorTt2,a_elm.innerHTML);
         } else {
-            result += 'edit color...';
+            //result += 'edit color...';
+            result += UiStrings.EditorTt3;
         }
     } else if (a_elm.classList.contains('link-type-delete-item')) {
         if (includeContext) {
             let fli_text = a_elm.parentElement.parentElement.previousSibling.innerText;
-            result += `remove '<em>${fli_text}</em>'`;
+            //result += `remove '<em>${fli_text}</em>'`;
+            result += strFormat(UiStrings.EditorTt4,fli_text);
         } else {
-            result += 'remove item';
+            //result += 'remove item';
+            result += UiStrings.EditorTt5;
         }
     } else {
         let link_uri = a_elm.getAttribute('href');
         if (isNullOrEmpty(link_uri)) {
-            result += 'to follow...'
+            //result += 'to follow...'
+            result += UiStrings.EditorTt6;
         } else {
-            result += `goto '<em>${a_elm.getAttribute('href')}</em>'...`;
+            //result += `goto '<em>${a_elm.getAttribute('href')}</em>'...`;
+            result += strFormat(UiStrings.EditorTt7,a_elm.getAttribute('href'));
         }
     }
     return result;
@@ -147,11 +154,14 @@ function showLinkPopupForSelection() {
     getEditorElement().addEventListener('focus', onLinkPopupClose);
 
     getLinkToolbarPopupContainerElement().classList.add('ql-preview-override');
+    // localize url entry
+    getLinkToolbarPopupContainerElement().setAttribute('data-before', UiStrings.EditorLinkLabel);
+
     // link input
     let link_input_elm = getLinkToolbarPopupTextInputElement();
     if (link_input_elm) {
         link_input_elm.setAttribute('draggable', false);
-        link_input_elm.setAttribute('placeholder', 'Enter url...');
+        link_input_elm.setAttribute('placeholder', UiStrings.EditorLinkPlaceholder);
         link_input_elm.addEventListener('keydown', onLinkPopupKeyDown, true);
         link_input_elm.value = link_input_val;
     }
@@ -159,6 +169,7 @@ function showLinkPopupForSelection() {
     // link save
     let link_save_button_elm = getLinkToolbarPopupSaveButtonElement();
     if (link_save_button_elm) {
+        link_save_button_elm.setAttribute('data-after', UiStrings.EditorLinkButtonText);
         link_save_button_elm.addEventListener('click', onLinkPopupSaveClick, true);
     }    
 }

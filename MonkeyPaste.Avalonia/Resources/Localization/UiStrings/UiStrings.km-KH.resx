@@ -2951,4 +2951,43 @@ feedback@monkeypales.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>បិទបើកផ្លូវកាត់សកល</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>កំហុសក្នុងការភ្ជាប់កម្មវិធីជំនួយ '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' ត្រូវបានដាក់ទង់ជាតិជាប្រភេទ {1} ប្រភេទក្នុង '{2}' ប៉ុន្តែមិនមានការប្រកួត '{3} ទេ។ {4}' ក្នុងថតឯកសាររបស់វា។</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>កំហុសភាពអាស្រ័យរបស់កម្មវិធីជំនួយសម្រាប់កម្មវិធីជំនួយ '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>ចុច</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>កែសម្រួល '&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>កែសម្រួលពណ៌ ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>យក '&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>យកធាតុចេញ</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>ដើម្បី​អនុវត្ត​តាម ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>ហ្គូតូ '&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>សរេង្គាហ</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>បញ្ចូលតំណ</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>បញ្ចូល URL</value>
+  </data>
 </root>

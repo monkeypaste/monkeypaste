@@ -2951,4 +2951,43 @@ FEEDBOWY@monkeypue.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Globle Globle товчлолуудыг асаана уу</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Plugin-ыг холбосон алдаа '{0}': {1} {1} {2} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' нь {{2} 'гэж тэмдэглэгдсэн' {2} 'гэж тэмдэглэгдсэн боловч' {3}. {3} '. {3}'. {{4} '. {3}'. {4} '. {4}'.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Pluglin-ийн хамаарлын хамаарлын алдаа {0} ': {1} {1} {2 {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Дээр байна</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Засварлах '&lt;&lt;&lt;&lt;{{0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Өнгө засах ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;&lt;&lt;&lt;&lt;{{0} &lt;/ em&gt;' -г арилгах ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Зүйлийг арилгах</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>дагах ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0 {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Аврах</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Оруулах</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Өргдуун үд оруулна</value>
+  </data>
 </root>

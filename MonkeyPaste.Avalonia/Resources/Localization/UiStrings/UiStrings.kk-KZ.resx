@@ -2951,4 +2951,43 @@ feedback@monkeyptaste.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Ғаламдық тіркесімдерді қосыңыз</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Плагинді байланыстыру қатесі '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' '{1} түрі ретінде белгіленеді, бірақ' 2} 'тереді, бірақ сәйкес' {3}. {4} '{4}' {4} '{4}'.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Плагиннің тәуелділік қатесі «{0}» плагині үшін қате: {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Нұқыңыз</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>'&lt;em&gt; {0} &lt;/ um&gt;' өңдеу ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Түсті өңдеу ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;em&gt; {0} &lt;/ um&gt;' алып тастаңыз ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Элементті алып тастаңыз</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>Келесіде жүру ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Жинау</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Сілтемені енгізіңіз</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL мекен-жайын енгізіңіз</value>
+  </data>
 </root>

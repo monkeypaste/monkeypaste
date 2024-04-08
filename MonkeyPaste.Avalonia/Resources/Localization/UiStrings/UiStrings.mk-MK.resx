@@ -2951,4 +2951,43 @@ Monkeypaste на уредот
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Вклучете ги глобалните кратенки на</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Грешка во врската со приклучокот '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' е обележан како {1} тип во '{2}', но нема совпаѓање '{3}. {4}' во својата папка.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Грешка во зависноста на приклучокот за приклучокот '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Кликнете</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Уреди '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>уреди боја ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Отстрани '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Отстранете ја ставката</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>да следи ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Зачувај</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Внесете врска</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Внесете URL</value>
+  </data>
 </root>

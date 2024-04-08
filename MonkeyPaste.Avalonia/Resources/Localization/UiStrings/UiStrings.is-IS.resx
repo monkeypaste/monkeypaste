@@ -2951,4 +2951,43 @@ Nú er hægt að virkja alþjóðlegar flýtileiðir í kerfisbakkavalmyndinni</
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Skiptu um flýtileiðir á heimsvísu</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Tengingartengingarvilla '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' er flaggað sem {1} gerð í '{2}' en er ekki með samsvarandi '{3}. {4}' í möppunni.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Villa við viðbótarvökva fyrir viðbót '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Smellur</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Breyttu '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>breyta lit ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Fjarlægðu '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Fjarlægðu hlutinn</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>að fylgja ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Vista</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Sláðu inn hlekk</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Sláðu inn url</value>
+  </data>
 </root>

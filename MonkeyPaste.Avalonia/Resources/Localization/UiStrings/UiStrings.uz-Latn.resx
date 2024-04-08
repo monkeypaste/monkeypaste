@@ -3016,4 +3016,43 @@ Hozirgi kunda tizimning trafik menyusida global yorliq yoqilishi mumkin</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Global yorliqlarni yoqing</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Plaginni bog'lashda xato '{0} {2} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>"{0}" {2} "{2}" turiga "{2}", ammo mos kelmaydi. {4} ". {4}". {4} ".</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Plaginga bog'liqlik xatosi Plagin '{0}} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Bosmoq</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>&lt;em&gt; {0} &lt;/ em&gt; '...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Rangni tahrirlash ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Elementni olib tashlang</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>ergashmoq ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>Goto '&lt;em&gt; {0} {/ em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Tejash</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Havolani kiriting</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL manzilini kiriting</value>
+  </data>
 </root>

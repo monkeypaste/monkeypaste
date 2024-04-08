@@ -266,8 +266,8 @@
 
             <Button Classes="defaultButton textOnlyButton"
                     Command="{Binding ClearCommand}"
-                    Content="{Binding ClearButtonLabel}"
-                    IsVisible="{Binding ClearButtonLabel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
+                    Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonClearText}"
+                    IsVisible="{Binding !IsEmpty}" />
         </DockPanel>
     </StackPanel>
     <!--</StackPanel>-->

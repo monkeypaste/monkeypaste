@@ -2951,4 +2951,43 @@ Globalni prečaci sada mogu biti omogućeni u izborniku Sistemske ladice</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Prebacite globalne prečace na</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Dodatak povezivanje pogreške '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' označen je kao {1} tip u '{2}', ali nema podudaranje '{3}. {4}' u svojoj mapi.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Pogreška ovisnosti dodatka za dodatak '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klik</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Uredi '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Uredi boju ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Uklonite '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Uklonite predmet</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>pratiti ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>Goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Uštedjeti</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Unesite vezu</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Unesite URL</value>
+  </data>
 </root>

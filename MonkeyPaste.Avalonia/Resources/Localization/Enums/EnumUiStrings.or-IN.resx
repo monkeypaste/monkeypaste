@@ -1105,15 +1105,6 @@
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
     <value>ମୂଷା</value>
   </data>
-  <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
-    <value />
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value>ସ୍ପଷ୍ଟ ହୋଇଛି</value>
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value>ବିଲୋପ ହୋଇଛି</value>
-  </data>
   <data name="MpTagType_None" xml:space="preserve">
     <value />
   </data>

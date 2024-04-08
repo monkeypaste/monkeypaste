@@ -30,7 +30,7 @@ namespace Ledgerizer {
         VERIFY_CONSISTENT_CULTURES = 1L << 14,
         GEN_EDITOR_UISTRS = 1L << 15,
         REMOTE_MOVE_CORE_TO_DAT = 1L << 16,
-        MOVE_JS_UISTRINGS = 1L << 17,
+        DO_JS_UISTRINGS = 1L << 17,
         DO_LOCAL_LEDGER = 1L << 18,
         DO_REMOTE_LEDGER = 1L << 19,
         DEBUG = 1L << 20,
@@ -42,7 +42,7 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.TRANSLATE_RESX |
             //MpLedgerizerFlags.GEN_EMPTY_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
-            MpLedgerizerFlags.GEN_PROD_LISTING |
+            //MpLedgerizerFlags.GEN_PROD_LISTING |
             //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
@@ -54,7 +54,7 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.DO_REMOTE_LEDGER |
                                    //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
                                    //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
-                                   //MpLedgerizerFlags.MOVE_JS_UISTRINGS |
+                                   MpLedgerizerFlags.DO_JS_UISTRINGS |
                                    // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
                                    //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
                                    //MpLedgerizerFlags.DEBUG // |
@@ -205,7 +205,7 @@ namespace Ledgerizer {
 
         static bool GEN_EDITOR_UISTRS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_EDITOR_UISTRS);
 
-        static bool MOVE_JS_UISTRINGS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.MOVE_JS_UISTRINGS);
+        static bool DO_JS_UISTRINGS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_JS_UISTRINGS);
 
         const string BUILD_CONFIG =
 #if DEBUG
@@ -328,7 +328,7 @@ namespace Ledgerizer {
             if (REMOTE_MOVE_CORE_TO_DAT) {
                 MoveCoresToDat_remote();
             }
-            if (MOVE_JS_UISTRINGS) {
+            if (DO_JS_UISTRINGS) {
                 MoveJsUiStrings();
             }
         }

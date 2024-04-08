@@ -2951,4 +2951,43 @@ FANDUCE@ONKEYPASTET.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>ଗ୍ଲୋବାଲ୍ ସର୍ଟକଟ୍ ଟୋଗଲ୍ କରନ୍ତୁ |</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ସଂଯୋଗ ତ୍ରୁଟି '{1}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' '{{2}' ଭାବରେ ଫ୍ଲାଗ୍ ହୋଇଛି କିନ୍ତୁ ଏହାର ଫୋଲ୍ଡରରେ '{3}' ସହିତ ମେଳ ଖାଉ ନାହିଁ |</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ '{0}': {1} {2} ପାଇଁ ପ୍ଲଗଇନ୍ ନିର୍ଭରଶୀଳ ତ୍ରୁଟି |</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>କ୍ଲିକ୍ କରନ୍ତୁ |</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>EDIK '&lt;EM&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>ରଙ୍ଗ ସଂପାଦନ କରନ୍ତୁ ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;EM&gt; {0} &lt;/ EM&gt;' ଅପସାରଣ କରନ୍ତୁ ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>ଆଇଟମ୍ ଅପସାରଣ କରନ୍ତୁ |</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>ଅନୁସରଣ ପାଇଁ ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>GoTo '&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>ସଞ୍ଚୟ କରନ୍ତୁ |</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>ଲିଙ୍କ୍ ପ୍ରବେଶ କରନ୍ତୁ |</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL ପ୍ରବେଶ କରନ୍ତୁ |</value>
+  </data>
 </root>

@@ -2951,4 +2951,43 @@
   <data name="HookResumeLabel" xml:space="preserve">
     <value>ആഗോള കുറുക്കുവഴികൾ ടോഗിൾ ചെയ്യുക</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>പ്ലഗിൻ ലിങ്കുചെയ്യുന്ന പിശക് '{0}': {1} {{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' '{2}' എന്നതിന് '{0}' ഫ്ലാഗുചെയ്തു, പക്ഷേ '{3}. {4}' എന്നത് അതിന്റെ ഫോൾഡറിൽ പൊരുത്തപ്പെടുന്ന ഒരു '{4}' ഇല്ല.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>പ്ലഗിൻ '{0}': {1 {2} {1 {2} പ്ലഗിൻ പ്ലഗിൻ ഡിപൻഡൻസി പിശക്</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>ക്ലിക്കുചെയ്യുക</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>എഡിറ്റുചെയ്യുക '&lt;em&gt; {0 {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>നിറം എഡിറ്റുചെയ്യുക ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;em&gt; {0 {0 {0 {0 {0} &lt;/ em&gt;' നീക്കംചെയ്യുക.</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>ഇനം നീക്കംചെയ്യുക</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>പിന്തുടരാൻ ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0 {0 {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>രക്ഷിക്കും</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>ലിങ്ക് നൽകുക</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL നൽകുക</value>
+  </data>
 </root>

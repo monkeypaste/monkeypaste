@@ -2951,4 +2951,43 @@ feedback@monkeypaste.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>สลับทางลัดทั่วโลก</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>ข้อผิดพลาดการเชื่อมโยงปลั๊กอิน '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' ถูกตั้งค่าสถานะเป็น {1} ประเภทใน '{2}' แต่ไม่มีการจับคู่ '{3}. {4}' ในโฟลเดอร์</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>ข้อผิดพลาดการพึ่งพาปลั๊กอินสำหรับปลั๊กอิน '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>คลิก</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>แก้ไข '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>แก้ไขสี ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>ลบ '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>ลบรายการ</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>ที่จะติดตาม ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>บันทึก</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>ป้อนลิงค์</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>ป้อน URL</value>
+  </data>
 </root>

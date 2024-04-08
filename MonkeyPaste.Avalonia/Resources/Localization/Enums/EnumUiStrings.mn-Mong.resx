@@ -1105,15 +1105,6 @@
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
     <value>ᠬᠤᠯᠤᠭᠠᠨ᠎ᠠ᠃</value>
   </data>
-  <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
-    <value />
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value>ᠲᠣᠳᠣᠷᠬᠠᠢ ᠮᠡᠳᠡᠨ᠎ᠡ ᠃</value>
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value>ᠬᠠᠰᠤᠨ᠎ᠠ᠃</value>
-  </data>
   <data name="MpTagType_None" xml:space="preserve">
     <value />
   </data>

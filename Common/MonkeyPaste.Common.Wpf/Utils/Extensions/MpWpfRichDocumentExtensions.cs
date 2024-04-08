@@ -510,7 +510,8 @@ namespace MonkeyPaste.Common.Wpf {
               doc.FontSize,
               doc.Foreground,
               new NumberSubstitution(),
-              TextFormattingMode.Display);//MpScreenInformation.ThisAppDip);
+              TextFormattingMode.Display,
+              MpScreenInformation.ThisAppDip);
 
             int offset = 0;
             var runsAndParagraphsList = doc.GetRunsAndParagraphs().ToList();

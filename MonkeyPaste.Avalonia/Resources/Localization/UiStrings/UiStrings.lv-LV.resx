@@ -2951,4 +2951,43 @@ Globālās saīsnes tagad var iespējot Sistēmas paplātes izvēlnē</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Pārslēdziet globālos saīsnes</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Spraudņu savienošanas kļūda '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' tiek atzīmēts kā {1} ierakstīt '{2}', bet tai nav atbilstoša '{3}. {4}' tās mapē.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Spraudņa spraudņa kļūda spraudnim '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klikšķis</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Rediģēt '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>rediģēt krāsu ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>noņemt '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>noņemt vienumu</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>sekot ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Ietaupīt</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Ievadīt saiti</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Ievadiet URL</value>
+  </data>
 </root>

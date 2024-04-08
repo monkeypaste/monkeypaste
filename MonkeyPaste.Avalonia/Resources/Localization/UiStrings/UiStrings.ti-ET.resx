@@ -2951,4 +2951,43 @@
   <data name="HookResumeLabel" xml:space="preserve">
     <value>ዓለምለኻዊ ኣቋራጭ መንገዲ ኣብ ልዕሊ</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>ናይ ፕላግ-ኢን ምትእስሳር ጌጋ '{0}':{1}{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' {1} ኣብ '{2}' ብምጽሓፍ ሰንደቕ ዕላማ ይግበረላ'ምበር ኣብ ኣቃፊራኡ '{3}.{4}' ዝመሳሰል የብሉን።</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>ናይ ፕላግ-ኢን ጽግዕተኛነት ጌጋ ንፕላግ-ኢን '{0}':{1}{2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>ጠውቑ</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>ምእራም '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>ሕብሪ ኣርትዕ ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>ኣቕሓ ኣወግድ</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>ንምክትታል ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>ጎቶ '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>ምቑጣብ</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>ሊንክ ኣእትዉ</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL ኣእትዉ</value>
+  </data>
 </root>

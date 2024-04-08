@@ -2951,4 +2951,43 @@
   <data name="HookResumeLabel" xml:space="preserve">
     <value>글로벌 단축키를 전환합니다</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>플러그인 링크 오류 '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}'은 '{2}'의 {1} 유형으로 표시되지만 폴더에 일치하는 '{3}. {4}'가 없습니다.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>플러그인의 플러그인 종속성 오류 '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>딸깍 하는 소리</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>편집 '&lt;em&gt; {0} &lt;/em&gt;'...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>색상 편집 ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;em&gt; {0} &lt;/em&gt;'을 제거하십시오 ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>항목을 제거하십시오</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>따라야 ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;'...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>구하다</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>링크를 입력하십시오</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL을 입력하십시오</value>
+  </data>
 </root>

@@ -59,7 +59,6 @@ namespace MonkeyPaste.Avalonia {
                 typeof(MpUserAccountType),
                 typeof(MpContentOptionType),
                 typeof(MpMainWindowShowBehaviorType),
-                typeof(MpShortcutAssignmentClearButtonType),
                 typeof(MpTagType),
                 typeof(MpReadOnlyTagType),
                 typeof(MpAnalyzerInputFormatFlags),

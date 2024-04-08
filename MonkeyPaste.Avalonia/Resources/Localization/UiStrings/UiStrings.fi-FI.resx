@@ -2951,4 +2951,43 @@ Globaalit pikakuvakkeet voidaan nyt ottaa käyttöön järjestelmälokero -valik
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Vaihtaa globaaleja pikakuvakkeita jhk</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Laajennus linkitysvirhe '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' on merkitty {1} Kirjoita '{2}', mutta siinä ei ole vastaavaa '{3}. {4}' kansiossaan.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Plugin -riippuvuusvirhe laajennukselle '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klikkaus</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>muokkaa '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Muokkaa väriä ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Poista '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Poista esine</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>seurata ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Tallentaa</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Antaa linkki</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Syötä URL</value>
+  </data>
 </root>

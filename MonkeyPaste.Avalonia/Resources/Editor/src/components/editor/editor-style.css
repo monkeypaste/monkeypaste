@@ -151,3 +151,21 @@ body:has(.editable) {
     line-height: 40px !important;
     font-size: 20px !important;
 }
+
+.ql-snow .ql-tooltip[data-mode=link]::before {
+    content: attr(data-before);
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+    border-right: 0px;
+    /*content: 'Save';*/
+    content: attr(data-after);
+    padding-right: 0px;
+}
+/* NOTE not sure where this one is but it should be localized */
+.ql-snow .ql-tooltip a.ql-action::after {
+    border-right: 1px solid #ccc;
+    content: 'Edit';
+    /*content: attr(data-after);*/
+    margin-left: 16px;
+    padding-right: 8px;
+}

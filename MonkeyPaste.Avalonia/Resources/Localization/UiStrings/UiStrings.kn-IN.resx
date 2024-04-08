@@ -2951,4 +2951,43 @@
   <data name="HookResumeLabel" xml:space="preserve">
     <value>ಜಾಗತಿಕ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ಟಾಗಲ್ ಮಾಡಿ</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>ಪ್ಲಗಿನ್ ಲಿಂಕ್ ಮಾಡುವ ದೋಷ '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' ಅನ್ನು '{2}' ನಲ್ಲಿ {1} ಪ್ರಕಾರ ಎಂದು ಫ್ಲ್ಯಾಗ್ ಮಾಡಲಾಗಿದೆ ಆದರೆ ಅದರ ಫೋಲ್ಡರ್‌ನಲ್ಲಿ '{3}. {4}' ಹೊಂದಾಣಿಕೆಯನ್ನು ಹೊಂದಿಲ್ಲ.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>'{0}' ಪ್ಲಗ್‌ಇನ್‌ಗೆ ಪ್ಲಗಿನ್ ಅವಲಂಬನೆ ದೋಷ: {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>ಕ್ಲಿಕ್</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>'&lt;em&gt; {0} &lt;/em&gt;' ಅನ್ನು ಸಂಪಾದಿಸಿ ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>ಬಣ್ಣವನ್ನು ಸಂಪಾದಿಸಿ ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;em&gt; {0} &lt;/em&gt;' ಅನ್ನು ತೆಗೆದುಹಾಕಿ ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>ಐಟಂ ತೆಗೆದುಹಾಕಿ</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>ಅನುಸರಿಸಲು ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>ಗೊಟೊ '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>ಉಳಿಸು</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>ಲಿಂಕ್ ಅನ್ನು ನಮೂದಿಸಿ</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL ಅನ್ನು ನಮೂದಿಸಿ</value>
+  </data>
 </root>

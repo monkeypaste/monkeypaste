@@ -1105,15 +1105,6 @@
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
     <value>ചുണ്ടെലി</value>
   </data>
-  <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
-    <value />
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value>വ്യക്തം</value>
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value>ഡിലീറ്റ് ചെയ്യുക</value>
-  </data>
   <data name="MpTagType_None" xml:space="preserve">
     <value />
   </data>

@@ -2951,4 +2951,43 @@
   <data name="HookResumeLabel" xml:space="preserve">
     <value>গ্লোবাল শর্টকাট চালু করুন</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>প্লাগইন লিঙ্কিং ত্রুটি '{0}':{1}{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}'কে '{2}'-এ {1} টাইপ হিসেবে পতাকাঙ্কিত করা হয়েছে কিন্তু এর ফোল্ডারে '{3}৷{4}' এর সাথে মিল নেই৷</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>প্লাগইন '{0}' এর জন্য প্লাগইন নির্ভরতা ত্রুটি:{1}{2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>ক্লিক</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>'&lt;em&gt;{0}&lt;/em&gt;' সম্পাদনা করুন ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>রঙ সম্পাদনা করুন...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;em&gt;{0}&lt;/em&gt;' সরান...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>আইটেম অপসারণ</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>অনুসরণ করতে...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>'&lt;em&gt;{0}&lt;/em&gt;' এ যান ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>সংরক্ষণ</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>লিঙ্ক লিখুন</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>ইউআরএল দিন</value>
+  </data>
 </root>

@@ -3016,4 +3016,43 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="HookResumeLabel" xml:space="preserve">
     <value>ਚਾਲੂ ਕਰੋ ਗਲੋਬਲ ਸ਼ੌਰਟਕਟ 'ਤੇ</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ ਲਿੰਕਿੰਗ ਗਲਤੀ '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' ਨੂੰ {1} ਕਿਸਮ ਦੇ ਤੌਰ ਤੇ ਸੰਕੇਤ ਕੀਤਾ ਗਿਆ ਹੈ '{2}' ਪਰ ਇਸ ਦੇ ਫੋਲਡਰ ਵਿੱਚ ਮੇਲ ਖਾਂਦਾ ਨਹੀਂ ਹੈ.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>ਪਲੱਗਇਨ '{0}' ਲਈ ਨਿਰਭਰਤਾ ਨਿਰਭਰਤਾ: {1} {{2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>ਕਲਿਕ ਕਰੋ</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>ਸੰਪਾਦਨ '&lt;EM&gt; {0} &lt;/ EM&gt; ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>ਸੋਧੋ ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;EM&gt; {0} &lt;/ em&gt;' ਹਟਾਓ ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>ਆਈਟਮ ਹਟਾਓ</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>ਦੀ ਪਾਲਣਾ ਕਰਨ ਲਈ ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>ਗੋਟੋ '&lt;ਐੱਮ&gt; {0} &lt;/ em&gt; ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>ਸੇਵ</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>ਲਿੰਕ ਦਰਜ ਕਰੋ</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL ਦਾਖਲ ਕਰੋ</value>
+  </data>
 </root>

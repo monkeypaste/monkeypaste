@@ -14,7 +14,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvShortcutView">
     <local:MpAvUserControl.Styles>
         <!--  - RECORD/ KEYGROUP TOGGLE  -->
-        <Style Selector="Grid#ContainerGrid local|MpAvShortcutLabel#ShortcutLabel">
+        <!--<Style Selector="Grid#ContainerGrid local|MpAvShortcutLabel#ShortcutLabel">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
@@ -24,7 +24,7 @@
                     Value="False" />
         </Style>
 
-        <Style Selector="Grid#ContainerGrid TextBlock#EmptyTextBlock">
+        <Style Selector="Grid#ContainerGrid:not(.hasShortcut) TextBlock#EmptyTextBlock">
             <Setter Property="IsVisible"
                     Value="True" />
         </Style>
@@ -55,7 +55,7 @@
         <Style Selector="Grid#ContainerGrid.recordable:pointerover Button#RecordButton">
             <Setter Property="IsVisible"
                     Value="True" />
-        </Style>
+        </Style>-->
 
         <!--  RECORD ANIMATION  -->
         <Style Selector="Button#RecordButton:pointerover /template/ ContentPresenter">
@@ -67,7 +67,7 @@
                     Value="Hand" />
         </Style>
 
-        <Style Selector="Button#RecordButton:pointerover Ellipse">
+        <Style Selector="Button#RecordButton Ellipse">
             <Style.Animations>
                 <Animation Duration="0:0:1.5"
                            FillMode="Forward"
@@ -96,7 +96,6 @@
             </Style.Animations>
         </Style>
 
-
         <!--  EMPTY LABEL  -->
         <Style Selector="TextBlock#EmptyShortcutTextBlock">
             <Setter Property="Foreground"
@@ -112,8 +111,8 @@
                    Classes="emptyKeys"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   FontWeight="SemiBold"
-                   FontStyle="Oblique"
+                   FontWeight="Bold"
+                   FontStyle="Italic"
                    Text="{Binding EmptyText, ElementName=ShortcutView}" />
         <local:MpAvShortcutLabel x:Name="ShortcutLabel"
                                  HorizontalAlignment="Center"

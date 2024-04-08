@@ -2951,4 +2951,43 @@ feedback@monkepte.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Միացրեք գլոբալ դյուրանցումները</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Plugin - ը հղում է «{0}». {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>«{0}» դրոշմված է որպես {1} տեսակը «{2}» -ում, բայց չունի համապատասխան «{3}: {4}» իր թղթապանակում:</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Plugin կախվածության սխալը `plugin '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Սեղմել</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Խմբագրել '&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Խմբագրել գույնը ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Հեռացրեք '&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Հեռացրեք կետը</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>հետեւել ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>Goto '&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Խնայել</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Մուտքագրեք հղումը</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Մուտքագրեք URL</value>
+  </data>
 </root>

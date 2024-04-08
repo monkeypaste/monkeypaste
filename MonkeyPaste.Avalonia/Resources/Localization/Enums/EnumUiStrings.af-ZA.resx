@@ -1128,12 +1128,6 @@
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
     <value>Muis</value>
   </data>
-  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value>Helder</value>
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value>Verwyder</value>
-  </data>
   <data name="MpTagType_Link" xml:space="preserve">
     <value>Skakel</value>
   </data>

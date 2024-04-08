@@ -2951,4 +2951,43 @@
   <data name="HookResumeLabel" xml:space="preserve">
     <value>ગ્લોબલ શ shortc ર્ટકટ્સ પર ટ g ગલ કરવું</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>પ્લગઇન લિંકિંગ ભૂલ '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' ને '{2}' માં {1} પ્રકાર તરીકે ધ્વજવંદન કરવામાં આવે છે, પરંતુ તેના ફોલ્ડરમાં મેચિંગ '{3}. {4}' નથી.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>પ્લગઇન માટે પ્લગઇન અવલંબન ભૂલ '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>કળણ</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>'&lt;em&gt; {0} &lt;/em&gt;' સંપાદિત કરો ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>રંગ સંપાદિત કરો ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;em&gt; {0} &lt;/em&gt;' દૂર કરો ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>વસ્તુ દૂર કરો</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>અનુસરો ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>ગોટો '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>બચત કરવી</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>કડી દાખલ કરો</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL દાખલ કરો</value>
+  </data>
 </root>

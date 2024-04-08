@@ -2951,4 +2951,43 @@
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Пребаците глобалне пречице на</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Грешка у повезивању додатака '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' је означено као {1} тип у '{2}', али нема одговарајући '{3}. {4}' у својој мапи.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Грешка зависности за додатак за додатак '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Климатизовати</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Едит '&lt;ем&gt; {0} &lt;/ ем&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Уредите боју ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Уклоните '&lt;ем&gt; {0} &lt;/ ем&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Обриши предмет</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>пратити ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>гото 'ем&gt; {0} &lt;/ ем&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>сачувати</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Унесите везу</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Унесите УРЛ</value>
+  </data>
 </root>

@@ -918,6 +918,7 @@ String.Format = function (b) {
 
 function strFormat(b) {
     var a = arguments;
+    b = isNullOrUndefined(b) ? '' : b;
     return b.replace(/(\{\{\d\}\}|\{\d\})/g, function (b) {
         if (b.substring(0, 2) == "{{") return b;
         var c = parseInt(b.match(/\d/)[0]);

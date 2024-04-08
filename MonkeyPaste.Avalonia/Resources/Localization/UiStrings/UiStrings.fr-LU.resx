@@ -2951,4 +2951,43 @@ Les raccourcis mondiaux peuvent désormais être activés dans le menu du platea
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Basculer les raccourcis mondiaux sur</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Erreur de liaison du plugin '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' est signalé comme {1} Type dans '{2}' mais n'a pas de correspondance '{3}. {4}' dans son dossier.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Erreur de dépendance du plugin pour plugin '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Cliquez sur</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Edit '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Modifier la couleur ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>supprimer '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>retirer l'objet</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>suivre ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Sauvegarder</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Entrez le lien</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Entrer l'URL</value>
+  </data>
 </root>

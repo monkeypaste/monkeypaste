@@ -2951,4 +2951,43 @@ feedback@monkeypaste.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Включете глобалните преки пътища</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Грешка при свързване на приставки „{0}“:{1}{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>„{0}“ е маркиран като тип {1} в „{2}“, но няма съответстващ „{3}.{4}“ в своята папка.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Грешка при зависимостта на приставката за приставката „{0}“:{1}{2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Кликнете</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>редактиране на „&lt;em&gt;{0}&lt;/em&gt;“ ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>редактиране на цвят...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>премахнете „&lt;em&gt;{0}&lt;/em&gt;“ ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Премахни артикул</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>да последвам ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>отидете на „&lt;em&gt;{0}&lt;/em&gt;“ ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Запазете</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Въведете връзка</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Въведете Url</value>
+  </data>
 </root>

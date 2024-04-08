@@ -2951,4 +2951,43 @@ Globalne skróty można teraz włączyć w menu taca systemu</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Włącz globalne skróty</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Błąd łączenia wtyczki „{0}”: {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>„{0}” jest oznaczony jako {1} Wpisz w „{2}”, ale w folderze nie ma dopasowania '{3}. {4} ”.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Błąd zależności wtyczki dla wtyczki '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Kliknij</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Edytuj '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Edytuj kolor ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Usuń „&lt;em&gt; {0} &lt;/em&gt;” ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Usuń przedmiot</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>podążać ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>GOTO '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Ratować</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Wprowadź link</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Wprowadź URL</value>
+  </data>
 </root>

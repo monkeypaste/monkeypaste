@@ -2951,4 +2951,43 @@
   <data name="HookResumeLabel" xml:space="preserve">
     <value>ग्लोबल शॉर्टकट्स को टॉगल करें</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>प्लगइन लिंकिंग एरर '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' को '{2}' में {1} टाइप के रूप में चिह्नित किया जाता है, लेकिन इसके फ़ोल्डर में एक मिलान '{3}। {4}' नहीं है।</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>प्लगइन के लिए प्लगइन निर्भरता त्रुटि '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>क्लिक</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>संपादित करें '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>रंग संपादित करें ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>निकालें '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>वस्तु निकालें</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>अनुकरण करना ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>गोटो '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>बचाना</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>लिंक दर्ज करें</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>यू आर एल दर्ज करो</value>
+  </data>
 </root>

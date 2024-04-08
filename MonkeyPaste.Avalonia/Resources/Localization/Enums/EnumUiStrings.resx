@@ -1173,15 +1173,6 @@
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
     <value>Mouse</value>
   </data>
-  <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
-    <value> </value>
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value>Clear</value>
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value>Delete</value>
-  </data>
   <data name="MpTagType_None" xml:space="preserve">
     <value> </value>
   </data>

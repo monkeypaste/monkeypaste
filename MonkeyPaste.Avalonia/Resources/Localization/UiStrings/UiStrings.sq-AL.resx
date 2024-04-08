@@ -2951,4 +2951,43 @@ Shkurtoret globale tani mund të aktivizohen në menunë e tabaka të sistemit</
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Ndërroni shkurtesat globale në</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Gabim i lidhjes së shtojcës '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' është flamuruar si {1} lloji '{2}' por nuk ka një përputhje '{3}. {4}' në dosjen e saj.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Gabim i varësisë nga plugin për plugin '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klikos</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Redakto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Redakto ngjyrën ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Hiq '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Hiq artikullin</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>ta ndjek ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Ruaj</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Fut Link</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Hyni në URL</value>
+  </data>
 </root>

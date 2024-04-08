@@ -2951,4 +2951,43 @@ Globalne bližnjice je zdaj mogoče omogočiti v meniju System pladnja</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Preklopite globalne bližnjice na</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Napaka pri povezavi vtičnika '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' je označen kot {1} vnesite v '{2}', vendar v svoji mapi nima ujemanja '{3}. {4}'.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Napaka odvisnosti vtičnika za vtičnik '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klik</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Uredi '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Uredi barvo ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>odstrani '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>odstranite element</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>slediti ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Shrani</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Vnesite povezavo</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Vnesite URL</value>
+  </data>
 </root>

@@ -2951,4 +2951,43 @@ Globale Kürzel können jetzt im Taskleistenmenü aktiviert werden.</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Globale Tastenkombinationen einschalten</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Plugin-Verknüpfungsfehler '{0}':{1}{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' ist in '{2}' als Typ {1} gekennzeichnet, hat aber keinen entsprechenden Eintrag '{3}.{4}' in seinem Ordner.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Plugin-Abhängigkeitsfehler für Plugin „{0}“:{1}{2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klicken</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>'&lt;em&gt;{0}&lt;/em&gt;' bearbeiten ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Farbe bearbeiten ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Entfernen Sie „&lt;em&gt;{0}&lt;/em&gt;“ …</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Gegenstand entfernen</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>Folgen ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>gehe zu '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Link eingeben</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL eingeben</value>
+  </data>
 </root>

@@ -2951,4 +2951,43 @@ Globální zkratky lze nyní povolit v nabídce hlavního panelu</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Zapněte globální zkratky</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Chyba propojení pluginu „{0}“:{1}{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' je označeno jako typ {1} v '{2}', ale ve své složce nemá odpovídající '{3}.{4}'.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Chyba závislosti pluginu pro plugin „{0}“:{1}{2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klikněte</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>upravit „&lt;em&gt;{0}&lt;/em&gt;“...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>upravit barvu...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>odstranit „&lt;em&gt;{0}&lt;/em&gt;“...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>odstranit položku</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>následovat ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>přejděte na „&lt;em&gt;{0}&lt;/em&gt;“...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Zadejte odkaz</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Zadejte URL adresu</value>
+  </data>
 </root>

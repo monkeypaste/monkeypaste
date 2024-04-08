@@ -2951,4 +2951,43 @@ Globale snelkoppelingen kunnen nu worden ingeschakeld in het menu System Tray</v
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Schakel globale snelkoppelingen in</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Plug -in koppelingsfout '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' wordt gemarkeerd als {1} type in '{2}' maar heeft geen bijpassende '{3}. {4}' in de map.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Plugin afhankelijkheidsfout voor plug -in '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klik</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>bewerken '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Kleur bewerken ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>verwijder '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Verwijder voorwerp</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>volgen ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goTo '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Redden</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Voer link in</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL invoeren</value>
+  </data>
 </root>

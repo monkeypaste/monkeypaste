@@ -1128,12 +1128,6 @@
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
     <value>الفأر</value>
   </data>
-  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value>واضح</value>
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value>يمسح</value>
-  </data>
   <data name="MpTagType_Link" xml:space="preserve">
     <value>وصلة</value>
   </data>

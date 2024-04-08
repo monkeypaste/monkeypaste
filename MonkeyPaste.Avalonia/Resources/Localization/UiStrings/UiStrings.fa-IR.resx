@@ -2951,4 +2951,43 @@ MonkeyPaste روی دستگاه
   <data name="HookResumeLabel" xml:space="preserve">
     <value>میانبرهای جهانی را تغییر دهید</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>خطای پیوند افزونه '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' به عنوان {1} نوع در "{2}" پرچم گذاری شده است ، اما یک تطبیق "{3}. {4} در پوشه خود ندارد.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>خطای وابستگی به افزونه برای افزونه '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>کلیک</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>ویرایش '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>ویرایش رنگ ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>حذف '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>حذف مورد</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>پيگيري كردن ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>صرفه جویی</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>لینک را وارد کنید</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>آدرس اینترنتی را وارد کنید</value>
+  </data>
 </root>

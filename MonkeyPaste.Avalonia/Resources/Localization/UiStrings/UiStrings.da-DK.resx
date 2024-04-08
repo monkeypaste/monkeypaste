@@ -2951,4 +2951,43 @@ Globale genveje kan nu aktiveres i systembakkemenuen</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Slå globale genveje til</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Plugin-linkningsfejl '{0}':{1}{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' er markeret som {1}-type i '{2}', men har ikke et matchende '{3}.{4}' i sin mappe.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Plugin-afhængighedsfejl for plugin '{0}':{1}{2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klik</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>rediger "&lt;em&gt;{0}&lt;/em&gt;" ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>rediger farve...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>fjern '&lt;em&gt;{0}&lt;/em&gt;'...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>fjerne varen</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>at følge ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>gå til '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Gemme</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Indtast link</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Indtast URL</value>
+  </data>
 </root>

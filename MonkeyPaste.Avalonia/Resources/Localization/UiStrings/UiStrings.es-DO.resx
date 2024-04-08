@@ -2951,4 +2951,43 @@ Los atajos globales ahora se pueden habilitar en el menú de la bandeja del sist
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Alternar atajos globales en</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Error de enlace de complemento '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' se marcó como {1} tipo en '{2}' pero no tiene una coincidencia '{3}. {4}' en su carpeta.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Error de dependencia del complemento para complementos {0} ': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Hacer clic</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Editar '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>editar color ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Eliminar '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>remover el artículo</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>seguir ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Ahorrar</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Ingrese el enlace</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Introducir URL</value>
+  </data>
 </root>

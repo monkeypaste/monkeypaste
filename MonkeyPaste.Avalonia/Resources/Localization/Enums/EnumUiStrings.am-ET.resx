@@ -1128,12 +1128,6 @@
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
     <value>አይጥ</value>
   </data>
-  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value>ማጽዳት</value>
-  </data>
-  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value>ሰርዝ</value>
-  </data>
   <data name="MpTagType_Link" xml:space="preserve">
     <value>አገናኝ</value>
   </data>

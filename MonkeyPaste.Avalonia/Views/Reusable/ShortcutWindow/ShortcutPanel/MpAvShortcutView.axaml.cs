@@ -1,9 +1,13 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
+using System.Linq;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -16,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region EmptyText Property
 
-        private string _EmptyText = "None";
+        private string _EmptyText = UiStrings.CommonNoneLabel;
 
         public static readonly DirectProperty<MpAvShortcutView, string> EmptyTextProperty =
             AvaloniaProperty.RegisterDirect<MpAvShortcutView, string>
@@ -88,8 +92,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvShortcutView() {
             InitializeComponent();
-            this.GetObservable(RecordCommandProperty).Subscribe(value => OnRecordChanged());
-            this.GetObservable(RecordCommandParameterProperty).Subscribe(value => OnRecordChanged());
+            ContainerGrid.Classes.CollectionChanged += Classes_CollectionChanged;
+            this.GetObservable(RecordCommandProperty).Subscribe(value => OnRecordChanged()).AddDisposable(this);
+            this.GetObservable(RecordCommandParameterProperty).Subscribe(value => OnRecordChanged()).AddDisposable(this);
         }
 
         private void OnRecordChanged() {
@@ -101,6 +106,72 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 c.Classes.Remove("recordable");
             }
+        }
+
+        protected override void OnLoaded(RoutedEventArgs e) {
+            base.OnLoaded(e);
+            RefreshState();
+        }
+        protected override void OnUnloaded(RoutedEventArgs e) {
+            base.OnUnloaded(e);
+            ContainerGrid.Classes.CollectionChanged -= Classes_CollectionChanged;
+        }
+
+        protected override void OnPointerMoved(PointerEventArgs e) {
+            base.OnPointerMoved(e);
+            RefreshState();
+        }
+        protected override void OnPointerEntered(PointerEventArgs e) {
+            base.OnPointerEntered(e);
+            RefreshState();
+        }
+        protected override void OnPointerExited(PointerEventArgs e) {
+            base.OnPointerExited(e);
+            RefreshState();
+        }
+        private void Classes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            RefreshState();
+        }
+        private void RefreshState() {
+            bool hovering = this.GetSelfAndVisualDescendants().OfType<Control>().Any(x => x.IsPointerOver);
+            bool recordable = ContainerGrid.Classes.Contains("recordable");
+            bool has_shortcut = ContainerGrid.Classes.Contains("hasShortcut");
+            bool is_param_part = this.GetVisualAncestor<MpAvParameterCollectionView>() != null;
+
+            if(recordable) {
+                if(hovering) {
+                    EmptyShortcutTextBlock.IsVisible = false;
+                    ShortcutLabel.IsVisible = false;
+                    RecordButton.IsVisible = true;
+                    return;
+                }
+                if(has_shortcut) {
+                    EmptyShortcutTextBlock.IsVisible = false;
+                    ShortcutLabel.IsVisible = true;
+                    RecordButton.IsVisible = false;
+                    return;
+                }
+                if(is_param_part) {
+                    EmptyShortcutTextBlock.IsVisible = false;
+                    ShortcutLabel.IsVisible = false;
+                    RecordButton.IsVisible = true;
+                    return;
+                }
+                EmptyShortcutTextBlock.IsVisible = true;
+                ShortcutLabel.IsVisible = false;
+                RecordButton.IsVisible = false;
+                return;
+            }
+            if (has_shortcut) {
+                EmptyShortcutTextBlock.IsVisible = false;
+                ShortcutLabel.IsVisible = true;
+                RecordButton.IsVisible = false;
+                return;
+            }
+            EmptyShortcutTextBlock.IsVisible = true;
+            ShortcutLabel.IsVisible = false;
+            RecordButton.IsVisible = false;
+            return;
         }
     }
 }

@@ -2951,4 +2951,43 @@ A globális parancsikonok már engedélyezhetők a rendszer tálca menüben</val
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Váltás a globális parancsikonok</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Plugin összekötő hiba '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>A '{0}' {1} beolvasva van, írja be a '{2}' -et, de nincs megfelelő '{3}. {4}' mappájában.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>A plugin függőségi hibája a '{0}' pluginhoz: {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Kattintás</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Szerkesztés '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Szerkesztés szín ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Távolítsa el a '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>elem eltávolítása</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>követni ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Megment</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Írja be a linket</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Írd be az URLt</value>
+  </data>
 </root>

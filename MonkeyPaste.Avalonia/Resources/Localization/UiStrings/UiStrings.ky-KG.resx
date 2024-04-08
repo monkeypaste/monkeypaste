@@ -2951,4 +2951,43 @@ feedback@monkeypaste.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Дүйнөлүк жарлыктарды күйгүзүү</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Плагин шилтеме катасы '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' '{1} түрүндөгү "{2}" деп белгиленет, бирок анын папкада' {3}. {4} 'дал келбейт.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Плагиндин көз карандылыгы Plugin '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Чыкылдатуу</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>'&lt;em&gt; {0} &lt;/ em&gt;' оңдоо ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Түстүү түс ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;Em&gt; {0} &lt;/ em&gt;' алып салуу ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Нерсени алып салуу</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>ээрчүү ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Сактоо</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Шилтеме киргизиңиз</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL киргизиңиз</value>
+  </data>
 </root>

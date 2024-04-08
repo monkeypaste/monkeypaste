@@ -2951,4 +2951,43 @@ feedble@monkeypaste.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Ενεργοποίηση καθολικών συντομεύσεων</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Σφάλμα σύνδεσης προσθήκης "{0}":{1}{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>Το '{0}' έχει επισημανθεί ως {1} πληκτρολογήστε '{2}' αλλά δεν έχει αντίστοιχο '{3}.{4}' στον φάκελό του.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Σφάλμα εξάρτησης προσθήκης για την προσθήκη "{0}":{1}{2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Κάντε κλικ</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>επεξεργασία "&lt;em&gt;{0}&lt;/em&gt;" ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>επεξεργασία χρώματος...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>αφαιρέστε το "&lt;em&gt;{0}&lt;/em&gt;" ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>αφαιρέστε το στοιχείο</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>ακολουθώ ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>πάω "&lt;em&gt;{0}&lt;/em&gt;" ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Αποθηκεύσετε</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Εισαγάγετε Σύνδεσμο</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Εισαγάγετε το Url</value>
+  </data>
 </root>

@@ -2951,4 +2951,43 @@
   <data name="HookResumeLabel" xml:space="preserve">
     <value>گلوبل شارٹ کٹ آن ٹوگل کریں</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>پلگ ان لنکنگ غلطی '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' کو '{2}' میں {1} ٹائپ کے طور پر پرچم لگایا گیا ہے لیکن اس کے فولڈر میں '{3}. {4}' نہیں ہے۔</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>پلگ ان '{0}' کے لئے پلگ ان انحصار کی خرابی: {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>کلک کریں</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>'&lt;em&gt; {0} &lt;/em&gt;' میں ترمیم کریں ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>رنگ میں ترمیم کریں ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;em&gt; {0} &lt;/em&gt;' کو ہٹا دیں ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>آئٹم کو ہٹا دیں</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>فالو کرنے کے لئے ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>گوٹو '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>بچت کریں</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>لنک درج کریں</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL درج کریں</value>
+  </data>
 </root>

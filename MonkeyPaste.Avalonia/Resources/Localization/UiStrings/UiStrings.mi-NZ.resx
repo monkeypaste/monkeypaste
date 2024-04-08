@@ -2951,4 +2951,43 @@ Ka taea e te waa poto poto te ao i roto i te tahua Tray punaha</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Toggle Poto Poto o te Ao ON</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Ko te Hapa Liming ERRING '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' kua haki hei {1} 'engari kaore i te' {3} '. {4}' i tona kōpaki.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Ko te hapa e pa ana ki te mono mo te mono '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Paatohu</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Whakatika '&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Whakatika tae ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Tangohia te '&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Tangohia te taonga</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>ki te whai ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/ em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Whakaora</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Whakauru hononga</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Whakauruhia URL</value>
+  </data>
 </root>

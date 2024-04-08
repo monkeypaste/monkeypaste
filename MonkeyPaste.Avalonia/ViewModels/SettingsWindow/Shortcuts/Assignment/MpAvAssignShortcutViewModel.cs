@@ -19,11 +19,6 @@ namespace MonkeyPaste.Avalonia {
         AppCopy,
         AppPaste
     }
-    public enum MpShortcutAssignmentClearButtonType {
-        None = 0,
-        Clear,
-        Delete
-    }
 
     public class MpAvAssignShortcutViewModel :
         MpAvViewModelBase,
@@ -178,20 +173,6 @@ namespace MonkeyPaste.Avalonia {
 
         public object IconResourceObj { get; set; }
 
-        public MpShortcutAssignmentClearButtonType ClearButtonType =>
-            IsUserDefinedShortcut ?
-                MpShortcutAssignmentClearButtonType.Delete :
-                _curShortcutId > 0 ?
-                    MpShortcutAssignmentClearButtonType.Clear :
-                    IsEmpty ?
-                        MpShortcutAssignmentClearButtonType.None :
-                        MpShortcutAssignmentClearButtonType.Clear;
-
-        public string ClearButtonLabel =>
-            IsEmpty || ClearButtonType == MpShortcutAssignmentClearButtonType.None ?
-                string.Empty :
-                ClearButtonType.EnumToUiString();
-
         #endregion
 
         #region Model
@@ -292,7 +273,6 @@ namespace MonkeyPaste.Avalonia {
             WarningString = string.Empty;
             WarningString2 = string.Empty;
             DuplicatedShortcutViewModel = null;
-            OnPropertyChanged(nameof(ClearButtonLabel));
 
             //if (_gestureHelper.Downs.Count > 0) {
             //    // only validate after gesture

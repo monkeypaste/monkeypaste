@@ -2951,4 +2951,43 @@
   <data name="HookResumeLabel" xml:space="preserve">
     <value>গ্লোবেল চৰ্টকাটসমূহ অন কৰক</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>প্লাগিন সংযোগ ত্ৰুটি '{0}':{1}{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' '{2}' ত {1} ধৰণ হিচাপে ফ্লেগ কৰা হৈছে কিন্তু ইয়াৰ ফোল্ডাৰত এটা মিল থকা '{3}.{4}' নাই।</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>প্লাগইন '{0}':{1}{2} ৰ বাবে প্লাগইন নিৰ্ভৰশীলতা ত্ৰুটি</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>ক্লিক কৰক</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>'&lt;em&gt;{0}&lt;/em&gt;' সম্পাদনা কৰক ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>ৰং সম্পাদনা কৰক ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;em&gt;{0}&lt;/em&gt;' আঁতৰাওক ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>বস্তু আঁতৰাওক</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>অনুসৰণ ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>'&lt;em&gt;{0}&lt;/em&gt;' লৈ যাওক ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>সঞ্চয় কৰা</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>লিংক দিয়ক</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Url সুমুৱাওক</value>
+  </data>
 </root>

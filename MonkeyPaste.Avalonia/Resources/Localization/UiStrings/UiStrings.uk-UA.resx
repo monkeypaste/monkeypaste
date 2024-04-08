@@ -2951,4 +2951,43 @@
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Перемикайте глобальні ярлики</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Помилка зв'язування плагіна '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' позначається як {1} Введіть '{2}', але не має відповідності '{3}. {4}' у своїй папці.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Помилка залежності плагіну для плагіна '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Клацати</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>редагувати '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Редагувати колір ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Видалити '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Видаліть елемент</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>слідувати ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Заощадити</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Введіть посилання</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Введіть URL -адресу</value>
+  </data>
 </root>

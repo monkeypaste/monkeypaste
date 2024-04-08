@@ -3,6 +3,7 @@ using Avalonia.ReactiveUI;
 #if SUGAR_WV
 using Avalonia.WebView.Desktop;
 #endif
+
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;

@@ -2951,4 +2951,43 @@ Pintasan global sekarang dapat diaktifkan di menu baki sistem</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Mengaktifkan jalan pintas global</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Plugin Linking Error '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' ditandai sebagai {1} type in '{2}' tetapi tidak memiliki pencocokan '{3}. {4}' di foldernya.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Kesalahan ketergantungan plugin untuk plugin '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klik</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Edit '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Edit Warna ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>hapus '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Hapus item</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>mengikuti ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Menyimpan</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Masukkan tautan</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Masukkan URL</value>
+  </data>
 </root>

@@ -2951,4 +2951,43 @@ feathback@monkeypaste.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>切换全局快捷方式</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>插件链接错误'{0}'：{1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}'被标记为{1}键入'{2}'，但在其文件夹中没有匹配'{3}。{4}。</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>插件依赖性错误的插件'{0}'：{1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>点击</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>编辑'&lt;em&gt; {0} &lt;/em&gt;'...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>编辑颜色...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>删除'&lt;em&gt; {0} &lt;/em&gt;'...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>除去项目</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>跟随 ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto'&lt;em&gt; {0} &lt;/em&gt;'...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>节省</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>输入链接</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>输入网址</value>
+  </data>
 </root>

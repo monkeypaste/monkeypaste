@@ -2951,4 +2951,43 @@ Bellach gellir galluogi Llwybrau Byr Byd-eang yn y Ddewislen Hambwrdd System</va
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Toglo Llwybrau Byr Byd-eang Ymlaen</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Gwall cysylltu ategyn '{0}':{1}{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>Mae '{0}' wedi'i fflagio fel {1} teipiwch '{2}' ond nid oes ganddo '{3}.{4}' cyfatebol yn ei ffolder.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Gwall dibyniaeth ategyn ar gyfer ategyn '{0}':{1}{2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Cliciwch</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>golygu '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>golygu lliw...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>dileu '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>tynnu eitem</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>i ddilyn ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>mynd i '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Hiachasit</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Rhowch Dolen</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Rhowch Url</value>
+  </data>
 </root>

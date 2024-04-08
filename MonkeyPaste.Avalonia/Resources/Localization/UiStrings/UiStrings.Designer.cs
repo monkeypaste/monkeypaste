@@ -2450,6 +2450,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string CommonClearText {
+            get {
+                return ResourceManager.GetString("CommonClearText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clone.
         /// </summary>
         public static string CommonCloneLabel {
@@ -3433,6 +3442,33 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string EditorLinkButtonText {
+            get {
+                return ResourceManager.GetString("EditorLinkButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Link.
+        /// </summary>
+        public static string EditorLinkLabel {
+            get {
+                return ResourceManager.GetString("EditorLinkLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Url.
+        /// </summary>
+        public static string EditorLinkPlaceholder {
+            get {
+                return ResourceManager.GetString("EditorLinkPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  Match Case.
         /// </summary>
         public static string EditorMatchCaseLabel {
@@ -3627,6 +3663,69 @@ namespace MonkeyPaste.Avalonia {
         public static string EditorTemplateTeaserText {
             get {
                 return ResourceManager.GetString("EditorTemplateTeaserText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click.
+        /// </summary>
+        public static string EditorTt1 {
+            get {
+                return ResourceManager.GetString("EditorTt1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to edit &apos;&lt;em&gt;{0}&lt;/em&gt;&apos; ....
+        /// </summary>
+        public static string EditorTt2 {
+            get {
+                return ResourceManager.GetString("EditorTt2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to edit color ....
+        /// </summary>
+        public static string EditorTt3 {
+            get {
+                return ResourceManager.GetString("EditorTt3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to remove &apos;&lt;em&gt;{0}&lt;/em&gt;&apos; ....
+        /// </summary>
+        public static string EditorTt4 {
+            get {
+                return ResourceManager.GetString("EditorTt4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to remove item.
+        /// </summary>
+        public static string EditorTt5 {
+            get {
+                return ResourceManager.GetString("EditorTt5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to to follow ....
+        /// </summary>
+        public static string EditorTt6 {
+            get {
+                return ResourceManager.GetString("EditorTt6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to goto &apos;&lt;em&gt;{0}&lt;/em&gt;&apos; ....
+        /// </summary>
+        public static string EditorTt7 {
+            get {
+                return ResourceManager.GetString("EditorTt7", resourceCulture);
             }
         }
         
@@ -4052,6 +4151,33 @@ namespace MonkeyPaste.Avalonia {
         public static string InvalidPluginEx5 {
             get {
                 return ResourceManager.GetString("InvalidPluginEx5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin Linking error &apos;{0}&apos;:{1}{2}.
+        /// </summary>
+        public static string InvalidPluginEx6 {
+            get {
+                return ResourceManager.GetString("InvalidPluginEx6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is flagged as {1} type in &apos;{2}&apos; but does not have a matching &apos;{3}.{4}&apos; in its folder..
+        /// </summary>
+        public static string InvalidPluginEx7 {
+            get {
+                return ResourceManager.GetString("InvalidPluginEx7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin dependency error for plugin &apos;{0}&apos;:{1}{2}.
+        /// </summary>
+        public static string InvalidPluginEx8 {
+            get {
+                return ResourceManager.GetString("InvalidPluginEx8", resourceCulture);
             }
         }
         

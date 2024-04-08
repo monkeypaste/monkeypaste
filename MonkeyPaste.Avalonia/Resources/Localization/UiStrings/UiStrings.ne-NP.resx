@@ -2951,4 +2951,43 @@
   <data name="HookResumeLabel" xml:space="preserve">
     <value>वैश्थाल विश्वव्यापी सर्टकटहरू टगल गर्नुहोस्</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>प्लगइन लिंक त्रुटि '9 0} ': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' '{2}'} टाइप {1} को रूपमा फ्ल्याग गरिएको छ तर मिलान '{{}}'}।</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>प्लगइनको लागि प्लगइन निर्भरता त्रुटि '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>क्लिक गर्नुहोस्</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>'&lt;Em&gt; {0} {0} &lt;/ EM&gt;' सम्पादन ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>EDIT र CONTITY ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>'&lt;Em&gt; {0} &lt;/ EM&gt;} हटाउनुहोस् ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>वस्तु हटाउनुहोस्</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>पछ्याउन ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>गोटो '&lt;{0} &lt;/ EM&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>बचाउनु</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>लिंक प्रविष्ट गर्नुहोस्</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>URL प्रविष्ट गर्नुहोस्</value>
+  </data>
 </root>

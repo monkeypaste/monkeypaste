@@ -2951,4 +2951,43 @@ Les dreceres globals ara es poden activar al menú de la safata del sistema</val
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Activa o desactiva les dreceres globals</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Error d'enllaç del connector "{0}":{1}{2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>"{0}" està marcat com a tipus {1} a "{2}", però no té un "{3}.{4}" coincident a la seva carpeta.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Error de dependència del connector per al connector "{0}":{1}{2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Feu clic</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>edita '&lt;em&gt;{0}&lt;/em&gt;'...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>edita el color...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>elimina "&lt;em&gt;{0}&lt;/em&gt;"...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>eliminar l'element</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>seguir ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>anar a "&lt;em&gt;{0}&lt;/em&gt;"...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Estalviar</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Introduïu l'enllaç</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Introduïu l'URL</value>
+  </data>
 </root>

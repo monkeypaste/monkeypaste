@@ -2951,4 +2951,43 @@ feedback@monkeypaste.com</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>החלף קיצורי דרך גלובליים ב</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>שגיאת קישור תוסף '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' מסומן כ- {1} הקלד '{2}' אך אין לו תואם '{3}. {4}' בתיקיה.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>שגיאת תלות בתוסף עבור תוסף {0} ': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>נְקִישָׁה</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>ערוך '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>ערוך צבע ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>הסר '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>הסר פריט</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>לעקוב ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>להציל</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>הזן קישור</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>הזן כתובת אתר</value>
+  </data>
 </root>

@@ -2951,4 +2951,43 @@ Globálne skratky je teraz možné povoliť v ponuke System Tray</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Prepínať globálne skratky</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Chyba prepojenia doplnku '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' je označený ako {1} type v '{2}', ale nemá v priečinku zodpovedajúci '{3}. {4}'.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Chyba závislosti doplnkov pre doplnok '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Kliknutie</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>edit '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Upraviť farbu ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Odstrániť '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Odstrániť položku</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>nasledovať ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Uložiť</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Zadajte odkaz</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Zadajte adresu URL</value>
+  </data>
 </root>

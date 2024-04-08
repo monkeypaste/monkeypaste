@@ -253,7 +253,8 @@ namespace MonkeyPaste.Common.Wpf {
                     p.FontSize,
                 Brushes.Black,
                 new NumberSubstitution(),
-                TextFormattingMode.Display);//MpScreenInformation.ThisAppDip);
+                TextFormattingMode.Display,
+                MpScreenInformation.ThisAppDip);
             if (ft.Width == 0 || !ft.Width.IsNumber()) {
                 double fs = p.FontSize == 0 || !p.FontSize.IsNumber() ? MpWpfHtmlToRtfConverter.CurrentDefaultFontSize : p.FontSize;
                 return textRange.Text.Length * fs;

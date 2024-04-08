@@ -2951,4 +2951,43 @@ Các phím tắt toàn cầu hiện có thể được bật trong menu khay h�
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Chuyển đổi các phím tắt toàn cầu trên</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Lỗi liên kết plugin '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' được gắn cờ là loại {1} trong '{2}' nhưng không có khớp '{3}. {4}' trong thư mục của nó.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Lỗi phụ thuộc plugin cho plugin '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Nhấp chuột</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Chỉnh sửa '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Chỉnh sửa màu ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Xóa '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>loại bỏ mục</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>để theo dõi ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Cứu</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Nhập liên kết</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Nhập URL</value>
+  </data>
 </root>

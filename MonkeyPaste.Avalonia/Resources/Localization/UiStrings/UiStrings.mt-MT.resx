@@ -2951,4 +2951,43 @@ Shortcuts globali issa jistgħu jiġu attivati ​​fil-menu tat-trej tas-siste
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Toggle shortcuts globali fuq</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Plugin Linking Error '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>"{0}" huwa mmarkat bħala {1} tip f '"{2}" iżda m'għandux tqabbil "{3}. {4}" fil-folder tiegħu.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Żball ta 'dipendenza tal-plugin għall-plugin' {0} ': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Ikklikkja</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Edit "&lt;em&gt; {0} &lt;/em&gt;" ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Editja l-kulur ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Neħħi '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>neħħi l-oġġett</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>issegwi ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Ħlief</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Daħħal link</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Daħħal URL</value>
+  </data>
 </root>

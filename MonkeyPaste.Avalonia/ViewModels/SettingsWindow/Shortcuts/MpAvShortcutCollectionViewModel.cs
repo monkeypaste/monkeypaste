@@ -664,15 +664,15 @@ namespace MonkeyPaste.Avalonia {
                 //if it does clear, save and unregister
                 if (scvm != null) {
 
-                    if (scvm.IsCustom) {
-                        // clearing custom implies delete
-                        Items.Remove(scvm);
-                        await scvm.Shortcut.DeleteFromDatabaseAsync();
-                    } else {
+                    //if (scvm.IsCustom) {
+                    //    // clearing custom implies delete
+                    //    Items.Remove(scvm);
+                    //    await scvm.Shortcut.DeleteFromDatabaseAsync();
+                    //} else {
                         scvm.RoutingType = result_routing_type;
                         scvm.ClearShortcutKeyString();
                         await scvm.Shortcut.WriteToDatabaseAsync();
-                    }
+                    //}
                 } else {
                     //nothing to do since no shortcut created
                 }

@@ -2951,4 +2951,43 @@ Comenzile rapide globale pot fi acum activate în meniul tăvii de sistem</value
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Comutați comenzi rapide globale</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Eroare de conectare a pluginului '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' este semnalat ca {1} tip în '{2}', dar nu are o potrivire '{3}. {4}' în folderul său.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Eroare de dependență de plugin pentru plugin '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Clic</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>editați '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>editați culoarea ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Eliminați '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Eliminați elementul</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>a urma ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>Goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Salvați</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Introduceți link</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Introdu URL-ul</value>
+  </data>
 </root>

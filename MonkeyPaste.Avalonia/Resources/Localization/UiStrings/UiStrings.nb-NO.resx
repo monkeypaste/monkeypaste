@@ -2951,4 +2951,43 @@ Globale snarveier kan nå aktiveres i systemskuffenyen</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Veksle globale snarveier på</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Plugin koblingsfeil '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' er flagget som {1} type i '{2}', men har ikke en matchende '{3}. {4}' i mappen.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Plugin -avhengighetsfeil for plugin '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Klikk</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>Rediger '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>Rediger farge ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Fjern '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>fjerne gjenstand</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>å følge ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Lagre</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Skriv inn lenken</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Skriv inn URL</value>
+  </data>
 </root>

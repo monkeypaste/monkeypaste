@@ -16,6 +16,7 @@ function initLocalizer(cc) {
             cur_culture_elms[i].remove();
         }
         toggleRightToLeft(globals.IsRtl);
+        localizeCss();
         localizeGlobals();
         initLocalizerDomWatcher();
         getLocalizableElements().forEach(x => localizeElement(x));
@@ -70,6 +71,9 @@ function getLocalizableElements() {
 // #endregion State
 
 // #region Actions
+function localizeCss() {
+    setElementComputedStyleProp(document.body, '--linkLabel', 'POOP');
+}
 function localizeElement(elm, args) {
     if (elm.hasAttribute(globals.LOCALIZER_UI_STRING_CONTENT_ATTR_NAME)) {
         // has content key

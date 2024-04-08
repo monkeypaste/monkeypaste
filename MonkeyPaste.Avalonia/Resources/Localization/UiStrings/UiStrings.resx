@@ -3036,4 +3036,52 @@ Global Shortcuts can now be enabled in the System Tray Menu</value>
   <data name="HookResumeLabel" xml:space="preserve">
     <value>Toggle Global Shortcuts On</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Plugin Linking error '{0}':{1}{2}</value>
+    <comment>File Path, Line Break, Exception</comment>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' is flagged as {1} type in '{2}' but does not have a matching '{3}.{4}' in its folder.</value>
+    <comment>Plugin Name, Folder, File Name, File Extension</comment>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Plugin dependency error for plugin '{0}':{1}{2}</value>
+    <comment>Plugin Name, Line Break, Exception</comment>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Enter Link</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Enter Url</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Click</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>edit '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+    <comment>Link Text</comment>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>edit color ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>remove '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+    <comment>File Path</comment>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>remove item</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>to follow ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt;{0}&lt;/em&gt;' ...</value>
+    <comment>Link Uri</comment>
+  </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Clear</value>
+  </data>
 </root>

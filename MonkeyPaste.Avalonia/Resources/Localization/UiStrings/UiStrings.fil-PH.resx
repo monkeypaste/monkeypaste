@@ -2951,4 +2951,43 @@ Maaari na ngayong paganahin ang mga global shortcut sa menu ng System Tray</valu
   <data name="HookResumeLabel" xml:space="preserve">
     <value>I -toggle ang mga pandaigdigang shortcut sa</value>
   </data>
+  <data name="InvalidPluginEx6" xml:space="preserve">
+    <value>Plugin na nag -uugnay ng error '{0}': {1} {2}</value>
+  </data>
+  <data name="InvalidPluginEx7" xml:space="preserve">
+    <value>'{0}' ay na -flag bilang {1} type in '{2}' ngunit walang pagtutugma ng '{3}. {4}' sa folder nito.</value>
+  </data>
+  <data name="InvalidPluginEx8" xml:space="preserve">
+    <value>Error sa dependency ng plugin para sa plugin '{0}': {1} {2}</value>
+  </data>
+  <data name="EditorTt1" xml:space="preserve">
+    <value>Mag -click</value>
+  </data>
+  <data name="EditorTt2" xml:space="preserve">
+    <value>I -edit ang '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt3" xml:space="preserve">
+    <value>I -edit ang Kulay ...</value>
+  </data>
+  <data name="EditorTt4" xml:space="preserve">
+    <value>Alisin ang '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorTt5" xml:space="preserve">
+    <value>Alisin ang item</value>
+  </data>
+  <data name="EditorTt6" xml:space="preserve">
+    <value>upang sundin ...</value>
+  </data>
+  <data name="EditorTt7" xml:space="preserve">
+    <value>goto '&lt;em&gt; {0} &lt;/em&gt;' ...</value>
+  </data>
+  <data name="EditorLinkButtonText" xml:space="preserve">
+    <value>I -save</value>
+  </data>
+  <data name="EditorLinkLabel" xml:space="preserve">
+    <value>Ipasok ang link</value>
+  </data>
+  <data name="EditorLinkPlaceholder" xml:space="preserve">
+    <value>Ilagay ang URL</value>
+  </data>
 </root>
