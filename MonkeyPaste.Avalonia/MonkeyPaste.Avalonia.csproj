@@ -2421,8 +2421,8 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(UseSugarWv)' == 'True'">
-    <PackageReference Include="WebView.Avalonia" Version="11.0.0.4" />
-    <PackageReference Include="WebView.Avalonia.MacCatalyst" Version="11.0.0.4" Condition="'$(BuildOs)' == 'MAC'" />
+    <PackageReference Include="WebView.Avalonia" Version="$(SugarWvVersion)" />
+    <PackageReference Include="WebView.Avalonia.MacCatalyst" Version="$(SugarWvVersion)" Condition="'$(BuildOs)' == 'MAC'" />
   </ItemGroup>
     
   <ItemGroup Condition="$(IsDesktop) == 'true'">

@@ -1,8 +1,5 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
-#if SUGAR_WV
-using Avalonia.WebView.Desktop;
-#endif
 
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
@@ -10,8 +7,8 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-
-#if CEFNET_WV
+#if SUGAR_WV
+using Avalonia.WebView.Desktop;
 #endif
 
 namespace MonkeyPaste.Avalonia {
