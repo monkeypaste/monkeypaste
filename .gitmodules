@@ -31,3 +31,6 @@
 [submodule "Plugins/YoloImageAnnotator"]
 	path = Plugins/YoloImageAnnotator
 	url = https://github.com/monkeypaste/YoloImageAnnotator.git
+[submodule "Common/MonkeyPaste.Common.Plugin"]
+	path = Common/MonkeyPaste.Common.Plugin
+	url = https://github.com/monkeypaste/MonkeyPaste.Common.Plugin
