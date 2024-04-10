@@ -79,6 +79,7 @@ namespace MonkeyPaste.Avalonia {
             await base.ApplyHighlightingAsync();
             if(_doc == null) {
                 _doc = new HtmlDocument();
+                _doc.LoadHtml(string.Empty.ToHtmlDocumentFromTextOrPartialHtml());
             }
             var hl_node_tups = _doc.DocumentNode.SelectNodesSafe($"//span[contains(@class, 'highlight')]").WithIndex();
             if (hl_node_tups.Count() != _matches.Count &&

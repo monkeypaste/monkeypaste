@@ -1,4 +1,7 @@
-﻿using MonkeyPaste.Common;
+﻿using Foundation;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using System;
 using System.IO;
 
 namespace MonkeyPaste.Avalonia {
@@ -7,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
         Multi instance issues:
         -new sources may be duplicated
         */
-        private static FileStream _lockFile;
+        private static object _lockFileObj;
         const string LOCK_FILE_DEFAULT_NAME = ".lock";
         
         string LockFilePath {
@@ -19,15 +22,31 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool IsFirstInstance {
             get {
-                if(_lockFile != null) {
+                if(_lockFileObj != null) {
                     return true;
                 }
                 try {
-                    _lockFile = File.Open(LockFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-                    _lockFile.Lock(0, 0);
+#if WINDOWS
+                    _lockFileObj = File.Open(LockFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                    _lockFileObj.Lock(0, 0); 
+#elif MAC
+                    // File.Open throws exception and .Lock not supported on mac
+                    return true;
+#else
+                    // untested
+                    // from https://learn.microsoft.com/en-us/dotnet/core/compatibility/core-libraries/6.0/filestream-file-locks-unix#type-of-breaking-change
+                    if(!LockFilePath.IsFile()) {
+                        MpFileIo.TouchFile(LockFilePath);
+                    }
+                    _lockFileObj = File.OpenRead(LockFilePath);
+                    _lockFileObj.Lock(0,0);
+#endif
                 }
-                catch { }
-                return _lockFile != null;
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Single instance error (if only instance otherwise expected).", ex);
+                    _lockFileObj = null;
+                }
+                return _lockFileObj != null;
             }
         }
     }

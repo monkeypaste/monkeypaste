@@ -69,8 +69,7 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentDeactivated);
             };
 
-
-            var result = await ascw.ShowDialogWithResultAsync(owner);
+            object result = await ascw.ShowDialogWithResultAsync(owner);
 
             if (result is bool assignResult && assignResult) {
                 return new Tuple<string, MpRoutingType>(scavm.KeyString, scavm.SelectedRoutingType);

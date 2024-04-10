@@ -487,6 +487,15 @@ namespace MonkeyPaste.Avalonia {
                 // give source precedence (likely a child element)
                 control = c;
             }
+#if MAC
+            // BUG (this could a debug thing from pause/resume but) for some reason when press event shows a dialog on mac the source button captures the pointer
+            // and after the dialog closes it just keeps thinking the pointer is over that source control so 
+            // trying to verify by position here
+            //if (e is PointerPressedEventArgs ppe && ppe.GetPosition(control) is { } control_mp &&
+            //        !control.Bounds.Contains(control_mp)) {
+            //    control = null;
+            //} 
+#endif
             return control;
         }
 
