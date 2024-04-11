@@ -352,6 +352,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public decimal Increment {
+            get {
+                if(ParameterFormat == null) {
+                    return 1;
+                }
+                return ParameterFormat.increment;
+            }
+        }
         public int Precision {
             get {
                 if (ParameterFormat == null) {
@@ -371,6 +379,7 @@ namespace MonkeyPaste.Avalonia {
                         case MpParameterControlType.CheckBox:
                             return MpParameterValueUnitType.Bool;
                         case MpParameterControlType.Slider:
+                        case MpParameterControlType.NumberTicker:
                             return MpParameterValueUnitType.Decimal;
                         case MpParameterControlType.Button:
                         case MpParameterControlType.PasswordBox:

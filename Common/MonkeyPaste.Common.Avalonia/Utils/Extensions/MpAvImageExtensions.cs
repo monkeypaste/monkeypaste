@@ -341,10 +341,19 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Read/Write
         private static unsafe PixelColor GetPixel(byte* bmpPtr, int offset) {
+#if MAC
+            // mac seems to be rgba
+            byte red = *(bmpPtr + offset + 0);
+            byte green = *(bmpPtr + offset + 1);
+            byte blue = *(bmpPtr + offset + 2);
+            byte alpha = *(bmpPtr + offset + 3);
+#else
+            // pixels are bgra
             byte blue = *(bmpPtr + offset + 0);
             byte green = *(bmpPtr + offset + 1);
             byte red = *(bmpPtr + offset + 2);
-            byte alpha = *(bmpPtr + offset + 3);
+            byte alpha = *(bmpPtr + offset + 3); 
+#endif
 
             return new PixelColor() {
                 Alpha = alpha,
@@ -355,10 +364,18 @@ namespace MonkeyPaste.Common.Avalonia {
         }
         private static unsafe byte* PutPixel(PixelColor pixel, byte* bmpPtr, int offset) {
             ////MpConsole.WriteLine($"[PutPixel] Unsafe BEGIN ", true);
+#if MAC
+            // mac seems to be rgba
+            *(bmpPtr + offset + 0) = pixel.Red;
+            *(bmpPtr + offset + 1) = pixel.Green;
+            *(bmpPtr + offset + 2) = pixel.Blue;
+            *(bmpPtr + offset + 3) = pixel.Alpha;
+#else
             *(bmpPtr + offset + 0) = pixel.Blue;
             *(bmpPtr + offset + 1) = pixel.Green;
             *(bmpPtr + offset + 2) = pixel.Red;
             *(bmpPtr + offset + 3) = pixel.Alpha;
+#endif
 
             ////MpConsole.WriteLine($"[PutPixel] Unsafe END ", false, true);
             return bmpPtr;
@@ -408,7 +425,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
 
-        #endregion
+#endregion
 
         public static unsafe Bitmap ToGrayScale(this Bitmap bitmap) {
             using (var memoryStream = new MemoryStream()) {

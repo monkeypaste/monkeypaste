@@ -1,4 +1,5 @@
-﻿using Avalonia.Input;
+﻿using AngleSharp.Dom;
+using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json.Linq;
@@ -132,24 +133,6 @@ namespace MonkeyPaste.Common.Avalonia {
             return ido.GetPlaceholderFormats().Count() > 0;
         }
 
-        public static object GetFormatPlaceholderData(string format) {
-            if (MpPortableDataFormats.InternalFormats.Contains(format) &&
-                format != MpPortableDataFormats.CefAsciiUrl) {
-                return null;
-            }
-            switch (format) {
-                case MpPortableDataFormats.Image:
-                case MpPortableDataFormats.CefAsciiUrl:
-                    return MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString();
-                case MpPortableDataFormats.Files:
-                case MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT:
-                    return new string[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT };
-                default:
-                    return MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT;
-            }
-        }
-
-
         public static bool ContainsData(this IDataObject ido, string format) {
             // NOTE used for live dnd dataObjectLookup state
             // since IDataObject doesn't allow for format removal
@@ -212,7 +195,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (!ido.TryGetData(format, out object dataObj)) {
                 return false;
             }
-            data = ReadDataFormat<T>(format, dataObj);
+            data = MpAvClipboardExtensions.ReadDataFormat<T>(format, dataObj);
             return data != null;
         }
 
@@ -221,93 +204,12 @@ namespace MonkeyPaste.Common.Avalonia {
             if (key == null || !dict.TryGetValue(key, out object dataObj)) {
                 return false;
             }
-            value = ReadDataFormat<T>(key, dataObj);
+            value = MpAvClipboardExtensions.ReadDataFormat<T>(key, dataObj);
             return value != null;
         }
 
-        public static T ReadDataFormat<T>(string format, object dataObj) where T : class {
-            if (dataObj == null) {
-                return default;
-            }
-            T typed_data = dataObj as T;
-            if (typed_data != null) {
-                return typed_data;
-            }
 
-            if (typeof(T) == typeof(string)) {
-                // wants string
-                if (dataObj is byte[] bytes) {
-                    // bytes -> string
-                    if (format == MpPortableDataFormats.Image) {
-                        // img bytes -> string
-                        typed_data = bytes.ToBase64String() as T;
-                    } else {
-                        // text bytes -> string
-#if WINDOWS
-                        if (format == MpPortableDataFormats.Xhtml) {
-                            var detected_encoding = bytes.DetectTextEncoding(out string detected_text);
-                            bytes = Encoding.UTF8.GetBytes(detected_text);
-                            //if (detected_text.Contains("Â")) {
-                            //    MpDebug.Break();
-                            //}
-                        }
-#endif
-                        typed_data = bytes.ToDecodedString() as T;
-
-                    }
-                } else if (dataObj is IEnumerable<string> strings) {
-                    // string list -> string
-                    typed_data = string.Join(Environment.NewLine, strings) as T;
-                } else if (dataObj is IEnumerable<IStorageItem> sil) {
-                    // si[] -> string
-                    typed_data = string.Join(Environment.NewLine, sil.Select(x => x.TryGetLocalPath())) as T;
-                } else if (dataObj is int intVal) {
-                    // int -> string (occurs internally putting actionId on clipboard)
-                    typed_data = intVal.ToString() as T;
-                } else if (dataObj != null) {
-                    typed_data = dataObj.ToString() as T;
-                }
-            } else if (typeof(T) == typeof(byte[])) {
-                // wants bytes
-                if (dataObj is string byteStr) {
-                    // string -> bytes
-                    if (format == MpPortableDataFormats.Image) {
-                        // string -> img bytes
-                        typed_data = byteStr.ToBytesFromBase64String() as T;
-                    } else {
-                        // string -> text bytes
-                        typed_data = byteStr.ToBytesFromString() as T;
-                    }
-                }
-            } else if (typeof(T) == typeof(IEnumerable<string>)) {
-                // wants string list
-                if (dataObj is string dataStr) {
-                    // string -> string list
-                    typed_data = dataStr.SplitNoEmpty(Environment.NewLine).AsEnumerable<string>() as T;
-                } else if (dataObj is IEnumerable<Uri> uril) {
-                    // uri[] -> string list
-                    typed_data = uril.Select(x => x.ToFileSystemPath()) as T;
-                } else if (dataObj is IEnumerable<IStorageItem> sil) {
-                    // si[] -> string list
-                    typed_data = sil.Select(x => x.TryGetLocalPath()) as T;
-                } else if (dataObj is JArray ja) {
-                    typed_data = ja.ToList().Select(x => x.ToString()) as T;
-                } else {
-
-                }
-            } else if (typeof(T) == typeof(MpPortableProcessInfo)) {
-                // wants process info
-                if (dataObj is string ppi_json) {
-                    typed_data = ppi_json.DeserializeObject<MpPortableProcessInfo>() as T;
-                }
-            }
-            if (typed_data == null) {
-                MpDebug.Break($"Unhandled dataobj get, source is '{dataObj.GetType()}' target is '{format}'");
-            }
-
-            return typed_data;
-        }
-
+        
         public static bool TryRemove(this IDataObject ido, string format) {
             if (ido == null || !ido.Contains(format)) {
                 return false;

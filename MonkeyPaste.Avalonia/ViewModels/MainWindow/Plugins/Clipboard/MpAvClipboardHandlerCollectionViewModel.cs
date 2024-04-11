@@ -1,5 +1,6 @@
 ﻿
 using Avalonia.Input;
+using Avalonia.Input.Platform;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -646,21 +647,21 @@ namespace MonkeyPaste.Avalonia {
                 preset_vms.Select(x => x.Parent).Distinct();
 
             var ido_formats = ido.GetAllDataFormats().ToList();
-            if (ido != null) {
-                // pre-pass data object and remove disabled formats
-                var formatsToRemove =
-                    ido_formats
-                    .Where(x => !MpPortableDataFormats.InternalFormats.Contains(x))
-                    .Where(x => preset_vms.All(y => y.FormatName != x))
-                    .Select(x => x)
-                    .ToList();
+            //if (ido != null) {
+            //    // pre-pass data object and remove disabled formats
+            //    var formatsToRemove =
+            //        ido_formats
+            //        .Where(x => !MpPortableDataFormats.InternalFormats.Contains(x))
+            //        .Where(x => preset_vms.All(y => y.FormatName != x))
+            //        .Select(x => x)
+            //        .ToList();
 
-                if (formatsToRemove.Any()) {
-                    MpConsole.WriteLine($"Unrecognized clipboard formats found writing to clipboard: {string.Join(",", formatsToRemove)}");
-                    formatsToRemove.ForEach(x => ido.TryRemove(x));
-                    formatsToRemove.ForEach(x => ido_formats.Remove(x));
-                }
-            }
+            //    if (formatsToRemove.Any()) {
+            //        MpConsole.WriteLine($"Unrecognized clipboard formats found writing to clipboard: {string.Join(",", formatsToRemove)}");
+            //        formatsToRemove.ForEach(x => ido.TryRemove(x));
+            //        formatsToRemove.ForEach(x => ido_formats.Remove(x));
+            //    }
+            //}
             // instantiate new ido for output
             Dictionary<string, object> dataLookup = ido.ToDictionary();
             var avdo = new MpAvDataObject();

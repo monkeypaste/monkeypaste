@@ -111,12 +111,6 @@
   <data name="ImgDoScaleLabel" xml:space="preserve">
     <value>ሚዛን ከመጠን በላይ</value>
   </data>
-  <data name="ImgExportTypeHint" xml:space="preserve">
-    <value>አንድ ቢትሪንግ ሲያስቀምጥ ወይም ሲጣል ይህ ነባሪው የፋይል አይነት ይሆናል</value>
-  </data>
-  <data name="ImgExportTypeLabel" xml:space="preserve">
-    <value>ነባሪ ወደ ውጭ የመላክ አይነት</value>
-  </data>
   <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
     <value>አንዳንድ ጊዜ ሙሉ በሙሉ ግልጽ ያልሆኑ ምስሎች በክሊፕቦርዱ ላይ ግራ የሚያጋቡ ናቸው.</value>
   </data>
@@ -215,5 +209,17 @@
   </data>
   <data name="TiffFormatLabel" xml:space="preserve">
     <value>ምስል (ጤፍ)</value>
+  </data>
+  <data name="ToFilePriorityLabel" xml:space="preserve">
+    <value>የፋይል ቅድሚያ</value>
+  </data>
+  <data name="ToFilePriorityHint" xml:space="preserve">
+    <value>እሴቱ ከፍ ባለ መጠን ለአሁኑ ቅንጥብ በጥያቄ ላይ ያለ ፋይል ለመፍጠር '{0}' የመጠቀም እድሉ ከፍተኛ ነው። የ0 እሴት '{0}' ማለት &lt;b style=\"color:red\"&gt;ቸል ይላል&lt;/b&gt;።</value>
+  </data>
+  <data name="ToFileExtLabel" xml:space="preserve">
+    <value>የፋይል ቅጥያ</value>
+  </data>
+  <data name="ToFileExtHint" xml:space="preserve">
+    <value>«{0}» በትዕዛዝ ላይ ፋይል ለመፍጠር ጥቅም ላይ የሚውለው የፋይል ቅጥያ ነው።</value>
   </data>
 </root>

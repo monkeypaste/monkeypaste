@@ -28,8 +28,8 @@
   <!-- GLOBAL PACKAGE VERSIONS -->
   <PropertyGroup>
     <AvaloniaVersion>11.0.10</AvaloniaVersion>
-    <!--<SugarWvVersion>11.0.0.4</SugarWvVersion>-->    
-    <SugarWvVersion>11.0.0.1</SugarWvVersion>    
+    <SugarWvVersion>11.0.0.4</SugarWvVersion>    
+    <!--<SugarWvVersion>11.0.0.1</SugarWvVersion>-->    
   </PropertyGroup>
   
   <!-- MANUALLY SET PROPERTIES-->

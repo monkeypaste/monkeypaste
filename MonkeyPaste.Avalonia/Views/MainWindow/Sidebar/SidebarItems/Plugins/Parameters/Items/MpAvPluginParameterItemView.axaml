@@ -164,6 +164,13 @@
                                                            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}" />
                         </DataTemplate>
 
+                        <!--  NumberTicker Parameter  -->
+
+                        <DataTemplate x:Key="NumberTickerParameterTemplate"
+                                      DataType="local:MpAvSliderParameterViewModel">
+                            <local:MpAvNumberTickerParameterView />
+                        </DataTemplate>
+
                         <!--  File or Directory Chooser Parameter  -->
 
                         <DataTemplate x:Key="FileChooserParameterTemplate"

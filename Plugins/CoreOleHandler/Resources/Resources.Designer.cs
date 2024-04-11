@@ -232,24 +232,6 @@ namespace CoreOleHandler {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When pasting or dropping a bitmap this will be the default file type.
-        /// </summary>
-        public static string ImgExportTypeHint {
-            get {
-                return ResourceManager.GetString("ImgExportTypeHint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Default Export Type.
-        /// </summary>
-        public static string ImgExportTypeLabel {
-            get {
-                return ResourceManager.GetString("ImgExportTypeLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Sometimes fully transparent images will show up on the clipboard, its confusing..
         /// </summary>
         public static string ImgIgnoreTransparentImgHint {
@@ -507,6 +489,42 @@ namespace CoreOleHandler {
         public static string TiffFormatLabel {
             get {
                 return ResourceManager.GetString("TiffFormatLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file extension used when &apos;{0}&apos; is used to create a file on-demand..
+        /// </summary>
+        public static string ToFileExtHint {
+            get {
+                return ResourceManager.GetString("ToFileExtHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Extension.
+        /// </summary>
+        public static string ToFileExtLabel {
+            get {
+                return ResourceManager.GetString("ToFileExtLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The higher the value the more likely &apos;{0}&apos; will be used to create a file on-demand for the current clip. A value of 0 means &apos;{0}&apos; will be &lt;b style=\&quot;color:red\&quot;&gt;ignored&lt;/b&gt;..
+        /// </summary>
+        public static string ToFilePriorityHint {
+            get {
+                return ResourceManager.GetString("ToFilePriorityHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Priority.
+        /// </summary>
+        public static string ToFilePriorityLabel {
+            get {
+                return ResourceManager.GetString("ToFilePriorityLabel", resourceCulture);
             }
         }
         

@@ -28,6 +28,10 @@ namespace MonkeyPaste.Avalonia {
             if (string.IsNullOrWhiteSpace(path)) {
                 return string.Empty;
             }
+            if(MpAvMacHelpers.IsPathExecutableUnderAppBundle(path)) {
+                // ONLY when path has no extension and is under a .app bundle get .app icon not generic exe icon
+                path = MpAvMacHelpers.GetAppBundlePathOrDefault(path);
+            }
 
             var icon = NSWorkspace.SharedWorkspace.IconForFile(path);
             var data = icon.AsTiff();

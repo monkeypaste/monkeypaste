@@ -111,12 +111,6 @@
   <data name="ImgDoScaleLabel" xml:space="preserve">
     <value>Скала преголема</value>
   </data>
-  <data name="ImgExportTypeHint" xml:space="preserve">
-    <value>Кога залепувате или испуштате битмап, ова ќе биде стандардниот тип на датотека</value>
-  </data>
-  <data name="ImgExportTypeLabel" xml:space="preserve">
-    <value>Стандарден вид на извоз</value>
-  </data>
   <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
     <value>Понекогаш целосно транспарентни слики ќе се појават на таблата со клип, збунувачки.</value>
   </data>
@@ -215,5 +209,17 @@
   </data>
   <data name="TiffFormatLabel" xml:space="preserve">
     <value>Слика (TIFF)</value>
+  </data>
+  <data name="ToFilePriorityLabel" xml:space="preserve">
+    <value>Приоритет на датотеката</value>
+  </data>
+  <data name="ToFilePriorityHint" xml:space="preserve">
+    <value>Колку е поголема вредноста, толку е поголема веројатноста „{0}“ ќе се користи за создавање датотека по барање за тековниот клип. Вредноста од 0 значи '{0}' ќе биде &lt;b style = \ "боја: црвена \"&gt; игнорирана &lt;/b&gt;.</value>
+  </data>
+  <data name="ToFileExtLabel" xml:space="preserve">
+    <value>Продолжување на датотеката</value>
+  </data>
+  <data name="ToFileExtHint" xml:space="preserve">
+    <value>Наставката на датотеката се користи кога '{0}' се користи за создавање датотека по барање.</value>
   </data>
 </root>

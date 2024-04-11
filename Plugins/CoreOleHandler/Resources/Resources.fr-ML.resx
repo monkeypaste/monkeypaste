@@ -111,12 +111,6 @@
   <data name="ImgDoScaleLabel" xml:space="preserve">
     <value>Échelle surdimensionnée</value>
   </data>
-  <data name="ImgExportTypeHint" xml:space="preserve">
-    <value>Lors de la collation ou de la suppression d'un bitmap, ce sera le type de fichier par défaut</value>
-  </data>
-  <data name="ImgExportTypeLabel" xml:space="preserve">
-    <value>Type d'exportation par défaut</value>
-  </data>
   <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
     <value>Parfois, des images entièrement transparentes apparaîtront dans le presse-papiers, son déroutant.</value>
   </data>
@@ -215,5 +209,17 @@
   </data>
   <data name="TiffFormatLabel" xml:space="preserve">
     <value>Image (TIFF)</value>
+  </data>
+  <data name="ToFilePriorityLabel" xml:space="preserve">
+    <value>Priorité de fichier</value>
+  </data>
+  <data name="ToFilePriorityHint" xml:space="preserve">
+    <value>Plus la valeur est élevée, plus la «{0}» sera utilisée élevée pour créer un fichier à la demande pour le clip actuel. Une valeur de 0 signifie '{0}' sera &lt;b style = \ "Color: Red \"&gt; ignoré &lt;/b&gt;.</value>
+  </data>
+  <data name="ToFileExtLabel" xml:space="preserve">
+    <value>Extension de fichier</value>
+  </data>
+  <data name="ToFileExtHint" xml:space="preserve">
+    <value>L'extension de fichier utilisée lorsque '{0}' est utilisée pour créer un fichier à la demande.</value>
   </data>
 </root>

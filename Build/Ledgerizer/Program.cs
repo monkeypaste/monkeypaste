@@ -43,7 +43,7 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.GEN_EMPTY_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
             //MpLedgerizerFlags.GEN_PROD_LISTING |
-            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
             //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
@@ -52,13 +52,13 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.DO_REMOTE_INDEX |
             //MpLedgerizerFlags.DO_LOCAL_LEDGER |
             //MpLedgerizerFlags.DO_REMOTE_LEDGER |
-                                   //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+                                   MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
                                    //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
-                                   MpLedgerizerFlags.DO_JS_UISTRINGS |
+                                   //MpLedgerizerFlags.DO_JS_UISTRINGS |
                                    // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
                                    //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
-                                   //MpLedgerizerFlags.DEBUG // |
-                                   MpLedgerizerFlags.RELEASE
+                                   MpLedgerizerFlags.DEBUG // |
+                                   //MpLedgerizerFlags.RELEASE
             ;
 
         #region Localizer Props
@@ -146,17 +146,17 @@ namespace Ledgerizer {
         #region General Props
 
         static string[] WorkingPluginNames => [
-            "AzureComputerVision",
-            "AzureTextTranslator",
-            "ChatGpt",
-            "CoreAnnotator",
+            //"AzureComputerVision",
+            //"AzureTextTranslator",
+            //"ChatGpt",
+            //CoreAnnotator",
             "CoreOleHandler",
-            "FileConverter",
-            "GoogleLiteTextTranslator",
-            "QrCoder",
-            "TextToSpeech",
-            "WebSearch",
-            "YoloImageAnnotator",
+            //"FileConverter",
+            //"GoogleLiteTextTranslator",
+            //"QrCoder",
+            //"TextToSpeech",
+            //"WebSearch",
+            //"YoloImageAnnotator",
         ];
         static IEnumerable<string> WorkingCorePlugins =>
             WorkingPluginNames.Where(x => CorePlugins.Contains(x));

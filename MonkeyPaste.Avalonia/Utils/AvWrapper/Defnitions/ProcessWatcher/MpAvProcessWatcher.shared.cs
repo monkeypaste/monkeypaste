@@ -166,7 +166,8 @@ namespace MonkeyPaste.Avalonia {
                 ApplicationName = GetAppNameByProessPath(GetProcessPath(handle)),
                 MainWindowTitle = GetProcessTitle(handle)
             };
-            ppi.MainWindowIconBase64 = minimal ? null : Mp.Services.IconBuilder.GetPathIconBase64(ppi.ProcessPath, ppi.Handle);
+            ppi.MainWindowIconBase64 = 
+                minimal ? null : Mp.Services.IconBuilder.GetPathIconBase64(ppi.ProcessPath, ppi.Handle);
             return ppi;
         }
         public bool BreakNextTick { get; set; }

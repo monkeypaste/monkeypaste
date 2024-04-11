@@ -61,13 +61,22 @@ namespace MonkeyPaste.Avalonia {
             ascw.Classes.Add("assignWindow");
             //ascw.Classes.Add("fadeIn");
 
-            ascw.Activated += (s, e) => {
+            void OnActivate(object s, EventArgs e) {
                 MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentActivated);
             };
 
-            ascw.Deactivated += (s, e) => {
+            void OnDeactivate(object s, EventArgs e) {
                 MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentDeactivated);
-            };
+            }
+            void OnClose(object s, EventArgs e) {
+                ascw.Activated -= OnActivate;
+                ascw.Deactivated -= OnDeactivate;
+                ascw.Closed -= OnClose;
+                MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentDeactivated);
+            }
+            ascw.Activated += OnActivate;
+            ascw.Deactivated += OnDeactivate;
+            ascw.Closed += OnClose;
 
             object result = await ascw.ShowDialogWithResultAsync(owner);
 

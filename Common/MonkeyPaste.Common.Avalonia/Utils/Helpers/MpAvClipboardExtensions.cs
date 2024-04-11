@@ -26,6 +26,8 @@ using MonkeyPaste.Common.Wpf;
 
 using MonoMac.AppKit;
 using MonoMac.Foundation;
+using System.Text;
+using Newtonsoft.Json.Linq;
 
 #endif
 
@@ -82,6 +84,159 @@ namespace MonkeyPaste.Common.Avalonia {
                 return;
             }
             await cb.SetDataObjectAsync(new MpAvDataObject(dataFormatLookup));
+        }
+        
+        public static async Task FinalizePlatformDataObjectAsync(Dictionary<string, object> dataFormatLookup) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                await Dispatcher.UIThread.InvokeAsync(() => FinalizePlatformDataObjectAsync(dataFormatLookup));
+                return;
+            }
+            foreach(string format in dataFormatLookup.Keys) {
+                object data = dataFormatLookup[format];
+                var map = GetPlatformFormatMap(format);
+                Type target_type = map.outputType;
+                Encoding target_enc = map.outputEncoding;
+                if(data.GetType() == target_type) {
+                    continue;
+                }
+                string str_data = ReadDataFormat<string>(format, data);
+                if(target_type == typeof(string)) {
+                    data = str_data;
+                } else if(target_type == typeof(byte[])) { 
+                    if(target_enc == Encoding.ASCII) {
+                        // implies its base64
+                        data = str_data.ToBytesFromBase64String();
+                    } else {
+                        data = str_data.ToBytesFromString(target_enc);
+                    }
+                } else if(target_type == typeof(IStorageItem[])) {
+                    data = await str_data.SplitNoEmpty(Environment.NewLine).ToAvFilesObjectAsync();
+                } else {
+                    MpDebug.Break($"Warning! Unknown clipboard map from format '{format}' to target: {target_type}/{target_enc}");
+                }
+                dataFormatLookup[format] = data;
+            }
+        }
+
+        public static T ReadDataFormat<T>(string format, object dataObj) where T : class {
+            if (dataObj == null) {
+                return default;
+            }
+            T typed_data = dataObj as T;
+            if (typed_data != null) {
+                return typed_data;
+            }
+
+            if (typeof(T) == typeof(string)) {
+                // wants string
+                if (dataObj is byte[] bytes) {
+                    // bytes -> string
+                    if (MpPortableDataFormats.IsFormatStrBase64(format) is true) {
+                        // img bytes -> string
+                        typed_data = bytes.ToBase64String() as T;
+                    } else {
+                        // text bytes -> string
+#if WINDOWS
+                        if (format == MpPortableDataFormats.Xhtml) {
+                            var detected_encoding = bytes.DetectTextEncoding(out string detected_text);
+                            bytes = Encoding.UTF8.GetBytes(detected_text);
+                            //if (detected_text.Contains("Â")) {
+                            //    MpDebug.Break();
+                            //}
+                        }
+#endif
+                        typed_data = bytes.ToDecodedString() as T;
+
+                    }
+                } else if (dataObj is IEnumerable<string> strings) {
+                    // string list -> string
+                    typed_data = string.Join(Environment.NewLine, strings) as T;
+                } else if (dataObj is IEnumerable<IStorageItem> sil) {
+                    // si[] -> string
+                    typed_data = string.Join(Environment.NewLine, sil.Select(x => x.TryGetLocalPath())) as T;
+                } else if (dataObj is int intVal) {
+                    // int -> string (occurs internally putting actionId on clipboard)
+                    typed_data = intVal.ToString() as T;
+                } else if (dataObj != null) {
+                    typed_data = dataObj.ToString() as T;
+                }
+            } else if (typeof(T) == typeof(byte[])) {
+                // wants bytes
+                if (dataObj is string byteStr) {
+                    // string -> bytes
+                    if (MpPortableDataFormats.IsFormatStrBase64(format) is true) {
+                        // string -> img bytes
+                        typed_data = byteStr.ToBytesFromBase64String() as T;
+                    } else {
+                        // string -> text bytes
+                        typed_data = byteStr.ToBytesFromString() as T;
+                    }
+                }
+            } else if (typeof(T) == typeof(IEnumerable<string>)) {
+                // wants string list
+                if (dataObj is string dataStr) {
+                    // string -> string list
+                    typed_data = dataStr.SplitNoEmpty(Environment.NewLine).AsEnumerable<string>() as T;
+                } else if (dataObj is IEnumerable<Uri> uril) {
+                    // uri[] -> string list
+                    typed_data = uril.Select(x => x.ToFileSystemPath()) as T;
+                } else if (dataObj is IEnumerable<IStorageItem> sil) {
+                    // si[] -> string list
+                    typed_data = sil.Select(x => x.TryGetLocalPath()) as T;
+                } else if (dataObj is JArray ja) {
+                    typed_data = ja.ToList().Select(x => x.ToString()) as T;
+                } else {
+
+                }
+            } else if (typeof(T) == typeof(MpPortableProcessInfo)) {
+                // wants process info
+                if (dataObj is string ppi_json) {
+                    typed_data = ppi_json.DeserializeObject<MpPortableProcessInfo>() as T;
+                }
+            }
+            if (typed_data == null) {
+                MpDebug.Break($"Unhandled dataobj get, source is '{dataObj.GetType()}' target is '{format}'");
+            }
+
+            return typed_data;
+        }
+        private static (Type outputType, Encoding outputEncoding) GetPlatformFormatMap(string format) {
+            Type output_type = typeof(string);
+            Encoding output_encoding = Encoding.UTF8;
+
+#if MAC
+            output_type = typeof(byte[]);
+            if (format == MpPortableDataFormats.MacText2) {
+                output_encoding = Encoding.Unicode;
+            }
+#elif WINDOWS
+            if(format == MpPortableDataFormats.WinXhtml) {
+                output_type = typeof(byte[]);
+            } 
+            if(format == MpPortableDataFormats.WinRtf) {
+                output_type = typeof(byte[]);
+            }
+            if(format == MpPortableDataFormats.WinUnicode) {
+                output_encoding = Encoding.Unicode;
+            }
+#else
+
+#endif
+            // common stuff
+            if (MpPortableDataFormats.IsImageFormat(format) is true) {
+                // this implies string->base64
+                output_encoding = Encoding.ASCII;
+            } else if (MpPortableDataFormats.IsFilesFormat(format) is true) {
+                // kinda hacky but to avoid dep here since IStorageItem is an 
+                // 
+                output_type = typeof(IStorageItem[]);
+                output_encoding = Encoding.ASCII;
+            }
+            if (format == MpPortableDataFormats.CefAsciiUrl) {
+                output_type = typeof(byte[]);
+                output_encoding = Encoding.ASCII;
+            }
+            return (output_type, output_encoding);
         }
 
 

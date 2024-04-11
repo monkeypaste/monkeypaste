@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
             if (pvmb == null) {
                 return null;
             }
-            string keyStr = pvmb.ControlType.ToString() + "ParameterTemplate";
+            string keyStr = $"{pvmb.ControlType}ParameterTemplate";
 
             if (pvmb.ControlType == MpParameterControlType.FileChooser ||
                pvmb.ControlType == MpParameterControlType.DirectoryChooser) {

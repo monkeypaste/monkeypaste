@@ -359,23 +359,24 @@ namespace MonkeyPaste.Avalonia {
                         avdo.SetData(MpPortableDataFormats.Files, ctvm.CopyItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter));
                     }
                 }
-            } else if (!ignore_pseudo_file) {
-                // NOTE setting dummy file so OLE system sees format on clipboard, actual
-                // data is overwritten in core clipboard handler
-                if (use_placeholders) {
-                    avdo.SetData(MpPortableDataFormats.Files, new[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT });
-                } else {
-                    // NOTE presumes Text is txt and Image is png
-                    // get unique pseudo-file path for whole or partial content
-                    bool is_fragment = ctvm.CopyItemType == MpCopyItemType.Text && !is_all_content ? true : false;
-                    string ctvm_fp = ctvm.CopyItem.GetDefaultFilePaths(isFragment: is_fragment).FirstOrDefault();
-                    string ctvm_data = is_fragment ? avdo.GetData(MpPortableDataFormats.Text) as string : ctvm.CopyItemData;
-                    avdo.SetData(
-                        MpPortableDataFormats.Files,
-                        new[] { ctvm_fp });
-                    ctvm_data.ToFile(forcePath: ctvm_fp);
-                }
-            }
+            } 
+            //else if (!ignore_pseudo_file) {
+            //    // NOTE setting dummy file so OLE system sees format on clipboard, actual
+            //    // data is overwritten in core clipboard handler
+            //    if (use_placeholders) {
+            //        avdo.SetData(MpPortableDataFormats.Files, new[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT });
+            //    } else {
+            //        // NOTE presumes Text is txt and Image is png
+            //        // get unique pseudo-file path for whole or partial content
+            //        bool is_fragment = ctvm.CopyItemType == MpCopyItemType.Text && !is_all_content ? true : false;
+            //        string ctvm_fp = ctvm.CopyItem.GetDefaultFilePaths(isFragment: is_fragment).FirstOrDefault();
+            //        string ctvm_data = is_fragment ? avdo.GetData(MpPortableDataFormats.Text) as string : ctvm.CopyItemData;
+            //        avdo.SetData(
+            //            MpPortableDataFormats.Files,
+            //            new[] { ctvm_fp });
+            //        ctvm_data.ToFile(forcePath: ctvm_fp);
+            //    }
+            //}
 
             bool is_full_content = ctvm.CopyItemType == MpCopyItemType.Image || is_all_content;
             avdo.AddContentReferences(ctvm.CopyItem, is_full_content);

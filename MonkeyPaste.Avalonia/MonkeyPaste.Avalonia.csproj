@@ -2260,6 +2260,9 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\Button\MpAvButtonParameterView.axaml.cs">
       <DependentUpon>MpAvButtonParameterView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\NumberTicker\MpAvNumberTickerParameterView.axaml.cs">
+      <DependentUpon>MpAvNumberTickerParameterView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\DateTime\MpAvDateTimeParameterView.axaml.cs">
       <DependentUpon>MpAvDateTimeParameterView.axaml</DependentUpon>
     </Compile>

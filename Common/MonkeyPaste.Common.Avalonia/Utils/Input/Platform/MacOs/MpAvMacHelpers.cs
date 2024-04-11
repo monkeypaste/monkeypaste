@@ -133,16 +133,16 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static bool IsPathExecutableUnderAppBundle(string path) {
             if (!string.IsNullOrEmpty(path) &&
-                //path.StartsWith(@"/Applications") &&
-                path.Contains(@".app/") &&
+                path.ToLowerInvariant().Contains(@".app/") &&
                 string.IsNullOrEmpty(Path.GetExtension(path))) {
+                // only return true for extensionless files under some .app/ dir
                 return true;
             }
             return false;
         }
         public static string GetAppBundlePathOrDefault(string path) {
             if (string.IsNullOrEmpty(path) ||
-                path.SplitNoEmpty(".app") is not { } pathParts ||
+                path.ToLowerInvariant().SplitNoEmpty(".app") is not { } pathParts ||
                 pathParts.Length <= 1) {
                 return path;
             }

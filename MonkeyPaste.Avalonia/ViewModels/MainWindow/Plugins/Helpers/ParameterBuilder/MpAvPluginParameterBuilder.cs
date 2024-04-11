@@ -77,6 +77,7 @@ namespace MonkeyPaste.Avalonia {
                     naipvm = new MpAvButtonParameterViewModel(parent);
                     break;
                 case MpParameterControlType.Slider:
+                case MpParameterControlType.NumberTicker:
                     naipvm = new MpAvSliderParameterViewModel(parent);
                     break;
                 case MpParameterControlType.DirectoryChooser:

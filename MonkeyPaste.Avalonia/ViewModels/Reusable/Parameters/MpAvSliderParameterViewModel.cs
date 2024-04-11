@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -48,6 +49,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
+        public string PrecisionFormat =>
+            "0" + (Precision <= 0 ? string.Empty : "." + string.Join(string.Empty, Enumerable.Repeat("0", Precision)));
         #endregion
 
         #region State

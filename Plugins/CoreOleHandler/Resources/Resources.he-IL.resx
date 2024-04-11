@@ -111,12 +111,6 @@
   <data name="ImgDoScaleLabel" xml:space="preserve">
     <value>גודל גדול מדי</value>
   </data>
-  <data name="ImgExportTypeHint" xml:space="preserve">
-    <value>בעת הדבקה או ירידה של מפת סיביות זה יהיה סוג קובץ ברירת המחדל</value>
-  </data>
-  <data name="ImgExportTypeLabel" xml:space="preserve">
-    <value>סוג ייצוא ברירת מחדל</value>
-  </data>
   <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
     <value>לפעמים תמונות שקופות לחלוטין יופיעו על הלוח, שלהן מבלבל.</value>
   </data>
@@ -215,5 +209,17 @@
   </data>
   <data name="TiffFormatLabel" xml:space="preserve">
     <value>תמונה (טיף)</value>
+  </data>
+  <data name="ToFilePriorityLabel" xml:space="preserve">
+    <value>קובץ עדיפות</value>
+  </data>
+  <data name="ToFilePriorityHint" xml:space="preserve">
+    <value>ככל שהערך גבוה יותר, ישמש יותר '{0}' ליצירת קובץ לפי דרישה עבור הקליפ הנוכחי. ערך של 0 פירושו '{0}' יהיה &lt;b סגנון = \ "צבע: אדום \"&gt; מתעלם &lt;/b&gt;.</value>
+  </data>
+  <data name="ToFileExtLabel" xml:space="preserve">
+    <value>סיומת קובץ</value>
+  </data>
+  <data name="ToFileExtHint" xml:space="preserve">
+    <value>סיומת הקובץ המשמשת כאשר '{0}' משמשת ליצירת קובץ לפי דרישה.</value>
   </data>
 </root>
