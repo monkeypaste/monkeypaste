@@ -286,14 +286,19 @@ namespace MonkeyPaste.Avalonia {
         private async Task InitDefaultShortcutsAsync() {
             _defaultShortcutDefinitions = null;
             foreach (var defaultShortcut in DefaultShortcutDefinitions) {
-                await MpShortcut.CreateAsync(
+                await CreateDefaultShortcutAsync(defaultShortcut);
+            }
+        }
+
+        public static async Task<MpShortcut> CreateDefaultShortcutAsync(string[] defaultShortcut) {
+            var sc = await MpShortcut.CreateAsync(
                     guid: defaultShortcut[0],
                     keyString: defaultShortcut[1],
                     shortcutType: defaultShortcut[2].ToEnum<MpShortcutType>(),
                     routeType: defaultShortcut[3].ToEnum<MpRoutingType>(),
                     isReadOnly: defaultShortcut.Length >= 5 ? bool.Parse(defaultShortcut[4]) : false,
                     isInternalOnly: defaultShortcut.Length >= 6 ? bool.Parse(defaultShortcut[5]) : true);
-            }
+            return sc;
         }
 
         #endregion

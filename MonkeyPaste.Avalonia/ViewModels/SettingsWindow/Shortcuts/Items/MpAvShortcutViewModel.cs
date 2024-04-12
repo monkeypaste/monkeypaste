@@ -117,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Shortcut == null) {
                     return false;
                 }
-                return (int)ShortcutType >= MpShortcut.MIN_USER_SHORTCUT_TYPE;
+                return ShortcutType.IsUserDefinedShortcut();
             }
         }
         public ICommand ShortcutCommand { get; set; }

@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Platform;
 
 namespace MonkeyPaste.Avalonia {
@@ -18,8 +19,13 @@ namespace MonkeyPaste.Avalonia {
         public void Unhide() {
             Width = 500;
             Height = 500;
+            Bounds = new Rect(Bounds.X, Bounds.Y, Width, Height);
             Opacity = 1;
             WindowState = WindowState.Normal;
+            ShowInTaskbar = true;
+            ShowActivated = true;
+            InvalidateMeasure();
+            Show();
             Activate();
         }
     }

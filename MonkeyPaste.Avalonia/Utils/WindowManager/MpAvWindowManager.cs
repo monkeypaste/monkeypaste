@@ -465,10 +465,11 @@ namespace MonkeyPaste.Avalonia {
                 MainWindow.Topmost = TopmostWindowsByZOrder.Contains(MainWindow);
             }
 
-            TopmostWindowsByZOrder
-                .Where(x => x is not MpAvMainWindow)
-                .ForEach((x, idx) => x.Topmost = idx == 0);
-            //.ForEach(x => x.Topmost = true);
+            var wl = TopmostWindowsByZOrder
+                .Where(x => x is not MpAvMainWindow);
+            foreach(var w in wl) {
+                w.Topmost = true;
+            }
 #endif
 
 

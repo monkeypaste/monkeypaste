@@ -826,15 +826,8 @@ namespace MonkeyPaste.Avalonia {
         private async Task InitShortcutsAsync() {
             Dispatcher.UIThread.VerifyAccess();
             //using mainwindow, map all saved shortcuts to their commands
-            var scl = await MpDataModelProvider.GetItemsAsync<MpShortcut>();
+            var scl = await GetShortcutsAndCheckForNewsAsync();
 
-            //IsCustomRoutingEnabled = scl.All(x => x.RoutingType == MpRoutingType.Internal || x.RoutingType == MpRoutingType.Direct);
-
-            async Task AddShortcutViewModelAsync(MpShortcut sc) {
-                AppCommandLookup.TryGetValue(sc.ShortcutType, out ICommand shortcutCommand);
-                var scvm = await CreateShortcutViewModel(sc, shortcutCommand);
-                Items.Add(scvm);
-            }
             await Task.WhenAll(scl.Select(x => AddShortcutViewModelAsync(x)));
             while (Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
@@ -878,7 +871,32 @@ namespace MonkeyPaste.Avalonia {
             await nscvm.InitializeAsync(sc, comamnd);
             return nscvm;
         }
+        private async Task AddShortcutViewModelAsync(MpShortcut sc) {
+            AppCommandLookup.TryGetValue(sc.ShortcutType, out ICommand shortcutCommand);
+            var scvm = await CreateShortcutViewModel(sc, shortcutCommand);
+            Items.Add(scvm);
+        }
+        private async Task<IEnumerable<MpShortcut>> GetShortcutsAndCheckForNewsAsync() {
+            // check for missing shortcuts (can occur after update)
+            // NOTE do not rename shortcuts! Or will need map which should be checked/applied here
 
+            var scl = await MpDataModelProvider.GetItemsAsync<MpShortcut>();
+
+            var new_shortcuts =
+                await Task.WhenAll(
+                scl
+                .Where(x => !x.ShortcutType.IsUserDefinedShortcut())
+                .Select(x => x.ShortcutType.ToString())
+                .Distinct()
+                .Difference(Enum.GetNames(typeof(MpShortcutType)))
+                .SelectMany(x => MpAvDefaultDataCreator.DefaultShortcutDefinitions.Where(y => y[2] == x))
+                .Select(x => MpAvDefaultDataCreator.CreateDefaultShortcutAsync(x)));
+
+            new_shortcuts.ForEach(x => MpConsole.WriteLine($"New shortcut added: {x}"));
+            scl.AddRange(new_shortcuts);
+
+            return scl;
+        }
         private void UpdateEditorShortcutsMessageStr() {
             _editorShortcutsMsgBase64 =
                 new MpQuillEditorShortcutKeystringMessage() {

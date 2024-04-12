@@ -2,16 +2,14 @@
 #if MAC
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using MonoMac.AppKit;
+using MonoMac.Foundation;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-
-using MonoMac.AppKit;
-using MonoMac.Foundation;
 
 namespace MonkeyPaste.Common {
     public static class MpAvMacDataFormatReader {
@@ -21,6 +19,9 @@ namespace MonkeyPaste.Common {
         }
 
         private static string Read(string mac_format, object mac_data) {
+            if(mac_data is string mac_str) {
+                return mac_str;
+            }
             string data_str = null;
             try {
                 switch (mac_format) {

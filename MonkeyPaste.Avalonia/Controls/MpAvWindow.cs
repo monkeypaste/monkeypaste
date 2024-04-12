@@ -158,7 +158,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task<object> ShowDialogWithResultAsync(Window owner = null) {
             SilentLockMainWindowCheck(owner);
 
-#if MAC
+#if MAC && false
             // weird issues (only check assign tile hotkey) after closing dialog so faking it...
             bool is_done = false;
             void OnClosed(object sender, EventArgs e) {

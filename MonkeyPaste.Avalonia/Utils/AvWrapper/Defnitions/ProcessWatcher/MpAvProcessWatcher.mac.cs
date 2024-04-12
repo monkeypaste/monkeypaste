@@ -58,10 +58,20 @@ namespace MonkeyPaste.Avalonia {
             NSString win_name_val = win_obj.ValueForKey(win_name_key) as NSString;
             return win_name_val.ToString();
         }
-        public IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos =>
-            NSWorkspace.SharedWorkspace.RunningApplications
-            .Where(x => IsHandleWindowProcess(x.ProcessIdentifier))
-            .Select(x => GetProcessInfoByHandle(x.ProcessIdentifier));
+        public IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos {
+            get {
+                // TODO avoiding trying to optimize this cause its slow but COULD do all these queries in a loop and avoid
+                // recreating all the NSRunningApp objects...dunno if its faster
+                // or try something like this https://stackoverflow.com/a/13766146/105028 to prune them further
+                var ral =
+                    NSWorkspace.SharedWorkspace.RunningApplications
+                    .Where(x => IsHandleWindowProcess(x.ProcessIdentifier))
+                    .DistinctBy(x => GetProcessPath(x.ProcessIdentifier))
+                    .Where(x=> GetProcessPath(x.ProcessIdentifier).StartsWith("/Application"))
+                    .Select(x => GetProcessInfoByHandle(x.ProcessIdentifier, MpIconSize.SmallIcon16));
+                return ral;
+            }
+        }
 
         protected string GetProcessPath(nint handle) {
             if (GetRunningApp(handle) is not { } app ||
@@ -100,7 +110,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             return
-                !app.Terminated &&
+                !app.Terminated && !app.Hidden &&
                 app.ActivationPolicy != NSApplicationActivationPolicy.Prohibited;
             //var result = MpAvMacHelpers.GetCGWindowByHandle(handle);
             //return result != default;

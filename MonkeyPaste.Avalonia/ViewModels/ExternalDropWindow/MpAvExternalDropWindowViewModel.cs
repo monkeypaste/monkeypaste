@@ -109,15 +109,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsShowingFinishMenu =>
             _dropCompleteWindow != null;
 
-        public bool IsDragObjectInitializing {
-            get {
-                var dobj = MpAvContentWebViewDragHelper.DragDataObject;
-                if (dobj == null) {
-                    return false;
-                }
-                return dobj.IsAnyPlaceholderData();
-            }
-        }
+        public bool IsDragObjectInitializing =>
+            MpAvContentWebViewDragHelper.DragDataObject == null;
 
         public string DragInfo {
             get {

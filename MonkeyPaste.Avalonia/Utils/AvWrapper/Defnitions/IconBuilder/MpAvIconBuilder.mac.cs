@@ -11,9 +11,9 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvIconBuilder {
-        public virtual string GetPathIconBase64(string path, nint handle, MpIconSize iconSize = MpIconSize.MediumIcon32) =>
+        public virtual string GetPathIconBase64(string path, nint handle, MpIconSize iconSize = MpIconSize.ExtraLargeIcon128) =>
             GetPathIconBase64(path, iconSize);
-        public string GetPathIconBase64(string path, MpIconSize iconSize = MpIconSize.MediumIcon32) {
+        public string GetPathIconBase64(string path, MpIconSize iconSize = MpIconSize.ExtraLargeIcon128) {
             /*
                 var path: NSString = NSWorkspace.sharedWorkspace().absolutePathForAppBundleWithIdentifier("com.apple.dt.xcode")!
                 var icon: NSImage = NSWorkspace.sharedWorkspace().iconForFile(path)
@@ -47,6 +47,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private MpSize GetSize(MpIconSize ics) {
+            if(ics == MpIconSize.None) {
+                return MpSize.Empty;
+            }
             if (ics.ToString().Split("Icon").Last() is { } len_str &&
                 int.Parse(len_str) is int len) {
                 return new MpSize(len, len);

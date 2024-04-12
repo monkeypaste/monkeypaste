@@ -83,6 +83,7 @@ namespace CoreOleHandler {
                     unitType = MpParameterValueUnitType.Integer,
                     minimum = 0,
                     maximum = int.MaxValue,
+                    precision = 0,
                     value = new MpParameterValueFormat(1.ToString(),true),
                     paramId = GetParamId(format, isReader, "filepriority")
                 });

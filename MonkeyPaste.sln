@@ -110,8 +110,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MonkeyPaste.com", "MonkeyPa
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MonkeyPaste.Vsi", "MonkeyPaste.Vsi\MonkeyPaste.Vsi.vdproj", "{8C25A00C-A0A0-4D0E-B66B-BEDD97F31F43}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ext", "ext", "{61213AF0-B56E-4456-92DB-E653A96FDCC9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1342,14 +1340,14 @@ Global
 		{FF623CDD-ACF6-4021-BB76-3A7DBB5CE735} = {D300D2C5-182B-4F20-98A6-4BA79EACCCC4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ConfirmAddLanguageFile = False
-		RESX_ExcelExportMode = Text
-		RESX_TaskErrorCategory = Message
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_RemoveEmptyEntries = False
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_DuplicateKeyHandling = Fail
-		RESX_ShowPerformanceTraces = True
 		RESX_CultureCountyOverrides = ar=ar-DJ
+		RESX_ShowPerformanceTraces = True
+		RESX_DuplicateKeyHandling = Fail
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_RemoveEmptyEntries = False
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_TaskErrorCategory = Message
+		RESX_ExcelExportMode = Text
+		RESX_ConfirmAddLanguageFile = False
 	EndGlobalSection
 EndGlobal

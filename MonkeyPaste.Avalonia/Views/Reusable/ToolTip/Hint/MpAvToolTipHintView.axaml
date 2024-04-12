@@ -36,12 +36,19 @@
             <Setter Property="Foreground"
                     Value="White" />
         </Style>
+
+        <Style Selector="TextBlock.mac">
+            <!--  text is off center just a bit maybe screen scale specific...  -->
+            <Setter Property="Margin"
+                    Value="0,0,1.5,0" />
+        </Style>
     </UserControl.Styles>
     <ToolTip.Tip>
         <local:MpAvToolTipView ToolTipText="{Binding ToolTipText, ElementName=InfoHintView}"
                                IsHtml="{Binding IsHtml, ElementName=InfoHintView}" />
     </ToolTip.Tip>
     <Grid x:Name="HintContainerGrid"
+          Classes.mac="{Binding IsMac, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           IsVisible="{Binding ShowHints, Source={x:Static local:MpAvPrefViewModel.Instance}}"
           Background="{StaticResource HitTestableTransparent}"
           Width="15"

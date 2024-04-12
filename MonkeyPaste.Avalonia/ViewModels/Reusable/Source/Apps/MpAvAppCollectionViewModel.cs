@@ -529,11 +529,11 @@ namespace MonkeyPaste.Avalonia {
                         exisiting_avml = RejectedItems;
                         break;
                 }
+                var awpil = Mp.Services.ProcessWatcher.AllWindowProcessInfos;
 
                 var mivml = new MpAvMenuItemViewModel() {
                     SubItems =
-                        Mp.Services.ProcessWatcher
-                        .AllWindowProcessInfos
+                        awpil
                         .Where(x => exisiting_avml.All(y => !y.ToProcessInfo().IsValueEqual(x)) && !x.IsValueEqual(ThisAppViewModel.ToProcessInfo()))
                         .OrderBy(x => x.ApplicationName)
                         .Select(x => new MpAvMenuItemViewModel() {

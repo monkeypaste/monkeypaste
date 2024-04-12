@@ -93,6 +93,9 @@ namespace MonkeyPaste.Avalonia {
             return ido;
         }
         public static MpAvDataObject ToAvDataObject(this MpPortableDataObject mpdo) {
+            if(mpdo is null) {
+                mpdo = new();
+            }
             if (mpdo is MpAvDataObject avdo) {
                 return avdo;
             }

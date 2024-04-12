@@ -833,6 +833,8 @@ namespace MonkeyPaste.Avalonia {
             IsHorizontalScrollbarVisibile ||
             IsVerticalScrollbarVisibile;
 
+        public bool IsAnyDropDownOpen { get; set; }
+
         public bool IsPinButtonVisible {
             get {
                 return IsSelected || IsHovering ? true : false;

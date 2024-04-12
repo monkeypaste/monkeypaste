@@ -139,24 +139,17 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsFormatOnSourceDragObject {
             get {
-                if (MpAvContentWebViewDragHelper.SourceDataObject == null) {
+                if (MpAvContentWebViewDragHelper.DragDataObject == null) {
                     return false;
                 }
                 bool format_exists =
-                    MpAvContentWebViewDragHelper.SourceDataObject.ContainsData(ClipboardFormat.formatName);
+                    MpAvContentWebViewDragHelper.DragDataObject.ContainsData(ClipboardFormat.formatName);
                 return format_exists;
             }
         }
 
-        public bool IsFormatPlaceholderOnTargetDragObject {
-            get {
-                if (MpAvContentWebViewDragHelper.DragDataObject == null) {
-                    return false;
-                }
-                return MpAvContentWebViewDragHelper.DragDataObject.ContainsPlaceholderFormat(ClipboardFormat.formatName);
-            }
-        }
-
+        public bool IsFormatPlaceholderOnTargetDragObject =>
+            false;
         #endregion
 
         #region Model

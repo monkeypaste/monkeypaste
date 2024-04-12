@@ -2716,9 +2716,10 @@ namespace MonkeyPaste.Avalonia {
 
             string msg = $"enableSubSelection_ext('{CurPasteInfoMessage.SerializeObjectToBase64()}')";
 
+            // BUG shouldn't need to check isWindowOpen, its supposed to enable subsel when open but 
             var to_notify_ctvml =
                 AllActiveItems
-                    .Where(x => x.IsSubSelectionEnabled)
+                    .Where(x => x.IsSubSelectionEnabled || x.IsWindowOpen)
                     .Select(x => x.GetContentView() as MpAvContentWebView)
                     .Where(x => x != null);
             if (to_notify_ctvml.IsNullOrEmpty()) {
@@ -3340,7 +3341,6 @@ namespace MonkeyPaste.Avalonia {
             } else if (cv is MpAvIContentDragSource ds) {
                 mpdo = await ds.GetDataObjectAsync(
                     formats: ctvm.GetOleFormats(false, pi),
-                    use_placeholders: false,
                     ignore_selection: pasteSource == MpPasteSourceType.Hotkey);
             }
 
@@ -3648,6 +3648,8 @@ namespace MonkeyPaste.Avalonia {
                          // datacontext doesn't re-initialize
                          ctvm_to_pin.DisableContentReadOnlyCommand.Execute(null);
                      }
+                     // Pooouts should always be subselectable
+                     ctvm_to_pin.EnableSubSelectionCommand.Execute(null);
                  } else {
                      // reset pinned item size (may have been missed if init was before adding to 1 of the item collections)
                      ctvm_to_pin.ResetTileSizeToDefaultCommand.Execute(null);

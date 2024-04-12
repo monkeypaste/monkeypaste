@@ -171,9 +171,10 @@
 
         <!--  BL Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
+                local:MpAvPointerCommandExtension.IsEnabled="False"
                 Classes="noBg noHoverBg noBorder cornerButton bottom left tt_near_bottom"
-                local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
-                local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}">
+                Command="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
+                CommandParameter="{Binding}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=AssignShortcut}"
                                        ToolTipText="{Binding ShortcutTooltipText}" />

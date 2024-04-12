@@ -220,42 +220,6 @@ namespace MonkeyPaste.Avalonia {
                 ignorePlugins: false);
             return avdo;
         }
-        async Task MpIPlatformDataObjectTools.UpdateDragDropDataObjectAsync(object source, object target) {
-            // NOTE this is called during a drag drop when user toggles a format preset
-            // source should be the initial output of ContentView dataObjectLookup and should
-            // have the highest fidelity of data on it for conversions
-            // NOTE DO NOT re-instantiate target haven't tested but I
-            // imagine the reference must persist that which was given to .DoDragDrop in StartDragging
-
-            MpDebug.Assert(source is IDataObject, $"source idoObj must be IDataObject. Is '{source.GetType()}'");
-            MpDebug.Assert(target is IDataObject, $"target idoObj must be IDataObject. Is '{target.GetType()}'");
-            if (source is IDataObject sido &&
-                target is IDataObject tido) {
-                var source_clone = sido.Clone();
-                //var temp = await WriteClipboardOrDropObjectAsync(source_clone, false, false);
-                var temp = await PerformOlePluginRequestAsync(
-                                    isRead: false,
-                                    isDnd: true,
-                                    ido: source_clone,
-                                    ignorePlugins: false);
-                if (temp is IDataObject temp_ido) {
-
-                    temp_ido.CopyTo(tido);
-                    if (tido.TryGetData(MpPortableDataFormats.Files, out IEnumerable<string> fnl)) {
-                        MpConsole.WriteLine($"dnd obj updated. target fns:");
-                        fnl.ForEach(x => MpConsole.WriteLine(x));
-                    }
-
-                }
-                //target = temp;
-                //return temp;
-            } else {
-                // need to cast or whats goin on here?
-                MpDebug.Break();
-                return;
-            }
-
-        }
         #endregion
 
         #endregion

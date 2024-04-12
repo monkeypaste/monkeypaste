@@ -156,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
-        protected virtual MpPortableProcessInfo GetProcessInfoByHandle(nint handle, bool minimal = false) {
+        protected virtual MpPortableProcessInfo GetProcessInfoByHandle(nint handle, MpIconSize iconSize = MpIconSize.MediumIcon32) {
             if (handle == IntPtr.Zero) {
                 return null;
             }
@@ -167,7 +167,7 @@ namespace MonkeyPaste.Avalonia {
                 MainWindowTitle = GetProcessTitle(handle)
             };
             ppi.MainWindowIconBase64 = 
-                minimal ? null : Mp.Services.IconBuilder.GetPathIconBase64(ppi.ProcessPath, ppi.Handle);
+                iconSize == MpIconSize.None ? null : Mp.Services.IconBuilder.GetPathIconBase64(ppi.ProcessPath, ppi.Handle, iconSize);
             return ppi;
         }
         public bool BreakNextTick { get; set; }

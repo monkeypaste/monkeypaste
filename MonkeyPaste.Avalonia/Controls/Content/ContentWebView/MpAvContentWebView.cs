@@ -60,12 +60,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvIReloadableContentWebView {
 
         #region Private Variables
-        private object _sendMessageLock = new object();
-        private string _contentScreenShotBase64_ntf { get; set; }
-
-        //private string _lastLoadedContentHandle = null;
-
-        private DateTime? _locatedDateTime;
 
         private MpQuillContentDataObjectResponseMessage _lastDataObjectResp = null;
         private MpQuillEditorContentChangedMessage _lastReadOnlyEnabledFromHostResp = null;
@@ -243,21 +237,14 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpAvDataObject> GetDataObjectAsync(
             string[] formats = null,
-            bool use_placeholders = false,
             bool ignore_selection = false) {
             if (BindingContext == null ||
                 BindingContext.IsAnyPlaceholder) {
                 MpDebug.Break();
                 return new MpAvDataObject();
             }
-            if (use_placeholders && !MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled) {
-                use_placeholders = false;
-            }
 
             var ctvm = BindingContext;
-            // clear screenshot
-            _contentScreenShotBase64_ntf = null;
-
             var contentDataReq = new MpQuillContentDataObjectRequestMessage() {
                 // 'forOle' not the best name 
                 selectionOnly = !ignore_selection
@@ -273,24 +260,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             bool provided_formats = formats != null;
-            bool ignore_pseudo_file = false;
-            bool ignore_ss = true;
-
-            if (ctvm.CopyItemType != MpCopyItemType.Image &&
-                contentDataReq.formats.Contains(MpPortableDataFormats.Image) /*&& use_placeholders*/) {
-                ignore_ss = false;
-            }
-            if (ctvm.CopyItemType != MpCopyItemType.FileList &&
-                provided_formats &&
-                !formats.Contains(MpPortableDataFormats.Files)) {
-                ignore_pseudo_file = true;
-            }
-
-            if (ignore_ss && !provided_formats) {
-                contentDataReq.formats.Remove(MpPortableDataFormats.Image);
-                contentDataReq.formats.Remove(MpPortableDataFormats.WinBitmap);
-                contentDataReq.formats.Remove(MpPortableDataFormats.WinDib);
-            }
 
             MpAvDataObject GetFallbackDataObject() {
                 var fb_avdo = BindingContext.CopyItem.ToAvDataObject(true, true, contentDataReq.formats.ToArray());
@@ -360,23 +329,6 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             } 
-            //else if (!ignore_pseudo_file) {
-            //    // NOTE setting dummy file so OLE system sees format on clipboard, actual
-            //    // data is overwritten in core clipboard handler
-            //    if (use_placeholders) {
-            //        avdo.SetData(MpPortableDataFormats.Files, new[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT });
-            //    } else {
-            //        // NOTE presumes Text is txt and Image is png
-            //        // get unique pseudo-file path for whole or partial content
-            //        bool is_fragment = ctvm.CopyItemType == MpCopyItemType.Text && !is_all_content ? true : false;
-            //        string ctvm_fp = ctvm.CopyItem.GetDefaultFilePaths(isFragment: is_fragment).FirstOrDefault();
-            //        string ctvm_data = is_fragment ? avdo.GetData(MpPortableDataFormats.Text) as string : ctvm.CopyItemData;
-            //        avdo.SetData(
-            //            MpPortableDataFormats.Files,
-            //            new[] { ctvm_fp });
-            //        ctvm_data.ToFile(forcePath: ctvm_fp);
-            //    }
-            //}
 
             bool is_full_content = ctvm.CopyItemType == MpCopyItemType.Image || is_all_content;
             avdo.AddContentReferences(ctvm.CopyItem, is_full_content);
@@ -387,46 +339,13 @@ namespace MonkeyPaste.Avalonia {
                 avdo.SetData(MpPortableDataFormats.Image, bmp.ToByteArray());
                 //avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
                 // TODO add colorized ascii maybe as html and rtf!!
-            } else if (!ignore_ss) {
-                //if (use_placeholders) {
-                //    avdo.SetData(MpPortableDataFormats.AvPNG, MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString());
-
-                //    Dispatcher.UIThread.Post(async () => {
-                //        await SetScreenShotAsync(avdo);
-                //    });
-                //} else {
-                //    await SetScreenShotAsync(avdo);
-                //}
-            }
-
-            //await avdo.MapAllPseudoFormatsAsync();
+            } 
             // remove all empty formats (workaround for cefnet bug w/ empty asciiUrl
             avdo.DataFormatLookup.Where(x => x.Value == null)
                 .ForEach(x => avdo.Remove(x.Key));
             return avdo;
         }
 
-        private async Task SetScreenShotAsync(MpAvDataObject avdo) {
-            bool timed_out = false;
-            int ss_timeout = 15_000;
-            var ss_sw = Stopwatch.StartNew();
-            // screen shot is async and js notifies w/ base64 property here
-            while (_contentScreenShotBase64_ntf == null) {
-                await Task.Delay(100);
-                if (ss_sw.ElapsedMilliseconds >= ss_timeout) {
-                    MpConsole.WriteLine("screen shot timed out :(");
-                    timed_out = true;
-                    break;
-                }
-            }
-            if (!timed_out) {
-                if (_contentScreenShotBase64_ntf.ToBytesFromBase64String() is byte[] ss_bytes) {
-
-                    MpConsole.WriteLine("screen shot set. byte count: " + ss_bytes.Length);
-                    avdo.Set(MpPortableDataFormats.Image, ss_bytes);
-                }
-            }
-        }
         public bool IsCurrentDropTarget => BindingContext == null ? false : BindingContext.IsDropOverTile;
 
         #endregion
@@ -733,13 +652,6 @@ namespace MonkeyPaste.Avalonia {
                     if (ntf is MpQuillContentQuerySearchRangesChangedNotificationMessage searchRangeCountMsg) {
                         // NOTE content highlight blocks until this is recv'd
                         SearchResponse = searchRangeCountMsg;
-                    }
-                    break;
-
-                case MpEditorBindingFunctionType.notifyContentScreenShot:
-                    ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillContentScreenShotNotificationMessage>(msgJsonBase64Str);
-                    if (ntf is MpQuillContentScreenShotNotificationMessage ssMsg) {
-                        _contentScreenShotBase64_ntf = ssMsg.contentScreenShotBase64;
                     }
                     break;
 
@@ -1120,7 +1032,7 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvContentWebView.IsContentFindAndReplaceVisibleProperty).Subscribe(value => OnIsContentFindOrReplaceVisibleChanged()).AddDisposable(this);
 
 #if SUGAR_WV
-            Background = Brushes.Transparent;
+            //Background = Brushes.Transparent;
 
 #endif
         }
@@ -1280,10 +1192,6 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.ContentViewLocator.RemoveView(this);
         }
 
-        protected override void OnDataContextEndUpdate() {
-            base.OnDataContextEndUpdate();
-            _locatedDateTime = DateTime.Now;
-        }
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs e) {
 
             base.OnPropertyChanged(e);
@@ -1706,7 +1614,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("content changed on append");
                 Dispatcher.UIThread.Post(async () => {
                     // sync append item to current clipboard
-                    var append_mpdo = await GetDataObjectAsync(null, false, true);
+                    var append_mpdo = await GetDataObjectAsync(null, true);
                     await Mp.Services.DataObjectTools
                         .WriteToClipboardAsync(append_mpdo, true);
                 });

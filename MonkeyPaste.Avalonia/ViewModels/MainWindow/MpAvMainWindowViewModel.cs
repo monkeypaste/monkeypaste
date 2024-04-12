@@ -1428,7 +1428,7 @@ namespace MonkeyPaste.Avalonia {
                         !isNtfActive &&
                         !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown && // reject drag cancel event
                         !IsResizing;
-#if MAC
+#if MAC && false
                     if (!canHide) {
                         MpConsole.WriteLine($"is_click_off {is_click_off}");
                         MpConsole.WriteLine($"IsMainWindowOpen {IsMainWindowOpen}");

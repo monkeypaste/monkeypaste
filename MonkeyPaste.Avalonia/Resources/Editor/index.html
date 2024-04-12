@@ -32,27 +32,6 @@
                 return ' ';
             }
         };
-
-        document.addEventListener('DOMContentLoaded', (e) => {
-            window.name = globals.EDITOR_WINDOW_NAME;
-            onDomLoaded_ntf();
-        });
-
-        window.onbeforeunload = function (e) {
-            if (!isRunningOnHost()) {
-                return undefined;
-            }
-            if (globals && globals.IsReloading) {
-                // disable confirm
-                console.log('unload accepted, is reloading');
-                return undefined;
-            }
-
-            console.log('unload rejected');
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        };
     </script>
 
     <!-- EXTERNAL STYLES BEGIN -->
@@ -99,7 +78,6 @@
     <link href="src/components/common/toolbar/common-toolbar-style.css" rel="stylesheet" />
 
     <!-- INTERNAL STYLES END -->
-
     <!-- EXTERNAL APIS BEGIN -->
     <script defer src="lib/HighlightJs/highlight.min.js"></script>
     <!--<script defer src="lib/HighlightJs/xml.min.js"></script>-->
@@ -122,11 +100,37 @@
     <script defer src="lib/html2canvas/html2canvas.min.js"></script>
 
     <!-- EXTERNAL APIS END -->
-
     <!-- INTERNAL API BEGIN -->
     <script defer src="src/components/globals/globals.js"></script>
     <script defer src="src/components/messages/messages_ntf.js"></script>
     <script defer src="src/components/util/debug.js"></script>
+
+    <script defer type="text/javascript">
+        document.addEventListener('DOMContentLoaded', (e) => {
+            window.name = globals.EDITOR_WINDOW_NAME;
+            onDomLoaded_ntf();
+        });
+
+        window.onbeforeunload = function (e) {
+            if (!isRunningOnHost()) {
+                return undefined;
+            }
+            if (globals && globals.IsReloading) {
+                // disable confirm
+                console.log('unload accepted, is reloading');
+                return undefined;
+            }
+
+            console.log('unload rejected');
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+
+            //return undefined;
+        };
+
+    </script>
+
     <script defer src="src/components/quill-wrapper/parchment/parchment-wrapper.js"></script>
     <script defer src="src/components/theme/theme.js"></script>
     <script defer src="src/components/localizer/localizer.js"></script>

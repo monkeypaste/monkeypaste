@@ -47,14 +47,6 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
-        public static IEnumerable<string> GetFilesAsPaths(this IDataObject dataObject) {
-            return (dataObject.Get(MpPortableDataFormats.Files) as IEnumerable<string>)
-                ?? dataObject.GetFiles()?
-                .Select(f => f.TryGetLocalPath())
-                .Where(p => !string.IsNullOrEmpty(p))
-                .OfType<string>();
-        }
-
         public static object GetAllowFiles(this IDataObject ido, string format) {
             if (ido == null) {
                 return null;
@@ -72,66 +64,6 @@ namespace MonkeyPaste.Common.Avalonia {
             return null;
         }
 
-        public static IDataObject Clone(this IDataObject ido_source) {
-            if (ido_source == null) {
-                return null;
-            }
-            var cavdo = new MpAvDataObject();
-            var availableFormats = ido_source.GetAllDataFormats().ToList();
-
-            // need duplicate string lists or the reference will be passed to clone
-            var string_lists_to_clone = availableFormats.Where(x => ido_source.Get(x) is IEnumerable<string>).ToArray();
-            for (int i = 0; i < string_lists_to_clone.Length; i++) {
-                string sltc = string_lists_to_clone[i];
-                if (ido_source.Get(sltc) is string[] source_stringArr) {
-                    var cloned_str_arr = new string[source_stringArr.Length];
-                    //source_stringArr.CopyTo(cloned_str_arr, 0);
-                    for (int j = 0; j < cloned_str_arr.Length; j++) {
-                        cloned_str_arr[j] = source_stringArr[j];
-                    }
-
-                    availableFormats.Remove(sltc);
-                    cavdo.Set(sltc, cloned_str_arr);
-                } else if (ido_source.Get(sltc) is byte[] source_byteArr) {
-                    var cloned_byte_arr = new byte[source_byteArr.Length];
-                    source_byteArr.CopyTo(cloned_byte_arr, 0);
-                    availableFormats.Remove(sltc);
-                    cavdo.Set(sltc, cloned_byte_arr);
-                }
-
-            }
-            availableFormats.ForEach(x => cavdo.SetData(x, ido_source.GetAllowFiles(x)));
-            return cavdo;
-        }
-
-        public static bool ContainsPlaceholderFormat(this IDataObject ido, string format) {
-            object f_data = ido.Get(format);
-            if (f_data == null) {
-                return false;
-            }
-            if (f_data is string dataStr &&
-                dataStr == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
-                return true;
-            }
-            if (f_data is IEnumerable<string> dl &&
-                dl.Any(x => x == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT)) {
-                return true;
-            }
-            if (f_data is byte[] dataBytes &&
-                dataBytes.ToDecodedString() == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
-                return true;
-            }
-            return false;
-        }
-        public static IEnumerable<string> GetPlaceholderFormats(this IDataObject ido) {
-            return
-                ido
-                .GetAllDataFormats()
-                .Where(x => ido.ContainsPlaceholderFormat(x));
-        }
-        public static bool IsAnyPlaceholderData(this IDataObject ido) {
-            return ido.GetPlaceholderFormats().Count() > 0;
-        }
 
         public static bool ContainsData(this IDataObject ido, string format) {
             // NOTE used for live dnd dataObjectLookup state
@@ -142,42 +74,12 @@ namespace MonkeyPaste.Common.Avalonia {
 
             if (ido == null ||
                 string.IsNullOrEmpty(format) ||
-                !ido.Contains(format) ||
-                ido.ContainsPlaceholderFormat(format)) {
+                !ido.Contains(format)) {
                 return false;
             }
 
             object data = ido.Get(format);
             return MpAvClipboardExtensions.IsValidClipboardData(data);
-        }
-
-        public static void CopyTo(this IDataObject source_ido, IDataObject target_ido) {
-            if (target_ido == null || source_ido == null) {
-                return;
-            }
-            var sfl = source_ido.GetAllDataFormats();
-            //foreach (var sf in sfl) {
-            //    // set all target items to available source items
-            //    if (source_ido.Get(sf) is string[] sourceFileArr &&
-            //        target_ido.Get(sf) is string[] targetFileArr) {
-            //        // retain file item array object, only up entries or null if new is less (edge case)
-            //        for (int i = 0; i < targetFileArr.Length; i++) {
-            //            if (i >= sourceFileArr.Length) {
-            //                targetFileArr[i] = null;
-            //                continue;
-            //            }
-            //            targetFileArr[i] = sourceFileArr[i];
-            //        }
-            //        continue;
-            //    }
-            //    target_ido.Set(sf, source_ido.Get(sf));
-            //}
-            sfl.ForEach(x => target_ido.Set(x, source_ido.Get(x)));
-            var tfl_to_clear = target_ido.GetAllDataFormats().Where(x => !sfl.Contains(x));
-            foreach (var tf_to_clear in tfl_to_clear) {
-                // clear all target data not found in source
-                target_ido.Set(tf_to_clear, null);
-            }
         }
 
         public static bool TryGetData(this IDataObject ido, string format, out object data) {
