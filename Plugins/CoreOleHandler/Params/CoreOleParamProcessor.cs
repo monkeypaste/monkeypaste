@@ -9,12 +9,12 @@ namespace CoreOleHandler {
         #region Private Variables
         #endregion
 
-        public static string CurImageExtVal { get; set; } = "png";
         public static object ProcessParam(
             MpParameterRequestItemFormat paramInfo,
             string format,
             object data,
             Dictionary<string, object> all_source_data,
+            Dictionary<string, object> all_target_data,
             MpOlePluginRequest req,
             bool allow_null_data,
             out Dictionary<string, object> convData,
@@ -317,15 +317,6 @@ namespace CoreOleHandler {
                                 }
 
                                 break;
-                            case CoreOleParamType.PNG_W_EXPORTTYPE: {
-                                    if (!string.IsNullOrWhiteSpace(paramVal)) {
-                                        // NOTE used for file creation
-                                        CurImageExtVal = paramVal;
-                                    }
-                                }
-
-
-                                break;
                             case CoreOleParamType.PNG_W_IGNORE: {
                                     if (paramVal.ParseOrConvertToBool(false) is bool ignImg &&
                                     ignImg) {
@@ -377,12 +368,49 @@ namespace CoreOleHandler {
 
                             case CoreOleParamType.FILES_W_IGNORE: {
                                     if (paramVal.ParseOrConvertToBool(false) is bool ignFiles &&
-                                    ignFiles) {
+                                        ignFiles) {
                                         data = null;
+                                        break;
                                     }
+                                    if(data != null || !allow_null_data) {
+                                        break;
+                                    }
+                                    // get highest priority format/ext with processed data
+                                    var pseudo_file_format_ext_kvp =
+                                        all_target_data
+                                        .Where(x => x.Value is not null && CoreOleParamBuilder.IsPseudoFileFormat(x.Key))
+                                        .Select(x => (x.Key, req.GetParamValue<int>(CoreOleParamBuilder.GetParamId(x.Key, false, "filepriority"))))
+                                        .Where(x => x.Item2 > 0)
+                                        .OrderBy(x => x.Item2)
+                                        .Select(x => (x.Key, req.GetParamValue(CoreOleParamBuilder.GetParamId(x.Key, false, "fileext"))))
+                                        .FirstOrDefault();
+                                    if(pseudo_file_format_ext_kvp.IsDefault()) {
+                                        // none available
+                                        break;
+                                    }
+                                    var format_data = all_target_data.TryGetValue(pseudo_file_format_ext_kvp.Key, out byte[] bytes);
+                                    if(bytes is null || bytes.Length == 0) {
+                                        MpConsole.WriteLine($"Error conv '{pseudo_file_format_ext_kvp.Key}' to file data. Data is '{all_target_data[pseudo_file_format_ext_kvp.Key]}'");
+                                        break;
+                                    }
+                                    string fn = null;
+                                    if (all_source_data.TryGetValue(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, out string title)) {
+                                        fn = title;
+                                    }
+                                    if (string.IsNullOrWhiteSpace(fn)) {
+                                        fn = Resources.UntitledLabel;
+                                    }
+                                    string fe = pseudo_file_format_ext_kvp.Item2;
+                                    string output_path = 
+                                        MpFileIo.GetUniqueFileOrDirectoryPath(
+                                            force_name: $"{fn}.{fe}");
+                                    output_path = MpFileIo.WriteByteArrayToFile(output_path, bytes);
+                                    // set data to string[] to be conv to IStorageItem in post-process
+                                    data = new[] { output_path };
+
+                                    break;
                                 }
 
-                                break;
                         }
                         break;
                     default:

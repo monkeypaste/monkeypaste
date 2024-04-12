@@ -159,16 +159,6 @@ function onException_ntf(ex_label,ex_msg) {
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyException', msgStr);
 } 
-
-function onCreateContentScreenShot_ntf(ss_base64) {
-	// output 'MpQuillContentScreenShotNotificationMessage'
-	let msg = {
-		contentScreenShotBase64: ss_base64
-	};
-	let msgStr = toBase64FromJsonObj(msg);
-	sendMessage('notifyContentScreenShot', msgStr);
-}
-
 function onFindReplaceVisibleChange_ntf(isVisible) {
 	// output 'MpQuillContentFindReplaceVisibleChanedNotificationMessage'
 	let msg = {

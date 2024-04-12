@@ -1,17 +1,15 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
-#if SUGAR_WV
-using Avalonia.WebView.Desktop;
-#endif
-
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using Avalonia.Logging;
 
-#if CEFNET_WV
+#if SUGAR_WV
+using Avalonia.WebView.Desktop;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -22,7 +20,9 @@ namespace MonkeyPaste.Avalonia {
 
         [STAThread]
         public static void Main(string[] args) {
-            TryForceHighPerformanceGpu();
+//#if WINDOWS
+            TryForceHighPerformanceGpu(); 
+//#endif
 
             App.Args = args;
 
@@ -33,23 +33,24 @@ namespace MonkeyPaste.Avalonia {
         // Avalonia configuration, don't remove; also used by visual designer.
         static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
-            //.With(new Win32PlatformOptions { UseWgl = true })
-            //.With(new AvaloniaNativePlatformOptions { UseGpu = !OperatingSystem.IsMacOS() })
+            .With(new AvaloniaNativePlatformOptions {
+                OverlayPopups = true,
+                //RenderingMode = [AvaloniaNativeRenderingMode.Software]
+            })
             //.With(new Win32PlatformOptions {
             //    UseWgl = true,
             //    AllowEglInitialization = true
             //})
             //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
             //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
-            //.With(new AvaloniaNativePlatformOptions { UseGpu = false }
 
             .UsePlatformDetect()
 #if SUGAR_WV
             .UseDesktopWebView()
 #endif
-            //.WithInterFont()
+            .WithInterFont()
             .UseReactiveUI()
-                .LogToTrace()// LogEventLevel.Verbose)
+            .LogToTrace()// LogEventLevel.Verbose)
                 ;
         static void HandleSingleInstanceLaunch(object[] args) {
 #if CEFNET_WV

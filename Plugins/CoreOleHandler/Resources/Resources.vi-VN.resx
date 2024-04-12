@@ -111,12 +111,6 @@
   <data name="ImgDoScaleLabel" xml:space="preserve">
     <value>Quy mô quá khổ</value>
   </data>
-  <data name="ImgExportTypeHint" xml:space="preserve">
-    <value>Khi dán hoặc thả bitmap, đây sẽ là loại tệp mặc định</value>
-  </data>
-  <data name="ImgExportTypeLabel" xml:space="preserve">
-    <value>Loại xuất mặc định</value>
-  </data>
   <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
     <value>Đôi khi hình ảnh hoàn toàn minh bạch sẽ hiển thị trên bảng tạm, nó khó hiểu.</value>
   </data>
@@ -215,5 +209,17 @@
   </data>
   <data name="TiffFormatLabel" xml:space="preserve">
     <value>Hình ảnh (TIFF)</value>
+  </data>
+  <data name="ToFilePriorityLabel" xml:space="preserve">
+    <value>Ưu tiên tập tin</value>
+  </data>
+  <data name="ToFilePriorityHint" xml:space="preserve">
+    <value>Giá trị càng cao thì càng có nhiều khả năng '{0}' sẽ được sử dụng để tạo một tệp theo yêu cầu cho clip hiện tại. Giá trị của 0 có nghĩa là '{0}' sẽ là &lt;b style = \ "color: red \"&gt; bị bỏ qua &lt;/b&gt;.</value>
+  </data>
+  <data name="ToFileExtLabel" xml:space="preserve">
+    <value>Tiện ích mở rộng tập tin</value>
+  </data>
+  <data name="ToFileExtHint" xml:space="preserve">
+    <value>Phần mở rộng tệp được sử dụng khi '{0}' được sử dụng để tạo một tệp theo yêu cầu.</value>
   </data>
 </root>

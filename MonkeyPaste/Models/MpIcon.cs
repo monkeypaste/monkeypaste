@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
 
     public enum MpIconSize {
+        None = 0x8,
         SmallIcon16 = 0x1,
         MediumIcon32 = 0x0,
         LargeIcon48 = 0x2,

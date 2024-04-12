@@ -176,12 +176,6 @@
   <data name="ImgDoScaleLabel" xml:space="preserve">
     <value>Scale Oversized</value>
   </data>
-  <data name="ImgExportTypeHint" xml:space="preserve">
-    <value>When pasting or dropping a bitmap this will be the default file type</value>
-  </data>
-  <data name="ImgExportTypeLabel" xml:space="preserve">
-    <value>Default Export Type</value>
-  </data>
   <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
     <value>Sometimes fully transparent images will show up on the clipboard, its confusing.</value>
   </data>
@@ -274,5 +268,19 @@
   </data>
   <data name="UntitledLabel" xml:space="preserve">
     <value>Untitled</value>
+  </data>
+  <data name="ToFilePriorityLabel" xml:space="preserve">
+    <value>File Priority</value>
+  </data>
+  <data name="ToFilePriorityHint" xml:space="preserve">
+    <value>The higher the value the more likely '{0}' will be used to create a file on-demand for the current clip. A value of 0 means '{0}' will be &lt;b style=\"color:red\"&gt;ignored&lt;/b&gt;.</value>
+    <comment>Clipboard Format</comment>
+  </data>
+  <data name="ToFileExtLabel" xml:space="preserve">
+    <value>File Extension</value>
+  </data>
+  <data name="ToFileExtHint" xml:space="preserve">
+    <value>The file extension used when '{0}' is used to create a file on-demand.</value>
+    <comment>Clipboard Format</comment>
   </data>
 </root>

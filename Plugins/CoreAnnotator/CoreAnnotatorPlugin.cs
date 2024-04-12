@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace CoreAnnotator {
@@ -39,7 +40,7 @@ namespace CoreAnnotator {
             return resp;
         }
         public MpAnalyzerComponent GetFormat(MpHeadlessComponentFormatRequest request) {
-            Resources.Culture = new System.Globalization.CultureInfo(request.culture);
+            Resources.Culture = new CultureInfo(request.culture);
 
             return new MpAnalyzerComponent() {
                 inputType = new MpPluginInputFormat() {

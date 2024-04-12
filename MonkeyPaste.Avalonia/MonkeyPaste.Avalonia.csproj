@@ -2260,6 +2260,9 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\Button\MpAvButtonParameterView.axaml.cs">
       <DependentUpon>MpAvButtonParameterView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\NumberTicker\MpAvNumberTickerParameterView.axaml.cs">
+      <DependentUpon>MpAvNumberTickerParameterView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\DateTime\MpAvDateTimeParameterView.axaml.cs">
       <DependentUpon>MpAvDateTimeParameterView.axaml</DependentUpon>
     </Compile>
@@ -2394,6 +2397,7 @@
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.17" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
@@ -2421,7 +2425,7 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(UseSugarWv)' == 'True'">
-    <PackageReference Include="WebView.Avalonia"  Version="$(SugarWvVersion)" />
+    <PackageReference Include="WebView.Avalonia" Version="$(SugarWvVersion)" />
     <PackageReference Include="WebView.Avalonia.MacCatalyst" Version="$(SugarWvVersion)" Condition="'$(BuildOs)' == 'MAC'" />
   </ItemGroup>
     

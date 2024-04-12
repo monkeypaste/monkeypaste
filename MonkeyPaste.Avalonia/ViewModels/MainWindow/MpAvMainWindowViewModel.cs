@@ -1428,6 +1428,24 @@ namespace MonkeyPaste.Avalonia {
                         !isNtfActive &&
                         !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown && // reject drag cancel event
                         !IsResizing;
+#if MAC && false
+                    if (!canHide) {
+                        MpConsole.WriteLine($"is_click_off {is_click_off}");
+                        MpConsole.WriteLine($"IsMainWindowOpen {IsMainWindowOpen}");
+                        MpConsole.WriteLine($"!MpAvWindowManager.IsAnyActive {!MpAvWindowManager.IsAnyActive}");
+                        MpConsole.WriteLine($"!IsMainWindowClosing {!IsMainWindowClosing}");
+                        MpConsole.WriteLine($"!IsMainWindowLocked {!IsMainWindowLocked}");
+                        MpConsole.WriteLine($"!IsAnyDropDownOpen {!IsAnyDropDownOpen}");
+                        MpConsole.WriteLine($"!IsMainWindowInitiallyOpening {!IsMainWindowInitiallyOpening}");
+                        MpConsole.WriteLine($"!is_any_other_opening_or_closing {!is_any_other_opening_or_closing}");
+                        MpConsole.WriteLine($"!isModalActive {!isModalActive}");
+                        MpConsole.WriteLine($"!isInputFocused {!isInputFocused}");
+                        MpConsole.WriteLine($"!IsAnyItemDragging {!IsAnyItemDragging}");
+                        MpConsole.WriteLine($"!isNtfActive {!isNtfActive}");
+                        MpConsole.WriteLine($"!MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown {!MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown}");
+                        MpConsole.WriteLine($"!IsResizing {!IsResizing}");
+                    } 
+#endif
                     return canHide;
                 default:
                     return false;

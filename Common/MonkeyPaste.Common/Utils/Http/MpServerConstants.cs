@@ -4,22 +4,6 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpServerConstants {
-        private static IConfiguration _config;
-        static IConfigurationSection Secrets {
-            get {
-                try {
-                    if (_config == null) {
-                        var cb = new ConfigurationBuilder();
-                        _config = cb.AddUserSecrets(typeof(MpServerConstants).Assembly).Build();
-                    }
-                    return _config.GetSection("server");
-                } catch {
-
-                }
-                return null;
-            }
-        }
-
         public static bool IS_SERVER_LOCAL =>
 #if PUBLIC_BUILD
             true;
@@ -27,21 +11,26 @@ namespace MonkeyPaste.Avalonia {
             false;
 #endif
 
-        public static string LOCAL_SERVER_URL =>
+        static string LOCAL_DOMAIN =>
 #if WINDOWS
-         "https://localhost";
+         "localhost";
 #else
-        Secrets == null ? "https://localhost" : Secrets["localIp"];
+        // local network server (windows xampp)
+        "192.168.43.33";
 #endif
-        public static string REMOTE_SERVER_URL =>
-            Secrets == null ? 
-                "https://localhost" : 
-                Secrets["httpUrl"];
-
-        public static string DOMAIN_URL =
+        static string REMOTE_DOMAIN =>
+            "monkeypaste.com";
+        static string DOMAIN =>
             IS_SERVER_LOCAL ?
-                LOCAL_SERVER_URL :
-                REMOTE_SERVER_URL;
+                LOCAL_DOMAIN :
+                REMOTE_DOMAIN;
+        public static string LOCAL_SERVER_URL =>
+            $"https://{LOCAL_DOMAIN}";
+        public static string REMOTE_SERVER_URL =>
+            $"https://www.{REMOTE_DOMAIN}";
+
+        public static string DOMAIN_URL =>
+            $"https://{DOMAIN}";
 
         public static string LEGAL_BASE_URL =>
             $"{DOMAIN_URL}/legal";
@@ -62,9 +51,6 @@ namespace MonkeyPaste.Avalonia {
             $"{DOMAIN_URL}/blog";
 
         public static string SUPPORT_EMAIL_URI =>
-            Secrets == null ? 
-                "mailto:support@localhost.com" : 
-                $"mailto:support@{Secrets["httpUrl"].Replace("https://www.",string.Empty)}";
-
+            $"mailto:support@{DOMAIN}";
     }
 }

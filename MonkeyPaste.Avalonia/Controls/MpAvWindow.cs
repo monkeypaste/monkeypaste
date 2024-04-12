@@ -10,6 +10,7 @@ using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static SQLite.SQLite3;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -157,7 +158,21 @@ namespace MonkeyPaste.Avalonia {
         public async Task<object> ShowDialogWithResultAsync(Window owner = null) {
             SilentLockMainWindowCheck(owner);
 
-            var result = await ShowDialog<object>(owner ?? MpAvWindowManager.LastActiveWindow);
+#if MAC && false
+            // weird issues (only check assign tile hotkey) after closing dialog so faking it...
+            bool is_done = false;
+            void OnClosed(object sender, EventArgs e) {
+                Closed -= OnClosed;
+                is_done = true;
+            }
+            Closed += OnClosed;
+            Show();
+            while (!is_done) {
+                await Task.Delay(100);
+            }
+# else
+            _ = await ShowDialog<object>(owner ?? MpAvWindowManager.LastActiveWindow);
+#endif
 
             if (owner is Window w) {
                 if (!w.ShowActivated) {

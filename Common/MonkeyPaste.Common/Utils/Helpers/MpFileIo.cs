@@ -864,7 +864,7 @@ namespace MonkeyPaste.Common {
         public static void SetDefaultUserAgent(this HttpClient httpClient) {
             //httpClient.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
             //httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(MpCommonTools.Services.ThisAppInfo.ThisAppProductName);
-            string ua = MpCommonTools.Services.UserAgentProvider.UserAgent;
+            //string ua = MpCommonTools.Services.UserAgentProvider.UserAgent;
             //httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(ua);
             httpClient.DefaultRequestHeaders.Add("User-Agent", "C# App");
         }

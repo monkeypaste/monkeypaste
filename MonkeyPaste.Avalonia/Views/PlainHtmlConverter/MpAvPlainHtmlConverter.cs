@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.VisualTree;
 using HtmlAgilityPack;
 using MonkeyPaste.Common;
@@ -124,6 +125,67 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private async Task CreateWebViewConverterAsync() {
+            bool do_hide = true;
+            IsBusy = true;
+            if (OperatingSystem.IsBrowser()) {
+                await MpDeviceWrapper.Instance.JsImporter.ImportAllAsync();
+                if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime mobile
+                        && mobile.MainView != null) {
+                    Mp.Services.ScreenInfoCollection = new MpAvScreenInfoCollectionBase(new[] { new MpAvDesktopScreenInfo(mobile.MainView.GetVisualRoot().AsScreen()) });
+                }
+            }
+
+            ConverterWebView = new MpAvPlainHtmlConverterWebView() {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+            };
+
+
+            if (Mp.Services.PlatformInfo.IsDesktop) {
+                if(do_hide) {
+                    _convWindow = new MpAvHiddenWindow();
+                } else {
+                    _convWindow = new MpAvWindow();
+                }
+                _convWindow.Width = 500;
+                _convWindow.Height = 500;
+
+                _convWindow.Content = ConverterWebView;
+                ConverterWebView.AttachedToVisualTree += async (s, e) => {
+                    var sw = Stopwatch.StartNew();
+                    if (OperatingSystem.IsWindows()) {
+                        // hide converter window from windows alt-tab menu
+                        MpAvToolWindow_Win32.SetAsToolWindow(_convWindow.TryGetPlatformHandle().Handle);
+                    }
+
+                    while (!ConverterWebView.IsEditorInitialized) {
+                        if (sw.Elapsed > TimeSpan.FromSeconds(60)) {
+                            // TODO should fallback here 
+                        }
+                        MpConsole.WriteLine("[loader] waiting for html converter init...");
+                        await Task.Delay(100);
+                    }
+                    if(do_hide) {
+                        _convWindow.Hide();
+                        _convWindow.WindowState = WindowState.Minimized;
+                    }
+                    sw.Stop();
+                    MpConsole.WriteLine($"Html converter initialized. ({_convWindow.Bounds.Width}x{_convWindow.Bounds.Height}) Load time: {sw.ElapsedMilliseconds}ms");
+                    IsLoaded = true;
+                };
+                _convWindow.Show();
+            } else if (App.PrimaryView is MpAvMainView mv) {
+                ConverterWebView.AttachedToLogicalTree += (s, e) => {
+                    if(do_hide) {
+                        ConverterWebView.IsVisible = false;
+                    }
+                };
+                mv.RootGrid.Children.Add(ConverterWebView);
+            }
+
+            IsBusy = false;
+        }
         private async Task<MpRichHtmlContentConverterResult> ConvertWithWebViewAsync(
             MpDataFormatType inputFormatType,
             string htmlDataStr,
@@ -255,59 +317,6 @@ namespace MonkeyPaste.Avalonia {
             }
             return doc.DocumentNode.OuterHtml;
         }
-        private async Task CreateWebViewConverterAsync() {
-            IsBusy = true;
-            if (OperatingSystem.IsBrowser()) {
-                await MpDeviceWrapper.Instance.JsImporter.ImportAllAsync();
-                if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime mobile
-                        && mobile.MainView != null) {
-                    Mp.Services.ScreenInfoCollection = new MpAvScreenInfoCollectionBase(new[] { new MpAvDesktopScreenInfo(mobile.MainView.GetVisualRoot().AsScreen()) });
-                }
-            }
-
-            ConverterWebView = new MpAvPlainHtmlConverterWebView() {
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-            };
-
-
-            if (Mp.Services.PlatformInfo.IsDesktop) {
-                _convWindow = new MpAvHiddenWindow() {
-                    Width = 10,
-                    Height = 10
-                };
-
-                _convWindow.Content = ConverterWebView;
-                ConverterWebView.AttachedToVisualTree += async (s, e) => {
-                    var sw = Stopwatch.StartNew();
-                    if (OperatingSystem.IsWindows()) {
-                        // hide converter window from windows alt-tab menu
-                        MpAvToolWindow_Win32.SetAsToolWindow(_convWindow.TryGetPlatformHandle().Handle);
-                    }
-
-                    while (!ConverterWebView.IsEditorInitialized) {
-                        if (sw.Elapsed > TimeSpan.FromSeconds(60)) {
-                            // TODO should fallback here 
-                        }
-                        MpConsole.WriteLine("[loader] waiting for html converter init...");
-                        await Task.Delay(100);
-                    }
-                    _convWindow.Hide();
-                    _convWindow.WindowState = WindowState.Minimized;
-                    sw.Stop();
-                    MpConsole.WriteLine($"Html converter initialized. ({_convWindow.Bounds.Width}x{_convWindow.Bounds.Height}) Load time: {sw.ElapsedMilliseconds}ms");
-                    IsLoaded = true;
-                };
-                _convWindow.Show();
-            } else if (App.PrimaryView is MpAvMainView mv) {
-                ConverterWebView.AttachedToLogicalTree += (s, e) => {
-                    ConverterWebView.IsVisible = false;
-                };
-                mv.RootGrid.Children.Add(ConverterWebView);
-            }
-
-            IsBusy = false;
-        }
 
         private MpRichHtmlContentConverterResult ConvertWithFallback(string htmlDataStr, string verifyText) {
             var result = MpRichHtmlContentConverterResult.Parse(htmlDataStr.ToString());
@@ -324,15 +333,14 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShowConverterDevTools => new MpCommand(
             () => {
 #if SUGAR_WV && MAC
-                // NOTE WKWebView doesn't have a 'show dev tools' only right-click context option so s
+                // NOTE WKWebView doesn't have a 'show dev tools' only right-click context option so 
                 // showing the conv window
                 if (_convWindow is not MpAvHiddenWindow cw) {
                     return;
                 }
                 cw.Unhide();
-#else
-                ConverterWebView.OpenDevTools();
 #endif
+                ConverterWebView.OpenDevTools();
             });
 
         #endregion

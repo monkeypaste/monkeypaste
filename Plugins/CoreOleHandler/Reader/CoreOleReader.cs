@@ -68,6 +68,7 @@ namespace CoreOleHandler {
                                 format: read_format,
                                 data: dataStr,
                                 all_source_data: avdo,
+                                all_target_data: read_output,
                                 req: request,
                                 allow_null_data: false,
                                 convData: out Dictionary<string, object> conv_result,
@@ -109,10 +110,6 @@ namespace CoreOleHandler {
                 userNotifications = nfl,
                 errorMessage = string.Join(Environment.NewLine, exl)
             };
-        }
-
-        private string ReadAsString(string format, object data) {
-            return MpAvPlatformDataObjectExtensions.ReadDataFormat<string>(format, data);
         }
         #endregion
     }

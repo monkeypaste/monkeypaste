@@ -115,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = false, bool ignore_selection = false) {
+        public async Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool ignore_selection = false) {
             if (BindingContext == null ||
                 BindingContext.IsPlaceholder ||
                 BindingContext.CopyItem.ToAvDataObject(true, true) is not MpAvDataObject avdo ||

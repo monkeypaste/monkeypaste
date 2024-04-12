@@ -92,10 +92,6 @@ namespace MonkeyPaste {
         public bool selectionOnly { get; set; }
     }
 
-    public class MpQuillContentScreenShotNotificationMessage {
-        public string contentScreenShotBase64 { get; set; }
-    }
-
     public class MpQuillContentFindReplaceVisibleChanedNotificationMessage {
         public bool isFindReplaceVisible { get; set; }
     }

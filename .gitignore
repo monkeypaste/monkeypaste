@@ -366,6 +366,7 @@ MigrationBackup/
 /Plugins/TextToSpeech
 /Plugins/WebSearch
 /Plugins/YoloImageAnnotator
+/MonkeyPaste.Avalonia/Resources/Localization/Listings
 /ext
 /MonkeyPaste.Desktop/cef
 /MonkeyPaste.Avalonia.Desktop/cef

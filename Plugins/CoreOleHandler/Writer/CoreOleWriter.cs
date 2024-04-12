@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -25,7 +26,7 @@ namespace CoreOleHandler {
                 request.dataObjectLookup is not Dictionary<string, object> ido_dict) {
                 return null;
             }
-
+            
             List<MpUserNotification> nfl = new List<MpUserNotification>();
             CoreOleHelpers.SetCulture(request);
             List<Exception> exl = new List<Exception>();
@@ -47,8 +48,11 @@ namespace CoreOleHandler {
                 // when file type is enabled but source is not a file,
                 // add file as a format and flag that it needs to be created
                 // AFTER all runtime formats have been processed so best format is written
-
+                                
                 needs_pseudo_file = true;
+                if(!writeFormats.Contains(MpPortableDataFormats.Files)) {
+                    writeFormats.Add(MpPortableDataFormats.Files);
+                }
             }
             bool needs_pseudo_image = false;
             if (!request.GetParamValue(CoreOleParamType.PNG_W_FROMTEXTFORMATS.ToString()).IsNullOrEmpty() &&
@@ -61,21 +65,21 @@ namespace CoreOleHandler {
 
             foreach (var write_format in writeFormats) {
                 object data = null;
-                if (needs_pseudo_file && write_format == MpPortableDataFormats.Files) {
-                    // called last 
-                    data = PreProcessFileFormat(write_output);
-                } else {
-                    if (write_output.TryGetValue(write_format, out string dataStr)) {
-                        data = dataStr;
-                    }
+                if (write_output.TryGetValue(write_format, out string dataStr)) {
+                    data = dataStr;
                 }
-                bool allow_null = needs_pseudo_image && write_format == MpPortableDataFormats.Image;
+
+                bool allow_null = 
+                    (needs_pseudo_image && write_format == MpPortableDataFormats.Image) ||
+                    (needs_pseudo_file && write_format == MpPortableDataFormats.Files);
+
                 foreach (var param in request.items) {
                     data = CoreOleParamProcessor.ProcessParam(
                         paramInfo: param,
                         format: write_format,
                         data: data,
                         all_source_data: ido_dict,
+                        all_target_data: write_output,
                         req: request,
                         allow_null_data: allow_null,
                         convData: out Dictionary<string, object> conv_result,
@@ -120,105 +124,12 @@ namespace CoreOleHandler {
         #region Private Methods
 
         #region File Pre-Processor
-        private object PreProcessFileFormat(Dictionary<string, object> ido) {
-            string source_type = null;
-            if (ido.TryGetValue(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT, out string itemType)) {
-                source_type = itemType.ToLowerInvariant();
-            }
-            if (source_type == null) {
-                source_type = "text";
-            }
-
-            string fn = null;
-            if (ido.TryGetValue(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, out string title)) {
-                fn = title;
-            }
-            if (string.IsNullOrWhiteSpace(fn)) {
-                fn = Resources.UntitledLabel;
-            }
-            object data_to_write = null;
-            string fe = null;
-            // NOTE basically avoiding writing text screen shot as file or
-            // image ascii and writing tabular csv when available or
-            // falling back to either html or rtf when plain text isn't wanted
-
-            if (source_type == "text") {
-                string pref_text_format = GetPreferredTextFileFormat(ido);
-                if (ido.TryGetValue(pref_text_format, out string text)) {
-                    // text as text
-                    data_to_write = text;
-                    fe = GetTextFileFormatExt(pref_text_format);
-                } else if (ido.TryGetValue(MpPortableDataFormats.Image, out byte[] imgBytes)) {
-                    // text as image
-                    data_to_write = imgBytes;
-                    fe = CoreOleParamProcessor.CurImageExtVal;
-                }
-            } else if (source_type == "image") {
-                if (ido.TryGetValue(MpPortableDataFormats.Image, out byte[] imgBytes)) {
-                    // image as image
-                    data_to_write = imgBytes;
-                    fe = CoreOleParamProcessor.CurImageExtVal;
-                } else {
-                    string pref_text_format = GetPreferredTextFileFormat(ido);
-                    if (ido.TryGetValue(pref_text_format, out string text)) {
-                        // image as text
-                        data_to_write = text;
-                        fe = GetTextFileFormatExt(pref_text_format);
-                    }
-                }
-            }
-            if (data_to_write == null || string.IsNullOrEmpty(fe)) {
-                return null;
-            }
-
-            string output_path = MpFileIo.GetUniqueFileOrDirectoryPath(
-                force_name: $"{fn}.{fe}");
-
-            if (data_to_write is byte[] bytes_to_write) {
-                output_path = MpFileIo.WriteByteArrayToFile(output_path, bytes_to_write);
-            } else if (data_to_write is string str_to_write) {
-                output_path = MpFileIo.WriteTextToFile(output_path, str_to_write);
-            } else {
-                return null;
-            }
-            return new[] { output_path };
-        }
         private int GetWriterPriority(string format) {
             if (format == MpPortableDataFormats.Files) {
                 // process files last
                 return int.MaxValue;
             }
             return 0;
-        }
-        private string GetPreferredTextFileFormat(Dictionary<string, object> ido) {
-            if (ido.ContainsKey(MpPortableDataFormats.Csv)) {
-                return MpPortableDataFormats.Csv;
-            }
-            if (ido.ContainsKey(MpPortableDataFormats.Text)) {
-                return MpPortableDataFormats.Text;
-            }
-            if (ido.ContainsKey(MpPortableDataFormats.Html)) {
-                return MpPortableDataFormats.Html;
-            }
-            if (ido.ContainsKey(MpPortableDataFormats.Rtf)) {
-                return MpPortableDataFormats.Rtf;
-            }
-            return null;
-        }
-        private string GetTextFileFormatExt(string format) {
-            if (format == MpPortableDataFormats.Csv) {
-                return "csv";
-            }
-            if (format == MpPortableDataFormats.Text) {
-                return "txt";
-            }
-            if (format == MpPortableDataFormats.Html) {
-                return "html";
-            }
-            if (format == MpPortableDataFormats.Rtf) {
-                return "rtf";
-            }
-            return null;
         }
 
         #endregion
@@ -240,7 +151,10 @@ namespace CoreOleHandler {
         #endregion
 
         #region Platform DataObject Post-Process
-        private async Task PrepareForOutputAsync(Dictionary<string, object> ido, bool isDnd, IEnumerable<string> formats) {
+        private async Task PrepareForOutputAsync(
+            Dictionary<string, object> ido, 
+            bool isDnd, 
+            IEnumerable<string> formats) {
 
             await MapAllPseudoFormatsAsync(ido);
 
@@ -248,13 +162,15 @@ namespace CoreOleHandler {
             var empty_formats = ido.Keys.Where(x => !formats.Contains(x) || ido[x] == null || (ido[x] is string && string.IsNullOrEmpty(((string)ido[x]))));
             empty_formats.ForEach(x => ido.Remove(x));
 
+            // use common to map everything to platform formats
+            await MpAvClipboardExtensions.FinalizePlatformDataObjectAsync(ido);
+
             if (isDnd) {
-#if MAC && False
+#if MAC && false
                 await ido.WriteToPasteboardAsync(true);
 #endif
                 return;
             }
-            //await clipboard.SetDataObjectAsync(ido);
             await MpAvClipboardExtensions.WriteToClipboardAsync(ido);
         }
 
@@ -342,7 +258,6 @@ namespace CoreOleHandler {
 
                 }
                 if (fpl != null) {
-
                     var av_fpl = await fpl.ToAvFilesObjectAsync();
                     ido.AddOrReplace(MpPortableDataFormats.Files, av_fpl);
                     MpConsole.WriteLine($"Files set");

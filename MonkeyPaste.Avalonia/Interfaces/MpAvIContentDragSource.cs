@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpAvIContentDragSource : MpIDraggable {
-        Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = false, bool ignore_selection = false);
+        Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool ignore_selection = false);
 
         string[] GetDragFormats();
     }

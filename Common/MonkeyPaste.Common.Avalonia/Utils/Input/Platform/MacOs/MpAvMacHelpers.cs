@@ -133,16 +133,16 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static bool IsPathExecutableUnderAppBundle(string path) {
             if (!string.IsNullOrEmpty(path) &&
-                //path.StartsWith(@"/Applications") &&
-                path.Contains(@".app/") &&
+                path.ToLowerInvariant().Contains(@".app/") &&
                 string.IsNullOrEmpty(Path.GetExtension(path))) {
+                // only return true for extensionless files under some .app/ dir
                 return true;
             }
             return false;
         }
         public static string GetAppBundlePathOrDefault(string path) {
             if (string.IsNullOrEmpty(path) ||
-                path.SplitNoEmpty(".app") is not { } pathParts ||
+                path.ToLowerInvariant().SplitNoEmpty(".app") is not { } pathParts ||
                 pathParts.Length <= 1) {
                 return path;
             }
@@ -245,23 +245,23 @@ namespace MonkeyPaste.Common.Avalonia {
             // from https://stackoverflow.com/a/20925575/105028
             /*
             NSTask *task = [[NSTask alloc] init];
-[task setLaunchPath: @"/usr/bin/textutil"];
-[task setArguments: @[@"-format", @"rtf", @"-convert", @"html", @"-stdin", @"-stdout"]];
-[task setStandardInput:[NSPipe pipe]];
-[task setStandardOutput:[NSPipe pipe]];
-NSFileHandle *taskInput = [[task standardInput] fileHandleForWriting];
-[taskInput writeData:[NSData dataWithBytes:cString length:cStringLength]];
-[task launch];
-[taskInput closeFile];
+            [task setLaunchPath: @"/usr/bin/textutil"];
+            [task setArguments: @[@"-format", @"rtf", @"-convert", @"html", @"-stdin", @"-stdout"]];
+            [task setStandardInput:[NSPipe pipe]];
+            [task setStandardOutput:[NSPipe pipe]];
+            NSFileHandle *taskInput = [[task standardInput] fileHandleForWriting];
+            [taskInput writeData:[NSData dataWithBytes:cString length:cStringLength]];
+            [task launch];
+            [taskInput closeFile];
 
             // sync
-NSData *outData = [[[task standardOutput] fileHandleForReading] readDataToEndOfFile];
-NSString *outStr = [[NSString alloc] initWithData:outData encoding:NSUTF8StringEncoding];
+            NSData *outData = [[[task standardOutput] fileHandleForReading] readDataToEndOfFile];
+            NSString *outStr = [[NSString alloc] initWithData:outData encoding:NSUTF8StringEncoding];
             */
             NSData rtf_data = NSData.FromString(rtf);
             NSTask task = new NSTask();
             task.LaunchPath = @"/usr/bin/textutil";
-            task.Arguments = new[] { "-format", "rtf", "-convert", "html", "-stdin", "-stdout" };
+            task.Arguments = ["-format", "rtf", "-convert", "html", "-stdin", "-stdout" ];
             task.StandardInput = new NSPipe();
             task.StandardOutput = new NSPipe();
             NSFileHandle taskInput = (task.StandardInput as NSPipe).WriteHandle;
@@ -275,7 +275,9 @@ NSString *outStr = [[NSString alloc] initWithData:outData encoding:NSUTF8StringE
 
             var pm = new PreMailer.Net.PreMailer(html);
             var result = pm.MoveCssInline();
-            return result.Html;
+            // BUG somewhere in this process (source rtf, rtf2html or inlining css) a trailing newline(s) is added
+            // so linearizing the html
+            return result.Html.StripLineBreaks();
         }
 
         public static string Html2Rtf(string html) {

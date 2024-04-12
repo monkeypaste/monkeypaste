@@ -1,5 +1,6 @@
 <Project> 
 
+  <!-- VERSION -->
   <PropertyGroup>
     <ApplicationName>MonkeyPaste</ApplicationName> 
     <ApplicationAuthor>Monkey LLC</ApplicationAuthor>
@@ -9,28 +10,6 @@
     <ApplicationVersionRevision>0</ApplicationVersionRevision>
     <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch).$(ApplicationVersionRevision)</ApplicationVersion>
    </PropertyGroup>
-  
-  <PropertyGroup>
-    <!-- This removes that AMD64 processor architecture warning -->
-    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-    <!-- This removes duplicate warnings for cef dylibs -->
-    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
-  </PropertyGroup>
-  
-  <!-- MANUALLY SET PROPERTIES-->
-  <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
-  <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
-    <IncludeCultures>True</IncludeCultures>
-    <!-- This property 'IsPublicBuild' ensures local webserver is used not remote-->
-    <IsPublicBuild>True</IsPublicBuild>
-    <PushPlugins>false</PushPlugins>
-    <!-- NOTE when changing av version need to reset coreole, probably everything-->
-    <AvaloniaVersion>11.0.10</AvaloniaVersion>
-    <SugarWvVersion>11.0.0.1</SugarWvVersion>
-    <DefaultLangVersion>Latest</DefaultLangVersion>
-    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
-  </PropertyGroup>
 
   <!-- MSBUILD PROPERTIES -->
 
@@ -40,8 +19,32 @@
     <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
     <NoWarn>$(NoWarn);NU1701;NU1702;IDE1006;CA1401;</NoWarn>
     <WarningsAsErrors>CS4014;</WarningsAsErrors>
+    <!-- This removes that AMD64 processor architecture warning -->
+    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+    <!-- This removes duplicate warnings for cef dylibs -->
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
 
+  <!-- GLOBAL PACKAGE VERSIONS -->
+  <PropertyGroup>
+    <AvaloniaVersion>11.0.10</AvaloniaVersion>
+    <SugarWvVersion>11.0.0.5</SugarWvVersion>    
+    <!--<SugarWvVersion>11.0.0.1</SugarWvVersion>-->    
+  </PropertyGroup>
+  
+  <!-- MANUALLY SET PROPERTIES-->
+  
+  <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
+  <PropertyGroup>
+    <BuildOs>MAC</BuildOs>
+    <IncludeCultures>True</IncludeCultures>
+    <!-- This property 'IsPublicBuild' ensures local webserver is used not remote-->
+    <IsPublicBuild>False</IsPublicBuild>
+    <PushPlugins>false</PushPlugins>
+    <!-- NOTE when changing av version need to reset coreole, probably everything-->
+    <DefaultLangVersion>Latest</DefaultLangVersion>
+    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
+  </PropertyGroup>
 
   <!-- CUSTOM PROPERTIES -->
 
@@ -115,6 +118,8 @@
     <BuildScriptsDir>$(BuildScriptsRootDir)\linux</BuildScriptsDir>
   </PropertyGroup>
   
+  <!-- MAC -->
+  
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
     <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
     <CommonTargetFramework>$(DefaultTargetFramework)</CommonTargetFramework>
@@ -131,12 +136,16 @@
     <!--<RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>-->
   </PropertyGroup>
     
+  <!-- WASM -->
+  
   <PropertyGroup Condition="$(BuildOs) == 'BROWSER'">
     <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);BROWSER;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Web</MainProjectName>
     <PlatformShortName>wasm</PlatformShortName>
   </PropertyGroup>
+  
+  <!-- ANDROID -->
   
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
     <MainTargetFramework>$(DefaultTargetFramework)-android</MainTargetFramework>
@@ -149,6 +158,8 @@
     <BuildScriptsDir>$(BuildScriptsRootDir)\android</BuildScriptsDir>
   </PropertyGroup>
 
+  <!-- IOS -->
+  
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">
     <MainTargetFramework>$(DefaultTargetFramework)-ios</MainTargetFramework>
     <DefineConstants>$(DefineConstants);MOBILE;IOS;</DefineConstants>

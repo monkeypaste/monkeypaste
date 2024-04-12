@@ -111,12 +111,6 @@
   <data name="ImgDoScaleLabel" xml:space="preserve">
     <value>Kiwango cha kupindukia</value>
   </data>
-  <data name="ImgExportTypeHint" xml:space="preserve">
-    <value>Wakati wa kubandika au kuacha bitmap hii itakuwa aina ya faili chaguo -msingi</value>
-  </data>
-  <data name="ImgExportTypeLabel" xml:space="preserve">
-    <value>Aina chaguo -msingi ya kuuza nje</value>
-  </data>
   <data name="ImgIgnoreTransparentImgHint" xml:space="preserve">
     <value>Wakati mwingine picha za uwazi kabisa zitajitokeza kwenye clipboard, utata wake.</value>
   </data>
@@ -215,5 +209,17 @@
   </data>
   <data name="TiffFormatLabel" xml:space="preserve">
     <value>Picha (TIFF)</value>
+  </data>
+  <data name="ToFilePriorityLabel" xml:space="preserve">
+    <value>Kipaumbele cha faili</value>
+  </data>
+  <data name="ToFilePriorityHint" xml:space="preserve">
+    <value>Thamani ya juu zaidi '{0}' itatumika kuunda faili inayohitajika kwa kipande cha sasa. Thamani ya 0 inamaanisha '{0}' itakuwa &lt;b style = \ "rangi: nyekundu \"&gt; kupuuzwa &lt;/b&gt;.</value>
+  </data>
+  <data name="ToFileExtLabel" xml:space="preserve">
+    <value>Ugani wa faili</value>
+  </data>
+  <data name="ToFileExtHint" xml:space="preserve">
+    <value>Ugani wa faili uliotumiwa wakati '{0}' hutumiwa kuunda faili inayohitajika.</value>
   </data>
 </root>

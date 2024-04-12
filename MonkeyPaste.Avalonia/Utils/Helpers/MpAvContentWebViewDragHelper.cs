@@ -13,13 +13,10 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private static MpAvIContentWebViewDragSource _dragSource;
-        private static bool _usePlaceholders;
         #endregion
 
         #region Properties
         public static IDataObject DragDataObject { get; set; }
-
-        public static IDataObject SourceDataObject { get; private set; }
 
         public static bool IsDragging => DragDataObject != null;
 
@@ -43,21 +40,18 @@ namespace MonkeyPaste.Avalonia {
 
             StartDrag(dragSource);
             dragSource.IsDragging = true;
-            // wait for source data
-            _usePlaceholders = MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled;
             //SourceDataObject = await dragSource.GetDataObjectAsync(_dragSource.GetDragFormats(), use_placeholders) as MpAvDataObject;
             // NOTE since using ALL formats drop widget won't work here
-            SourceDataObject = await dragSource.GetDataObjectAsync(null, _usePlaceholders) as MpAvDataObject;
+            DragDataObject = await dragSource.GetDataObjectAsync(null) as MpAvDataObject;
 
-            if (SourceDataObject == null) {
+            if (DragDataObject == null) {
                 // is none selected?
                 MpDebug.Break();
                 FinishDrag(null);
                 return DragDropEffects.None;
             }
 
-            await ApplyClipboardPresetOrSourceUpdateToDragDataAsync();
-
+            DragDataObject = await Mp.Services.DataObjectTools.WriteDragDropDataObjectAsync(DragDataObject) as IDataObject;
 
             MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
 
@@ -110,55 +104,9 @@ namespace MonkeyPaste.Avalonia {
             return result;
         }
 
-        public static async Task ApplyClipboardPresetOrSourceUpdateToDragDataAsync() {
-            if (SourceDataObject == null) {
-                // no drag in progress
-                return;
-            }
-
-            if (_usePlaceholders) {
-                if (DragDataObject == null) {
-                    // initial case
-                    DragDataObject = new MpAvDataObject();
-                    SourceDataObject.CopyTo(DragDataObject);
-                }
-
-                // clone source or processing will overwrite original data (so drop widget changes have no affect)
-                var source_clone = SourceDataObject.Clone();
-                var temp = await Mp.Services.DataObjectTools.WriteDragDropDataObjectAsync(source_clone);
-                if (temp is IDataObject temp_ido &&
-                    DragDataObject is MpAvDataObject ddo) {
-                    // update actual drag ido while retaining its ref (must be same as in StartDrag)
-                    temp_ido.CopyTo(DragDataObject);
-                    MpConsole.WriteLine("DragDataObject updated");
-                }
-                return;
-            }
-            if (DragDataObject == null) {
-                DragDataObject = SourceDataObject;
-            }
-            var result = await Mp.Services.DataObjectTools.WriteDragDropDataObjectAsync(DragDataObject);
-            if (result is IDataObject ido) {
-                DragDataObject = ido;
-            }
-        }
-
-
         #endregion
 
         #region Private Methods
-
-        private static void ReceivedGlobalMessage(MpMessageType msg) {
-            switch (msg) {
-                //case MpMessageType.ItemDragBegin:
-                case MpMessageType.ClipboardPresetEnabledChanged:
-                    ApplyClipboardPresetOrSourceUpdateToDragDataAsync().FireAndForgetSafeAsync();
-                    break;
-            }
-        }
-
-
-
         private static void OnGlobalKeyPrssedOrReleasedHandler(object sender, string key) {
             if (MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown) {
                 FinishDrag(null);
@@ -176,14 +124,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void HookDragEvents() {
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += OnGlobalKeyPrssedOrReleasedHandler;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += OnGlobalKeyPrssedOrReleasedHandler;
 
         }
 
         private static void UnhookDragEvents() {
-            MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= OnGlobalKeyPrssedOrReleasedHandler;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= OnGlobalKeyPrssedOrReleasedHandler;
 
@@ -208,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private static void ResetDragState() {
             UnhookDragEvents();
-            SourceDataObject = null;
+            DragDataObject = null;
             DragDataObject = null;
             _dragSource = null;
         }

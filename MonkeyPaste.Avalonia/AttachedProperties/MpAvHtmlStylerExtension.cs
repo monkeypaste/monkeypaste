@@ -546,7 +546,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpHtmlStyleType.Content:
                     css_str += string.Format(@"
 * {{ margin: 0; padding: 0; }}
-body {{ color: {0}; font-size: {1}px; font-family: {2}; white-space: normal;  word-break: break-all; }}
+body {{ color: {0}; font-size: {1}px; font-family: {2}; white-space: pre;  word-break: break-all; }}
 p {{ height: 1em; line-height: 1.42; margin: 0; padding: 0; }}
 .underline {{ text-decoration: underline; line-height: 1.42; text-underline-offset: -2; }}
 .highlight-inactive {{ background-color: {3}; color: {4}; }}

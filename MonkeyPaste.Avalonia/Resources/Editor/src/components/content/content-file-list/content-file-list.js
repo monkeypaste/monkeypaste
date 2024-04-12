@@ -336,18 +336,7 @@ async function convertFileListContentToFormatsAsync(selectionOnly, formats) {
 			}
 		} else if (isPlainTextFormat(lwc_format)) {
 			data = getFileListContentData(selectionOnly);
-		} //else if (isImageFormat(lwc_format)) {
-			// BUG this ignores selected items cause its confusing and won't really be needed
-
-			// trigger async screenshot notification where host needs
-			// to null and wait for value to avoid async issues
-			//getDocRangeAsImageAsync(getContentRange())
-			//	.then((result) => {
-			//		onCreateContentScreenShot_ntf(result);
-			//	});
-			//data = globals.PLACEHOLDER_DATAOBJECT_TEXT;
-			//data = await getDocRangeAsImageAsync(getContentRange());
-		//}
+		} 
 		else if (isCsvFormat(lwc_format)) {
 			data = getFileListContentData(selectionOnly).split(globals.DefaultCsvProps.RowSeparator).join(',');
 		} else if (isFileListFormat(lwc_format)) {

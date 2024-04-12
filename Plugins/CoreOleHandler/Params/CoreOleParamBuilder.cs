@@ -75,6 +75,27 @@ namespace CoreOleHandler {
                     paramId = GetParamId(format, isReader, "maxcharcount")
                 });
             }
+            if(!isReader && IsPseudoFileFormat(format)) {
+                pfl.Add(new MpParameterFormat() {
+                    label = Resources.ToFilePriorityLabel,
+                    description = string.Format(Resources.ToFilePriorityHint,format),
+                    controlType = MpParameterControlType.NumberTicker,
+                    unitType = MpParameterValueUnitType.Integer,
+                    minimum = 0,
+                    maximum = int.MaxValue,
+                    precision = 0,
+                    value = new MpParameterValueFormat(1.ToString(),true),
+                    paramId = GetParamId(format, isReader, "filepriority")
+                });
+                pfl.Add(new MpParameterFormat() {
+                    label = Resources.ToFileExtLabel,
+                    description = string.Format(Resources.ToFileExtHint,format),
+                    controlType = MpParameterControlType.TextBox,
+                    unitType = MpParameterValueUnitType.PlainText,
+                    value = new MpParameterValueFormat(MpPortableDataFormats.GetDefaultFileExt(format),true),
+                    paramId = GetParamId(format, isReader, "fileext")
+                });
+            }
 
             switch (format) {
                 case MpPortableDataFormats.Files:
@@ -155,18 +176,7 @@ namespace CoreOleHandler {
                             value = new MpParameterValueFormat(true.ToString(), true)
                         });
                     } else {
-                        pfl.Add(new MpParameterFormat() {
-                            label = Resources.ImgExportTypeLabel,
-                            description = Resources.ImgExportTypeHint,
-                            controlType = MpParameterControlType.ComboBox,
-                            unitType = MpParameterValueUnitType.PlainText,
-                            paramId = GetParamId(format, isReader, "exporttype"),
-                            values =
-                                new[] { "bmp", "png", "jpg" }
-                                .Select(x => new MpParameterValueFormat(x, x == "png"))
-                                .ToList()
-                        });
-                        
+                                                
                         pfl.Add(new MpParameterFormat() {
                             label = Resources.TextToImageLabel,
                             description = Resources.TextToImageHint,
@@ -192,6 +202,12 @@ namespace CoreOleHandler {
             }
 
             return pfl;
+        }
+        public static bool IsPseudoFileFormat(string format) {
+            return 
+                MpPortableDataFormats.IsFilesFormat(format) is not true &&
+                (MpPortableDataFormats.IsTextFormat(format) is true ||
+                 MpPortableDataFormats.IsImageFormat(format) is true);
         }
         public static string GetParamId(string format, bool isReader, string detail) {
             format =
