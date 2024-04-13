@@ -110,6 +110,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvProcessWatcher() {
             _instance = this;
+#if LINUX
+            Init();
+#endif
             StartWatcher();
         }
 

@@ -1,256 +1,221 @@
-﻿using MonkeyPaste.Common;
+﻿#if LINUX
+
+using Avalonia.Platform;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
-//using Avalonia.Gtk3;
 using System.Collections.Generic;
-//using Gio;
-//
-//using GLib;
-//using Gdk;
-using System.Diagnostics;
+using System.Runtime.InteropServices;
+using X11;
+
 
 namespace MonkeyPaste.Avalonia {
 
-    public class MpAvX11ProcessWatcher : MpAvProcessWatcherBase {
+    public partial class MpAvProcessWatcher {
         #region Private Variables
-
-        private string[] _requiredTools = new string[] {
-            "xdotool"
-        };
-
-        private object _lockObj = new object();
-
-        private MpPortableProcessInfo _lastActiveInfo;
-
-        private List<string> _errorWindows = new List<string>();
-
-        #endregion
-
-        #region Properties
-
-        protected override bool CanWatchProcesses() {
-            string xdotoolPath = "command -v xdotool".ShellExec();
-            MpConsole.WriteLine("CanWatchProcessOutput: " + xdotoolPath);
-            return !string.IsNullOrEmpty(xdotoolPath);
-        }
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region MpIProcessWatcher Overrides
-        protected override bool IsAdmin(object handleIdOrTitle) {
-            throw new NotImplementedException();
-        }
-        protected override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
-            throw new NotImplementedException();
-        }
-        protected override IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle) {
-            throw new NotImplementedException();
-        }
-        protected override IntPtr GetParentHandleAtPoint(MpPoint poIntPtr) {
-            return IntPtr.Zero;
-        }
-
-        protected override IntPtr SetActiveProcess(IntPtr handle) {
-            IntPtr lastHandle = GetActiveProcessInfo().Handle;
-            int handle_val = handle.ToInt32();
-            $"xdotool windowactivate {handle_val}".ShellExec();
-            return lastHandle;
-        }
-        protected override MpPortableProcessInfo GetActiveProcessInfo() {
-            var active_info = new MpPortableProcessInfo();
-            string activeWindow = "xdotool getfocuswindow".ShellExec().Trim();
-            active_info.MainWindowTitle = "xdotool getfocuswindow getwindowname".ShellExec().Trim();
-            try {
-                active_info.Handle = new IntPtr(int.Parse(activeWindow));
-
-                if (!_errorWindows.Contains(activeWindow)) {
-                    string activePidStr = "xdotool getfocuswindow getwindowpid".ShellExec().Trim();
-
-                    if (!activePidStr.IsStringNullOrWhiteSpace()) {
-                        string xdotool_error = "has no pid associated with it.";
-                        if (activePidStr.Contains(xdotool_error)) {
-                            // window handle was found but no pid, note this to avoid rechecking since it errors
-                            _errorWindows.Add(activeWindow);
-                        } else {
-                            try {
-                                IntPtr active_pid = new IntPtr(int.Parse(activePidStr));
-                                if (active_pid != IntPtr.Zero) {
-                                    string active_path_with_args = $"ps -q {activePidStr} -o cmd=".ShellExec().Trim();
-                                    if (!string.IsNullOrWhiteSpace(active_path_with_args)) {
-                                        string clean_path = MpX11ShellHelpers.GetCleanShellStr(active_path_with_args);
-                                        if (!string.IsNullOrWhiteSpace(clean_path)) {
-                                            // check parse here
-                                            string argParts = active_path_with_args.Substring(clean_path.Length, active_path_with_args.Length - clean_path.Length);
-                                            Debugger.Break();
-                                            if (!string.IsNullOrWhiteSpace(argParts)) {
-                                                active_info.ArgumentList = new List<string>() { argParts };
-                                            }
-                                            active_info.ProcessPath = clean_path;
-                                        }
-                                    }
-                                }
-                            }
-                            catch (Exception) {
-                                //MpConsole.WriteTraceLine(ex);
-                            }
-                        }
-                    }
-
+        private bool _hasError;
+        private nint _displayPtr;
+        private nint displayPtr {
+            get {
+                if(_displayPtr == nint.Zero) {
+                    _displayPtr = Xlib.XOpenDisplay(null);
                 }
+                return _displayPtr;
             }
-            catch (Exception) {
-            }
-            return active_info;
         }
+        private Window _rootWindow;
+        #endregion
+        int HandleError(nint display, ref XErrorEvent error) {
+            MpConsole.WriteLine($"Xll error: '{error}'");
+            _hasError = true;
+            return 1;
+        }
+        event XErrorHandlerDelegate HandleErrorDelegate;
+        protected void Init() {
+            return;
+            HandleErrorDelegate += HandleError;
+            Xlib.XSetErrorHandler(HandleErrorDelegate);
 
-        protected void CreateRunningProcessLookup() {
-            var runningApps = GetRunningAppsWrapper();
-            if (runningApps == null) {
+            if (displayPtr == nint.Zero) {
+                MpConsole.WriteLine("Unable to open the default X display");
                 return;
             }
-            //foreach (var kvp in runningApps) {
-            //    foreach (var handle in kvp.Value) {
-            //        IntPtr handlePtr = new IntPtr(int.Parse(handle));
-            //        if (!RunningProcessLookup.ContainsKey(kvp.Key)) {
-            //            RunningProcessLookup.TryAdd(kvp.Key, new() { handlePtr });
-            //        } else if (RunningProcessLookup.TryGetValue(kvp.Key, out var handles)) {
-            //            handles.Add(handlePtr);
-            //            RunningProcessLookup[kvp.Key] = handles;
-            //        }
-            //    }
-            //}
-        }
 
-        protected MpPortableProcessInfo RefreshRunningProcessLookup() {
-            lock (_lockObj) {
-                string activeWindow = "xdotool getactivewindow".ShellExec().Trim();
-                if (_errorWindows.Contains(activeWindow)) {
-                    // window reports error when accessing pid, i think this slows system down
-                    return null;
-                }
+            _rootWindow = Xlib.XDefaultRootWindow(displayPtr);
 
-                string activePidStr = "xdotool getactivewindow getwindowpid".ShellExec().Trim();
-                IntPtr activeIntPtr = IntPtr.Zero;
-                string activeWindowTitle = null;
-                string xdotool_error = "has no pid associated with it.";
-
-                if (!activePidStr.IsStringNullOrWhiteSpace()) {
-                    if (activePidStr.Contains(xdotool_error)) {
-                        // window handle was found but no pid, note this to avoid rechecking since it errors
-                        _errorWindows.Add(activeWindow);
-                        return null;
-                    }
-                    try {
-                        activeIntPtr = new IntPtr(int.Parse(activePidStr));
-                        if (activeIntPtr != IntPtr.Zero) {
-                            if (_lastActiveInfo != null && _lastActiveInfo.Handle == activeIntPtr) {
-                                return _lastActiveInfo;
-                            }
-
-                            activeWindowTitle = "xdotool getactivewindow getwindowname".ShellExec().Trim();
-                            string activeWindowPath = $"ps -q {activePidStr} -o cmd=".ShellExec().Trim();
-                            if (!string.IsNullOrEmpty(activeWindowPath)) {
-                                _lastActiveInfo = new MpPortableProcessInfo() {
-                                    Handle = activeIntPtr,
-                                    ProcessPath = activeWindowPath,
-                                    MainWindowTitle = activeWindowTitle
-                                };
-                                return _lastActiveInfo;
-                            }
-                        }
-                    }
-                    catch (Exception) {
-                        //MpConsole.WriteTraceLine(ex);
-                        activeIntPtr = IntPtr.Zero;
-                    }
-                }
-                return null;
-
-                // Tuple<string, string, IntPtr>? activeAppTuple = _lastProcessTuple;
-
-
-                // var filteredApps = GetRunningAppsWrapper();
-                // var refreshedPaths = new List<string>();
-
-                // foreach (var runningApp in filteredApps) {
-                //     foreach (var handle in runningApp.Value) {
-                //         IntPtr handlePtr = new IntPtr(int.Parse(handle));
-
-                //         ObservableCollection<IntPtr> handles = null;
-                //         if (RunningProcessLookup.TryGetValue(runningApp.Key.ToLower(), out handles)) {
-                //             // application is already known
-                //             if (!handles.Contains(handlePtr)) {
-                //                 //handle is new
-                //                 handles.Add(handlePtr);
-                //             }
-
-                //         } else {
-                //             // new process found
-                //             handles = new() { handlePtr };
-                //             RunningProcessLookup.TryAdd(runningApp.Key.ToLower(), handles);
-                //         }
-                //         if (handles == null) {
-                //             Debugger.Break();
-                //         }
-                //         if (handlePtr == activeIntPtr) {
-                //             // handle is active
-                //             // if (activeAppTuple != null) {
-                //             //     Debugger.Break();
-                //             // } else {
-                //             int runningAppIdx = handles.IndexOf(handlePtr);
-                //             handles.Move(runningAppIdx, 0);
-
-                //             activeAppTuple = new Tuple<string, string, IntPtr>(
-                //                 runningApp.Key.ToLower(),
-                //                 activeWindowTitle,
-                //                 handlePtr);
-                //         }
-
-                //         RunningProcessLookup[runningApp.Key.ToLower()] = handles;
-
-                //         if (!refreshedPaths.Contains(runningApp.Key.ToLower())) {
-                //             refreshedPaths.Add(runningApp.Key.ToLower());
-                //         }
-                //     }
-
-                // }
-
-                // //remove apps that were terminated
-                // var appsToRemove = RunningProcessLookup.Where(x => !refreshedPaths.Contains(x.Key.ToLower()));
-                // for (int i = 0; i < appsToRemove.Count(); i++) {
-                //     RunningProcessLookup.TryRemove(appsToRemove.ElementAt(i));
-                // }
-
-                // return activeAppTuple;
+            if (_rootWindow == default) {
+                MpConsole.WriteLine("Unable to open root window");
+                return;
             }
         }
-
-        #endregion
-
-        #region Helpers
-
-        private Dictionary<string, List<string>> GetRunningAppsWrapper() {
-            // if(MpAvX11ProcessWatcher_xlib.IsXDisplayAvailable()) {
-            //     return MpAvX11ProcessWatcher_xlib.GetRunningApps();
-            // }
-            return MpAvX11ProcessWatcher_shell.GetRunningApps();
+        public IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos =>
+            new List<MpPortableProcessInfo>();
+        public nint SetActiveProcess(MpPortableProcessInfo p) {
+            return nint.Zero;
+        }
+        protected nint GetThisAppHandle() {
+            if (MpAvWindowManager.MainWindow is not { } mw ||
+                mw.TryGetPlatformHandle() is not IPlatformHandle ph) {
+                return nint.Zero;
+            }
+            return ph.Handle;
+        }
+        protected nint GetActiveProcessHandle() {
+            return nint.Zero;
+            nint handle = GetFocusWindowHandle();
+            nint test = GetTopWindowHandle(handle);
+            return handle;
         }
 
-        protected override string GetProcessTitle(nint handle) {
-            throw new NotImplementedException();
+        private nint GetFocusWindowHandle() {
+            // from https://gist.github.com/kui/2622504
+            Window w = default;
+            RevertFocus revert_to = default;
+            Status result = Xlib.XGetInputFocus(displayPtr, ref w, ref revert_to);
+            nint handle = (nint)((int)w);
+
+            if(handle != nint.Zero) {
+                string prop_return = default;
+
+                var a = Xlib.XFetchName(displayPtr, w, ref prop_return);
+                //nint actual_type_return = default;
+                //int actual_format_return = default; 
+                //ulong nitems_return = default;
+                //ulong bytes_after_return = default;
+                //string prop_return = default;
+                //int a =
+                //XGetWindowProperty(
+                //    displayPtr,
+                //    w,
+                //    Atom.WmName,
+                //    0L,
+                //    (~0L),
+                //    false,
+                //    Atom.None,
+                //    ref actual_type_return,
+                //    ref actual_format_return,
+                //    ref nitems_return,
+                //    ref bytes_after_return,
+                //    ref prop_return);
+            }
+
+            return handle;
+        }
+        private nint GetTopWindowHandle(nint start) {
+            // from https://gist.github.com/kui/2622504
+            Window w = (Window)((int)start);
+            Window parent = (Window)((int)start);
+            Window root = Window.None;
+
+            while(parent != root) {
+                w = parent;
+                int result = Xlib.XQueryTree(displayPtr, w, ref root, ref parent, out _);
+                if(result < 0 || _hasError) {
+                    MpConsole.WriteLine($"Find top window failed");
+                    break;
+                }
+            }
+            //MpConsole.WriteLine($"Found top window: {w}");
+            return (nint)((int)w);
+        }
+        protected bool IsHandleWindowProcess(nint handle) {
+            return handle != nint.Zero;
+        }
+        protected string GetProcessPath(nint handle) {
+            return string.Empty;
+        }
+        protected string GetProcessTitle(nint handle) {
+            // from https://gist.github.com/kui/2622504
+            //Xlib.XGet
+            return "<process title here>";
+        }
+        protected string GetAppNameByProessPath(string path) {
+            return string.Empty;
+        }
+        protected nint GetParentHandleAtPoint(MpPoint p) {
+            return nint.Zero;
         }
 
-        protected override string GetProcessPath(nint handle) {
-            throw new NotImplementedException();
+        public Dictionary<string, List<string>> GetRunningApps() {
+            nint ev = Marshal.AllocHGlobal(24 * sizeof(long));
+            Window ReturnedParent = 0, ReturnedRoot = 0;
+            Xlib.XGrabServer(_displayPtr);
+
+            int status = Xlib.XQueryTree(
+                _displayPtr,
+                _rootWindow, ref ReturnedRoot, ref ReturnedParent,
+                out var ChildWindows);
+
+            if (status == 0) {
+                // could not query tree
+                return null;
+            }
+            foreach (var child in ChildWindows) {
+                // var a = XInternAtom(_displayPtr, "_NET_CLIENT_LIST", true);
+                // Atom actualType;
+                // int format;
+                // ulong numItems, bytesAfter;
+                // unsigned char *data =0;
+                // int status = XGetWindowProperty(m_pDisplay,
+                //                             rootWindow,
+                //                             a,
+                //                             0L,
+                //                             (~0L),
+                //                             false,
+                //                             AnyPropertyType,
+                //                             &actualType,
+                //                             &format,
+                //                             &numItems,
+                //                             &bytesAfter,
+                //                             &data);
+
+                var window_name = String.Empty;
+                Xlib.XFetchName(_displayPtr, child, ref window_name);
+                MpConsole.WriteLine("Child Window Name: " + window_name);
+            }
+            Xlib.XUngrabServer(_displayPtr); // Release the lock on the server.
+
+            var windows = new Dictionary<string, nint>();
+            return null;
         }
 
-        protected override MpPortableProcessInfo GetProcessInfoByHandle(nint handle) {
-            throw new NotImplementedException();
-        }
-        #endregion
+        [DllImport("libX11.so.6")]
+        private static extern X11.Atom XInternAtom(nint display, string name, bool only_if_exists);
+
+        /*
+        int XGetWindowProperty(display, w, property, long_offset, long_length, delete, req_type, 
+                        actual_type_return, actual_format_return, nitems_return, bytes_after_return, 
+                        prop_return)
+      Display *display;
+      Window w;
+      Atom property;
+      long long_offset, long_length;
+      Bool delete;
+      Atom req_type; 
+      Atom *actual_type_return;
+      int *actual_format_return;
+      unsigned long *nitems_return;
+      unsigned long *bytes_after_return;
+      unsigned char **prop_return;
+      */
+        [DllImport("libX11.so.6")]
+        private static extern int XGetWindowProperty(
+            nint display,
+            Window window,
+            Atom atom,
+            long long_offset,
+            long long_length,
+            bool delete,
+            Atom req_type,
+            ref nint actual_type_return, //atom
+            ref int actual_format_return, //int
+            ref ulong nitems_return, //ulong
+            ref ulong bytes_after_return, //ulong
+            ref string prop_return);
 
     }
+
+
 }
+#endif

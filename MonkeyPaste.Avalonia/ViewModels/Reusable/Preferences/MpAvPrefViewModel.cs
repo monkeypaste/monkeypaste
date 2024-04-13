@@ -373,6 +373,8 @@ namespace MonkeyPaste.Avalonia {
             false; 
 #elif MAC
             true;
+#elif LINUX
+            false;
 #else
             true;
 #endif

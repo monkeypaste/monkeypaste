@@ -1,4 +1,5 @@
 ﻿using Avalonia.Platform.Interop;
+using Avalonia.X11;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace MonkeyPaste.Common.Avalonia {
             var tcs = new TaskCompletionSource<bool>();
             new Thread(() => {
                 try {
-                    using (var backends = new Utf8Buffer("x11"))
+                    using (var backends = new MpUtf8Buffer("x11"))
                         GtkApi.gdk_set_allowed_backends(backends);
                 }
                 catch {
@@ -34,7 +35,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 }
 
                 IntPtr app;
-                using (var utf = new Utf8Buffer($"avalonia.app.a{Guid.NewGuid():N}"))
+                using (var utf = new MpUtf8Buffer($"avalonia.app.a{Guid.NewGuid():N}"))
                     app = GtkApi.gtk_application_new(utf, 0);
                 if (app == IntPtr.Zero) {
                     tcs.SetResult(false);

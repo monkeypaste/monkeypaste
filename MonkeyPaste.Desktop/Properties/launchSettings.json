@@ -6,6 +6,10 @@
     "Reset": {
       "commandName": "Project",
       "commandLineArgs": "resetdata"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
     }
   }
 }

@@ -1,5 +1,4 @@
-﻿using Foundation;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.IO;
@@ -26,9 +25,12 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
                 try {
-#if WINDOWS
+#if WINDOWS || LINUX
+                    if(OperatingSystem.IsMacOS()) {
+                        return false;
+                    }
                     _lockFileObj = File.Open(LockFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-                    _lockFileObj.Lock(0, 0); 
+                    (_lockFileObj as FileStream).Lock(0, 0); 
 #elif MAC
                     // File.Open throws exception and .Lock not supported on mac
                     return true;
@@ -39,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
                         MpFileIo.TouchFile(LockFilePath);
                     }
                     _lockFileObj = File.OpenRead(LockFilePath);
-                    _lockFileObj.Lock(0,0);
+                    (_lockFileObj as FileStream).Lock(0,0);
 #endif
                 }
                 catch (Exception ex) {

@@ -368,9 +368,7 @@
     <None Remove="Assets\Images\clipboard.png" />
     <None Remove="Assets\Images\clipboardbw.png" />
     <None Remove="Assets\Images\clockarrow.png" />
-    <None Remove="Assets\Images\Close.png" />
-    <None Remove="Assets\Images\close1.png" />
-    <None Remove="Assets\Images\close2.png" />
+    <None Remove="Assets\Images\close.png" />
     <None Remove="Assets\Images\closewindow.png" />
     <None Remove="Assets\Images\cog.png" />
     <None Remove="Assets\Images\cogcolor.png" />
@@ -663,31 +661,10 @@
   
   
   <ItemGroup Condition="'$(BuildOs)' != 'ANDROID'">
-    <AvaloniaResource Include="Assets\Sounds\Alert.wav">
+    <AvaloniaResource Include="Assets\Sounds\*.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\Blip.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\Sonar.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\Chime.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\Monkey.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\Ting.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-  
   </ItemGroup>
-
-  
-    
-  
-  
   <ItemGroup>
     <AvaloniaResource Include="Assets\Fonts\Habanero\Habanero.otf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -792,6 +769,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\clockarrow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\close.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\closewindow.png">
@@ -1758,9 +1738,6 @@
     <AvaloniaResource Include="Assets\Images\clipboard.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\close.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\cog.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -2452,11 +2429,11 @@
     <Compile Include="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.$(PlatformShortName).cs" />
     
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\**" />
+    
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.linux.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.shared.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.$(PlatformShortName).cs" />
     <Compile Include="Utils\WindowManager\Helpers\MpAvWindowPositioner.cs" />
   </ItemGroup>
-  
   
   
   
@@ -2465,6 +2442,8 @@
   </ItemGroup>
   <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
     <Compile Include="Utils\Helpers\MpAvAppleScripts.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(BuildOs)' != 'WINDOWS'">
     <Compile Remove="Utils\AvWrapper\Defnitions\ScreenInfo\Collection\Item\Desktop\MpAvTaskbar.uwp.cs" />
     <Compile Remove="Utils\Helpers\MpPngToIcoConverter.uwp.cs" />
   </ItemGroup>

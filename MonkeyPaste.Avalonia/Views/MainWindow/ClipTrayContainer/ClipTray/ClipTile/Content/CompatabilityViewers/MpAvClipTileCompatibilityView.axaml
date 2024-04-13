@@ -23,15 +23,15 @@
             <local:MpAvClipTileCompatibilityViewSelector>
                 <DataTemplate x:Key="PlainTextTemplate"
                               DataType="local:MpAvClipTileViewModel">
-                    <local:MpAvPlainTextContentView />
+                    <local:MpAvPlainTextContentView DataContext="{Binding $parent[UserControl].DataContext}" />
                 </DataTemplate>
                 <DataTemplate x:Key="ImageTemplate"
                               DataType="local:MpAvClipTileViewModel">
-                    <local:MpAvImageContentView />
+                    <local:MpAvImageContentView DataContext="{Binding $parent[UserControl].DataContext}" />
                 </DataTemplate>
                 <DataTemplate x:Key="FileListTemplate"
                               DataType="local:MpAvClipTileViewModel">
-                    <local:MpAvFileListContentView />
+                    <local:MpAvFileListContentView DataContext="{Binding $parent[UserControl].DataContext}" />
                 </DataTemplate>
             </local:MpAvClipTileCompatibilityViewSelector>
         </ContentControl.DataTemplates>

@@ -11,15 +11,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Remove="Controls\**" />
     <AvaloniaXaml Remove="Utils\Input\Platform\Win32\COM\**" />
     <AvaloniaXaml Remove="Utils\Input\Platform\X11\Glib\**" />
     <AvaloniaXaml Remove="Utils\Input\Platform\X11\Gtk\**" />
+    <Compile Remove="Controls\**" />
     <Compile Remove="Utils\Input\Platform\Win32\**" />
     <Compile Remove="Utils\Input\Platform\X11\Glib\**" />
     <Compile Remove="Utils\Input\Platform\X11\Gtk\**" />
+    <EmbeddedResource Remove="Controls\**" />
     <EmbeddedResource Remove="Utils\Input\Platform\Win32\COM\**" />
     <EmbeddedResource Remove="Utils\Input\Platform\X11\Glib\**" />
     <EmbeddedResource Remove="Utils\Input\Platform\X11\Gtk\**" />
+    <None Remove="Controls\**" />
     <None Remove="Utils\Input\Platform\Win32\COM\**" />
     <None Remove="Utils\Input\Platform\X11\Glib\**" />
     <None Remove="Utils\Input\Platform\X11\Gtk\**" />
@@ -41,7 +45,7 @@
   
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
+    <PackageReference Include="Avalonia.X11" Version="11.0.10" />
     <PackageReference Include="PreMailer.Net" Version="2.5.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="SharpHook" Version="5.2.2" />
@@ -52,12 +56,13 @@
     <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">    
-    <Compile Include="Utils\Input\Platform\X11\MpAvX11PathIconHelper.cs" />
+  <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">
     <Compile Remove="Utils\Input\Platform\MacOs\*.*" />
     <Compile Remove="Utils\Input\Platform\Win32\*.*" />
-    <PackageReference Include="GtkSharp" Version="3.24.24.38" />
+    <PackageReference Include="GtkSharp" Version="3.24.24.95" />
     <PackageReference Include="X11" Version="1.0.6" />
+    <Compile Include="Utils\Input\Platform\X11\Gtk\GtkHelper.cs" />
+    <Compile Include="Utils\Input\Platform\X11\Gtk\GtkApi.cs" />
     
   </ItemGroup>
   
@@ -80,15 +85,13 @@
     <Compile Remove="Utils\Extensions\DataObject\**" />
     <Compile Include="Utils\Extensions\DataObject\Mac\MpAvMacDataFormatReader.cs" />
     <Compile Include="Utils\Extensions\DataObject\MpAvPlatformDataObjectExtensions.shared.cs" />
+    <Compile Remove="Utils\Extensions\DataObject\MpAvPlatformDataObjectExtensions.linux.cs" />
     <Compile Include="Utils\Extensions\DataObject\MpAvPlatformDataObjectExtensions.$(PlatformShortName).cs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\Adorner\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\artwork\monkey.png">

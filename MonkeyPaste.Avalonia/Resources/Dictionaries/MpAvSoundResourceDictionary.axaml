@@ -2,11 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <!--  BASELINE SOUNDS  -->
-    <sys:String x:Key="MonkeySound">avares://MonkeyPaste.Avalonia/Assets/Sounds/Monkey.wav</sys:String>
-    <sys:String x:Key="TingSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/Ting.wav</sys:String>
-    <sys:String x:Key="ChimeSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/Chime.wav</sys:String>
-    <sys:String x:Key="AlertSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/Alert.wav</sys:String>
-    <sys:String x:Key="BlipSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/Blip.wav</sys:String>
-    <sys:String x:Key="SonarSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/Sonar.wav</sys:String>
+    <sys:String x:Key="MonkeySound">avares://MonkeyPaste.Avalonia/Assets/Sounds/monkey.wav</sys:String>
+    <sys:String x:Key="TingSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/ting.wav</sys:String>
+    <sys:String x:Key="ChimeSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/chime.wav</sys:String>
+    <sys:String x:Key="AlertSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/alert.wav</sys:String>
+    <sys:String x:Key="BlipSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/blip.wav</sys:String>
+    <sys:String x:Key="SonarSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/sonar.wav</sys:String>
 
 </ResourceDictionary>
