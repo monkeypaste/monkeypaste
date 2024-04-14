@@ -82,6 +82,7 @@
     <Compile Remove="Behaviors\DragDrop\**" />
     <Compile Remove="Behaviors\_Base\**" />
     <Compile Remove="Behaviors\__Factory\**" />
+    <Compile Remove="bin\**" />
     <Compile Remove="cef\**" />
     <Compile Remove="cef_old\**" />
     <Compile Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
@@ -122,6 +123,7 @@
     <EmbeddedResource Remove="Behaviors\DragDrop\**" />
     <EmbeddedResource Remove="Behaviors\_Base\**" />
     <EmbeddedResource Remove="Behaviors\__Factory\**" />
+    <EmbeddedResource Remove="bin\**" />
     <EmbeddedResource Remove="cef\**" />
     <EmbeddedResource Remove="cef_old\**" />
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
@@ -164,6 +166,7 @@
     <None Remove="Behaviors\DragDrop\**" />
     <None Remove="Behaviors\_Base\**" />
     <None Remove="Behaviors\__Factory\**" />
+    <None Remove="bin\**" />
     <None Remove="cef\**" />
     <None Remove="cef_old\**" />
     <None Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
@@ -568,6 +571,7 @@
     <None Remove="Assets\Images\wrench.png" />
     <None Remove="Assets\Images\yandexIcon.png" />
     <None Remove="Assets\Images\yinyang.png" />
+    <None Remove="Assets\lib\pid.so" />
     <None Remove="Assets\Sounds\alert.wav" />
     <None Remove="Assets\Sounds\blip.wav" />
     <None Remove="Assets\Sounds\chime.wav" />
@@ -2121,6 +2125,10 @@
     
     <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" />
     
+    <Content Include="Assets\lib\pid.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    
     <Content Include="Resources\Legal\credits.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -2371,14 +2379,13 @@
   
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(StableAvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="$(StableAvaloniaVersion)" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.17" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Themes.Simple" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="$(StableAvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="$(StableAvaloniaVersion)" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.6" />
     <PackageReference Include="Markdig" Version="0.34.0" />
     <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" NoWarn="NU1701" />
@@ -2392,6 +2399,7 @@
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
     <PackageReference Include="System.Speech" Version="8.0.0" />
     <PackageReference Include="TaskScheduler" Version="2.10.1" />
+    <PackageReference Include="WebView.Avalonia" Version="$(SugarWvVersion)"  Condition="'$(UseSugarWv)' == 'True'"/>
     <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
   </ItemGroup>
 
@@ -2402,7 +2410,6 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(UseSugarWv)' == 'True'">
-    <PackageReference Include="WebView.Avalonia" Version="$(SugarWvVersion)" />
     <PackageReference Include="WebView.Avalonia.MacCatalyst" Version="$(SugarWvVersion)" Condition="'$(BuildOs)' == 'MAC'" />
   </ItemGroup>
     
@@ -2432,6 +2439,7 @@
     
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.linux.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.shared.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\XdoLib.cs" />
     <Compile Include="Utils\WindowManager\Helpers\MpAvWindowPositioner.cs" />
   </ItemGroup>
   
@@ -2559,5 +2567,11 @@
   <ItemGroup>
     <UpToDateCheckInput Remove="Assets\Images\Flags\ad.png" />
   </ItemGroup>
-
+  
+  <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">
+    <None Include="Assets\lib\*.so">
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

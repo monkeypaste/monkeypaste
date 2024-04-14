@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
 
-    public partial class MpAvX11ProcessWatcher {
+    public partial class MpAvProcessWatcher {
         #region Private Variables
 
         private string[] _requiredTools = new string[] {

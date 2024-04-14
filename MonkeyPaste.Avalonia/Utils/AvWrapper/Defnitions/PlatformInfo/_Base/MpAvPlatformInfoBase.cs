@@ -333,7 +333,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (OsType == MpUserDeviceType.Linux) {
                 // TODO this is a place OsVersionInfo will be needed
-                return @".deb";
+                return string.Empty;
             }
             if (OsType == MpUserDeviceType.Browser) {
                 return string.Empty;

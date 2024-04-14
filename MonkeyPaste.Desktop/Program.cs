@@ -46,7 +46,8 @@ namespace MonkeyPaste.Avalonia {
             //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
 #if LINUX
             .With(new X11PlatformOptions { 
-                //RenderingMode = [X11RenderingMode.Software] 
+               // RenderingMode = [X11RenderingMode.Software],
+                EnableIme = true,
             })
 #endif
 

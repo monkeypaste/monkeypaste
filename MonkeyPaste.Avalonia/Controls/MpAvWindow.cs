@@ -123,6 +123,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+        public void SetBounds(Rect rect) {
+            Bounds = rect;
+        }
+
         protected override void OnOpened(EventArgs e) {
             base.OnOpened(e);
             Dispatcher.UIThread.Post(async () => {

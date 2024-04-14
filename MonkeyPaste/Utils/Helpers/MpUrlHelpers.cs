@@ -306,7 +306,7 @@ namespace MonkeyPaste {
                     new Uri(url) is not Uri uri) {
                 return string.Empty;
             }
-            if (_domainParser == null) {
+            if (_domainParser == null) { 
                 _domainParser = new DomainParser(new WebTldRuleProvider());
             }
 

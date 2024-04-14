@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             double x = primaryScreen.WorkArea.Right - s.Width - pad;
-#if MAC
+#if MAC || LINUX
             double y = primaryScreen.WorkArea.Top + pad;
 #else
             double y = primaryScreen.WorkArea.Bottom - s.Height - pad;
@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvWindowManager.ToastNotifications
                 .Where(x => x.OpenDateTime < time_for_this && x.WindowState != WindowState.Minimized)
                 .Sum(x => (GetWindowSize(x).Height + pad) * primaryScreen.Scaling);
-#if MAC
+#if MAC || LINUX
             y += offsetY;
 #else
             y -= offsetY;

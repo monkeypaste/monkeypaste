@@ -5,6 +5,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -108,7 +109,10 @@ namespace MonkeyPaste.Avalonia {
         #region Layout
         public PixelRect FakeWindowScreenRect {
             get {
-                var fwr = MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext is MpAvWelcomeNotificationViewModel).Screens.Primary.WorkingArea;
+                if(MpAvWindowManager.LocateWindow(MpAvWelcomeNotificationViewModel.Instance) is not { } ww) {
+                    return new();
+                }
+                var fwr = ww.Screens.Primary.WorkingArea;
                 int w = fwr.Width;
                 int h = (int)((double)fwr.Height * 0.3d);
                 int x = fwr.X;
@@ -121,7 +125,11 @@ namespace MonkeyPaste.Avalonia {
             FakeWindowScreenRect.Size.ToPortableSize(MpAvWindowManager.ActiveWindow.VisualPixelDensity()).ToAvSize();
 
         public double FakeWindowStartTop =>
-            FakeWindowSize.Height;
+#if LINUX
+        FakeWindowSize.Height * MpAvWindowManager.ActiveWindow.VisualPixelDensity();
+#else
+        FakeWindowSize.Height; 
+#endif
 
         public double FakeWindowEndTop =>
             0;
@@ -136,7 +144,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvFakeWindowViewModel() : base(null) { }
         public MpAvFakeWindowViewModel(MpAvPointerGestureWindowViewModel parent) : base(parent) {
             PropertyChanged += MpAvFakeWindowViewModel_PropertyChanged;
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
         }
 
 
@@ -175,6 +182,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(FakeWindowLabel));
                     OnPropertyChanged(nameof(FakeWindowDetail));
                     if (IsWindowOpen) {
+                        MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
                         break;
                     }
                     break;
@@ -187,11 +195,13 @@ namespace MonkeyPaste.Avalonia {
                 Background = Brushes.Transparent,
                 ShowActivated = true,
                 CanResize = false,
+                SizeToContent = SizeToContent.Manual,
                 WindowState = WindowState.Normal,
                 BorderThickness = new Thickness(0),
                 SystemDecorations = SystemDecorations.None,
                 TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent },
                 WindowStartupLocation = WindowStartupLocation.Manual,
+                ExtendClientAreaToDecorationsHint = false,
                 ShowInTaskbar = false,
             };
             fmw.Bind(
@@ -201,14 +211,34 @@ namespace MonkeyPaste.Avalonia {
                     Path = nameof(IsFakeWindowVisible),
                     Mode = BindingMode.TwoWay
                 });
-#if WINDOWS 
+
+#if WINDOWS
             MpAvToolWindow_Win32.SetAsToolWindow(fmw.TryGetPlatformHandle().Handle);
+#elif LINUX
+            // on linux position/size will get overriden on show cause async or something
+            // so apply init props again on visible
+            Dispatcher.UIThread.Post(async () => {
+                while(!IsWindowOpen) { await Task.Delay(100); }
+                while(true) {
+                    fmw.Width = FakeWindowSize.Width;
+                    fmw.Height = FakeWindowSize.Height;
+                    fmw.Position = FakeWindowScreenRect.Position;
+                    await Task.Delay(100);
+                }
+            });
+
+            fmw.GetObservable(Window.IsVisibleProperty).Subscribe(value => {
+                fmw.Width = FakeWindowSize.Width;
+                fmw.Height = FakeWindowSize.Height;
+                fmw.Position = FakeWindowScreenRect.Position;
+                FakeWindowActualTop = FakeWindowStartTop;
+            });
 #endif
+
             fmw.Position = FakeWindowScreenRect.Position;
             fmw.Width = FakeWindowSize.Width;
             fmw.Height = FakeWindowSize.Height;
             FakeWindowActualTop = FakeWindowStartTop;
-
             return fmw;
         }
 
@@ -257,7 +287,6 @@ namespace MonkeyPaste.Avalonia {
                     _animationTimer.Stop();
                     return;
                 }
-                //SetMainWindowRect(new MpRect(x));
                 FakeWindowActualTop = x[0];
 
             };

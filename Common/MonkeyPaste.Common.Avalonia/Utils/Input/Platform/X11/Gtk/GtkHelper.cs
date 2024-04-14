@@ -1,5 +1,4 @@
 ﻿using Avalonia.Platform.Interop;
-using Avalonia.X11;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +8,9 @@ namespace MonkeyPaste.Common.Avalonia {
         private static IntPtr s_display;
         private static Task<bool> _initialized;
         public static async Task EnsureInitialized() {
+#if SUGAR_WV
+            return; 
+#endif
             if (_initialized == null) _initialized = StartGtk();
 
             if (!(await _initialized))

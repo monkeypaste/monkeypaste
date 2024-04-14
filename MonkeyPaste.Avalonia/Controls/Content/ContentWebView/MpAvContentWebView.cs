@@ -1342,7 +1342,7 @@ namespace MonkeyPaste.Avalonia {
             while (!IsDomLoaded) {
                 // wait for Navigate(EditorPath)
                 await Task.Delay(100);
-                if (sw.ElapsedMilliseconds > 15_000) {
+                if (sw.ElapsedMilliseconds > 60_000) {
                     // BUG found this stuck here, i think it makes the ObjectDisposedException
                     // would be nice to infer state  but just letting it load to see if its ok
                     //MpDebug.Break($"editor timeout, should open its dev tools");

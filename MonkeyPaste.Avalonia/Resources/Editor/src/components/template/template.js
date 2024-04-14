@@ -689,16 +689,21 @@ function isHtmlStrContainTemplate(htmlStr) {
     if (isNullOrEmpty(htmlStr)) {
         return false;
     }
-    return htmlStr.toLowerCase().indexOf('templateguid') >= 0;
+    if (htmlStr.toLowerCase().indexOf('templateguid') >= 0) {
+        return true;
+    }
+    return false;
 }
 
 function isPlainTextStrContainTemplate(ptStr) {
     if (isNullOrEmpty(ptStr)) {
         return false;
     }
-    return
-    ptStr.toLowerCase().indexOf(globals.ENCODED_TEMPLATE_OPEN_TOKEN) >= 0 &&
-        ptStr.toLowerCase().indexOf(globals.ENCODED_TEMPLATE_CLOSE_TOKEN) >= 0;
+    if (ptStr.toLowerCase().indexOf(globals.ENCODED_TEMPLATE_OPEN_TOKEN) >= 0 &&
+        ptStr.toLowerCase().indexOf(globals.ENCODED_TEMPLATE_CLOSE_TOKEN) >= 0) {
+        return true;
+    }
+    return false;
 }
 
 function isDocIdxAtTemplateInsert(doc_idx, telm) {

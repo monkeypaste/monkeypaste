@@ -156,7 +156,8 @@ namespace MonkeyPaste {
             DateTime? manifestLastModifiedDateTime = null) {
 
             if (iconId == 0) {
-                throw new Exception("needs icon");
+                //throw new Exception("needs icon");
+                iconId = MpDefaultDataModelTools.UnknownIconId;
             }
             if (string.IsNullOrEmpty(pluginGuid)) {
                 throw new Exception("needs analyzer id");

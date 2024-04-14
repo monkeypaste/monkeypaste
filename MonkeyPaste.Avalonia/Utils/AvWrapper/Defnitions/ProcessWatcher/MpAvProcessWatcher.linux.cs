@@ -6,7 +6,10 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using X11;
 
 
@@ -14,7 +17,25 @@ namespace MonkeyPaste.Avalonia {
 
     public partial class MpAvProcessWatcher {
         #region Private Variables
+
         private bool _hasError;
+        
+        private nint _xdoCtx;
+        private nint xdoCtx {
+            get {
+                if(_xdoCtx == nint.Zero) {
+                    //string ld_path = Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "Assets", "lib");
+                    //Environment.SetEnvironmentVariable(
+                    //    "LD_LIBRARY_PATH", 
+                    //    Environment.GetEnvironmentVariable("LD_LIBRARY_PATH").ToStringOrEmpty() + 
+                    //    ":" + ld_path);
+                    //string test = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
+                    _xdoCtx = XdoLib.xdo_new(null);
+                }
+                return _xdoCtx;
+            }
+        }
+
         private nint _displayPtr;
         private nint displayPtr {
             get {
@@ -33,25 +54,37 @@ namespace MonkeyPaste.Avalonia {
         }
         event XErrorHandlerDelegate HandleErrorDelegate;
         protected void Init() {
-            return;
             HandleErrorDelegate += HandleError;
-            Xlib.XSetErrorHandler(HandleErrorDelegate);
+            try {
+                _ = xdoCtx;
+                Xlib.XSetErrorHandler(HandleErrorDelegate);
 
-            if (displayPtr == nint.Zero) {
-                MpConsole.WriteLine("Unable to open the default X display");
-                return;
+                if (displayPtr == nint.Zero) {
+                    MpConsole.WriteLine("Unable to open the default X display");
+                    return;
+                }
+
+                _rootWindow = Xlib.XDefaultRootWindow(displayPtr);
+
+                if (_rootWindow == default) {
+                    MpConsole.WriteLine("Unable to open root window");
+                    return;
+                }
             }
-
-            _rootWindow = Xlib.XDefaultRootWindow(displayPtr);
-
-            if (_rootWindow == default) {
-                MpConsole.WriteLine("Unable to open root window");
-                return;
-            }
+            catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
         }
         public IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos =>
             new List<MpPortableProcessInfo>();
         public nint SetActiveProcess(MpPortableProcessInfo p) {
+            try {
+                if (p == null || p.Handle == nint.Zero) {
+                    return nint.Zero;
+                }
+                XdoLib.xdo_activate_window(xdoCtx, (int)p.Handle);
+                XdoLib.xdo_focus_window(xdoCtx, (int)p.Handle);
+                return p.Handle;
+            }
+            catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
             return nint.Zero;
         }
         protected nint GetThisAppHandle() {
@@ -62,73 +95,120 @@ namespace MonkeyPaste.Avalonia {
             return ph.Handle;
         }
         protected nint GetActiveProcessHandle() {
-            return nint.Zero;
             nint handle = GetFocusWindowHandle();
-            nint test = GetTopWindowHandle(handle);
-            return handle;
+            //nint test = GetTopWindowHandle(handle);
+            //return handle;
+            //int handle = default;
+            //XdoLib.xdo_get_active_window(xdoCtx, ref handle);
+            return (nint)handle;
         }
 
         private nint GetFocusWindowHandle() {
-            // from https://gist.github.com/kui/2622504
-            Window w = default;
-            RevertFocus revert_to = default;
-            Status result = Xlib.XGetInputFocus(displayPtr, ref w, ref revert_to);
-            nint handle = (nint)((int)w);
+            return nint.Zero;
+            try {
+                // from https://gist.github.com/kui/2622504
+                Window w = default;
+                RevertFocus revert_to = default;
+                Status result = Xlib.XGetInputFocus(displayPtr, ref w, ref revert_to);
+                nint handle = (nint)((int)w);
 
-            if(handle != nint.Zero) {
-                string prop_return = default;
+                if (handle != nint.Zero) {
+                    //string prop_return = default;
 
-                var a = Xlib.XFetchName(displayPtr, w, ref prop_return);
-                //nint actual_type_return = default;
-                //int actual_format_return = default; 
-                //ulong nitems_return = default;
-                //ulong bytes_after_return = default;
-                //string prop_return = default;
-                //int a =
-                //XGetWindowProperty(
-                //    displayPtr,
-                //    w,
-                //    Atom.WmName,
-                //    0L,
-                //    (~0L),
-                //    false,
-                //    Atom.None,
-                //    ref actual_type_return,
-                //    ref actual_format_return,
-                //    ref nitems_return,
-                //    ref bytes_after_return,
-                //    ref prop_return);
+                    //var a = Xlib.XFetchName(displayPtr, w, ref prop_return);
+                    //nint actual_type_return = default;
+                    //int actual_format_return = default; 
+                    //ulong nitems_return = default;
+                    //ulong bytes_after_return = default;
+                    //string prop_return = default;
+                    //int a =
+                    //XGetWindowProperty(
+                    //    displayPtr,
+                    //    w,
+                    //    Atom.WmName,
+                    //    0L,
+                    //    (~0L),
+                    //    false,
+                    //    Atom.None,
+                    //    ref actual_type_return,
+                    //    ref actual_format_return,
+                    //    ref nitems_return,
+                    //    ref bytes_after_return,
+                    //    ref prop_return);
+                }
+
+                return handle;
             }
-
-            return handle;
+            catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
+            return nint.Zero;
         }
         private nint GetTopWindowHandle(nint start) {
-            // from https://gist.github.com/kui/2622504
-            Window w = (Window)((int)start);
-            Window parent = (Window)((int)start);
-            Window root = Window.None;
-
-            while(parent != root) {
-                w = parent;
-                int result = Xlib.XQueryTree(displayPtr, w, ref root, ref parent, out _);
-                if(result < 0 || _hasError) {
-                    MpConsole.WriteLine($"Find top window failed");
-                    break;
+            try {
+                if (start == nint.Zero) {
+                    return nint.Zero;
                 }
-            }
-            //MpConsole.WriteLine($"Found top window: {w}");
-            return (nint)((int)w);
+                // from https://gist.github.com/kui/2622504
+                Window w = (Window)((int)start);
+                Window parent = (Window)((int)start);
+                Window root = Window.None;
+
+                while (parent != root) {
+                    w = parent;
+                    int result = Xlib.XQueryTree(displayPtr, w, ref root, ref parent, out _);
+                    if (result < 0 || _hasError) {
+                        MpConsole.WriteLine($"Find top window failed");
+                        break;
+                    }
+                }
+                //MpConsole.WriteLine($"Found top window: {w}");
+                return (nint)((int)w);
+            }catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
+            return nint.Zero;
         }
         protected bool IsHandleWindowProcess(nint handle) {
-            return handle != nint.Zero;
+            if (handle == nint.Zero) {
+                return false;
+            }
+            return !GetProcessTitle(handle).IsNullOrEmpty();
         }
         protected string GetProcessPath(nint handle) {
             return string.Empty;
+            try {
+                //handle = GetTopWindowHandle(handle);
+                if (handle == nint.Zero || !IsHandleWindowProcess(handle)) {
+                    return string.Empty;
+                }
+                if (handle == GetThisAppHandle()) {
+                    return Mp.Services.PlatformInfo.ExecutingPath;
+                }
+                int pid = XdoLib.xdo_get_pid_window(xdoCtx, (int)handle);
+                if (pid == 0) {
+                    return string.Empty;
+                }
+                var path_bytes = new byte[256];
+                PidTools.get_exe_for_pid(pid, path_bytes);
+                string path = Encoding.Default.GetString(path_bytes).Replace("\0", string.Empty);
+                // TODO need to test/finish parsing path/args here
+                //var exe = path.ParseCmdPath();
+                return path;
+            } catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
+            return string.Empty;
         }
         protected string GetProcessTitle(nint handle) {
-            // from https://gist.github.com/kui/2622504
-            //Xlib.XGet
-            return "<process title here>";
+            return string.Empty;
+            try {
+                if (handle == nint.Zero) {
+                    return string.Empty;
+                }
+                // from https://gist.github.com/kui/2622504
+                string title = default;
+                int len = default;
+                int name_type = default;
+                XdoLib.xdo_get_window_name(xdoCtx, (int)handle, ref title, ref len, ref name_type);
+                return title;
+            }
+            catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
+            return string.Empty;
         }
         protected string GetAppNameByProessPath(string path) {
             return string.Empty;
