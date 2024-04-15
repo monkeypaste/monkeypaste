@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste", "MonkeyPaste\MonkeyPaste.csproj", "{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}"
@@ -1258,14 +1259,14 @@ Global
 		{FF623CDD-ACF6-4021-BB76-3A7DBB5CE735} = {D300D2C5-182B-4F20-98A6-4BA79EACCCC4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_CultureCountyOverrides = ar=ar-DJ
-		RESX_ShowPerformanceTraces = True
-		RESX_DuplicateKeyHandling = Fail
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_RemoveEmptyEntries = False
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_TaskErrorCategory = Message
-		RESX_ExcelExportMode = Text
 		RESX_ConfirmAddLanguageFile = False
+		RESX_ExcelExportMode = Text
+		RESX_TaskErrorCategory = Message
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_RemoveEmptyEntries = False
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_DuplicateKeyHandling = Fail
+		RESX_ShowPerformanceTraces = True
+		RESX_CultureCountyOverrides = ar=ar-DJ
 	EndGlobalSection
 EndGlobal
