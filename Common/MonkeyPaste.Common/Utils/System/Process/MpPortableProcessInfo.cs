@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace MonkeyPaste.Common {
     public class MpPortableProcessInfo : MpIIsValueEqual<MpPortableProcessInfo> {
@@ -18,6 +19,9 @@ namespace MonkeyPaste.Common {
 
         #endregion
         #region Properties
+        [JsonIgnore]
+        public int IntHandle =>
+            (int)Handle;
         public nint Handle { get; set; }// = nint.Zero;
         public int WindowNumber { get; set; }
         public string ProcessPath { get; set; } = string.Empty;

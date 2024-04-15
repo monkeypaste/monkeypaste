@@ -42,8 +42,9 @@ namespace MonkeyPaste.Avalonia {
             if (ctvm == null) {
                 return;
             }
-            if (ctvm.IsPinned) {
-                var ptr_lb = this.GetVisualDescendant<MpAvPinTrayView>().GetVisualDescendant<ListBox>();
+            if (ctvm.IsPinned &&
+                this.GetVisualDescendant<MpAvPinTrayView>() is { } ptrv &&
+                ptrv.GetVisualDescendant<ListBox>() is { } ptr_lb) {
                 int ctvm_pin_idx = BindingContext.PinnedItems.IndexOf(ctvm);
                 var ptr_ctvm_lbi = ptr_lb.ContainerFromIndex(ctvm_pin_idx);
                 ptr_ctvm_lbi?.BringIntoView();

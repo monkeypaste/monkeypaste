@@ -164,8 +164,9 @@ namespace MonkeyPaste.Avalonia {
         private void CreateLoaderItems() {
             //#if DESKTOP
             BaseItems.AddRange(new[] {
-                //new MpAvLoaderItemViewModel(typeof(MpAvCefNetApplication), "Rich Content Editor"),
+#if MOBILE
                 new MpAvLoaderItemViewModel(typeof(MpConsole),UiStrings.LoaderLoggerLabel, [Mp.Services.PlatformInfo.IsTraceEnabled ? Mp.Services.PlatformInfo.LogPath : null, App.HasStartupArg(App.WAIT_FOR_DEBUG_ARG)]),
+#endif
                 new MpAvLoaderItemViewModel(typeof(MpAvSystemTray), UiStrings.LoaderSysTrayLabel),
                 new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),UiStrings.LoaderThemeLabel),
                 new MpAvLoaderItemViewModel(typeof(MpDb), UiStrings.LoaderDataLabel),

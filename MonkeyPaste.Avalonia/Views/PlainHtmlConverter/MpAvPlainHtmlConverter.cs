@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsLoaded { get; set; } =
-#if CEFNET_WV || OUTSYS_WV || MOBILE
+#if SUGAR_WV || CEFNET_WV || OUTSYS_WV || MOBILE
             false;
 #else
             true;
@@ -71,8 +71,10 @@ namespace MonkeyPaste.Avalonia {
             MpAvCefNetApplication.IsCefNetLoaded;
 #elif OUTSYS_WV
             true;
-#else
+#elif SUGAR_WV
             true;
+#else
+            false;
 #endif
 
         bool IsWebViewConverterAvailable =>

@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private nint GetFocusWindowHandle() {
-            return nint.Zero;
+            //return nint.Zero;
             try {
                 // from https://gist.github.com/kui/2622504
                 Window w = default;
@@ -172,14 +172,10 @@ namespace MonkeyPaste.Avalonia {
             return !GetProcessTitle(handle).IsNullOrEmpty();
         }
         protected string GetProcessPath(nint handle) {
-            return string.Empty;
+            //return string.Empty;
             try {
-                //handle = GetTopWindowHandle(handle);
-                if (handle == nint.Zero || !IsHandleWindowProcess(handle)) {
+                if (handle == nint.Zero) {
                     return string.Empty;
-                }
-                if (handle == GetThisAppHandle()) {
-                    return Mp.Services.PlatformInfo.ExecutingPath;
                 }
                 int pid = XdoLib.xdo_get_pid_window(xdoCtx, (int)handle);
                 if (pid == 0) {
@@ -187,6 +183,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 var path_bytes = new byte[256];
                 PidTools.get_exe_for_pid(pid, path_bytes);
+                if(path_bytes == null) {
+                    return string.Empty;
+                }
                 string path = Encoding.Default.GetString(path_bytes).Replace("\0", string.Empty);
                 // TODO need to test/finish parsing path/args here
                 //var exe = path.ParseCmdPath();
@@ -195,9 +194,10 @@ namespace MonkeyPaste.Avalonia {
             return string.Empty;
         }
         protected string GetProcessTitle(nint handle) {
-            return string.Empty;
+            //return string.Empty;
             try {
-                if (handle == nint.Zero) {
+                if (handle == nint.Zero || handle == 1) {
+                    // NOTE handle==1 throws exception getting title
                     return string.Empty;
                 }
                 // from https://gist.github.com/kui/2622504

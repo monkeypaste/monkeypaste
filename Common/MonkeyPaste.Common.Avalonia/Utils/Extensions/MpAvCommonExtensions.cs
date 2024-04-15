@@ -125,6 +125,9 @@ namespace MonkeyPaste.Common.Avalonia {
         #region Visual Tree
 
         public static Visual FindVisualDescendantWithHashCode(this Visual visual, int hashCode, bool printInfo = false) {
+            if (visual == null) {
+                return default;
+            }
             var target = visual.GetSelfAndVisualDescendants().FirstOrDefault(x => x.GetHashCode() == hashCode);
             if (target != null && printInfo) {
                 var control_up = target.GetVisualAncestors();
@@ -139,6 +142,9 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static ILogical FindLogicalDescendantWithHashCode(this ILogical logical, int hashCode, bool printInfo = false) {
+            if (logical == null) {
+                return default;
+            }
             var logical_tree = logical.GetSelfAndLogicalDescendants();
             var target = logical_tree.FirstOrDefault(x => x.GetHashCode() == hashCode);
             if (target != null && printInfo) {
@@ -154,6 +160,9 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static async Task<T> GetVisualDescendantAsync<T>(this Visual visual, bool includeSelf = true, int timeOutMs = 3_000) where T : Visual? {
+            if (visual == null) {
+                return default;
+            }
             T result = visual.GetVisualDescendant<T>(includeSelf);
             if (result != null) {
                 return result;
@@ -171,6 +180,9 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static async Task<T> GetVisualAncestorAsync<T>(this Visual visual, bool includeSelf = true, int timeOutMs = 3_000) where T : Visual? {
+            if (visual == null) {
+                return default;
+            }
             T result = visual.GetVisualAncestor<T>(includeSelf);
             if (result != null) {
                 return result;
@@ -187,27 +199,28 @@ namespace MonkeyPaste.Common.Avalonia {
             return result;
         }
         public static T GetVisualAncestor<T>(this Visual visual, bool includeSelf = true) where T : Visual? {
+            if(visual == null) {
+                return default;
+            }
             if (includeSelf && visual is T) {
                 return (T)visual;
             }
             var visualResult = (T)visual.GetVisualAncestors().FirstOrDefault(x => x is T);
             return visualResult;
         }
-        public static IEnumerable<T> GetVisualAncestors<T>(this Visual visual, bool includeSelf = true) where T : Visual {
-            IEnumerable<T> visualResult = visual.GetVisualAncestors().Where(x => x is T).Cast<T>();
-            if (includeSelf && visual is T ct) {
-                visualResult.Append(ct);
-            }
-
-            return visualResult;
-        }
         public static T GetVisualDescendant<T>(this Visual control, bool includeSelf = true) where T : Visual {
+            if (control == null) {
+                return default;
+            }
             if (includeSelf && control is T) {
                 return (T)control;
             }
             return (T)control.GetVisualDescendants().FirstOrDefault(x => x is T);
         }
         public static IEnumerable<T> GetVisualDescendants<T>(this Visual control, bool includeSelf = true) where T : Visual {
+            if (control == null) {
+                return default;
+            }
             IEnumerable<T> result = control.GetVisualDescendants().OfType<T>();
             if (includeSelf && control is T ct) {
                 result.Prepend(ct);
@@ -215,6 +228,9 @@ namespace MonkeyPaste.Common.Avalonia {
             return result;
         }
         public static IEnumerable<T> GetLogicalDescendants<T>(this ILogical logical, bool includeSelf = true) where T : ILogical {
+            if (logical == null) {
+                return default;
+            }
             IEnumerable<T> result = logical.GetLogicalDescendants().OfType<T>();
             if (includeSelf && logical is T t) {
                 result.Prepend(t);
@@ -222,6 +238,9 @@ namespace MonkeyPaste.Common.Avalonia {
             return result;
         }
         public static T GetLogicalDescendant<T>(this ILogical logical, bool includeSelf = true) where T : ILogical {
+            if (logical == null) {
+                return default;
+            }
             IEnumerable<T> result = logical.GetLogicalDescendants().OfType<T>();
             if (includeSelf && logical is T t) {
                 result.Prepend(t);
@@ -229,16 +248,28 @@ namespace MonkeyPaste.Common.Avalonia {
             return result.FirstOrDefault();
         }
         public static bool TryGetVisualAncestor<T>(this Visual control, out T ancestor) where T : Visual {
+            if (control == null) {
+                ancestor = default;
+                return false;
+            }
             ancestor = control.GetVisualAncestor<T>();
             return ancestor != null;
         }
 
         public static bool TryGetVisualDescendant<T>(this Visual control, out T descendant) where T : Visual {
+            if (control == null) {
+                descendant = default;
+                return false;
+            }
             descendant = control.GetVisualDescendant<T>();
             return descendant != null;
         }
 
         public static bool TryGetVisualDescendants<T>(this Visual control, out IEnumerable<T> descendant) where T : Visual {
+            if (control == null) {
+                descendant = default;
+                return false;
+            }
             descendant = control.GetVisualDescendants<T>();
             return descendant.Count() > 0;
         }

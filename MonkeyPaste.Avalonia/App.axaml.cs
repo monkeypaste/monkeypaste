@@ -137,12 +137,8 @@ namespace MonkeyPaste.Avalonia {
 
         public override async void OnFrameworkInitializationCompleted() {
             DateTime startup_datetime = DateTime.Now;
-#if DEBUG
-            if (!Debugger.IsAttached) {
-
-            }
-#endif
 #if DESKTOP
+            MpConsole.Init(new MpAvPlatformInfo_desktop().LogPath, App.HasStartupArg(App.WAIT_FOR_DEBUG_ARG));
             MpAvLogSink.Init();
 #endif
 

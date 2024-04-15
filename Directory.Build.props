@@ -45,23 +45,23 @@
     <PushPlugins>false</PushPlugins>
     <!-- NOTE when changing av version need to reset coreole, probably everything-->
     <DefaultLangVersion>Latest</DefaultLangVersion>
-    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
-  </PropertyGroup>
-
-  <!-- CUSTOM PROPERTIES -->
-
-  <PropertyGroup>
-    <!-- DEFAULTS (MAYBE OVERRIDEN BY CONDITIONS) -->
     <IsDesktop>false</IsDesktop>
     <IsMobile>false</IsMobile>
     <DefaultPlatforms>x64</DefaultPlatforms>
-    <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
     <UseCefNet>false</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
     <UseSugarWv>false</UseSugarWv>
     <DefaultTargetFramework>net8.0</DefaultTargetFramework>
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
+  </PropertyGroup>
+
+  <!-- CUSTOM PROPERTIES -->
+
+  <PropertyGroup>
+    <!-- DEFAULTS (MAYBE OVERRIDEN BY CONDITIONS) -->
+    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
+    <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
     <BuildScriptsRootDir>$(SolutionDir)\Build\_build\scripts</BuildScriptsRootDir>
   </PropertyGroup>
   
@@ -115,7 +115,7 @@
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <UseCefNet>false</UseCefNet>
-    <UseSugarWv>true</UseSugarWv>
+    <UseSugarWv>false</UseSugarWv>
     <PlatformShortName>linux</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\linux</BuildScriptsDir>
   </PropertyGroup>

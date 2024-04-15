@@ -243,6 +243,10 @@ namespace MonkeyPaste.Common.Avalonia {
                 return avdo;
             }
             var actualFormats = await cb.GetFormatsSafeAsync();
+            if(actualFormats == null) {
+                // timeout
+                return avdo;
+            }
             // <PlatformFormatName,CommonFormatName>
             var mappedFormats = actualFormats.ToDictionary(x => x, x => x);
 
