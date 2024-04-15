@@ -115,7 +115,7 @@
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <UseCefNet>false</UseCefNet>
-    <UseSugarWv>true</UseSugarWv>
+    <UseSugarWv>false</UseSugarWv>
     <PlatformShortName>linux</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\linux</BuildScriptsDir>
   </PropertyGroup>
