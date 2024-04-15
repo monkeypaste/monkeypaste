@@ -1,6 +1,6 @@
 #!/bin/sh
 TARGET_FRAMEWORK="net8.0"
-cd "/Users/tkefauver/mp/MonkeyPaste.Desktop/"
+cd "../../../../../MonkeyPaste.Desktop/"
 dotnet restore -r osx-x64
 
 dotnet msbuild -t:BundleApp -p:RuntimeIdentifier=osx-x64 -p:Platform=x64

@@ -4,17 +4,16 @@ using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common.Plugin;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
 using System.Runtime.Intrinsics.X86;
-
-
-
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
 
 #if WINDOWS
 
@@ -26,8 +25,6 @@ using MonkeyPaste.Common.Wpf;
 
 using MonoMac.AppKit;
 using MonoMac.Foundation;
-using System.Text;
-using Newtonsoft.Json.Linq;
 
 #endif
 
@@ -281,11 +278,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             return avdo;
         }
-
-        public static async Task LogClipboardAsync(this IClipboard cb) {
-            var avdo = await cb.ToDataObjectAsync();
-            avdo.LogDataObject();
-        }
+        
         public static async Task<string[]> GetFormatsSafeAsync(this IClipboard cb, int retryCount = 0) {
             if (cb == null) {
                 return new string[] { };

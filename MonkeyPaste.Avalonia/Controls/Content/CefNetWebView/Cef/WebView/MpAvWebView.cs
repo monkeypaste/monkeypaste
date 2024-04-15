@@ -624,12 +624,16 @@ namespace MonkeyPaste.Avalonia {
 #endif
         }
         private void InnerWebView_NavigationCompleted(object sender, WebViewCore.Events.WebViewUrlLoadedEventArg e) {
-            IsNavigating = false;
-            OnNavigated(InnerWebView.Url.AbsoluteUri);
+            Dispatcher.UIThread.Post(() => {
+                IsNavigating = false;
+                OnNavigated(InnerWebView.Url.AbsoluteUri);
+            });
         }
 
         private void InnerWebView_NavigationStarting(object sender, WebViewCore.Events.WebViewUrlLoadingEventArg e) {
-            IsNavigating = true;
+            Dispatcher.UIThread.Post(() => {
+                IsNavigating = true;
+            });
         }
 
         private void InnerWebView_WebMessageReceived(object sender, WebViewCore.Events.WebViewMessageReceivedEventArgs e) {
@@ -637,8 +641,10 @@ namespace MonkeyPaste.Avalonia {
                     string.IsNullOrEmpty(jsonStr)) {
                 return;
             }
-            var msg = jsonStr.DeserializeObject<MpQuillPostMessageResponse>();
-            HandleBindingNotification(msg.msgType, msg.msgData, msg.handle);
+            Dispatcher.UIThread.Post(() => {
+                var msg = jsonStr.DeserializeObject<MpQuillPostMessageResponse>();
+                HandleBindingNotification(msg.msgType, msg.msgData, msg.handle);
+            });
         }
 #endif
         #endregion

@@ -115,6 +115,15 @@ namespace MonkeyPaste.Common {
         }
 
         #endregion
+
+        public static string ParseCmdPath(this string cmd) {
+            if(cmd.IsNullOrEmpty() ||
+                cmd.Trim().SplitNoEmpty(" ") is not { } cmdParts ||
+                cmdParts.Length == 0){
+                return string.Empty;
+            }
+            return cmd;
+        }
         public static bool ContainsHtml(this string text) {
             // from ResXManager Extensions
             HtmlDocument doc = new();

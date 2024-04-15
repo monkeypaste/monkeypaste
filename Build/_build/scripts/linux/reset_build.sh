@@ -1,4 +1,5 @@
 #!/bin/sh
+
 echo "Build Reset..."
 cd "../../../../"
 rm -fr Plugins/CoreOleHandler/obj/
@@ -24,6 +25,6 @@ rm -fr MonkeyPaste.Avalonia/bin/
 
 rm -fr MonkeyPaste/obj/
 rm -fr MonkeyPaste/bin/
- 
+
 cd -
 echo "DONE"

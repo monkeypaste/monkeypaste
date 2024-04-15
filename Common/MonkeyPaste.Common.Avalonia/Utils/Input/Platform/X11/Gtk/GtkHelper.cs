@@ -8,6 +8,9 @@ namespace MonkeyPaste.Common.Avalonia {
         private static IntPtr s_display;
         private static Task<bool> _initialized;
         public static async Task EnsureInitialized() {
+#if SUGAR_WV
+            return; 
+#endif
             if (_initialized == null) _initialized = StartGtk();
 
             if (!(await _initialized))
@@ -18,7 +21,7 @@ namespace MonkeyPaste.Common.Avalonia {
             var tcs = new TaskCompletionSource<bool>();
             new Thread(() => {
                 try {
-                    using (var backends = new Utf8Buffer("x11"))
+                    using (var backends = new MpUtf8Buffer("x11"))
                         GtkApi.gdk_set_allowed_backends(backends);
                 }
                 catch {
@@ -34,7 +37,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 }
 
                 IntPtr app;
-                using (var utf = new Utf8Buffer($"avalonia.app.a{Guid.NewGuid():N}"))
+                using (var utf = new MpUtf8Buffer($"avalonia.app.a{Guid.NewGuid():N}"))
                     app = GtkApi.gtk_application_new(utf, 0);
                 if (app == IntPtr.Zero) {
                     tcs.SetResult(false);

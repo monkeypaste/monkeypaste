@@ -33,7 +33,9 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvSystemTray {
         public static void Init() {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
-            InitStartupTray();
+#if !LINUX
+            InitStartupTray(); 
+#endif
         }
         public static void InitActualTray() {
             var rootIcon = CreateTrayIcon();

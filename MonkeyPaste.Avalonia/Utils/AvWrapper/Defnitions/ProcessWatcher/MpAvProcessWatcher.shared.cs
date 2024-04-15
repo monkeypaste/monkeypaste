@@ -110,6 +110,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvProcessWatcher() {
             _instance = this;
+#if LINUX
+            Init();
+#endif
             StartWatcher();
         }
 
@@ -229,6 +232,8 @@ namespace MonkeyPaste.Avalonia {
 
 #if MAC
             MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo.ApplicationName}");
+#elif LINUX
+            MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo.ProcessPath}");
 #else
             MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo.MainWindowTitle}");
 #endif

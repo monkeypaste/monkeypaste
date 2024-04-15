@@ -2,6 +2,7 @@
 
 using GLib;
 using Gtk;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Runtime.InteropServices;
 using X11;

@@ -292,16 +292,20 @@ namespace MonkeyPaste {
                 //implies this an add so all syncable columns are returned
                 other = new MpIcon();
             }
+            var db_img = await MpDataModelProvider.GetItemAsync<MpDbImage>(IconImageId);
+
             //returns db column name and string paramValue of dr that is diff
             var diffLookup = new Dictionary<string, string>();
             diffLookup = CheckValue(IconGuid, other.IconGuid,
                 "MpIconGuid",
                 diffLookup,
                 IconGuid.ToString());
-            diffLookup = CheckValue(IconImageId, other.IconImageId,
+            if(db_img != null) {
+                diffLookup = CheckValue(IconImageId, other.IconImageId,
                 "fk_IconDbImageId",
                 diffLookup,
-                MpDataModelProvider.GetItem<MpDbImage>(IconImageId).Guid);
+                db_img.Guid);
+            }
             diffLookup = CheckValue(HexColor1, other.HexColor1,
                 "HexColor1",
                 diffLookup);

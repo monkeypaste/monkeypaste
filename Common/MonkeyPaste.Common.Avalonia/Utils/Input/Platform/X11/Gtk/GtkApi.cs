@@ -1,6 +1,8 @@
 ﻿using Avalonia.Platform.Interop;
 using System;
+using System.Buffers;
 using System.Runtime.InteropServices;
+using System.Text;
 namespace MonkeyPaste.Common.Avalonia {
     public static unsafe class GdiApi {
         private const string GlibName = "libglib-2.0.so.0";
@@ -73,13 +75,13 @@ namespace MonkeyPaste.Common.Avalonia {
         #region StartGtk
 
         [DllImport(GdkName)]
-        public static extern IntPtr gdk_set_allowed_backends(Utf8Buffer backends);
+        public static extern IntPtr gdk_set_allowed_backends(MpUtf8Buffer backends);
 
         [DllImport(GtkName)]
         public static extern bool gtk_init_check(int argc, IntPtr argv);
 
         [DllImport(GtkName)]
-        public static extern IntPtr gtk_application_new(Utf8Buffer appId, int flags);
+        public static extern IntPtr gtk_application_new(MpUtf8Buffer appId, int flags);
 
         [DllImport(GdkName)]
         public static extern IntPtr gdk_display_get_default();
@@ -103,7 +105,7 @@ namespace MonkeyPaste.Common.Avalonia {
         public delegate bool signal_dialog_response(IntPtr gtkWidget, GtkResponseType response, IntPtr userData);
 
         [DllImport(GtkName)]
-        public static extern IntPtr gtk_file_chooser_dialog_new(Utf8Buffer title, IntPtr parent,
+        public static extern IntPtr gtk_file_chooser_dialog_new(MpUtf8Buffer title, IntPtr parent,
             GtkFileChooserAction action, IntPtr ignore);
 
         [DllImport(GtkName)]
@@ -114,28 +116,28 @@ namespace MonkeyPaste.Common.Avalonia {
 
         [DllImport(GtkName)]
         public static extern void
-            gtk_dialog_add_button(IntPtr raw, Utf8Buffer button_text, GtkResponseType response_id);
+            gtk_dialog_add_button(IntPtr raw, MpUtf8Buffer button_text, GtkResponseType response_id);
 
         [DllImport(GtkName)]
         public static extern GSList* gtk_file_chooser_get_filenames(IntPtr chooser);
 
         [DllImport(GtkName)]
-        public static extern void gtk_file_chooser_set_filename(IntPtr chooser, Utf8Buffer file);
+        public static extern void gtk_file_chooser_set_filename(IntPtr chooser, MpUtf8Buffer file);
 
         [DllImport(GtkName)]
-        public static extern void gtk_file_chooser_set_current_name(IntPtr chooser, Utf8Buffer file);
+        public static extern void gtk_file_chooser_set_current_name(IntPtr chooser, MpUtf8Buffer file);
 
         [DllImport(GtkName)]
-        public static extern void gtk_file_chooser_set_current_folder(IntPtr chooser, Utf8Buffer file);
+        public static extern void gtk_file_chooser_set_current_folder(IntPtr chooser, MpUtf8Buffer file);
 
         [DllImport(GtkName)]
         public static extern IntPtr gtk_file_filter_new();
 
         [DllImport(GtkName)]
-        public static extern IntPtr gtk_file_filter_set_name(IntPtr filter, Utf8Buffer name);
+        public static extern IntPtr gtk_file_filter_set_name(IntPtr filter, MpUtf8Buffer name);
 
         [DllImport(GtkName)]
-        public static extern IntPtr gtk_file_filter_add_pattern(IntPtr filter, Utf8Buffer pattern);
+        public static extern IntPtr gtk_file_filter_add_pattern(IntPtr filter, MpUtf8Buffer pattern);
 
         [DllImport(GtkName)]
         public static extern IntPtr gtk_file_chooser_add_filter(IntPtr chooser, IntPtr filter);
@@ -171,5 +173,62 @@ namespace MonkeyPaste.Common.Avalonia {
         public static IntPtr GetForeignWindow(IntPtr xid) => gdk_x11_window_foreign_new_for_display(s_display, xid);
 
         #endregion
+    }
+    public class MpUtf8Buffer : SafeHandle {
+        private GCHandle _gcHandle;
+
+        private byte[]? _data;
+
+        public int ByteLen {
+            get {
+                byte[]? data = _data;
+                if (data == null) {
+                    return 0;
+                }
+
+                return data.Length;
+            }
+        }
+
+        public override bool IsInvalid => handle == IntPtr.Zero;
+
+        public MpUtf8Buffer(string? s)
+            : base(IntPtr.Zero, ownsHandle: true) {
+            if (s != null) {
+                _data = Encoding.UTF8.GetBytes(s);
+                _gcHandle = GCHandle.Alloc(_data, GCHandleType.Pinned);
+                handle = _gcHandle.AddrOfPinnedObject();
+            }
+        }
+
+        protected override bool ReleaseHandle() {
+            if (handle != IntPtr.Zero) {
+                handle = IntPtr.Zero;
+                _data = null;
+                _gcHandle.Free();
+            }
+
+            return true;
+        }
+
+        public unsafe static string? StringFromPtr(IntPtr s) {
+            byte* ptr = (byte*)(void*)s;
+            if (ptr == null) {
+                return null;
+            }
+
+            int i;
+            for (i = 0; ptr[i] != 0; i++) {
+            }
+
+            byte[] array = ArrayPool<byte>.Shared.Rent(i);
+            try {
+                Marshal.Copy(s, array, 0, i);
+                return Encoding.UTF8.GetString(array, 0, i);
+            }
+            finally {
+                ArrayPool<byte>.Shared.Return(array);
+            }
+        }
     }
 }

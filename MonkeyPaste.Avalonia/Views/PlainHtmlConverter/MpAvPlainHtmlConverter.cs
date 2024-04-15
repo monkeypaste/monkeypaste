@@ -126,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private async Task CreateWebViewConverterAsync() {
-            bool do_hide = true;
+            bool do_hide = false;
             IsBusy = true;
             if (OperatingSystem.IsBrowser()) {
                 await MpDeviceWrapper.Instance.JsImporter.ImportAllAsync();
@@ -145,11 +145,14 @@ namespace MonkeyPaste.Avalonia {
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 if(do_hide) {
                     _convWindow = new MpAvHiddenWindow();
+                    _convWindow.Width = 1;
+                    _convWindow.Height = 1;
                 } else {
-                    _convWindow = new MpAvWindow();
+                    _convWindow = new MpAvWindow(); 
+                    _convWindow.Width = 50;
+                    _convWindow.Height = 50;
                 }
-                _convWindow.Width = 500;
-                _convWindow.Height = 500;
+                
 
                 _convWindow.Content = ConverterWebView;
                 ConverterWebView.AttachedToVisualTree += async (s, e) => {

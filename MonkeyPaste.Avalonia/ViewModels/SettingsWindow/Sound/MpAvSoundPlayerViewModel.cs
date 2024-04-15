@@ -73,7 +73,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsOsSupported =>
-#if BROWSER || ANDROID || MAC
+#if BROWSER || ANDROID || LINUX || MAC
             false;
 #else
             true;
@@ -237,7 +237,9 @@ namespace MonkeyPaste.Avalonia {
                 byte volume = (byte)(100d * new_norm_volue);
                 await _player.SetVolume(volume);
 
-            }, (args) => IsOsSupported);
+            }, (args) => {
+                return IsOsSupported;
+            });
 
         public ICommand PlayCustomSoundCommand => new MpAsyncCommand<object>(
             async (args) => {
@@ -271,7 +273,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 await UpdateVolumeCommand.ExecuteAsync(null);
 
-            }, (args) => IsOsSupported);
+            }, (args) => {
+                return IsOsSupported;
+            });
         public ICommand PlaySoundNotificationCommand => new MpAsyncCommand<object>(
             async (args) => {
                 if (args is not MpSoundNotificationType snt ||

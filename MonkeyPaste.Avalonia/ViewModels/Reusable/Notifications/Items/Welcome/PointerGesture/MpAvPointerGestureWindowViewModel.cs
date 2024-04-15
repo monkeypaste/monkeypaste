@@ -163,7 +163,7 @@ namespace MonkeyPaste.Avalonia {
                 Position = new PixelPoint(),
                 Width = ss.Width,
                 Height = MaxWindowY,
-                Background = Brushes.Transparent,//new SolidColorBrush() { Color = Colors.Orange, Opacity = 0.3 },
+                Background = Brushes.Transparent,
                 WindowState = WindowState.Normal,
                 CanResize = false,
                 SystemDecorations = SystemDecorations.None,
@@ -171,6 +171,7 @@ namespace MonkeyPaste.Avalonia {
                 WindowStartupLocation = WindowStartupLocation.Manual,
                 ExtendClientAreaToDecorationsHint = false,
                 ShowInTaskbar = false,
+                SizeToContent = SizeToContent.Manual,
                 Title = "MarkerWindow"
             };
 
@@ -242,8 +243,11 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 var gw = CreateTopEdgeMarkerWindow();
                 gw.Show();
+#if !LINUX
+                // NOTE for some reason on ubuntu 20.04 this creates screen artifacts and doesn't affect behavior omitting 
                 FakeWindowViewModel.ToggleFakeWindowCommand.Execute(null);
+#endif
             });
-        #endregion
+#endregion
     }
 }

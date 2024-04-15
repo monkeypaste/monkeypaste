@@ -173,7 +173,10 @@ function getAppendButtonLookup2() {
 // #region State
 
 function isShowingPasteAppendPopupOptElement() {
-	return getPasteAppendPopupOptElement() != null;
+	if (getPasteAppendPopupOptElement() != null) {
+		return true;
+	}
+	return false;
 }
 
 // #endregion State

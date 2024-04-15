@@ -27,16 +27,18 @@
 
   <!-- GLOBAL PACKAGE VERSIONS -->
   <PropertyGroup>
+    <!--<AvaloniaVersion>11.2.999-cibuild0047282-alpha</AvaloniaVersion>-->
+    <StableAvaloniaVersion>11.0.10</StableAvaloniaVersion>
     <AvaloniaVersion>11.0.10</AvaloniaVersion>
-    <SugarWvVersion>11.0.0.5</SugarWvVersion>    
-    <!--<SugarWvVersion>11.0.0.1</SugarWvVersion>-->    
+    <!--<SugarWvVersion>11.0.0.6</SugarWvVersion>-->    
+    <SugarWvVersion>11.0.0.0</SugarWvVersion>    
   </PropertyGroup>
   
   <!-- MANUALLY SET PROPERTIES-->
   
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>MAC</BuildOs>
+    <BuildOs>LINUX</BuildOs>
     <IncludeCultures>True</IncludeCultures>
     <!-- This property 'IsPublicBuild' ensures local webserver is used not remote-->
     <IsPublicBuild>False</IsPublicBuild>

@@ -10,50 +10,7 @@
                        mc:Ignorable="d"
                        d:DesignWidth="400"
                        d:DesignHeight="300">
-    <UserControl.Resources>
-        <SpringEasing x:Key="SpringEasing"
-                      Mass="1"
-                      Stiffness="2000"
-                      Damping="20"
-                      InitialVelocity="0" />
-    </UserControl.Resources>
     <local:MpAvUserControl.Styles>
-        <!--  SHOW/HIDE ANIMATION  -->
-        <Style Selector="Border#PlaceholderWindow.show"
-               x:DataType="local:MpAvFakeWindowViewModel">
-            <Style.Animations>
-                <Animation Duration="0:0:1.0"
-                           FillMode="Forward"
-                           Easing="{DynamicResource SpringEasing}">
-                    <KeyFrame Cue="0%">
-                        <Setter Property="Canvas.Top"
-                                Value="{Binding FakeWindowStartTop}" />
-                    </KeyFrame>
-                    <KeyFrame Cue="100%">
-                        <Setter Property="Canvas.Top"
-                                Value="{Binding FakeWindowEndTop}" />
-                    </KeyFrame>
-                </Animation>
-            </Style.Animations>
-        </Style>
-        <Style Selector="Border#PlaceholderWindow.hide"
-               x:DataType="local:MpAvFakeWindowViewModel">
-            <Style.Animations>
-                <Animation Duration="0:0:1"
-                           FillMode="Forward"
-                           Easing="{DynamicResource SpringEasing}">
-                    <KeyFrame Cue="0%">
-                        <Setter Property="Canvas.Top"
-                                Value="{Binding FakeWindowEndTop}" />
-                    </KeyFrame>
-                    <KeyFrame Cue="100%">
-                        <Setter Property="Canvas.Top"
-                                Value="{Binding FakeWindowStartTop}" />
-                    </KeyFrame>
-                </Animation>
-            </Style.Animations>
-        </Style>
-
         <!--  MW BACKGROUND  -->
         <Style Selector="Border#PlaceholderWindow">
             <Setter Property="Background"
@@ -64,7 +21,8 @@
                     Value="{DynamicResource PinTrayBgBrush}" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Canvas HorizontalAlignment="Stretch"
+    <Canvas Background="Transparent"
+            HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Border x:Name="PlaceholderWindow"
                 Classes.dragover="{Binding IsDragOver}"
@@ -72,12 +30,12 @@
                 Width="{Binding $parent.Bounds.Width}"
                 Height="{Binding $parent.Bounds.Height}"
                 Canvas.Top="{Binding FakeWindowActualTop, Mode=TwoWay}">
-            <Border.Transitions>
+            <!--<Border.Transitions>
                 <Transitions>
                     <BrushTransition Property="Background"
                                      Duration="0:0:0.5" />
                 </Transitions>
-            </Border.Transitions>
+            </Border.Transitions>-->
             <Viewbox Stretch="Uniform"
                      HorizontalAlignment="Center"
                      StretchDirection="Both"

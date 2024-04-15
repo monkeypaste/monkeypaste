@@ -33,16 +33,23 @@ namespace MonkeyPaste.Avalonia {
         // Avalonia configuration, don't remove; also used by visual designer.
         static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
-            .With(new AvaloniaNativePlatformOptions {
-                OverlayPopups = true,
-                //RenderingMode = [AvaloniaNativeRenderingMode.Software]
-            })
+#if MAC
+        .With(new AvaloniaNativePlatformOptions {
+            OverlayPopups = true,
+            //RenderingMode = [AvaloniaNativeRenderingMode.Software]
+        }) 
+#endif
             //.With(new Win32PlatformOptions {
             //    UseWgl = true,
             //    AllowEglInitialization = true
             //})
             //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
-            //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
+#if LINUX
+            .With(new X11PlatformOptions { 
+               // RenderingMode = [X11RenderingMode.Software],
+                EnableIme = true,
+            })
+#endif
 
             .UsePlatformDetect()
 #if SUGAR_WV

@@ -166,7 +166,7 @@ namespace MonkeyPaste.Avalonia {
         public double MainWindowDefaultHorizontalHeightRatio =>
 #if WINDOWS
             0.35;
-#elif MAC
+#elif MAC || LINUX
             0.45;
 #else
             1.0d;
@@ -671,8 +671,6 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.SendGlobal(MpMessageType.MainWindowLoadComplete);
             FinishMainWindowLoadAsync().FireAndForgetSafeAsync();
         }
-
-
 
         #endregion
 

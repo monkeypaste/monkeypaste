@@ -30,18 +30,30 @@ function isRunningOnWebView2() {
 }
 
 function isRunningOnCef() {
-	return typeof window['notifyLoadComplete'] === 'function';
+	if (typeof window['notifyLoadComplete'] === 'function') {
+		return true;
+	}
+	return false;
 }
 
 function isRunningOnXam() {
-	return typeof window['CSharp'] === 'object';
+	if (typeof window['CSharp'] === 'object') {
+		return true;
+	}
+	return false;
 }
 function isRunningOnOutSys() {
-	return typeof window['SendMessage'] === 'object';
+	if (typeof window['SendMessage'] === 'object') {
+		return true;
+	}
+	return false;
 }
 
 function isRunningInIframe() {
-	return window.parent != window;
+	if (window.parent != window) {
+		return true;
+	}
+	return false;
 }
 
 function isRunningOnHost() {
@@ -55,10 +67,12 @@ function isRunningOnHost() {
 	return false;
 }
 function isDesktop() {
-	return
-		globals.EnvName == globals.WindowsEnv ||
+	if (globals.EnvName == globals.WindowsEnv ||
 		globals.EnvName == globals.LinuxEnv ||
-		globals.EnvName == globals.MacEnv;
+		globals.EnvName == globals.MacEnv) {
+		return true;
+	}
+	return false;
 }
 
 // #endregion State
