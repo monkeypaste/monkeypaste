@@ -16,6 +16,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -63,6 +64,17 @@ namespace MonkeyPaste.Avalonia {
 #else
             MainView;
 #endif
+
+        public static void WaitForDebug(object[] args) {
+            if (args.Contains(WAIT_FOR_DEBUG_ARG)) {
+                Console.WriteLine("Attach debugger and use 'Set next statement'");
+                while (true) {
+                    Thread.Sleep(100);
+                    if (Debugger.IsAttached)
+                        break;
+                }
+            }
+        }
         public static void SetPrimaryView(Control c) {
             if (_instance == null ||
                 _instance.ApplicationLifetime is not ISingleViewApplicationLifetime sval ||
@@ -140,6 +152,10 @@ namespace MonkeyPaste.Avalonia {
 #if DESKTOP
             MpConsole.Init(new MpAvPlatformInfo_desktop().LogPath, App.HasStartupArg(App.WAIT_FOR_DEBUG_ARG));
             MpAvLogSink.Init();
+#endif
+
+#if LINUX && CEFNET_WV
+            WaitForDebug(Args); 
 #endif
 
             ReportCommandLineArgs(Args);

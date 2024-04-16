@@ -67,6 +67,18 @@
     <ProjectReference Include="..\MonkeyPaste.Desktop.Launcher\MonkeyPaste.Desktop.Launcher.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(UseCefNet)' == 'True'">
+    <!--<PackageReference Include="CefNet" Version="$(CefNetWvVersion)" />
+    <PackageReference Include="CefNet.Avalonia" Version="$(CefNetWvVersion)" />-->
+
+    <Reference Include="CefNet">
+      <HintPath>$(CefAssemblyDir)\CefNet.dll</HintPath>
+    </Reference>
+    <Reference Include="CefNet.Avalonia">
+      <HintPath>$(CefAssemblyDir)\CefNet.Avalonia.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 
   <ItemGroup>
     <None Remove="cef\**" />
@@ -85,15 +97,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup Condition="$(UseCefNet) == 'True'">
-    <Reference Include="CefNet">
-      <HintPath>..\ext\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
-    </Reference>
-    <Reference Include="CefNet.Avalonia">
-      <HintPath>..\ext\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

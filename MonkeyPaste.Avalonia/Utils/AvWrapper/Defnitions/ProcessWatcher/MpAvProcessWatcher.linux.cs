@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
         private nint _xdoCtx;
         private nint xdoCtx {
             get {
-                if(_xdoCtx == nint.Zero) {
+                if(_xdoCtx == 0) {
                     //string ld_path = Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "Assets", "lib");
                     //Environment.SetEnvironmentVariable(
                     //    "LD_LIBRARY_PATH", 
@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
         private nint _displayPtr;
         private nint displayPtr {
             get {
-                if(_displayPtr == nint.Zero) {
+                if(_displayPtr == 0) {
                     _displayPtr = Xlib.XOpenDisplay(null);
                 }
                 return _displayPtr;
@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
                 _ = xdoCtx;
                 Xlib.XSetErrorHandler(HandleErrorDelegate);
 
-                if (displayPtr == nint.Zero) {
+                if (displayPtr == 0) {
                     MpConsole.WriteLine("Unable to open the default X display");
                     return;
                 }
@@ -77,20 +77,20 @@ namespace MonkeyPaste.Avalonia {
             new List<MpPortableProcessInfo>();
         public nint SetActiveProcess(MpPortableProcessInfo p) {
             try {
-                if (p == null || p.Handle == nint.Zero) {
-                    return nint.Zero;
+                if (p == null || p.Handle == 0) {
+                    return 0;
                 }
                 XdoLib.xdo_activate_window(xdoCtx, (int)p.Handle);
                 XdoLib.xdo_focus_window(xdoCtx, (int)p.Handle);
                 return p.Handle;
             }
             catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
-            return nint.Zero;
+            return 0;
         }
         protected nint GetThisAppHandle() {
             if (MpAvWindowManager.MainWindow is not { } mw ||
                 mw.TryGetPlatformHandle() is not IPlatformHandle ph) {
-                return nint.Zero;
+                return 0;
             }
             return ph.Handle;
         }
@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private nint GetFocusWindowHandle() {
-            //return nint.Zero;
+            return 0;
             try {
                 // from https://gist.github.com/kui/2622504
                 Window w = default;
@@ -112,7 +112,7 @@ namespace MonkeyPaste.Avalonia {
                 Status result = Xlib.XGetInputFocus(displayPtr, ref w, ref revert_to);
                 nint handle = (nint)((int)w);
 
-                if (handle != nint.Zero) {
+                if (handle != 0) {
                     //string prop_return = default;
 
                     //var a = Xlib.XFetchName(displayPtr, w, ref prop_return);
@@ -140,12 +140,12 @@ namespace MonkeyPaste.Avalonia {
                 return handle;
             }
             catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
-            return nint.Zero;
+            return 0;
         }
         private nint GetTopWindowHandle(nint start) {
             try {
-                if (start == nint.Zero) {
-                    return nint.Zero;
+                if (start == 0) {
+                    return 0;
                 }
                 // from https://gist.github.com/kui/2622504
                 Window w = (Window)((int)start);
@@ -163,18 +163,18 @@ namespace MonkeyPaste.Avalonia {
                 //MpConsole.WriteLine($"Found top window: {w}");
                 return (nint)((int)w);
             }catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
-            return nint.Zero;
+            return 0;
         }
         protected bool IsHandleWindowProcess(nint handle) {
-            if (handle == nint.Zero) {
+            if (handle == 0) {
                 return false;
             }
             return !GetProcessTitle(handle).IsNullOrEmpty();
         }
         protected string GetProcessPath(nint handle) {
-            //return string.Empty;
+            return string.Empty;
             try {
-                if (handle == nint.Zero) {
+                if (handle == 0) {
                     return string.Empty;
                 }
                 int pid = XdoLib.xdo_get_pid_window(xdoCtx, (int)handle);
@@ -194,9 +194,9 @@ namespace MonkeyPaste.Avalonia {
             return string.Empty;
         }
         protected string GetProcessTitle(nint handle) {
-            //return string.Empty;
+            return string.Empty;
             try {
-                if (handle == nint.Zero || handle == 1) {
+                if (handle == 0 || handle == 1) {
                     // NOTE handle==1 throws exception getting title
                     return string.Empty;
                 }
@@ -214,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
             return string.Empty;
         }
         protected nint GetParentHandleAtPoint(MpPoint p) {
-            return nint.Zero;
+            return 0;
         }
 
         public Dictionary<string, List<string>> GetRunningApps() {

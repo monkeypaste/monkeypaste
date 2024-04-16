@@ -6,7 +6,7 @@ dotnet restore
 
 dotnet build
 
-chmod +x "bin/Debug/$TARGET_FRAMEWORK/linux-x64//MonkeyPaste.Desktop" 
+chmod +x "bin/Debug/$TARGET_FRAMEWORK/linux-x64/MonkeyPaste.Desktop" 
 
 cd -
 echo "DONE"

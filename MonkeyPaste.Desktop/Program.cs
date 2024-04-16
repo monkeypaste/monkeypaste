@@ -1,12 +1,14 @@
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Logging;
 using Avalonia.ReactiveUI;
+using CefNet;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Avalonia.Logging;
 
 #if SUGAR_WV
 using Avalonia.WebView.Desktop;
@@ -26,7 +28,6 @@ namespace MonkeyPaste.Avalonia {
 
             App.Args = args;
 
-            WaitForDebug(args);
             HandleSingleInstanceLaunch(args);
         }
 
@@ -46,8 +47,8 @@ namespace MonkeyPaste.Avalonia {
             //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
 #if LINUX
             .With(new X11PlatformOptions { 
-               // RenderingMode = [X11RenderingMode.Software],
-                EnableIme = true,
+               //RenderingMode = [X11RenderingMode.Software],
+               // EnableIme = true,
             })
 #endif
 
@@ -64,13 +65,22 @@ namespace MonkeyPaste.Avalonia {
             // NOTE if implementing mutex this NEEDS to be beforehand or webviews never load
             MpAvCefNetApplication.Init();
 #endif
+
+#if !LINUX && !CEFNET_WV
+            WaitForDebug(args); 
+#endif
+            var test = MpAvCefNetApplication.IsCefNetLoaded;
             BuildAndLaunch(args);
         }
         private static void BuildAndLaunch(object[] args) {
             Exception top_level_ex = null;
             try {
                 BuildAvaloniaApp()
-                    .StartWithClassicDesktopLifetime(App.Args);
+#if CEFNET_WV
+                    .StartWithCefNetApplicationLifetime(App.Args, ShutdownMode.OnExplicitShutdown);
+#else
+                    .StartWithClassicDesktopLifetime(App.Args, ShutdownMode.OnExplicitShutdown); 
+#endif
             }
             catch (Exception ex) {
                 top_level_ex = ex;
@@ -89,16 +99,6 @@ namespace MonkeyPaste.Avalonia {
                     Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.TopLevelException, top_level_ex == null ? "NONE" : top_level_ex.ToString());
                 }
 
-            }
-        }
-        private static void WaitForDebug(object[] args) {
-            if (args.Contains(App.WAIT_FOR_DEBUG_ARG)) {
-                Console.WriteLine("Attach debugger and use 'Set next statement'");
-                while (true) {
-                    Thread.Sleep(100);
-                    if (Debugger.IsAttached)
-                        break;
-                }
             }
         }
 

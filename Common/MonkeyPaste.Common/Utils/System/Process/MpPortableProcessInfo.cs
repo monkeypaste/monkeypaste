@@ -22,7 +22,7 @@ namespace MonkeyPaste.Common {
         [JsonIgnore]
         public int IntHandle =>
             (int)Handle;
-        public nint Handle { get; set; }// = nint.Zero;
+        public nint Handle { get; set; }// = 0;
         public int WindowNumber { get; set; }
         public string ProcessPath { get; set; } = string.Empty;
         public string ApplicationName { get; set; } // app name

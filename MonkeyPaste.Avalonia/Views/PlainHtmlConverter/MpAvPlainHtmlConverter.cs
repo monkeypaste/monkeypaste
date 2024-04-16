@@ -128,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private async Task CreateWebViewConverterAsync() {
-            bool do_hide = false;
+            bool do_hide = true;
             IsBusy = true;
             if (OperatingSystem.IsBrowser()) {
                 await MpDeviceWrapper.Instance.JsImporter.ImportAllAsync();

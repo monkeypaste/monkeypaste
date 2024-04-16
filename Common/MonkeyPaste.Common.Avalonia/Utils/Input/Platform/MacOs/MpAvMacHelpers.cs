@@ -225,7 +225,7 @@ namespace MonkeyPaste.Common.Avalonia {
              public NSBitmapImageRep(IntPtr planes, long width, long height, long bps, long spp, bool alpha, bool isPlanar, string colorSpaceName, NSBitmapFormat bitmapFormat, long rBytes, long pBits)
             */
             //var rep = new NSBitmapImageRep(
-            //    planes: nint.Zero,
+            //    planes: 0,
             //    width: (long)nsimage.Size.Width,
             //    height: (long)nsimage.Size.Height,
             //    bps: (long)8,
