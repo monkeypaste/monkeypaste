@@ -216,8 +216,14 @@ namespace Ledgerizer {
         const string BUILD_OS =
 #if WINDOWS
             "WINDOWS";
-#elif MAC 
+#elif MAC
             "MAC";
+#elif LINUX
+            "LINUX";
+#elif ANDROID
+            "ANDROID;
+#elif IOS
+            "IOS";
 #else
             "";
 #endif

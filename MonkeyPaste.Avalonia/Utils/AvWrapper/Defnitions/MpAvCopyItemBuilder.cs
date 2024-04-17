@@ -42,8 +42,6 @@ namespace MonkeyPaste.Avalonia {
                 throw new Exception("Must have transacion type");
             }
 
-            await NormalizePlatformFormatsAsync(avdo);
-
             (MpCopyItemType itemType,
                 string itemData,
                 string itemDelta,
@@ -406,65 +404,6 @@ namespace MonkeyPaste.Avalonia {
             }
             return default_title;
         }
-        #endregion
-
-        #region Platform Handling
-        private async Task<MpAvDataObject> NormalizePlatformFormatsAsync(MpAvDataObject avdo) {
-            if (OperatingSystem.IsAndroid()) {
-                return avdo;
-            }
-            MpConsole.WriteLine($"Normalizing actual dataobject formats:  {string.Join(",", avdo.GetAllDataFormats().Select(x => x))}");
-
-            // foreach(var af in actual_formats) {
-            //     MpConsole.WriteLine("Actual available format: " + af);
-            //     object af_data = await Application.Current.Clipboard.GetDataAsync(af);
-            //     if(af_data == null) {
-            //         MpConsole.WriteLine("data null");
-            //         continue;
-            //     }
-            //     if(af_data is string af_data_str) {
-            //         MpConsole.WriteLine("(string)");
-            //         MpConsole.WriteLine(af_data_str);
-            //     } else if(af_data is IEnumerable<string> strl) {
-            //         MpConsole.WriteLine("(string[]");
-            //         strl.ForEach(x => MpConsole.WriteLine(x));
-            //     } else if(af_data is byte[] bytes && bytes.ToDecodedString() is string bytes_str) {
-            //         MpConsole.WriteLine("(bytes)");
-            //         MpConsole.WriteLine(bytes_str);
-            //     } else {
-            //         MpConsole.WriteLine("(unknown): " + af_data.GetType());
-            //     }
-            // }
-
-            if (OperatingSystem.IsLinux()) {
-                var actual_formats = await Mp.Services.DeviceClipboard.GetFormatsAsync();
-                // linux doesn't case non-html formats the same as windows so mapping them here
-                bool isLinuxFileList = avdo.ContainsData(MpPortableDataFormats.MimeText) &&
-                                    actual_formats.Contains(MpPortableDataFormats.MimeGnomeFiles);
-                if (isLinuxFileList) {
-                    // NOTE avalonia doesn't acknowledge files (no 'FileNames' entry) on Ubuntu 22.04
-                    // and is beyond support for the clipboard plugin right now so..
-                    // TODO eventually should tidy up clipboard handling so plugins are clear example code
-                    string files_text_base64 = avdo.GetData(MpPortableDataFormats.MimeText) as string;
-                    if (!string.IsNullOrEmpty(files_text_base64)) {
-                        string files_text = files_text_base64.ToStringFromBase64();
-                        MpConsole.WriteLine("Got file text: " + files_text);
-                        avdo.SetData(MpPortableDataFormats.Files, files_text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
-                    }
-
-                } else {
-                    bool isLinuxAndNeedsCommonPlainText = avdo.ContainsData(MpPortableDataFormats.MimeText) &&
-                                                            !avdo.ContainsData(MpPortableDataFormats.Text);
-                    if (isLinuxAndNeedsCommonPlainText) {
-                        string plain_text = avdo.GetData(MpPortableDataFormats.MimeText) as string;
-                        avdo.SetData(MpPortableDataFormats.Text, plain_text);
-                    }
-                }
-            }
-            MpConsole.WriteLine($"DataObject format normalization complete. Available dataobject formats: {string.Join(",", avdo.DataFormatLookup.Select(x => x.Key))}");
-            return avdo;
-        }
-
         #endregion
 
         #endregion

@@ -33,8 +33,11 @@ namespace CoreOleHandler {
 #endif
                 (MpPortableDataFormats.Csv,Resources.CsvFormatLabel,DEF_MAX_TEXT,"csv.png"),
                 (MpPortableDataFormats.Files,Resources.FilesFormatLabel,-1,"files.png"),
-                //("x-special/gnome-copied-files","Files (Linux)"),
-        ];
+#if LINUX
+                (MpPortableDataFormats.MimeGnomeFiles,Resources.FilesFormatLabel + " (platform)",-1,"files.png"),
+                (MpPortableDataFormats.MimeUriList,Resources.FilesFormatLabel + " (platform2)",-1,"files.png"),
+#endif
+            ];
         }
 
         private MpClipboardHandlerFormat GetFormat(string format, bool isReader) {

@@ -154,10 +154,6 @@ namespace MonkeyPaste.Avalonia {
             MpAvLogSink.Init();
 #endif
 
-#if LINUX && CEFNET_WV
-            WaitForDebug(Args); 
-#endif
-
             ReportCommandLineArgs(Args);
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
 

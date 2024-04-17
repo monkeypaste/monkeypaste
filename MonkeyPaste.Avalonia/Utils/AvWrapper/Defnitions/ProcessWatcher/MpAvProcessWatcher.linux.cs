@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
 
     public partial class MpAvProcessWatcher {
         #region Private Variables
-
+        bool IS_DISABLED => false;
         private bool _hasError;
         
         private nint _xdoCtx;
@@ -76,6 +76,9 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos =>
             new List<MpPortableProcessInfo>();
         public nint SetActiveProcess(MpPortableProcessInfo p) {
+            if(IS_DISABLED) {
+                return 0;
+            }
             try {
                 if (p == null || p.Handle == 0) {
                     return 0;
@@ -95,6 +98,9 @@ namespace MonkeyPaste.Avalonia {
             return ph.Handle;
         }
         protected nint GetActiveProcessHandle() {
+            if (IS_DISABLED) {
+                return 0;
+            }
             nint handle = GetFocusWindowHandle();
             //nint test = GetTopWindowHandle(handle);
             //return handle;
@@ -104,7 +110,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private nint GetFocusWindowHandle() {
-            return 0;
+            if (IS_DISABLED) {
+                return 0;
+            }
             try {
                 // from https://gist.github.com/kui/2622504
                 Window w = default;
@@ -143,6 +151,9 @@ namespace MonkeyPaste.Avalonia {
             return 0;
         }
         private nint GetTopWindowHandle(nint start) {
+            if (IS_DISABLED) {
+                return 0;
+            }
             try {
                 if (start == 0) {
                     return 0;
@@ -166,13 +177,18 @@ namespace MonkeyPaste.Avalonia {
             return 0;
         }
         protected bool IsHandleWindowProcess(nint handle) {
+            if (IS_DISABLED) {
+                return false;
+            }
             if (handle == 0) {
                 return false;
             }
-            return !GetProcessTitle(handle).IsNullOrEmpty();
+            return XdoLib.xdo_get_pid_window(xdoCtx, (int)handle) > 0;
         }
         protected string GetProcessPath(nint handle) {
-            return string.Empty;
+            if (IS_DISABLED) {
+                return string.Empty;
+            }
             try {
                 if (handle == 0) {
                     return string.Empty;
@@ -194,7 +210,9 @@ namespace MonkeyPaste.Avalonia {
             return string.Empty;
         }
         protected string GetProcessTitle(nint handle) {
-            return string.Empty;
+            if (IS_DISABLED) {
+                return string.Empty;
+            }
             try {
                 if (handle == 0 || handle == 1) {
                     // NOTE handle==1 throws exception getting title

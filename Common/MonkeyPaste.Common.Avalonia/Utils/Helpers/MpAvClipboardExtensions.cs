@@ -216,6 +216,10 @@ namespace MonkeyPaste.Common.Avalonia {
             if(format == MpPortableDataFormats.WinUnicode) {
                 output_encoding = Encoding.Unicode;
             }
+#elif LINUX
+            if(format == MpPortableDataFormats.MimeText) {
+                output_type = typeof(byte[]);
+            }
 #else
 
 #endif

@@ -114,9 +114,9 @@
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'"> 
     <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>
-    <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
+    <MainProjectName>MonkeyPaste.Desktop</MainProjectName> 
     <IsDesktop>true</IsDesktop>
-    <UseCefNet>true</UseCefNet>
+    <UseCefNet>false</UseCefNet> 
     <UseSugarWv>false</UseSugarWv>
     <PlatformShortName>linux</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\linux</BuildScriptsDir>

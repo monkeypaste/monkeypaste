@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Logging;
 using Avalonia.ReactiveUI;
-using CefNet;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -12,6 +11,10 @@ using System.Threading;
 
 #if SUGAR_WV
 using Avalonia.WebView.Desktop;
+#endif
+#if CEFNET_WV
+
+using CefNet;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -65,11 +68,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE if implementing mutex this NEEDS to be beforehand or webviews never load
             MpAvCefNetApplication.Init();
 #endif
-
-#if !LINUX && !CEFNET_WV
-            WaitForDebug(args); 
-#endif
-            var test = MpAvCefNetApplication.IsCefNetLoaded;
+            App.WaitForDebug(args);
             BuildAndLaunch(args);
         }
         private static void BuildAndLaunch(object[] args) {

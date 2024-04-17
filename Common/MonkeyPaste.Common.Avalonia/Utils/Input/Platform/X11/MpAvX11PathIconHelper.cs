@@ -133,11 +133,6 @@ namespace MonkeyPaste.Common.Avalonia {
                 var fileInfo = file.QueryInfo("standard::icon", 0, Cancellable.Current);
                 var fileIcon = fileInfo.Icon;
                 var iconTheme = Gtk.IconTheme.Default;
-                if (iconTheme == null) {
-                    MpConsole.WriteLine("IconTheme not found");
-                } else {
-                    MpConsole.WriteLine("IconTheme exists");
-                }
 
                 var iconInfo = iconTheme.LookupIcon(
                     fileIcon, iconSize, IconLookupFlags.ForceSize | IconLookupFlags.UseBuiltin);
