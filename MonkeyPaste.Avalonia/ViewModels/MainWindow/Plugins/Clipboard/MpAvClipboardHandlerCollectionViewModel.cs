@@ -680,7 +680,7 @@ namespace MonkeyPaste.Avalonia {
                     resp.dataObjectLookup
                     .Where(x =>
                         x.Value != null &&
-                        (MpPortableDataFormats.InternalFormats.Contains(x.Key) ||
+                        (MpPortableDataFormats.RegisteredInternalFormats.Contains(x.Key) ||
                         preset_vms.Any(y => y.FormatName == x.Key)))
                     .ForEach(kvp => avdo.SetData(kvp.Key, kvp.Value));
                 }
@@ -699,7 +699,7 @@ namespace MonkeyPaste.Avalonia {
                 // not handled by plugins
                 ido
                     .GetAllDataFormats()
-                    .Where(x => !avdo.ContainsData(x) && MpPortableDataFormats.InternalFormats.Contains(x))
+                    .Where(x => !avdo.ContainsData(x) && MpPortableDataFormats.RegisteredInternalFormats.Contains(x))
                     .ForEach(x => avdo.SetData(x, ido.Get(x)));
             }
             if (ignoreClipboardChange && was_cb_monitoring) {

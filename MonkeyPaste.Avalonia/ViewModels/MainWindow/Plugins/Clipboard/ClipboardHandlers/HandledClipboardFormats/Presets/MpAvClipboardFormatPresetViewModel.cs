@@ -424,6 +424,13 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(Label):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.FullLabel)));
                     break;
+                case nameof(IsEnabled):
+                    if(IsEnabled) {
+                        MpPortableDataFormats.RegisterDataFormat(FormatName,IsReader,IsWriter);
+                    } else {
+                        MpPortableDataFormats.UnregisterDataFormat(FormatName, IsReader, IsWriter);
+                    }
+                    break;
             }
         }
 
