@@ -16,6 +16,10 @@ namespace MonkeyPaste.Avalonia {
 
         [DllImport(XdoName)]
         public static extern int xdo_get_active_window(nint xdo, ref int window);
+        [DllImport(XdoName)]
+        public static extern int xdo_get_focused_window(nint xdo, ref int window);
+        [DllImport(XdoName)]
+        public static extern int xdo_get_focused_window_sane(nint xdo, ref int window);
 
         [DllImport(XdoName)]
         public static extern int xdo_activate_window(nint xdo, int window);

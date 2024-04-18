@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using X11;
@@ -46,11 +47,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private Window _rootWindow;
+
         #endregion
         int HandleError(nint display, ref XErrorEvent error) {
             MpConsole.WriteLine($"Xll error: '{error}'");
             _hasError = true;
-            return 1;
+            return 0;
         }
         event XErrorHandlerDelegate HandleErrorDelegate;
         protected void Init() {
@@ -91,9 +93,16 @@ namespace MonkeyPaste.Avalonia {
             return 0;
         }
         protected nint GetThisAppHandle() {
+            if(_thisAppHandle > 0) {
+                return _thisAppHandle;
+            }
             if (MpAvWindowManager.MainWindow is not { } mw ||
                 mw.TryGetPlatformHandle() is not IPlatformHandle ph) {
                 return 0;
+            }
+            if(MpAvWindowManager.MainWindow is MpAvMainWindow) {
+                // make sure to use the actual mw handle
+                _thisAppHandle = ph.Handle;
             }
             return ph.Handle;
         }
@@ -101,11 +110,19 @@ namespace MonkeyPaste.Avalonia {
             if (IS_DISABLED) {
                 return 0;
             }
-            nint handle = GetFocusWindowHandle();
+            if (MpAvWindowManager.IsAnyActive) {
+                // BUG i maybe wrong but i think avalonia is one of the
+                // kinds of windows that doesn't report a pid from its handle
+                // when thisApp is active i get this error:
+                // XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+                return ThisAppHandle;
+            }
+            //nint handle = GetFocusWindowHandle();
             //nint test = GetTopWindowHandle(handle);
             //return handle;
-            //int handle = default;
+            int handle = default;
             //XdoLib.xdo_get_active_window(xdoCtx, ref handle);
+            XdoLib.xdo_get_focused_window_sane(xdoCtx, ref handle);
             return (nint)handle;
         }
 
@@ -183,11 +200,18 @@ namespace MonkeyPaste.Avalonia {
             if (handle == 0) {
                 return false;
             }
+            if(handle == ThisAppHandle) {
+                return true;
+            }
             return XdoLib.xdo_get_pid_window(xdoCtx, (int)handle) > 0;
         }
         protected string GetProcessPath(nint handle) {
             if (IS_DISABLED) {
                 return string.Empty;
+            }
+            if (handle == ThisAppHandle) {
+                string cmd_path = $"{Mp.Services.PlatformInfo.ExecutingPath} {string.Join(" ", App.Args)}";
+                return cmd_path;
             }
             try {
                 if (handle == 0) {
@@ -212,6 +236,9 @@ namespace MonkeyPaste.Avalonia {
         protected string GetProcessTitle(nint handle) {
             if (IS_DISABLED) {
                 return string.Empty;
+            }
+            if(handle == ThisAppHandle) {
+                return MpAvWindowManager.MainWindow.Title;
             }
             try {
                 if (handle == 0 || handle == 1) {
