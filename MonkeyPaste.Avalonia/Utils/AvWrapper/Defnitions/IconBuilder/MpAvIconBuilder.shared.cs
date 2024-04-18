@@ -3,6 +3,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -76,6 +77,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
+        protected MpSize GetSize(MpIconSize ics) {
+            if (ics == MpIconSize.None) {
+                return MpSize.Empty;
+            }
+            if (ics.ToString().Split("Icon").Last() is { } len_str &&
+                int.Parse(len_str) is int len) {
+                return new MpSize(len, len);
+            }
+            return new MpSize(32, 32);
+        }
     }
 }
 
