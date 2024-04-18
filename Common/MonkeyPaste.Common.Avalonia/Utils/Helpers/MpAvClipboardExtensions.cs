@@ -46,7 +46,7 @@ namespace MonkeyPaste.Common.Avalonia {
                         {MpPortableDataFormats.MacImage1, MpPortableDataFormats.AvImage },
                         {MpPortableDataFormats.MacImage2, MpPortableDataFormats.AvImage },
                         {MpPortableDataFormats.MacHtml1, MpPortableDataFormats.MimeHtml },
-                        {MpPortableDataFormats.MacChromeUrl, MpPortableDataFormats.MimeMozUrl },
+                        {MpPortableDataFormats.MacChromeUrl1, MpPortableDataFormats.MimeMozUrl },
                         {MpPortableDataFormats.MacChromeUrl2, MpPortableDataFormats.MimeMozUrl },
                     };
                 }
@@ -269,7 +269,18 @@ namespace MonkeyPaste.Common.Avalonia {
             }
 
             foreach (string format in formatFilter) {
-                object data = await cb.GetDataSafeAsync(format);
+                object data = null;
+#if LINUX
+                if(MpPortableDataFormats.IsAvaloniaFormat(format)) {
+                    // xclip won't know about avalonia formats
+                    data = await cb.GetDataSafeAsync(format);
+                } else {
+
+                    data = await MpX11ClipboardHelper.ReadFormatAsync(format);
+                }
+#else
+                data = await cb.GetDataSafeAsync(format);
+#endif
                 if (data == null) {
                     continue;
                 }
@@ -444,4 +455,5 @@ namespace MonkeyPaste.Common.Avalonia {
 #endif
         }
     }
+
 }
