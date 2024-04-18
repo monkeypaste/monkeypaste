@@ -57,9 +57,13 @@
 
     <Style Selector=":is(Window).notificationWindow.loader"
            x:DataType="local:MpAvNotificationViewModelBase">
-        <Setter Property="ShowInTaskbar"
-                Value="True" />
         <Setter Property="ShowActivated"
+                Value="True" />
+    </Style>
+    <Style Selector=":is(Window).notificationWindow.loader:not(.linux)"
+           x:DataType="local:MpAvNotificationViewModelBase">
+        <!--  linux will show 2 taskbar icons so don't show  -->
+        <Setter Property="ShowInTaskbar"
                 Value="True" />
     </Style>
 

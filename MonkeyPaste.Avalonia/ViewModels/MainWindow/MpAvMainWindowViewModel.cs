@@ -166,8 +166,10 @@ namespace MonkeyPaste.Avalonia {
         public double MainWindowDefaultHorizontalHeightRatio =>
 #if WINDOWS
             0.35;
-#elif MAC || LINUX
+#elif MAC
             0.45;
+#elif LINUX
+            0.3;
 #else
             1.0d;
 #endif
