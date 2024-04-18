@@ -50,7 +50,7 @@ namespace CoreOleHandler {
             
 
             foreach (var read_format in readFormats) {
-                if (MpPortableDataFormats.InternalFormats.Contains(read_format)) {
+                if (MpPortableDataFormats.RegisteredInternalFormats.Contains(read_format)) {
                     // ignore internal formats but let them pass through as output
                     read_output.AddOrReplace(read_format, avdo[read_format]);
                     continue;
@@ -120,11 +120,13 @@ namespace CoreOleHandler {
         #endregion
 
         private async Task PreProcessAsync(Dictionary<string,object> avdo, IEnumerable<string> request_formats) {
+            // (LINUX)
+            // Files
             if (OperatingSystem.IsLinux() &&
                 request_formats.Contains(MpPortableDataFormats.Files) &&
                 !avdo.ContainsKey(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT) &&
                 !avdo.ContainsKey(MpPortableDataFormats.Files) &&
-                avdo.ContainsKey(MpPortableDataFormats.MimeGnomeFiles) &&
+                avdo.ContainsKey(MpPortableDataFormats.LinuxFiles2) &&
                 avdo.TryGetValue(MpPortableDataFormats.Text, out string fpl_str) &&
                 fpl_str.SplitByLineBreak() is { } fpl) {
                 // BUG avalonia 'Files' doesn't work on linux but the can inferred from the available formats
@@ -146,6 +148,18 @@ namespace CoreOleHandler {
                 var sil = await uri_fpl.ToAvFilesObjectAsync();
                 avdo.Add(MpPortableDataFormats.Files, sil);
             }
+
+            // PNG
+            if (OperatingSystem.IsLinux() &&
+                request_formats.Contains(MpPortableDataFormats.AvImage) &&
+                !avdo.ContainsKey(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT) &&
+                !avdo.ContainsKey(MpPortableDataFormats.AvImage) &&
+                MpPortableDataFormats.ImageFormats.FirstOrDefault(x=>avdo.ContainsKey(x)) is { } plat_img_format) {
+                // to stay consistent map platform images to common "PNG" format if not present
+                avdo.Add(MpPortableDataFormats.AvImage, avdo[plat_img_format]);
+            }
+
+            // end linux
         }
     }
 }

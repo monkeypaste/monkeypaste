@@ -10,8 +10,6 @@ namespace MonkeyPaste.Common {
 
         #endregion
         public static async Task<string> ShellExecAsync(this string cmd) {
-            var start_dt = DateTime.Now;
-
             var escapedArgs = cmd.Replace("\"", "\\\"");
             var process = new System.Diagnostics.Process {
                 StartInfo = new ProcessStartInfo {
@@ -24,16 +22,39 @@ namespace MonkeyPaste.Common {
                 },
                 EnableRaisingEvents = true
             };
-            string output_line = null;
+
             var sb = new StringBuilder();
+            bool has_exited = false;
+
+            process.Exited += (sender, args) => {
+                has_exited = true;
+                string errorStr = process.StandardError.ReadToEnd();
+                if (!string.IsNullOrEmpty(errorStr)) {
+                    MpConsole.WriteLine($"Error for cmd '{cmd}':");
+                    MpConsole.WriteLine(errorStr);
+                }
+                if(process == null) {
+                    return;
+                }
+                process.Dispose();
+                process = null;
+            };
 
             try {
                 process.Start();
-                while ((output_line = await process.StandardOutput.ReadLineAsync()) != null) {
+                while(true) {
+                    if(has_exited) {
+                        break;
+                    }
+                    string output_line = await process.StandardOutput.ReadLineAsync();
+                    if(output_line == null) {
+                        break;
+                    }
                     sb.AppendLine(output_line);
-                }
+                } 
             }
-            catch (Exception) {
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error executing bash cmd '{cmd}'.", ex);
             }
 
             return sb.ToString();

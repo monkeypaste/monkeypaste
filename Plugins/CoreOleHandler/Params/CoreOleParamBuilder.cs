@@ -34,8 +34,8 @@ namespace CoreOleHandler {
                 (MpPortableDataFormats.Csv,Resources.CsvFormatLabel,DEF_MAX_TEXT,"csv.png"),
                 (MpPortableDataFormats.Files,Resources.FilesFormatLabel,-1,"files.png"),
 #if LINUX
-                (MpPortableDataFormats.MimeGnomeFiles,Resources.FilesFormatLabel + " (platform)",-1,"files.png"),
-                (MpPortableDataFormats.MimeUriList,Resources.FilesFormatLabel + " (platform2)",-1,"files.png"),
+                (MpPortableDataFormats.LinuxFiles2,Resources.FilesFormatLabel + " (platform)",-1,"files.png"),
+                (MpPortableDataFormats.LinuxFiles3,Resources.FilesFormatLabel + " (platform2)",-1,"files.png"),
 #endif
             ];
         }

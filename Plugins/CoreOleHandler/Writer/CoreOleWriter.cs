@@ -208,15 +208,15 @@ namespace CoreOleHandler {
                 // TODO this should only be for gnome based linux
 
                 if (ido.ContainsKey(MpPortableDataFormats.Files) &&
-                    !ido.ContainsKey(MpPortableDataFormats.MimeGnomeFiles) &&
+                    !ido.ContainsKey(MpPortableDataFormats.LinuxFiles2) &&
                     ido.TryGetValue(MpPortableDataFormats.Files, out IEnumerable<string> files) &&
                     string.Join(Environment.NewLine, files) is string av_files_str) {
                     // ensure cef style text is in formats
-                    ido.AddOrReplace(MpPortableDataFormats.MimeGnomeFiles, av_files_str);
+                    ido.AddOrReplace(MpPortableDataFormats.LinuxFiles2, av_files_str);
                 }
-                if (ido.ContainsKey(MpPortableDataFormats.MimeGnomeFiles) &&
+                if (ido.ContainsKey(MpPortableDataFormats.LinuxFiles2) &&
                     !ido.ContainsKey(MpPortableDataFormats.Files) &&
-                    ido.TryGetValue(MpPortableDataFormats.MimeGnomeFiles, out string gn_files_str) &&
+                    ido.TryGetValue(MpPortableDataFormats.LinuxFiles2, out string gn_files_str) &&
                     gn_files_str.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries) is IEnumerable<string> gn_files
                     ) {
                     // ensure avalonia style text is in formats
