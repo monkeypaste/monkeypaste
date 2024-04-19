@@ -571,7 +571,6 @@
     <None Remove="Assets\Images\wrench.png" />
     <None Remove="Assets\Images\yandexIcon.png" />
     <None Remove="Assets\Images\yinyang.png" />
-    <None Remove="Assets\lib\pid.so" />
     <None Remove="Assets\Sounds\alert.wav" />
     <None Remove="Assets\Sounds\blip.wav" />
     <None Remove="Assets\Sounds\chime.wav" />
@@ -2125,10 +2124,6 @@
     
     <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" />
     
-    <Content Include="Assets\lib\pid.so">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    
     <Content Include="Resources\Legal\credits.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -2440,6 +2435,7 @@
     
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.linux.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.shared.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\X11Tools.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\XdoLib.cs" />
     <Compile Include="Utils\WindowManager\Helpers\MpAvWindowPositioner.cs" />
   </ItemGroup>
