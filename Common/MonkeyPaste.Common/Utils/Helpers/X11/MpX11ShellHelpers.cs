@@ -1,8 +1,44 @@
+using MonkeyPaste.Common.Plugin;
 using System;
+using System.IO;
+using System.Linq;
 
 namespace MonkeyPaste.Common {
     public static class MpX11ShellHelpers {
         private static string _shellTestString_cmdstr;
+
+        public static string GetLauncherProperty(string appPath,string propertyName) {
+            try {
+                string exe_name = Path.GetFileName(appPath);
+                string exec_match_val = $"Exec={exe_name}";
+
+                string desktop_dir = "/usr/share/applications";
+                var dpl = new DirectoryInfo(desktop_dir)
+                    .GetFiles("*.desktop").Select(x => x.FullName);
+
+                string prop_val = null;
+                foreach (string dp in dpl) {
+                    // read desktop file
+                    string dp_pt = MpFileIo.ReadTextFromFile(dp);
+                    if (dp_pt.Contains(exec_match_val)) {
+                        // desktop file contains exec match
+                        if (dp_pt.SplitNoEmpty($"{propertyName}=") is { } propParts &&
+                            propParts.Length > 1 &&
+                            propParts.Skip(1).FirstOrDefault() is { } propValPart1 &&
+                            propValPart1.SplitByLineBreak().FirstOrDefault() is { } propValPart2 &&
+                            !propValPart2.IsNullOrEmpty()) {
+                            // found "Icon=<icon name>" 
+                            prop_val = propValPart2;
+                            break;
+                        }
+                    }
+                }
+                return prop_val;
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine($"Error reading launcher prop '{propertyName}' for app path '{appPath}'.", ex);
+            }
+            return null;
+        }
 
         public static string GetExeWithArgsToExePath(string exeWithArgsStr) {
             if (string.IsNullOrEmpty(exeWithArgsStr)) {
