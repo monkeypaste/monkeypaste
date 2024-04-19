@@ -4,7 +4,7 @@ using Avalonia.Metadata;
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClipTileContentDataTemplateSelector : IDataTemplate {
+    public class MpAvEditableTextContentTemplateSelector : IDataTemplate {
         [Content]
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
@@ -12,16 +12,9 @@ namespace MonkeyPaste.Avalonia {
             if (param is not MpAvClipTileViewModel ctvm) {
                 return null;
             }
-            string key;
-            if (MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
-#if SUGAR_WV
-                key = "CompositeWebViewTemplate";
-#else
-                key = "ContentWebViewTemplate";
-#endif
-            } else {
-                key = "CompositeWebViewTemplate";
-            }
+            string key =
+                MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ?
+                    "EditableWebViewTemplate" : "PlainTextTemplate";
             return AvailableTemplates[key].Build(param);
         }
 

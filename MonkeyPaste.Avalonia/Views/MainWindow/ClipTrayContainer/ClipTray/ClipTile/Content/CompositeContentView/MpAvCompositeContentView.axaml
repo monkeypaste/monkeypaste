@@ -18,7 +18,7 @@
 
         <!--  PASTE TOOLBAR TRANSITIONS  -->
 
-        <Style Selector="local|MpAvPasteToolbarView,local|MpAvContentWebViewContainer">
+        <Style Selector="local|MpAvPasteToolbarView,ContentControl#EditableTextContentControl">
             <Setter Property="Transitions">
                 <Transitions>
                     <ThicknessTransition Property="Margin"
@@ -27,11 +27,11 @@
             </Setter>
         </Style>
         <!--  WEBVIEW DETAIL HOVER MARGIN  -->
-        <Style Selector="local|MpAvContentWebViewContainer">
+        <Style Selector="ContentControl#EditableTextContentControl">
             <Setter Property="Margin"
                     Value="0,0,0,0" />
         </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid:not(.show-read-only) local|MpAvContentWebViewContainer">
+        <Style Selector="Grid#CompositeWebViewContainerGrid:not(.show-read-only) ContentControl#EditableTextContentControl">
             <Setter Property="Margin"
                     Value="0,0,0,0" />
         </Style>
@@ -71,7 +71,7 @@
             <Setter Property="IsVisible"
                     Value="True" />
         </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvContentWebViewContainer">
+        <Style Selector="Grid#CompositeWebViewContainerGrid ContentControl#EditableTextContentControl">
             <!--<Setter Property="IsVisible"
                     Value="True" />-->
             <Setter Property="Width"
@@ -79,7 +79,7 @@
             <Setter Property="Height"
                     Value="{StaticResource NaN}" />
         </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only local|MpAvContentWebViewContainer">
+        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only ContentControl#EditableTextContentControl">
             <!--<Setter Property="IsVisible"
                     Value="False" />-->
             <Setter Property="Width"
@@ -159,11 +159,28 @@
         <!--  FILE-LIST VIEW  -->
         <local:MpAvFileListContentView Classes="content-zoom plain-content-view"
                                        Classes.active="{Binding CopyItemType, ConverterParameter=FileList, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}" />
-        <!--  EDITABLE WEBVIEW  -->
-        <local:MpAvContentWebViewContainer x:Name="EditableWebView"
-                                           HorizontalAlignment="Stretch"
-                                           VerticalAlignment="Stretch"
-                                           Grid.RowSpan="2" />
+        <!--  EDITABLE TEXT  -->
+        <ContentControl x:Name="EditableTextContentControl"
+                        Grid.RowSpan="2"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Content="{Binding}">
+            <ContentControl.DataTemplates>
+                <local:MpAvEditableTextContentTemplateSelector>
+                    <DataTemplate x:Key="PlainTextTemplate"
+                                  DataType="local:MpAvClipTileViewModel">
+                        <local:MpAvPlainTextContentView />
+                    </DataTemplate>
+                    <DataTemplate x:Key="EditableWebViewTemplate"
+                                  DataType="local:MpAvClipTileViewModel">
+                        <local:MpAvContentWebViewContainer x:Name="EditableWebView"
+                                                           HorizontalAlignment="Stretch"
+                                                           VerticalAlignment="Stretch" />
+                    </DataTemplate>
+                </local:MpAvEditableTextContentTemplateSelector>
+            </ContentControl.DataTemplates>
+        </ContentControl>
+
         <!--  PASTE TOOLBAR  -->
 
         <local:MpAvPasteToolbarView Grid.Row="1"
