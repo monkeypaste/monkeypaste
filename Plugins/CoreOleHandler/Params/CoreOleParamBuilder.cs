@@ -22,7 +22,9 @@ namespace CoreOleHandler {
         private (string formatName, string label, int max_len, string icon_path)[] GetFormatModels() {
             return [
                 (MpPortableDataFormats.Text,Resources.TextFormatLabel,DEF_MAX_TEXT,"text.png"),
-                (MpPortableDataFormats.MimeText,Resources.MimeTextFormatLabel,DEF_MAX_TEXT,"text.png"),
+#if !LINUX
+		(MpPortableDataFormats.MimeText,Resources.MimeTextFormatLabel,DEF_MAX_TEXT,"text.png"),  
+#endif
                 (MpPortableDataFormats.Rtf,Resources.RtfFormatLabel,DEF_MAX_TEXT,"rtf.png"),
                 (MpPortableDataFormats.Xhtml,Resources.HtmlFormatLabel,-1,"html.png"),
                 (MpPortableDataFormats.Html,Resources.MimeHtmlFormatLabel,-1,"html.png"),
