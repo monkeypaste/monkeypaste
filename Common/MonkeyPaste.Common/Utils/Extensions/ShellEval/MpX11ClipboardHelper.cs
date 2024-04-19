@@ -6,11 +6,11 @@ namespace MonkeyPaste.Common {
     public static class MpX11ClipboardHelper {
 
         public static async Task<string> ReadFormatAsync(string format) {
-            string output_suffix = string.Empty;
+            string xclip_cmd = $"xclip -o -target {format} -selection clipboard";
             if(MpPortableDataFormats.IsFormatStrBase64(format)) {
-                output_suffix = " | base64";
+                xclip_cmd = $"echo -n `{xclip_cmd}` | base64";
             }
-            string result = await $"echo -n `xclip -o -target {format} -selection clipboard`{output_suffix}".ShellExecAsync();
+            string result = await xclip_cmd.ShellExecAsync();
             return result;
         }
     }
