@@ -382,6 +382,7 @@ MigrationBackup/
 /MonkeyPaste.Avalonia/README.md
 /MonkeyPaste.Avalonia/Resources/Listings/imports
 /MonkeyPaste.Avalonia/Resources/Listings/files
+/XdoTest
 *.mp4
 *.mkv
 *.lib
