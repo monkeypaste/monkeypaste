@@ -1,6 +1,7 @@
 ﻿#if LINUX
 
 using Avalonia.Platform;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -38,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private nint _displayPtr;
-        private nint displayPtr {
+        public nint displayPtr {
             get {
                 if(_displayPtr == 0) {
                     _displayPtr = Xlib.XOpenDisplay(null);
@@ -122,7 +123,13 @@ namespace MonkeyPaste.Avalonia {
             //return handle;
             int handle = default;
             //XdoLib.xdo_get_active_window(xdoCtx, ref handle);
+            _hasError = false;
             XdoLib.xdo_get_focused_window_sane(xdoCtx, ref handle);
+            if(_hasError) {
+                // handle becomes 1 when there's an error and will screw other things up
+                _hasError = false;
+                handle = default;
+            }
             return (nint)handle;
         }
 
@@ -210,8 +217,9 @@ namespace MonkeyPaste.Avalonia {
                 return string.Empty;
             }
             if (handle == ThisAppHandle) {
-                string cmd_path = $"{Mp.Services.PlatformInfo.ExecutingPath} {string.Join(" ", App.Args)}";
-                return cmd_path;
+                return Dispatcher.UIThread.Invoke(() => {
+                    return Mp.Services.PlatformInfo.ExecutingPath;
+                });
             }
             try {
                 if (handle == 0) {
@@ -222,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
                     return string.Empty;
                 }
                 var path_bytes = new byte[256];
-                PidTools.get_exe_for_pid(pid, path_bytes);
+                X11Tools.get_exe_for_pid(pid, path_bytes);
                 if(path_bytes == null) {
                     return string.Empty;
                 }
@@ -238,7 +246,9 @@ namespace MonkeyPaste.Avalonia {
                 return string.Empty;
             }
             if(handle == ThisAppHandle) {
-                return MpAvWindowManager.MainWindow.Title;
+                return Dispatcher.UIThread.Invoke(() => {
+                    return MpAvWindowManager.MainWindow.Title;
+                }); 
             }
             try {
                 if (handle == 0 || handle == 1) {
@@ -256,6 +266,17 @@ namespace MonkeyPaste.Avalonia {
             return string.Empty;
         }
         protected string GetAppNameByProessPath(string path) {
+            if(MpX11ShellHelpers.GetLauncherProperty(path,"Name") is string appName &&
+                !appName.IsNullOrEmpty()) {
+                return appName;
+            }
+            if(!path.IsNullOrEmpty()) {
+                try {
+                    return Path.GetFileNameWithoutExtension(path);
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine($"Error reading app file name from '{path.ToStringOrEmpty()}'.", ex);
+                }
+            }
             return string.Empty;
         }
         protected nint GetParentHandleAtPoint(MpPoint p) {
@@ -340,6 +361,8 @@ namespace MonkeyPaste.Avalonia {
             ref string prop_return);
 
     }
+
+    
 
 
 }
