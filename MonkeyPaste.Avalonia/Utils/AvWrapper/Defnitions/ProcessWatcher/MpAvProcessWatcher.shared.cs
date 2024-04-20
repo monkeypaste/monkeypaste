@@ -159,7 +159,7 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
-        protected virtual MpPortableProcessInfo GetProcessInfoByHandle(nint handle, MpIconSize iconSize = MpIconSize.MediumIcon32) {
+        protected virtual MpPortableProcessInfo GetProcessInfoByHandle(nint handle, MpIconSize iconSize = MpIconSize.ExtraLargeIcon128) {
             if (handle == IntPtr.Zero) {
                 return null;
             }

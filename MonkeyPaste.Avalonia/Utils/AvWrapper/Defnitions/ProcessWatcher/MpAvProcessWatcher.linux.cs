@@ -122,13 +122,18 @@ namespace MonkeyPaste.Avalonia {
             //nint test = GetTopWindowHandle(handle);
             //return handle;
             int handle = default;
-            //XdoLib.xdo_get_active_window(xdoCtx, ref handle);
             _hasError = false;
+            
             XdoLib.xdo_get_focused_window_sane(xdoCtx, ref handle);
             if(_hasError) {
                 // handle becomes 1 when there's an error and will screw other things up
                 _hasError = false;
-                handle = default;
+                XdoLib.xdo_get_focused_window(xdoCtx, ref handle);
+                if(_hasError) {
+                    _hasError = false;
+                } else if(handle == 1) {
+                    handle = default;
+                }                
             }
             return (nint)handle;
         }
@@ -227,6 +232,10 @@ namespace MonkeyPaste.Avalonia {
                 }
                 int pid = XdoLib.xdo_get_pid_window(xdoCtx, (int)handle);
                 if (pid == 0) {
+                    //var top_handle = GetTopWindowHandle(handle);
+                    //if(top_handle != handle && top_handle != 0) {
+                    //    return GetProcessPath(top_handle);
+                    //}
                     return string.Empty;
                 }
                 var path_bytes = new byte[256];
@@ -260,6 +269,12 @@ namespace MonkeyPaste.Avalonia {
                 int len = default;
                 int name_type = default;
                 XdoLib.xdo_get_window_name(xdoCtx, (int)handle, ref title, ref len, ref name_type);
+                //if(title.IsNullOrEmpty()) {
+                //    var top_handle = GetTopWindowHandle(handle);
+                //    if (top_handle != handle && top_handle != 0) {
+                //        return GetProcessTitle(top_handle);
+                //    }
+                //}
                 return title;
             }
             catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
