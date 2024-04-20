@@ -2673,11 +2673,11 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(() => SetCurPasteInfoMessage(e), DispatcherPriority.Background);
         }
         private void SetCurPasteInfoMessage(MpPortableProcessInfo e) {
-            if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+            //if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 // no paste toolbar so ignore
                 // TODO? add plain text paste toolbar? (tip of an iceburg)
-                return;
-            }
+                //return;
+            //}
             if (e == null) {
                 // unknown paste app
                 CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage() {

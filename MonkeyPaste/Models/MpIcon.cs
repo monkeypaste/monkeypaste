@@ -205,7 +205,43 @@ namespace MonkeyPaste {
         }
 
         #region Sync
+        public async Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
+            await Task.Delay(1);
 
+            MpIcon other = null;
+            if (drOrModel is MpIcon) {
+                other = drOrModel as MpIcon;
+            } else {
+                //implies this an add so all syncable columns are returned
+                other = new MpIcon();
+            }
+            //returns db column name and string paramValue of dr that is diff
+            var diffLookup = new Dictionary<string, string>();
+            diffLookup = CheckValue(IconGuid, other.IconGuid,
+                "MpIconGuid",
+                diffLookup,
+                IconGuid.ToString());
+            diffLookup = CheckValue(IconImageId, other.IconImageId,
+                "fk_IconDbImageId",
+                diffLookup,
+                MpDataModelProvider.GetItem<MpDbImage>(IconImageId).Guid);
+            diffLookup = CheckValue(HexColor1, other.HexColor1,
+                "HexColor1",
+                diffLookup);
+            diffLookup = CheckValue(HexColor2, other.HexColor2,
+                "HexColor2",
+                diffLookup);
+            diffLookup = CheckValue(HexColor3, other.HexColor3,
+                "HexColor3",
+                diffLookup);
+            diffLookup = CheckValue(HexColor4, other.HexColor4,
+                "HexColor4",
+                diffLookup);
+            diffLookup = CheckValue(HexColor5, other.HexColor5,
+                "HexColor5",
+                diffLookup);
+            return diffLookup;
+        }
         public async Task<object> CreateFromLogsAsync(string iconGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var icon = await MpDb.GetDbObjectByTableGuidAsync<MpIcon>(iconGuid);
 
@@ -280,48 +316,6 @@ namespace MonkeyPaste {
 
         public Type GetDbObjectType() {
             return typeof(MpIcon);
-        }
-
-        public async Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
-            await Task.Delay(1);
-
-            MpIcon other = null;
-            if (drOrModel is MpIcon) {
-                other = drOrModel as MpIcon;
-            } else {
-                //implies this an add so all syncable columns are returned
-                other = new MpIcon();
-            }
-            var db_img = await MpDataModelProvider.GetItemAsync<MpDbImage>(IconImageId);
-
-            //returns db column name and string paramValue of dr that is diff
-            var diffLookup = new Dictionary<string, string>();
-            diffLookup = CheckValue(IconGuid, other.IconGuid,
-                "MpIconGuid",
-                diffLookup,
-                IconGuid.ToString());
-            if(db_img != null) {
-                diffLookup = CheckValue(IconImageId, other.IconImageId,
-                "fk_IconDbImageId",
-                diffLookup,
-                db_img.Guid);
-            }
-            diffLookup = CheckValue(HexColor1, other.HexColor1,
-                "HexColor1",
-                diffLookup);
-            diffLookup = CheckValue(HexColor2, other.HexColor2,
-                "HexColor2",
-                diffLookup);
-            diffLookup = CheckValue(HexColor3, other.HexColor3,
-                "HexColor3",
-                diffLookup);
-            diffLookup = CheckValue(HexColor4, other.HexColor4,
-                "HexColor4",
-                diffLookup);
-            diffLookup = CheckValue(HexColor5, other.HexColor5,
-                "HexColor5",
-                diffLookup);
-            return diffLookup;
         }
 
         #endregion

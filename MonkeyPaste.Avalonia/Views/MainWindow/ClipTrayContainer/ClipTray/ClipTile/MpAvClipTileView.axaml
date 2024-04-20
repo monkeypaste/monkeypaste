@@ -80,6 +80,10 @@
         <!--  CONTENT PADDING  -->
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.compatMode ContentControl#ClipTileContentControl">
             <Setter Property="Padding"
+                    Value="0,5" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.compatMode.contentReadOnly ContentControl#ClipTileContentControl">
+            <Setter Property="Padding"
                     Value="5" />
         </Style>
 

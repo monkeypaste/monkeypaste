@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvIconBuilder {
-
+        const int ICON_SIZE = 256;
         public string GetPathIconBase64(string path, nint handle, MpIconSize iconSize = MpIconSize.ExtraLargeIcon128) {
             return GetIcon_internal(path, iconSize, true);
         }
@@ -23,9 +23,13 @@ namespace MonkeyPaste.Avalonia {
             if (string.IsNullOrEmpty(path)) {
                 return null;
             }
-            string iconBase64 = isApp ?
-                GetAppIcon(path, (int)GetSize(iconSize).Width) :
-                GetFileIcon(path, (int)GetSize(iconSize).Width);
+            string iconBase64 = null;
+            if(isApp) {
+                iconBase64 = GetAppIcon(path, ICON_SIZE);
+            }
+            if(!isApp || iconBase64 == null) {
+                iconBase64 = GetFileIcon(path, ICON_SIZE);
+            }
 
             if (string.IsNullOrEmpty(iconBase64)) {
                 return MpBase64Images.QuestionMark;
@@ -34,6 +38,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private string GetAppIcon(string path, int size) {
+            if(Mp.Services != null && Mp.Services.PlatformInfo != null && Mp.Services.PlatformInfo.ExecutingPath == path) {
+                return MpBase64Images.AppIcon;
+            }
             string icon_name = MpX11ShellHelpers.GetLauncherProperty(path, "Icon");
             if (icon_name == null) {
                 return null;
@@ -58,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
             } 
 
             // use shell instead of dotnet cause of permission errors
-            string base64 = $"base64 {icon_path}".ShellExec();
+            string base64 = $"base64 --wrap=0 {icon_path}".ShellExec();
             MpConsole.WriteLine($"Icon for '{path}':");
             MpConsole.WriteLine(base64);
             return base64;

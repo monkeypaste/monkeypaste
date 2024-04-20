@@ -35,6 +35,22 @@ namespace MonkeyPaste.Avalonia {
             MpAvDataObject avdo,
             MpTransactionType transType = MpTransactionType.None,
             bool force_allow_dup = false) {
+            MpCopyItem result = null;
+//#if LINUX
+//            result = await BuildAsync_linux(avdo, transType, force_allow_dup);
+//#else
+            result = await BuildAsync_default(avdo, transType, force_allow_dup);
+//#endif
+            return result;
+        }
+
+        #endregion
+
+        #region Private Methods
+        private async Task<MpCopyItem> BuildAsync_default(
+            MpAvDataObject avdo,
+            MpTransactionType transType = MpTransactionType.None,
+            bool force_allow_dup = false) {
             if (avdo == null || avdo.DataFormatLookup.Count == 0) {
                 return null;
             }
@@ -63,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
 
             BuildSupplementalsAsync(ci_guid, avdo, ci == null, transType, source_cts.Token).FireAndForgetSafeAsync();
 
-            
+
             if (ci == null) {
                 // new, non-duplicate or don't care
                 var dobj = await MpDataObject.CreateAsync(pdo: avdo);
@@ -96,9 +112,98 @@ namespace MonkeyPaste.Avalonia {
             return ci;
         }
 
-        #endregion
+        private async Task<MpCopyItem> BuildAsync_linux(
+            MpAvDataObject avdo,
+            MpTransactionType transType = MpTransactionType.None,
+            bool force_allow_dup = false) {
+            if (avdo == null || avdo.DataFormatLookup.Count == 0) {
+                return null;
+            }
+            if (transType == MpTransactionType.None) {
+                throw new Exception("Must have transacion type");
+            }
 
-        #region Private Methods
+            (MpCopyItemType itemType,
+                string itemData,
+                string itemDelta,
+                string itemPlainText) = await DecodeContentDataAsync(avdo);
+
+            if (itemType == MpCopyItemType.None ||
+                itemData == null) {
+                MpConsole.WriteLine("Warning! CopyItemBuilder could not create itemData");
+                return null;
+            }
+
+            (MpCopyItem ci, string checksum) = await PerformDupCheckAsync(
+                compare_data: itemPlainText,
+                itemType: itemType,
+                force_allow_dup, false);
+
+            IEnumerable<MpISourceRef> refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(avdo);
+
+            if (Mp.Services.SourceRefTools.IsAnySourceRejected(refs)) {
+                return null;
+            }
+
+            bool is_new = ci == null;
+            if (is_new) {
+                // new, non-duplicate or don't care
+                var dobj = await MpDataObject.CreateAsync(pdo: avdo);
+                string default_title = await GetDefaultItemTitleAsync(itemType, avdo);
+
+                MpDataObjectSourceType dataObjectSourceType = avdo.GetDataObjectSourceType();
+                string ci_guid = is_new ? System.Guid.NewGuid().ToString() : ci.Guid;
+                int icon_id = PickIconIdFromSourceRefs(refs);
+                ci = await MpCopyItem.CreateAsync(
+                    guid: ci_guid,
+                    dataObjectId: dobj.Id,
+                    iconId: icon_id,
+                    title: default_title,
+                    data: itemData,
+                    itemType: itemType,
+                    checksum: checksum,
+                    dataObjectSourceType: dataObjectSourceType,
+                    suppressWrite: false);
+                if (ci == null) {
+                    // probably null data, clean up pre-create
+                    //source_cts.Cancel();
+                    await dobj.DeleteFromDatabaseAsync();
+                    return null;
+                }
+            } else {
+                if (transType == MpTransactionType.Created) {
+                    MpConsole.WriteLine($"Item '{ci}' duplication detected. Marking '{MpTransactionType.Created}' as '{MpTransactionType.Recreated}'");
+                    // try to prevent multiple 'create' transactions, 'Recreate' will imply dup ref
+                    transType = MpTransactionType.Recreated;
+                }
+            }
+
+            List<string> ref_urls = refs.Select(x => Mp.Services.SourceRefTools.ConvertToInternalUrl(x)).ToList();
+            if (avdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> urls)) {
+                var urlList = urls.ToList();
+                for (int i = 0; i < ref_urls.Count; i++) {
+                    var provided_url = urlList.FirstOrDefault(x => x.ToLower().StartsWith(ref_urls[i].ToLower()));
+                    if (provided_url != null) {
+                        // prefer provided url in case it has args and remove so not added later
+                        ref_urls[i] = provided_url;
+                        urlList.Remove(provided_url);
+                    }
+                }
+                // add remaining urls for transaction
+                if (urlList.Count > 0) {
+                    ref_urls.AddRange(urlList);
+                }
+            }
+            await Mp.Services.TransactionBuilder.ReportTransactionAsync(
+                            copyItemId: ci.Id,
+                            reqType: MpJsonMessageFormatType.DataObject,
+                            //req: avdo.SerializeData(),
+                            respType: MpJsonMessageFormatType.Delta,
+                            //resp: string.IsNullOrEmpty(itemDelta) ? ci.ToDelta():itemDelta,
+                            ref_uris: ref_urls,
+                            transType: transType);
+            return ci;
+        }
 
         #region Source Helpers
         private async Task BuildSupplementalsAsync(
@@ -363,10 +468,11 @@ namespace MonkeyPaste.Avalonia {
                         // browser image copy handling
                         itemType = MpCopyItemType.Image;
                         delta = null;
-                    } else if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
-                        //plain text mode, just use plain text for now
-                        itemData = itemData.ToPlainText();
-                    }
+                    } 
+                    //else if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                    //    //plain text mode, just use plain text for now
+                    //    itemData = itemData.ToPlainText();
+                    //}
                 }
             }
 

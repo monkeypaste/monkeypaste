@@ -21,6 +21,12 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvIconSourceObjToBitmapConverter Instance = new MpAvIconSourceObjToBitmapConverter();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
+            if (parameter.ToStringOrEmpty() == "test") {
+
+            }
+            if (value is int blah && blah == 11) {
+
+            }
             double scale = 1.0d;
             List<string> paramParts = parameter == null ? new List<string>() : parameter.ToString().SplitNoEmpty("|").ToList();
 

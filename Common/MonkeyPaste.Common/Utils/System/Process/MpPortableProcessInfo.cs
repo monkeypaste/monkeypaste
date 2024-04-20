@@ -19,9 +19,6 @@ namespace MonkeyPaste.Common {
 
         #endregion
         #region Properties
-        [JsonIgnore]
-        public int IntHandle =>
-            (int)Handle;
         public nint Handle { get; set; }// = 0;
         public int WindowNumber { get; set; }
         public string ProcessPath { get; set; } = string.Empty;
@@ -42,10 +39,15 @@ namespace MonkeyPaste.Common {
             }
             return null;
         }
-        public static MpPortableProcessInfo FromHandle(nint handle) {
+        public static MpPortableProcessInfo FromHandle(nint handle, bool fallback_on_error) {
             if (MpCommonTools.Services != null &&
                 MpCommonTools.Services.ProcessWatcher != null) {
-                return MpCommonTools.Services.ProcessWatcher.GetProcessInfoFromHandle(handle);
+                var pi = MpCommonTools.Services.ProcessWatcher.GetProcessInfoFromHandle(handle);
+                if(fallback_on_error && (pi == null || pi.ProcessPath.IsNullOrEmpty())) {
+                    // fallback to os thing
+                    return FromPath(MpCommonTools.Services.PlatformInfo.OsFileManagerPath);
+                }
+                return pi;
             }
             return null;
         }

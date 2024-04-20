@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Data Object
-        public static bool IsDataNotEqual(this MpPortableDataObject dbo1, MpPortableDataObject dbo2, bool fast_check = false) {
+        public static bool IsDataNotEqual(this MpPortableDataObject dbo1, MpPortableDataObject dbo2, bool fast_check = false, IEnumerable<string> ignoredFormats = default) {
             if (dbo1 == null && dbo2 != null) {
                 return true;
             }
@@ -26,6 +26,9 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
             foreach (var nce in dbo2.DataFormatLookup) {
+                if(ignoredFormats != null && ignoredFormats.Contains(nce.Key)) {
+                    continue;
+                }
                 try {
                     if (!dbo1.DataFormatLookup.ContainsKey(nce.Key)) {
                         return true;

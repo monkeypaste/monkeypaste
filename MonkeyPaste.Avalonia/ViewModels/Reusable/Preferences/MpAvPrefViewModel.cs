@@ -313,7 +313,13 @@ namespace MonkeyPaste.Avalonia {
         public double NotificationSoundVolume { get; set; } = 0;
         public bool ShowInTaskbar { get; set; } = true;
 
-        public bool AnimateMainWindow { get; set; } = true;
+        public bool AnimateMainWindow { get; set; } =
+
+#if LINUX
+            false;
+#else
+        true; 
+#endif
 
         public string DefaultReadOnlyFontFamily { get; set; } = BASELINE_DEFAULT_READ_ONLY_FONT;
         public string DefaultEditableFontFamily { get; set; } = BASELINE_DEFAULT_CONTENT_FONT;

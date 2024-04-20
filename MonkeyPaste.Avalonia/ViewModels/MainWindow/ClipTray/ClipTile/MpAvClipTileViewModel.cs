@@ -1227,6 +1227,9 @@ namespace MonkeyPaste.Avalonia {
                     return FileItemCollectionViewModel.PrimaryIconSourceObj;
                 }
                 if (CopyItemIconId == 0) {
+                    if(CopyItemId > 0) {
+
+                    }
                     return MpBase64Images.QuestionMark;
                 }
                 return CopyItemIconId;

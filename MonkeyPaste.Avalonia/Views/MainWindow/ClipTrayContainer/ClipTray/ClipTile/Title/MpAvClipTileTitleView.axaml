@@ -240,7 +240,7 @@
                 <Image x:Name="ClipTileAppIconImage"
                        IsVisible="{Binding !IsVisible, ElementName=TransBusySpinner}"
                        IsHitTestVisible="False"
-                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+                       Source="{Binding IconResourceObj, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                        Stretch="Uniform"
                        HorizontalAlignment="Stretch"
                        VerticalAlignment="Stretch" />

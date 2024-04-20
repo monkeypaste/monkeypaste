@@ -15,6 +15,11 @@ namespace MonkeyPaste.Avalonia {
         //private DispatcherTimer _timer = null;
         private Timer _timer = null;
 
+        private string[] _ignoredFormats = [
+#if LINUX
+            MpPortableDataFormats.MimeText
+#endif
+            ];
         #endregion
 
         #region Interfaces
@@ -123,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
         private async Task CheckClipboardHelper() {
             var cbo = await ConvertManagedFormats();
 
-            if (cbo.IsDataNotEqual(_lastCbo, fast_check: true)) {
+            if (cbo.IsDataNotEqual(_lastCbo, fast_check: true, ignoredFormats: _ignoredFormats)) {
                 IsStartupClipboard = _lastCbo == null;
                 MpConsole.WriteLine($"Clipboard changed. Startup clipboard: {IsStartupClipboard}");
                 _lastCbo = cbo;

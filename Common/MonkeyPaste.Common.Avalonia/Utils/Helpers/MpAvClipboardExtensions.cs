@@ -43,8 +43,8 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (_MacFormatMap == null) {
                     _MacFormatMap = new() {
                         {MpPortableDataFormats.MacRtf1, MpPortableDataFormats.WinRtf },
-                        {MpPortableDataFormats.MacImage1, MpPortableDataFormats.AvImage },
                         {MpPortableDataFormats.MacImage2, MpPortableDataFormats.AvImage },
+                        {MpPortableDataFormats.MacImage3, MpPortableDataFormats.AvImage },
                         {MpPortableDataFormats.MacHtml1, MpPortableDataFormats.MimeHtml },
                         {MpPortableDataFormats.MacChromeUrl1, MpPortableDataFormats.MimeMozUrl },
                         {MpPortableDataFormats.MacChromeUrl2, MpPortableDataFormats.MimeMozUrl },
@@ -273,7 +273,11 @@ namespace MonkeyPaste.Common.Avalonia {
 #if LINUX
                 if(MpPortableDataFormats.IsAvaloniaFormat(format)) {
                     // xclip won't know about avalonia formats
-                    data = await cb.GetDataSafeAsync(format);
+                    if(format == MpPortableDataFormats.AvText) {
+                        data = await cb.GetTextAsync();
+                    } else {
+                        data = await cb.GetDataSafeAsync(format);
+                    }                    
                 } else {
 
                     data = await MpX11ClipboardHelper.ReadFormatAsync(format);

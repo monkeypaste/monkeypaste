@@ -31,6 +31,7 @@ namespace MonkeyPaste.Avalonia {
         public const string RESTART_ARG = "--restarted";
         public const string TRACE_ARG = "--trace";
         public const string WAIT_FOR_DEBUG_ARG = "--wait-for-attach";
+        public const string NO_ATTACH_ARG = "--no-attach";
 
         #endregion
 
@@ -150,7 +151,7 @@ namespace MonkeyPaste.Avalonia {
         public override async void OnFrameworkInitializationCompleted() {
             DateTime startup_datetime = DateTime.Now;
 #if DESKTOP
-            MpConsole.Init(new MpAvPlatformInfo_desktop().LogPath, App.HasStartupArg(App.WAIT_FOR_DEBUG_ARG));
+            MpConsole.Init(new MpAvPlatformInfo_desktop().LogPath, App.HasStartupArg(App.WAIT_FOR_DEBUG_ARG) || App.HasStartupArg(App.NO_ATTACH_ARG));
             MpAvLogSink.Init();
 #endif
 

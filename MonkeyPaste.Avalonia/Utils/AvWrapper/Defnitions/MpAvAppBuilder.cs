@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
 #if !ANDROID 
             if (!processPath.IsFileOrDirectory()) {
-                MpDebug.Break($"Invalid process path detected '{processPath}'", silent: true);
+                MpDebug.Break($"Invalid process path detected '{processPath}'", silent: false);
                 return null;
             }
 #endif

@@ -35,6 +35,7 @@ namespace MonkeyPaste {
                 var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(MpDefaultDataModelTools.UnknownIconDbImageId);
                 return img;
             }
+            
 
             var dupCheck = await MpDataModelProvider.GetDbImageByBase64StrAsync(base64Str);
             if (dupCheck != null) {
@@ -111,6 +112,9 @@ namespace MonkeyPaste {
                 ParseToken,
                 DbImageGuid.ToString(),
                 ImageBase64);
+        }
+        public override async Task WriteToDatabaseAsync() {
+            await base.WriteToDatabaseAsync();
         }
 
         public Type GetDbObjectType() {

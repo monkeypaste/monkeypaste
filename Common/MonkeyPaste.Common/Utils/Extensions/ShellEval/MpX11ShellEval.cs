@@ -46,11 +46,11 @@ namespace MonkeyPaste.Common {
                     if(has_exited) {
                         break;
                     }
-                    string output_line = await process.StandardOutput.ReadLineAsync();
+                    string output_line = await process.StandardOutput.ReadToEndAsync();
                     if(output_line == null) {
                         break;
                     }
-                    sb.AppendLine(output_line);
+                    sb.Append(output_line);
                 } 
             }
             catch (Exception ex) {
