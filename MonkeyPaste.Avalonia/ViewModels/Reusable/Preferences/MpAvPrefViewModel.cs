@@ -387,7 +387,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private bool _isRichHtmlContentEnabled =
-#if ANDROID || (!CEFNET_WV && !SUGAR_WV && !OUTSYS_WV)
+#if ANDROID
             false; 
 #else
             true;

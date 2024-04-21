@@ -135,6 +135,14 @@ namespace MonkeyPaste.Avalonia {
 
             DbInfo = new MpAvDbInfo();
             await MpAvPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
+#if DEBUG
+            if (MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+#if !CEFNET_WV && !OUTSYS_WV && !SUGAR_WV
+                MpConsole.WriteLine($"WebView not linked. Disabling rich content pref..");
+                MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled = false;
+#endif
+            } 
+#endif
 
             DefaultDataCreator = new MpAvDefaultDataCreator();
             UserAgentProvider = MpAvPlainHtmlConverter.Instance;
