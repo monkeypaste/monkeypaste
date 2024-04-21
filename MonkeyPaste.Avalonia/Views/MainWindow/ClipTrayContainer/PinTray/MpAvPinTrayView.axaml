@@ -159,7 +159,7 @@
                     <Button.IsVisible>
                         <MultiBinding Converter="{x:Static BoolConverters.Or}">
                             <Binding Path="InternalPinnedItems"
-                                     Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                                     Converter="{x:Static local:MpAvCollectionToIsMultipleBoolConverter.Instance}" />
                             <Binding Path="IsPinTrayBusy" />
                             <Binding Path="IsAddingClipboardItem" />
                         </MultiBinding>

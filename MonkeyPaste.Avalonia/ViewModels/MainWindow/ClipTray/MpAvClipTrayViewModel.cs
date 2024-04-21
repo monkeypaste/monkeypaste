@@ -3596,6 +3596,7 @@ namespace MonkeyPaste.Avalonia {
                      // cases:
                      // 1. drop from pin tray (sort)
                      // 2. new duplicate was in pin tray
+                     // 3. internal pinned to popout
 
                      int cur_pin_idx = PinnedItems.IndexOf(ctvm_to_pin);
                      if (cur_pin_idx < 0) {
