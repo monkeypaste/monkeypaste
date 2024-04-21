@@ -260,8 +260,6 @@ namespace MonkeyPaste {
         }
 
         public async Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
-            await Task.Delay(1);
-
             MpApp other = null;
             if (drOrModel is MpApp) {
                 other = drOrModel as MpApp;
@@ -275,14 +273,25 @@ namespace MonkeyPaste {
                 "MpAppGuid",
                 diffLookup,
                 AppGuid.ToString());
-            diffLookup = CheckValue(UserDeviceId, other.UserDeviceId,
+
+            var ud = await MpDataModelProvider.GetItemAsync<MpUserDevice>(UserDeviceId);
+            if(ud != null) {
+                diffLookup = CheckValue(UserDeviceId, other.UserDeviceId,
                 "fk_MpUserDeviceId",
                 diffLookup,
-                MpDataModelProvider.GetItem<MpUserDevice>(UserDeviceId).Guid);
-            diffLookup = CheckValue(IconId, other.IconId,
+                ud.Guid);
+            }            
+
+            var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);
+            if (icon != null) {
+                diffLookup = CheckValue(IconId, other.IconId,
                 "fk_MpIconId",
                 diffLookup,
-                MpDataModelProvider.GetItem<MpIcon>(IconId).Guid);
+                icon.Guid);
+            } else {
+                // TODO should probably do something here but waiting until building out syncing...
+            }
+            
             diffLookup = CheckValue(AppPath, other.AppPath,
                 "AppPath",
                 diffLookup);

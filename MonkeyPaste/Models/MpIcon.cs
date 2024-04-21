@@ -206,8 +206,6 @@ namespace MonkeyPaste {
 
         #region Sync
         public async Task<Dictionary<string, string>> DbDiffAsync(object drOrModel) {
-            await Task.Delay(1);
-
             MpIcon other = null;
             if (drOrModel is MpIcon) {
                 other = drOrModel as MpIcon;
@@ -221,10 +219,16 @@ namespace MonkeyPaste {
                 "MpIconGuid",
                 diffLookup,
                 IconGuid.ToString());
-            diffLookup = CheckValue(IconImageId, other.IconImageId,
+            var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(IconImageId);
+            if(img != null) {
+                diffLookup = CheckValue(IconImageId, other.IconImageId,
                 "fk_IconDbImageId",
                 diffLookup,
-                MpDataModelProvider.GetItem<MpDbImage>(IconImageId).Guid);
+                img.Guid);
+            } else {
+                // TODO should probably do something here but waiting until building out syncing...
+            }
+
             diffLookup = CheckValue(HexColor1, other.HexColor1,
                 "HexColor1",
                 diffLookup);
