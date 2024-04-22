@@ -580,7 +580,7 @@ namespace MonkeyPaste.Avalonia {
                 // on clipboard change (windows) get clipboard override process watcher and use clipboard owner 
                 // NOTE only doing this on change (ignorePlugins === false) for perf
                 nint cb_owner_handle = WinApi.GetOpenClipboardWindow();
-                active_pi = MpPortableProcessInfo.FromHandle(cb_owner_handle);
+                active_pi = MpPortableProcessInfo.FromHandle(cb_owner_handle, false);
             }
 #elif LINUX
             //if (attachActiveProcessIfNone && isRead && !isDnd && active_pi == null && !ignorePlugins) {

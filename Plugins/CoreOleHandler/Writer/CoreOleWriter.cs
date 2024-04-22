@@ -140,10 +140,10 @@ namespace CoreOleHandler {
 #if WINDOWS
             if (ido.TryGetData(MpPortableDataFormats.Image, out byte[] pngBytes)) {
                 object dib = MonkeyPaste.Common.Wpf.MpWpfClipoardImageHelper.GetWpfDib(pngBytes);
-                ido.Set(MpPortableDataFormats.WinDib, dib);
+                ido.Set(MpPortableDataFormats.WinImage3, dib);
 
                 object bmp = MonkeyPaste.Common.Wpf.MpWpfClipoardImageHelper.GetSysDrawingBitmap(pngBytes);
-                ido.Set(MpPortableDataFormats.WinBitmap, bmp);
+                ido.Set(MpPortableDataFormats.WinImage2, bmp);
             }
 
 #endif

@@ -9,6 +9,7 @@
     <ApplicationVersionPatch>17</ApplicationVersionPatch>
     <ApplicationVersionRevision>0</ApplicationVersionRevision>
     <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch).$(ApplicationVersionRevision)</ApplicationVersion>
+    <LinuxVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor)-$(ApplicationVersionPatch)</LinuxVersion>
    </PropertyGroup>
 
   <!-- MSBUILD PROPERTIES -->
@@ -29,8 +30,8 @@
   <PropertyGroup>
     <!--<AvaloniaVersion>11.2.999-cibuild0047282-alpha</AvaloniaVersion>-->
     <StableAvaloniaVersion>11.0.10</StableAvaloniaVersion>
-    <!--<AvaloniaVersion>11.0.10</AvaloniaVersion>-->
-    <AvaloniaVersion>9999.0.0-localbuild</AvaloniaVersion>
+    <AvaloniaVersion>11.0.10</AvaloniaVersion>
+    <!--<AvaloniaVersion>9999.0.0-localbuild</AvaloniaVersion>-->
     <!--<SugarWvVersion>11.0.0.6</SugarWvVersion>-->    
     <SugarWvVersion>11.0.0.0</SugarWvVersion>
     <CefNetWvVersion>105.3.24107.1511</CefNetWvVersion>
@@ -92,8 +93,8 @@
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>false</UseCefNet>
-    <UseSugarWv>true</UseSugarWv>
+    <UseCefNet>true</UseCefNet>
+    <UseSugarWv>false</UseSugarWv>
     <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <PlatformShortName>uwp</PlatformShortName> 
@@ -117,7 +118,7 @@
     <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName> 
     <IsDesktop>true</IsDesktop>
-    <UseCefNet>false</UseCefNet> 
+    <UseCefNet>true</UseCefNet> 
     <UseSugarWv>false</UseSugarWv>
     <PlatformShortName>linux</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\linux</BuildScriptsDir>
@@ -132,7 +133,7 @@
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>false</UseCefNet>
+    <UseCefNet>true</UseCefNet>
     <UseSugarWv>true</UseSugarWv>
     <PlatformShortName>mac</PlatformShortName>
     <TargetRuntimeIdentifiers>osx-x64</TargetRuntimeIdentifiers>

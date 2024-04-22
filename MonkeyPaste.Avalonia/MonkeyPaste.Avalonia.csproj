@@ -634,6 +634,7 @@
     <Compile Remove="AttachedProperties\MpAvTextSelectionExtension.cs" />
     <Compile Remove="Behaviors\MpAvMoveBehavior.cs" />
     <Compile Remove="Controls\Content\CefNetWebView\Cef\WebView\MpAvCefNetWebView.cs" />
+    <Compile Remove="Controls\Windows\MpAvX11Window.cs" />
     <Compile Remove="Program.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\MpAvCursor.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
@@ -2433,10 +2434,10 @@
     
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\**" />
     
-    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.linux.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.$(PlatformShortName).cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.shared.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\X11Tools.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\XdoLib.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\X11Tools.cs" Condition="'$(BuildOs)' == 'LINUX'"/>
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\XdoLib.cs" Condition="'$(BuildOs)' == 'LINUX'"/>
     <Compile Include="Utils\WindowManager\Helpers\MpAvWindowPositioner.cs" />
   </ItemGroup>
   

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -2621,7 +2622,8 @@ namespace MonkeyPaste.Avalonia {
                     MpAvQueryTrayView.Instance.ClipTrayListBox.GetLogicalDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext))
                     .Union(MpAvPinTrayView.Instance.PinTrayListBox.GetLogicalDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext)));
                 foreach (var lbi in lbil) {
-                    if (lbi.DataContext is not MpAvClipTileViewModel ctvm ||
+                    if (!lbi.IsAttachedToVisualTree() ||
+                        lbi.DataContext is not MpAvClipTileViewModel ctvm ||
                         lbi.GetLogicalDescendant<MpAvContentWebViewContainer>() is not { } cwv ||
                         cwv.GetLogicalDescendant<MpAvContentWebView>() is not { } ctwv) {
                         continue;

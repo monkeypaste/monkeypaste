@@ -98,10 +98,58 @@
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
+  
 
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
   </ItemGroup>
+
+  <ItemGroup Condition="$(BuildOs) != 'LINUX'">
+    <None Remove="monkey.png" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(BuildOs) == 'LINUX'">
+    <Content Include="icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
+  <!--<ItemGroup Condition="$(BuildOs) == 'LINUX'">
+    <PackageReference Include="Packaging.Targets">
+      <Version>0.1.220</Version>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>-->
+  <!--<PropertyGroup Condition="$(BuildOs) == 'LINUX'">
+    <Version>$(LinuxVersion)</Version>
+    <Authors>Thomas Kefauver</Authors>
+    <Maintainer>Thomas Kefauver</Maintainer>
+    <Description>A clipboard manager and more</Description>
+    <Company>$(ApplicationAuthor)</Company>    
+    <PackagePrefix>$([System.Text.RegularExpressions.Regex]::Replace($(ApplicationName), "\B[A-Z]", "-$0").ToLower())</PackagePrefix>
+    <DebPackageArchitecture Condition="$(RuntimeIdentifier.Contains('x64'))">amd64</DebPackageArchitecture>
+    <DebPackageArchitecture Condition="$(RuntimeIdentifier.Contains('x86'))">i386</DebPackageArchitecture>
+    <DebPackageArchitecture Condition="$(RuntimeIdentifier.Contains('arm'))">armhf</DebPackageArchitecture>
+    <PackageName>$(PackagePrefix)_$(Version)_$(DebPackageArchitecture)</PackageName>
+    <Homepage>https://www.monkeypaste.com</Homepage>
+  </PropertyGroup>-->
+  
+  <!--<PropertyGroup>
+    <OUTDIR>$(MainTargetDir)</OUTDIR>
+  </PropertyGroup>
+  <Target Name="RenameAfterBuild" AfterTargets="AfterBuild" Condition="$(RuntimeIdentifier.Contains('linux'))">
+    <Move SourceFiles="$(OUTDIR)\$(AssemblyName)" DestinationFiles="$(OUTDIR)\$(PackagePrefix)" />
+    <Message Text="Renamed linux binary file." Importance="high" />
+  </Target>
+  <Target Name="RenameBeforePublish" BeforeTargets="CreatePackageProperties" Condition="$(RuntimeIdentifier.Contains('linux'))">
+    <Move SourceFiles="$(OUTDIR)publish\$(AssemblyName)" DestinationFiles="$(OUTDIR)publish\$(PackagePrefix)" />
+    <Message Text="Renamed linux binary file." Importance="high" />
+  </Target>
+  <Target Name="SetAppHostName" AfterTargets="CreatePackageProperties" Condition="$(RuntimeIdentifier.Contains('linux'))">
+    <PropertyGroup>
+      <AppHost Condition="'$(SymlinkAppHostInBin)' == 'true'">$(PackagePrefix)$(_NativeExecutableExtension)</AppHost>
+    </PropertyGroup>
+  </Target>-->
 </Project>

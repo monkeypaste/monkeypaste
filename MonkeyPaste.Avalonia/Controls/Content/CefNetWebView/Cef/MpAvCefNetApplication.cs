@@ -173,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (!string.IsNullOrEmpty(LogFilePath)) {
                 settings.LogFile = LogFilePath;
-                settings.LogSeverity = CefLogSeverity.Error;
+                settings.LogSeverity = CefLogSeverity.Verbose;
             }
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;

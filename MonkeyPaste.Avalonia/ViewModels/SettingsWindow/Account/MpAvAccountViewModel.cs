@@ -278,7 +278,7 @@ namespace MonkeyPaste.Avalonia {
             _lastBillingCycleType = BillingCycleType;
 
             PropertyChanged += MpAvAccountViewModel_PropertyChanged;
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
         #endregion
@@ -286,7 +286,9 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public async Task InitializeAsync() {
             IsBusy = true;
-            await LoginCommand.ExecuteAsync(MpLoginSourceType.Init);
+            //await LoginCommand.ExecuteAsync(MpLoginSourceType.Init);
+            AccountType = MpUserAccountType.Unlimited;
+            await Task.Delay(1);
             IsBusy = false;
             IsLoaded = true;
         }

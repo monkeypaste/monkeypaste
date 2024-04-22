@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Logging;
 using Avalonia.ReactiveUI;
+using MonkeyPaste.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -17,7 +18,7 @@ using Avalonia.WebView.Desktop;
 using CefNet;
 #endif
 
-namespace MonkeyPaste.Avalonia {
+namespace MonkeyPaste.Desktop {
     internal class Program {
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -25,9 +26,9 @@ namespace MonkeyPaste.Avalonia {
 
         [STAThread]
         public static void Main(string[] args) {
-//#if WINDOWS
+#if WINDOWS
             TryForceHighPerformanceGpu(); 
-//#endif
+#endif
 
             App.Args = args;
 

@@ -139,7 +139,7 @@ const config = {
             position: "right",
           },
           {
-            href: "https://github.com/monkeypaste",
+            href: "https://github.com/monkeypaste/monkeypaste",
             label: "GitHub",
             position: "right",
           },

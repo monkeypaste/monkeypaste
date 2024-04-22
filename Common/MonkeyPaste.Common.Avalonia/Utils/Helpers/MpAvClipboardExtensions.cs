@@ -207,13 +207,13 @@ namespace MonkeyPaste.Common.Avalonia {
                 output_encoding = Encoding.Unicode;
             }
 #elif WINDOWS
-            if(format == MpPortableDataFormats.WinXhtml) {
+            if(format == MpPortableDataFormats.WinHtml1) {
                 output_type = typeof(byte[]);
             } 
             if(format == MpPortableDataFormats.WinRtf) {
                 output_type = typeof(byte[]);
             }
-            if(format == MpPortableDataFormats.WinUnicode) {
+            if(format == MpPortableDataFormats.WinText3) {
                 output_encoding = Encoding.Unicode;
             }
 #elif LINUX
