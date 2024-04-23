@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -40,8 +41,22 @@ namespace MonkeyPaste.Avalonia {
         public static void InitActualTray() {
             var rootIcon = CreateTrayIcon();
             rootIcon.Menu = CreateNativeMenu();
-
             TrayIcon.SetIcons(Application.Current, new TrayIcons { rootIcon });
+        }
+        public static void ShutdownTray(Application app) {
+            if(app == null ||
+                TrayIcon.GetIcons(app) is not { } tray ||
+                tray.Count < 1) {
+                MpConsole.WriteLine($"Sys tray shutdown error, no tray icons found");
+                return;
+            }
+            int count = tray.Count;
+            for (int i = 0; i < count; i++) {
+                tray[i].Dispose();
+                tray[i] = null;
+            }
+            TrayIcon.SetIcons(app, null);
+            MpConsole.WriteLine($"Sys tray shutdown successful");
         }
         private static void InitStartupTray() {
             var startupIcon = new TrayIcon() {
