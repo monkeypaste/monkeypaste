@@ -17,7 +17,7 @@ namespace MonkeyPaste.Common {
                     Arguments = $"-c \"{escapedArgs}\"",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    UseShellExecute = false,
+                    UseShellExecute = false,    
                     CreateNoWindow = true
                 },
                 EnableRaisingEvents = true
@@ -27,13 +27,17 @@ namespace MonkeyPaste.Common {
             bool has_exited = false;
 
             process.Exited += (sender, args) => {
-                has_exited = true;
-                string errorStr = process.StandardError.ReadToEnd();
-                if (!string.IsNullOrEmpty(errorStr)) {
-                    MpConsole.WriteLine($"Error for cmd '{cmd}':");
-                    MpConsole.WriteLine(errorStr);
+                try {
+                    has_exited = true;
+                    string errorStr = process.StandardError.ReadToEnd();
+                    if (!string.IsNullOrEmpty(errorStr)) {
+                        MpConsole.WriteLine($"Error for cmd '{cmd}':");
+                        MpConsole.WriteLine(errorStr);
+                    }
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine($"Shell exit error. cmd '{cmd}'.", ex);
                 }
-                if(process == null) {
+                if (process == null) {
                     return;
                 }
                 process.Dispose();
@@ -113,7 +117,7 @@ namespace MonkeyPaste.Common {
                 //MpConsole.WriteLine(e, "Command {} failed", cmd);                
             }
 
-            return output;
+            return output.ToStringOrEmpty();
         }
     }
 }

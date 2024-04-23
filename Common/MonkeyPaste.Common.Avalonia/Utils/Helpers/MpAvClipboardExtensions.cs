@@ -246,7 +246,14 @@ namespace MonkeyPaste.Common.Avalonia {
             if (cb == null) {
                 return avdo;
             }
-            var actualFormats = await cb.GetFormatsSafeAsync();
+#if LINUX
+            // NOTE avalonia returns window sel as clipboard sometimes 
+            // (maybe from barrier) but in firefox it won't have source info 
+            // so doing it manually to enforce clipboard only
+            var actualFormats = await MpX11ClipboardHelper.GetFormatsAsync(MpLinuxSelectionType.Clipboard);
+#else
+            var actualFormats = await cb.GetFormatsSafeAsync(); 
+#endif
             if(actualFormats == null) {
                 // timeout
                 return avdo;

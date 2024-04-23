@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
+    public enum MpLinuxSelectionType {
+        None = 0,
+        Primary,
+        Secondary,
+        Clipboard
+    }
     public static class MpX11ClipboardHelper {
 
         public static async Task<string> ReadFormatAsync(string format) {
@@ -18,5 +24,14 @@ namespace MonkeyPaste.Common {
             }
             return result;
         }
+
+        public static async Task<string[]> GetFormatsAsync(MpLinuxSelectionType selType) {
+            string xclip_cmd = $"xclip -o -target TARGETS -selection {selType.ToString().ToLowerInvariant()}";
+            string result = await xclip_cmd.ShellExecAsync();
+            return result.SplitByLineBreak();
+        }
+
+        
+
     }
 }
