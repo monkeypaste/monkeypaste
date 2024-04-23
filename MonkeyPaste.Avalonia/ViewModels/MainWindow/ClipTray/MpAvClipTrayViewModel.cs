@@ -270,7 +270,6 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
                             Header = UiStrings.SettingsInteropAppOleFormatButtonPointerOverLabel,
-                            IsVisible = !IsAutoEditEnabled,
                             //AltNavIdx = 0,
                             IconResourceKey = "EditContentImage",
                             Command = EditSelectedContentCommand,
@@ -1242,8 +1241,6 @@ namespace MonkeyPaste.Avalonia {
         #region State
         List<string> PendingRejectedItemGuids { get; set; } = [];
         public int PinOpCopyItemId { get; set; } = -1;
-        public bool IsAutoEditEnabled =>
-            !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled;
 
         private Uri _editorUri;
         public Uri EditorUri {

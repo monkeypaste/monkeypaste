@@ -66,8 +66,8 @@ namespace MonkeyPaste.Avalonia {
 
             // use shell instead of dotnet cause of permission errors
             string base64 = $"base64 --wrap=0 {icon_path}".ShellExec();
-            MpConsole.WriteLine($"Icon for '{path}':");
-            MpConsole.WriteLine(base64);
+            //MpConsole.WriteLine($"Icon for '{path}':");
+            //MpConsole.WriteLine(base64);
             return base64;
         }
 

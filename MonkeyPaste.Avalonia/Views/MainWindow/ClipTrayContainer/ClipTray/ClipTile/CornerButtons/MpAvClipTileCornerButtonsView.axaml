@@ -191,8 +191,6 @@
             <ToggleButton.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="CanEdit" />
-                    <Binding Path="!IsAutoEditEnabled"
-                             Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
                 </MultiBinding>
             </ToggleButton.IsVisible>
             <ToolTip.Tip>

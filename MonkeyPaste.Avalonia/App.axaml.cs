@@ -31,6 +31,7 @@ namespace MonkeyPaste.Avalonia {
         public const string RESTART_ARG = "--restarted";
         public const string TRACE_ARG = "--trace";
         public const string WAIT_FOR_DEBUG_ARG = "--wait-for-attach";
+        public const string BREAK_ON_ATTACH_ARG = "--break-on-attach";
         public const string NO_ATTACH_ARG = "--no-attach";
 
         #endregion
@@ -71,8 +72,12 @@ namespace MonkeyPaste.Avalonia {
                 Console.WriteLine("Attach debugger and use 'Set next statement'");
                 while (true) {
                     Thread.Sleep(100);
-                    if (Debugger.IsAttached)
+                    if (Debugger.IsAttached) {
+                        if(args.Contains(BREAK_ON_ATTACH_ARG)) {
+                            Debugger.Break();
+                        }
                         break;
+                    }
                 }
             }
         }
@@ -101,9 +106,16 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"App shutdown called Code: '{code}' Detail: '{detail.ToStringOrEmpty("NULL")}'");
             //MpConsole.ShutdownLog();
             if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
+               
                 MpAvWindowManager.CloseAll();
 #if CEFNET_WV
                 MpAvCefNetApplication.ShutdownCefNet();
+#endif
+                var app = Application.Current;
+#if LINUX
+                // BUG sys tray doesn't close when app does on linux
+                // this DOES close it but throws segmentation fault
+                MpAvSystemTray.ShutdownTray(app); 
 #endif
                 lifetime.Shutdown();
                 bool success = true;// lifetime.TryShutdown();

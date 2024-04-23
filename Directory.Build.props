@@ -35,6 +35,7 @@
     <!--<SugarWvVersion>11.0.0.6</SugarWvVersion>-->    
     <SugarWvVersion>11.0.0.0</SugarWvVersion>
     <CefNetWvVersion>105.3.24107.1511</CefNetWvVersion>
+    <AvHtmlRendererVersion>11.0.19</AvHtmlRendererVersion>
   </PropertyGroup>
   
   <!-- MANUALLY SET PROPERTIES-->

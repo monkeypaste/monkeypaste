@@ -390,3 +390,4 @@ MigrationBackup/
 */libcef.dll
 *.weights
 *.zip
+/.idea

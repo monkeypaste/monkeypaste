@@ -29,15 +29,35 @@ namespace MonkeyPaste.Desktop {
 #if WINDOWS
             TryForceHighPerformanceGpu(); 
 #endif
+            Exception top_level_ex = null;
+            try {
+                App.Args = args;
 
-            App.Args = args;
-
-            HandleSingleInstanceLaunch(args);
+                HandleSingleInstanceLaunch(args);
+            }
+            catch (Exception ex) {
+                top_level_ex = ex;
+                // here we can work with the exception, for example add it to our log file
+                MpConsole.WriteTraceLine("Something very bad happened", ex);
+                if (Mp.Services != null &&
+                    Mp.Services.ShutdownHelper != null) {
+                    Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.TopLevelException, top_level_ex == null ? "NONE" : top_level_ex.ToString());
+                }
+            }
+            finally {
+                // This block is optional. 
+                // Use the finally-block if you need to clean things up or similar
+                if (Mp.Services != null &&
+                    Mp.Services.ShutdownHelper != null) {
+                    Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.TopLevelException, top_level_ex == null ? "NONE" : top_level_ex.ToString());
+                }
+            }            
         }
 
         // Avalonia configuration, don't remove; also used by visual designer.
         static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
+            .UsePlatformDetect()
 #if MAC
         .With(new AvaloniaNativePlatformOptions {
             OverlayPopups = true,
@@ -56,50 +76,29 @@ namespace MonkeyPaste.Desktop {
             })
 #endif
 
-            .UsePlatformDetect()
 #if SUGAR_WV
             .UseDesktopWebView()
 #endif
             .WithInterFont()
             .UseReactiveUI()
-            .LogToTrace()// LogEventLevel.Verbose)
+            .LogToTrace()//LogEventLevel.Verbose)
                 ;
         static void HandleSingleInstanceLaunch(object[] args) {
+            App.WaitForDebug(args);
 #if CEFNET_WV
             // NOTE if implementing mutex this NEEDS to be beforehand or webviews never load
             MpAvCefNetApplication.Init();
 #endif
-            App.WaitForDebug(args);
             BuildAndLaunch(args);
         }
         private static void BuildAndLaunch(object[] args) {
-            Exception top_level_ex = null;
-            try {
-                BuildAvaloniaApp()
+            BuildAvaloniaApp()
 #if CEFNET_WV
                     .StartWithCefNetApplicationLifetime(App.Args, ShutdownMode.OnExplicitShutdown);
 #else
                     .StartWithClassicDesktopLifetime(App.Args, ShutdownMode.OnExplicitShutdown); 
 #endif
-            }
-            catch (Exception ex) {
-                top_level_ex = ex;
-                // here we can work with the exception, for example add it to our log file
-                MpConsole.WriteTraceLine("Something very bad happened", ex);
-                if (Mp.Services != null &&
-                    Mp.Services.ShutdownHelper != null) {
-                    Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.TopLevelException, top_level_ex == null ? "NONE" : top_level_ex.ToString());
-                }
-            }
-            finally {
-                // This block is optional. 
-                // Use the finally-block if you need to clean things up or similar
-                if (Mp.Services != null &&
-                    Mp.Services.ShutdownHelper != null) {
-                    Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.TopLevelException, top_level_ex == null ? "NONE" : top_level_ex.ToString());
-                }
-
-            }
+           
         }
 
         [System.Runtime.InteropServices.DllImport("nvapi64.dll", EntryPoint = "fake")]

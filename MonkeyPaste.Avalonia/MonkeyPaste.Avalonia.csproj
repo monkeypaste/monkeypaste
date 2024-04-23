@@ -2378,7 +2378,7 @@
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(StableAvaloniaVersion)" />
     <PackageReference Include="Avalonia.Diagnostics" Version="$(StableAvaloniaVersion)" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10" />
-    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.17" />
+    <PackageReference Include="Avalonia.HtmlRenderer" Version="$(AvHtmlRendererVersion)" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(StableAvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="$(StableAvaloniaVersion)" />
@@ -2436,8 +2436,8 @@
     
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.$(PlatformShortName).cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.shared.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\X11Tools.cs" Condition="'$(BuildOs)' == 'LINUX'"/>
-    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\XdoLib.cs" Condition="'$(BuildOs)' == 'LINUX'"/>
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\X11Tools.cs" Condition="'$(BuildOs)' == 'LINUX'" />
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\XdoLib.cs" Condition="'$(BuildOs)' == 'LINUX'" />
     <Compile Include="Utils\WindowManager\Helpers\MpAvWindowPositioner.cs" />
   </ItemGroup>
   

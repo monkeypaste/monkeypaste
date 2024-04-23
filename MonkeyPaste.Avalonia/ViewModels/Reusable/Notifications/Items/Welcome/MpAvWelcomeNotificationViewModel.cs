@@ -511,6 +511,14 @@ namespace MonkeyPaste.Avalonia {
             // there's per-page validation (only needed for accounts atm I think)
             MpAvPrefViewModel.Instance.IsWelcomeComplete = true;
             IsFinishing = false;
+
+#if LINUX && !DEBUG
+            // BUG on initial startup only in release it seems,
+            // getting a  "frame_impl" connection timeout which i 'think'
+            // has something to do w/ all the placeholder webviews initializing at the same time or something
+            // but restarting here is seamless enough
+            await MpAvAppRestarter.ShutdownWithRestartTaskAsync("welcome complete"); 
+#endif
         }
 
         private void CloseGestureDemo() {

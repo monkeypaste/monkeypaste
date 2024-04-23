@@ -3,19 +3,14 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
                        xmlns:local="using:MonkeyPaste.Avalonia"
-                       xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
                        x:DataType="local:MpAvAboutViewModel"
                        x:TypeArguments="local:MpAvAboutViewModel"
                        Background="White"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450">
-    <local:MpAvUserControl.Styles>
-
-    </local:MpAvUserControl.Styles>
     <Grid RowDefinitions="Auto,*"
           Margin="10">
         <DockPanel Grid.Row="0">
@@ -30,7 +25,7 @@
                     Margin="0,0,10,0">
                 <Image Width="50"
                        Height="50"
-                       Classes="applogo wink shakeOnce shakeOnceOver"
+                       Classes="applogo wink"
                        HorizontalAlignment="Center" />
             </Border>
             <StackPanel Orientation="Vertical"
@@ -102,7 +97,6 @@
                 <av:HtmlLabel x:Name="CreditsTextBlock"
                               local:MpAvIsHoveringExtension.IsEnabled="True"
                               local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverCredits, Mode=TwoWay}"
-                              Classes="credits"
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Stretch"
                               Text="{Binding CreditsHtml}" />

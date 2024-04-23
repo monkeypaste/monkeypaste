@@ -24,9 +24,12 @@ namespace MonkeyPaste.Avalonia {
             {"no-zygote",null },
             {"no-sandbox",null },
 #if CEFNET_WV
-            //{"enable-begin-frame-scheduling",null },
-            //{"enable-media-stream",null },
-            //{"enable-blink-features", "CSSPseudoHas"},
+#if !DEBUG
+		    {"enable-begin-frame-scheduling",null },  
+            {"enable-media-stream",null },
+            {"enable-blink-features", "CSSPseudoHas"},
+#endif
+            
             //{"remote-debugging-port", "9222"},
 #endif
 #endif
