@@ -583,10 +583,11 @@ namespace MonkeyPaste.Avalonia {
                 active_pi = MpPortableProcessInfo.FromHandle(cb_owner_handle, false);
             }
 #elif LINUX
-            //if (attachActiveProcessIfNone && isRead && !isDnd && active_pi == null && !ignorePlugins) {
-            //    nint cb_owner_handle = X11Tools.get_clipboard_owner(MpAvProcessWatcher.Instance.displayPtr);
-            //    active_pi = MpPortableProcessInfo.FromHandle(cb_owner_handle,true);
-            //}
+            if (attachActiveProcessIfNone && isRead && !isDnd && active_pi == null && !ignorePlugins) {
+                nint cb_owner_handle = X11Tools.get_clipboard_owner(); 
+                cb_owner_handle = MpAvProcessWatcher.Instance.GetTopWindowHandle(cb_owner_handle);
+                active_pi = MpPortableProcessInfo.FromHandle(cb_owner_handle, true);
+            }
 #endif
             int[] custom_preset_ids = ignorePlugins ? null :
                     MpAvAppCollectionViewModel.Instance

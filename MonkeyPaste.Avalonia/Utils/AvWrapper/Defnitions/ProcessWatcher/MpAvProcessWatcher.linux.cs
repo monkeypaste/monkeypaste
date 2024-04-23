@@ -19,19 +19,24 @@ namespace MonkeyPaste.Avalonia {
 
     public partial class MpAvProcessWatcher {
         #region Private Variables
-        bool IS_DISABLED => false;
+        bool force_disabled = false;
+        bool IS_DISABLED {
+            get {
+                if(force_disabled ||
+                    Mp.Services == null ||
+                    Mp.Services.StartupState == null ||
+                    !Mp.Services.StartupState.IsReady) {
+                    return true;
+                }
+                return false;
+            }
+        }
         private bool _hasError;
         
         private nint _xdoCtx;
         private nint xdoCtx {
             get {
                 if(_xdoCtx == 0) {
-                    //string ld_path = Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "Assets", "lib");
-                    //Environment.SetEnvironmentVariable(
-                    //    "LD_LIBRARY_PATH", 
-                    //    Environment.GetEnvironmentVariable("LD_LIBRARY_PATH").ToStringOrEmpty() + 
-                    //    ":" + ld_path);
-                    //string test = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
                     _xdoCtx = XdoLib.xdo_new(null);
                 }
                 return _xdoCtx;
@@ -179,7 +184,7 @@ namespace MonkeyPaste.Avalonia {
             catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
             return 0;
         }
-        private nint GetTopWindowHandle(nint start) {
+        public nint GetTopWindowHandle(nint start) {
             if (IS_DISABLED) {
                 return 0;
             }

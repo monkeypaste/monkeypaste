@@ -12,6 +12,6 @@ namespace MonkeyPaste.Avalonia {
         public static extern int get_exe_for_pid(int pid, [Out] byte[] exe_path_return);
 
         [DllImport(PidName)]
-        public static extern int get_clipboard_owner(nint display);
+        public static extern int get_clipboard_owner(); 
     }
 }
