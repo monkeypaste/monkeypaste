@@ -1,6 +1,6 @@
 #!/bin/bash
 clear
-CONFIG=Debug
+CONFIG=Release
 TARGET_FRAMEWORK="net8.0"
 PLATFORM=linux-x64 
 RUN_ARGS="--wait-for-attach"
@@ -20,6 +20,12 @@ if [ "$1" = "no-attach" ]; then
 fi
 if [ "$2" = "no-attach" ]; then
 	RUN_ARGS=" "
+fi
+if [ "$1" = "break-on-attach" ]; then
+	RUN_ARGS=$RUN_ARGS" --break-on-attach"
+fi
+if [ "$2" = "break-on-attach" ]; then
+	RUN_ARGS=$RUN_ARGS" --break-on-attach"
 fi
 
 ./build.sh
