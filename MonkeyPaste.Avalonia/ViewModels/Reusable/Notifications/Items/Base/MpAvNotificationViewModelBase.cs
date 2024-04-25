@@ -403,6 +403,12 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return NotificationFormat.Title;
             }
+            set {
+                if(Title !=  value) {
+                    NotificationFormat.Title = value;
+                    OnPropertyChanged(nameof(Title));
+                }
+            }
         }
 
         public virtual object Body {
@@ -490,6 +496,9 @@ namespace MonkeyPaste.Avalonia {
             IsWindowOpen = false;
         }
 
+        public override string ToString() {
+            return NotificationFormat == null ? "Empty ntf" : NotificationFormat.ToStringOrEmpty();
+        }
         #endregion
 
         #region Protected Methods

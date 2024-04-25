@@ -2755,8 +2755,12 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"Mp.Services.StartupState.IsReady: {Mp.Services.StartupState.IsReady}");
                 MpConsole.WriteLine($"IsIgnoringClipboardChanges: {IsIgnoringClipboardChanges}");
                 MpConsole.WriteLine($"IsThisAppActive: {MpAvWindowManager.IsAnyActive}");
+                if (MpAvWindowManager.IsAnyActive && MpAvWindowManager.ActiveWindow is { } aw) {
+                    MpConsole.WriteLine($"Active Window title: {aw.Title}");
+                }
                 MpConsole.WriteLine($"is_startup_ido: {is_startup_ido}");
                 MpConsole.WriteLine($"IgnoreInternalClipboardChanges: {MpAvPrefViewModel.Instance.IgnoreInternalClipboardChanges}", false, true);
+                
                 return;
             }
 

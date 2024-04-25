@@ -154,8 +154,8 @@ namespace MonkeyPaste.Avalonia {
                     _convWindow.Width = 50;
                     _convWindow.Height = 50;
                 }
-                
 
+                _convWindow.Title = "Hidden converter window".ToWindowTitleText();
                 _convWindow.Content = ConverterWebView;
                 ConverterWebView.AttachedToVisualTree += async (s, e) => {
                     var sw = Stopwatch.StartNew();
