@@ -2,14 +2,14 @@
 echo "Building..."
 CONFIG=Release
 PLATFORM=linux-x64
-TARGET_FRAMEWORK="net8.0"
+FRAMEWORK="net8.0"
 
 cd "../../../../MonkeyPaste.Desktop/"
 
-dotnet build -c $CONFIG -f $TARGET_FRAMEWORK
+dotnet build -c $CONFIG -f $FRAMEWORK
 #dotnet msbuild /property:Configuration=$CONFIG /property:DefineConstants=LINUX%3BDESKTOP%3BCEFNET_WV%3B$CONFIG -restore
 
-chmod +x "bin/$CONFIG/$TARGET_FRAMEWORK/$PLATFORM/MonkeyPaste.Desktop" 
+chmod +x "bin/$CONFIG/$FRAMEWORK/$PLATFORM/MonkeyPaste.Desktop" 
 
 cd -
 echo "DONE"

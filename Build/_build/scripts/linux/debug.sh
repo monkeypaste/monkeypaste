@@ -1,7 +1,7 @@
 #!/bin/bash
 clear
 CONFIG=Release
-TARGET_FRAMEWORK="net8.0"
+FRAMEWORK="net8.0"
 PLATFORM=linux-x64 
 RUN_ARGS="--wait-for-attach"
 
@@ -30,5 +30,5 @@ fi
 
 ./build.sh
 
-cd "../../../../MonkeyPaste.Desktop/bin/$CONFIG/$TARGET_FRAMEWORK/$PLATFORM/"
+cd "../../../../MonkeyPaste.Desktop/bin/$CONFIG/$FRAMEWORK/$PLATFORM/"
 ./MonkeyPaste.Desktop $RUN_ARGS
