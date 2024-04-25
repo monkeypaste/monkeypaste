@@ -606,7 +606,13 @@
     <None Remove="resources\editor\src\components\quill-wrapper\parchment\parchment-wrapper.js" />
     <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
     <None Remove="Resources\Editor\test.html" />
+    <None Remove="Resources\Legal\credits.android.html" />
     <None Remove="Resources\Legal\credits.html" />
+    <None Remove="Resources\Legal\credits.ios.html" />
+    <None Remove="Resources\Legal\credits.linux.html" />
+    <None Remove="Resources\Legal\credits.mac.html" />
+    <None Remove="Resources\Legal\credits.uwp.html" />
+    <None Remove="Resources\Legal\credits.web.html" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
@@ -2124,6 +2130,10 @@
     <Folder Include="Resources\Legal\"/>-->
     
     <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" />
+        
+    <Content Include="Resources\Legal\credits.$(PlatformShortName).html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     
     <Content Include="Resources\Legal\credits.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
