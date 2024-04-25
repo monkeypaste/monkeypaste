@@ -273,6 +273,11 @@ namespace MonkeyPaste.Avalonia {
                 return Path.Combine(ExecutingDir, "Resources", "Legal", "credits.html");
             }
         }
+        public virtual string CreditsPlatformPath {
+            get {
+                return Path.Combine(ExecutingDir, "Resources", "Legal", $"credits.{OsShortName}.html");
+            }
+        }
         public virtual string HelpPath {
             get {
                 if (OperatingSystem.IsBrowser()) {

@@ -86,7 +86,10 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShowAboutWindowCommand => new MpCommand(
             () => {
                 if (string.IsNullOrEmpty(CreditsHtml)) {
-                    CreditsHtml = MpFileIo.ReadTextFromFile(Mp.Services.PlatformInfo.CreditsPath);
+                    string creditsHtml = MpFileIo.ReadTextFromFile(Mp.Services.PlatformInfo.CreditsPath);
+                    string platformCreditsHtml = MpFileIo.ReadTextFromFile(Mp.Services.PlatformInfo.CreditsPlatformPath);
+                    string platform_insert_marker = "<!-- PLATFORM CREDITS HERE -->";
+                    CreditsHtml = creditsHtml.Replace(platform_insert_marker, platformCreditsHtml);
                 }
                 if (IsWindowOpen) {
                     if (IsWindowActive) {
