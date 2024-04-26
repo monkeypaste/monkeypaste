@@ -1,25 +1,25 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvLoginLoadTools {
         // from https://askubuntu.com/a/134369/1637790
-        string AutoStartPath =>
+        string AutoStartDir =>
             $"{Mp.Services.PlatformInfo.StorageDir}/../../../.config/autostart";
-                    
 
-        public bool IsLoadOnLoginEnabled {
-            get {                
-                if (!AutoStartPath.IsFile() ||
-                    MpFileIo.ReadTextFromFile(AutoStartPath) is not string auto_start_contents) {
-                    return false;
-                }
-                return auto_start_contents.Contains(GetAutoStartEntry(true));
-            }
-        }
+        string AutoStartLauncherPath =>
+            Path.Combine(AutoStartDir, "monkeypaste.desktop");
+        string LauncherPath =>
+            "/usr/share/applications/monkeypaste.desktop";
+        
+        public bool IsLoadOnLoginEnabled =>
+            AutoStartLauncherPath.IsFile();
 
         public async Task SetLoadOnLoginAsync(bool isLoadOnLogin, bool silent = false) {
             if(isLoadOnLogin == IsLoadOnLoginEnabled) {
@@ -28,53 +28,49 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
 
             if(isLoadOnLogin) {
-                string contents;
-                if (AutoStartPath.IsFile()) {
-                    // autostart file exists
-                    contents = MpFileIo.ReadTextFromFile(AutoStartPath);
-                    if(contents.Contains(GetAutoStartEntry(false))) {
-                        // disabled entry exists, replace
-                        contents = contents.Replace(GetAutoStartEntry(false), GetAutoStartEntry(true));
-                    } else {
-                        // no entry exists
-                        contents = contents + Environment.NewLine + GetAutoStartEntry(true);
+                if(!AutoStartDir.IsDirectory()) {
+                    MpFileIo.CreateDirectory(AutoStartDir);
+                    //await $"mkdir {AutoStartDir}".ShellExecAsync();
+                    if (!AutoStartDir.IsDirectory()) {
+                        MpConsole.WriteLine($"Cannot enable login load cannot add auto start dir at '{AutoStartDir}'");
+                        return;
                     }
-                } else {
-                    contents = GetAutoStartEntry(true);
                 }
-                MpFileIo.WriteTextToFile(AutoStartPath, contents);
+                if(!AutoStartLauncherPath.IsFile()) {
+                    //await $"cp {LauncherPath} {AutoStartLauncherPath}".ShellExecAsync();
+                    //MpFileIo.CopyFileOrDirectory(LauncherPath, AutoStartLauncherPath);
+                    MpFileIo.WriteTextToFile(AutoStartLauncherPath, GetAutoStartEntry());
+                }
             } else {
-                string contents;
-                if (AutoStartPath.IsFile()) {
-                    // autostart file exists
-                    contents = MpFileIo.ReadTextFromFile(AutoStartPath);
-                    if (contents.Contains(GetAutoStartEntry(true))) {
-                        // enabled entry exists, replace
-                        contents = contents.Replace(GetAutoStartEntry(true), GetAutoStartEntry(false));
-                    } 
-                } else {
-                    // file doesn't exist, shouldn't happen
-                    return;
+                if(AutoStartLauncherPath.IsFile()) {
+                    MpFileIo.DeleteFile(AutoStartLauncherPath);
                 }
-                if(contents == null) {
-                    // no entry or file doesn't exist, shouldn't happen
-                    return;
-                }
-                MpFileIo.WriteTextToFile(AutoStartPath, contents);
             }
         }
 
-        private string GetAutoStartEntry(bool isEnabled) {
-            string[] parts = {
+        private string GetAutoStartEntry() {
+            List<string> parts = default;
+            if(LauncherPath.IsFile()) {
+                string entry = MpFileIo.ReadTextFromFile(LauncherPath);
+                parts = entry.SplitByLineBreak().ToList();
+                if (parts.FirstOrDefault(x => x.StartsWith("Exec=")) is { } execLine) {
+                    string new_exec = execLine + $" {App.LOGIN_LOAD_ARG}";
+                    parts[parts.IndexOf(execLine)] = new_exec;
+                }
+                parts.Add("X-GNOME-Autostart-enabled=true");
+            } else {
+                parts = new List<string>() {
                     $"[Desktop Entry]",
                     $"Type=Application",
-                    $"Exec={Mp.Services.PlatformInfo.ExecutingPath}",
+                    $"Exec={Mp.Services.PlatformInfo.ExecutingPath} {App.LOGIN_LOAD_ARG}",
                     $"Hidden=false",
+                    $"Terminal=false",
                     $"NoDisplay=false",
-                    $"X-GNOME-Autostart-enabled={isEnabled.ToString().ToLowerInvariant()}",
+                    $"X-GNOME-Autostart-enabled=true",
                     $"Name={Mp.Services.ThisAppInfo.ThisAppProductName}",
                     $"Comment=Login load for {Mp.Services.ThisAppInfo.ThisAppProductName}"
                 };
+            } 
             return string.Join(Environment.NewLine, parts);
         }
     }
