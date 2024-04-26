@@ -512,7 +512,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvPrefViewModel.Instance.IsWelcomeComplete = true;
             IsFinishing = false;
 
-#if LINUX && !DEBUG && false
+#if LINUX 
             // BUG on initial startup only in release it seems,
             // getting a  "frame_impl" connection timeout which i 'think'
             // has something to do w/ all the placeholder webviews initializing at the same time or something

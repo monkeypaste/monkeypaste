@@ -115,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
-            ShutdownHelper = App.Instance;
+            ShutdownHelper = new MpAvShutdownTools();
             ThisAppInfo = new MpAvThisAppInfo();
             PlatformUserInfo = new MpAvPlatformUserInfo();
 

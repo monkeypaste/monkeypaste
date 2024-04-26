@@ -2728,7 +2728,7 @@ namespace MonkeyPaste.Avalonia {
             to_notify_ctvml
                 .ForEach(x => x.SendMessage(msg));
 
-            MpConsole.WriteLine($"{to_notify_ctvml.Count()} items notified of active app change");
+            //MpConsole.WriteLine($"{to_notify_ctvml.Count()} items notified of active app change");
         }
 
         private void ClipboardWatcher_OnClipboardChanged(object sender, MpPortableDataObject mpdo) {

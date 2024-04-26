@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
 
     public partial class MpAvProcessWatcher {
         #region Private Variables
+        bool use_shell = true;
         bool force_disabled = false;
         bool IS_DISABLED {
             get {
@@ -91,8 +92,15 @@ namespace MonkeyPaste.Avalonia {
                 if (p == null || p.Handle == 0) {
                     return 0;
                 }
-                XdoLib.xdo_activate_window(xdoCtx, (int)p.Handle);
-                XdoLib.xdo_focus_window(xdoCtx, (int)p.Handle);
+                if(use_shell) {
+                    $"xdotool windowactivate {(int)p.Handle}".ShellExec().Trim();
+                    $"xdotool windowfocus {(int)p.Handle}".ShellExec().Trim();
+                } else {
+                    XdoLib.xdo_activate_window(xdoCtx, (int)p.Handle);
+                    XdoLib.xdo_focus_window(xdoCtx, (int)p.Handle);
+                }
+                
+                
                 return p.Handle;
             }
             catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
@@ -113,34 +121,50 @@ namespace MonkeyPaste.Avalonia {
             return ph.Handle;
         }
         protected nint GetActiveProcessHandle() {
-            if (IS_DISABLED) {
+            if (IS_DISABLED) { 
                 return 0;
             }
-            if (MpAvWindowManager.IsAnyActive) {
-                // BUG i maybe wrong but i think avalonia is one of the
-                // kinds of windows that doesn't report a pid from its handle
-                // when thisApp is active i get this error:
-                // XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
-                return ThisAppHandle;
-            }
+            //if (MpAvWindowManager.IsAnyActive) {
+            //    // BUG i maybe wrong but i think avalonia is one of the
+            //    // kinds of windows that doesn't report a pid from its handle
+            //    // when thisApp is active i get this error:
+            //    // XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+            //    return ThisAppHandle;
+            //}
             //nint handle = GetFocusWindowHandle();
             //nint test = GetTopWindowHandle(handle);
             //return handle;
             int handle = default;
             _hasError = false;
             
-            XdoLib.xdo_get_focused_window_sane(xdoCtx, ref handle);
-            if(_hasError) {
-                // handle becomes 1 when there's an error and will screw other things up
-                _hasError = false;
-                XdoLib.xdo_get_focused_window(xdoCtx, ref handle);
-                if(_hasError) {
+            try {
+                if(use_shell) {
+                    string result = $"xdotool getwindowfocus".ShellExec().Trim();
+                    if(int.TryParse(result,out int intResult)) {
+                        handle = intResult;
+                    }
+                } else {
+                    XdoLib.xdo_get_focused_window_sane(xdoCtx, ref handle);
+                }
+                
+                if (_hasError) {
+                    // only w/ non shell
+                    MpConsole.WriteLine($"Sane failed for handle '{handle}', attempting fallback");
+                    // handle becomes 1 when there's an error and will screw other things up
                     _hasError = false;
-                } else if(handle == 1) {
-                    handle = default;
-                }                
+                    XdoLib.xdo_get_focused_window(xdoCtx, ref handle);
+                    if (_hasError) {
+                        MpConsole.WriteLine($"backup failed for handle '{handle}', attempting fallback");
+                        _hasError = false;
+                    } else if (handle == 1) {
+                        handle = default;
+                    }
+                }
+                return (nint)handle;
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine($"Error getting active window.", ex);
             }
-            return (nint)handle;
+            return 0;
         }
 
         private nint GetFocusWindowHandle() {
@@ -188,27 +212,31 @@ namespace MonkeyPaste.Avalonia {
             if (IS_DISABLED) {
                 return 0;
             }
-            try {
-                if (start == 0) {
+            if (start == 0) {
+                return 0;
+            }
+            // from https://gist.github.com/kui/2622504
+            Window w = (Window)((int)start);
+            Window parent = (Window)((int)start);
+            Window root = Window.None;
+
+            while (parent != root) {
+                w = parent;
+                int result = -1;
+                try {
+                    result = Xlib.XQueryTree(displayPtr, w, ref root, ref parent, out _);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"proc err.", ex);
                     return 0;
                 }
-                // from https://gist.github.com/kui/2622504
-                Window w = (Window)((int)start);
-                Window parent = (Window)((int)start);
-                Window root = Window.None;
-
-                while (parent != root) {
-                    w = parent;
-                    int result = Xlib.XQueryTree(displayPtr, w, ref root, ref parent, out _);
-                    if (result < 0 || _hasError) {
-                        MpConsole.WriteLine($"Find top window failed");
-                        break;
-                    }
+                if (result < 0 || _hasError) {
+                    MpConsole.WriteLine($"Find top window failed");
+                    break;
                 }
-                //MpConsole.WriteLine($"Found top window: {w}");
-                return (nint)((int)w);
-            }catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
-            return 0;
+            }
+            //MpConsole.WriteLine($"Found top window: {w}");
+            return (nint)((int)w);
         }
         protected bool IsHandleWindowProcess(nint handle) {
             if (IS_DISABLED) {
@@ -220,7 +248,16 @@ namespace MonkeyPaste.Avalonia {
             if(handle == ThisAppHandle) {
                 return true;
             }
-            return XdoLib.xdo_get_pid_window(xdoCtx, (int)handle) > 0;
+            try {
+                if(use_shell) {
+                    return GetWindowPid(handle) > 0;
+                } else {
+                    return XdoLib.xdo_get_pid_window(xdoCtx, (int)handle) > 0;
+                }
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine($"Error checking if handle '{handle}' is window process.", ex);
+            }
+            return false;
         }
         protected string GetProcessPath(nint handle) {
             if (IS_DISABLED) {
@@ -235,7 +272,12 @@ namespace MonkeyPaste.Avalonia {
                 if (handle == 0) {
                     return string.Empty;
                 }
-                int pid = XdoLib.xdo_get_pid_window(xdoCtx, (int)handle);
+                int pid = 0;
+                if(use_shell) {
+                    pid = GetWindowPid(handle);
+                } else {
+                    pid = XdoLib.xdo_get_pid_window(xdoCtx, (int)handle);
+                }
                 if (pid == 0) {
                     //var top_handle = GetTopWindowHandle(handle);
                     //if(top_handle != handle && top_handle != 0) {
@@ -255,6 +297,17 @@ namespace MonkeyPaste.Avalonia {
             } catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
             return string.Empty;
         }
+        private int GetWindowPid(nint handle) {
+            if(handle == 0) {
+                return 0;
+            }
+            string result = $"xdotool getwindowpid {(int)handle}".ShellExec().Trim();
+            if (!result.StartsWith("X Error") &&
+                int.TryParse(result, out int intResult)) {
+                return intResult;
+            }
+            return 0;
+        }
         protected string GetProcessTitle(nint handle) {
             if (IS_DISABLED) {
                 return string.Empty;
@@ -269,11 +322,15 @@ namespace MonkeyPaste.Avalonia {
                     // NOTE handle==1 throws exception getting title
                     return string.Empty;
                 }
-                // from https://gist.github.com/kui/2622504
                 string title = default;
-                int len = default;
-                int name_type = default;
-                XdoLib.xdo_get_window_name(xdoCtx, (int)handle, ref title, ref len, ref name_type);
+                if (use_shell) {
+                    title = $"xdotool getwindowname {(int)handle}".ShellExec();
+                } else {
+                // from https://gist.github.com/kui/2622504
+                    int len = default;
+                    int name_type = default;
+                    XdoLib.xdo_get_window_name(xdoCtx, (int)handle, ref title, ref len, ref name_type);
+                }
                 //if(title.IsNullOrEmpty()) {
                 //    var top_handle = GetTopWindowHandle(handle);
                 //    if (top_handle != handle && top_handle != 0) {

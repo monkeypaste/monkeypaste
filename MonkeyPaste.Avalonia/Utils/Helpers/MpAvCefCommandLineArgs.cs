@@ -24,11 +24,11 @@ namespace MonkeyPaste.Avalonia {
             {"no-zygote",null },
             {"no-sandbox",null },
 #if CEFNET_WV
-#if !DEBUG
+//#if !DEBUG
 		    {"enable-begin-frame-scheduling",null },  
             {"enable-media-stream",null },
             {"enable-blink-features", "CSSPseudoHas"},
-#endif
+//#endif
             
             //{"remote-debugging-port", "9222"},
 #endif
