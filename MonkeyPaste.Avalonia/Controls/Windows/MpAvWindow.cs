@@ -68,16 +68,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsEffectivelyActive {
-            get {
-                if(Mp.Services == null ||
-                    Mp.Services.ProcessWatcher == null) {
-                    return false;
-                }
-                Mp.Services.ProcessWatcher.LastProcessInfo
-            }
-        }
-
         public object DialogResult { get; set; }
 
         private MpWindowType _windowType = MpWindowType.None;

@@ -20,9 +20,8 @@ using System.Threading;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class App : Application, MpIShutdownTools {
+    public partial class App : Application {
         #region Private Variable
-        private bool _isShuttingDown = false;
         #endregion
 
         #region Constants
@@ -97,33 +96,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpIShutdownTools Implementation
-        void MpIShutdownTools.ShutdownApp(MpShutdownType code, string detail) {
-            if (_isShuttingDown) {
-                return;
-            }
-            _isShuttingDown = true;
-            MpConsole.WriteLine($"App shutdown called Code: '{code}' Detail: '{detail.ToStringOrEmpty("NULL")}'");
-            //MpConsole.ShutdownLog();
-            if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
-               
-                MpAvWindowManager.CloseAll();
-#if CEFNET_WV
-                MpAvCefNetApplication.ShutdownCefNet();
-#endif
-                var app = Application.Current;
-#if LINUX
-                // BUG sys tray doesn't close when app does on linux
-                // this DOES close it but throws segmentation fault
-                MpAvSystemTray.ShutdownTray(app); 
-#endif
-                lifetime.Shutdown();
-                bool success = true;// lifetime.TryShutdown();
-                MpConsole.WriteLine($"Lifetime shutdown: {success.ToTestResultLabel()}");
-            }
-        }
-
-        #endregion
         #endregion
 
         #region Properties
@@ -163,7 +135,7 @@ namespace MonkeyPaste.Avalonia {
         public override async void OnFrameworkInitializationCompleted() {
             DateTime startup_datetime = DateTime.Now;
 #if DESKTOP
-            MpConsole.Init(new MpAvPlatformInfo_desktop().LogPath, App.HasStartupArg(App.WAIT_FOR_DEBUG_ARG) || App.HasStartupArg(App.NO_ATTACH_ARG));
+            MpConsole.Init(new MpAvPlatformInfo_desktop().LogPath, Debugger.IsAttached || HasStartupArg(TRACE_ARG));
             MpAvLogSink.Init();
 #endif
 

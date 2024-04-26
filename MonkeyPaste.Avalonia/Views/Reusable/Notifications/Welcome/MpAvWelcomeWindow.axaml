@@ -114,6 +114,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Border.Background>
+            <!--<RadialGradientBrush Center="0.0,0.0" GradientOrigin="0.0,0.0" RadiusX="50%" RadiusY="50%">-->
             <RadialGradientBrush Center="0.0,0.0" GradientOrigin="0.0,0.0" Radius="0.5">
                 <RadialGradientBrush.Transform>
                     <TransformGroup>

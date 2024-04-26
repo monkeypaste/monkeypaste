@@ -53,7 +53,7 @@ cat > "${WORKING_DIR}/DEBIAN/control" <<- EOM
 Package: ${PACKAGE}
 Version: ${VERSION}
 Architecture: ${ARCH}
-Depends: bash, xclip
+Depends: bash, xclip, xdotool
 Maintainer: ${FULL_NAME} <${MY_EMAIL}>
 Description: A clipboard manager and more.
  MonkeyPaste is a clipboard manager, automation and productivity tool like no other. Enhancing your clipboard into an enriched and organized part of your workflow, featuring an intuitive and low-profile interface that supports text, files and images. Designed for flexibility, with an ever-growing community-driven libray of plugins.
@@ -104,7 +104,10 @@ Exec=${PACKAGE}
 Terminal=false
 Version=${VERSION}
 Comment=A clipboard manager and more.
-Terminal=false
+
+[Desktop Action Trace]
+Name=Start ${APP_NAME} with logging enabled
+Exec=${PACKAGE} --trace
 EOM
 
 dpkg-deb --build --root-owner-group $PACKAGE_NAME
