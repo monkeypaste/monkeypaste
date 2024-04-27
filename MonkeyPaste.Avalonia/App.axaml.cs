@@ -136,7 +136,7 @@ namespace MonkeyPaste.Avalonia {
             DateTime startup_datetime = DateTime.Now;
 #if DESKTOP
             MpConsole.Init(new MpAvPlatformInfo_desktop().LogPath, Debugger.IsAttached || HasStartupArg(TRACE_ARG));
-            MpAvLogSink.Init();
+            //MpAvLogSink.Init();
 #endif
 
             ReportCommandLineArgs(Args);
