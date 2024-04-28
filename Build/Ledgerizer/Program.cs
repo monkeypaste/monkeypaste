@@ -35,6 +35,7 @@ namespace Ledgerizer {
         DO_REMOTE_LEDGER = 1L << 19,
         DEBUG = 1L << 20,
         RELEASE = 1L << 21,
+        MOVE_NUGET_CACHE = 1L << 22
     }
     internal class Program {
 
@@ -43,7 +44,7 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.GEN_EMPTY_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
             //MpLedgerizerFlags.GEN_PROD_LISTING |
-            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
             //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
@@ -52,11 +53,12 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.DO_REMOTE_INDEX |
             //MpLedgerizerFlags.DO_LOCAL_LEDGER |
             //MpLedgerizerFlags.DO_REMOTE_LEDGER |
-                                   MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+                                   //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
                                    //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
                                    //MpLedgerizerFlags.DO_JS_UISTRINGS |
                                    // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
                                    //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
+                                   MpLedgerizerFlags.MOVE_NUGET_CACHE |
                                    MpLedgerizerFlags.DEBUG // |
                                    //MpLedgerizerFlags.RELEASE
             ;
@@ -207,6 +209,8 @@ namespace Ledgerizer {
 
         static bool DO_JS_UISTRINGS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_JS_UISTRINGS);
 
+        static bool MOVE_NUGET_CACHE = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.MOVE_NUGET_CACHE);
+
         const string BUILD_CONFIG =
 #if DEBUG
             "Debug";
@@ -253,19 +257,28 @@ namespace Ledgerizer {
         const string PROJ_URL_FORMAT = @"https://github.com/monkeypaste/{0}";
         const string ICON_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/icon.png";
         const string PUBLIC_PACKAGE_URL_FORMAT = @"https://github.com/monkeypaste/{0}/releases/download/{1}/{1}.zip";
-        static string PRIVATE_ICON_URL_FORMAT = $"{Secrets["httpUrl"]}/dat/{0}.png";
+        static string PRIVATE_ICON_URL_FORMAT = $"{ServerSecrets["httpUrl"]}/dat/{0}.png";
 
         #endregion
 
         #region Env
         private static IConfiguration _config;
-        static IConfigurationSection Secrets { 
+        static IConfigurationSection ServerSecrets { 
             get {
                 if(_config == null) {
                     var cb = new ConfigurationBuilder();
                     _config = cb.AddUserSecrets<Program>().Build();
                 }
                 return _config.GetSection("server");
+            }
+        }
+        static IConfigurationSection UbuntuSecrets { 
+            get {
+                if(_config == null) {
+                    var cb = new ConfigurationBuilder();
+                    _config = cb.AddUserSecrets<Program>().Build();
+                }
+                return _config.GetSection("ubuntu");
             }
         }
         #endregion
@@ -336,6 +349,9 @@ namespace Ledgerizer {
             }
             if (DO_JS_UISTRINGS) {
                 MoveJsUiStrings();
+            }
+            if(MOVE_NUGET_CACHE) {
+                MoveNugetCache();
             }
         }
 
@@ -1080,9 +1096,9 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     Path.Combine(
                         GetPluginProjDir(core_plugin_name),
                         "icon.png");
-                string url = Secrets["ftpDatUrlPrefix"].ToString();
-                string username = Secrets["ftpUserName"].ToString();
-                string password = Secrets["ftpPassword"].ToString();
+                string url = ServerSecrets["ftpDatUrlPrefix"].ToString();
+                string username = ServerSecrets["ftpUserName"].ToString();
+                string password = ServerSecrets["ftpPassword"].ToString();
                 var icon_result = MpFtpTools.FtpFileUpload(
                     ftpUrl: $"{url}/{core_plugin_name}.png",
                     userName: username,
@@ -1842,7 +1858,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                         {"plugin_guid", mf.guid },
                         {"version", mf.version},
                         {"is_install", "0" },
-                        {"add_phrase", Secrets["versionUpdatePhrase"].ToString() }
+                        {"add_phrase", ServerSecrets["versionUpdatePhrase"].ToString() }
                     };
                     string url = is_remote ?
                         $"{MpServerConstants.REMOTE_SERVER_URL}/plugins/plugin-info-check.php" :
@@ -1859,6 +1875,27 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 Thread.Sleep(100);
             }
 
+        }
+        #endregion
+
+        #region Nuget Cache
+        private static void MoveNugetCache() {
+            MpConsole.WriteLine($"Moving Nuget Cache...");
+            var source_dirs =
+                Directory.GetDirectories(UbuntuSecrets["sourceDir"].ToString())
+                .SelectMany(x => Directory.GetDirectories(x).Where(y => y.Contains("9999.0.0-localbuild")));
+            var sb = new StringBuilder();
+            foreach (var sd in source_dirs) {
+                string target_dir = sd.Replace(
+                    UbuntuSecrets["sourceDir"].ToString(),
+                    UbuntuSecrets["targetDir"].ToString())
+                    .Replace("\\", "/");
+                sb.AppendLine($"rmdir {target_dir}");
+                sb.AppendLine($"put -r {sd} {target_dir}");
+            }
+            MpConsole.WriteLine($"Output:");
+            MpConsole.WriteLine(sb.ToString());
+            MpConsole.WriteLine($"DONE");
         }
         #endregion
 
@@ -1907,7 +1944,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     return string.Format(README_URL_FORMAT, plugin_name);
                 case "project":
                     if (CorePlugins.Contains(plugin_name)) {
-                        return Secrets["httpUrl"];
+                        return ServerSecrets["httpUrl"];
                     }
                     return string.Format(PROJ_URL_FORMAT, plugin_name);
                 case "icon":

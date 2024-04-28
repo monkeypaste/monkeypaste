@@ -23,10 +23,12 @@ namespace MonkeyPaste.Common {
             request.Method = WebRequestMethods.Ftp.UploadFile;
             request.Credentials = new NetworkCredential(userName, password);
 
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            using (Stream requestStream = request.GetRequestStream()) {
-                fileStream.CopyTo(requestStream);
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read)) {
+                using (Stream requestStream = request.GetRequestStream()) {
+                    fileStream.CopyTo(requestStream);
+                }
             }
+            
 
             using (FtpWebResponse response = (FtpWebResponse)request.GetResponse()) {
                 return response.StatusCode;

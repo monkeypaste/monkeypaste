@@ -72,7 +72,9 @@ namespace MonkeyPaste.Desktop {
 #if LINUX
             .With(new X11PlatformOptions { 
                //RenderingMode = [X11RenderingMode.Software],
-               // EnableIme = true,
+               //EnableIme = true,
+               //OverlayPopups = true,
+               //EnableInputFocusProxy = true,
             })
 #endif
 

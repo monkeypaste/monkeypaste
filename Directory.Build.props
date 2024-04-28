@@ -27,11 +27,11 @@
   </PropertyGroup>
 
   <!-- GLOBAL PACKAGE VERSIONS -->
-  <PropertyGroup>
-    <StableAvaloniaVersion>11.0.10</StableAvaloniaVersion>
-    <AvaloniaVersion>11.0.10</AvaloniaVersion>
-    <!--<StableAvaloniaVersion>9999.0.0-localbuild</StableAvaloniaVersion>-->
-    <!--<AvaloniaVersion>9999.0.0-localbuild</AvaloniaVersion>-->
+  <PropertyGroup> 
+    <!--<StableAvaloniaVersion>11.0.10</StableAvaloniaVersion> 
+    <AvaloniaVersion>11.0.10</AvaloniaVersion>-->
+    <StableAvaloniaVersion>9999.0.0-localbuild</StableAvaloniaVersion>
+    <AvaloniaVersion>9999.0.0-localbuild</AvaloniaVersion>
     <!--<SugarWvVersion>11.0.0.6</SugarWvVersion>-->    
     <SugarWvVersion>11.0.0.0</SugarWvVersion>
     <CefNetWvVersion>105.3.24107.1511</CefNetWvVersion>
