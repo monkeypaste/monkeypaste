@@ -1,6 +1,0 @@
-{
-    "search.exclude": {
-        "**/MonkeyPaste.Common.Wpf": true
-    },
-    "editor.smoothScrolling": true
-}
