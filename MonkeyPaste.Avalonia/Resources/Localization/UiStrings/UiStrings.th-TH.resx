@@ -2990,4 +2990,10 @@ feedback@monkeypaste.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>ป้อน URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>ชัดเจน</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>บริจาค</value>
+  </data>
 </root>

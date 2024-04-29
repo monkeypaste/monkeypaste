@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Diagnostics;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -10,16 +11,18 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using Avalonia.Diagnostics;
+
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+
 using AvToolTip = Avalonia.Controls.ToolTip;
 
 #if WINDOWS
@@ -254,7 +257,7 @@ namespace MonkeyPaste.Avalonia {
             // and pseudo files are only needed for dnd comptaibility so its gewd
             if (formats == null) {
                 // NOTE important that ALL data formats are on clipboard for drag source obj to process 
-                contentDataReq.formats = MpPortableDataFormats.RegisteredFormats.ToList();
+                contentDataReq.formats = MpDataFormatRegistrar.RegisteredFormats.ToList();
             } else {
                 contentDataReq.formats = formats.ToList();
             }

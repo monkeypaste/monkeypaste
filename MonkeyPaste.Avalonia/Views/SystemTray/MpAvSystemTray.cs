@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -40,8 +41,25 @@ namespace MonkeyPaste.Avalonia {
         public static void InitActualTray() {
             var rootIcon = CreateTrayIcon();
             rootIcon.Menu = CreateNativeMenu();
-
             TrayIcon.SetIcons(Application.Current, new TrayIcons { rootIcon });
+        }
+        public static void ShutdownTray(Application app) {
+            if(app == null ||
+                TrayIcon.GetIcons(app) is not { } tray ||
+                tray.Count < 1) {
+                MpConsole.WriteLine($"Sys tray shutdown error, no tray icons found");
+                return;
+            }
+            int count = tray.Count;
+            for (int i = 0; i < count; i++) {
+                if(i >= tray.Count || tray[i] == null) {
+                    continue;
+                }
+                tray[i].Dispose();
+                tray[i] = null;
+            }
+            TrayIcon.SetIcons(app, null);
+            MpConsole.WriteLine($"Sys tray shutdown successful");
         }
         private static void InitStartupTray() {
             var startupIcon = new TrayIcon() {
@@ -99,10 +117,11 @@ namespace MonkeyPaste.Avalonia {
                     new Binding() {
                         Source = tmivm.IconSrcBindingObj,
                         Path = tmivm.IconPropPath,
-                        Converter = MpAvStringHexToBitmapTintConverter.Instance
+                        Converter = MpAvStringHexToBitmapTintConverter.Instance,
+                        ConverterParameter = MpThemeResourceKey.ThemeInteractiveColor_norand.ToString()
                     });
             } else if (tmivm.IconSourceObj != null) {
-                rootIcon.Icon = MpAvStringHexToBitmapTintConverter.Instance.Convert(tmivm.IconSourceObj, typeof(WindowIcon), null, null) as WindowIcon;
+                rootIcon.Icon = MpAvStringHexToBitmapTintConverter.Instance.Convert(tmivm.IconSourceObj, typeof(WindowIcon), MpThemeResourceKey.ThemeInteractiveColor_norand.ToString(), null) as WindowIcon;
 
             }
 

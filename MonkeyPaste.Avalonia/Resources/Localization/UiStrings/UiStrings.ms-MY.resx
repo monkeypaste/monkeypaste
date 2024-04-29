@@ -2990,4 +2990,10 @@ Pintasan global kini boleh didayakan dalam menu dulang sistem</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Masukkan url</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Jelas</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Menderma</value>
+  </data>
 </root>

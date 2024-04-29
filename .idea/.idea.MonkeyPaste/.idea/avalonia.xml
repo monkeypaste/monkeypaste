@@ -5,6 +5,10 @@
       <map>
         <entry key="MonkeyPaste.Avalonia/MonkeyPaste.Avalonia/Views/MainView.axaml" value="MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.Desktop.Mac/MonkeyPaste.Avalonia.Desktop.Mac.csproj" />
         <entry key="MonkeyPaste.Avalonia/MonkeyPaste.Avalonia/Views/MainWindow.axaml" value="MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.Desktop.Mac/MonkeyPaste.Avalonia.Desktop.Mac.csproj" />
+        <entry key="MonkeyPaste.Avalonia/Themes/Default/Accents/Accents.axaml" value="MonkeyPaste.Desktop/MonkeyPaste.Desktop.csproj" />
+        <entry key="MonkeyPaste.Avalonia/Themes/Default/Controls/TemplatedControl.axaml" value="MonkeyPaste.Desktop/MonkeyPaste.Desktop.csproj" />
+        <entry key="MonkeyPaste.Avalonia/Themes/Default/Controls/TextBox.axaml" value="MonkeyPaste.Desktop/MonkeyPaste.Desktop.csproj" />
+        <entry key="MonkeyPaste.Avalonia/Views/AboutWindow/MpAvAboutView.axaml" value="MonkeyPaste.Avalonia.Web/MonkeyPaste.Avalonia.Web.csproj" />
         <entry key="MonkeyPaste.Avalonia/Views/MainWindow/MainWindow.axaml" value="MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj" />
         <entry key="MonkeyPaste.Avalonia/Views/MainWindow/TitleMenu/MpAvMainWindowTitleMenuView.axaml" value="MonkeyPaste.Avalonia/MonkeyPaste.Avalonia.csproj" />
       </map>

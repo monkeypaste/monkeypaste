@@ -1,10 +1,13 @@
 ﻿using Avalonia.Platform;
 using Avalonia.Threading;
+
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+
 using MonoMac.AppKit;
 using MonoMac.Foundation;
 using MonoMac.WebKit;
+
 using System;
 using System.IO;
 using System.Linq;
@@ -45,16 +48,6 @@ namespace MonkeyPaste.Avalonia {
                     return base64;
                 }
             }
-        }
-        private MpSize GetSize(MpIconSize ics) {
-            if(ics == MpIconSize.None) {
-                return MpSize.Empty;
-            }
-            if (ics.ToString().Split("Icon").Last() is { } len_str &&
-                int.Parse(len_str) is int len) {
-                return new MpSize(len, len);
-            }
-            return new MpSize(32, 32);
         }
     }
 }

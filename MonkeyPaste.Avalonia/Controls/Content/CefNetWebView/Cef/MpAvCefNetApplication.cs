@@ -245,6 +245,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void OnContextCreated(CefBrowser browser, CefFrame frame, CefV8Context context) {
+            // NOTE have no idea what this does but its part of the cefnet sample app...
+//            frame.ExecuteJavaScript(@"
+//{
+//const newProto = navigator.__proto__;
+//delete newProto.webdriver;
+//navigator.__proto__ = newProto;
+//}", frame.Url, 0);
+
             _messageHub.WindowBinder.CefNetApp_OnCefNetContextCreated(this, context);
         }
 

@@ -17,15 +17,6 @@ Here you will find details about how to use the app **beyond the intergrated hel
 - ios 'Coming soon'
 - Android 'Coming soon'
 
-:::tip Linux will be 100% free
-As a nod to Linux and free-for-use software in general, MonkeyPaste will default to the *'Unlimited'* account plan **free of charge on all Linux desktop platforms.**
-:::
-
-:::info 
-Global shortcut support on Linux is limited to [Passive-mode](shortcuts/index.md#global-routing-types). More info on shortcuts [here](../docs/shortcuts/index.md)
-:::
-
-
 ## Getting Help
 
 If you encounter any issues or bugs with MonkeyPaste, please open a new issue in the forum at [Issues](https://monkeypaste.com/forum/index.php?board=6.0) or [Bugs](https://monkeypaste.com/forum/index.php?board=5.0) respectively. 

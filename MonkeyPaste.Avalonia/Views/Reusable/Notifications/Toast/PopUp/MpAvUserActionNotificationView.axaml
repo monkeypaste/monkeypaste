@@ -380,6 +380,22 @@
                         </StackPanel>
                     </Border>
                 </Button>
+
+                <!--  DONATE  -->
+                <Button Classes="iconBtn"
+                        Padding="0"
+                        IsDefault="True"
+                        MaxWidth="{StaticResource PosInf}"
+                        IsVisible="{Binding ShowDonateButton}"
+                        Command="{Binding DonateCommand}">
+                    <Border Classes="innerBtnBorder"
+                            Background="Blue">
+                        <StackPanel>
+                            <Image Source="{Binding Source={StaticResource HeartImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
+                            <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SysTrayRateAppLabel}" />
+                        </StackPanel>
+                    </Border>
+                </Button>
                 <!--  UPGRADE  -->
                 <Button Classes="iconBtn"
                         Padding="0"

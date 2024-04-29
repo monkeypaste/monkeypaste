@@ -2990,4 +2990,10 @@ feedback@monkepte.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Մուտքագրեք URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Պարզ</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Նվիրաբերել</value>
+  </data>
 </root>

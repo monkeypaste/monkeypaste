@@ -2990,4 +2990,10 @@ feedback@monkeypaste.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Въведете Url</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Ясно</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Дарете</value>
+  </data>
 </root>

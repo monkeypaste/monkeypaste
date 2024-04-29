@@ -318,7 +318,14 @@
                                    Height="30"
                                    IsVisible="{Binding IsSelectedBusy}"
                                    HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
+                                   VerticalAlignment="Center">
+            <local:MpAvBusySpinnerView.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="IsSelectedBusy" />
+                    <Binding Path="!IsSelectedDownloading" />
+                </MultiBinding>
+            </local:MpAvBusySpinnerView.IsVisible>
+        </local:MpAvBusySpinnerView>
 
         <!--  NO SELECTION OVERLAY  -->
 

@@ -88,6 +88,9 @@ namespace MonkeyPaste.Common.Avalonia {
 
         [DllImport(GtkName)]
         public static extern void gtk_main_iteration();
+        
+        [DllImport(GtkName)]
+        public static extern int gdk_window_get_scale_factor(IntPtr window);
         #endregion
 
         #region File Chooser

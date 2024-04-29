@@ -2990,4 +2990,10 @@ A globális parancsikonok már engedélyezhetők a rendszer tálca menüben</val
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Írd be az URLt</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Egyértelmű</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Adományoz</value>
+  </data>
 </root>

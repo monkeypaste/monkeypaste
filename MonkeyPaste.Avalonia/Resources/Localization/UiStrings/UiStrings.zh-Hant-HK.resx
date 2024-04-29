@@ -2990,4 +2990,10 @@ feathback@monkeypaste.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>輸入網址</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>捐</value>
+  </data>
 </root>

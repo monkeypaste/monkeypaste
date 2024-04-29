@@ -2990,4 +2990,10 @@ Is féidir aicearraí domhanda a chumasú anois sa roghchlár tráidire córais<
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Iontráil URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Glan amach</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Síntigh</value>
+  </data>
 </root>

@@ -2990,4 +2990,10 @@ feedback@monkeyptaste.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL мекен-жайын енгізіңіз</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Айқын</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Қию</value>
+  </data>
 </root>

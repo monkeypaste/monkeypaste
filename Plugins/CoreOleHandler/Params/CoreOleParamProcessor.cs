@@ -2,6 +2,7 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using System.Diagnostics;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace CoreOleHandler {
@@ -39,7 +40,7 @@ namespace CoreOleHandler {
                 // plugin creator has to manage mapping internally
                 CoreOleParamType paramType = paramInfo.paramId.ToEnum<CoreOleParamType>();
                 switch (format) {
-                    case MpPortableDataFormats.Rtf:
+                    case var _ when format == MpPortableDataFormats.Rtf:
                         switch (paramType) {
                             case CoreOleParamType.RICHTEXTFORMAT_R_MAXCHARCOUNT: {
                                     if (data is string rtf) {
@@ -71,7 +72,7 @@ namespace CoreOleHandler {
                                 break;
                         }
                         break;
-                    case MpPortableDataFormats.Xhtml:
+                    case var _ when format == MpPortableDataFormats.Xhtml:
                         switch (paramType) {
                             case CoreOleParamType.HTMLFORMAT_R_MAXCHARCOUNT: {
                                     if (data is string html_str) {
@@ -103,7 +104,7 @@ namespace CoreOleHandler {
                                 break;
                         }
                         break;
-                    case MpPortableDataFormats.Html:
+                    case var _ when format == MpPortableDataFormats.Html:
                         switch (paramType) {
                             case CoreOleParamType.TEXTHTML_R_MAXCHARCOUNT: {
                                     if (data is string html_str) {
@@ -135,7 +136,7 @@ namespace CoreOleHandler {
                                 break;
                         }
                         break;
-                    case MpPortableDataFormats.Text:
+                    case var _ when format == MpPortableDataFormats.Text:
                         switch (paramType) {
                             case CoreOleParamType.TEXT_R_MAXCHARCOUNT: {
                                     if (data is string text) {
@@ -181,7 +182,7 @@ namespace CoreOleHandler {
                                 break;
                         }
                         break;
-                    case MpPortableDataFormats.MimeText:
+                    case var _ when format == MpPortableDataFormats.MimeText:
                         // BUG somehow text/plain is getting converted to bytes
                         // when setting clipboard (like editor clipboard copy)
                         // so if bytes convert to text...
@@ -225,7 +226,7 @@ namespace CoreOleHandler {
                                 break;
                         }
                         break;
-                    case MpPortableDataFormats.Image:
+                    case var _ when format == MpPortableDataFormats.Image:
                         switch (paramType) {
                             case CoreOleParamType.PNG_W_FROMTEXTFORMATS: {
                                     // text->image
@@ -236,8 +237,8 @@ namespace CoreOleHandler {
                                     // select highest fidelity text format that is available
                                     string text_format_to_conv =
                                         all_formats
-                                        .Where(x => MpPortableDataFormats.IsTextFormat(x) is true)
-                                        .OrderByDescending(x => MpPortableDataFormats.SortedTextFormats.IndexOf(x))
+                                        .Where(x => MpDataFormatRegistrar.IsTextFormat(x) is true)
+                                        .OrderByDescending(x => MpDataFormatRegistrar.SortedTextFormats.IndexOf(x))
                                         .FirstOrDefault();
                                     if(!all_source_data.TryGetValue(text_format_to_conv,out string text_data)) {
                                         break;
@@ -249,7 +250,7 @@ namespace CoreOleHandler {
                                 
                             case CoreOleParamType.PNG_W_ASCIIART: {
                                     // Image->text
-                                    if (all_formats.Any(x => MpPortableDataFormats.IsPlainTextFormat(x) is true)) {
+                                    if (all_formats.Any(x => MpDataFormatRegistrar.IsPlainTextFormat(x) is true)) {
                                         // already has text ignore ascii art
                                         break;
                                     }
@@ -327,7 +328,7 @@ namespace CoreOleHandler {
                                 break;
                         }
                         break;
-                    case MpPortableDataFormats.Files:
+                    case var _ when format == MpPortableDataFormats.Files:
                         switch (paramType) {
                             case CoreOleParamType.FILES_R_IGNORE: {
                                     if (paramVal.ParseOrConvertToBool(false) is bool ignore_fd &&
@@ -439,7 +440,9 @@ namespace CoreOleHandler {
         }
 
         private static string AddNotification(ref List<MpUserNotification> nfl, string title, string msg = default, string detail = default, MpPluginNotificationType ntfType = MpPluginNotificationType.PluginResponseWarning) {
-#if DEBUG
+            if(!Debugger.IsAttached) {
+                return string.Empty;
+            }
             if (nfl == null) {
                 nfl = new List<MpUserNotification>();
             }
@@ -450,9 +453,6 @@ namespace CoreOleHandler {
                 Detail = detail
             });
             return msg;
-#else
-            return string.Empty;
-#endif
         }
 
         private static void HandleMaxNotification(ref object data, ref List<MpUserNotification> nfl, string text, string format, int max, bool isReader = true) {

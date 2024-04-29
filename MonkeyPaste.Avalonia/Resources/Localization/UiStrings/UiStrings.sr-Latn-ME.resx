@@ -2990,4 +2990,10 @@ Ukupna restauracija ne može biti zagarantovana i može smanjiti performanse ili
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Унесите УРЛ</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Јасно</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Донирати</value>
+  </data>
 </root>

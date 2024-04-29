@@ -2990,4 +2990,10 @@ Les dreceres globals ara es poden activar al menú de la safata del sistema</val
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Introduïu l'URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Clar</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Donar</value>
+  </data>
 </root>

@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
                 key = "ContentWebViewTemplate";
 #endif
             } else {
-                key = "CompatibilityViewTemplate";
+                key = "CompositeWebViewTemplate";
             }
             return AvailableTemplates[key].Build(param);
         }

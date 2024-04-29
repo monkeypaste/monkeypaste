@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -269,7 +270,6 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
                             Header = UiStrings.SettingsInteropAppOleFormatButtonPointerOverLabel,
-                            IsVisible = !IsAutoEditEnabled,
                             //AltNavIdx = 0,
                             IconResourceKey = "EditContentImage",
                             Command = EditSelectedContentCommand,
@@ -1241,8 +1241,6 @@ namespace MonkeyPaste.Avalonia {
         #region State
         List<string> PendingRejectedItemGuids { get; set; } = [];
         public int PinOpCopyItemId { get; set; } = -1;
-        public bool IsAutoEditEnabled =>
-            !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled;
 
         private Uri _editorUri;
         public Uri EditorUri {
@@ -2621,7 +2619,8 @@ namespace MonkeyPaste.Avalonia {
                     MpAvQueryTrayView.Instance.ClipTrayListBox.GetLogicalDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext))
                     .Union(MpAvPinTrayView.Instance.PinTrayListBox.GetLogicalDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext)));
                 foreach (var lbi in lbil) {
-                    if (lbi.DataContext is not MpAvClipTileViewModel ctvm ||
+                    if (!lbi.IsAttachedToVisualTree() ||
+                        lbi.DataContext is not MpAvClipTileViewModel ctvm ||
                         lbi.GetLogicalDescendant<MpAvContentWebViewContainer>() is not { } cwv ||
                         cwv.GetLogicalDescendant<MpAvContentWebView>() is not { } ctwv) {
                         continue;
@@ -2673,11 +2672,11 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(() => SetCurPasteInfoMessage(e), DispatcherPriority.Background);
         }
         private void SetCurPasteInfoMessage(MpPortableProcessInfo e) {
-            if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+            //if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 // no paste toolbar so ignore
                 // TODO? add plain text paste toolbar? (tip of an iceburg)
-                return;
-            }
+                //return;
+            //}
             if (e == null) {
                 // unknown paste app
                 CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage() {
@@ -2729,7 +2728,7 @@ namespace MonkeyPaste.Avalonia {
             to_notify_ctvml
                 .ForEach(x => x.SendMessage(msg));
 
-            MpConsole.WriteLine($"{to_notify_ctvml.Count()} items notified of active app change");
+            //MpConsole.WriteLine($"{to_notify_ctvml.Count()} items notified of active app change");
         }
 
         private void ClipboardWatcher_OnClipboardChanged(object sender, MpPortableDataObject mpdo) {
@@ -2756,8 +2755,12 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"Mp.Services.StartupState.IsReady: {Mp.Services.StartupState.IsReady}");
                 MpConsole.WriteLine($"IsIgnoringClipboardChanges: {IsIgnoringClipboardChanges}");
                 MpConsole.WriteLine($"IsThisAppActive: {MpAvWindowManager.IsAnyActive}");
+                if (MpAvWindowManager.IsAnyActive && MpAvWindowManager.ActiveWindow is { } aw) {
+                    MpConsole.WriteLine($"Active Window title: {aw.Title}");
+                }
                 MpConsole.WriteLine($"is_startup_ido: {is_startup_ido}");
                 MpConsole.WriteLine($"IgnoreInternalClipboardChanges: {MpAvPrefViewModel.Instance.IgnoreInternalClipboardChanges}", false, true);
+                
                 return;
             }
 
@@ -3596,6 +3599,7 @@ namespace MonkeyPaste.Avalonia {
                      // cases:
                      // 1. drop from pin tray (sort)
                      // 2. new duplicate was in pin tray
+                     // 3. internal pinned to popout
 
                      int cur_pin_idx = PinnedItems.IndexOf(ctvm_to_pin);
                      if (cur_pin_idx < 0) {

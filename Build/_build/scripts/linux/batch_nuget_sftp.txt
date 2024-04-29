@@ -1,0 +1,56 @@
+rmdir /home/tkefauver/.nuget/packages/avalonia/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.android/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.android\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.android/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.browser/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.browser\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.browser/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.browser.blazor/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.browser.blazor\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.browser.blazor/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.controls.colorpicker/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.controls.colorpicker\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.controls.colorpicker/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.controls.datagrid/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.controls.datagrid\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.controls.datagrid/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.controls.itemsrepeater/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.controls.itemsrepeater\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.controls.itemsrepeater/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.desktop/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.desktop\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.desktop/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.diagnostics/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.diagnostics\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.diagnostics/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.direct2d1/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.direct2d1\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.direct2d1/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.fonts.inter/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.fonts.inter\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.fonts.inter/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.freedesktop/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.freedesktop\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.freedesktop/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.headless/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.headless\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.headless/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.headless.nunit/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.headless.nunit\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.headless.nunit/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.headless.vnc/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.headless.vnc\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.headless.vnc/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.headless.xunit/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.headless.xunit\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.headless.xunit/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.ios/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.ios\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.ios/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.linuxframebuffer/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.linuxframebuffer\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.linuxframebuffer/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.markup.xaml.loader/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.markup.xaml.loader\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.markup.xaml.loader/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.native/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.native\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.native/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.reactiveui/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.reactiveui\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.reactiveui/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.remote.protocol/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.remote.protocol\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.remote.protocol/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.skia/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.skia\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.skia/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.themes.fluent/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.themes.fluent\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.themes.fluent/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.themes.simple/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.themes.simple\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.themes.simple/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.win32/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.win32\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.win32/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.win32.interoperability/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.win32.interoperability\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.win32.interoperability/9999.0.0-localbuild
+rmdir /home/tkefauver/.nuget/packages/avalonia.x11/9999.0.0-localbuild
+put -r C:\Users\tkefauver\.nuget\packages\avalonia.x11\9999.0.0-localbuild /home/tkefauver/.nuget/packages/avalonia.x11/9999.0.0-localbuild

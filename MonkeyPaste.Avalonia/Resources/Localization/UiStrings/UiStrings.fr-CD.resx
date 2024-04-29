@@ -2990,4 +2990,10 @@ Les raccourcis mondiaux peuvent désormais être activés dans le menu du platea
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Entrer l'URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Clair</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Faire un don</value>
+  </data>
 </root>

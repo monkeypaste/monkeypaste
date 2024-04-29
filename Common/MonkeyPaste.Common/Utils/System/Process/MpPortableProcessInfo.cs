@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace MonkeyPaste.Common {
     public class MpPortableProcessInfo : MpIIsValueEqual<MpPortableProcessInfo> {
@@ -18,7 +19,7 @@ namespace MonkeyPaste.Common {
 
         #endregion
         #region Properties
-        public nint Handle { get; set; }// = nint.Zero;
+        public nint Handle { get; set; }// = 0;
         public int WindowNumber { get; set; }
         public string ProcessPath { get; set; } = string.Empty;
         public string ApplicationName { get; set; } // app name
@@ -38,10 +39,15 @@ namespace MonkeyPaste.Common {
             }
             return null;
         }
-        public static MpPortableProcessInfo FromHandle(nint handle) {
+        public static MpPortableProcessInfo FromHandle(nint handle, bool fallback_on_error) {
             if (MpCommonTools.Services != null &&
                 MpCommonTools.Services.ProcessWatcher != null) {
-                return MpCommonTools.Services.ProcessWatcher.GetProcessInfoFromHandle(handle);
+                var pi = MpCommonTools.Services.ProcessWatcher.GetProcessInfoFromHandle(handle);
+                if(fallback_on_error && (pi == null || pi.ProcessPath.IsNullOrEmpty())) {
+                    // fallback to os thing
+                    return FromPath(MpCommonTools.Services.PlatformInfo.OsFileManagerPath);
+                }
+                return pi;
             }
             return null;
         }
@@ -58,8 +64,7 @@ namespace MonkeyPaste.Common {
         }
 
         public override string ToString() {
-            //return string.Format(@"Handle '{0}' Path '{1}' Title '{2}' ", Handle, ProcessPath, MainWindowTitle);
-            return this.SerializeObject();
+            return $"Handle '{Handle}' Title '{MainWindowTitle}' Path '{ProcessPath}' Args '{string.Join(" ",ArgumentList)}'";
         }
 
         public object Clone() {

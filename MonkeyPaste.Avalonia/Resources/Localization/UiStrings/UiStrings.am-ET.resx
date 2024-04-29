@@ -2990,4 +2990,10 @@
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>ዩአርኤል ያስገቡ</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>ማጽዳት</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>ለገሱ</value>
+  </data>
 </root>

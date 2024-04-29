@@ -2990,4 +2990,10 @@ Pintasan global sekarang dapat diaktifkan di menu baki sistem</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Masukkan URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Jernih</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Menyumbangkan</value>
+  </data>
 </root>

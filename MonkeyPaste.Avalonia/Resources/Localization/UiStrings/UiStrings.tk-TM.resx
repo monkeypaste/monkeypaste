@@ -2990,4 +2990,10 @@ Global gysga ýollar ulgam tromy menýusynda başlap biler</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL giriň</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Düşnükli</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Bagyş et</value>
+  </data>
 </root>

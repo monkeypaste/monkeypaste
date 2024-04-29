@@ -2990,4 +2990,10 @@ feedback@monkeypaste.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>إدخال عنوان الموقع</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>واضح</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>يتبرع</value>
+  </data>
 </root>

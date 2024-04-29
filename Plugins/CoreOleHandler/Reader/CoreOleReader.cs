@@ -43,8 +43,14 @@ namespace CoreOleHandler {
             Dictionary<string, object> read_output = [];
             var readFormats = request.formats.Where(x => avdo.ContainsKey(x));
 
+            // PRE PROCESSING (only need for linux atm)
+            if(!request.ignoreParams) {
+                await PreProcessAsync(avdo, request.formats);
+            }
+            
+
             foreach (var read_format in readFormats) {
-                if (MpPortableDataFormats.InternalFormats.Contains(read_format)) {
+                if (MpDataFormatRegistrar.RegisteredInternalFormats.Contains(read_format)) {
                     // ignore internal formats but let them pass through as output
                     read_output.AddOrReplace(read_format, avdo[read_format]);
                     continue;
@@ -112,5 +118,48 @@ namespace CoreOleHandler {
             };
         }
         #endregion
+
+        private async Task PreProcessAsync(Dictionary<string,object> avdo, IEnumerable<string> request_formats) {
+            // (LINUX)
+            // Files
+            if (OperatingSystem.IsLinux() &&
+                request_formats.Contains(MpPortableDataFormats.Files) &&
+                !avdo.ContainsKey(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT) &&
+                !avdo.ContainsKey(MpPortableDataFormats.Files) &&
+                avdo.ContainsKey(MpPortableDataFormats.LinuxFiles2) &&
+                avdo.TryGetValue(MpPortableDataFormats.Text, out string fpl_str) &&
+                fpl_str.SplitByLineBreak() is { } fpl) {
+                // BUG avalonia 'Files' doesn't work on linux but the can inferred from the available formats
+                // when not an internal ido and gnome-file flag format is present, text is a path list of files
+
+                var sil = await fpl.ToAvFilesObjectAsync();
+                avdo.Add(MpPortableDataFormats.Files, sil);
+            }else if (OperatingSystem.IsLinux() &&
+                request_formats.Contains(MpPortableDataFormats.Files) &&
+                !avdo.ContainsKey(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT) &&
+                !avdo.ContainsKey(MpPortableDataFormats.Files) &&
+                avdo.ContainsKey(MpPortableDataFormats.MimeUriList) &&
+                avdo.TryGetValue(MpPortableDataFormats.MimeUriList, out byte[] uril_bytes) &&
+                uril_bytes.ToDecodedString() is { } uril_str &&
+                uril_str.SplitByLineBreak() is { } uril &&
+                uril.Select(x=>x.ToPathFromUri()) is { } uri_fpl) {
+                // same as gnome files but its weird, sometimes gnome-files isn't there and this is text/uri-list is instead
+
+                var sil = await uri_fpl.ToAvFilesObjectAsync();
+                avdo.Add(MpPortableDataFormats.Files, sil);
+            }
+
+            // PNG
+            if (OperatingSystem.IsLinux() &&
+                request_formats.Contains(MpPortableDataFormats.AvImage) &&
+                !avdo.ContainsKey(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT) &&
+                !avdo.ContainsKey(MpPortableDataFormats.AvImage) &&
+                MpPortableDataFormats.ImageFormats.FirstOrDefault(x=>avdo.ContainsKey(x)) is { } plat_img_format) {
+                // to stay consistent map platform images to common "PNG" format if not present
+                avdo.Add(MpPortableDataFormats.AvImage, avdo[plat_img_format]);
+            }
+
+            // end linux
+        }
     }
 }

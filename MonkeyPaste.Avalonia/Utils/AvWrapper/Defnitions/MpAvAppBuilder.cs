@@ -22,9 +22,9 @@ namespace MonkeyPaste.Avalonia {
                     string.Join(" ", pi.ArgumentList) :
                     null;
 
-#if !ANDROID
+#if !ANDROID 
             if (!processPath.IsFileOrDirectory()) {
-                MpDebug.Break($"Invalid process path detected '{processPath}'");
+                MpDebug.Break($"Invalid process path detected '{processPath}'", silent: false);
                 return null;
             }
 #endif

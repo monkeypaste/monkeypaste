@@ -94,30 +94,42 @@ namespace MonkeyPaste.Avalonia {
         [JsonIgnore]
         public static string arg1 {
             get {
+#if LINUX
+                return "arg1arg1arg1arg1arg1arg1arg1arg1";
+#else
                 if (!PreferencesPath.IsFile()) {
                     MpFileIo.TouchFile(PreferencesPath);
                 }
-                return new FileInfo(PreferencesPath).CreationTimeUtc.ToTickChecksum();
+                return new FileInfo(PreferencesPath).CreationTimeUtc.ToTickChecksum(); 
+#endif
             }
         }
         [JsonIgnore]
         public static string arg2 =>
+#if LINUX
+            "arg2arg2arg2arg2arg2arg2arg2arg2";
+#else
             Instance == null ||
             !Instance.DbCreateDateTime.HasValue ?
                 string.Empty :
                 Instance.DbCreateDateTime.Value.ToTickChecksum();
+#endif
 
         [JsonIgnore]
         public static string arg3 {
             get {
+#if LINUX
+                return "arg3arg3arg3arg3arg3arg3arg3arg3";
+#else
                 if (!PreferencesPathBackup.IsFile()) {
                     MpFileIo.TouchFile(PreferencesPathBackup);
                 }
                 return new FileInfo(PreferencesPathBackup).CreationTimeUtc.ToTickChecksum();
+#endif
             }
         }
 
-        #endregion
+#endregion
 
         #region Interfaces
 
@@ -301,7 +313,13 @@ namespace MonkeyPaste.Avalonia {
         public double NotificationSoundVolume { get; set; } = 0;
         public bool ShowInTaskbar { get; set; } = true;
 
-        public bool AnimateMainWindow { get; set; } = true;
+        public bool AnimateMainWindow { get; set; } =
+
+#if LINUX
+            false;
+#else
+        true; 
+#endif
 
         public string DefaultReadOnlyFontFamily { get; set; } = BASELINE_DEFAULT_READ_ONLY_FONT;
         public string DefaultEditableFontFamily { get; set; } = BASELINE_DEFAULT_CONTENT_FONT;
@@ -371,10 +389,6 @@ namespace MonkeyPaste.Avalonia {
         private bool _isRichHtmlContentEnabled =
 #if ANDROID
             false; 
-#elif MAC
-            true;
-#elif LINUX
-            false;
 #else
             true;
 #endif

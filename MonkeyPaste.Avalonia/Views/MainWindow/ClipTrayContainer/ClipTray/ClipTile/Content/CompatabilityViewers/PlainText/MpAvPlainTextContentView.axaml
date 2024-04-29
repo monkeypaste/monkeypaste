@@ -35,7 +35,7 @@
                               VerticalContentAlignment="Top"
                               Background="Transparent"
                               Foreground="{DynamicResource ThemeInteractiveBrush}"
-                              Text="{Binding CopyItemData, Converter={x:Static local:MpAvContentDataConverter.Instance}, ConverterParameter=PlainText}">
+                              Text="{Binding CopyItemData, Converter={x:Static local:MpAvContentDataConverter.Instance}, ConverterParameter=PlainText, Mode=OneWay}">
         <local:MpAvContentTextBox.ContextMenu>
             <ContextMenu IsVisible="False" />
         </local:MpAvContentTextBox.ContextMenu>

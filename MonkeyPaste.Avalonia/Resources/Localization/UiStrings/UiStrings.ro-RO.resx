@@ -2990,4 +2990,10 @@ Comenzile rapide globale pot fi acum activate în meniul tăvii de sistem</value
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Introdu URL-ul</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>clar</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Donează</value>
+  </data>
 </root>

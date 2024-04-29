@@ -2990,4 +2990,10 @@ feedback@monkeypaste.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URLを入力</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>クリア</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>寄付する</value>
+  </data>
 </root>

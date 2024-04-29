@@ -14,13 +14,14 @@ namespace MonkeyPaste.Avalonia {
             if (parameter is string paramStr && paramStr.ToLowerInvariant() == "flip") {
                 flip = true;
             }
+            int count = 0;
             if (value is ICollection collection) {
-                return collection.Count > 1 ? flip : !flip;
+                count = collection.Count;
             }
             if (value is IEnumerable<object> enumerable) {
-                return enumerable.Count() > 1 ? flip : !flip;
+                count = enumerable.Count();
             }
-            return false;
+            return count > 1 ? !flip : flip;
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {

@@ -2990,4 +2990,10 @@ Globalni prečaci sada mogu biti omogućeni u izborniku Sistemske ladice</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Unesite URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Čisto</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Donirati</value>
+  </data>
 </root>

@@ -698,28 +698,26 @@ namespace MonkeyPaste {
 
         private static async Task InitTablesAsync() {
             await _connectionAsync.CreateTableAsync<MpAction>();
-            await _connectionAsync.CreateTableAsync<MpParameterValue>();
             await _connectionAsync.CreateTableAsync<MpApp>();
-            await _connectionAsync.CreateTableAsync<MpAppOlePreset>();
             await _connectionAsync.CreateTableAsync<MpAppClipboardShortcuts>();
-            await _connectionAsync.CreateTableAsync<MpBillableItem>();
+            await _connectionAsync.CreateTableAsync<MpAppOlePreset>();
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemAnnotation>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
-            await _connectionAsync.CreateTableAsync<MpTransactionSource>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTransaction>();
             await _connectionAsync.CreateTableAsync<MpDataObject>();
             await _connectionAsync.CreateTableAsync<MpDataObjectItem>();
             await _connectionAsync.CreateTableAsync<MpDbImage>();
             await _connectionAsync.CreateTableAsync<MpDbLog>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
+            await _connectionAsync.CreateTableAsync<MpParameterValue>();
             await _connectionAsync.CreateTableAsync<MpPreset>();
             await _connectionAsync.CreateTableAsync<MpSearchCriteriaItem>();
             await _connectionAsync.CreateTableAsync<MpShortcut>();
             await _connectionAsync.CreateTableAsync<MpSyncHistory>();
             await _connectionAsync.CreateTableAsync<MpTag>();
             await _connectionAsync.CreateTableAsync<MpTextTemplate>();
-            await _connectionAsync.CreateTableAsync<MpContentToken>();
+            await _connectionAsync.CreateTableAsync<MpTransactionSource>(); 
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUser>();
             await _connectionAsync.CreateTableAsync<MpUserDevice>();

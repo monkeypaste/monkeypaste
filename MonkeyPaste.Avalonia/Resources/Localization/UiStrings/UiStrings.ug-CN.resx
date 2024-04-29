@@ -2990,4 +2990,10 @@ tempo@Monkepaste.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL نى كىرگۈزۈڭ</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>ئېنىق</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>ئىئانە قىلىڭ</value>
+  </data>
 </root>

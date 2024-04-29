@@ -1,5 +1,5 @@
-﻿using System;
-using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common.Plugin;
+using System;
 
 
 #if WINDOWS
@@ -105,24 +105,24 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static string ToRichHtmlDocument(this string source_data, string source_format) {
             string result = source_data;
-            if (MpPortableDataFormats.IsRtfFormat(source_format) is true) {
+            if (MpDataFormatRegistrar.IsRtfFormat(source_format) is true) {
                 result = RtfToHtml(source_data);
-            } else if (MpPortableDataFormats.IsCsvFormat(source_format) is true) {
+            } else if (MpDataFormatRegistrar.IsCsvFormat(source_format) is true) {
                 result = MpCsvRichHtmlTableConverter.CsvToRichHtmlTable(source_data).ToHtmlDocumentFromTextOrPartialHtml();
-            } else if (MpPortableDataFormats.IsImageFormat(source_format) is true) {
+            } else if (MpDataFormatRegistrar.IsImageFormat(source_format) is true) {
                 result = source_data.ToHtmlImageDoc();
-            } else if (MpPortableDataFormats.IsFilesFormat(source_format) is true) {
+            } else if (MpDataFormatRegistrar.IsFilesFormat(source_format) is true) {
                 if(MpCommonTools.Services != null &&
                     MpCommonTools.Services.FilesToHtmlConverter != null &&
                     source_data.Split(new string[] {Environment.NewLine},StringSplitOptions.None) is { } paths) {
                     result = MpCommonTools.Services.FilesToHtmlConverter.ConvertToHtml(paths);
                 }
-            } else if (MpPortableDataFormats.IsHtmlFormat(source_format) is not true) {
+            } else if (MpDataFormatRegistrar.IsHtmlFormat(source_format) is not true) {
                 // should be some plain text format
                 result = source_data.ToHtmlDocumentFromTextOrPartialHtml();
             } else {
                 // assert to keep formats in order
-                MpDebug.Assert(MpPortableDataFormats.IsHtmlFormat(source_format) is true, $"Warning, unhandled text format '{source_format}'");
+                MpDebug.Assert(MpDataFormatRegistrar.IsHtmlFormat(source_format) is true, $"Warning, unhandled text format '{source_format}'");
             }
             return result;
         }

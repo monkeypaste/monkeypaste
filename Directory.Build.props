@@ -6,9 +6,10 @@
     <ApplicationAuthor>Monkey LLC</ApplicationAuthor>
     <ApplicationVersionMajor>1</ApplicationVersionMajor>
     <ApplicationVersionMinor>0</ApplicationVersionMinor>
-    <ApplicationVersionPatch>17</ApplicationVersionPatch>
+    <ApplicationVersionPatch>18</ApplicationVersionPatch>
     <ApplicationVersionRevision>0</ApplicationVersionRevision>
     <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch).$(ApplicationVersionRevision)</ApplicationVersion>
+    <LinuxVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor)-$(ApplicationVersionPatch)</LinuxVersion>
    </PropertyGroup>
 
   <!-- MSBUILD PROPERTIES -->
@@ -26,12 +27,15 @@
   </PropertyGroup>
 
   <!-- GLOBAL PACKAGE VERSIONS -->
-  <PropertyGroup>
-    <!--<AvaloniaVersion>11.2.999-cibuild0047282-alpha</AvaloniaVersion>-->
-    <StableAvaloniaVersion>11.0.10</StableAvaloniaVersion>
-    <AvaloniaVersion>11.0.10</AvaloniaVersion>
+  <PropertyGroup> 
+    <!--<StableAvaloniaVersion>11.0.10</StableAvaloniaVersion> 
+    <AvaloniaVersion>11.0.10</AvaloniaVersion>-->
+    <StableAvaloniaVersion>9999.0.0-localbuild</StableAvaloniaVersion>
+    <AvaloniaVersion>9999.0.0-localbuild</AvaloniaVersion>
     <!--<SugarWvVersion>11.0.0.6</SugarWvVersion>-->    
-    <SugarWvVersion>11.0.0.0</SugarWvVersion>    
+    <SugarWvVersion>11.0.0.0</SugarWvVersion>
+    <CefNetWvVersion>105.3.24107.1511</CefNetWvVersion>
+    <AvHtmlRendererVersion>11.0.19</AvHtmlRendererVersion>
   </PropertyGroup>
   
   <!-- MANUALLY SET PROPERTIES-->
@@ -45,23 +49,29 @@
     <PushPlugins>false</PushPlugins>
     <!-- NOTE when changing av version need to reset coreole, probably everything-->
     <DefaultLangVersion>Latest</DefaultLangVersion>
-    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
-  </PropertyGroup>
-
-  <!-- CUSTOM PROPERTIES -->
-
-  <PropertyGroup>
-    <!-- DEFAULTS (MAYBE OVERRIDEN BY CONDITIONS) -->
     <IsDesktop>false</IsDesktop>
     <IsMobile>false</IsMobile>
     <DefaultPlatforms>x64</DefaultPlatforms>
-    <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
     <UseCefNet>false</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
     <UseSugarWv>false</UseSugarWv>
     <DefaultTargetFramework>net8.0</DefaultTargetFramework>
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
+    <!--<ConfigForHotReload>true</ConfigForHotReload>-->
+  </PropertyGroup>
+
+  <!-- CUSTOM PROPERTIES -->
+
+  <PropertyGroup Condition="$(ConfigForHotReload) == 'True'">
+    <DefaultTargetFramework>net6.0</DefaultTargetFramework>
+    <CommonTargetFramework>net6.0</CommonTargetFramework>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <!-- DEFAULTS (MAYBE OVERRIDEN BY CONDITIONS) -->
+    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
+    <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
     <BuildScriptsRootDir>$(SolutionDir)\Build\_build\scripts</BuildScriptsRootDir>
   </PropertyGroup>
   
@@ -77,7 +87,6 @@
     <!-- When changing this not a bad idea to rebuild plugins -->
     <UseWap>true</UseWap>
     <!-- NOTE when ConfigForHotReload is enabled, UseWap must be false-->
-    <ConfigForHotReload>false</ConfigForHotReload>
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
     <Tfm>10.0.22621.0</Tfm>
     <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;</DefineConstants>
@@ -85,8 +94,8 @@
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>false</UseCefNet>
-    <UseSugarWv>true</UseSugarWv>
+    <UseCefNet>true</UseCefNet>
+    <UseSugarWv>false</UseSugarWv>
     <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <PlatformShortName>uwp</PlatformShortName> 
@@ -99,10 +108,6 @@
     <DefineConstants>$(DefineConstants);WAP;</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup Condition="$(BuildOs) == 'WINDOWS' And $(ConfigForHotReload) == 'True'">
-    <DefaultTargetFramework>net6.0</DefaultTargetFramework>
-    <CommonTargetFramework>net6.0</CommonTargetFramework>
-  </PropertyGroup>
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS' And $(UseWap) == 'False'">
     <MainTargetFramework>$(DefaultTargetFramework)-windows</MainTargetFramework>
   </PropertyGroup>
@@ -112,9 +117,9 @@
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'"> 
     <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>
-    <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
+    <MainProjectName>MonkeyPaste.Desktop</MainProjectName> 
     <IsDesktop>true</IsDesktop>
-    <UseCefNet>false</UseCefNet>
+    <UseCefNet>true</UseCefNet>
     <UseSugarWv>false</UseSugarWv>
     <PlatformShortName>linux</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\linux</BuildScriptsDir>
@@ -129,7 +134,7 @@
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>false</UseCefNet>
+    <UseCefNet>true</UseCefNet>
     <UseSugarWv>true</UseSugarWv>
     <PlatformShortName>mac</PlatformShortName>
     <TargetRuntimeIdentifiers>osx-x64</TargetRuntimeIdentifiers>
@@ -169,7 +174,8 @@
     <IsMobile>true</IsMobile>
     <PlatformShortName>ios</PlatformShortName>
   </PropertyGroup>
-  
+  <!---  END OF TARGETS-->
+
   
   <PropertyGroup>
     <MainProjectDir>$(SolutionDir)$(MainProjectName)</MainProjectDir>
@@ -195,16 +201,19 @@
     <TargetDatTempDir>$(TargetDatDir)\tmp</TargetDatTempDir>
   </PropertyGroup>
 
+  
   <PropertyGroup Condition="$(IsPublicBuild) == 'True'">
     <DefineConstants>$(DefineConstants);PUBLIC_BUILD;</DefineConstants>
   </PropertyGroup>
     
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
-    <TargetDatDir>$(MainProjectDir)\Assets\\dat</TargetDatDir>
+    <TargetDatDir>$(MainProjectDir)\Assets\dat</TargetDatDir>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(UseCefNet)' == 'True'">
-    <CefPlatformDir>$(MainProjectDir)\cef\$(PlatformShortName)\$(Platform)</CefPlatformDir>
+    <!--<CefPlatformDir>$(MainProjectDir)\cef\$(PlatformShortName)\$(Platform)</CefPlatformDir>-->
+    <CefPlatformDir>$(MSBuildThisFileDirectory)\MonkeyPaste.Desktop\cef\$(PlatformShortName)\$(DefaultPlatforms)</CefPlatformDir>
+    <CefAssemblyDir>$(MSBuildThisFileDirectory)\ext\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0</CefAssemblyDir>
     <DefineConstants>$(DefineConstants);CEFNET_WV</DefineConstants>
   </PropertyGroup>
 

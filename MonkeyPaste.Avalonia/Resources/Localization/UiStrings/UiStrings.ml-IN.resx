@@ -2990,4 +2990,10 @@
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL നൽകുക</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>വക്തമായ</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>സംഭാവനചെയ്യുക</value>
+  </data>
 </root>

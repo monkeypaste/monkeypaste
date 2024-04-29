@@ -2990,4 +2990,10 @@ Dabar „System Tray“ meniu galima įjungti globalius nuorodas</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Įveskite URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Aišku</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Paaukoti</value>
+  </data>
 </root>

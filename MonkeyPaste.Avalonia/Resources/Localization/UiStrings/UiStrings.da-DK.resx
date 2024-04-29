@@ -2990,4 +2990,10 @@ Globale genveje kan nu aktiveres i systembakkemenuen</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Indtast URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Klar</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Doner</value>
+  </data>
 </root>

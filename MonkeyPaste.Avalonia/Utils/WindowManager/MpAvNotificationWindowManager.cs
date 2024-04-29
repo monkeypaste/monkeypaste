@@ -144,6 +144,10 @@ namespace MonkeyPaste.Avalonia {
         private void BeginOpen(MpAvWindow nw) {
             var nvmb = nw.DataContext as MpAvNotificationViewModelBase;
 
+            if(nvmb.Title.IsNullOrEmpty()) {
+                // give title for debugging/compliance
+                nvmb.Title = nvmb.ToString().ToWindowTitleText();
+            }
             if (nvmb.CanMoveWindow) {
                 MpAvMoveWindowExtension.SetIsEnabled(nw, true);
             }

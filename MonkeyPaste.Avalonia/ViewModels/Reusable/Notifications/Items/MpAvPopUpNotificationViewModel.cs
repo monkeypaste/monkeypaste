@@ -99,6 +99,7 @@ namespace MonkeyPaste.Avalonia {
         public bool ShowBusySpinner { get; set; }
         public bool ShowOkButton { get; set; }
         public bool ShowRateButton { get; set; }
+        public bool ShowDonateButton { get; set; }
         public bool ShowUpgradeButton { get; set; }
         public bool ShowLearnMoreButton { get; set; }
         public bool ShowTextBox { get; set; }
@@ -235,7 +236,8 @@ namespace MonkeyPaste.Avalonia {
                     ShowCancelButton = true;
                     break;
                 case MpNotificationButtonsType.Rate:
-                    ShowRateButton = true;
+                    ShowRateButton = !OperatingSystem.IsLinux();
+                    ShowDonateButton = true;
                     break;
                 case MpNotificationButtonsType.Progress: {
                         ShowProgressSpinner = true;
@@ -584,6 +586,12 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 MpAvPrefViewModel.Instance.HasRated = true;
                 MpAvAccountViewModel.Instance.RateAppCommand.Execute(null);
+                DialogResult = MpNotificationDialogResultType.Dismiss;
+            });
+        
+        public ICommand DonateCommand => new MpCommand(
+            () => {
+                MpAvAccountViewModel.Instance.DonateCommand.Execute(null);
                 DialogResult = MpNotificationDialogResultType.Dismiss;
             });
 

@@ -194,9 +194,19 @@ namespace MonkeyPaste.Avalonia {
 
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.SysTrayRateAppLabel,
+                            IsVisible = !OperatingSystem.IsLinux(),
                             IconResourceKey = "StarYellowImage",
                             CommandSrcObj = MpAvAccountViewModel.Instance,
                             CommandPath = nameof(MpAvAccountViewModel.Instance.RateAppCommand)
+                        },
+                        
+                        // DONATE
+
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.DonateLabel,
+                            IconResourceKey = "HeartImage",
+                            CommandSrcObj = MpAvAccountViewModel.Instance,
+                            CommandPath = nameof(MpAvAccountViewModel.Instance.DonateCommand)
                         },
                         
                         // CHECK FOR UPDATE
@@ -209,7 +219,7 @@ namespace MonkeyPaste.Avalonia {
                             CommandParameter = "Click"
                         },
                         
-                        // CHECK FOR UPDATE
+                        // FEEDBACK
 
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.SysTrayFeebackLabel,
@@ -490,10 +500,12 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand1 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                if (MpAvClipTrayViewModel.Instance.SelectedItem.GetContentView() is MpAvContentWebView cwv) {
-                    cwv.RenderToFile(@"C:\Users\tkefauver\Desktop\ss.png");
-                }
-
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
+                           title: UiStrings.NtfRateAppTitle,
+                           body: UiStrings.NtfRateAppText,
+                           msgType: MpNotificationType.RateApp,
+                           iconSourceObj: "MonkeyWinkImage",
+                           maxShowTimeMs: 5_000).FireAndForgetSafeAsync();
             });
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(

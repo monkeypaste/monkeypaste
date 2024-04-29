@@ -16,12 +16,12 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class App : Application, MpIShutdownTools {
+    public partial class App : Application {
         #region Private Variable
-        private bool _isShuttingDown = false;
         #endregion
 
         #region Constants
@@ -30,6 +30,8 @@ namespace MonkeyPaste.Avalonia {
         public const string RESTART_ARG = "--restarted";
         public const string TRACE_ARG = "--trace";
         public const string WAIT_FOR_DEBUG_ARG = "--wait-for-attach";
+        public const string BREAK_ON_ATTACH_ARG = "--break-on-attach";
+        public const string NO_ATTACH_ARG = "--no-attach";
 
         #endregion
 
@@ -63,6 +65,21 @@ namespace MonkeyPaste.Avalonia {
 #else
             MainView;
 #endif
+
+        public static void WaitForDebug(object[] args) {
+            if (args.Contains(WAIT_FOR_DEBUG_ARG)) {
+                Console.WriteLine("Attach debugger and use 'Set next statement'");
+                while (true) {
+                    Thread.Sleep(100);
+                    if (Debugger.IsAttached) {
+                        if(args.Contains(BREAK_ON_ATTACH_ARG)) {
+                            Debugger.Break();
+                        }
+                        break;
+                    }
+                }
+            }
+        }
         public static void SetPrimaryView(Control c) {
             if (_instance == null ||
                 _instance.ApplicationLifetime is not ISingleViewApplicationLifetime sval ||
@@ -79,26 +96,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpIShutdownTools Implementation
-        void MpIShutdownTools.ShutdownApp(MpShutdownType code, string detail) {
-            if (_isShuttingDown) {
-                return;
-            }
-            _isShuttingDown = true;
-            MpConsole.WriteLine($"App shutdown called Code: '{code}' Detail: '{detail.ToStringOrEmpty("NULL")}'");
-            //MpConsole.ShutdownLog();
-            if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
-                MpAvWindowManager.CloseAll();
-#if CEFNET_WV
-                MpAvCefNetApplication.ShutdownCefNet();
-#endif
-                lifetime.Shutdown();
-                bool success = true;// lifetime.TryShutdown();
-                MpConsole.WriteLine($"Lifetime shutdown: {success.ToTestResultLabel()}");
-            }
-        }
-
-        #endregion
         #endregion
 
         #region Properties
@@ -137,13 +134,9 @@ namespace MonkeyPaste.Avalonia {
 
         public override async void OnFrameworkInitializationCompleted() {
             DateTime startup_datetime = DateTime.Now;
-#if DEBUG
-            if (!Debugger.IsAttached) {
-
-            }
-#endif
 #if DESKTOP
-            MpAvLogSink.Init();
+            MpConsole.Init(new MpAvPlatformInfo_desktop().LogPath, Debugger.IsAttached || HasStartupArg(TRACE_ARG));
+            //MpAvLogSink.Init();
 #endif
 
             ReportCommandLineArgs(Args);

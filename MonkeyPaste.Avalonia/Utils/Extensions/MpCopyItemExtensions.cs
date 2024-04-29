@@ -37,46 +37,46 @@ namespace MonkeyPaste.Avalonia {
                     switch (ci.ItemType) {
                         case MpCopyItemType.Text:
                             switch (format) {
-                                case MpPortableDataFormats.Xhtml:
+                                case var _ when format == MpPortableDataFormats.Xhtml:
                                     data = ci.ItemData.ToBase64String();
                                     break;
-                                case MpPortableDataFormats.Html:
+                                case var _ when format == MpPortableDataFormats.Html:
                                     data = ci.ItemData;
                                     break;
-                                case MpPortableDataFormats.Text:
+                                case var _ when format == MpPortableDataFormats.Text:
                                     data = ci.ItemData.ToPlainText("html");
                                     break;
-                                case MpPortableDataFormats.Image:
+                                case var _ when format == MpPortableDataFormats.Image:
                                     data = ci.ItemData.ToHtmlImageDoc();
                                     break;
-                                case MpPortableDataFormats.Files:
+                                case var _ when format == MpPortableDataFormats.Files:
                                     data = ci.ItemData.ToFile(forcePath: ci.GetDefaultFilePaths().FirstOrDefault());
                                     break;
                             }
                             break;
                         case MpCopyItemType.Image:
                             switch (format) {
-                                case MpPortableDataFormats.Html:
+                                case var _ when format == MpPortableDataFormats.Html:
                                     data = ci.ItemData.ToHtmlImageDoc();
                                     break;
                                 //case MpPortableDataFormats.Text:
                                 //    data = ci.ItemData.ToAvBitmap().ToAsciiImage();
                                 //    break;
-                                case MpPortableDataFormats.Files:
+                                case var _ when format == MpPortableDataFormats.Files:
                                     data = ci.ItemData.ToFile(forcePath: ci.GetDefaultFilePaths().FirstOrDefault());
                                     break;
                             }
                             break;
                         case MpCopyItemType.FileList:
                             switch (format) {
-                                case MpPortableDataFormats.Text:
+                                case var _ when format == MpPortableDataFormats.Text:
                                     data = ci.ItemData;
                                     break;
-                                case MpPortableDataFormats.Files:
+                                case var _ when format == MpPortableDataFormats.Files:
                                     data = ci.ItemData.SplitNoEmpty(Environment.NewLine);
                                     break;
 
-                                case MpPortableDataFormats.Image:
+                                case var _ when format == MpPortableDataFormats.Image:
                                     data = ci.ItemData.ToHtmlImageDoc();
                                     break;
                             }

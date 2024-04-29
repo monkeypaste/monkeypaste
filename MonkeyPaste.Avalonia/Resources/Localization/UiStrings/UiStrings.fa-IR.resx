@@ -2990,4 +2990,10 @@ MonkeyPaste روی دستگاه
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>آدرس اینترنتی را وارد کنید</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>پاک کردن</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>اهداء کردن</value>
+  </data>
 </root>

@@ -23,7 +23,10 @@
             <local:MpAvClipTileCompatibilityViewSelector>
                 <DataTemplate x:Key="PlainTextTemplate"
                               DataType="local:MpAvClipTileViewModel">
-                    <local:MpAvPlainTextContentView DataContext="{Binding $parent[UserControl].DataContext}" />
+                    <Grid>
+                        <local:MpAvPlainTextContentView DataContext="{Binding $parent[UserControl].DataContext}" />
+                        <local:MpAvPlainTextContentView DataContext="{Binding $parent[UserControl].DataContext}" />
+                    </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="ImageTemplate"
                               DataType="local:MpAvClipTileViewModel">

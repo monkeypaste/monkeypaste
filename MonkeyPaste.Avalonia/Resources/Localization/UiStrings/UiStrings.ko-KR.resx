@@ -2990,4 +2990,10 @@
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL을 입력하십시오</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>분명한</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>기부</value>
+  </data>
 </root>

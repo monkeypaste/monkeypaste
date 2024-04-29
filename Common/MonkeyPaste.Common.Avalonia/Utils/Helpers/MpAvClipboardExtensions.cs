@@ -43,10 +43,10 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (_MacFormatMap == null) {
                     _MacFormatMap = new() {
                         {MpPortableDataFormats.MacRtf1, MpPortableDataFormats.WinRtf },
-                        {MpPortableDataFormats.MacImage1, MpPortableDataFormats.AvImage },
                         {MpPortableDataFormats.MacImage2, MpPortableDataFormats.AvImage },
+                        {MpPortableDataFormats.MacImage3, MpPortableDataFormats.AvImage },
                         {MpPortableDataFormats.MacHtml1, MpPortableDataFormats.MimeHtml },
-                        {MpPortableDataFormats.MacChromeUrl, MpPortableDataFormats.MimeMozUrl },
+                        {MpPortableDataFormats.MacChromeUrl1, MpPortableDataFormats.MimeMozUrl },
                         {MpPortableDataFormats.MacChromeUrl2, MpPortableDataFormats.MimeMozUrl },
                     };
                 }
@@ -128,7 +128,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 // wants string
                 if (dataObj is byte[] bytes) {
                     // bytes -> string
-                    if (MpPortableDataFormats.IsFormatStrBase64(format) is true) {
+                    if (MpDataFormatRegistrar.IsFormatStrBase64(format) is true) {
                         // img bytes -> string
                         typed_data = bytes.ToBase64String() as T;
                     } else {
@@ -161,7 +161,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 // wants bytes
                 if (dataObj is string byteStr) {
                     // string -> bytes
-                    if (MpPortableDataFormats.IsFormatStrBase64(format) is true) {
+                    if (MpDataFormatRegistrar.IsFormatStrBase64(format) is true) {
                         // string -> img bytes
                         typed_data = byteStr.ToBytesFromBase64String() as T;
                     } else {
@@ -207,23 +207,27 @@ namespace MonkeyPaste.Common.Avalonia {
                 output_encoding = Encoding.Unicode;
             }
 #elif WINDOWS
-            if(format == MpPortableDataFormats.WinXhtml) {
+            if(format == MpPortableDataFormats.WinHtml1) {
                 output_type = typeof(byte[]);
             } 
             if(format == MpPortableDataFormats.WinRtf) {
                 output_type = typeof(byte[]);
             }
-            if(format == MpPortableDataFormats.WinUnicode) {
+            if(format == MpPortableDataFormats.WinText3) {
                 output_encoding = Encoding.Unicode;
+            }
+#elif LINUX
+            if(format == MpPortableDataFormats.MimeText) {
+                output_type = typeof(byte[]);
             }
 #else
 
 #endif
             // common stuff
-            if (MpPortableDataFormats.IsImageFormat(format) is true) {
+            if (MpDataFormatRegistrar.IsImageFormat(format) is true) {
                 // this implies string->base64
                 output_encoding = Encoding.ASCII;
-            } else if (MpPortableDataFormats.IsFilesFormat(format) is true) {
+            } else if (MpDataFormatRegistrar.IsFilesFormat(format) is true) {
                 // kinda hacky but to avoid dep here since IStorageItem is an 
                 // 
                 output_type = typeof(IStorageItem[]);
@@ -242,7 +246,18 @@ namespace MonkeyPaste.Common.Avalonia {
             if (cb == null) {
                 return avdo;
             }
-            var actualFormats = await cb.GetFormatsSafeAsync();
+#if LINUX
+            // NOTE avalonia returns window sel as clipboard sometimes 
+            // (maybe from barrier) but in firefox it won't have source info 
+            // so doing it manually to enforce clipboard only
+            var actualFormats = await MpX11ClipboardHelper.GetFormatsAsync(MpLinuxSelectionType.Clipboard);
+#else
+            var actualFormats = await cb.GetFormatsSafeAsync(); 
+#endif
+            if(actualFormats == null) {
+                // timeout
+                return avdo;
+            }
             // <PlatformFormatName,CommonFormatName>
             var mappedFormats = actualFormats.ToDictionary(x => x, x => x);
 
@@ -261,7 +276,22 @@ namespace MonkeyPaste.Common.Avalonia {
             }
 
             foreach (string format in formatFilter) {
-                object data = await cb.GetDataSafeAsync(format);
+                object data = null;
+#if LINUX
+                if(MpDataFormatRegistrar.IsAvaloniaFormat(format)) {
+                    // xclip won't know about avalonia formats
+                    if(format == MpPortableDataFormats.AvText) {
+                        data = await cb.GetTextAsync();
+                    } else {
+                        data = await cb.GetDataSafeAsync(format);
+                    }                    
+                } else {
+
+                    data = await MpX11ClipboardHelper.ReadFormatAsync(format);
+                }
+#else
+                data = await cb.GetDataSafeAsync(format);
+#endif
                 if (data == null) {
                     continue;
                 }
@@ -436,4 +466,5 @@ namespace MonkeyPaste.Common.Avalonia {
 #endif
         }
     }
+
 }

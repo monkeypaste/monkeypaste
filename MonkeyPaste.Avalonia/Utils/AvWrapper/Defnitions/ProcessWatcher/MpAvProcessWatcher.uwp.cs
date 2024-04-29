@@ -1,4 +1,7 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Platform;
+
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 
 using System;
 using System.Collections.Generic;
@@ -7,15 +10,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management;
+using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
-using Avalonia.Platform;
-using System.Runtime.InteropServices;
+
 using static MonkeyPaste.Avalonia.NativeMethods;
-using MonkeyPaste.Common.Plugin;
-
-
-
 
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;
@@ -61,6 +60,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+
+        public MpPortableProcessInfo GetClipboardOwner() {
+            nint cb_owner_handle = WinApi.GetOpenClipboardWindow();
+            return MpPortableProcessInfo.FromHandle(cb_owner_handle, false);
+        }
         protected virtual string GetAppNameByProessPath(string process_path) {
             string process_ext = Path.GetExtension(process_path);
             if (process_path.IsFile() &&

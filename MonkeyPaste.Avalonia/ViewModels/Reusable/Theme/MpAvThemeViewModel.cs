@@ -60,6 +60,7 @@ namespace MonkeyPaste.Avalonia {
             "ghost.png",
             "global.png",
             "graph.png",
+            "heart.png",
             "html.png",
             "info.png",
             "joystickative.png",
@@ -181,6 +182,20 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public string PlatformShortName =>
+#if WINDOWS
+            "windows";
+#elif MAC
+            "mac";
+#elif LINUX
+            "linux";
+#elif ANDROID
+            "android";
+#elif IOS
+            "ios";
+#else
+                    "";
+#endif
 
         public bool IsDesktop =>
 #if DESKTOP
@@ -224,9 +239,9 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsThemeLight =>
             !MpAvPrefViewModel.Instance.IsThemeDark;
-        #endregion
+#endregion
 
-        #endregion
+#endregion
 
         #region Constructors
         private MpAvThemeViewModel() {

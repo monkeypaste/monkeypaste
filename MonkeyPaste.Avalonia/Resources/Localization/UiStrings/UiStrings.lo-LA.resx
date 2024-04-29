@@ -2990,4 +2990,10 @@ monkeypaste ໃນອຸປະກອນ
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>ໃສ່ URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>ແຈ່ມແຈ້ງ</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>ບໍ​ລິ​ຈາກ</value>
+  </data>
 </root>

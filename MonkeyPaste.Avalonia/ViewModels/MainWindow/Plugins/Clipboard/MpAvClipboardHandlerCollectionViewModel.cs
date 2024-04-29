@@ -247,7 +247,7 @@ namespace MonkeyPaste.Avalonia {
             AllPresets.Where(x => x.IsSelected);
 
         public IEnumerable<MpAvClipboardFormatViewModel> FormatViewModels =>
-            MpPortableDataFormats.RegisteredFormats.Select(x => new MpAvClipboardFormatViewModel(this, x));
+            MpDataFormatRegistrar.RegisteredFormats.Select(x => new MpAvClipboardFormatViewModel(this, x));
         public IEnumerable<MpAvClipboardFormatPresetViewModel> EnabledFormats => AllPresets.Where(x => x.IsEnabled);
 
         public IEnumerable<MpAvClipboardFormatPresetViewModel> EnabledReaders => EnabledFormats.Where(x => x.IsReader);
@@ -356,9 +356,13 @@ namespace MonkeyPaste.Avalonia {
             var ole_guids =
                 MpPluginLoader.Plugins
                 .Where(x => x.pluginType == MpPluginType.Clipboard)
-                .Select(x => x.guid);
+                .Select(x => x.guid)
+                .ToList();
 
-            foreach (var ole_guid in ole_guids) {
+            int count = ole_guids.Count;
+            for (int i = 0; i < count; i++) {
+                string ole_guid = ole_guids[i];
+
                 var paivm = await CreateClipboardHandlerItemViewModelAsync(ole_guid);
                 bool success = await ValidateHandlerFormatsAsync(paivm);
                 if (success) {
@@ -575,14 +579,10 @@ namespace MonkeyPaste.Avalonia {
                     ido.Get(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) as MpPortableProcessInfo :
                     null;
 
-#if WINDOWS
             if (attachActiveProcessIfNone && isRead && !isDnd && active_pi == null && !ignorePlugins) {
-                // on clipboard change (windows) get clipboard override process watcher and use clipboard owner 
-                // NOTE only doing this on change (ignorePlugins === false) for perf
-                nint cb_owner_handle = WinApi.GetOpenClipboardWindow();
-                active_pi = MpPortableProcessInfo.FromHandle(cb_owner_handle);
+                active_pi = Mp.Services.ProcessWatcher.GetClipboardOwner();
             }
-#endif
+
             int[] custom_preset_ids = ignorePlugins ? null :
                     MpAvAppCollectionViewModel.Instance
                     .GetAppCustomOlePresetsByWatcherState(
@@ -680,7 +680,7 @@ namespace MonkeyPaste.Avalonia {
                     resp.dataObjectLookup
                     .Where(x =>
                         x.Value != null &&
-                        (MpPortableDataFormats.InternalFormats.Contains(x.Key) ||
+                        (MpDataFormatRegistrar.RegisteredInternalFormats.Contains(x.Key) ||
                         preset_vms.Any(y => y.FormatName == x.Key)))
                     .ForEach(kvp => avdo.SetData(kvp.Key, kvp.Value));
                 }
@@ -699,7 +699,7 @@ namespace MonkeyPaste.Avalonia {
                 // not handled by plugins
                 ido
                     .GetAllDataFormats()
-                    .Where(x => !avdo.ContainsData(x) && MpPortableDataFormats.InternalFormats.Contains(x))
+                    .Where(x => !avdo.ContainsData(x) && MpDataFormatRegistrar.RegisteredInternalFormats.Contains(x))
                     .ForEach(x => avdo.SetData(x, ido.Get(x)));
             }
             if (ignoreClipboardChange && was_cb_monitoring) {

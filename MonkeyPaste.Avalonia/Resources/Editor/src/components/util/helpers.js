@@ -97,6 +97,13 @@ function isNullOrUndefined(obj) {
     return obj === undefined || obj == null;
 }
 
+function stripLineBreaks(str) {
+    if (isNullOrEmpty(str)) {
+        return '';
+    }
+    let result = str.replaceAll('\r', '').replaceAll('\n', '');
+    return result;
+}
 
 function splitByNewLine(str) {
     if (isNullOrEmpty(str)) {

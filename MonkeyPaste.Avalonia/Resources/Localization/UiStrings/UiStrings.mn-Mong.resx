@@ -2990,4 +2990,10 @@ FEEDBOWY@monkeypue.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Өргдуун үд оруулна</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Саруул</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Бэлэглэх</value>
+  </data>
 </root>

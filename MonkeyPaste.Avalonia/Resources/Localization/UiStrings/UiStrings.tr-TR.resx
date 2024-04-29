@@ -2990,4 +2990,10 @@ Global kısayollar artık sistem tepsisi menüsünde etkinleştirilebilir</value
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL girin</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Temizlemek</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Bağış yapmak</value>
+  </data>
 </root>

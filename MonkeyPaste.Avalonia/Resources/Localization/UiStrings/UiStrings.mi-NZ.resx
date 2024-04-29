@@ -2990,4 +2990,10 @@ Ka taea e te waa poto poto te ao i roto i te tahua Tray punaha</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Whakauruhia URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Purata</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Hoatu koha</value>
+  </data>
 </root>

@@ -1,18 +1,24 @@
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Logging;
 using Avalonia.ReactiveUI;
+using MonkeyPaste.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using Avalonia.Logging;
 
 #if SUGAR_WV
 using Avalonia.WebView.Desktop;
 #endif
+#if CEFNET_WV
 
-namespace MonkeyPaste.Avalonia {
+using CefNet;
+#endif
+
+namespace MonkeyPaste.Desktop {
     internal class Program {
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -20,57 +26,14 @@ namespace MonkeyPaste.Avalonia {
 
         [STAThread]
         public static void Main(string[] args) {
-//#if WINDOWS
+#if WINDOWS
             TryForceHighPerformanceGpu(); 
-//#endif
-
-            App.Args = args;
-
-            WaitForDebug(args);
-            HandleSingleInstanceLaunch(args);
-        }
-
-        // Avalonia configuration, don't remove; also used by visual designer.
-        static AppBuilder BuildAvaloniaApp()
-            => AppBuilder.Configure<App>()
-#if MAC
-        .With(new AvaloniaNativePlatformOptions {
-            OverlayPopups = true,
-            //RenderingMode = [AvaloniaNativeRenderingMode.Software]
-        }) 
 #endif
-            //.With(new Win32PlatformOptions {
-            //    UseWgl = true,
-            //    AllowEglInitialization = true
-            //})
-            //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
-#if LINUX
-            .With(new X11PlatformOptions { 
-               // RenderingMode = [X11RenderingMode.Software],
-                EnableIme = true,
-            })
-#endif
-
-            .UsePlatformDetect()
-#if SUGAR_WV
-            .UseDesktopWebView()
-#endif
-            .WithInterFont()
-            .UseReactiveUI()
-            .LogToTrace()// LogEventLevel.Verbose)
-                ;
-        static void HandleSingleInstanceLaunch(object[] args) {
-#if CEFNET_WV
-            // NOTE if implementing mutex this NEEDS to be beforehand or webviews never load
-            MpAvCefNetApplication.Init();
-#endif
-            BuildAndLaunch(args);
-        }
-        private static void BuildAndLaunch(object[] args) {
             Exception top_level_ex = null;
             try {
-                BuildAvaloniaApp()
-                    .StartWithClassicDesktopLifetime(App.Args);
+                App.Args = args;
+
+                HandleSingleInstanceLaunch(args);
             }
             catch (Exception ex) {
                 top_level_ex = ex;
@@ -88,18 +51,56 @@ namespace MonkeyPaste.Avalonia {
                     Mp.Services.ShutdownHelper != null) {
                     Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.TopLevelException, top_level_ex == null ? "NONE" : top_level_ex.ToString());
                 }
-
-            }
+            }            
         }
-        private static void WaitForDebug(object[] args) {
-            if (args.Contains(App.WAIT_FOR_DEBUG_ARG)) {
-                Console.WriteLine("Attach debugger and use 'Set next statement'");
-                while (true) {
-                    Thread.Sleep(100);
-                    if (Debugger.IsAttached)
-                        break;
-                }
-            }
+
+        // Avalonia configuration, don't remove; also used by visual designer.
+        static AppBuilder BuildAvaloniaApp()
+            => AppBuilder.Configure<App>()
+            .UsePlatformDetect()
+#if MAC
+        .With(new AvaloniaNativePlatformOptions {
+            OverlayPopups = true,
+            //RenderingMode = [AvaloniaNativeRenderingMode.Software]
+        }) 
+#endif
+            //.With(new Win32PlatformOptions {
+            //    UseWgl = true,
+            //    AllowEglInitialization = true
+            //})
+            //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
+#if LINUX
+            .With(new X11PlatformOptions { 
+               //RenderingMode = [X11RenderingMode.Software],
+               //EnableIme = true,
+               //OverlayPopups = true,
+               //EnableInputFocusProxy = true,
+            })
+#endif
+
+#if SUGAR_WV
+            .UseDesktopWebView()
+#endif
+            .WithInterFont()
+            .UseReactiveUI()
+            .LogToTrace()//LogEventLevel.Verbose)
+                ;
+        static void HandleSingleInstanceLaunch(object[] args) {
+            App.WaitForDebug(args);
+#if CEFNET_WV
+            // NOTE if implementing mutex this NEEDS to be beforehand or webviews never load
+            MpAvCefNetApplication.Init();
+#endif
+            BuildAndLaunch(args);
+        }
+        private static void BuildAndLaunch(object[] args) {
+            BuildAvaloniaApp()
+#if CEFNET_WV
+                    .StartWithCefNetApplicationLifetime(App.Args, ShutdownMode.OnExplicitShutdown);
+#else
+                    .StartWithClassicDesktopLifetime(App.Args, ShutdownMode.OnExplicitShutdown); 
+#endif
+           
         }
 
         [System.Runtime.InteropServices.DllImport("nvapi64.dll", EntryPoint = "fake")]

@@ -3055,4 +3055,10 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL ਦਾਖਲ ਕਰੋ</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>ਸਾਫ</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>ਦਾਨ</value>
+  </data>
 </root>

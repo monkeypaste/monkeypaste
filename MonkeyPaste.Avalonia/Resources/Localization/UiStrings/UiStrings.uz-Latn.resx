@@ -3055,4 +3055,10 @@ Hozirgi kunda tizimning trafik menyusida global yorliq yoqilishi mumkin</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL manzilini kiriting</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Aniq</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Xayr-ehson qilmoq</value>
+  </data>
 </root>

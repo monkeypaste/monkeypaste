@@ -2990,4 +2990,10 @@ FANDUCE@ONKEYPASTET.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL ପ୍ରବେଶ କରନ୍ତୁ |</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>ସଫା</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>ଦାନ କରନ୍ତୁ |</value>
+  </data>
 </root>

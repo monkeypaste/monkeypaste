@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common;
 using PropertyChanged;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -17,10 +18,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void InitDnd() {
-            DragDrop.SetAllowDrop(this, true);
-            this.AddHandler(DragDrop.DragOverEvent, MpAvTopEdgeMarkerView_DragOver);
+            //DragDrop.SetAllowDrop(this, true);
+            //this.AddHandler(DragDrop.DragOverEvent, MpAvTopEdgeMarkerView_DragOver);
+            if (TopLevel.GetTopLevel(this) is MpAvWindow w) {
+                w.AddHandler(DragDrop.DragOverEvent, MpAvTopEdgeMarkerView_DragOver);
+            }
         }
         private void MpAvTopEdgeMarkerView_DragOver(object sender, DragEventArgs e) {
+            MpConsole.WriteLine($"TopEdge drag over...");
             if (BindingContext.FakeWindowViewModel.FakeWindowActionType == MpFakeWindowActionType.Open) {
                 return;
             }

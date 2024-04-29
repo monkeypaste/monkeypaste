@@ -2990,4 +2990,10 @@ Monkeypaste на уредот
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Внесете URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Чиста</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Донирај</value>
+  </data>
 </root>

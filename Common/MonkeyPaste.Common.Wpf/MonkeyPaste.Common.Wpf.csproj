@@ -38,8 +38,8 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack, Version=1.11.57.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\HtmlAgilityPack.1.11.57\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.11.60.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\HtmlAgilityPack.1.11.60\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -101,12 +101,17 @@
     <Compile Include="Utils\PInvoke\WinApi.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj">
+      <Project>{400473eb-9a5b-4e8d-816d-5bc5b315c542}</Project>
+      <Name>MonkeyPaste.Common.Plugin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj">
       <Project>{e641a0b5-0461-47f3-91bb-340be880a545}</Project>
       <Name>MonkeyPaste.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

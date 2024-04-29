@@ -11,28 +11,17 @@ namespace MonkeyPaste.Avalonia {
 
         public static async Task ShutdownWithRestartTaskAsync(string detail) {
             string launcher_path =
-                Path.Combine(
+#if WINDOWS
+        Path.Combine(
                     Path.GetDirectoryName(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)),
                     "MonkeyPaste.Desktop.Launcher",
-                    "MonkeyPaste.Desktop.Launcher.exe");
+                    "MonkeyPaste.Desktop.Launcher.exe"); 
+#else
+                Mp.Services.PlatformInfo.ExecutingPath;
+#endif
             Process process = Process.Start(launcher_path, App.RESTART_ARG);
             Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.Restart, detail);
-
-            //if (result == AppRestartFailureReason.NotInForeground ||
-            //    result == AppRestartFailureReason.RestartPending ||
-            //    result == AppRestartFailureReason.Other) {
-            //    var result2 = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
-            //        notificationType: MpNotificationType.ModalShutdownLater,
-            //        title: UiStrings.CommonRestartFailedTitle,
-            //        body: UiStrings.CommonRestartFailedText,
-            //        iconSourceObj: "ErrorImage");
-            //    if(result2 == MpNotificationDialogResultType.Cancel) {
-            //        return;
-            //    }
-            //}
-
             await Task.Delay(1);
-            //RequestRestartAsync(true, detail).FireAndForgetSafeAsync();
         }
     }
 }

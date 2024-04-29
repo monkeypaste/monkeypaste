@@ -869,31 +869,6 @@ namespace MonkeyPaste {
         }
         #endregion
 
-        #region MpContentToken
-
-        public static async Task<MpContentToken> GetTokenAsync(int copyItemId, int actionId, string matchData) {
-            string query = "select * from MpContentToken where fk_MpCopyItemId=? and fk_MpActionId=? and MatchData=?";
-            var result = await MpDb.QueryAsync<MpContentToken>(query, copyItemId, actionId, matchData);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
-        }
-
-        public static async Task<List<MpContentToken>> GetTokenByActionIdAsync(int actionId) {
-            string query = $"select * from MpContentToken where fk_MpActionId=?";
-            var result = await MpDb.QueryAsync<MpContentToken>(query, actionId);
-            return result;
-        }
-
-        public static async Task<List<MpContentToken>> GetTokenByCopyItemIdAsync(int copyItemId) {
-            string query = $"select * from MpContentToken where fk_MpCopyItemId=?";
-            var result = await MpDb.QueryAsync<MpContentToken>(query, copyItemId);
-            return result;
-        }
-
-        #endregion
-
         #region MpDataObject
 
         public static async Task<bool> IsDataObjectContainFormatAsync(int doid, string formatName) {

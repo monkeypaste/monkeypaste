@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Cairo;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -35,14 +36,28 @@ namespace MonkeyPaste.Avalonia {
             MpAvDataObject avdo,
             MpTransactionType transType = MpTransactionType.None,
             bool force_allow_dup = false) {
+            MpCopyItem result = null;
+//#if LINUX
+//            result = await BuildAsync_linux(avdo, transType, force_allow_dup);
+//#else
+            result = await BuildAsync_default(avdo, transType, force_allow_dup);
+//#endif
+            return result;
+        }
+
+        #endregion
+
+        #region Private Methods
+        private async Task<MpCopyItem> BuildAsync_default(
+            MpAvDataObject avdo,
+            MpTransactionType transType = MpTransactionType.None,
+            bool force_allow_dup = false) {
             if (avdo == null || avdo.DataFormatLookup.Count == 0) {
                 return null;
             }
             if (transType == MpTransactionType.None) {
                 throw new Exception("Must have transacion type");
             }
-
-            await NormalizePlatformFormatsAsync(avdo);
 
             (MpCopyItemType itemType,
                 string itemData,
@@ -65,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
 
             BuildSupplementalsAsync(ci_guid, avdo, ci == null, transType, source_cts.Token).FireAndForgetSafeAsync();
 
-            
+
             if (ci == null) {
                 // new, non-duplicate or don't care
                 var dobj = await MpDataObject.CreateAsync(pdo: avdo);
@@ -98,9 +113,98 @@ namespace MonkeyPaste.Avalonia {
             return ci;
         }
 
-        #endregion
+        private async Task<MpCopyItem> BuildAsync_linux(
+            MpAvDataObject avdo,
+            MpTransactionType transType = MpTransactionType.None,
+            bool force_allow_dup = false) {
+            if (avdo == null || avdo.DataFormatLookup.Count == 0) {
+                return null;
+            }
+            if (transType == MpTransactionType.None) {
+                throw new Exception("Must have transacion type");
+            }
 
-        #region Private Methods
+            (MpCopyItemType itemType,
+                string itemData,
+                string itemDelta,
+                string itemPlainText) = await DecodeContentDataAsync(avdo);
+
+            if (itemType == MpCopyItemType.None ||
+                itemData == null) {
+                MpConsole.WriteLine("Warning! CopyItemBuilder could not create itemData");
+                return null;
+            }
+
+            (MpCopyItem ci, string checksum) = await PerformDupCheckAsync(
+                compare_data: itemPlainText,
+                itemType: itemType,
+                force_allow_dup, false);
+
+            IEnumerable<MpISourceRef> refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(avdo);
+
+            if (Mp.Services.SourceRefTools.IsAnySourceRejected(refs)) {
+                return null;
+            }
+
+            bool is_new = ci == null;
+            if (is_new) {
+                // new, non-duplicate or don't care
+                var dobj = await MpDataObject.CreateAsync(pdo: avdo);
+                string default_title = await GetDefaultItemTitleAsync(itemType, avdo);
+
+                MpDataObjectSourceType dataObjectSourceType = avdo.GetDataObjectSourceType();
+                string ci_guid = is_new ? System.Guid.NewGuid().ToString() : ci.Guid;
+                int icon_id = PickIconIdFromSourceRefs(refs);
+                ci = await MpCopyItem.CreateAsync(
+                    guid: ci_guid,
+                    dataObjectId: dobj.Id,
+                    iconId: icon_id,
+                    title: default_title,
+                    data: itemData,
+                    itemType: itemType,
+                    checksum: checksum,
+                    dataObjectSourceType: dataObjectSourceType,
+                    suppressWrite: false);
+                if (ci == null) {
+                    // probably null data, clean up pre-create
+                    //source_cts.Cancel();
+                    await dobj.DeleteFromDatabaseAsync();
+                    return null;
+                }
+            } else {
+                if (transType == MpTransactionType.Created) {
+                    MpConsole.WriteLine($"Item '{ci}' duplication detected. Marking '{MpTransactionType.Created}' as '{MpTransactionType.Recreated}'");
+                    // try to prevent multiple 'create' transactions, 'Recreate' will imply dup ref
+                    transType = MpTransactionType.Recreated;
+                }
+            }
+
+            List<string> ref_urls = refs.Select(x => Mp.Services.SourceRefTools.ConvertToInternalUrl(x)).ToList();
+            if (avdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> urls)) {
+                var urlList = urls.ToList();
+                for (int i = 0; i < ref_urls.Count; i++) {
+                    var provided_url = urlList.FirstOrDefault(x => x.ToLower().StartsWith(ref_urls[i].ToLower()));
+                    if (provided_url != null) {
+                        // prefer provided url in case it has args and remove so not added later
+                        ref_urls[i] = provided_url;
+                        urlList.Remove(provided_url);
+                    }
+                }
+                // add remaining urls for transaction
+                if (urlList.Count > 0) {
+                    ref_urls.AddRange(urlList);
+                }
+            }
+            await Mp.Services.TransactionBuilder.ReportTransactionAsync(
+                            copyItemId: ci.Id,
+                            reqType: MpJsonMessageFormatType.DataObject,
+                            //req: avdo.SerializeData(),
+                            respType: MpJsonMessageFormatType.Delta,
+                            //resp: string.IsNullOrEmpty(itemDelta) ? ci.ToDelta():itemDelta,
+                            ref_uris: ref_urls,
+                            transType: transType);
+            return ci;
+        }
 
         #region Source Helpers
         private async Task BuildSupplementalsAsync(
@@ -272,13 +376,13 @@ namespace MonkeyPaste.Avalonia {
             }
 
             switch (max_format) {
-                case MpPortableDataFormats.Text3:
-                case MpPortableDataFormats.Text2:
-                case MpPortableDataFormats.Text:
+                case var _ when max_format == MpPortableDataFormats.Text3:
+                case var _ when max_format == MpPortableDataFormats.Text2:
+                case var _ when max_format == MpPortableDataFormats.Text:
                     inputFormatType = MpDataFormatType.PlainText;
                     break;
-                case MpPortableDataFormats.Html:
-                case MpPortableDataFormats.Xhtml:
+                case var _ when max_format == MpPortableDataFormats.Html:
+                case var _ when max_format == MpPortableDataFormats.Xhtml:
 
                     // NOTE to avoid loosing rtf markup the converted html is 
                     // fully html special entities are fully encoded which will lead
@@ -288,7 +392,7 @@ namespace MonkeyPaste.Avalonia {
                         MpDataFormatType.Rtf2Html :
                         MpDataFormatType.Html;
                     break;
-                case MpPortableDataFormats.Rtf:
+                case var _ when max_format == MpPortableDataFormats.Rtf:
                     // NOTE should only happen if user has disabled (its default) convert rtf2html 
                     //MpDebug.Assert(!avdo.ContainsData(MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT), $"CopyItem builder error trying to use conversion data instead of source");
                     //MpDebug.Assert(
@@ -299,7 +403,7 @@ namespace MonkeyPaste.Avalonia {
                     itemData = itemData.RtfToHtml();
                     inputFormatType = MpDataFormatType.Rtf2Html;
                     break;
-                case MpPortableDataFormats.Csv:
+                case var _ when max_format == MpPortableDataFormats.Csv:
                     itemData = itemData.CsvStrToRichHtmlTable();
                     inputFormatType = MpDataFormatType.Html;
                     //if (avdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) && 
@@ -315,12 +419,12 @@ namespace MonkeyPaste.Avalonia {
                     //    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvCsv);
                     //}
                     break;
-                case MpPortableDataFormats.Image:
-                case MpPortableDataFormats.Image2:
+                case var _ when max_format == MpPortableDataFormats.Image:
+                case var _ when max_format == MpPortableDataFormats.Image2:
                     // NOTE this is just a filler here, haven't had need to discern images
                     inputFormatType = MpDataFormatType.Bmp;
                     break;
-                case MpPortableDataFormats.Files:
+                case var _ when max_format == MpPortableDataFormats.Files:
                     inputFormatType = MpDataFormatType.FileList;
                     break;
             }
@@ -365,10 +469,11 @@ namespace MonkeyPaste.Avalonia {
                         // browser image copy handling
                         itemType = MpCopyItemType.Image;
                         delta = null;
-                    } else if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
-                        //plain text mode, just use plain text for now
-                        itemData = itemData.ToPlainText();
-                    }
+                    } 
+                    //else if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                    //    //plain text mode, just use plain text for now
+                    //    itemData = itemData.ToPlainText();
+                    //}
                 }
             }
 
@@ -406,65 +511,6 @@ namespace MonkeyPaste.Avalonia {
             }
             return default_title;
         }
-        #endregion
-
-        #region Platform Handling
-        private async Task<MpAvDataObject> NormalizePlatformFormatsAsync(MpAvDataObject avdo) {
-            if (OperatingSystem.IsAndroid()) {
-                return avdo;
-            }
-            MpConsole.WriteLine($"Normalizing actual dataobject formats:  {string.Join(",", avdo.GetAllDataFormats().Select(x => x))}");
-
-            // foreach(var af in actual_formats) {
-            //     MpConsole.WriteLine("Actual available format: " + af);
-            //     object af_data = await Application.Current.Clipboard.GetDataAsync(af);
-            //     if(af_data == null) {
-            //         MpConsole.WriteLine("data null");
-            //         continue;
-            //     }
-            //     if(af_data is string af_data_str) {
-            //         MpConsole.WriteLine("(string)");
-            //         MpConsole.WriteLine(af_data_str);
-            //     } else if(af_data is IEnumerable<string> strl) {
-            //         MpConsole.WriteLine("(string[]");
-            //         strl.ForEach(x => MpConsole.WriteLine(x));
-            //     } else if(af_data is byte[] bytes && bytes.ToDecodedString() is string bytes_str) {
-            //         MpConsole.WriteLine("(bytes)");
-            //         MpConsole.WriteLine(bytes_str);
-            //     } else {
-            //         MpConsole.WriteLine("(unknown): " + af_data.GetType());
-            //     }
-            // }
-
-            if (OperatingSystem.IsLinux()) {
-                var actual_formats = await Mp.Services.DeviceClipboard.GetFormatsAsync();
-                // linux doesn't case non-html formats the same as windows so mapping them here
-                bool isLinuxFileList = avdo.ContainsData(MpPortableDataFormats.MimeText) &&
-                                    actual_formats.Contains(MpPortableDataFormats.MimeGnomeFiles);
-                if (isLinuxFileList) {
-                    // NOTE avalonia doesn't acknowledge files (no 'FileNames' entry) on Ubuntu 22.04
-                    // and is beyond support for the clipboard plugin right now so..
-                    // TODO eventually should tidy up clipboard handling so plugins are clear example code
-                    string files_text_base64 = avdo.GetData(MpPortableDataFormats.MimeText) as string;
-                    if (!string.IsNullOrEmpty(files_text_base64)) {
-                        string files_text = files_text_base64.ToStringFromBase64();
-                        MpConsole.WriteLine("Got file text: " + files_text);
-                        avdo.SetData(MpPortableDataFormats.Files, files_text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
-                    }
-
-                } else {
-                    bool isLinuxAndNeedsCommonPlainText = avdo.ContainsData(MpPortableDataFormats.MimeText) &&
-                                                            !avdo.ContainsData(MpPortableDataFormats.Text);
-                    if (isLinuxAndNeedsCommonPlainText) {
-                        string plain_text = avdo.GetData(MpPortableDataFormats.MimeText) as string;
-                        avdo.SetData(MpPortableDataFormats.Text, plain_text);
-                    }
-                }
-            }
-            MpConsole.WriteLine($"DataObject format normalization complete. Available dataobject formats: {string.Join(",", avdo.DataFormatLookup.Select(x => x.Key))}");
-            return avdo;
-        }
-
         #endregion
 
         #endregion

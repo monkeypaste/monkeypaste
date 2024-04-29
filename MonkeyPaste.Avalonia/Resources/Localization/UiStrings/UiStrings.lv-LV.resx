@@ -2990,4 +2990,10 @@ Globālās saīsnes tagad var iespējot Sistēmas paplātes izvēlnē</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Ievadiet URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Noskaidrot</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Ziedot</value>
+  </data>
 </root>

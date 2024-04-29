@@ -109,6 +109,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSelectedBusy =>
             SelectedItem != null && SelectedItem.IsAnyBusy;
+        public bool IsSelectedDownloading =>
+            SelectedItem != null && SelectedItem.IsDownloading;
 
         public bool IsInitialized { get; set; } = false;
 

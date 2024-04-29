@@ -16,6 +16,10 @@ namespace MonkeyPaste.Avalonia {
 
         [DllImport(XdoName)]
         public static extern int xdo_get_active_window(nint xdo, ref int window);
+        [DllImport(XdoName)]
+        public static extern int xdo_get_focused_window(nint xdo, ref int window);
+        [DllImport(XdoName)]
+        public static extern int xdo_get_focused_window_sane(nint xdo, ref int window);
 
         [DllImport(XdoName)]
         public static extern int xdo_activate_window(nint xdo, int window);
@@ -30,11 +34,5 @@ namespace MonkeyPaste.Avalonia {
 
         [DllImport(XdoName)]
         public static extern int xdo_get_window_classname(nint xdo, int window, ref string class_ret);
-    }
-    
-    public static class PidTools {
-        const string PidName = "pid.so";
-        [DllImport(PidName)]
-        public static extern int get_exe_for_pid(int pid, [Out] byte[] exe_path_return);
     }
 }

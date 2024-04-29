@@ -2990,4 +2990,10 @@ Globale kortpaaie kan nou in die System Tray Menu geaktiveer word</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Voer URL in</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Helder</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>skenk</value>
+  </data>
 </root>

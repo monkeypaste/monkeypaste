@@ -2990,4 +2990,10 @@ feedback@monkeypaste.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL ను నమోదు చేయండి</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>క్లియర్</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>దానం</value>
+  </data>
 </root>

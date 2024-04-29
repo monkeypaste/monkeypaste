@@ -2990,4 +2990,10 @@ Le scorciatoie globali possono ora essere abilitate nel menu del vassoio di sist
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Inserisci l'URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Chiaro</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Donare</value>
+  </data>
 </root>

@@ -2990,4 +2990,10 @@ Shkurtoret globale tani mund të aktivizohen në menunë e tabaka të sistemit</
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Hyni në URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Qartë</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Dhuroj</value>
+  </data>
 </root>

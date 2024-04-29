@@ -2990,4 +2990,10 @@ Shortcuts globali issa jistgħu jiġu attivati ​​fil-menu tat-trej tas-siste
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Daħħal URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Ċar</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Donazzjoni</value>
+  </data>
 </root>

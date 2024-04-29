@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsLoaded { get; set; } =
-#if CEFNET_WV || OUTSYS_WV || MOBILE
+#if SUGAR_WV || CEFNET_WV || OUTSYS_WV || MOBILE
             false;
 #else
             true;
@@ -71,8 +71,10 @@ namespace MonkeyPaste.Avalonia {
             MpAvCefNetApplication.IsCefNetLoaded;
 #elif OUTSYS_WV
             true;
-#else
+#elif SUGAR_WV
             true;
+#else
+            false;
 #endif
 
         bool IsWebViewConverterAvailable =>
@@ -126,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private async Task CreateWebViewConverterAsync() {
-            bool do_hide = false;
+            bool do_hide = true;
             IsBusy = true;
             if (OperatingSystem.IsBrowser()) {
                 await MpDeviceWrapper.Instance.JsImporter.ImportAllAsync();
@@ -152,8 +154,8 @@ namespace MonkeyPaste.Avalonia {
                     _convWindow.Width = 50;
                     _convWindow.Height = 50;
                 }
-                
 
+                _convWindow.Title = "Hidden converter window".ToWindowTitleText();
                 _convWindow.Content = ConverterWebView;
                 ConverterWebView.AttachedToVisualTree += async (s, e) => {
                     var sw = Stopwatch.StartNew();
@@ -194,11 +196,7 @@ namespace MonkeyPaste.Avalonia {
             string htmlDataStr,
             string verifyPlainText,
             MpCsvFormatProperties csvProps = null) {
-            if (!IsWebViewConverterAvailable) {
-                MpDebug.Break($"Convert from webview called before available");
-                return ConvertWithFallback(htmlDataStr, verifyPlainText);
-            }
-            htmlDataStr = htmlDataStr.ToString().ToBase64String();
+            htmlDataStr = htmlDataStr.ToBase64String();
 
             if (string.IsNullOrWhiteSpace(htmlDataStr)) {
                 MpConsole.WriteTraceLine("Error parsing html data obj, no data found");

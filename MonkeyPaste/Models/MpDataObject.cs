@@ -93,6 +93,7 @@ namespace MonkeyPaste {
                         if (valObj is IStorageItem si &&
                             si.TryGetLocalPath() is string path) {
                             valueParts.Add(path);
+                            continue;
                         }
                         MpDebug.Break($"Unknown file list item type '{valObj.GetType()}'");
 

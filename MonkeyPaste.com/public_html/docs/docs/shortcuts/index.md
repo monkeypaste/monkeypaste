@@ -2,6 +2,7 @@
 sidebar_position: 4
 ---
 # Shortcuts
+
 :::warning unified keys
 MonkeyPaste **ignores** the difference between left or right **modkeys** and num pad or home row **number keys**. They are all considered **the same key**. 
 :::
@@ -30,6 +31,10 @@ You can change the keys for a shortcut by hovering over the keys and clicking th
 |Post |The shortcut will be executed **after** the active application receives it so an active application shortcut *can* happen **before**.|
 |Override |The **last** key of the shortcut will be suppressed from input to the active application so it will be unknown to the active application. |
 |Exclusive Override |**(Experimental)** This is a special type of override mode designed for the locking keys (Num Lock, Caps Lock and Scroll Lock). It only allows **one** key (non-modifier) for its assignment but will be executed *anytime* no matter what other keys are down. This prevents the lock key from getting stuck in its lock state.|
+
+:::danger Linux Limitations
+Global shortcut support on Linux is limited to [Passive-mode](shortcuts/index.md#global-routing-types). More info on shortcuts [here](../docs/shortcuts/index.md)
+:::
 
 :::tip When in doubt Override
 To ensure your global shortcut doesn't conflict with some other applications shortcut, set the *Routing Type* to *Override*. Also it helps to make it one you don't use in other applications then if it *does* conflict with one somewhere, it *won't really matter* since you don't use it anyways!

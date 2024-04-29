@@ -234,6 +234,7 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvPrefViewModel.Instance.IsTextRightToLeft) {
                 Classes.Add("rtl");
             }
+            Classes.Add(MpAvThemeViewModel.Instance.PlatformShortName);
 
             MpAvWindowManager.AllWindows.Add(this);
             this.Closed += MpAvWindow_Closed;

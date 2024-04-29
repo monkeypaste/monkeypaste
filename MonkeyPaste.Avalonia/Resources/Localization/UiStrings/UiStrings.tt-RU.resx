@@ -2990,4 +2990,10 @@ Changeзгәрешләр өчен сылтамага иярегез
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL кертегез</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Чиста</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Бүләк итегез</value>
+  </data>
 </root>

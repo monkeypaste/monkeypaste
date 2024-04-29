@@ -562,6 +562,12 @@ namespace MonkeyPaste.Avalonia {
                         LoadReadMeAsync().FireAndForgetSafeAsync();
                     }
                     break;
+                case nameof(InstallProgressViewModel):
+                    OnPropertyChanged(nameof(IsDownloading));
+                    if(Parent != null) {
+                        Parent.OnPropertyChanged(nameof(Parent.IsSelectedDownloading));
+                    }
+                    break;
             }
         }
 

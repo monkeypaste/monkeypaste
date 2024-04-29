@@ -2990,4 +2990,10 @@ Globale snarveier kan nå aktiveres i systemskuffenyen</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Skriv inn URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Klar</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Donere</value>
+  </data>
 </root>

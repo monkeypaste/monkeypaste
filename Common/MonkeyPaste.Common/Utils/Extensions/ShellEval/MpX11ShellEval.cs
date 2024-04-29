@@ -10,8 +10,6 @@ namespace MonkeyPaste.Common {
 
         #endregion
         public static async Task<string> ShellExecAsync(this string cmd) {
-            var start_dt = DateTime.Now;
-
             var escapedArgs = cmd.Replace("\"", "\\\"");
             var process = new System.Diagnostics.Process {
                 StartInfo = new ProcessStartInfo {
@@ -19,21 +17,48 @@ namespace MonkeyPaste.Common {
                     Arguments = $"-c \"{escapedArgs}\"",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    UseShellExecute = false,
+                    UseShellExecute = false,    
                     CreateNoWindow = true
                 },
                 EnableRaisingEvents = true
             };
-            string output_line = null;
+
             var sb = new StringBuilder();
+            bool has_exited = false;
+
+            process.Exited += (sender, args) => {
+                try {
+                    has_exited = true;
+                    string errorStr = process.StandardError.ReadToEnd();
+                    if (!string.IsNullOrEmpty(errorStr)) {
+                        MpConsole.WriteLine($"Error for cmd '{cmd}':");
+                        MpConsole.WriteLine(errorStr);
+                    }
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine($"Shell exit error. cmd '{cmd}'.", ex);
+                }
+                if (process == null) {
+                    return;
+                }
+                process.Dispose();
+                process = null;
+            };
 
             try {
                 process.Start();
-                while ((output_line = await process.StandardOutput.ReadLineAsync()) != null) {
-                    sb.AppendLine(output_line);
-                }
+                while(true) {
+                    if(has_exited) {
+                        break;
+                    }
+                    string output_line = await process.StandardOutput.ReadToEndAsync();
+                    if(output_line == null) {
+                        break;
+                    }
+                    sb.Append(output_line);
+                } 
             }
-            catch (Exception) {
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error executing bash cmd '{cmd}'.", ex);
             }
 
             return sb.ToString();
@@ -92,7 +117,7 @@ namespace MonkeyPaste.Common {
                 //MpConsole.WriteLine(e, "Command {} failed", cmd);                
             }
 
-            return output;
+            return output.ToStringOrEmpty();
         }
     }
 }

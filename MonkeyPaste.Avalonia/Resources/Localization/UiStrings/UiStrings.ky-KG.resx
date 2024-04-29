@@ -2990,4 +2990,10 @@ feedback@monkeypaste.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL киргизиңиз</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Тазалоо</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Кайрымдуулук</value>
+  </data>
 </root>
