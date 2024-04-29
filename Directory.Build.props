@@ -6,7 +6,7 @@
     <ApplicationAuthor>Monkey LLC</ApplicationAuthor>
     <ApplicationVersionMajor>1</ApplicationVersionMajor>
     <ApplicationVersionMinor>0</ApplicationVersionMinor>
-    <ApplicationVersionPatch>17</ApplicationVersionPatch>
+    <ApplicationVersionPatch>18</ApplicationVersionPatch>
     <ApplicationVersionRevision>0</ApplicationVersionRevision>
     <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch).$(ApplicationVersionRevision)</ApplicationVersion>
     <LinuxVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor)-$(ApplicationVersionPatch)</LinuxVersion>
