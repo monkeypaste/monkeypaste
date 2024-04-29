@@ -1,36 +1,48 @@
 [submodule "Build/Ledger"]
 	path = Build/Ledger
 	url = https://github.com/monkeypaste/ledger/ledger.git
+    ignore = dirty
 [submodule "Plugins/AzureCompoterVision"]
 	path = Plugins/AzureCompoterVision
 	url = https://github.com/monkeypaste/azurecomputervision.git
+    ignore = dirty
 [submodule "Plugins/AzureTextTranslator"]
 	path = Plugins/AzureTextTranslator
 	url = https://github.com/monkeypaste/AzureTextTranslator.git
+    ignore = dirty
 [submodule "Plugins/ChatGpt"]
 	path = Plugins/ChatGpt
 	url = https://github.com/monkeypaste/ChatGpt.git
+    ignore = dirty
 [submodule "Plugins/FileConverter"]
 	path = Plugins/FileConverter
 	url = https://github.com/monkeypaste/FileConverter.git
+    ignore = dirty
 [submodule "Plugins/GoogleLiteTextTranslator"]
 	path = Plugins/GoogleLiteTextTranslator
 	url = https://github.com/monkeypaste/GoogleLiteTextTranslator.git
+    ignore = dirty
 [submodule "Plugins/MinimalExample"]
 	path = Plugins/MinimalExample
 	url = https://github.com/monkeypaste/MinimalExample.git
+    ignore = dirty
 [submodule "Plugins/QrCoder"]
 	path = Plugins/QrCoder
 	url = https://github.com/monkeypaste/QrCoder.git
+    ignore = dirty
 [submodule "Plugins/TextToSpeech"]
 	path = Plugins/TextToSpeech
 	url = https://github.com/monkeypaste/TextToSpeech.git
+    ignore = dirty
 [submodule "Plugins/WebSearch"]
 	path = Plugins/WebSearch
 	url = https://github.com/monkeypaste/WebSearch.git
+    ignore = dirty
 [submodule "Plugins/YoloImageAnnotator"]
 	path = Plugins/YoloImageAnnotator
 	url = https://github.com/monkeypaste/YoloImageAnnotator.git
+    ignore = dirty
 [submodule "Common/MonkeyPaste.Common.Plugin"]
 	path = Common/MonkeyPaste.Common.Plugin
 	url = https://github.com/monkeypaste/MonkeyPaste.Common.Plugin
+    ignore = dirty

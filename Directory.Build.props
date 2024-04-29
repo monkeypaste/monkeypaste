@@ -119,7 +119,7 @@
     <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName> 
     <IsDesktop>true</IsDesktop>
-    <UseCefNet>true</UseCefNet> 
+    <UseCefNet>true</UseCefNet>
     <UseSugarWv>false</UseSugarWv>
     <PlatformShortName>linux</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\linux</BuildScriptsDir>
