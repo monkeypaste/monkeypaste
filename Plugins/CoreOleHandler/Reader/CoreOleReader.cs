@@ -50,7 +50,7 @@ namespace CoreOleHandler {
             
 
             foreach (var read_format in readFormats) {
-                if (MpPortableDataFormats.RegisteredInternalFormats.Contains(read_format)) {
+                if (MpDataFormatRegistrar.RegisteredInternalFormats.Contains(read_format)) {
                     // ignore internal formats but let them pass through as output
                     read_output.AddOrReplace(read_format, avdo[read_format]);
                     continue;

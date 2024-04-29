@@ -3143,6 +3143,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Donate.
+        /// </summary>
+        public static string DonateLabel {
+            get {
+                return ResourceManager.GetString("DonateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remember Drop Settings For:.
         /// </summary>
         public static string DropCompleteRememberLabelPrefix {

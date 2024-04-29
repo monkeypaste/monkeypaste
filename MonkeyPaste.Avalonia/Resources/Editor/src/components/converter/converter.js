@@ -55,11 +55,12 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	if (formatType == 'plaintext') {
 		setEditorText(dataStr, 'user');
 	} else {
-		let html_doc = globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(dataStr), 'text/html');
+		let clean_html = stripLineBreaks(cleanHtmlForFragmentMarkers(dataStr));
+
+		let html_doc = globals.DomParser.parseFromString(clean_html, 'text/html');
 
 		// images aren't converted so if present in content its composite
-		let is_composite =
-			Array.from(html_doc.querySelectorAll('img')).length > 0;
+		let is_composite = Array.from(html_doc.querySelectorAll('img')).length > 0;
 		if (is_composite) {
 			// for mixed content ignore validations
 			DO_VALIDATE = false;
@@ -90,55 +91,10 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 
 	let is_conv_html_valid = true;
 
-	if (DO_VALIDATE && verifyText != null) {
-		let convText = getText();
-		let c_ascii = toAscii(convText);
-
-		let v_ascii = toAscii(verifyText.replaceAll(`\r\n`, `\n`));
-		if (!v_ascii.endsWith('\n')) {
-			// BUG1 when actual text doesn't end w/ newline make sure quills newline is removed
-			// BUG2 dom parser adding TWO extra new lines to html fragment of html text so
-			// removing extras until match or letting it fail still if not the case
-			let last_conv_char = c_ascii.charAt(c_ascii.length - 1);
-			while (last_conv_char == '\n') {
-				c_ascii = trimQuillTrailingLineEndFromText(c_ascii);
-				if (c_ascii.length == 0) {
-					break;
-				}
-				last_conv_char = c_ascii.charAt(c_ascii.length - 1);
-			}
-		}
-		// compare content only, new lines aren't critical and commonly create failure
-		let v_comp = v_ascii.replaceAll('\n', '');
-		let c_comp = c_ascii.replaceAll('\n', '');
-		const diff_idx = getFirstDifferenceIdx(v_comp, c_comp);
-		is_conv_html_valid = diff_idx < 0;
-		if (!ENFORCE_VALIDATE || is_conv_html_valid) {
-			log('conversion validate: PASSED');
-			if (!needs_encoding) {
-				// encode final output
-				output_html = getHtml(null, true);
-			}
-			const is_actual_inline_only = v_ascii.indexOf('\n') < 0;
-			if (is_actual_inline_only) {
-				output_html = output_html.replace('<p', '<span').replace('p>','span>');
-			}
-		} else {
-			log('conversion validate: FAILED');
-			let first_verify_diff_char = getEscapedStr(v_comp.charAt(diff_idx));
-			let first_conv_diff_char = getEscapedStr(c_comp.charAt(diff_idx));
-
-			log(`first diff: idx ${diff_idx} verify: '${first_verify_diff_char}' conv: '${first_conv_diff_char}'`);
-			log('verify length: ' + v_ascii.length);
-			log('conv length: ' + c_ascii.length);
-			log('verify text:');
-			log(verifyText);
-			log('conv text:');
-			log(convText);
-			onException_ntf('conversion error.');
-			output_html = encodeHtmlSpecialEntitiesFromPlainText(verifyText);
-		}
+	if (DO_VALIDATE) {
+		output_html = verifyConv(verifyText, output_html, ENFORCE_VALIDATE);
 	}
+
 	setEditorHtml(output_html);
 	let output_delta = convertHtmlToDelta(output_html);
 	let themed_html = getHtml(null, true, false, true, true);
@@ -156,6 +112,62 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	};
 }
 
+function verifyConv(verifyText, output_html, enforceValidation) {
+	if (isNullOrUndefined(verifyText)) {
+		return output_html;
+	}
+	let convText = getText();
+	let c_ascii = toAscii(convText);
+
+	let v_ascii = toAscii(verifyText.replaceAll(`\r\n`, `\n`));
+	if (!v_ascii.endsWith('\n')) {
+		// BUG1 when actual text doesn't end w/ newline make sure quills newline is removed
+		// BUG2 dom parser adding TWO extra new lines to html fragment of html text so
+		// removing extras until match or letting it fail still if not the case
+		let last_conv_char = c_ascii.charAt(c_ascii.length - 1);
+		while (last_conv_char == '\n') {
+			c_ascii = trimQuillTrailingLineEndFromText(c_ascii);
+			if (c_ascii.length == 0) {
+				break;
+			}
+			last_conv_char = c_ascii.charAt(c_ascii.length - 1);
+		}
+	}
+	// compare content only, new lines aren't critical and commonly create failure
+	let v_comp = v_ascii.replaceAll('\n', '');
+	let c_comp = c_ascii.replaceAll('\n', '');
+	const diff_idx = getFirstDifferenceIdx(v_comp, c_comp);
+	is_conv_html_valid = diff_idx < 0;
+
+	if (!enforceValidation || is_conv_html_valid) {
+		if (is_conv_html_valid) {
+			log('conversion validate: PASSED');
+		}
+		if (!needs_encoding) {
+			// encode final output
+			output_html = getHtml(null, true);
+		}
+		const is_actual_inline_only = v_ascii.indexOf('\n') < 0;
+		if (is_actual_inline_only) {
+			output_html = output_html.replace('<p', '<span').replace('p>', 'span>');
+		}
+	} else {
+		log('conversion validate: FAILED');
+		let first_verify_diff_char = getEscapedStr(v_comp.charAt(diff_idx));
+		let first_conv_diff_char = getEscapedStr(c_comp.charAt(diff_idx));
+
+		log(`first diff: idx ${diff_idx} verify: '${first_verify_diff_char}' conv: '${first_conv_diff_char}'`);
+		log('verify length: ' + v_ascii.length);
+		log('conv length: ' + c_ascii.length);
+		log('verify text:');
+		log(verifyText);
+		log('conv text:');
+		log(convText);
+		onException_ntf('conversion error.');
+		output_html = encodeHtmlSpecialEntitiesFromPlainText(verifyText);
+	}
+	return output_html;
+}
 
 function locateFaviconBase64(htmlStr) {
 	const BASE64_PREFIX = 'data:image/png;base64,';

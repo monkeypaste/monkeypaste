@@ -2990,4 +2990,10 @@
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Url সুমুৱাওক</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>পৰিষ্কাৰ</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>দান কৰা</value>
+  </data>
 </root>

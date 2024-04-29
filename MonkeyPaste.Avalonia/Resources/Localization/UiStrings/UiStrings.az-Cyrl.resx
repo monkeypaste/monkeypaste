@@ -2990,4 +2990,10 @@ Qlobal Qısayolları indi Sistem Tablası Menyusunda aktivləşdirmək olar</val
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Url daxil edin</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Aydın</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Bağışlayın</value>
+  </data>
 </root>

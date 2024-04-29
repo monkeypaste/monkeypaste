@@ -2446,6 +2446,7 @@
     
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.$(PlatformShortName).cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.shared.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpXdoCmd.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\X11Tools.cs" Condition="'$(BuildOs)' == 'LINUX'" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\XdoLib.cs" Condition="'$(BuildOs)' == 'LINUX'" />
     <Compile Include="Utils\WindowManager\Helpers\MpAvWindowPositioner.cs" />

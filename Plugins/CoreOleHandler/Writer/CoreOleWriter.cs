@@ -137,16 +137,16 @@ namespace CoreOleHandler {
         #region Windows Image Post-processor
 
         private void PostProcessImage(IDataObject ido) {
-#if WINDOWS
-            if (ido.TryGetData(MpPortableDataFormats.Image, out byte[] pngBytes)) {
-                object dib = MonkeyPaste.Common.Wpf.MpWpfClipoardImageHelper.GetWpfDib(pngBytes);
-                ido.Set(MpPortableDataFormats.WinImage3, dib);
-
-                object bmp = MonkeyPaste.Common.Wpf.MpWpfClipoardImageHelper.GetSysDrawingBitmap(pngBytes);
-                ido.Set(MpPortableDataFormats.WinImage2, bmp);
+            if(!OperatingSystem.IsWindows()) {
+                return;
             }
+            if (ido.TryGetData(MpPortableDataFormats.Image, out byte[] pngBytes)) {
+                //object dib = MonkeyPaste.Common.Wpf.MpWpfClipoardImageHelper.GetWpfDib(pngBytes);
+                //ido.Set(MpDataFormats.WinImage3, dib);
 
-#endif
+                //object bmp = MonkeyPaste.Common.Wpf.MpWpfClipoardImageHelper.GetSysDrawingBitmap(pngBytes);
+                //ido.Set(MpDataFormats.WinImage2, bmp);
+            }
         }
         #endregion
 
@@ -166,9 +166,9 @@ namespace CoreOleHandler {
             await MpAvClipboardExtensions.FinalizePlatformDataObjectAsync(ido);
 
             if (isDnd) {
-#if MAC && false
-                await ido.WriteToPasteboardAsync(true);
-#endif
+                if(OperatingSystem.IsMacOS() && false) {
+                    //await ido.WriteToPasteboardAsync(true);
+                }
                 return;
             }
             await MpAvClipboardExtensions.WriteToClipboardAsync(ido);

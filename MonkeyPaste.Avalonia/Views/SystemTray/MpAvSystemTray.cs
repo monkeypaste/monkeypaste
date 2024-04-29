@@ -117,10 +117,11 @@ namespace MonkeyPaste.Avalonia {
                     new Binding() {
                         Source = tmivm.IconSrcBindingObj,
                         Path = tmivm.IconPropPath,
-                        Converter = MpAvStringHexToBitmapTintConverter.Instance
+                        Converter = MpAvStringHexToBitmapTintConverter.Instance,
+                        ConverterParameter = MpThemeResourceKey.ThemeInteractiveColor_norand.ToString()
                     });
             } else if (tmivm.IconSourceObj != null) {
-                rootIcon.Icon = MpAvStringHexToBitmapTintConverter.Instance.Convert(tmivm.IconSourceObj, typeof(WindowIcon), null, null) as WindowIcon;
+                rootIcon.Icon = MpAvStringHexToBitmapTintConverter.Instance.Convert(tmivm.IconSourceObj, typeof(WindowIcon), MpThemeResourceKey.ThemeInteractiveColor_norand.ToString(), null) as WindowIcon;
 
             }
 

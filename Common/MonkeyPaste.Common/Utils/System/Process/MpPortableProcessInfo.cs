@@ -64,8 +64,7 @@ namespace MonkeyPaste.Common {
         }
 
         public override string ToString() {
-            //return string.Format(@"Handle '{0}' Path '{1}' Title '{2}' ", Handle, ProcessPath, MainWindowTitle);
-            return this.SerializeObject();
+            return $"Handle '{Handle}' Title '{MainWindowTitle}' Path '{ProcessPath}' Args '{string.Join(" ",ArgumentList)}'";
         }
 
         public object Clone() {

@@ -2990,4 +2990,10 @@ furedback@monkeypaste.com</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL ஐ உள்ளிடவும்</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>தெளிவான</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>நன்கொடை</value>
+  </data>
 </root>

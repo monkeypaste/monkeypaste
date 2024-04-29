@@ -179,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),
                     //new MpAvLoaderItemViewModel(typeof(MpAvNotificationWindowManager),"Notifications"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
-                    new MpAvLoaderItemViewModel(typeof(MpPortableDataFormats),UiStrings.LoaderClipboardLabel, Mp.Services.DataObjectRegistrar),
+                    new MpAvLoaderItemViewModel(typeof(MpDataFormatRegistrar),UiStrings.LoaderClipboardLabel, Mp.Services.DataObjectRegistrar),
                     //new MpAvLoaderItemViewModel(typeof(MpAvTemplateModelHelper), "Templates"),
                     new MpAvLoaderItemViewModel(typeof(MpPluginLoader), UiStrings.LoaderAnalyzersLabel),
 #if WINDOWS

@@ -12,8 +12,8 @@ namespace MonkeyPaste.Common {
     public static class MpX11ClipboardHelper {
 
         public static async Task<string> ReadFormatAsync(string format) {
-            string xclip_cmd = $"xclip -o -target {format} -selection clipboard";
-            if(MpPortableDataFormats.IsFormatStrBase64(format)) {
+            string xclip_cmd = $"xclip -o -target {format}";// -selection clipboard";
+            if(MpDataFormatRegistrar.IsFormatStrBase64(format)) {
                 xclip_cmd = $"{xclip_cmd} | base64 --wrap=0";
             }
             string result = await xclip_cmd.ShellExecAsync();
@@ -26,7 +26,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static async Task<string[]> GetFormatsAsync(MpLinuxSelectionType selType) {
-            string xclip_cmd = $"xclip -o -target TARGETS -selection {selType.ToString().ToLowerInvariant()}";
+            string xclip_cmd = $"xclip -o -target TARGETS";// -selection {selType.ToString().ToLowerInvariant()}";
             string result = await xclip_cmd.ShellExecAsync();
             return result.SplitByLineBreak();
         }

@@ -2990,4 +2990,10 @@ Globaalit pikakuvakkeet voidaan nyt ottaa käyttöön järjestelmälokero -valik
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Syötä URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Asia selvä</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Lahjoittaa</value>
+  </data>
 </root>

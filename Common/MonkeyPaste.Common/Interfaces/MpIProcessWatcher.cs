@@ -9,6 +9,7 @@ namespace MonkeyPaste.Common {
         nint SetActiveProcess(MpPortableProcessInfo p);
         MpPortableProcessInfo GetProcessInfoFromScreenPoint(MpPoint pixelPoint);
         MpPortableProcessInfo GetProcessInfoFromHandle(nint handle);
+        MpPortableProcessInfo GetClipboardOwner();
         MpPortableProcessInfo LastProcessInfo { get; }
         MpPortableProcessInfo ThisAppProcessInfo { get; }
         IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos { get; }

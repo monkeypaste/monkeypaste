@@ -2990,4 +2990,10 @@ Các phím tắt toàn cầu hiện có thể được bật trong menu khay h�
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Nhập URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Thông thoáng</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Quyên tặng</value>
+  </data>
 </root>

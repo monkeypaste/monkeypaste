@@ -2990,4 +2990,10 @@ Globálne skratky je teraz možné povoliť v ponuke System Tray</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Zadajte adresu URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>jasný</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Darovať</value>
+  </data>
 </root>

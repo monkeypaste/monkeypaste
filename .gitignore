@@ -358,14 +358,14 @@ MigrationBackup/
 
 /Plugins/AzureComputerVision/
 /Plugins/AzureTextTranslator/
-/Plugins/ChatGpt
-/Plugins/FileConverter
-/Plugins/GoogleLiteTextTranslator
-/Plugins/MinimalExample
-/Plugins/QrCoder
-/Plugins/TextToSpeech
-/Plugins/WebSearch
-/Plugins/YoloImageAnnotator
+/Plugins/ChatGpt/
+/Plugins/FileConverter/
+/Plugins/GoogleLiteTextTranslator/
+/Plugins/MinimalExample/
+/Plugins/QrCoder/
+/Plugins/TextToSpeech/
+/Plugins/WebSearch/
+/Plugins/YoloImageAnnotator/
 /MonkeyPaste.Avalonia/Resources/Localization/Listings
 /ext
 /MonkeyPaste.Desktop/cef

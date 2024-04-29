@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -262,7 +263,6 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
         private void InitWelcomeItems() {
 
-
             #region Greeting
             GreetingViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.Greeting) {
                 SplashIconSourceObj = "AppImage",
@@ -368,7 +368,8 @@ namespace MonkeyPaste.Avalonia {
             #region Drag To Open
             DragToOpenBehaviorViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.DragToOpen) {
                 Title = UiStrings.WelcomeDragToOpenTitle,
-                Caption = UiStrings.WelcomeDragToOpenCaption
+                Caption = UiStrings.WelcomeDragToOpenCaption,
+                NeedsSkip = OperatingSystem.IsLinux()
             };
             DragToOpenBehaviorViewModel.Items = new[] {
                     new MpAvWelcomeOptionItemViewModel(this,false,DragToOpenBehaviorViewModel) {

@@ -168,6 +168,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public string DonateUri =>
+            "https://buymeacoffee.com/monkeypaste";
 
         protected Dictionary<string, (MpUserAccountType, bool)> AccountTypeAddOnStoreIdLookup { get; } =
             new Dictionary<string, (MpUserAccountType, bool)>() {

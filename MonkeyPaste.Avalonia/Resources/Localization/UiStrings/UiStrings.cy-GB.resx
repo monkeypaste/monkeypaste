@@ -2990,4 +2990,10 @@ Bellach gellir galluogi Llwybrau Byr Byd-eang yn y Ddewislen Hambwrdd System</va
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Rhowch Url</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Gliria ’</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Rhoddwch</value>
+  </data>
 </root>

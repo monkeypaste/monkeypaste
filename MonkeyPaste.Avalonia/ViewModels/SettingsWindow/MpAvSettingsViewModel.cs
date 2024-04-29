@@ -29,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
             nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
             //nameof(MpAvPrefViewModel.Instance.ShowInTaskSwitcher),
             nameof(MpAvPrefViewModel.Instance.IsLoggingEnabled),
+            nameof(MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled),
         };
 
         private string[] _reinitContentParams => new string[] {

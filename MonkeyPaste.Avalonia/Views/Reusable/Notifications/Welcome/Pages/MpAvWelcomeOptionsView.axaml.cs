@@ -51,7 +51,10 @@ namespace MonkeyPaste.Avalonia {
             }
             var ido = new DataObject();
             ido.Set(MpPortableDataFormats.Text, MpAvFakeWindowView.DRAG_TEXT);
-            _ = await MpAvDoDragDropWrapper.DoDragDropAsync(sender as Control, e, ido, DragDropEffects.Copy | DragDropEffects.Move);
+#if LINUX
+            ido.Set(MpPortableDataFormats.LinuxText1, MpAvFakeWindowView.DRAG_TEXT);
+#endif
+            _ = await MpAvDoDragDropWrapper.DoDragDropAsync(sender as Control, e, ido, DragDropEffects.Copy);// | DragDropEffects.Move);
         }
     }
 }

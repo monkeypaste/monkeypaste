@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Cairo;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -375,13 +376,13 @@ namespace MonkeyPaste.Avalonia {
             }
 
             switch (max_format) {
-                case MpPortableDataFormats.Text3:
-                case MpPortableDataFormats.Text2:
-                case MpPortableDataFormats.Text:
+                case var _ when max_format == MpPortableDataFormats.Text3:
+                case var _ when max_format == MpPortableDataFormats.Text2:
+                case var _ when max_format == MpPortableDataFormats.Text:
                     inputFormatType = MpDataFormatType.PlainText;
                     break;
-                case MpPortableDataFormats.Html:
-                case MpPortableDataFormats.Xhtml:
+                case var _ when max_format == MpPortableDataFormats.Html:
+                case var _ when max_format == MpPortableDataFormats.Xhtml:
 
                     // NOTE to avoid loosing rtf markup the converted html is 
                     // fully html special entities are fully encoded which will lead
@@ -391,7 +392,7 @@ namespace MonkeyPaste.Avalonia {
                         MpDataFormatType.Rtf2Html :
                         MpDataFormatType.Html;
                     break;
-                case MpPortableDataFormats.Rtf:
+                case var _ when max_format == MpPortableDataFormats.Rtf:
                     // NOTE should only happen if user has disabled (its default) convert rtf2html 
                     //MpDebug.Assert(!avdo.ContainsData(MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT), $"CopyItem builder error trying to use conversion data instead of source");
                     //MpDebug.Assert(
@@ -402,7 +403,7 @@ namespace MonkeyPaste.Avalonia {
                     itemData = itemData.RtfToHtml();
                     inputFormatType = MpDataFormatType.Rtf2Html;
                     break;
-                case MpPortableDataFormats.Csv:
+                case var _ when max_format == MpPortableDataFormats.Csv:
                     itemData = itemData.CsvStrToRichHtmlTable();
                     inputFormatType = MpDataFormatType.Html;
                     //if (avdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) && 
@@ -418,12 +419,12 @@ namespace MonkeyPaste.Avalonia {
                     //    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvCsv);
                     //}
                     break;
-                case MpPortableDataFormats.Image:
-                case MpPortableDataFormats.Image2:
+                case var _ when max_format == MpPortableDataFormats.Image:
+                case var _ when max_format == MpPortableDataFormats.Image2:
                     // NOTE this is just a filler here, haven't had need to discern images
                     inputFormatType = MpDataFormatType.Bmp;
                     break;
-                case MpPortableDataFormats.Files:
+                case var _ when max_format == MpPortableDataFormats.Files:
                     inputFormatType = MpDataFormatType.FileList;
                     break;
             }

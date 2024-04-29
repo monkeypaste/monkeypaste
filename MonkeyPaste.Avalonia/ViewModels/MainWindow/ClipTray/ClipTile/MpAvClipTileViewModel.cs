@@ -1553,7 +1553,7 @@ namespace MonkeyPaste.Avalonia {
             };
             if (isDnd && MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled) {
                 // initialize target with all possible formats set to null
-                req_formats = MpPortableDataFormats.RegisteredFormats.ToList();
+                req_formats = MpDataFormatRegistrar.RegisteredFormats.ToList();
 
             } else if (MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 // initialize target with default format for type

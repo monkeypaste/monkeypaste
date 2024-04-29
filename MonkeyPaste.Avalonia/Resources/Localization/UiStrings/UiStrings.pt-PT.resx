@@ -2990,4 +2990,10 @@ Os atalhos globais agora podem ser ativados no menu da bandeja do sistema</value
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Digite URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Doar</value>
+  </data>
 </root>

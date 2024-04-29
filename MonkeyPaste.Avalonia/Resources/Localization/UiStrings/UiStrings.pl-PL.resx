@@ -2990,4 +2990,10 @@ Globalne skróty można teraz włączyć w menu taca systemu</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Wprowadź URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Jasne</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Podarować</value>
+  </data>
 </root>

@@ -196,11 +196,7 @@ namespace MonkeyPaste.Avalonia {
             string htmlDataStr,
             string verifyPlainText,
             MpCsvFormatProperties csvProps = null) {
-            if (!IsWebViewConverterAvailable) {
-                MpDebug.Break($"Convert from webview called before available");
-                return ConvertWithFallback(htmlDataStr, verifyPlainText);
-            }
-            htmlDataStr = htmlDataStr.ToString().ToBase64String();
+            htmlDataStr = htmlDataStr.ToBase64String();
 
             if (string.IsNullOrWhiteSpace(htmlDataStr)) {
                 MpConsole.WriteTraceLine("Error parsing html data obj, no data found");

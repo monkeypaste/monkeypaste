@@ -44,7 +44,7 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.GEN_EMPTY_RESX
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
             //MpLedgerizerFlags.GEN_PROD_LISTING |
-            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
             //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
@@ -53,14 +53,14 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.DO_REMOTE_INDEX |
             //MpLedgerizerFlags.DO_LOCAL_LEDGER |
             //MpLedgerizerFlags.DO_REMOTE_LEDGER |
-                                   //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+                                   MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
                                    //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
                                    //MpLedgerizerFlags.DO_JS_UISTRINGS |
                                    // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
                                    //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
-                                   MpLedgerizerFlags.MOVE_NUGET_CACHE |
-                                   MpLedgerizerFlags.DEBUG // |
-                                   //MpLedgerizerFlags.RELEASE
+                                   //MpLedgerizerFlags.MOVE_NUGET_CACHE |
+                                   MpLedgerizerFlags.DEBUG  |
+                                   MpLedgerizerFlags.RELEASE
             ;
 
         #region Localizer Props
@@ -151,7 +151,7 @@ namespace Ledgerizer {
             //"AzureComputerVision",
             //"AzureTextTranslator",
             //"ChatGpt",
-            //"CoreAnnotator",
+            "CoreAnnotator",
             "CoreOleHandler",
             //"FileConverter",
             //"GoogleLiteTextTranslator",
@@ -1674,9 +1674,11 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             // clear last output
             MpFileIo.DeleteDirectory(publish_dir);
             string config = is_release ? "Release" : "Debug";
-            string args = CorePlugins.Contains(plugin_name) ?
-                $"msbuild /p:OutDir={publish_dir} -target:Publish /property:Configuration={config} /property:DefineConstants=AUX%3B{BUILD_OS} -restore" :
-                $"publish --configuration {config} --output {publish_dir}";
+            //string args = CorePlugins.Contains(plugin_name) ?
+            //    $"msbuild /p:OutDir={publish_dir} -target:Publish /property:Configuration={config} /property:DefineConstants=AUX%3B{BUILD_OS} -restore" :
+            //    $"publish --configuration {config} --output {publish_dir}";
+            
+            string args = $"publish --configuration {config} --output {publish_dir}";
 
             (int exit_code, string proc_output) =
                 RunProcess(

@@ -2990,4 +2990,10 @@ Los atajos globales ahora se pueden habilitar en el menú de la bandeja del sist
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Introducir URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Donar</value>
+  </data>
 </root>

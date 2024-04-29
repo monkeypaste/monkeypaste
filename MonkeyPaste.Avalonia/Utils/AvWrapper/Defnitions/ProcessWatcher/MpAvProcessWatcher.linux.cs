@@ -16,7 +16,6 @@ using X11;
 
 
 namespace MonkeyPaste.Avalonia {
-
     public partial class MpAvProcessWatcher {
         #region Private Variables
         bool use_shell = true;
@@ -55,13 +54,21 @@ namespace MonkeyPaste.Avalonia {
         }
         private Window _rootWindow;
 
+        event XErrorHandlerDelegate HandleErrorDelegate;
+        
         #endregion
+
+        public MpPortableProcessInfo GetClipboardOwner() {
+            nint cb_owner_handle = X11Tools.get_clipboard_owner();
+            cb_owner_handle = GetTopWindowHandle(cb_owner_handle);
+            return MpPortableProcessInfo.FromHandle(cb_owner_handle, true);
+        }
+
         int HandleError(nint display, ref XErrorEvent error) {
             MpConsole.WriteLine($"Xll error: '{error}'");
             _hasError = true;
             return 0;
         }
-        event XErrorHandlerDelegate HandleErrorDelegate;
         protected void Init() {
             HandleErrorDelegate += HandleError;
             try {
@@ -93,13 +100,12 @@ namespace MonkeyPaste.Avalonia {
                     return 0;
                 }
                 if(use_shell) {
-                    $"xdotool windowactivate {(int)p.Handle}".ShellExec().Trim();
-                    $"xdotool windowfocus {(int)p.Handle}".ShellExec().Trim();
+                    MpXdoCmd.Exec(MpXdoCmdType.WindowActivate, (int)p.Handle);
+                    MpXdoCmd.Exec(MpXdoCmdType.WindowFocus, (int)p.Handle);
                 } else {
                     XdoLib.xdo_activate_window(xdoCtx, (int)p.Handle);
                     XdoLib.xdo_focus_window(xdoCtx, (int)p.Handle);
-                }
-                
+                }                
                 
                 return p.Handle;
             }
@@ -139,10 +145,7 @@ namespace MonkeyPaste.Avalonia {
             
             try {
                 if(use_shell) {
-                    string result = $"xdotool getwindowfocus".ShellExec().Trim();
-                    if(int.TryParse(result,out int intResult)) {
-                        handle = intResult;
-                    }
+                    handle = MpXdoCmd.Exec<int>(MpXdoCmdType.GetWindowFocus);
                 } else {
                     XdoLib.xdo_get_focused_window_sane(xdoCtx, ref handle);
                 }
@@ -208,7 +211,7 @@ namespace MonkeyPaste.Avalonia {
             catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
             return 0;
         }
-        public nint GetTopWindowHandle(nint start) {
+        private nint GetTopWindowHandle(nint start) {
             if (IS_DISABLED) {
                 return 0;
             }
@@ -250,7 +253,7 @@ namespace MonkeyPaste.Avalonia {
             }
             try {
                 if(use_shell) {
-                    return GetWindowPid(handle) > 0;
+                    return MpXdoCmd.Exec<int>(MpXdoCmdType.GetWindowPid,(int)handle) > 0;
                 } else {
                     return XdoLib.xdo_get_pid_window(xdoCtx, (int)handle) > 0;
                 }
@@ -274,7 +277,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 int pid = 0;
                 if(use_shell) {
-                    pid = GetWindowPid(handle);
+                    pid = MpXdoCmd.Exec<int>(MpXdoCmdType.GetWindowPid, (int)handle);
                 } else {
                     pid = XdoLib.xdo_get_pid_window(xdoCtx, (int)handle);
                 }
@@ -297,17 +300,6 @@ namespace MonkeyPaste.Avalonia {
             } catch(Exception ex) { MpConsole.WriteTraceLine($"proc err.",ex); }
             return string.Empty;
         }
-        private int GetWindowPid(nint handle) {
-            if(handle == 0) {
-                return 0;
-            }
-            string result = $"xdotool getwindowpid {(int)handle}".ShellExec().Trim();
-            if (!result.StartsWith("X Error") &&
-                int.TryParse(result, out int intResult)) {
-                return intResult;
-            }
-            return 0;
-        }
         protected string GetProcessTitle(nint handle) {
             if (IS_DISABLED) {
                 return string.Empty;
@@ -324,9 +316,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 string title = default;
                 if (use_shell) {
-                    title = $"xdotool getwindowname {(int)handle}".ShellExec();
+                    title = MpXdoCmd.Exec(MpXdoCmdType.GetWindowName, (int)handle);
                 } else {
-                // from https://gist.github.com/kui/2622504
+                    // from https://gist.github.com/kui/2622504
                     int len = default;
                     int name_type = default;
                     XdoLib.xdo_get_window_name(xdoCtx, (int)handle, ref title, ref len, ref name_type);

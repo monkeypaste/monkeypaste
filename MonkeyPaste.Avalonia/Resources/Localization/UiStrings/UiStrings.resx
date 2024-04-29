@@ -3084,4 +3084,7 @@ Global Shortcuts can now be enabled in the System Tray Menu</value>
   <data name="CommonClearText" xml:space="preserve">
     <value>Clear</value>
   </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Donate</value>
+  </data>
 </root>

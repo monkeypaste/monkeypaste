@@ -117,132 +117,7 @@ namespace MonkeyPaste.Avalonia {
         public object CurrentExecuteArgs { get; set; }
         #endregion
 
-        #region Models
-
-        #region MpBillableItem
-
-        public string ApiName {
-            get {
-                if (PluginFormat == null) {
-                    return string.Empty;
-                }
-                return PluginFormat.title;
-            }
-        }
-
-        public DateTime NextPaymentDateTime {
-            get {
-                if (BillableItem == null) {
-                    return DateTime.MaxValue;
-                }
-                return BillableItem.NextPaymentDateTime;
-            }
-            set {
-                if (NextPaymentDateTime != value) {
-                    BillableItem.NextPaymentDateTime = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(NextPaymentDateTime));
-                }
-            }
-        }
-
-        public MpPeriodicCycleType CycleType {
-            get {
-                if (BillableItem == null) {
-                    return MpPeriodicCycleType.None;
-                }
-                return BillableItem.CycleType;
-            }
-        }
-
-        public int MaxRequestCountPerCycle {
-            get {
-                if (BillableItem == null) {
-                    return int.MaxValue;
-                }
-                return BillableItem.MaxRequestCountPerCycle;
-            }
-        }
-
-
-        public int MaxRequestByteCount {
-            get {
-                if (BillableItem == null) {
-                    return int.MaxValue;
-                }
-                return BillableItem.MaxRequestByteCount;
-            }
-        }
-
-        public int MaxRequestByteCountPerCycle {
-            get {
-                if (BillableItem == null) {
-                    return int.MaxValue;
-                }
-                return BillableItem.MaxRequestByteCountPerCycle;
-            }
-        }
-
-        public int MaxResponseBytesPerCycle {
-            get {
-                if (BillableItem == null) {
-                    return int.MaxValue;
-                }
-                return BillableItem.MaxRequestByteCountPerCycle;
-            }
-        }
-
-        public int CurrentCycleRequestByteCount {
-            get {
-                if (BillableItem == null) {
-                    return 0;
-                }
-                return BillableItem.CurrentCycleRequestByteCount;
-            }
-            set {
-                if (BillableItem.CurrentCycleRequestByteCount != value) {
-                    BillableItem.CurrentCycleRequestByteCount = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(CurrentCycleRequestByteCount));
-                }
-            }
-        }
-
-
-        public int CurrentCycleResponseByteCount {
-            get {
-                if (BillableItem == null) {
-                    return 0;
-                }
-                return BillableItem.CurrentCycleResponseByteCount;
-            }
-            set {
-                if (BillableItem.CurrentCycleResponseByteCount != value) {
-                    BillableItem.CurrentCycleResponseByteCount = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(CurrentCycleResponseByteCount));
-                }
-            }
-        }
-
-
-        public int CurrentCycleRequestCount {
-            get {
-                if (BillableItem == null) {
-                    return 0;
-                }
-                return BillableItem.CurrentCycleRequestByteCount;
-            }
-            set {
-                if (BillableItem.CurrentCycleRequestCount != value) {
-                    BillableItem.CurrentCycleRequestCount = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(CurrentCycleRequestCount));
-                }
-            }
-        }
-
-        #endregion
+        #region Models        
 
         #region Db
 
@@ -312,10 +187,6 @@ namespace MonkeyPaste.Avalonia {
                 return PluginFormat.description;
             }
         }
-
-
-        public MpBillableItem BillableItem { get; set; }
-
 
         #endregion
 

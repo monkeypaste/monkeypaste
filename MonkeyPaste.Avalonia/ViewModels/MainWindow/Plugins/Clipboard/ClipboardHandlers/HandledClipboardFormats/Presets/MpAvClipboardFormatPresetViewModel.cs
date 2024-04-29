@@ -426,9 +426,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsEnabled):
                     if(IsEnabled) {
-                        MpPortableDataFormats.RegisterDataFormat(FormatName,IsReader,IsWriter);
+                        MpDataFormatRegistrar.RegisterDataFormat(FormatName,IsReader,IsWriter);
                     } else {
-                        MpPortableDataFormats.UnregisterDataFormat(FormatName, IsReader, IsWriter);
+                        MpDataFormatRegistrar.UnregisterDataFormat(FormatName, IsReader, IsWriter);
                     }
                     break;
             }

@@ -2990,4 +2990,10 @@ Globalne prečice sada mogu biti omogućene u System Tray meniju</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Unesite URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Jasan</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Donirati</value>
+  </data>
 </root>

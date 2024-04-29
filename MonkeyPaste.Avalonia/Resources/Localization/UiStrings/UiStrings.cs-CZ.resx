@@ -2990,4 +2990,10 @@ Globální zkratky lze nyní povolit v nabídce hlavního panelu</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Zadejte URL adresu</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Průhledná</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Darovat</value>
+  </data>
 </root>

@@ -128,7 +128,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 // wants string
                 if (dataObj is byte[] bytes) {
                     // bytes -> string
-                    if (MpPortableDataFormats.IsFormatStrBase64(format) is true) {
+                    if (MpDataFormatRegistrar.IsFormatStrBase64(format) is true) {
                         // img bytes -> string
                         typed_data = bytes.ToBase64String() as T;
                     } else {
@@ -161,7 +161,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 // wants bytes
                 if (dataObj is string byteStr) {
                     // string -> bytes
-                    if (MpPortableDataFormats.IsFormatStrBase64(format) is true) {
+                    if (MpDataFormatRegistrar.IsFormatStrBase64(format) is true) {
                         // string -> img bytes
                         typed_data = byteStr.ToBytesFromBase64String() as T;
                     } else {
@@ -224,10 +224,10 @@ namespace MonkeyPaste.Common.Avalonia {
 
 #endif
             // common stuff
-            if (MpPortableDataFormats.IsImageFormat(format) is true) {
+            if (MpDataFormatRegistrar.IsImageFormat(format) is true) {
                 // this implies string->base64
                 output_encoding = Encoding.ASCII;
-            } else if (MpPortableDataFormats.IsFilesFormat(format) is true) {
+            } else if (MpDataFormatRegistrar.IsFilesFormat(format) is true) {
                 // kinda hacky but to avoid dep here since IStorageItem is an 
                 // 
                 output_type = typeof(IStorageItem[]);
@@ -278,7 +278,7 @@ namespace MonkeyPaste.Common.Avalonia {
             foreach (string format in formatFilter) {
                 object data = null;
 #if LINUX
-                if(MpPortableDataFormats.IsAvaloniaFormat(format)) {
+                if(MpDataFormatRegistrar.IsAvaloniaFormat(format)) {
                     // xclip won't know about avalonia formats
                     if(format == MpPortableDataFormats.AvText) {
                         data = await cb.GetTextAsync();

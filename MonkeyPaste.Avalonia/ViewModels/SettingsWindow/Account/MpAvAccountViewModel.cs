@@ -967,6 +967,11 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 return !OperatingSystem.IsLinux();
             });
+        
+        public ICommand DonateCommand => new MpCommand(
+            () => {
+                MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(MpAvAccountTools.Instance.DonateUri);
+            });
 
         #endregion
     }

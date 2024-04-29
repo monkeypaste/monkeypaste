@@ -2990,4 +2990,10 @@ Globaalsed otseteed saab nüüd süsteemialuse menüüs lubada</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Sisestage URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Selge</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Annetama</value>
+  </data>
 </root>

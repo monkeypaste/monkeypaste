@@ -2990,4 +2990,10 @@ Maaari na ngayong paganahin ang mga global shortcut sa menu ng System Tray</valu
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Ilagay ang URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Malinaw</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Mag -donate</value>
+  </data>
 </root>

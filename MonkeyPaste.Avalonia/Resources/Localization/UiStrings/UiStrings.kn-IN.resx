@@ -2990,4 +2990,10 @@
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL ಅನ್ನು ನಮೂದಿಸಿ</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>ಸ್ಪಷ್ಟ</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>ದಾನ ಮಾಡು</value>
+  </data>
 </root>

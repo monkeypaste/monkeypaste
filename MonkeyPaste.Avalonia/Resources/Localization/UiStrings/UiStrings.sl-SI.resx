@@ -2990,4 +2990,10 @@ Globalne bližnjice je zdaj mogoče omogočiti v meniju System pladnja</value>
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Vnesite URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Jasno</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Donirajte</value>
+  </data>
 </root>

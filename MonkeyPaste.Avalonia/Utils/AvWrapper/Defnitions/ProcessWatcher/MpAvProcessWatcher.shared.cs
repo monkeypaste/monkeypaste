@@ -95,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
                 return _lastProcessInfo;
             }
         }
-
+        public bool BreakNextTick { get; set; }
 
         #endregion
 
@@ -153,12 +153,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-
-        protected virtual bool CanWatchProcesses() {
-            // overridden on linux to verify xdotool exists
-            return true;
-        }
-
         protected virtual MpPortableProcessInfo GetProcessInfoByHandle(nint handle, MpIconSize iconSize = MpIconSize.ExtraLargeIcon128) {
             if (handle == IntPtr.Zero) {
                 return null;
@@ -173,38 +167,11 @@ namespace MonkeyPaste.Avalonia {
                 iconSize == MpIconSize.None ? null : Mp.Services.IconBuilder.GetPathIconBase64(ppi.ProcessPath, ppi.Handle, iconSize);
             return ppi;
         }
-        public bool BreakNextTick { get; set; }
         protected virtual void ProcessWatcherTimer_tick(object sender, EventArgs e) {
             if (BreakNextTick) {
                 BreakNextTick = false;
                 MpDebug.BreakAll();
             }
-
-            //#if MAC
-            //            var active_handle_info = GetProcessInfoByHandle(GetActiveProcessHandle(), true);
-            //            if (active_handle_info == default ||
-            //                active_handle_info.Handle == _lastActiveHandle) {
-            //                return;
-            //            }
-
-            //            if (IsProcessPathEqual(ThisAppProcessInfo, active_handle_info)) {
-            //                // when this app is active ignore update
-            //                return;
-            //            }
-            //            if (!IsHandleWindowProcess(active_handle_info.Handle)) {
-            //                // some weird process, ignore
-            //                return;
-            //            }
-
-            //            // should be valid window process here
-            //            var prev_active_info = _lastActiveInfo;
-            //            _lastActiveInfo = active_handle_info;
-
-            //            if (IsProcessPathEqual(prev_active_info, active_handle_info)) {
-            //                // ignore inner-process window changes not relevant for this event
-            //                return;
-            //            }
-            //#else
             nint activeHandle = GetActiveProcessHandle();
             if (activeHandle == IntPtr.Zero ||
                 activeHandle == _lastActiveHandle) {
@@ -228,15 +195,7 @@ namespace MonkeyPaste.Avalonia {
                 // ignore inner-process window changes not relevant for this event
                 return;
             }
-            //#endif
-
-#if MAC
-            MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo.ApplicationName}");
-#elif LINUX
-            MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo.ProcessPath}");
-#else
-            MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo.MainWindowTitle}");
-#endif
+            MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo}");
             OnAppActivated?.Invoke(this, LastProcessInfo);
         }
 

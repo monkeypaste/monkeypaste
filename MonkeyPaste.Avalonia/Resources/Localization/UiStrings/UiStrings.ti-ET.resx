@@ -2990,4 +2990,10 @@
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>URL ኣእትዉ</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>ንፁር</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>ምልጋስ</value>
+  </data>
 </root>

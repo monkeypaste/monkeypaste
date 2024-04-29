@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Platform;
 using MonkeyPaste.Common;
@@ -64,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsGesturing =>
             GestureType == MpPointGestureType.ScrollToOpen ?
                 MpAvMainWindowViewModel.CanScrollOpen() :
-                MpAvMainWindowViewModel.CanDragOpen() && MpAvDoDragDropWrapper.DragDataObject != null;
+                MpAvMainWindowViewModel.CanDragOpen();// && MpAvDoDragDropWrapper.DragDataObject != null;
 
         public bool IsInGestureZone { get; private set; }
         #endregion
@@ -163,7 +164,7 @@ namespace MonkeyPaste.Avalonia {
                 Position = new PixelPoint(),
                 Width = ss.Width,
                 Height = MaxWindowY,
-                Background = Brushes.Transparent,
+                Background = new SolidColorBrush(Colors.White,0.001),
                 WindowState = WindowState.Normal,
                 CanResize = false,
                 SystemDecorations = SystemDecorations.None,
@@ -174,6 +175,7 @@ namespace MonkeyPaste.Avalonia {
                 SizeToContent = SizeToContent.Manual,
                 Title = "MarkerWindow"
             };
+            DragDrop.SetAllowDrop(gw, true);
 
 #if WINDOWS
             MpAvToolWindow_Win32.SetAsToolWindow(gw.TryGetPlatformHandle().Handle);

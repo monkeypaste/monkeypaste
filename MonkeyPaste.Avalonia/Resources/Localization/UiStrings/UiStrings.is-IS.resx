@@ -2990,4 +2990,10 @@ Nú er hægt að virkja alþjóðlegar flýtileiðir í kerfisbakkavalmyndinni</
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Sláðu inn url</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Tær</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Gefðu</value>
+  </data>
 </root>

@@ -60,6 +60,7 @@ namespace MonkeyPaste.Avalonia {
             "ghost.png",
             "global.png",
             "graph.png",
+            "heart.png",
             "html.png",
             "info.png",
             "joystickative.png",

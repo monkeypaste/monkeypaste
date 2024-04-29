@@ -5,12 +5,18 @@ using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvShutdownTools : MpIShutdownTools {
-        private bool _isShuttingDown = false;
+        private int _shutdownCount = 0;
+        private bool _isShuttingDown =>
+#if LINUX
+            _shutdownCount > 2;
+#else
+            _shutdownCount >= 1;
+#endif
         public void ShutdownApp(MpShutdownType code, string detail) {
+            _shutdownCount++;
             if (_isShuttingDown) {
                 return;
             }
-            _isShuttingDown = true;
             MpConsole.WriteLine($"App shutdown called Code: '{code}' Detail: '{detail.ToStringOrEmpty("NULL")}'");
             //MpConsole.ShutdownLog();
             if (App.Instance != null &&
@@ -29,6 +35,9 @@ namespace MonkeyPaste.Avalonia {
                 lifetime.Shutdown();
                 bool success = true;// lifetime.TryShutdown();
                 MpConsole.WriteLine($"Lifetime shutdown: {success.ToTestResultLabel()}");
+#if LINUX
+                ShutdownApp(code, "Ensuring shutdown...");
+#endif
             }
         }
     }

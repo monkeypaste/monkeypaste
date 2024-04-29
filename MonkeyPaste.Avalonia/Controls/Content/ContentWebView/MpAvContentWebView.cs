@@ -257,7 +257,7 @@ namespace MonkeyPaste.Avalonia {
             // and pseudo files are only needed for dnd comptaibility so its gewd
             if (formats == null) {
                 // NOTE important that ALL data formats are on clipboard for drag source obj to process 
-                contentDataReq.formats = MpPortableDataFormats.RegisteredFormats.ToList();
+                contentDataReq.formats = MpDataFormatRegistrar.RegisteredFormats.ToList();
             } else {
                 contentDataReq.formats = formats.ToList();
             }

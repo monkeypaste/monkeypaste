@@ -25,6 +25,11 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
 
+        #region MpIPlatformDataObjectRegistrar Implementation
+        
+
+        #endregion
+        
         #region MpIActionComponent Implementation
         void MpIActionComponent.RegisterActionComponent(MpIInvokableAction mvm) {
             if (OnClipboardChanged.HasInvoker(mvm)) {

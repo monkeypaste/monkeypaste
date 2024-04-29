@@ -2990,4 +2990,10 @@
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>ইউআরএল দিন</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>পরিষ্কার</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>দান করুন</value>
+  </data>
 </root>

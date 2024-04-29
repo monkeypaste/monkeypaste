@@ -2990,4 +2990,10 @@
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>Введіть URL -адресу</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>Чіткий</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>Пожертвувати</value>
+  </data>
 </root>

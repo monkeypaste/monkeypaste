@@ -2990,4 +2990,10 @@ Monkeypaste მოწყობილობაზე
   <data name="EditorLinkPlaceholder" xml:space="preserve">
     <value>შეიყვანეთ URL</value>
   </data>
+  <data name="CommonClearText" xml:space="preserve">
+    <value>გასუფთავება</value>
+  </data>
+  <data name="DonateLabel" xml:space="preserve">
+    <value>ჩუქება</value>
+  </data>
 </root>
