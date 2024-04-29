@@ -393,3 +393,8 @@ MigrationBackup/
 /.idea
 *.ods#
 *.ods
+.DS_Store
+.vscode/
+MonkeyPaste.code-workspace
+git-filter-repo
+omnisharp.json
