@@ -267,15 +267,9 @@ Auður af verðmæti og merkingu sem þú átt skilið að hafa tiltækt innan s
     <value>Örugg, örugg og einkarekin staðbundin gagnageymsla með valfrjálsri 2 - þátta lykilorðsvörn</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeysta er nú alveg ókeypis frá og með þessari útgáfu !!
-
-Allar takmarkanir (í APP-áskriftum) hafa verið fjarlægðar þar sem MonkeyPaste er nú að breytast yfir í að verða opið verkefni. Svo fylgstu með Github okkar (github.com/monkeypaste) ef þú hefur áhuga á að leggja sitt af mörkum.
-
-Uppfærslur:
-
-- Allar getu takmarkanir fjarlægðar!
-- Hafnar endurbætur á UI ritstjóra
-- Grunnstuðningur við að keyra mörg tilvik af acpryduce
-- Nýr ritstjóri sameiginlegs verðmæta (í viðbótarvafra þar sem við á)</value>
+    <value>- Full heimild fyrir MonkeyPaste nú fáanlegt á Github https://github.com/monkeypaste/monkeypaste
+- Linux útgáfa gefin út niðurhal hér https://github.com/monkeypaste/monkeypaste/releases
+- Bætt eindrægni (nú hefur HTML áhorfandi fyrir textabúðir)
+- Minniháttar endurbætur á galla og frammistöðu</value>
   </data>
 </root>

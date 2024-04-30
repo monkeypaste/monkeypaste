@@ -267,15 +267,9 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
     <value>İsteğe bağlı 2 faktorlu parol mühafizəsi ilə təhlükəsiz, təhlükəsiz və özəl yerli məlumat saxlama</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeyte indi bu buraxılışdan tamamilə azaddır!
-
-Artıq bütün məhdudiyyətlər (App abunəçiləri) çıxarıldığı kimi, artıq açıq mənbəli bir layihə olmağa keçid kimi çıxdı. Buna görə töhfə vermək istəyirsinizsə, Github (Github.com/monkeyte).
-
-Yeniləmələr:
-
-- Bütün tutum məhdudiyyətləri silindi!
-- URL redaktoru UI təkmilləşdirmələrini rədd etdi
-- Monkeytaste birdən çox hallarını işlətmək üçün əsas dəstək
-- Yeni paylaşılan dəyər redaktoru (tətbiq olunan plugin brauzerində)</value>
+    <value>- MonkeyPaste üçün tam mənbə artıq githubumuzda mövcuddur https://github.com/monkeypaste/monkeypaste
+- Linux versiyasını buradan yükləyin https://github.com/monkeypaste/monkeypaste/releases
+- təkmilləşdirilmiş uyğunluq rejimi (indi mətn klipləri üçün HTML görüntüləyicisi var)
+- kiçik səhv və performans təkmilləşdirmələri</value>
   </data>
 </root>

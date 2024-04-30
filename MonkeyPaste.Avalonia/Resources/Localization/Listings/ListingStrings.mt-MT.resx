@@ -267,15 +267,9 @@ il-klibbord tiegħek qatt jiġi traċċat jew maħżun KULLIMKIEN lil hinn mill-
     <value>Ħażna ta 'dejta lokali sikura, sigura u privata b'protezzjoni fakultattiva tal-password tal-fattur 2 -</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>MonkeyPaste issa huwa kompletament ħieles minn dan ir-rilaxx !!
-
-Ir-restrizzjonijiet kollha (fis-sottoskrizzjonijiet tal-app) tneħħew hekk kif il-monkeypaste issa qed jgħaddi biex isir proġett ta 'sors miftuħ. Allura żżomm għajnejk fuq il-github tagħna (github.com/monkeypaste) jekk int interessat li tikkontribwixxi.
-
-Aġġornamenti:
-
-- Ir-restrizzjonijiet kollha tal-kapaċità mneħħija!
-- Editur tal-URL rifjutat UI Titjib
-- Appoġġ fil-linja bażi għat-tħaddim ta 'każijiet multipli ta' monkeypaste
-- Editur tal-Valur Maqsum Ġdid (fil-plugin browser fejn applikabbli)</value>
+    <value>- Sors sħiħ għal MonkeyPaste issa disponibbli fuq il-github tagħna https://github.com/monkeypaste/monkeypaste
+- Verżjoni Linux rilaxxata Niżżel Hawnhekk https://github.com/monkeypaste/monkeypaste/releases
+- Mod ta 'kompatibilità mtejjeb (issa għandu telespettatur HTML għal klipps tat-test)
+- Titjib minuri ta 'bug u prestazzjoni</value>
   </data>
 </root>

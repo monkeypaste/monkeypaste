@@ -267,15 +267,9 @@ ditt urklipp spåras eller lagras VAR som helst utanför din egen maskin. Period
     <value>Trygg, säker och privat lokal datalagring med valfritt 2-faktors lösenordsskydd</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste är nu helt gratis från och med denna utgåva !!
-
-Alla begränsningar (i APP-prenumerationer) har tagits bort eftersom monkeypasta nu övergår till att bli ett open source-projekt. Så håll ett öga på vår github (github.com/monkeypaste) om du är intresserad av att bidra.
-
-Uppdateringar:
-
-- Alla kapacitetsbegränsningar borttagna!
-- Avvisade UI -förbättringar av UI
-- Baslinjestöd för att köra flera instanser av monkeypasta
-- Ny delad Value Editor (i plugin -webbläsare där det är tillämpligt)</value>
+    <value>- Full källa för monkeypaste nu tillgänglig på vår github https://github.com/monkeypaste/monkeypaste
+- Linux -version släppt nedladdning här https://github.com/monkeypaste/monkeypaste/releases
+- Förbättrat kompatibilitetsläge (har nu HTML Viewer för textklipp)
+- Mindre fel och prestandaförbättringar</value>
   </data>
 </root>

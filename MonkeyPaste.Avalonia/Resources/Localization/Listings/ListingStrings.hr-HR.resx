@@ -267,15 +267,9 @@ vaš međuspremnik se uvijek prati ili pohranjuje BILO GDJE izvan vašeg vlastit
     <value>Sigurna, sigurna i privatna lokalna pohrana podataka s opcionalnom zaštitom lozinkom od 2 faktora</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste je sada potpuno besplatan od ovog izdanja !!
-
-Sva ograničenja (u pretplatama na aplikacije) uklonjena su jer Monkeypaste sada prelazi u projekt otvorenog koda. Stoga pazite na naš github (github.com/monkeypaste) ako ste zainteresirani za doprinos.
-
-Nadopune:
-
-- uklonjena sva ograničenja kapaciteta!
-- Odbijena poboljšanja UI UI Editor UI
-- osnovna podrška za pokretanje više instanci monkeypaste
-- Novi uređivač zajedničke vrijednosti (u pregledniku dodataka, ako je primjenjivo)</value>
+    <value>- Puni izvor za Monkeypaste sada dostupan na našem GitHub https://github.com/monkeypaste/monkeypaste
+- Linux verzija objavljena ovdje preuzmi https://github.com/monkeypaste/monkeypaste/releases
+- Poboljšani način kompatibilnosti (sada ima HTML preglednik za tekstualne isječke)
+- Manja poboljšanja pogrešaka i performansi</value>
   </data>
 </root>

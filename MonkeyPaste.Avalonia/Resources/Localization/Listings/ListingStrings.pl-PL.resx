@@ -267,15 +267,9 @@ Twój schowek jest zawsze śledzony lub przechowywany GDZIEKOLWIEK poza Twoim ko
     <value>Bezpieczne i prywatne lokalne przechowywanie danych z opcjonalną 2-składnikową ochroną hasłem</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste jest teraz całkowicie wolny od tego wydania !!
-
-Wszystkie ograniczenia (w subskrypcjach aplikacji) zostały usunięte, ponieważ Monkeypaste przechodzi teraz na projekt typu open source. Więc miej oko na nasz github (github.com/monkeypaste), jeśli chcesz się przyczynić.
-
-Aktualizacje:
-
-- Wszystkie ograniczenia pojemności usunięte!
-- Ulepszenia interfejsu użytkownika edytora URL odrzuconych URL
-- Bazowa obsługa uruchamiania wielu instancji małpy
-- Nowy edytor współdzielonej wartości (w stosownych przypadkach w przeglądarce wtyczki)</value>
+    <value>- Pełne źródło Monkeypaste dostępne teraz na naszym github https://github.com/monkeypaste/monkeypaste
+- wersja Linux wydana tutaj pobierz tutaj https://github.com/monkeypaste/monkeypaste/releases
+- Ulepszony tryb kompatybilności (teraz ma przeglądarkę HTML dla klipów tekstowych)
+- drobne ulepszenia błędów i wydajności</value>
   </data>
 </root>

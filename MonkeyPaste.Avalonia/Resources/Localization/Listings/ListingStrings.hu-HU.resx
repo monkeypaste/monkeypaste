@@ -267,15 +267,9 @@ a vágólapodat mindig nyomon követheted vagy tárolhatod BÁRHOL a saját gép
     <value>Biztonságos, védett és privát helyi adattárolás opcionális 2 faktoros jelszavas védelemmel</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>A majompaste most már teljesen ingyenes a kiadás óta !!
-
-Az összes korlátozást (az APP-előfizetésekben) eltávolították, mivel a majompaste most áttér a nyílt forráskódú projektvé. Tehát tartsa szemmel a Github -ot (github.com/monkeypaste), ha érdekli a közreműködés.
-
-Frissítések:
-
-- Minden kapacitási korlátozás eltávolítva!
-- Elutasított URL -szerkesztő UI fejlesztései
-- Alapvető támogatás a majompaste több példányának futtatásához
-- Új megosztott értékszerkesztő (adott esetben a plugin böngészőben)</value>
+    <value>- A MonkeyPaste teljes forrása már elérhető a Github -on https://github.com/monkeypaste/monkeypaste
+- A Linux verzió kiadása itt https://github.com/monkeypaste/monkeypaste/releases
+- Javított kompatibilitási mód (most már van HTML néző a szöveges klipekhez)
+- Kisebb hiba és teljesítményjavítások</value>
   </data>
 </root>

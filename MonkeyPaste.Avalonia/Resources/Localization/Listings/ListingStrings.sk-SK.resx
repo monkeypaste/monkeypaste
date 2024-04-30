@@ -267,15 +267,9 @@ Vaša schránka je vždy sledovaná alebo uložená KDEKOĽVEK mimo vášho vlas
     <value>Bezpečné, zabezpečené a súkromné lokálne ukladanie dát s voliteľnou 2-faktorovou ochranou heslom</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>MonkeyPaste je od tohto vydania teraz úplne zadarmo !!
-
-Všetky obmedzenia (v predplatných aplikáciách) boli odstránené, pretože MonkeyPaste teraz prechádza do projektu s otvoreným zdrojom. Takže sledujte náš github (github.com/monkeypaste), ak máte záujem o prispievanie.
-
-Aktualizácie:
-
-- Všetky obmedzenia kapacity odstránené!
-- Odmietnuté vylepšenia redaktora UIR UI
-- Základná podpora pre spustenie viacerých inštancií MonkeyPaste
-- Nový editor zdieľaných hodnôt (v prípade potreby v prehliadači doplnku)</value>
+    <value>- Úplný zdroj pre MonkeyPaste, ktorý je teraz k dispozícii na našom github https://github.com/monkeypaste/monkeypaste
+- Linux verzia vydaná na stiahnutie tu https://github.com/monkeypaste/monkeypaste/releases
+- Vylepšený režim kompatibility (teraz má prehliadač HTML pre textové klipy)
+- vylepšenia drobných chýb a výkonu</value>
   </data>
 </root>

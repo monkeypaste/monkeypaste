@@ -267,15 +267,9 @@ leikepöytääsi seurataan tai tallennetaan MIHIN tahansa oman koneesi ulkopuole
     <value>Turvallinen, suojattu ja yksityinen paikallinen tietojen tallennus valinnaisella 2-vaiheisella salasanasuojauksella</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkepaste on nyt täysin vapaa tästä julkaisusta !!
-
-Kaikki rajoitukset (APP-tilauksissa) on poistettu, koska Monkeypaste on nyt siirtymässä avoimen lähdekoodin projektiin. Joten pidä silmällä GitHubia (github.com/monkeypaste), jos olet kiinnostunut osallistumaan.
-
-Päivitykset:
-
-- Kaikki kapasiteettirajoitukset on poistettu!
-- hylätty URL -URL -editorin käyttöliittymäparannukset
-- Perustuki monkeparten useiden tapausten suorittamiseen
-- Uusi jaettu arvoeditori (laajennusselaimessa tarvittaessa)</value>
+    <value>- Täysi lähde MonkeyPastelle on nyt saatavana Githubissa https://github.com/monkeypaste/monkeypaste
+- Linux -versio julkaistu Lataa täältä https://github.com/monkeypaste/monkeypaste/releases
+- Parannettu yhteensopivuustila (nyt on HTML -katsoja tekstilinkille)
+- Pienet vika- ja suorituskyvyn parannukset</value>
   </data>
 </root>

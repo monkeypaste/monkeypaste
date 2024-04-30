@@ -267,15 +267,9 @@ clipboard Anda pernah dilacak atau disimpan DI MANA SAJA di luar mesin Anda send
     <value>Penyimpanan data lokal yang aman, terlindungi, dan pribadi dengan perlindungan kata sandi 2 faktor opsional</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste sekarang sepenuhnya gratis pada rilis ini !!
-
-Semua pembatasan (dalam langganan aplikasi) telah dihapus karena monkeypaste sekarang bertransisi untuk menjadi proyek open-source. Jadi perhatikan github kami (github.com/monkeypaste) jika Anda tertarik untuk berkontribusi.
-
-Pembaruan:
-
-- Semua pembatasan kapasitas dihapus!
-- Peningkatan UI UI yang ditolak
-- Dukungan dasar untuk menjalankan beberapa contoh monkeypaste
-- Editor Nilai Bersama Baru (di browser plugin jika berlaku)</value>
+    <value>- Sumber lengkap untuk monkeypaste sekarang tersedia di github https://github.com/monkeypaste/monkeypaste kami
+- Linux Versi Download Download Di Sini https://github.com/monkeypaste/monkeypaste/releases
+- Mode kompatibilitas yang ditingkatkan (sekarang memiliki penampil HTML untuk klip teks)
+- Bug kecil dan peningkatan kinerja</value>
   </data>
 </root>

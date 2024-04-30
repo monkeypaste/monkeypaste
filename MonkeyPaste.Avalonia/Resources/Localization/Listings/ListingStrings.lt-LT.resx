@@ -267,15 +267,9 @@ jūsų mainų sritis visada stebima arba saugoma BET KUR, išskyrus jūsų kompi
     <value>Saugus, patikimas ir privatus vietinis duomenų saugojimas su pasirenkama 2 faktorių slaptažodžio apsauga</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste dabar yra visiškai nemokama nuo šios laidos !!
-
-Visi apribojimai (programų prenumeratos) buvo pašalinti, nes „MonkeYPaste“ dabar pereina prie atvirojo kodo projekto. Taigi stebėkite mūsų „GitHub“ (github.com/monkeypaste), jei jus domina prisidėjimas.
-
-Atnaujinimai:
-
-- Nuimti visi pajėgumų apribojimai!
-- Atmesti URL redaktoriaus UI patobulinimai
-- Pradinė parama paleisti kelis „MonkeYPaste“ egzempliorius
-- Naujas bendro naudojimo vertės redaktorius (papildinio naršyklėje, jei taikoma)</value>
+    <value>- Visas „MonkeYPaste“ šaltinis, kurį dabar galima rasti mūsų „Github“ https://github.com/monkeypaste/monkeypaste
+- „Linux“ versija išleista atsisiųsti čia https://github.com/monkeypaste/monkeypaste/releases
+- Patobulintas suderinamumo režimas (dabar turi HTML peržiūros priemonę teksto klipams)
+- Mažos klaidos ir našumo patobulinimai</value>
   </data>
 </root>

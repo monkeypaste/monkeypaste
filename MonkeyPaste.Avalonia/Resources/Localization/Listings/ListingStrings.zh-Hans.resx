@@ -267,15 +267,9 @@
     <value>安全、可靠和私密的本地数据存储，可选的 2 因素密码保护</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>截至此版本，MonkeyPaste现在完全免费！！
-
-所有限制（在应用程序订阅中）已被删除，因为Monkeypaste现在正在转变为开源项目。因此，如果您有兴趣贡献，请密切注意我们的github（github.com/monkeypaste）。
-
-更新：
-
- - 消除了所有容量限制！
- - 拒绝的URL编辑器UI改进
- - 为运行多个实例的MonkePaste的支持
- - 新的共享价值编辑器（在适用的插件浏览器中）</value>
+    <value>-  MonkeyPaste的完整来源现已在我们的GitHub https://github.com/monkeypaste/monkeypaste上提供
+ -  Linux版本在此处下载https://github.com/monkeypaste/monkeypaste/releases
+ - 改进的兼容模式（现在具有用于文本剪辑的HTML查看器）
+ - 较小的错误和绩效改进</value>
   </data>
 </root>

@@ -267,15 +267,9 @@ i tuoi appunti sono sempre tracciati o archiviati OVUNQUE oltre la tua macchina.
     <value>Archiviazione dei dati locale sicura, protetta e privata con protezione con password opzionale a 2 fattori</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste è ora completamente libero da questa versione !!
-
-Tutte le restrizioni (negli abbonamenti alle app) sono state rimosse poiché Monkeypaste sta ora passando a diventare un progetto open source. Quindi tieni d'occhio il nostro GitHub (github.com/monkeypaste) se sei interessato a contribuire.
-
-Aggiornamenti:
-
-- Tutte le restrizioni di capacità rimosse!
-- Miglioramenti dell'interfaccia utente dell'Editor URL respinti
-- Supporto di base per l'esecuzione di più istanze di Monkeypaste
-- Nuovo editor di valori condivisi (nel browser plug -in ove applicabile)</value>
+    <value>- Fonte completa per Monkeypaste ora disponibile sul nostro github https://github.com/monkeypaste/monkeypaste
+- Versione Linux rilasciata Download qui https://github.com/monkeypaste/monkeypaste/releases
+- Modalità di compatibilità migliorata (ora ha un visualizzatore HTML per clip di testo)
+- Bug minori e miglioramenti delle prestazioni</value>
   </data>
 </root>

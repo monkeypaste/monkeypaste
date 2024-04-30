@@ -267,15 +267,9 @@ utklippstavlen din blir noen gang sporet eller lagret hvor som helst utenfor din
     <value>Sikker, sikker og privat lokal datalagring med valgfri 2-faktor passordbeskyttelse</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste er nå helt gratis fra denne utgivelsen !!
-
-Alle begrensninger (i appabonnement) er fjernet ettersom MonkeyPaste nå overgår til å bli et open source-prosjekt. Så følg med på vår github (github.com/monkeypaste) hvis du er interessert i å bidra.
-
-Oppdateringer:
-
-- Alle kapasitetsbegrensninger fjernet!
-- Avviste URL -redigeringsgrensesnittforbedringer
-- Baseline -støtte for å kjøre flere forekomster av MonkeyPaste
-- Ny delte verdiredaktør (i plugin nettleser der det er aktuelt)</value>
+    <value>- Full kilde for MonkeyPaste nå tilgjengelig på vår github https://github.com/monkeypaste/monkeypaste
+- Linux -versjon utgitt nedlasting her https://github.com/monkeypaste/monkeypaste/releases
+- Forbedret kompatibilitetsmodus (har nå HTML -seer for tekstklipp)
+- Mindre feil- og ytelsesforbedringer</value>
   </data>
 </root>

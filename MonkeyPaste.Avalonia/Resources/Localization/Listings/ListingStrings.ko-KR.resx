@@ -267,15 +267,9 @@
     <value>안전하고 보안이 유지되는 개인 로컬 데이터 스토리지(2단계 암호 보호 옵션)</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste는 이제이 릴리스에서 완전히 무료입니다 !!
-
-MonkeyPaste가 이제 오픈 소스 프로젝트가되기 위해 전환함에 따라 모든 제한 (앱 구독)이 제거되었습니다. 기여에 관심이 있다면 Github (github.com/monkeypaste)를 주시하십시오.
-
-업데이트 :
-
-- 모든 용량 제한이 제거되었습니다!
--URL 편집기 UI 개선을 거부했습니다
-- 여러 원숭이의 여러 인스턴스를 실행하기위한 기준 지원
-- 새로운 공유 가치 편집기 (해당되는 경우 플러그인 브라우저에서)</value>
+    <value>-Github https://github.com/monkeypaste/monkeypaste에서 사용할 수있는 전체 소스
+-Linux 버전이 여기에서 다운로드 https://github.com/monkeypaste/monkeypaste/releases를 다운로드합니다
+- 개선 된 호환성 모드 (이제 텍스트 클립 용 HTML 뷰어가 있습니다)
+- 사소한 버그 및 성능 향상</value>
   </data>
 </root>

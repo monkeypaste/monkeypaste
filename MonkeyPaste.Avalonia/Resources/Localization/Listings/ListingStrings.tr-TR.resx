@@ -267,15 +267,9 @@ panonuz, kendi makinenizin ötesinde HERHANGİ BİR YERDE izlenir veya saklanır
     <value>İsteğe bağlı 2 faktörlü parola koruması ile güvenli, emniyetli ve özel yerel veri depolama</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste şimdi bu sürümden itibaren tamamen ücretsiz !!
-
-Monkeypaste şimdi açık kaynaklı bir proje haline geldiğinden tüm kısıtlamalar (uygulama aboneliklerinde) kaldırıldı. Eğer katkıda bulunmak istiyorsanız GitHub'ımıza (GitHub.com/Monkeyaste) göz atın.
-
-Güncellemeler:
-
-- Tüm kapasite kısıtlamaları kaldırıldı!
-- Reddedilen URL Editör Kullanıcı Araştırması Geliştirmeleri
-- Monkeycaste'in birden fazla örneğini çalıştırmak için temel destek
-- Yeni Paylaşılan Değer Düzenleyicisi (Mümkün olan yerlerde eklenti tarayıcısında)</value>
+    <value>- Monkeypaste için tam kaynak artık GitHub'umuzda mevcut https://github.com/monkeyaste/Monkeypaste
+- Linux sürümü yayınlandı https://github.com/monkeyaste/Monkeypaste/Releases
+- Geliştirilmiş uyumluluk modu (şimdi metin klipleri için HTML görüntüleyicisi var)
+- Küçük hata ve performans iyileştirmeleri</value>
   </data>
 </root>

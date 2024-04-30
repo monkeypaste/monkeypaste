@@ -267,15 +267,9 @@ uw klembord wordt ooit gevolgd of opgeslagen OVERAL buiten uw eigen machine. Per
     <value>Veilige, beveiligde en privé lokale gegevensopslag met optionele 2-factor wachtwoordbeveiliging</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste is nu volledig gratis vanaf deze release !!
-
-Alle beperkingen (in app-abonnementen) zijn verwijderd omdat Monkeypaste nu overstapt naar een open-source project. Dus houd onze GitHub (github.com/monkeypaste) in de gaten als u geïnteresseerd bent om bij te dragen.
-
-Updates:
-
-- Alle capaciteitsbeperkingen verwijderd!
-- Verbeteringen van de URL -editor van de URL -editor
-- Basisondersteuning voor het uitvoeren van meerdere instanties van Monkeypaste
-- Nieuwe gedeelde waarde -editor (in plug -in browser waar van toepassing)</value>
+    <value>- Volledige bron voor Monkeypaste nu beschikbaar op onze github https://github.com/monkeypaste/monkeypaste
+- Linux -versie vrijgegeven download hier https://github.com/monkeypaste/monkeypaste/releases
+- Verbeterde compatibiliteitsmodus (heeft nu HTML -viewer voor tekstclips)
+- Kleine bug- en prestatieverbeteringen</value>
   </data>
 </root>

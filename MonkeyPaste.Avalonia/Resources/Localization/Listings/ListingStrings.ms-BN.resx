@@ -267,15 +267,9 @@ papan keratan anda pernah dijejaki atau disimpan DI MANA-MANA di luar mesin anda
     <value>Penyimpanan data tempatan yang selamat, selamat dan peribadi dengan perlindungan kata laluan 2 faktor pilihan</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste kini bebas sepenuhnya seperti pelepasan ini !!
-
-Semua sekatan (dalam langganan APP) telah dikeluarkan kerana monkeypaste kini beralih untuk menjadi projek sumber terbuka. Oleh itu, perhatikan github kami (github.com/monkeypaste) jika anda berminat untuk menyumbang.
-
-Kemas kini:
-
-- Semua sekatan kapasiti dikeluarkan!
-- Penambahbaikan UI Editor URL yang ditolak
-- Sokongan asas untuk menjalankan pelbagai contoh monkeypaste
-- Editor Nilai Dikongsi Baru (dalam Pelayar Plugin di mana berkenaan)</value>
+    <value>- Sumber penuh untuk monkeypaste kini boleh didapati di github https://github.com/monkeypaste/monkeypaste
+- Versi Linux Dikeluarkan Muat turun di sini https://github.com/monkeypaste/monkeypaste/releases
+- Mod keserasian yang lebih baik (kini mempunyai penonton HTML untuk klip teks)
+- Penambahbaikan pepijat dan prestasi kecil</value>
   </data>
 </root>

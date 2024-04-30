@@ -267,15 +267,9 @@ clipboard-ul dvs. este urmărit sau stocat ORIUNDE în afara propriei mașini. P
     <value>Stocare sigură, securizată și privată a datelor locale cu protecție opțională cu parolă cu 2 factori</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste este acum complet liber de la această versiune !!
-
-Toate restricțiile (în abonamentele APP) au fost eliminate, deoarece MonkeyPaste trece acum la a deveni un proiect open-source. Așadar, urmăriți github -ul nostru (github.com/monkeypaste) dacă sunteți interesat să contribuiți.
-
-Actualizări:
-
-- Toate restricțiile de capacitate eliminate!
-- Respingerea URL -ului URL AM INFORMAȚII
-- Suport de bază pentru rularea mai multor cazuri de Monkeypaste
-- nou editor de valori partajate (în browserul de pluginuri, după caz)</value>
+    <value>- Sursa completă pentru Monkeypaste acum disponibilă pe github -ul nostru https://github.com/monkeypaste/monkeypaste
+- Versiunea Linux lansată Descărcare aici https://github.com/monkeypaste/monkeypaste/reLeases
+- Mod de compatibilitate îmbunătățit (acum are HTML Viewer pentru clipuri de text)
+- Bug -uri minore și îmbunătățiri ale performanței</value>
   </data>
 </root>

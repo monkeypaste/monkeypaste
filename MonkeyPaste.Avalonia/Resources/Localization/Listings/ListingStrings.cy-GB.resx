@@ -267,15 +267,9 @@ Mae eich clipfwrdd yn cael ei olrhain neu ei storio UNRHYW le y tu hwnt i'ch pei
     <value>Storio data lleol diogel, diogel a phreifat gyda diogelwch cyfrinair 2 ffactor dewisol</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Mae MonkeyPaste bellach yn hollol rhad ac am ddim o'r datganiad hwn !!
-
-Mae'r holl gyfyngiadau (mewn tanysgrifiadau ap) wedi'u dileu gan fod MonkeyPaste bellach yn trosglwyddo i ddod yn brosiect ffynhonnell agored. Felly cadwch lygad ar ein github (github.com/monkeypaste) os oes gennych chi ddiddordeb mewn cyfrannu.
-
-Diweddariadau:
-
-- dileu'r holl gyfyngiadau capasiti!
-- gwelliannau UI golygydd Url a wrthodwyd
-- cefnogaeth sylfaenol ar gyfer rhedeg sawl achos o MonkeyPaste
-- golygydd gwerth a rennir newydd (mewn porwr ategyn lle bo'n berthnasol)</value>
+    <value>- Ffynhonnell lawn ar gyfer MonkeyPaste nawr ar gael ar ein github https://github.com/monkeypaste/monkeypaste
+- Fersiwn Linux wedi'i ryddhau i'w lawrlwytho yma https://github.com/monkeypaste/monkeypaste/releases
+- gwell modd cydnawsedd (mae gan wyliwr HTML bellach ar gyfer clipiau testun)
+- mân welliannau i fygiau a pherfformiad</value>
   </data>
 </root>
