@@ -92,7 +92,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	let is_conv_html_valid = true;
 
 	if (DO_VALIDATE) {
-		output_html = verifyConv(verifyText, output_html, ENFORCE_VALIDATE);
+		output_html = verifyConv(verifyText, output_html, needs_encoding, ENFORCE_VALIDATE);
 	}
 
 	setEditorHtml(output_html);
@@ -112,7 +112,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	};
 }
 
-function verifyConv(verifyText, output_html, enforceValidation) {
+function verifyConv(verifyText, output_html, needs_encoding, enforceValidation) {
 	if (isNullOrUndefined(verifyText)) {
 		return output_html;
 	}
