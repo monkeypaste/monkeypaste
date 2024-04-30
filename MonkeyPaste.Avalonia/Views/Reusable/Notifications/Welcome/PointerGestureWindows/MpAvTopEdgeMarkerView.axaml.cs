@@ -18,11 +18,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void InitDnd() {
-            //DragDrop.SetAllowDrop(this, true);
-            //this.AddHandler(DragDrop.DragOverEvent, MpAvTopEdgeMarkerView_DragOver);
-            if (TopLevel.GetTopLevel(this) is MpAvWindow w) {
-                w.AddHandler(DragDrop.DragOverEvent, MpAvTopEdgeMarkerView_DragOver);
-            }
+            DragDrop.SetAllowDrop(this, true);
+            this.AddHandler(DragDrop.DragOverEvent, MpAvTopEdgeMarkerView_DragOver);
+            //if (TopLevel.GetTopLevel(this) is MpAvWindow w) {
+            //    w.AddHandler(DragDrop.DragOverEvent, MpAvTopEdgeMarkerView_DragOver);
+            //}
         }
         private void MpAvTopEdgeMarkerView_DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine($"TopEdge drag over...");
