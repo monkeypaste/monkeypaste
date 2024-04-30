@@ -87,35 +87,37 @@ namespace MonkeyPaste.Common {
             ) {
             add_debug = add_debug.HasValue ? add_debug : MpServerConstants.IS_SERVER_LOCAL;
             // from https://stackoverflow.com/a/62640006/105028
-            using (HttpClient httpClient = new HttpClient())
-            using (MultipartFormDataContent formDataContent = new MultipartFormDataContent()) {
-                try {
-                    if (keyValuePairs != null) {
-                        foreach (var keyValuePair in keyValuePairs) {
-                            formDataContent.Add(new StringContent(keyValuePair.Value.ToStringOrEmpty()), keyValuePair.Key);
+            using (HttpClient httpClient = new HttpClient()) {
+                httpClient.SetDefaultUserAgent();
+                using (MultipartFormDataContent formDataContent = new MultipartFormDataContent()) {
+                    try {
+                        if (keyValuePairs != null) {
+                            foreach (var keyValuePair in keyValuePairs) {
+                                formDataContent.Add(new StringContent(keyValuePair.Value.ToStringOrEmpty()), keyValuePair.Key);
+                            }
+                        }
+                        if (add_debug is true) {
+                            formDataContent.Add(new StringContent("1"), "XDEBUG_SESSION");
+                            httpClient.Timeout = TimeSpan.FromMinutes(30);
+                        } else {
+                            httpClient.Timeout = TimeSpan.FromMilliseconds(timeout_ms);
+                        }
+                        // Post Request And Wait For The Response.
+                        HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(url, formDataContent);
+
+                        // Check If Successful Or Not.
+                        if (httpResponseMessage.IsSuccessStatusCode) {
+                            // Return Byte Array To The Caller.
+                            return await httpResponseMessage.Content.ReadAsStringAsync();
+                        } else {
+                            // Throw Some Sort of Exception?
+                            return string.Empty;
                         }
                     }
-                    if (add_debug is true) {
-                        formDataContent.Add(new StringContent("1"), "XDEBUG_SESSION");
-                        httpClient.Timeout = TimeSpan.FromMinutes(30);
-                    } else {
-                        httpClient.Timeout = TimeSpan.FromMilliseconds(timeout_ms);
-                    }
-                    // Post Request And Wait For The Response.
-                    HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(url, formDataContent);
-
-                    // Check If Successful Or Not.
-                    if (httpResponseMessage.IsSuccessStatusCode) {
-                        // Return Byte Array To The Caller.
-                        return await httpResponseMessage.Content.ReadAsStringAsync();
-                    } else {
-                        // Throw Some Sort of Exception?
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"Post to url '{url}' error.", ex);
                         return string.Empty;
                     }
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Post to url '{url}' error.", ex);
-                    return string.Empty;
                 }
             }
         }

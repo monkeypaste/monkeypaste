@@ -63,7 +63,7 @@ namespace MonkeyPaste.Common.Avalonia {
             var formats = ido.Keys.ToList();
             foreach (string format in formats) {
                 switch (format) {
-                    case MpPortableDataFormats.Files: {
+                    case var _ when format == MpPortableDataFormats.Files: {
                             // from https://stackoverflow.com/a/5843278/105028
                             if (!ido.TryGetValue(format, out IEnumerable<string> fpl) ||
                                 !fpl.Any()) {
@@ -91,7 +91,7 @@ namespace MonkeyPaste.Common.Avalonia {
                             //ido.Set(format, fpl.FirstOrDefault().ToFileSystemUriFromPath());
                             break;
                         }
-                    case MpPortableDataFormats.Image: {
+                    case var _ when format == MpPortableDataFormats.Image: {
                             // from https://stackoverflow.com/a/18124824/105028
                             if (!ido.TryGetValue(format, out string imgBase64)) {
                                 continue;

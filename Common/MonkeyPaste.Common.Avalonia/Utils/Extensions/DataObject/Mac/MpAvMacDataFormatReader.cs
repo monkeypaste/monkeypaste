@@ -31,12 +31,12 @@ namespace MonkeyPaste.Common {
                     case MpPortableDataFormats.MacImage1:
                         data_str = ReadPublicPng(mac_data);
                         break;
-                    case MpPortableDataFormats.MacChromeUrl:
+                    case MpPortableDataFormats.MacChromeUrl1:
                     case MpPortableDataFormats.MacChromeUrl2:
                     case MpPortableDataFormats.MacText1:
                     case MpPortableDataFormats.MacText2:
                     case MpPortableDataFormats.MacText3:
-                    case MpPortableDataFormats.MacUrl:
+                    case MpPortableDataFormats.MacUrl1:
                     case MpPortableDataFormats.MacUrl2:
                     case MpPortableDataFormats.MacHtml1:
                     case MpPortableDataFormats.MacRtf1:

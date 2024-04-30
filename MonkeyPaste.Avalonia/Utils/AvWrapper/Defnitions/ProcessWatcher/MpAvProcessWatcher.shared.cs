@@ -209,6 +209,10 @@ namespace MonkeyPaste.Avalonia {
             return GetProcessPath(h1) == GetProcessPath(h2);
         }
 
+        public MpPortableProcessInfo GetClipboardOwner() {
+            return null;
+        }
+
 
         #endregion
     }
