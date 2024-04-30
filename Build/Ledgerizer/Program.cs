@@ -19,8 +19,8 @@ namespace Ledgerizer {
         FORCE_REPLACE_REMOTE_TAG = 1L << 3,
         DO_LOCAL_VERSIONS = 1L << 4,
         DO_REMOTE_VERSIONS = 1L << 5,
-        DO_LOCAL_INDEX = 1L << 6,
-        DO_REMOTE_INDEX = 1L << 7,
+        DO_LOCAL_CULTURE_INDEX = 1L << 6,
+        DO_REMOTE_CULTURE_INDEX = 1L << 7,
         LOCAL_MOVE_CORE_TO_DAT = 1L << 8,
         GEN_LOCALIZED_MANIFESTS = 1L << 9,
         GEN_EMPTY_RESX = 1L << 10,
@@ -39,28 +39,32 @@ namespace Ledgerizer {
     }
     internal class Program {
 
+        #region Properties
+
         static MpLedgerizerFlags LEDGERIZER_FLAGS =
-            //MpLedgerizerFlags.TRANSLATE_RESX |
-            //MpLedgerizerFlags.GEN_EMPTY_RESX
+            //MpLedgerizerFlags.GEN_EDITOR_UISTRS |
             //MpLedgerizerFlags.GEN_ADDON_LISTING |
             //MpLedgerizerFlags.GEN_PROD_LISTING |
-            MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            //MpLedgerizerFlags.TRANSLATE_RESX |
+            //MpLedgerizerFlags.GEN_EMPTY_RESX
+            //MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
+            //MpLedgerizerFlags.DO_CULTURE_VERIFY |
+            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
+            //MpLedgerizerFlags.DO_LOCAL_LEDGER |
             //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
-            //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
+            //MpLedgerizerFlags.DO_REMOTE_LEDGER |
             //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
             //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
-            //MpLedgerizerFlags.DO_LOCAL_INDEX |
-            //MpLedgerizerFlags.DO_REMOTE_INDEX |
-            //MpLedgerizerFlags.DO_LOCAL_LEDGER |
-            //MpLedgerizerFlags.DO_REMOTE_LEDGER |
-                                   MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
-                                   //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
-                                   //MpLedgerizerFlags.DO_JS_UISTRINGS |
-                                   // MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
-                                   //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
-                                   //MpLedgerizerFlags.MOVE_NUGET_CACHE |
-                                   MpLedgerizerFlags.DEBUG  |
-                                   MpLedgerizerFlags.RELEASE
+            MpLedgerizerFlags.DO_LOCAL_CULTURE_INDEX |
+            MpLedgerizerFlags.DO_REMOTE_CULTURE_INDEX |
+            //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
+            //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
+            //MpLedgerizerFlags.DO_JS_UISTRINGS |
+            //MpLedgerizerFlags.MOVE_NUGET_CACHE |
+            //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
+            //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
+            MpLedgerizerFlags.DEBUG  |
+            MpLedgerizerFlags.RELEASE
             ;
 
         #region Localizer Props
@@ -151,12 +155,12 @@ namespace Ledgerizer {
             //"AzureComputerVision",
             //"AzureTextTranslator",
             //"ChatGpt",
-            "CoreAnnotator",
-            "CoreOleHandler",
+            //"CoreAnnotator",
+            //"CoreOleHandler",
             //"FileConverter",
             //"GoogleLiteTextTranslator",
             //"QrCoder",
-            //"TextToSpeech",
+            "TextToSpeech",
             //"WebSearch",
             //"YoloImageAnnotator",
         ];
@@ -186,8 +190,8 @@ namespace Ledgerizer {
         static bool DO_LOCAL_VERSIONS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_VERSIONS);
         static bool DO_REMOTE_VERSIONS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_VERSIONS);
 
-        static bool DO_LOCAL_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_INDEX);
-        static bool DO_REMOTE_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_INDEX);
+        static bool DO_LOCAL_CULTURE_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_CULTURE_INDEX);
+        static bool DO_REMOTE_CULTURE_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_CULTURE_INDEX);
 
         static bool DO_LOCAL_LEDGER = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_LEDGER);
         static bool DO_REMOTE_LEDGER = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_LEDGER);
@@ -283,6 +287,8 @@ namespace Ledgerizer {
         }
         #endregion
 
+        #endregion
+
 
         static void Main(string[] args) {
             Console.WriteLine($"Tasks: {LEDGERIZER_FLAGS}");
@@ -335,11 +341,11 @@ namespace Ledgerizer {
             if (DO_REMOTE_VERSIONS) {
                 UpdateVersions(true);
             }
-            if (DO_LOCAL_INDEX) {
-                CreateIndex(false);
+            if (DO_LOCAL_CULTURE_INDEX) {
+                CreateCultureIndex(false);
             }
-            if (DO_REMOTE_INDEX) {
-                CreateIndex(true);
+            if (DO_REMOTE_CULTURE_INDEX) {
+                CreateCultureIndex(true);
             }
             if (LOCAL_MOVE_CORE_TO_DAT) {
                 MoveCoresToDat_local();
@@ -1534,12 +1540,12 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
         #endregion
 
         #region Index
-        static void CreateIndex(bool is_remote) {
+        static void CreateCultureIndex(bool is_remote) {
             MpConsole.WriteLine($"Creating {(is_remote ? "REMOTE" : "LOCAL")} Cultures...", true);
 
             List<string> found_cultures = [];
             // find all distinct cultures
-            foreach (var plugin_name in WorkingPluginNames) {
+            foreach (var plugin_name in AllPluginNames) {
                 string plugin_cultures_dir = GetPluginResourcesDir(plugin_name);
                 if (plugin_cultures_dir == null) {
                     // no resources dir
@@ -1557,7 +1563,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             // create localized ledger for each distinct culture in /Cultures dir
             foreach (string cc in found_cultures) {
                 var culture_manifests = new List<MpManifestFormat>();
-                foreach (string plugin_name in WorkingPluginNames) {
+                foreach (string plugin_name in AllPluginNames) {
                     try {
                         // find closest culture for each plugin and create that manifest
                         var culture_manifest = GetLocalizedManifest(plugin_name, cc);
@@ -1600,19 +1606,19 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
         static MpManifestFormat GetLocalizedManifest(string plugin_name, string culture) {
             string plugin_proj_cultures_dir = GetPluginResourcesDir(plugin_name);
-            string localized_manifest_path = Path.Combine(GetPluginProjDir(plugin_name), ManifestFileName);
+            string inv_manifest_path = Path.Combine(GetPluginProjDir(plugin_name), ManifestFileName);
             if (plugin_proj_cultures_dir != null) {
                 string resolved_cultre = MpLocalizationHelpers.FindClosestCultureCode(
                 culture, plugin_proj_cultures_dir,
                 file_name_filter: ManifestPrefix);
                 if (!string.IsNullOrEmpty(resolved_cultre)) {
-                    localized_manifest_path = Path.Combine(
+                    inv_manifest_path = Path.Combine(
                     plugin_proj_cultures_dir,
                     $"{ManifestPrefix}.{resolved_cultre}.{ManifestExt}").Replace("..", ".");
-                    MpDebug.Assert(localized_manifest_path.IsFile(), $"ERror can't find manifest {localized_manifest_path}");
+                    MpDebug.Assert(inv_manifest_path.IsFile(), $"ERror can't find manifest {inv_manifest_path}");
                 }
             }
-            return JsonConvert.DeserializeObject<MpManifestFormat>(MpFileIo.ReadTextFromFile(localized_manifest_path));
+            return JsonConvert.DeserializeObject<MpManifestFormat>(MpFileIo.ReadTextFromFile(inv_manifest_path));
         }
 
 
@@ -1868,7 +1874,12 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
                     var resp = await MpHttpRequester.SubmitPostDataToUrlAsync(url, req_args);
                     bool success = MpHttpRequester.ProcessServerResponse(resp, out var resp_args);
-                    MpConsole.WriteLine($"{mf} {success.ToTestResultLabel()} info check resp: {resp}");
+
+                    var msg_mf = mf;
+                    if(GetLocalizedManifest(mf.title,"en-US") is { } neu_mf) {
+                        msg_mf = neu_mf;
+                    }
+                    MpConsole.WriteLine($"{msg_mf} {success.ToTestResultLabel()} info check resp: {resp}");
                 }
                 is_done = true;
             });
