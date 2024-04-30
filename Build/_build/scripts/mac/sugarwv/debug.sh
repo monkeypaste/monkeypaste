@@ -1,6 +1,7 @@
 #!/bin/bash
 clear
-TARGET_FRAMEWORK="net8.0"
+CONFIG=Release
+FRAMEWORK="net8.0"
 RUN_ARGS="--wait-for-attach"
 
 if [ "$1" = "reset-all" ]; then
@@ -19,7 +20,7 @@ if [ "$1" = "no-attach" ]; then
 	RUN_ARGS=""
 fi
 
-./bundle-osx-x64.sh
+./build.sh
 
-cd "../../../../../MonkeyPaste.Desktop/bin/x64/Debug/$TARGET_FRAMEWORK/osx-x64/publish/MonkeyPaste.app/Contents/MacOS/"
+cd "../../../../../MonkeyPaste.Desktop/bin/x64/$CONFIG/$FRAMEWORK/osx-x64/publish/MonkeyPaste.app/Contents/MacOS/"
 ./MonkeyPaste.Desktop $RUN_ARGS
