@@ -33,11 +33,11 @@ namespace Ledgerizer {
         DO_JS_UISTRINGS = 1L << 17,
         DO_LOCAL_LEDGER = 1L << 18,
         DO_REMOTE_LEDGER = 1L << 19,
-        DEBUG = 1L << 20,
-        RELEASE = 1L << 21,
-        MOVE_NUGET_CACHE = 1L << 22
+        MOVE_NUGET_CACHE = 1L << 20,
+        DEBUG = 1L << 21,
+        RELEASE = 1L << 22,
     }
-    internal class Program {
+    internal class Ledgerizer {
 
         #region Properties
 
@@ -55,16 +55,17 @@ namespace Ledgerizer {
             //MpLedgerizerFlags.DO_REMOTE_LEDGER |
             //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
             //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
-            MpLedgerizerFlags.DO_LOCAL_CULTURE_INDEX |
-            MpLedgerizerFlags.DO_REMOTE_CULTURE_INDEX |
+            //MpLedgerizerFlags.DO_LOCAL_CULTURE_INDEX |
+            //MpLedgerizerFlags.DO_REMOTE_CULTURE_INDEX |
             //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
             //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
             //MpLedgerizerFlags.DO_JS_UISTRINGS |
             //MpLedgerizerFlags.MOVE_NUGET_CACHE |
             //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
             //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
-            MpLedgerizerFlags.DEBUG  |
-            MpLedgerizerFlags.RELEASE
+            //MpLedgerizerFlags.DEBUG  |
+            //MpLedgerizerFlags.RELEASE
+            MpLedgerizerFlags.None
             ;
 
         #region Localizer Props
@@ -151,19 +152,19 @@ namespace Ledgerizer {
 
         #region General Props
 
-        static string[] WorkingPluginNames => [
+        static List<string> WorkingPluginNames { get; set; } = []; //=> [
             //"AzureComputerVision",
             //"AzureTextTranslator",
             //"ChatGpt",
             //"CoreAnnotator",
-            //"CoreOleHandler",
+           // "CoreOleHandler",
             //"FileConverter",
             //"GoogleLiteTextTranslator",
             //"QrCoder",
-            "TextToSpeech",
+            //"TextToSpeech",
             //"WebSearch",
             //"YoloImageAnnotator",
-        ];
+       // ];
         static IEnumerable<string> WorkingCorePlugins =>
             WorkingPluginNames.Where(x => CorePlugins.Contains(x));
 
@@ -182,38 +183,38 @@ namespace Ledgerizer {
         ];
 
 
-        static bool DO_LOCAL_PACKAGING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
+        static bool DO_LOCAL_PACKAGING => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
 
-        static bool DO_REMOTE_PACKAGING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_PACKAGING);
-        static bool FORCE_REPLACE_REMOTE_TAG = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG);
+        static bool DO_REMOTE_PACKAGING => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_PACKAGING);
+        static bool FORCE_REPLACE_REMOTE_TAG => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG);
 
-        static bool DO_LOCAL_VERSIONS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_VERSIONS);
-        static bool DO_REMOTE_VERSIONS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_VERSIONS);
+        static bool DO_LOCAL_VERSIONS => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_VERSIONS);
+        static bool DO_REMOTE_VERSIONS => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_VERSIONS);
 
-        static bool DO_LOCAL_CULTURE_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_CULTURE_INDEX);
-        static bool DO_REMOTE_CULTURE_INDEX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_CULTURE_INDEX);
+        static bool DO_LOCAL_CULTURE_INDEX => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_CULTURE_INDEX);
+        static bool DO_REMOTE_CULTURE_INDEX => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_CULTURE_INDEX);
 
-        static bool DO_LOCAL_LEDGER = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_LEDGER);
-        static bool DO_REMOTE_LEDGER = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_LEDGER);
+        static bool DO_LOCAL_LEDGER => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_LEDGER);
+        static bool DO_REMOTE_LEDGER => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_LEDGER);
 
-        static bool LOCAL_MOVE_CORE_TO_DAT = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT);
-        static bool REMOTE_MOVE_CORE_TO_DAT = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT);
+        static bool LOCAL_MOVE_CORE_TO_DAT => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT);
+        static bool REMOTE_MOVE_CORE_TO_DAT => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT);
 
-        static bool GEN_LOCALIZED_MANIFESTS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS);
+        static bool GEN_LOCALIZED_MANIFESTS => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS);
 
-        static bool GEN_ADDON_LISTING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_ADDON_LISTING);
-        static bool GEN_PROD_LISTING = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_PROD_LISTING);
+        static bool GEN_ADDON_LISTING => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_ADDON_LISTING);
+        static bool GEN_PROD_LISTING => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_PROD_LISTING);
 
-        static bool GEN_EMPTY_RESX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_EMPTY_RESX);
+        static bool GEN_EMPTY_RESX => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_EMPTY_RESX);
 
-        static bool TRANS_RESX = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.TRANSLATE_RESX);
-        static bool DO_CULTURE_VERIFY = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES);
+        static bool TRANS_RESX => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.TRANSLATE_RESX);
+        static bool DO_CULTURE_VERIFY => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES);
 
-        static bool GEN_EDITOR_UISTRS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_EDITOR_UISTRS);
+        static bool GEN_EDITOR_UISTRS => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_EDITOR_UISTRS);
 
-        static bool DO_JS_UISTRINGS = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_JS_UISTRINGS);
+        static bool DO_JS_UISTRINGS => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_JS_UISTRINGS);
 
-        static bool MOVE_NUGET_CACHE = LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.MOVE_NUGET_CACHE);
+        static bool MOVE_NUGET_CACHE => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.MOVE_NUGET_CACHE);
 
         const string BUILD_CONFIG =
 #if DEBUG
@@ -261,7 +262,7 @@ namespace Ledgerizer {
         const string PROJ_URL_FORMAT = @"https://github.com/monkeypaste/{0}";
         const string ICON_URL_FORMAT = @"https://raw.githubusercontent.com/monkeypaste/{0}/master/icon.png";
         const string PUBLIC_PACKAGE_URL_FORMAT = @"https://github.com/monkeypaste/{0}/releases/download/{1}/{1}.zip";
-        static string PRIVATE_ICON_URL_FORMAT = $"{ServerSecrets["httpUrl"]}/dat/{0}.png";
+        static string PRIVATE_ICON_URL_FORMAT = $"{ServerSecrets["httpUrl"]}/dat/{{0}}.png";
 
         #endregion
 
@@ -271,7 +272,7 @@ namespace Ledgerizer {
             get {
                 if(_config == null) {
                     var cb = new ConfigurationBuilder();
-                    _config = cb.AddUserSecrets<Program>().Build();
+                    _config = cb.AddUserSecrets<Ledgerizer>().Build();
                 }
                 return _config.GetSection("server");
             }
@@ -280,7 +281,7 @@ namespace Ledgerizer {
             get {
                 if(_config == null) {
                     var cb = new ConfigurationBuilder();
-                    _config = cb.AddUserSecrets<Program>().Build();
+                    _config = cb.AddUserSecrets<Ledgerizer>().Build();
                 }
                 return _config.GetSection("ubuntu");
             }
@@ -291,14 +292,13 @@ namespace Ledgerizer {
 
 
         static void Main(string[] args) {
+            SelectTasks();
             Console.WriteLine($"Tasks: {LEDGERIZER_FLAGS}");
-            Console.WriteLine("Press any key to ledgerize!");
-            Console.ReadKey();
             Console.WriteLine("Starting...");
 
             ProcessAll();
 
-            MpConsole.WriteLine("Done.. press key to finish", true);
+            Console.WriteLine("Done.. press key to finish");
             Console.ReadLine();
         }
         static void ProcessAll() {
@@ -360,6 +360,56 @@ namespace Ledgerizer {
                 MoveNugetCache();
             }
         }
+
+        #region Menu
+        static void SelectTasks() {
+            Console.Clear();
+            var task_names = Enum.GetNames(typeof(MpLedgerizerFlags));
+            foreach(var (task_name,idx) in task_names.WithIndex()) {
+                if(idx == 0) {
+                    Console.WriteLine($"0. Select working plugin list...");
+                    continue;
+                }
+                Console.WriteLine($"{idx}.{task_name}");
+            }
+            Console.WriteLine($"Select tasks/flags (# seperated by comma):");
+            var tasks_str = Console.ReadLine().SplitNoEmpty(",").Select(x=>x.Trim());
+
+            foreach(var task_str in tasks_str) {
+                if(!int.TryParse(task_str,out int task_idx) || task_idx < 0 || task_idx >= task_names.Length) {
+                    continue;
+                }
+                if(task_idx == 0) {
+                    LEDGERIZER_FLAGS = MpLedgerizerFlags.None;
+                    SelectPlugins();
+                    SelectTasks();
+                    return;
+                }
+                LEDGERIZER_FLAGS.AddFlag(task_names[task_idx].ToEnum<MpLedgerizerFlags>());
+            }
+        }
+
+        static void SelectPlugins() {
+            Console.Clear();
+            foreach (var (plugin_name, idx) in AllPluginNames.WithIndex()) {
+                if (idx == 0) {
+                    continue;
+                }
+                Console.WriteLine($"{idx}.{plugin_name}");
+            }
+            Console.WriteLine($"Select plugin (# seperated by comma):");
+            var plugins_str = Console.ReadLine().SplitNoEmpty(",").Select(x => x.Trim());
+            foreach (var plugin_idx_str in plugins_str) {
+                if (!int.TryParse(plugin_idx_str, out int plugin_idx) || 
+                    plugin_idx < 0 || 
+                    plugin_idx >= AllPluginNames.Length ||
+                    WorkingPluginNames.Contains(AllPluginNames[plugin_idx])) {
+                    continue;
+                }
+                WorkingPluginNames.Add(AllPluginNames[plugin_idx]);
+            }
+        }
+        #endregion
 
         #region Listing
         static void DoSwap() {
