@@ -9,7 +9,12 @@
     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <Platforms>$(DefaultPlatforms)</Platforms>
     <UserSecretsId>fda21b04-a963-455b-b33c-0bf1b867d66c</UserSecretsId>
+    <ApplicationIcon>hammer.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="hammer.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />

@@ -266,13 +266,13 @@ namespace MonkeyPaste.Avalonia {
         private string FindSourceUrl(MpAvDataObject avdo) {
             string cb_html_or_fragment = null;
 #if MAC
-            if (avdo.TryGetData(MpPortableDataFormats.MacChromeUrl, out string chrome_url)) {
+            if (avdo.TryGetData(MpPortableDataFormats.MacChromeUrl1, out string chrome_url)) {
                 return chrome_url;
             }
             if (avdo.TryGetData(MpPortableDataFormats.MacChromeUrl2, out string chrome_url2)) {
                 return chrome_url2;
             }
-            if (avdo.TryGetData(MpPortableDataFormats.MacUrl, out string mac_url)) {
+            if (avdo.TryGetData(MpPortableDataFormats.MacUrl1, out string mac_url)) {
                 return mac_url;
             }
             if (avdo.TryGetData(MpPortableDataFormats.MacUrl2, out string mac_url2)) {

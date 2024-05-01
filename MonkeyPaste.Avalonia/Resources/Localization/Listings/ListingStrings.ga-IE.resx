@@ -267,15 +267,9 @@ déantar do ghearrthaisce a rianú nó a stóráil riamh ÁIT AR BITH thar do mh
     <value>Stóráil sonraí áitiúla sábháilte, slán agus príobháideach le cosaint roghnach 2 - cosaint focal faire fachtóir</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Tá Monkeypaste go hiomlán saor in aisce anois mar an scaoileadh seo !!
-
-Baineadh na srianta go léir (i suibscríbhinní app) as mar go bhfuil monkeypaste ag aistriú go tionscadal foinse oscailte anois. Mar sin, coinnigh súil ar ár Github (github.com/monkeypaste) má tá suim agat cur leis.
-
-Nuashonruithe:
-
-- Gach srian acmhainne a bhaint!
-- Feabhsuithe Chomhéadain an Eagarthóra URL diúltaithe
-- Tacaíocht bhunlíne chun il -chásanna de monkeypaste a reáchtáil
-- Eagarthóir Luach Comhroinnte Nua (i mbrabhsálaí plugin nuair is infheidhme)</value>
+    <value>- Foinse Iomlán le haghaidh Monkeypaste atá ar fáil anois ar ár Github https://github.com/monkeypaste/monkeypaste
+- Leagan Linux Scaoileadh Íoslódáil anseo https://github.com/monkeypaste/monkeypaste/releases
+- Mód Comhoiriúnachta Feabhsaithe (anois tá HTML Viewer aige le haghaidh gearrthóga téacs)
+- Mionfheabhsuithe ar fhabht agus ar fheidhmíocht</value>
   </data>
 </root>

@@ -267,15 +267,9 @@ Ihre Zwischenablage wird immer IRGENDWO außerhalb Ihres eigenen Computers verfo
     <value>Sichere und private lokale Datenspeicherung mit optionalem 2-Faktor-Passwortschutz</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>MonkeyPaste ist ab dieser Version komplett kostenlos!! 
-
-Alle Einschränkungen (in App-Abonnements) wurden entfernt, da MonkeyPaste jetzt zu einem Open-Source-Projekt wird. Behalten Sie also unser GitHub (github.com/monkeypaste) im Auge, wenn Sie daran interessiert sind, einen Beitrag zu leisten. 
-
-Aktualisierungen: 
-
-- alle Kapazitätsbeschränkungen entfernt! 
-- abgelehnte Verbesserungen der Benutzeroberfläche des URL-Editors 
-- grundlegende Unterstützung für die Ausführung mehrerer Instanzen von MonkeyPaste 
-- neuer gemeinsamer Werteditor (ggf. im Plugin-Browser)</value>
+    <value>- Vollständiger Quellcode für MonkeyPaste jetzt auf unserem GitHub verfügbar https://github.com/monkeypaste/monkeypaste 
+- Linux-Version veröffentlicht, hier herunterladen https://github.com/monkeypaste/monkeypaste/releases 
+- verbesserter Kompatibilitätsmodus (hat jetzt HTML-Viewer für Textausschnitte) 
+- kleinere Fehler und Leistungsverbesserungen</value>
   </data>
 </root>

@@ -267,15 +267,9 @@ jūsu starpliktuve kādreiz tiek izsekota vai glabāta JEBKUR ārpus jūsu maš�
     <value>Droša, droša un privāta lokālā datu glabāšana ar papildu 2 faktoru paroles aizsardzību</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>MonkeyPaste tagad ir pilnīgi bezmaksas kā šī izlaiduma dēļ !!
-
-Visi ierobežojumi (lietotņu abonementos) ir noņemti, jo pērtiķiem tagad pāriet uz atvērtā koda projektu. Tāpēc sekojiet līdzi mūsu github (github.com/monkeypaste), ja jūs interesē ieguldījums.
-
-Atjauninājumi:
-
-- Visi jaudas ierobežojumi noņemti!
-- Noraidītie URL redaktora UI uzlabojumi
-- Sākotnējais atbalsts vairāku pērtipāsta gadījumu vadīšanai
-- Jauns koplietošanas vērtības redaktors (attiecīgā gadījumā spraudņu pārlūkprogrammā)</value>
+    <value>- Pilns MonkeyPaste avots tagad ir pieejams mūsu github https://github.com/monkepaste/monkeypaste
+- Linux versija izlaista lejupielāde šeit
+- Uzlabots saderības režīms (tagad ir HTML skatītājs teksta klipiem)
+- Nelieli kļūdu un veiktspējas uzlabojumi</value>
   </data>
 </root>

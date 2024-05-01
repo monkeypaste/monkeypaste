@@ -1,7 +1,7 @@
 {
   "title": "Core Clipboard Handler",
   "description": "অবিকল্পিত ক্লিপবোৰ্ড বিন্যাস নিয়ন্ত্ৰণ কৰে",
-  "version": "1.0.2.0",
+  "version": "1.0.2.1",
   "author": "Monkey",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "projectUrl": "https://www.monkeypaste.com",

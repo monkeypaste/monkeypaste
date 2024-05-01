@@ -267,15 +267,9 @@ Odložišče je vedno sledeno ali shranjeno KJERKOLI zunaj vašega lastnega stro
     <value>Varna, zaščitena in zasebna lokalna shramba podatkov z izbirno 2-faktorsko zaščito z geslom</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>MonkeyPaste je od te izdaje zdaj povsem brezplačen !!
-
-Vse omejitve (v naročnini na aplikacije) so bile odstranjene, saj MonkeyPaste zdaj prehaja na to, da postane odprtokodni projekt. Zato bodite pozorni na naš github (github.com/monkeypaste), če vas zanima prispevanje.
-
-Posodobitve:
-
-- Odstranjene vse omejitve zmogljivosti!
-- zavrnjene izboljšave UI urejevalnika URL -jev
-- Osnovna podpora za izvajanje več primerkov MonkeyPaste
-- Nov urejevalnik vrednosti (v brskalniku vtičnikov, kjer je primerno)</value>
+    <value>- Celoten vir za MonkeyPaste, ki je zdaj na voljo na našem github https://github.com/monkeypaste/monkeypaste
+- Izdana različica Linuxa Prenos tukaj https://github.com/monkeypaste/monkeypaste/releases
+- Izboljšan način združljivosti (zdaj ima HTML pregledovalnik za besedilne posnetke)
+- Manjše izboljšave hroščev in uspešnosti</value>
   </data>
 </root>

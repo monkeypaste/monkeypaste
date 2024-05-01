@@ -32,8 +32,8 @@
     <AvaloniaVersion>11.0.10</AvaloniaVersion>-->
     <StableAvaloniaVersion>9999.0.0-localbuild</StableAvaloniaVersion>
     <AvaloniaVersion>9999.0.0-localbuild</AvaloniaVersion>
-    <!--<SugarWvVersion>11.0.0.6</SugarWvVersion>-->    
-    <SugarWvVersion>11.0.0.0</SugarWvVersion>
+    <SugarWvVersion>11.0.0.6</SugarWvVersion>    
+    <!--<SugarWvVersion>11.0.0.0</SugarWvVersion>-->
     <CefNetWvVersion>105.3.24107.1511</CefNetWvVersion>
     <AvHtmlRendererVersion>11.0.19</AvHtmlRendererVersion>
   </PropertyGroup>
@@ -42,7 +42,7 @@
   
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>LINUX</BuildOs>
+    <BuildOs>MAC</BuildOs>
     <IncludeCultures>True</IncludeCultures>
     <!-- This property 'IsPublicBuild' ensures local webserver is used not remote-->
     <IsPublicBuild>False</IsPublicBuild>
@@ -128,13 +128,15 @@
   <!-- MAC -->
   
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
+    <StableAvaloniaVersion>11.0.10</StableAvaloniaVersion> 
+    <AvaloniaVersion>11.0.10</AvaloniaVersion>
     <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
     <CommonTargetFramework>$(DefaultTargetFramework)</CommonTargetFramework>
     <DefineConstants>$(DefineConstants);MAC;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>true</UseCefNet>
+    <UseCefNet>false</UseCefNet>
     <UseSugarWv>true</UseSugarWv>
     <PlatformShortName>mac</PlatformShortName>
     <TargetRuntimeIdentifiers>osx-x64</TargetRuntimeIdentifiers>

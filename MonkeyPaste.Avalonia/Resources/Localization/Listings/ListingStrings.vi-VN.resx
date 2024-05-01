@@ -267,15 +267,9 @@ khay nhớ tạm của bạn đã từng được theo dõi hoặc lưu trữ B�
     <value>Lưu trữ dữ liệu cục bộ an toàn, bảo mật và riêng tư với tùy chọn bảo vệ bằng mật khẩu 2 yếu tố</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste bây giờ hoàn toàn miễn phí khi phát hành này !!
-
-Tất cả các hạn chế (trong đăng ký ứng dụng) đã bị xóa vì khỉ hiện đang chuyển sang trở thành một dự án nguồn mở. Vì vậy, hãy để mắt đến github của chúng tôi (github.com/monkeypaste) nếu bạn quan tâm đến việc đóng góp.
-
-Cập nhật:
-
-- Tất cả các hạn chế về năng lực đã loại bỏ!
-- Cải tiến UI của biên tập viên URL bị từ chối
-- Hỗ trợ cơ bản để chạy nhiều phiên bản của khỉ
-- Trình chỉnh sửa giá trị được chia sẻ mới (trong trình duyệt plugin nếu có)</value>
+    <value>- Nguồn đầy đủ cho khỉ hiện có sẵn trên GitHub https://github.com/monkeypaste/monkeypaste của chúng tôi
+- Phiên bản Linux đã phát hành Tải xuống tại đây https://github.com/monkeypaste/monkeypaste/releases
+- Chế độ tương thích được cải thiện (hiện có trình xem HTML cho clip văn bản)
+- Cải thiện lỗi và hiệu suất nhỏ</value>
   </data>
 </root>

@@ -27,14 +27,17 @@ namespace CoreOleHandler {
         private (string formatName, string label, int max_len, string icon_path)[] GetFormatModels() {
             var fml = new List<(string formatName, string label, int max_len, string icon_path)>() {
                 (MpPortableDataFormats.Text,Resources.TextFormatLabel,DEF_MAX_TEXT,"text.png"),
+                (MpPortableDataFormats.MimeText,Resources.MimeTextFormatLabel,DEF_MAX_TEXT,"text.png"),
                 (MpPortableDataFormats.Rtf,Resources.RtfFormatLabel,DEF_MAX_TEXT,"rtf.png"),
                 (MpPortableDataFormats.Xhtml,Resources.HtmlFormatLabel,-1,"html.png"),
                 (MpPortableDataFormats.Html,Resources.MimeHtmlFormatLabel,-1,"html.png"),
                 (MpPortableDataFormats.MimeMozUrl,Resources.MozUrlFormatLabel,-1,"html.png"),
                 (MpPortableDataFormats.Image,Resources.PngFormatLabel,-1,"png.png"),
+                (MpPortableDataFormats.Files,Resources.FilesFormatLabel,-1,"files.png"),
             };
             if(OperatingSystem.IsMacOS()) {
-                fml.Add((MpPortableDataFormats.Image2, "TIFF", -1, "png.png"));
+                fml.Add((MpPortableDataFormats.MacImage2, "PNG (platform)", -1, "png.png"));
+                fml.Add((MpPortableDataFormats.MacImage3, "TIFF", -1, "png.png"));
             } else if(OperatingSystem.IsLinux()) {
                 fml.AddRange([
                     (MpPortableDataFormats.LinuxImage2,Resources.PngFormatLabel + "2",-1,"png.png"),
@@ -42,6 +45,8 @@ namespace CoreOleHandler {
                     (MpPortableDataFormats.LinuxFiles2,Resources.FilesFormatLabel + " (platform)",-1,"files.png"),
                     (MpPortableDataFormats.LinuxFiles3,Resources.FilesFormatLabel + " (platform2)",-1,"files.png"),
                     ]);
+            } else if(OperatingSystem.IsWindows()) {
+                fml.Add((MpPortableDataFormats.Csv, Resources.CsvFormatLabel, DEF_MAX_TEXT, "csv.png"));
             }
             if(fml.Where(x=>fml.Any(y=>y != x && y.formatName == x.formatName)) is { } dups) {
                 MpDebug.Assert(!dups.Any(), $"Error, dup formats found for {string.Join(",", dups.Select(x => x.formatName))}");

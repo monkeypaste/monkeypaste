@@ -267,15 +267,9 @@ Dërrasa juaj është gjurmuar ose ruajtur ndonjëherë kudo përtej makinës su
     <value>Ruajtje e sigurt, e sigurt dhe private e të dhënave lokale me mbrojtje opsionale të fjalëkalimeve 2 - faktor</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>MonkeyPaste tani është plotësisht e lirë nga kjo lëshim !!
-
-Të gjitha kufizimet (në pajtimet e aplikacionit) janë hequr pasi MonkeyPaste tani po kalon të bëhet një projekt me burim të hapur. Pra, mbani një sy në GitHub tonë (github.com/MonKeypaste) nëse jeni të interesuar të kontribuoni.
-
-Përditësimet:
-
-- Të gjitha kufizimet e kapaciteteve janë hequr!
-- Redaktori i URL -së i refuzuar Përmirësimet UI
-- Mbështetje fillestare për drejtimin e shumë rasteve të MonkeyPaste
-- Redaktori i ri i vlerës së përbashkët (në Shfletuesin e Plugin kur është e aplikueshme)</value>
+    <value>- Burim i plotë për Monkeypaste tani i disponueshëm në GitHub tonë https://github.com/Monkeypaste/Monkeypaste
+- Linux Version i lëshuar Shkarkoni këtu https://github.com/Monkeypaste/Monkeypaste/Releases
+- Mënyra e Përpjekjes së Përmirësuar (tani ka shikues HTML për klipet e tekstit)
+- Përmirësime të vogla të gabimeve dhe performancës</value>
   </data>
 </root>

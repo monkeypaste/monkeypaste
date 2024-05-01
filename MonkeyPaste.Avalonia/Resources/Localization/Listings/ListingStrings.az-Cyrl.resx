@@ -267,15 +267,9 @@ Panoya, hər yerdə öz maşınınızdan kənarda izlənilir və ya saxlanılır
     <value>İsteğe bağlı 2 faktorlu parol mühafizəsi ilə təhlükəsiz, təhlükəsiz və özəl yerli məlumat saxlama</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>MonkeyPaste indi bu buraxılışdan etibarən tamamilə pulsuzdur!
-
-MonkeyPaste indi açıq mənbəli layihəyə çevrildiyi üçün bütün məhdudiyyətlər (tətbiq abunəliklərində) silindi. Odur ki, töhfə verməkdə maraqlısınızsa, github-a (github.com/monkeypaste) diqqət yetirin.
-
-Yeniləmələr:
-
-- bütün tutum məhdudiyyətləri aradan qaldırıldı!
-- rədd edilmiş Url redaktoru UI təkmilləşdirmələri
-- MonkeyPaste-in çoxsaylı nümunələrini işə salmaq üçün baza dəstəyi
-- yeni paylaşılan dəyər redaktoru (mümkün olduqda plagin brauzerində)</value>
+    <value>- MonkeyPaste üçün tam mənbə artıq githubumuzda mövcuddur https://github.com/monkeypaste/monkeypaste
+- Linux versiyasını buradan yükləyin https://github.com/monkeypaste/monkeypaste/releases
+- təkmilləşdirilmiş uyğunluq rejimi (indi mətn klipləri üçün HTML görüntüləyicisi var)
+- kiçik səhv və performans təkmilləşdirmələri</value>
   </data>
 </root>

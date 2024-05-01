@@ -267,15 +267,9 @@
     <value>ድሕንነትን ድሕንነትን ናይ ብሕቲ ሓበሬታ ንምኽዛን ኣማራጺ ዝዀነ 2 ረቛሒ ዘለዎ ናይ password መከላኸሊ</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>MonkeyPaste ሕጂ ምሉእ ብምሉእ ነጻ ኮይኑ ኣሎ ክሳብ እዚ ምውጻእ!!
-
-ሕጂ ሞንኪፓስቲ ናብ ክፉት ምንጪ ዘለዎ ፕሮጀክት ንምዃን ዝሰጋገር ስለዘሎ፡ ኩሉ ገደብ (ኣብ ናይ ኣፕ ምዝገባ) ተኣልዩ ኣሎ። ስለዚ ኣብ ኣበርክቶ ክትገብሩ እንተደሊኹም ኣብ GitHub.com/MonkeyPaste)ና ክትከታተሉ ትኽእሉ ኢኹም።
-
-እዋናዊ ሓበሬታታት፤
-
-- ኩሉ ናይ ዓቕሚ ገደብ ተኣልዩ!
-- ዝተነጽገ URL Editor UI ምምሕያሻት
-- መበገሲ ደገፍ ንብዙሕ ኣጋጣሚታት ናይ MonkeyPaste
-- ሓድሽ ዝተኻፈለ ዋጋ ኣርታዒ (ኣብ ዝምልከቶ ቦታ ኣብ ፕላግኢን መርበብ ሓበሬታ)</value>
+    <value>- ምሉእ ምንጪ ን MonkeyPaste ሕጂ ኣብ GitHub ናታትና ይርከብ https://github.com/monkeypaste/monkeypaste
+- ሊኑክስ ቨርዥን ተዘርጊሑ ኣብዚ ምውራድ https://github.com/monkeypaste/monkeypaste/releases
+- ዝተመሓየሸ ናይ ምትእስሳር ሞድ (ሕጂ HTML Viewer for Text Clips ኣለዎ)
+- ንእሽቶ ስሕተትን ምምሕያሽ ኣፈፃፅማን</value>
   </data>
 </root>

@@ -267,15 +267,9 @@ The እስከ 1,000 የሚሆኑ ክሊፖች
     <value>ደህንነቱ የተጠበቀ፣ ደህንነቱ የተጠበቀ እና የግል የአካባቢ ውሂብ ማከማቻ ከአማራጭ 2-ፋይል የይለፍ ቃል ጥበቃ</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>የዝንጀሮ መለጠፍ አሁን ከተለቀቀበት ጊዜ ጀምሮ ሙሉ በሙሉ ነፃ ነው!!
-
-MonkeyPaste አሁን ወደ ክፍት ምንጭ ፕሮጀክት እየተሸጋገረ ስለሆነ ሁሉም ገደቦች (በመተግበሪያ ምዝገባዎች) ተወግደዋል። ስለዚህ አስተዋጽዖ ለማድረግ ፍላጎት ካሎት የእኛን github (github.com/monkeypaste) ይከታተሉ።
-
-ዝማኔዎች፡-
-
-- ሁሉም የአቅም ገደቦች ተወግደዋል!
-- ተቀባይነት አላገኘም የዩአርኤል አርታኢ የተጠቃሚ በይነገጽ ማሻሻያ
-- በርካታ የ MonkeyPaste ምሳሌዎችን ለማስኬድ የመነሻ ድጋፍ
-- አዲስ የተጋራ እሴት አርታኢ (የሚመለከተው ከሆነ በተሰኪ አሳሽ ውስጥ)</value>
+    <value>- የ MonkeyPaste ሙሉ ምንጭ አሁን በእኛ github ላይ ይገኛል https://github.com/monkeypaste/monkeypaste
+- የሊኑክስ ስሪት እዚህ አውርዷል https://github.com/monkeypaste/monkeypaste/releases
+- የተሻሻለ የተኳኋኝነት ሁነታ (አሁን ለጽሑፍ ቅንጥቦች ኤችቲኤምኤል መመልከቻ አለው)
+- ጥቃቅን ስህተቶች እና የአፈፃፀም ማሻሻያዎች</value>
   </data>
 </root>

@@ -267,15 +267,9 @@
     <value>אחסון נתונים מקומי בטוח, מאובטח ופרטי עם הגנה אופציונלית באמצעות סיסמה דו-שלבית</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste כעת בחינם לגמרי נכון לשחרור זה !!
-
-כל ההגבלות (במנויים לאפליקציות) הוסרו מכיוון שה- Monkeypaste עובר כעת להפוך לפרויקט קוד פתוח. אז השגיח על GitHub שלנו (github.com/monkeypaste) אם אתה מעוניין לתרום.
-
-עדכונים:
-
-- כל מגבלות הקיבולת הוסרו!
-- שיפורי ממשק משתמש של עורך URL נדחה
-- תמיכה בסיסית בהפעלת מקרים מרובים של קופיפסטה
-- עורך ערך משותף חדש (בדפדפן תוסף במידת הצורך)</value>
+    <value>- מקור מלא ל- Monkeypaste זמין כעת ב- Github https://github.com/monkeypaste/monkeypaste
+- גרסת לינוקס פורסמה הורדה כאן https://github.com/monkeypaste/monkeypaste/releases
+- מצב תאימות משופר (כעת יש מציג HTML לקטעי טקסט)
+- שיפורי באגים וביצועים קלים</value>
   </data>
 </root>

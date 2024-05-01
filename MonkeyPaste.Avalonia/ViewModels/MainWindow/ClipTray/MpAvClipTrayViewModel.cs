@@ -3189,6 +3189,8 @@ namespace MonkeyPaste.Avalonia {
         private async Task<MpCopyItem> AddItemFromDataObjectAsync(MpAvDataObject avdo, bool is_copy = false) {
             LastAddedClipboardDataObject = avdo;
             try {
+                var sw = Stopwatch.StartNew();
+
                 await MpFifoAsyncQueue.WaitByConditionAsync(
                     lockObj: _addDataObjectContentLock,
                     time_out_ms: ADD_CONTENT_TIMEOUT_MS,
@@ -3200,6 +3202,11 @@ namespace MonkeyPaste.Avalonia {
                             !Mp.Services.StartupState.IsCoreLoaded;
                         if (is_waiting) {
                             MpConsole.WriteLine($"waiting to add item to cliptray...(IsAddingClipboardItem:{IsAddingClipboardItem},MpAvPlainHtmlConverter.Instance.IsBusy:{MpAvPlainHtmlConverter.Instance.IsBusy},Mp.Services.StartupState.IsCoreLoaded:{Mp.Services.StartupState.IsCoreLoaded})");
+
+                            if (sw.Elapsed > TimeSpan.FromMilliseconds(ADD_CONTENT_TIMEOUT_MS) && IsAddingClipboardItem) {
+                                MpConsole.WriteLine($"AddItem timeout reached, just goin");
+                                IsAddingClipboardItem = false;
+                            }
                         }
                         return is_waiting;
                     },

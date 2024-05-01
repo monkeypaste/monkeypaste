@@ -267,15 +267,9 @@ sua área de transferência é rastreada ou armazenada em qualquer lugar além d
     <value>Armazenamento de dados local seguro e privado com proteção opcional por senha de 2 fatores</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>O MonkeyyySaste agora está totalmente livre a partir deste lançamento !!
-
-Todas as restrições (nas assinaturas de aplicativos) foram removidas, pois agora a MonkeyyySaste está em transição para se tornar um projeto de código aberto. Portanto, fique de olho em nosso github (github.com/monkeypaste) se você estiver interessado em contribuir.
-
-Atualizações:
-
-- Todas as restrições de capacidade removidas!
-- Melhorias da UI do editor de URL rejeitadas
-- Suporte de linha de base para a execução de várias instâncias de macacão
-- Novo editor de valor compartilhado (no navegador do plug -in, quando aplicável)</value>
+    <value>- Fonte completa do MonkeyyySaste agora disponível em nosso github https://github.com/monkeypsaste/monkeyyyaste
+- Versão Linux Lançada Download aqui https://github.com/monkeypsaste/monkeypsaste/releasesas
+- Modo de compatibilidade aprimorado (agora possui visualizador HTML para clipes de texto)
+- Menores melhorias de bug e desempenho</value>
   </data>
 </root>

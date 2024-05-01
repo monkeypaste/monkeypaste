@@ -1,7 +1,7 @@
 #!/bin/bash
 # from https://www.internalpointers.com/post/build-binary-deb-package-practical-guide
 
-VERSION=1.0-17
+VERSION=1.0-18
 FRAMEWORK=net8.0
 ARCH=amd64
 PLATFORM=linux-x64
@@ -36,7 +36,8 @@ cd $PACKAGE_DIR
 
 # copy <publish_dir> to <package_dir>/usr/lib/<package_name_dir> 
 rm -fr $WORKING_DIR
-LIB_DIR="${WORKING_DIR}/usr/lib/${PACKAGE}"
+TARGET_LIB_DIR="/usr/lib/${PACKAGE}"
+LIB_DIR="${WORKING_DIR}${TARGET_LIB_DIR}"
 mkdir -p $LIB_DIR
 cp -fa "${PUBLISH_DIR}/." "${LIB_DIR}/"
 
@@ -60,13 +61,12 @@ Description: A clipboard manager and more.
 EOM
 
 # add post uninstall script (removes local storage)
-POSTRM_SCRIPT_PATH="${WORKING_DIR}/DEBIAN/postrm"
-cat > $POSTRM_SCRIPT_PATH <<- EOM
-#!/bin/bash
-rm -fr $HOME/share/.local/MonkeyPaste
-EOM
-
-chmod +x $POSTRM_SCRIPT_PATH
+#POSTRM_SCRIPT_PATH="${WORKING_DIR}/DEBIAN/postrm"
+#cat > $POSTRM_SCRIPT_PATH <<- EOM
+##!/bin/bash
+#rm -fr $HOME/share/.local/MonkeyPaste
+#EOM
+#chmod +x $POSTRM_SCRIPT_PATH
 
 # create icons
 ICON_SVG_PATH=/home/tkefauver/mp/artwork/canva/monkey/Default.svg
@@ -104,13 +104,11 @@ Exec=${PACKAGE}
 Terminal=false
 Version=${VERSION}
 Comment=A clipboard manager and more.
-
-[Desktop Action Trace]
-Name=Start ${APP_NAME} with logging enabled
-Exec=${PACKAGE} --trace
 EOM
 
 dpkg-deb --build --root-owner-group $PACKAGE_NAME
+
+rm -fr $PACKAGE_NAME
 
 echo "DONE"
 

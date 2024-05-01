@@ -267,15 +267,9 @@
     <value>تخزين بيانات محلية آمنة ومأمونة وخاصة مع حماية اختيارية بكلمة مرور ثنائية العوامل</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Monkeypaste الآن مجاني تمامًا حتى هذا الإصدار !!
-
-تمت إزالة جميع القيود (في اشتراكات التطبيق) حيث تنتقل الآن Monkeypaste إلى مشروع مفتوح المصدر. لذا راقب github (github.com/monkeypaste) إذا كنت مهتمًا بالمساهمة.
-
-التحديثات:
-
-- جميع قيود السعة إزالتها!
-- تحسينات محرر URL URL المرفض
-- الدعم الأساسي لتشغيل مثيلات متعددة من Monkeypaste
-- محرر القيمة المشتركة الجديدة (في متصفح البرنامج المساعد عند الاقتضاء)</value>
+    <value>- المصدر الكامل لـ MonkeyPaste متوفر الآن على جيثب الخاص بنا https://github.com/monkeypaste/monkeypaste
+- تم إصدار نسخة Linux للتنزيل هنا https://github.com/monkeypaste/monkeypaste/releases
+- تحسين وضع التوافق (يحتوي الآن على عارض HTML لمقاطع النص)
+- علة طفيفة وتحسينات في الأداء</value>
   </data>
 </root>

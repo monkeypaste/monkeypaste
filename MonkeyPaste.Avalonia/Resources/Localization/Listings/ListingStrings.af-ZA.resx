@@ -267,15 +267,9 @@ jou knipbord word ooit opgespoor of gestoor ENIGE plek buite jou eie masjien. Ty
     <value>Veilige, veilige en private plaaslike databerging met opsionele 2-faktor wagwoordbeskerming</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>MonkeyPaste is nou heeltemal gratis vanaf hierdie vrystelling!!
-
-Alle beperkings (in app-intekeninge) is verwyder aangesien MonkeyPaste nou oorgaan om 'n oopbronprojek te word. Hou dus ons github (github.com/monkeypaste) dop as jy belangstel om by te dra.
-
-Opdaterings:
-
-- alle kapasiteitsbeperkings verwyder!
-- verwerp URL-redakteur UI verbeterings
-- Basislynondersteuning vir die uitvoer van verskeie gevalle van MonkeyPaste
-- nuwe gedeelde waarderedigeerder (in plugin-blaaier waar van toepassing)</value>
+    <value>- Volledige bron vir MonkeyPaste nou beskikbaar op ons github https://github.com/monkeypaste/monkeypaste
+- Linux-weergawe vrygestel, laai hier af https://github.com/monkeypaste/monkeypaste/releases
+- verbeterde verenigbaarheidsmodus (het nou HTML-kyker vir tekssnitte)
+- Geringe fout en prestasieverbeterings</value>
   </data>
 </root>

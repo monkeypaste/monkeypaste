@@ -354,15 +354,9 @@ your clipboard is ever tracked or stored ANYWHERE beyond your own machine. Perio
     <comment>@Invariant</comment>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>MonkeyPaste is now entirely free as of this release!! 
-
-All restrictions (in app subscriptions) have been removed as MonkeyPaste is now transitioning to becoming an open-source project. So keep an eye on our github (github.com/monkeypaste) if you're interested in contributing.
-
-Updates:
-
-- all capacity restrictions removed!
-- rejected Url editor UI improvements
-- baseline support for running multiple instances of MonkeyPaste
-- new shared value editor (in plugin browser where applicable)</value>
+    <value>- Full source for MonkeyPaste now available on our github https://github.com/monkeypaste/monkeypaste
+- Linux version released download here https://github.com/monkeypaste/monkeypaste/releases
+- improved compatibility mode (now has HTML viewer for text clips)
+- minor bug and performance improvements</value>
   </data>
 </root>

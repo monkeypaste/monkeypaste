@@ -267,15 +267,9 @@ dit udklipsholder spores eller gemmes nogensinde HVOR som helst ud over din egen
     <value>Sikker, sikker og privat lokal datalagring med valgfri 2-faktor adgangskodebeskyttelse</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>MonkeyPaste er nu helt gratis fra denne udgivelse!!
-
-Alle begrænsninger (i app-abonnementer) er blevet fjernet, da MonkeyPaste nu går over til at blive et open source-projekt. Så hold øje med vores github (github.com/monkeypaste), hvis du er interesseret i at bidrage.
-
-Opdateringer:
-
-- alle kapacitetsbegrænsninger fjernet!
-- afviste forbedringer af Url editor UI
-- Baseline support til at køre flere forekomster af MonkeyPaste
-- ny delt værdieditor (i plugin-browser, hvor det er relevant)</value>
+    <value>- Fuld kilde til MonkeyPaste nu tilgængelig på vores github https://github.com/monkeypaste/monkeypaste
+- Linux version frigivet download her https://github.com/monkeypaste/monkeypaste/releases
+- forbedret kompatibilitetstilstand (har nu HTML-fremviser til tekstklip)
+- mindre fejl og forbedringer af ydeevnen</value>
   </data>
 </root>
