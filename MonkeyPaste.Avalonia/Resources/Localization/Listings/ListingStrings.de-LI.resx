@@ -267,9 +267,10 @@ Ihre Zwischenablage wird immer IRGENDWO außerhalb Ihres eigenen Computers verfo
     <value>Sichere und private lokale Datenspeicherung mit optionalem 2-Faktor-Passwortschutz</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Vollständiger Quellcode für MonkeyPaste jetzt auf unserem GitHub verfügbar https://github.com/monkeypaste/monkeypaste 
+    <value>- Kritischer Fix für 1.0.18.0, bei dem Dateiclips ignoriert wurden 
+- Vollständiger Quellcode für MonkeyPaste jetzt auf unserem GitHub verfügbar https://github.com/monkeypaste/monkeypaste 
 - Linux-Version veröffentlicht, hier herunterladen https://github.com/monkeypaste/monkeypaste/releases 
-- verbesserter Kompatibilitätsmodus (hat jetzt HTML-Viewer für Textausschnitte) 
-- kleinere Fehler und Leistungsverbesserungen</value>
+- Verbesserter Kompatibilitätsmodus (hat jetzt HTML-Viewer für Textclips) 
+- Kleinere Fehler und Leistungsverbesserungen</value>
   </data>
 </root>

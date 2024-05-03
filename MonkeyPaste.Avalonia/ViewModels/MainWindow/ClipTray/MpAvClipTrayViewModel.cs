@@ -2732,9 +2732,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ClipboardWatcher_OnClipboardChanged(object sender, MpPortableDataObject mpdo) {
+            if(!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(() => ClipboardWatcher_OnClipboardChanged(sender, mpdo));
+                return;
+            }
             // NOTE this is on a bg thread
 
-            Dispatcher.UIThread.Post(() => OnPropertyChanged(nameof(CanAddItemWhileIgnoringClipboard)));
+            OnPropertyChanged(nameof(CanAddItemWhileIgnoringClipboard));
 
             bool is_startup_ido = Mp.Services.ClipboardMonitor.IsStartupClipboard;
 

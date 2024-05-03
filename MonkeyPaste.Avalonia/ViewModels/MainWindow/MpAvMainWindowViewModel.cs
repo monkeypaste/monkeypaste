@@ -470,7 +470,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsMainWindowOpen { get; private set; } = false;
         public bool IsMainWindowVisible { get; set; }
         public bool IsMainWindowLoading { get; set; } = true;
-
         public bool IsMainWindowInHiddenLoadState { get; private set; }
 
         private bool _isMainWindowLocked;
@@ -589,10 +588,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Events
-
-        //public event EventHandler? OnMainWindowOpened;
-
-        //public event EventHandler? OnMainWindowClosed;
         #endregion
 
         #region Constructors
@@ -997,7 +992,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (MpAvPrefViewModel.Instance.ShowInTaskbar) {
                 WindowState = WindowState.Minimized;
-            } else if (MpAvWindowManager.MainWindow is Window w) {
+            } else if (MpAvWindowManager.MainWindow is MpAvWindow w) {
                 w.Hide();
             }
             IsMainWindowVisible = false;
@@ -1389,7 +1384,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpMainWindowHideType.Deactivate:
                     return false;
                 case MpMainWindowHideType.Click:
-                    if (MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation is not { } gmp) {
+                    MpPoint gmp = MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation;
+                    if (!MpAvShortcutCollectionViewModel.Instance.IsGlobalHooksPaused) {
                         return false;
                     }
                     bool isInputFocused =
@@ -1398,7 +1394,7 @@ namespace MonkeyPaste.Avalonia {
                    c.GetVisualAncestor<ContextMenu>() != null ||
                    c.GetVisualAncestor<MenuItem>() != null ||
                    c.GetVisualAncestor<ComboBoxItem>() != null ||
-                   (c.GetVisualAncestor<Window>() is Window w && w != MpAvWindowManager.MainWindow) ||
+                   (c.GetVisualAncestor<MpAvWindow>() is MpAvWindow w && w != MpAvWindowManager.MainWindow) ||
                    (c.GetVisualAncestor<TextBox>() is TextBox tb && !tb.IsReadOnly)
                );
 

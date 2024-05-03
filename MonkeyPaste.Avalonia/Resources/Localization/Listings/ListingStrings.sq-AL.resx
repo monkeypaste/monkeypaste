@@ -267,7 +267,8 @@ Dërrasa juaj është gjurmuar ose ruajtur ndonjëherë kudo përtej makinës su
     <value>Ruajtje e sigurt, e sigurt dhe private e të dhënave lokale me mbrojtje opsionale të fjalëkalimeve 2 - faktor</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Burim i plotë për Monkeypaste tani i disponueshëm në GitHub tonë https://github.com/Monkeypaste/Monkeypaste
+    <value>- Fiksimi kritik për 1.0.18.0 i cili po injoronte klipet e skedarëve
+- Burim i plotë për Monkeypaste tani i disponueshëm në GitHub tonë https://github.com/Monkeypaste/Monkeypaste
 - Linux Version i lëshuar Shkarkoni këtu https://github.com/Monkeypaste/Monkeypaste/Releases
 - Mënyra e Përpjekjes së Përmirësuar (tani ka shikues HTML për klipet e tekstit)
 - Përmirësime të vogla të gabimeve dhe performancës</value>

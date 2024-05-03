@@ -267,7 +267,8 @@ The እስከ 1,000 የሚሆኑ ክሊፖች
     <value>ደህንነቱ የተጠበቀ፣ ደህንነቱ የተጠበቀ እና የግል የአካባቢ ውሂብ ማከማቻ ከአማራጭ 2-ፋይል የይለፍ ቃል ጥበቃ</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- የ MonkeyPaste ሙሉ ምንጭ አሁን በእኛ github ላይ ይገኛል https://github.com/monkeypaste/monkeypaste
+    <value>- የፋይል ቅንጥቦችን ችላ እያለ ለ 1.0.18.0 ወሳኝ ጥገና
+- የ MonkeyPaste ሙሉ ምንጭ አሁን በእኛ github ላይ ይገኛል https://github.com/monkeypaste/monkeypaste
 - የሊኑክስ ስሪት እዚህ አውርዷል https://github.com/monkeypaste/monkeypaste/releases
 - የተሻሻለ የተኳኋኝነት ሁነታ (አሁን ለጽሑፍ ቅንጥቦች ኤችቲኤምኤል መመልከቻ አለው)
 - ጥቃቅን ስህተቶች እና የአፈፃፀም ማሻሻያዎች</value>

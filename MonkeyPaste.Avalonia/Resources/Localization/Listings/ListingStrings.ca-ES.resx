@@ -267,7 +267,8 @@ el porta-retalls es rastreja o s'emmagatzema EN QUALSEVOL lloc més enllà de la
     <value>Emmagatzematge de dades local segur, segur i privat amb protecció amb contrasenya opcional de 2 factors</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Font completa de MonkeyPaste ara disponible al nostre github https://github.com/monkeypaste/monkeypaste
+    <value>- Correcció crítica per a 1.0.18.0 que ignorava els clips de fitxers
+- Font completa de MonkeyPaste ara disponible al nostre github https://github.com/monkeypaste/monkeypaste
 - Descarregar la versió de Linux publicada aquí https://github.com/monkeypaste/monkeypaste/releases
 - Mode de compatibilitat millorat (ara té un visor HTML per a clips de text)
 - errors menors i millores de rendiment</value>

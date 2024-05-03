@@ -267,7 +267,8 @@
     <value>უსაფრთხო, უსაფრთხო და პირადი ადგილობრივი მონაცემთა შენახვა სურვილისამებრ 2 - ფაქტორიანი პაროლის დაცვა</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Monkeypaste- ის სრული წყარო ახლა ხელმისაწვდომია ჩვენს github https://github.com/monkeypaste/monkeypaste
+    <value>- კრიტიკული დაფიქსირება 1.0.18.0 -ისთვის, რომელიც უგულებელყოფდა ფაილების კლიპებს
+- Monkeypaste- ის სრული წყარო ახლა ხელმისაწვდომია ჩვენს github https://github.com/monkeypaste/monkeypaste
 - Linux ვერსია გამოვიდა ჩამოტვირთვა აქ https://github.com/monkeypaste/monkeypaste/releases
 - გაუმჯობესებული თავსებადობის რეჟიმი (ახლა აქვს HTML მაყურებელი ტექსტური კლიპებისთვის)
 - მცირე შეცდომების და შესრულების გაუმჯობესება</value>

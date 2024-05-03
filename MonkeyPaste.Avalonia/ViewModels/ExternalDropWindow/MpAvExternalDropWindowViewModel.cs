@@ -388,7 +388,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsShowingFinishMenu));
         }
 
-        private void SetDropWindowPosition(Window w) {
+        private void SetDropWindowPosition(MpAvWindow w) {
             if (w == null ||
                 !w.IsVisible) {
                 return;

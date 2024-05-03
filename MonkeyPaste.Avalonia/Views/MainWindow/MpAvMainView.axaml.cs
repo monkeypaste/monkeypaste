@@ -41,7 +41,11 @@ namespace MonkeyPaste.Avalonia {
                 _instance = mv;
             }
             if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-                desktop.MainWindow = mw;
+#if WINDOWED
+                desktop.MainWindow = MpAvRootWindow.Instance;
+#else
+                desktop.MainWindow = mw; 
+#endif
             }
 #else
             _instance = new MpAvMainView();
@@ -412,7 +416,7 @@ namespace MonkeyPaste.Avalonia {
             }
             string edgy_tooltip_class = $"tt_near_{BindingContext.MainWindowOrientationType.ToString().ToLowerInvariant()}";
 
-            foreach (var sbc in new_edgies) {
+            foreach (var sbc in new_edgies.Where(x=>x != null)) {
                 sbc.Classes.Add(edgy_tooltip_class);
             }
 

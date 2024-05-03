@@ -267,7 +267,8 @@ su portapapeles se rastrea o almacena en cualquier lugar más allá de su propia
     <value>Almacenamiento local seguro y privado de datos con protección opcional de 2 factores con contraseña</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Fuente completa para MonkyyPaste ahora disponible en nuestro GitHub https://github.com/monkyypaste/monkyepaste
+    <value>- Fix crítica para 1.0.18.0 que ignoraba los clips de archivo
+- Fuente completa para MonkyyPaste ahora disponible en nuestro GitHub https://github.com/monkyypaste/monkyepaste
 - Versión de Linux Descargar aquí https://github.com/monkyypaste/monkypaste/releases
 - Modo de compatibilidad mejorado (ahora tiene un visor HTML para clips de texto)
 - Mejoras menores de error y rendimiento</value>

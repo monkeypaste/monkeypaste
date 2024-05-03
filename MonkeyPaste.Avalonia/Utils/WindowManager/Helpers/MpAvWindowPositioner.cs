@@ -48,22 +48,22 @@ namespace MonkeyPaste.Avalonia {
             return new PixelPoint((int)x, (int)y);
         }
 
-        public static PixelPoint GetWindowPositionByAnchorVisual(Window nw, Visual owner_c) {
+        public static PixelPoint GetWindowPositionByAnchorVisual(MpAvWindow nw, Visual owner_c) {
             var anchor_s_origin = owner_c.PointToScreen(new Point());
             var anchor_s_size = owner_c.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
             var nw_s_size = nw.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
             double nw_x = anchor_s_origin.X + (anchor_s_size.Width / 2) - (nw_s_size.Width / 2);
             double nw_y = anchor_s_origin.Y + (anchor_s_size.Height / 2) - (nw_s_size.Height / 2);
 
-            if (TopLevel.GetTopLevel(owner_c) is Window owner_w &&
+            if (MpAvWindowManager.GetTopLevel(owner_c) is MpAvWindow owner_w &&
                 owner_w.Screens.ScreenFromVisual(owner_w) is { } scr) {
                 var s_size = scr.WorkingArea.Size;
                 nw_x = Math.Clamp(nw_x, 0, s_size.Width - nw_s_size.Width);
                 nw_y = Math.Clamp(nw_y, 0, s_size.Height - nw_s_size.Height);
             }
             PixelPoint pos = new PixelPoint((int)nw_x, (int)nw_y);
-            if (pos.X == 0 && owner_c is not Window &&
-                TopLevel.GetTopLevel(owner_c) is Window owner_w2) {
+            if (pos.X == 0 && owner_c is not MpAvWindow &&
+                MpAvWindowManager.GetTopLevel(owner_c) is MpAvWindow owner_w2) {
                 // BUG sometimes ntf ends up in bottom corner of screen
                 // NOTE ensuring this doesn't get stuck in a loop by checking if owner is window
 
@@ -73,7 +73,7 @@ namespace MonkeyPaste.Avalonia {
             return pos;
         }
 
-        public static double GetWindowTitleHeight(Window w) {
+        public static double GetWindowTitleHeight(MpAvWindow w) {
             if (w == null) {
                 return 0;
             }
@@ -92,7 +92,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private static Size GetWindowSize(Window w, double fallback_w = 350, double fallbach_h = 150) {
+        private static Size GetWindowSize(MpAvWindow w, double fallback_w = 350, double fallbach_h = 150) {
             double th = GetWindowTitleHeight(w);
             //MpConsole.WriteLine($"Window title height: {th}px");
             if (w.Width > 0 && w.Height > 0) {

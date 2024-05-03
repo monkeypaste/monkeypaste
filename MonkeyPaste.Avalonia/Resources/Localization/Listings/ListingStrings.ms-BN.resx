@@ -267,7 +267,8 @@ papan keratan anda pernah dijejaki atau disimpan DI MANA-MANA di luar mesin anda
     <value>Penyimpanan data tempatan yang selamat, selamat dan peribadi dengan perlindungan kata laluan 2 faktor pilihan</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Sumber penuh untuk monkeypaste kini boleh didapati di github https://github.com/monkeypaste/monkeypaste
+    <value>- Betulkan kritikal untuk 1.0.18.0 yang mengabaikan klip fail
+- Sumber penuh untuk monkeypaste kini boleh didapati di github https://github.com/monkeypaste/monkeypaste
 - Versi Linux Dikeluarkan Muat turun di sini https://github.com/monkeypaste/monkeypaste/releases
 - Mod keserasian yang lebih baik (kini mempunyai penonton HTML untuk klip teks)
 - Penambahbaikan pepijat dan prestasi kecil</value>

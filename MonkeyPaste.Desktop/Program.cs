@@ -97,10 +97,11 @@ namespace MonkeyPaste.Desktop {
             BuildAvaloniaApp()
 #if CEFNET_WV
                     .StartWithCefNetApplicationLifetime(App.Args, ShutdownMode.OnExplicitShutdown);
+
 #else
                     .StartWithClassicDesktopLifetime(App.Args, ShutdownMode.OnExplicitShutdown); 
 #endif
-           
+
         }
 
         [System.Runtime.InteropServices.DllImport("nvapi64.dll", EntryPoint = "fake")]

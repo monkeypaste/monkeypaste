@@ -267,7 +267,8 @@
     <value>安全、安心、プライベートなローカルデータストレージ、オプションの2要素パスワード保護</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>-Monkeypasteの完全なソースGithub https://github.com/monkeypaste/monkeypasteで利用可能になりました
+    <value>- ファイルクリップを無視していた1.0.18.0の重要な修正
+-Monkeypasteの完全なソースGithub https://github.com/monkeypaste/monkeypasteで利用可能になりました
 -Linuxバージョンリリースされたここからダウンロードhttps://github.com/monkeypaste/monkeypaste/releases
  - 互換性モードの改善（テキストクリップ用のHTMLビューアーがあります）
  - マイナーなバグとパフォーマンスの改善</value>

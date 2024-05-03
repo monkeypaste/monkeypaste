@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
                         WindowStartupLocation.CenterOwner,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(
                     iconResourceObj == null ? "AppIcon" : iconResourceObj,
-                    typeof(WindowIcon), null, null) as WindowIcon,
+                    typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 Content = new MpAvWebPageView() {
                     Address = address
                 },

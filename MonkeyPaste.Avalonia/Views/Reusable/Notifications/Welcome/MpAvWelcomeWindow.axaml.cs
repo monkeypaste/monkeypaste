@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvWelcomeWindow : MpAvNotificationWindow {
         public MpAvWelcomeWindow() : this(null) { }
-        public MpAvWelcomeWindow(Window owner = default) : base(owner) {
+        public MpAvWelcomeWindow(MpAvWindow owner = default) : base(owner) {
             InitializeComponent();
             //this.GetObservable(Window.WidthProperty).Subscribe(paramValue => OnWindowSizeChanged());
             //this.GetObservable(Window.HeightProperty).Subscribe(paramValue => OnWindowSizeChanged());
@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
 
             var mb = this.FindControl<Button>("MinimizeButton");
             mb.Click += (s, e) => {
-                if (TopLevel.GetTopLevel(this) is Window w) {
+                if (MpAvWindowManager.GetTopLevel(this) is MpAvWindow w) {
                     w.WindowState = WindowState.Minimized;
                 }
             };

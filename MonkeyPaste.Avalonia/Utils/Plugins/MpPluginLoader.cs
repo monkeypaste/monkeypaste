@@ -213,8 +213,7 @@ namespace MonkeyPaste.Avalonia {
             return success;
         }
 
-        public static async Task<bool> BeginUpdatePluginAsync(string plugin_guid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm) {
-
+        public static async Task<bool> BeginUpdatePluginAsync(string plugin_guid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm, bool attemptInstall = true) {
             string plugin_update_dir = await DownloadAndExtractPluginToDirAsync(plugin_guid, packageUrl, PluginUpdatesDir, cpivm);
             if (!plugin_update_dir.IsDirectory()) {
                 // update failed, only returns if no restart
@@ -226,44 +225,49 @@ namespace MonkeyPaste.Avalonia {
             }
             // plugin downloaded to update dir, 
 
-            // create backup of current so if anything fails it can be merged back in and coll vm can always reload item
-            string backup_dir = CreatePluginBackup(plugin_guid);
-            //ATTEMPT to delete current plugin
-            bool success = await DeletePluginByGuidAsync(plugin_guid);
-            if (success) {
-                // install plugin from update dir
-                success = await InstallPluginAsync(plugin_guid, plugin_update_dir.ToFileSystemUriFromPath(), false, cpivm);
-                if (success) {
-                    // clean up everything
-                    MpFileIo.DeleteDirectory(backup_dir);
-                    MpFileIo.DeleteDirectory(plugin_update_dir);
-                    return true;
-                }
-            }
-            // at this point either active dir couldn't be deleted (or SOMETHING couldn't be deleted) or install failed
-            // so try to restore plugin dir and reload
             bool was_reloaded = false;
-            try {
-                // copy any missing files over
-                string root_plugin_dir = Path.Combine(PluginRootDir, plugin_guid);
-                MpFileIo.CreateDirectory(root_plugin_dir);
-                MpFileIo.CopyContents(backup_dir, root_plugin_dir, overwrite: false);
-                // find manifest
-                if (FindInvariantManifestPaths(root_plugin_dir) is { } inv_mf_paths &&
-                    inv_mf_paths.FirstOrDefault() is { } inv_mf_path &&
-                    ResolveLocalizedManifestPath(inv_mf_path) is { } mf_path) {
-                    // load and validate
-                    was_reloaded = await LoadPluginAsync(mf_path);
-                    await ValidateLoadedPluginsAsync();
-                    // confirm it was loaded
-                    was_reloaded = PluginGuidLookup.ContainsKey(plugin_guid);
+            if (attemptInstall) {
+                //ATTEMPT to delete current plugin
+
+                // create backup of current so if anything fails it can be merged back in and coll vm can always reload item
+                string backup_dir = CreatePluginBackup(plugin_guid);
+                bool success = await DeletePluginByGuidAsync(plugin_guid);
+                if (success) {
+                    // install plugin from update dir
+                    success = await InstallPluginAsync(plugin_guid, plugin_update_dir.ToFileSystemUriFromPath(), false, cpivm);
+                    if (success) {
+                        // clean up everything
+                        MpFileIo.DeleteDirectory(backup_dir);
+                        MpFileIo.DeleteDirectory(plugin_update_dir);
+                        return true;
+                    }
                 }
+
+                // at this point either active dir couldn't be deleted (or SOMETHING couldn't be deleted) or install failed
+                // so try to restore plugin dir and reload
+                try {
+                    // copy any missing files over
+                    string root_plugin_dir = Path.Combine(PluginRootDir, plugin_guid);
+                    MpFileIo.CreateDirectory(root_plugin_dir);
+                    MpFileIo.CopyContents(backup_dir, root_plugin_dir, overwrite: false);
+                    // find manifest
+                    if (FindInvariantManifestPaths(root_plugin_dir) is { } inv_mf_paths &&
+                        inv_mf_paths.FirstOrDefault() is { } inv_mf_path &&
+                        ResolveLocalizedManifestPath(inv_mf_path) is { } mf_path) {
+                        // load and validate
+                        was_reloaded = await LoadPluginAsync(mf_path);
+                        await ValidateLoadedPluginsAsync();
+                        // confirm it was loaded
+                        was_reloaded = PluginGuidLookup.ContainsKey(plugin_guid);
+                    }
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error restoring plugin backup for plugin '{plugin_guid}'.", ex);
+                }
+                // remove backup but keep update for next startup
+                MpFileIo.DeleteDirectory(backup_dir);
             }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error restoring plugin backup for plugin '{plugin_guid}'.", ex);
-            }
-            // remove backup but keep update for next startup
-            MpFileIo.DeleteDirectory(backup_dir);
+            
 
             // NOTE this won't return if they choose restart
             await Mp.Services.PlatformMessageBox.ShowRestartNowOrLaterMessageBoxAsync(

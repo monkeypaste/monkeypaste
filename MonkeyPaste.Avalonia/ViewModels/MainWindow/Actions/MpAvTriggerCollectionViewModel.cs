@@ -169,7 +169,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvZoomBorder zb = null;
             if (IsWindowOpen &&
-                MpAvWindowManager.LocateWindow(this) is Window dsw &&
+                MpAvWindowManager.LocateWindow(this) is MpAvWindow dsw &&
                 dsw.GetVisualDescendant<MpAvZoomBorder>() is MpAvZoomBorder dsw_zb) {
                 zb = dsw_zb;
             } else if (App.MainView is Control mv &&
@@ -680,7 +680,7 @@ namespace MonkeyPaste.Avalonia {
                 Width = 1000,
                 Height = 500,
                 ShowInTaskbar = true,
-                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BoltImage", typeof(WindowIcon), null, null) as WindowIcon,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BoltImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 Content = new MpAvTriggerActionChooserView(),
                 DataContext = this,

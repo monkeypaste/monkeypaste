@@ -267,7 +267,8 @@ il-klibbord tiegħek qatt jiġi traċċat jew maħżun KULLIMKIEN lil hinn mill-
     <value>Ħażna ta 'dejta lokali sikura, sigura u privata b'protezzjoni fakultattiva tal-password tal-fattur 2 -</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Sors sħiħ għal MonkeyPaste issa disponibbli fuq il-github tagħna https://github.com/monkeypaste/monkeypaste
+    <value>- soluzzjoni kritika għal 1.0.18.0 li kienet qed tinjora l-filmati
+- Sors sħiħ għal MonkeyPaste issa disponibbli fuq il-github tagħna https://github.com/monkeypaste/monkeypaste
 - Verżjoni Linux rilaxxata Niżżel Hawnhekk https://github.com/monkeypaste/monkeypaste/releases
 - Mod ta 'kompatibilità mtejjeb (issa għandu telespettatur HTML għal klipps tat-test)
 - Titjib minuri ta 'bug u prestazzjoni</value>

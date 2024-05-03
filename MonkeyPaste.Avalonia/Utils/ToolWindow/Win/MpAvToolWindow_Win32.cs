@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
         //public static extern int IntSetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
         public static void SetAsToolWindow(IntPtr handle) {
-#if WINDOWS
+#if WINDOWS && !WINDOWED
             int cur_style_val = GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
             cur_style_val |= (int)ExtendedWindowStyles.WS_EX_TOOLWINDOW;
             SetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE, (IntPtr)cur_style_val);
@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void UnsetAsToolWindow(IntPtr handle) {
-#if WINDOWS
+#if WINDOWS && !WINDOWED
             GetWindowLongFields cur_style = (GetWindowLongFields)GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
             MpDebug.Assert(IsToolWindow(handle), "Warning, not tool window");
             cur_style.RemoveFlag(GetWindowLongFields.GWL_EXSTYLE);

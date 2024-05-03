@@ -81,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
                     DataContext = this,
                     Topmost = true,
                     Title = title.ToWindowTitleText(),
-                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("ColorsImage", typeof(WindowIcon), null, null) as WindowIcon,
+                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("ColorsImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                     Width = 350,
                     Height = 450,
                     CanResize = false,

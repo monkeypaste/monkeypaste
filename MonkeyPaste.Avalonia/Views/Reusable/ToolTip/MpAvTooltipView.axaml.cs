@@ -105,7 +105,7 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnLoaded(RoutedEventArgs e) {
             base.OnLoaded(e);
-            if (TopLevel.GetTopLevel(this) is not PopupRoot pur) {
+            if (MpAvWindowManager.GetTopLevel(this) is not PopupRoot pur) {
                 return;
             }
             pur.Classes.Add("tooltip");
@@ -131,7 +131,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 #if DEBUG
-            if (TopLevel.GetTopLevel(this) is TopLevel tl) {
+            if (MpAvWindowManager.GetTopLevel(this) is TopLevel tl) {
                 tl.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
             }
 #endif
@@ -167,7 +167,7 @@ namespace MonkeyPaste.Avalonia {
                         if (!IsDevToolsOpen) {
                             return;
                         }
-                        if (TopLevel.GetTopLevel(this) is not PopupRoot pr ||
+                        if (MpAvWindowManager.GetTopLevel(this) is not PopupRoot pr ||
                             GetHostControl() is not Control host) {
                             await Task.Delay(50);
                             continue;
@@ -204,7 +204,7 @@ namespace MonkeyPaste.Avalonia {
             });
         }
         private Control GetHostControl() {
-            if (TopLevel.GetTopLevel(this) is not TopLevel tl ||
+            if (MpAvWindowManager.GetTopLevel(this) is not TopLevel tl ||
                 tl.Parent is not Control host_control) {
                 return null;
             }
@@ -212,7 +212,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MoveToolTip(MpPoint scr_mp) {
-            if (TopLevel.GetTopLevel(this) is not PopupRoot pr ||
+            if (MpAvWindowManager.GetTopLevel(this) is not PopupRoot pr ||
                 pr.Screens.ScreenFromWindow(pr) is not Screen pr_screen ||
                 GetHostControl() is not Control host) {
                 return;
@@ -260,7 +260,7 @@ namespace MonkeyPaste.Avalonia {
         }
         //private void SetToolTipOffset(Control hc, MpPoint diff, MpPoint scr_mp) {
         //    if (hc == null ||
-        //        TopLevel.GetTopLevel(this) is not PopupRoot pur) {
+        //        MpAvWindowManager.GetTopLevel(this) is not PopupRoot pur) {
         //        return;
         //    }
 
@@ -292,7 +292,7 @@ namespace MonkeyPaste.Avalonia {
         //protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
         //    base.OnAttachedToVisualTree(e);
         //    IsHitTestVisible = false;
-        //    if (TopLevel.GetTopLevel(this) is TopLevel tt_tl) {
+        //    if (MpAvWindowManager.GetTopLevel(this) is TopLevel tt_tl) {
         //        tt_tl.Classes.Add("transparent");
         //        tt_tl.IsHitTestVisible = false;
         //    }
@@ -306,7 +306,7 @@ namespace MonkeyPaste.Avalonia {
         //        return;
         //    }
         //    hc.GetObservable(Control.IsVisibleProperty).Subscribe(paramValue => OnHostOrHostTopLevelVisibleChanged(hc));
-        //    if (TopLevel.GetTopLevel(hc) is TopLevel host_tl) {
+        //    if (MpAvWindowManager.GetTopLevel(hc) is TopLevel host_tl) {
         //        host_tl.GetObservable(Control.IsVisibleProperty).Subscribe(paramValue => OnHostOrHostTopLevelVisibleChanged(host_tl));
         //    }
         //    // workaround to pass tooltip type from hint to tooltip

@@ -114,6 +114,10 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvPrefViewModel.Instance == null) {
                 return;
             }
+
+#if WINDOWED
+            MpAvRootWindow.Instance.Show();
+#endif
             IsInitialStartup = !MpAvPrefViewModel.Instance.IsWelcomeComplete;
             MpAvPrefViewModel.Instance.StartupDateTime = startup_datetime;
 
@@ -152,7 +156,6 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("Platform load complete");
 
                 LoadedDateTime = DateTime.Now;
-
 
                 IsPlatformLoaded = true;
             }, DispatcherPriority.Background);

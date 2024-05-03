@@ -267,7 +267,8 @@ teie lõikelauda jälgitakse või salvestatakse alati kõikjal väljaspool teie 
     <value>Turvaline, turvaline ja privaatne kohalik andmesalvestus valikulise 2 - teguri paroolikaitsega</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Ahvüüpasta täielik allikas on nüüd saadaval meie GitHub https://github.com/monkeypaste/monkeypaste
+    <value>- kriitiline parandus 1.0.18.0 jaoks, mis ignoreeris failiklippe
+- Ahvüüpasta täielik allikas on nüüd saadaval meie GitHub https://github.com/monkeypaste/monkeypaste
 - Linuxi versioon välja antud allalaadimine siit https://github.com/monkeypaste/monkeypaste/releasses
 - täiustatud ühilduvusrežiim (nüüd on HTML -vaataja tekstklambrite jaoks)
 - väikesed vea- ja jõudluse täiustused</value>

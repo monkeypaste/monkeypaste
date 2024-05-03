@@ -267,7 +267,8 @@ uw klembord wordt ooit gevolgd of opgeslagen OVERAL buiten uw eigen machine. Per
     <value>Veilige, beveiligde en privé lokale gegevensopslag met optionele 2-factor wachtwoordbeveiliging</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Volledige bron voor Monkeypaste nu beschikbaar op onze github https://github.com/monkeypaste/monkeypaste
+    <value>- Kritieke oplossing voor 1.0.18.0 die bestandsclips negeerde
+- Volledige bron voor Monkeypaste nu beschikbaar op onze github https://github.com/monkeypaste/monkeypaste
 - Linux -versie vrijgegeven download hier https://github.com/monkeypaste/monkeypaste/releases
 - Verbeterde compatibiliteitsmodus (heeft nu HTML -viewer voor tekstclips)
 - Kleine bug- en prestatieverbeteringen</value>

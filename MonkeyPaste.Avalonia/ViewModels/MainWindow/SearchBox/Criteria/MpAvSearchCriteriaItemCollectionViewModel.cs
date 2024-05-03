@@ -591,7 +591,7 @@ namespace MonkeyPaste.Avalonia {
                         Height = 300,
                         DataContext = this,
                         ShowInTaskbar = true,
-                        Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BinocularsImage", typeof(WindowIcon), null, null) as WindowIcon,
+                        Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BinocularsImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
                         Content = new MpAvSearchCriteriaListBoxView(),
                         Topmost = true,

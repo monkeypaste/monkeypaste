@@ -23,13 +23,13 @@ namespace MonkeyPaste.Avalonia {
 
     public static class MpAvWindowManager {
         #region Private Variables
-        private static Dictionary<Window, IEnumerable<IDisposable>> _dispLookup = new Dictionary<Window, IEnumerable<IDisposable>>();
-        private static Dictionary<Window, WindowState> _restoreStateLookup = new Dictionary<Window, WindowState>();
+        private static Dictionary<MpAvWindow, IEnumerable<IDisposable>> _dispLookup = new Dictionary<MpAvWindow, IEnumerable<IDisposable>>();
+        private static Dictionary<MpAvWindow, WindowState> _restoreStateLookup = new Dictionary<MpAvWindow, WindowState>();
         private static List<MpAvWindow> _waitingToClose = new List<MpAvWindow>();
         #endregion
 
         #region Properties
-
+        public static List<MpAvWindow> OpeningWindows { get; set; } = [];
         public static Screens Screens =>
             AllWindows.Any() ? AllWindows.FirstOrDefault().Screens : null;
         public static ObservableCollection<MpAvWindow> AllWindows { get; private set; } = new ObservableCollection<MpAvWindow>();
@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
 
         public static bool IsAnyChildWindowOpening =>
-            MpAvWindow.OpeningWindows.Where(x => x is not MpAvMainWindow).Any();
+            OpeningWindows.Where(x => x is not MpAvMainWindow).Any();
         public static bool IsAnyChildWindowClosing =>
             _waitingToClose.Where(x => x is not MpAvMainWindow).Any();
 
@@ -182,23 +182,37 @@ namespace MonkeyPaste.Avalonia {
             return $"{prefix}{Mp.Services.ThisAppInfo.ThisAppProductName}";
         }
 
+        public static Visual GetTopLevel(this Visual visual, bool logical = false) {
+            if(visual == null) {
+                return null;
+            }
+            var actual_tl = TopLevel.GetTopLevel(visual);
+            if (!logical) {
+                return actual_tl;
+            }
+            if(visual.GetVisualAncestor<MpAvWindow>() is { } w) {
+                return w;
+            }
+            return actual_tl;
+        }
+
         #endregion
 
         #region Private Methods
 
         private static void AllWindows_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             if (e.NewItems != null) {
-                foreach (Window nw in e.NewItems) {
+                foreach (MpAvWindow nw in e.NewItems) {
                     AttachAllHandlers(nw);
                 }
             }
             if (e.OldItems != null) {
-                foreach (Window ow in e.OldItems) {
+                foreach (MpAvWindow ow in e.OldItems) {
                     DetachAllHandlers(ow);
                 }
             }
         }
-        private static void BoundsChangedHandler(Window w, AvaloniaPropertyChangedEventArgs<Rect> e) {
+        private static void BoundsChangedHandler(MpAvWindow w, AvaloniaPropertyChangedEventArgs<Rect> e) {
             if (w.DataContext is MpIWindowBoundsObserverViewModel wbovm) {
                 var oldAndNewVals = e.GetOldAndNewValue<Rect>();
                 wbovm.LastBounds = oldAndNewVals.oldValue.ToPortableRect();
@@ -206,16 +220,16 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void TopmostChangedHandler(Window w, AvaloniaPropertyChangedEventArgs<bool> e) {
+        private static void TopmostChangedHandler(MpAvWindow w, AvaloniaPropertyChangedEventArgs<bool> e) {
             UpdateTopmost();
         }
 
 
-        private static void IsVisibleChangedHandler(Window w, AvaloniaPropertyChangedEventArgs<bool> e) {
+        private static void IsVisibleChangedHandler(MpAvWindow w, AvaloniaPropertyChangedEventArgs<bool> e) {
             UpdateTopmost();
         }
 
-        private static void WindowStateChangedHandler(Window w, AvaloniaPropertyChangedEventArgs<bool> e) {
+        private static void WindowStateChangedHandler(MpAvWindow w, AvaloniaPropertyChangedEventArgs<bool> e) {
             if (w.DataContext is MpIWindowStateViewModel wsvm) {
                 wsvm.WindowState = w.WindowState;
             }
@@ -269,22 +283,6 @@ namespace MonkeyPaste.Avalonia {
                 //StartChildLifecycleChangeDelay(w);
             }
         }
-        private static void Window_Opened(object sender, System.EventArgs e) {
-            if (sender is not MpAvWindow w) {
-                return;
-            }
-            // close any waiting windows (startup bug)
-            //_waitingToClose.ForEach(x => x.Close());
-            w.OpenDateTime = DateTime.Now;
-            //MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
-
-            if (w.DataContext is MpICloseWindowViewModel cwvm) {
-                cwvm.IsWindowOpen = true;
-            }
-            UpdateTopmost();
-            //w.Activate();
-            //w.Focus();
-        }
 
         private static void Window_Closing(object sender, WindowClosingEventArgs e) {
             if (sender is not MpAvWindow w) {
@@ -317,11 +315,30 @@ namespace MonkeyPaste.Avalonia {
                 //disp_controls.ForEach(x => x.Dispose());
             }
         }
-        private static void Window_Closed(object sender, System.EventArgs e) {
+
+        private static void Window_Opened(object sender, System.EventArgs e) {
             if (sender is not MpAvWindow w) {
                 return;
             }
 
+            w.OpenDateTime = DateTime.Now;
+            if (w.DataContext is MpICloseWindowViewModel cwvm) {
+                cwvm.IsWindowOpen = true;
+            }
+            Dispatcher.UIThread.Post(async () => {
+                // wait for window to activate (if it does)
+                await Task.Delay(500);
+                OpeningWindows.Remove(w);
+            });
+            UpdateTopmost();
+            //w.Activate();
+            //w.Focus();
+        }
+        private static void Window_Closed(object sender, System.EventArgs e) {
+            if (sender is not MpAvWindow w) {
+                return;
+            }
+            OpeningWindows.Remove(w);
             Dispatcher.UIThread.Post(async () => {
                 // wait activation change
                 await Task.Delay(500);
@@ -340,26 +357,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region Helpers
 
-        private static void AttachAllHandlers(Window nw) {
+        private static void AttachAllHandlers(MpAvWindow nw) {
             nw.Opened += Window_Opened;
             nw.Closed += Window_Closed;
             nw.Closing += Window_Closing;
             nw.Activated += Window_Activated;
             nw.Deactivated += Window_Deactivated;
             nw.DataContextChanged += Window_DataContextChanged;
-            IDisposable dsp1 = Window.BoundsProperty.Changed.AddClassHandler<Window>((x, y) => BoundsChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<Rect>));
-            IDisposable dsp2 = Window.TopmostProperty.Changed.AddClassHandler<Window>((x, y) => TopmostChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
-            IDisposable dsp3 = Window.IsVisibleProperty.Changed.AddClassHandler<Window>((x, y) => IsVisibleChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
-            IDisposable dsp4 = Window.WindowStateProperty.Changed.AddClassHandler<Window>((x, y) => WindowStateChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
+            IDisposable dsp1 = Control.BoundsProperty.Changed.AddClassHandler<MpAvWindow>((x, y) => BoundsChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<Rect>));
+            //IDisposable dsp2 = MpAvWindow.TopmostProperty.Changed.AddClassHandler<MpAvWindow>((x, y) => TopmostChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
+            IDisposable dsp3 = Control.IsVisibleProperty.Changed.AddClassHandler<MpAvWindow>((x, y) => IsVisibleChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
+            //IDisposable dsp4 = MpAvWindow.WindowStateProperty.Changed.AddClassHandler<MpAvWindow>((x, y) => WindowStateChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
             if (_dispLookup.ContainsKey(nw)) {
                 MpDebug.Break("Error, window shouldn't already exist here");
             } else {
-                _dispLookup.Add(nw, new[] { dsp1, dsp2, dsp3, dsp4 });
+                _dispLookup.Add(nw, new[] { dsp1, dsp3/*, dsp2, dsp4 */});
             }
             AttachWindowViewModelHandlers(nw);
         }
 
-        private static void DetachAllHandlers(Window nw) {
+        private static void DetachAllHandlers(MpAvWindow nw) {
             nw.Opened -= Window_Opened;
             nw.Closed -= Window_Closed;
             nw.Closing -= Window_Closing;
@@ -372,13 +389,13 @@ namespace MonkeyPaste.Avalonia {
             }
             DetachWindowViewModelHandlers(nw);
         }
-        private static void AttachWindowViewModelHandlers(Window w) {
+        private static void AttachWindowViewModelHandlers(MpAvWindow w) {
             if (w.DataContext is MpAvViewModelBase vmb) {
                 vmb.PropertyChanged += WindowViewModel_PropertyChanged;
             }
         }
 
-        private static void DetachWindowViewModelHandlers(Window w) {
+        private static void DetachWindowViewModelHandlers(MpAvWindow w) {
             if (w.DataContext is MpAvViewModelBase vmb) {
                 vmb.PropertyChanged -= WindowViewModel_PropertyChanged;
             }
@@ -481,7 +498,7 @@ namespace MonkeyPaste.Avalonia {
 
 
 
-        private static async Task ShowWhileAnimatingAsync(Window w) {
+        private static async Task ShowWhileAnimatingAsync(MpAvWindow w) {
             if (w.DataContext is not MpIIsAnimatedWindowViewModel adwvm) {
                 return;
             }
@@ -495,7 +512,7 @@ namespace MonkeyPaste.Avalonia {
             UpdateTopmost();
         }
 
-        private static void StartChildLifecycleChangeDelay(Window w) {
+        private static void StartChildLifecycleChangeDelay(MpAvWindow w) {
             if (w == MainWindow) {
                 return;
             }

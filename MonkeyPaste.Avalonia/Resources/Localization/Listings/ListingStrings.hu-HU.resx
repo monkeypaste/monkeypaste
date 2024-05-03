@@ -267,7 +267,8 @@ a vágólapodat mindig nyomon követheted vagy tárolhatod BÁRHOL a saját gép
     <value>Biztonságos, védett és privát helyi adattárolás opcionális 2 faktoros jelszavas védelemmel</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- A MonkeyPaste teljes forrása már elérhető a Github -on https://github.com/monkeypaste/monkeypaste
+    <value>- Kritikus javítás az 1.0.18.0 -hoz, amely figyelmen kívül hagyta a fájlklipeket
+- A MonkeyPaste teljes forrása már elérhető a Github -on https://github.com/monkeypaste/monkeypaste
 - A Linux verzió kiadása itt https://github.com/monkeypaste/monkeypaste/releases
 - Javított kompatibilitási mód (most már van HTML néző a szöveges klipekhez)
 - Kisebb hiba és teljesítményjavítások</value>

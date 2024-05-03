@@ -6,7 +6,7 @@
     <ApplicationAuthor>Monkey LLC</ApplicationAuthor>
     <ApplicationVersionMajor>1</ApplicationVersionMajor>
     <ApplicationVersionMinor>0</ApplicationVersionMinor>
-    <ApplicationVersionPatch>18</ApplicationVersionPatch>
+    <ApplicationVersionPatch>19</ApplicationVersionPatch>
     <ApplicationVersionRevision>0</ApplicationVersionRevision>
     <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch).$(ApplicationVersionRevision)</ApplicationVersion>
     <LinuxVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor)-$(ApplicationVersionPatch)</LinuxVersion>
@@ -28,10 +28,8 @@
 
   <!-- GLOBAL PACKAGE VERSIONS -->
   <PropertyGroup> 
-    <!--<StableAvaloniaVersion>11.0.10</StableAvaloniaVersion> 
-    <AvaloniaVersion>11.0.10</AvaloniaVersion>-->
-    <StableAvaloniaVersion>9999.0.0-localbuild</StableAvaloniaVersion>
-    <AvaloniaVersion>9999.0.0-localbuild</AvaloniaVersion>
+    <StableAvaloniaVersion>11.0.10</StableAvaloniaVersion> 
+    <AvaloniaVersion>11.0.10</AvaloniaVersion>
     <SugarWvVersion>11.0.0.6</SugarWvVersion>    
     <!--<SugarWvVersion>11.0.0.0</SugarWvVersion>-->
     <CefNetWvVersion>105.3.24107.1511</CefNetWvVersion>
@@ -42,19 +40,29 @@
   
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>MAC</BuildOs>
+    <BuildOs>WINDOWS</BuildOs>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <UseCefNet>false</UseCefNet>
+    <UseOutSysCef>false</UseOutSysCef>
+    <UseSugarWv>false</UseSugarWv>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <IsDesktop>false</IsDesktop>
+    <IsMobile>false</IsMobile>
+    <IsWindowed>false</IsWindowed>
+  </PropertyGroup>
+  
+  <PropertyGroup>
     <IncludeCultures>True</IncludeCultures>
     <!-- This property 'IsPublicBuild' ensures local webserver is used not remote-->
     <IsPublicBuild>False</IsPublicBuild>
     <PushPlugins>false</PushPlugins>
     <!-- NOTE when changing av version need to reset coreole, probably everything-->
     <DefaultLangVersion>Latest</DefaultLangVersion>
-    <IsDesktop>false</IsDesktop>
-    <IsMobile>false</IsMobile>
     <DefaultPlatforms>x64</DefaultPlatforms>
-    <UseCefNet>false</UseCefNet>
-    <UseOutSysCef>false</UseOutSysCef>
-    <UseSugarWv>false</UseSugarWv>
     <DefaultTargetFramework>net8.0</DefaultTargetFramework>
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
@@ -115,7 +123,9 @@
   
   <!-- LINUX -->
   
-  <PropertyGroup Condition="$(BuildOs) == 'LINUX'"> 
+  <PropertyGroup Condition="$(BuildOs) == 'LINUX'">
+    <StableAvaloniaVersion>9999.0.0-localbuild</StableAvaloniaVersion>
+    <AvaloniaVersion>9999.0.0-localbuild</AvaloniaVersion>
     <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName> 
@@ -129,8 +139,6 @@
   <!-- MAC -->
   
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
-    <StableAvaloniaVersion>11.0.10</StableAvaloniaVersion> 
-    <AvaloniaVersion>11.0.10</AvaloniaVersion>
     <MainTargetFramework>$(DefaultTargetFramework)</MainTargetFramework>
     <CommonTargetFramework>$(DefaultTargetFramework)</CommonTargetFramework>
     <DefineConstants>$(DefineConstants);MAC;DESKTOP;</DefineConstants>

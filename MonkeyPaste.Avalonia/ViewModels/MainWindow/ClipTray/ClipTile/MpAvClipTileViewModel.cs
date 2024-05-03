@@ -713,7 +713,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsHostWindowActive {
             get {
                 if (GetContentView() is Control c &&
-                    TopLevel.GetTopLevel(c) is Window w) {
+                    MpAvWindowManager.GetTopLevel(c) is MpAvWindow w) {
                     return w.IsActive;
                 }
                 return false;
@@ -2099,7 +2099,7 @@ namespace MonkeyPaste.Avalonia {
                 DataContext = this,
                 ShowInTaskbar = true,
                 Background = Brushes.Transparent,
-                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(WindowIcon), null, null) as WindowIcon,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 Content = cached_view ?? new MpAvClipTileView(),
                 CornerRadius = Mp.Services.PlatformResource.GetResource<CornerRadius>("TileCornerRadius")
             };

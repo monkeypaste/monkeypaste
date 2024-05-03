@@ -140,11 +140,10 @@ namespace MonkeyPaste.Common {
             if (IsTraceEnabled) {
                 Trace.Write(sb.ToString());
             }
-            if (LogToConsole) {
+            if (LogToConsole && Debugger.IsAttached) {
+                //Debug.WriteLine(sb.ToString().TrimEnd());
+            } else if(LogToConsole || !HasInitialized) {
                 Console.WriteLine(sb.ToString().TrimEnd());
-                if(Debugger.IsAttached) {
-                    Debug.WriteLine(sb.ToString().TrimEnd());
-                }
             }
 
         }

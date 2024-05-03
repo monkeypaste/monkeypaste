@@ -267,7 +267,8 @@
     <value>안전하고 보안이 유지되는 개인 로컬 데이터 스토리지(2단계 암호 보호 옵션)</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>-Github https://github.com/monkeypaste/monkeypaste에서 사용할 수있는 전체 소스
+    <value>- 파일 클립을 무시한 1.0.18.0에 대한 임계 수정
+-Github https://github.com/monkeypaste/monkeypaste에서 사용할 수있는 전체 소스
 -Linux 버전이 여기에서 다운로드 https://github.com/monkeypaste/monkeypaste/releases를 다운로드합니다
 - 개선 된 호환성 모드 (이제 텍스트 클립 용 HTML 뷰어가 있습니다)
 - 사소한 버그 및 성능 향상</value>

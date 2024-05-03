@@ -267,7 +267,8 @@ votre presse-papiers n’est jamais suivi ou stocké N’IMPORTE OÙ au-delà de
     <value>Stockage de données local sûr, sécurisé et privé avec protection par mot de passe à 2 facteurs en option</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Source complète pour Monkeypaste maintenant disponible sur notre github https://github.com/monkeypaste/monkeypaste
+    <value>- Correction critique pour 1.0.18.0 qui ignorait les clips de fichiers
+- Source complète pour Monkeypaste maintenant disponible sur notre github https://github.com/monkeypaste/monkeypaste
 - Version Linux publiée téléchargement ici https://github.com/monkeypaste/monkeypaste/releases
 - Mode de compatibilité amélioré (a maintenant une visionneuse HTML pour les clips de texte)
 - Améliorations mineures de bugs et de performances</value>

@@ -267,7 +267,8 @@ A सामग्रीको 1,000 क्लिपहरू सम्म
     <value>वैकल्पिक 2 - कारक पासवर्ड सुरक्षाको साथ सुरक्षित, सुरक्षित र निजी स्थानीय डेटा भण्डारण</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- बाँधिइपसासाइटको लागि पूर्ण स्रोत अब हाम्रो github https://giithub.com/monshechastey/monsyspase /
+    <value>- 1.0.18.0 को लागि आलोचनात्मक फिक्स जुन फाइल क्लिपहरूलाई बेवास्ता गर्दै थियो
+- बाँधिइपसासाइटको लागि पूर्ण स्रोत अब हाम्रो github https://giithub.com/monshechastey/monsyspase /
 - लिनक्स संस्करणले डाउनलोड जारी गर्यो jttps://gthiithub.com/monshechaste/monshechaste/reease/rease
 - सुधार अनुकूलता मोड (अब पाठ क्लिपहरूको लागि HTML दर्शक छ)
 - माइनर बग र प्रदर्शन सुधार सुधार</value>

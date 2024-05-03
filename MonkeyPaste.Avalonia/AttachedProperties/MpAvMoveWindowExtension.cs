@@ -134,7 +134,7 @@ namespace MonkeyPaste.Avalonia {
             _downPos = null;
             if (e.Source is not Control source_control ||
                 sender is not Control attached_control ||
-                TopLevel.GetTopLevel(attached_control) is not Window w ||
+                MpAvWindowManager.GetTopLevel(attached_control) is not MpAvWindow w ||
                 source_control.GetSelfAndVisualAncestors().Any(x => IsWindowMoveRejected(attached_control, x))) {
                 return;
             }
@@ -148,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
             if (!_downPos.HasValue ||
                 sender is not Control attached_control ||
                 !e.IsLeftDown(attached_control) ||
-                TopLevel.GetTopLevel(attached_control) is not Window w) {
+                MpAvWindowManager.GetTopLevel(attached_control) is not MpAvWindow w) {
                 _downPos = null;
 
                 return;
@@ -162,7 +162,7 @@ namespace MonkeyPaste.Avalonia {
             _downPos = null;
             e.Pointer.Capture(null);
             if (sender is not Control attached_control ||
-                TopLevel.GetTopLevel(attached_control) is not Window w) {
+                MpAvWindowManager.GetTopLevel(attached_control) is not MpAvWindow w) {
                 return;
             }
             SetIsUserMoving(w, false);

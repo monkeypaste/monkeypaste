@@ -13,7 +13,7 @@ function initAllMatchers() {
     initLineBreakMatcher();
     initWhitespaceMatcher();
     initPreSwapMatcher();
-    initHeaderConverterMatcherMatcher();
+    //initHeaderConverterMatcherMatcher();
 
     if (isPlainHtmlConverter()) {
         initFontColorMatcher();

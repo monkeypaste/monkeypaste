@@ -267,7 +267,8 @@ leikepöytääsi seurataan tai tallennetaan MIHIN tahansa oman koneesi ulkopuole
     <value>Turvallinen, suojattu ja yksityinen paikallinen tietojen tallennus valinnaisella 2-vaiheisella salasanasuojauksella</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Täysi lähde MonkeyPastelle on nyt saatavana Githubissa https://github.com/monkeypaste/monkeypaste
+    <value>- Kriittinen korjaus 1.0.18.0: lle, joka jätti huomiotta tiedostoleikkeet
+- Täysi lähde MonkeyPastelle on nyt saatavana Githubissa https://github.com/monkeypaste/monkeypaste
 - Linux -versio julkaistu Lataa täältä https://github.com/monkeypaste/monkeypaste/releases
 - Parannettu yhteensopivuustila (nyt on HTML -katsoja tekstilinkille)
 - Pienet vika- ja suorituskyvyn parannukset</value>

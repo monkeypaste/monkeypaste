@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -114,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
                 eventType.ToRoutedEvent(),
                 App.MainView as Control,
                 gmp,
-                MpKeyModifierFlags.None,
+                KeyModifiers.None,
                 false);
 
             //var hits =

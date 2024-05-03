@@ -40,10 +40,10 @@ namespace MonkeyPaste.Avalonia {
 
         public object FocusElement {
             get {
-                if (MpAvWindowManager.ActiveWindow is Window w &&
-                    TopLevel.GetTopLevel(w) is TopLevel tl) {
+                if (MpAvWindowManager.ActiveWindow is MpAvWindow w &&
+                    MpAvWindowManager.GetTopLevel(w) is TopLevel tl) {
                     var fe = tl.FocusManager.GetFocusedElement();
-                    if (fe == null || TopLevel.GetTopLevel(fe as Control) != tl) {
+                    if (fe == null || MpAvWindowManager.GetTopLevel(fe as Control) != tl) {
                         // focus manager
                         // a) doesn't treat active window as a focused control
                         // b) seems to not care what top level you give it and returns focused input control

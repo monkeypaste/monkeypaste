@@ -30,10 +30,11 @@ namespace MonkeyPaste.Avalonia {
                 // somethigns wrong
                 MpDebug.Break();
             }
+
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 ShowDesktopNotification(nvmb);
             } else {
-                ShowMobileNotification(nvmb);
+                ShowWindowedNotification(nvmb);
             }
         }
         public void HideNotification(object dc) {
@@ -52,9 +53,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        private MpAvNotificationWindowManager() {
-        }
-
+        private MpAvNotificationWindowManager() { }
 
         #endregion
 
@@ -63,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private void ShowMobileNotification(MpAvNotificationViewModelBase nvmb) {
+        private void ShowWindowedNotification(MpAvNotificationViewModelBase nvmb) {
             Control nw = null;
             var layoutType = MpAvNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
             switch (layoutType) {
@@ -119,7 +118,11 @@ namespace MonkeyPaste.Avalonia {
                         ShowActivated = true
                     };
 
-                    App.Current.SetMainWindow(nw);
+#if WINDOWED
+                    App.Current.SetMainWindow(MpAvRootWindow.Instance);
+#else
+                    App.Current.SetMainWindow(nw); 
+#endif
                     break;
                 default:
                     nw = new MpAvUserActionNotificationWindow() {
@@ -192,8 +195,8 @@ namespace MonkeyPaste.Avalonia {
             nw.Closed += OnWindowClosed;
             nw.EffectiveViewportChanged += Nw_EffectiveViewportChanged;
             try {
-                if (nvmb.Owner is Window ow) {
-                    nw.Show(ow);
+                if (nvmb.Owner != null) {
+                    nw.Show(nvmb.Owner);
                 } else {
                     nw.Show();
                 }

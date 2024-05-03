@@ -267,7 +267,8 @@ ubao wako wa kunakili unafuatiliwa au kuhifadhiwa popote zaidi ya mashine yako m
     <value>Hifadhi salama, salama na ya kibinafsi ya data ya ndani na hiari 2 - ulinzi wa nenosiri</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Chanzo kamili cha Monkeypaste sasa kinapatikana kwenye github yetu https://github.com/monkeypaste/monkeypaste
+    <value>- Kurekebisha muhimu kwa 1.0.18.0 ambayo ilikuwa ikipuuza sehemu za faili
+- Chanzo kamili cha Monkeypaste sasa kinapatikana kwenye github yetu https://github.com/monkeypaste/monkeypaste
 - Toleo la Linux lililotolewa kupakua hapa https://github.com/monkeypaste/monkeypaste/releases
 - Njia bora ya utangamano (sasa ina mtazamaji wa HTML kwa sehemu za maandishi)
 - Mdudu mdogo na maboresho ya utendaji</value>

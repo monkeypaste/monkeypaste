@@ -267,7 +267,8 @@ khay nhớ tạm của bạn đã từng được theo dõi hoặc lưu trữ B�
     <value>Lưu trữ dữ liệu cục bộ an toàn, bảo mật và riêng tư với tùy chọn bảo vệ bằng mật khẩu 2 yếu tố</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Nguồn đầy đủ cho khỉ hiện có sẵn trên GitHub https://github.com/monkeypaste/monkeypaste của chúng tôi
+    <value>- Bản sửa lỗi quan trọng cho 1.0.18.0 đã bỏ qua các clip tệp
+- Nguồn đầy đủ cho khỉ hiện có sẵn trên GitHub https://github.com/monkeypaste/monkeypaste của chúng tôi
 - Phiên bản Linux đã phát hành Tải xuống tại đây https://github.com/monkeypaste/monkeypaste/releases
 - Chế độ tương thích được cải thiện (hiện có trình xem HTML cho clip văn bản)
 - Cải thiện lỗi và hiệu suất nhỏ</value>

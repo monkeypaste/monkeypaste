@@ -14,11 +14,11 @@ namespace MonkeyPaste.Avalonia {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
 #if DESKTOP
             if (value is DynamicResourceExtension dre) {
-                value = Mp.Services.PlatformResource.GetResource(dre.ResourceKey.ToString()) as string;
+                value = Mp.Services?.PlatformResource?.GetResource(dre.ResourceKey.ToString()) as string;
             }
             if (value is string valueStr && !string.IsNullOrEmpty(valueStr)) {
                 if (MpAvThemeViewModel.Instance.CustomFontFamilyNames.Contains(valueStr)) {
-                    return Mp.Services.PlatformResource.GetResource<FontFamily>($"{valueStr}Font");
+                    return Mp.Services?.PlatformResource?.GetResource<FontFamily>($"{valueStr}Font");
                 }
                 try {
                     var ff = new FontFamily(valueStr);

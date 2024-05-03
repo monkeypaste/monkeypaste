@@ -1372,7 +1372,7 @@ namespace MonkeyPaste.Avalonia {
                     CanResize = true,
                     SizeToContent = SizeToContent.Manual,
                     Title = UiStrings.AccountLoginWindowTitle.ToWindowTitleText(),
-                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("LoginImage", typeof(WindowIcon), null, null) as WindowIcon,
+                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("LoginImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     DataContext = this,
                     Content = new MpAvSettingsView()
@@ -1383,7 +1383,7 @@ namespace MonkeyPaste.Avalonia {
                     Width = 1050,
                     Height = 650,
                     Title = UiStrings.CommonSettingsTitle.ToWindowTitleText(),
-                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogColorImage", typeof(WindowIcon), null, null) as WindowIcon,
+                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogColorImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     DataContext = this,
                     Content = new MpAvSettingsView()
@@ -1804,7 +1804,7 @@ namespace MonkeyPaste.Avalonia {
                                 Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment1DarkColor.ToString()),
                                 CanResize = false,
                                 Title = UiStrings.PrefSetPasswordWindowTitlePrefix.ToWindowTitleText(),
-                                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("LockImage", typeof(WindowIcon), null, null) as WindowIcon,
+                                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("LockImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                                 Content = new MpAvSetPasswordView() {
                                     ShowDialogButtons = true
                                 }

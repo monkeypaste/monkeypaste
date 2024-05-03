@@ -267,7 +267,8 @@
     <value>वैकल्पिक 2 के साथ सुरक्षित, सुरक्षित और निजी स्थानीय डेटा भंडारण - कारक पासवर्ड सुरक्षा</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- हमारे GitHub https://github.com/monkeypaste/monkeypaste पर अब उपलब्ध मंकीपास्ट के लिए पूर्ण स्रोत उपलब्ध है
+    <value>- 1.0.18.0 के लिए क्रिटिकल फिक्स जो फ़ाइल क्लिप की अनदेखी कर रहा था
+- हमारे GitHub https://github.com/monkeypaste/monkeypaste पर अब उपलब्ध मंकीपास्ट के लिए पूर्ण स्रोत उपलब्ध है
 - लिनक्स संस्करण जारी डाउनलोड यहाँ यहाँ https://github.com/monkeypaste/monkeypaste/releases
 - बेहतर संगतता मोड (अब पाठ क्लिप के लिए HTML दर्शक है)
 - मामूली बग और प्रदर्शन में सुधार</value>

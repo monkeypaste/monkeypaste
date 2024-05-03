@@ -10,13 +10,16 @@ using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static SQLite.SQLite3;
 
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
     public class MpAvWindow :
-        Window,
+#if WINDOWED
+        MpAvChildWindow,
+#else
+        Window, 
+#endif
         MpIUserControl {
 
         #region Private Variables
@@ -27,10 +30,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-
-        private static List<MpAvWindow> _openingWindows = [];
-        public static IReadOnlyList<MpAvWindow> OpeningWindows =>
-            _openingWindows;
 
         private static DevToolsOptions _defaultDevToolOptions;
         public static DevToolsOptions DefaultDevToolOptions =>
@@ -55,7 +54,9 @@ namespace MonkeyPaste.Avalonia {
             DataContext as MpIWindowViewModel;
 
         #region Overrides
-        protected override Type StyleKeyOverride => typeof(Window);
+#if !WINDOWED
+        protected override Type StyleKeyOverride => typeof(Window); 
+#endif
         #endregion
 
         #region State
@@ -68,7 +69,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public object DialogResult { get; set; }
+#if !WINDOWED
+        public object DialogResult { get; set; } 
+#endif
 
         private MpWindowType _windowType = MpWindowType.None;
         public MpWindowType WindowType {
@@ -102,7 +105,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIPlatformScreenInfo ScreenInfo {
             get {
-                if (this.Screens.ScreenFromWindow(this) is not Screen scr) {
+                if (this.GetVisualAncestor<Window>() is not { } w ||
+                    this.Screens.ScreenFromWindow(w) is not Screen scr) {
                     return this.Screens.Primary.ToScreenInfo();
                 }
                 return scr.ToScreenInfo();
@@ -116,7 +120,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvWindow() : this(null) { }
-        public MpAvWindow(Window owner = default) : base(owner == null ? PlatformManager.CreateWindow() : owner.PlatformImpl) {
+        public MpAvWindow(MpAvWindow owner = default) :
+#if WINDOWED
+        base()
+#else
+        base(owner == null ? PlatformManager.CreateWindow() : owner.PlatformImpl) 
+#endif
+            {
             Init();
         }
 
@@ -127,31 +137,9 @@ namespace MonkeyPaste.Avalonia {
             Bounds = rect;
         }
 
-        protected override void OnOpened(EventArgs e) {
-            base.OnOpened(e);
-            Dispatcher.UIThread.Post(async () => {
-                // wait for window to activate (if it does)
-                await Task.Delay(500);
-                _openingWindows.Remove(this);
-            });
-        }
-        protected override void OnClosed(EventArgs e) {
-            _openingWindows.Remove(this);
-            base.OnClosed(e);
-        }
-
-        public new void Show(Window owner = null) {
-            //if (silentLock) {
-            //    SilentLockMainWindowCheck(owner);
-            //}
-            if (!_openingWindows.Contains(this)) {
-                _openingWindows.Add(this);
-            }
-
-            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
-                desktop.MainWindow is not MpAvMainWindow) {
-                desktop.MainWindow = this;
-            }
+        
+        public new void Show(Window owner) {
+            MpAvWindowManager.OpeningWindows.AddOrReplace(this);
 
             if (owner == null) {
                 base.Show();
@@ -159,31 +147,17 @@ namespace MonkeyPaste.Avalonia {
                 base.Show(owner);
             }
         }
-        public async Task<object> ShowDialogWithResultAsync(Window owner = null) {
+        public async Task<object> ShowDialogWithResultAsync(MpAvWindow owner = null) {
             SilentLockMainWindowCheck(owner);
 
-#if MAC && false
-            // weird issues (only check assign tile hotkey) after closing dialog so faking it...
-            bool is_done = false;
-            void OnClosed(object sender, EventArgs e) {
-                Closed -= OnClosed;
-                is_done = true;
-            }
-            Closed += OnClosed;
-            Show();
-            while (!is_done) {
-                await Task.Delay(100);
-            }
-# else
             _ = await ShowDialog<object>(owner ?? MpAvWindowManager.LastActiveWindow);
-#endif
 
-            if (owner is Window w) {
-                if (!w.ShowActivated) {
+            if (owner != null) {
+                if (!owner.ShowActivated) {
 
                 } else {
-                    w.Activate();
-                    w.Focus();
+                    owner.Activate();
+                    owner.Focus();
                 }
             }
             return DialogResult;
@@ -220,10 +194,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void Init() {
-#if DEBUG
+#if DEBUG && !WINDOWED
             this.AttachDevTools(DefaultDevToolOptions);
 #endif
-            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(WindowIcon), null, null) as WindowIcon;
+            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon;
             if (Mp.Services != null &&
                 Mp.Services.ScreenInfoCollection == null) {
                 Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(this);
@@ -243,7 +217,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvWindowManager.AllWindows.Remove(this);
             this.Closed -= MpAvWindow_Closed;
         }
-        private void SilentLockMainWindowCheck(Window owner) {
+        private void SilentLockMainWindowCheck(MpAvWindow owner) {
             if (owner != null && owner is not MpAvMainWindow) {
                 return;
             }
@@ -257,10 +231,5 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
         #endregion
-    }
-
-    [DoNotNotify]
-    public class MpAvNotificationWindow : MpAvWindow {
-        public MpAvNotificationWindow(Window owner = default) : base(owner) { }
     }
 }

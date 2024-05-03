@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncObject,
         MpIAsyncCollectionObject {
         #region Private Variables
-        private MpAvWindow _convWindow;
+        private Window _convWindow;
 
         #endregion
 
@@ -150,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
                     _convWindow.Width = 1;
                     _convWindow.Height = 1;
                 } else {
-                    _convWindow = new MpAvWindow(); 
+                    _convWindow = new Window(); 
                     _convWindow.Width = 50;
                     _convWindow.Height = 50;
                 }

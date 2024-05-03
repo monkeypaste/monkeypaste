@@ -143,7 +143,7 @@ namespace MonkeyPaste.Avalonia {
             return pwtb1.Text.ToStringOrEmpty() == pwtb2.Text.ToStringOrEmpty();
         }
         private void CancelButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if (TopLevel.GetTopLevel(this) is not MpAvWindow w) {
+            if (MpAvWindowManager.GetTopLevel(this) is not MpAvWindow w) {
                 return;
             }
             w.DialogResult = null;
@@ -151,7 +151,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void DoneButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if (TopLevel.GetTopLevel(this) is not MpAvWindow w) {
+            if (MpAvWindowManager.GetTopLevel(this) is not MpAvWindow w) {
                 return;
             }
 

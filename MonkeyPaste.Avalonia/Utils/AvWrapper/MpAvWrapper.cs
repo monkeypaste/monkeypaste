@@ -141,8 +141,16 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"WebView not linked. Disabling rich content pref..");
                 MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled = false;
 #endif
-            } 
+            }
+
+            if(!MpAvPrefViewModel.Instance.IsWindowed) {
+#if WINDOWED
+                MpConsole.WriteLine($"WINDOWED const present. Checking Windowed pref...");
+                MpAvPrefViewModel.Instance.IsWindowed = true;
 #endif
+            }
+#endif
+
 
             DefaultDataCreator = new MpAvDefaultDataCreator();
             UserAgentProvider = MpAvPlainHtmlConverter.Instance;

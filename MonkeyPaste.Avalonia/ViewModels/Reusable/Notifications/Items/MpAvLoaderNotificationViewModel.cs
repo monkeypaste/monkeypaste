@@ -98,10 +98,9 @@ namespace MonkeyPaste.Avalonia {
                 await DoLoaderAsync();
                 return MpNotificationDialogResultType.DoNotShow;
             }
-            // NOTE returning loading notifies builder not to hide loader
-            return MpNotificationDialogResultType.Loading;
+            return BeginShow();
         }
-        #endregion
+#endregion
 
         #region Private Methods
 
@@ -113,7 +112,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private async Task DoLoaderAsync() {
-
             await ProgressLoader.BeginLoaderAsync();
             await ProgressLoader.FinishLoaderAsync();
         }

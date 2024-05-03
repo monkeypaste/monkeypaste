@@ -267,7 +267,8 @@ panonuz, kendi makinenizin ötesinde HERHANGİ BİR YERDE izlenir veya saklanır
     <value>İsteğe bağlı 2 faktörlü parola koruması ile güvenli, emniyetli ve özel yerel veri depolama</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Monkeypaste için tam kaynak artık GitHub'umuzda mevcut https://github.com/monkeyaste/Monkeypaste
+    <value>- 1.0.18.0 için kritik düzeltme, dosya kliplerini görmezden geliyordu
+- Monkeypaste için tam kaynak artık GitHub'umuzda mevcut https://github.com/monkeyaste/Monkeypaste
 - Linux sürümü yayınlandı https://github.com/monkeyaste/Monkeypaste/Releases
 - Geliştirilmiş uyumluluk modu (şimdi metin klipleri için HTML görüntüleyicisi var)
 - Küçük hata ve performans iyileştirmeleri</value>

@@ -267,7 +267,8 @@
     <value>বৈকল্পিক 2 - কাৰক পাছৱৰ্ড সুৰক্ষাৰ সৈতে সুৰক্ষিত, সুৰক্ষিত আৰু ব্যক্তিগত স্থানীয় তথ্য সংৰক্ষণ</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- MonkeyPaste জন্য সম্পূর্ণ উৎস এখন আমাদের github উপর উপলব্ধ https://github.com/monkeypaste/monkeypaste
+    <value>- 1.0.18.0 ৰ বাবে জটিল সমাধান যি ফাইল ক্লিপসমূহ আওকাণ কৰি আছিল
+- MonkeyPaste জন্য সম্পূর্ণ উৎস এখন আমাদের github উপর উপলব্ধ https://github.com/monkeypaste/monkeypaste
 - Linux সংস্কৰণ মুকলি ইয়াত ডাউনলোড কৰক https://github.com/monkeypaste/monkeypaste/releases
 - উন্নত সুসংগততা ধৰণ (এতিয়া লিখনী ক্লিপসমূহৰ বাবে HTML দৰ্শক আছে)
 - সৰু বাগ আৰু পৰিৱেশন উন্নতি</value>

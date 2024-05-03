@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
                 offset = MpPoint.Zero;
 
                 if (!MpAvShortcutCollectionViewModel.Instance.IsGlobalHooksPaused &&
-                    TopLevel.GetTopLevel(target) is TopLevel tl) {
+                    MpAvWindowManager.GetTopLevel(target) is TopLevel tl) {
                     var tlp = tl.PointToClient(MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation.ToAvPixelPoint(tl.VisualPixelDensity()));
                     offset = tl.TranslatePoint(tlp, target).Value.ToPortablePoint();
                 }
@@ -114,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
 #if DEBUG
-            if (TopLevel.GetTopLevel(this) is TopLevel tl) {
+            if (MpAvWindowManager.GetTopLevel(this) is TopLevel tl) {
                 tl.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
             }
 #endif

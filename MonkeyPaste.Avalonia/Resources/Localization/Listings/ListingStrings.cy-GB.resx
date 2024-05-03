@@ -267,7 +267,8 @@ Mae eich clipfwrdd yn cael ei olrhain neu ei storio UNRHYW le y tu hwnt i'ch pei
     <value>Storio data lleol diogel, diogel a phreifat gyda diogelwch cyfrinair 2 ffactor dewisol</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Ffynhonnell lawn ar gyfer MonkeyPaste nawr ar gael ar ein github https://github.com/monkeypaste/monkeypaste
+    <value>- Trwsiad critigol ar gyfer 1.0.18.0 a oedd yn anwybyddu clipiau Ffeil
+- Ffynhonnell lawn ar gyfer MonkeyPaste nawr ar gael ar ein github https://github.com/monkeypaste/monkeypaste
 - Fersiwn Linux wedi'i ryddhau i'w lawrlwytho yma https://github.com/monkeypaste/monkeypaste/releases
 - gwell modd cydnawsedd (mae gan wyliwr HTML bellach ar gyfer clipiau testun)
 - mân welliannau i fygiau a pherfformiad</value>

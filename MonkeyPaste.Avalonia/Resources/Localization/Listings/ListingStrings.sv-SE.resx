@@ -267,7 +267,8 @@ ditt urklipp spåras eller lagras VAR som helst utanför din egen maskin. Period
     <value>Trygg, säker och privat lokal datalagring med valfritt 2-faktors lösenordsskydd</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Full källa för monkeypaste nu tillgänglig på vår github https://github.com/monkeypaste/monkeypaste
+    <value>- Kritisk fix för 1.0.18.0 som ignorerade filklämmor
+- Full källa för monkeypaste nu tillgänglig på vår github https://github.com/monkeypaste/monkeypaste
 - Linux -version släppt nedladdning här https://github.com/monkeypaste/monkeypaste/releases
 - Förbättrat kompatibilitetsläge (har nu HTML Viewer för textklipp)
 - Mindre fel och prestandaförbättringar</value>

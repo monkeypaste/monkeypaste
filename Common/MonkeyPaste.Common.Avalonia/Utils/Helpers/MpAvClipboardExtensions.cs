@@ -14,6 +14,8 @@ using System.Runtime.Intrinsics.X86;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+
 
 #if WINDOWS
 
@@ -53,6 +55,31 @@ namespace MonkeyPaste.Common.Avalonia {
                 return _MacFormatMap;
             }
         }
+
+
+        #region Storage
+
+        public static async Task<IStorageItem[]> ToAvFilesObjectAsync(this IEnumerable<string> fpl) {
+            var files = await Task.WhenAll(fpl.Where(x => x.IsFileOrDirectory()).Select(x => x.ToFileOrFolderStorageItemAsync()));
+            return files.ToArray();
+        }
+        public static async Task<IStorageItem> ToFileOrFolderStorageItemAsync(this string path) {
+            if (!path.IsFileOrDirectory()) {
+                return null;
+            }
+            IStorageItem si = null;
+            var mw = Application.Current.GetMainTopLevel();
+            var storageProvider = TopLevel.GetTopLevel(mw)!.StorageProvider;
+            if (storageProvider != null) {
+                if (path.IsFile()) {
+                    si = await storageProvider.TryGetFileFromPathAsync(path);
+                } else {
+                    si = await storageProvider.TryGetFolderFromPathAsync(path);
+                }
+            }
+            return si;
+        }
+        #endregion
 
         public static async Task<Dictionary<string, object>> ReadClipboardAsync(string[] formatFilter = default, int retryCount = 0) {
             if (!Dispatcher.UIThread.CheckAccess()) {

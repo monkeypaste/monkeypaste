@@ -267,7 +267,8 @@ i tuoi appunti sono sempre tracciati o archiviati OVUNQUE oltre la tua macchina.
     <value>Archiviazione dei dati locale sicura, protetta e privata con protezione con password opzionale a 2 fattori</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Fonte completa per Monkeypaste ora disponibile sul nostro github https://github.com/monkeypaste/monkeypaste
+    <value>- Correzione critica per 1.0.18.0 che ignorava i clip di file
+- Fonte completa per Monkeypaste ora disponibile sul nostro github https://github.com/monkeypaste/monkeypaste
 - Versione Linux rilasciata Download qui https://github.com/monkeypaste/monkeypaste/releases
 - Modalità di compatibilità migliorata (ora ha un visualizzatore HTML per clip di testo)
 - Bug minori e miglioramenti delle prestazioni</value>

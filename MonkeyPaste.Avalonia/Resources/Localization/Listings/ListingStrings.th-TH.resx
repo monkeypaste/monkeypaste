@@ -267,7 +267,8 @@
     <value>การจัดเก็บข้อมูลในเครื่องที่ปลอดภัย มั่นคง และเป็นส่วนตัวพร้อมการป้องกันด้วยรหัสผ่านแบบ 2 ปัจจัยเสริม</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- แหล่งข้อมูลเต็มรูปแบบสำหรับ monkeypaste ตอนนี้มีอยู่ใน github https://github.com/monkeypaste/monkeypaste ของเรา
+    <value>- การแก้ไขที่สำคัญสำหรับ 1.0.18.0 ซึ่งไม่สนใจคลิปไฟล์
+- แหล่งข้อมูลเต็มรูปแบบสำหรับ monkeypaste ตอนนี้มีอยู่ใน github https://github.com/monkeypaste/monkeypaste ของเรา
 - เวอร์ชัน Linux เปิดตัวดาวน์โหลดที่นี่ https://github.com/monkeypaste/monkeypaste/releases
 - โหมดความเข้ากันได้ที่ดีขึ้น (ตอนนี้มี HTML Viewer สำหรับคลิปข้อความ)
 - การปรับปรุงข้อผิดพลาดเล็กน้อยและประสิทธิภาพ</value>

@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
         private void InitDnd() {
             DragDrop.SetAllowDrop(this, true);
             this.AddHandler(DragDrop.DragOverEvent, MpAvTopEdgeMarkerView_DragOver);
-            //if (TopLevel.GetTopLevel(this) is MpAvWindow w) {
+            //if (MpAvWindowManager.GetTopLevel(this) is MpAvWindow w) {
             //    w.AddHandler(DragDrop.DragOverEvent, MpAvTopEdgeMarkerView_DragOver);
             //}
         }
@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
             // center marker horizontally once actual width is known
             Canvas.SetLeft(marker, (this.Bounds.Width / 2) - (marker.Bounds.Width / 2));
 
-            if (TopLevel.GetTopLevel(this) is not Window w) {
+            if (MpAvWindowManager.GetTopLevel(this) is not MpAvWindow w) {
                 return;
             }
             w.Position = new PixelPoint();

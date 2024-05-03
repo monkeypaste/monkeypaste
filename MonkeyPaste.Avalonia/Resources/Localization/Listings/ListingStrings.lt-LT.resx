@@ -267,7 +267,8 @@ jūsų mainų sritis visada stebima arba saugoma BET KUR, išskyrus jūsų kompi
     <value>Saugus, patikimas ir privatus vietinis duomenų saugojimas su pasirenkama 2 faktorių slaptažodžio apsauga</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Visas „MonkeYPaste“ šaltinis, kurį dabar galima rasti mūsų „Github“ https://github.com/monkeypaste/monkeypaste
+    <value>- Kritinis taisymas 1.0.18.0, kuris ignoravo failų klipus
+- Visas „MonkeYPaste“ šaltinis, kurį dabar galima rasti mūsų „Github“ https://github.com/monkeypaste/monkeypaste
 - „Linux“ versija išleista atsisiųsti čia https://github.com/monkeypaste/monkeypaste/releases
 - Patobulintas suderinamumo režimas (dabar turi HTML peržiūros priemonę teksto klipams)
 - Mažos klaidos ir našumo patobulinimai</value>

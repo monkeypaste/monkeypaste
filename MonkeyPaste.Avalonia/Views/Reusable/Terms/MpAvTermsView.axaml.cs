@@ -41,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
                 ShowActivated = true,
                 WindowType = MpWindowType.Modal,
                 Title = UiStrings.TermsWindowTitle,
-                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("GavelImage", typeof(WindowIcon), null, null) as WindowIcon,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("GavelImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 Content = new MpAvTermsView(),
                 DataContext = tacvm
@@ -73,7 +73,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void YesButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if (TopLevel.GetTopLevel(this) is not MpAvWindow w) {
+            if (MpAvWindowManager.GetTopLevel(this) is not MpAvWindow w) {
                 return;
             }
             w.DialogResult = true;
@@ -81,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void NoButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if (TopLevel.GetTopLevel(this) is not MpAvWindow w) {
+            if (MpAvWindowManager.GetTopLevel(this) is not MpAvWindow w) {
                 return;
             }
             w.DialogResult = false;

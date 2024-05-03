@@ -1007,7 +1007,11 @@ namespace MonkeyPaste.Avalonia {
             Task.Run(async () => {
                 try {
                     // grab current cb text
-                    string cbText = await TopLevel.GetTopLevel(MpAvMainView.Instance).Clipboard.GetTextAsync();
+                    if(MpAvMainView.Instance == null ||
+                        MpAvWindowManager.GetTopLevel(MpAvMainView.Instance) is not TopLevel tl) {
+                        return;
+                    }
+                    string cbText = await tl.Clipboard.GetTextAsync();
                     if (!string.IsNullOrEmpty(cbText)) {
                         // find matching data object items w/ current text
 
