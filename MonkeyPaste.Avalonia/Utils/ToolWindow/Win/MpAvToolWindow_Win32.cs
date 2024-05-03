@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
         public static void SetAsNoHitTestWindow(IntPtr handle) {
             // from https://github.com/AvaloniaUI/Avalonia/issues/4956
             // see thread for other platforms
-#if WINDOWS
+#if WINDOWS && !WINDOWED
             int cur_style_val = GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
             SetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE, cur_style_val | (int)ExtendedWindowStyles.WS_EX_LAYERED | (int)ExtendedWindowStyles.WS_EX_TRANSPARENT);
 #endif
@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void RemoveNoHitTestWindow(IntPtr handle) {
-#if WINDOWS
+#if WINDOWS && !WINDOWED
             int cur_style_val = GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
             int with_hit_test_style_val = cur_style_val & (~(int)ExtendedWindowStyles.WS_EX_LAYERED) & (~(int)ExtendedWindowStyles.WS_EX_TRANSPARENT);
             SetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE, with_hit_test_style_val);
