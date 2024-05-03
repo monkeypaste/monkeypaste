@@ -54,6 +54,66 @@ namespace MonkeyPaste.Avalonia {
 
         #region Screens
 
+        public static Screen AsScreen(this IRenderRoot rr) {
+            return new Screen(
+                            1,
+                            new PixelRect(rr.ClientSize.ToAvPixelSize(1)),
+                            new PixelRect(rr.ClientSize.ToAvPixelSize(1)),
+                            true);
+        }
+        public static MpPoint GetScreenMousePoint(this PointerEventArgs e) {
+            //var c_mp = e.GetPosition(control).ToPortablePoint();
+            //var c_origin = control.PointToScreen(new Point()).ToPortablePoint(control.VisualPixelDensity());
+            //return c_mp + c_origin;
+#if MOBILE
+            return e.GetPosition(App.MainView).ToPortablePoint();
+#else
+            if (e.Source is not Control c ||
+                c.GetScreen() is not Screen scr) {
+                return MpPoint.Zero;
+            }
+            var c_mp = e.GetPosition(c);
+            var scr_mp = c.PointToScreen(c_mp);
+            var result = scr_mp.ToPortablePoint(scr.Scaling);
+            return result;
+#endif
+        }
+        public static Screen GetScreen(this Visual v) {
+            if (MpAvWindowManager.GetTopLevel(v) is not WindowBase tl) {
+                return null;
+            }
+            return tl.Screens.ScreenFromVisual(v);
+        }
+        public static double VisualPixelDensity(this Visual visual, Window w = null) {
+
+            if (w == null &&
+                MpAvWindowManager.GetTopLevel(visual) is Window tlw) {
+                //Application.Current.GetMainTopLevel() is Window mw) {
+                w = tlw;
+            }
+
+            if (w == null) {
+                return 1;
+            }
+            if (visual == null) {
+                //return w.Screens.Primary.PixelDensity;
+                return w.Screens.Primary.Scaling;
+            }
+            var scr = w.Screens.ScreenFromVisual(visual);
+            if (scr == null && Application.Current.GetMainTopLevel() is Window mw2) {
+                scr = mw2.Screens.Primary;
+                if (scr == null) {
+                    if (mw2.Screens.All.FirstOrDefault() is { } mw3) {
+                        scr = mw3;
+                    } else {
+                        MpDebug.Break();
+                        return 1;
+                    }
+                }
+            }
+            //return scr.PixelDensity;
+            return scr.Scaling;
+        }
         public static Screen Primary(this Screens screens) {
             return screens.All.FirstOrDefault(x => x.IsPrimary);
         }
