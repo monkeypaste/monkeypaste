@@ -46,3 +46,6 @@
 	path = Common/MonkeyPaste.Common.Plugin
 	url = https://github.com/monkeypaste/MonkeyPaste.Common.Plugin
     ignore = dirty
+[submodule "MonkeyPaste.com/public_html/docs"]
+	path = MonkeyPaste.com/public_html/docs
+	url = https://github.com/monkeypaste/monkeypaste-docs
