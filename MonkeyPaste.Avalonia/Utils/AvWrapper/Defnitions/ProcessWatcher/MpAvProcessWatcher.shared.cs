@@ -2,16 +2,13 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
 
     public partial class MpAvProcessWatcher : MpIProcessWatcher {
         #region Private Variables
-        private DispatcherTimer _timer;
-
-#if MAC
-        //private int _lastActiveWindowNum;
-#endif
+        private DispatcherTimer _timer = default;
         #endregion
 
         #region Protected Variables
@@ -123,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
         public void StartWatcher() {
 #if MOBILE
             return;
-#endif
+#else
             if (_timer == null) {
                 // initial start
 
@@ -135,6 +132,7 @@ namespace MonkeyPaste.Avalonia {
                 _timer.Stop();
             }
             _timer.Start();
+#endif
         }
         public void StopWatcher() {
             _timer?.Stop();
@@ -207,10 +205,6 @@ namespace MonkeyPaste.Avalonia {
         }
         protected bool IsProcessPathEqual(nint h1, nint h2) {
             return GetProcessPath(h1) == GetProcessPath(h2);
-        }
-
-        public MpPortableProcessInfo GetClipboardOwner() {
-            return null;
         }
 
 

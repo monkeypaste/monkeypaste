@@ -16,6 +16,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvIconBuilder {
         public virtual string GetPathIconBase64(string path, nint handle, MpIconSize iconSize = MpIconSize.ExtraLargeIcon128) =>
             GetPathIconBase64(path, iconSize);
+
         public string GetPathIconBase64(string path, MpIconSize iconSize = MpIconSize.ExtraLargeIcon128) {
             /*
                 var path: NSString = NSWorkspace.sharedWorkspace().absolutePathForAppBundleWithIdentifier("com.apple.dt.xcode")!
