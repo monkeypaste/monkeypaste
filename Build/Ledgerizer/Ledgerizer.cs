@@ -11,62 +11,35 @@ using System.Reflection;
 using System.Text;
 
 namespace Ledgerizer {
-    [Flags]
-    enum MpLedgerizerFlags : long {
-        None = 0,
-        DO_LOCAL_PACKAGING = 1L << 1,
-        DO_REMOTE_PACKAGING = 1L << 2,
-        FORCE_REPLACE_REMOTE_TAG = 1L << 3,
-        DO_LOCAL_VERSIONS = 1L << 4,
-        DO_REMOTE_VERSIONS = 1L << 5,
-        DO_LOCAL_CULTURE_INDEX = 1L << 6,
-        DO_REMOTE_CULTURE_INDEX = 1L << 7,
-        LOCAL_MOVE_CORE_TO_DAT = 1L << 8,
-        GEN_LOCALIZED_MANIFESTS = 1L << 9,
-        GEN_EMPTY_RESX = 1L << 10,
-        GEN_ADDON_LISTING = 1L << 11,
-        GEN_PROD_LISTING = 1L << 12,
-        TRANSLATE_RESX = 1L << 13,
-        VERIFY_CONSISTENT_CULTURES = 1L << 14,
-        GEN_EDITOR_UISTRS = 1L << 15,
-        REMOTE_MOVE_CORE_TO_DAT = 1L << 16,
-        DO_JS_UISTRINGS = 1L << 17,
-        DO_LOCAL_LEDGER = 1L << 18,
-        DO_REMOTE_LEDGER = 1L << 19,
-        MOVE_NUGET_CACHE = 1L << 20,
-        DEBUG = 1L << 21,
-        RELEASE = 1L << 22,
+    enum MpLedgerizerFlags {
+        None,
+        DO_LOCAL_PACKAGING,
+        DO_REMOTE_PACKAGING,
+        DO_LOCAL_VERSIONS,
+        DO_REMOTE_VERSIONS,
+        DO_LOCAL_LEDGER,
+        DO_REMOTE_LEDGER,
+        DO_LOCAL_CULTURE_INDEX,
+        DO_REMOTE_CULTURE_INDEX,
+        FORCE_REPLACE_REMOTE_TAG,
+        LOCAL_MOVE_CORE_TO_DAT,
+        REMOTE_MOVE_CORE_TO_DAT,
+        GEN_LOCALIZED_MANIFESTS,
+        GEN_EMPTY_RESX,
+        GEN_ADDON_LISTING,
+        GEN_PROD_LISTING,
+        TRANSLATE_RESX,
+        VERIFY_CONSISTENT_CULTURES,
+        GEN_EDITOR_UISTRS,
+        DO_JS_UISTRINGS,
+        MOVE_NUGET_CACHE,
+        DEBUG,
+        RELEASE,
     }
     internal class Ledgerizer {
 
         #region Properties
-
-        static MpLedgerizerFlags LEDGERIZER_FLAGS =
-            //MpLedgerizerFlags.GEN_EDITOR_UISTRS |
-            //MpLedgerizerFlags.GEN_ADDON_LISTING |
-            //MpLedgerizerFlags.GEN_PROD_LISTING |
-            //MpLedgerizerFlags.TRANSLATE_RESX |
-            //MpLedgerizerFlags.GEN_EMPTY_RESX
-            //MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS |
-            //MpLedgerizerFlags.DO_CULTURE_VERIFY |
-            //MpLedgerizerFlags.DO_LOCAL_PACKAGING |
-            //MpLedgerizerFlags.DO_LOCAL_LEDGER |
-            //MpLedgerizerFlags.DO_REMOTE_PACKAGING |
-            //MpLedgerizerFlags.DO_REMOTE_LEDGER |
-            //MpLedgerizerFlags.DO_LOCAL_VERSIONS |
-            //MpLedgerizerFlags.DO_REMOTE_VERSIONS |
-            //MpLedgerizerFlags.DO_LOCAL_CULTURE_INDEX |
-            //MpLedgerizerFlags.DO_REMOTE_CULTURE_INDEX |
-            //MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT |
-            //MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT |
-            //MpLedgerizerFlags.DO_JS_UISTRINGS |
-            //MpLedgerizerFlags.MOVE_NUGET_CACHE |
-            //MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG |
-            //MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES
-            //MpLedgerizerFlags.DEBUG  |
-            //MpLedgerizerFlags.RELEASE
-            MpLedgerizerFlags.None
-            ;
+        static List<MpLedgerizerFlags> BuildTasks { get; set; } = [];
 
         #region Localizer Props
 
@@ -183,38 +156,38 @@ namespace Ledgerizer {
         ];
 
 
-        static bool DO_LOCAL_PACKAGING => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
+        static bool DO_LOCAL_PACKAGING => BuildTasks.Contains(MpLedgerizerFlags.DO_LOCAL_PACKAGING);
 
-        static bool DO_REMOTE_PACKAGING => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_PACKAGING);
-        static bool FORCE_REPLACE_REMOTE_TAG => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG);
+        static bool DO_REMOTE_PACKAGING => BuildTasks.Contains(MpLedgerizerFlags.DO_REMOTE_PACKAGING);
+        static bool FORCE_REPLACE_REMOTE_TAG => BuildTasks.Contains(MpLedgerizerFlags.FORCE_REPLACE_REMOTE_TAG);
 
-        static bool DO_LOCAL_VERSIONS => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_VERSIONS);
-        static bool DO_REMOTE_VERSIONS => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_VERSIONS);
+        static bool DO_LOCAL_VERSIONS => BuildTasks.Contains(MpLedgerizerFlags.DO_LOCAL_VERSIONS);
+        static bool DO_REMOTE_VERSIONS => BuildTasks.Contains(MpLedgerizerFlags.DO_REMOTE_VERSIONS);
 
-        static bool DO_LOCAL_CULTURE_INDEX => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_CULTURE_INDEX);
-        static bool DO_REMOTE_CULTURE_INDEX => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_CULTURE_INDEX);
+        static bool DO_LOCAL_CULTURE_INDEX => BuildTasks.Contains(MpLedgerizerFlags.DO_LOCAL_CULTURE_INDEX);
+        static bool DO_REMOTE_CULTURE_INDEX => BuildTasks.Contains(MpLedgerizerFlags.DO_REMOTE_CULTURE_INDEX);
 
-        static bool DO_LOCAL_LEDGER => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_LOCAL_LEDGER);
-        static bool DO_REMOTE_LEDGER => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_REMOTE_LEDGER);
+        static bool DO_LOCAL_LEDGER => BuildTasks.Contains(MpLedgerizerFlags.DO_LOCAL_LEDGER);
+        static bool DO_REMOTE_LEDGER => BuildTasks.Contains(MpLedgerizerFlags.DO_REMOTE_LEDGER);
 
-        static bool LOCAL_MOVE_CORE_TO_DAT => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT);
-        static bool REMOTE_MOVE_CORE_TO_DAT => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT);
+        static bool LOCAL_MOVE_CORE_TO_DAT => BuildTasks.Contains(MpLedgerizerFlags.LOCAL_MOVE_CORE_TO_DAT);
+        static bool REMOTE_MOVE_CORE_TO_DAT => BuildTasks.Contains(MpLedgerizerFlags.REMOTE_MOVE_CORE_TO_DAT);
 
-        static bool GEN_LOCALIZED_MANIFESTS => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS);
+        static bool GEN_LOCALIZED_MANIFESTS => BuildTasks.Contains(MpLedgerizerFlags.GEN_LOCALIZED_MANIFESTS);
 
-        static bool GEN_ADDON_LISTING => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_ADDON_LISTING);
-        static bool GEN_PROD_LISTING => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_PROD_LISTING);
+        static bool GEN_ADDON_LISTING => BuildTasks.Contains(MpLedgerizerFlags.GEN_ADDON_LISTING);
+        static bool GEN_PROD_LISTING => BuildTasks.Contains(MpLedgerizerFlags.GEN_PROD_LISTING);
 
-        static bool GEN_EMPTY_RESX => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_EMPTY_RESX);
+        static bool GEN_EMPTY_RESX => BuildTasks.Contains(MpLedgerizerFlags.GEN_EMPTY_RESX);
 
-        static bool TRANS_RESX => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.TRANSLATE_RESX);
-        static bool DO_CULTURE_VERIFY => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES);
+        static bool TRANS_RESX => BuildTasks.Contains(MpLedgerizerFlags.TRANSLATE_RESX);
+        static bool DO_CULTURE_VERIFY => BuildTasks.Contains(MpLedgerizerFlags.VERIFY_CONSISTENT_CULTURES);
 
-        static bool GEN_EDITOR_UISTRS => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.GEN_EDITOR_UISTRS);
+        static bool GEN_EDITOR_UISTRS => BuildTasks.Contains(MpLedgerizerFlags.GEN_EDITOR_UISTRS);
 
-        static bool DO_JS_UISTRINGS => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DO_JS_UISTRINGS);
+        static bool DO_JS_UISTRINGS => BuildTasks.Contains(MpLedgerizerFlags.DO_JS_UISTRINGS);
 
-        static bool MOVE_NUGET_CACHE => LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.MOVE_NUGET_CACHE);
+        static bool MOVE_NUGET_CACHE => BuildTasks.Contains(MpLedgerizerFlags.MOVE_NUGET_CACHE);
 
         const string BUILD_CONFIG =
 #if DEBUG
@@ -230,7 +203,7 @@ namespace Ledgerizer {
 #elif LINUX
             "LINUX";
 #elif ANDROID
-            "ANDROID;
+            "ANDROID";
 #elif IOS
             "IOS";
 #else
@@ -293,7 +266,8 @@ namespace Ledgerizer {
 
         static void Main(string[] args) {
             SelectTasks();
-            Console.WriteLine($"Tasks: {LEDGERIZER_FLAGS}");
+            Console.Clear();
+            Console.WriteLine($"Tasks: {string.Join(", ",BuildTasks.Select(x=>x.ToString())}");
             Console.WriteLine("Starting...");
 
             ProcessAll();
@@ -379,13 +353,18 @@ namespace Ledgerizer {
                 if(!int.TryParse(task_str,out int task_idx) || task_idx < 0 || task_idx >= task_names.Length) {
                     continue;
                 }
-                if(task_idx == 0) {
-                    LEDGERIZER_FLAGS = MpLedgerizerFlags.None;
+                    
+                if (task_idx == 0) {
+                    BuildTasks.Clear();
                     SelectPlugins();
                     SelectTasks();
                     return;
                 }
-                LEDGERIZER_FLAGS.AddFlag(task_names[task_idx].ToEnum<MpLedgerizerFlags>());
+                var t = task_names[task_idx].ToEnum<MpLedgerizerFlags>();
+                if (BuildTasks.Contains(t)) {
+                    continue;
+                }
+                BuildTasks.Add(t);
             }
         }
 
@@ -437,7 +416,7 @@ namespace Ledgerizer {
             }
         }
         static void GenProdListing() {
-            MpConsole.WriteLine($"Generating Product Listings...STARTED", true);
+            Console.WriteLine($"Generating Product Listings...STARTED", true);
             // (short) translation prefix fields:
             // TeaserCaption
             // ss1*
@@ -1027,17 +1006,17 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                      $"{prod_listing_dir_name}.csv");
             string output_csv = csv.ToCsv();
             MpFileIo.WriteTextToFile(prod_listing_path, output_csv);
-            MpConsole.WriteLine(prod_listing_path);
+            Console.WriteLine(prod_listing_path);
 
-            MpConsole.WriteLine($"Generating Product Listings...DONE", false, true);
+            Console.WriteLine($"Generating Product Listings...DONE", false, true);
         }
         static void GenAddOnListings() {
-            MpConsole.WriteLine($"Generating AddOn Listings...STARTED", true);
+            Console.WriteLine($"Generating AddOn Listings...STARTED", true);
             GenAddOnListing("Basic", "Monthly");
             GenAddOnListing("Basic", "Yearly");
             GenAddOnListing("Unlimited", "Monthly");
             GenAddOnListing("Unlimited", "Yearly");
-            MpConsole.WriteLine($"Generating AddOn Listings...DONE", false, true);
+            Console.WriteLine($"Generating AddOn Listings...DONE", false, true);
         }
         static void GenAddOnListing(string plan_name, string cycle_type) {
             // outputs path to listing file
@@ -1104,7 +1083,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     output_dir,
                     $"{listing_dir_name}.csv");
             MpFileIo.WriteTextToFile(output_path, sb.ToString(), overwrite: true);
-            MpConsole.WriteLine(output_path);
+            Console.WriteLine(output_path);
         }
         static string GetListingDir() {
 
@@ -1124,10 +1103,10 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 all_ccl
                 .Where(x => WorkingCultures.Contains(x));
             if (ccl.Difference(WorkingCultures) is { } culture_diffs && culture_diffs.Any()) {
-                MpConsole.WriteLine($"Cultures found/working culture mismatch detected.");
+                Console.WriteLine($"Cultures found/working culture mismatch detected.");
 
-                MpConsole.WriteLine($"Working cultures not to be generated: {string.Join(",", WorkingCultures.Where(x => !ccl.Contains(x)))}");
-                MpConsole.WriteLine($"Available cultures not to be generated: {string.Join(",", all_ccl.Where(x => !ccl.Contains(x)))}");
+                Console.WriteLine($"Working cultures not to be generated: {string.Join(",", WorkingCultures.Where(x => !ccl.Contains(x)))}");
+                Console.WriteLine($"Available cultures not to be generated: {string.Join(",", all_ccl.Where(x => !ccl.Contains(x)))}");
             }
             return ccl;
         }
@@ -1138,11 +1117,11 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             string root_pack_dir = GetPackagesDir(is_debug);
             string core_plugin_zip_path = Path.Combine(root_pack_dir, $"{core_plugin_name}.zip");
             if (!core_plugin_zip_path.IsFile()) {
-                MpConsole.WriteLine($"Error! No package found for '{core_plugin_name}' at '{core_plugin_zip_path}'");
+                Console.WriteLine($"Error! No package found for '{core_plugin_name}' at '{core_plugin_zip_path}'");
                 return;
             }
             if (ReadPluginManifestFromProjDir(core_plugin_name) is not { } core_mf) {
-                MpConsole.WriteLine($"Error could not find core manifest for '{core_plugin_name}'");
+                Console.WriteLine($"Error could not find core manifest for '{core_plugin_name}'");
                 return;
             }
 
@@ -1160,7 +1139,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     userName: username,
                     password: password,
                     filePath: plugin_icon_path);
-                MpConsole.WriteLine($"{core_plugin_name} icon result: {(icon_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
+                Console.WriteLine($"{core_plugin_name} icon result: {(icon_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
 
                 // transfer package
                 var zip_result = MpFtpTools.FtpFileUpload(
@@ -1169,7 +1148,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     password: password,
                     filePath: core_plugin_zip_path);
 
-                MpConsole.WriteLine($"{core_plugin_name} {core_mf.version} zip result: {(zip_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
+                Console.WriteLine($"{core_plugin_name} {core_mf.version} zip result: {(zip_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
 
                 // duplicate as latest
                 var latest_result = MpFtpTools.FtpFileUpload(
@@ -1177,31 +1156,32 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     userName: username,
                     password: password,
                     filePath: core_plugin_zip_path);
-                MpConsole.WriteLine($"{core_plugin_name} latest zip result: {(latest_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
+                Console.WriteLine($"{core_plugin_name} latest zip result: {(latest_result == System.Net.FtpStatusCode.ClosingData).ToTestResultLabel()}");
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error moving remote dat {core_plugin_name}.", ex);
+                Console.WriteLine($"Error moving remote dat {core_plugin_name}.");
+                Console.WriteLine(ex.ToString());
             }
         }
         static void MoveCoresToDat_remote() {
-            MpConsole.WriteLine($"[REMOTE] Moving core plugins to dat STARTED", true);
+            Console.WriteLine($"[REMOTE] Moving core plugins to dat STARTED", true);
 
 
-            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DEBUG)) {
+            if (BuildTasks.Contains(MpLedgerizerFlags.DEBUG)) {
                 foreach (string core_plugin_name in WorkingCorePlugins) {
                     MoveCorePluginToServer(core_plugin_name, true);
                 }
             }
-            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.RELEASE)) {
+            if (BuildTasks.Contains(MpLedgerizerFlags.RELEASE)) {
                 foreach (string core_plugin_name in WorkingCorePlugins) {
                     MoveCorePluginToServer(core_plugin_name, false);
                 }
             }
 
-            MpConsole.WriteLine($"[REMOTE] Moving core plugins to dat DONE", false, true);
+            Console.WriteLine($"[REMOTE] Moving core plugins to dat DONE", false, true);
         }
         static void MoveCoresToDat_local() {
-            MpConsole.WriteLine($"[LOCAL] Moving core plugins to dat STARTED", true);
+            Console.WriteLine($"[LOCAL] Moving core plugins to dat STARTED", true);
             void DoLocalMove(bool is_debug) {
                 string root_pack_dir = GetPackagesDir(is_debug);
                 string proj_dat_dir =
@@ -1217,27 +1197,27 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 foreach (string core_plugin_name in WorkingCorePlugins) {
                     string core_plugin_zip_path = Path.Combine(root_pack_dir, $"{core_plugin_name}.zip");
                     if (!core_plugin_zip_path.IsFile()) {
-                        MpConsole.WriteLine($"Error! No package found for '{core_plugin_name}' at '{core_plugin_zip_path}'");
+                        Console.WriteLine($"Error! No package found for '{core_plugin_name}' at '{core_plugin_zip_path}'");
                         continue;
                     }
                     if (ReadPluginManifestFromProjDir(core_plugin_name) is not { } core_mf) {
-                        MpConsole.WriteLine($"Error could not find core manifest for '{core_plugin_name}'");
+                        Console.WriteLine($"Error could not find core manifest for '{core_plugin_name}'");
                         continue;
                     }
 
                     string target_dat_path = Path.Combine(proj_dat_dir, $"{core_mf.guid}.zip");
                     MpFileIo.CopyFileOrDirectory(core_plugin_zip_path, target_dat_path, forceOverwrite: true);
-                    MpConsole.WriteLine(target_dat_path);
+                    Console.WriteLine(target_dat_path);
                 }
             }
 
-            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DEBUG)) {
+            if (BuildTasks.Contains(MpLedgerizerFlags.DEBUG)) {
                 DoLocalMove(true);
             }
-            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.RELEASE)) {
+            if (BuildTasks.Contains(MpLedgerizerFlags.RELEASE)) {
                 DoLocalMove(false);
             }
-            MpConsole.WriteLine($"[LOCAL] Moving core plugins to dat DONE", false, true);
+            Console.WriteLine($"[LOCAL] Moving core plugins to dat DONE", false, true);
         }
         #endregion
 
@@ -1286,11 +1266,11 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             }
         }
         static void LocalizeManifests() {
-            MpConsole.WriteLine("Localize Manifest...STARTED", true);
+            Console.WriteLine("Localize Manifest...STARTED", true);
             foreach (string plugin_name in WorkingPluginNames) {
                 LocalizeManifest(plugin_name);
             }
-            MpConsole.WriteLine("Localize Manifest...DONE", false, true);
+            Console.WriteLine("Localize Manifest...DONE", false, true);
         }
         static void LocalizeManifest(string plugin_name) {
             // when plugin has Resources/Resources.resx, presume manifest is templated
@@ -1314,7 +1294,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             foreach (string lang_code in lang_codes.Where(x => !x.IsInvariant()).Select(x => x.Name)) {
                 Localizer.Program.LocalizeManifest(invariant_resource_path, inv_mf_path, lang_code, plugin_res_dir);
             }
-            MpConsole.WriteLine("", stampless: true);
+            Console.WriteLine("");
         }
         static void GenAllEmptyLocalizedResx() {
             var all_ref_resxs = GetAllNeutralResxPaths();
@@ -1334,7 +1314,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     //}
                     var lookup_to_write = cc == "en-US" ? resx_lookup : empty_lookup;
                     MpResxTools.WriteResxToPath(empty_localized_resx_path, lookup_to_write);
-                    MpConsole.WriteLine(empty_localized_resx_path);
+                    Console.WriteLine(empty_localized_resx_path);
                 }
             }
         }
@@ -1411,7 +1391,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             //}
 
             MpResxTools.WriteResxToPath(trans_resx_path, trans_resx_lookup);
-            MpConsole.WriteLine(trans_resx_path);
+            Console.WriteLine(trans_resx_path);
 
         }
         static async Task TranslateResxOneLinersAsync(string neutral_resx_path, string cc) {
@@ -1436,7 +1416,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 .ForEach(x => trans_resx_lookup[x.Key] = x.Value);
 
             MpResxTools.WriteResxToPath(trans_resx_path, trans_resx_lookup);
-            MpConsole.WriteLine(trans_resx_path);
+            Console.WriteLine(trans_resx_path);
 
             // get non-empty neutral single line keys that aren't html, invariant or have localized data
             var neutral_single_line_kvps =
@@ -1485,7 +1465,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             MpDebug.Assert(base_idx == neutral_single_line_kvps.Length, $"Base idx mismatch");
 
             MpResxTools.WriteResxToPath(trans_resx_path, trans_resx_lookup);
-            MpConsole.WriteLine(trans_resx_path);
+            Console.WriteLine(trans_resx_path);
 
         }
         static async Task<string[]> TranslateTextsAsync(string[] neutral_texts, string cc, int max_len = 5000) {
@@ -1564,7 +1544,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             var all_neu_resxs = GetAllNeutralResxPaths().First();
             var all_cultures_per_neu_lookup = MpLocalizationHelpers.FindCulturesInDirectory(Path.GetDirectoryName(all_neu_resxs)).ToList();
             var lang_groups = all_cultures_per_neu_lookup.Where(x => !x.Name.IsNullOrEmpty()).GroupBy(x => x.Name.SplitNoEmpty("-").First()).ToList();
-            MpConsole.WriteLine($"Languages: {lang_groups.Count} Dialects: {all_cultures_per_neu_lookup.Count}");
+            Console.WriteLine($"Languages: {lang_groups.Count} Dialects: {all_cultures_per_neu_lookup.Count}");
         }
 
         static bool VerifyConsitentCultures() {
@@ -1578,11 +1558,11 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 var missing_cultures = all_cultures.Where(x => neutral_resx_culture_lookup[neutral_resx_path].All(y => y.Name != x.Name)).ToList();
                 if (missing_cultures.Any()) {
                     success = false;
-                    MpConsole.WriteLine($"Culture Check FAILED: {neutral_resx_path}", true);
-                    MpConsole.WriteLine("Missing Cultures: ");
-                    missing_cultures.ForEach((x, idx) => MpConsole.WriteLine($"{x.Name}", false, idx == missing_cultures.Count - 1));
+                    Console.WriteLine($"Culture Check FAILED: {neutral_resx_path}", true);
+                    Console.WriteLine("Missing Cultures: ");
+                    missing_cultures.ForEach((x, idx) => Console.WriteLine($"{x.Name}", false, idx == missing_cultures.Count - 1));
                 } else {
-                    MpConsole.WriteLine($"Culture Check PASSED: {neutral_resx_path}", true, true);
+                    Console.WriteLine($"Culture Check PASSED: {neutral_resx_path}", true, true);
                 }
             }
             return success;
@@ -1591,7 +1571,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
         #region Index
         static void CreateCultureIndex(bool is_remote) {
-            MpConsole.WriteLine($"Creating {(is_remote ? "REMOTE" : "LOCAL")} Cultures...", true);
+            Console.WriteLine($"Creating {(is_remote ? "REMOTE" : "LOCAL")} Cultures...", true);
 
             List<string> found_cultures = [];
             // find all distinct cultures
@@ -1626,7 +1606,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                         culture_manifests.Add(culture_manifest);
                     }
                     catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Error deserializing {plugin_name} '{cc}'", ex);
+                        Console.WriteLine($"Error deserializing {plugin_name} '{cc}'", ex);
                     }
                 }
                 var culture_ledger = new MpManifestLedger() {
@@ -1639,10 +1619,10 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     MpLedgerConstants.LOCAL_CULTURES_DIR_URI.ToPathFromUri(),
                     culture_ledger_file_name);
                 MpFileIo.WriteTextToFile(culture_ledger_path, culture_ledger.SerializeObject(omitNulls: true).ToPrettyPrintJson());
-                MpConsole.WriteLine(culture_ledger_path);
+                Console.WriteLine(culture_ledger_path);
             }
 
-            MpConsole.WriteLine($"Creating {(is_remote ? "REMOTE" : "LOCAL")} index...", true);
+            Console.WriteLine($"Creating {(is_remote ? "REMOTE" : "LOCAL")} index...", true);
             // create index of all written cultures
             string ledger_index_file_name = is_remote ?
                 MpLedgerConstants.REMOTE_LEDGER_INDEX_NAME :
@@ -1651,7 +1631,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 MpLedgerConstants.LEDGER_PROJ_DIR,
                 ledger_index_file_name);
             MpFileIo.WriteTextToFile(ledger_index_path, found_cultures.SerializeObject().ToPrettyPrintJson());
-            MpConsole.WriteLine(ledger_index_path);
+            Console.WriteLine(ledger_index_path);
         }
 
         static MpManifestFormat GetLocalizedManifest(string plugin_name, string culture) {
@@ -1699,12 +1679,12 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 MpFileIo.WriteTextToFile(
                         output_path,
                         output_ledger.SerializeObject(true).ToPrettyPrintJson());
-                MpConsole.WriteLine($"{(is_remote ? "REMOTE" : "LOCAL")} ledger written to: {output_path}", true);
+                Console.WriteLine($"{(is_remote ? "REMOTE" : "LOCAL")} ledger written to: {output_path}", true);
             }
-            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DEBUG)) {
+            if (BuildTasks.Contains(MpLedgerizerFlags.DEBUG)) {
                 GenLedger(false);
             }
-            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.RELEASE)) {
+            if (BuildTasks.Contains(MpLedgerizerFlags.RELEASE)) {
                 GenLedger(true);
             }
         }
@@ -1743,10 +1723,10 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     args: args);
 
             if (exit_code != 0) {
-                MpConsole.WriteLine("");
-                MpConsole.WriteLine($"Error from '{plugin_name}' exit code '{exit_code}'");
-                MpConsole.WriteLine(proc_output);
-                MpConsole.WriteLine("");
+                Console.WriteLine("");
+                Console.WriteLine($"Error from '{plugin_name}' exit code '{exit_code}'");
+                Console.WriteLine(proc_output);
+                Console.WriteLine("");
                 return null;
             }
 
@@ -1788,18 +1768,18 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             }
             // cleanup published output
             MpFileIo.DeleteDirectory(publish_dir);
-            MpConsole.WriteLine($"{plugin_name} local [{BUILD_OS}-{config.ToUpper()}] DONE" + install_update_suffix);
+            Console.WriteLine($"{plugin_name} local [{BUILD_OS}-{config.ToUpper()}] DONE" + install_update_suffix);
 
             // return zip uri to use for local packageUrl
             return output_path.ToFileSystemUriFromPath();
         }
         static void PublishLocal() {
-            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.DEBUG)) {
+            if (BuildTasks.Contains(MpLedgerizerFlags.DEBUG)) {
                 foreach (var plugin_name in WorkingPluginNames) {
                     string local_package_uri = PackPlugin(plugin_name, false);
                 }
             }
-            if (LEDGERIZER_FLAGS.HasFlag(MpLedgerizerFlags.RELEASE)) {
+            if (BuildTasks.Contains(MpLedgerizerFlags.RELEASE)) {
                 foreach (var plugin_name in WorkingPluginNames) {
                     string local_package_uri = PackPlugin(plugin_name, true);
                 }
@@ -1820,7 +1800,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             string source_package_path = GetPluginPackageUri(plugin_name, true, false).ToPathFromUri();
             if (!source_package_path.IsFile()) {
                 // local package missing so pack local first
-                MpConsole.WriteLine($"Local package missing for {plugin_name}. Packing...");
+                Console.WriteLine($"Local package missing for {plugin_name}. Packing...");
                 string local_pack_path_uri = PackPlugin(plugin_name, true);
                 MpDebug.Assert(local_pack_path_uri.ToPathFromUri() == source_package_path, $"Remote publish error package path mismatch. Expected: '{source_package_path}' Found: '{local_pack_path_uri}'");
             }
@@ -1832,7 +1812,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 MoveCorePluginToServer(plugin_name, false);
                 return GetPluginPackageUri(plugin_name, false, false);
             }
-            MpConsole.WriteLine($"Pushing {target_package_file_name} for {plugin_name} to github...");
+            Console.WriteLine($"Pushing {target_package_file_name} for {plugin_name} to github...");
             MpFileIo.CopyFileOrDirectory(source_package_path, target_package_path, forceOverwrite: true);
 
             // see this about gh release https://cli.github.com/manual/gh_release_create
@@ -1848,7 +1828,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     // delete version, call again
                     if (forced_new_version != null) {
                         // should only occur once 
-                        MpConsole.WriteLine($"Uncaught error after delete for '{proj_dir}' skipping upload");
+                        Console.WriteLine($"Uncaught error after delete for '{proj_dir}' skipping upload");
                         MpFileIo.DeleteFile(target_package_path);
                         return null;
                     }
@@ -1858,7 +1838,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                             dir: proj_dir,
                             args: $"release delete {target_tag_name} --yes --cleanup-tag");
                     if (del_exit_code != 0) {
-                        MpConsole.WriteLine($"Error delete failed exit code {del_exit_code}. Output: {del_proc_output}");
+                        Console.WriteLine($"Error delete failed exit code {del_exit_code}. Output: {del_proc_output}");
                         MpFileIo.DeleteFile(target_package_path);
                         return null;
                     }
@@ -1866,7 +1846,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     // increment, call again
                     if (working_version.SplitNoEmpty(".") is not { } verParts ||
                         !int.TryParse(verParts.Last(), out int minor_rev)) {
-                        MpConsole.WriteLine($"Error bad version for plugin at '{proj_dir}'");
+                        Console.WriteLine($"Error bad version for plugin at '{proj_dir}'");
                         MpFileIo.DeleteFile(target_package_path);
                         return null;
                     }
@@ -1886,20 +1866,20 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     manifest_json = manifest_json.Replace(old_ver_json, new_ver_json);
                     MpFileIo.WriteTextToFile(Path.Combine(proj_dir, ManifestFileName), manifest_json);
                 } else {
-                    MpConsole.WriteLine($"Error! Could not find old ver string '{old_ver_json}' trying to replace with '{new_ver_json}' in plugin '{proj_dir}'");
+                    Console.WriteLine($"Error! Could not find old ver string '{old_ver_json}' trying to replace with '{new_ver_json}' in plugin '{proj_dir}'");
                 }
             }
 
             if (exit_code != 0) {
-                MpConsole.WriteLine($"Error from '{plugin_name}' exit code '{exit_code}'", true);
-                MpConsole.WriteLine(proc_output, false, true);
+                Console.WriteLine($"Error from '{plugin_name}' exit code '{exit_code}'", true);
+                Console.WriteLine(proc_output, false, true);
                 MpFileIo.DeleteFile(target_package_path);
                 return null;
             }
 
             MpFileIo.DeleteFile(target_package_path);
             string github_release_uri = GetPluginPackageUri(plugin_name, false, false);
-            MpConsole.WriteLine($"{plugin_name} remote DONE");
+            Console.WriteLine($"{plugin_name} remote DONE");
             return github_release_uri;
         }
         #endregion
@@ -1929,7 +1909,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     if(GetLocalizedManifest(mf.title,"en-US") is { } neu_mf) {
                         msg_mf = neu_mf;
                     }
-                    MpConsole.WriteLine($"{msg_mf} {success.ToTestResultLabel()} info check resp: {resp}");
+                    Console.WriteLine($"{msg_mf} {success.ToTestResultLabel()} info check resp: {resp}");
                 }
                 is_done = true;
             });
@@ -1943,7 +1923,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
         #region Nuget Cache
         private static void MoveNugetCache() {
-            MpConsole.WriteLine($"Moving Nuget Cache...");
+            Console.WriteLine($"Moving Nuget Cache...");
             var source_dirs =
                 Directory.GetDirectories(UbuntuSecrets["sourceDir"].ToString())
                 .SelectMany(x => Directory.GetDirectories(x).Where(y => y.Contains("9999.0.0-localbuild")));
@@ -1956,9 +1936,9 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                 sb.AppendLine($"rmdir {target_dir}");
                 sb.AppendLine($"put -r {sd} {target_dir}");
             }
-            MpConsole.WriteLine($"Output:");
-            MpConsole.WriteLine(sb.ToString());
-            MpConsole.WriteLine($"DONE");
+            Console.WriteLine($"Output:");
+            Console.WriteLine(sb.ToString());
+            Console.WriteLine($"DONE");
         }
         #endregion
 
