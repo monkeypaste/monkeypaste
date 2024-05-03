@@ -130,7 +130,6 @@
                 </Image.RenderTransform>
             </Image>
             <Grid Grid.Column="1"
-                  x:DataType="pcl:MpIProgressLoaderViewModel"
                   DataContext="{Binding ProgressLoader}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"

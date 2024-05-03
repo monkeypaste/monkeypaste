@@ -189,7 +189,6 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate DataType="local:MpAvAppViewModel">
                                                 <Grid Classes="oleFormatContainer"
-                                                      x:DataType="local:MpAvAppOleFormatInfoCollectionViewModel"
                                                       Margin="3"
                                                       DataContext="{Binding OleFormatInfos}">
 
@@ -284,7 +283,6 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate DataType="local:MpAvAppViewModel">
                                                 <Grid Classes="oleFormatContainer"
-                                                      x:DataType="local:MpAvAppOleFormatInfoCollectionViewModel"
                                                       Margin="3"
                                                       DataContext="{Binding OleFormatInfos}">
 
@@ -477,8 +475,7 @@
                                         </DataGridTemplateColumn.HeaderTemplate>
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Grid DataContext="{Binding CopyShortcutViewModel}"
-                                                      x:DataType="local:MpAvAppClipboardShortcutViewModel">
+                                                <Grid DataContext="{Binding CopyShortcutViewModel}">
                                                     <local:MpAvShortcutView RecordCommand="{Binding RecordShortcutCommand}" />
                                                 </Grid>
                                             </DataTemplate>
@@ -499,8 +496,7 @@
                                         </DataGridTemplateColumn.HeaderTemplate>
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Grid DataContext="{Binding PasteShortcutViewModel}"
-                                                      x:DataType="local:MpAvAppClipboardShortcutViewModel">
+                                                <Grid DataContext="{Binding PasteShortcutViewModel}">
 
                                                     <local:MpAvShortcutView RecordCommand="{Binding RecordShortcutCommand}" />
                                                 </Grid>

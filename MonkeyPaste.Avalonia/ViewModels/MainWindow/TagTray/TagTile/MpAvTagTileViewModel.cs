@@ -48,6 +48,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIMenuItemViewModel Implementation
 
+        public string IconBorderHexColor =>
+            TagHexColor.IsHexStringBright() ? MpSystemColors.black : MpSystemColors.White;
+
         ICommand MpAvIMenuItemViewModel.Command => ToggleLinkToSelectedClipTileCommand;
         object MpAvIMenuItemViewModel.CommandParameter => null;
         string MpAvIMenuItemViewModel.Header => TagName;

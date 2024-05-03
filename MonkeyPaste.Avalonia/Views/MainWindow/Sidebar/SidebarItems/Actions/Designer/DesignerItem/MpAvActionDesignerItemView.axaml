@@ -101,16 +101,14 @@
                Selector="Border#DesignerIconContainer">
             <Setter Property="Child">
                 <Setter.Value>
-                    <Template>
-                        <Grid>
-                            <Image IsVisible="{Binding !IsPerformingAction}" />
-                            <local:MpAvBusySpinnerView Width="20"
-                                                       Height="20"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       IsVisible="{Binding IsPerformingAction}" />
-                        </Grid>
-                    </Template>
+                    <Grid>
+                        <Image IsVisible="{Binding !IsPerformingAction}" />
+                        <local:MpAvBusySpinnerView Width="20"
+                                                   Height="20"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   IsVisible="{Binding IsPerformingAction}" />
+                    </Grid>
                 </Setter.Value>
             </Setter>
         </Style>

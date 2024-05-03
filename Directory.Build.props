@@ -18,7 +18,7 @@
     <Nullable>disable</Nullable>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
-    <NoWarn>$(NoWarn);NU1701;NU1702;IDE1006;CA1401;</NoWarn>
+    <NoWarn>$(NoWarn);NU1701;NU1702;IDE1006;CA1401;XA0101;</NoWarn>
     <WarningsAsErrors>CS4014;</WarningsAsErrors>
     <!-- This removes that AMD64 processor architecture warning -->
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
@@ -101,6 +101,7 @@
     <PlatformShortName>uwp</PlatformShortName> 
     <StartupOutputType>WinExe</StartupOutputType>
     <BuildScriptsDir>$(BuildScriptsRootDir)\windows</BuildScriptsDir>
+    <IsWindowed>false</IsWindowed>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(UseWap) == 'True' And $(BuildOs) == 'WINDOWS'">
@@ -163,6 +164,7 @@
     <AndroidPackageName>com.Monkey.MonkeyPaste</AndroidPackageName>
     <AndroidInternalStorageDir>/data/user/0/$(AndroidPackageName)/files</AndroidInternalStorageDir>
     <IsMobile>true</IsMobile>
+    <UseSugarWv>true</UseSugarWv>
     <PlatformShortName>android</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\android</BuildScriptsDir>
   </PropertyGroup>
@@ -194,6 +196,8 @@
     <EditorSourceDir>$(UiProjectDir)\Resources\Editor</EditorSourceDir>
     <SoundsSourceDir>$(UiProjectDir)\Assets\Sounds</SoundsSourceDir>
     <TermsDir>$(UiProjectDir)\Resources\Legal\terms</TermsDir>
+    <EnumsDir>$(UiProjectDir)\Resources\Localization\Enums</EnumsDir>
+    <UiStringsDir>$(UiProjectDir)\Resources\Localization\UiStrings</UiStringsDir>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -206,6 +210,14 @@
   
   <PropertyGroup Condition="$(IsPublicBuild) == 'True'">
     <DefineConstants>$(DefineConstants);PUBLIC_BUILD;</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(IsMobile) == 'True'">
+    <!--<IsWindowed>true</IsWindowed>-->
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(IsWindowed) == 'True'">
+    <DefineConstants>$(DefineConstants);WINDOWED;</DefineConstants>
   </PropertyGroup>
     
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">

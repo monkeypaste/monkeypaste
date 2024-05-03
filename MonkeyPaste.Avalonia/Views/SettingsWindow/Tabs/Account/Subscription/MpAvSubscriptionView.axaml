@@ -7,8 +7,6 @@
                        d:DesignHeight="750"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
-                       xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
-                       xmlns:pcl="using:MonkeyPaste"
                        x:TypeArguments="local:MpAvSubscriptionPurchaseViewModel"
                        x:DataType="local:MpAvSubscriptionPurchaseViewModel"
                        x:CompileBindings="True"
@@ -520,8 +518,7 @@
                     <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
                     <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
                 </Button.Resources>
-                <DockPanel DataContext="{Binding SelectedItem}"
-                           x:DataType="local:MpAvSubscriptionItemViewModel">
+                <DockPanel DataContext="{Binding SelectedItem}">
                     <Image DockPanel.Dock="Left"
                            Width="30"
                            Height="30"

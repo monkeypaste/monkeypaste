@@ -337,7 +337,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpRect MainWindowOpenedScreenRect {
             get {
-#if DESKTOP
+#if WINDOWED
+                return MpAvRootWindow.Instance.Bounds.ToPortableRect();
+#elif DESKTOP
                 switch (MainWindowOrientationType) {
                     case MpMainWindowOrientationType.Bottom:
                         return new MpRect(

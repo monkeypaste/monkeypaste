@@ -57,7 +57,6 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
                     <ContentControl x:Name="SelectedSidebarContentControl"
-                                    x:DataType="pcl:MpISidebarItemViewModel"
                                     DataContext="{Binding LastSelectedItem}"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"

@@ -2634,7 +2634,7 @@ namespace MonkeyPaste.Avalonia {
                         continue;
                     }
                     was_drag_in_progress = true;
-                    /// drag left this tile
+                    // drag left this tile
                     MpConsole.WriteLine($"Clearing drop on '{ctvm}'");
                     //ctwv.RelayDndMsg(MpDragDropOpType.dragleave, null, MpAvDoDragDropWrapper.DragDataObject, gmp);
                     ctvm.IsDropOverTile = false;

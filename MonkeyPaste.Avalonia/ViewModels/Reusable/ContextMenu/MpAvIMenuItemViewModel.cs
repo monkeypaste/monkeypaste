@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
         ColorPaletteItem,
     }
 
-    public interface MpAvIMenuItemViewModel : MpIViewModel {
+    public interface MpAvIMenuItemViewModel : MpIHoverableViewModel, MpIViewModel {
         ICommand Command { get; }
         object CommandParameter { get; }
         string Header { get; }
@@ -23,6 +23,7 @@ namespace MonkeyPaste.Avalonia {
         bool? IsChecked { get; }
         bool IsThreeState { get; }
         bool IsSubMenuOpen { get; set; }
+        string IconBorderHexColor { get; }
         MpMenuItemType MenuItemType { get; }
         IEnumerable<MpAvIMenuItemViewModel> SubItems { get; }
     }

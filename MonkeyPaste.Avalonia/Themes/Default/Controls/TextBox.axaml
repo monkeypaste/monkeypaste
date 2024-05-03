@@ -1,8 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="using:MonkeyPaste.Avalonia"
-        xmlns:pcl="using:MoneyPaste">
+        xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
         <Thickness x:Key="TextControlThemePadding">0,0,0,0</Thickness>
         <Thickness x:Key="TextControlBorderThemeThicknessFocused">0,0,0,0</Thickness>
@@ -29,11 +28,11 @@
     </Style>
     <Style Selector=":is(TextBox)[IsReadOnly=false]:not(.fontFamilyOverride)">
         <Setter Property="FontFamily"
-                Value="{Binding Source={DynamicResource DefaultEditableFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
+                Value="{Binding DefaultEditableFontFamilyFont, Source={x:Static local:MpAvThemeViewModel.Instance}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
     </Style>
     <Style Selector=":is(TextBox)[IsReadOnly=true]:not(.fontFamilyOverride)">
         <Setter Property="FontFamily"
-                Value="{Binding Source={DynamicResource DefaultReadOnlyFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
+                Value="{Binding DefaultReadOnlyFontFamilyFont, Source={x:Static local:MpAvThemeViewModel.Instance}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
     </Style>
     <Style Selector=":is(TextBox):not(.custom), :is(TextBox):not(.custom):focus">
         <Setter Property="Background"
