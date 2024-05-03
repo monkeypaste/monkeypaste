@@ -7,8 +7,10 @@ using System.IO;
 using Path = System.IO.Path;
 
 namespace MonkeyPaste.Avalonia.Android {
-    public class MpAvAdIconBuilder : MpAvIconBuildBase {
-        public override string GetPathIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
+    public class MpAvAdIconBuilder : MpIPathToPlatformIcon {
+        public string GetPathIconBase64(string path, MpIconSize iconSize = MpIconSize.MediumIcon32) =>
+           GetPathIconBase64(path, IntPtr.Zero, iconSize);
+        public string GetPathIconBase64(string appPath, IntPtr handle, MpIconSize iconSize = MpIconSize.MediumIcon32) {
             try {
                 string package_name = Path.GetFileName(appPath);
                 using (Drawable d =

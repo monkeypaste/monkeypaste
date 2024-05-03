@@ -23,7 +23,6 @@ namespace MonkeyPaste.Avalonia.Android {
             }
         }
         public MpAvAdScreenInfo(Activity activity) {
-            Name = "Main Display";
             Init(activity);
 
         }

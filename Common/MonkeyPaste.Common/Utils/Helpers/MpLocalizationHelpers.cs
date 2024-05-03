@@ -30,6 +30,9 @@ namespace MonkeyPaste.Common {
         }
         public static IEnumerable<CultureInfo> FindCulturesInDirectory(string dir, string file_name_filter = default, string file_ext_filter = default) {
             List<CultureInfo> cl = new List<CultureInfo>();
+            if(!dir.IsDirectory()) {
+                return cl;
+            }
             var fil = new DirectoryInfo(dir).EnumerateFiles();
 
             foreach (var fi in fil) {

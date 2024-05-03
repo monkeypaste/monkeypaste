@@ -8,6 +8,8 @@ using Android.Webkit;
 using Android.Widget;
 using Avalonia;
 using Avalonia.Android;
+using Avalonia.ReactiveUI;
+using Avalonia.WebView.Android;
 using Orientation = Android.Content.Res.Orientation;
 
 namespace MonkeyPaste.Avalonia.Android {
@@ -29,8 +31,9 @@ namespace MonkeyPaste.Avalonia.Android {
             _instance = this;
 
             return base.CustomizeAppBuilder(builder)
-                 //.WithInterFont()
-                 //.UseReactiveUI()
+                 .WithInterFont()
+                 .UseReactiveUI()
+                 .UseAndroidWebView()
                  .AfterSetup(_ => {
                      WebView.SetWebContentsDebuggingEnabled(true);
                      new MpAvAdWrapper().CreateDeviceInstance(this);
@@ -98,13 +101,13 @@ namespace MonkeyPaste.Avalonia.Android {
 
                 Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
 
-                Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(SystemUiFlags.Fullscreen |
-                                                                       SystemUiFlags.HideNavigation |
-                                                                       SystemUiFlags.Immersive |
-                                                                       SystemUiFlags.ImmersiveSticky |
-                                                                       SystemUiFlags.LayoutHideNavigation |
-                                                                       SystemUiFlags.LayoutStable |
-                                                                       SystemUiFlags.LowProfile);
+                Window.DecorView.SystemUiFlags = SystemUiFlags.Fullscreen |
+                                                SystemUiFlags.HideNavigation |
+                                                SystemUiFlags.Immersive |
+                                                SystemUiFlags.ImmersiveSticky |
+                                                SystemUiFlags.LayoutHideNavigation |
+                                                SystemUiFlags.LayoutStable |
+                                                SystemUiFlags.LowProfile;
             }
         }
 
