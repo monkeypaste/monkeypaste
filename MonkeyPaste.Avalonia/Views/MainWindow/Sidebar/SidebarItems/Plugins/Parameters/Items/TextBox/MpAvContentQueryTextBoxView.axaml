@@ -127,6 +127,7 @@
                                  Text="{Binding ContentQuery}"
                                  Foreground="{DynamicResource ThemeAccent1Color}"
                                  FontSize="{Binding FontSize, ElementName=ContentQueryTextBox}"
+                                 IsVisible="{Binding IsReadOnly}"
                                  HorizontalAlignment="Left"
                                  VerticalAlignment="Stretch">
                 <SelectableTextBlock.IsVisible>
@@ -169,6 +170,7 @@
             <Button x:Name="FilterButton"
                     Grid.Column="2"
                     Classes="defaultButton noBg noHoverBg noBorder outerButton"
+                    IsVisible="{Binding IsFieldButtonVisible}"
                     Command="{Binding ShowQueryMenuCommand}"
                     CommandParameter="{Binding $self}">
                 <Button.IsVisible>

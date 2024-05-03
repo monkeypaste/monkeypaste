@@ -337,9 +337,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpRect MainWindowOpenedScreenRect {
             get {
-#if WINDOWED
-                return MpAvRootWindow.Instance.Bounds.ToPortableRect();
-#elif DESKTOP
+#if DESKTOP
                 switch (MainWindowOrientationType) {
                     case MpMainWindowOrientationType.Bottom:
                         return new MpRect(
@@ -1384,8 +1382,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpMainWindowHideType.Deactivate:
                     return false;
                 case MpMainWindowHideType.Click:
-                    MpPoint gmp = MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation;
-                    if (!MpAvShortcutCollectionViewModel.Instance.IsGlobalHooksPaused) {
+                    if (!MpAvShortcutCollectionViewModel.Instance.IsGlobalHooksPaused &&
+                        MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation is not { } gmp) {
                         return false;
                     }
                     bool isInputFocused =

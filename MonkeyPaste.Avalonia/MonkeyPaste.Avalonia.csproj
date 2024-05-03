@@ -28,20 +28,16 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <AndroidJavaSource Remove="Assets\lib\**" />
     <AndroidJavaSource Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <AndroidJavaSource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
-    <AndroidLibrary Remove="Assets\lib\**" />
     <AndroidLibrary Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <AndroidLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
-    <AndroidNativeLibrary Remove="Assets\lib\**" />
     <AndroidNativeLibrary Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <AndroidNativeLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AvaloniaXaml Remove="Assets\Images\MpRichTextBox\**" />
     <AvaloniaXaml Remove="Assets\Images\resize_backup2\**" />
     <AvaloniaXaml Remove="Assets\Images\resize_backup\**" />
     <AvaloniaXaml Remove="Assets\Images\Tests\**" />
-    <AvaloniaXaml Remove="Assets\lib\**" />
     <AvaloniaXaml Remove="AttachedProperties\DragDrop\**" />
     <AvaloniaXaml Remove="Behaviors\DragDrop\**" />
     <AvaloniaXaml Remove="Behaviors\_Base\**" />
@@ -82,7 +78,6 @@
     <Compile Remove="Assets\Images\resize_backup2\**" />
     <Compile Remove="Assets\Images\resize_backup\**" />
     <Compile Remove="Assets\Images\Tests\**" />
-    <Compile Remove="Assets\lib\**" />
     <Compile Remove="AttachedProperties\DragDrop\**" />
     <Compile Remove="Behaviors\DragDrop\**" />
     <Compile Remove="Behaviors\_Base\**" />
@@ -124,7 +119,6 @@
     <EmbeddedResource Remove="Assets\Images\resize_backup2\**" />
     <EmbeddedResource Remove="Assets\Images\resize_backup\**" />
     <EmbeddedResource Remove="Assets\Images\Tests\**" />
-    <EmbeddedResource Remove="Assets\lib\**" />
     <EmbeddedResource Remove="AttachedProperties\DragDrop\**" />
     <EmbeddedResource Remove="Behaviors\DragDrop\**" />
     <EmbeddedResource Remove="Behaviors\_Base\**" />
@@ -162,14 +156,12 @@
     <EmbeddedResource Remove="Views\Reusable\ContextMenu\Selector\**" />
     <EmbeddedResource Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <EmbeddedResource Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
-    <JavaSourceJar Remove="Assets\lib\**" />
     <JavaSourceJar Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <JavaSourceJar Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <None Remove="Assets\Images\MpRichTextBox\**" />
     <None Remove="Assets\Images\resize_backup2\**" />
     <None Remove="Assets\Images\resize_backup\**" />
     <None Remove="Assets\Images\Tests\**" />
-    <None Remove="Assets\lib\**" />
     <None Remove="AttachedProperties\DragDrop\**" />
     <None Remove="Behaviors\DragDrop\**" />
     <None Remove="Behaviors\_Base\**" />
@@ -242,10 +234,8 @@
     <Page Remove="Views\Reusable\ContextMenu\Selector\**" />
     <Page Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <Page Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
-    <ProguardConfiguration Remove="Assets\lib\**" />
     <ProguardConfiguration Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <ProguardConfiguration Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
-    <TransformFile Remove="Assets\lib\**" />
     <TransformFile Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <TransformFile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidAsset Remove="Assets\Images\burlap.png" />
@@ -2140,8 +2130,6 @@
     <Folder Include="Resources\Legal\"/>-->
     
     <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="Resources\Localization\UiStrings\**" LinkBase="$(MainTargetDir)\Resources\Localization" CopyToOutputDirectory="PreserveNewest" Condition="'$(BuildOs)' == 'ANDROID'"/>
-    <Content Include="Resources\Localization\Enums\**" LinkBase="$(MainTargetDir)\Resources\Localization" CopyToOutputDirectory="PreserveNewest" Condition="'$(BuildOs)' == 'ANDROID'"/>
         
     <Content Include="Resources\Legal\credits.$(PlatformShortName).html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2439,7 +2427,6 @@
   </ItemGroup>
   
   <ItemGroup>    
-    <AndroidAsset Remove="Assets\lib\**" />    
     <Compile Remove="Utils\AvWrapper\Defnitions\Share\**" />    
     <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.shared.cs" />    
     <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.$(PlatformShortName).cs" />    
@@ -2570,9 +2557,5 @@
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(BuildOs)' == 'ANDROID'">
-    
   </ItemGroup>
 </Project>

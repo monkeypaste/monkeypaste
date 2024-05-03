@@ -283,19 +283,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        int LastPopulatedHostId { get; set; }
-
-        private bool _isPopulating;
-        public bool IsPopulating {
-            get {
-                bool was_populating = _isPopulating;
-                _isPopulating = CopyItemId != 0 && CopyItemId != LastPopulatedHostId;
-                if(was_populating != _isPopulating) {
-                    OnPropertyChanged(nameof(IsPopulating));
-                }
-                return _isPopulating;
-            }
-        }
         public bool IsPlainTextView { get; set; } = false;
         public bool DoShake { get; set; }
         public bool IsSortDescending { get; set; } = true;
@@ -380,13 +367,6 @@ namespace MonkeyPaste.Avalonia {
                 Parent.CopyItemIconId = ciid_icon_id;
 
             }
-            if(Transactions.Any()) {
-                LastPopulatedHostId = copyItemId;
-            } else {
-                // must be a new tile and waiting for gather sources to report back
-            }
-            
-            OnPropertyChanged(nameof(IsPopulating)); // triggers timer for sources to be gathered or fallback after timeout
 
             IsBusy = false;
         }
@@ -491,25 +471,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsPlainTextView):
                     Transactions.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlainTextView)));
-                    break;
-                case nameof(IsPopulating):
-                    if(IsPopulating) {
-                        Dispatcher.UIThread.Post(async () => {
-                            var sw = Stopwatch.StartNew();
-                            while (true) {
-                                if(!IsPopulating) {
-                                    return;
-                                }
-                                if(sw.Elapsed < TimeSpan.FromSeconds(7)) {
-                                    await Task.Delay(100);
-                                    continue;
-                                }
-                                break;
-                            }
-                            LastPopulatedHostId = CopyItemId;
-                            OnPropertyChanged(nameof(IsPopulating));
-                        });
-                    }
                     break;
             }
         }

@@ -4,7 +4,8 @@ using System.Linq;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvAppOleMenuViewModelBase : MpAvViewModelBase, MpAvIMenuItemViewModel {
+    public abstract class MpAvAppOleMenuViewModelBase : MpAvViewModelBase,
+        MpAvIMenuItemViewModel {
         #region Interfaces
 
         #region MpAvIMenuItemViewModel Implementation
@@ -35,11 +36,6 @@ namespace MonkeyPaste.Avalonia {
                 return result;
             }
         }
-
-        string MpAvIMenuItemViewModel.IconBorderHexColor =>
-            MpSystemColors.Transparent;
-        
-        public bool IsHovering { get; set; }
 
 
         ICommand MpAvIMenuItemViewModel.Command =>

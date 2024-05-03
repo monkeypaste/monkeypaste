@@ -3,6 +3,7 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:beh="clr-namespace:Avalonia.Xaml.Interactivity"
+                       xmlns:sys="clr-namespace:Sys"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:avwv="using:AvaloniaWebView"
                        xmlns:pcl="using:MonkeyPaste"

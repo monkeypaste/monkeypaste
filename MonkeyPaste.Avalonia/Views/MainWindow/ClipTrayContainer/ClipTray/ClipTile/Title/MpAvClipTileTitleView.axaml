@@ -60,16 +60,6 @@
                 </Animation>
             </Style.Animations>
         </Style>
-
-        <!--  ICON BUSY VISIBILITY  -->
-        <Style Selector="local|MpAvBusySpinnerView#TransBusySpinner">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="local|MpAvBusySpinnerView#TransBusySpinner.trans-populating, local|MpAvBusySpinnerView#TransBusySpinner.trans-busy">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TitleContainerGrid"
           ColumnDefinitions="0.7*,0.3*">
@@ -256,16 +246,15 @@
                        VerticalAlignment="Stretch" />
 
                 <local:MpAvBusySpinnerView x:Name="TransBusySpinner"
-                                           Classes="square"
-                                           Classes.trans-populating="{Binding TransactionCollectionViewModel.IsPopulating}"
                                            Width="{Binding $parent.Width}"
-                                           Height="{Binding $parent.Height}">
-                    <Classes.trans-busy>
+                                           Height="{Binding $parent.Height}"
+                                           Classes="square">
+                    <local:MpAvBusySpinnerView.IsVisible>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="!IsBusy" />
                             <Binding Path="TransactionCollectionViewModel.IsBusy" />
                         </MultiBinding>
-                    </Classes.trans-busy>
+                    </local:MpAvBusySpinnerView.IsVisible>
                 </local:MpAvBusySpinnerView>
             </Grid>
         </Button>

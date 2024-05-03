@@ -3,7 +3,6 @@
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -189,16 +188,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region View Models
-
-        public override ObservableCollection<MpAvParameterViewModelBase> Items {
-            get => base.Items;
-            set => base.Items = value;
-        }
-
-        public override MpAvParameterViewModelBase SelectedItem {
-            get => base.SelectedItem;
-            set => base.SelectedItem = value;
-        }
 
         public Dictionary<string, string> ParamLookup =>
             Items.ToDictionary(x => x.ParamId, x => x.CurrentValue);

@@ -295,6 +295,7 @@
 
             <local:MpAvPluginDetailView x:Name="SelectedPluginOuterContainer"
                                         DataContext="{Binding SelectedItem}"
+                                        x:DataType="local:MpAvPluginItemViewModel"
                                         CornerRadius="5">
                 <local:MpAvPluginDetailView.Background>
                     <SolidColorBrush Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="0.25" />
@@ -315,6 +316,7 @@
                                    Grid.Column="2"
                                    Width="30"
                                    Height="30"
+                                   IsVisible="{Binding IsSelectedBusy}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center">
             <local:MpAvBusySpinnerView.IsVisible>

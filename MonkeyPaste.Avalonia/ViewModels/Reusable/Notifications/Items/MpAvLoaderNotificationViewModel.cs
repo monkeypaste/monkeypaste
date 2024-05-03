@@ -100,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return BeginShow();
         }
-#endregion
+        #endregion
 
         #region Private Methods
 

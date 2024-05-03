@@ -114,10 +114,6 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvPrefViewModel.Instance == null) {
                 return;
             }
-
-#if WINDOWED
-            MpAvRootWindow.Instance.Show();
-#endif
             IsInitialStartup = !MpAvPrefViewModel.Instance.IsWelcomeComplete;
             MpAvPrefViewModel.Instance.StartupDateTime = startup_datetime;
 

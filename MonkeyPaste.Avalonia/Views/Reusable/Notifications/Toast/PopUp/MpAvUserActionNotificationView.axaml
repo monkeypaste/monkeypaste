@@ -241,9 +241,9 @@
                                 <DataTemplate x:Key="ParameterCollectionTemplate"
                                               x:DataType="local:MpAvPopUpNotificationViewModel">
                                     <Border DataContext="{Binding Body}"
-                                            MinWidth="250">
+                                            MinWidth="250"
+                                            x:DataType="local:MpAvAnalyticItemPresetViewModel">
                                         <ListBox x:Name="ExecuteParameterListBox"
-                                                 x:DataType="local:MpAvAnalyticItemPresetViewModel"
                                                  Classes="paramHost"
                                                  Grid.Row="1"
                                                  Padding="0"

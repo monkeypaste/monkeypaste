@@ -57,11 +57,8 @@
     <PackageReference Include="GtkSharp" Version="3.24.24.95" />
     <PackageReference Include="X11" Version="1.0.6" />
     <Compile Include="Utils\Input\Platform\X11\Gtk\GtkHelper.cs" />
-    <Compile Include="Utils\Input\Platform\X11\Gtk\GtkApi.cs" />    
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(BuildOs)' != 'LINUX'">
-    <Compile Remove="Utils\Input\Platform\X11\*.*" />
+    <Compile Include="Utils\Input\Platform\X11\Gtk\GtkApi.cs" />
+    
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
@@ -69,10 +66,6 @@
     <Compile Remove="Utils\Input\Platform\X11\*.*" />
     <Compile Remove="Utils\Input\Platform\Win32\*.*" />
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(BuildOs)' != 'MAC'">
-    <Compile Remove="Utils\Input\Platform\MacOs\*.*" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">

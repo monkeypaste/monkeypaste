@@ -1,9 +1,5 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Media;
+﻿using Avalonia.Controls;
 using PropertyChanged;
-using ReactiveUI;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -29,8 +25,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvRootWindow() {
+
             Content = new Canvas();
-            SystemDecorations = SystemDecorations.Full;
         }
         #endregion
 
@@ -39,23 +35,6 @@ namespace MonkeyPaste.Avalonia {
             if(ContentCanvas.Children.Contains(cw)) {
                 return;
             }
-
-            cw.Bind(
-                Canvas.LeftProperty,
-                new Binding() {
-                    Source = cw,
-                    Path = nameof(cw.CanvasX),
-                    Mode = BindingMode.OneWay
-                });
-            
-            cw.Bind(
-                Canvas.TopProperty,
-                new Binding() {
-                    Source = cw,
-                    Path = nameof(cw.CanvasY),
-                    Mode = BindingMode.OneWay
-                });
-
             ContentCanvas.Children.Add(cw);
         }
         

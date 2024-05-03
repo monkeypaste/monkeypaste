@@ -41,7 +41,7 @@
         </Style>
         <Style Selector="Button#ResetOrDeleteButton.canDelete Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=force|ThemeInteractiveColor}" />
+                    Value="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}, ConverterParameter=force|ThemeInteractiveColor}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <local:MpAvClipBorder Classes="filterDataGridContainer">

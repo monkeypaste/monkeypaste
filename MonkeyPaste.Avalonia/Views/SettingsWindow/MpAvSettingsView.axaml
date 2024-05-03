@@ -489,6 +489,7 @@
             </ScrollViewer.Transitions>
             <TransitioningContentControl x:Name="SettingsTransitioningContentControl"
                                          Margin="10,5,20,5"
+                                         DataContext="{Binding}"
                                          Content="{Binding SelectedTabIdx}">
                 <TransitioningContentControl.PageTransition>
                     <CrossFade Duration="0:00:00.500" />

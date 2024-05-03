@@ -1,8 +1,5 @@
-﻿using System.Text.Json.Serialization;
-
-namespace MonkeyPaste {
+﻿namespace MonkeyPaste {
     public interface MpIAsyncObject {
-        [JsonIgnore]
         bool IsBusy { get; }
     }
     public interface MpIPassiveAsyncObject {

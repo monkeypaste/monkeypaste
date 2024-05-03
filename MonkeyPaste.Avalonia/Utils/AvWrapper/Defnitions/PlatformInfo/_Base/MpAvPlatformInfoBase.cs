@@ -267,10 +267,6 @@ namespace MonkeyPaste.Avalonia {
                 return Path.Combine(ExecutingDir, "Resources", "Legal", "terms.html");
             }
         }
-        public virtual string EnumsPath =>
-            Path.Combine(ExecutingDir, "Resources", "Localization", "Enums", "EnumUiStrings.resx");
-        public virtual string UiStringsPath =>
-            Path.Combine(ExecutingDir, "Resources", "Localization", "UiStrings", "UiStrings.resx");
 
         public virtual string CreditsPath {
             get {

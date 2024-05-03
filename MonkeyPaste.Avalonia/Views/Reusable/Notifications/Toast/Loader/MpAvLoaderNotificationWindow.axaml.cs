@@ -1,8 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-
 using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
@@ -12,6 +10,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvLoaderNotificationWindow(MpAvWindow owner = default) : base(owner) {
             InitializeComponent();
         }
+
         protected override void OnLoaded(RoutedEventArgs e) {
             base.OnLoaded(e);
 
@@ -23,8 +22,6 @@ namespace MonkeyPaste.Avalonia {
                 await lnvm.ProgressLoader.FinishLoaderAsync();
             });
         }
-
-
     }
 }
 

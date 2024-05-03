@@ -44,10 +44,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIMenuItemViewModel Implementation
 
-        string MpAvIMenuItemViewModel.IconBorderHexColor =>
-            MpSystemColors.Transparent;
-
-
         ICommand MpAvIMenuItemViewModel.Command => null;
         object MpAvIMenuItemViewModel.CommandParameter => null;
         string MpAvIMenuItemViewModel.Header => UiStrings.ClipTileTagContextMenuLabel;

@@ -76,12 +76,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public static bool USE_LOADERS =>
-#if ANDROID
-            false;
-#else
-            true; 
-#endif
+        public static bool USE_LOADERS => true;
 
         private static Dictionary<string, PluginLoader> _loaders = [];
         static string PLUGIN_INFO_URL =>
@@ -896,79 +891,45 @@ namespace MonkeyPaste.Avalonia {
         private static IEnumerable<T> LoadDll<T>(string targetDllPath, string guid, out AssemblyLoadContext alc) {
             alc = null;
             try {
-                MpPluginAssemblyLoadContext cur_alc =
-#if DESKTOP
-                    new MpPluginAssemblyLoadContext(targetDllPath); 
-#else
-                    null;
-#endif
                 if (USE_LOADERS) {
                     bool is_core = CorePluginGuids.Contains(guid);
-                    try {
-                        PluginLoader pl = PluginLoader.CreateFromAssemblyFile(
-                                           assemblyFile: targetDllPath,
-                                           sharedTypes: sharedTypes,
-                                           isUnloadable: true,
-                                           configure: (c) => {
-                                               c.DefaultContext = cur_alc;
-                                               c.PreferSharedTypes = true;
-                                           });
-                        if (pl != null) {
-                            var objs = new List<T>();
-                            var plugin_types = pl.LoadDefaultAssembly().GetTypes().Where(t => typeof(T).IsAssignableFrom(t) && !t.IsAbstract);
-                            foreach (var pluginType in plugin_types) {
-                                if (Activator.CreateInstance(pluginType) is T pcb) {
-                                    objs.Add(pcb);
-                                }
+                    if (PluginLoader.CreateFromAssemblyFile(
+                        assemblyFile: targetDllPath,
+                        sharedTypes: sharedTypes,
+                        isUnloadable: true,
+                        configure: (config) => {
+                            config.DefaultContext = new MpPluginAssemblyLoadContext(targetDllPath);
+                            config.PreferSharedTypes = true;
+                        }) is { } pl) {
+                        var objs = new List<T>();
+                        var plugin_types = pl.LoadDefaultAssembly().GetTypes().Where(t => typeof(T).IsAssignableFrom(t) && !t.IsAbstract);
+                        foreach (var pluginType in plugin_types) {
+                            if (Activator.CreateInstance(pluginType) is T pcb) {
+                                objs.Add(pcb);
                             }
-                            _loaders.AddOrReplace(guid, pl);
-                            return objs;
                         }
-                    }catch(Exception ex) {
-                        MpConsole.WriteTraceLine($"[DotNetCorePlugins] Error loading assembly from '{targetDllPath}'.", ex);
+                        _loaders.AddOrReplace(guid, pl);
+                        return objs;
                     }
-                   
                 }
-                if(cur_alc == null) {
-                    Assembly ass = default;
-                    try {
-                        ass = Assembly.LoadFrom(targetDllPath);
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"[Assembly.LoadFrom] Error loading assembly from '{targetDllPath}'.", ex);
-                    }                    
-                    if(ass == null) {
-                        try {
-                            ass = Assembly.Load(MpFileIo.ReadBytesFromFile(targetDllPath));
-                        }
-                        catch (Exception ex) {
-                            MpConsole.WriteTraceLine($"[Assembly.Load] Error loading assembly from '{targetDllPath}'.", ex);
-                        }
-                    }
-                    if(ass == null) {
-                        return null;
-                    }
-
-                    var sub_types = ass.FindSubTypes<T>();
-                    return sub_types;
-                    //
-
-                    //Assembly result = null;
-                    //var dir_dlls = Directory.GetFiles(Path.GetDirectoryName(targetDllPath)).Where(x => x.ToLower().EndsWith("dll"));
-                    //foreach (var dll_path in dir_dlls) {
-                    //    var assembly = Assembly.Load(MpFileIo.ReadBytesFromFile(dll_path));
-                    //    MpConsole.WriteLine($"{Path.GetFileNameWithoutExtension(targetDllPath)} loaded: {assembly.FullName}");
-                    //    if (dll_path == targetDllPath) {
-                    //        result = assembly;
-                    //    }
-                    //}
-                    //return result;
-                    //return null;
-                }
-                alc = cur_alc;
+                alc = new MpPluginAssemblyLoadContext(targetDllPath);
                 var assembly = alc.LoadFromAssemblyPath(targetDllPath);
                 var result = assembly.FindSubTypes<T>().ToArray();
                 return result;
+                //return Assembly.LoadFrom(targetDllPath);
+
+                //return Assembly.Load(MpFileIo.ReadBytesFromFile(targetDllPath));
+
+                //Assembly result = null;
+                //var dir_dlls = Directory.GetFiles(Path.GetDirectoryName(targetDllPath)).Where(x => x.ToLower().EndsWith("dll"));
+                //foreach (var dll_path in dir_dlls) {
+                //    var assembly = Assembly.Load(MpFileIo.ReadBytesFromFile(dll_path));
+                //    MpConsole.WriteLine($"{Path.GetFileNameWithoutExtension(targetDllPath)} loaded: {assembly.FullName}");
+                //    if (dll_path == targetDllPath) {
+                //        result = assembly;
+                //    }
+                //}
+                //return result;
 
             }
             catch (Exception ex) {
@@ -1073,7 +1034,7 @@ namespace MonkeyPaste.Avalonia {
             return objs;
         }
         #endregion
-#endregion
+        #endregion
 
         #region Component
         private static bool ValidateParametersAndPresets(MpPresetParamaterHostBase host, string plugin_label) {
@@ -1299,7 +1260,7 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-#endregion
+        #endregion
     }
 
 }

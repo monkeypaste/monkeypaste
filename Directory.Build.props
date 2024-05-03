@@ -18,7 +18,7 @@
     <Nullable>disable</Nullable>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
-    <NoWarn>$(NoWarn);NU1701;NU1702;IDE1006;CA1401;XA0101;</NoWarn>
+    <NoWarn>$(NoWarn);NU1701;NU1702;IDE1006;CA1401;</NoWarn>
     <WarningsAsErrors>CS4014;</WarningsAsErrors>
     <!-- This removes that AMD64 processor architecture warning -->
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
@@ -172,7 +172,6 @@
     <AndroidPackageName>com.Monkey.MonkeyPaste</AndroidPackageName>
     <AndroidInternalStorageDir>/data/user/0/$(AndroidPackageName)/files</AndroidInternalStorageDir>
     <IsMobile>true</IsMobile>
-    <UseSugarWv>true</UseSugarWv>
     <PlatformShortName>android</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\android</BuildScriptsDir>
   </PropertyGroup>
@@ -204,8 +203,6 @@
     <EditorSourceDir>$(UiProjectDir)\Resources\Editor</EditorSourceDir>
     <SoundsSourceDir>$(UiProjectDir)\Assets\Sounds</SoundsSourceDir>
     <TermsDir>$(UiProjectDir)\Resources\Legal\terms</TermsDir>
-    <EnumsDir>$(UiProjectDir)\Resources\Localization\Enums</EnumsDir>
-    <UiStringsDir>$(UiProjectDir)\Resources\Localization\UiStrings</UiStringsDir>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -221,7 +218,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="$(IsMobile) == 'True'">
-    <!--<IsWindowed>true</IsWindowed>-->
+    <IsWindowed>true</IsWindowed>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(IsWindowed) == 'True'">

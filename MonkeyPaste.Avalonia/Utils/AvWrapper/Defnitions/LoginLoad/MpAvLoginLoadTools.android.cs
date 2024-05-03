@@ -1,13 +1,10 @@
-﻿using System.Threading.Tasks;
-
-namespace MonkeyPaste.Avalonia {
+﻿namespace MonkeyPaste.Avalonia {
     public partial class MpAvLoginLoadTools {
 
         public bool IsLoadOnLoginEnabled =>
             false;
 
-        public async Task SetLoadOnLoginAsync(bool isLoadOnLogin, bool is_silent = false) {
-            await Task.Delay(1);
+        public void SetLoadOnLogin(bool isLoadOnLogin, bool silent = false) {
             return;
         }
     }

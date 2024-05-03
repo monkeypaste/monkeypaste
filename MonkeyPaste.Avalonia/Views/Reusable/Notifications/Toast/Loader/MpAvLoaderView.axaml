@@ -5,6 +5,7 @@
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
                        xmlns:local="clr-namespace:MonkeyPaste.Avalonia;assembly=MonkeyPaste.Avalonia"
+                       xmlns:dd="clr-namespace:My.Namespace;assembly=MonkeyPaste.Avalonia"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"
@@ -101,6 +102,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid Grid.Column="1"
+          x:DataType="pcl:MpIProgressLoaderViewModel"
           DataContext="{Binding ProgressLoader}"
           Margin="55,0,0,0"
           HorizontalAlignment="Stretch"

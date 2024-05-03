@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: default);
 
         #endregion
-
+        
         #region Title Property
         public string Title {
             get { return GetValue(TitleProperty); }
@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: default);
 
         #endregion
-
+        
         #region ShowActivated Property
         public bool ShowActivated {
             get { return GetValue(ShowActivatedProperty); }
@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: default);
 
         #endregion
-
+        
         #region WindowStartupLocation Property
         public WindowStartupLocation WindowStartupLocation {
             get { return GetValue(WindowStartupLocationProperty); }
@@ -101,7 +101,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: default);
 
         #endregion
-
+        
         #region SizeToContent Property
         public SizeToContent SizeToContent {
             get { return GetValue(SizeToContentProperty); }
@@ -179,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: default);
 
         #endregion
-
+        
         #region SystemDecorations Property
         public SystemDecorations SystemDecorations {
             get { return GetValue(SystemDecorationsProperty); }
@@ -192,7 +192,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: default);
 
         #endregion
-
+        
         #region ExtendClientAreaToDecorationsHint Property
         public bool ExtendClientAreaToDecorationsHint {
             get { return GetValue(ExtendClientAreaToDecorationsHintProperty); }
@@ -203,6 +203,19 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaProperty.Register<MpAvChildWindow, bool>(
                 name: nameof(ExtendClientAreaToDecorationsHint),
                 defaultValue: default);
+
+        #endregion
+
+        #region WindowDecorationMargin Property
+        private Thickness _windowDecorationMargin;
+        public Thickness WindowDecorationMargin {
+            get => _windowDecorationMargin;
+            private set => SetAndRaise(WindowDecorationMarginProperty, ref _windowDecorationMargin, value);
+        }
+
+        public static readonly DirectProperty<MpAvWindow, Thickness> WindowDecorationMarginProperty =
+            AvaloniaProperty.RegisterDirect<MpAvWindow, Thickness>(nameof(WindowDecorationMargin),
+                o => o.WindowDecorationMargin);
 
         #endregion
 
@@ -251,32 +264,22 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region CanvasX Property
         public double CanvasX {
-            get { return GetValue(CanvasXProperty); }
-            set { SetValue(CanvasXProperty, value); }
+            get => Canvas.GetLeft(this);
+            set {
+                if(CanvasX != value) {
+                    Canvas.SetLeft(this, value);
+                }
+            }
         }
-
-        public static readonly StyledProperty<double> CanvasXProperty =
-            AvaloniaProperty.Register<MpAvChildWindow, double>(
-                name: nameof(CanvasX),
-                defaultValue: default);
-
-        #endregion
-        
-        #region CanvasY Property
         public double CanvasY {
-            get { return GetValue(CanvasYProperty); }
-            set { SetValue(CanvasYProperty, value); }
+            get => Canvas.GetTop(this);
+            set {
+                if (CanvasY != value) {
+                    Canvas.SetTop(this, value);
+                }
+            }
         }
-
-        public static readonly StyledProperty<double> CanvasYProperty =
-            AvaloniaProperty.Register<MpAvChildWindow, double>(
-                name: nameof(CanvasY),
-                defaultValue: default);
-
-        #endregion
-
         #endregion
 
         #region Events
@@ -289,11 +292,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        static MpAvChildWindow() {
+        public MpAvChildWindow() : this(null) {
+            WindowDecorationMargin = new Thickness(1, 1, 1, 1);
         }
-        
-        public MpAvChildWindow() : base() {
-        }
+        public MpAvChildWindow(IWindowImpl owner) : base() { }
         #endregion
 
         #region Public Methods
@@ -303,7 +305,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return rw.TryGetPlatformHandle();
         }
-        public async Task<T> ShowDialog<T>(MpAvChildWindow owner) {
+        public async Task<T> ShowDialog<T>(MpAvWindow owner) {
             Show(owner);
             while (DialogResult == null) {
                 await Task.Delay(100);
@@ -315,12 +317,12 @@ namespace MonkeyPaste.Avalonia {
             if(MpAvRootWindow.Instance == null) {
                 return;
             }
-            MpAvRootWindow.Instance.AddChild(this);
+            //MpAvRootWindow.Instance.AddChild(this);
         }
         public void Show(Window owner) {
             Show();
         }
-        public void Show(MpAvChildWindow owner) {
+        public void Show(MpAvWindow owner) {
             Show();
         }
         public void Activate() {

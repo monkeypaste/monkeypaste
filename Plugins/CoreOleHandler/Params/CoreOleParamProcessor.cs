@@ -277,7 +277,7 @@ namespace CoreOleHandler {
                                     double max_w = req.GetParamValue<double>(CoreOleParamType.PNG_R_MAXW.ToString());
                                     double max_h = req.GetParamValue<double>(CoreOleParamType.PNG_R_MAXH.ToString());
 
-                                    MpSize bmp_size = new MpSize(bmp.Size.Width,bmp.Size.Height);
+                                    MpSize bmp_size = bmp.Size.ToPortableSize();
                                     MpSize adj_size = bmp_size.ResizeKeepAspect(max_w, max_h);
                                     bool needs_scale = !bmp_size.IsValueEqual(adj_size);
                                     if (!needs_scale) {

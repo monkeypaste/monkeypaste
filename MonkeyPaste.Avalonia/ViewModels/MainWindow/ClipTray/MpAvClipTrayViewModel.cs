@@ -2634,7 +2634,7 @@ namespace MonkeyPaste.Avalonia {
                         continue;
                     }
                     was_drag_in_progress = true;
-                    // drag left this tile
+                    /// drag left this tile
                     MpConsole.WriteLine($"Clearing drop on '{ctvm}'");
                     //ctwv.RelayDndMsg(MpDragDropOpType.dragleave, null, MpAvDoDragDropWrapper.DragDataObject, gmp);
                     ctvm.IsDropOverTile = false;
@@ -2732,13 +2732,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ClipboardWatcher_OnClipboardChanged(object sender, MpPortableDataObject mpdo) {
-            if(!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(() => ClipboardWatcher_OnClipboardChanged(sender, mpdo));
-                return;
-            }
             // NOTE this is on a bg thread
 
-            OnPropertyChanged(nameof(CanAddItemWhileIgnoringClipboard));
+            Dispatcher.UIThread.Post(() => OnPropertyChanged(nameof(CanAddItemWhileIgnoringClipboard)));
 
             bool is_startup_ido = Mp.Services.ClipboardMonitor.IsStartupClipboard;
 

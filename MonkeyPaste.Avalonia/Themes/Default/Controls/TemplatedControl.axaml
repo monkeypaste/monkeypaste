@@ -6,7 +6,7 @@
 
     <Style Selector=":is(TemplatedControl):not(:is(TextBox)[IsReadOnly=false]):not(.fontFamilyOverride)">
         <Setter Property="FontFamily"
-                Value="{Binding DefaultReadOnlyFontFamilyFont, Source={x:Static local:MpAvThemeViewModel.Instance}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
+                Value="{Binding Source={DynamicResource DefaultReadOnlyFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
     </Style>
     <!--  NO BG  -->
     <Style Selector=":is(TemplatedControl).noBg /template/ ContentPresenter">

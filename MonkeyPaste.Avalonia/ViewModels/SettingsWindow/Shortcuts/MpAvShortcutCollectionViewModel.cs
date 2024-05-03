@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
 
         static bool LOAD_W_GLOBAL_HOOKS_TOGGLED_ON =
 #if DEBUG
-            true;
+            false;//true;
 #else
             true;
 #endif

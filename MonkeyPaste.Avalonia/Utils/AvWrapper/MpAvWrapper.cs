@@ -122,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
             if (MpDeviceWrapper.Instance != null) {
                 PlatformInfo = MpDeviceWrapper.Instance.PlatformInfo;
                 ScreenInfoCollection = MpDeviceWrapper.Instance.ScreenInfoCollection;
-                //IconBuilder = MpDeviceWrapper.Instance.IconBuilder;
+                IconBuilder = MpDeviceWrapper.Instance.IconBuilder;
                 DeviceClipboard = MpDeviceWrapper.Instance.DeviceClipboard;
             } else {
                 PlatformInfo = new MpAvPlatformInfo_desktop();

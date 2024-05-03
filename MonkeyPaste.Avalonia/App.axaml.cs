@@ -151,9 +151,13 @@ namespace MonkeyPaste.Avalonia {
                 desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
                 desktop.ShutdownRequested += Desktop_ShutdownRequested;
+
                 var loader = new MpAvLoaderViewModel(is_login_load);
                 await loader.CreatePlatformAsync(startup_datetime);
                 await loader.InitAsync();
+#if WINDOWED
+                MpAvRootWindow.Instance.Show();
+#endif
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
                 
                 mobile.MainView = new Border() {

@@ -1,22 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>$(MainTargetFramework)</TargetFramework>    
+    <TargetFramework>net7.0-android</TargetFramework>
+    
     <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
     <ApplicationId>$(AndroidPackageName)</ApplicationId>
     <ApplicationVersion>1</ApplicationVersion>
-    <ApplicationDisplayVersion>$(ApplicationVersion)</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
-    <SupportedOSPlatformVersion>26.0</SupportedOSPlatformVersion>
-    <TargetFrameworkVersion>34</TargetFrameworkVersion>
     <!--<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <ErrorReport>send</ErrorReport>-->
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <!--<RunAOTCompilation>True</RunAOTCompilation>-->
-    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <!--<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>-->
     <!--<DebugType>embedded</DebugType>-->
     <!--<DebugSymbols>True</DebugSymbols>
     <DebugType>embedded</DebugType>-->
@@ -41,14 +40,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WebView.Avalonia.Android" Version="$(SugarWvVersion)" />
-    <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.6" />
-    <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="SkiaSharp.Views" Version="2.88.8" />
+    <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.4" />
+    <PackageReference Include="Avalonia.Android" Version="11.0.5" />
+    <PackageReference Include="SkiaSharp.Views" Version="2.88.6" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Reactive" Version="6.0.0" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
-    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.10.0.3" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
+    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,18 +61,18 @@
     <Folder Include="Assets\" />
     <Folder Include="Assets\dat\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
-  </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'ANDROID'">   
 
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(EditorSourceDir)" DestinationFile="$(TargetDatDir)\editor.zip" />
+    <ZipDirectory Overwrite="true"
+                  ContinueOnError="true"
+                  SourceDirectory="$(EditorSourceDir)"
+                  DestinationFile="$(TargetDatDir)\editor.zip" />
     
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(TermsDir)" DestinationFile="$(TargetDatDir)\terms.zip" />
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(EnumsDir)" DestinationFile="$(TargetDatDir)\enums.zip" />
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(UiStringsDir)" DestinationFile="$(TargetDatDir)\uistrings.zip" />
+    <ZipDirectory Overwrite="true"
+                  ContinueOnError="true"
+                  SourceDirectory="$(TermsDir)"
+                  DestinationFile="$(TargetDatDir)\terms.zip" />
     
     <!--<ZipDirectory Overwrite="true"
                   ContinueOnError="true"

@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
         // BUG error MSB4018: System.ArgumentException: Member 'System.Collections.ObjectModel.ObservableCollection`1' is declared in another module and needs to be imported
         // Must override .net standard observable collection in avalonia for some reason
         public override ObservableCollection<C> Items { get; set; } = new ObservableCollection<C>();
-        public new C SelectedItem {
+        public override C SelectedItem {
             get => Items.FirstOrDefault(x => x.IsSelected);
             set {
                 if (SelectedItem != value) {

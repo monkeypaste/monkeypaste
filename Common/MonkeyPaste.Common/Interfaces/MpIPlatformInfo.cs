@@ -27,8 +27,6 @@ namespace MonkeyPaste.Common {
 
         string EditorPath { get; }
         string TermsPath { get; }
-        string EnumsPath { get; }
-        string UiStringsPath { get; }
         string CreditsPath { get; }
         string CreditsPlatformPath { get; }
 

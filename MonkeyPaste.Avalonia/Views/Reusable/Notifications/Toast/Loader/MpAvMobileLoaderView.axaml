@@ -17,6 +17,7 @@
     </local:MpAvUserControl.Styles>
     <StackPanel HorizontalAlignment="Center"
                 VerticalAlignment="Center"
+                x:DataType="pcl:MpIProgressLoaderViewModel"
                 DataContext="{Binding ProgressLoader}"
                 Spacing="15">
         <!--  LOGO  -->
