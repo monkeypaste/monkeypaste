@@ -584,18 +584,15 @@ namespace MonkeyPaste.Common {
                 return MpCommonTools.Services.PlatformResource.GetResource<byte[]>(uriStr);
             }
 
-            using (var httpClient = new HttpClient()) {
-                httpClient.SetDefaultUserAgent();
-                if (timeoutMs > 0) {
-                    httpClient.Timeout = TimeSpan.FromMilliseconds(timeoutMs);
-                }
-                try {
-                    byte[] bytes = await httpClient.GetByteArrayAsync(uri);//.TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
-                    return bytes;
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error reading bytes from '{uri}'. ", ex);
-                }
+            //if (timeoutMs > 0) {
+            //    httpClient.Timeout = TimeSpan.FromMilliseconds(timeoutMs);
+            //}
+            try {
+                byte[] bytes = await MpHttpClient.Client.GetByteArrayAsync(uri);//.TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
+                return bytes;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error reading bytes from '{uri}'. ", ex);
             }
             return null;
         }
@@ -745,19 +742,16 @@ namespace MonkeyPaste.Common {
             this string url, string path,
             TimeSpan timeout = default, IProgress<double> progress = null, CancellationToken cancellationToken = default) {
             // from https://stackoverflow.com/a/46497896/105028
-            using (var httpClient = new HttpClient()) {
-                httpClient.SetDefaultUserAgent();
-                if (timeout != default) {
-                    httpClient.Timeout = timeout;
-                }
+            //if (timeout != default) {
+            //    httpClient.Timeout = timeout;
+            //}
 
-                // Create a file stream to store the downloaded data.
-                // This really can be any type of writeable stream.
-                using (var file = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None)) {
-                    // Use the custom extension method below to download the data.
-                    // The passed progress-instance will receive the download status updates.
-                    await httpClient.DownloadAsync(url, file, progress, cancellationToken);
-                }
+            // Create a file stream to store the downloaded data.
+            // This really can be any type of writeable stream.
+            using (var file = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None)) {
+                // Use the custom extension method below to download the data.
+                // The passed progress-instance will receive the download status updates.
+                await MpHttpClient.Client.DownloadAsync(url, file, progress, cancellationToken);
             }
         }
 
