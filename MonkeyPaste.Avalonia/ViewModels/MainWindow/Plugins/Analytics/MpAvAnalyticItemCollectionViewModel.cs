@@ -191,6 +191,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public override MpAvAnalyticItemViewModel SelectedItem {
+            get => base.SelectedItem;
+            set => base.SelectedItem = value;
+        }
+
         #endregion
 
 

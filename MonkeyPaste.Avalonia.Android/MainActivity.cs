@@ -8,6 +8,8 @@ using Android.Webkit;
 using Android.Widget;
 using Avalonia;
 using Avalonia.Android;
+using Avalonia.ReactiveUI;
+using Avalonia.WebView.Android;
 using Orientation = Android.Content.Res.Orientation;
 
 namespace MonkeyPaste.Avalonia.Android {
@@ -19,7 +21,7 @@ namespace MonkeyPaste.Avalonia.Android {
     MainLauncher = true,
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
     public class MainActivity : AvaloniaMainActivity<App> {
-        private bool _isFullscreen = true;
+        public static bool IsFullscreen => false;
 
         private static MainActivity _instance;
         public static MainActivity Instance =>
@@ -29,8 +31,9 @@ namespace MonkeyPaste.Avalonia.Android {
             _instance = this;
 
             return base.CustomizeAppBuilder(builder)
-                 //.WithInterFont()
-                 //.UseReactiveUI()
+                 .WithInterFont()
+                 .UseReactiveUI()
+                 .UseAndroidWebView()
                  .AfterSetup(_ => {
                      WebView.SetWebContentsDebuggingEnabled(true);
                      new MpAvAdWrapper().CreateDeviceInstance(this);
@@ -40,7 +43,7 @@ namespace MonkeyPaste.Avalonia.Android {
 
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
-            if (_isFullscreen) {
+            if (IsFullscreen) {
                 SetFullscreenWindowLayout();
             }
 
@@ -73,7 +76,7 @@ namespace MonkeyPaste.Avalonia.Android {
         public override void OnWindowFocusChanged(bool hasFocus) {
             base.OnWindowFocusChanged(hasFocus);
             MpAvMainWindowViewModel.Instance.IsMainWindowActive = hasFocus;
-            if (hasFocus && _isFullscreen) {
+            if (hasFocus && IsFullscreen) {
                 SetFullscreenWindowLayout();
             }
         }
@@ -86,8 +89,6 @@ namespace MonkeyPaste.Avalonia.Android {
             }
             if (Build.VERSION.SdkInt >= BuildVersionCodes.R) {
                 IWindowInsetsController wicController = Window.InsetsController;
-
-
                 Window.SetDecorFitsSystemWindows(false);
                 Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
                 if (wicController != null) {
@@ -98,13 +99,13 @@ namespace MonkeyPaste.Avalonia.Android {
 
                 Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
 
-                Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(SystemUiFlags.Fullscreen |
-                                                                       SystemUiFlags.HideNavigation |
-                                                                       SystemUiFlags.Immersive |
-                                                                       SystemUiFlags.ImmersiveSticky |
-                                                                       SystemUiFlags.LayoutHideNavigation |
-                                                                       SystemUiFlags.LayoutStable |
-                                                                       SystemUiFlags.LowProfile);
+                Window.DecorView.SystemUiFlags = SystemUiFlags.Fullscreen |
+                                                   SystemUiFlags.HideNavigation |
+                                                   SystemUiFlags.Immersive |
+                                                   SystemUiFlags.ImmersiveSticky |
+                                                   SystemUiFlags.LayoutHideNavigation |
+                                                   SystemUiFlags.LayoutStable |
+                                                   SystemUiFlags.LowProfile;
             }
         }
 

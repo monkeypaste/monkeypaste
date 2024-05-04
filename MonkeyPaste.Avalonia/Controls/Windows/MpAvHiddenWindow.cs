@@ -5,7 +5,13 @@ using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvHiddenWindow : Window {
+    public class MpAvHiddenWindow :
+#if WINDOWED
+        Window  
+#else
+        MpAvWindow  
+#endif
+        {
 
         public MpAvHiddenWindow() : base() {
             Width = 0;

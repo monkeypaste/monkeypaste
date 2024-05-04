@@ -1,6 +1,7 @@
 ﻿//using McMaster.NETCore.Plugins;
 using Avalonia;
 using Avalonia.Input.Platform;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;

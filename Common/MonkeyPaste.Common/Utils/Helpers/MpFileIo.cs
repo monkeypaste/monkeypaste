@@ -584,17 +584,15 @@ namespace MonkeyPaste.Common {
                 return MpCommonTools.Services.PlatformResource.GetResource<byte[]>(uriStr);
             }
 
-            using (var httpClient = MpHttpClient.Client) {
-                //if (timeoutMs > 0) {
-                //    httpClient.Timeout = TimeSpan.FromMilliseconds(timeoutMs);
-                //}
-                try {
-                    byte[] bytes = await httpClient.GetByteArrayAsync(uri);//.TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
-                    return bytes;
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error reading bytes from '{uri}'. ", ex);
-                }
+            //if (timeoutMs > 0) {
+            //    httpClient.Timeout = TimeSpan.FromMilliseconds(timeoutMs);
+            //}
+            try {
+                byte[] bytes = await MpHttpClient.Client.GetByteArrayAsync(uri);//.TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
+                return bytes;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error reading bytes from '{uri}'. ", ex);
             }
             return null;
         }
@@ -744,7 +742,6 @@ namespace MonkeyPaste.Common {
             this string url, string path,
             TimeSpan timeout = default, IProgress<double> progress = null, CancellationToken cancellationToken = default) {
             // from https://stackoverflow.com/a/46497896/105028
-            using (var httpClient = MpHttpClient.Client) {
                 //if (timeout != default) {
                 //    httpClient.Timeout = timeout;
                 //}
@@ -754,9 +751,8 @@ namespace MonkeyPaste.Common {
                 using (var file = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None)) {
                     // Use the custom extension method below to download the data.
                     // The passed progress-instance will receive the download status updates.
-                    await httpClient.DownloadAsync(url, file, progress, cancellationToken);
+                    await MpHttpClient.Client.DownloadAsync(url, file, progress, cancellationToken);
                 }
-            }
         }
 
         private static async Task DownloadAsync(

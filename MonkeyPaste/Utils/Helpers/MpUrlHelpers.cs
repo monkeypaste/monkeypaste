@@ -247,38 +247,35 @@ namespace MonkeyPaste {
             }
             try {
                 var sb = new StringBuilder();
-                using (HttpClient client = MpHttpClient.Client) {
-                    try {
-                        using (HttpResponseMessage response = await client.GetAsync(url)) {
-                            using (var stream = await response.Content.ReadAsStreamAsync()) {
-                                while (true) {
-                                    long rem = stream.Length - stream.Position;
-                                    if (rem <= 0) {
-                                        // no head found?
-                                        break;
-                                    }
-                                    int len = Math.Min(1000, (int)rem);
-                                    var bytes = new byte[len];
-                                    var bytesread = stream.Read(bytes, 0, len);
-                                    string text = Encoding.UTF8.GetString(bytes);
-                                    int head_end_idx = text.ToLower().IndexOf("</head>");
-                                    if (head_end_idx < 0) {
-                                        sb.Append(text);
-                                        continue;
-                                    }
-                                    sb.Append(text.Substring(0, head_end_idx + "</head>".Length));
-                                    // complete doc
-                                    sb.Append("</html>");
+                try {
+                    using (HttpResponseMessage response = await MpHttpClient.Client.GetAsync(url)) {
+                        using (var stream = await response.Content.ReadAsStreamAsync()) {
+                            while (true) {
+                                long rem = stream.Length - stream.Position;
+                                if (rem <= 0) {
+                                    // no head found?
                                     break;
                                 }
-                                return sb.ToString();
+                                int len = Math.Min(1000, (int)rem);
+                                var bytes = new byte[len];
+                                var bytesread = stream.Read(bytes, 0, len);
+                                string text = Encoding.UTF8.GetString(bytes);
+                                int head_end_idx = text.ToLower().IndexOf("</head>");
+                                if (head_end_idx < 0) {
+                                    sb.Append(text);
+                                    continue;
+                                }
+                                sb.Append(text.Substring(0, head_end_idx + "</head>".Length));
+                                // complete doc
+                                sb.Append("</html>");
+                                break;
                             }
+                            return sb.ToString();
                         }
                     }
-                    catch (HttpRequestException) {
-                        return string.Empty;
-                    }
-
+                }
+                catch (HttpRequestException) {
+                    return string.Empty;
                 }
             }
             catch (Exception ex) {

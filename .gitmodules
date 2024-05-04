@@ -2,8 +2,8 @@
 	path = Build/Ledger
 	url = https://github.com/monkeypaste/ledger/ledger.git
     ignore = dirty
-[submodule "Plugins/AzureCompoterVision"]
-	path = Plugins/AzureCompoterVision
+[submodule "Plugins/AzureComputerVision"]
+	path = Plugins/AzureComputerVision
 	url = https://github.com/monkeypaste/azurecomputervision.git
     ignore = dirty
 [submodule "Plugins/AzureTextTranslator"]

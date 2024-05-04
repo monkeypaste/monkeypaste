@@ -79,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
             //return c_mp + c_origin;
 #if MOBILE
             return e.GetPosition(App.MainView).ToPortablePoint();
-#endif
+#else
             if (e.Source is not Control c ||
                 c.GetScreen() is not Screen scr) {
                 return MpPoint.Zero;
@@ -88,6 +88,7 @@ namespace MonkeyPaste.Avalonia {
             var scr_mp = c.PointToScreen(c_mp);
             var result = scr_mp.ToPortablePoint(scr.Scaling);
             return result;
+#endif
         }
         public static Screen GetScreen(this Visual v) {
             if (MpAvWindowManager.GetTopLevel(v) is not WindowBase tl) {

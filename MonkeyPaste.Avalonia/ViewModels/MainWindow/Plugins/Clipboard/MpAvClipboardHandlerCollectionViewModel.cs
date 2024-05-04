@@ -7,6 +7,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -247,6 +248,16 @@ namespace MonkeyPaste.Avalonia {
                     SubItems = Items.Select(x => x.ContextMenuItemViewModel).ToList()
                 };
             }
+        }
+
+        public override ObservableCollection<MpAvClipboardHandlerItemViewModel> Items {
+            get => base.Items;
+            set => base.Items = value;
+        }
+
+        public override MpAvClipboardHandlerItemViewModel SelectedItem {
+            get => base.SelectedItem;
+            set => base.SelectedItem = value;
         }
 
         public IEnumerable<MpAvClipboardHandlerItemViewModel> SortedItems =>

@@ -61,7 +61,7 @@ namespace MonkeyPaste.Common {
                     WriteLine($"Logging enabled to '{LogFilePath}'");
                 }
                 catch (Exception ex) {
-                    WriteTraceLine($"Error deleting previous log file w/ path: {LogFilePath} with exception: ",ex);
+                    WriteTraceLine($"Error deleting previous log file w/ path: {LogFilePath} with exception: ", ex);
                 }
             }
 
@@ -140,10 +140,11 @@ namespace MonkeyPaste.Common {
             if (IsTraceEnabled) {
                 Trace.Write(sb.ToString());
             }
-            if (LogToConsole && Debugger.IsAttached) {
-                //Debug.WriteLine(sb.ToString().TrimEnd());
-            } else if(LogToConsole || !HasInitialized) {
+            if (LogToConsole) {
                 Console.WriteLine(sb.ToString().TrimEnd());
+                if (Debugger.IsAttached) {
+                    Debug.WriteLine(sb.ToString().TrimEnd());
+                }
             }
 
         }

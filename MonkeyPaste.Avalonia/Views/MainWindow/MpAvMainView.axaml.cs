@@ -691,7 +691,7 @@ namespace MonkeyPaste.Avalonia {
 #if DESKTOP
                 true;// mwvm.IsMainWindowOrientationDragging;
 #else
-                false;
+                true;
 #endif
 
             if (skip_anim) {

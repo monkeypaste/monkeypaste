@@ -18,7 +18,7 @@
     <Nullable>disable</Nullable>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
-    <NoWarn>$(NoWarn);NU1701;NU1702;IDE1006;CA1401;</NoWarn>
+    <NoWarn>$(NoWarn);NU1701;NU1702;IDE1006;CA1401;XA0101;</NoWarn>
     <WarningsAsErrors>CS4014;</WarningsAsErrors>
     <!-- This removes that AMD64 processor architecture warning -->
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
@@ -40,7 +40,7 @@
   
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>ANDROID</BuildOs>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -202,7 +202,9 @@
   <PropertyGroup>
     <EditorSourceDir>$(UiProjectDir)\Resources\Editor</EditorSourceDir>
     <SoundsSourceDir>$(UiProjectDir)\Assets\Sounds</SoundsSourceDir>
-    <TermsDir>$(UiProjectDir)\Resources\Legal\terms</TermsDir>
+    <TermsDir>$(UiProjectDir)\Resources\Legal</TermsDir>
+    <EnumsDir>$(UiProjectDir)\Resources\Localization\Enums</EnumsDir>
+    <UiStringsDir>$(UiProjectDir)\Resources\Localization\UiStrings</UiStringsDir>
   </PropertyGroup>
   
   <PropertyGroup>

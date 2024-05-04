@@ -1382,8 +1382,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpMainWindowHideType.Deactivate:
                     return false;
                 case MpMainWindowHideType.Click:
-                    if (!MpAvShortcutCollectionViewModel.Instance.IsGlobalHooksPaused &&
-                        MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation is not { } gmp) {
+                    var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation;
+                    if (!MpAvShortcutCollectionViewModel.Instance.IsGlobalHooksPaused ||
+                        gmp == null) {
                         return false;
                     }
                     bool isInputFocused =

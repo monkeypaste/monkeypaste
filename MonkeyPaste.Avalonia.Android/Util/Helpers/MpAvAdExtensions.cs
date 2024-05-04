@@ -9,11 +9,11 @@ namespace MonkeyPaste.Avalonia.Android {
         public static MpPointerEventType ToPointerEventType(this MotionEventActions mea) {
             switch (mea) {
                 case MotionEventActions.Up:
-                    return MpPointerEventType.Release;
+                    return MpPointerEventType.Up;
                 case MotionEventActions.Move:
                     return MpPointerEventType.Move;
                 case MotionEventActions.Down:
-                    return MpPointerEventType.Press;
+                    return MpPointerEventType.Down;
                 case MotionEventActions.HoverEnter:
                     return MpPointerEventType.Enter;
                 case MotionEventActions.Outside:

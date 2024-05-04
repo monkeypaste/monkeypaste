@@ -15,11 +15,11 @@ namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
     public class MpAvWindow :
-//#if WINDOWED
-//        MpAvChildWindow,
-//#else
-        Window, 
-//#endif
+#if WINDOWED
+        MpAvChildWindow,
+#else
+        Window,
+#endif
         MpIUserControl {
 
         #region Private Variables
@@ -54,7 +54,9 @@ namespace MonkeyPaste.Avalonia {
             DataContext as MpIWindowViewModel;
 
         #region Overrides
-        protected override Type StyleKeyOverride => typeof(Window);
+#if !WINDOWED
+        protected override Type StyleKeyOverride => typeof(Window); 
+#endif
         #endregion
 
         #region State
@@ -67,9 +69,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-//#if !WINDOWED
-        public object DialogResult { get; set; } 
-//#endif
+#if !WINDOWED
+        public object DialogResult { get; set; }
+#endif
 
         private MpWindowType _windowType = MpWindowType.None;
         public MpWindowType WindowType {
@@ -223,10 +225,5 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
         #endregion
-    }
-
-    [DoNotNotify]
-    public class MpAvNotificationWindow : MpAvWindow {
-        public MpAvNotificationWindow(MpAvWindow owner = default) : base(owner) { }
     }
 }

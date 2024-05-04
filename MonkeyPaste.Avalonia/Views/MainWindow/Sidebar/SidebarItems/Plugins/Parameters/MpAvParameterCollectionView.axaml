@@ -202,8 +202,7 @@
                                 <sys:String>'</sys:String>
                             </Binding.Source>
                         </Binding>
-                        <Binding Path="LabelText"
-                                 x:DataType="pcl:MpILabelTextViewModel" />
+                        <Binding Path="LabelText"/>
                         <Binding>
                             <Binding.Source>
                                 <sys:String>'</sys:String>

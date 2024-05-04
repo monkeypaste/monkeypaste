@@ -2129,7 +2129,7 @@
     <Folder Include="Resources\Legal\Licenses\" />
     <Folder Include="Resources\Legal\"/>-->
     
-    <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" Condition="'$(BuildOs)' != 'ANDROID'" />
         
     <Content Include="Resources\Legal\credits.$(PlatformShortName).html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2493,6 +2493,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Assets\lib\" />
     <Folder Include="Utils\Plugins\Headless\" />
   </ItemGroup>
 
@@ -2508,18 +2509,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Resources\Editor\test.html">
-      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
-    </Content>
-    <Content Update="Resources\Editor\lib\jquery-context-menus\src\context-menu.css">
-      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
-    </Content>
-    <Content Update="Resources\Editor\src\components\localizer\localizer-style.css">
-      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
-    </Content>
-    <Content Update="Resources\Editor\src\components\localizer\UiStrings.js">
-      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
-    </Content>
+<!--    <Content Update="Resources\Editor\test.html">-->
+<!--      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>-->
+<!--    </Content>-->
+<!--    <Content Update="Resources\Editor\lib\jquery-context-menus\src\context-menu.css">-->
+<!--      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>-->
+<!--    </Content>-->
+<!--    <Content Update="Resources\Editor\src\components\localizer\localizer-style.css">-->
+<!--      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>-->
+<!--    </Content>-->
+<!--    <Content Update="Resources\Editor\src\components\localizer\UiStrings.js">-->
+<!--      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>-->
+<!--    </Content>-->
   </ItemGroup>
   
   <PropertyGroup>
@@ -2557,5 +2558,11 @@
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup Condition="'$(BuildOs)' != 'LINUX'">
+    <AndroidAsset Remove="Assets\lib\libxdo.so" />
+    <AndroidNativeLibrary Remove="Assets\lib\libxdo.so" />
+    <AndroidAsset Remove="Assets\lib\x11tools.so" />
+    <AndroidNativeLibrary Remove="Assets\lib\x11tools.so" />
   </ItemGroup>
 </Project>

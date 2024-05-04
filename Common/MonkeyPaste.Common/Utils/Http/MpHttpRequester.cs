@@ -30,8 +30,7 @@ namespace MonkeyPaste.Common {
                 }
 
                 // from https://stackoverflow.com/a/69826649
-                using var httpClient = MpHttpClient.Client;
-                using var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
+                using var response = await MpHttpClient.Client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
 
                 response.EnsureSuccessStatusCode();
                 var totalBytes = response.Content.Headers.ContentLength;
@@ -87,28 +86,26 @@ namespace MonkeyPaste.Common {
             ) {
             add_debug = add_debug.HasValue ? add_debug : MpServerConstants.IS_SERVER_LOCAL;
             // from https://stackoverflow.com/a/62640006/105028
-            using (HttpClient httpClient = MpHttpClient.Client) {
-                if(add_debug is true) {
-                    keyValuePairs.Add("XDEBUG_SESSION", "1");
-                }
-                using (var formDataContent = new FormUrlEncodedContent(keyValuePairs)) {
-                    try {
-                        // Post Request And Wait For The Response.
-                        var httpResponseMessage = await httpClient.PostAsync(url, formDataContent);
+            if (add_debug is true) {
+                keyValuePairs.Add("XDEBUG_SESSION", "1");
+            }
+            using (var formDataContent = new FormUrlEncodedContent(keyValuePairs)) {
+                try {
+                    // Post Request And Wait For The Response.
+                    var httpResponseMessage = await MpHttpClient.Client.PostAsync(url, formDataContent);
 
-                        // Check If Successful Or Not.
-                        if (httpResponseMessage.IsSuccessStatusCode) {
-                            // Return Byte Array To The Caller.
-                            return await httpResponseMessage.Content.ReadAsStringAsync();
-                        } else {
-                            // Throw Some Sort of Exception?
-                            return string.Empty;
-                        }
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Post to url '{url}' error.", ex);
+                    // Check If Successful Or Not.
+                    if (httpResponseMessage.IsSuccessStatusCode) {
+                        // Return Byte Array To The Caller.
+                        return await httpResponseMessage.Content.ReadAsStringAsync();
+                    } else {
+                        // Throw Some Sort of Exception?
                         return string.Empty;
                     }
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Post to url '{url}' error.", ex);
+                    return string.Empty;
                 }
             }
         }

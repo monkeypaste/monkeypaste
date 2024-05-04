@@ -719,7 +719,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                /// get copy of all current values shared/unshared separated
+                // get copy of all current values shared/unshared separated
                 Dictionary<string, string> shared_params = new Dictionary<string, string>();
                 foreach (var sp in aipvm.Items.Where(x => x.IsSharedValue)) {
                     shared_params.Add(sp.ParamId.ToString(), sp.CurrentValue);

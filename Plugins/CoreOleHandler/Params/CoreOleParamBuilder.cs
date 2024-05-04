@@ -17,7 +17,7 @@ namespace CoreOleHandler {
             CoreOleHelpers.SetCulture(request);
             // create format models AFTER culture set 
             _formatModels = GetFormatModels();
-            
+
             return new MpClipboardComponent() {
                 readers = _formatModels.Select(x => GetFormat(x.formatName, true)).ToList(),
                 writers = _formatModels.Select(x => GetFormat(x.formatName, false)).ToList()
@@ -27,23 +27,28 @@ namespace CoreOleHandler {
         private (string formatName, string label, int max_len, string icon_path)[] GetFormatModels() {
             var fml = new List<(string formatName, string label, int max_len, string icon_path)>() {
                 (MpPortableDataFormats.Text,Resources.TextFormatLabel,DEF_MAX_TEXT,"text.png"),
+                (MpPortableDataFormats.MimeText,Resources.MimeTextFormatLabel,DEF_MAX_TEXT,"text.png"),
                 (MpPortableDataFormats.Rtf,Resources.RtfFormatLabel,DEF_MAX_TEXT,"rtf.png"),
                 (MpPortableDataFormats.Xhtml,Resources.HtmlFormatLabel,-1,"html.png"),
                 (MpPortableDataFormats.Html,Resources.MimeHtmlFormatLabel,-1,"html.png"),
                 (MpPortableDataFormats.MimeMozUrl,Resources.MozUrlFormatLabel,-1,"html.png"),
                 (MpPortableDataFormats.Image,Resources.PngFormatLabel,-1,"png.png"),
+                (MpPortableDataFormats.Files,Resources.FilesFormatLabel,-1,"files.png"),
             };
-            if(OperatingSystem.IsMacOS()) {
-                fml.Add((MpPortableDataFormats.Image2, "TIFF", -1, "png.png"));
-            } else if(OperatingSystem.IsLinux()) {
+            if (OperatingSystem.IsMacOS()) {
+                fml.Add((MpPortableDataFormats.MacImage2, "PNG (platform)", -1, "png.png"));
+                fml.Add((MpPortableDataFormats.MacImage3, "TIFF", -1, "png.png"));
+            } else if (OperatingSystem.IsLinux()) {
                 fml.AddRange([
                     (MpPortableDataFormats.LinuxImage2,Resources.PngFormatLabel + "2",-1,"png.png"),
                     (MpPortableDataFormats.LinuxImage3,Resources.PngFormatLabel + "3",-1,"png.png"),
                     (MpPortableDataFormats.LinuxFiles2,Resources.FilesFormatLabel + " (platform)",-1,"files.png"),
                     (MpPortableDataFormats.LinuxFiles3,Resources.FilesFormatLabel + " (platform2)",-1,"files.png"),
                     ]);
+            } else if (OperatingSystem.IsWindows()) {
+                fml.Add((MpPortableDataFormats.Csv, Resources.CsvFormatLabel, DEF_MAX_TEXT, "csv.png"));
             }
-            if(fml.Where(x=>fml.Any(y=>y != x && y.formatName == x.formatName)) is { } dups) {
+            if (fml.Where(x => fml.Any(y => y != x && y.formatName == x.formatName)) is { } dups) {
                 MpDebug.Assert(!dups.Any(), $"Error, dup formats found for {string.Join(",", dups.Select(x => x.formatName))}");
             }
             return fml.ToArray();
@@ -87,24 +92,24 @@ namespace CoreOleHandler {
                     paramId = GetParamId(format, isReader, "maxcharcount")
                 });
             }
-            if(!isReader && IsPseudoFileFormat(format)) {
+            if (!isReader && IsPseudoFileFormat(format)) {
                 pfl.Add(new MpParameterFormat() {
                     label = Resources.ToFilePriorityLabel,
-                    description = string.Format(Resources.ToFilePriorityHint,format),
+                    description = string.Format(Resources.ToFilePriorityHint, format),
                     controlType = MpParameterControlType.NumberTicker,
                     unitType = MpParameterValueUnitType.Integer,
                     minimum = 0,
                     maximum = int.MaxValue,
                     precision = 0,
-                    value = new MpParameterValueFormat(1.ToString(),true),
+                    value = new MpParameterValueFormat(1.ToString(), true),
                     paramId = GetParamId(format, isReader, "filepriority")
                 });
                 pfl.Add(new MpParameterFormat() {
                     label = Resources.ToFileExtLabel,
-                    description = string.Format(Resources.ToFileExtHint,format),
+                    description = string.Format(Resources.ToFileExtHint, format),
                     controlType = MpParameterControlType.TextBox,
                     unitType = MpParameterValueUnitType.PlainText,
-                    value = new MpParameterValueFormat(MpDataFormatRegistrar.GetDefaultFileExt(format),true),
+                    value = new MpParameterValueFormat(MpDataFormatRegistrar.GetDefaultFileExt(format), true),
                     paramId = GetParamId(format, isReader, "fileext")
                 });
             }
@@ -188,7 +193,7 @@ namespace CoreOleHandler {
                             value = new MpParameterValueFormat(true.ToString(), true)
                         });
                     } else {
-                                                
+
                         pfl.Add(new MpParameterFormat() {
                             label = Resources.TextToImageLabel,
                             description = Resources.TextToImageHint,
@@ -197,8 +202,8 @@ namespace CoreOleHandler {
                             paramId = GetParamId(format, isReader, "fromtextformats"),
                             values =
                                 _formatModels
-                                .Where(x=>MpDataFormatRegistrar.IsTextFormat(x.formatName) is true)
-                                .Select(x => new MpParameterValueFormat(x.formatName,x.label, false))
+                                .Where(x => MpDataFormatRegistrar.IsTextFormat(x.formatName) is true)
+                                .Select(x => new MpParameterValueFormat(x.formatName, x.label, false))
                                 .ToList()
                         });
                         pfl.Add(new MpParameterFormat() {
@@ -216,7 +221,7 @@ namespace CoreOleHandler {
             return pfl;
         }
         public static bool IsPseudoFileFormat(string format) {
-            return 
+            return
                 MpDataFormatRegistrar.IsFilesFormat(format) is not true &&
                 (MpDataFormatRegistrar.IsTextFormat(format) is true ||
                  MpDataFormatRegistrar.IsImageFormat(format) is true);

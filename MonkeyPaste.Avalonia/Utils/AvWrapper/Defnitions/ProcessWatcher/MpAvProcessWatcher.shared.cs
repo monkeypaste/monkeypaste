@@ -123,8 +123,8 @@ namespace MonkeyPaste.Avalonia {
         public void StartWatcher() {
 #if MOBILE
             return;
-#endif
-            if (_timer == null) {
+#else
+             if (_timer == null) {
                 // initial start
 
                 _timer = new DispatcherTimer(DispatcherPriority.Background) {
@@ -135,6 +135,7 @@ namespace MonkeyPaste.Avalonia {
                 _timer.Stop();
             }
             _timer.Start();
+#endif
         }
         public void StopWatcher() {
             _timer?.Stop();

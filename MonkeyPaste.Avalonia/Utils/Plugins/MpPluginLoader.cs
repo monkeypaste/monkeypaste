@@ -76,7 +76,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public static bool USE_LOADERS => true;
+        public static bool USE_LOADERS =>
+#if ANDROID
+            false;
+#else
+            true;
+#endif
 
         private static Dictionary<string, PluginLoader> _loaders = [];
         static string PLUGIN_INFO_URL =>
@@ -262,7 +267,7 @@ namespace MonkeyPaste.Avalonia {
                 // remove backup but keep update for next startup
                 MpFileIo.DeleteDirectory(backup_dir);
             }
-            
+
 
             // NOTE this won't return if they choose restart
             await Mp.Services.PlatformMessageBox.ShowRestartNowOrLaterMessageBoxAsync(
@@ -891,16 +896,19 @@ namespace MonkeyPaste.Avalonia {
         private static IEnumerable<T> LoadDll<T>(string targetDllPath, string guid, out AssemblyLoadContext alc) {
             alc = null;
             try {
+                MpPluginAssemblyLoadContext cur_alc = 
+                    OperatingSystem.IsAndroid() ? null : new MpPluginAssemblyLoadContext(targetDllPath);
                 if (USE_LOADERS) {
                     bool is_core = CorePluginGuids.Contains(guid);
-                    if (PluginLoader.CreateFromAssemblyFile(
-                        assemblyFile: targetDllPath,
-                        sharedTypes: sharedTypes,
-                        isUnloadable: true,
-                        configure: (config) => {
-                            config.DefaultContext = new MpPluginAssemblyLoadContext(targetDllPath);
-                            config.PreferSharedTypes = true;
-                        }) is { } pl) {
+                    try {
+                        PluginLoader pl = PluginLoader.CreateFromAssemblyFile(
+                                           assemblyFile: targetDllPath,
+                                           sharedTypes: sharedTypes,
+                                           isUnloadable: true,
+                                           configure: (c) => {
+                                               c.DefaultContext = cur_alc;
+                                               c.PreferSharedTypes = true;
+                                           });
                         var objs = new List<T>();
                         var plugin_types = pl.LoadDefaultAssembly().GetTypes().Where(t => typeof(T).IsAssignableFrom(t) && !t.IsAbstract);
                         foreach (var pluginType in plugin_types) {
@@ -911,25 +919,51 @@ namespace MonkeyPaste.Avalonia {
                         _loaders.AddOrReplace(guid, pl);
                         return objs;
                     }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"[DotNetCorePlugins] Error loading assembly from '{targetDllPath}'.", ex);
+                    }
+
                 }
-                alc = new MpPluginAssemblyLoadContext(targetDllPath);
+                if (cur_alc == null) {
+                    Assembly ass = default;
+                    try {
+                        ass = Assembly.LoadFrom(targetDllPath);
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"[Assembly.LoadFrom] Error loading assembly from '{targetDllPath}'.", ex);
+                    }
+                    if (ass == null) {
+                        try {
+                            ass = Assembly.Load(MpFileIo.ReadBytesFromFile(targetDllPath));
+                        }
+                        catch (Exception ex) {
+                            MpConsole.WriteTraceLine($"[Assembly.Load] Error loading assembly from '{targetDllPath}'.", ex);
+                        }
+                    }
+                    if (ass == null) {
+                        return null;
+                    }
+
+                    var sub_types = ass.FindSubTypes<T>();
+                    return sub_types;
+                    //
+
+                    //Assembly result = null;
+                    //var dir_dlls = Directory.GetFiles(Path.GetDirectoryName(targetDllPath)).Where(x => x.ToLower().EndsWith("dll"));
+                    //foreach (var dll_path in dir_dlls) {
+                    //    var assembly = Assembly.Load(MpFileIo.ReadBytesFromFile(dll_path));
+                    //    MpConsole.WriteLine($"{Path.GetFileNameWithoutExtension(targetDllPath)} loaded: {assembly.FullName}");
+                    //    if (dll_path == targetDllPath) {
+                    //        result = assembly;
+                    //    }
+                    //}
+                    //return result;
+                    //return null;
+                }
+                alc = cur_alc;
                 var assembly = alc.LoadFromAssemblyPath(targetDllPath);
                 var result = assembly.FindSubTypes<T>().ToArray();
                 return result;
-                //return Assembly.LoadFrom(targetDllPath);
-
-                //return Assembly.Load(MpFileIo.ReadBytesFromFile(targetDllPath));
-
-                //Assembly result = null;
-                //var dir_dlls = Directory.GetFiles(Path.GetDirectoryName(targetDllPath)).Where(x => x.ToLower().EndsWith("dll"));
-                //foreach (var dll_path in dir_dlls) {
-                //    var assembly = Assembly.Load(MpFileIo.ReadBytesFromFile(dll_path));
-                //    MpConsole.WriteLine($"{Path.GetFileNameWithoutExtension(targetDllPath)} loaded: {assembly.FullName}");
-                //    if (dll_path == targetDllPath) {
-                //        result = assembly;
-                //    }
-                //}
-                //return result;
 
             }
             catch (Exception ex) {

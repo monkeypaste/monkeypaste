@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 

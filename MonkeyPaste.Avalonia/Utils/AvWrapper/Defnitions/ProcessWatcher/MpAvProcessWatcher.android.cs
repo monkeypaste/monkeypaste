@@ -1,70 +1,54 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAndroidProcessWatcher : MpAvProcessWatcherBase {
-        protected override nint GetParentHandleAtPoint(MpPoint poIntPtr) {
-            return App.Current.GetMainWindowHandle();
-        }
-
-        public override nint SetActiveProcess(nint handle) {
-            return handle;
-        }
-
-        protected override nint SetActiveProcess(nint handle, ProcessWindowStyle windowStyle) {
-            return handle;
-        }
-
-        protected override bool IsAdmin(object handleIdOrTitle) {
-            return false;
-        }
-
-        protected override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
-            return ProcessWindowStyle.Maximized;
-        }
-
-        private MpPortableProcessInfo _thisAppInfo;
-        //protected override MpPortableProcessInfo GetActiveProcessInfo() {
-        //    if (_thisAppInfo == null) {
-        //        _thisAppInfo = new MpPortableProcessInfo() {
-        //            Handle = App.Current.GetMainWindowHandle(),
-        //            ProcessPath = Mp.Services.PlatformInfo.ExecutingPath,
-        //            MainWindowTitle = Mp.Services.ThisAppInfo.ThisAppProductName,
-        //            MainWindowIconBase64 = MpBase64Images.AppIcon
-        //        };
-        //    }
-        //    return _thisAppInfo;
-        //}
-
-
-
-        protected override string GetProcessPath(nint handle) {
-            return Mp.Services.PlatformInfo.ExecutingPath;
-        }
-
-        protected override MpPortableProcessInfo GetProcessInfoByHandle(nint handle) {
-            if (_thisAppInfo == null) {
-                _thisAppInfo = new MpPortableProcessInfo() {
-                    Handle = App.Current.GetMainWindowHandle(),
-                    ProcessPath = Mp.Services.PlatformInfo.ExecutingPath,
-                    MainWindowTitle = Mp.Services.ThisAppInfo.ThisAppProductName,
-                    MainWindowIconBase64 = MpBase64Images.AppIcon
-                };
+    public partial class MpAvProcessWatcher {
+        private MpPortableProcessInfo __thisAppInfo;
+        MpPortableProcessInfo _thisAppInfo {
+            get {
+                if (__thisAppInfo == null) {
+                    __thisAppInfo = new MpPortableProcessInfo() {
+                        Handle = App.Current.GetMainWindowHandle(),
+                        ProcessPath = Mp.Services.PlatformInfo.ExecutingPath,
+                        MainWindowTitle = Mp.Services.ThisAppInfo.ThisAppProductName,
+                        MainWindowIconBase64 = MpBase64Images.AppIcon
+                    };
+                }
+                return __thisAppInfo;
             }
+        }
+
+        public nint SetActiveProcess(MpPortableProcessInfo p) {
+            return GetThisAppHandle();
+        }
+
+        public MpPortableProcessInfo GetClipboardOwner() {
             return _thisAppInfo;
         }
-
-        public override IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos { get; }
-
-        protected override nint GetActiveProcessHandle() {
+        protected IntPtr GetParentHandleAtPoint(MpPoint p) {
+            return GetThisAppHandle();
+        }
+        protected IntPtr GetThisAppHandle() {
             return App.Current.GetMainWindowHandle();
         }
-
-        protected override bool IsHandleWindowProcess(nint handle) {
+        protected IntPtr GetActiveProcessHandle() {
+            return GetThisAppHandle();
+        }
+        protected string GetProcessPath(IntPtr handle) {
+            return Mp.Services?.PlatformInfo?.ExecutingPath;
+        }
+        protected string GetAppNameByProessPath(string path) {
+            return Mp.Services?.ThisAppInfo?.ThisAppProductName;
+        }
+        protected string GetProcessTitle(IntPtr handle) {
+            return Mp.Services?.ThisAppInfo?.ThisAppProductName;
+        }
+        protected bool IsHandleWindowProcess(IntPtr handle) {
             return true;
         }
+        public IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos { get; } = [];
     }
 }
-

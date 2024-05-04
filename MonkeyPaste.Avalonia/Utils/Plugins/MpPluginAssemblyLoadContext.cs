@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 
@@ -10,11 +11,15 @@ namespace MonkeyPaste.Avalonia {
         public MpPluginAssemblyLoadContext() : base(nameof(MpPluginAssemblyLoadContext), isCollectible: true) {
         }
         public MpPluginAssemblyLoadContext(string mainAssemblyToLoadPath) : base(isCollectible: true) {
+            if (OperatingSystem.IsAndroid()) {
+                return;
+            }
             _resolver = new AssemblyDependencyResolver(mainAssemblyToLoadPath);
         }
 
         protected override Assembly? Load(AssemblyName assemblyName) {
-            if (Default.Assemblies.Any(a => a.FullName == assemblyName.FullName)) {
+            if (_resolver == null ||
+                Default.Assemblies.Any(a => a.FullName == assemblyName.FullName)) {
                 // This will fallback to loading the assembly from default context.
                 return null;
             }

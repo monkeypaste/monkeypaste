@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Common {
 
-    public interface MpIPlatformInfo { 
+    public interface MpIPlatformInfo {
         bool IsAdmin { get; }
         string OsMachineName { get; }
         string OsVersion { get; }
@@ -27,6 +27,8 @@ namespace MonkeyPaste.Common {
 
         string EditorPath { get; }
         string TermsPath { get; }
+        string EnumsPath { get; }
+        string UiStringsPath { get; }
         string CreditsPath { get; }
         string CreditsPlatformPath { get; }
 

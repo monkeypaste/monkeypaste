@@ -2,12 +2,15 @@
 using Avalonia.Input;
 using Avalonia.Input.Platform;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
 namespace MonkeyPaste.Avalonia.Android {
-    public class MpAvAdClipboard : IClipboard {
-        internal static ClipboardManager ClipboardManager =>
+    public class MpAvAdClipboard : MpIClipboard {
+        static ClipboardManager ClipboardManager =>
             Platform.AppContext.GetSystemService(Context.ClipboardService) as ClipboardManager;
 
         public Task<string> GetTextAsync() =>
@@ -19,9 +22,9 @@ namespace MonkeyPaste.Avalonia.Android {
         public Task ClearAsync() =>
             Clipboard.SetTextAsync(string.Empty);
 
-        public async Task SetDataObjectAsync(IDataObject data) {
-            if (data == null ||
-                data.GetText() is not string data_text) {
+        public async Task SetDataObjectAsync(Dictionary<string, object> ido) {
+            if (ido == null ||
+                ido.TryGetValue(MpPortableDataFormats.Text, out string data_text)) {
                 await ClearAsync();
                 return;
             }
@@ -35,6 +38,7 @@ namespace MonkeyPaste.Avalonia.Android {
             }
             return new string[] { };
         }
+
 
         public async Task<object> GetDataAsync(string format) {
             if (format == MpPortableDataFormats.Text) {
