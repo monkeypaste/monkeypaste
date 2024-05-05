@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Widget;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using Xamarin.Essentials;
 using static Android.Content.PM.PackageManager;
 using ApplicationInfoFlags = Android.Content.PM.PackageManager.ApplicationInfoFlags;

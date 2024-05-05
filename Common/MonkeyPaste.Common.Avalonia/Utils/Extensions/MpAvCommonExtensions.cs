@@ -25,30 +25,6 @@ using static Avalonia.VisualExtensions;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvCommonExtensions {
-        #region Storage
-
-        public static async Task<IStorageItem[]> ToAvFilesObjectAsync(this IEnumerable<string> fpl) {
-            var files = await Task.WhenAll(fpl.Where(x => x.IsFileOrDirectory()).Select(x => x.ToFileOrFolderStorageItemAsync()));
-            return files.ToArray();
-        }
-        public static async Task<IStorageItem> ToFileOrFolderStorageItemAsync(this string path) {
-            if (!path.IsFileOrDirectory()) {
-                return null;
-            }
-            IStorageItem si = null;
-            var mw = Application.Current.GetMainTopLevel();
-            var storageProvider = TopLevel.GetTopLevel(mw)!.StorageProvider;
-            if (storageProvider != null) {
-                if (path.IsFile()) {
-                    si = await storageProvider.TryGetFileFromPathAsync(path);
-                } else {
-                    si = await storageProvider.TryGetFolderFromPathAsync(path);
-                }
-            }
-            return si;
-        }
-        #endregion
-
         #region Environment
 
         public static Screen AsScreen(this IRenderRoot rr) {
@@ -199,7 +175,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return result;
         }
         public static T GetVisualAncestor<T>(this Visual visual, bool includeSelf = true) where T : Visual? {
-            if(visual == null) {
+            if (visual == null) {
                 return default;
             }
             if (includeSelf && visual is T) {
@@ -277,7 +253,7 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
         #region Control
-        
+
         public static RenderTargetBitmap RenderToBitmap(this Control target) {
             if (target is TemplatedControl tc) {
                 MpDebug.Assert(tc.Background != null, $"Needs bg");
@@ -859,8 +835,8 @@ namespace MonkeyPaste.Common.Avalonia {
             //var c_origin = control.PointToScreen(new Point()).ToPortablePoint(control.VisualPixelDensity());
             //return c_mp + c_origin;
 #if MOBILE
-            return e.GetPosition(App.MainView).ToPortablePoint();
-#endif
+            return e.GetPosition(Application.Current.GetMainTopLevel()).ToPortablePoint();
+#else
             if (e.Source is not Control c ||
                 c.GetScreen() is not Screen scr) {
                 return MpPoint.Zero;
@@ -869,6 +845,7 @@ namespace MonkeyPaste.Common.Avalonia {
             var scr_mp = c.PointToScreen(c_mp);
             var result = scr_mp.ToPortablePoint(scr.Scaling);
             return result;
+#endif
         }
 
         #endregion

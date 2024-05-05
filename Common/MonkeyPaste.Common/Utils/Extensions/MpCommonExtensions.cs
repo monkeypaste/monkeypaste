@@ -155,6 +155,17 @@ namespace MonkeyPaste.Common {
             return found == null ? -1 : found.i;
         }
 
+        public static bool AddOrReplace<T>(this IList<T> d, T value) {
+            //returns true if kvp was added
+            //returns false if kvp was replaced
+            int idx = d.IndexOf(value);
+            if(idx < 0) {
+                d.Add(value);
+            } else {
+                d[idx] = value;
+            }
+            return idx < 0;
+        }
         public static bool AddOrReplace<TKey, TValue>(this Dictionary<TKey, TValue> d, TKey key, TValue value) {
             //returns true if kvp was added
             //returns false if kvp was replaced

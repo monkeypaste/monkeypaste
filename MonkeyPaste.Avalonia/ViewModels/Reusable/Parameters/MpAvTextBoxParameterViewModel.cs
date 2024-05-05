@@ -212,7 +212,7 @@ namespace MonkeyPaste.Avalonia {
                 Width = 300,
                 Height = 300,
                 Title = Label.ToWindowTitleText(),
-                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("SlidersImage", typeof(WindowIcon), null, null) as WindowIcon,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("SlidersImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 Content = new MpAvContentQueryTextBoxView(),
                 Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString())
             };

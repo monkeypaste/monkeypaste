@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
             int curShortcutId,
             MpShortcutAssignmentType assignmentType = MpShortcutAssignmentType.InternalCommand,
             object iconResourceObj = null,
-            Window owner = null) {
+            MpAvWindow owner = null) {
             var scavm = new MpAvAssignShortcutViewModel();
             await scavm.InitializeAsync(shortcutName, keys, curShortcutId, assignmentType, iconResourceObj);
             var ascw = new MpAvWindow() {
@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = false,
                 Topmost = true,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("KeyboardImage", typeof(WindowIcon), null, null) as WindowIcon,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("KeyboardImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 Title = UiStrings.CommonAssignShortcutLabel.ToWindowTitleText(),
                 Content = new MpAvAssignShortcutView()
             };

@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
         public abstract MpIPlatformInfo PlatformInfo { get; set; }
         public abstract MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
 
-        public abstract MpIIconBuilder IconBuilder { get; set; }
+        public abstract MpIPathToPlatformIcon IconBuilder { get; set; }
         public abstract MpIClipboard DeviceClipboard { get; set; }
 
         #endregion

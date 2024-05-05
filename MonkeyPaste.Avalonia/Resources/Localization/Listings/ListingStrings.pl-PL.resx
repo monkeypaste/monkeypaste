@@ -267,7 +267,8 @@ Twój schowek jest zawsze śledzony lub przechowywany GDZIEKOLWIEK poza Twoim ko
     <value>Bezpieczne i prywatne lokalne przechowywanie danych z opcjonalną 2-składnikową ochroną hasłem</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Pełne źródło Monkeypaste dostępne teraz na naszym github https://github.com/monkeypaste/monkeypaste
+    <value>- Krytyczna poprawka dla 1.0.18.0, która ignorowała klipy plików
+- Pełne źródło Monkeypaste dostępne teraz na naszym github https://github.com/monkeypaste/monkeypaste
 - wersja Linux wydana tutaj pobierz tutaj https://github.com/monkeypaste/monkeypaste/releases
 - Ulepszony tryb kompatybilności (teraz ma przeglądarkę HTML dla klipów tekstowych)
 - drobne ulepszenia błędów i wydajności</value>

@@ -267,7 +267,8 @@
     <value>ذخیره سازی داده های محلی امن، امن و خصوصی با حفاظت از رمز عبور 2 فاکتور اختیاری</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- منبع کامل برای Monkeypaste اکنون در GitHub https://github.com/monkeypaste/monkeypaste موجود است
+    <value>- رفع بحرانی برای 1.0.18.0 که نادیده گرفتن کلیپ های پرونده بود
+- منبع کامل برای Monkeypaste اکنون در GitHub https://github.com/monkeypaste/monkeypaste موجود است
 - نسخه لینوکس منتشر شده در اینجا https://github.com/monkeypaste/monkeypaste/releases
 - حالت سازگاری بهبود یافته (اکنون HTML Viewer برای کلیپ های متن دارد)
 - اشکال جزئی و بهبود عملکرد</value>

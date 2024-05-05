@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using MonkeyPaste.Common.Plugin;
 
 
@@ -91,6 +92,9 @@ namespace MonkeyPaste.Common.Avalonia {
             int iconsize,
             int fileAttributeFlag,
             uint flags) {
+            if(!Dispatcher.UIThread.CheckAccess()) {
+                return Dispatcher.UIThread.Invoke(() => GetIconHandleFromFilePathWithFlags(filepath, iconsize, fileAttributeFlag, flags));
+            }
 #if WINDOWS
             try {
                 const int ILD_TRANSPARENT = 1;

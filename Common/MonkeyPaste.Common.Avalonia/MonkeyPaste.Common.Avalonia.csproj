@@ -27,6 +27,14 @@
     <None Remove="Utils\Input\Platform\Win32\COM\**" />
     <None Remove="Utils\Input\Platform\X11\Glib\**" />
     <None Remove="Utils\Input\Platform\X11\Gtk\**" />
+    <AvaloniaXaml Remove="Utils\Input\Platform\X11\**" />
+    <Compile Remove="Utils\Input\Platform\X11\**" />
+    <EmbeddedResource Remove="Utils\Input\Platform\X11\**" />
+    <None Remove="Utils\Input\Platform\X11\**" />
+    <AvaloniaXaml Remove="Utils\Input\Platform\MacOs\**" />
+    <Compile Remove="Utils\Input\Platform\MacOs\**" />
+    <EmbeddedResource Remove="Utils\Input\Platform\MacOs\**" />
+    <None Remove="Utils\Input\Platform\MacOs\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,6 +73,7 @@
     <ProjectReference Remove="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
     <Compile Remove="Utils\Input\Platform\X11\*.*" />
     <Compile Remove="Utils\Input\Platform\Win32\*.*" />
+    <Compile Include="Utils\Input\Platform\MacOs\*.*" />
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
   </ItemGroup>
   
@@ -97,6 +106,15 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+  <ItemGroup Condition="'$(BuildOs)' != 'LINUX'">
+    <AdditionalFiles Remove="Utils\Input\Platform\X11\**" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(BuildOs)' != 'MAC'">
+    <AdditionalFiles Remove="Utils\Input\Platform\MacOs\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utils\Input\Platform\" />
   </ItemGroup>
   <PropertyGroup>
      <!-- 

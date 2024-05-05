@@ -267,7 +267,8 @@ vaše schránka je vždy sledována nebo uložena KDEKOLI mimo váš vlastní po
     <value>Bezpečné, zabezpečené a soukromé místní úložiště dat s volitelnou dvoufaktorovou ochranou heslem</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Úplný zdroj pro MonkeyPaste je nyní k dispozici na našem githubu https://github.com/monkeypaste/monkeypaste
+    <value>- Kritická oprava pro 1.0.18.0, která ignorovala klipy souborů
+- Úplný zdroj pro MonkeyPaste je nyní k dispozici na našem githubu https://github.com/monkeypaste/monkeypaste
 - Vydaná verze pro Linux ke stažení zde https://github.com/monkeypaste/monkeypaste/releases
 - vylepšený režim kompatibility (nyní má HTML prohlížeč pro textové klipy)
 - drobná chyba a vylepšení výkonu</value>

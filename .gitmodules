@@ -2,8 +2,8 @@
 	path = Build/Ledger
 	url = https://github.com/monkeypaste/ledger/ledger.git
     ignore = dirty
-[submodule "Plugins/AzureCompoterVision"]
-	path = Plugins/AzureCompoterVision
+[submodule "Plugins/AzureComputerVision"]
+	path = Plugins/AzureComputerVision
 	url = https://github.com/monkeypaste/azurecomputervision.git
     ignore = dirty
 [submodule "Plugins/AzureTextTranslator"]
@@ -46,3 +46,6 @@
 	path = Common/MonkeyPaste.Common.Plugin
 	url = https://github.com/monkeypaste/MonkeyPaste.Common.Plugin
     ignore = dirty
+[submodule "MonkeyPaste.com/public_html/docs"]
+	path = MonkeyPaste.com/public_html/docs
+	url = https://github.com/monkeypaste/monkeypaste-docs

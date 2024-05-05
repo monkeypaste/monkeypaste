@@ -78,7 +78,6 @@ namespace MonkeyPaste.Avalonia {
             bool can_reload = await MpPluginLoader.BeginUpdatePluginAsync(plugin_guid, package_url, cpivm);
             if (can_reload) {
                 can_reload = await AddOrReplaceAnalyzerViewModelByGuidAsync(plugin_guid);
-
             }
             IsBusy = false;
             return can_reload;
@@ -190,6 +189,11 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return SelectedItem.SelectedItem;
             }
+        }
+
+        public override MpAvAnalyticItemViewModel SelectedItem {
+            get => base.SelectedItem;
+            set => base.SelectedItem = value;
         }
 
         #endregion

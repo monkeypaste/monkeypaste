@@ -267,7 +267,8 @@ clipboard-ul dvs. este urmărit sau stocat ORIUNDE în afara propriei mașini. P
     <value>Stocare sigură, securizată și privată a datelor locale cu protecție opțională cu parolă cu 2 factori</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Sursa completă pentru Monkeypaste acum disponibilă pe github -ul nostru https://github.com/monkeypaste/monkeypaste
+    <value>- soluție critică pentru 1.0.18.0 care ignora clipurile de fișiere
+- Sursa completă pentru Monkeypaste acum disponibilă pe github -ul nostru https://github.com/monkeypaste/monkeypaste
 - Versiunea Linux lansată Descărcare aici https://github.com/monkeypaste/monkeypaste/reLeases
 - Mod de compatibilitate îmbunătățit (acum are HTML Viewer pentru clipuri de text)
 - Bug -uri minore și îmbunătățiri ale performanței</value>

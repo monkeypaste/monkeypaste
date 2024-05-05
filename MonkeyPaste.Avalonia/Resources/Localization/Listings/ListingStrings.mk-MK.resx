@@ -267,7 +267,8 @@
     <value>Безбедно, безбедно и приватно локално складирање на податоци со опционална 2 - заштита на фактор лозинка</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Целосен извор за MonkeyPaste сега достапен на нашиот github https://github.com/monkeypaste/monkeypaste
+    <value>- Критична поправка за 1.0.18.0 што ги игнорираше клиповите за датотеки
+- Целосен извор за MonkeyPaste сега достапен на нашиот github https://github.com/monkeypaste/monkeypaste
 - Објавена верзија на Linux, преземете тука https://github.com/monkeypaste/monkeypaste/releases
 - Подобрен режим на компатибилност (сега има HTML Viewer за клипови со текст)
 - Мала подобрувања во грешки и перформанси</value>

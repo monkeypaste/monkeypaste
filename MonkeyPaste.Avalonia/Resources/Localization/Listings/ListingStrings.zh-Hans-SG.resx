@@ -267,7 +267,8 @@
     <value>安全、可靠和私密的本地数据存储，可选的 2 因素密码保护</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>-  MonkeyPaste的完整来源现已在我们的GitHub https://github.com/monkeypaste/monkeypaste上提供
+    <value>-  1.0.18.0的关键修复
+ -  MonkeyPaste的完整来源现已在我们的GitHub https://github.com/monkeypaste/monkeypaste上提供
  -  Linux版本在此处下载https://github.com/monkeypaste/monkeypaste/releases
  - 改进的兼容模式（现在具有用于文本剪辑的HTML查看器）
  - 较小的错误和绩效改进</value>

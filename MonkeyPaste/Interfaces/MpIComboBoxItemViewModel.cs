@@ -5,7 +5,7 @@ namespace MonkeyPaste {
         int IconId { get; }
         string Label { get; }
     }
-    public interface MpIAsyncComboBoxItemViewModel : MpIComboBoxItemViewModel, MpIAsyncObject {
+    public interface MpIAsyncComboBoxItemViewModel : MpIComboBoxItemViewModel{
     }
     public interface MpIAsyncComboBoxViewModel : MpIViewModel {
         IEnumerable<MpIAsyncComboBoxItemViewModel> Items { get; }

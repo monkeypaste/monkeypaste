@@ -267,7 +267,8 @@
     <value>Անվտանգ, ապահով եւ մասնավոր տեղական տվյալների պահպանումը ընտրանքային 2 - ֆակտորիալ ծածկագրի պաշտպանությամբ</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Լրիվ աղբյուրը Monkeypaste- ի համար այժմ հասանելի է մեր github https://github.com/monkeypaste/monkeepaste
+    <value>- Քննադատական ​​շտկում 1.0.18.0-ի համար, որն անտեսում էր ֆայլերի տեսահոլովակները
+- Լրիվ աղբյուրը Monkeypaste- ի համար այժմ հասանելի է մեր github https://github.com/monkeypaste/monkeepaste
 - Linux- ի վարկածը թողարկվել է ներբեռնումը այստեղ https://github.com/monkeepte/monkePePaste/reques
 - բարելավված համատեղելիության ռեժիմը (այժմ HTML հեռուստադիտող ունի տեքստի տեսահոլովակների համար)
 - Փոքր վրիպակների եւ կատարողականի բարելավում</value>

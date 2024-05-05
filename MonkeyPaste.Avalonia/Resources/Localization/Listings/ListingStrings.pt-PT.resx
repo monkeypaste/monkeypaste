@@ -267,7 +267,8 @@ sua área de transferência é rastreada ou armazenada em qualquer lugar além d
     <value>Armazenamento de dados local seguro e privado com proteção opcional por senha de 2 fatores</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Fonte completa do MonkeyyySaste agora disponível em nosso github https://github.com/monkeypsaste/monkeyyyaste
+    <value>- Correção crítica para 1.0.18.0, que estava ignorando os clipes de arquivo
+- Fonte completa do MonkeyyySaste agora disponível em nosso github https://github.com/monkeypsaste/monkeyyyaste
 - Versão Linux Lançada Download aqui https://github.com/monkeypsaste/monkeypsaste/releasesas
 - Modo de compatibilidade aprimorado (agora possui visualizador HTML para clipes de texto)
 - Menores melhorias de bug e desempenho</value>

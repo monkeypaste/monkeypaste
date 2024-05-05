@@ -3,7 +3,6 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                       xmlns:paz="using:Avalonia.Controls.PanAndZoom"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        x:CompileBindings="True"
@@ -145,7 +144,6 @@
 
     </local:MpAvUserControl.Styles>
     <Grid ColumnDefinitions="85,Auto,85,Auto,85"
-          x:DataType="local:MpAvTriggerActionViewModelBase"
           DataContext="{Binding SelectedTrigger}"
           HorizontalAlignment="Center"
           VerticalAlignment="Stretch">

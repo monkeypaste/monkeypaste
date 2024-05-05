@@ -267,7 +267,8 @@ ang iyong clipboard ay kailanman sinusubaybayan o naka imbak SAANMAN lampas sa i
     <value>Ligtas, ligtas at pribadong lokal na imbakan ng data na may opsyonal na 2 - factor na proteksyon ng password</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Buong mapagkukunan para sa Monkeypaste Magagamit na ngayon sa aming GitHub https://github.com/monkeypaste/monkeypaste
+    <value>- Kritikal na pag -aayos para sa 1.0.18.0 na hindi pinapansin ang mga file clip
+- Buong mapagkukunan para sa Monkeypaste Magagamit na ngayon sa aming GitHub https://github.com/monkeypaste/monkeypaste
 - Ang bersyon ng Linux ay inilabas ang pag -download dito https://github.com/monkeypaste/monkeypaste/releases
 - Pinahusay na mode ng pagiging tugma (mayroon na ngayong HTML Viewer para sa mga clip ng teksto)
 - Mga menor de edad na bug at pagpapabuti ng pagganap</value>

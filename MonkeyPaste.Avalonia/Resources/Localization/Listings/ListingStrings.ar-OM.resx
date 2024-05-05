@@ -267,7 +267,8 @@
     <value>تخزين بيانات محلية آمنة ومأمونة وخاصة مع حماية كلمة مرور اختيارية ثنائية العامل</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- المصدر الكامل لـ MonkeyPaste متوفر الآن على جيثب الخاص بنا https://github.com/monkeypaste/monkeypaste
+    <value>- إصلاح حاسم للإصدار 1.0.18.0 والذي كان يتجاهل مقاطع الملفات
+- المصدر الكامل لـ MonkeyPaste متوفر الآن على جيثب الخاص بنا https://github.com/monkeypaste/monkeypaste
 - تم إصدار نسخة Linux للتنزيل هنا https://github.com/monkeypaste/monkeypaste/releases
 - تحسين وضع التوافق (يحتوي الآن على عارض HTML لمقاطع النص)
 - علة طفيفة وتحسينات في الأداء</value>

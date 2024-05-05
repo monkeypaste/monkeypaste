@@ -276,7 +276,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     if (fc.GetVisualAncestor<MpAvClearTextButton>() is MpAvClearTextButton focus_ctb &&
                         focus_ctb.DataContext is MpAvSearchBoxViewModel &&
-                        TopLevel.GetTopLevel(fc) is MpAvWindow w) {
+                        MpAvWindowManager.GetTopLevel(fc) is MpAvWindow w) {
                         // searchbox clear text button is focus, move focus to mw
                         w.TrySetFocusAsync().FireAndForgetSafeAsync();
                         return;

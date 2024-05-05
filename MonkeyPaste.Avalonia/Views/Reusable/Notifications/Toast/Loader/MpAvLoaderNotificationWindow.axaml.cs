@@ -7,7 +7,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvLoaderNotificationWindow : MpAvNotificationWindow {
         public MpAvLoaderNotificationWindow() : this(null) { }
-        public MpAvLoaderNotificationWindow(Window owner = default) : base(owner) {
+        public MpAvLoaderNotificationWindow(MpAvWindow owner = default) : base(owner) {
             InitializeComponent();
         }
 

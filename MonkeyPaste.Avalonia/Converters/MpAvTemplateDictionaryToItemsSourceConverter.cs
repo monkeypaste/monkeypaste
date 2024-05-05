@@ -4,6 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Data.Converters;
 using Avalonia.Layout;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
@@ -98,8 +99,8 @@ namespace MonkeyPaste.Avalonia {
         private void Child_mi_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
             if (sender is not MenuItem child_mi ||
                 child_mi.Tag is not MenuItem mi ||
-                TopLevel.GetTopLevel(mi) is not PopupRoot pr ||
-                TopLevel.GetTopLevel(child_mi) is not PopupRoot child_pr) {
+                MpAvWindowManager.GetTopLevel(mi) is not PopupRoot pr ||
+                MpAvWindowManager.GetTopLevel(child_mi) is not PopupRoot child_pr) {
                 return;
             }
             var parent_tl = pr.PointToScreen(pr.Bounds.TopLeft);

@@ -267,7 +267,8 @@
     <value>אחסון נתונים מקומי בטוח, מאובטח ופרטי עם הגנה אופציונלית באמצעות סיסמה דו-שלבית</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- מקור מלא ל- Monkeypaste זמין כעת ב- Github https://github.com/monkeypaste/monkeypaste
+    <value>- תיקון קריטי עבור 1.0.18.0 שהתעלם מקליפי קבצים
+- מקור מלא ל- Monkeypaste זמין כעת ב- Github https://github.com/monkeypaste/monkeypaste
 - גרסת לינוקס פורסמה הורדה כאן https://github.com/monkeypaste/monkeypaste/releases
 - מצב תאימות משופר (כעת יש מציג HTML לקטעי טקסט)
 - שיפורי באגים וביצועים קלים</value>

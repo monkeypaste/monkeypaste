@@ -267,6 +267,10 @@ namespace MonkeyPaste.Avalonia {
                 return Path.Combine(ExecutingDir, "Resources", "Legal", "terms.html");
             }
         }
+        public virtual string EnumsPath =>
+            Path.Combine(ExecutingDir, "Resources", "Localization", "Enums", "EnumUiStrings.resx");
+        public virtual string UiStringsPath =>
+            Path.Combine(ExecutingDir, "Resources", "Localization", "UiStrings", "UiStrings.resx");
 
         public virtual string CreditsPath {
             get {
@@ -287,8 +291,20 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string LogDir =>
-            Path.Combine(StorageDir, "Logs");
+        private string _logDir;
+        public string LogDir {
+            get {
+                if (_logDir == null) {
+                    _logDir = Path.Combine(StorageDir, "Logs");
+                    if (!_logDir.IsDirectory()) {
+
+                        MpFileIo.CreateDirectory(_logDir);
+                        MpConsole.WriteLine($"Log dir successfully created at: '{_logDir}'");
+                    }
+                }
+                return _logDir;
+            }
+        }
         private string _logPath;
         public string LogPath {
             get {

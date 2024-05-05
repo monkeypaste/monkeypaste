@@ -1,6 +1,9 @@
-﻿namespace MonkeyPaste {
+﻿using Newtonsoft.Json;
+
+namespace MonkeyPaste {
     public interface MpIAsyncObject {
-        bool IsBusy { get; }
+        [JsonIgnore]
+        bool IsBusy { get; set; }
     }
     public interface MpIPassiveAsyncObject {
         bool IsBusy { get; set; }

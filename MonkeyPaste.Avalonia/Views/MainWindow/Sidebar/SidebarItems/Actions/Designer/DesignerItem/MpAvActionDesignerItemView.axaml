@@ -101,6 +101,7 @@
                Selector="Border#DesignerIconContainer">
             <Setter Property="Child">
                 <Setter.Value>
+                    <!-- ReSharper disable once Xaml.InvalidType -->
                     <Template>
                         <Grid>
                             <Image IsVisible="{Binding !IsPerformingAction}" />
@@ -110,6 +111,7 @@
                                                        VerticalAlignment="Center"
                                                        IsVisible="{Binding IsPerformingAction}" />
                         </Grid>
+                        <!-- ReSharper disable once Xaml.InvalidType -->
                     </Template>
                 </Setter.Value>
             </Setter>

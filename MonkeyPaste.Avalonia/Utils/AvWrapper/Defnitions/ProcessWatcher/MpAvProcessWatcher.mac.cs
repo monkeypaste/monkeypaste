@@ -133,7 +133,10 @@ namespace MonkeyPaste.Avalonia {
             throw new NotImplementedException();
         }
 
-
+        
+        public MpPortableProcessInfo GetClipboardOwner() {
+            return null;
+        }
         #region Helpers
 
 

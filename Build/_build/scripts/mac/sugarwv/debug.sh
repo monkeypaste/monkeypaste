@@ -16,7 +16,7 @@ fi
 if [ "$1" = "reset-user" ]; then
 	../reset_user.sh
 fi
-if [ "$1" = "no-attach" ]; then
+if [ "$1" = "no-attach" ] || [ "$2" = "no-attach" ]; then
 	RUN_ARGS=""
 fi
 

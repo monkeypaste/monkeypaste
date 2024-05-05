@@ -267,7 +267,8 @@ vaša ostava se ikada prati ili skladišti bilo gde izvan vaše mašine. Menstru
     <value>Bezbedno, bezbedno i privatno lokalno skladištenje podataka sa opcionalnom zaštitom lozinke 2 - faktor zaštite lozinkom</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Потпуни извор за монкеапасте сада је доступан на нашим ГитХуб хттпс: //гитхуб.цом/монкеипасте/монкеипасте
+    <value>- Критични поправак за 1.0.18.0 који је игнорисао игнорисане датотеке датотека
+- Потпуни извор за монкеапасте сада је доступан на нашим ГитХуб хттпс: //гитхуб.цом/монкеипасте/монкеипасте
 - Линук верзија Објављена Преузмите овде хттпс: //гитхуб.цом/монкеипасте/ Монкеипасте/релеасе
 - Побољшани режим компатибилности (сада има ХТМЛ Виевер за текстуалне клипове)
 - Побољшања мањих грешака и перформанси</value>

@@ -267,7 +267,8 @@
     <value>кошумча 2 менен коопсуз, коопсуз жана жеке жергиликтүү маалыматтарды сактоо - фактор сырсөз коргоо</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Азыр MonkeyPaste үчүн толук булак биздин Github https://github.com/minkeyPaste/MonkeyPaste
+    <value>- 1,0.18.0 үчүн сын-пикирлер
+- Азыр MonkeyPaste үчүн толук булак биздин Github https://github.com/minkeyPaste/MonkeyPaste
 - Linux Version
 - өркүндөтүлгөн шайкештик режими (азыр тексттик клиптер үчүн HTML Viewer бар)
 - Кичинекей мүчүлүштүктөрдү жана иштин өркүндөтүлүшү</value>

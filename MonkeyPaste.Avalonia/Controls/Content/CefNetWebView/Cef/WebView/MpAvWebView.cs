@@ -560,7 +560,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 #if CEFNET_WV
-            if (TopLevel.GetTopLevel(this) is MpAvWindow w) {
+            if (MpAvWindowManager.GetTopLevel(this) is MpAvWindow w) {
                 w.Closed += W_Closed;
             }
 #endif

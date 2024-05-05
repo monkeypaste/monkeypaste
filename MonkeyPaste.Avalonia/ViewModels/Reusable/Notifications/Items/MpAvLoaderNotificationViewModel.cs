@@ -94,19 +94,11 @@ namespace MonkeyPaste.Avalonia {
 
 
         public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
-            var base_result = BeginShow();
-            if (base_result == MpNotificationDialogResultType.DoNotShow) {
-                // when loader is DoNotShow base never shows it (and StartLoader is called from window)
-                // so manually perform load
-                if (ValueLoaded == 0) {
-                    // don't restart loader if user JUST set don't show again 
-                    await DoLoaderAsync();
-                }
-
-                return base_result;
+            if(IsDoNotShowType) {
+                await DoLoaderAsync();
+                return MpNotificationDialogResultType.DoNotShow;
             }
-            // NOTE returning loading notifies builder not to hide loader
-            return MpNotificationDialogResultType.Loading;
+            return BeginShow();
         }
         #endregion
 
@@ -120,7 +112,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private async Task DoLoaderAsync() {
-
             await ProgressLoader.BeginLoaderAsync();
             await ProgressLoader.FinishLoaderAsync();
         }

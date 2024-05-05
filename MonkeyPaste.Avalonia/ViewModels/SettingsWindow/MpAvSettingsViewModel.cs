@@ -6,7 +6,6 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -739,12 +738,13 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = UiStrings.PrefIgnoreWhiteSpaceLabel,
                                             description = UiStrings.PrefIgnoreWhiteSpaceHint,
-                                            values = new List<MpParameterValueFormat>() {
+                                            values = [
                                                 new MpParameterValueFormat() {
                                                     isDefault = true,
-                                                    value = MpAvPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems.ToString()
+                                                    value = MpAvPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems
+                                                        .ToString()
                                                 }
-                                            }
+                                            ]
                                         },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.TrackExternalPasteHistory),
@@ -1199,8 +1199,6 @@ namespace MonkeyPaste.Avalonia {
 
                 // map button cmds 
                 fvm.Items
-                    //.Where(x => x.ControlType == MpParameterControlType.Button || x.ControlType == MpParameterControlType.Hyperlink)
-                    //.Cast<MpAvButtonParameterViewModel>()
                     .OfType<MpAvButtonParameterViewModel>()
                     .ForEach(x => x.ClickCommand = ButtonParameterClickCommand);
 
@@ -1305,6 +1303,15 @@ namespace MonkeyPaste.Avalonia {
 #endif
 #endif
                     }
+                },
+                {
+                    nameof(MpRuntimePrefParamType.ShowLogsFolder),
+                    (piv) => {
+                        if(piv.GetVisualDescendant<Button>() is not Button b) {
+                            return;
+                        }
+                        b.IsEnabled = Mp.Services.PlatformInfo.LogDir.ToFileSystemUriFromPath().LocalStoragePathToPackagePath().IsDirectory();
+                    }
                 }
             };
 
@@ -1372,7 +1379,8 @@ namespace MonkeyPaste.Avalonia {
                     CanResize = true,
                     SizeToContent = SizeToContent.Manual,
                     Title = UiStrings.AccountLoginWindowTitle.ToWindowTitleText(),
-                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("LoginImage", typeof(WindowIcon), null, null) as WindowIcon,
+                    Icon = MpAvIconSourceObjToBitmapConverter.Instance
+                        .Convert("LoginImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     DataContext = this,
                     Content = new MpAvSettingsView()
@@ -1383,7 +1391,8 @@ namespace MonkeyPaste.Avalonia {
                     Width = 1050,
                     Height = 650,
                     Title = UiStrings.CommonSettingsTitle.ToWindowTitleText(),
-                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogColorImage", typeof(WindowIcon), null, null) as WindowIcon,
+                    Icon = MpAvIconSourceObjToBitmapConverter.Instance
+                        .Convert("CogColorImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     DataContext = this,
                     Content = new MpAvSettingsView()
@@ -1804,7 +1813,9 @@ namespace MonkeyPaste.Avalonia {
                                 Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment1DarkColor.ToString()),
                                 CanResize = false,
                                 Title = UiStrings.PrefSetPasswordWindowTitlePrefix.ToWindowTitleText(),
-                                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("LockImage", typeof(WindowIcon), null, null) as WindowIcon,
+                                Icon = 
+                                    MpAvIconSourceObjToBitmapConverter.Instance
+                                        .Convert("LockImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                                 Content = new MpAvSetPasswordView() {
                                     ShowDialogButtons = true
                                 }

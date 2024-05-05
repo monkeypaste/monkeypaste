@@ -1,5 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.VisualTree;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Linq;
 namespace MonkeyPaste.Avalonia {

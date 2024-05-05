@@ -497,7 +497,7 @@ namespace MonkeyPaste.Avalonia {
                                 // to avoid tooltip overlapping mouse which creates a stutter from
                                 // leave/exit calls
 
-                                var tl = TopLevel.GetTopLevel(tt);
+                                var tl = MpAvWindowManager.GetTopLevel(tt);
                                 var tt_size = tl.Bounds.Size.ToPortableSize();
                                 if (tt_size.IsEmpty()) {
                                     return;
@@ -789,7 +789,7 @@ namespace MonkeyPaste.Avalonia {
                                 eventType: pointerMsg.eventType.ToEnum<MpPointerEventType>().ToRoutedEvent(),
                                 interactive: this,
                                 mp: new MpPoint(pointerMsg.clientX, pointerMsg.clientY),
-                                kmf: MpKeyModifierFlags.None,
+                                KeyModifiers.None,
                                 isLocalMp: true);
                             this.RaiseEvent(pe);
                             return;
@@ -804,7 +804,7 @@ namespace MonkeyPaste.Avalonia {
                                 eventType: pointerMsg.eventType.ToEnum<MpPointerEventType>().ToRoutedEvent(),
                                 interactive: ctv.ClipTileContainerBorder,
                                 mp: mp,
-                                kmf: MpKeyModifierFlags.None,
+                                kmf: KeyModifiers.None,
                                 isLocalMp: true,
                                 isLeftButton: pointerMsg.isLeft);
                         ctv.ClipTileContainerBorder.RaiseEvent(pe2);
@@ -816,7 +816,7 @@ namespace MonkeyPaste.Avalonia {
 
                 #region OTHER
                 case MpEditorBindingFunctionType.notifyDevToolsRequested:
-                    if (TopLevel.GetTopLevel(this) is MpAvWindow tl) {
+                    if (MpAvWindowManager.GetTopLevel(this) is MpAvWindow tl) {
                         tl.ShowDevTools();
                     }
                     break;
@@ -1488,7 +1488,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 #endif
-            if (TopLevel.GetTopLevel(this) is MpAvWindow w &&
+            if (MpAvWindowManager.GetTopLevel(this) is MpAvWindow w &&
                 w.Classes.Contains("content-window")) {
 
             }
@@ -1976,7 +1976,7 @@ namespace MonkeyPaste.Avalonia {
             // keeping animation smooth so waiting till end to make sure its set
 
             if (BindingContext.IsWindowOpen &&
-                TopLevel.GetTopLevel(this) is MpAvWindow w &&
+                MpAvWindowManager.GetTopLevel(this) is MpAvWindow w &&
                 w.Screens.ScreenFromPoint(w.Position) is Screen ws) {
                 // for pop out keep it on its screen
                 double pd = this.VisualPixelDensity();

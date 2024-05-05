@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnLoaded(RoutedEventArgs e) {
             base.OnLoaded(e);
-            if (TopLevel.GetTopLevel(this) is not { } tl) {
+            if (MpAvWindowManager.GetTopLevel(this) is not { } tl) {
                 return;
             }
             IsPopOut = tl.Classes.Contains("popout");

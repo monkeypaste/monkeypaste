@@ -47,11 +47,11 @@ namespace MonkeyPaste.Avalonia {
 
         private static void AttachedControl_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             if (sender is not Control control ||
-                TopLevel.GetTopLevel(control) is not { } tl) {
+                MpAvWindowManager.GetTopLevel(control) is not Control tl) {
                 return;
             }
 
-            tl.AddHandler(TopLevel.PointerMovedEvent, TopLevel_PointerMoved, RoutingStrategies.Tunnel);
+            tl.AddHandler(Control.PointerMovedEvent, TopLevel_PointerMoved, RoutingStrategies.Tunnel);
         }
 
 
@@ -61,10 +61,10 @@ namespace MonkeyPaste.Avalonia {
             }
             control.DetachedFromVisualTree -= AttachedControl_DetachedFromVisualOrExtension;
             control.AttachedToVisualTree -= AttachedControl_AttachedToVisualTree;
-            if (TopLevel.GetTopLevel(control) is not TopLevel tl) {
+            if (MpAvWindowManager.GetTopLevel(control) is not Control tl) {
                 return;
             }
-            tl.RemoveHandler(TopLevel.PointerMovedEvent, TopLevel_PointerMoved);
+            tl.RemoveHandler(Control.PointerMovedEvent, TopLevel_PointerMoved);
         }
 
         private static void TopLevel_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {

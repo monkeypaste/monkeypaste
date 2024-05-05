@@ -7,6 +7,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,12 +42,40 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIManagePluginComponents Implementation (unimplemented)
 
-        Task<bool> MpIManagePluginComponents.InstallAsync(string pluginGuid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm) {
-            throw new NotImplementedException();
+        async Task<bool> MpIManagePluginComponents.InstallAsync(string pluginGuid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm) {
+            bool success = await MpPluginLoader.InstallPluginAsync(pluginGuid, packageUrl, false, cpivm);
+            if (success) {
+                IsBusy = true;
+
+                var chivm = await CreateClipboardHandlerItemViewModelAsync(pluginGuid);
+                Items.Add(chivm);
+
+                IsBusy = false;
+            }
+
+            return success;
         }
 
-        Task<bool> MpIManagePluginComponents.BeginUpdateAsync(string pluginGuid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm) {
-            throw new NotImplementedException();
+        async Task<bool> MpIManagePluginComponents.UninstallAsync(string plugin_guid) {
+            if (Items.FirstOrDefault(x => x.PluginGuid == plugin_guid) is not { } chivm) {
+                MpDebug.Break($"Error uninstalling plugin guid '{plugin_guid}' can't find handler");
+                return false;
+            }
+            // NOTE wait for processing to end BEFORE stopping monitor or last monitor req may restart itself (i think)
+            await RemoveHandlerReferencesAsync(chivm, true);
+
+            // remove from plugin dir
+            bool success = await MpPluginLoader.DeletePluginByGuidAsync(plugin_guid);
+
+            if (SelectedItem == null) {
+                SelectedItem = SortedItems.FirstOrDefault();
+            }
+            return success;
+        }
+        async Task<bool> MpIManagePluginComponents.BeginUpdateAsync(string pluginGuid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm) {
+            // NOTE not even trying to install, just wait for restart. can_reload will always be false
+            bool can_reload = await MpPluginLoader.BeginUpdatePluginAsync(pluginGuid, packageUrl, cpivm, attemptInstall: false);
+            return can_reload;
         }
         private async Task RemoveHandlerReferencesAsync(MpAvClipboardHandlerItemViewModel chivm, bool deletePresets) {
             IsOleProcessingBlocked = true;
@@ -76,22 +105,6 @@ namespace MonkeyPaste.Avalonia {
 
             Mp.Services.ClipboardMonitor.StartMonitor(true);
             IsOleProcessingBlocked = false;
-        }
-        async Task<bool> MpIManagePluginComponents.UninstallAsync(string plugin_guid) {
-            if (Items.FirstOrDefault(x => x.PluginGuid == plugin_guid) is not { } chivm) {
-                MpDebug.Break($"Error uninstalling plugin guid '{plugin_guid}' can't find handler");
-                return false;
-            }
-            // NOTE wait for processing to end BEFORE stopping monitor or last monitor req may restart itself (i think)
-            await RemoveHandlerReferencesAsync(chivm, true);
-
-            // remove from plugin dir
-            bool success = await MpPluginLoader.DeletePluginByGuidAsync(plugin_guid);
-
-            if (SelectedItem == null) {
-                SelectedItem = SortedItems.FirstOrDefault();
-            }
-            return success;
         }
         #endregion
 
@@ -235,6 +248,16 @@ namespace MonkeyPaste.Avalonia {
                     SubItems = Items.Select(x => x.ContextMenuItemViewModel).ToList()
                 };
             }
+        }
+
+        public override ObservableCollection<MpAvClipboardHandlerItemViewModel> Items {
+            get => base.Items;
+            set => base.Items = value;
+        }
+
+        public override MpAvClipboardHandlerItemViewModel SelectedItem {
+            get => base.SelectedItem;
+            set => base.SelectedItem = value;
         }
 
         public IEnumerable<MpAvClipboardHandlerItemViewModel> SortedItems =>

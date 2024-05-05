@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MonkeyPaste.Common {
+namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvDragDropExtensions {
         private const int MIN_AUTOSCROLL_REST_DELAY_MS = 5_000;
 

@@ -267,7 +267,8 @@ clipboard Anda pernah dilacak atau disimpan DI MANA SAJA di luar mesin Anda send
     <value>Penyimpanan data lokal yang aman, terlindungi, dan pribadi dengan perlindungan kata sandi 2 faktor opsional</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Sumber lengkap untuk monkeypaste sekarang tersedia di github https://github.com/monkeypaste/monkeypaste kami
+    <value>- Perbaikan kritis untuk 1.0.18.0 yang mengabaikan klip file
+- Sumber lengkap untuk monkeypaste sekarang tersedia di github https://github.com/monkeypaste/monkeypaste kami
 - Linux Versi Download Download Di Sini https://github.com/monkeypaste/monkeypaste/releases
 - Mode kompatibilitas yang ditingkatkan (sekarang memiliki penampil HTML untuk klip teks)
 - Bug kecil dan peningkatan kinerja</value>

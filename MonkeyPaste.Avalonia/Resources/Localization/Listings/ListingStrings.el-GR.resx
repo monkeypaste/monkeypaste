@@ -267,7 +267,8 @@
     <value>Ασφαλής, ασφαλής και ιδιωτική τοπική αποθήκευση δεδομένων με προαιρετική προστασία κωδικού πρόσβασης 2 παραγόντων</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Η πλήρης πηγή για το MonkeyPaste είναι τώρα διαθέσιμη στο github μας https://github.com/monkeypaste/monkeypaste
+    <value>- Κρίσιμη επιδιόρθωση για την 1.0.18.0 που αγνοούσε τα αποσπάσματα αρχείων
+- Η πλήρης πηγή για το MonkeyPaste είναι τώρα διαθέσιμη στο github μας https://github.com/monkeypaste/monkeypaste
 - Έκδοση Linux που κυκλοφόρησε κατεβάστε εδώ https://github.com/monkeypaste/monkeypaste/releases
 - βελτιωμένη λειτουργία συμβατότητας (πλέον διαθέτει πρόγραμμα προβολής HTML για κλιπ κειμένου)
 - Μικρά σφάλματα και βελτιώσεις απόδοσης</value>

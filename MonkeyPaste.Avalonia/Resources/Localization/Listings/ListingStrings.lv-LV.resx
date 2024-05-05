@@ -267,7 +267,8 @@ jūsu starpliktuve kādreiz tiek izsekota vai glabāta JEBKUR ārpus jūsu maš�
     <value>Droša, droša un privāta lokālā datu glabāšana ar papildu 2 faktoru paroles aizsardzību</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Pilns MonkeyPaste avots tagad ir pieejams mūsu github https://github.com/monkepaste/monkeypaste
+    <value>- kritisks labojums 1.0.18.0, kas ignorēja failu klipus
+- Pilns MonkeyPaste avots tagad ir pieejams mūsu github https://github.com/monkepaste/monkeypaste
 - Linux versija izlaista lejupielāde šeit
 - Uzlabots saderības režīms (tagad ir HTML skatītājs teksta klipiem)
 - Nelieli kļūdu un veiktspējas uzlabojumi</value>

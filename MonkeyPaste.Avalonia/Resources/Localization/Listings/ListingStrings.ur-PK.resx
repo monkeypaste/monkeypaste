@@ -267,7 +267,8 @@ lim لامحدود صلاحیت</value>
     <value>اختیاری 2 - فیکٹر پاس ورڈ کی حفاظت کے ساتھ محفوظ، محفوظ اور نجی مقامی ڈیٹا اسٹوریج</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- مانکی پیسٹ کے لئے مکمل ماخذ اب ہمارے گیتوب پر دستیاب ہے https://github.com/monkeypaste/monkeypaste
+    <value>- 1.0.18.0 کے لئے تنقیدی فکس جو فائل کلپس کو نظرانداز کررہا تھا
+- مانکی پیسٹ کے لئے مکمل ماخذ اب ہمارے گیتوب پر دستیاب ہے https://github.com/monkeypaste/monkeypaste
 - لینکس ورژن جاری کیا گیا یہاں ڈاؤن لوڈ ، اتارنا https://github.com/monkeypaste/monkeypaste/releases
 - بہتر مطابقت وضع (ٹیکسٹ کلپس کے لئے اب HTML ناظرین ہے)
 - معمولی بگ اور کارکردگی میں بہتری</value>

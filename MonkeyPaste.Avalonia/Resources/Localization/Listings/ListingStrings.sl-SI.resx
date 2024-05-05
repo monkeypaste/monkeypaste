@@ -267,7 +267,8 @@ Odložišče je vedno sledeno ali shranjeno KJERKOLI zunaj vašega lastnega stro
     <value>Varna, zaščitena in zasebna lokalna shramba podatkov z izbirno 2-faktorsko zaščito z geslom</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Celoten vir za MonkeyPaste, ki je zdaj na voljo na našem github https://github.com/monkeypaste/monkeypaste
+    <value>- Kritični popravek za 1.0.18.0, ki je ignoriral posnetke datotek
+- Celoten vir za MonkeyPaste, ki je zdaj na voljo na našem github https://github.com/monkeypaste/monkeypaste
 - Izdana različica Linuxa Prenos tukaj https://github.com/monkeypaste/monkeypaste/releases
 - Izboljšan način združljivosti (zdaj ima HTML pregledovalnik za besedilne posnetke)
 - Manjše izboljšave hroščev in uspešnosti</value>

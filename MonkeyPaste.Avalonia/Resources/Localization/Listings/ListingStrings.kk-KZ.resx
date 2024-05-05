@@ -267,7 +267,8 @@
     <value>Міндетті емес 2 - факторлық парольді қорғаумен жергілікті деректерді қауіпсіз, қауіпсіз және жеке сақтау</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Monkeyptaste үшін толық көзі Біздің GTITS: https://github.com/monkeyptaste/monkeyptaste
+    <value>- файл клиптерін елемейтін 1.0.18.0 үшін критикалық түзету
+- Monkeyptaste үшін толық көзі Біздің GTITS: https://github.com/monkeyptaste/monkeyptaste
 - Linux нұсқасы шығарылды, мұнда https://github.com/monkeyptaste/monkyyptaste/reliss
 - жетілдірілген үйлесімділік режимі (қазір мәтіндік клиптерге арналған HTML қараушысы бар)
 - кішігірім қате және өнімділікті жақсарту</value>

@@ -20,8 +20,8 @@ namespace MonkeyPaste.Common {
 
         public MpAsyncCommand(
              Func<T, Task> execute,
-             Func<T, bool> canExecute = null,
-             MpIErrorHandler errorHandler = null,
+             Func<T, bool> canExecute,
+             MpIErrorHandler errorHandler,
              params object[] npcArgs) {
             _execute = execute;
             _canExecute = canExecute;

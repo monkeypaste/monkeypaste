@@ -5,6 +5,7 @@ using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -111,7 +112,7 @@ namespace MonkeyPaste.Avalonia {
         public static bool IS_WINDOW_FADE_ENABLED = true;
 
         private static MpAvThemeViewModel _instance;
-        public static MpAvThemeViewModel Instance => _instance ?? (_instance = new MpAvThemeViewModel());
+        public static MpAvThemeViewModel Instance => _instance ??= new MpAvThemeViewModel();
 
         public void Init() {
             UpdateThemeResources();
@@ -158,12 +159,17 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public FontFamily DefaultReadOnlyFontFamilyFont { get; private set; }
+        public FontFamily DefaultEditableFontFamilyFont { get; private set; }
+
         public string DefaultReadOnlyFontFamily {
             get => GetThemeValue<string>(MpThemeResourceKey.DefaultReadOnlyFontFamily);
             set {
                 if (DefaultReadOnlyFontFamily != value) {
                     SetThemeValue(MpThemeResourceKey.DefaultReadOnlyFontFamily, value);
                     SetThemeValue(MpThemeResourceKey.ContentControlThemeFontFamily, value);
+                    DefaultReadOnlyFontFamilyFont = MpAvStringToFontFamilyConverter.Instance.Convert(value,
+                        typeof(FontFamily), null, CultureInfo.CurrentCulture) as FontFamily;
                     OnPropertyChanged(nameof(DefaultReadOnlyFontFamily));
                 }
             }
@@ -174,6 +180,8 @@ namespace MonkeyPaste.Avalonia {
             set {
                 if (DefaultEditableFontFamily != value) {
                     SetThemeValue(MpThemeResourceKey.DefaultEditableFontFamily, value);
+                    DefaultEditableFontFamilyFont = MpAvStringToFontFamilyConverter.Instance.Convert(value,
+                        typeof(FontFamily), null, CultureInfo.CurrentCulture) as FontFamily;
                     OnPropertyChanged(nameof(DefaultEditableFontFamily));
                 }
             }
@@ -239,24 +247,14 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsThemeLight =>
             !MpAvPrefViewModel.Instance.IsThemeDark;
-#endregion
+        #endregion
 
-#endregion
+        #endregion
 
         #region Constructors
         private MpAvThemeViewModel() {
             PropertyChanged += MpAvThemeViewModel_PropertyChanged;
-#if DESKTOP
-            GlobalBgOpacity = GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_desktop); ;
-            DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_desktop);
-#elif BROWSER
-            GlobalBgOpacity = GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_browser); ;
-            DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_browser);
-#else
-            GlobalBgOpacity = GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_mobile);
-            DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile);
-            //DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_desktop);
-#endif
+            InitDefaults();
             UpdateThemeResources();
         }
         #endregion
@@ -320,6 +318,20 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void InitDefaults() {
+
+#if DESKTOP
+            GlobalBgOpacity = GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_desktop); ;
+            DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_desktop);
+#elif BROWSER
+            GlobalBgOpacity = GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_browser); ;
+            DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_browser);
+#else
+            GlobalBgOpacity = GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_mobile, 1);
+            DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile, 15);
+#endif
+        }
+
         private void SyncThemePref(string prefName) {
             if (!this.HasProperty(prefName)) {
                 return;
@@ -327,12 +339,16 @@ namespace MonkeyPaste.Avalonia {
             this.SetPropertyValue(prefName, MpAvPrefViewModel.Instance.GetPropertyValue(prefName));
         }
 
-        private T GetThemeValue<T>(MpThemeResourceKey trk) {
-            return (T)Mp.Services.PlatformResource.GetResource(trk.ToString());
+        private T GetThemeValue<T>(MpThemeResourceKey trk, T fallback = default) {
+            if (Mp.Services == null ||
+                Mp.Services.PlatformResource == null) {
+                return fallback;
+            }
+            return (T)Mp.Services?.PlatformResource?.GetResource(trk.ToString());
         }
 
         private void SetThemeValue(MpThemeResourceKey trk, object value) {
-            Mp.Services.PlatformResource.SetResource(trk.ToString(), value);
+            Mp.Services?.PlatformResource?.SetResource(trk.ToString(), value);
 
         }
         private void CreatePalette() {
@@ -393,6 +409,9 @@ namespace MonkeyPaste.Avalonia {
             // 24: default button bg h(h-240, S=15, V=95) (comp5)
             // 25: default button bg h(h-240, S=15, V=65) (comp5bg)
 
+            if (MpAvPrefViewModel.Instance == null) {
+                return;
+            }
             var tt = MpAvPrefViewModel.Instance.ThemeType;
             string hex = MpAvPrefViewModel.Instance.ThemeColor;
             // prepass selected color to get decent chroma

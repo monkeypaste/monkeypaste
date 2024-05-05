@@ -122,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
             if (MpDeviceWrapper.Instance != null) {
                 PlatformInfo = MpDeviceWrapper.Instance.PlatformInfo;
                 ScreenInfoCollection = MpDeviceWrapper.Instance.ScreenInfoCollection;
-                IconBuilder = MpDeviceWrapper.Instance.IconBuilder;
+                //IconBuilder = MpDeviceWrapper.Instance.IconBuilder;
                 DeviceClipboard = MpDeviceWrapper.Instance.DeviceClipboard;
             } else {
                 PlatformInfo = new MpAvPlatformInfo_desktop();
@@ -141,8 +141,16 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"WebView not linked. Disabling rich content pref..");
                 MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled = false;
 #endif
-            } 
+            }
+
+            if (!MpAvPrefViewModel.Instance.IsWindowed) {
+#if WINDOWED
+                MpConsole.WriteLine($"WINDOWED const present. Checking Windowed pref...");
+                MpAvPrefViewModel.Instance.IsWindowed = true;
 #endif
+            }
+#endif
+
 
             DefaultDataCreator = new MpAvDefaultDataCreator();
             UserAgentProvider = MpAvPlainHtmlConverter.Instance;
@@ -203,12 +211,12 @@ namespace MonkeyPaste.Avalonia {
             UserCultureInfo = MpAvCurrentCultureViewModel.Instance;
 
             SingleInstanceTools = new MpAvAppInstanceTools();
-            if(!SingleInstanceTools.IsFirstInstance) {
+            if (!SingleInstanceTools.IsFirstInstance) {
                 // this is not the first instance
                 var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                     notificationType: MpNotificationType.SingleInstanceWarning,
                     body: UiStrings.SingInstanceCheckNtfText);
-                if(result == MpNotificationDialogResultType.Shutdown) {
+                if (result == MpNotificationDialogResultType.Shutdown) {
                     // block for shutdown to kill process
                     await Task.Delay(3_000);
                 }

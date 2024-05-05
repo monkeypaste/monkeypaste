@@ -153,7 +153,6 @@ namespace MonkeyPaste.Avalonia {
 
                 LoadedDateTime = DateTime.Now;
 
-
                 IsPlatformLoaded = true;
             }, DispatcherPriority.Background);
         }

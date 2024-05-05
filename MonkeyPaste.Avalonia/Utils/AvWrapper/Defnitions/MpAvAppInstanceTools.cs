@@ -25,24 +25,22 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
                 try {
-#if WINDOWS || LINUX
-                    if(OperatingSystem.IsMacOS()) {
-                        return false;
-                    }
-                    _lockFileObj = File.Open(LockFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-                    (_lockFileObj as FileStream).Lock(0, 0); 
-#elif MAC
-                    // File.Open throws exception and .Lock not supported on mac
                     return true;
-#else
-                    // untested
-                    // from https://learn.microsoft.com/en-us/dotnet/core/compatibility/core-libraries/6.0/filestream-file-locks-unix#type-of-breaking-change
-                    if(!LockFilePath.IsFile()) {
-                        MpFileIo.TouchFile(LockFilePath);
-                    }
-                    _lockFileObj = File.OpenRead(LockFilePath);
-                    (_lockFileObj as FileStream).Lock(0,0);
-#endif
+//#if WINDOWS || LINUX
+//                    _lockFileObj = File.Open(LockFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+//                    (_lockFileObj as FileStream).Lock(0, 0); 
+//#elif MAC
+//                    // File.Open throws exception and .Lock not supported on mac
+//                    return true;
+//#else
+//                    // untested
+//                    // from https://learn.microsoft.com/en-us/dotnet/core/compatibility/core-libraries/6.0/filestream-file-locks-unix#type-of-breaking-change
+//                    if(!LockFilePath.IsFile()) {
+//                        MpFileIo.TouchFile(LockFilePath);
+//                    }
+//                    _lockFileObj = File.OpenRead(LockFilePath);
+//                    (_lockFileObj as FileStream).Lock(0,0);
+//#endif
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Single instance error (if only instance otherwise expected).", ex);

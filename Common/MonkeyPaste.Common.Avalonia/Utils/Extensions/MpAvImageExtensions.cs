@@ -160,13 +160,13 @@ namespace MonkeyPaste.Common.Avalonia {
             var bmpTarget = bmpSrc.CreateScaledBitmap(new PixelSize((int)size.Width, (int)size.Height));
             return bmpTarget;
         }
-
         public static Bitmap? ResizeKeepAspect(this Bitmap bmpSrc, MpSize size, bool enlarge) {
 
             var new_size = bmpSrc.Size.ToPortableSize().ResizeKeepAspect(size.Width, size.Height, enlarge).ToAvPixelSize(1);
             var bmpTarget = bmpSrc.CreateScaledBitmap(new_size);
             return bmpTarget;
         }
+
         public static MpSize ResizeKeepAspect(this MpSize src, double maxWidth, double maxHeight, bool enlarge = false) {
             maxWidth = enlarge ? maxWidth : Math.Min(maxWidth, src.Width);
             maxHeight = enlarge ? maxHeight : Math.Min(maxHeight, src.Height);
@@ -177,7 +177,7 @@ namespace MonkeyPaste.Common.Avalonia {
         public static unsafe string ToAsciiImage(this Bitmap bmpSrc) {
             //MpConsole.WriteLine($"[ToAsciiImage] Unsafe BEGIN ", true);
             // since this doesn't create accurate images in text (
-            MpSize size = bmpSrc.PixelSize.ToPortableSize(1).ResizeKeepAspect(100, 100);
+            MpSize size = new MpSize((double)bmpSrc.PixelSize.Width,(double)bmpSrc.PixelSize.Height).ResizeKeepAspect(100, 100);
             // FIX SCALE ISSUE
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
             bmpSrc = bmpSrc.Resize(size);

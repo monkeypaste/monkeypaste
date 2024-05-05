@@ -98,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
                 // should only have parts for color resource
                 MpDebug.Break();
             }
-            if (valStr.EndsWith("Icon") || targetType == typeof(WindowIcon)) {
+            if (valStr.EndsWith("Icon") || targetType == typeof(MpAvWindowIcon) || targetType == typeof(WindowIcon)) {
                 string res_uri = valStr.IsAvResourceString() ? valStr : Mp.Services.PlatformResource.GetResource<string>(valStr);
                 using (var icon_stream = AssetLoader.Open(new Uri(res_uri))) {
 #if WINDOWS
@@ -106,12 +106,18 @@ namespace MonkeyPaste.Avalonia {
                         // avoid exception using png
                         using (var conv_stream = new MemoryStream()) {
                             if (MpPngToIcoConverter.ConvertToIcon(icon_stream, conv_stream)) {
-                                return new WindowIcon(conv_stream);
+                                if(targetType == typeof(WindowIcon)) {
+                                    return new WindowIcon(conv_stream);
+                                }
+                                return new MpAvWindowIcon(conv_stream);
                             }
                         }
-                    } 
+                    }
 #endif
-                    return new WindowIcon(icon_stream);
+                    if (targetType == typeof(WindowIcon)) {
+                        return new WindowIcon(icon_stream);
+                    }
+                    return new MpAvWindowIcon(icon_stream);
                 }
             }
             if (valStr.EndsWith("Image") || valStr.IsAvResourceString()) {

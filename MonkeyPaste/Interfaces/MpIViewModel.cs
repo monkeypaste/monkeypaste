@@ -3,11 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace MonkeyPaste {
-    public interface MpIViewModel {
-
-        [JsonIgnore]
-        bool IsBusy { get; set; }
-
+    public interface MpIViewModel : MpIAsyncObject {
 
         [JsonIgnore]
         bool HasModelChanged { get; set; }

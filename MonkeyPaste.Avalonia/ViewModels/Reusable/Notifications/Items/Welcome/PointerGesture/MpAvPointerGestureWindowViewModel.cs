@@ -187,7 +187,7 @@ namespace MonkeyPaste.Avalonia {
                 //    var nsWindow = (MonoMac.AppKit.NSWindow)MonoMac.ObjCRuntime.Runtime.GetNSObject(macosHandle.NSWindow);
                 //    nsWindow.IgnoresMouseEvents = true;
                 //}
-                //if (TopLevel.GetTopLevel(gw) is { } gw_tl &&
+                //if (MpAvWindowManager.GetTopLevel(gw) is { } gw_tl &&
                 //    gw_tl.PlatformImpl is IMacOSTopLevelPlatformHandle mac_imp) {
                 //    var test = Runtime.GetNSObject(mac_imp.NSView);
                 //    var test2 = Runtime.GetNSObject(mac_imp.NSWindow);

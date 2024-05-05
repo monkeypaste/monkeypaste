@@ -4,11 +4,14 @@ using System.Linq;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvAppOleMenuViewModelBase : MpAvViewModelBase,
-        MpAvIMenuItemViewModel {
+    public abstract class MpAvAppOleMenuViewModelBase : MpAvViewModelBase, MpAvIMenuItemViewModel {
         #region Interfaces
 
         #region MpAvIMenuItemViewModel Implementation
+
+        string MpAvIMenuItemViewModel.IconBorderHexColor =>
+            MpSystemColors.Transparent;
+        public bool IsHovering { get; set; }
         public object CommandParameter { get; }
         public string InputGestureText { get; }
         public bool StaysOpenOnClick =>

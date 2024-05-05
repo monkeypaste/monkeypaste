@@ -20,7 +20,7 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 			userOnly: true,
 			maxStack: globals.MaxUndoLimit < 0 ? Number.MAX_SAFE_INTEGER : globals.MaxUndoLimit
 		},
-		formats: 'background',
+		formats: ['background'],
 		modules: {
 			toolbar: toolbarId,
 			//syntax: {
@@ -42,6 +42,8 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 	});
 
 	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
+	hljs.initHighlighting();
+
 	log('quill version: ' + Quill.version);
 	return quill_instance;
 }

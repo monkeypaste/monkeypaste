@@ -10,9 +10,34 @@ using AvApplication = Avalonia.Application;
 
 namespace MonkeyPaste.Avalonia.Android {
     public class MpAvAdScreenInfo : MpAvScreenInfoBase {
+        #region Private Variables
+        
+        private double _navHeightPortrait;
+        private double _navHeightLandscape;
+        private double _statusHeight;
+        private double _sw;
+        private double _sh;
+        
+        #endregion
+
+        #region Constants
+        #endregion
+
+        #region Statics
+        #endregion
+
+        #region Interfaces
+        #endregion
+
+        #region Properties
+        bool IsVertical =>
+            DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Portrait;
         public override bool IsPrimary =>
             true;
+        #endregion
 
+        #region Constructors
+        
         public MpAvAdScreenInfo() {
             if (AvApplication.Current is ISingleViewApplicationLifetime mobile &&
                 mobile.MainView.GetVisualRoot() is IRenderRoot rr) {
@@ -22,10 +47,11 @@ namespace MonkeyPaste.Avalonia.Android {
                 IsPrimary = true;
             }
         }
-        public MpAvAdScreenInfo(Activity activity) {
-            Name = "Main Display";
-            Init(activity);
+        #endregion
 
+        #region Public Methods
+        public MpAvAdScreenInfo(Activity activity) {
+            Init(activity);
         }
 
         private void Init(Activity activity) {
@@ -36,48 +62,71 @@ namespace MonkeyPaste.Avalonia.Android {
                 WorkArea = Bounds;
                 IsPrimary = true;
             } else {
+                // s9 info:
+                // nav height: 144
+                // status height: 72
+                // scaling: 3
+                // dim: 1080 x 2220
+                // scaled:
+                // nav height: 48
+                // status height: 24
+                // dim: 360 x 740
                 DisplayInfo di = DeviceDisplay.MainDisplayInfo;
-
-                int nid = activity.ApplicationContext.Resources.GetIdentifier(
-                        DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Portrait ?
-                        "navigation_bar_height" : "navigation_bar_height_landscape",
-                        "dimen", "android");
-                float nav_height = 0;
+                
+                int nid = activity.ApplicationContext.Resources.GetIdentifier("navigation_bar_height","dimen","android");
                 if (nid > 0) {
-                    nav_height = activity.ApplicationContext.Resources.GetDimension(nid);
+                    // s9 is 144
+                    _navHeightPortrait = (double)activity.ApplicationContext.Resources.GetDimension(nid);
+                }
+                nid = activity.ApplicationContext.Resources.GetIdentifier("navigation_bar_height_landscape","dimen","android");
+                if (nid > 0) {
+                    _navHeightLandscape = (double)activity.ApplicationContext.Resources.GetDimension(nid);
                 }
                 int sid = activity.ApplicationContext.Resources.GetIdentifier("status_bar_height", "dimen", "android");
-                float status_height = 0;
                 if (sid > 0) {
-                    status_height = activity.ApplicationContext.Resources.GetDimension(sid);
+                    // s9 72
+                    _statusHeight = (double)activity.ApplicationContext.Resources.GetDimension(sid);
                 }
+                // s9 is 3
                 Scaling = di.Density;
 
-                int s_w = (int)di.Width;
-                int s_h = (int)di.Height - (int)nav_height - (int)status_height;
-                Bounds = new PixelRect(new PixelSize(s_w, s_h)).ToPortableRect(Scaling);
-
-                //int wa_x = 0;
-                //int wa_y = (int)status_height + 200;
-                //int wa_w = (int)di.Width;
-                //int wa_h = (int)(di.Height - status_height - nav_height - 200);
-                WorkArea = Bounds;//new PixelRect(wa_x, wa_y, wa_w, wa_h).ToPortableRect(Scaling);
-
-                IsPrimary = true;
+                _sw = IsVertical ? di.Width : di.Height;
+                _sh = IsVertical ? di.Height : di.Width;
+                Bounds = GetBounds(IsVertical);
+                WorkArea = GetWorkArea(IsVertical);
             }
         }
 
-        private MpRect _baseBounds;
         public override void Rotate(double angle) {
-            if (_baseBounds == null) {
-                _baseBounds = Bounds;
-            }
-            MpRect nb = _baseBounds;
-            if (angle == 270 || angle == 90) {
-                nb = new MpRect(0, 0, _baseBounds.Height, _baseBounds.Width);
-            }
-            Bounds = nb;
-            WorkArea = nb;
+            bool is_portrait = angle != 270 && angle != 90;
+            Bounds = GetBounds(is_portrait);
+            WorkArea = GetWorkArea(is_portrait);
         }
+        #endregion
+
+        #region Protected Methods
+        #endregion
+
+        #region Private Methods
+        
+        private MpRect GetBounds(bool is_vert) {
+            var ps = is_vert ? new PixelSize((int)_sw, (int)_sh) : new PixelSize((int)_sh, (int)_sw);
+            return new PixelRect(ps).ToPortableRect(Scaling);
+        }
+        
+        private MpRect GetWorkArea(bool is_vert) {
+            var pix_bounds = GetBounds(is_vert).ToAvPixelRect(Scaling);
+            int nav_height = (int)(is_vert ? _navHeightPortrait : _navHeightLandscape);
+            int wa_x = pix_bounds.X;
+            int wa_y = pix_bounds.Y + (int)_statusHeight;
+            int wa_w = pix_bounds.Width;
+            int dumb_pad = 144;
+            int wa_h = pix_bounds.Height - (int)_statusHeight - nav_height - dumb_pad;
+            return new PixelRect(wa_x, wa_y, wa_w, wa_h).ToPortableRect(Scaling);
+        }
+        #endregion
+
+        #region Commands
+        #endregion
     }
 }

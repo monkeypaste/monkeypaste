@@ -76,7 +76,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public static bool USE_LOADERS => true;
+        public static bool USE_LOADERS =>
+#if ANDROID
+            false;
+#else
+            true;
+#endif
 
         private static Dictionary<string, PluginLoader> _loaders = [];
         static string PLUGIN_INFO_URL =>
@@ -208,8 +213,7 @@ namespace MonkeyPaste.Avalonia {
             return success;
         }
 
-        public static async Task<bool> BeginUpdatePluginAsync(string plugin_guid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm) {
-
+        public static async Task<bool> BeginUpdatePluginAsync(string plugin_guid, string packageUrl, MpICancelableProgressIndicatorViewModel cpivm, bool attemptInstall = true) {
             string plugin_update_dir = await DownloadAndExtractPluginToDirAsync(plugin_guid, packageUrl, PluginUpdatesDir, cpivm);
             if (!plugin_update_dir.IsDirectory()) {
                 // update failed, only returns if no restart
@@ -221,44 +225,49 @@ namespace MonkeyPaste.Avalonia {
             }
             // plugin downloaded to update dir, 
 
-            // create backup of current so if anything fails it can be merged back in and coll vm can always reload item
-            string backup_dir = CreatePluginBackup(plugin_guid);
-            //ATTEMPT to delete current plugin
-            bool success = await DeletePluginByGuidAsync(plugin_guid);
-            if (success) {
-                // install plugin from update dir
-                success = await InstallPluginAsync(plugin_guid, plugin_update_dir.ToFileSystemUriFromPath(), false, cpivm);
-                if (success) {
-                    // clean up everything
-                    MpFileIo.DeleteDirectory(backup_dir);
-                    MpFileIo.DeleteDirectory(plugin_update_dir);
-                    return true;
-                }
-            }
-            // at this point either active dir couldn't be deleted (or SOMETHING couldn't be deleted) or install failed
-            // so try to restore plugin dir and reload
             bool was_reloaded = false;
-            try {
-                // copy any missing files over
-                string root_plugin_dir = Path.Combine(PluginRootDir, plugin_guid);
-                MpFileIo.CreateDirectory(root_plugin_dir);
-                MpFileIo.CopyContents(backup_dir, root_plugin_dir, overwrite: false);
-                // find manifest
-                if (FindInvariantManifestPaths(root_plugin_dir) is { } inv_mf_paths &&
-                    inv_mf_paths.FirstOrDefault() is { } inv_mf_path &&
-                    ResolveLocalizedManifestPath(inv_mf_path) is { } mf_path) {
-                    // load and validate
-                    was_reloaded = await LoadPluginAsync(mf_path);
-                    await ValidateLoadedPluginsAsync();
-                    // confirm it was loaded
-                    was_reloaded = PluginGuidLookup.ContainsKey(plugin_guid);
+            if (attemptInstall) {
+                //ATTEMPT to delete current plugin
+
+                // create backup of current so if anything fails it can be merged back in and coll vm can always reload item
+                string backup_dir = CreatePluginBackup(plugin_guid);
+                bool success = await DeletePluginByGuidAsync(plugin_guid);
+                if (success) {
+                    // install plugin from update dir
+                    success = await InstallPluginAsync(plugin_guid, plugin_update_dir.ToFileSystemUriFromPath(), false, cpivm);
+                    if (success) {
+                        // clean up everything
+                        MpFileIo.DeleteDirectory(backup_dir);
+                        MpFileIo.DeleteDirectory(plugin_update_dir);
+                        return true;
+                    }
                 }
+
+                // at this point either active dir couldn't be deleted (or SOMETHING couldn't be deleted) or install failed
+                // so try to restore plugin dir and reload
+                try {
+                    // copy any missing files over
+                    string root_plugin_dir = Path.Combine(PluginRootDir, plugin_guid);
+                    MpFileIo.CreateDirectory(root_plugin_dir);
+                    MpFileIo.CopyContents(backup_dir, root_plugin_dir, overwrite: false);
+                    // find manifest
+                    if (FindInvariantManifestPaths(root_plugin_dir) is { } inv_mf_paths &&
+                        inv_mf_paths.FirstOrDefault() is { } inv_mf_path &&
+                        ResolveLocalizedManifestPath(inv_mf_path) is { } mf_path) {
+                        // load and validate
+                        was_reloaded = await LoadPluginAsync(mf_path);
+                        await ValidateLoadedPluginsAsync();
+                        // confirm it was loaded
+                        was_reloaded = PluginGuidLookup.ContainsKey(plugin_guid);
+                    }
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error restoring plugin backup for plugin '{plugin_guid}'.", ex);
+                }
+                // remove backup but keep update for next startup
+                MpFileIo.DeleteDirectory(backup_dir);
             }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error restoring plugin backup for plugin '{plugin_guid}'.", ex);
-            }
-            // remove backup but keep update for next startup
-            MpFileIo.DeleteDirectory(backup_dir);
+
 
             // NOTE this won't return if they choose restart
             await Mp.Services.PlatformMessageBox.ShowRestartNowOrLaterMessageBoxAsync(
@@ -887,16 +896,19 @@ namespace MonkeyPaste.Avalonia {
         private static IEnumerable<T> LoadDll<T>(string targetDllPath, string guid, out AssemblyLoadContext alc) {
             alc = null;
             try {
+                MpPluginAssemblyLoadContext cur_alc = 
+                    OperatingSystem.IsAndroid() ? null : new MpPluginAssemblyLoadContext(targetDllPath);
                 if (USE_LOADERS) {
                     bool is_core = CorePluginGuids.Contains(guid);
-                    if (PluginLoader.CreateFromAssemblyFile(
-                        assemblyFile: targetDllPath,
-                        sharedTypes: sharedTypes,
-                        isUnloadable: true,
-                        configure: (config) => {
-                            config.DefaultContext = new MpPluginAssemblyLoadContext(targetDllPath);
-                            config.PreferSharedTypes = true;
-                        }) is { } pl) {
+                    try {
+                        PluginLoader pl = PluginLoader.CreateFromAssemblyFile(
+                                           assemblyFile: targetDllPath,
+                                           sharedTypes: sharedTypes,
+                                           isUnloadable: true,
+                                           configure: (c) => {
+                                               c.DefaultContext = cur_alc;
+                                               c.PreferSharedTypes = true;
+                                           });
                         var objs = new List<T>();
                         var plugin_types = pl.LoadDefaultAssembly().GetTypes().Where(t => typeof(T).IsAssignableFrom(t) && !t.IsAbstract);
                         foreach (var pluginType in plugin_types) {
@@ -907,25 +919,51 @@ namespace MonkeyPaste.Avalonia {
                         _loaders.AddOrReplace(guid, pl);
                         return objs;
                     }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"[DotNetCorePlugins] Error loading assembly from '{targetDllPath}'.", ex);
+                    }
+
                 }
-                alc = new MpPluginAssemblyLoadContext(targetDllPath);
+                if (cur_alc == null) {
+                    Assembly ass = default;
+                    try {
+                        ass = Assembly.LoadFrom(targetDllPath);
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"[Assembly.LoadFrom] Error loading assembly from '{targetDllPath}'.", ex);
+                    }
+                    if (ass == null) {
+                        try {
+                            ass = Assembly.Load(MpFileIo.ReadBytesFromFile(targetDllPath));
+                        }
+                        catch (Exception ex) {
+                            MpConsole.WriteTraceLine($"[Assembly.Load] Error loading assembly from '{targetDllPath}'.", ex);
+                        }
+                    }
+                    if (ass == null) {
+                        return null;
+                    }
+
+                    var sub_types = ass.FindSubTypes<T>();
+                    return sub_types;
+                    //
+
+                    //Assembly result = null;
+                    //var dir_dlls = Directory.GetFiles(Path.GetDirectoryName(targetDllPath)).Where(x => x.ToLower().EndsWith("dll"));
+                    //foreach (var dll_path in dir_dlls) {
+                    //    var assembly = Assembly.Load(MpFileIo.ReadBytesFromFile(dll_path));
+                    //    MpConsole.WriteLine($"{Path.GetFileNameWithoutExtension(targetDllPath)} loaded: {assembly.FullName}");
+                    //    if (dll_path == targetDllPath) {
+                    //        result = assembly;
+                    //    }
+                    //}
+                    //return result;
+                    //return null;
+                }
+                alc = cur_alc;
                 var assembly = alc.LoadFromAssemblyPath(targetDllPath);
                 var result = assembly.FindSubTypes<T>().ToArray();
                 return result;
-                //return Assembly.LoadFrom(targetDllPath);
-
-                //return Assembly.Load(MpFileIo.ReadBytesFromFile(targetDllPath));
-
-                //Assembly result = null;
-                //var dir_dlls = Directory.GetFiles(Path.GetDirectoryName(targetDllPath)).Where(x => x.ToLower().EndsWith("dll"));
-                //foreach (var dll_path in dir_dlls) {
-                //    var assembly = Assembly.Load(MpFileIo.ReadBytesFromFile(dll_path));
-                //    MpConsole.WriteLine($"{Path.GetFileNameWithoutExtension(targetDllPath)} loaded: {assembly.FullName}");
-                //    if (dll_path == targetDllPath) {
-                //        result = assembly;
-                //    }
-                //}
-                //return result;
 
             }
             catch (Exception ex) {

@@ -267,7 +267,8 @@ jou knipbord word ooit opgespoor of gestoor ENIGE plek buite jou eie masjien. Ty
     <value>Veilige, veilige en private plaaslike databerging met opsionele 2-faktor wagwoordbeskerming</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Volledige bron vir MonkeyPaste nou beskikbaar op ons github https://github.com/monkeypaste/monkeypaste
+    <value>- Kritieke oplossing vir 1.0.18.0 wat lêersnitte geïgnoreer het
+- Volledige bron vir MonkeyPaste nou beskikbaar op ons github https://github.com/monkeypaste/monkeypaste
 - Linux-weergawe vrygestel, laai hier af https://github.com/monkeypaste/monkeypaste/releases
 - verbeterde verenigbaarheidsmodus (het nou HTML-kyker vir tekssnitte)
 - Geringe fout en prestasieverbeterings</value>

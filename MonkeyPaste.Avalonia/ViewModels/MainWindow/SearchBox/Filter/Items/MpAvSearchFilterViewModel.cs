@@ -15,6 +15,9 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpAvIMenuItemViewModel Implementation
+        string MpAvIMenuItemViewModel.IconBorderHexColor =>
+            MpSystemColors.Transparent;
+        public bool IsHovering { get; set; }
         bool MpAvIMenuItemViewModel.IsSubMenuOpen { get; set; }
         ICommand MpAvIMenuItemViewModel.Command => ToggleIsCheckedCommand;
         object MpAvIMenuItemViewModel.CommandParameter => null;

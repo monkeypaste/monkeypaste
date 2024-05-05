@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Building..."
-CONFIG=Debug
+CONFIG=Release
 PLATFORM=linux-x64
 FRAMEWORK="net8.0"
 

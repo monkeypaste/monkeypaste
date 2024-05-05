@@ -7,7 +7,6 @@
              d:DesignHeight="750"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="using:MonkeyPaste.Avalonia"
-             xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
              xmlns:pcl="using:MonkeyPaste"
              x:Name="WebPageView"
              x:Class="MonkeyPaste.Avalonia.MpAvWebPageView">

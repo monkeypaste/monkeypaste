@@ -1,9 +1,17 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
+using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvHiddenWindow : MpAvWindow {
+    [DoNotNotify]
+    public class MpAvHiddenWindow :
+#if WINDOWED
+        Window  
+#else
+        MpAvWindow  
+#endif
+        {
 
         public MpAvHiddenWindow() : base() {
             Width = 0;

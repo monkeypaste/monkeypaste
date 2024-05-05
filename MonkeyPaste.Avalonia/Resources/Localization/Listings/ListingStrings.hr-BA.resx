@@ -267,7 +267,8 @@ vaš međuspremnik se uvijek prati ili pohranjuje BILO GDJE izvan vašeg vlastit
     <value>Sigurna, sigurna i privatna lokalna pohrana podataka s opcionalnom zaštitom lozinkom od 2 faktora</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Puni izvor za Monkeypaste sada dostupan na našem GitHub https://github.com/monkeypaste/monkeypaste
+    <value>- kritično popravljanje za 1.0.18.0 koji je zanemario isječke datoteka
+- Puni izvor za Monkeypaste sada dostupan na našem GitHub https://github.com/monkeypaste/monkeypaste
 - Linux verzija objavljena ovdje preuzmi https://github.com/monkeypaste/monkeypaste/releases
 - Poboljšani način kompatibilnosti (sada ima HTML preglednik za tekstualne isječke)
 - Manja poboljšanja pogrešaka i performansi</value>

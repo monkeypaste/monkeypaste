@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 
 using System;
@@ -56,11 +57,20 @@ namespace MonkeyPaste.Avalonia {
 
         public string UiStringDir {
             get {
+#if ANDROID
                 return Path.Combine(
-                Path.GetDirectoryName(typeof(MpAvEnumUiStringResourceConverter).Assembly.Location),
-                "Resources",
-                "Localization",
-                "UiStrings");
+                    Mp.Services.PlatformInfo.StorageDir,
+                    "..",
+                    "Resources",
+                    "Localization",
+                    "UiStrings");
+#else
+                return Path.Combine(
+                    Path.GetDirectoryName(typeof(MpAvEnumUiStringResourceConverter).Assembly.Location),
+                    "Resources",
+                    "Localization",
+                    "UiStrings");
+#endif
             }
         }
         public CultureInfo CurrentCulture { get; private set; }

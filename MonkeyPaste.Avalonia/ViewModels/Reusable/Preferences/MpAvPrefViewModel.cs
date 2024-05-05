@@ -214,15 +214,26 @@ namespace MonkeyPaste.Avalonia {
 
         public DateTime? DbCreateDateTime { get; set; }
 
-        #region Sync
-
-        
-
-        #endregion
-
         #endregion
 
         #region Appearance
+
+        private bool _isWindowed = false;
+        public bool IsWindowed {
+            get {
+#if WINDOWED
+                return true;
+#else                
+                return _isWindowed;
+#endif
+            }
+            set {
+                if(_isWindowed != value) {
+                    _isWindowed = value;
+                    OnPropertyChanged(nameof(IsWindowed));
+                }
+            }
+        }
 
         public int DefaultPluginIconId { get; set; } = 0;
 
@@ -233,9 +244,9 @@ namespace MonkeyPaste.Avalonia {
         [JsonIgnore]
         public bool IsThemeDark =>
             ThemeType == MpThemeType.Dark;
-        #endregion
+#endregion
 
-        #endregion
+#endregion
 
         #region Dynamic Properties          
 
@@ -530,7 +541,7 @@ namespace MonkeyPaste.Avalonia {
         public static bool IsLoading { get; private set; } = false;
         #endregion
 
-        #endregion
+#endregion
 
         #region Constructors
 

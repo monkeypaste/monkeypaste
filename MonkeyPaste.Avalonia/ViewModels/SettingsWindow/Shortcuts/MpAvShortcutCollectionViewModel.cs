@@ -44,14 +44,14 @@ namespace MonkeyPaste.Avalonia {
 #if DESKTOP 
             true;
 #else
-            false;
+            true;
 #endif
 
         static bool ALLOW_GLOBAL_KEYBOARD_INPUT =
 #if DESKTOP 
             true;
 #else
-            false;
+            true;
 #endif
         static bool ALLOW_GLOBAL_INPUT = ALLOW_GLOBAL_KEYBOARD_INPUT || ALLOW_GLOBAL_MOUSE_INPUT;
 
@@ -1007,7 +1007,11 @@ namespace MonkeyPaste.Avalonia {
             Task.Run(async () => {
                 try {
                     // grab current cb text
-                    string cbText = await TopLevel.GetTopLevel(MpAvMainView.Instance).Clipboard.GetTextAsync();
+                    if(MpAvMainView.Instance == null ||
+                        MpAvWindowManager.GetTopLevel(MpAvMainView.Instance) is not TopLevel tl) {
+                        return;
+                    }
+                    string cbText = await tl.Clipboard.GetTextAsync();
                     if (!string.IsNullOrEmpty(cbText)) {
                         // find matching data object items w/ current text
 

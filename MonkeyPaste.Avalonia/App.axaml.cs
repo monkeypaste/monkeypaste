@@ -136,7 +136,7 @@ namespace MonkeyPaste.Avalonia {
             DateTime startup_datetime = DateTime.Now;
 #if DESKTOP
             MpConsole.Init(new MpAvPlatformInfo_desktop().LogPath, Debugger.IsAttached || HasStartupArg(TRACE_ARG));
-            //MpAvLogSink.Init();
+            MpAvLogSink.Init();
 #endif
 
             ReportCommandLineArgs(Args);
@@ -155,8 +155,11 @@ namespace MonkeyPaste.Avalonia {
                 var loader = new MpAvLoaderViewModel(is_login_load);
                 await loader.CreatePlatformAsync(startup_datetime);
                 await loader.InitAsync();
-
+#if WINDOWED
+                MpAvRootWindow.Instance.Show();
+#endif
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
+                
                 mobile.MainView = new Border() {
                     //Margin = new Thickness(0, 24, 0, 0),
                     HorizontalAlignment = HorizontalAlignment.Stretch,

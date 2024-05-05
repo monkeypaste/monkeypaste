@@ -76,38 +76,36 @@ namespace MonkeyPaste.Avalonia {
                 _reqParams = new List<MpParameterRequestItemFormat>();
             }
 
-            using (var client = new HttpClient()) {
-                using (var httpRequest = CreateRequestMessage(_reqParams)) {
-                    try {
-                        var response = await client.SendAsync(httpRequest);
+            using (var httpRequest = CreateRequestMessage(_reqParams)) {
+                try {
+                    var response = await MpHttpClient.Client.SendAsync(httpRequest);
 
-                        if (!response.IsSuccessStatusCode) {
-                            // NOTE fix command should probably open manfiest folder but only http plugin info is provided so just opening plugin folder
-                            var userAction = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
-                                                    notificationType: MpNotificationType.BadHttpRequest,
-                                                    body: $"{response.ReasonPhrase}",
-                                                    fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(MpPluginLoader.PluginRootDir)));
+                    if (!response.IsSuccessStatusCode) {
+                        // NOTE fix command should probably open manfiest folder but only http plugin info is provided so just opening plugin folder
+                        var userAction = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                                                notificationType: MpNotificationType.BadHttpRequest,
+                                                body: $"{response.ReasonPhrase}",
+                                                fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(MpPluginLoader.PluginRootDir)));
 
-                            //if(userAction == MpNotificationDialogResultType.Retry) {
-                            //    return new MpPluginResponseFormatBase() {
-                            //        message = MpPluginResponseFormatBase.RETRY_MESSAGE
-                            //    };
-                            //}
-                        }
-
-                        string responseStr = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine($"Response from '{httpRequest.RequestUri.AbsoluteUri}':");
-                        Console.WriteLine(responseStr.ToPrettyPrintJson());
-                        httpRequest.Content.Dispose();
-
-                        // return raw response to base which calls decode override
-                        return responseStr;
+                        //if(userAction == MpNotificationDialogResultType.Retry) {
+                        //    return new MpPluginResponseFormatBase() {
+                        //        message = MpPluginResponseFormatBase.RETRY_MESSAGE
+                        //    };
+                        //}
                     }
-                    catch (Exception ex) {
-                        Console.WriteLine("Error performing analysis w/ plugin: " + _httpTransactionFormat.name);
-                        Console.WriteLine(ex);
-                        return null;
-                    }
+
+                    string responseStr = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Response from '{httpRequest.RequestUri.AbsoluteUri}':");
+                    Console.WriteLine(responseStr.ToPrettyPrintJson());
+                    httpRequest.Content.Dispose();
+
+                    // return raw response to base which calls decode override
+                    return responseStr;
+                }
+                catch (Exception ex) {
+                    Console.WriteLine("Error performing analysis w/ plugin: " + _httpTransactionFormat.name);
+                    Console.WriteLine(ex);
+                    return null;
                 }
             }
         }

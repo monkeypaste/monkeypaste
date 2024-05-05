@@ -267,7 +267,8 @@
     <value>Безопасное, надежное и конфиденциальное локальное хранилище данных с дополнительной 2-факторной защитой паролем</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- Полный источник для обезьяны теперь доступен на нашем GitHub https://github.com/monkeypaste/monkeypaste
+    <value>- Критическое исправление для 1.0.18.0, которое игнорировало клипы файлов
+- Полный источник для обезьяны теперь доступен на нашем GitHub https://github.com/monkeypaste/monkeypaste
 - Linux версия выпустила скачать здесь https://github.com/monkeypaste/monkeypaste/releases
 - Улучшенный режим совместимости (теперь имеет HTML Viewer для текстовых клипов)
 - Незначительные улучшения ошибок и производительности</value>

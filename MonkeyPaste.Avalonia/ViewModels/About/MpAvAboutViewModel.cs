@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 CanResize = true,
                 Title = UiStrings.AboutWindowTitlePrefix.ToWindowTitleText(),
-                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppImage", typeof(WindowIcon), null, null) as WindowIcon,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 DataContext = this,
                 Content = new MpAvAboutView()
             };

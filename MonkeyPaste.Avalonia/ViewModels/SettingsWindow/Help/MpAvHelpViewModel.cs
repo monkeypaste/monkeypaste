@@ -143,7 +143,7 @@ namespace MonkeyPaste.Avalonia {
                 Height = 620,
                 ShowActivated = true,
                 Title = UiStrings.SettingsHelpTabLabel.ToWindowTitleText(),
-                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(HELP_ICON_KEY, typeof(WindowIcon), null, null) as WindowIcon,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(HELP_ICON_KEY, typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 DataContext = this,
                 Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString()),

@@ -267,7 +267,8 @@
     <value>ການເກັບຮັກສາຂໍ້ມູນທ້ອງຖິ່ນທີ່ປອດໄພ, ປອດໄພແລະເອກະຊົນທີ່ມີທາງເລືອກ 2 - ການປົກປ້ອງລະຫັດຜ່ານປັດໄຈ</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>- ແຫຼ່ງເຕັມທີ່ສໍາລັບ Monkeypaste ໃນປັດຈຸບັນມີຢູ່ໃນ GEMITHUB https://github.com/meykeypaste/meykeypaste
+    <value>- ແກ້ໄຂສໍາຄັນສໍາລັບ 1.0.18.0 ເຊິ່ງແມ່ນບໍ່ສົນໃຈຄລິບເອກະສານ
+- ແຫຼ່ງເຕັມທີ່ສໍາລັບ Monkeypaste ໃນປັດຈຸບັນມີຢູ່ໃນ GEMITHUB https://github.com/meykeypaste/meykeypaste
 - Linux Version ທີ່ປ່ອຍອອກມາທີ່ນີ້ https://github.com/meykeypaste/meykeypaste/releases/releases
 - ການປັບປຸງຮູບແບບຄວາມເຂົ້າກັນໄດ້ (ດຽວນີ້ມີ HTML Viewer ສໍາລັບຄລິບຂໍ້ຄວາມ)
 - ຂໍ້ບົກພ່ອງແລະການປັບປຸງການປະຕິບັດຫນ້ອຍ</value>
