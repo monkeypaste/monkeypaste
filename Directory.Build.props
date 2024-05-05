@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <!-- GLOBAL PACKAGE VERSIONS -->
-  <PropertyGroup> 
+  <PropertyGroup>
     <StableAvaloniaVersion>11.0.10</StableAvaloniaVersion> 
     <AvaloniaVersion>11.0.10</AvaloniaVersion>
     <SugarWvVersion>11.0.0.6</SugarWvVersion>    
@@ -40,7 +40,7 @@
   
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>ANDROID</BuildOs>
+    <BuildOs>LINUX</BuildOs>
   </PropertyGroup>
   
   <PropertyGroup>

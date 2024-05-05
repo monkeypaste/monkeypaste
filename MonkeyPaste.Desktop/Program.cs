@@ -81,7 +81,7 @@ namespace MonkeyPaste.Desktop {
 #if SUGAR_WV
             .UseDesktopWebView()
 #endif
-            .WithInterFont()
+            //.WithInterFont()
             .UseReactiveUI()
             .LogToTrace()//LogEventLevel.Verbose)
                 ;

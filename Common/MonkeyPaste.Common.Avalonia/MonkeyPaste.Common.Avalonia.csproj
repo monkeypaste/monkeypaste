@@ -73,6 +73,7 @@
     <ProjectReference Remove="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
     <Compile Remove="Utils\Input\Platform\X11\*.*" />
     <Compile Remove="Utils\Input\Platform\Win32\*.*" />
+    <Compile Include="Utils\Input\Platform\MacOs\*.*" />
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
   </ItemGroup>
   

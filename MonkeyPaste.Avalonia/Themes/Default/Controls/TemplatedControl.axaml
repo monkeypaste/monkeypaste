@@ -6,7 +6,7 @@
 
     <Style Selector=":is(TemplatedControl):not(:is(TextBox)[IsReadOnly=false]):not(.fontFamilyOverride)">
         <Setter Property="FontFamily"
-                Value="{Binding DefaultReadOnlyFontFamilyFont, Source={x:Static local:MpAvThemeViewModel.Instance}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
+                Value="{Binding Source={DynamicResource DefaultReadOnlyFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
     </Style>
     <!--  NO BG  -->
     <Style Selector=":is(TemplatedControl).noBg /template/ ContentPresenter">
@@ -54,7 +54,7 @@
                 Value="{Binding $self.Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />
     </Style>
 
-  <!--  CONTRAST BG (Compliment)  -->
+    <!--  CONTRAST BG (Compliment)  -->
     <Style Selector=":is(TemplatedControl).comp.contrastFg /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Foreground"
                 Value="{Binding $self.Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}, ConverterParameter=compliment}" />

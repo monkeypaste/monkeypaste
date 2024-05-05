@@ -160,20 +160,6 @@ namespace MonkeyBuild {
 #else
             "Release";
 #endif
-        const string BUILD_OS =
-#if WINDOWS
-            "WINDOWS";
-#elif MAC
-            "MAC";
-#elif LINUX
-            "LINUX";
-#elif ANDROID
-            "ANDROID";
-#elif IOS
-            "IOS";
-#else
-            "";
-#endif
         static string[] ExcludedPublishFileNames = [
             "PresentationFramework.dll",
             "PresentationFramework.xml",
@@ -1731,7 +1717,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
             }
             // cleanup published output
             MpFileIo.DeleteDirectory(publish_dir);
-            Console.WriteLine($"{plugin_name} local [{BUILD_OS}-{config.ToUpper()}] DONE" + install_update_suffix);
+            Console.WriteLine($"{plugin_name} local [{config.ToUpper()}] DONE" + install_update_suffix);
 
             // return zip uri to use for local packageUrl
             return output_path.ToFileSystemUriFromPath();

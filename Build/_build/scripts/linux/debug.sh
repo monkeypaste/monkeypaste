@@ -1,6 +1,6 @@
 #!/bin/bash
 clear
-CONFIG=Debug
+CONFIG=Release
 FRAMEWORK="net8.0"
 PLATFORM=linux-x64 
 

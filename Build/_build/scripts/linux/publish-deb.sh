@@ -1,7 +1,7 @@
 #!/bin/bash
 # from https://www.internalpointers.com/post/build-binary-deb-package-practical-guide
 
-VERSION=1.0-18
+VERSION=1.0-19
 FRAMEWORK=net8.0
 ARCH=amd64
 PLATFORM=linux-x64

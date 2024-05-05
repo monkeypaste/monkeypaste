@@ -291,8 +291,20 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string LogDir =>
-            Path.Combine(StorageDir, "Logs");
+        private string _logDir;
+        public string LogDir {
+            get {
+                if (_logDir == null) {
+                    _logDir = Path.Combine(StorageDir, "Logs");
+                    if (!_logDir.IsDirectory()) {
+
+                        MpFileIo.CreateDirectory(_logDir);
+                        MpConsole.WriteLine($"Log dir successfully created at: '{_logDir}'");
+                    }
+                }
+                return _logDir;
+            }
+        }
         private string _logPath;
         public string LogPath {
             get {

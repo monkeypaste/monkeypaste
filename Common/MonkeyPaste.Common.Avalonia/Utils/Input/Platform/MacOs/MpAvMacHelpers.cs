@@ -1,11 +1,9 @@
-﻿
-using Avalonia.Platform;
+﻿using Avalonia.Platform;
 
 using MonoMac.AppKit;
 using MonoMac.CoreGraphics;
 using MonoMac.Foundation;
 using MonoMac.ObjCRuntime;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,8 +11,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvMacHelpers {

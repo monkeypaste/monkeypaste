@@ -47,7 +47,7 @@ namespace CoreOleHandler {
                     ]);
             } else if (OperatingSystem.IsWindows()) {
                 fml.Add((MpPortableDataFormats.Csv, Resources.CsvFormatLabel, DEF_MAX_TEXT, "csv.png"));
-            }
+            } 
             if (fml.Where(x => fml.Any(y => y != x && y.formatName == x.formatName)) is { } dups) {
                 MpDebug.Assert(!dups.Any(), $"Error, dup formats found for {string.Join(",", dups.Select(x => x.formatName))}");
             }

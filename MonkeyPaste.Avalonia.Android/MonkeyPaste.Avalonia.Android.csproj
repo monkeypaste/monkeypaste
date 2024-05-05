@@ -15,12 +15,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <!--<RunAOTCompilation>True</RunAOTCompilation>-->
+    <RunAOTCompilation>True</RunAOTCompilation>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-    <!--<DebugType>embedded</DebugType>-->
-    <!--<DebugSymbols>True</DebugSymbols>
-    <DebugType>embedded</DebugType>-->
-    <!--<Optimize>True</Optimize>-->
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>embedded</DebugType>
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

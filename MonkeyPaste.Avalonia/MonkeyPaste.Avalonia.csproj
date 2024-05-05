@@ -2523,12 +2523,13 @@
 <!--    </Content>-->
   </ItemGroup>
   
+  
   <PropertyGroup>
     <!-- Makes the TypeScript compilation task a no-op -->
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>portable</DebugType>
-</PropertyGroup>
+  </PropertyGroup>
     
   <!-- LOCALIZATION RESOURCES-->
   <ItemGroup>

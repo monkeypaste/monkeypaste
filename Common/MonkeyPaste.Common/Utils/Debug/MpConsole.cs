@@ -139,11 +139,11 @@ namespace MonkeyPaste.Common {
             }
             if (IsTraceEnabled) {
                 Trace.Write(sb.ToString());
-            }
-            if (LogToConsole) {
-                Console.WriteLine(sb.ToString().TrimEnd());
+            } else if (LogToConsole) {
                 if (Debugger.IsAttached) {
                     Debug.WriteLine(sb.ToString().TrimEnd());
+                } else {
+                    Console.WriteLine(sb.ToString().TrimEnd());
                 }
             }
 

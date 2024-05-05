@@ -109,8 +109,7 @@
                   VerticalAlignment="Stretch"
                   Width="{Binding $parent[Grid].Bounds.Width}">
             <TreeView.ItemTemplate>
-                <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
-                                  ItemsSource="{Binding SortedItems}">
+                <TreeDataTemplate ItemsSource="{Binding SortedItems}">
                     <Grid>
                         <local:MpAvTagView x:Name="TagView" />
                         <Border x:Name="SortDropBorder_top"

@@ -6,7 +6,6 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -1200,8 +1199,6 @@ namespace MonkeyPaste.Avalonia {
 
                 // map button cmds 
                 fvm.Items
-                    //.Where(x => x.ControlType == MpParameterControlType.Button || x.ControlType == MpParameterControlType.Hyperlink)
-                    //.Cast<MpAvButtonParameterViewModel>()
                     .OfType<MpAvButtonParameterViewModel>()
                     .ForEach(x => x.ClickCommand = ButtonParameterClickCommand);
 
@@ -1305,6 +1302,15 @@ namespace MonkeyPaste.Avalonia {
                         cb.IsEnabled = MpAvCefNetApplication.IsCefNetLoaded;    
 #endif
 #endif
+                    }
+                },
+                {
+                    nameof(MpRuntimePrefParamType.ShowLogsFolder),
+                    (piv) => {
+                        if(piv.GetVisualDescendant<Button>() is not Button b) {
+                            return;
+                        }
+                        b.IsEnabled = Mp.Services.PlatformInfo.LogDir.ToFileSystemUriFromPath().LocalStoragePathToPackagePath().IsDirectory();
                     }
                 }
             };

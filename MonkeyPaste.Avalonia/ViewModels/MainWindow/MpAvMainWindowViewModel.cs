@@ -16,12 +16,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public enum MpMainWindowHideType {
-        None = 0,
-        Click,
-        Deactivate,
-        Force
-    }
     public class MpAvMainWindowViewModel :
         MpAvViewModelBase,
         MpIWindowViewModel,
@@ -1383,7 +1377,7 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 case MpMainWindowHideType.Click:
                     var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation;
-                    if (!MpAvShortcutCollectionViewModel.Instance.IsGlobalHooksPaused ||
+                    if (MpAvShortcutCollectionViewModel.Instance.IsGlobalHooksPaused ||
                         gmp == null) {
                         return false;
                     }
@@ -1469,7 +1463,6 @@ namespace MonkeyPaste.Avalonia {
             },
             (args) => {
                 return CanHideMainWindow(args);
-
             });
 
         public ICommand ToggleShowMainWindowCommand => new MpCommand(
