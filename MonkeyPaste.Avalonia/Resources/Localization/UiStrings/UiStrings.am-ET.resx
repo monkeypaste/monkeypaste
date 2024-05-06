@@ -2996,4 +2996,7 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>ለገሱ</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ወደ ቅንጥብ ሰሌዳ ተቀድቷል።</value>
+  </data>
 </root>

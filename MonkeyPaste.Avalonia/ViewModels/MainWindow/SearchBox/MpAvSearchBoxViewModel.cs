@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -74,7 +75,6 @@ namespace MonkeyPaste.Avalonia {
                 if (SearchFilterCollectionViewModel.IsPopupMenuOpen) {
                     return true;
                 }
-
 
                 if (Mp.Services.FocusMonitor.FocusElement is Control c && (
                     c.TryGetSelfOrAncestorDataContext<MpAvSearchBoxViewModel>(out _) ||

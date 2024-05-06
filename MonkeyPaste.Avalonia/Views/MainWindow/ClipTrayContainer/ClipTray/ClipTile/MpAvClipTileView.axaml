@@ -201,8 +201,6 @@
                           Classes.capTooltip="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"
                           Classes.userColor="{Binding CopyItemHexColor, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                           Classes.compatMode="{Binding !IsRichHtmlContentEnabled, Source={x:Static local:MpAvPrefViewModel.Instance}}"
-                          local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                          local:MpAvReceivesEventsExtension.SenderFilter="{Binding EmbedHost}"
                           VerticalAlignment="Stretch"
                           local:MpAvPointerCommandExtension.IsEnabled="True"
                           local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"

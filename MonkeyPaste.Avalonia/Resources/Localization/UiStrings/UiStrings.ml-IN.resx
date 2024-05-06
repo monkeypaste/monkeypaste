@@ -2996,4 +2996,7 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>സംഭാവനചെയ്യുക</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തി</value>
+  </data>
 </root>

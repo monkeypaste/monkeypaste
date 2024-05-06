@@ -2996,4 +2996,7 @@ Ukupna restauracija ne može biti zagarantovana i može smanjiti performanse ili
   <data name="DonateLabel" xml:space="preserve">
     <value>Донирати</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Копирано у међуспремник</value>
+  </data>
 </root>

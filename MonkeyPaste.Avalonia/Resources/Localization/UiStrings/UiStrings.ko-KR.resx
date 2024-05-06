@@ -2996,4 +2996,7 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>기부</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>클립 보드에 복사</value>
+  </data>
 </root>

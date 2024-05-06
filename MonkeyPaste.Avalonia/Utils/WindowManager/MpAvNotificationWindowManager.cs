@@ -67,29 +67,26 @@ namespace MonkeyPaste.Avalonia {
             var layoutType = MpAvNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
             switch (layoutType) {
                 case MpNotificationLayoutType.Welcome:
-                    //nw = new MpAvWelcomeWindow() {
-                    //    DataContext = nvmb
-                    //};
+                    // ignored
                     break;
                 case MpNotificationLayoutType.Loader:
                     var mlv = new MpAvMobileLoaderView() {
-                        DataContext = nvmb,
-                        //Width = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x=>x.IsPrimary).WorkArea.Width,
-                        //Height = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x=>x.IsPrimary).WorkArea.Height
+                        DataContext = nvmb
                     };
                     App.SetPrimaryView(mlv);
                     break;
-                case MpNotificationLayoutType.ErrorWithOption:
-                case MpNotificationLayoutType.UserAction:
-                case MpNotificationLayoutType.ErrorAndShutdown:
-                    //nw = new MpAvUserActionNotificationWindow() {
-                    //    DataContext = nvmb
-                    //};
-                    break;
                 default:
-                    //nw = new MpAvMessageNotificationWindow() {
-                    //    DataContext = nvmb,
-                    //};
+                    MpDebug.Assert(nvmb.Body is string, $"Unhandled mobile ntf '{nvmb.NotificationType}'");
+
+                    if(MpAvDeviceWrapper.Instance == null ||
+                        nvmb.Body is not string text) {
+                        break;
+                    }
+                    MpAvDeviceWrapper.Instance.PlatformToastNotification.ShowToast(
+                        title: nvmb.Title,
+                        text: text,
+                        icon: nvmb.IconSourceObj,
+                        accentHexColor: nvmb.BorderHexColor);
                     break;
             }
             if (nw == null) {

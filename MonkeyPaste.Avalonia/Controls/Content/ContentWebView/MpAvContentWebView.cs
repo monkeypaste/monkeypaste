@@ -30,8 +30,6 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Windows.Media.Media3D;
 #endif
 
-
-
 #if CEFNET_WV
 using CefNet.Avalonia;
 #endif
@@ -49,7 +47,6 @@ using TheArtOfDev.HtmlRenderer.Avalonia;
 #if MAC
 using MonoMac.Foundation;
 #endif
-
 #endif
 
 namespace MonkeyPaste.Avalonia {

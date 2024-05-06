@@ -30,7 +30,6 @@
                               Classes.drag="{Binding IsTileDragging}"
                               Classes.sugarwv="{Binding IsSugarWv}"
                               Focusable="{Binding IsSubSelectionEnabled}"
-                              local:MpAvReceivesEventsExtension.IsEnabled="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                               ContentId="{Binding CopyItemId, Mode=OneWay}"
                               ContentScale="{Binding ZoomFactor}"
                               IsEditorLoaded="{Binding IsEditorLoaded, Mode=TwoWay}"

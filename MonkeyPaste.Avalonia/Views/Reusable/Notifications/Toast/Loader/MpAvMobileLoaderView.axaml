@@ -13,6 +13,15 @@
                        x:DataType="local:MpAvLoaderNotificationViewModel"
                        x:CompileBindings="True"
                        x:Class="MonkeyPaste.Avalonia.MpAvMobileLoaderView">
+    <local:MpAvUserControl.Background>
+        <RadialGradientBrush Center="50%, 50%" GradientOrigin="50%, 50%" Radius="0.5">
+            <RadialGradientBrush.GradientStops>
+                <GradientStop Color="WhiteSmoke" Offset="0" />
+                <GradientStop Color="Violet" Offset="0.3" />
+                <GradientStop Color="Purple" Offset="1" />
+            </RadialGradientBrush.GradientStops>
+        </RadialGradientBrush>
+    </local:MpAvUserControl.Background>
     <local:MpAvUserControl.Styles>
     </local:MpAvUserControl.Styles>
     <StackPanel HorizontalAlignment="Center"
@@ -26,14 +35,26 @@
                Height="100"
                Source="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                HorizontalAlignment="Center" />
-        <!--  PROGRESS BAR  -->
-        <ProgressBar Margin="50,0"
-                     Height="20"
-                     Minimum="0"
-                     Maximum="1"
-                     HorizontalAlignment="Center"
-                     Value="{Binding PercentLoaded}"
-                     ShowProgressText="True" />
+        <Grid>
+
+            <!--  PLEASE WAIT SPINNER  -->
+            <local:MpAvBusySpinnerView Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       IsVisible="{Binding ShowSpinner}"
+                                       RenderTransform="translateX(-50px)"
+                                       Width="25"
+                                       Height="25" />
+            <!--  PROGRESS BAR  -->
+            <ProgressBar Margin="50,0"
+                         Height="20"
+                         Minimum="0"
+                         Maximum="1"
+                         Opacity="{Binding ShowSpinner, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}, ConverterParameter=0|1}"
+                         HorizontalAlignment="Center"
+                         Value="{Binding PercentLoaded}"
+                         ShowProgressText="True" />
+        </Grid>
+
         <!--  PROGRESS INFO  -->
         <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"
                                      HorizontalAlignment="Center"

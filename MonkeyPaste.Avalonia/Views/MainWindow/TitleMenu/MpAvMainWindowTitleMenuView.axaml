@@ -17,6 +17,24 @@
         <sys:Double x:Key="ResizerLength">3</sys:Double>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+        <!--  MOBILE ONLY  -->
+        <Style Selector="Grid#TitlePanel.mobile">
+            <Setter Property="Background"
+                    Value="{DynamicResource TitleMenuActiveBgBrush}" />
+        </Style>
+
+        <Style Selector="Grid#TitlePanel.mobile StackPanel.edge-cntr">
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+
+        <Style Selector="Grid#TitlePanel.mobile :is(Button)">
+            <Setter Property="Width"
+                    Value="25" />
+            <Setter Property="Height"
+                    Value="25" />
+        </Style>
+
         <!--  BUTTONS  -->
 
         <Style Selector="Border#MinimizeBorder">
@@ -117,11 +135,13 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TitlePanel"
+          Classes.mobile="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <!--  LEFT  -->
 
         <StackPanel x:Name="LeftStackPanel"
+                    Classes="edge-cntr"
                     Orientation="Horizontal"
                     HorizontalAlignment="Left">
             <!--  SETTINGS BUTTON  -->
@@ -186,6 +206,7 @@
         <Button x:Name="WindowOrientationHandleButton"
                 BorderThickness="0"
                 Cursor="SizeAll"
+                IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                 Classes="noBg noHoverBg outlineOver"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Stretch"
@@ -202,12 +223,13 @@
         <!--  RIGHT  -->
 
         <StackPanel x:Name="RightStackPanel"
+                    Classes="edge-cntr"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
 
             <!--  Zoom Factor Slider  -->
             <local:MpAvZoomFactorView x:Name="ZoomFactorView"
-                                      IsVisible="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, ConverterParameter=test, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
+                                      IsVisible="{Binding SelectedCopyItemId, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, ConverterParameter=test, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
 
             <!--  Layout Toggle Button  -->
 
@@ -229,6 +251,7 @@
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
                     Classes="noBg noHoverBg noBorder"
+                    IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.IsEnabled="True"
                     local:MpAvPointerCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.RightPressCommandParameter="CW">

@@ -29,10 +29,13 @@
   
   <ItemGroup>
     <AndroidJavaSource Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
+    <AndroidJavaSource Remove="Controls\Content\NativeWebViewHost\**" />
     <AndroidJavaSource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidLibrary Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
+    <AndroidLibrary Remove="Controls\Content\NativeWebViewHost\**" />
     <AndroidLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidNativeLibrary Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
+    <AndroidNativeLibrary Remove="Controls\Content\NativeWebViewHost\**" />
     <AndroidNativeLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AvaloniaXaml Remove="Assets\Images\MpRichTextBox\**" />
     <AvaloniaXaml Remove="Assets\Images\resize_backup2\**" />
@@ -46,6 +49,7 @@
     <AvaloniaXaml Remove="cef_old\**" />
     <AvaloniaXaml Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <AvaloniaXaml Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
+    <AvaloniaXaml Remove="Controls\Content\NativeWebViewHost\**" />
     <AvaloniaXaml Remove="Controls\Content\TextElement\**" />
     <AvaloniaXaml Remove="Interfaces\Content\**" />
     <AvaloniaXaml Remove="Resources\Localization\UiStrings\Baselines\**" />
@@ -87,6 +91,7 @@
     <Compile Remove="cef_old\**" />
     <Compile Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <Compile Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
+    <Compile Remove="Controls\Content\NativeWebViewHost\**" />
     <Compile Remove="Controls\Content\TextElement\**" />
     <Compile Remove="Interfaces\Content\**" />
     <Compile Remove="Resources\Localization\UiStrings\Baselines\**" />
@@ -128,6 +133,7 @@
     <EmbeddedResource Remove="cef_old\**" />
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
+    <EmbeddedResource Remove="Controls\Content\NativeWebViewHost\**" />
     <EmbeddedResource Remove="Controls\Content\TextElement\**" />
     <EmbeddedResource Remove="Interfaces\Content\**" />
     <EmbeddedResource Remove="Resources\Localization\UiStrings\Baselines\**" />
@@ -157,6 +163,7 @@
     <EmbeddedResource Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <EmbeddedResource Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <JavaSourceJar Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
+    <JavaSourceJar Remove="Controls\Content\NativeWebViewHost\**" />
     <JavaSourceJar Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <None Remove="Assets\Images\MpRichTextBox\**" />
     <None Remove="Assets\Images\resize_backup2\**" />
@@ -171,6 +178,7 @@
     <None Remove="cef_old\**" />
     <None Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <None Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
+    <None Remove="Controls\Content\NativeWebViewHost\**" />
     <None Remove="Controls\Content\TextElement\**" />
     <None Remove="Interfaces\Content\**" />
     <None Remove="Resources\Localization\UiStrings\Baselines\**" />
@@ -235,8 +243,10 @@
     <Page Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <Page Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <ProguardConfiguration Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
+    <ProguardConfiguration Remove="Controls\Content\NativeWebViewHost\**" />
     <ProguardConfiguration Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <TransformFile Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
+    <TransformFile Remove="Controls\Content\NativeWebViewHost\**" />
     <TransformFile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidAsset Remove="Assets\Images\burlap.png" />
     <AvaloniaXaml Remove="Themes\Default\Accents\Accents.axaml" />
@@ -637,6 +647,7 @@
     <Compile Remove="AttachedProperties\MpAvCefWebViewExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvMarqueeTextBoxExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvMenuExtension.cs" />
+    <Compile Remove="AttachedProperties\MpAvReceivesEventsExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvTextSelectionExtension.cs" />
     <Compile Remove="Behaviors\MpAvMoveBehavior.cs" />
     <Compile Remove="Controls\Content\CefNetWebView\Cef\WebView\MpAvCefNetWebView.cs" />

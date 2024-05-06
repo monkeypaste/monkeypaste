@@ -2996,4 +2996,7 @@ Is féidir aicearraí domhanda a chumasú anois sa roghchlár tráidire córais<
   <data name="DonateLabel" xml:space="preserve">
     <value>Síntigh</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Cóipeáilte go gearrthaisce</value>
+  </data>
 </root>

@@ -2996,4 +2996,7 @@ Os atalhos globais agora podem ser ativados no menu da bandeja do sistema</value
   <data name="DonateLabel" xml:space="preserve">
     <value>Doar</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Copiado para a área de transferência</value>
+  </data>
 </root>

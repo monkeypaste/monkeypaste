@@ -2996,4 +2996,7 @@ Le scorciatoie globali possono ora essere abilitate nel menu del vassoio di sist
   <data name="DonateLabel" xml:space="preserve">
     <value>Donare</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Copiato negli appunti</value>
+  </data>
 </root>

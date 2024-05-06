@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia.Android {
     public static class MpAvAdAssetMover {
         static bool IGNORE_OVERWRITE =
 #if DEBUG
-            false;
+            true;
 #else
             true;
 #endif
@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia.Android {
             MpConsole.WriteLine($"Total asset move time: {sw.ElapsedMilliseconds}ms");
         }
         private static void MovePlugins() {
-            string core_dat_dir = Path.Combine(MpDeviceWrapper.Instance.PlatformInfo.ExecutingDir, MpPluginLoader.DAT_FOLDER_NAME);
+            string core_dat_dir = Path.Combine(MpAvDeviceWrapper.Instance.PlatformInfo.ExecutingDir, MpPluginLoader.DAT_FOLDER_NAME);
             if (core_dat_dir.IsDirectory()) {
                 // already moved
                 if (IGNORE_OVERWRITE) {
@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia.Android {
         }
 
         private static void MoveResources() {
-            var pi = MpDeviceWrapper.Instance.PlatformInfo;
+            var pi = MpAvDeviceWrapper.Instance.PlatformInfo;
             var asset_lookup = new Dictionary<string, string>() {
                 { Path.Combine("dat","editor.zip"), Path.GetDirectoryName(pi.EditorPath) },
                 { Path.Combine("dat","terms.zip"), Path.GetDirectoryName(pi.TermsPath) },

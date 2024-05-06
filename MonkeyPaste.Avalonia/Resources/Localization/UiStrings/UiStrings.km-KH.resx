@@ -2996,4 +2996,7 @@ feedback@monkeypales.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>បរិច្ចាក</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>បានចម្លងទៅក្ដារតម្បៀតខ្ទាស់</value>
+  </data>
 </root>

@@ -66,10 +66,6 @@ namespace MonkeyPaste.Avalonia {
         [JsonIgnore]
         public const bool ENCRYPT_DB = true;
 
-        #endregion
-
-        #region Constants
-
         public const double BASE_DEFAULT_FONT_SIZE = 12;
 
         #endregion
@@ -90,6 +86,12 @@ namespace MonkeyPaste.Avalonia {
         public static string PreferencesPathBackup =>
             $"{PreferencesPath}.{PREF_BACKUP_PATH_EXT}";
 
+
+        [JsonIgnore]
+        public static string DEFAULT_THEME_TYPE_NAME => MpThemeType.Dark.ToString();
+
+        [JsonIgnore]
+        public static string DEFAULT_THEME_HEX_COLOR => MpSystemColors.purple;
 
         [JsonIgnore]
         public static string arg1 {
@@ -318,8 +320,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Look & Feel
         public bool ShowContentTitles { get; set; } = true;
-        public string ThemeTypeName { get; set; } = MpThemeType.Dark.ToString();
-        public string ThemeColor { get; set; } = MpSystemColors.purple;
+        public string ThemeTypeName { get; set; } = DEFAULT_THEME_TYPE_NAME;
+        public string ThemeColor { get; set; } = DEFAULT_THEME_HEX_COLOR;
         public int NotificationSoundGroupIdx { get; set; } = (int)MpSoundGroupType.Minimal;
         public double NotificationSoundVolume { get; set; } = 0;
         public bool ShowInTaskbar { get; set; } = true;

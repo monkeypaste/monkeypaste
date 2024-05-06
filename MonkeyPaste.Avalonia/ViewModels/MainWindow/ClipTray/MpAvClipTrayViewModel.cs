@@ -59,7 +59,14 @@ namespace MonkeyPaste.Avalonia {
         public const double UNEXPANDED_HEIGHT_RATIO = 0.5d;
         public const double DEFAULT_UNEXPANDED_HEIGHT = DEFAULT_ITEM_SIZE * UNEXPANDED_HEIGHT_RATIO;
 
-        #endregion
+        const double DEFAULT_PIN_TRAY_RATIO =
+#if MOBILE
+            1.0;
+#else
+            0.5;
+#endif
+
+#endregion
 
         #region Statics
 
@@ -976,6 +983,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public int SelectedCopyItemId =>
+            SelectedItem == null ? 0 : SelectedItem.CopyItemId;
+
         public IEnumerable<MpAvClipTileViewModel> VisibleQueryItems =>
             Items.Where(x => x.IsAnyQueryCornerVisible && !x.IsPlaceholder);
 
@@ -1091,9 +1101,17 @@ namespace MonkeyPaste.Avalonia {
         public double MinClipTrayScreenHeight =>
             MinClipOrPinTrayScreenHeight;
         public double MinClipOrPinTrayScreenWidth =>
-            50;
+#if DESKTOP
+        50;
+#else
+        0;
+#endif
         public double MinClipOrPinTrayScreenHeight =>
-            50;
+#if DESKTOP
+        50;
+#else
+        0;
+#endif
         public double MaxTileWidth =>
             double.PositiveInfinity;// Math.Max(0, ObservedQueryTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
         public double MaxTileHeight =>
@@ -1854,14 +1872,12 @@ namespace MonkeyPaste.Avalonia {
             AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.CanDrop)));
         }
 
-        public MpSize GetCurrentDefaultPinTrayRatio() {
+        public MpSize GetDefaultPinTrayRatio(double var_dim_len = DEFAULT_PIN_TRAY_RATIO) {
             MpSize p_ratio = new MpSize(1, 1);
-            double pin_tray_var_dim_ratio = 0.5;
-
             if (ListOrientation == Orientation.Vertical) {
-                p_ratio.Height = pin_tray_var_dim_ratio;
+                p_ratio.Height = var_dim_len;
             } else {
-                p_ratio.Width = pin_tray_var_dim_ratio;
+                p_ratio.Width = var_dim_len;
             }
             return p_ratio;
         }
@@ -2226,6 +2242,7 @@ namespace MonkeyPaste.Avalonia {
                 //    break;
                 case nameof(SelectedItem):
                     MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
+                    OnPropertyChanged(nameof(SelectedCopyItemId));
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(CanScroll));
@@ -3205,7 +3222,7 @@ namespace MonkeyPaste.Avalonia {
                             !MpAvPlainHtmlConverter.Instance.IsLoaded ||
                             !Mp.Services.StartupState.IsCoreLoaded;
                         if (is_waiting) {
-                            MpConsole.WriteLine($"waiting to add item to cliptray...(IsAddingClipboardItem:{IsAddingClipboardItem},MpAvPlainHtmlConverter.Instance.IsBusy:{MpAvPlainHtmlConverter.Instance.IsBusy},Mp.Services.StartupState.IsCoreLoaded:{Mp.Services.StartupState.IsCoreLoaded})");
+                            MpConsole.WriteLine($"waiting to add item to cliptray...(IsAddingClipboardItem:{IsAddingClipboardItem},MpAvPlainHtmlConverter.Instance.IsLoaded:{MpAvPlainHtmlConverter.Instance.IsLoaded},MpAvPlainHtmlConverter.Instance.IsBusy:{MpAvPlainHtmlConverter.Instance.IsBusy},Mp.Services.StartupState.IsCoreLoaded:{Mp.Services.StartupState.IsCoreLoaded})");
 
                             if (sw.Elapsed > TimeSpan.FromMilliseconds(ADD_CONTENT_TIMEOUT_MS) && IsAddingClipboardItem) {
                                 MpConsole.WriteLine($"AddItem timeout reached, just goin");
@@ -3412,6 +3429,37 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Assert(PinnedItems.All(x => x != PinTrayCachePlaceholder), $"Pin Tray Cache item misplaced");
                 PinnedItems.Insert(0, PinTrayCachePlaceholder);
             }
+        }
+
+        private void SetPinTrayRatio(MpSize new_ratio) {
+            if (MpAvMainView.Instance is not MpAvMainView mv ||
+                mv.GetVisualDescendant<MpAvMovableGridSplitter>() is not { } mgs) {
+                return;
+            }
+
+            var trg = mgs.Parent as Grid;
+            if (trg == null) {
+                return;
+            }
+
+            double trg_w = 0;
+            double trg_h = 0;
+            if (trg.ColumnDefinitions.Any()) {
+                trg_w = trg.ColumnDefinitions[0].ActualWidth;
+            } else {
+                trg_w = trg.Bounds.Width;
+            }
+
+            if (trg.RowDefinitions.Any()) {
+                trg_h = trg.RowDefinitions[0].ActualHeight;
+            } else {
+                trg_h = trg.Bounds.Height;
+            }
+
+            double dw = (trg.Bounds.Width * new_ratio.Width) - trg_w;
+            double dh = (trg.Bounds.Height * new_ratio.Height) - trg_h;
+            MpConsole.WriteLine($"Tray Splitter reset. Ratio: {new_ratio} Delta: {dw},{dh}");
+            mgs.ApplyDelta(new Vector(dw, dh));
         }
         #endregion
 
@@ -4911,42 +4959,20 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ResetTraySplitterCommand => new MpCommand<object>(
             (args) => {
-                if (MpAvMainView.Instance is not MpAvMainView mv) {
-                    return;
-                }
-                var mgs = args as MpAvMovableGridSplitter;
-                if (mgs == null) {
-                    mgs = mv.GetVisualDescendant<MpAvMovableGridSplitter>();
-                    if (mgs == null) {
-                        return;
-                    }
-                }
+                var def_ratio = GetDefaultPinTrayRatio();
+                SetPinTrayRatio(def_ratio);
+            });
 
-                var trg = mgs.Parent as Grid;
-                if (trg == null) {
-                    return;
-                }
-
-                double trg_w = 0;
-                double trg_h = 0;
-                if (trg.ColumnDefinitions.Any()) {
-                    trg_w = trg.ColumnDefinitions[0].ActualWidth;
-                } else {
-                    trg_w = trg.Bounds.Width;
-                }
-
-                if (trg.RowDefinitions.Any()) {
-                    trg_h = trg.RowDefinitions[0].ActualHeight;
-                } else {
-                    trg_h = trg.Bounds.Height;
-                }
-
-                var p_ratio = GetCurrentDefaultPinTrayRatio();
-
-                double dw = (trg.Bounds.Width * p_ratio.Width) - trg_w;
-                double dh = (trg.Bounds.Height * p_ratio.Height) - trg_h;
-                MpConsole.WriteLine($"Tray Splitter reset. Ratio: {p_ratio} Delta: {dw},{dh}");
-                mgs.ApplyDelta(new Vector(dw, dh));
+        public ICommand ExpandPinTrayCommand => new MpCommand(
+            () => {
+                var exp_pin_ratio = GetDefaultPinTrayRatio();
+                SetPinTrayRatio(exp_pin_ratio);
+            });
+        
+        public ICommand ExpandQueryTrayCommand => new MpCommand(
+            () => {
+                var exp_quer_ratio = GetDefaultPinTrayRatio(0);
+                SetPinTrayRatio(exp_quer_ratio);
             });
 
         public ICommand SelectClipTileTransactionNodeCommand => new MpAsyncCommand<object>(
@@ -5130,6 +5156,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 MpConsole.WriteLine($"Content webviews restored: {(Items.Count + PinnedItems.Count)} Total time: {sw.ElapsedMilliseconds}ms");
             });
+
 
         #region Append
         public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data, string handle) {

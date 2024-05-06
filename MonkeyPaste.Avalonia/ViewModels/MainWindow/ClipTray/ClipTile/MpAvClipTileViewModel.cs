@@ -687,9 +687,6 @@ namespace MonkeyPaste.Avalonia {
             Parent != null && Parent.LayoutType == MpClipTrayLayoutType.Grid;
 #endif
 
-        public MpIEmbedHost EmbedHost =>
-            GetContentView() as MpIEmbedHost;
-
         private int SelectedDetailIdx { get; set; } = 0;
 
         public bool IsOverDetailGrid { get; set; }
@@ -1752,7 +1749,6 @@ namespace MonkeyPaste.Avalonia {
                     // false = PublicHandle changed
 
                     OnPropertyChanged(nameof(IsAnyBusy));
-                    OnPropertyChanged(nameof(EmbedHost));
                     break;
                 case nameof(CopyItemTitle):
                     if (Parent != null &&

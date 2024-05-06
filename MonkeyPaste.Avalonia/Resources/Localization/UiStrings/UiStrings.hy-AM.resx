@@ -2996,4 +2996,7 @@ feedback@monkepte.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Նվիրաբերել</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Պատճենահանվել է clipboard- ին</value>
+  </data>
 </root>

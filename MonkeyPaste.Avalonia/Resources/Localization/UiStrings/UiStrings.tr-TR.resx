@@ -2996,4 +2996,7 @@ Global kısayollar artık sistem tepsisi menüsünde etkinleştirilebilir</value
   <data name="DonateLabel" xml:space="preserve">
     <value>Bağış yapmak</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Panoya kopyalandı</value>
+  </data>
 </root>

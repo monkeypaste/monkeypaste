@@ -61,6 +61,7 @@
         </Grid.RowDefinitions>
 
         <!--  QUERY TRAY  -->
+
         <Border x:Name="QueryTrayContainerBorder"
                 Grid.Row="0"
                 Grid.RowSpan="2"
@@ -86,7 +87,6 @@
                          BorderThickness="0"
                          Margin="0,0,0,0"
                          AutoScrollToSelectedItem="False"
-                         local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                          SelectedItem="{Binding SelectedClipTrayItem, Mode=TwoWay}"
                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -143,33 +143,6 @@
                     </ListBox.ItemsPanel>
                 </ListBox>
             </local:MpAvPagingScrollViewer>
-
-            <!--  REPEATER TEST  -->
-            <!--<ScrollViewer x:Name="QueryRepeaterScrollViewer"
-                          HorizontalScrollBarVisibility="{Binding IsQueryHorizontalScrollBarVisible, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
-                          VerticalScrollBarVisibility="Hidden"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Top"
-                          Offset="{Binding ScrollVector, Mode=TwoWay}"
-                          AllowAutoHide="True"
-                          Width="{Binding $parent.Bounds.Width}"
-                          Height="{Binding $parent.Bounds.Height}">
-                <ItemsRepeater ItemsSource="{Binding Items}">
-                    <ItemsRepeater.Layout>
-                        <StackLayout Spacing="3"
-                                     Orientation="Horizontal" />
-                    </ItemsRepeater.Layout>
-                    <ItemsRepeater.ItemTemplate>
-                        <DataTemplate>
-                            <local:MpAvClipTileView UseLayoutRounding="True"
-                                                    local:MpAvIsHoveringExtension.IsEnabled="True"
-                                                    local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                                    local:MpAvBoundsObserverExtension.IsEnabled="True"
-                                                    local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}" />
-                        </DataTemplate>
-                    </ItemsRepeater.ItemTemplate>
-                </ItemsRepeater>
-            </ScrollViewer>-->
         </Border>
 
 
@@ -240,6 +213,7 @@
                                                  VerticalContentAlignment="Stretch"
                                                  IsVisible="{Binding HasCriteriaItems}" />
         </Border>
+
         <GridSplitter x:Name="AdvancedSearchSplitter"
                       Grid.Row="0"
                       Classes="horizontal"
@@ -255,6 +229,12 @@
                 </MultiBinding>
             </GridSplitter.IsVisible>
         </GridSplitter>
+
+        <!--  MOBILE EXPAND PIN TRAY BUTTON  -->
+        <Button x:Name="ExpandPinTrayButton"
+                Classes="defaultButton clipTrayButton outlineOver clipTrayBackButton"
+                IsVisible="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                Command="{Binding ExpandPinTrayCommand}" />
     </Grid>
 
 </local:MpAvUserControl>

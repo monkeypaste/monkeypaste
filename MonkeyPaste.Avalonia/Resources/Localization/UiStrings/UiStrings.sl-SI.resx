@@ -2996,4 +2996,7 @@ Globalne bližnjice je zdaj mogoče omogočiti v meniju System pladnja</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Donirajte</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopirano na odložišče</value>
+  </data>
 </root>

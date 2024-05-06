@@ -2996,4 +2996,7 @@ FANDUCE@ONKEYPASTET.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>ଦାନ କରନ୍ତୁ |</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>କ୍ଲିପବୋର୍ଡରେ କପି କରାଯାଇଛି |</value>
+  </data>
 </root>

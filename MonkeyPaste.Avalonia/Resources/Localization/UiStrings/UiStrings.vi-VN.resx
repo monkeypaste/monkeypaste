@@ -2996,4 +2996,7 @@ Các phím tắt toàn cầu hiện có thể được bật trong menu khay h�
   <data name="DonateLabel" xml:space="preserve">
     <value>Quyên tặng</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Sao chép vào clipboard</value>
+  </data>
 </root>

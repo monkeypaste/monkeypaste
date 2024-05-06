@@ -40,7 +40,7 @@
   
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>LINUX</BuildOs>
+    <BuildOs>ANDROID</BuildOs>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -172,6 +172,7 @@
     <AndroidPackageName>com.Monkey.MonkeyPaste</AndroidPackageName>
     <AndroidInternalStorageDir>/data/user/0/$(AndroidPackageName)/files</AndroidInternalStorageDir>
     <IsMobile>true</IsMobile>
+    <UseSugarWv>true</UseSugarWv>
     <PlatformShortName>android</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\android</BuildScriptsDir>
   </PropertyGroup>

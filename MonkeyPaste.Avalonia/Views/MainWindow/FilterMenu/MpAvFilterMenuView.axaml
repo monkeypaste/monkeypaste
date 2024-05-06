@@ -12,9 +12,32 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvFilterMenuView">
+    <local:MpAvUserControl.Styles>
+        <!--  MOBILE VERT SUB-FILTER VISIBILITY  -->
+        <Style Selector="Grid#FilterDockPanel.mobile.vert.sort-expanded local|MpAvTagTrayView">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#FilterDockPanel.mobile.vert.sort-expanded local|MpAvSearchBoxView">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#FilterDockPanel.mobile.vert.search-expanded local|MpAvTagTrayView">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#FilterDockPanel.mobile.vert.search-expanded local|MpAvClipTileSortView">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <ScrollViewer VerticalScrollBarVisibility="Hidden"
                   HorizontalScrollBarVisibility="Auto">
         <Grid x:Name="FilterDockPanel"
+              Classes.mobile="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+              Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+              Classes.sort-expanded="{Binding IsExpanded, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}"
+              Classes.search-expanded="{Binding IsExpanded, Source={x:Static local:MpAvSearchBoxViewModel.Instance}}"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch"
               Background="{StaticResource MainWindowBgBrush}">

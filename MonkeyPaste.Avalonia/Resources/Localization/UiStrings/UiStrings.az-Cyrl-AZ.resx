@@ -2996,4 +2996,7 @@ Qlobal Qısayolları indi Sistem Tablası Menyusunda aktivləşdirmək olar</val
   <data name="DonateLabel" xml:space="preserve">
     <value>Bağışlayın</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Buferə kopyalandı</value>
+  </data>
 </root>

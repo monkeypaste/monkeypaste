@@ -2996,4 +2996,7 @@ Comenzile rapide globale pot fi acum activate în meniul tăvii de sistem</value
   <data name="DonateLabel" xml:space="preserve">
     <value>Donează</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Copiat în clipboard</value>
+  </data>
 </root>

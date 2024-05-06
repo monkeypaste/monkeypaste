@@ -2996,4 +2996,7 @@ Globālās saīsnes tagad var iespējot Sistēmas paplātes izvēlnē</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Ziedot</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopē pie starpliktuves</value>
+  </data>
 </root>

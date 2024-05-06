@@ -2996,4 +2996,7 @@ Bellach gellir galluogi Llwybrau Byr Byd-eang yn y Ddewislen Hambwrdd System</va
   <data name="DonateLabel" xml:space="preserve">
     <value>Rhoddwch</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Wedi'i gopïo i'r clipfwrdd</value>
+  </data>
 </root>

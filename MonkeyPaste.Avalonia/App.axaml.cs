@@ -171,8 +171,8 @@ namespace MonkeyPaste.Avalonia {
                 await loader.CreatePlatformAsync(startup_datetime);
 
                 Dispatcher.UIThread.Post(async () => {
-                    if (MpDeviceWrapper.Instance != null) {
-                        await MpDeviceWrapper.Instance.InitAsync(null);
+                    if (MpAvDeviceWrapper.Instance != null) {
+                        await MpAvDeviceWrapper.Instance.InitAsync(null);
                     }
                     MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled = false;
                     await loader.InitAsync();

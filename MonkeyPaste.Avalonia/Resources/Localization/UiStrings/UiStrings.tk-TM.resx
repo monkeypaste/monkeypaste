@@ -2996,4 +2996,7 @@ Global gysga ýollar ulgam tromy menýusynda başlap biler</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Bagyş et</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Paneline göçürildi</value>
+  </data>
 </root>

@@ -253,7 +253,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         private MpAvThemeViewModel() {
-            PropertyChanged += MpAvThemeViewModel_PropertyChanged;
             InitDefaults();
             UpdateThemeResources();
         }
@@ -287,6 +286,10 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             if (res_str.EndsWith("Image")) {
+                if(Mp.Services == null ||
+                    Mp.Services.PlatformResource == null) {
+                    return false;
+                }
                 res_str = Mp.Services.PlatformResource.GetResource<string>(res_str);
             }
             return _colorImageFileNames.Any(x => res_str.ToLowerInvariant().EndsWith(x));
@@ -310,13 +313,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private void MpAvThemeViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(HasModelChanged):
-
-                    break;
-            }
-        }
 
         private void InitDefaults() {
 
@@ -409,11 +405,12 @@ namespace MonkeyPaste.Avalonia {
             // 24: default button bg h(h-240, S=15, V=95) (comp5)
             // 25: default button bg h(h-240, S=15, V=65) (comp5bg)
 
-            if (MpAvPrefViewModel.Instance == null) {
-                return;
+            MpThemeType tt = MpAvPrefViewModel.DEFAULT_THEME_TYPE_NAME.ToEnum<MpThemeType>();
+            string hex = MpAvPrefViewModel.DEFAULT_THEME_HEX_COLOR;
+            if (MpAvPrefViewModel.Instance != null) {
+                tt = MpAvPrefViewModel.Instance.ThemeType;
+                hex = MpAvPrefViewModel.Instance.ThemeColor;
             }
-            var tt = MpAvPrefViewModel.Instance.ThemeType;
-            string hex = MpAvPrefViewModel.Instance.ThemeColor;
             // prepass selected color to get decent chroma
             // V >= 50, S >= 50
             hex.ToPortableColor().ColorToHsv(out double preh, out double pres, out double prev);
@@ -561,8 +558,6 @@ namespace MonkeyPaste.Avalonia {
             SetThemeValue(MpThemeResourceKey.ThemeLightColor, colors[27]);
             SetThemeValue(MpThemeResourceKey.ThemeDarkColor, colors[28]);
 
-
-
             // NON-DYNAMIC COLORS
             SetThemeValue(
                 MpThemeResourceKey.ThemeContentLinkColor,
@@ -592,18 +587,20 @@ namespace MonkeyPaste.Avalonia {
                     Mp.Services.PlatformResource.GetResource<Color>("PasteButtonCustomBgColor_dark") :
                     Mp.Services.PlatformResource.GetResource<Color>("PasteButtonCustomBgColor"));
 
-            // FONT STUFF
-            MpAvPrefViewModel.Instance.OnPropertyChanged(nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft));
+            if(MpAvPrefViewModel.Instance != null) {
+                // FONT STUFF
+                MpAvPrefViewModel.Instance.OnPropertyChanged(nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft));
 
-            SetThemeValue(MpThemeResourceKey.IsRtl, MpAvPrefViewModel.Instance.IsTextRightToLeft);
-            bool test = GetThemeValue<bool>(MpThemeResourceKey.IsRtl);
-            IsRtl = MpAvPrefViewModel.Instance.IsTextRightToLeft;
+                SetThemeValue(MpThemeResourceKey.IsRtl, MpAvPrefViewModel.Instance.IsTextRightToLeft);
+                bool test = GetThemeValue<bool>(MpThemeResourceKey.IsRtl);
+                IsRtl = MpAvPrefViewModel.Instance.IsTextRightToLeft;
 
-            if (IsRtl &&
-                MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily == MpAvPrefViewModel.BASELINE_DEFAULT_READ_ONLY_FONT) {
-                // BUG not sure what the cause is but Nunito in Arabic has random problems rendering...
-                // so if font isn't user defined change to avoid
-                MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily = MpAvPrefViewModel.BASELINE_DEFAULT_READ_ONLY_FONT2;
+                if (IsRtl &&
+                    MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily == MpAvPrefViewModel.BASELINE_DEFAULT_READ_ONLY_FONT) {
+                    // BUG not sure what the cause is but Nunito in Arabic has random problems rendering...
+                    // so if font isn't user defined change to avoid
+                    MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily = MpAvPrefViewModel.BASELINE_DEFAULT_READ_ONLY_FONT2;
+                }
             }
 
             MpMessenger.SendGlobal(MpMessageType.ThemeChanged);

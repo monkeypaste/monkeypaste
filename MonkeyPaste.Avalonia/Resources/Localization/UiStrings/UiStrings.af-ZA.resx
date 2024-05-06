@@ -2996,4 +2996,7 @@ Globale kortpaaie kan nou in die System Tray Menu geaktiveer word</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>skenk</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Gekopieer na knipbord</value>
+  </data>
 </root>

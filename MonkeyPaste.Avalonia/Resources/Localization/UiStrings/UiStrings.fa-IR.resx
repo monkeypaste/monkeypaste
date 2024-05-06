@@ -2996,4 +2996,7 @@ MonkeyPaste روی دستگاه
   <data name="DonateLabel" xml:space="preserve">
     <value>اهداء کردن</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>کپی شده در کلیپ بورد</value>
+  </data>
 </root>

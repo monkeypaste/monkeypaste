@@ -2996,4 +2996,7 @@ FEEDBOWY@monkeypue.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Бэлэглэх</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Санах самбар руу хуулсан</value>
+  </data>
 </root>

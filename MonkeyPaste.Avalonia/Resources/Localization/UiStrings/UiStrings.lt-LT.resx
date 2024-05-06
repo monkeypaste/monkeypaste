@@ -2996,4 +2996,7 @@ Dabar „System Tray“ meniu galima įjungti globalius nuorodas</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Paaukoti</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Nukopijuota į mainų sritį</value>
+  </data>
 </root>

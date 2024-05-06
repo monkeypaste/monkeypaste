@@ -2996,4 +2996,7 @@ Njia za mkato za ulimwengu sasa zinaweza kuwezeshwa kwenye menyu ya tray ya mfum
   <data name="DonateLabel" xml:space="preserve">
     <value>Toa</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kunakiliwa kwa clipboard</value>
+  </data>
 </root>

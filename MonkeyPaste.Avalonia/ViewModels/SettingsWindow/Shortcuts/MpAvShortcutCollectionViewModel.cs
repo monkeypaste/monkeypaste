@@ -44,14 +44,14 @@ namespace MonkeyPaste.Avalonia {
 #if DESKTOP 
             true;
 #else
-            true;
+            false;
 #endif
 
         static bool ALLOW_GLOBAL_KEYBOARD_INPUT =
 #if DESKTOP 
             true;
 #else
-            true;
+            false;
 #endif
         static bool ALLOW_GLOBAL_INPUT = ALLOW_GLOBAL_KEYBOARD_INPUT || ALLOW_GLOBAL_MOUSE_INPUT;
 

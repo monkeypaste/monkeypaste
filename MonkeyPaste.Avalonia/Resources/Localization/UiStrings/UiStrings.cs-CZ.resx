@@ -2996,4 +2996,7 @@ Globální zkratky lze nyní povolit v nabídce hlavního panelu</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Darovat</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Zkopírováno do schránky</value>
+  </data>
 </root>

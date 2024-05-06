@@ -2996,4 +2996,7 @@ Shortcuts globali issa jistgħu jiġu attivati ​​fil-menu tat-trej tas-siste
   <data name="DonateLabel" xml:space="preserve">
     <value>Donazzjoni</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Ikkopjat fuq clipboard</value>
+  </data>
 </root>

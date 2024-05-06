@@ -2996,4 +2996,7 @@ Maaari na ngayong paganahin ang mga global shortcut sa menu ng System Tray</valu
   <data name="DonateLabel" xml:space="preserve">
     <value>Mag -donate</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kinopya sa clipboard</value>
+  </data>
 </root>

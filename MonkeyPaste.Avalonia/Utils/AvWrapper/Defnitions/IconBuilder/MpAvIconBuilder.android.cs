@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
             GetPathIconBase64(path, IntPtr.Zero, iconSize);
 
         public string GetPathIconBase64(string path, nint handle, MpIconSize iconSize = MpIconSize.MediumIcon32) {
-            return MpDeviceWrapper.Instance.IconBuilder.GetPathIconBase64(path, handle, iconSize);
+            return MpAvDeviceWrapper.Instance.IconBuilder.GetPathIconBase64(path, handle, iconSize);
         }
     }
 }

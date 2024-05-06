@@ -2996,4 +2996,7 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>Пожертвувати</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Скопіюється в буфер обміну</value>
+  </data>
 </root>

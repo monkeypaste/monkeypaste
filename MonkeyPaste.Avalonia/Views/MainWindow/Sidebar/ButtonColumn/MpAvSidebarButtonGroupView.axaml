@@ -123,6 +123,7 @@
                     Value="{DynamicResource HoverSelectedBorderBrush}" />
         </Style>
     </local:MpAvUserControl.Styles>
+
     <Grid x:Name="SidebarButtonGroupContainerGrid"
           Classes.horizontal="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
           HorizontalAlignment="Stretch"
@@ -142,10 +143,7 @@
             <Grid Classes="inner-container"
                   ClipToBounds="False">
                 <PathIcon Data="{StaticResource BooksSvg}" />
-
-                <!--
-                    BADGE
-                -->
+                <!--  BADGE  -->
                 <Border Background="Red"
                         ClipToBounds="False"
                         Width="10"
@@ -175,7 +173,6 @@
 
         </RadioButton>
         <RadioButton x:Name="ClipboardHandlerToggleButton"
-                     IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                      Grid.Row="1"
                      GroupName="SidebarButtonGroup"
                      Classes="sidebarRadio switchless"

@@ -4543,6 +4543,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copied to clipboard.
+        /// </summary>
+        public static string MobileCopiedNtfText {
+            get {
+                return ResourceManager.GetString("MobileCopiedNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto Copy Selection Mode: {0}.
         /// </summary>
         public static string MouseModeAutoCopyNtfText {

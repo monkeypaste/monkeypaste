@@ -2996,4 +2996,7 @@ Globale genveje kan nu aktiveres i systembakkemenuen</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Doner</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopieret til udklipsholder</value>
+  </data>
 </root>

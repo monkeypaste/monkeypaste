@@ -124,6 +124,34 @@
                     Value="{StaticResource ThemeAccent5Color}" />
         </Style>
 
+
+        <!--  TRAY BUTTONS  -->
+        <Style Selector=":is(Button).clipTrayButton">
+            <Setter Property="Width"
+                    Value="25" />
+            <Setter Property="Height"
+                    Value="25" />
+        </Style>
+        <Style Selector=":is(Button).clipTrayBackButton">
+            <Setter Property="Margin"
+                    Value="20,5,0,0" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Template>
+                        <Image Source="{Binding ., Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}">
+                            <Image.RenderTransform>
+                                <RotateTransform Angle="90" />
+                            </Image.RenderTransform>
+                        </Image>
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </local:MpAvUserControl.Styles>
     <!--  NOTE! Layout is in mw code behind orientation change  -->
     <Grid x:Name="ClipTrayContainerGrid"
@@ -151,6 +179,7 @@
                                        Classes.clipTraySplitter="True"
                                        Classes.vertical="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                                        Classes.horizontal="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                                       IsVisible="{Binding !IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                        local:MpAvPointerCommandExtension.IsEnabled="True"
                                        local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
                                        local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetTraySplitterCommand}"

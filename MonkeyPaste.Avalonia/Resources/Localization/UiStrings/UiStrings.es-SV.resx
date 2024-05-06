@@ -2996,4 +2996,7 @@ Los atajos globales ahora se pueden habilitar en el menú de la bandeja del sist
   <data name="DonateLabel" xml:space="preserve">
     <value>Donar</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Copiado al portapapeles</value>
+  </data>
 </root>

@@ -2996,4 +2996,7 @@ Globale Kürzel können jetzt im Taskleistenmenü aktiviert werden.</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Spenden</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>In die Zwischenablage kopiert</value>
+  </data>
 </root>

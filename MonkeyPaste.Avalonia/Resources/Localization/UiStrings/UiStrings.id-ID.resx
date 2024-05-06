@@ -2996,4 +2996,7 @@ Pintasan global sekarang dapat diaktifkan di menu baki sistem</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Menyumbangkan</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Disalin ke clipboard</value>
+  </data>
 </root>

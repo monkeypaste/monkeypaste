@@ -2996,4 +2996,7 @@ A globális parancsikonok már engedélyezhetők a rendszer tálca menüben</val
   <data name="DonateLabel" xml:space="preserve">
     <value>Adományoz</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>A vágólapra másolt</value>
+  </data>
 </root>

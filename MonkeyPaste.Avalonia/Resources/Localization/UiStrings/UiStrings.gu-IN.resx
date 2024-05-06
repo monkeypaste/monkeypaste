@@ -2996,4 +2996,7 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>દાન કરવું</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ક્લિપબોર્ડ પર ક ied પિ કરેલી</value>
+  </data>
 </root>

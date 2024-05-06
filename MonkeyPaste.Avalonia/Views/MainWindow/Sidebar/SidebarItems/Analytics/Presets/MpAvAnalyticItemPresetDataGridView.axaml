@@ -275,6 +275,7 @@
 
                     <!--  HOTKEY COLUMN  -->
                     <DataGridTemplateColumn Width="40"
+                                            IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                             Header="Shortcut">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">

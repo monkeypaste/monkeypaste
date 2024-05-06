@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
 #if DESKTOP
                         ctg.RowDefinitions = new RowDefinitions("*,*,*,*,*"); 
 #else
-                        ctg.RowDefinitions = new RowDefinitions("*,0,*,*,0");
+                        ctg.RowDefinitions = new RowDefinitions("*,*,*,*,0");
 #endif
                         tbl.ForEach(x => Grid.SetColumn(x, 0));
                         tbl.ForEach(x => Grid.SetRow(x, tbl.IndexOf(x)));
@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
 #if DESKTOP
                         ctg.ColumnDefinitions = new ColumnDefinitions("*,*,*,*,*"); 
 #else
-                        ctg.ColumnDefinitions = new ColumnDefinitions("0.3*,0,0.3*,0.3*,0.30");
+                        ctg.ColumnDefinitions = new ColumnDefinitions("*,*,*,*,0");
 #endif
                         tbl.ForEach(x => Grid.SetRow(x, 0));
                         tbl.ForEach(x => Grid.SetColumn(x, tbl.IndexOf(x)));

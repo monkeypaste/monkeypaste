@@ -2996,4 +2996,7 @@ Monkeypaste მოწყობილობაზე
   <data name="DonateLabel" xml:space="preserve">
     <value>ჩუქება</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>გადაწერილი ბუფერული</value>
+  </data>
 </root>

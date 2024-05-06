@@ -2,6 +2,7 @@
 using Android.Content.Res;
 using AndroidX.Fragment.App.StrictMode;
 using Avalonia.Input.Platform;
+using MonkeyPaste.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -12,7 +13,7 @@ using System.IO.Compression;
 using Stopwatch = System.Diagnostics.Stopwatch;
 
 namespace MonkeyPaste.Avalonia.Android {
-    public class MpAvAdWrapper : MpDeviceWrapper {
+    public class MpAvAdWrapper : MpAvDeviceWrapper {
 
         #region Interfaces
 
@@ -37,6 +38,7 @@ namespace MonkeyPaste.Avalonia.Android {
             ScreenInfoCollection = new MpAvAdScreenInfoCollection(new[] { new MpAvAdScreenInfo(activity) });
             IconBuilder = new MpAvAdIconBuilder();
             DeviceClipboard = new MpAvAdClipboard();
+            PlatformToastNotification = new MpAvAdToastNotification();
 
             MpAvAdAssetMover.MoveDats();
 

@@ -2996,4 +2996,7 @@ Shkurtoret globale tani mund të aktivizohen në menunë e tabaka të sistemit</
   <data name="DonateLabel" xml:space="preserve">
     <value>Dhuroj</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopjuar në clipboard</value>
+  </data>
 </root>

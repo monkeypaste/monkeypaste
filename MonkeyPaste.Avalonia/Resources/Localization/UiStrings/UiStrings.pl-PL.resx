@@ -2996,4 +2996,7 @@ Globalne skróty można teraz włączyć w menu taca systemu</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Podarować</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Skopiowane do schowka</value>
+  </data>
 </root>

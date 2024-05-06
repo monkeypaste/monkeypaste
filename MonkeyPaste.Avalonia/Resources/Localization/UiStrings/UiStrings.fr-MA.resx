@@ -2996,4 +2996,7 @@ Les raccourcis mondiaux peuvent désormais être activés dans le menu du platea
   <data name="DonateLabel" xml:space="preserve">
     <value>Faire un don</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Copié dans le presse-papier</value>
+  </data>
 </root>

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using HtmlAgilityPack;
 using MonkeyPaste.Common;
@@ -21,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncCollectionObject {
         #region Private Variables
         private Window _convWindow;
-
+        private bool do_hide = true;
         #endregion
 
         #region Constants
@@ -128,10 +129,9 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private async Task CreateWebViewConverterAsync() {
-            bool do_hide = true;
             IsBusy = true;
             if (OperatingSystem.IsBrowser()) {
-                await MpDeviceWrapper.Instance.JsImporter.ImportAllAsync();
+                await MpAvDeviceWrapper.Instance.JsImporter.ImportAllAsync();
                 if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime mobile
                         && mobile.MainView != null) {
                     Mp.Services.ScreenInfoCollection = new MpAvScreenInfoCollectionBase(new[] { new MpAvDesktopScreenInfo(mobile.MainView.GetVisualRoot().AsScreen()) });
@@ -154,43 +154,58 @@ namespace MonkeyPaste.Avalonia {
                     _convWindow.Width = 50;
                     _convWindow.Height = 50;
                 }
-
+                if (OperatingSystem.IsWindows()) {
+                    // hide converter window from windows alt-tab menu
+                    MpAvToolWindow_Win32.SetAsToolWindow(_convWindow.TryGetPlatformHandle().Handle);
+                }
                 _convWindow.Title = "Hidden converter window".ToWindowTitleText();
                 _convWindow.Content = ConverterWebView;
-                ConverterWebView.AttachedToVisualTree += async (s, e) => {
-                    var sw = Stopwatch.StartNew();
-                    if (OperatingSystem.IsWindows()) {
-                        // hide converter window from windows alt-tab menu
-                        MpAvToolWindow_Win32.SetAsToolWindow(_convWindow.TryGetPlatformHandle().Handle);
-                    }
+                _convWindow.Show();
+            } else {
+                // mobile
 
-                    while (!ConverterWebView.IsEditorInitialized) {
-                        if (sw.Elapsed > TimeSpan.FromSeconds(60)) {
-                            // TODO should fallback here 
+                Dispatcher.UIThread.Post(async () => {
+                    // NOTE need to ntf loaded or mv won't be created
+                    MpAvMainView mv = null;
+                    while (true) {
+                        mv = MpAvMainView.Instance;
+                        if (mv != null) {
+                            break;
                         }
-                        MpConsole.WriteLine("[loader] waiting for html converter init...");
                         await Task.Delay(100);
                     }
-                    if(do_hide) {
-                        _convWindow.Hide();
-                        _convWindow.WindowState = WindowState.Minimized;
-                    }
-                    sw.Stop();
-                    MpConsole.WriteLine($"Html converter initialized. ({_convWindow.Bounds.Width}x{_convWindow.Bounds.Height}) Load time: {sw.ElapsedMilliseconds}ms");
-                    IsLoaded = true;
-                };
-                _convWindow.Show();
-            } else if (App.PrimaryView is MpAvMainView mv) {
-                ConverterWebView.AttachedToLogicalTree += (s, e) => {
-                    if(do_hide) {
-                        ConverterWebView.IsVisible = false;
-                    }
-                };
-                mv.RootGrid.Children.Add(ConverterWebView);
+                    mv.RootGrid.Children.Add(ConverterWebView);
+                });
             }
+            ConverterWebView.AttachedToVisualTree += ConverterWebView_AttachedToVisualTree;
 
             IsBusy = false;
         }
+
+        private async void ConverterWebView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            var sw = Stopwatch.StartNew();
+
+            while (!ConverterWebView.IsEditorInitialized) {
+                if (sw.Elapsed > TimeSpan.FromSeconds(60)) {
+                    // TODO should fallback here 
+                }
+                MpConsole.WriteLine("waiting for html converter init...");
+                await Task.Delay(100);
+            }
+            if (do_hide) {
+                if(_convWindow == null) {
+                    // mobile
+                    ConverterWebView.IsVisible = false;
+                } else {
+                    _convWindow.Hide();
+                    _convWindow.WindowState = WindowState.Minimized;
+                }
+            }
+            MpConsole.WriteLine($"Html converter initialized. Load time: {sw.ElapsedMilliseconds}ms");
+            IsLoaded = true;
+        }
+
+
         private async Task<MpRichHtmlContentConverterResult> ConvertWithWebViewAsync(
             MpDataFormatType inputFormatType,
             string htmlDataStr,

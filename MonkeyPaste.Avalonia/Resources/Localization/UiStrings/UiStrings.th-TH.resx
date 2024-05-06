@@ -2996,4 +2996,7 @@ feedback@monkeypaste.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>บริจาค</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>คัดลอกไปยังคลิปบอร์ด</value>
+  </data>
 </root>

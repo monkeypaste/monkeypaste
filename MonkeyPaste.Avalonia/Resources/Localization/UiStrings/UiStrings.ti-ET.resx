@@ -2996,4 +2996,7 @@
   <data name="DonateLabel" xml:space="preserve">
     <value>ምልጋስ</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ናብ ቅንጥብጣብ ሰሌዳ ዝተቐድሐ</value>
+  </data>
 </root>

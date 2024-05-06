@@ -3,11 +3,11 @@ using MonkeyPaste.Common.Plugin;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpDeviceWrapper : MpIDeviceWrapper {
+    public abstract class MpAvDeviceWrapper : MpIDeviceWrapper {
         #region Statics
 
-        protected static MpDeviceWrapper _instance;
-        public static MpDeviceWrapper Instance =>
+        protected static MpAvDeviceWrapper _instance;
+        public static MpAvDeviceWrapper Instance =>
             _instance;
 
         #endregion
@@ -15,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIDeviceWrapper Implementation
+        public MpIPlatformToastNotification PlatformToastNotification { get; set; }
         public MpIJsImporter JsImporter { get; protected set; }
         public abstract MpIPlatformInfo PlatformInfo { get; set; }
         public abstract MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }

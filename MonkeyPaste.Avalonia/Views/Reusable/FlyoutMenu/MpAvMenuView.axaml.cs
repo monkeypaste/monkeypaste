@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
 #if DESKTOP
             true,
 #else
-            false,
+            true,//false,
 #endif
             PlacementMode placementMode = PlacementMode.Pointer,
             PopupAnchor popupAnchor = PopupAnchor.TopLeft,

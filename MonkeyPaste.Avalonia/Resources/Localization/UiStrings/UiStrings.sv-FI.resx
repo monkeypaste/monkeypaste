@@ -2996,4 +2996,7 @@ Globala genvägar kan nu vara aktiverade i systemfack -menyn</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Donera</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopierad till urklipp</value>
+  </data>
 </root>

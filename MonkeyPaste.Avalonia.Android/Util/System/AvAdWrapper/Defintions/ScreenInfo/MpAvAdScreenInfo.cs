@@ -116,12 +116,13 @@ namespace MonkeyPaste.Avalonia.Android {
         
         private MpRect GetWorkArea(bool is_vert) {
             var pix_bounds = GetBounds(is_vert).ToAvPixelRect(Scaling);
-            int nav_height = (int)(is_vert ? _navHeightPortrait : _navHeightLandscape);
             int wa_x = pix_bounds.X;
             int wa_y = pix_bounds.Y + (int)_statusHeight;
             int wa_w = pix_bounds.Width;
-            int dumb_pad = 144;
-            int wa_h = pix_bounds.Height - (int)_statusHeight - nav_height - dumb_pad;
+
+            int nav_height = (int)(is_vert ? _navHeightPortrait : _navHeightLandscape);
+            int bound_diff = (int)(_statusHeight + nav_height) * 2;
+            int wa_h = pix_bounds.Height - bound_diff;
             return new PixelRect(wa_x, wa_y, wa_w, wa_h).ToPortableRect(Scaling);
         }
         #endregion

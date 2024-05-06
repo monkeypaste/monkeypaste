@@ -2996,4 +2996,7 @@ feathback@monkeypaste.com</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>捐</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>复制到剪贴板</value>
+  </data>
 </root>

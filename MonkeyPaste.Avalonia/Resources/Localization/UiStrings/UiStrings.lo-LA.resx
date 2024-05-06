@@ -2996,4 +2996,7 @@ monkeypaste ໃນອຸປະກອນ
   <data name="DonateLabel" xml:space="preserve">
     <value>ບໍ​ລິ​ຈາກ</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ຄັດລອກໄປທີ່ Clipboard</value>
+  </data>
 </root>

@@ -1,15 +1,21 @@
 ﻿
+using Android;
 using Android.App;
 using Android.Content.PM;
 using Android.Content.Res;
 using Android.OS;
+using Android.Util;
 using Android.Views;
 using Android.Webkit;
 using Android.Widget;
+using AndroidX.Core.App;
 using Avalonia;
 using Avalonia.Android;
 using Avalonia.ReactiveUI;
 using Avalonia.WebView.Android;
+using DryIoc.FastExpressionCompiler.LightExpression;
+using MonkeyPaste.Common;
+using System.Linq;
 using Orientation = Android.Content.Res.Orientation;
 
 namespace MonkeyPaste.Avalonia.Android {
@@ -35,9 +41,9 @@ namespace MonkeyPaste.Avalonia.Android {
                  .UseReactiveUI()
                  .UseAndroidWebView()
                  .AfterSetup(_ => {
-                     WebView.SetWebContentsDebuggingEnabled(true);
+                     //WebView.SetWebContentsDebuggingEnabled(true);
                      new MpAvAdWrapper().CreateDeviceInstance(this);
-                     MpAvNativeWebViewHost.Implementation = new MpAvAdWebViewBuilder();
+                     //MpAvNativeWebViewHost.Implementation = new MpAvAdWebViewBuilder();
                  });
         }
 
@@ -46,7 +52,7 @@ namespace MonkeyPaste.Avalonia.Android {
             if (IsFullscreen) {
                 SetFullscreenWindowLayout();
             }
-
+            DoPermissionCheck();
             MpAvAdUncaughtExceptionHandler.Instance.Init();
         }
         public override void OnBackPressed() {
@@ -61,11 +67,8 @@ namespace MonkeyPaste.Avalonia.Android {
         public override void OnConfigurationChanged(Configuration newConfig) {
             base.OnConfigurationChanged(newConfig);
 
-            if (newConfig.Orientation == Orientation.Landscape) {
-                Toast.MakeText(this, "landscape", ToastLength.Short).Show();
-            } else if (newConfig.Orientation == Orientation.Portrait) {
-                Toast.MakeText(this, "portrait", ToastLength.Short).Show();
-            }
+            MpAvDeviceWrapper.Instance.PlatformToastNotification
+                .ShowToast(string.Empty, newConfig.Orientation.ToString(), null, null);
 
             var display = this.WindowManager.DefaultDisplay;
             MpMainWindowOrientationType mwot = display.Rotation.ToPortableOrientationType();
@@ -109,6 +112,26 @@ namespace MonkeyPaste.Avalonia.Android {
             }
         }
 
+        public bool DoPermissionCheck() {
+            // from https://stackoverflow.com/a/33162451/105028
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.M) {
+                
+                if (CheckSelfPermission(Manifest.Permission.ReadExternalStorage) == Permission.Granted) {
+                    return true;
+                }
+                ActivityCompat.RequestPermissions(this, new string[] { Manifest.Permission.ReadExternalStorage }, 1);
+                return false;
+            } else {
+                return true;
+            }
+        }
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults) {
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            MpConsole.WriteLine($"Permissions: {string.Join(",", permissions)}");
+            MpConsole.WriteLine($"Results    : {string.Join(",", grantResults.Select(x => x.ToString()))}");
+        }
+
         //protected override void OnResume() {
         //    base.OnResume();
 
@@ -116,5 +139,6 @@ namespace MonkeyPaste.Avalonia.Android {
 
         //    Finish();
         //}
+
     }
 }

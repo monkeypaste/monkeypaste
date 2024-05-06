@@ -3061,4 +3061,7 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="DonateLabel" xml:space="preserve">
     <value>ਦਾਨ</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>ਕਲਿੱਪਬੋਰਡ ਵਿੱਚ ਨਕਲ ਕੀਤਾ</value>
+  </data>
 </root>

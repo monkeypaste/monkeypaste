@@ -14,17 +14,33 @@
     <ErrorReport>send</ErrorReport>-->
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <RunAOTCompilation>True</RunAOTCompilation>
-    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>embedded</DebugType>
-    <Optimize>True</Optimize>
+    <DebugSymbols>False</DebugSymbols>
+    <!--<DebugType>none</DebugType>-->
+    <!--<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>-->
+    <!--<DebugType>embedded</DebugType>-->
+    <!--<Optimize>True</Optimize>-->
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Debugger>Xamarin</Debugger>
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AndroidJavaSource Remove="Controls\WebView\**" />
+    <AndroidLibrary Remove="Controls\WebView\**" />
+    <AndroidNativeLibrary Remove="Controls\WebView\**" />
+    <AvaloniaXaml Remove="Controls\WebView\**" />
+    <Compile Remove="Controls\WebView\**" />
+    <EmbeddedResource Remove="Controls\WebView\**" />
+    <JavaSourceJar Remove="Controls\WebView\**" />
+    <None Remove="Controls\WebView\**" />
+    <ProguardConfiguration Remove="Controls\WebView\**" />
+    <TransformFile Remove="Controls\WebView\**" />
+  </ItemGroup>
+  
   <ItemGroup>
     <Compile Remove="MpCopyClipboardNotificationActivity.cs" />
     <Compile Remove="SplashActivity.cs" />
@@ -58,6 +74,7 @@
   <ItemGroup>
     <Folder Include="Assets\" />
     <Folder Include="Assets\dat\" />
+    <Folder Include="Controls\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -66,12 +83,12 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'ANDROID'">
 
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(EditorSourceDir)" DestinationFile="$(TargetDatDir)\editor.zip" />
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(TermsDir)" DestinationFile="$(TargetDatDir)\terms.zip" />
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(EnumsDir)" DestinationFile="$(TargetDatDir)\enums.zip" />
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(UiStringsDir)" DestinationFile="$(TargetDatDir)\uistrings.zip" />
+    <ZipDirectory Overwrite="false" ContinueOnError="true" SourceDirectory="$(EditorSourceDir)" DestinationFile="$(TargetDatDir)\editor.zip" />
+    <ZipDirectory Overwrite="false" ContinueOnError="true" SourceDirectory="$(TermsDir)" DestinationFile="$(TargetDatDir)\terms.zip" />
+    <ZipDirectory Overwrite="false" ContinueOnError="true" SourceDirectory="$(EnumsDir)" DestinationFile="$(TargetDatDir)\enums.zip" />
+    <ZipDirectory Overwrite="false" ContinueOnError="true" SourceDirectory="$(UiStringsDir)" DestinationFile="$(TargetDatDir)\uistrings.zip" />
 
-    <!--<ZipDirectory Overwrite="true"
+    <!--<ZipDirectory Overwrite="false"
                   ContinueOnError="true"
                   SourceDirectory="$(SoundsSourceDir)"
                   DestinationFile="$(TargetDatDir)\sounds.zip" />-->

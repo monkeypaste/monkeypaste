@@ -690,6 +690,10 @@ namespace MonkeyPaste.Avalonia {
                     while (MpAvClipTrayViewModel.Instance.IsAnyBusy) {
                         await Task.Delay(100);
                     }
+                    if(MpAvThemeViewModel.Instance.IsMobile) {
+                        // expand query tray on mobile
+                        MpAvClipTrayViewModel.Instance.ExpandQueryTrayCommand.Execute(null);
+                    }
                 }
                 IsSelecting = false;
             },

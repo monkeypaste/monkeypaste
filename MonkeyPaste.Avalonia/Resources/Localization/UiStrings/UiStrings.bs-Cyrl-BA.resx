@@ -3061,4 +3061,7 @@ Globalne prečice sada mogu biti omogućene u System Tray meniju</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Donirati</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Kopirano u međuspremnik</value>
+  </data>
 </root>

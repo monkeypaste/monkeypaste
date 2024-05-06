@@ -2996,4 +2996,7 @@ Globale snelkoppelingen kunnen nu worden ingeschakeld in het menu System Tray</v
   <data name="DonateLabel" xml:space="preserve">
     <value>Doneren</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Gekopieerd naar het klembord</value>
+  </data>
 </root>

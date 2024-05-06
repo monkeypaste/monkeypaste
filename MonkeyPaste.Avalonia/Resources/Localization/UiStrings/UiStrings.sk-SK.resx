@@ -2996,4 +2996,7 @@ Globálne skratky je teraz možné povoliť v ponuke System Tray</value>
   <data name="DonateLabel" xml:space="preserve">
     <value>Darovať</value>
   </data>
+  <data name="MobileCopiedNtfText" xml:space="preserve">
+    <value>Skopírované do schránky</value>
+  </data>
 </root>

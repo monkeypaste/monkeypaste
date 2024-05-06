@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override Assembly? Load(AssemblyName assemblyName) {
             if (_resolver == null ||
+                OperatingSystem.IsAndroid() ||
                 Default.Assemblies.Any(a => a.FullName == assemblyName.FullName)) {
                 // This will fallback to loading the assembly from default context.
                 return null;
