@@ -12,16 +12,8 @@
                        d:DesignHeight="450"
                        x:DataType="local:MpAvLoaderNotificationViewModel"
                        x:CompileBindings="True"
+                       Background="Purple"
                        x:Class="MonkeyPaste.Avalonia.MpAvMobileLoaderView">
-    <local:MpAvUserControl.Background>
-        <RadialGradientBrush Center="50%, 50%" GradientOrigin="50%, 50%" Radius="0.5">
-            <RadialGradientBrush.GradientStops>
-                <GradientStop Color="WhiteSmoke" Offset="0" />
-                <GradientStop Color="Violet" Offset="0.3" />
-                <GradientStop Color="Purple" Offset="1" />
-            </RadialGradientBrush.GradientStops>
-        </RadialGradientBrush>
-    </local:MpAvUserControl.Background>
     <local:MpAvUserControl.Styles>
     </local:MpAvUserControl.Styles>
     <StackPanel HorizontalAlignment="Center"
@@ -41,22 +33,22 @@
             <local:MpAvBusySpinnerView Foreground="White"
                                        HorizontalAlignment="Center"
                                        IsVisible="{Binding ShowSpinner}"
-                                       RenderTransform="translateX(-50px)"
                                        Width="25"
                                        Height="25" />
             <!--  PROGRESS BAR  -->
             <ProgressBar Margin="50,0"
-                         Height="20"
+                         Height="5"
                          Minimum="0"
                          Maximum="1"
-                         Opacity="{Binding ShowSpinner, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}, ConverterParameter=0|1}"
+                         IsVisible="{Binding !ShowSpinner}"
                          HorizontalAlignment="Center"
                          Value="{Binding PercentLoaded}"
-                         ShowProgressText="True" />
+                         ShowProgressText="False" />
         </Grid>
 
         <!--  PROGRESS INFO  -->
         <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"
+                                     IsVisible="{Binding !ShowSpinner}"
                                      HorizontalAlignment="Center"
                                      Content="{Binding Body}">
             <TransitioningContentControl.PageTransition>
@@ -65,6 +57,7 @@
             <TransitioningContentControl.ContentTemplate>
                 <DataTemplate DataType="sys:String">
                     <TextBlock x:Name="ProgressInfoBlock"
+                               Foreground="WhiteSmoke"
                                ClipToBounds="False"
                                FontSize="12"
                                TextAlignment="Center"

@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static bool IS_DYNAMIC_TINT_ENABLED =
 #if ANDROID
-        false;
+        true;
 #else            
         true;
 #endif

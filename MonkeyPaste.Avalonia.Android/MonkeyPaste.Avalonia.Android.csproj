@@ -30,15 +30,27 @@
 
   <ItemGroup>
     <AndroidJavaSource Remove="Controls\WebView\**" />
+    <AndroidJavaSource Remove="Resources\xml\**" />
     <AndroidLibrary Remove="Controls\WebView\**" />
+    <AndroidLibrary Remove="Resources\xml\**" />
     <AndroidNativeLibrary Remove="Controls\WebView\**" />
+    <AndroidNativeLibrary Remove="Resources\xml\**" />
+    <AndroidResource Remove="Resources\xml\**" />
     <AvaloniaXaml Remove="Controls\WebView\**" />
+    <AvaloniaXaml Remove="Resources\xml\**" />
     <Compile Remove="Controls\WebView\**" />
+    <Compile Remove="Resources\xml\**" />
+    <Content Remove="Resources\xml\**" />
     <EmbeddedResource Remove="Controls\WebView\**" />
+    <EmbeddedResource Remove="Resources\xml\**" />
     <JavaSourceJar Remove="Controls\WebView\**" />
+    <JavaSourceJar Remove="Resources\xml\**" />
     <None Remove="Controls\WebView\**" />
+    <None Remove="Resources\xml\**" />
     <ProguardConfiguration Remove="Controls\WebView\**" />
+    <ProguardConfiguration Remove="Resources\xml\**" />
     <TransformFile Remove="Controls\WebView\**" />
+    <TransformFile Remove="Resources\xml\**" />
   </ItemGroup>
   
   <ItemGroup>

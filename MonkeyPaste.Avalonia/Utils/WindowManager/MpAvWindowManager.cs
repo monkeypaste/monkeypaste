@@ -30,8 +30,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
         public static List<MpAvWindow> OpeningWindows { get; set; } = [];
-        public static Screens Screens =>
+#if WINDOWED
+        public static MpIPlatformScreenInfoCollection Screens =>
             AllWindows.Any() ? AllWindows.FirstOrDefault().Screens : null;
+#else
+        public static Screens Screens =>
+            AllWindows.Any() ? AllWindows.FirstOrDefault().Screens : null; 
+#endif
         public static ObservableCollection<MpAvWindow> AllWindows { get; private set; } = new ObservableCollection<MpAvWindow>();
         public static IReadOnlyList<MpAvWindow> TopmostWindowsByZOrder =>
 #if MAC

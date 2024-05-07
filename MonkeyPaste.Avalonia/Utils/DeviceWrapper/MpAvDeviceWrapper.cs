@@ -15,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIDeviceWrapper Implementation
+        public MpAvIDeviceWebViewHelper DeviceWebViewHelper { get; set; }
         public MpIPlatformToastNotification PlatformToastNotification { get; set; }
         public MpIJsImporter JsImporter { get; protected set; }
         public abstract MpIPlatformInfo PlatformInfo { get; set; }

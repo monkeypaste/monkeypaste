@@ -135,6 +135,21 @@ namespace MonkeyPaste.Avalonia {
         public static MpIPlatformScreenInfo ToScreenInfo(this Screen screen) {
             return new MpAvDesktopScreenInfo(screen);
         }
+
+        public static MpIPlatformScreenInfo ScreenFromPoint(this MpIPlatformScreenInfoCollection sic, PixelPoint p) {
+            return sic.Screens.FirstOrDefault(x => x.Bounds.ToAvPixelRect(x.Scaling).Contains(p));
+        }
+
+        public static MpIPlatformScreenInfo ScreenFromPoint_WORKS(this MpIPlatformScreenInfoCollection sic, PixelPoint p) =>
+            sic.ScreenFromPoint(p);
+
+        public static MpIPlatformScreenInfo ScreenFromVisual(this MpIPlatformScreenInfoCollection sic, Visual v) {
+            if(TopLevel.GetTopLevel(v) is not { } tl) {
+                return sic.Primary;
+            }
+            return sic.ScreenFromPoint(v.PointToScreen(new()));
+        }
+
         #endregion
 
         #region Window
@@ -1112,6 +1127,12 @@ namespace MonkeyPaste.Avalonia {
         public static MpSize ToPortableSize(this MpPoint p) {
             return new MpSize(p.X, p.Y);
         }
+        
+        public static MpSize ToPortableSize(this MpSize s, double scaling) {
+            // NOTE this is to keep compatibility for WINDOWED mode
+
+            return s.ToAvPixelSize(1).ToPortableSize(scaling);
+        }
 
         public static MpSize ToPortableSize(this Size size) {
             return new MpSize(size.Width, size.Height);
@@ -1175,11 +1196,9 @@ namespace MonkeyPaste.Avalonia {
             return new PixelRect(rect.Location.ToAvPixelPoint(pixelDensity), rect.Size.ToAvPixelSize(pixelDensity));
         }
 
-        public static PixelRect ToAvScreenPixelRect(this MpRect rect, double pixelDensity) {
-            return new PixelRect(rect.Location.ToAvPixelPoint(pixelDensity), rect.Size.ToAvPixelSize(pixelDensity));
+        public static bool Contains(this MpRect rect, PixelPoint pp, double scaling = 1) {
+            return rect.Contains(pp.ToPortablePoint(scaling));
         }
-
-
 
         #endregion
     }

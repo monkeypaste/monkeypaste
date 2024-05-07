@@ -116,7 +116,8 @@ namespace MonkeyPaste.Avalonia {
                     };
 
 #if WINDOWED
-                    App.Current.SetMainWindow(MpAvRootWindow.Instance);
+                    MpDebug.Break("unhandled");
+                   // App.Current.SetMainWindow(MpAvRootWindow.Instance);
 #else
                     App.Current.SetMainWindow(nw); 
 #endif

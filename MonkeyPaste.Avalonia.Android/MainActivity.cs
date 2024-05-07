@@ -41,7 +41,6 @@ namespace MonkeyPaste.Avalonia.Android {
                  .UseReactiveUI()
                  .UseAndroidWebView()
                  .AfterSetup(_ => {
-                     //WebView.SetWebContentsDebuggingEnabled(true);
                      new MpAvAdWrapper().CreateDeviceInstance(this);
                      //MpAvNativeWebViewHost.Implementation = new MpAvAdWebViewBuilder();
                  });

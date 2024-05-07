@@ -105,11 +105,15 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIPlatformScreenInfo ScreenInfo {
             get {
+#if WINDOWED
+                return Screens.Primary;
+#else
                 if (this.GetVisualAncestor<Window>() is not { } w ||
-                    this.Screens.ScreenFromWindow(w) is not Screen scr) {
+                            this.Screens.ScreenFromWindow(w) is not Screen scr) {
                     return this.Screens.Primary.ToScreenInfo();
                 }
-                return scr.ToScreenInfo();
+                return scr.ToScreenInfo(); 
+#endif
             }
         }
 

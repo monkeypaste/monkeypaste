@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia.Android {
         public override MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
         public override MpIPathToPlatformIcon IconBuilder { get; set; }
         public override MpIClipboard DeviceClipboard { get; set; }
+
         #endregion
 
 
@@ -39,6 +40,7 @@ namespace MonkeyPaste.Avalonia.Android {
             IconBuilder = new MpAvAdIconBuilder();
             DeviceClipboard = new MpAvAdClipboard();
             PlatformToastNotification = new MpAvAdToastNotification();
+            DeviceWebViewHelper = new MpAvAdWebViewHelper();
 
             MpAvAdAssetMover.MoveDats();
 

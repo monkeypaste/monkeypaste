@@ -173,6 +173,7 @@
     <AndroidInternalStorageDir>/data/user/0/$(AndroidPackageName)/files</AndroidInternalStorageDir>
     <IsMobile>true</IsMobile>
     <UseSugarWv>true</UseSugarWv>
+    <IsWindowed>true</IsWindowed>
     <PlatformShortName>android</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\android</BuildScriptsDir>
   </PropertyGroup>

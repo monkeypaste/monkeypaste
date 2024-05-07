@@ -84,6 +84,7 @@ namespace MonkeyPaste.Avalonia {
             config.DefaultWebViewBackgroundColor = System.Drawing.Color.FromArgb(System.Drawing.Color.Transparent.ToArgb());
             config.AdditionalBrowserArguments = MpAvCefCommandLineArgs.ToArgString();
             config.BrowserExecutableFolder = Path.GetDirectoryName(new MpAvPlatformInfo_desktop().EditorPath);
+            
             MpConsole.WriteLine($"Cef args: '{config.AdditionalBrowserArguments}'");
             //config.UserDataFolder = _creationProperties.UserDataFolder;
             //config.Language = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name;
@@ -465,8 +466,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
-
         #region Constructors
         public MpAvWebView() : base() {
             this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged()).AddDisposable(this);
@@ -621,6 +620,8 @@ namespace MonkeyPaste.Avalonia {
             } else {
 
             }
+#elif ANDROID
+            MpAvDeviceWrapper.Instance.DeviceWebViewHelper.EnableFileAccess(InnerWebView);
 #endif
         }
         private void InnerWebView_NavigationCompleted(object sender, WebViewCore.Events.WebViewUrlLoadedEventArg e) {

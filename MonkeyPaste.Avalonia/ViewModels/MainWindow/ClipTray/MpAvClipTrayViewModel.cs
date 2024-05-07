@@ -1423,16 +1423,20 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPinTrayEmpty =>
             !InternalPinnedItems.Any();
 
+        private bool _isPinTrayVisible;
         public bool IsPinTrayVisible {
             get {
-                //if (!IsPinTrayEmpty) {
-                //    return true;
-                //}
-                ////if (IsPinTrayDropPopOutVisible) {
-                ////    return true;
-                ////} 
-                //return false;
+#if DESKTOP
                 return true;
+#else
+                return _isPinTrayVisible;
+#endif
+            }
+            set {
+                if(_isPinTrayVisible != value) {
+                    _isPinTrayVisible = value;
+                    OnPropertyChanged(nameof(IsPinTrayVisible));
+                }
             }
         }
 
@@ -1502,9 +1506,9 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #endregion
+#endregion
 
-        #endregion
+#endregion
 
         #region Events
 
@@ -1872,7 +1876,15 @@ namespace MonkeyPaste.Avalonia {
             AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.CanDrop)));
         }
 
-        public MpSize GetDefaultPinTrayRatio(double var_dim_len = DEFAULT_PIN_TRAY_RATIO) {
+        public MpSize GetCurrentPinTrayRatio() {
+#if WINDOWED
+            return IsPinTrayVisible ? GetDefaultPinTrayRatio(1) : GetDefaultPinTrayRatio(0);
+#else
+            return GetDefaultPinTrayRatio();
+#endif
+        }
+
+        private MpSize GetDefaultPinTrayRatio(double var_dim_len = DEFAULT_PIN_TRAY_RATIO) {
             MpSize p_ratio = new MpSize(1, 1);
             if (ListOrientation == Orientation.Vertical) {
                 p_ratio.Height = var_dim_len;
@@ -2019,7 +2031,7 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
-        #endregion
+#endregion
 
         #region Protected Methods
 
@@ -3460,6 +3472,8 @@ namespace MonkeyPaste.Avalonia {
             double dh = (trg.Bounds.Height * new_ratio.Height) - trg_h;
             MpConsole.WriteLine($"Tray Splitter reset. Ratio: {new_ratio} Delta: {dw},{dh}");
             mgs.ApplyDelta(new Vector(dw, dh));
+
+            RefreshQueryTrayLayout();
         }
         #endregion
 
@@ -4967,12 +4981,16 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 var exp_pin_ratio = GetDefaultPinTrayRatio();
                 SetPinTrayRatio(exp_pin_ratio);
+                MpAvMainView.Instance.UpdateLayout();
+                IsPinTrayVisible = true;
             });
         
         public ICommand ExpandQueryTrayCommand => new MpCommand(
             () => {
                 var exp_quer_ratio = GetDefaultPinTrayRatio(0);
                 SetPinTrayRatio(exp_quer_ratio);
+                MpAvMainView.Instance.UpdateLayout();
+                IsPinTrayVisible = false;
             });
 
         public ICommand SelectClipTileTransactionNodeCommand => new MpAsyncCommand<object>(

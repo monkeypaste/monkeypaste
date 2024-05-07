@@ -129,7 +129,7 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv_ctrv_cg = ctrcv_ctrv.FindControl<Grid>("QueryTrayContainerGrid");
             var ctrcv_ctr_lb = ctrcv_ctrv.FindControl<ListBox>("ClipTrayListBox");
 
-            var pin_tray_ratio = MpAvClipTrayViewModel.Instance.GetDefaultPinTrayRatio();
+            var pin_tray_ratio = MpAvClipTrayViewModel.Instance.GetCurrentPinTrayRatio();
             mwtg.RowDefinitions.Clear();
             mwtg.ColumnDefinitions.Clear();
             double gs_fixed_length = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;

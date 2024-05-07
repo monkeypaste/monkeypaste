@@ -22,11 +22,11 @@ namespace MonkeyPaste.Avalonia {
                 return new PixelPoint();
             }
 
-            double x = primaryScreen.WorkArea.Right - s.Width - pad;
+            double x = primaryScreen.WorkingArea.Right - s.Width - pad;
 #if MAC || LINUX
             double y = primaryScreen.WorkArea.Top + pad;
 #else
-            double y = primaryScreen.WorkArea.Bottom - s.Height - pad;
+            double y = primaryScreen.WorkingArea.Bottom - s.Height - pad;
 #endif
 
             x *= primaryScreen.Scaling;

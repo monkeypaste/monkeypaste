@@ -64,6 +64,8 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        public MpPoint Center =>
+            this.Centroid();
         public double X {
             get => Left;
             set => Left = value;

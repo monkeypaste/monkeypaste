@@ -147,6 +147,15 @@
                                                Grid.Row="0"
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch" />
+
+            <!--  CHILD WINDOW OVERLAY  -->
+            <local:MpAvOverlayContainerView x:Name="OverlayContainer"
+                                            Grid.ColumnSpan="3"
+                                            Grid.RowSpan="3"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            Background="Transparent"
+                                            IsVisible="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}" />
         </Grid>
     </Canvas>
 </local:MpAvUserControl>

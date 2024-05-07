@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsLoaded { get; set; } =
-#if SUGAR_WV || CEFNET_WV || OUTSYS_WV || MOBILE
+#if SUGAR_WV || CEFNET_WV || OUTSYS_WV 
             false;
 #else
             true;
@@ -72,6 +72,8 @@ namespace MonkeyPaste.Avalonia {
             MpAvCefNetApplication.IsCefNetLoaded;
 #elif OUTSYS_WV
             true;
+#elif SUGAR_WV && ANDROID 
+            false;
 #elif SUGAR_WV
             true;
 #else
@@ -196,6 +198,7 @@ namespace MonkeyPaste.Avalonia {
                 if(_convWindow == null) {
                     // mobile
                     ConverterWebView.IsVisible = false;
+                    
                 } else {
                     _convWindow.Hide();
                     _convWindow.WindowState = WindowState.Minimized;

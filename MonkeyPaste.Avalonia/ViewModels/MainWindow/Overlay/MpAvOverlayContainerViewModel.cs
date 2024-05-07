@@ -1,13 +1,11 @@
-﻿
-using Android.Service.Notification;
-using Avalonia.Platform;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAdScreenInfoCollection : MpAvScreenInfoCollectionBase {
+    public class MpAvOverlayContainerViewModel : MpAvViewModelBase {
         #region Private Variables
         #endregion
 
@@ -15,22 +13,19 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+        private static MpAvOverlayContainerViewModel _instance;
+        public static MpAvOverlayContainerViewModel Instance => _instance ?? (_instance = new());
         #endregion
 
         #region Interfaces
-
-
-        #region IScreenImpl
-
-        #endregion
         #endregion
 
         #region Properties
+        public bool IsOverlayVisible { get; set; }
         #endregion
 
         #region Constructors
-
-        public MpAvAdScreenInfoCollection(IEnumerable<MpIPlatformScreenInfo> sil) : base(sil) { }
+        public MpAvOverlayContainerViewModel() { }
         #endregion
 
         #region Public Methods

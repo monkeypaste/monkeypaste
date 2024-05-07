@@ -906,7 +906,9 @@ namespace MonkeyPaste.Avalonia {
                                            sharedTypes: sharedTypes,
                                            isUnloadable: true,
                                            configure: (c) => {
-                                               c.DefaultContext = cur_alc;
+                                               if(cur_alc != null) {
+                                                   c.DefaultContext = cur_alc;
+                                               }
                                                c.PreferSharedTypes = true;
                                            });
                         var objs = new List<T>();

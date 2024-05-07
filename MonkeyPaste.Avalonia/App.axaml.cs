@@ -155,9 +155,6 @@ namespace MonkeyPaste.Avalonia {
                 var loader = new MpAvLoaderViewModel(is_login_load);
                 await loader.CreatePlatformAsync(startup_datetime);
                 await loader.InitAsync();
-#if WINDOWED
-                MpAvRootWindow.Instance.Show();
-#endif
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
                 
                 mobile.MainView = new Border() {
@@ -166,6 +163,9 @@ namespace MonkeyPaste.Avalonia {
                     VerticalAlignment = VerticalAlignment.Stretch,
                     Background = Brushes.Silver,
                 };
+                if(mobile.MainView is Border b) {
+                    b.EffectiveViewportChanged += B_EffectiveViewportChanged;
+                }
 
                 var loader = new MpAvLoaderViewModel(is_login_load);
                 await loader.CreatePlatformAsync(startup_datetime);
@@ -184,6 +184,16 @@ namespace MonkeyPaste.Avalonia {
 #if DEBUG && DESKTOP
             this.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
 #endif
+        }
+
+        private void B_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
+            if(sender is not Control c) {
+                return;
+            }
+            MpConsole.WriteLine($"Screen: {MpAvDeviceWrapper.Instance.ScreenInfoCollection.Primary}");
+            MpConsole.WriteLine($"MainView: {c.Bounds}");
+            MpAvDeviceWrapper.Instance.ScreenInfoCollection.Primary.Bounds = c.Bounds.ToPortableRect();
+            MpAvDeviceWrapper.Instance.ScreenInfoCollection.Primary.WorkingArea = c.Bounds.ToPortableRect();
         }
 
         private void Desktop_ShutdownRequested(object sender, ShutdownRequestedEventArgs e) {

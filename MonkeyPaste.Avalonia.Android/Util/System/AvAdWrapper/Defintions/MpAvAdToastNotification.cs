@@ -1,4 +1,6 @@
 ﻿using Android.Widget;
+using Avalonia.WebView.Android.Core;
+using AvaloniaWebView;
 
 namespace MonkeyPaste.Avalonia.Android {
     public class MpAvAdToastNotification : MpIPlatformToastNotification {
@@ -7,6 +9,18 @@ namespace MonkeyPaste.Avalonia.Android {
 
             ToastLength tl = text.Length < 30 ? ToastLength.Short : ToastLength.Long;
             Toast.MakeText(MainActivity.Instance, text, tl).Show();
+        }
+    }
+    public class MpAvAdWebViewHelper : MpAvIDeviceWebViewHelper {
+        public void EnableFileAccess(WebView wv) {
+            if(wv.PlatformWebView is not AndroidWebViewCore wvc ||
+                wvc.WebView is not { } wkwv) {
+                return;                
+            }
+            wkwv.Settings.AllowFileAccessFromFileURLs = true;
+            wkwv.Settings.AllowUniversalAccessFromFileURLs = true;
+            wkwv.Settings.AllowFileAccess = true;
+            wkwv.Settings.AllowContentAccess = true;
         }
     }
 }

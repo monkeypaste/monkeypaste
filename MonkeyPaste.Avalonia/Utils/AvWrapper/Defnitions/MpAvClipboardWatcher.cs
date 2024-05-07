@@ -12,7 +12,6 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private MpPortableDataObject _lastCbo = null;
-        //private DispatcherTimer _timer = null;
         private Timer _timer = null;
 
         private string[] _ignoredFormats = [

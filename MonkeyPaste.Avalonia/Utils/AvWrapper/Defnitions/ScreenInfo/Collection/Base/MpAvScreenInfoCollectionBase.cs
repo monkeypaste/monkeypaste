@@ -1,4 +1,6 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +11,8 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvScreenInfoCollectionBase : MpIPlatformScreenInfoCollection {
         private MpAvScreenInfoComparer _comparer = new MpAvScreenInfoComparer();
         public ObservableCollection<MpIPlatformScreenInfo> Screens { get; protected set; }
-
+        public IEnumerable<MpIPlatformScreenInfo> All =>
+            Screens;
         public MpIPlatformScreenInfo Primary {
             get {
                 if (Screens == null) {
@@ -69,6 +72,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return false;
         }
+
     }
     public class MpAvScreenInfoComparer : IEqualityComparer<MpIPlatformScreenInfo> {
         public bool Equals(MpIPlatformScreenInfo x, MpIPlatformScreenInfo y) {

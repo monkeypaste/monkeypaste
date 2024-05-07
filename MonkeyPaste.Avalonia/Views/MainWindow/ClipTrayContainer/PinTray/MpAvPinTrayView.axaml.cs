@@ -73,6 +73,22 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        protected override void OnPointerReleased(PointerReleasedEventArgs e) {
+            base.OnPointerReleased(e);
+            if(MpAvMainView.Instance.RootGrid.GetVisualDescendant<MpAvPlainHtmlConverterWebView>() is { } cwv) {
+                foreach(var c in MpAvMainView.Instance.RootGrid.Children) {
+                    if(c == cwv) {
+                        c.IsVisible = true;
+                        c.Width = MpAvMainView.Instance.Width;
+                        c.Height = MpAvMainView.Instance.Height;
+                        continue;
+                    }
+                    c.IsVisible = false;
+                }
+
+            }
+        }
+
 
         #region Drop
 

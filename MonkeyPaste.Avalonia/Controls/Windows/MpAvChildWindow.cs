@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Diagnostics;
 using Avalonia.Input;
 using Avalonia.Input.TextInput;
@@ -49,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: default);
 
         #endregion
-        
+
         #region Title Property
         public string Title {
             get { return GetValue(TitleProperty); }
@@ -62,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: default);
 
         #endregion
-        
+
         #region ShowActivated Property
         public bool ShowActivated {
             get { return GetValue(ShowActivatedProperty); }
@@ -88,7 +89,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: default);
 
         #endregion
-        
+
         #region WindowStartupLocation Property
         public WindowStartupLocation WindowStartupLocation {
             get { return GetValue(WindowStartupLocationProperty); }
@@ -101,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: default);
 
         #endregion
-        
+
         #region SizeToContent Property
         public SizeToContent SizeToContent {
             get { return GetValue(SizeToContentProperty); }
@@ -179,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: default);
 
         #endregion
-        
+
         #region SystemDecorations Property
         public SystemDecorations SystemDecorations {
             get { return GetValue(SystemDecorationsProperty); }
@@ -192,7 +193,7 @@ namespace MonkeyPaste.Avalonia {
                 defaultValue: default);
 
         #endregion
-        
+
         #region ExtendClientAreaToDecorationsHint Property
         public bool ExtendClientAreaToDecorationsHint {
             get { return GetValue(ExtendClientAreaToDecorationsHintProperty); }
@@ -229,17 +230,17 @@ namespace MonkeyPaste.Avalonia {
                 return Bounds.Size;
             }
         }
-        
+
         public PixelPoint Position {
             get {
-                if(MpAvRootWindow.Instance == null) {
-                    return default;
-                }
+                //if(MpAvMainView.Instance == null) {
+                //    return default;
+                //}
                 double scale = this.VisualPixelDensity();
                 return new MpPoint(CanvasX, CanvasY).ToAvPixelPoint(scale);
             }
             set {
-                if(Position.X != value.X || Position.Y != value.Y) {
+                if (Position.X != value.X || Position.Y != value.Y) {
                     double scale = this.VisualPixelDensity();
                     var p = value.ToPortablePoint(scale);
                     CanvasX = p.X;
@@ -252,34 +253,40 @@ namespace MonkeyPaste.Avalonia {
         public object Owner { get; set; }
 
         public object DialogResult { get; set; }
-        public Screens Screens =>
-            MpAvRootWindow.Instance == null ?
-                null :
-                MpAvRootWindow.Instance.Screens;
+        public MpIPlatformScreenInfoCollection Screens =>
+            Mp.Services.ScreenInfoCollection;
 
         public IWindowImpl PlatformImpl =>
-            MpAvRootWindow.Instance == null ?
-                null :
-                MpAvRootWindow.Instance.PlatformImpl;
+            null;
 
         #endregion
 
+        #region CanvasX Property
         public double CanvasX {
-            get => Canvas.GetLeft(this);
-            set {
-                if(CanvasX != value) {
-                    Canvas.SetLeft(this, value);
-                }
-            }
+            get { return GetValue(CanvasXProperty); }
+            set { SetValue(CanvasXProperty, value); }
         }
+
+        public static readonly StyledProperty<double> CanvasXProperty =
+            AvaloniaProperty.Register<MpAvChildWindow, double>(
+                name: nameof(CanvasX),
+                defaultValue: default);
+
+        #endregion
+
+        #region CanvasY Property
         public double CanvasY {
-            get => Canvas.GetTop(this);
-            set {
-                if (CanvasY != value) {
-                    Canvas.SetTop(this, value);
-                }
-            }
+            get { return GetValue(CanvasYProperty); }
+            set { SetValue(CanvasYProperty, value); }
         }
+
+        public static readonly StyledProperty<double> CanvasYProperty =
+            AvaloniaProperty.Register<MpAvChildWindow, double>(
+                name: nameof(CanvasY),
+                defaultValue: default);
+
+        #endregion
+
         #endregion
 
         #region Events
@@ -300,10 +307,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public IPlatformHandle? TryGetPlatformHandle() {
-            if(MpAvRootWindow.Instance is not { } rw) {
-                return default;
+            if (TopLevel.GetTopLevel(App.MainView) is not { } tl ||
+                tl.TryGetPlatformHandle() is not { } ph) {
+                return null;
             }
-            return rw.TryGetPlatformHandle();
+            return ph;
         }
         public async Task<T> ShowDialog<T>(MpAvWindow owner) {
             Show(owner);
@@ -313,11 +321,11 @@ namespace MonkeyPaste.Avalonia {
             return (T)(object)DialogResult;
         }
         public void Show() {
-            // TODO attach & position this window to MpAvRootWindow here
-            if(MpAvRootWindow.Instance == null) {
+            // TODO attach & position this window to MpAvMainView here
+            if (MpAvOverlayContainerView.Instance is not { } ocv) {
                 return;
             }
-            //MpAvRootWindow.Instance.AddChild(this);
+            ocv.AddChild(this);
         }
         public void Show(Window owner) {
             Show();
@@ -335,13 +343,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void Close() {
-            // TODO detach from MpAvRootWindow
+            // TODO detach from MpAvMainView
 
-            if (MpAvRootWindow.Instance == null) {
+            if (MpAvOverlayContainerView.Instance is not { } ocv) {
                 return;
             }
-
-            if(MpAvRootWindow.Instance.RemoveChild(this)) {
+            
+            if(ocv.RemoveChild(this)) {
                 Closed?.Invoke(this, EventArgs.Empty);
             }
         }

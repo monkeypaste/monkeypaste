@@ -1292,15 +1292,13 @@ namespace MonkeyPaste.Avalonia {
                     nameof(MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled),
                     (piv) => {
                         
-#if DESKTOP
+
+#if CEFNET_WV
                         if(piv.GetVisualDescendant<CheckBox>() is not CheckBox cb) {
                             return;
                         }
-
-#if CEFNET_WV
-		// ensure rich content cb reflects webview availability
+		                // ensure rich content cb reflects webview availability
                         cb.IsEnabled = MpAvCefNetApplication.IsCefNetLoaded;    
-#endif
 #endif
                     }
                 },
@@ -1648,7 +1646,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #endregion
+#endregion
 
         #region Param Locators
         public Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameViewModelsByParamId(string paramId, MpSettingsFrameType frameType = MpSettingsFrameType.None) {
@@ -1771,18 +1769,18 @@ namespace MonkeyPaste.Avalonia {
         public MpIAsyncCommand<object> ShowSettingsWindowCommand => new MpAsyncCommand<object>(
             async (args) => {
                 UpdateFilters();
-#if DESKTOP
+//#if DESKTOP
                 if (IsWindowOpen) {
                     IsWindowActive = true;
-                } else if (Mp.Services.PlatformInfo.IsDesktop) {
+                } else {
                     var sw = CreateSettingsWindow();
 
                     sw.Show();
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }
-#else
-                App.SetPrimaryView(MpAvSettingsView.Instance);
-#endif
+//#else
+//                App.SetPrimaryView(MpAvSettingsView.Instance);
+//#endif
                 await SelectTabCommand.ExecuteAsync(args);
             });
         public ICommand CloseSettingsCommand => new MpCommand(
