@@ -1,15 +1,18 @@
-﻿using System;
-using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.App;
 using Android.Widget;
-using Xamarin.Essentials;
-using TaskStackBuilder = Android.Support.V4.App.TaskStackBuilder;
 
-namespace MonkeyPaste.Droid {
+using MonkeyPaste.Common;
+
+using System;
+using System.Threading.Tasks;
+
+using Xamarin.Essentials;
+
+namespace MonkeyPaste.Avalonia.Android {
     [Service]
     [Obsolete]
     public class MpCopyClipboardNotificationService : IntentService {
@@ -87,7 +90,6 @@ namespace MonkeyPaste.Droid {
         public override void OnDestroy() {
             base.OnDestroy();
             Clipboard.ClipboardContentChanged -= Clipboard_ClipboardContentChanged;
-
             StopForeground(true);
         }
         public override IBinder OnBind(Intent intent) {

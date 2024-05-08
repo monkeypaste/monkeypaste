@@ -134,7 +134,7 @@
         </Style>
         <Style Selector=":is(Button).clipTrayBackButton">
             <Setter Property="Margin"
-                    Value="20,5,0,0" />
+                    Value="5,5,0,0" />
             <Setter Property="HorizontalAlignment"
                     Value="Left" />
             <Setter Property="VerticalAlignment"
@@ -173,13 +173,14 @@
                                local:MpAvSizeObserverExtension.IsEnabled="True"
                                local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedPinTrayScreenWidth, Mode=TwoWay}"
                                local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedPinTrayScreenHeight, Mode=TwoWay}" />
-        <!--  PIN/QUERY SPLITTER  -->
+        <!--
+            PIN/QUERY SPLITTER
+        -->
         <local:MpAvMovableGridSplitter x:Name="ClipTraySplitter"
                                        Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                        Classes.clipTraySplitter="True"
                                        Classes.vertical="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                                        Classes.horizontal="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-                                       IsVisible="{Binding !IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                        local:MpAvPointerCommandExtension.IsEnabled="True"
                                        local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
                                        local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetTraySplitterCommand}"

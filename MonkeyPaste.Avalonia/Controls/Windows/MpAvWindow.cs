@@ -123,10 +123,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvWindow() : this(null) { }
-        public MpAvWindow(MpAvWindow owner = default) : base(owner == null ? PlatformManager.CreateWindow() : owner.PlatformImpl) {
+        public MpAvWindow() {
+
             Init();
         }
+        //public MpAvWindow(MpAvWindow owner = default) : base(owner == null ? PlatformManager.CreateWindow() : owner.PlatformImpl) {
+        //}
 
         #endregion
 
@@ -229,5 +231,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
         #endregion
+    }
+
+
+    [DoNotNotify]
+    public abstract class MpAvWindow<TViewModel> : MpAvWindow where TViewModel : class {
+        public new TViewModel BindingContext {
+            get => GetValue(DataContextProperty) as TViewModel;
+            set => SetValue(DataContextProperty, value);
+        }
     }
 }

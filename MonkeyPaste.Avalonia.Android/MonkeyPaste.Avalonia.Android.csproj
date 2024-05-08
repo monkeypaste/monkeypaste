@@ -15,17 +15,28 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <RunAOTCompilation>True</RunAOTCompilation>
-    <DebugSymbols>False</DebugSymbols>
+    <!--<AotAssemblies>true</AotAssemblies>-->
+    <RunAOTCompilation>true</RunAOTCompilation>
+    <EnableLLVM>true</EnableLLVM>
+    <IsAotCompatible>True</IsAotCompatible>
+    <IsTrimmable>True</IsTrimmable>
+    <AndroidEnableProfiledAot>True</AndroidEnableProfiledAot>    
+    
+    <!--<AndroidAotAdditionalArguments>no-write-symbols,nodebug</AndroidAotAdditionalArguments>-->
+    <!--<AndroidAotMode>Hybrid</AndroidAotMode>-->
+    <!--<AndroidGenerateJniMarshalMethods>True</AndroidGenerateJniMarshalMethods>-->
+    <!--<DebugSymbols>False</DebugSymbols>-->
     <!--<DebugType>none</DebugType>-->
     <!--<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>-->
     <!--<DebugType>embedded</DebugType>-->
-    <!--<Optimize>True</Optimize>-->
+    <Optimize>false</Optimize>
+    <AndroidEnableMultiDex>false</AndroidEnableMultiDex>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Debugger>Xamarin</Debugger>
     <DebugSymbols>True</DebugSymbols>
+    <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
   </PropertyGroup>
 
   <ItemGroup>
@@ -80,13 +91,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="MpCopyClipboardNotificationActivity.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Assets\" />
     <Folder Include="Assets\dat\" />
     <Folder Include="Controls\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="MpCopyClipboardNotificationActivity.cs" />
   </ItemGroup>
 
   <ItemGroup>

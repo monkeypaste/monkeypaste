@@ -41,6 +41,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void AddChild(MpAvChildWindow cw) {
+            if(cw is MpAvMainView) {
+                return;
+            }
 
             if (OverlayCanvas.Children.Contains(this)) {
                 // show or ignore here
@@ -67,6 +70,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool RemoveChild(MpAvChildWindow cw) {
+            if (cw is MpAvMainView) {
+                return false;
+            }
             return OverlayCanvas.Children.Remove(cw);
         }
     }

@@ -139,6 +139,7 @@ namespace MonkeyPaste.Avalonia {
                     return MainWindowHeight -
                         MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
+                        MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength -
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
 #else
                     return MainWindowHeight -
@@ -632,6 +633,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 MpAvMainView.Instance.DataContext = this;
                 App.SetPrimaryView(MpAvMainView.Instance);
+                MpAvWindowManager.AllWindows.Add(MpAvMainView.Instance);
                 //sval.MainView = MpAvMainView.Instance;
                 //sval.MainView.HorizontalAlignment = HorizontalAlignment.Stretch;
                 //sval.MainView.VerticalAlignment = VerticalAlignment.Bottom;

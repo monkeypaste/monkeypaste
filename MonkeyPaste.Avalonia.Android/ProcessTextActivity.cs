@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Widget;
@@ -34,6 +35,7 @@ namespace MonkeyPaste.Avalonia.Android {
                 .ShowToast(string.Empty, UiStrings.MobileCopiedNtfText, null, null);
 
             CreateTextClip(selectedText);
+
 
             Finish();
         }

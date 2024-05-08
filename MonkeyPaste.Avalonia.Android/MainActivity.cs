@@ -1,6 +1,7 @@
 ﻿
 using Android;
 using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.Content.Res;
 using Android.OS;
@@ -32,6 +33,9 @@ namespace MonkeyPaste.Avalonia.Android {
         private static MainActivity _instance;
         public static MainActivity Instance =>
             _instance;
+        public MainActivity() {
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+        }
 
         protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) {
             _instance = this;
@@ -138,6 +142,14 @@ namespace MonkeyPaste.Avalonia.Android {
 
         //    Finish();
         //}
+
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch(msg) {
+                case MpMessageType.MainWindowLoadComplete:
+                    //ForegroundService.Instance.Start();
+                    break;
+            }
+        }
 
     }
 }

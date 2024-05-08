@@ -14,28 +14,54 @@
                        x:CompileBindings="True"
                        Background="Purple"
                        x:Class="MonkeyPaste.Avalonia.MpAvMobileLoaderView">
+
+    <local:MpAvUserControl.Background>
+        <RadialGradientBrush Center="100%, 100%" GradientOrigin="100%, 90%" Radius="1.0">
+            <RadialGradientBrush.GradientStops>
+                <GradientStop Color="Purple" Offset="0" />
+                <GradientStop Color="DarkViolet" Offset="1" />
+            </RadialGradientBrush.GradientStops>
+        </RadialGradientBrush>
+    </local:MpAvUserControl.Background>
     <local:MpAvUserControl.Styles>
     </local:MpAvUserControl.Styles>
     <StackPanel HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 DataContext="{Binding ProgressLoader}"
                 Spacing="15">
-        <!--  LOGO  -->
-        <Image x:Name="LogoImage"
-               Classes="applogo"
-               Width="100"
-               Height="100"
-               Source="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
-               HorizontalAlignment="Center" />
-        <Grid>
+        <Grid Width="100"
+              Height="100">
+            <local:MpAvProgressSpinner HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       ArcWidth="2.5"
+                                       RingBrush="Transparent"
+                                       PercentBrush="Cyan"
+                                       LabelBrush="Transparent"
+                                       Percent="{Binding PercentLoaded}" />
 
-            <!--  PLEASE WAIT SPINNER  -->
+            <!--  LOGO  -->
+            <Image x:Name="LogoImage"
+                   Classes="applogo"
+                   Width="70"
+                   Height="70"
+                   Source="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+
+        </Grid>
+        <!--<Grid>
+
+        -->
+        <!--  PLEASE WAIT SPINNER  -->
+        <!--
             <local:MpAvBusySpinnerView Foreground="White"
                                        HorizontalAlignment="Center"
                                        IsVisible="{Binding ShowSpinner}"
                                        Width="25"
                                        Height="25" />
-            <!--  PROGRESS BAR  -->
+        -->
+        <!--  PROGRESS BAR  -->
+        <!--
             <ProgressBar Margin="50,0"
                          Height="5"
                          Minimum="0"
@@ -44,7 +70,7 @@
                          HorizontalAlignment="Center"
                          Value="{Binding PercentLoaded}"
                          ShowProgressText="False" />
-        </Grid>
+        </Grid>-->
 
         <!--  PROGRESS INFO  -->
         <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"

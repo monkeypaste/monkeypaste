@@ -35,7 +35,26 @@
                     Value="25" />
         </Style>
 
+        <Style Selector="Grid#TitlePanel.mobile ToggleButton#SettingsToggleButton">
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Template>
+                        <Image Source="{Binding Source={StaticResource BurgerImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!--  BUTTONS  -->
+        <Style Selector="Grid#TitlePanel ToggleButton#SettingsToggleButton">
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Template>
+                        <PathIcon Data="{StaticResource CogSvg}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <Style Selector="Border#MinimizeBorder">
             <Setter Property="Background"
@@ -155,7 +174,6 @@
                     <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonSettingsTitle}"
                                            InputGestureText="{Binding ., ConverterParameter=ShowSettings, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
                 </ToolTip.Tip>
-                <PathIcon Data="{StaticResource CogSvg}" />
             </ToggleButton>
 
             <!--  LOCK BUTTON  -->

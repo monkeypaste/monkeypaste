@@ -374,7 +374,7 @@ namespace MonkeyPaste.Avalonia {
             IDisposable dsp3 = Control.IsVisibleProperty.Changed.AddClassHandler<MpAvWindow>((x, y) => IsVisibleChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
             IDisposable dsp4 = MpAvWindow.WindowStateProperty.Changed.AddClassHandler<MpAvWindow>((x, y) => WindowStateChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
             if (_dispLookup.ContainsKey(nw)) {
-                MpDebug.Break("Error, window shouldn't already exist here");
+                MpDebug.Break("Error, window shouldn't already exist here", silent: true);
             } else {
                 _dispLookup.Add(nw, new[] { dsp1, dsp2, dsp3, dsp4 });
             }

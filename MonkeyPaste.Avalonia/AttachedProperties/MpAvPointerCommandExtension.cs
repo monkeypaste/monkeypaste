@@ -302,11 +302,11 @@ namespace MonkeyPaste.Avalonia {
 
         private static void EnabledControl_AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
+                bool press_added = false;
                 bool has_any_press =
                     GetLeftPressCommand(control) != null ||
                     GetRightPressCommand(control) != null ||
                     GetDoubleLeftPressCommand(control) != null;
-
 
                 if (has_any_press) {
                     if (control is Button b && GetLeftPressCommand(control) != null) {
@@ -314,20 +314,20 @@ namespace MonkeyPaste.Avalonia {
                         b.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
                     }
                     control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
-
-                    if (GetRightPressCommand(control) is ICommand rght_press_cmd && GetRouteHoldToRightPress(control)) {
-                        control.AddHandler(Control.HoldingEvent, Control_Holding, RoutingStrategies.Tunnel);
-
-#if MOBILE
-                        //control.AddHandler(Control.PointerPressedEvent, (s, e) => {
-                        //    e.Handled = true;
-                        //}, RoutingStrategies.Tunnel);
-#endif
-                    }
+                    press_added = true;
+                    
                 }
 
                 if (GetLeftReleaseCommand(control) != null || GetRightReleaseCommand(control) != null) {
                     control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, GetRoutingStrategy(control));
+                }
+
+                if (GetRouteHoldToRightPress(control) &&
+                    (GetRightPressCommand(control) is not null || GetRightReleaseCommand(control) is not null)) {
+                    control.AddHandler(Control.HoldingEvent, Control_Holding, RoutingStrategies.Tunnel);
+                    if(!press_added) {
+                        control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
+                    }
                 }
             }
         }

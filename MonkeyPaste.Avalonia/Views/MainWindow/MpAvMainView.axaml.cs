@@ -18,7 +18,11 @@ namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
     public partial class MpAvMainView :
-        MpAvUserControl<MpAvMainWindowViewModel>,
+#if WINDOWED
+        MpAvWindow<MpAvMainWindowViewModel>,
+#else
+        MpAvUserControl<MpAvMainWindowViewModel>, 
+#endif
         MpAvIResizableControl,
         MpIAsyncObject {
         #region Private Variables

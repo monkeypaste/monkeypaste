@@ -6,10 +6,12 @@ using PropertyChanged;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvLoaderNotificationWindow : MpAvNotificationWindow {
-        public MpAvLoaderNotificationWindow() : this(null) { }
-        public MpAvLoaderNotificationWindow(MpAvWindow owner = default) : base(owner) {
+        public MpAvLoaderNotificationWindow() {
             InitializeComponent();
         }
+        //public MpAvLoaderNotificationWindow(MpAvWindow owner = default) : base(owner) {
+        //    InitializeComponent();
+        //}
 
         protected override void OnLoaded(RoutedEventArgs e) {
             base.OnLoaded(e);

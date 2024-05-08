@@ -2,7 +2,7 @@
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvNotificationWindow : MpAvWindow {
-        public MpAvNotificationWindow(MpAvWindow owner = default) : base(owner) { }
+    public abstract class MpAvNotificationWindow : MpAvWindow {
+        //public MpAvNotificationWindow(MpAvWindow owner = default) : base(owner) { }
     }
 }

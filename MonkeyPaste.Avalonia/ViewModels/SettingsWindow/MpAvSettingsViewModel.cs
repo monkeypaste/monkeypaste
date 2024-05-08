@@ -1395,7 +1395,7 @@ namespace MonkeyPaste.Avalonia {
                     DataContext = this,
                     Content = new MpAvSettingsView()
                 };
-                sw.Classes.Add("fadeIn");
+                //sw.Classes.Add("fadeIn");
             }
 
             void Sw_Opened(object sender, EventArgs e) {

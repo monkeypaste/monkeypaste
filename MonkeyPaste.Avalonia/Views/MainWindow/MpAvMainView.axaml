@@ -14,6 +14,18 @@
     <local:MpAvUserControl.RenderTransform>
         <TranslateTransform />
     </local:MpAvUserControl.RenderTransform>
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Viewbox#SidebarViewbox">
+            <Setter Property="Stretch"
+                    Value="Uniform" />
+            <Setter Property="StretchDirection"
+                    Value="DownOnly" />
+        </Style>
+        <Style Selector="Viewbox#SidebarViewbox.desktop">
+            <Setter Property="Stretch"
+                    Value="None" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Canvas x:Name="MainWindowCanvas"
             Width="{Binding MainWindowWidth}"
             Height="{Binding MainWindowHeight}">
@@ -56,53 +68,56 @@
                         Grid.Column="1"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
-                    <ContentControl x:Name="SelectedSidebarContentControl"
-                                    DataContext="{Binding LastSelectedItem}"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    HorizontalContentAlignment="Stretch"
-                                    VerticalContentAlignment="Stretch"
-                                    local:MpAvSizeObserverExtension.IsEnabled="True"
-                                    local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
-                                    local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}"
-                                    Content="{Binding}">
-                        <ContentControl.DataTemplates>
-                            <local:MpAvSidebarItemTemplateSelector>
-                                <!--  TAG TREE  -->
-                                <DataTemplate x:Key="TagTreeViewTemplate"
-                                              x:DataType="local:MpAvTagTrayViewModel">
-                                    <local:MpAvTagTreeView Margin="0,0,0,0"
-                                                           HorizontalAlignment="Stretch"
-                                                           HorizontalContentAlignment="Stretch" />
+                    <Viewbox x:Name="SidebarViewbox"
+                             Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}">
+                        <ContentControl x:Name="SelectedSidebarContentControl"
+                                        DataContext="{Binding LastSelectedItem}"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalContentAlignment="Stretch"
+                                        VerticalContentAlignment="Stretch"
+                                        local:MpAvSizeObserverExtension.IsEnabled="True"
+                                        local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
+                                        local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}"
+                                        Content="{Binding}">
+                            <ContentControl.DataTemplates>
+                                <local:MpAvSidebarItemTemplateSelector>
+                                    <!--  TAG TREE  -->
+                                    <DataTemplate x:Key="TagTreeViewTemplate"
+                                                  x:DataType="local:MpAvTagTrayViewModel">
+                                        <local:MpAvTagTreeView Margin="0,0,0,0"
+                                                               HorizontalAlignment="Stretch"
+                                                               HorizontalContentAlignment="Stretch" />
 
-                                </DataTemplate>
+                                    </DataTemplate>
 
-                                <!--  CLIPBOARD HANDLER  -->
-                                <DataTemplate x:Key="ClipboardHandlerSelectorViewTemplate"
-                                              x:DataType="local:MpAvClipboardHandlerCollectionViewModel">
-                                    <local:MpAvClipboardHandlerSelectorView HorizontalAlignment="Stretch"
+                                    <!--  CLIPBOARD HANDLER  -->
+                                    <DataTemplate x:Key="ClipboardHandlerSelectorViewTemplate"
+                                                  x:DataType="local:MpAvClipboardHandlerCollectionViewModel">
+                                        <local:MpAvClipboardHandlerSelectorView HorizontalAlignment="Stretch"
+                                                                                HorizontalContentAlignment="Stretch" />
+
+
+                                    </DataTemplate>
+                                    <!--  ANALYZERS  -->
+                                    <DataTemplate x:Key="AnalyticItemSelectorViewTemplate"
+                                                  x:DataType="local:MpAvAnalyticItemCollectionViewModel">
+                                        <local:MpAvAnalyticItemSelectorView HorizontalAlignment="Stretch"
                                                                             HorizontalContentAlignment="Stretch" />
 
+                                    </DataTemplate>
+                                    <!--  ACTIONS  -->
+                                    <DataTemplate x:Key="TriggerActionChooserViewTemplate"
+                                                  x:DataType="local:MpAvTriggerCollectionViewModel">
 
-                                </DataTemplate>
-                                <!--  ANALYZERS  -->
-                                <DataTemplate x:Key="AnalyticItemSelectorViewTemplate"
-                                              x:DataType="local:MpAvAnalyticItemCollectionViewModel">
-                                    <local:MpAvAnalyticItemSelectorView HorizontalAlignment="Stretch"
-                                                                        HorizontalContentAlignment="Stretch" />
-
-                                </DataTemplate>
-                                <!--  ACTIONS  -->
-                                <DataTemplate x:Key="TriggerActionChooserViewTemplate"
-                                              x:DataType="local:MpAvTriggerCollectionViewModel">
-
-                                    <local:MpAvTriggerActionChooserView IsVisible="{Binding !IsWindowOpen}"
-                                                                        HorizontalAlignment="Stretch"
-                                                                        HorizontalContentAlignment="Stretch" />
-                                </DataTemplate>
-                            </local:MpAvSidebarItemTemplateSelector>
-                        </ContentControl.DataTemplates>
-                    </ContentControl>
+                                        <local:MpAvTriggerActionChooserView IsVisible="{Binding !IsWindowOpen}"
+                                                                            HorizontalAlignment="Stretch"
+                                                                            HorizontalContentAlignment="Stretch" />
+                                    </DataTemplate>
+                                </local:MpAvSidebarItemTemplateSelector>
+                            </ContentControl.DataTemplates>
+                        </ContentControl>
+                    </Viewbox>
                 </Border>
 
 

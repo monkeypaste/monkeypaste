@@ -124,6 +124,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region Layout
+        #endregion
+
         #region Appearance
 
 

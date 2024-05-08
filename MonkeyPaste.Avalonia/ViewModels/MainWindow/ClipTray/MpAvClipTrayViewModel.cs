@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
@@ -57,11 +58,12 @@ namespace MonkeyPaste.Avalonia {
         public const double MIN_SIZE_ZOOM_FACTOR_COEFF = (double)1 / (double)7;
         public const double DEFAULT_ITEM_SIZE = 260;
         public const double UNEXPANDED_HEIGHT_RATIO = 0.5d;
-        public const double DEFAULT_UNEXPANDED_HEIGHT = DEFAULT_ITEM_SIZE * UNEXPANDED_HEIGHT_RATIO;
+        public const double DEFAULT_UNEXPANDED_HEIGHT = 
+            DEFAULT_ITEM_SIZE * UNEXPANDED_HEIGHT_RATIO;
 
         const double DEFAULT_PIN_TRAY_RATIO =
 #if MOBILE
-            1.0;
+            0.5;//1.0;
 #else
             0.5;
 #endif
@@ -762,7 +764,9 @@ namespace MonkeyPaste.Avalonia {
             double h = DEFAULT_ITEM_SIZE - hsbh - safe_pad;
 
             if (ListOrientation == Orientation.Vertical) {
-                h = DEFAULT_UNEXPANDED_HEIGHT;
+#if DESKTOP
+                h = DEFAULT_UNEXPANDED_HEIGHT; 
+#endif
             } else if (LayoutType == MpClipTrayLayoutType.Grid &&
                         Mp.Services.Query.TotalAvailableItemsInQuery > CurGridFixedCount) {
                 // when there's multiple query rows shorten height a bit to 
@@ -1041,7 +1045,7 @@ namespace MonkeyPaste.Avalonia {
             IsPinTrayVisible ? MinClipOrPinTrayScreenWidth : 0;
         public double MinPinTrayScreenHeight =>
             IsPinTrayVisible ? MinClipOrPinTrayScreenHeight : 0;
-
+        
         public double MaxPinTrayScreenWidth {
             get {
                 if (ListOrientation == Orientation.Horizontal) {
@@ -1050,6 +1054,7 @@ namespace MonkeyPaste.Avalonia {
                 return double.PositiveInfinity;
             }
         }
+
         public double MaxPinTrayScreenHeight {
             get {
                 if (ListOrientation == Orientation.Horizontal) {
@@ -1061,7 +1066,7 @@ namespace MonkeyPaste.Avalonia {
 
         public double MaxContainerScreenWidth {
             get {
-#if MOBILE
+#if false
                 return double.PositiveInfinity;
 #else
                 if (ListOrientation == Orientation.Horizontal) {
@@ -1078,7 +1083,7 @@ namespace MonkeyPaste.Avalonia {
 
         public double MaxContainerScreenHeight {
             get {
-#if MOBILE
+#if false
                 return double.PositiveInfinity;
 #else
                 if (ListOrientation == Orientation.Horizontal) {
@@ -1104,13 +1109,13 @@ namespace MonkeyPaste.Avalonia {
 #if DESKTOP
         50;
 #else
-        0;
+        50;
 #endif
         public double MinClipOrPinTrayScreenHeight =>
 #if DESKTOP
         50;
 #else
-        0;
+        50;
 #endif
         public double MaxTileWidth =>
             double.PositiveInfinity;// Math.Max(0, ObservedQueryTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
@@ -1423,7 +1428,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPinTrayEmpty =>
             !InternalPinnedItems.Any();
 
-        private bool _isPinTrayVisible;
+        private bool _isPinTrayVisible = true;
         public bool IsPinTrayVisible {
             get {
 #if DESKTOP
@@ -1878,7 +1883,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpSize GetCurrentPinTrayRatio() {
 #if WINDOWED
-            return IsPinTrayVisible ? GetDefaultPinTrayRatio(1) : GetDefaultPinTrayRatio(0);
+            return GetDefaultPinTrayRatio();
+            //return IsPinTrayVisible ? GetDefaultPinTrayRatio(1) : GetDefaultPinTrayRatio(0);
 #else
             return GetDefaultPinTrayRatio();
 #endif
@@ -3472,8 +3478,46 @@ namespace MonkeyPaste.Avalonia {
             double dh = (trg.Bounds.Height * new_ratio.Height) - trg_h;
             MpConsole.WriteLine($"Tray Splitter reset. Ratio: {new_ratio} Delta: {dw},{dh}");
             mgs.ApplyDelta(new Vector(dw, dh));
+        }
+        private void AnimatePinTrayRatio(double r) {
+            if (MpAvMainView.Instance is not MpAvMainView mv ||
+                mv.GetVisualDescendant<MpAvMovableGridSplitter>() is not { } mgs) {
+                return;
+            }
 
-            RefreshQueryTrayLayout();
+            var trg = mgs.Parent as Grid;
+            if (trg == null) {
+                return;
+            }
+
+            double trg_w = 0;
+            double trg_h = 0;
+            if (trg.ColumnDefinitions.Any()) {
+                trg_w = trg.ColumnDefinitions[0].ActualWidth;
+            } else {
+                trg_w = trg.Bounds.Width;
+            }
+
+            if (trg.RowDefinitions.Any()) {
+                trg_h = trg.RowDefinitions[0].ActualHeight;
+            } else {
+                trg_h = trg.Bounds.Height;
+            }
+            var new_ratio = GetDefaultPinTrayRatio(r);
+
+            double dw = (trg.Bounds.Width * new_ratio.Width) - trg_w;
+            double dh = (trg.Bounds.Height * new_ratio.Height) - trg_h;
+
+            Dispatcher.UIThread.Post(async () => {
+                double sw = dw / 100;
+                double sh = dh / 100;
+                for(int i = 0;i < 100;i++) {
+                    mgs.ApplyDelta(new Vector(sw, sh));
+                    await Task.Delay(7);
+                }
+
+                //RefreshQueryTrayLayout();
+            });
         }
         #endregion
 
@@ -4979,18 +5023,43 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ExpandPinTrayCommand => new MpCommand(
             () => {
-                var exp_pin_ratio = GetDefaultPinTrayRatio();
-                SetPinTrayRatio(exp_pin_ratio);
-                MpAvMainView.Instance.UpdateLayout();
+
+                if (ListOrientation == Orientation.Horizontal) {
+                    double pad = ObservedContainerScreenWidth - ObservedQueryTrayScreenWidth;
+                    ObservedQueryTrayScreenWidth = 0;
+                    ObservedPinTrayScreenWidth = ObservedContainerScreenWidth - pad;
+                } else {
+                    double pad = ObservedContainerScreenHeight - ObservedQueryTrayScreenHeight;
+                    ObservedQueryTrayScreenHeight = 0;
+                    ObservedPinTrayScreenHeight = ObservedContainerScreenHeight - pad;
+                }
+
+                RefreshQueryTrayLayout();
+                //MpAvMainView.Instance.UpdateLayout();
                 IsPinTrayVisible = true;
+            }, () => {
+                return false;
             });
         
         public ICommand ExpandQueryTrayCommand => new MpCommand(
             () => {
-                var exp_quer_ratio = GetDefaultPinTrayRatio(0);
-                SetPinTrayRatio(exp_quer_ratio);
-                MpAvMainView.Instance.UpdateLayout();
+                if(ListOrientation == Orientation.Horizontal) {
+                    double pad = ObservedContainerScreenWidth - ObservedPinTrayScreenWidth;
+                    ObservedQueryTrayScreenWidth = ObservedContainerScreenWidth - pad;
+                    ObservedPinTrayScreenWidth = 0;
+                } else {
+                    double pad = ObservedContainerScreenHeight - ObservedPinTrayScreenHeight;
+                    ObservedQueryTrayScreenHeight = ObservedContainerScreenHeight - pad;
+                    ObservedPinTrayScreenHeight = 0;
+                }
+                MpAvMainView.Instance.InvalidateAll();
+
+                //AnimatePinTrayRatio(0);
+                //RefreshQueryTrayLayout();
+                //MpAvMainView.Instance.UpdateLayout();
                 IsPinTrayVisible = false;
+            }, () => {
+                return false;
             });
 
         public ICommand SelectClipTileTransactionNodeCommand => new MpAsyncCommand<object>(

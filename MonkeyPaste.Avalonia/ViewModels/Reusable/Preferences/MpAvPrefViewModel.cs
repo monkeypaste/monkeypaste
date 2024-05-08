@@ -96,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
         [JsonIgnore]
         public static string arg1 {
             get {
-#if LINUX
+#if LINUX || ANDROID
                 return "arg1arg1arg1arg1arg1arg1arg1arg1";
 #else
                 if (!PreferencesPath.IsFile()) {
@@ -108,7 +108,7 @@ namespace MonkeyPaste.Avalonia {
         }
         [JsonIgnore]
         public static string arg2 =>
-#if LINUX
+#if LINUX || ANDROID
             "arg2arg2arg2arg2arg2arg2arg2arg2";
 #else
             Instance == null ||
@@ -120,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
         [JsonIgnore]
         public static string arg3 {
             get {
-#if LINUX
+#if LINUX || ANDROID
                 return "arg3arg3arg3arg3arg3arg3arg3arg3";
 #else
                 if (!PreferencesPathBackup.IsFile()) {

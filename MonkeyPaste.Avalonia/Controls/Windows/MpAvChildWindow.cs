@@ -19,7 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-
+        
     [DoNotNotify]
     public abstract class MpAvChildWindow : MpAvUserControl {
         #region Private Variables
@@ -207,19 +207,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region WindowDecorationMargin Property
-        private Thickness _windowDecorationMargin;
-        public Thickness WindowDecorationMargin {
-            get => _windowDecorationMargin;
-            private set => SetAndRaise(WindowDecorationMarginProperty, ref _windowDecorationMargin, value);
-        }
-
-        public static readonly DirectProperty<MpAvWindow, Thickness> WindowDecorationMarginProperty =
-            AvaloniaProperty.RegisterDirect<MpAvWindow, Thickness>(nameof(WindowDecorationMargin),
-                o => o.WindowDecorationMargin);
-
-        #endregion
-
         public Size? FrameSize {
             get {
                 return Bounds.Size;
@@ -299,10 +286,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvChildWindow() : this(null) {
-            WindowDecorationMargin = new Thickness(1, 1, 1, 1);
-        }
-        public MpAvChildWindow(IWindowImpl owner) : base() { }
+        public MpAvChildWindow() { }
         #endregion
 
         #region Public Methods
@@ -393,4 +377,6 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         #endregion
     }
+
+
 }

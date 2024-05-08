@@ -5,7 +5,7 @@
     <Styles.Resources>
         <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength_desktop">5</sys:Double>
         <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength_browser">5</sys:Double>
-        <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength_mobile">15</sys:Double>
+        <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength_mobile">10</sys:Double>
         <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength">5</sys:Double>
     </Styles.Resources>
 
