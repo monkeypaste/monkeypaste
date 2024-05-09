@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvPopUpNotificationViewModel : MpAvNotificationViewModelBase {
+    public class MpAvUserActionNotificationViewModel : MpAvNotificationViewModelBase {
         #region Private Variables
         bool _wasIgnoreHiddenToFix = false;
         #endregion
@@ -90,6 +90,8 @@ namespace MonkeyPaste.Avalonia {
         public bool ShowShutdownButton { get; set; }
         public bool ShowRestartNowButton { get; set; }
         public bool ShowLaterButton { get; set; }
+        public bool ShowDoneButton { get; set; }
+        public bool ShowBackButton { get; set; }
 
         public bool ShowYesButton { get; set; }
         public bool ShowNoButton { get; set; }
@@ -176,7 +178,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvPopUpNotificationViewModel() : base() {
+        public MpAvUserActionNotificationViewModel() : base() {
             PropertyChanged += MpUserActionNotificationViewModel_PropertyChanged;
         }
 
@@ -213,6 +215,10 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationButtonsType.RestartNowLater:
                     ShowRestartNowButton = true;
                     ShowLaterButton = true;
+                    break;
+                case MpNotificationButtonsType.BackDone:
+                    ShowDoneButton = true;
+                    ShowBackButton = true;
                     break;
                 case MpNotificationButtonsType.RestartIgnoreCancel:
                     ShowRestartButton = true;
@@ -574,6 +580,16 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 MpAvSubscriptionPurchaseViewModel.Instance.NavigateToBuyUpgradeCommand.Execute(null);
                 DialogResult = MpNotificationDialogResultType.Dismiss;
+            });
+
+        public ICommand BackCommand => new MpCommand(
+            () => {
+                DialogResult = MpNotificationDialogResultType.Back;
+            });
+        
+        public ICommand DoneCommand => new MpCommand(
+            () => {
+                DialogResult = MpNotificationDialogResultType.Done;
             });
 
         public ICommand LearnMoreCommand => new MpCommand(

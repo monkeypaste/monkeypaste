@@ -12,6 +12,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSettingsFrameViewModel :
         MpAvViewModelBase,
+        MpAvIMenuItemViewModel,
         MpILabelTextViewModel,
         MpIIconResourceViewModel,
         MpISelectableViewModel,
@@ -27,6 +28,43 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpAvIMenuItemViewModel Implementation
+
+        ICommand MpAvIMenuItemViewModel.Command => new MpAsyncCommand<object>(
+            async (args) => {
+                var menu_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                    notificationType: MpNotificationType.ModalSettingsFrameMenu,
+                    title: LabelText,
+                    body: this,
+                    iconSourceObj: IconResourceObj);
+
+                if (menu_result == MpNotificationDialogResultType.Done) {
+                    MpAvMenuView.CloseMenu();
+                    return;
+                }
+                MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand.Execute(null);
+            });
+        object MpAvIMenuItemViewModel.CommandParameter =>
+            null;
+        string MpAvIMenuItemViewModel.Header =>
+            LabelText;
+        object MpAvIMenuItemViewModel.IconSourceObj =>
+            IconResourceObj;
+        string MpAvIMenuItemViewModel.InputGestureText =>
+            null;
+        bool MpAvIMenuItemViewModel.StaysOpenOnClick { get; }
+        bool MpAvIMenuItemViewModel.HasLeadingSeparator { get; }
+        bool MpAvIMenuItemViewModel.IsVisible =>
+            true;
+        bool? MpAvIMenuItemViewModel.IsChecked { get; }
+        bool MpAvIMenuItemViewModel.IsThreeState { get; }
+        bool MpAvIMenuItemViewModel.IsSubMenuOpen { get; set; }
+        string MpAvIMenuItemViewModel.IconBorderHexColor { get; }
+        MpMenuItemType MpAvIMenuItemViewModel.MenuItemType { get; } = MpMenuItemType.Default;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems { get; }
+        bool MpIHoverableViewModel.IsHovering { get; set; }
+        #endregion
 
         #region MpIIconResourceViewModel Implementation
         public object IconResourceObj {
@@ -239,6 +277,7 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = false;
         }
+
         #endregion
 
 

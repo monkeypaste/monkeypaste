@@ -13,6 +13,7 @@ using Xamarin.Essentials;
 namespace MonkeyPaste.Avalonia.Android {
     [Service]
     public class ForegroundService : Service {
+        // from https://stackoverflow.com/a/29483217/105028
         #region Private Variables
         private MyBroadcastReceiver _broadcastReceiver;
         private string foregroundChannelId = "9001";

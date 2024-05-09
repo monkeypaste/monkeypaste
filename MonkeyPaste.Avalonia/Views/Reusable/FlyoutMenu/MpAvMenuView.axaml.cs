@@ -13,6 +13,12 @@ using System;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvMenuView : ContextMenu {
+        const bool DEFAULT_SHOW_BY_POINTER =
+#if DESKTOP
+            true;
+#else
+            true;//false,
+#endif
         static bool _IsDevToolsOpen = false;
         static ContextMenu _cm;
 
@@ -32,15 +38,11 @@ namespace MonkeyPaste.Avalonia {
             }
             _cm = null;
         }
+
         public static MpAvMenuView ShowMenu(
             Control target,
             MpAvIMenuItemViewModel dc,
-            bool showByPointer =
-#if DESKTOP
-            true,
-#else
-            true,//false,
-#endif
+            bool showByPointer = DEFAULT_SHOW_BY_POINTER,
             PlacementMode placementMode = PlacementMode.Pointer,
             PopupAnchor popupAnchor = PopupAnchor.TopLeft,
             MpPoint offset = null) {
@@ -51,7 +53,6 @@ namespace MonkeyPaste.Avalonia {
             if (showByPointer) {
                 placementMode = PlacementMode.TopEdgeAlignedLeft;
                 popupAnchor = PopupAnchor.TopLeft;
-
                 offset = MpPoint.Zero;
 
                 if (!MpAvShortcutCollectionViewModel.Instance.IsGlobalHooksPaused &&
@@ -68,10 +69,31 @@ namespace MonkeyPaste.Avalonia {
                 HorizontalOffset = offset == null ? 0 : offset.X,
                 VerticalOffset = offset == null ? 0 : offset.Y,
             };
-            _cm = target.ContextMenu;
-            target.ContextMenu.Open();
+
+            void OnContextMenuOpened(object sender, EventArgs e) {
+                if(sender is not ContextMenu cm) {
+                    return;
+                }
+                _cm = cm;
+            }
+            void OnContextMenuClosed(object sender, EventArgs e) {
+                if(sender is not ContextMenu cm) {
+                    return;
+                }
+                cm.Opened -= OnContextMenuOpened;
+                cm.Closed -= OnContextMenuClosed;
+                if(cm == _cm) {
+                    _cm = null;
+                }                
+            }
+            target.ContextMenu.Opened += OnContextMenuOpened;
+            target.ContextMenu.Closed += OnContextMenuClosed;
+
+            target.ContextMenu.Open(target);
+
             return target.ContextMenu as MpAvMenuView;
         }
+
         public MpAvMenuView() : base() {
             InitializeComponent();
 

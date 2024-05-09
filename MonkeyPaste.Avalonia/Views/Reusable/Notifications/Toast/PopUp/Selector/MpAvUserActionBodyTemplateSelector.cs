@@ -5,7 +5,7 @@ using MonkeyPaste.Common;
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvPopupBodyTemplateSelector : IDataTemplate {
+    public class MpAvUserActionBodyTemplateSelector : IDataTemplate {
         // This Dictionary should store our shapes. We mark this as [Content], so we can directly add elements to it later.
         [Content]
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
 
         Control ITemplate<object, Control>.Build(object param) {
             string key = "TextBodyTemplate";
-            if (param is MpAvPopUpNotificationViewModel uanvm) {
+            if (param is MpAvUserActionNotificationViewModel uanvm) {
                 if (uanvm.HasParams) {
                     key = "ParameterCollectionTemplate";
                 } else if (uanvm.ShowTextBox) {

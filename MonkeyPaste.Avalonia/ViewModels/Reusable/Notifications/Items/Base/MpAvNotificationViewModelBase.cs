@@ -41,6 +41,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalProgressCancelMessageBox:
                 case MpNotificationType.ModalBusyMessageBox:
+                case MpNotificationType.ModalSettingsFrameMenu:
                 case MpNotificationType.ExecuteParametersRequest:
                 case MpNotificationType.ContentCapReached:
                 case MpNotificationType.RateApp:
@@ -111,6 +112,8 @@ namespace MonkeyPaste.Avalonia {
                     return MpNotificationButtonsType.SubmitCancel;
                 case MpNotificationType.ModalOkMessageBox:
                     return MpNotificationButtonsType.Ok;
+                case MpNotificationType.ModalSettingsFrameMenu:
+                    return MpNotificationButtonsType.BackDone;
                 case MpNotificationType.ContentCapReached:
                 case MpNotificationType.TrashCapReached:
                 case MpNotificationType.ContentAddBlockedByAccount:
@@ -152,6 +155,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalProgressCancelMessageBox:
                 case MpNotificationType.ModalBusyMessageBox:
+                case MpNotificationType.ModalSettingsFrameMenu:
                 case MpNotificationType.Welcome:
                     return MpNotificationPlacementType.ModalAnchor;
                 default:

@@ -9,7 +9,7 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Name="UserActionNotificationWindow"
-                       x:DataType="local:MpAvPopUpNotificationViewModel"
+                       x:DataType="local:MpAvUserActionNotificationViewModel"
                        x:CompileBindings="True"
                        x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationView">
     <local:MpAvUserControl.Styles>
@@ -210,10 +210,10 @@
                                     VerticalAlignment="Stretch"
                                     Content="{Binding}">
                         <ContentControl.DataTemplates>
-                            <local:MpAvPopupBodyTemplateSelector>
+                            <local:MpAvUserActionBodyTemplateSelector>
                                 <!--  TEXT MESSAGE  -->
                                 <DataTemplate x:Key="TextBodyTemplate"
-                                              x:DataType="local:MpAvPopUpNotificationViewModel">
+                                              x:DataType="local:MpAvUserActionNotificationViewModel">
                                     <SelectableTextBlock x:Name="MessageBody"
                                                          FontSize="14"
                                                          HorizontalAlignment="Left"
@@ -227,7 +227,7 @@
 
                                 <!--  HTML MESSAGE  -->
                                 <DataTemplate x:Key="HtmlBodyTemplate"
-                                              x:DataType="local:MpAvPopUpNotificationViewModel">
+                                              x:DataType="local:MpAvUserActionNotificationViewModel">
                                     <av:HtmlLabel x:Name="ToolTipHtmlPanel"
                                                   HorizontalAlignment="Left"
                                                   VerticalAlignment="Top"
@@ -239,7 +239,7 @@
                                 </DataTemplate>
                                 <!--  PARAMS  -->
                                 <DataTemplate x:Key="ParameterCollectionTemplate"
-                                              x:DataType="local:MpAvPopUpNotificationViewModel">
+                                              x:DataType="local:MpAvUserActionNotificationViewModel">
                                     <Border DataContext="{Binding Body}"
                                             MinWidth="250">
                                         <ListBox x:Name="ExecuteParameterListBox"
@@ -275,7 +275,7 @@
 
                                 <!--  TEXTBOX  -->
                                 <DataTemplate x:Key="TextBoxTemplate"
-                                              x:DataType="local:MpAvPopUpNotificationViewModel">
+                                              x:DataType="local:MpAvUserActionNotificationViewModel">
 
                                     <!--  TEXTBOX (Optional)  -->
 
@@ -316,7 +316,7 @@
 
                                 <!--  BUSY  -->
                                 <DataTemplate x:Key="BusyTemplate"
-                                              x:DataType="local:MpAvPopUpNotificationViewModel">
+                                              x:DataType="local:MpAvUserActionNotificationViewModel">
                                     <Border HorizontalAlignment="Stretch"
                                             VerticalAlignment="Center">
                                         <Border.IsVisible>
@@ -349,7 +349,7 @@
 
                                 </DataTemplate>
 
-                            </local:MpAvPopupBodyTemplateSelector>
+                            </local:MpAvUserActionBodyTemplateSelector>
                         </ContentControl.DataTemplates>
                     </ContentControl>
 
@@ -490,6 +490,13 @@
                 <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.UserActionShutdownButtonText}"
                         IsVisible="{Binding ShowShutdownButton}"
                         Command="{Binding ShutdownCommand}" />
+                <!--  BACK, DONE  -->
+                <Button Content="Back"
+                        IsVisible="{Binding ShowBackButton}"
+                        Command="{Binding BackCommand}" />
+                <Button Content="Done"
+                        IsVisible="{Binding ShowDoneButton}"
+                        Command="{Binding DoneCommand}" />
                 <!--  Yes, No, Cancel or Ok, Cancel States  -->
                 <Button Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonYesButtonText}"
                         IsDefault="{Binding ShowYesButton}"

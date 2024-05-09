@@ -18,6 +18,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSettingsViewModel :
         MpAvViewModelBase,
+        MpAvIMenuItemViewModel,
         MpICloseWindowViewModel,
         MpIActiveWindowViewModel,
         MpIWantsTopmostWindowViewModel {
@@ -70,7 +71,33 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpIWindowViewModel Implementatiosn
+        #region MpAvIMenuItemViewModel Implementation
+        ICommand MpAvIMenuItemViewModel.Command =>
+            null;
+        object MpAvIMenuItemViewModel.CommandParameter =>
+            null;
+        string MpAvIMenuItemViewModel.Header =>
+            UiStrings.AccountLoginWindowTitle;
+        object MpAvIMenuItemViewModel.IconSourceObj =>
+            "CogColorImage";
+        string MpAvIMenuItemViewModel.InputGestureText =>
+            null;
+        bool MpAvIMenuItemViewModel.StaysOpenOnClick { get; }
+        bool MpAvIMenuItemViewModel.HasLeadingSeparator { get; }
+        bool MpAvIMenuItemViewModel.IsVisible =>
+            true;
+        bool? MpAvIMenuItemViewModel.IsChecked { get; }
+        bool MpAvIMenuItemViewModel.IsThreeState { get; }
+        bool MpAvIMenuItemViewModel.IsSubMenuOpen { get; set; }
+        string MpAvIMenuItemViewModel.IconBorderHexColor { get; }
+        MpMenuItemType MpAvIMenuItemViewModel.MenuItemType { get; } = MpMenuItemType.Default;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems =>
+            Items;
+        bool MpIHoverableViewModel.IsHovering { get; set; }
+
+        #endregion
+
+        #region MpIWindowViewModel Implementation
         public MpWindowType WindowType =>
             MpWindowType.Settings;
 
@@ -1764,7 +1791,7 @@ namespace MonkeyPaste.Avalonia {
                     IsWindowOpen = false;
                     return;
                 }
-                ShowSettingsWindowCommand.Execute(null);
+                ShowSettingsWindowCommand.Execute(args);
             });
         public MpIAsyncCommand<object> ShowSettingsWindowCommand => new MpAsyncCommand<object>(
             async (args) => {
@@ -1773,9 +1800,12 @@ namespace MonkeyPaste.Avalonia {
                 if (IsWindowOpen) {
                     IsWindowActive = true;
                 } else {
+#if DESKTOP
                     var sw = CreateSettingsWindow();
-
-                    sw.Show();
+                    sw.Show(); 
+#else
+                    MpAvMenuView.ShowMenu(args as Control, this);
+#endif
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }
 //#else
@@ -2011,6 +2041,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvAppRestarter.ShutdownWithRestartTaskAsync("Restoring Default Preferences").FireAndForgetSafeAsync();
 
             });
+
         #endregion
     }
 }
