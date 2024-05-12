@@ -31,7 +31,7 @@
     <StableAvaloniaVersion>11.0.10</StableAvaloniaVersion> 
     <AvaloniaVersion>11.0.10</AvaloniaVersion>
     <SugarWvVersion>11.0.0.6</SugarWvVersion>    
-    <!--<SugarWvVersion>11.0.0.0</SugarWvVersion>-->
+    <PublicSugarWvVersion>11.0.0.1</PublicSugarWvVersion>
     <CefNetWvVersion>105.3.24107.1511</CefNetWvVersion>
     <AvHtmlRendererVersion>11.0.19</AvHtmlRendererVersion>
   </PropertyGroup>
@@ -40,7 +40,7 @@
   
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>ANDROID</BuildOs>
+    <BuildOs>IOS</BuildOs>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -181,11 +181,16 @@
   <!-- IOS -->
   
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">
-    <MainTargetFramework>$(DefaultTargetFramework)-ios</MainTargetFramework>
+    <MainTargetFramework>$(DefaultTargetFramework)-ios</MainTargetFramework> 
     <DefineConstants>$(DefineConstants);MOBILE;IOS;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
     <IsMobile>true</IsMobile>
+    <UseSugarWv>true</UseSugarWv>
+    <IsWindowed>true</IsWindowed>
     <PlatformShortName>ios</PlatformShortName>
+    <IncludeCultures>False</IncludeCultures>
+    <BuildScriptsDir>$(BuildScriptsRootDir)\ios</BuildScriptsDir>
+    <SugarWvVersion>$(PublicSugarWvVersion)</SugarWvVersion>
   </PropertyGroup>
   <!---  END OF TARGETS-->
 

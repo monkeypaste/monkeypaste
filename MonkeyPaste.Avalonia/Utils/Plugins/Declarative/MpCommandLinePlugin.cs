@@ -60,7 +60,9 @@ namespace MonkeyPaste.Avalonia {
             process.ErrorDataReceived += error_handler;
 
             try {
+#pragma warning disable CA1416 // Validate platform compatibility
                 process.Start();
+#pragma warning restore CA1416 // Validate platform compatibility
                 process.BeginErrorReadLine();
                 string output = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();

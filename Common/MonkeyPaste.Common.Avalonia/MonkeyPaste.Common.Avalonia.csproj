@@ -77,6 +77,14 @@
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
   </ItemGroup>
   
+  <ItemGroup Condition="'$(BuildOs)' == 'IOS'">
+    <ProjectReference Remove="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
+    <Compile Remove="Utils\Input\Platform\X11\*.*" />
+    <Compile Remove="Utils\Input\Platform\Win32\*.*" />
+    <Compile Include="Utils\Input\Platform\MacOs\*.*" />
+    <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
+  </ItemGroup>
+  
   <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
     <Reference Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationFramework.dll" />
     <ProjectReference Include="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
@@ -110,7 +118,7 @@
   <ItemGroup Condition="'$(BuildOs)' != 'LINUX'">
     <AdditionalFiles Remove="Utils\Input\Platform\X11\**" />
   </ItemGroup>
-  <ItemGroup Condition="'$(BuildOs)' != 'MAC'">
+  <ItemGroup Condition="'$(BuildOs)' != 'MAC' And '$(BuildOs)' != 'IOS'">
     <AdditionalFiles Remove="Utils\Input\Platform\MacOs\**" />
   </ItemGroup>
   <ItemGroup>

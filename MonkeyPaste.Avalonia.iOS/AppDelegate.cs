@@ -1,10 +1,12 @@
-using Foundation;
-using UIKit;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.iOS;
 using Avalonia.Media;
 using Avalonia.ReactiveUI;
+using Avalonia.WebView.iOS;
+using Foundation;
+using MonkeyPaste.Avalonia;
+using UIKit;
 
 namespace MonkeyPaste.Avalonia.iOS;
 
@@ -16,6 +18,14 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
 {
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
-        return builder.UseReactiveUI();
+        return
+            builder
+            .UseReactiveUI()
+            .UseIosWebView()
+            .AfterSetup(_ => {
+                MpAvDeviceWrapper.Instance.CreateDeviceInstance(null);
+            });
+            ;
+        ;
     }
 }

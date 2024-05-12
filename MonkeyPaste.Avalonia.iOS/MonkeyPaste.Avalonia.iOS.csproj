@@ -1,19 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>$(MainTargetFramework)</TargetFramework>
-    <SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
-    <ProvisioningType>manual</ProvisioningType>
-    <Nullable>enable</Nullable>
-    <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
-    
-    <!-- These properties need to be set in order to run on a real iDevice -->
+    <TargetFramework>net8.0-ios</TargetFramework>
+    <SupportedOSPlatformVersion>11.0</SupportedOSPlatformVersion>
+    <!--<ProvisioningType>manual</ProvisioningType>-->
+    <Nullable>disable</Nullable>
+    <!--<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>-->  
     <!--<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>-->
     <!--<CodesignKey></CodesignKey>-->
+    <CodesignKey>Apple Development: tkefauver@gmail.com (DMRFFP0DQ1GC)</CodesignKey>
   </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Remove="Util\System\AvIosWrapper\Defintions\MpAvAdToastNotification.cs" />
+    <Compile Remove="Util\System\AvIosWrapper\MpAvIosAssetMover.cs" />
+  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.iOS" Version="11.0.0-preview7" />
+    <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="WebView.Avalonia.iOS" Version="$(SugarWvVersion)" />
   </ItemGroup>
 
   <ItemGroup>

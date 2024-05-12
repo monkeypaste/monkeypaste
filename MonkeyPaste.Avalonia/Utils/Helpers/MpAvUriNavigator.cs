@@ -60,7 +60,9 @@ namespace MonkeyPaste.Avalonia {
             using (var myProcess = new Process()) {
                 myProcess.StartInfo.UseShellExecute = true;
                 myProcess.StartInfo.FileName = uri.AbsoluteUri;
+#pragma warning disable CA1416 // Validate platform compatibility
                 myProcess.Start();
+#pragma warning restore CA1416 // Validate platform compatibility
             }
         }
 
@@ -97,7 +99,9 @@ namespace MonkeyPaste.Avalonia {
                 using (var myProcess = new Process()) {
                     myProcess.StartInfo.UseShellExecute = true;
                     myProcess.StartInfo.FileName = path;
+#pragma warning disable CA1416 // Validate platform compatibility
                     myProcess.Start();
+#pragma warning restore CA1416 // Validate platform compatibility
                 }
             }
         }

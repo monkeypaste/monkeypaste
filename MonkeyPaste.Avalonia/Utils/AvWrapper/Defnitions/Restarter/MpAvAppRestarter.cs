@@ -19,7 +19,9 @@ namespace MonkeyPaste.Avalonia {
 #else
                 Mp.Services.PlatformInfo.ExecutingPath;
 #endif
+#pragma warning disable CA1416 // Validate platform compatibility
             Process process = Process.Start(launcher_path, App.RESTART_ARG);
+#pragma warning restore CA1416 // Validate platform compatibility
             Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.Restart, detail);
             await Task.Delay(1);
         }

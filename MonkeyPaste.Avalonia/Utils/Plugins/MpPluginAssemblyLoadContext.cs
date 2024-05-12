@@ -11,7 +11,8 @@ namespace MonkeyPaste.Avalonia {
         public MpPluginAssemblyLoadContext() : base(nameof(MpPluginAssemblyLoadContext), isCollectible: true) {
         }
         public MpPluginAssemblyLoadContext(string mainAssemblyToLoadPath) : base(isCollectible: true) {
-            if (OperatingSystem.IsAndroid()) {
+            if (OperatingSystem.IsAndroid() ||
+                OperatingSystem.IsIOS()) {
                 return;
             }
             _resolver = new AssemblyDependencyResolver(mainAssemblyToLoadPath);
@@ -20,6 +21,7 @@ namespace MonkeyPaste.Avalonia {
         protected override Assembly? Load(AssemblyName assemblyName) {
             if (_resolver == null ||
                 OperatingSystem.IsAndroid() ||
+                OperatingSystem.IsIOS() ||
                 Default.Assemblies.Any(a => a.FullName == assemblyName.FullName)) {
                 // This will fallback to loading the assembly from default context.
                 return null;
