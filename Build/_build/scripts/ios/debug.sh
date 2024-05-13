@@ -1,6 +1,9 @@
 #!/bin/bash
 CONFIG=Release
-FRAMEWORK="net8.0"
+FRAMEWORK="net8.0-ios"
+RUNTIME="ios-arm64"
+PLATFORM="Any CPU"
+DEVICE_ID="00008020-001945DA3669402E"
 
 clear
 
@@ -24,10 +27,9 @@ cd "../../../../MonkeyPaste.Avalonia.iOS/"
 
 # udids found by /Applications/Xcode.app/Contents/Developer/usr/bin/simctl list
 # SIM_UDID=3606F702-B6EB-48FC-9A7D-D03A7FF6E6DC
-SIM_UDID=A0FF0E0B-3B4A-4A16-8E1B-D472F2299BD7
 
 
 # for physical device:
 # -p:_DeviceName=<UDID>
 #dotnet build -t:Run -p:_DeviceName=:v2:udid=${SIM_UDID} -p:RuntimeIdentifier=iossimulator-x64 -f ${FRAMEWORK}-ios MonkeyPaste.Avalonia.iOS.csproj
-dotnet build -t:Run -p:_DeviceName=:v2:udid=${SIM_UDID} -p:RuntimeIdentifier=ios-arm64 -f ${FRAMEWORK}-ios MonkeyPaste.Avalonia.iOS.csproj
+dotnet build -t:Run -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} -p:_DeviceName=${DEVICE_ID}

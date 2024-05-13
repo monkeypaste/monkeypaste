@@ -1066,9 +1066,6 @@ namespace MonkeyPaste.Avalonia {
 
         public double MaxContainerScreenWidth {
             get {
-#if false
-                return double.PositiveInfinity;
-#else
                 if (ListOrientation == Orientation.Horizontal) {
                     return
                         MpAvMainWindowViewModel.Instance.MainWindowWidth -
@@ -1077,15 +1074,11 @@ namespace MonkeyPaste.Avalonia {
                 return
                     MpAvMainWindowViewModel.Instance.MainWindowWidth -
                     MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength;
-#endif
             }
         }
 
         public double MaxContainerScreenHeight {
             get {
-#if false
-                return double.PositiveInfinity;
-#else
                 if (ListOrientation == Orientation.Horizontal) {
                     return
                         MpAvMainWindowViewModel.Instance.MainWindowHeight -
@@ -1097,7 +1090,6 @@ namespace MonkeyPaste.Avalonia {
                         //MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarHeight -
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength -
                         MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize;
-#endif
             }
         }
 

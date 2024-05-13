@@ -1,14 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0-ios</TargetFramework>
-    <SupportedOSPlatformVersion>11.0</SupportedOSPlatformVersion>
+    <TargetFramework>$(MainTargetFramework)</TargetFramework>
+    <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
     <!--<ProvisioningType>manual</ProvisioningType>-->
     <Nullable>disable</Nullable>
     <!--<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>-->  
-    <!--<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>-->
-    <!--<CodesignKey></CodesignKey>-->
-    <CodesignKey>Apple Development: tkefauver@gmail.com (DMRFFP0DQ1GC)</CodesignKey>
+    <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+    <CodesignKey>Apple Development: thomas kefauver (MY7R67BXWM)</CodesignKey>
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

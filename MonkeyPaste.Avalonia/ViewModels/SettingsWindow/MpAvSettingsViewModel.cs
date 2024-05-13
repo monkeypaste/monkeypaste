@@ -264,6 +264,7 @@ namespace MonkeyPaste.Avalonia {
                     MpSettingsTabType.Account,
                     new [] {
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Status) {
+                            IsVisible = false,
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
@@ -330,6 +331,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Register) {
+                            IsVisible = false,
                             FrameHint = UiStrings.PrefRegistrationFrameHint,
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
@@ -386,6 +388,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Login) {
+                            IsVisible = false,
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
@@ -558,6 +561,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Window) {
+                            IsVisible = MpAvThemeViewModel.Instance.IsDesktop,
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
@@ -847,6 +851,7 @@ namespace MonkeyPaste.Avalonia {
                                                 }).ToList()
                                         },
                                         new MpParameterFormat() {
+                                            isVisible = MpAvThemeViewModel.Instance.IsDesktop,
                                             paramId = nameof(MpAvPrefViewModel.Instance.IsClipboardListeningOnStartup),
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
@@ -1053,6 +1058,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.TopScreenEdgeGestures) {
+                            IsVisible = MpAvThemeViewModel.Instance.IsDesktop,
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
@@ -1096,6 +1102,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Shortcuts) {
+                            IsVisible = MpAvThemeViewModel.Instance.IsDesktop,
                             PluginFormat = new MpRuntimePlugin() {
                                 headless = new MpHeadlessComponent() {
                                     parameters = new List<MpParameterFormat>() {
@@ -1174,6 +1181,7 @@ namespace MonkeyPaste.Avalonia {
                                             }
                                         },
                                         new MpParameterFormat() {
+                                            isVisible = MpAvThemeViewModel.Instance.IsDesktop,
                                             paramId = MpRuntimePrefParamType.ResetShortcuts.ToString(),
                                             controlType = MpParameterControlType.Button,
                                             label = UiStrings.PrefResetShortcutsLabel,

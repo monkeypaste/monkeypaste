@@ -33,8 +33,10 @@
               Height="100">
             <local:MpAvProgressSpinner HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
+                                       Width="100"
+                                       Height="100"
                                        ArcWidth="2.5"
-                                       RingBrush="Transparent"
+                                       RingBrush="Gold"
                                        PercentBrush="Cyan"
                                        LabelBrush="Transparent"
                                        Percent="{Binding PercentLoaded}" />

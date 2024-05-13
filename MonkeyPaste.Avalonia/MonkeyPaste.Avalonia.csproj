@@ -2528,8 +2528,7 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-<!--    <Content Update="Resources\Editor\test.html">-->
+  <ItemGroup><!--    <Content Update="Resources\Editor\test.html">-->
 <!--      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>-->
 <!--    </Content>-->
 <!--    <Content Update="Resources\Editor\lib\jquery-context-menus\src\context-menu.css">-->
@@ -2541,6 +2540,8 @@
 <!--    <Content Update="Resources\Editor\src\components\localizer\UiStrings.js">-->
 <!--      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>-->
 <!--    </Content>-->
+  
+    <BundleResource Remove="Resources\Editor\test.html" />
   </ItemGroup>
   
   
