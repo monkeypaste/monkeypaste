@@ -41,8 +41,10 @@ rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste\bin\"
 
 rmdir /S /Q "C:\Users\tkefauver\AppData\Local\MonkeyPaste" 
 rmdir /S /Q "C:\Users\tkefauver\AppData\Local\MonkeyPaste_DEBUG" 
+
 rmdir /S /Q "C:\Users\tkefauver\AppData\Roaming\MonkeyPaste" 
 rmdir /S /Q "C:\Users\tkefauver\AppData\Roaming\MonkeyPaste_DEBUG" 
+
 @echo OFF
 echo 0. Shutdown Visual Studio if open
 echo 1. Clean out solution file (remove everything inside 'GlobalSection(ProjectConfigurationPlatforms) = postSolution') before reopening.

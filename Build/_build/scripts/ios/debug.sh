@@ -32,4 +32,4 @@ cd "../../../../MonkeyPaste.Avalonia.iOS/"
 # for physical device:
 # -p:_DeviceName=<UDID>
 #dotnet build -t:Run -p:_DeviceName=:v2:udid=${SIM_UDID} -p:RuntimeIdentifier=iossimulator-x64 -f ${FRAMEWORK}-ios MonkeyPaste.Avalonia.iOS.csproj
-dotnet build -t:Run -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} -p:_DeviceName=${DEVICE_ID}
+dotnet build -v -t:Run -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} -p:_DeviceName=${DEVICE_ID}

@@ -168,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
                     osrs.Buffer != null &&
                     osrs.Buffer.Length > 0) {
                 if (_scale == 0) {
-                    _scale = MpDeviceWrapper.Instance.ScreenInfoCollection.Screens.FirstOrDefault().Scaling;
+                    _scale = MpAvDeviceWrapper.Instance.ScreenInfoCollection.Screens.FirstOrDefault().Scaling;
                 }
                 var bmp = osrs.Buffer.ToAvBitmap();
                 //var test1 = bmp.PixelSize;

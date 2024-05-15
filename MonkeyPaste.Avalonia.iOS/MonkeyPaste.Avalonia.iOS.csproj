@@ -3,15 +3,29 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
     <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
-    <!--<ProvisioningType>manual</ProvisioningType>-->
     <Nullable>disable</Nullable>
     <!--<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>-->  
     <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+    <_DeviceName>00008020-001945DA3669402E</_DeviceName>
+    <RemoteVs>false</RemoteVs>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RemoteVs)' == 'False'">
+    <ProvisioningType>manual</ProvisioningType>
     <CodesignKey>Apple Development: thomas kefauver (MY7R67BXWM)</CodesignKey>
   </PropertyGroup>
   
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+  <PropertyGroup Condition="'$(RemoteVs)' == 'True'">
+    <ProvisioningType>automatic</ProvisioningType>
+    <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
+    <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+  </PropertyGroup>
+  
   
   <ItemGroup>
     <Compile Remove="Util\System\AvIosWrapper\Defintions\MpAvAdToastNotification.cs" />
@@ -20,7 +34,7 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="WebView.Avalonia.iOS" Version="$(SugarWvVersion)" />
+    <PackageReference Include="WebView.Avalonia.iOS" Version="$(SugarWvVersion)" Condition="'$(UseSugarWv)' == 'True'" />
   </ItemGroup>
 
   <ItemGroup>

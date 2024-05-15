@@ -9,9 +9,8 @@
      <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
      <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
-
+     <Platforms>x64;AnyCPU</Platforms>
      <!--<WarningsAsErrors>CS4014;</WarningsAsErrors>-->
-     <Platforms>$(DefaultPlatforms)</Platforms>
      <!--<RuntimeIdentifiers>$(TargetRuntimeIdentifiers)</RuntimeIdentifiers>-->
      <!--<AvaloniaNameGeneratorIsEnabled>true</AvaloniaNameGeneratorIsEnabled>-->
     <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
@@ -29,13 +28,10 @@
   
   <ItemGroup>
     <AndroidJavaSource Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
-    <AndroidJavaSource Remove="Controls\Content\NativeWebViewHost\**" />
     <AndroidJavaSource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidLibrary Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
-    <AndroidLibrary Remove="Controls\Content\NativeWebViewHost\**" />
     <AndroidLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidNativeLibrary Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
-    <AndroidNativeLibrary Remove="Controls\Content\NativeWebViewHost\**" />
     <AndroidNativeLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AvaloniaXaml Remove="Assets\Images\MpRichTextBox\**" />
     <AvaloniaXaml Remove="Assets\Images\resize_backup2\**" />
@@ -49,7 +45,6 @@
     <AvaloniaXaml Remove="cef_old\**" />
     <AvaloniaXaml Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <AvaloniaXaml Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
-    <AvaloniaXaml Remove="Controls\Content\NativeWebViewHost\**" />
     <AvaloniaXaml Remove="Controls\Content\TextElement\**" />
     <AvaloniaXaml Remove="Interfaces\Content\**" />
     <AvaloniaXaml Remove="Resources\Editor\src\components\svg\assets\**" />
@@ -92,7 +87,6 @@
     <Compile Remove="cef_old\**" />
     <Compile Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <Compile Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
-    <Compile Remove="Controls\Content\NativeWebViewHost\**" />
     <Compile Remove="Controls\Content\TextElement\**" />
     <Compile Remove="Interfaces\Content\**" />
     <Compile Remove="Resources\Editor\src\components\svg\assets\**" />
@@ -135,7 +129,6 @@
     <EmbeddedResource Remove="cef_old\**" />
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
-    <EmbeddedResource Remove="Controls\Content\NativeWebViewHost\**" />
     <EmbeddedResource Remove="Controls\Content\TextElement\**" />
     <EmbeddedResource Remove="Interfaces\Content\**" />
     <EmbeddedResource Remove="Resources\Editor\src\components\svg\assets\**" />
@@ -166,7 +159,6 @@
     <EmbeddedResource Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <EmbeddedResource Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <JavaSourceJar Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
-    <JavaSourceJar Remove="Controls\Content\NativeWebViewHost\**" />
     <JavaSourceJar Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <None Remove="Assets\Images\MpRichTextBox\**" />
     <None Remove="Assets\Images\resize_backup2\**" />
@@ -181,7 +173,6 @@
     <None Remove="cef_old\**" />
     <None Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <None Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
-    <None Remove="Controls\Content\NativeWebViewHost\**" />
     <None Remove="Controls\Content\TextElement\**" />
     <None Remove="Interfaces\Content\**" />
     <None Remove="Resources\Editor\src\components\svg\assets\**" />
@@ -247,10 +238,8 @@
     <Page Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <Page Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <ProguardConfiguration Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
-    <ProguardConfiguration Remove="Controls\Content\NativeWebViewHost\**" />
     <ProguardConfiguration Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <TransformFile Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
-    <TransformFile Remove="Controls\Content\NativeWebViewHost\**" />
     <TransformFile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidAsset Remove="Assets\Images\burger.png" />
     <AndroidAsset Remove="Assets\Images\burlap.png" />
