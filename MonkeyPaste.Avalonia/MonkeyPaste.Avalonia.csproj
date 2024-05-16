@@ -1,20 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
    <PropertyGroup>
     <OutputType>Library</OutputType>
-    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <Nullable>disable</Nullable>
-    <TrimMode>copyused</TrimMode> 
-    <WarningLevel>4</WarningLevel>
      <LangVersion>$(DefaultLangVersion)</LangVersion>
-     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFramework>$(MainTargetFramework)</TargetFramework>
-     <Platforms>x64;AnyCPU</Platforms>
+    <TargetFramework>$(CommonTargetFramework)</TargetFramework>
+     <Platforms>$(DefaultPlatforms)</Platforms>
+     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+
+     <!-- Makes the TypeScript compilation task a no-op -->
+     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+     <!--<DebugType>portable</DebugType>-->
+     
+     <!--<Platforms>x64;AnyCPU</Platforms>-->
+    <!--<WarningLevel>4</WarningLevel>-->
+    <!--<TrimMode>copyused</TrimMode>--> 
+     <!--<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>-->
+     <!--<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>-->
+    <!--<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>-->
+     
+     
      <!--<WarningsAsErrors>CS4014;</WarningsAsErrors>-->
      <!--<RuntimeIdentifiers>$(TargetRuntimeIdentifiers)</RuntimeIdentifiers>-->
      <!--<AvaloniaNameGeneratorIsEnabled>true</AvaloniaNameGeneratorIsEnabled>-->
     <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
-     <!--<UseMauiEssentials>true</UseMauiEssentials>-->
   </PropertyGroup>
 
   <PropertyGroup>
@@ -679,6 +688,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AvaloniaResource>
   </ItemGroup>
+  
   <ItemGroup>
     <AvaloniaResource Include="Assets\Fonts\Habanero\Habanero.otf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -686,58 +696,10 @@
     <AvaloniaResource Include="Assets\Fonts\Habanero\Habanero.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\Nunito-Italic-VariableFont_wght.ttf">
+    <AvaloniaResource Include="Assets\Fonts\Nunito\*.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\Nunito-VariableFont_wght.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-Black.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-BlackItalic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-Bold.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-BoldItalic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-ExtraBold.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-ExtraBoldItalic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-ExtraLight.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-ExtraLightItalic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-Italic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-Light.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-LightItalic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-Medium.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-MediumItalic.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-SemiBold.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-SemiBoldItalic.ttf">
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\*.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\add_green.png">
@@ -759,6 +721,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\bell.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\bitmap.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\books.png">
@@ -795,6 +760,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\command.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\csv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\curlys.png">
@@ -1562,6 +1530,9 @@
     <AvaloniaResource Include="Assets\Images\hourglass.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\html.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\ibeam.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -1641,6 +1612,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\robotarmcolor.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\rtf.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\select.png">
@@ -2460,8 +2434,7 @@
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\X11Tools.cs" Condition="'$(BuildOs)' == 'LINUX'" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\XdoLib.cs" Condition="'$(BuildOs)' == 'LINUX'" />
     <Compile Include="Utils\WindowManager\Helpers\MpAvWindowPositioner.cs" />
-  </ItemGroup>
-  
+  </ItemGroup>  
   
   
   <ItemGroup>
@@ -2486,22 +2459,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Localization\Enums\EnumUiStrings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>EnumUiStrings.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-
-    <EmbeddedResource Update="Resources\Localization\UiStrings\UiStrings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Assets\lib\" />
     <Folder Include="Utils\Plugins\Headless\" />
   </ItemGroup>
@@ -2516,40 +2473,36 @@
       <HintPath>$(CefAssemblyDir)\CefNet.Avalonia.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-  <ItemGroup><!--    <Content Update="Resources\Editor\test.html">-->
-<!--      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>-->
-<!--    </Content>-->
-<!--    <Content Update="Resources\Editor\lib\jquery-context-menus\src\context-menu.css">-->
-<!--      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>-->
-<!--    </Content>-->
-<!--    <Content Update="Resources\Editor\src\components\localizer\localizer-style.css">-->
-<!--      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>-->
-<!--    </Content>-->
-<!--    <Content Update="Resources\Editor\src\components\localizer\UiStrings.js">-->
-<!--      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>-->
-<!--    </Content>-->
-  
-    <BundleResource Remove="Resources\Editor\test.html" />
-  </ItemGroup>
-  
-  
-  <PropertyGroup>
-    <!-- Makes the TypeScript compilation task a no-op -->
-    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>portable</DebugType>
-  </PropertyGroup>
     
   <!-- LOCALIZATION RESOURCES-->
+
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Localization\Enums\EnumUiStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EnumUiStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+
+    <EmbeddedResource Update="Resources\Localization\UiStrings\UiStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  
   <ItemGroup>
     <None Include="Resources\Localization\Listings" />
   </ItemGroup>
   <ItemGroup Condition="'$(IncludeCultures)' == 'True'">
-    <Content Include="Resources\Localization\UiStrings\UiStrings.*.resx">
+    <Content Include="Resources\Localization\UiStrings\UiStrings.*.resx" 
+          PublishFolderType="Resource">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Localization\EnumUiStrings\EnumUiStrings.*.resx">
+    <Content Include="Resources\Localization\EnumUiStrings\EnumUiStrings.*.resx"
+          PublishFolderType="Resource">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\Localization\UiStrings\UiStrings.*.resx" />
@@ -2560,12 +2513,9 @@
   <ItemGroup Condition="'$(IncludeCultures)' == 'False'">
     <None Include="Resources\Localization\UiStrings\UiStrings.*.resx" />
     <None Include="Resources\Localization\EnumUiStrings\EnumUiStrings.*.resx" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    
-    <UpToDateCheckInput Remove="Assets\Images\Flags\ad.png" />
-  </ItemGroup>
+    <None Include="Resources\Localization\UiStrings\UiStrings.resx" />
+    <None Include="Resources\Localization\EnumUiStrings\EnumUiStrings.resx" />
+  </ItemGroup>  
   
   <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">
     <None Include="Assets\lib\*.so">
@@ -2579,4 +2529,6 @@
     <AndroidAsset Remove="Assets\lib\x11tools.so" />
     <AndroidNativeLibrary Remove="Assets\lib\x11tools.so" />
   </ItemGroup>
+  
+  
 </Project>

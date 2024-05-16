@@ -604,30 +604,32 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void DetachedFromVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
-            if (s is ListBox lb) {
-                if (GetScrollViewer(lb) is ScrollViewer sv) {
-                    sv.RemoveHandler(
-                                ScrollViewer.PointerPressedEvent,
-                                ScrollViewerPointerPressedHandler);
-
-                    sv.RemoveHandler(
-                        ScrollViewer.PointerMovedEvent,
-                        ScrollViewerPointerMovedHandler);
-                    sv.RemoveHandler(
-                        ScrollViewer.PointerReleasedEvent,
-                        ScrollViewerPointerReleasedHandler);
-                }
-                lb.AttachedToVisualTree -= AttachedToVisualHandler;
-                lb.DetachedFromVisualTree -= DetachedFromVisualHandler;
-
-                lb.RemoveHandler(
-                    ListBox.PointerWheelChangedEvent,
-                    PointerMouseWheelHandler);
-
-                lb.RemoveHandler(
-                    ListBox.PointerPressedEvent,
-                    PreviewControlPointerPressedHandler);
+            if (s is not ListBox lb) {
+                return;
             }
+
+            if (GetScrollViewer(lb) is ScrollViewer sv) {
+                sv.RemoveHandler(
+                            ScrollViewer.PointerPressedEvent,
+                            ScrollViewerPointerPressedHandler);
+
+                sv.RemoveHandler(
+                    ScrollViewer.PointerMovedEvent,
+                    ScrollViewerPointerMovedHandler);
+                sv.RemoveHandler(
+                    ScrollViewer.PointerReleasedEvent,
+                    ScrollViewerPointerReleasedHandler);
+            }
+            lb.AttachedToVisualTree -= AttachedToVisualHandler;
+            lb.DetachedFromVisualTree -= DetachedFromVisualHandler;
+
+            lb.RemoveHandler(
+                ListBox.PointerWheelChangedEvent,
+                PointerMouseWheelHandler);
+
+            lb.RemoveHandler(
+                ListBox.PointerPressedEvent,
+                PreviewControlPointerPressedHandler);
         }
 
 

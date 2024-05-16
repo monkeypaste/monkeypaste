@@ -187,8 +187,8 @@
     <IsMobile>true</IsMobile>
     <UseSugarWv>true</UseSugarWv>
     <IsWindowed>true</IsWindowed>
+    <IncludeCultures>false</IncludeCultures>
     <PlatformShortName>ios</PlatformShortName>
-    <IncludeCultures>False</IncludeCultures>
     <BuildScriptsDir>$(BuildScriptsRootDir)\ios</BuildScriptsDir>
     <SugarWvVersion>$(PublicSugarWvVersion)</SugarWvVersion>
   </PropertyGroup>

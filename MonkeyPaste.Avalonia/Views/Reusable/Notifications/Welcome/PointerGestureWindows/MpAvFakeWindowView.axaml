@@ -6,6 +6,7 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        x:TypeArguments="local:MpAvFakeWindowViewModel"
+                       x:DataType="local:MpAvFakeWindowViewModel"
                        x:Class="MonkeyPaste.Avalonia.MpAvFakeWindowView"
                        mc:Ignorable="d"
                        d:DesignWidth="400"

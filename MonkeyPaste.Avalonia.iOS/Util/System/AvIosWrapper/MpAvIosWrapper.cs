@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia.iOS{
             //PlatformToastNotification = new MpAvAdToastNotification();
             //DeviceWebViewHelper = new MpAvAdWebViewHelper();
 
-            //MpAvIosAssetMover.MoveDats();
+            MpAvIosAssetMover.MoveDats();
 
         }
 

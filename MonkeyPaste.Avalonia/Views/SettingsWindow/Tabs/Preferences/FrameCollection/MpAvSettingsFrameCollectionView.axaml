@@ -1,15 +1,16 @@
 <local:MpAvUserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:dd="clr-namespace:MonkeyPaste.Avalonia;assembly=MonkeyPaste.Avalonia"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:local="using:MonkeyPaste.Avalonia"
-             xmlns:pcl="using:MonkeyPaste"
-             mc:Ignorable="d"
-             d:DesignWidth="800"
-             d:DesignHeight="750"
-             x:Class="MonkeyPaste.Avalonia.MpAvSettingsFrameCollectionView">
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:dd="clr-namespace:MonkeyPaste.Avalonia;assembly=MonkeyPaste.Avalonia"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="750"
+                       x:CompileBindings="False"
+                       x:Class="MonkeyPaste.Avalonia.MpAvSettingsFrameCollectionView">
     <ItemsControl x:Name="SettingsFrameItemsControl"
                   ItemsSource="{Binding}"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -35,5 +36,5 @@
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
     </ItemsControl>
-  
+
 </local:MpAvUserControl>

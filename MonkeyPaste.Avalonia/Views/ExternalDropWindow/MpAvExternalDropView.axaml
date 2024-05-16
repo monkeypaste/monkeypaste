@@ -30,8 +30,7 @@
             BorderThickness="1"
             BorderBrush="Black">
         <Border.Background>
-            <SolidColorBrush Color="DimGray"
-                             Opacity="0.85" />
+            <SolidColorBrush Color="DimGray" Opacity="0.85" />
         </Border.Background>
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch"
@@ -84,6 +83,7 @@
             <ListBox x:Name="DropItemListBox"
                      Grid.Row="1"
                      DataContext="{x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}"
+                     x:DataType="local:MpAvClipboardHandlerCollectionViewModel"
                      Background="Transparent"
                      BorderBrush="Transparent"
                      HorizontalAlignment="Left"

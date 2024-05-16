@@ -1,6 +1,10 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="BitmapImage">avares://MonkeyPaste.Avalonia/Assets/Images/bitmap.png</sys:String>
+    <sys:String x:Key="HtmlImage">avares://MonkeyPaste.Avalonia/Assets/Images/html.png</sys:String>
+    <sys:String x:Key="CsvImage">avares://MonkeyPaste.Avalonia/Assets/Images/csv.png</sys:String>
+    <sys:String x:Key="RtfImage">avares://MonkeyPaste.Avalonia/Assets/Images/rtf.png</sys:String>
     <sys:String x:Key="BurgerImage">avares://MonkeyPaste.Avalonia/Assets/Images/burger.png</sys:String>
     <sys:String x:Key="SyncImage">avares://MonkeyPaste.Avalonia/Assets/Images/sync.png</sys:String>
     <sys:String x:Key="StackImage">avares://MonkeyPaste.Avalonia/Assets/Images/stack.png</sys:String>

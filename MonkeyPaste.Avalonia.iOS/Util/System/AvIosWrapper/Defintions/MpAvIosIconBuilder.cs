@@ -17,10 +17,10 @@ namespace MonkeyPaste.Avalonia.iOS {
                 iconSize == MpIconSize.None) {
                 return string.Empty;
             }
-            if (MpAvMacHelpers.IsPathExecutableUnderAppBundle(path)) {
-                // ONLY when path has no extension and is under a .app bundle get .app icon not generic exe icon
-                path = MpAvMacHelpers.GetAppBundlePathOrDefault(path);
-            }
+            //if (MpAvMacHelpers.IsPathExecutableUnderAppBundle(path)) {
+            //    // ONLY when path has no extension and is under a .app bundle get .app icon not generic exe icon
+            //    path = MpAvMacHelpers.GetAppBundlePathOrDefault(path);
+            //} 
 
             if(NSUrl.FromString(path.ToFileSystemUriFromPath()) is not { } url ||
                 UIDocumentInteractionController.FromUrl(url) is not { } dic ||

@@ -9,6 +9,7 @@
              xmlns:local="using:MonkeyPaste.Avalonia"
              xmlns:pcl="using:MonkeyPaste"
              x:Name="WebPageView"
+             x:CompileBindings="False"
              x:Class="MonkeyPaste.Avalonia.MpAvWebPageView">
     <UserControl.Styles>
         <Style Selector="Grid#OfflineContainer, Grid#BusyContainer">

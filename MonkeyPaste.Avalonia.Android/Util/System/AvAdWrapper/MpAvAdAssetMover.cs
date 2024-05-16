@@ -68,24 +68,7 @@ namespace MonkeyPaste.Avalonia.Android {
                 //}
                 UnzipAsset(asset_kvp.Key, asset_kvp.Value);
             }
-        }
-
-        private static bool IsAssetNewer(string assetPath, string targetDir) {
-            try {
-                // BUG can't read file info from assets so ignoring for now
-                long dat_ticks = new Java.IO.File(assetPath).LastModified();
-                long dir_ticks = MpFileIo.GetDateTimeInfo(targetDir, true, false).Value.Ticks;
-                bool result = dat_ticks > dir_ticks;
-                MpConsole.WriteLine($"Asset '{assetPath}' mod datetime: {new DateTime(dat_ticks)}", true);
-                MpConsole.WriteLine($"Dir '{targetDir}' mod datetime: {new DateTime(dir_ticks)}");
-                MpConsole.WriteLine($"Asset is {(result ? "NEWER" : "OLDER")}");
-                return result;
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error moving asset at path '{assetPath}' to dir '{targetDir}'.", ex);
-                return true;
-            }
-        }
+        }        
 
         private static void UnzipAsset(string assetPath, string targetDir) {
             if (targetDir.IsDirectory()) {
@@ -113,5 +96,22 @@ namespace MonkeyPaste.Avalonia.Android {
             target.Close();
             source.Close();
         }
+
+        //private static bool IsAssetNewer(string assetPath, string targetDir) {
+        //    try {
+        //        // BUG can't read file info from assets so ignoring for now
+        //        long dat_ticks = new Java.IO.File(assetPath).LastModified();
+        //        long dir_ticks = MpFileIo.GetDateTimeInfo(targetDir, true, false).Value.Ticks;
+        //        bool result = dat_ticks > dir_ticks;
+        //        MpConsole.WriteLine($"Asset '{assetPath}' mod datetime: {new DateTime(dat_ticks)}", true);
+        //        MpConsole.WriteLine($"Dir '{targetDir}' mod datetime: {new DateTime(dir_ticks)}");
+        //        MpConsole.WriteLine($"Asset is {(result ? "NEWER" : "OLDER")}");
+        //        return result;
+        //    }
+        //    catch (Exception ex) {
+        //        MpConsole.WriteTraceLine($"Error moving asset at path '{assetPath}' to dir '{targetDir}'.", ex);
+        //        return true;
+        //    }
+        //}
     }
 }

@@ -84,15 +84,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localizer", "Build\Localize
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyBuild", "Build\MonkeyBuild\MonkeyBuild.csproj", "{FC11C0A5-F685-45A0-8541-0B6DCED9A686}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iosTest", "iosTest\iosTest\iosTest.csproj", "{B1D77ECA-C48B-4615-A237-EF05018A2744}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iosTest", "iosTest\iosTest\iosTest.csproj", "{B1D77ECA-C48B-4615-A237-EF05018A2744}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iosTest.Android", "iosTest\iosTest.Android\iosTest.Android.csproj", "{8BB553EB-260E-4B68-986B-0DC5E5B1B160}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iosTest.Desktop", "iosTest\iosTest.Desktop\iosTest.Desktop.csproj", "{A3F3DE68-E46C-4F8D-A78B-50934082E59B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iosTest.iOS", "iosTest\iosTest.iOS\iosTest.iOS.csproj", "{7D1B4F3C-D3CC-4C2B-89F3-C2029B2B3B83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iosTest.iOS", "iosTest\iosTest.iOS\iosTest.iOS.csproj", "{7D1B4F3C-D3CC-4C2B-89F3-C2029B2B3B83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iosTest.Browser", "iosTest\iosTest.Browser\iosTest.Browser.csproj", "{18901D23-8E5E-4429-8D5E-BD319984A55A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_isoTest", "_isoTest", "{13219535-A288-4C1B-B219-D215C3C9BB83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -358,16 +360,21 @@ Global
 		{29AC63F3-4BF7-4D64-B021-D53E7703B429} = {D300D2C5-182B-4F20-98A6-4BA79EACCCC4}
 		{FF623CDD-ACF6-4021-BB76-3A7DBB5CE735} = {D300D2C5-182B-4F20-98A6-4BA79EACCCC4}
 		{FC11C0A5-F685-45A0-8541-0B6DCED9A686} = {D300D2C5-182B-4F20-98A6-4BA79EACCCC4}
+		{B1D77ECA-C48B-4615-A237-EF05018A2744} = {13219535-A288-4C1B-B219-D215C3C9BB83}
+		{8BB553EB-260E-4B68-986B-0DC5E5B1B160} = {13219535-A288-4C1B-B219-D215C3C9BB83}
+		{A3F3DE68-E46C-4F8D-A78B-50934082E59B} = {13219535-A288-4C1B-B219-D215C3C9BB83}
+		{7D1B4F3C-D3CC-4C2B-89F3-C2029B2B3B83} = {13219535-A288-4C1B-B219-D215C3C9BB83}
+		{18901D23-8E5E-4429-8D5E-BD319984A55A} = {13219535-A288-4C1B-B219-D215C3C9BB83}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_CultureCountyOverrides = ar=ar-DJ
-		RESX_ShowPerformanceTraces = True
-		RESX_DuplicateKeyHandling = Fail
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_RemoveEmptyEntries = False
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_TaskErrorCategory = Message
-		RESX_ExcelExportMode = Text
 		RESX_ConfirmAddLanguageFile = False
+		RESX_ExcelExportMode = Text
+		RESX_TaskErrorCategory = Message
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_RemoveEmptyEntries = False
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_DuplicateKeyHandling = Fail
+		RESX_ShowPerformanceTraces = True
+		RESX_CultureCountyOverrides = ar=ar-DJ
 	EndGlobalSection
 EndGlobal

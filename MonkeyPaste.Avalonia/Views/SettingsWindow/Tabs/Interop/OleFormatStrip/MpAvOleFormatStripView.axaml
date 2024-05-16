@@ -8,6 +8,7 @@
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
+                       x:CompileBindings="False"
                        x:Class="MonkeyPaste.Avalonia.MpAvOleFormatStripView">
     <ItemsControl ItemsSource="{Binding}"
                   MaxWidth="250"

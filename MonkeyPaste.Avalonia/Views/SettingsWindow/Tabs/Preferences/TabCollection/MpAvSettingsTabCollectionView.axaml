@@ -9,6 +9,7 @@
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="750"
+                       x:CompileBindings="False"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsTabCollectionView">
     <ItemsControl x:Name="SettingsFrameItemsControl"
                   ItemsSource="{Binding}"

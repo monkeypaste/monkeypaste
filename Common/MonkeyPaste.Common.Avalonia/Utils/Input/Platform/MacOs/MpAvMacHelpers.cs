@@ -1,5 +1,4 @@
 ﻿using Avalonia.Platform;
-
 using MonoMac.AppKit;
 using MonoMac.CoreGraphics;
 using MonoMac.Foundation;

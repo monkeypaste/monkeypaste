@@ -4,13 +4,38 @@
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
     <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
     <Nullable>disable</Nullable>
-    <!--<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>-->  
-    <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
-    <_DeviceName>00008020-001945DA3669402E</_DeviceName>
-    <RemoteVs>false</RemoteVs>
+    <!--<_DeviceName>00008020-001945DA3669402E</_DeviceName>-->
+    <RemoteVs>true</RemoteVs>
+    <EnableCodeSigning>true</EnableCodeSigning>
+    <!--<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>-->
+    <!--<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>-->
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <!--<MtouchLink>None</MtouchLink>-->
+    <MtouchLink>Full</MtouchLink>
+    <OptimizePNGs>True</OptimizePNGs>
+    <ProvisioningType>automatic</ProvisioningType>
+    <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CodesignExtraArgs></CodesignExtraArgs>
+    <MtouchLink>Full</MtouchLink>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CodesignExtraArgs></CodesignExtraArgs>
+    <MtouchLink>Full</MtouchLink>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
+    <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(RemoteVs)' == 'False'">
+  <!--<PropertyGroup Condition="'$(RemoteVs)' == 'False'">
     <ProvisioningType>manual</ProvisioningType>
     <CodesignKey>Apple Development: thomas kefauver (MY7R67BXWM)</CodesignKey>
   </PropertyGroup>
@@ -24,12 +49,25 @@
   <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
     <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
     <CodesignProvision>VS: WildCard Development</CodesignProvision>
-  </PropertyGroup>
-  
+  </PropertyGroup>-->
   
   <ItemGroup>
     <Compile Remove="Util\System\AvIosWrapper\Defintions\MpAvAdToastNotification.cs" />
-    <Compile Remove="Util\System\AvIosWrapper\MpAvIosAssetMover.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\dat\editor.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\dat\enums.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\dat\legal.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\dat\uistrings.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -40,4 +78,6 @@
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
   </ItemGroup>
+
+
 </Project>

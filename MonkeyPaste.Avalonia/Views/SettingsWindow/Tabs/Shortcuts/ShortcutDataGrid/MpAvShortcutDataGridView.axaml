@@ -45,7 +45,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <local:MpAvClipBorder Classes="filterDataGridContainer">
-        <Grid>
+        <Grid x:CompileBindings="False">
             <DataGrid x:Name="ShortcutDatagrid"
                       Sorting="Dg_Sorting"
                       local:MpAvDataGridRefreshExtension.IsEnabled="False"
@@ -82,7 +82,8 @@
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="5">
                                     <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutDataGridRoutingHeader}" />
-                                    <local:MpAvToolTipHintView IsHtml="True" ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutRoutingTypeHint}" />
+                                    <local:MpAvToolTipHintView IsHtml="True"
+                                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ShortcutRoutingTypeHint}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>

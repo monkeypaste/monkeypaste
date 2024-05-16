@@ -25,7 +25,8 @@
                     Value="SemiBold" />
         </Style>
 
-        <Style Selector="TextBox.valid.colorTextBox:not(:empty)">
+        <Style Selector="TextBox.valid.colorTextBox:not(:empty)"
+               x:DataType="local:MpAvSearchCriteriaOptionViewModel">
             <Setter Property="Foreground"
                     Value="{Binding Value, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}" />
         </Style>
@@ -43,8 +44,10 @@
 
         </Style>
     </local:MpAvUserControl.Styles>
+
     <ContentControl x:Name="CriteriaOptionContentControl"
                     Margin="0,3"
+                    x:DataType="local:MpAvSearchCriteriaOptionViewModel"
                     Content="{Binding}">
         <ContentControl.DataTemplates>
             <local:MpAvSearchCriteriaOptionViewSelector>

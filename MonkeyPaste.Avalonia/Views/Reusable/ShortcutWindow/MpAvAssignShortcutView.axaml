@@ -7,6 +7,8 @@
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:common="using:MonkeyPaste.Common"
                        xmlns:dd="clr-namespace:MonkeyPaste.Avalonia;assembly=MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvAssignShortcutViewModel"
+                       x:DataType="local:MpAvAssignShortcutViewModel"
                        Background="{DynamicResource ThemeInteractiveBgColor}"
                        mc:Ignorable="d"
                        d:DesignWidth="400"

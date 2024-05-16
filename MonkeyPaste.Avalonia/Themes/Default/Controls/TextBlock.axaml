@@ -29,24 +29,6 @@
                 Value="12" />
     </Style>
 
-    <Style Selector="TextBlock.fillHeight">
-        <Setter Property="FontSize"
-                Value="{Binding $self.Bounds.Height}" />
-    </Style>
-    <Style Selector="TextBlock.fillWidth">
-        <Setter Property="FontSize">
-            <Setter.Value>
-                <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
-                              ConverterParameter="/">
-                    <Binding Path="Bounds.Width" />
-                    <Binding Path="Text^.Length" />
-                </MultiBinding>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-
-
     <!--  EMPTY TEXT  -->
     <Style Selector="TextBlock.emptyOverlayText">
         <Setter Property="FontSize"
