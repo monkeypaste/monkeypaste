@@ -4,6 +4,7 @@ FRAMEWORK="net8.0-ios"
 RUNTIME="ios-arm64"
 PLATFORM="Any CPU"
 DEVICE_ID="00008020-001945DA3669402E"
+DEVICE_ARG="-p:_DeviceName="
 
 clear
 
@@ -23,13 +24,14 @@ if [ "$1" = "no-attach" ] || [ "$2" = "no-attach" ]; then
 	RUN_ARGS=""
 fi
 
+if [ "$1" = "sim" ] || [ "$2" = "sim" ]; then
+	RUNTIME="iossimulator-x64"
+	DEVICE_ID="5566995A-C2C3-417D-9714-F8F6333EEF03"
+	DEVICE_ARG="-p:_DeviceName=:v2:udid="
+fi
+
 cd "../../../../MonkeyPaste.Avalonia.iOS/"
 
-# udids found by /Applications/Xcode.app/Contents/Developer/usr/bin/simctl list
-# SIM_UDID=3606F702-B6EB-48FC-9A7D-D03A7FF6E6DC
 
-
-# for physical device:
-# -p:_DeviceName=<UDID>
-#dotnet build -t:Run -p:_DeviceName=:v2:udid=${SIM_UDID} -p:RuntimeIdentifier=iossimulator-x64 -f ${FRAMEWORK}-ios MonkeyPaste.Avalonia.iOS.csproj
-dotnet build -v -t:Run -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} -p:_DeviceName=${DEVICE_ID}
+# dotnet build -t:Run  -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} ${DEVICE_ARG}${DEVICE_ID}
+dotnet build -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME}

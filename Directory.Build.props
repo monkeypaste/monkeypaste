@@ -237,6 +237,10 @@
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
     <TargetDatDir>$(MainProjectDir)\Assets\dat</TargetDatDir>
   </PropertyGroup>
+    
+  <PropertyGroup Condition="$(BuildOs) == 'IOS'">
+    <AppBundleDir>$(MainTargetDir)\$(MainProjectName).app</AppBundleDir>
+  </PropertyGroup>
 
   <PropertyGroup Condition="'$(UseCefNet)' == 'True'">
     <!--<CefPlatformDir>$(MainProjectDir)\cef\$(PlatformShortName)\$(Platform)</CefPlatformDir>-->

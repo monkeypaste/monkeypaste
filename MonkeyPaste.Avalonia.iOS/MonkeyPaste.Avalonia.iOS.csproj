@@ -2,53 +2,31 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
-    <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion> 
     <Nullable>disable</Nullable>
-    <!--<_DeviceName>00008020-001945DA3669402E</_DeviceName>-->
     <RemoteVs>true</RemoteVs>
-    <EnableCodeSigning>true</EnableCodeSigning>
     <!--<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>-->
-    <!--<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>-->
+    <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
   </PropertyGroup>
   
   <PropertyGroup>
+    <SelfContained>true</SelfContained>
     <!--<MtouchLink>None</MtouchLink>-->
-    <MtouchLink>Full</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <OptimizePNGs>True</OptimizePNGs>
-    <ProvisioningType>automatic</ProvisioningType>
-    <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <CodesignExtraArgs>--deep</CodesignExtraArgs>
+    <!--<ProvisioningType>automatic</ProvisioningType>-->
+    <CodesignKey>Apple Development: thomas kefauver (MY7R67BXWM)</CodesignKey>
+    <!--<CodesignProvision>Monkey Profile</CodesignProvision>-->
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <CodesignExtraArgs></CodesignExtraArgs>
-    <MtouchLink>Full</MtouchLink>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <CodesignExtraArgs></CodesignExtraArgs>
-    <MtouchLink>Full</MtouchLink>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-    <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
-  </PropertyGroup>
+  <ItemGroup>
+    <None Include="Settings.bundle\**" />
+  </ItemGroup>
 
   <!--<PropertyGroup Condition="'$(RemoteVs)' == 'False'">
     <ProvisioningType>manual</ProvisioningType>
     <CodesignKey>Apple Development: thomas kefauver (MY7R67BXWM)</CodesignKey>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(RemoteVs)' == 'True'">
-    <ProvisioningType>automatic</ProvisioningType>
-    <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-    <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>-->
   
   <ItemGroup>
@@ -79,5 +57,14 @@
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
   </ItemGroup>
 
-
+  <Target Name="___SIGNINGFIX" BeforeTargets="_CodesignAppBundle">
+    <Exec Command="echo REMOVING Settings.bundle from '$(AppBundleDir)' ..." />
+    <Exec Command="mv $(AppBundleDir)/Settings.bundle /Users/tkefauver/Desktop" />
+    <!--<Exec Command="rm -fr $(AppBundleDir)/Settings.bundle" />-->
+  </Target>
+  
+  <Target Name="___SIGNINGFIX2" AfterTargets="_CodesignAppBundle">
+    <Exec Command="echo REPLACING Settings.bundle from '$(AppBundleDir)' ..." />
+    <Exec Command="mv /Users/tkefauver/Desktop/Settings.bundle $(AppBundleDir)" /> 
+  </Target>
 </Project>
