@@ -1609,6 +1609,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modal Settings Frame Menu.
+        /// </summary>
+        public static string MpNotificationType_ModalSettingsFrameMenu {
+            get {
+                return ResourceManager.GetString("MpNotificationType_ModalSettingsFrameMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modal Shutdown Later.
         /// </summary>
         public static string MpNotificationType_ModalShutdownLater {

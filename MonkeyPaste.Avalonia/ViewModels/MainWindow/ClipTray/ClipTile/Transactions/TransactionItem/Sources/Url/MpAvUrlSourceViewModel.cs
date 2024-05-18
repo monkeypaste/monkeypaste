@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public MpPluginRequestFormatBase ParameterReqFormat { get; private set; }
+        public MpParameterMessageRequestFormat ParameterReqFormat { get; private set; }
 
         #endregion
 
@@ -39,11 +39,11 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             await base.InitializeAsync(ts);
 
-            if (string.IsNullOrEmpty(SourceArg)) {
-                ParameterReqFormat = null;
-            } else {
-                ParameterReqFormat = MpJsonConverter.DeserializeObject<MpPluginRequestFormatBase>(SourceArg);
-            }
+            //if (string.IsNullOrEmpty(SourceArg)) {
+            //    ParameterReqFormat = null;
+            //} else {
+            //    ParameterReqFormat = MpJsonConverter.DeserializeObject<MpParameterMessageRequestFormat>(SourceArg);
+            //}
             PresetViewModel =
                 MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == SourceObjId);
 

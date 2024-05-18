@@ -12,8 +12,9 @@ namespace MonkeyPaste.Avalonia.Android {
         }
     }
     public class MpAvAdWebViewHelper : MpAvIDeviceWebViewHelper {
-        public void EnableFileAccess(WebView wv) {
-            if(wv.PlatformWebView is not AndroidWebViewCore wvc ||
+        public void EnableFileAccess(object wvObj) {
+            if(wvObj is not WebView wv ||
+                wv.PlatformWebView is not AndroidWebViewCore wvc ||
                 wvc.WebView is not { } wkwv) {
                 return;                
             }

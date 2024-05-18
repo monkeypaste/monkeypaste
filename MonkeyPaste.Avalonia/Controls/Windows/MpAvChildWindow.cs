@@ -286,7 +286,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvChildWindow() { }
+        public MpAvChildWindow() { 
+        
+        }
         #endregion
 
         #region Public Methods

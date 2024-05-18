@@ -3,12 +3,12 @@
   <PropertyGroup>
     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <TargetFramework>$(CommonTargetFramework)</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <!--<ImplicitUsings>enable</ImplicitUsings>-->
     <Nullable>disable</Nullable>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
-    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-    <Platforms>$(DefaultPlatforms)</Platforms>
-    <!--<EnableDynamicLoading>true</EnableDynamicLoading>-->
+    <!--<RunPostBuildEvent>Always</RunPostBuildEvent>-->
+    <!--<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>-->
+    <!--<Platforms>$(DefaultPlatforms)</Platforms>-->
+    <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Resources\Resources.*.resx">

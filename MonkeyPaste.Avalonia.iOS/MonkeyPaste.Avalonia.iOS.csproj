@@ -10,19 +10,15 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <SelfContained>true</SelfContained>
+    <!--<SelfContained>true</SelfContained>-->
     <!--<MtouchLink>None</MtouchLink>-->
     <MtouchLink>SdkOnly</MtouchLink>
     <OptimizePNGs>True</OptimizePNGs>
-    <CodesignExtraArgs>--deep</CodesignExtraArgs>
+    <!--<CodesignExtraArgs>deep</CodesignExtraArgs>-->
     <!--<ProvisioningType>automatic</ProvisioningType>-->
     <CodesignKey>Apple Development: thomas kefauver (MY7R67BXWM)</CodesignKey>
     <!--<CodesignProvision>Monkey Profile</CodesignProvision>-->
   </PropertyGroup>
-  
-  <ItemGroup>
-    <None Include="Settings.bundle\**" />
-  </ItemGroup>
 
   <!--<PropertyGroup Condition="'$(RemoteVs)' == 'False'">
     <ProvisioningType>manual</ProvisioningType>
@@ -56,15 +52,10 @@
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
   </ItemGroup>
-
-  <Target Name="___SIGNINGFIX" BeforeTargets="_CodesignAppBundle">
-    <Exec Command="echo REMOVING Settings.bundle from '$(AppBundleDir)' ..." />
-    <Exec Command="mv $(AppBundleDir)/Settings.bundle /Users/tkefauver/Desktop" />
-    <!--<Exec Command="rm -fr $(AppBundleDir)/Settings.bundle" />-->
-  </Target>
   
-  <Target Name="___SIGNINGFIX2" AfterTargets="_CodesignAppBundle">
-    <Exec Command="echo REPLACING Settings.bundle from '$(AppBundleDir)' ..." />
-    <Exec Command="mv /Users/tkefauver/Desktop/Settings.bundle $(AppBundleDir)" /> 
-  </Target>
+  <!--<Target Name="___SIGNINGFIX" BeforeTargets="_CodesignAppBundle">
+    <Exec Command="echo REMOVING Settings.bundle from '$(AppBundleDir)' ..." />
+
+    <Exec Command="rm -fr $(AppBundleDir)/Settings.bundle" />
+  </Target>-->
 </Project>

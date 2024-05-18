@@ -1,7 +1,7 @@
 #!/bin/bash
 clear
 APP_PATH="/Users/tkefauver/mp/MonkeyPaste.Avalonia.iOS/bin/Debug/net8.0-ios/ios-arm64/MonkeyPaste.Avalonia.iOS.app"
-SIGNING_IDENTITY="Apple Development: thomas kefauver (MY7R67BXWM)" # matches Keychain Access certificate name
+SIGNING_IDENTITY=Set # matches Keychain Access certificate name
 
 #ENTITLEMENTS=`pwd`
 #ENTITLEMENTS="${ENTITLEMENTS}/Entitlements.xcent"

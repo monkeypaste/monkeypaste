@@ -7,7 +7,7 @@
     <Nullable>disable</Nullable>
     <DefineConstants>$(DefineConstants);AUX;</DefineConstants>
     <LangVersion>$(DefaultLangVersion)</LangVersion>
-    <Platforms>$(DefaultPlatforms)</Platforms>
+    <!--<Platforms>$(DefaultPlatforms)</Platforms>-->
     <UserSecretsId>fda21b04-a963-455b-b33c-0bf1b867d66c</UserSecretsId>
     <ApplicationIcon>hammer.ico</ApplicationIcon>
   </PropertyGroup>

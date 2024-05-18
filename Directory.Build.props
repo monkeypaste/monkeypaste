@@ -40,7 +40,7 @@
   
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>IOS</BuildOs>
+    <BuildOs>WINDOWS</BuildOs>
   </PropertyGroup>
   
   <PropertyGroup>

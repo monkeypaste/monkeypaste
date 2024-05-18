@@ -8,13 +8,6 @@ using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvDesktopScreenInfo : MpAvScreenInfoBase {
-
-#if WINDOWS
-        public override MpRect WorkArea {
-            get => base.WorkArea;
-            set => base.WorkArea = value;
-        }
-#endif
         public MpAvDesktopScreenInfo() : base() { }
         public MpAvDesktopScreenInfo(MpIPlatformScreenInfo psi) : base(psi) { }
         public MpAvDesktopScreenInfo(Screen s) : this(s, 0) { }

@@ -144,6 +144,7 @@ namespace MonkeyPaste.Avalonia {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
+            ConverterWebView.AttachedToVisualTree += ConverterWebView_AttachedToVisualTree;
 
 
             if (Mp.Services.PlatformInfo.IsDesktop) {
@@ -179,7 +180,6 @@ namespace MonkeyPaste.Avalonia {
                     mv.RootGrid.Children.Add(ConverterWebView);
                 });
             }
-            ConverterWebView.AttachedToVisualTree += ConverterWebView_AttachedToVisualTree;
 
             IsBusy = false;
         }

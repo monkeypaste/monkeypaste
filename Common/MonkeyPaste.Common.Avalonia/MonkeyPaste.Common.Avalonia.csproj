@@ -7,7 +7,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <TargetFramework>$(CommonTargetFramework)</TargetFramework>
-    <Platforms>$(DefaultPlatforms)</Platforms>
+    <!--<Platforms>$(DefaultPlatforms)</Platforms>-->
   </PropertyGroup>
 
   <ItemGroup>

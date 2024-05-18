@@ -336,26 +336,26 @@ namespace MonkeyPaste.Avalonia {
                 switch (MainWindowOrientationType) {
                     case MpMainWindowOrientationType.Bottom:
                         return new MpRect(
-                            MainWindowScreen.WorkArea.Left,
-                            MainWindowScreen.WorkArea.Bottom - MainWindowHeight,
+                            MainWindowScreen.WorkingArea.Left,
+                            MainWindowScreen.WorkingArea.Bottom - MainWindowHeight,
                             MainWindowWidth,
                             MainWindowHeight);
                     case MpMainWindowOrientationType.Top:
                         return new MpRect(
-                            MainWindowScreen.WorkArea.Left,
-                            MainWindowScreen.WorkArea.Top,
+                            MainWindowScreen.WorkingArea.Left,
+                            MainWindowScreen.WorkingArea.Top,
                             MainWindowWidth,
                             MainWindowHeight);
                     case MpMainWindowOrientationType.Left:
                         return new MpRect(
-                            MainWindowScreen.WorkArea.Left,
-                            MainWindowScreen.WorkArea.Top,
+                            MainWindowScreen.WorkingArea.Left,
+                            MainWindowScreen.WorkingArea.Top,
                             MainWindowWidth,
                             MainWindowHeight);
                     case MpMainWindowOrientationType.Right:
                         return new MpRect(
-                            MainWindowScreen.WorkArea.Right - MainWindowWidth,
-                            MainWindowScreen.WorkArea.Top,
+                            MainWindowScreen.WorkingArea.Right - MainWindowWidth,
+                            MainWindowScreen.WorkingArea.Top,
                             MainWindowWidth,
                             MainWindowHeight);
                     default:

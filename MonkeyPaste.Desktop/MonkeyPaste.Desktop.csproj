@@ -4,10 +4,10 @@
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
     <Nullable>disable</Nullable>
     <LangVersion>$(DefaultLangVersion)</LangVersion>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <Platforms>AnyCpu;x64</Platforms>
-    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
+    <!--<Platforms>AnyCpu;x64</Platforms>-->
+    <!--<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>-->
+    <!--<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>-->
     <RuntimeIdentifier>$(TargetRuntimeIdentifiers)</RuntimeIdentifier>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>monkey.ico</ApplicationIcon>
@@ -17,6 +17,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <SelfContained>true</SelfContained>
   </PropertyGroup>
+
 
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
     <UseAppHost>true</UseAppHost>

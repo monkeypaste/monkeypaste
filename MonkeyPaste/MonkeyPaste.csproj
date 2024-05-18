@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-    <Platforms>$(DefaultPlatforms)</Platforms>
+    <!--<ProduceReferenceAssembly>true</ProduceReferenceAssembly>-->
+    <!--<Platforms>$(DefaultPlatforms)</Platforms>-->
     <LangVersion>$(DefaultLangVersion)</LangVersion>
   </PropertyGroup>
 

@@ -309,6 +309,9 @@
   <data name="MpNotificationType_ModalShutdownLater" xml:space="preserve">
     <value>Modal Shutdown Later</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>Modal Settings Frame Menu</value>
+  </data>
   <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
     <value>Confirm End Append</value>
   </data>
