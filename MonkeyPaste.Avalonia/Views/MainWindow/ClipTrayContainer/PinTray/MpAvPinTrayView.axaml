@@ -192,7 +192,6 @@
             <!--  MOBILE EXPAND QUERY TRAY BUTTON  -->
             <Button x:Name="ExpandQueryTrayButton"
                     Classes="defaultButton clipTrayButton outlineOver clipTrayBackButton"
-                    IsVisible="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                     Command="{Binding ExpandQueryTrayCommand}">
                 <Button.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">

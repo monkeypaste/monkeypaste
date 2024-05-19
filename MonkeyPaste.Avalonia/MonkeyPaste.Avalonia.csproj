@@ -136,6 +136,8 @@
     <Compile Include="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.$(PlatformShortName).cs" />
     
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\**" />
+    
+    <AvaloniaXaml Remove="Themes\Default\Controls\Viewbox.axaml" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.shared.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.$(PlatformShortName).cs" />
   </ItemGroup>  

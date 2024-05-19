@@ -67,7 +67,9 @@
         #region FONTS
 
         DefaultEditableFontFamily,
+        DefaultEditableFontFamilyFont,
         DefaultReadOnlyFontFamily,
+        DefaultReadOnlyFontFamilyFont,
         ContentControlThemeFontFamily,
         IsRtl,
 

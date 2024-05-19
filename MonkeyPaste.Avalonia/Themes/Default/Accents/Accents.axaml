@@ -20,6 +20,8 @@
 
         <sys:String x:Key="DefaultEditableFontFamily">Arial</sys:String>
         <sys:String x:Key="DefaultReadOnlyFontFamily">Segoe UI</sys:String>
+        <FontFamily x:Key="DefaultEditableFontFamilyFont">Arial</FontFamily>
+        <FontFamily x:Key="DefaultReadOnlyFontFamilyFont">Segoe UI</FontFamily>
 
         <SolidColorBrush x:Key="HitTestableTransparent" Color="Black" Opacity="0.01" />
 

@@ -40,7 +40,7 @@
   
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>IOS</BuildOs>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -93,7 +93,7 @@
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
     <!-- (people not me should probably not set this to true) -->
     <!-- When changing this not a bad idea to rebuild plugins -->
-    <UseWap>true</UseWap>
+    <UseWap>false</UseWap>
     <!-- NOTE when ConfigForHotReload is enabled, UseWap must be false-->
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
     <Tfm>10.0.22621.0</Tfm>

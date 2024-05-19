@@ -162,17 +162,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public FontFamily DefaultReadOnlyFontFamilyFont { get; private set; }
-        public FontFamily DefaultEditableFontFamilyFont { get; private set; }
-
         public string DefaultReadOnlyFontFamily {
             get => GetThemeValue<string>(MpThemeResourceKey.DefaultReadOnlyFontFamily);
             set {
                 if (DefaultReadOnlyFontFamily != value) {
                     SetThemeValue(MpThemeResourceKey.DefaultReadOnlyFontFamily, value);
                     SetThemeValue(MpThemeResourceKey.ContentControlThemeFontFamily, value);
-                    DefaultReadOnlyFontFamilyFont = MpAvStringToFontFamilyConverter.Instance.Convert(value,
+                    FontFamily ff = MpAvStringToFontFamilyConverter.Instance.Convert(value,
                         typeof(FontFamily), null, CultureInfo.CurrentCulture) as FontFamily;
+                    SetThemeValue(MpThemeResourceKey.DefaultReadOnlyFontFamilyFont, ff);
                     OnPropertyChanged(nameof(DefaultReadOnlyFontFamily));
                 }
             }
@@ -183,8 +181,9 @@ namespace MonkeyPaste.Avalonia {
             set {
                 if (DefaultEditableFontFamily != value) {
                     SetThemeValue(MpThemeResourceKey.DefaultEditableFontFamily, value);
-                    DefaultEditableFontFamilyFont = MpAvStringToFontFamilyConverter.Instance.Convert(value,
+                    FontFamily ff = MpAvStringToFontFamilyConverter.Instance.Convert(value,
                         typeof(FontFamily), null, CultureInfo.CurrentCulture) as FontFamily;
+                    SetThemeValue(MpThemeResourceKey.DefaultEditableFontFamilyFont, ff);
                     OnPropertyChanged(nameof(DefaultEditableFontFamily));
                 }
             }

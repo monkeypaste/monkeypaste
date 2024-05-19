@@ -26,12 +26,12 @@ fi
 
 if [ "$1" = "sim" ] || [ "$2" = "sim" ]; then
 	RUNTIME="iossimulator-x64"
-	DEVICE_ID="5566995A-C2C3-417D-9714-F8F6333EEF03"
+	DEVICE_ID="D57D4990-6DCF-4D75-AC49-C3B7AD0959F4"
 	DEVICE_ARG="-p:_DeviceName=:v2:udid="
 fi
 
 cd "../../../../MonkeyPaste.Avalonia.iOS/"
 
 
-# dotnet build -t:Run  -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} ${DEVICE_ARG}${DEVICE_ID}
-dotnet build -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME}
+#dotnet build -t:Run  -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} ${DEVICE_ARG}${DEVICE_ID}
+dotnet build -t:Run  -f ${FRAMEWORK} ${DEVICE_ARG}${DEVICE_ID}

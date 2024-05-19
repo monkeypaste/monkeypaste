@@ -185,7 +185,6 @@ Global
 		{BF5BAF65-1B25-4DE8-A2BA-7B9DCC365E25}.Release|x64.Build.0 = Release|Any CPU
 		{EB00E01E-3BED-4214-B910-E799240CB764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB00E01E-3BED-4214-B910-E799240CB764}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB00E01E-3BED-4214-B910-E799240CB764}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{EB00E01E-3BED-4214-B910-E799240CB764}.Debug|x64.ActiveCfg = Debug|x64
 		{EB00E01E-3BED-4214-B910-E799240CB764}.Debug|x64.Build.0 = Debug|x64
 		{EB00E01E-3BED-4214-B910-E799240CB764}.Debug|x64.Deploy.0 = Debug|x64
@@ -210,7 +209,6 @@ Global
 		{1A3788A7-1387-4327-8E9F-14E90ED1F7A3}.Release|x64.ActiveCfg = Release|Any CPU
 		{1A3788A7-1387-4327-8E9F-14E90ED1F7A3}.Release|x64.Build.0 = Release|Any CPU
 		{595EFB8D-2B22-4D04-9FED-1608492EDB02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{595EFB8D-2B22-4D04-9FED-1608492EDB02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{595EFB8D-2B22-4D04-9FED-1608492EDB02}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{595EFB8D-2B22-4D04-9FED-1608492EDB02}.Debug|x64.Build.0 = Debug|Any CPU
 		{595EFB8D-2B22-4D04-9FED-1608492EDB02}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -384,14 +382,14 @@ Global
 		{18901D23-8E5E-4429-8D5E-BD319984A55A} = {13219535-A288-4C1B-B219-D215C3C9BB83}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_CultureCountyOverrides = ar=ar-DJ
-		RESX_ShowPerformanceTraces = True
-		RESX_DuplicateKeyHandling = Fail
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_RemoveEmptyEntries = False
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_TaskErrorCategory = Message
-		RESX_ExcelExportMode = Text
 		RESX_ConfirmAddLanguageFile = False
+		RESX_ExcelExportMode = Text
+		RESX_TaskErrorCategory = Message
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_RemoveEmptyEntries = False
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_DuplicateKeyHandling = Fail
+		RESX_ShowPerformanceTraces = True
+		RESX_CultureCountyOverrides = ar=ar-DJ
 	EndGlobalSection
 EndGlobal

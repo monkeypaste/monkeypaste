@@ -15,7 +15,7 @@
         <TranslateTransform />
     </local:MpAvUserControl.RenderTransform>
     <local:MpAvUserControl.Styles>
-        <Style Selector="Viewbox#SidebarViewbox">
+        <!--<Style Selector="Viewbox#SidebarViewbox">
             <Setter Property="Stretch"
                     Value="Uniform" />
             <Setter Property="StretchDirection"
@@ -24,7 +24,7 @@
         <Style Selector="Viewbox#SidebarViewbox.desktop">
             <Setter Property="Stretch"
                     Value="None" />
-        </Style>
+        </Style>-->
     </local:MpAvUserControl.Styles>
     <Canvas x:Name="MainWindowCanvas"
             Width="{Binding MainWindowWidth}"
@@ -69,7 +69,7 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
                     <!--<Viewbox x:Name="SidebarViewbox"
-                             Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}">-->
+                             Classes="mobile-only">-->
                     <ContentControl x:Name="SelectedSidebarContentControl"
                                     DataContext="{Binding LastSelectedItem}"
                                     HorizontalAlignment="Stretch"
