@@ -395,9 +395,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            while (Items.Any(x => x.IsBusy)) {
-                await Task.Delay(100);
-            }
+            //while (Items.Any(x => x.IsBusy)) {
+            //    await Task.Delay(100);
+            //}
 
             OnPropertyChanged(nameof(Items));
 

@@ -681,7 +681,7 @@ namespace MonkeyPaste.Avalonia {
             (IsPinned || (Parent != null && Parent.IsQueryItemResizeEnabled));
 
         public bool IsEditPopOutOnly =>
-#if SUGAR_WV
+#if SUGAR_WV || CEFNET_WV
             true;
 #else
             Parent != null && Parent.LayoutType == MpClipTrayLayoutType.Grid;

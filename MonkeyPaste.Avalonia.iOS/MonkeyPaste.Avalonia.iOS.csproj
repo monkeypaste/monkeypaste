@@ -4,48 +4,46 @@
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
     <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion> 
     <Nullable>disable</Nullable>
-    <RemoteVs>false</RemoteVs>
-    <!--<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>-->
+    <RemoteVs></RemoteVs>
+    <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
     <!--<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>-->
   </PropertyGroup>
   
   <PropertyGroup>
+    <!--<EnableCodesigning>false</EnableCodesigning>-->
+    <!--<ArchiveOnBuild>true</ArchiveOnBuild>-->
     <!--<SelfContained>true</SelfContained>-->
+    
     <!--<MtouchLink>None</MtouchLink>-->
     <!--<MtouchLink>SdkOnly</MtouchLink>-->
     <!--<OptimizePNGs>True</OptimizePNGs>-->
-    <!--<CodesignExtraArgs>deep</CodesignExtraArgs>-->
+    <!--<CodesignExtraArgs>&#8211;&#8211;deep</CodesignExtraArgs>-->
     <!--<ProvisioningType>automatic</ProvisioningType>-->
     <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
     <CodesignProvision>VS: WildCard Development</CodesignProvision>
-    <!--<CodesignProvision>Monkey Profile</CodesignProvision>-->
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios' And '$(RemoteVs)' == 'True'">
+  <PropertyGroup Condition="'$(RemoteVs)' == 'True'">
     <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
     <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
 
-  <!--<PropertyGroup Condition="'$(RemoteVs)' == 'False'">
-    <ProvisioningType>manual</ProvisioningType>
+  <PropertyGroup Condition="'$(RemoteVs)' == 'False'">
     <CodesignKey>Apple Development: thomas kefauver (MY7R67BXWM)</CodesignKey>
-  </PropertyGroup>-->
+    <!--<CodesignProvision>Monkey Profile</CodesignProvision>-->
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
+    <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+  </PropertyGroup>
   
   <ItemGroup>
     <Compile Remove="Util\System\AvIosWrapper\Defintions\MpAvAdToastNotification.cs" />
   </ItemGroup>
   
   <ItemGroup>
-    <AvaloniaResource Include="Assets\dat\editor.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\dat\enums.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\dat\legal.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\dat\uistrings.zip">
+    <AvaloniaResource Include="Assets\dat\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
   </ItemGroup>
@@ -57,6 +55,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SkipCodesignItems Include="MonkeyPaste.Avalonia.iOS.app/Settings.bundle" />
+    <SkipCodesignItems Include="MonkeyPaste.Avalonia.iOS.app/Settings.bundle/Root.plist" />
+    <SkipCodesignItems Include="MonkeyPaste.Avalonia.iOS.app/Settings.bundle/en.lproj" />
+    <SkipCodesignItems Include="MonkeyPaste.Avalonia.iOS.app/Settings.bundle/en.lproj/Root.strings" />
+    <SkipCodesignItems Include="Settings.bundle" />
+    <SkipCodesignItems Include="Settings.bundle/Root.plist" />
+    <SkipCodesignItems Include="Settings.bundle/en.lproj" />
+    <SkipCodesignItems Include="Settings.bundle/en.lproj/Root.strings" />
   </ItemGroup>
 
   <!-- Workaround for https://github.com/dotnet/maui/issues/7272 -->

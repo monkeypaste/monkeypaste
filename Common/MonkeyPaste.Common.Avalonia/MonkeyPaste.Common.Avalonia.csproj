@@ -3,11 +3,18 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <Nullable>disable</Nullable>
-    <TrimMode>copyused</TrimMode> 
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <TargetFramework>$(CommonTargetFramework)</TargetFramework>
     <!--<Platforms>$(DefaultPlatforms)</Platforms>-->
+    <!-- 
+     Turns off reference assembly generation 
+     See: https://learn.microsoft.com/en-us/dotnet/standard/assembly/reference-assemblies
+     -->
+    <!--<ProduceReferenceAssembly>false</ProduceReferenceAssembly>-->
+    <PackageIcon>monkey.png</PackageIcon>
+    <PackageProjectUrl>https://www.monkeypaste.com/</PackageProjectUrl>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -123,14 +130,4 @@
   <ItemGroup>
     <Folder Include="Utils\Input\Platform\" />
   </ItemGroup>
-  <PropertyGroup>
-     <!-- 
-     Turns off reference assembly generation 
-     See: https://learn.microsoft.com/en-us/dotnet/standard/assembly/reference-assemblies
-     -->
-     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-     <PackageIcon>monkey.png</PackageIcon>
-     <PackageProjectUrl>https://www.monkeypaste.com/</PackageProjectUrl>
-     <PackageReadmeFile>readme.md</PackageReadmeFile>
-</PropertyGroup>
 </Project>

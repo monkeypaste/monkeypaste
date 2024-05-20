@@ -765,7 +765,8 @@ namespace MonkeyPaste.Avalonia {
 
             if (ListOrientation == Orientation.Vertical) {
 #if DESKTOP
-                h = DEFAULT_UNEXPANDED_HEIGHT; 
+                //h = DEFAULT_UNEXPANDED_HEIGHT;
+                w = ObservedContainerScreenWidth - vsbw - safe_pad;
 #endif
             } else if (LayoutType == MpClipTrayLayoutType.Grid &&
                         Mp.Services.Query.TotalAvailableItemsInQuery > CurGridFixedCount) {

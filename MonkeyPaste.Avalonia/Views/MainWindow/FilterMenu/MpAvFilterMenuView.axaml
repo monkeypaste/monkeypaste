@@ -14,19 +14,19 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvFilterMenuView">
     <local:MpAvUserControl.Styles>
         <!--  MOBILE VERT SUB-FILTER VISIBILITY  -->
-        <Style Selector="Grid#FilterDockPanel.mobile.vert.sort-expanded local|MpAvTagTrayView">
+        <Style Selector="Grid#FilterDockPanel.vert.sort-expanded local|MpAvTagTrayView">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Grid#FilterDockPanel.mobile.vert.sort-expanded local|MpAvSearchBoxView">
+        <Style Selector="Grid#FilterDockPanel.vert.sort-expanded local|MpAvSearchBoxView">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Grid#FilterDockPanel.mobile.vert.search-expanded local|MpAvTagTrayView">
+        <Style Selector="Grid#FilterDockPanel.vert.search-expanded local|MpAvTagTrayView">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Grid#FilterDockPanel.mobile.vert.search-expanded local|MpAvClipTileSortView">
+        <Style Selector="Grid#FilterDockPanel.vert.search-expanded local|MpAvClipTileSortView">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
