@@ -1,8 +1,8 @@
 #!/bin/bash
-CONFIG=Release
+CONFIG=Debug
 FRAMEWORK="net8.0-ios"
 RUNTIME="ios-arm64"
-PLATFORM="Any CPU"
+PLATFORM="AnyCPU"
 DEVICE_ID="00008020-001945DA3669402E"
 DEVICE_ARG="-p:_DeviceName="
 
@@ -34,4 +34,4 @@ cd "../../../../MonkeyPaste.Avalonia.iOS/"
 
 
 #dotnet build -t:Run  -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} ${DEVICE_ARG}${DEVICE_ID}
-dotnet build -t:Run  -f ${FRAMEWORK} ${DEVICE_ARG}${DEVICE_ID}
+dotnet publish -c ${CONFIG} -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} ${DEVICE_ARG}${DEVICE_ID}

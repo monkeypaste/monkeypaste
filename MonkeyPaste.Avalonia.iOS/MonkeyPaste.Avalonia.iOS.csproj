@@ -4,9 +4,9 @@
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
     <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion> 
     <Nullable>disable</Nullable>
-    <RemoteVs></RemoteVs>
-    <RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>
-    <!--<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>-->
+    <RemoteVs>True</RemoteVs>
+    <!--<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>-->
+    <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -15,12 +15,11 @@
     <!--<SelfContained>true</SelfContained>-->
     
     <!--<MtouchLink>None</MtouchLink>-->
-    <!--<MtouchLink>SdkOnly</MtouchLink>-->
+    <MtouchLink>SdkOnly</MtouchLink>
+    <!--<MtouchLink>Full</MtouchLink>-->
     <!--<OptimizePNGs>True</OptimizePNGs>-->
-    <!--<CodesignExtraArgs>&#8211;&#8211;deep</CodesignExtraArgs>-->
+    <!--<CodesignExtraArgs>&#8211;deep</CodesignExtraArgs>-->
     <!--<ProvisioningType>automatic</ProvisioningType>-->
-    <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(RemoteVs)' == 'True'">
@@ -30,11 +29,6 @@
 
   <PropertyGroup Condition="'$(RemoteVs)' == 'False'">
     <CodesignKey>Apple Development: thomas kefauver (MY7R67BXWM)</CodesignKey>
-    <!--<CodesignProvision>Monkey Profile</CodesignProvision>-->
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-    <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
     <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
   
@@ -57,7 +51,7 @@
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <SkipCodesignItems Include="MonkeyPaste.Avalonia.iOS.app/Settings.bundle" />
     <SkipCodesignItems Include="MonkeyPaste.Avalonia.iOS.app/Settings.bundle/Root.plist" />
     <SkipCodesignItems Include="MonkeyPaste.Avalonia.iOS.app/Settings.bundle/en.lproj" />
@@ -66,34 +60,13 @@
     <SkipCodesignItems Include="Settings.bundle/Root.plist" />
     <SkipCodesignItems Include="Settings.bundle/en.lproj" />
     <SkipCodesignItems Include="Settings.bundle/en.lproj/Root.strings" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <!-- Workaround for https://github.com/dotnet/maui/issues/7272 -->
-  <Target Name="_SetPublishFolderTypeNoneOnDocFileItems" BeforeTargets="_ComputePublishLocation">
+  <!--<Target Name="_SetPublishFolderTypeNoneOnDocFileItems" BeforeTargets="_ComputePublishLocation">
     <ItemGroup>
       <ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Extension)' == '.resx' And '%(ResolvedFileToPublish.PublishFolderType)' == ''" PublishFolderType="None" />
     </ItemGroup>
-  </Target>
-
-  <!-- Original parameter: TargetFramework="$(TargetFramework)"
-     See https://youtrack.jetbrains.com/issue/RIDER-98741/Application-bundle-wasnt-generated-after-deployment-when-trying-to-run-debug-iOS-app-from-Windows-machine -->
-  <!--<Target Name="_GenerateBuildSessionIdOverride"
-          Condition="'$(IsRemoteBuild)' == 'true'"
-          AfterTargets="_GenerateBuildSessionId"
-          BeforeTargets="_SayHello">
-    <GenerateBuildSessionId MessagingVersion="$(MessagingVersion)"
-                            TargetFramework=""
-                            ProjectFullPath="$(MSBuildProjectFullPath)"
-                            ProjectName="$(MSBuildProjectName)"
-                            VisualStudioProcessId="$(VisualStudioProcessId)">
-      <Output TaskParameter="BuildSessionId" PropertyName="BuildSessionId" />
-      <Output TaskParameter="BuildAppName" PropertyName="BuildAppName" />
-    </GenerateBuildSessionId>
   </Target>-->
-  
-  <!--<Target Name="___SIGNINGFIX" BeforeTargets="_CodesignAppBundle">
-    <Exec Command="echo REMOVING Settings.bundle from '$(AppBundleDir)' ..." />
 
-    <Exec Command="rm -fr $(AppBundleDir)/Settings.bundle" />
-  </Target>-->
 </Project>

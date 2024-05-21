@@ -642,14 +642,16 @@ namespace MonkeyPaste.Avalonia {
 
             SetVelocityX(lb, 0);
             SetVelocityY(lb, 0);
-            if (GetCanTouchScroll(lb)) {
-                //e.Pointer.Capture(lb);
-                _down_touch_loc = e.GetPosition(lb).ToPortablePoint();
-                MpConsole.WriteLine($"Touch down loc: {_down_touch_loc}", true);
-                _downOffset = new MpPoint(GetScrollOffsetX(lb), GetScrollOffsetY(lb));
-                _last_scroll_offset = _downOffset;
-            }
             e.Handled = false;
+            if (!GetCanTouchScroll(lb)) {
+                return;
+            }
+            e.PreventGestureRecognition();
+            //e.Pointer.Capture(lb);
+            _down_touch_loc = e.GetPosition(lb).ToPortablePoint();
+            //MpConsole.WriteLine($"Touch down loc: {_down_touch_loc}", true);
+            _downOffset = new MpPoint(GetScrollOffsetX(lb), GetScrollOffsetY(lb));
+            _last_scroll_offset = _downOffset;
         }
 
         private static void PreviewControlPointerMovedHandler(object s, PointerEventArgs e) {
@@ -664,6 +666,8 @@ namespace MonkeyPaste.Avalonia {
                 SetIsTouchScrolling(lb, false);
                 return;
             }
+            e.PreventGestureRecognition();
+            SetIsTouchScrolling(lb, true);
 
             var cur_touch_loc = e.GetPosition(lb).ToPortablePoint();
             if (_down_touch_loc == null) {
@@ -677,14 +681,15 @@ namespace MonkeyPaste.Avalonia {
             var cur_offset = new MpPoint(GetScrollOffsetX(lb), GetScrollOffsetY(lb));
             var new_offset = cur_offset - (cur_touch_loc - _down_touch_loc);
 
-            MpConsole.WriteLine($"Cur Offset: {cur_offset} New Offset: {new_offset}", true);
-            MpConsole.WriteLine($"Cur Loc: {cur_touch_loc} Down Loc: {_down_touch_loc}", false, true);
+            //MpConsole.WriteLine($"Cur Offset: {cur_offset} New Offset: {new_offset}", true);
+            //MpConsole.WriteLine($"Cur Loc: {cur_touch_loc} Down Loc: {_down_touch_loc}", false, true);
 
             ApplyScrollOffset(lb, new_offset.X, new_offset.Y);
             if (_last_v == null) {
                 _last_v = MpPoint.Zero;
             } else {
-                _last_v = (cur_touch_loc - _last_v) / (cur_touch_dt - _last_touch_dt.Value).TotalMilliseconds;
+                //_last_v = (cur_touch_loc - _last_v) / (cur_touch_dt - _last_touch_dt.Value).TotalMilliseconds;
+                _last_v = (cur_touch_loc - _last_touch_loc) / (cur_touch_dt - _last_touch_dt.Value).TotalMilliseconds;
             }
 
             _last_touch_loc = cur_touch_loc;
@@ -701,6 +706,7 @@ namespace MonkeyPaste.Avalonia {
                 _last_v == null) {
                 return;
             }
+            e.PreventGestureRecognition();
 
             var cur_touch_loc = e.GetPosition(lb).ToPortablePoint();
             var cur_touch_dt = DateTime.Now;
@@ -884,20 +890,20 @@ namespace MonkeyPaste.Avalonia {
                 scrollOffsetX += vx;
                 scrollOffsetY += vy;
 
-                //if (_touch_accel == null) {
-                vx *= GetFrictionX(lb);
-                vy *= GetFrictionY(lb);
-                //} else {
-                //    _touch_accel *= new MpPoint(GetFrictionX(lb), GetFrictionY(lb));
-                //    //vx *= GetFrictionX(lb);
-                //    //vy *= GetFrictionY(lb);
-                //    var new_v = new MpPoint(vx, vy) + (_touch_accel * (0.5d * (double)(SCROLL_TICK_INTERVAL_MS ^ 2)));
-                //    vx = new_v.X;
-                //    vy = new_v.Y;
-                //    if (_touch_accel.Length.IsFuzzyZero()) {
-                //        _touch_accel = null;
-                //    }
-                //}
+                if (_touch_accel == null) {
+                    vx *= GetFrictionX(lb);
+                    vy *= GetFrictionY(lb);
+                } else {
+                    _touch_accel *= new MpPoint(GetFrictionX(lb), GetFrictionY(lb));
+                    //vx *= GetFrictionX(lb);
+                    //vy *= GetFrictionY(lb);
+                    var new_v = new MpPoint(vx, vy) + (_touch_accel * (0.5d * (double)(SCROLL_TICK_INTERVAL_MS ^ 2)));
+                    vx = new_v.X;
+                    vy = new_v.Y;
+                    if (_touch_accel.Length.IsFuzzyZero()) {
+                        _touch_accel = null;
+                    }
+                }
 
 
                 ApplyScrollOffset(lb, scrollOffsetX, scrollOffsetY);

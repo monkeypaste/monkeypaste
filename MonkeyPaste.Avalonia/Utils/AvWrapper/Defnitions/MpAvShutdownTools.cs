@@ -23,6 +23,7 @@ namespace MonkeyPaste.Avalonia {
             //MpConsole.ShutdownLog();
             if (App.Instance != null &&
                 App.Instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
+                MpAvSystemTray.ShutdownTray(App.Instance);
                 lifetime.Shutdown();
 
                 //MpAvWindowManager.CloseAll();

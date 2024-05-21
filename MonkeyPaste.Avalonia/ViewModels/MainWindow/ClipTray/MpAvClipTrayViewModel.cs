@@ -368,14 +368,32 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPagingScrollViewer Implementation
         public bool IsTouchScrolling { get; set; }
-        public bool CanTouchScroll =>
-            Mp.Services.PlatformInfo.IsTouchInputEnabled &&
-            QueryItems.All(x => !x.IsTileDragging) &&
-            QueryItems.All(x => !x.CanResize) &&
-            QueryItems.All(x => !x.CanResize) &&
-            (HoverItem == null ||
-             HoverItem.IsPinned ||
-             !HoverItem.IsSubSelectionEnabled);
+        public bool CanTouchScroll {
+            get {
+                bool can_touch_scroll =
+                    Mp.Services.PlatformInfo.IsTouchInputEnabled &&
+                        QueryItems.All(x => !x.IsTileDragging) &&
+                        QueryItems.All(x => !x.CanResize) &&
+                        (HoverItem == null ||
+                         //HoverItem.IsPinned ||
+                         !HoverItem.IsSubSelectionEnabled);
+
+                MpConsole.WriteLine($"Can touch scroll: {can_touch_scroll}");
+                if (!can_touch_scroll) {
+                    MpConsole.WriteLine($"Mp.Services.PlatformInfo.IsTouchInputEnabled: {Mp.Services.PlatformInfo.IsTouchInputEnabled}");
+                    MpConsole.WriteLine($"QueryItems.All(x => !x.CanResize): {QueryItems.All(x => !x.CanResize)}");
+                    if(HoverItem == null) {
+                        MpConsole.WriteLine($"HoverItem is null");
+                    } else {
+
+                        MpConsole.WriteLine($"HoverItem.IsPinned: {HoverItem.IsPinned}");
+                        MpConsole.WriteLine($"!HoverItem.IsSubSelectionEnabled: {!HoverItem.IsSubSelectionEnabled}");
+                    }
+                }
+                return can_touch_scroll;
+            }
+        }
+            
 
 
         public Orientation ListOrientation =>

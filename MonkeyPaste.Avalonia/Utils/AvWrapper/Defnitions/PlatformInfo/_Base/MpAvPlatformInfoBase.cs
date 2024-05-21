@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsBrowser =>
             OperatingSystem.IsBrowser();
 
-        public abstract bool IsTouchInputEnabled { get; }
+        public virtual bool IsTouchInputEnabled { get; } = true;
         #endregion
 
         #region Info
