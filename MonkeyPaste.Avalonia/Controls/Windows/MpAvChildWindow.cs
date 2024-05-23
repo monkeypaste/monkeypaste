@@ -12,6 +12,7 @@ using Avalonia.Rendering;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;

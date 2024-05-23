@@ -1,4 +1,5 @@
 ﻿using Avalonia.Platform;
+using MonkeyPaste.Avalonia;
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
@@ -17,53 +18,24 @@ namespace MonkeyPaste.Avalonia.iOS {
 #endif
         public static void MoveDats() {
             var sw = Stopwatch.StartNew();
-            //MovePlugins();
-            MoveResources();
+            MoveAssets();
             Console.WriteLine($"Total asset move time: {sw.ElapsedMilliseconds}ms");
         }
-        private static void MoveResources() {
-            //string editor_zip_path = "avares://iosTest/Assets/dat/Editor.zip";
-            //string dest_dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Resources");
-            //UnzipAsset(editor_zip_path, dest_dir);
-
+        private static void MoveAssets() {
             var pi = MpAvDeviceWrapper.Instance.PlatformInfo;
             var asset_lookup = new Dictionary<string, string>() {
                 { "editor.zip", Path.GetDirectoryName(pi.EditorPath) },
-                { "terms.zip", Path.GetDirectoryName(pi.TermsPath) },
+                { "legal.zip", Path.GetDirectoryName(pi.TermsPath) },
                 { "enums.zip", Path.GetDirectoryName(pi.EnumsPath) },
                 { "uistrings.zip", Path.GetDirectoryName(pi.UiStringsPath) },
             };
+            string core_dat_dir = Path.Combine(MpAvDeviceWrapper.Instance.PlatformInfo.ExecutingDir, MpPluginLoader.DAT_FOLDER_NAME);
+            MpPluginLoader.CorePluginGuids.ForEach(x => asset_lookup.Add($"{x}.zip", core_dat_dir));
 
             foreach (var asset_kvp in asset_lookup) {
                 UnzipDatAsset(asset_kvp.Key, asset_kvp.Value);
             }
         }
-
-        private static void MovePlugins() {
-            string core_dat_dir = Path.Combine(Path.GetDirectoryName(typeof(MpAvIosAssetMover).Assembly.Location), "Assets", "dat");
-            if (core_dat_dir.IsDirectory()) {
-                // already moved
-                if (IGNORE_OVERWRITE) {
-                    // release 
-                    return;
-                }
-                // remove it
-                MpFileIo.DeleteDirectory(core_dat_dir);
-            }
-            // create dat dir in <local storage>/files/dat
-            if (!MpFileIo.CreateDirectory(core_dat_dir)) {
-                MpDebug.Break($"Error could not create CoreDatDir at '{core_dat_dir}'");
-                return;
-            }
-
-            // move all plugin zips to newly created dat dir
-            foreach (var core_plugin_guid in MpPluginLoader.CorePluginGuids) {
-                string cpg_fn = $"{core_plugin_guid}.zip";
-                string target_cpg_path = Path.Combine(core_dat_dir, cpg_fn);
-                UnzipDatAsset(cpg_fn, target_cpg_path);
-            }
-        }
-
 
         private static void UnzipDatAsset(string assetName, string targetDir) {
             if (Directory.Exists(targetDir)) {

@@ -77,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static bool USE_LOADERS =>
-#if ANDROID
+#if ANDROID || IOS
             false;
 #else
             true;

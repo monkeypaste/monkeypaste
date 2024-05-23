@@ -1,4 +1,5 @@
-﻿using Xamarin.Essentials;
+﻿using Microsoft.Maui.Devices;
+using MonkeyPaste.Avalonia;
 
 namespace MonkeyPaste.Avalonia.iOS{
     public class MpAvIosPlatformInfo : MpAvPlatformInfoBase {

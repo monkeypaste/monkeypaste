@@ -1,4 +1,5 @@
 ﻿using Foundation;
+using MonkeyPaste;
 using MonkeyPaste.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;

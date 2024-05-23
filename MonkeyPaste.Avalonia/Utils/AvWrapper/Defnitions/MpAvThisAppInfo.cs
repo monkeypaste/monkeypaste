@@ -1,7 +1,7 @@
 ﻿using MonkeyPaste.Common;
 #if WINDOWS
 #else
-using Xamarin.Essentials;
+//using Xamarin.Essentials;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -45,8 +45,8 @@ namespace MonkeyPaste.Avalonia {
 
         }
         public MpAvThisAppInfo() {
-#if ANDROID
-            VersionTracking.Track();
+#if ANDROID || IOS
+            //VersionTracking.Track();
 #endif
         }
     }

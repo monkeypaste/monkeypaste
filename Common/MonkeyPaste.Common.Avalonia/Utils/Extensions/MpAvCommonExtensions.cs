@@ -930,7 +930,11 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
         #region Size
+        public static MpSize ToPortableSize(this MpSize s, double scaling) {
+            // NOTE this is to keep compatibility for WINDOWED mode
 
+            return s.ToAvPixelSize(1).ToPortableSize(scaling);
+        }
         public static MpSize ToPortableSize(this MpPoint p) {
             return new MpSize(p.X, p.Y);
         }
@@ -1003,7 +1007,9 @@ namespace MonkeyPaste.Common.Avalonia {
             return new PixelRect(rect.Location.ToAvPixelPoint(pixelDensity), rect.Size.ToAvPixelSize(pixelDensity));
         }
 
-
+        public static bool Contains(this MpRect rect, PixelPoint pp, double scaling = 1) {
+            return rect.Contains(pp.ToPortablePoint(scaling));
+        }
 
         #endregion
     }

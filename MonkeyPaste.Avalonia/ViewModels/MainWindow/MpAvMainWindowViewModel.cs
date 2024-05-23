@@ -1243,7 +1243,7 @@ namespace MonkeyPaste.Avalonia {
             };
             while (true) {
                 if (wait_vml.Any(x => x.IsAnyBusy) ||
-                    !MpAvPlainHtmlConverter.Instance.IsLoaded ||
+                    //!MpAvPlainHtmlConverter.Instance.IsLoaded ||
                     !Mp.Services.StartupState.IsPlatformLoaded ||
                     MpAvClipTrayViewModel.Instance.IsAddingClipboardItem) {
                     await Task.Delay(100);

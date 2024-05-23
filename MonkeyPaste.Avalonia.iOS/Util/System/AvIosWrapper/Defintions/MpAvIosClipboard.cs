@@ -1,15 +1,17 @@
-﻿using Avalonia.Input;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Input;
 using Avalonia.Input.Platform;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
+using MonkeyPaste.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
 
 namespace MonkeyPaste.Avalonia.iOS{
-    public class MpAvIosClipboard : MpIClipboard {        
-
+    public class MpAvIosClipboard : MpIClipboard {
         public Task<string> GetTextAsync() =>
             Clipboard.GetTextAsync();
 

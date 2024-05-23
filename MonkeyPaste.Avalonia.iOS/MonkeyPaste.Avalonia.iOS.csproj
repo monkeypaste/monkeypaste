@@ -1,39 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>$(MainTargetFramework)</TargetFramework>
-    <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion> 
+    <TargetFramework>net8.0-ios</TargetFramework>
+    <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
     <Nullable>disable</Nullable>
-    <RemoteVs>True</RemoteVs>
-    <!--<RuntimeIdentifier>iossimulator-x64</RuntimeIdentifier>-->
-    <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+    <ProvisioningType>manual</ProvisioningType>
+    <CodesignKey>Apple Development: Created via API (79M7T3S5XK)</CodesignKey>
+    <UseMauiEssentials>true</UseMauiEssentials>
   </PropertyGroup>
   
-  <PropertyGroup>
-    <!--<EnableCodesigning>false</EnableCodesigning>-->
-    <!--<ArchiveOnBuild>true</ArchiveOnBuild>-->
-    <!--<SelfContained>true</SelfContained>-->
-    
-    <!--<MtouchLink>None</MtouchLink>-->
+  <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <MtouchLink>SdkOnly</MtouchLink>
-    <!--<MtouchLink>Full</MtouchLink>-->
-    <!--<OptimizePNGs>True</OptimizePNGs>-->
-    <!--<CodesignExtraArgs>&#8211;deep</CodesignExtraArgs>-->
-    <!--<ProvisioningType>automatic</ProvisioningType>-->
+    <OptimizePNGs>True</OptimizePNGs>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <MtouchLink>SdkOnly</MtouchLink>
+    <OptimizePNGs>True</OptimizePNGs>
+  </PropertyGroup>-->
   
-  <PropertyGroup Condition="'$(RemoteVs)' == 'True'">
-    <CodesignKey>Apple Development: Created via API (884PVH7X29)</CodesignKey>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
+    <CodesignKey>Apple Development: Created via API (79M7T3S5XK)</CodesignKey>
     <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(RemoteVs)' == 'False'">
-    <CodesignKey>Apple Development: thomas kefauver (MY7R67BXWM)</CodesignKey>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
-  </PropertyGroup>
-  
   <ItemGroup>
-    <Compile Remove="Util\System\AvIosWrapper\Defintions\MpAvAdToastNotification.cs" />
+    <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="WebView.Avalonia.iOS" Version="11.0.0.1" />
+    <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.21" />
   </ItemGroup>
   
   <ItemGroup>
@@ -41,32 +34,28 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
   </ItemGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="WebView.Avalonia.iOS" Version="$(SugarWvVersion)" Condition="'$(UseSugarWv)' == 'True'" />
+    <None Remove="Assets\dat\cf2ec03f-9edd-45e9-a605-2a2df71e03bd.zip" />
+    <None Remove="Assets\dat\ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31.zip" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
-  </ItemGroup>
-
-  <!--<ItemGroup>
-    <SkipCodesignItems Include="MonkeyPaste.Avalonia.iOS.app/Settings.bundle" />
-    <SkipCodesignItems Include="MonkeyPaste.Avalonia.iOS.app/Settings.bundle/Root.plist" />
-    <SkipCodesignItems Include="MonkeyPaste.Avalonia.iOS.app/Settings.bundle/en.lproj" />
-    <SkipCodesignItems Include="MonkeyPaste.Avalonia.iOS.app/Settings.bundle/en.lproj/Root.strings" />
-    <SkipCodesignItems Include="Settings.bundle" />
-    <SkipCodesignItems Include="Settings.bundle/Root.plist" />
-    <SkipCodesignItems Include="Settings.bundle/en.lproj" />
-    <SkipCodesignItems Include="Settings.bundle/en.lproj/Root.strings" />
-  </ItemGroup>-->
-
+  </ItemGroup>    
+  
+  
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <!--<Debugger>Xamarin</Debugger>
+    <DebugSymbols>True</DebugSymbols>-->
+    <MtouchDebug>True</MtouchDebug>
+    <MtouchProfiling>True</MtouchProfiling>
+  </PropertyGroup>
+  
   <!-- Workaround for https://github.com/dotnet/maui/issues/7272 -->
-  <!--<Target Name="_SetPublishFolderTypeNoneOnDocFileItems" BeforeTargets="_ComputePublishLocation">
+  <Target Name="_SetPublishFolderTypeNoneOnDocFileItems" BeforeTargets="_ComputePublishLocation">
     <ItemGroup>
       <ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Extension)' == '.resx' And '%(ResolvedFileToPublish.PublishFolderType)' == ''" PublishFolderType="None" />
     </ItemGroup>
-  </Target>-->
-
+  </Target>
 </Project>

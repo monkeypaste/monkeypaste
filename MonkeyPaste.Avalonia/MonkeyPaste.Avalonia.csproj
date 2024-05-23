@@ -30,6 +30,10 @@
     <UseWPF>True</UseWPF>
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(IsMobile)' == 'True'">
+    <UseMauiEssentials>True</UseMauiEssentials>
+  </PropertyGroup>
 
   <PropertyGroup>
     <!-- Removes Fody 'already processed warning' -->
@@ -100,7 +104,8 @@
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
     <PackageReference Include="System.Speech" Version="8.0.0" />
     <PackageReference Include="TaskScheduler" Version="2.11.0" Condition="'$(BuildOs)' == 'WINDOWS'" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
+    <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.21" />
+    <!--<PackageReference Include="Xamarin.Essentials" Version="1.8.1" />-->
   </ItemGroup>
 
 

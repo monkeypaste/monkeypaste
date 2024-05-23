@@ -4,13 +4,18 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.VisualTree;
+using Microsoft.Maui.Devices;
+using MonkeyPaste.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Collections.Generic;
-using Xamarin.Essentials;
+using System.Linq;
+using UIKit;
 using AvApplication = Avalonia.Application;
 
 namespace MonkeyPaste.Avalonia.iOS{
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1422:Validate platform compatibility", Justification = "<Pending>")]
+
     public class MpAvIosScreenInfo : MpAvScreenInfoBase {
         #region Private Variables
         
@@ -60,22 +65,6 @@ namespace MonkeyPaste.Avalonia.iOS{
                 // Get Metrics
                 var di = DeviceDisplay.MainDisplayInfo;
 
-                // Orientation (Landscape, Portrait, Square, Unknown)
-                var orientation = di.Orientation;
-
-                // Rotation (0, 90, 180, 270)
-                var rotation = di.Rotation;
-
-                // Width (in pixels)
-                var width = di.Width;
-
-                // Width (in xamarin.forms units)
-                var xamarinWidth = width / di.Density;
-
-                // Height (in pixels)
-                var height = di.Height;
-
-                // Screen density
                 Scaling = di.Density;
                 if(IsVertical) {
                     _sw = di.Width;
@@ -84,6 +73,10 @@ namespace MonkeyPaste.Avalonia.iOS{
                     _sw = di.Height;
                     _sh = di.Width;
                 }
+
+                var window = UIApplication.SharedApplication.Windows.FirstOrDefault();
+                _statusHeight = window?.SafeAreaInsets.Top ?? 0;
+                _navHeightPortrait = window?.SafeAreaInsets.Bottom ?? 0;
                 Bounds = GetBounds(IsVertical);
                 WorkingArea = GetWorkArea(IsVertical);
             }

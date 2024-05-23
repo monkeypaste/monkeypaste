@@ -1,4 +1,5 @@
 ﻿using Avalonia.Input.Platform;
+using MonkeyPaste;
 using MonkeyPaste.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -11,6 +12,9 @@ using Stopwatch = System.Diagnostics.Stopwatch;
 
 namespace MonkeyPaste.Avalonia.iOS{
     public class MpAvIosWrapper : MpAvDeviceWrapper {
+
+        #region Statics
+        #endregion
 
         #region Interfaces
 
@@ -25,6 +29,8 @@ namespace MonkeyPaste.Avalonia.iOS{
 
         #endregion
 
+        #region Constructors
+        #endregion
         #region Public Methods
 
         public override void CreateDeviceInstance(object args) {
@@ -34,8 +40,8 @@ namespace MonkeyPaste.Avalonia.iOS{
             ScreenInfoCollection = new MpAvIosScreenInfoCollection(new[] { new MpAvIosScreenInfo() });
             IconBuilder = new MpAvIosIconBuilder();
             DeviceClipboard = new MpAvIosClipboard();
-            //PlatformToastNotification = new MpAvAdToastNotification();
-            //DeviceWebViewHelper = new MpAvAdWebViewHelper();
+            PlatformToastNotification = new MpAvIosToastNotification();
+            DeviceWebViewHelper = new MpAvIosWebViewHelper();
 
             MpAvIosAssetMover.MoveDats();
 

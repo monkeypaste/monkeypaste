@@ -40,7 +40,7 @@
   
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>IOS</BuildOs>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -181,9 +181,11 @@
   <!-- IOS -->
   
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">
-    <MainTargetFramework>$(DefaultTargetFramework)-ios</MainTargetFramework> 
+    <MainTargetFramework>$(DefaultTargetFramework)-ios</MainTargetFramework>
+    <!--<CommonTargetFramework>$(DefaultTargetFramework)</CommonTargetFramework>-->
     <DefineConstants>$(DefineConstants);MOBILE;IOS;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
+    <!--<MainProjectName>Scratch/iosTest/iosTest.iOS</MainProjectName>-->
     <IsMobile>true</IsMobile>
     <UseSugarWv>true</UseSugarWv>
     <IsWindowed>true</IsWindowed>

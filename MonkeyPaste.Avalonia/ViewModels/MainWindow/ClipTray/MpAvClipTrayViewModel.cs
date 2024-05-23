@@ -3248,7 +3248,7 @@ namespace MonkeyPaste.Avalonia {
                         bool is_waiting =
                             IsAddingClipboardItem ||
                             MpAvPlainHtmlConverter.Instance.IsBusy ||
-                            !MpAvPlainHtmlConverter.Instance.IsLoaded ||
+                            //!MpAvPlainHtmlConverter.Instance.IsLoaded ||
                             !Mp.Services.StartupState.IsCoreLoaded;
                         if (is_waiting) {
                             MpConsole.WriteLine($"waiting to add item to cliptray...(IsAddingClipboardItem:{IsAddingClipboardItem},MpAvPlainHtmlConverter.Instance.IsLoaded:{MpAvPlainHtmlConverter.Instance.IsLoaded},MpAvPlainHtmlConverter.Instance.IsBusy:{MpAvPlainHtmlConverter.Instance.IsBusy},Mp.Services.StartupState.IsCoreLoaded:{Mp.Services.StartupState.IsCoreLoaded})");

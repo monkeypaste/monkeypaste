@@ -83,7 +83,8 @@ namespace MonkeyPaste.Avalonia {
             config.IsStatusBarEnabled = false;
             config.DefaultWebViewBackgroundColor = System.Drawing.Color.FromArgb(System.Drawing.Color.Transparent.ToArgb());
             config.AdditionalBrowserArguments = MpAvCefCommandLineArgs.ToArgString();
-            config.BrowserExecutableFolder = Path.GetDirectoryName(new MpAvPlatformInfo_desktop().EditorPath);
+            //config.BrowserExecutableFolder = Path.GetDirectoryName(new MpAvPlatformInfo_desktop().EditorPath);
+            config.BrowserExecutableFolder = Path.GetDirectoryName(Mp.Services.PlatformInfo.EditorPath);
             
             MpConsole.WriteLine($"Cef args: '{config.AdditionalBrowserArguments}'");
             //config.UserDataFolder = _creationProperties.UserDataFolder;

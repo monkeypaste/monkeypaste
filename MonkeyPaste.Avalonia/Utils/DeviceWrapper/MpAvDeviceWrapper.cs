@@ -1,11 +1,11 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvDeviceWrapper : MpIDeviceWrapper {
         #region Statics
-
         protected static MpAvDeviceWrapper _instance;
         public static MpAvDeviceWrapper Instance =>
             _instance;

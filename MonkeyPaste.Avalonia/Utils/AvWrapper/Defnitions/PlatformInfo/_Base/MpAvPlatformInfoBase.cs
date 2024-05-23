@@ -342,26 +342,17 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private string GetExecutableExt() {
-            if (OsType == MpUserDeviceType.Windows) {
-                return ".exe";
+            switch(OsType) {
+                case MpUserDeviceType.Windows:
+                    return ".exe";
+                case MpUserDeviceType.Android:
+                    return ".apk";
+                case MpUserDeviceType.Mac:
+                case MpUserDeviceType.Ios:
+                    return "/";
+                default:
+                    return string.Empty;
             }
-            if (OsType == MpUserDeviceType.Android) {
-                // NOTE this may need OsVersionInfo too
-                return ".apk";
-            }
-            if (OsType == MpUserDeviceType.Mac) {
-                return @"/";
-            }
-            if (OsType == MpUserDeviceType.Linux) {
-                // TODO this is a place OsVersionInfo will be needed
-                return string.Empty;
-            }
-            if (OsType == MpUserDeviceType.Browser) {
-                return string.Empty;
-            }
-            // add
-            MpDebug.Break("missing executable exit");
-            return null;
         }
 
         #endregion
