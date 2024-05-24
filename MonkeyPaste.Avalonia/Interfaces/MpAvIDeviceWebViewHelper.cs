@@ -1,6 +1,6 @@
 ﻿
 namespace MonkeyPaste.Avalonia {
     public interface MpAvIDeviceWebViewHelper {
-        void EnableFileAccess(object wv);
+        void ConfigureWebview(object wv);
     }
 }

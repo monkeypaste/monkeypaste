@@ -69,7 +69,7 @@
   </ItemGroup>
   
   <ItemGroup>    
-    <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" Condition="'$(BuildOs)' != 'ANDROID' And '$(BuildOs)' != 'IOS'" />
+    <!--<Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" Condition="'$(BuildOs)' != 'ANDROID' And '$(BuildOs)' != 'IOS'" />-->
   </ItemGroup>  
   
   

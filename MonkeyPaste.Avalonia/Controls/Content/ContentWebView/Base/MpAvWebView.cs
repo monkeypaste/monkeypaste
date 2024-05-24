@@ -83,9 +83,8 @@ namespace MonkeyPaste.Avalonia {
             config.IsStatusBarEnabled = false;
             config.DefaultWebViewBackgroundColor = System.Drawing.Color.FromArgb(System.Drawing.Color.Transparent.ToArgb());
             config.AdditionalBrowserArguments = MpAvCefCommandLineArgs.ToArgString();
-            //config.BrowserExecutableFolder = Path.GetDirectoryName(new MpAvPlatformInfo_desktop().EditorPath);
-            config.BrowserExecutableFolder = Path.GetDirectoryName(Mp.Services.PlatformInfo.EditorPath);
-            
+            config.BrowserExecutableFolder = Path.GetDirectoryName(new MpAvPlatformInfoBase().EditorPath);
+
             MpConsole.WriteLine($"Cef args: '{config.AdditionalBrowserArguments}'");
             //config.UserDataFolder = _creationProperties.UserDataFolder;
             //config.Language = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name;
@@ -93,11 +92,11 @@ namespace MonkeyPaste.Avalonia {
             //config.IsInPrivateModeEnabled = _creationProperties.IsInPrivateModeEnabled;
         }
 #endif
-        #endregion
+#endregion
 
-        #region Interfaces
+            #region Interfaces
 #if CEFNET_WV || OUTSYS_WV || SUGAR_WV
-        public void OpenDevTools() {
+            public void OpenDevTools() {
 #if RELEASE
             return;
 #elif OUTSYS_WV
@@ -187,36 +186,16 @@ namespace MonkeyPaste.Avalonia {
             if (!Uri.IsWellFormedUriString(urlStr, UriKind.Absolute)) {
                 return;
             }
-
-#if MAC
-            /*
-            from https://stackoverflow.com/a/57756238/105028
-            [wkwebView.configuration.preferences setValue:@"TRUE" forKey:@"allowFileAccessFromFileURLs"];
-        NSURL *url = [NSURL fileURLWithPath:YOURFILEPATH];
-        [wkwebView loadFileURL:url allowingReadAccessToURL:url.URLByDeletingLastPathComponent];
-            */
-            //Dispatcher.UIThread.Post(async () => {
-            //    while (true) {
-            //        // wait for webview to get attached to visual tree (where PlatformWebView is assigned)
-            //        if (InnerWebView == null || InnerWebView.PlatformWebView == null) {
-            //            await Task.Delay(100);
-            //            continue;
-            //        }
-            //        break;
-            //    }
-            //    if (InnerWebView.PlatformWebView is MacCatalystWebViewCore wvc &&
-            //        wvc.WebView is WkWebview wv &&
-            //        urlStr.ToPathFromUri() is string url_path) {
-            //        wv.Configuration.Preferences.SetValueForKey(NSObject.FromObject(true), new NSString("allowFileAccessFromFileURLs"));
-            //        NSUrl url = NSUrl.FromFilename(url_path);
-            //        NSUrl url_dir = NSUrl.FromFilename(Path.GetDirectoryName(url_path));
-            //        wv.LoadFileUrl(url, url_dir);
-            //    }
-            //});
+            if(!MpAvAssetMover.IsLoaded) {
+                Dispatcher.UIThread.Post(async () => {
+                    while(!MpAvAssetMover.IsLoaded) {
+                        await Task.Delay(100);
+                    }
+                    Navigate(urlStr);
+                });
+                return;
+            }
             InnerWebView.Url = new Uri(urlStr, UriKind.Absolute);
-#else
-            InnerWebView.Url = new Uri(urlStr, UriKind.Absolute);
-#endif
 #endif
         }
 #endif
@@ -622,7 +601,9 @@ namespace MonkeyPaste.Avalonia {
 
             }
 #elif ANDROID
-            MpAvDeviceWrapper.Instance.DeviceWebViewHelper.EnableFileAccess(InnerWebView);
+            MpAvDeviceWrapper.Instance.DeviceWebViewHelper.ConfigureWebview(InnerWebView);
+#elif IOS
+            MpAvDeviceWrapper.Instance.DeviceWebViewHelper.ConfigureWebview(new object[] { InnerWebView, this });
 #endif
         }
         private void InnerWebView_NavigationCompleted(object sender, WebViewCore.Events.WebViewUrlLoadedEventArg e) {

@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvPlatformInfoBase : MpIPlatformInfo {
+    public class MpAvPlatformInfoBase : MpIPlatformInfo {
         #region Properties
 
         #region State
@@ -254,32 +254,41 @@ namespace MonkeyPaste.Avalonia {
                 return _storageDir;
             }
         }
+        public virtual string ResourcesDir {
+            get {
+                string resources_dir = Path.Combine(StorageDir, "Resources");
+                if(!resources_dir.IsDirectory()) {
+                    MpFileIo.CreateDirectory(resources_dir);
+                }
+                return resources_dir;
+            }
+        }
         public virtual string EditorPath {
             get {
                 if (OperatingSystem.IsBrowser()) {
                     return Path.Combine("Editor", "index.html");
                 }
-                return Path.Combine(ExecutingDir, "Resources", "Editor", "index.html");
+                return Path.Combine(ResourcesDir, "Editor", "index.html");
             }
         }
         public virtual string TermsPath {
             get {
-                return Path.Combine(ExecutingDir, "Resources", "Legal", "terms.html");
+                return Path.Combine(ResourcesDir, "Legal", "terms.html");
             }
         }
         public virtual string EnumsPath =>
-            Path.Combine(ExecutingDir, "Resources", "Localization", "Enums", "EnumUiStrings.resx");
+            Path.Combine(ResourcesDir, "Localization", "Enums", "EnumUiStrings.resx");
         public virtual string UiStringsPath =>
-            Path.Combine(ExecutingDir, "Resources", "Localization", "UiStrings", "UiStrings.resx");
+            Path.Combine(ResourcesDir, "Localization", "UiStrings", "UiStrings.resx");
 
         public virtual string CreditsPath {
             get {
-                return Path.Combine(ExecutingDir, "Resources", "Legal", "credits.html");
+                return Path.Combine(ResourcesDir, "Legal", "credits.html");
             }
         }
         public virtual string CreditsPlatformPath {
             get {
-                return Path.Combine(ExecutingDir, "Resources", "Legal", $"credits.{OsShortName}.html");
+                return Path.Combine(ResourcesDir, "Legal", $"credits.{OsShortName}.html");
             }
         }
         public virtual string HelpPath {
@@ -287,7 +296,7 @@ namespace MonkeyPaste.Avalonia {
                 if (OperatingSystem.IsBrowser()) {
                     return Path.Combine("Editor", "index.html");
                 }
-                return Path.Combine(ExecutingDir, "Resources", "Help", "index.html");
+                return Path.Combine(ResourcesDir, "Help", "index.html");
             }
         }
 

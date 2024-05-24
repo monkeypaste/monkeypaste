@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
     public static class MpPluginLoader {
         #region Private Variables
-
+        private static MpAvPlatformInfoBase _pi = new MpAvPlatformInfoBase();
         #endregion
 
         #region Constants
@@ -109,7 +109,7 @@ namespace MonkeyPaste.Avalonia {
             Plugins.ToDictionary(x => x.guid, x => x);
         public static bool IsLoaded { get; private set; }
         public static string PluginRootDir =>
-            Path.Combine(Mp.Services.PlatformInfo.StorageDir, PLUG_FOLDER_NAME);
+            Path.Combine(_pi.StorageDir, PLUG_FOLDER_NAME);
         public static string PluginCacheDir =>
             Path.Combine(PluginRootDir, PLUGIN_CACHE_FOLDER_NAME);
         public static string PluginBackupDir =>
@@ -117,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
         public static string PluginUpdatesDir =>
             Path.Combine(PluginCacheDir, PLUGIN_UPDATES_FOLDER_NAME);
         public static string CoreDatDir =>
-            Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, DAT_FOLDER_NAME);
+            Path.Combine(_pi.ExecutingDir, DAT_FOLDER_NAME);
 
         public static string[] CorePluginGuids => new string[] {
             CoreClipboardHandlerGuid,

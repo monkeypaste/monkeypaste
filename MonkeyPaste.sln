@@ -84,6 +84,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iosTest", "Scratch\iosTest\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iosTest.iOS", "Scratch\iosTest\iosTest.iOS\iosTest.iOS.csproj", "{E0AB907B-2125-4D53-A07C-10CE59DC3C9B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Avalonia.iOS.KeyboardExtentsion", "Scratch\iosTest\MonkeyPaste.Avalonia.iOS.KeyboardExtentsion\MonkeyPaste.Avalonia.iOS.KeyboardExtentsion.csproj", "{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Avalonia.iOS.ShareExtentsion", "Scratch\iosTest\MonkeyPaste.Avalonia.iOS.ShareExtentsion\MonkeyPaste.Avalonia.iOS.ShareExtentsion.csproj", "{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -318,6 +322,30 @@ Global
 		{E0AB907B-2125-4D53-A07C-10CE59DC3C9B}.Release|x64.ActiveCfg = Release|Any CPU
 		{E0AB907B-2125-4D53-A07C-10CE59DC3C9B}.Release|x64.Build.0 = Release|Any CPU
 		{E0AB907B-2125-4D53-A07C-10CE59DC3C9B}.Release|x64.Deploy.0 = Release|Any CPU
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}.Debug|x64.Build.0 = Debug|Any CPU
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}.Release|x64.ActiveCfg = Release|Any CPU
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}.Release|x64.Build.0 = Release|Any CPU
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56}.Release|x64.Deploy.0 = Release|Any CPU
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}.Debug|x64.Build.0 = Debug|Any CPU
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}.Release|x64.ActiveCfg = Release|Any CPU
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}.Release|x64.Build.0 = Release|Any CPU
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB}.Release|x64.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -345,16 +373,18 @@ Global
 		{FC11C0A5-F685-45A0-8541-0B6DCED9A686} = {D300D2C5-182B-4F20-98A6-4BA79EACCCC4}
 		{F7F9D093-030B-4D7F-ABC8-529F25E15734} = {F1F3ACA3-2B6A-4422-AB3E-FD484113ED53}
 		{E0AB907B-2125-4D53-A07C-10CE59DC3C9B} = {F1F3ACA3-2B6A-4422-AB3E-FD484113ED53}
+		{D9031235-0C00-4C34-BD1C-1DB57E1B4B56} = {F1F3ACA3-2B6A-4422-AB3E-FD484113ED53}
+		{375D4054-044A-4906-AAF2-F8D5F8AA4FAB} = {F1F3ACA3-2B6A-4422-AB3E-FD484113ED53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_ConfirmAddLanguageFile = False
-		RESX_ExcelExportMode = Text
-		RESX_TaskErrorCategory = Message
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_RemoveEmptyEntries = False
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_DuplicateKeyHandling = Fail
-		RESX_ShowPerformanceTraces = True
 		RESX_CultureCountyOverrides = ar=ar-DJ
+		RESX_ShowPerformanceTraces = True
+		RESX_DuplicateKeyHandling = Fail
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_RemoveEmptyEntries = False
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_TaskErrorCategory = Message
+		RESX_ExcelExportMode = Text
+		RESX_ConfirmAddLanguageFile = False
 	EndGlobalSection
 EndGlobal

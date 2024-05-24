@@ -144,6 +144,31 @@ namespace MonkeyBuild {
             "YoloImageAnnotator",
         ];
 
+        static string[] ASSET_DIRS => [
+            Path.Combine(
+                MpPlatformHelpers.GetSolutionDir(),
+                "MonkeyPaste.Avalonia",
+                "Resources",
+                "Editor"),
+            Path.Combine(
+                MpPlatformHelpers.GetSolutionDir(),
+                "MonkeyPaste.Avalonia",
+                "Resources",
+                "Localization",
+                "Enums"),
+            Path.Combine(
+                MpPlatformHelpers.GetSolutionDir(),
+                "MonkeyPaste.Avalonia",
+                "Resources",
+                "Localization",
+                "UiStrings"),
+            Path.Combine(
+                MpPlatformHelpers.GetSolutionDir(),
+                "MonkeyPaste.Avalonia",
+                "Resources",
+                "Legal"),
+        ];
+
 
         static bool DO_LOCAL_PACKAGING => BuildTasks.Contains(MpBuildFlags.DO_LOCAL_PACKAGING);
 

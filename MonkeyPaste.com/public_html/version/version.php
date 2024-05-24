@@ -2,9 +2,11 @@
 
 require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
-const LINUX_VER = '1.0.17.0';
-const WIN_VER = '1.0.14.0';
-const MAC_VER = '1.0.12.0';
+const LINUX_VER = '1.0.18.0';
+const WIN_VER = '1.0.19.0';
+const MAC_VER = '1.0.19.0';
+const ANDROID_VER = '1.0.19.0';
+const IOS_VER = '1.0.19.0';
 
 function exit_w_version_resp(string $device_type) {
      $resp_obj = null;
@@ -17,6 +19,12 @@ function exit_w_version_resp(string $device_type) {
                break;
           case 'Linux':
                $resp_obj = ['device_version' => LINUX_VER];
+               break;
+          case 'Android':
+               $resp_obj = ['device_version' => ANDROID_VER];
+               break;
+          case 'Ios':
+               $resp_obj = ['device_version' => IOS_VER];
                break;
           default:
                exit_w_error('unknown device type');

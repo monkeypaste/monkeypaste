@@ -188,13 +188,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void B_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
-            if(sender is not Control c) {
+            // measuring only seems wrong on android and ios would need to recalculate extents
+#if ANDROID
+            if (sender is not Control c) {
                 return;
             }
             MpConsole.WriteLine($"Screen: {MpAvDeviceWrapper.Instance.ScreenInfoCollection.Primary}");
             MpConsole.WriteLine($"MainView: {c.Bounds}");
             MpAvDeviceWrapper.Instance.ScreenInfoCollection.Primary.Bounds = c.Bounds.ToPortableRect();
-            MpAvDeviceWrapper.Instance.ScreenInfoCollection.Primary.WorkingArea = c.Bounds.ToPortableRect();
+            MpAvDeviceWrapper.Instance.ScreenInfoCollection.Primary.WorkingArea = c.Bounds.ToPortableRect(); 
+#endif
         }
 
         private void Desktop_ShutdownRequested(object sender, ShutdownRequestedEventArgs e) {

@@ -166,7 +166,10 @@ namespace MonkeyPaste.Avalonia {
                 _convWindow.Show();
             } else {
                 // mobile
-
+                if(!do_hide) {
+                    ConverterWebView.Width = 200;
+                    ConverterWebView.Height = 200;
+                }
                 Dispatcher.UIThread.Post(async () => {
                     // NOTE need to ntf loaded or mv won't be created
                     MpAvMainView mv = null;
@@ -182,10 +185,14 @@ namespace MonkeyPaste.Avalonia {
             }
 
             IsBusy = false;
+
+            // always mark as loaded and fallback if necessary while cnvwv loads
+            IsLoaded = true;
         }
 
         private async void ConverterWebView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             var sw = Stopwatch.StartNew();
+            ConverterWebView.OpenDevTools();
 
             while (!ConverterWebView.IsEditorInitialized) {
                 if (sw.Elapsed > TimeSpan.FromSeconds(60)) {
@@ -205,7 +212,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             MpConsole.WriteLine($"Html converter initialized. Load time: {sw.ElapsedMilliseconds}ms");
-            IsLoaded = true;
+            //IsLoaded = true;
         }
 
 

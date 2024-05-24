@@ -9,7 +9,6 @@ namespace MonkeyPaste.Common {
         string OsVersion { get; }
         string OsFileManagerPath { get; }
         string RuntimeShortName { get; }
-
         string ExecutableName { get; }
         string ExecutingDir { get; }
         string ExecutingPath { get; }
@@ -24,7 +23,7 @@ namespace MonkeyPaste.Common {
         bool IsTraceEnabled { get; }
         string OsShortName { get; }
         string PlatformName { get; }
-
+        string ResourcesDir { get; }
         string EditorPath { get; }
         string TermsPath { get; }
         string EnumsPath { get; }
