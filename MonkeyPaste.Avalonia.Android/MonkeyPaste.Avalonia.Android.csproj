@@ -71,13 +71,11 @@
   <ItemGroup>
     <PackageReference Include="WebView.Avalonia" Version="$(SugarWvVersion)" />
     <PackageReference Include="WebView.Avalonia.Android" Version="$(SugarWvVersion)" />
-    <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.6" />
     <PackageReference Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
     <PackageReference Include="SkiaSharp.Views" Version="2.88.8" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Reactive" Version="6.0.0" />
     <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
-    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.10.0.3" />
   </ItemGroup>
 
   <ItemGroup>

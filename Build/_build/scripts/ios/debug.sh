@@ -30,8 +30,8 @@ if [ "$1" = "sim" ] || [ "$2" = "sim" ]; then
 	DEVICE_ARG="-p:_DeviceName=:v2:udid="
 fi
 
-cd "../../../../MonkeyPaste.Avalonia.iOS/"
+cd "../../../../ios/iosTest.iOS/"
 
 
-#dotnet build -t:Run  -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} ${DEVICE_ARG}${DEVICE_ID}
-dotnet publish -c ${CONFIG} -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} ${DEVICE_ARG}${DEVICE_ID}
+dotnet build -t:Run -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} ${DEVICE_ARG}${DEVICE_ID}
+#dotnet publish -c ${CONFIG} -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} ${DEVICE_ARG}${DEVICE_ID}

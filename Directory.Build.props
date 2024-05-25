@@ -184,8 +184,8 @@
     <MainTargetFramework>$(DefaultTargetFramework)-ios</MainTargetFramework>
     <!--<CommonTargetFramework>$(DefaultTargetFramework)</CommonTargetFramework>-->
     <DefineConstants>$(DefineConstants);MOBILE;IOS;</DefineConstants>
-    <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
-    <!--<MainProjectName>Scratch/iosTest/iosTest.iOS</MainProjectName>-->
+    <!--<MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>-->
+    <MainProjectName>ios\iosTest.iOS</MainProjectName>
     <IsMobile>true</IsMobile>
     <UseSugarWv>true</UseSugarWv>
     <IsWindowed>true</IsWindowed>
@@ -193,6 +193,7 @@
     <PlatformShortName>ios</PlatformShortName>
     <BuildScriptsDir>$(BuildScriptsRootDir)\ios</BuildScriptsDir>
     <SugarWvVersion>$(PublicSugarWvVersion)</SugarWvVersion>
+    <MinIosVersion>13.0</MinIosVersion>
   </PropertyGroup>
   <!---  END OF TARGETS-->
 

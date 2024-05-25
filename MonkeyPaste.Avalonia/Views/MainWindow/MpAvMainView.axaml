@@ -160,6 +160,7 @@
             <!--  Title Menu  -->
             <local:MpAvMainWindowTitleMenuView x:Name="MainWindowTitleView"
                                                Grid.Row="0"
+                                               MaxHeight="{Binding TitleMenuHeight, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}"
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch" />
 

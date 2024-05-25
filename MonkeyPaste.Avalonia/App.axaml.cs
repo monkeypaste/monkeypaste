@@ -68,16 +68,17 @@ namespace MonkeyPaste.Avalonia {
 #endif
 
         public static void WaitForDebug(object[] args) {
-            if (args.Contains(WAIT_FOR_DEBUG_ARG)) {
-                Console.WriteLine("Attach debugger and use 'Set next statement'");
-                while (true) {
-                    Thread.Sleep(100);
-                    if (Debugger.IsAttached) {
-                        if(args.Contains(BREAK_ON_ATTACH_ARG)) {
-                            Debugger.Break();
-                        }
-                        break;
+            if (!args.Contains(WAIT_FOR_DEBUG_ARG)) {
+                return;
+            }
+            Console.WriteLine("Attach debugger and use 'Set next statement'");
+            while (true) {
+                Thread.Sleep(100);
+                if (Debugger.IsAttached) {
+                    if (args.Contains(BREAK_ON_ATTACH_ARG)) {
+                        Debugger.Break();
                     }
+                    break;
                 }
             }
         }
