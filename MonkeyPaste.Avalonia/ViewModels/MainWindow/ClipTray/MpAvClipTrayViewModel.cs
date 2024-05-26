@@ -3463,8 +3463,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void SetPinTrayRatio(MpSize new_ratio) {
-            if (MpAvMainView.Instance is not MpAvMainView mv ||
-                mv.GetVisualDescendant<MpAvMovableGridSplitter>() is not { } mgs) {
+            if (MpAvClipTrayContainerView.Instance.ClipTraySplitter is  not { } mgs) {
                 return;
             }
 
@@ -3472,23 +3471,10 @@ namespace MonkeyPaste.Avalonia {
             if (trg == null) {
                 return;
             }
+            var mgs_offset = mgs.TranslatePoint(new(), trg);
 
-            double trg_w = 0;
-            double trg_h = 0;
-            if (trg.ColumnDefinitions.Any()) {
-                trg_w = trg.ColumnDefinitions[0].ActualWidth;
-            } else {
-                trg_w = trg.Bounds.Width;
-            }
-
-            if (trg.RowDefinitions.Any()) {
-                trg_h = trg.RowDefinitions[0].ActualHeight;
-            } else {
-                trg_h = trg.Bounds.Height;
-            }
-
-            double dw = (trg.Bounds.Width * new_ratio.Width) - trg_w;
-            double dh = (trg.Bounds.Height * new_ratio.Height) - trg_h;
+            double dw = (trg.Bounds.Width * new_ratio.Width) - mgs_offset.Value.X;
+            double dh = (trg.Bounds.Height * new_ratio.Height) - mgs_offset.Value.Y;
             MpConsole.WriteLine($"Tray Splitter reset. Ratio: {new_ratio} Delta: {dw},{dh}");
             mgs.ApplyDelta(new Vector(dw, dh));
         }

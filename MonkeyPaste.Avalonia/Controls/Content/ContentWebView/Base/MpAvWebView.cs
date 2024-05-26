@@ -150,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
 #if DEBUG
-            LogResponse(notificationType, msgJsonBase64Str);
+            LogResponse(notificationType);
             object ntf = null;
             switch (notificationType) {
                 case MpEditorBindingFunctionType.notifyShowDebugger:
@@ -268,33 +268,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        protected ConcurrentDictionary<string, List<string>> RequestLookup { get; set; } = [];
-        protected ConcurrentDictionary<string, List<string>> ResponseLookup { get; set; } = [];
+        protected List<string> RequestLookup { get; set; } = [];
+        protected List<string> ResponseLookup { get; set; } = [];
         protected void LogRequest(string script) {
             if (script.SplitNoEmpty("(") is not { } script_parts ||
                         script_parts.Length < 1 ||
-                    script_parts[0] is not string reqTypeName ||
-                    script_parts[1] is not string reqData_raw ||
-                    reqData_raw.Replace("'", string.Empty).Replace(")", string.Empty) is not string reqData) {
+                    script_parts[0] is not string reqTypeName) {
                 return;
             }
-            if (!this.RequestLookup.TryGetValue(reqTypeName, out var requests)) {
-                requests = [];
-                if (!this.RequestLookup.TryAdd(reqTypeName, requests)) {
-                    return;
-                }
-            }
-            requests.Add(reqData);
+            RequestLookup.Add(reqTypeName);
         }
 
-        protected void LogResponse(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
-            if (!this.ResponseLookup.TryGetValue(notificationType.ToString(), out var responses)) {
-                responses = [];
-                if (!this.ResponseLookup.TryAdd(notificationType.ToString(), responses)) {
-                    return;
-                }
-            }
-            responses.Add(msgJsonBase64Str);
+        protected void LogResponse(MpEditorBindingFunctionType notificationType) {
+            ResponseLookup.Add(notificationType.ToString());
         }
 
         protected bool CanMakeRequest(string script) {
@@ -321,7 +307,7 @@ namespace MonkeyPaste.Avalonia {
             string main_req_name = "initMain_ext";
             string content_req_name = "loadContentAsync_ext";
 
-            bool is_main_loaded = RequestLookup.ContainsKey(main_req_name);
+            bool is_main_loaded = RequestLookup.Contains(main_req_name);
             if (reqTypeName == main_req_name) {
                 // should be initial setup request
                 if (is_main_loaded) {
