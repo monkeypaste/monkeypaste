@@ -50,14 +50,14 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"Sys tray shutdown error, no tray icons found");
                 return;
             }
-            int count = tray.Count;
-            for (int i = 0; i < count; i++) {
-                if(i >= tray.Count || tray[i] == null) {
-                    continue;
-                }
-                tray[i].Dispose();
-                tray[i] = null;
-            }
+            //int count = tray.Count;
+            //for (int i = 0; i < count; i++) {
+            //    if(i >= tray.Count || tray[i] == null) {
+            //        continue;
+            //    }
+            //    tray[i].Dispose();
+            //    tray[i] = null;
+            //}
             TrayIcon.SetIcons(app, null);
             MpConsole.WriteLine($"Sys tray shutdown successful");
         }

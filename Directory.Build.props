@@ -30,7 +30,9 @@
   <PropertyGroup>
     <StableAvaloniaVersion>11.0.10</StableAvaloniaVersion> 
     <AvaloniaVersion>11.0.10</AvaloniaVersion>
-    <SugarWvVersion>11.0.0.6</SugarWvVersion>    
+    <DefSugarWvVersion>11.0.0.1</DefSugarWvVersion>    
+    <CustomSugarWvVersion>11.0.0.6</CustomSugarWvVersion>    
+    <SugarWvVersion>$(DefSugarWvVersion)</SugarWvVersion>    
     <PublicSugarWvVersion>11.0.0.1</PublicSugarWvVersion>
     <CefNetWvVersion>105.3.24107.1511</CefNetWvVersion>
     <AvHtmlRendererVersion>11.0.19</AvHtmlRendererVersion>
@@ -40,7 +42,7 @@
   
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>IOS</BuildOs>
+    <BuildOs>WINDOWS</BuildOs>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -66,7 +68,7 @@
     <DefaultTargetFramework>net8.0</DefaultTargetFramework>
     <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
-    <!--<ConfigForHotReload>true</ConfigForHotReload>-->
+    <ConfigForHotReload>true</ConfigForHotReload>
   </PropertyGroup>
 
   <!-- CUSTOM PROPERTIES -->
@@ -102,14 +104,15 @@
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>true</UseCefNet>
-    <UseSugarWv>false</UseSugarWv>
+    <UseCefNet>false</UseCefNet>
+    <UseSugarWv>true</UseSugarWv>
     <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <PlatformShortName>uwp</PlatformShortName> 
     <StartupOutputType>WinExe</StartupOutputType>
     <BuildScriptsDir>$(BuildScriptsRootDir)\windows</BuildScriptsDir>
     <IsWindowed>false</IsWindowed>
+    
   </PropertyGroup>
 
   <PropertyGroup Condition="$(UseWap) == 'True' And $(BuildOs) == 'WINDOWS'">
@@ -150,6 +153,7 @@
     <PlatformShortName>mac</PlatformShortName>
     <TargetRuntimeIdentifiers>osx-x64</TargetRuntimeIdentifiers>
     <BuildScriptsDir>$(BuildScriptsRootDir)\mac</BuildScriptsDir>
+    <SugarWvVersion>$(CustomSugarWvVersion)</SugarWvVersion>
     <!-- NOTE RuntimeIdentifiers set in mp-bundle-osx-x64.sh -->
     <!--<RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>-->
   </PropertyGroup>

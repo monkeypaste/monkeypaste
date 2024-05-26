@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -500,32 +501,23 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand1 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                Mp.Services.NotificationBuilder.ShowMessageAsync(
-                           title: UiStrings.NtfRateAppTitle,
-                           body: UiStrings.NtfRateAppText,
-                           msgType: MpNotificationType.RateApp,
-                           iconSourceObj: "MonkeyWinkImage",
-                           maxShowTimeMs: 5_000).FireAndForgetSafeAsync();
+                MpAvClipTrayContainerView.Instance.ClipTraySplitter.ApplyDelta(new Vector(100,0));
             });
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
-                await MpAvClipTrayViewModel.Instance.ReloadAllCommand.ExecuteAsync();
+                await Task.Delay(1);
+                MpAvClipTrayContainerView.Instance.ClipTraySplitter.ApplyDelta(new Vector(-100,0));
             });
         public ICommand GenericTestCommand3 => new MpAsyncCommand(
             async () => {
-                // NOTE this one will clear rwwv after dnd
-
-                await Task.Delay(1);
-                MpAvClipTrayViewModel.Instance.ReloadAllContentCommand.Execute(null);
+                // expands pin tray
+                MpAvClipTrayViewModel.Instance.ExpandPinTrayCommand.Execute(null);
             });
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {
-                await Task.Delay(1);
-                //MpAvClipTrayViewModel.Instance.ClearAllSelection();
-                Mp.Services.DataObjectTools
-                .WriteToClipboardAsync(
-                    new MpAvDataObject(MpPortableDataFormats.Text, MpAvDocusaurusHelpers.GetShortcutsMarkdown()), true).FireAndForgetSafeAsync();
+                // expands query tray
+                MpAvClipTrayViewModel.Instance.ExpandQueryTrayCommand.Execute(null);
             });
 
         public ICommand GenericTestCommand5 => new MpAsyncCommand(

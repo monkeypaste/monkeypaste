@@ -6,6 +6,7 @@ using Avalonia.Diagnostics;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -124,11 +125,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvWindow() {
-
             Init();
         }
-        //public MpAvWindow(MpAvWindow owner = default) : base(owner == null ? PlatformManager.CreateWindow() : owner.PlatformImpl) {
-        //}
 
         #endregion
 

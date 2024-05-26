@@ -45,11 +45,7 @@ namespace MonkeyPaste.Avalonia {
                 _instance = mv;
             }
             if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-#if WINDOWED
-                desktop.MainWindow = MpAvRootWindow.Instance;
-#else
-                desktop.MainWindow = mw; 
-#endif
+                desktop.MainWindow = mw;
             }
 #else
             _instance = new MpAvMainView();

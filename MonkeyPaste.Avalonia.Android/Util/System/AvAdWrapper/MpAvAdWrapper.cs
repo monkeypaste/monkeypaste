@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia.Android {
             PlatformToastNotification = new MpAvAdToastNotification();
             DeviceWebViewHelper = new MpAvAdWebViewHelper();
 
-            MpAvAdAssetMover.MoveDats();
+            MpAvAssetMover.MoveAssets();
 
         }
 

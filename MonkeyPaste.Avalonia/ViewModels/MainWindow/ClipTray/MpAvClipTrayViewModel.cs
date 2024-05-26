@@ -1067,19 +1067,21 @@ namespace MonkeyPaste.Avalonia {
         
         public double MaxPinTrayScreenWidth {
             get {
-                if (ListOrientation == Orientation.Horizontal) {
-                    return Math.Max(0, ObservedContainerScreenWidth - MinClipTrayScreenWidth);
-                }
-                return double.PositiveInfinity;
+                // if (ListOrientation == Orientation.Horizontal) {
+                //     return Math.Max(0, ObservedContainerScreenWidth - MinClipTrayScreenWidth);
+                // }
+                // return double.PositiveInfinity;
+                return MaxContainerScreenWidth;
             }
         }
 
         public double MaxPinTrayScreenHeight {
             get {
-                if (ListOrientation == Orientation.Horizontal) {
-                    return double.PositiveInfinity;
-                }
-                return Math.Max(0, ObservedContainerScreenHeight - MinClipTrayScreenHeight);
+                // if (ListOrientation == Orientation.Horizontal) {
+                //     return double.PositiveInfinity;
+                // }
+                // return Math.Max(0, ObservedContainerScreenHeight - MinClipTrayScreenHeight);
+                return MaxContainerScreenHeight;
             }
         }
 
@@ -1118,15 +1120,15 @@ namespace MonkeyPaste.Avalonia {
             MinClipOrPinTrayScreenHeight;
         public double MinClipOrPinTrayScreenWidth =>
 #if DESKTOP
-        50;
+        0;
 #else
-        50;
+        0;
 #endif
         public double MinClipOrPinTrayScreenHeight =>
 #if DESKTOP
-        50;
+        0;
 #else
-        50;
+        0;
 #endif
         public double MaxTileWidth =>
             double.PositiveInfinity;// Math.Max(0, ObservedQueryTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
@@ -3490,46 +3492,6 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"Tray Splitter reset. Ratio: {new_ratio} Delta: {dw},{dh}");
             mgs.ApplyDelta(new Vector(dw, dh));
         }
-        private void AnimatePinTrayRatio(double r) {
-            if (MpAvMainView.Instance is not MpAvMainView mv ||
-                mv.GetVisualDescendant<MpAvMovableGridSplitter>() is not { } mgs) {
-                return;
-            }
-
-            var trg = mgs.Parent as Grid;
-            if (trg == null) {
-                return;
-            }
-
-            double trg_w = 0;
-            double trg_h = 0;
-            if (trg.ColumnDefinitions.Any()) {
-                trg_w = trg.ColumnDefinitions[0].ActualWidth;
-            } else {
-                trg_w = trg.Bounds.Width;
-            }
-
-            if (trg.RowDefinitions.Any()) {
-                trg_h = trg.RowDefinitions[0].ActualHeight;
-            } else {
-                trg_h = trg.Bounds.Height;
-            }
-            var new_ratio = GetDefaultPinTrayRatio(r);
-
-            double dw = (trg.Bounds.Width * new_ratio.Width) - trg_w;
-            double dh = (trg.Bounds.Height * new_ratio.Height) - trg_h;
-
-            Dispatcher.UIThread.Post(async () => {
-                double sw = dw / 100;
-                double sh = dh / 100;
-                for(int i = 0;i < 100;i++) {
-                    mgs.ApplyDelta(new Vector(sw, sh));
-                    await Task.Delay(7);
-                }
-
-                //RefreshQueryTrayLayout();
-            });
-        }
         #endregion
 
         #region Commands
@@ -5035,42 +4997,27 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ExpandPinTrayCommand => new MpCommand(
             () => {
 
-                if (ListOrientation == Orientation.Horizontal) {
-                    double pad = ObservedContainerScreenWidth - ObservedQueryTrayScreenWidth;
-                    ObservedQueryTrayScreenWidth = 0;
-                    ObservedPinTrayScreenWidth = ObservedContainerScreenWidth - pad;
-                } else {
-                    double pad = ObservedContainerScreenHeight - ObservedQueryTrayScreenHeight;
-                    ObservedQueryTrayScreenHeight = 0;
-                    ObservedPinTrayScreenHeight = ObservedContainerScreenHeight - pad;
-                }
-
-                RefreshQueryTrayLayout();
-                //MpAvMainView.Instance.UpdateLayout();
+                // expands pin tray
+                Vector delta =
+                    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                        new Vector(MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width, 0) :
+                        new Vector(0, MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Height);
+                MpAvClipTrayContainerView.Instance.ClipTraySplitter
+                    .ApplyDelta(delta);
+                
                 IsPinTrayVisible = true;
-            }, () => {
-                return false;
             });
         
         public ICommand ExpandQueryTrayCommand => new MpCommand(
             () => {
-                if(ListOrientation == Orientation.Horizontal) {
-                    double pad = ObservedContainerScreenWidth - ObservedPinTrayScreenWidth;
-                    ObservedQueryTrayScreenWidth = ObservedContainerScreenWidth - pad;
-                    ObservedPinTrayScreenWidth = 0;
-                } else {
-                    double pad = ObservedContainerScreenHeight - ObservedPinTrayScreenHeight;
-                    ObservedQueryTrayScreenHeight = ObservedContainerScreenHeight - pad;
-                    ObservedPinTrayScreenHeight = 0;
-                }
-                MpAvMainView.Instance.InvalidateAll();
-
-                //AnimatePinTrayRatio(0);
-                //RefreshQueryTrayLayout();
-                //MpAvMainView.Instance.UpdateLayout();
+                // expands query tray
+                Vector delta =
+                    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                        new Vector(-MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width, 0) :
+                        new Vector(0, -MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Height);
+                MpAvClipTrayContainerView.Instance.ClipTraySplitter
+                    .ApplyDelta(delta);
                 IsPinTrayVisible = false;
-            }, () => {
-                return false;
             });
 
         public ICommand SelectClipTileTransactionNodeCommand => new MpAsyncCommand<object>(

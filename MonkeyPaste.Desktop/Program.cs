@@ -84,6 +84,9 @@ namespace MonkeyPaste.Desktop {
             //.WithInterFont()
             .UseReactiveUI()
             .LogToTrace()//LogEventLevel.Verbose)
+            .AfterSetup(_ => {
+                MpAvAssetMover.MoveAssets();
+            })
                 ;
         static void HandleSingleInstanceLaunch(object[] args) {
             App.WaitForDebug(args);

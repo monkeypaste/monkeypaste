@@ -127,7 +127,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarWidth {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return 200;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
+                    return 225;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
                 } else {
                     return MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }

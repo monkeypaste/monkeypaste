@@ -3,10 +3,12 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using DryIoc.ImTools;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,7 +33,6 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
             this.AttachedToVisualTree += MpAvTagView_AttachedToVisualTree;
             this.AddHandler(PointerPressedEvent, MpAvTagView_PointerPressed, RoutingStrategies.Tunnel);
-
         }
         #endregion
 
@@ -104,6 +105,9 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void MpAvTagView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            if(IsPinTrayTagView()) {
+                OuterTagPanel.Classes.Add("pinned");
+            }
             InitDnd();
         }
 

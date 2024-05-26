@@ -10,7 +10,7 @@ using System.Linq;
 namespace MonkeyPaste.Avalonia {
     public class MpAvScreenInfoCollectionBase : MpIPlatformScreenInfoCollection {
         private MpAvScreenInfoComparer _comparer = new MpAvScreenInfoComparer();
-        public ObservableCollection<MpIPlatformScreenInfo> Screens { get; protected set; }
+        public ObservableCollection<MpIPlatformScreenInfo> Screens { get; protected set; } = [];
         public IEnumerable<MpIPlatformScreenInfo> All =>
             Screens;
         public MpIPlatformScreenInfo Primary {
@@ -25,6 +25,13 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public MpAvScreenInfoCollectionBase(MpAvWindow w) {
+            if (w is null ||
+                w.Screens is not { } scrns) {
+                return;
+            }
+            scrns.All.Select(x => new MpAvDesktopScreenInfo(x));
+        }
         public MpAvScreenInfoCollectionBase(IEnumerable<MpIPlatformScreenInfo> sil) {
             Screens = new ObservableCollection<MpIPlatformScreenInfo>(sil);
         }
@@ -55,7 +62,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private bool HasScreensChanged(IList<MpIPlatformScreenInfo> a, IList<MpIPlatformScreenInfo> b) {
-            if (a.Count != b.Count) {
+            if(a == b && b == null) {
+                return false;
+            }
+            if (((a == null || b == null) && a != b) ||
+                a.Count != b.Count) {
                 return true;
             }
             foreach (var a_s in a) {

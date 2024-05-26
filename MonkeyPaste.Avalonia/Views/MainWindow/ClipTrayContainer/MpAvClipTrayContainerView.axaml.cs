@@ -23,10 +23,9 @@ namespace MonkeyPaste.Avalonia {
                 MpAvClipTrayContainerView_DataContextChanged(null, null);
             }
 
-            var gs = this.FindControl<GridSplitter>("ClipTraySplitter");
-            gs.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeBegin);
-            gs.DragCompleted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeEnd);
-            gs.DragDelta += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTraySizeChanged);
+            ClipTraySplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeBegin);
+            ClipTraySplitter.DragCompleted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeEnd);
+            ClipTraySplitter.DragDelta += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTraySizeChanged);
         }
 
         private void MpAvClipTrayContainerView_DataContextChanged(object sender, EventArgs e) {
@@ -42,11 +41,9 @@ namespace MonkeyPaste.Avalonia {
             if (ctvm == null) {
                 return;
             }
-            if (ctvm.IsPinned &&
-                this.GetVisualDescendant<MpAvPinTrayView>() is { } ptrv &&
-                ptrv.GetVisualDescendant<ListBox>() is { } ptr_lb) {
+            if (ctvm.IsPinned) {
                 int ctvm_pin_idx = BindingContext.PinnedItems.IndexOf(ctvm);
-                var ptr_ctvm_lbi = ptr_lb.ContainerFromIndex(ctvm_pin_idx);
+                var ptr_ctvm_lbi = PinTrayView.PinTrayListBox.ContainerFromIndex(ctvm_pin_idx);
                 ptr_ctvm_lbi?.BringIntoView();
                 return;
             }
@@ -56,5 +53,11 @@ namespace MonkeyPaste.Avalonia {
             //ctr_ctvm_lbi?.BringIntoView();
             return;
         }
+
+        public double GetQueryTrayRatio() {
+            return MpAvClipTrayContainerView.Instance.ClipTrayView.Bounds.Width /
+                MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width;
+        }
+
     }
 }

@@ -203,6 +203,7 @@ Global
 		{1A3788A7-1387-4327-8E9F-14E90ED1F7A3}.Release|x64.ActiveCfg = Release|Any CPU
 		{1A3788A7-1387-4327-8E9F-14E90ED1F7A3}.Release|x64.Build.0 = Release|Any CPU
 		{595EFB8D-2B22-4D04-9FED-1608492EDB02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{595EFB8D-2B22-4D04-9FED-1608492EDB02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{595EFB8D-2B22-4D04-9FED-1608492EDB02}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{595EFB8D-2B22-4D04-9FED-1608492EDB02}.Debug|x64.Build.0 = Debug|Any CPU
 		{595EFB8D-2B22-4D04-9FED-1608492EDB02}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -293,6 +294,7 @@ Global
 		{FF623CDD-ACF6-4021-BB76-3A7DBB5CE735}.Release|x64.ActiveCfg = Release|Any CPU
 		{FF623CDD-ACF6-4021-BB76-3A7DBB5CE735}.Release|x64.Build.0 = Release|Any CPU
 		{FC11C0A5-F685-45A0-8541-0B6DCED9A686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC11C0A5-F685-45A0-8541-0B6DCED9A686}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC11C0A5-F685-45A0-8541-0B6DCED9A686}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{FC11C0A5-F685-45A0-8541-0B6DCED9A686}.Debug|x64.Build.0 = Debug|Any CPU
 		{FC11C0A5-F685-45A0-8541-0B6DCED9A686}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -300,8 +302,6 @@ Global
 		{FC11C0A5-F685-45A0-8541-0B6DCED9A686}.Release|x64.ActiveCfg = Release|Any CPU
 		{FC11C0A5-F685-45A0-8541-0B6DCED9A686}.Release|x64.Build.0 = Release|Any CPU
 		{9F9C6911-290E-4D07-9BFA-203DC9108F2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F9C6911-290E-4D07-9BFA-203DC9108F2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9F9C6911-290E-4D07-9BFA-203DC9108F2B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{9F9C6911-290E-4D07-9BFA-203DC9108F2B}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{9F9C6911-290E-4D07-9BFA-203DC9108F2B}.Debug|x64.Build.0 = Debug|Any CPU
 		{9F9C6911-290E-4D07-9BFA-203DC9108F2B}.Debug|x64.Deploy.0 = Debug|Any CPU
@@ -312,8 +312,6 @@ Global
 		{9F9C6911-290E-4D07-9BFA-203DC9108F2B}.Release|x64.Build.0 = Release|Any CPU
 		{9F9C6911-290E-4D07-9BFA-203DC9108F2B}.Release|x64.Deploy.0 = Release|Any CPU
 		{77F679FA-9C36-4E00-878F-433B2AD94D66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77F679FA-9C36-4E00-878F-433B2AD94D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77F679FA-9C36-4E00-878F-433B2AD94D66}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{77F679FA-9C36-4E00-878F-433B2AD94D66}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{77F679FA-9C36-4E00-878F-433B2AD94D66}.Debug|x64.Build.0 = Debug|Any CPU
 		{77F679FA-9C36-4E00-878F-433B2AD94D66}.Debug|x64.Deploy.0 = Debug|Any CPU
@@ -352,14 +350,14 @@ Global
 		{77F679FA-9C36-4E00-878F-433B2AD94D66} = {F1F3ACA3-2B6A-4422-AB3E-FD484113ED53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_CultureCountyOverrides = ar=ar-DJ
-		RESX_ShowPerformanceTraces = True
-		RESX_DuplicateKeyHandling = Fail
-		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
-		RESX_RemoveEmptyEntries = False
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_TaskErrorCategory = Message
-		RESX_ExcelExportMode = Text
 		RESX_ConfirmAddLanguageFile = False
+		RESX_ExcelExportMode = Text
+		RESX_TaskErrorCategory = Message
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_RemoveEmptyEntries = False
+		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_DuplicateKeyHandling = Fail
+		RESX_ShowPerformanceTraces = True
+		RESX_CultureCountyOverrides = ar=ar-DJ
 	EndGlobalSection
 EndGlobal
