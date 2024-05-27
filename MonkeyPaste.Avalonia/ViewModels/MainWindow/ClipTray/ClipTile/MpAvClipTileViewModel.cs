@@ -225,7 +225,7 @@ namespace MonkeyPaste.Avalonia {
                     _isSelected = value;
                 }
                 if (IsSelected && !CanSelect) {
-                    MpDebug.Break("PinPlaceholder error, shouldn't be selectable");
+                    MpDebug.Break("PinPlaceholder error, shouldn't be selectable", silent: true);
                 }
                 OnPropertyChanged(nameof(IsSelected));
             }

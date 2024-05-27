@@ -221,6 +221,8 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(3_000);
                 }
             }
+
+            MpAvThemeViewModel.Instance.UpdateThemeResources();
         }
 
         #endregion

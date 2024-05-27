@@ -60,11 +60,7 @@ namespace MonkeyPaste.Avalonia {
             AllWindows.FirstOrDefault(x => x is MpAvMainWindow);
 
         public static MpAvWindow ActiveWindow =>
-#if LINUX
-        AllWindows.FirstOrDefault(x => x.IsActive);
-#else
-        AllWindows.FirstOrDefault(x => x.IsActive); 
-#endif
+            AllWindows.FirstOrDefault(x => x.IsActive);
         public static MpAvWindow LastActiveWindow =>
             AllWindows.OrderByDescending(x => x.LastActiveDateTime).FirstOrDefault();
 

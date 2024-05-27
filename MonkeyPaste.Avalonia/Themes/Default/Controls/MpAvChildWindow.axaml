@@ -1,0 +1,77 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Style Selector=":is(local|MpAvChildWindow)">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid x:DataType="local:MpAvChildWindow"
+                      RowDefinitions="Auto,*">
+                    <!--  HEADER  -->
+                    <Border x:Name="PART_NavContainer"
+                            Grid.Row="0"
+                            Padding="5"
+                            Background="Blue"
+                            BoxShadow="inset 0 0 10 10 #46000000">
+                        <DockPanel Grid.Row="0"
+                                   x:Name="PART_PageNavPanel">
+                            <!--  BACK BUTTON  -->
+                            <Button x:Name="PART_PageNavBackButton"
+                                    DockPanel.Dock="Left"
+                                    Classes="defaultButton textOnlyButton"
+                                    IsVisible="{TemplateBinding BackCommand,
+                                                                Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                    Command="{TemplateBinding BackCommand}"
+                                    CommandParameter="{Binding $self}">
+                                <TextBlock Text="⬅️"
+                                           Padding="5"
+                                           TextAlignment="Center"
+                                           FontSize="24" />
+                            </Button>
+
+                            <!--  HEADER MENU  -->
+                            <ItemsControl x:Name="PART_PageNavMenu"
+                                          DockPanel.Dock="Right"
+                                          IsVisible="{TemplateBinding MenuItems,
+                                                                      Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                          ItemsSource="{TemplateBinding MenuItems}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="local:MpAvMenuItemViewModel">
+                                        <Button x:Name="HeaderMenuButton"
+                                                Classes="defaultButton"
+                                                Command="{Binding Command}"
+                                                CommandParameter="{Binding CommandParameter}">
+                                            <Image Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!--  TITLE  -->
+
+                            <TextBlock Text="{TemplateBinding Title}"
+                                       FontSize="26"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center"
+                                       TextAlignment="Center" />
+
+
+                        </DockPanel>
+
+                    </Border>
+
+                    <!--  CONTENT  -->
+                    <ContentPresenter Grid.Row="1"
+                                      Content="{TemplateBinding Content}" />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

@@ -523,21 +523,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public MpMainWindowShowBehaviorType MainWindowShowBehaviorType =>
             MpAvPrefViewModel.Instance.MainWindowShowBehaviorTypeStr.ToEnum<MpMainWindowShowBehaviorType>();
-        //public int MainWindowMonitorIdx {
-        //    get {
-        //        switch (MainWindowShowBehaviorType) {
-        //            case MpMainWindowShowBehaviorType.Primary:
-        //            default:
-        //                // NOTE will need another monitor to build out non-primary display types
-        //                int monitorIdx = Mp.Services.ScreenInfoCollection.Screens.IndexOf(Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x => x.IsPrimary));
-        //                _mainWindowScreen =
-        //                    monitorIdx < 0 ?
-        //                    Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault() :
-        //                    Mp.Services.ScreenInfoCollection.Screens.ElementAt(monitorIdx);
-        //                return monitorIdx;
-        //        }
-        //    }
-        //}
+       
 
         private MpIPlatformScreenInfo _mainWindowScreen;
         public MpIPlatformScreenInfo MainWindowScreen {
@@ -787,6 +773,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(MainWindowOrientationType):
                     MpAvPrefViewModel.Instance.MainWindowOrientationStr = MainWindowOrientationType.ToString();
                     OnPropertyChanged(nameof(MainWindowLayoutOrientation));
+                    MpAvThemeViewModel.Instance.OnPropertyChanged(nameof(MpAvThemeViewModel.Instance.Orientation));
                     break;
                 case nameof(MainWindowShowBehaviorType):
                     MpAvPrefViewModel.Instance.MainWindowShowBehaviorTypeStr = MainWindowShowBehaviorType.ToString();

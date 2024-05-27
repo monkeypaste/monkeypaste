@@ -1,4 +1,5 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -125,6 +126,14 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region Layout
+
+        public Orientation Orientation =>
+            Mp.Services == null ||
+            Mp.Services.StartupState == null ||
+            !Mp.Services.StartupState.IsReady ||
+            MpAvMainWindowViewModel.Instance.IsVerticalOrientation ?
+                Orientation.Vertical : Orientation.Horizontal;
+
         #endregion
 
         #region Appearance
@@ -407,12 +416,13 @@ namespace MonkeyPaste.Avalonia {
             // 24: default button bg h(h-240, S=15, V=95) (comp5)
             // 25: default button bg h(h-240, S=15, V=65) (comp5bg)
 
-            MpThemeType tt = MpAvPrefViewModel.DEFAULT_THEME_TYPE_NAME.ToEnum<MpThemeType>();
-            string hex = MpAvPrefViewModel.DEFAULT_THEME_HEX_COLOR;
-            if (MpAvPrefViewModel.Instance != null) {
-                tt = MpAvPrefViewModel.Instance.ThemeType;
-                hex = MpAvPrefViewModel.Instance.ThemeColor;
+            if (MpAvPrefViewModel.Instance == null) {
+                // null during global style init
+                return;
             }
+
+            MpThemeType tt = MpAvPrefViewModel.Instance.ThemeType;
+            string hex = MpAvPrefViewModel.Instance.ThemeColor;
             // prepass selected color to get decent chroma
             // V >= 50, S >= 50
             hex.ToPortableColor().ColorToHsv(out double preh, out double pres, out double prev);
@@ -566,7 +576,7 @@ namespace MonkeyPaste.Avalonia {
                 tt == MpThemeType.Dark ?
                     Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkColor_dark") :
                     Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkColor_light"));
-
+            
             SetThemeValue(
                 MpThemeResourceKey.ThemeContentLinkHoverColor,
                 tt == MpThemeType.Dark ?

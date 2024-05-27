@@ -2,7 +2,9 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Media;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 
 using System;
@@ -132,7 +134,17 @@ namespace MonkeyPaste.Avalonia {
             Items.ForEach(x => x.RefreshState());
             OnPropertyChanged(nameof(CanUpdateCount));
             OnPropertyChanged(nameof(FilteredItems));
-            SelectedItem = FilteredItems.FirstOrDefault();
+
+            bool is_mobile =
+                MpAvThemeViewModel.Instance.IsMobile
+                || true; // only for testing
+
+            if(is_mobile) {
+                SelectedItem = null;
+            } else {
+                SelectedItem = FilteredItems.FirstOrDefault();
+            }
+            
         }
         #endregion
 
@@ -233,6 +245,9 @@ namespace MonkeyPaste.Avalonia {
             return ledger_uri;
         }
         private MpAvWindow CreatePluginBrowserWindow(string selectedGuid) {
+            bool test_child = true;
+
+            var pbv = new MpAvPluginBrowserView();
             MpAvWindow pbw = new MpAvWindow() {
                 Width = 800,
                 Height = 500,
@@ -240,10 +255,13 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("JigsawImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Content = new MpAvPluginBrowserView(),
             };
-            if (pbw.Content is MpAvPluginBrowserView pbv &&
-                pbv.FindControl<TabStrip>("PluginTabStrip") is TabStrip ts) {
+            pbw.Background =
+                MpAvThemeViewModel.Instance.IsThemeDark ?
+                    Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor) :
+                    Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeLightColor);
+
+            if (pbv.FindControl<TabStrip>("PluginTabStrip") is TabStrip ts) {
                 ts.SelectedItem = Tabs[(int)MpPluginBrowserTabType.Installed];
             }
 
@@ -272,6 +290,24 @@ namespace MonkeyPaste.Avalonia {
                         SelectedItem = pivm;
                     }
                 };
+            }
+
+            if(test_child) {
+                var pbv_cw = new MpAvChildWindow() {
+                    Content = pbv,
+                    BackCommand = BackCommand,
+                };
+                pbw.Content = pbv_cw;
+
+                pbv_cw.Bind(
+                MpAvChildWindow.TitleProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(WindowTitle),
+                    Converter = MpAvStringToWindowTitleConverter.Instance
+                });
+            } else {
+                pbw.Content = pbv;
             }
             return pbw;
         }
@@ -339,6 +375,28 @@ namespace MonkeyPaste.Avalonia {
                 }
                 OpenPluginBrowserWindow(null);
             });
+
+        public ICommand ClearPluginSelectionCommand => new MpCommand(
+            () => {
+                SelectedItem = null;
+            },
+            () => {
+                return SelectedItem != null;
+            });
+        
+        public ICommand BackCommand => new MpCommand<object>(
+            (args) => {
+                if(args is not Control c ||
+                    c.GetVisualAncestor<MpAvChildWindow>() is not { } cw) {
+                    return;
+                }
+                if(SelectedItem == null) {
+                    cw.Close();
+                } else {
+                    ClearPluginSelectionCommand.Execute(null);
+                }
+            });
+
         #endregion
     }
 }

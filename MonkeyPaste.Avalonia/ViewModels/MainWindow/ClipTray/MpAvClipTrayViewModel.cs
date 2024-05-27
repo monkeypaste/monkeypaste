@@ -782,9 +782,12 @@ namespace MonkeyPaste.Avalonia {
             double h = DEFAULT_ITEM_SIZE - hsbh - safe_pad;
 
             if (ListOrientation == Orientation.Vertical) {
+
 #if DESKTOP
                 //h = DEFAULT_UNEXPANDED_HEIGHT;
-                w = ObservedContainerScreenWidth - vsbw - safe_pad;
+                if(LayoutType == MpClipTrayLayoutType.Stack) {
+                    w = ObservedContainerScreenWidth - vsbw - safe_pad;
+                }
 #endif
             } else if (LayoutType == MpClipTrayLayoutType.Grid &&
                         Mp.Services.Query.TotalAvailableItemsInQuery > CurGridFixedCount) {

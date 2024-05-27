@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -512,20 +513,32 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand3 => new MpAsyncCommand(
             async () => {
                 // expands pin tray
+                await Task.Delay(1);
                 MpAvClipTrayViewModel.Instance.ExpandPinTrayCommand.Execute(null);
             });
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {
                 // expands query tray
+                await Task.Delay(1);
                 MpAvClipTrayViewModel.Instance.ExpandQueryTrayCommand.Execute(null);
             });
 
         public ICommand GenericTestCommand5 => new MpAsyncCommand(
             async () => {
-                //await Mp.Services.DataObjectTools.WriteToClipboardAsync(new MpAvDataObject(MpPortableDataFormats.Image, MpBase64Images.AppIcon), true);
-                //MpAvImageExtensions.Test();
                 await Task.Delay(1);
-                MpAvSubscriptionPurchaseViewModel.Instance.NavigateToBuyUpgradeCommand.Execute(null);
+                if(MpAvWindowManager.LocateWindow(MpAvPluginBrowserViewModel.Instance) is not { } pbw ||
+                    pbw.GetVisualDescendant<MpAvPluginBrowserView>() is not { } pbv ||
+                    pbv.PluginRootContainer is not { } prc ||
+                    pbv.PluginHeaderContainer is not { } phc) {
+                    return;
+                }
+                if(prc.Classes.Contains("mobile")) {
+                    prc.Classes.Remove("mobile");
+                    phc.Classes.Remove("mobile");
+                } else {
+                    prc.Classes.Add("mobile");
+                    phc.Classes.Add("mobile");
+                }
             });
 
         #endregion

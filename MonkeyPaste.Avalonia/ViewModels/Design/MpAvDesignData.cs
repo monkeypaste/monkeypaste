@@ -38,5 +38,6 @@ namespace MonkeyPaste.Avalonia {
                 Body = "Body"
             }
         };
+
     }
 }

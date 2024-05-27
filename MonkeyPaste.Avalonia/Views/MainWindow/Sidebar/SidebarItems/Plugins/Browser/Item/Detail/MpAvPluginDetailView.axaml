@@ -122,7 +122,7 @@
 
     </local:MpAvUserControl.Styles>
 
-    <ScrollViewer MinHeight="300">
+    <ScrollViewer>
         <Grid>
             <Grid x:Name="SelectedPluginContainer"
                   IsVisible="{Binding !IsVisible, ElementName=PluginConfigureView}"

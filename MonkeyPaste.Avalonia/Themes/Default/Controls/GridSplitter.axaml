@@ -43,6 +43,20 @@
                 Value="Columns" />
     </Style>
 
+    <Style Selector="GridSplitter.vertical.stretch">
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="VerticalAlignment"
+                Value="Stretch" />
+    </Style>
+
+    <Style Selector="GridSplitter.horizontal.stretch">
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+    </Style>
+
     <Style Selector="GridSplitter.horizontal.level1">
         <Setter Property="Height"
                 Value="2.5" />

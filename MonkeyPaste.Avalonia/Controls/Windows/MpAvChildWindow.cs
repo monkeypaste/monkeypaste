@@ -1,5 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Diagnostics;
 using Avalonia.Input;
@@ -18,11 +20,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using AvKeyGesture = Avalonia.Input.KeyGesture;
 
 namespace MonkeyPaste.Avalonia {
         
     [DoNotNotify]
-    public abstract class MpAvChildWindow : MpAvUserControl {
+    public class MpAvChildWindow : MpAvUserControl {
         #region Private Variables
         #endregion
 
@@ -275,6 +279,50 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Back Command
+
+        public static readonly AttachedProperty<ICommand> BackCommandProperty =
+            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, ICommand>(
+                nameof(BackCommand));
+
+        public ICommand BackCommand {
+            get => GetValue(BackCommandProperty);
+            set => SetValue(BackCommandProperty, value);
+        }
+
+        //static ICommand DefaultBackCommand => new MpCommand<object>(
+        //    (args) => {
+        //        MpConsole.WriteLine("Back clicked");
+        //        this.Close();
+        //        if (ParentWindow == null) {
+        //            return;
+        //        }
+        //        ParentWindow.Activate();
+        //    });
+        #endregion
+
+        #region Parent Window
+
+        public static readonly AttachedProperty<MpAvChildWindow> ParentWindowProperty =
+            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, MpAvChildWindow>(
+                nameof(ParentWindow), default, false);
+        public MpAvChildWindow ParentWindow {
+            get => GetValue(ParentWindowProperty);
+            set => SetValue(ParentWindowProperty, value);
+        }
+        #endregion
+        
+        #region MenuItems
+
+        public static readonly AttachedProperty<IEnumerable<MpAvMenuItemViewModel>> MenuItemsProperty =
+            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, IEnumerable<MpAvMenuItemViewModel>>(
+                nameof(MenuItems), default, false);
+        public IEnumerable<MpAvMenuItemViewModel> MenuItems {
+            get => GetValue(MenuItemsProperty);
+            set => SetValue(MenuItemsProperty, value);
+        }
+        #endregion
+
         #endregion
 
         #region Events
@@ -287,8 +335,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvChildWindow() { 
-        
+        public MpAvChildWindow() {
+
         }
         #endregion
 
@@ -312,6 +360,13 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvOverlayContainerView.Instance is not { } ocv) {
                 return;
             }
+            if(ParentWindow == default) {
+#if WINDOWED
+                ParentWindow = MpAvWindowManager.ActiveWindow; 
+#else
+                ParentWindow = MpAvWindowManager.ActiveWindow.GetVisualDescendant<MpAvChildWindow>(); 
+#endif
+            }
             ocv.AddChild(this);
         }
         public void Show(Window owner) {
@@ -331,6 +386,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void Close() {
             // TODO detach from MpAvMainView
+            MpConsole.WriteLine($"Child Window '{Title}' closed");
 
             if (MpAvOverlayContainerView.Instance is not { } ocv) {
                 return;
@@ -351,7 +407,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void AttachDevTools() { }
         public void AttachDevTools(DevToolsOptions dto) { }
-        public void AttachDevTools(KeyGesture kg) { }
+        public void AttachDevTools(AvKeyGesture kg) { }
         #endregion
 
         #region Protected Methods
