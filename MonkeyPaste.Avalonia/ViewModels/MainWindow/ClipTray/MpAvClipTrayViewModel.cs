@@ -62,8 +62,8 @@ namespace MonkeyPaste.Avalonia {
             DEFAULT_ITEM_SIZE * UNEXPANDED_HEIGHT_RATIO;
 
         const double DEFAULT_PIN_TRAY_RATIO =
-#if MOBILE
-            0.5;//1.0;
+#if MOBILE_OR_WINDOWED
+            1.0;
 #else
             0.5;
 #endif
@@ -782,13 +782,11 @@ namespace MonkeyPaste.Avalonia {
             double h = DEFAULT_ITEM_SIZE - hsbh - safe_pad;
 
             if (ListOrientation == Orientation.Vertical) {
-
-#if DESKTOP
                 //h = DEFAULT_UNEXPANDED_HEIGHT;
-                if(LayoutType == MpClipTrayLayoutType.Stack) {
+                if(LayoutType == MpClipTrayLayoutType.Stack &&
+                    ObservedContainerScreenWidth > 0) {
                     w = ObservedContainerScreenWidth - vsbw - safe_pad;
                 }
-#endif
             } else if (LayoutType == MpClipTrayLayoutType.Grid &&
                         Mp.Services.Query.TotalAvailableItemsInQuery > CurGridFixedCount) {
                 // when there's multiple query rows shorten height a bit to 
@@ -1096,8 +1094,12 @@ namespace MonkeyPaste.Avalonia {
                         MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarWidth;
                 }
                 return
-                    MpAvMainWindowViewModel.Instance.MainWindowWidth -
-                    MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength;
+                            MpAvMainWindowViewModel.Instance.MainWindowWidth -
+#if MULTI_WINDOW
+                            MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength; 
+#else
+                            0;
+#endif
             }
         }
 
@@ -1447,10 +1449,10 @@ namespace MonkeyPaste.Avalonia {
         private bool _isPinTrayVisible = true;
         public bool IsPinTrayVisible {
             get {
-#if DESKTOP
-                return true;
-#else
+#if MOBILE_OR_WINDOWED
                 return _isPinTrayVisible;
+#else
+                return true;
 #endif
             }
             set {

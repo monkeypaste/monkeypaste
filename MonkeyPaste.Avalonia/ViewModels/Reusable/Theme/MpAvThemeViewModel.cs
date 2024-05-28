@@ -228,6 +228,18 @@ namespace MonkeyPaste.Avalonia {
 #else
             false;
 #endif
+        public bool IsWindowed =>
+#if WINDOWED
+            true;
+#else
+            false;
+#endif
+
+        public bool IsMobileOrWindowed =>
+            IsMobile || IsWindowed;
+
+        public bool IsMultiWindow =>
+            !IsMobileOrWindowed;
 
         public bool IsBrowser =>
 #if BROWSER
@@ -327,7 +339,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void InitDefaults() {
 
-#if DESKTOP
+#if MULTI_WINDOW
             GlobalBgOpacity = GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_desktop); ;
             DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_desktop);
 #elif BROWSER
@@ -335,7 +347,7 @@ namespace MonkeyPaste.Avalonia {
             DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_browser);
 #else
             GlobalBgOpacity = GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_mobile, 1);
-            DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile, 15);
+            DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile, 0);
 #endif
         }
 

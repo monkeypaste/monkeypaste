@@ -55,8 +55,8 @@ namespace MonkeyPaste.Avalonia {
             DataContext as MpIWindowViewModel;
 
         #region Overrides
-#if !WINDOWED
-        protected override Type StyleKeyOverride => typeof(Window); 
+#if !MOBILE_OR_WINDOWED
+        //protected override Type StyleKeyOverride => typeof(MpAvWindow); 
 #endif
         #endregion
 
@@ -196,10 +196,7 @@ namespace MonkeyPaste.Avalonia {
             this.AttachDevTools(DefaultDevToolOptions);
 #endif
             Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon;
-            if (Mp.Services != null &&
-                Mp.Services.ScreenInfoCollection == null) {
-                Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(this);
-            }
+            
             if (MpAvPrefViewModel.Instance.IsThemeDark) {
                 Classes.Add("dark");
             }

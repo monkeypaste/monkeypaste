@@ -171,7 +171,6 @@
 
         <!--  BL Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
-                IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                 local:MpAvPointerCommandExtension.IsEnabled="False"
                 Classes="noBg noHoverBg noBorder cornerButton bottom left tt_near_bottom"
                 Command="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"

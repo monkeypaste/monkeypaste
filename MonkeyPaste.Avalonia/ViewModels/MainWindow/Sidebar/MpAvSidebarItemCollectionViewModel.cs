@@ -64,9 +64,9 @@ namespace MonkeyPaste.Avalonia {
                     return 0;
                 }
                 return
-                    SelectedItem.SidebarWidth +
-                    (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                        MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength : 0);
+                    SelectedItem.SidebarWidth;// +
+                    //(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                    //    MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength : 0);
             }
         }
 
@@ -76,9 +76,9 @@ namespace MonkeyPaste.Avalonia {
                     return 0;
                 }
                 return
-                    SelectedItem.SidebarHeight +
-                    (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                        0 : MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength);
+                    SelectedItem.SidebarHeight;// +
+                    //(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                    //    0 : MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength);
             }
         }
 
@@ -229,7 +229,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(MouseModeVerticalOffset));
                     break;
                 case MpMessageType.MainWindowOpened:
-#if DESKTOP
+#if MULTI_WINDOW
                     if (MpAvMainWindowViewModel.Instance.IsMainWindowInHiddenLoadState ||
                                     HasSetStartupSelection) {
                         break;

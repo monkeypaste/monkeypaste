@@ -45,7 +45,6 @@
     <ScrollViewer VerticalScrollBarVisibility="Hidden"
                   HorizontalScrollBarVisibility="Auto">
       <Grid x:Name="FilterDockPanel"
-                Classes.mobile="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                 Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                 Classes.sort-expanded="{Binding IsExpanded, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}"
                 Classes.search-expanded="{Binding IsExpanded, Source={x:Static local:MpAvSearchBoxViewModel.Instance}}"

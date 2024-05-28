@@ -195,7 +195,7 @@
                     Command="{Binding ExpandQueryTrayCommand}">
                 <Button.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
-                        <Binding Path="IsMobile"
+                        <Binding Path="IsMobileOrWindowed"
                                  Source="{x:Static local:MpAvThemeViewModel.Instance}" />
                         <Binding Path="IsAnyTagActive"
                                  Source="{x:Static local:MpAvTagTrayViewModel.Instance}" />

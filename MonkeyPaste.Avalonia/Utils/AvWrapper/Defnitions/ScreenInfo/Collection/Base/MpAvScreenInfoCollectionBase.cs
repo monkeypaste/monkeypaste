@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -24,14 +25,7 @@ namespace MonkeyPaste.Avalonia {
                 return Screens.FirstOrDefault();
             }
         }
-
-        public MpAvScreenInfoCollectionBase(MpAvWindow w) {
-            if (w is null ||
-                w.Screens is not { } scrns) {
-                return;
-            }
-            scrns.All.Select(x => new MpAvDesktopScreenInfo(x));
-        }
+        public MpAvScreenInfoCollectionBase() { }
         public MpAvScreenInfoCollectionBase(IEnumerable<MpIPlatformScreenInfo> sil) {
             Screens = new ObservableCollection<MpIPlatformScreenInfo>(sil);
         }

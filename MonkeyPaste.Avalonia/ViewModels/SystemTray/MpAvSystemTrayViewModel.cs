@@ -514,13 +514,14 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 // expands pin tray
                 await Task.Delay(1);
-                MpAvClipTrayViewModel.Instance.ExpandPinTrayCommand.Execute(null);
+                MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute("CCW");
             });
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {
                 // expands query tray
                 await Task.Delay(1);
-                MpAvClipTrayViewModel.Instance.ExpandQueryTrayCommand.Execute(null);
+                //MpAvClipTrayViewModel.Instance.ExpandQueryTrayCommand.Execute(null);
+                MpAvMainView.Instance.UpdateLayout();
             });
 
         public ICommand GenericTestCommand5 => new MpAsyncCommand(

@@ -152,7 +152,7 @@
     -->
     <Grid x:Name="PluginRootContainer"
           Classes="oriented"
-          Classes.mobile="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+          Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           Classes.browse="{Binding SelectedTabType, ConverterParameter=Browse, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
           Classes.installed="{Binding SelectedTabType, ConverterParameter=Installed, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
           Classes.updates="{Binding SelectedTabType, ConverterParameter=Updates, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
@@ -165,7 +165,6 @@
 
         <Grid x:Name="PluginHeaderContainer"
               Classes="oriented master"
-              Classes.mobile="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
               local:MpAvOrientedGridExtension.HorizontalRow="0"
               local:MpAvOrientedGridExtension.HorizontalColumnSpan="3">
             <!--  SEARCH CNTR  -->
@@ -304,6 +303,7 @@
 
                 <!--  OPEN FOLDER BUTTON  -->
                 <Button x:Name="OpenPluginFolderButton"
+                        IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                         Classes="defaultButton noBg noHoverBg outline outlineOver square"
                         Command="{Binding OpenPluginFolderCommand}">
                     <ToolTip.Tip>

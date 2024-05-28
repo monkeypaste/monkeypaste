@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Threading;
+using Microsoft.Maui.Graphics;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -34,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 ShowDesktopNotification(nvmb);
             } else {
-                ShowWindowedNotification(nvmb);
+                ShowMobileNotification(nvmb);
             }
         }
         public void HideNotification(object dc) {
@@ -62,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private void ShowWindowedNotification(MpAvNotificationViewModelBase nvmb) {
+        private void ShowMobileNotification(MpAvNotificationViewModelBase nvmb) {
             Control nw = null;
             var layoutType = MpAvNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
             switch (layoutType) {
@@ -98,27 +99,43 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(() => ShowDesktopNotification(nvmb));
                 return;
             }
-            // BUG setting owner seems locks everything up, don't know
-            // if its or avalonia but just ignoring it for now
             MpAvWindow nw = null;
             switch (nvmb) {
                 case MpAvWelcomeNotificationViewModel:
+#if WINDOWED
+                    return;
+#else
                     nw = new MpAvWelcomeWindow() {
                         DataContext = nvmb
-                    };
+                    }; 
                     break;
+#endif
                 case MpAvLoaderNotificationViewModel:
-                    nvmb.IsVisible = true;
+#if WINDOWED
+                    var w = new Window() {
+                        Width = 360,
+                        Height = 740,
+                        DataContext = nvmb
+                    };
+                    w.Classes.Add("windowed-mode");
+                    if (Mp.Services != null && Mp.Services.ScreenInfoCollection == null) {
+                        Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(w);
+                    }
+
+                    nw = new MpAvWindow() {
+                        DataContext = nvmb,
+                        Content = new MpAvMobileLoaderView() {
+                            DataContext = nvmb
+                        }
+                    };
+                    w.Content = nw;
+                    App.Current.SetMainWindow(w);
+#else
                     nw = new MpAvLoaderNotificationWindow() {
                         DataContext = nvmb,
                         Topmost = true,
                         ShowActivated = true
                     };
-
-#if WINDOWED
-                    MpDebug.Break("unhandled");
-                   // App.Current.SetMainWindow(MpAvRootWindow.Instance);
-#else
                     App.Current.SetMainWindow(nw); 
 #endif
                     break;
@@ -128,21 +145,23 @@ namespace MonkeyPaste.Avalonia {
                     };
                     break;
             }
-            if (nw == null) {
-                // somethings wrong
-                return;
-            }
 
 #if WINDOWS
 
-            if (nvmb is not MpAvWelcomeNotificationViewModel) {
+            if (nvmb is not MpAvWelcomeNotificationViewModel &&
+                nw != null &&
+                nw.TryGetPlatformHandle() is { } ph) {
 
-                MpAvToolWindow_Win32.SetAsToolWindow(nw.TryGetPlatformHandle().Handle);
+                MpAvToolWindow_Win32.SetAsToolWindow(ph.Handle);
             }
 #endif
+
             BeginOpen(nw);
         }
         private void BeginOpen(MpAvWindow nw) {
+            if(nw == null) {
+                return;
+            }
             var nvmb = nw.DataContext as MpAvNotificationViewModelBase;
 
             if(nvmb.Title.IsNullOrEmpty()) {

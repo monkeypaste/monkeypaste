@@ -158,7 +158,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TitlePanel"
-          Classes.mobile="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+          Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <!--  LEFT  -->
@@ -184,7 +184,7 @@
 
             <!--  LOCK BUTTON  -->
             <ToggleButton x:Name="LockToggleButton"
-                          IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                          IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=OneWay}"
                           Command="{Binding ToggleMainWindowLockCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                           CommandParameter="{Binding $self}"
@@ -230,7 +230,7 @@
         <Button x:Name="WindowOrientationHandleButton"
                 BorderThickness="0"
                 Cursor="SizeAll"
-                IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                 Classes="noBg noHoverBg outlineOver"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Stretch"
@@ -275,7 +275,6 @@
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
                     Classes="noBg noHoverBg noBorder"
-                    IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.IsEnabled="True"
                     local:MpAvPointerCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.RightPressCommandParameter="CW">

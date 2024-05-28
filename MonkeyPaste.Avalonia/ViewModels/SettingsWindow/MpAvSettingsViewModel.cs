@@ -1804,11 +1804,10 @@ namespace MonkeyPaste.Avalonia {
         public MpIAsyncCommand<object> ShowSettingsWindowCommand => new MpAsyncCommand<object>(
             async (args) => {
                 UpdateFilters();
-//#if DESKTOP
                 if (IsWindowOpen) {
                     IsWindowActive = true;
                 } else {
-#if DESKTOP
+#if MULTI_WINDOW
                     var sw = CreateSettingsWindow();
                     sw.Show(); 
 #else
@@ -1816,9 +1815,6 @@ namespace MonkeyPaste.Avalonia {
 #endif
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }
-//#else
-//                App.SetPrimaryView(MpAvSettingsView.Instance);
-//#endif
                 await SelectTabCommand.ExecuteAsync(args);
             });
         public ICommand CloseSettingsCommand => new MpCommand(

@@ -161,7 +161,6 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         private void CreateLoaderItems() {
-            //#if DESKTOP
             BaseItems.AddRange(new[] {
 #if MOBILE
                 new MpAvLoaderItemViewModel(typeof(MpConsole),UiStrings.LoaderLoggerLabel, [Mp.Services.PlatformInfo.IsTraceEnabled ? Mp.Services.PlatformInfo.LogPath : null, App.HasStartupArg(App.WAIT_FOR_DEBUG_ARG)]),
@@ -171,7 +170,6 @@ namespace MonkeyPaste.Avalonia {
                 new MpAvLoaderItemViewModel(typeof(MpDb), UiStrings.LoaderDataLabel),
                 //new MpAvLoaderItemViewModel(typeof(MpAvAccountViewModel), UiStrings.LoaderAccountLabel),
             }.ToList());
-            //#endif
 
             CoreItems.AddRange(
                new List<MpAvLoaderItemViewModel>() {
@@ -208,7 +206,6 @@ namespace MonkeyPaste.Avalonia {
             PlatformItems.AddRange(
                    new List<MpAvLoaderItemViewModel>() {
                         new MpAvLoaderItemViewModel(typeof(MpAvMenuView),  UiStrings.LoaderMainWindowLabel),
-                        new MpAvLoaderItemViewModel(typeof(MpAvMainView), UiStrings.LoaderMainWindowLabel),
                         new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel),  UiStrings.LoaderMainWindowLabel)
                    });
         }

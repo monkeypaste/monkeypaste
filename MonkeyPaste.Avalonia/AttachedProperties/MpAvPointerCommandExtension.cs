@@ -223,10 +223,10 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<bool> RouteHoldToRightPressProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
                 "RouteHoldToRightPress",
-#if DESKTOP
-                false);
-#else
+#if MOBILE_OR_WINDOWED
                 true);
+#else
+                false);
 #endif
 
         #endregion

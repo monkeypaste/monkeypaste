@@ -156,7 +156,7 @@
                                  Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
                         <Binding Path="!IsReadOnly" />
                         <Binding Path="!IsSecure" />
-                        <Binding Path="IsMobile"
+                        <Binding Path="IsMobileOrWindowed"
                                  Source="{x:Static local:MpAvThemeViewModel.Instance}" />
                         <Binding Path="!IsPopOut"
                                  ElementName="ContentQueryTextBoxView" />

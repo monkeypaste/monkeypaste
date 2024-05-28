@@ -28,13 +28,19 @@ namespace MonkeyPaste.Avalonia {
         #region Layout
         public double ZoomSliderLength => 125;
         public double ZoomSliderLineWidth => 1;
-        public double ZoomSliderValueLength => 3;
+
+        public double ZoomSliderValueLength =>
+#if MULTI_WINDOW
+        3; 
+#else
+            10;
+#endif
         public double ZoomSliderShortMargin => 3;
         public double ZoomSliderLongMargin => 10;
 
         public double TitleDragHandleLongLength => 50;
         public double DefaultTitleMenuFixedLength =>
-#if DESKTOP
+#if MULTI_WINDOW
         20;
 #else
         50;

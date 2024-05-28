@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void AddChild(MpAvChildWindow cw) {
 #if WINDOWED
-            if (cw is MpAvMainView) {
+            if (cw is MpAvMainView || cw is MpAvMainWindow) {
                 return;
             } 
 #endif

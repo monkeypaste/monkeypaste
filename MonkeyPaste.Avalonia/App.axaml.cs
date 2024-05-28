@@ -52,7 +52,11 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-                    return desktop.MainWindow;
+#if WINDOWED
+                    return desktop.MainWindow.Content as Control;
+#else
+                    return desktop.MainWindow; 
+#endif
                 }
                 if (_instance.ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
                     return mobile.MainView;
@@ -86,6 +90,10 @@ namespace MonkeyPaste.Avalonia {
             if (_instance == null ||
                 _instance.ApplicationLifetime is not ISingleViewApplicationLifetime sval ||
                 sval.MainView is not Border b) {
+                if(_instance != null && _instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lt) {
+                    lt.MainWindow.DataContext = c.DataContext;
+                    lt.MainWindow.Content = c;
+                }
                 return;
             }
             b.Child = c;

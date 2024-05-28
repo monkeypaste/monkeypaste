@@ -357,15 +357,18 @@ namespace MonkeyPaste.Avalonia {
         }
         public void Show() {
             // TODO attach & position this window to MpAvMainView here
-            if (MpAvOverlayContainerView.Instance is not { } ocv) {
-                return;
-            }
             if(ParentWindow == default) {
 #if WINDOWED
-                ParentWindow = MpAvWindowManager.ActiveWindow; 
+                ParentWindow = MpAvWindowManager.ActiveWindow;
 #else
                 ParentWindow = MpAvWindowManager.ActiveWindow.GetVisualDescendant<MpAvChildWindow>(); 
 #endif
+            }
+            if (MpAvOverlayContainerView.Instance is not { } ocv) {
+                if(Parent is Window w) {
+                    w.Show();
+                }
+                return;
             }
             ocv.AddChild(this);
         }

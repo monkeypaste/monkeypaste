@@ -676,6 +676,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public bool IsResizerEnabled =>
+            MpAvThemeViewModel.Instance.IsMultiWindow &&
             !IsWindowOpen &&
             !IsFrozen &&
             (IsPinned || (Parent != null && Parent.IsQueryItemResizeEnabled));
@@ -967,18 +968,17 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsCornerButtonsVisible {
             get {
+#if MOBILE_OR_WINDOWED
+                return false;
+#else
                 if (IsFrozen) {
                     return false;
-                }
-                if (Mp.Services.PlatformInfo.IsDesktop) {
-                    if (IsWindowOpen || IsSubSelectionEnabled || IsSelected || (IsHovering && !Parent.IsAnyDropOverTrays)) {
-                        return true;
-                    }
-                } else if (IsSelected) {
+                }                
+                if (IsWindowOpen || IsSubSelectionEnabled || IsSelected || (IsHovering && !Parent.IsAnyDropOverTrays)) {
                     return true;
                 }
                 return false;
-
+#endif
             }
         }
 

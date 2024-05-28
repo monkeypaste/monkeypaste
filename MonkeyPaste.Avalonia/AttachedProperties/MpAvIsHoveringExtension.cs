@@ -86,10 +86,8 @@ namespace MonkeyPaste.Avalonia {
                 control.Unloaded += Control_Unloaded;
                 control.PointerEntered += PointerEnterHandler;
                 control.PointerExited += PointerLeaveHandler;
-#if MOBILE
                 control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
                 control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, RoutingStrategies.Tunnel); 
-#endif
             }
         }
 

@@ -2,6 +2,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
+    <Design.PreviewWith>
+        <local:MpAvChildWindow Title="Sup"
+                               Width="360"
+                               Height="740" />
+    </Design.PreviewWith>
     <Style Selector=":is(local|MpAvChildWindow)">
         <Setter Property="Template">
             <ControlTemplate>
@@ -9,24 +14,24 @@
                       RowDefinitions="Auto,*">
                     <!--  HEADER  -->
                     <Border x:Name="PART_NavContainer"
+                            IsVisible="{TemplateBinding ParentWindow,
+                                                        Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                             Grid.Row="0"
                             Padding="5"
-                            Background="Blue"
-                            BoxShadow="inset 0 0 10 10 #46000000">
+                            Background="{DynamicResource ThemeDarkColor}">
                         <DockPanel Grid.Row="0"
                                    x:Name="PART_PageNavPanel">
                             <!--  BACK BUTTON  -->
                             <Button x:Name="PART_PageNavBackButton"
                                     DockPanel.Dock="Left"
-                                    Classes="defaultButton textOnlyButton"
+                                    Classes="defaultButton noBg noHoverBg"
                                     IsVisible="{TemplateBinding BackCommand,
                                                                 Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                     Command="{TemplateBinding BackCommand}"
                                     CommandParameter="{Binding $self}">
-                                <TextBlock Text="⬅️"
-                                           Padding="5"
-                                           TextAlignment="Center"
-                                           FontSize="24" />
+                                <Image Width="25"
+                                       Height="25"
+                                       Source="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                             </Button>
 
                             <!--  HEADER MENU  -->
@@ -57,6 +62,8 @@
                             <!--  TITLE  -->
 
                             <TextBlock Text="{TemplateBinding Title}"
+                                       Effect="{StaticResource ThemeDropShadow}"
+                                       Foreground="{Binding Background, ElementName=PART_NavContainer, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                                        FontSize="26"
                                        FontWeight="Bold"
                                        VerticalAlignment="Center"

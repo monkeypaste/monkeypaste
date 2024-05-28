@@ -120,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
         public double AvailableContentAndSidebarWidth {
             get {
                 if (IsVerticalOrientation) {
-#if MOBILE
+#if MOBILE_OR_WINDOWED
                     return MainWindowWidth;
 #else                    
                     return MainWindowWidth -
@@ -135,7 +135,8 @@ namespace MonkeyPaste.Avalonia {
         public double AvailableContentAndSidebarHeight {
             get {
                 if (IsVerticalOrientation) {
-#if MOBILE
+#if MOBILE_OR_WINDOWED
+                    var test = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
                     return MainWindowHeight -
                         MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
@@ -147,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
 #endif
                 }
-#if MOBILE
+#if MOBILE_OR_WINDOWED
                 return MainWindowHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight;
 #else
@@ -170,10 +171,10 @@ namespace MonkeyPaste.Avalonia {
 #endif
 
         public double MainWindowDefaultVerticalWidthRatio =>
-#if DESKTOP
-            0.2;
-#else
+#if MOBILE_OR_WINDOWED
             1.0d;
+#else
+            0.2;
 #endif
 
         public double MainWindowDefaultDesiredHorizontalHeight =>
@@ -200,9 +201,24 @@ namespace MonkeyPaste.Avalonia {
 
         public double ResizerLength => 3;
 
-        public double MainWindowMinimumHorizontalHeight => 200;
-        public double MainWindowMinimumVerticalWidth => 290;
-        public double MainWindowExtentPad => 20;
+        public double MainWindowMinimumHorizontalHeight =>
+#if MULTI_WINDOW
+        200; 
+#else
+            0;
+#endif
+        public double MainWindowMinimumVerticalWidth =>
+#if MULTI_WINDOW
+        290; 
+#else
+            0;
+#endif
+        public double MainWindowExtentPad =>
+#if MULTI_WINDOW
+        20; 
+#else
+            0;
+#endif
 
         public double ResizeXFactor {
             get {
@@ -298,10 +314,15 @@ namespace MonkeyPaste.Avalonia {
                         return MainWindowScreen.WorkingArea.Width;
                     case MpMainWindowOrientationType.Left:
                     case MpMainWindowOrientationType.Right:
+#if MULTI_WINDOW
                         double max_w = MainWindowScreen.WorkingArea.Width;
                         double min_w = max_w * MainWindowDefaultVerticalWidthRatio;
                         double desired_w = MainWindowDefaultDesiredVerticalWidth;
-                        return Math.Clamp(desired_w, min_w, max_w);
+                        return Math.Clamp(desired_w, min_w, max_w); 
+#else
+                        return MainWindowScreen.WorkingArea.Width;
+
+#endif
                 }
                 return 0;
             }
@@ -312,10 +333,14 @@ namespace MonkeyPaste.Avalonia {
                 switch (MainWindowOrientationType) {
                     case MpMainWindowOrientationType.Top:
                     case MpMainWindowOrientationType.Bottom:
+#if MULTI_WINDOW
                         double max_h = MainWindowScreen.WorkingArea.Height;
                         double min_h = max_h * MainWindowDefaultHorizontalHeightRatio;
                         double desired_h = MainWindowDefaultDesiredHorizontalHeight;
-                        return Math.Clamp(desired_h, min_h, max_h);
+                        return Math.Clamp(desired_h, min_h, max_h); 
+#else
+                        return MainWindowScreen.WorkingArea.Height;
+#endif
                     case MpMainWindowOrientationType.Left:
                     case MpMainWindowOrientationType.Right:
                         return MainWindowScreen.WorkingArea.Height;
@@ -332,7 +357,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpRect MainWindowOpenedScreenRect {
             get {
-#if DESKTOP
+#if MULTI_WINDOW
                 switch (MainWindowOrientationType) {
                     case MpMainWindowOrientationType.Bottom:
                         return new MpRect(
@@ -418,7 +443,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsMainWindowOrientationChanging { get; set; } = false;
         public double MainWindowTransformAngle {
             get {
-#if DESKTOP
+#if MULTI_WINDOW
                 return 0;
 #else
                 switch (MainWindowOrientationType) {
@@ -538,6 +563,9 @@ namespace MonkeyPaste.Avalonia {
                     if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime mobile
                         && mobile.MainView != null) {
                         return new MpAvDesktopScreenInfo(mobile.MainView.GetVisualRoot().AsScreen());
+                    } else if(Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lt &&
+                        lt.MainWindow is { } w) {
+                        return new MpAvDesktopScreenInfo(w.Screens.Primary);
                     }
                     return new MpAvDesktopScreenInfo() { IsPrimary = true, };
                 }
@@ -571,11 +599,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         private MpAvMainWindowViewModel() : base() {
-#if DESKTOP
-            MainWindowOrientationType = MpMainWindowOrientationType.Bottom;
+            if(MpAvPrefViewModel.Instance == null) {
+#if MULTI_WINDOW
+                MainWindowOrientationType = MpMainWindowOrientationType.Bottom;
 #else
-            MainWindowOrientationType = MpMainWindowOrientationType.Left;
+                MainWindowOrientationType = MpMainWindowOrientationType.Left;
 #endif
+            } else {
+                MainWindowOrientationType = MpAvPrefViewModel.Instance.MainWindowOrientationStr.ToEnum<MpMainWindowOrientationType>();
+            }
             PropertyChanged += MpAvMainWindowViewModel_PropertyChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
@@ -596,6 +628,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseWheelScroll += Instance_OnGlobalMouseWheelScroll;
 
 #if DESKTOP
+            MpAvMainView.Init(this);
             while (App.MainView == null) {
                 await Task.Delay(100);
             }
@@ -635,7 +668,7 @@ namespace MonkeyPaste.Avalonia {
 
             SetupMainWindowSize();
 
-#if DESKTOP
+#if MULTI_WINDOW
             SetMainWindowRect(MainWindowClosedScreenRect);
 #else
             SetMainWindowRect(MainWindowOpenedScreenRect);
@@ -701,7 +734,7 @@ namespace MonkeyPaste.Avalonia {
                     if (!IsMainWindowVisible) {
                         break;
                     }
-#if DESKTOP
+#if MULTI_WINDOW
                     if (MpAvWindowManager.MainWindow == null) {
                         break;
                     }
@@ -713,7 +746,7 @@ namespace MonkeyPaste.Avalonia {
                     // mw is always open screen rect
                     // mw opacity mask is always open screen rect
                     // mwcg is what is animated so it hides outside current screen workarea
-#if DESKTOP
+#if MULTI_WINDOW
                     if (MpAvWindowManager.MainWindow == null) {
                         break;
                     }
@@ -850,11 +883,15 @@ namespace MonkeyPaste.Avalonia {
                     MainWindowWidth = MainWindowScreen.WorkingArea.Width;
                     if (MainWindowHeight == 0) {
                         // startup case                        
+#if MULTI_WINDOW
                         if (MpAvPrefViewModel.Instance.MainWindowInitialHeight == 0) {
                             // initial setting
                             MpAvPrefViewModel.Instance.MainWindowInitialHeight = MainWindowDefaultHeight;
                         }
                         MainWindowHeight = MpAvPrefViewModel.Instance.MainWindowInitialHeight;
+#else 
+                        MainWindowHeight = MainWindowDefaultHeight;
+#endif
                     } else {
                         if (isOrientationChange) {
                             // clear initial width 
@@ -873,11 +910,15 @@ namespace MonkeyPaste.Avalonia {
                     MainWindowHeight = MainWindowScreen.WorkingArea.Height;
                     if (MainWindowWidth == 0) {
                         // startup case                        
+#if MULTI_WINDOW
                         if (MpAvPrefViewModel.Instance.MainWindowInitialWidth == 0) {
                             // initial setting
                             MpAvPrefViewModel.Instance.MainWindowInitialWidth = MainWindowDefaultWidth;
                         }
-                        MainWindowWidth = MpAvPrefViewModel.Instance.MainWindowInitialWidth;
+                        MainWindowWidth = MpAvPrefViewModel.Instance.MainWindowInitialWidth; 
+#else
+                        MainWindowWidth = MainWindowDefaultWidth;
+#endif
                     } else {
                         if (isOrientationChange) {
                             // clear initial height
@@ -906,7 +947,7 @@ namespace MonkeyPaste.Avalonia {
         private void StartMainWindowShow() {
             IsMainWindowOpening = true;
 
-#if DESKTOP
+#if MULTI_WINDOW
             if (MpAvWindowManager.MainWindow is not { } mw) {
                 return;
             }
@@ -1239,7 +1280,7 @@ namespace MonkeyPaste.Avalonia {
                 break;
             }
 
-#if DESKTOP
+#if MULTI_WINDOW
             await HideMainWindowCommand.ExecuteAsync(MpMainWindowHideType.Force);
 
             // only show in taskbar once initial/hidden show is complete
@@ -1355,9 +1396,9 @@ namespace MonkeyPaste.Avalonia {
             });
 
         private bool CanHideMainWindow(object args) {
-#if MOBILE
+#if MOBILE_OR_WINDOWED
 
-                return false;
+            return false;
 #else
             MpMainWindowHideType hide_type = args == null ? MpMainWindowHideType.None : (MpMainWindowHideType)args;
             if (hide_type == MpMainWindowHideType.Force) {
@@ -1514,10 +1555,23 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeBegin);
                 IsMainWindowOrientationChanging = true;
 
+                bool was_horiz = IsHorizontalOrientation;
+                double last_angle = MainWindowTransformAngle;
                 MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;
+
+                bool did_change = IsHorizontalOrientation != was_horiz;
                 OnPropertyChanged(nameof(MainWindowTransformAngle));
-                if (!Mp.Services.PlatformInfo.IsDesktop) {
+                if (!MpAvThemeViewModel.Instance.IsMultiWindow && did_change) {
                     MainWindowScreen.Rotate(MainWindowTransformAngle);
+#if WINDOWED
+                    if(TopLevel.GetTopLevel(MpAvMainView.Instance) is Window w) {
+                        var new_bounds = new MpRect(0, 0, w.Bounds.Height, w.Bounds.Width);
+                        w.Width = new_bounds.Width;
+                        w.Height = new_bounds.Height;
+                        Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(w);
+                        MpMessenger.SendGlobal(MpMessageType.ScreenInfoChanged);
+                    } 
+#endif
                 }
                 OnPropertyChanged(nameof(MainWindowScreen));
                 SetupMainWindowSize(true);

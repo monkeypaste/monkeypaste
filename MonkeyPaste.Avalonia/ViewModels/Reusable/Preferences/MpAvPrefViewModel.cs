@@ -342,7 +342,7 @@ namespace MonkeyPaste.Avalonia {
         public bool ShowHints { get; set; } = true;
         public bool ShowTooltips { get; set; } = true;
         public double GlobalBgOpacity { get; set; }
-#if DESKTOP
+#if MULTI_WINDOW
         = 0.7;
 #else
         = 1.0d;
@@ -489,9 +489,7 @@ namespace MonkeyPaste.Avalonia {
         #region Last Load Remembers
 
         public string MainWindowOrientationStr { get; set; }
-#if DESKTOP
-        = MpMainWindowOrientationType.Bottom.ToString();
-#elif BROWSER
+#if MULTI_WINDOW || BROWSER
         = MpMainWindowOrientationType.Bottom.ToString();
 #else
         = MpMainWindowOrientationType.Left.ToString();

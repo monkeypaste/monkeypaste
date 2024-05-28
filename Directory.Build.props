@@ -99,7 +99,7 @@
     <!-- NOTE when ConfigForHotReload is enabled, UseWap must be false-->
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
     <Tfm>10.0.22621.0</Tfm>
-    <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;</DefineConstants>
+    <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
@@ -111,8 +111,7 @@
     <PlatformShortName>uwp</PlatformShortName> 
     <StartupOutputType>WinExe</StartupOutputType>
     <BuildScriptsDir>$(BuildScriptsRootDir)\windows</BuildScriptsDir>
-    <IsWindowed>false</IsWindowed>
-    
+    <IsWindowed>true</IsWindowed>    
   </PropertyGroup>
 
   <PropertyGroup Condition="$(UseWap) == 'True' And $(BuildOs) == 'WINDOWS'">
@@ -239,6 +238,14 @@
   
   <PropertyGroup Condition="$(IsWindowed) == 'True'">
     <DefineConstants>$(DefineConstants);WINDOWED;</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(IsWindowed) == 'True' Or $(IsMobile) == 'True'">
+    <DefineConstants>$(DefineConstants);MOBILE_OR_WINDOWED;</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(IsWindowed) != 'True' And $(IsMobile) != 'True'">
+    <DefineConstants>$(DefineConstants);MULTI_WINDOW;</DefineConstants>
   </PropertyGroup>
     
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">

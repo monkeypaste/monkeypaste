@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
                     if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                         // horizontal shows sidebar down left side
                         ctg.ColumnDefinitions.Clear();
-#if DESKTOP
+#if MULTI_WINDOW
                         ctg.RowDefinitions = new RowDefinitions("*,*,*,*,*"); 
 #else
                         ctg.RowDefinitions = new RowDefinitions("*,*,*,*,0");
@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         // vertical shows sidebar across bottom
                         ctg.RowDefinitions.Clear();
-#if DESKTOP
+#if MULTI_WINDOW
                         ctg.ColumnDefinitions = new ColumnDefinitions("*,*,*,*,*"); 
 #else
                         ctg.ColumnDefinitions = new ColumnDefinitions("*,*,*,*,0");

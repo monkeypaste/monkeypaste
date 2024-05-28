@@ -233,7 +233,7 @@
         <!--  MOBILE EXPAND PIN TRAY BUTTON  -->
         <Button x:Name="ExpandPinTrayButton"
                 Classes="defaultButton clipTrayButton outlineOver clipTrayBackButton"
-                IsVisible="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                 Command="{Binding ExpandPinTrayCommand}" />
     </Grid>
 

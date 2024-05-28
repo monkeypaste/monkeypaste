@@ -4,13 +4,11 @@
         xmlns:local="using:MonkeyPaste.Avalonia"
         xmlns:pcl="using:MonkeyPaste">
 
-    <Style Selector=":is(Window).windowed-mode">
-        <Setter Property="Width"
-                Value="360" />
-        <Setter Property="Height"
-                Value="740" />
-        <Setter Property="SystemDecorations"
-                Value="Full" />
+    <Style Selector=":is(Window).resizable">
+        <Setter Property="CanResize"
+                Value="True" />
+        <Setter Property="ExtendClientAreaToDecorationsHint"
+                Value="True" />
 
     </Style>
 
