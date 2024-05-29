@@ -161,12 +161,14 @@ namespace MonkeyPaste.Avalonia {
                 radiusX: r,
                 radiusY: r);
 
-            double deg = Percent * 360;
+            double percent = Math.Min(0.9999, Percent);
+
+            double deg = percent * 360;
             var c = new Point(cx, cy);
 
             double sa = -90 * (Math.PI / 180.0d);
             double ea = (deg - 90) * (Math.PI / 180.0d);
-            bool isLarge = Percent >= 0.5;
+            bool isLarge = percent >= 0.5;
             Point p0 = c + new Vector(Math.Cos(sa), Math.Sin(sa)) * r;
             Point p1 = c + new Vector(Math.Cos(ea), Math.Sin(ea)) * r;
 
@@ -186,7 +188,7 @@ namespace MonkeyPaste.Avalonia {
                 pen: new Pen(PercentBrush, arc_width),
                 pg);
 
-            string percent_label = ((int)Math.Clamp(Percent * 100, 0, 100)).ToString();
+            string percent_label = ((int)Math.Clamp(percent * 100, 0, 100)).ToString();
             if (percent_label.Length == 1) {
                 // NOTE padding single digits so font size is consistent
                 percent_label = "0" + percent_label;
@@ -197,6 +199,7 @@ namespace MonkeyPaste.Avalonia {
                     foreground: LabelBrush,
                     textAlignment: TextAlignment.Center);
             var tl = c.ToPortablePoint() - (new MpPoint(ft.Width, ft.Height) * 0.5);
+
             // draw progress text
             context.DrawText(
                 ft,

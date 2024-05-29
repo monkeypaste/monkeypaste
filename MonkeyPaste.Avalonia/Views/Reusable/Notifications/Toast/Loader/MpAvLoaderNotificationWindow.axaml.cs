@@ -9,9 +9,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvLoaderNotificationWindow() {
             InitializeComponent();
         }
-        //public MpAvLoaderNotificationWindow(MpAvWindow owner = default) : base(owner) {
-        //    InitializeComponent();
-        //}
 
         protected override void OnLoaded(RoutedEventArgs e) {
             base.OnLoaded(e);

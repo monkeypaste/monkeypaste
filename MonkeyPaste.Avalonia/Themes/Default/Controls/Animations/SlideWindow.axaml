@@ -6,11 +6,11 @@
         <sys:TimeSpan x:Key="SlideDur">0:0:0.5</sys:TimeSpan>
     </Styles.Resources>
 
-    <Style Selector="Window.slideIn">
+    <Style Selector="Window.slide-in-right">
         <Setter Property="TranslateTransform.X"
                 Value="360" />
     </Style>
-    <Style Selector="Window.slideIn[IsVisible=true]">
+    <Style Selector="Window.slide-in-right[IsVisible=true]">
         <Style.Animations>
             <Animation Duration="{StaticResource SlideDur}"
                        FillMode="Forward">
@@ -20,6 +20,26 @@
                 </KeyFrame>
                 <KeyFrame Cue="100%">
                     <Setter Property="TranslateTransform.X"
+                            Value="0" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+  
+   <Style Selector="Window.slide-in-top">
+        <Setter Property="TranslateTransform.Y"
+                Value="-360" />
+    </Style>
+    <Style Selector="Window.slide-in-top[IsVisible=true]">
+        <Style.Animations>
+            <Animation Duration="{StaticResource SlideDur}"
+                       FillMode="Forward">
+                <KeyFrame Cue="0%">
+                    <Setter Property="TranslateTransform.Y"
+                            Value="-360" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="TranslateTransform.Y"
                             Value="0" />
                 </KeyFrame>
             </Animation>

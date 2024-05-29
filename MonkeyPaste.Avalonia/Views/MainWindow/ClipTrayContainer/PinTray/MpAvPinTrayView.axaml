@@ -128,7 +128,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     IsHitTestVisible="False"
-                    IsVisible="{Binding InternalPinnedItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                    IsVisible="{Binding IsPinTrayEmpty}"
                     Background="Transparent">
                 <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PinTrayEmptyLabel}"
                            Classes="disabled emptyOverlayText" />

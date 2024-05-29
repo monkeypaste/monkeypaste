@@ -48,10 +48,10 @@ namespace MonkeyPaste.Avalonia {
             } 
 #endif
 
-            if (OverlayCanvas.Children.Contains(this)) {
+            if (OverlayCanvas.Children.Contains(cw)) {
                 // show or ignore here
             } else {
-                OverlayCanvas.Children.Add(this);
+                OverlayCanvas.Children.Add(cw);
 
                 cw.Bind(
                     Canvas.LeftProperty,

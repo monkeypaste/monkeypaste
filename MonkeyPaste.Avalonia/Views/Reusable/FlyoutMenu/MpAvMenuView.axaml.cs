@@ -14,10 +14,10 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvMenuView : ContextMenu {
         const bool DEFAULT_SHOW_BY_POINTER =
-#if DESKTOP
+#if MULTI_WINDOW
             true;
 #else
-            true;//false,
+            false;
 #endif
         static bool _IsDevToolsOpen = false;
         static ContextMenu _cm;

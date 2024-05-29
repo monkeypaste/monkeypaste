@@ -140,7 +140,10 @@ namespace MonkeyPaste.Avalonia {
                     return MainWindowHeight -
                         MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
-                        MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength -
+                        //MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength -
+                        (MpAvSidebarItemCollectionViewModel.Instance.SelectedItem == null ?
+                            MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength : 
+                            -MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength) -
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
 #else
                     return MainWindowHeight -
@@ -1556,7 +1559,6 @@ namespace MonkeyPaste.Avalonia {
                 IsMainWindowOrientationChanging = true;
 
                 bool was_horiz = IsHorizontalOrientation;
-                double last_angle = MainWindowTransformAngle;
                 MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;
 
                 bool did_change = IsHorizontalOrientation != was_horiz;
@@ -1564,13 +1566,28 @@ namespace MonkeyPaste.Avalonia {
                 if (!MpAvThemeViewModel.Instance.IsMultiWindow && did_change) {
                     MainWindowScreen.Rotate(MainWindowTransformAngle);
 #if WINDOWED
-                    if(TopLevel.GetTopLevel(MpAvMainView.Instance) is Window w) {
-                        var new_bounds = new MpRect(0, 0, w.Bounds.Height, w.Bounds.Width);
-                        w.Width = new_bounds.Width;
-                        w.Height = new_bounds.Height;
+                    if (TopLevel.GetTopLevel(MpAvMainView.Instance) is Window w) {
+                        //w.CanResize = true;
+                        //var new_bounds = new MpRect(0, 0, w.Bounds.Height, w.Bounds.Width);
+                        //w.Width = new_bounds.Width;
+                        //w.Height = new_bounds.Height;
+                        //w.CanResize = false;
+                        //w.CanResize = true;
+                        if(IsHorizontalOrientation) {
+                            w.Width = 740;
+                            w.Height = 360;
+                        } else {
+                            w.Width = 360;
+                            w.Height = 740;
+                        }
+                        if(w.Content is MpAvWindow cw) {
+                            cw.Width = w.Width;
+                            cw.Height = w.Height;
+                        }
+                        _mainWindowScreen = null;
                         Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(w);
                         MpMessenger.SendGlobal(MpMessageType.ScreenInfoChanged);
-                    } 
+                    }
 #endif
                 }
                 OnPropertyChanged(nameof(MainWindowScreen));

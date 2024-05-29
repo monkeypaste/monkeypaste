@@ -23,8 +23,8 @@ namespace MonkeyPaste.Avalonia {
             }
 
             double x = primaryScreen.WorkingArea.Right - s.Width - pad;
-#if MAC || LINUX
-            double y = primaryScreen.WorkArea.Top + pad;
+#if MAC || LINUX || MOBILE_OR_WINDOWED
+            double y = primaryScreen.WorkingArea.Top + pad;
 #else
             double y = primaryScreen.WorkingArea.Bottom - s.Height - pad;
 #endif
@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvWindowManager.ToastNotifications
                 .Where(x => x.OpenDateTime < time_for_this && x.WindowState != WindowState.Minimized)
                 .Sum(x => (GetWindowSize(x).Height + pad) * primaryScreen.Scaling);
-#if MAC || LINUX
+#if MAC || LINUX || MOBILE_OR_WINDOWED
             y += offsetY;
 #else
             y -= offsetY;
@@ -103,6 +103,14 @@ namespace MonkeyPaste.Avalonia {
             if (w.DataContext is MpAvUserActionNotificationViewModel mnvm) {
                 width = 350;// mnvm.MessageWindowFixedWidth;
             }
+#if MOBILE_OR_WINDOWED
+            if(Mp.Services != null && 
+                Mp.Services.ScreenInfoCollection != null &&
+                Mp.Services.ScreenInfoCollection.Primary != null) {
+                th = 0;
+                width = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width;
+            }
+#endif
             return new Size(width, height + th);
         }
 

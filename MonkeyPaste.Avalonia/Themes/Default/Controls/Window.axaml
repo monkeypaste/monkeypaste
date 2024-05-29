@@ -5,13 +5,26 @@
         xmlns:pcl="using:MonkeyPaste">
 
     <Style Selector=":is(Window).windowed-mode">
+        <!--<Setter Property="Width"
+                Value="360" />
+        <Setter Property="Height"
+                Value="740" />-->
+        <Setter Property="SystemDecorations"
+                Value="Full" />
+        <!--<Setter Property="CanResize"
+                Value="False" />-->
+    </Style>
+    <!--<Style Selector=":is(Window).windowed-mode.vertical">
         <Setter Property="Width"
                 Value="360" />
         <Setter Property="Height"
                 Value="740" />
-        <Setter Property="SystemDecorations"
-                Value="Full" />
-
     </Style>
+    <Style Selector=":is(Window).windowed-mode.horizontal">
+        <Setter Property="Width"
+                Value="740" />
+        <Setter Property="Height"
+                Value="360" />
+    </Style>-->
 
 </Styles>

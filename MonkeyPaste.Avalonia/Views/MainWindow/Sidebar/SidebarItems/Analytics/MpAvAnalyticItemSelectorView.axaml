@@ -13,12 +13,20 @@
                        d:DesignWidth="350"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvAnalyticItemSelectorView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="WrapPanel#OuterWrapPanel.mobile">
+            <Setter Property="MaxWidth"
+                    Value="550" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Padding="10">
         <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
-            <WrapPanel Orientation="Horizontal"
+            <WrapPanel x:Name="OuterWrapPanel"
+                       Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                       Orientation="Horizontal"
                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border x:Name="AnalyzerPluginPresetContainerBorder"

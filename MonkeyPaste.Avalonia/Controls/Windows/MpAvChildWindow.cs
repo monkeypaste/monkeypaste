@@ -9,6 +9,7 @@ using Avalonia.Input.TextInput;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
+using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.Styling;
@@ -31,6 +32,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
+        const double HEADER_HEIGHT_RATIO = 0.125;
         #endregion
 
         #region Statics
@@ -240,8 +242,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public bool IsActive =>
-            this.GetSelfAndVisualDescendants().OfType<Control>().Any(x => x.IsFocused);
+        //public bool IsActive =>
+        //    this.GetSelfAndVisualDescendants().OfType<Control>().Any(x => x.IsFocused);
+        public bool IsActive { get; private set; }
         public object Owner { get; set; }
 
         public object DialogResult { get; set; }
@@ -279,7 +282,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Back Command
+        #region BackCommand
 
         public static readonly AttachedProperty<ICommand> BackCommandProperty =
             AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, ICommand>(
@@ -289,16 +292,6 @@ namespace MonkeyPaste.Avalonia {
             get => GetValue(BackCommandProperty);
             set => SetValue(BackCommandProperty, value);
         }
-
-        //static ICommand DefaultBackCommand => new MpCommand<object>(
-        //    (args) => {
-        //        MpConsole.WriteLine("Back clicked");
-        //        this.Close();
-        //        if (ParentWindow == null) {
-        //            return;
-        //        }
-        //        ParentWindow.Activate();
-        //    });
         #endregion
 
         #region Parent Window
@@ -309,6 +302,17 @@ namespace MonkeyPaste.Avalonia {
         public MpAvChildWindow ParentWindow {
             get => GetValue(ParentWindowProperty);
             set => SetValue(ParentWindowProperty, value);
+        }
+        #endregion
+        
+        #region ShowHeader
+
+        public static readonly AttachedProperty<bool> ShowHeaderProperty =
+            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, bool>(
+                nameof(ShowHeader), default, true);
+        public bool ShowHeader {
+            get => GetValue(ShowHeaderProperty);
+            set => SetValue(ShowHeaderProperty, value);
         }
         #endregion
         
@@ -356,20 +360,15 @@ namespace MonkeyPaste.Avalonia {
             return (T)(object)DialogResult;
         }
         public void Show() {
-            // TODO attach & position this window to MpAvMainView here
-            if(ParentWindow == default) {
-#if WINDOWED
-                ParentWindow = MpAvWindowManager.ActiveWindow;
-#else
-                ParentWindow = MpAvWindowManager.ActiveWindow.GetVisualDescendant<MpAvChildWindow>(); 
-#endif
-            }
+            SetupWindow();
             if (MpAvOverlayContainerView.Instance is not { } ocv) {
                 if(Parent is Window w) {
+                    Activate();
                     w.Show();
                 }
                 return;
             }
+
             ocv.AddChild(this);
         }
         public void Show(Window owner) {
@@ -380,6 +379,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public void Activate() {
             // TODO Focus this child window here
+            MpAvWindowManager.AllWindows.ForEach(x => x.IsActive = x == this);
             Activated?.Invoke(this, EventArgs.Empty);
         }
         public void Deactivate() {
@@ -414,7 +414,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-        protected virtual void OnOpened(EventArgs e) { }
+        protected virtual void OnOpened(EventArgs e) {
+            if(ShowActivated) {
+                Activate();
+            }
+        }
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
@@ -434,6 +438,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+        private void SetupWindow() {
+            Width = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width;
+            Height = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height;
+
+            if (ParentWindow == default) {
+#if WINDOWED
+                ParentWindow = MpAvWindowManager.ActiveWindow;
+#else
+                ParentWindow = MpAvWindowManager.ActiveWindow.GetVisualDescendant<MpAvChildWindow>(); 
+#endif
+            }
+            //Title = uavm.Title;
+            //if(uavm.IconSourceObj != null) {
+            //    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(
+            //        uavm.IconSourceObj, typeof(MpAvWindowIcon), 
+            //        MpThemeResourceKey.ThemeInteractiveColor.ToString(), null) as MpAvWindowIcon;
+            //}
+        }
         #endregion
 
         #region Commands

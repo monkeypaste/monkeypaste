@@ -4,7 +4,7 @@
         xmlns:local="using:MonkeyPaste.Avalonia"
         xmlns:pcl="using:MonkeyPaste">
 
-    <Style Selector=":is(Window).resizable">
+    <Style Selector=":is(local|MpAvWindow).resizable">
         <Setter Property="CanResize"
                 Value="True" />
         <Setter Property="ExtendClientAreaToDecorationsHint"

@@ -1,4 +1,4 @@
-<local:MpAvWindow xmlns="https://github.com/avaloniaui"
+<local:MpAvNotificationWindow xmlns="https://github.com/avaloniaui"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,4 +16,4 @@
                   Classes.params="{Binding HasParams}"
                   Classes.reset="{Binding ShowResetPresetButtons}">
     <local:MpAvUserActionNotificationView />
-</local:MpAvWindow>
+</local:MpAvNotificationWindow>

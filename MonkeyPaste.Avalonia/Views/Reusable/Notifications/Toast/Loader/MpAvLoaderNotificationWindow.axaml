@@ -1,21 +1,21 @@
-<local:MpAvWindow xmlns="https://github.com/avaloniaui"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                  xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
-                  xmlns:local="clr-namespace:MonkeyPaste.Avalonia;assembly=MonkeyPaste.Avalonia"
-                  mc:Ignorable="d"
-                  d:DesignWidth="800"
-                  d:DesignHeight="450"
-                  x:Name="LoaderNotificationWindow"
-                  x:DataType="local:MpAvLoaderNotificationViewModel"
-                  x:CompileBindings="True"
-                  x:Class="MonkeyPaste.Avalonia.MpAvLoaderNotificationWindow"
-                  Classes="notificationWindow loader"
-                  Width="350"
-                  Height="140">
-    <local:MpAvWindow.Resources>
+<local:MpAvNotificationWindow xmlns="https://github.com/avaloniaui"
+                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                              xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                              xmlns:local="clr-namespace:MonkeyPaste.Avalonia;assembly=MonkeyPaste.Avalonia"
+                              mc:Ignorable="d"
+                              d:DesignWidth="800"
+                              d:DesignHeight="450"
+                              x:Name="LoaderNotificationWindow"
+                              x:DataType="local:MpAvLoaderNotificationViewModel"
+                              x:CompileBindings="True"
+                              x:Class="MonkeyPaste.Avalonia.MpAvLoaderNotificationWindow"
+                              Classes="notificationWindow loader"
+                              Width="350"
+                              Height="140">
+    <local:MpAvNotificationWindow.Resources>
         <LinearGradientBrush x:Key="OuterGradientBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Offset="0" Color="{DynamicResource ThemeInteractiveBgColor}" />
@@ -57,8 +57,8 @@
                 <GradientStop Offset="1" Color="Transparent" />
             </LinearGradientBrush.GradientStops>
         </LinearGradientBrush>
-    </local:MpAvWindow.Resources>
-    <local:MpAvWindow.Styles>
+    </local:MpAvNotificationWindow.Resources>
+    <local:MpAvNotificationWindow.Styles>
         <Style Selector="Rectangle#ProgressShine1">
             <Style.Animations>
                 <Animation Duration="0:0:10"
@@ -102,7 +102,7 @@
                 </Animation>
             </Style.Animations>
         </Style>
-    </local:MpAvWindow.Styles>
+    </local:MpAvNotificationWindow.Styles>
     <Border x:Name="OuterBorder"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -257,4 +257,4 @@
                                      CommandParameter="{Binding $self}" />
         </Grid>
     </Border>
-</local:MpAvWindow>
+</local:MpAvNotificationWindow>

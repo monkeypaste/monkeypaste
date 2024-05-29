@@ -22,8 +22,6 @@ namespace MonkeyPaste.Avalonia {
         MpITagQueryTools,
         MpIPopupMenuPicker {
         #region Private Variables
-
-
         #endregion
 
         #region Statics

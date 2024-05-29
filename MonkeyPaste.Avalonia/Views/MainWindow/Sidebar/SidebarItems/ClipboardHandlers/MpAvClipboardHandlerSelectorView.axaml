@@ -21,6 +21,10 @@
             <Setter Property="Content"
                     Value="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ClipboardPluginFormatTypeReadersLabel}" />
         </Style>
+        <Style Selector="WrapPanel#OuterWrapPanel.mobile">
+            <Setter Property="MaxWidth"
+                    Value="550" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -28,7 +32,9 @@
         <ScrollViewer BringIntoViewOnFocusChange="False"
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
-            <WrapPanel Orientation="Horizontal"
+            <WrapPanel x:Name="OuterWrapPanel"
+                       Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                       Orientation="Horizontal"
                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border x:Name="ClipboardPluginPresetContainerBorder"

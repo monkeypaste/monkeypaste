@@ -24,9 +24,9 @@ public partial class MpAvCompositeContentView : MpAvUserControl<MpAvClipTileView
         ReadOnlyWebView.AddHandler(PointerPressedEvent, ReadOnlyWebView_PointerPressed, RoutingStrategies.Tunnel);
     }
     private void ReadOnlyWebView_PointerPressed(object sender, PointerPressedEventArgs e) {
-//#if MOBILE
-//            return;
-//#else
+#if MOBILE
+            return;
+#else
         if (sender is not HtmlPanel hp ||
             !e.IsLeftPress(hp) ||
             hp.IsSelectionEnabled ||
@@ -49,7 +49,7 @@ public partial class MpAvCompositeContentView : MpAvUserControl<MpAvClipTileView
             },
             MIN_DISTANCE: 20);
 
-//#endif
+#endif
     }
 
 }

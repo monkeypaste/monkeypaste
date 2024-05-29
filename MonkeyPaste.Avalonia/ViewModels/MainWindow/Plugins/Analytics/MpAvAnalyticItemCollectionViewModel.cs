@@ -110,6 +110,9 @@ namespace MonkeyPaste.Avalonia {
                 if (SelectedPresetViewModel != null) {
                     w += DefaultParameterColumnVarDimLength;
                 }
+#if MOBILE_OR_WINDOWED
+                w = Math.Min(w, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width);
+#endif
                 return w;
             }
         }

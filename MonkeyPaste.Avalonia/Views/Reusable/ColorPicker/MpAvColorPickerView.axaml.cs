@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
             cp.IsColorPaletteVisible = true;
         }
         private void Okbtn_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if (this.GetVisualRoot() is MpAvWindow w) {
+            if (this.GetVisualAncestor<MpAvWindow>() is { } w) {
                 var cp = this.FindControl<ColorView>("Picker");
                 w.DialogResult = cp.Color.ToPortableColor().ToHex(!cp.IsAlphaEnabled);
                 w.Close();
@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Cancelbtn_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if (this.GetVisualRoot() is MpAvWindow w) {
+            if (this.GetVisualAncestor<MpAvWindow>() is { } w) {
                 w.DialogResult = null;
                 w.Close(null);
             }

@@ -13,6 +13,7 @@
                        x:CompileBindings="True"
                        x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationView">
     <local:MpAvUserControl.Styles>
+        <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvSettings.axaml" />
         <!--  PROGRESS SPINNER  -->
 
         <!--  PARAM LISTBOXITEM  -->
@@ -140,35 +141,25 @@
                    Grid.Column="0"
                    Width="64"
                    Height="64"
-                   IsVisible="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                    Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}"
                    Stretch="Uniform"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
-                   Margin="0,0,10,0" />
+                   Margin="0,0,10,0">
+                <Image.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="IconSourceObj"
+                                 Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                        <Binding Path="!IsMobileOrWindowed"
+                                 Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                    </MultiBinding>
+                </Image.IsVisible>
+            </Image>
 
             <DockPanel Grid.Column="1">
                 <!--  TITLE  -->
-                <StackPanel DockPanel.Dock="Top">
-                    <!--<local:MpAvMarqueeTextBox Grid.Row="0"
-                                      Grid.Column="1"
-                                      AutoMarquee="False"
-                                      EditOnFocus="False"
-                                      MinWidth="{Binding #TitleUnderline.Bounds.Width}"
-                                      MaxWidth="{Binding #TitleUnderline.Bounds.Width}"
-                                      Width="{Binding #TitleUnderline.Bounds.Width}"
-                                      MinHeight="30"
-                                      FontSize="20"
-                                      IsReadOnly="True"
-                                      IsMarqueeEnabled="True"
-                                      VerticalAlignment="Center"
-                                      HorizontalAlignment="Left"
-                                      TextAlignment="Left"
-                                      HorizontalContentAlignment="Left"
-                                      VerticalContentAlignment="Top"
-                                      FontWeight="SemiBold"
-                                      Text="{Binding Title}" />-->
-
+                <StackPanel DockPanel.Dock="Top"
+                            IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}">
                     <TextBlock MaxWidth="{Binding #TitleUnderline.Bounds.Width}"
                                MinHeight="30"
                                FontSize="24"
@@ -190,13 +181,11 @@
                 </StackPanel>
 
 
-
-
                 <!--  BODY  -->
                 <ScrollViewer x:Name="BodyScrollViewer"
                               HorizontalScrollBarVisibility="Auto"
                               VerticalScrollBarVisibility="Auto"
-                              AllowAutoHide="False"
+                              AllowAutoHide="True"
                               Margin="0,5,5,5">
                     <Classes.singleline>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -237,12 +226,12 @@
                                                   local:MpAvHtmlStylerExtension.IsEnabled="True"
                                                   Text="{Binding Body}" />
                                 </DataTemplate>
-                                <!--  PARAMS  -->
+                                <!--  EXECUTE PARAMS  -->
                                 <DataTemplate x:Key="ParameterCollectionTemplate"
                                               x:DataType="local:MpAvUserActionNotificationViewModel">
                                     <Border DataContext="{Binding Body}"
                                             MinWidth="250">
-                                        <ListBox x:Name="ExecuteParameterListBox"
+                                        <ListBox x:Name="ExecParamCollectionTemplate"
                                                  x:DataType="local:MpAvAnalyticItemPresetViewModel"
                                                  Classes="paramHost"
                                                  Grid.Row="1"
@@ -264,12 +253,22 @@
                                                 </ItemsPanelTemplate>
                                             </ListBox.ItemsPanel>
                                             <ListBox.ItemTemplate>
-                                                <DataTemplate>
+                                                <DataTemplate x:DataType="local:MpAvParameterViewModelBase">
                                                     <local:MpAvPluginParameterItemView HorizontalAlignment="Stretch"
                                                                                        Classes.invalid="{Binding !IsValid}" />
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
+                                    </Border>
+                                </DataTemplate>
+
+                                <!--  PREF PARAMS  -->
+                                <DataTemplate x:Key="PrefParamCollectionTemplate"
+                                              x:DataType="local:MpAvUserActionNotificationViewModel">
+
+                                    <Border DataContext="{Binding Body}"
+                                            MinWidth="250">
+                                        <local:MpAvSettingsFrameView />
                                     </Border>
                                 </DataTemplate>
 
@@ -362,6 +361,7 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Classes="butttonsContainer"
+                        Spacing="10"
                         DockPanel.Dock="Bottom"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right">

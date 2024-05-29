@@ -9,7 +9,9 @@ namespace MonkeyPaste.Avalonia {
         public virtual MpRect WorkingArea { get; set; } = MpRect.Empty;
         public virtual double Scaling { get; set; }
         public virtual bool IsPrimary { get; set; }
-        public virtual void Rotate(double angle) { }
+        public virtual void Rotate(double angle) {
+        }
+
 
         public MpAvScreenInfoBase() : this(null) { }
         public MpAvScreenInfoBase(MpIPlatformScreenInfo psi) {

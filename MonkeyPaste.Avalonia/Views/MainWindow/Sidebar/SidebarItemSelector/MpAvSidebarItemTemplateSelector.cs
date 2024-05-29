@@ -1,9 +1,13 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Media;
 using Avalonia.Metadata;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 namespace MonkeyPaste.Avalonia {
 
 
@@ -35,7 +39,23 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break($"unknown sidebar item type {param?.GetType()}");
                 return null;
             }
-            return AvailableTemplates[keyStr].Build(param);
+            var c = AvailableTemplates[keyStr].Build(param);
+#if MOBILE_OR_WINDOWED
+            if(sbivm is MpAvTagTreeView) {
+                return c;
+            }
+            return new Viewbox() {
+                Name = "SidebarItemViewbox",
+                Stretch = Stretch.UniformToFill,
+                Margin = new Thickness(10),
+                Child = new ScrollViewer() {
+                    Content = c
+                }
+            };
+            //return c;
+#else
+            return c;
+#endif
         }
 
         public bool Match(object data) {

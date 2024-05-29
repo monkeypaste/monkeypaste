@@ -7,10 +7,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvDesktopScreenInfoCollection : MpAvScreenInfoCollectionBase {
 
         public MpAvDesktopScreenInfoCollection(Window w) {
-            var b = 
-                w.Bounds.Size.ToPortableSize().IsValueEqual(MpSize.Empty) ?
-                new MpRect(0, 0, w.Width,w.Height) : // this should match windowed-mode class
-                w.Bounds.ToPortableRect();
+            var b = new MpRect(0, 0, w.Width, w.Height); // this should match windowed-mode class;
             Screens.Add(new MpAvDesktopScreenInfo() {
                 Bounds = b,
                 WorkingArea = b,

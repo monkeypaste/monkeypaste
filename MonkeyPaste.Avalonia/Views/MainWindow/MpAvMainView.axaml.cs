@@ -471,7 +471,7 @@ namespace MonkeyPaste.Avalonia {
 
             bool is_horiz =
 #if MOBILE_OR_WINDOWED
-                !mwvm.IsHorizontalOrientation;
+                true;// !mwvm.IsHorizontalOrientation;
 #else
                 mwvm.IsHorizontalOrientation;
 #endif

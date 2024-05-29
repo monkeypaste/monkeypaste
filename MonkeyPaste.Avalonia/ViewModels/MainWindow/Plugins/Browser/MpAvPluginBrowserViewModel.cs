@@ -6,7 +6,6 @@ using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -245,23 +244,23 @@ namespace MonkeyPaste.Avalonia {
             return ledger_uri;
         }
         private MpAvWindow CreatePluginBrowserWindow(string selectedGuid) {
-            bool test_child = true;
-
-            var pbv = new MpAvPluginBrowserView();
             MpAvWindow pbw = new MpAvWindow() {
-                Width = 800,
-                Height = 500,
+                Width = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? double.NaN : 800,
+                Height = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? double.NaN : 500,
                 DataContext = this,
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("JigsawImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                Content = new MpAvPluginBrowserView(),
+                BackCommand = BackCommand
             };
             pbw.Background =
                 MpAvThemeViewModel.Instance.IsThemeDark ?
                     Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor) :
                     Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeLightColor);
 
-            if (pbv.FindControl<TabStrip>("PluginTabStrip") is TabStrip ts) {
+            if (pbw.Content is MpAvPluginBrowserView pbv &&
+                pbv.FindControl<TabStrip>("PluginTabStrip") is TabStrip ts) {
                 ts.SelectedItem = Tabs[(int)MpPluginBrowserTabType.Installed];
             }
 
@@ -290,24 +289,6 @@ namespace MonkeyPaste.Avalonia {
                         SelectedItem = pivm;
                     }
                 };
-            }
-
-            if(test_child) {
-                var pbv_cw = new MpAvChildWindow() {
-                    Content = pbv,
-                    BackCommand = BackCommand,
-                };
-                pbw.Content = pbv_cw;
-
-                pbv_cw.Bind(
-                MpAvChildWindow.TitleProperty,
-                new Binding() {
-                    Source = this,
-                    Path = nameof(WindowTitle),
-                    Converter = MpAvStringToWindowTitleConverter.Instance
-                });
-            } else {
-                pbw.Content = pbv;
             }
             return pbw;
         }

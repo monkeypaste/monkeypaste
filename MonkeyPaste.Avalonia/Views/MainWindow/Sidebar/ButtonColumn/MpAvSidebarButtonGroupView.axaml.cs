@@ -34,30 +34,30 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case MpMessageType.MainWindowOrientationChangeEnd:
-                    var ctg = this.FindControl<Grid>("SidebarButtonGroupContainerGrid");
-                    var tbl = ctg.GetVisualDescendants<Button>().ToList();
+//                    var ctg = this.FindControl<Grid>("SidebarButtonGroupContainerGrid");
+//                    var tbl = ctg.GetVisualDescendants<Button>().ToList();
 
-                    if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                        // horizontal shows sidebar down left side
-                        ctg.ColumnDefinitions.Clear();
-#if MULTI_WINDOW
-                        ctg.RowDefinitions = new RowDefinitions("*,*,*,*,*"); 
-#else
-                        ctg.RowDefinitions = new RowDefinitions("*,*,*,*,0");
-#endif
-                        tbl.ForEach(x => Grid.SetColumn(x, 0));
-                        tbl.ForEach(x => Grid.SetRow(x, tbl.IndexOf(x)));
-                    } else {
-                        // vertical shows sidebar across bottom
-                        ctg.RowDefinitions.Clear();
-#if MULTI_WINDOW
-                        ctg.ColumnDefinitions = new ColumnDefinitions("*,*,*,*,*"); 
-#else
-                        ctg.ColumnDefinitions = new ColumnDefinitions("*,*,*,*,0");
-#endif
-                        tbl.ForEach(x => Grid.SetRow(x, 0));
-                        tbl.ForEach(x => Grid.SetColumn(x, tbl.IndexOf(x)));
-                    }
+//                    if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+//                        // horizontal shows sidebar down left side
+//                        ctg.ColumnDefinitions.Clear();
+//#if MULTI_WINDOW
+//                        ctg.RowDefinitions = new RowDefinitions("*,*,*,*,*"); 
+//#else
+//                        ctg.RowDefinitions = new RowDefinitions("*,*,*,*,0");
+//#endif
+//                        tbl.ForEach(x => Grid.SetColumn(x, 0));
+//                        tbl.ForEach(x => Grid.SetRow(x, tbl.IndexOf(x)));
+//                    } else {
+//                        // vertical shows sidebar across bottom
+//                        ctg.RowDefinitions.Clear();
+//#if MULTI_WINDOW
+//                        ctg.ColumnDefinitions = new ColumnDefinitions("*,*,*,*,*"); 
+//#else
+//                        ctg.ColumnDefinitions = new ColumnDefinitions("*,*,*,*,0");
+//#endif
+//                        tbl.ForEach(x => Grid.SetRow(x, 0));
+//                        tbl.ForEach(x => Grid.SetColumn(x, tbl.IndexOf(x)));
+//                    }
                     break;
             }
         }

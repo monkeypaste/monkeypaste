@@ -17,7 +17,5 @@ namespace MonkeyPaste.Avalonia {
             WorkingArea = s.WorkingArea.ToPortableRect(Scaling);
             IsPrimary = s.IsPrimary;
         }
-
-
     }
 }

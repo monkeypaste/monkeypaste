@@ -355,6 +355,7 @@ namespace MonkeyPaste.Avalonia {
             grid.ColumnDefinitions.AddRange(cd ?? new ColumnDefinitions("*"));
 
             //grid.EndInit();
+            MpConsole.WriteLine($"Grid '{grid.Name}' Orientation: '{orientation}'");
             MpConsole.WriteLine($"Grid '{grid.Name}' RowDefs: '{grid.RowDefinitions}'");
             MpConsole.WriteLine($"Grid '{grid.Name}' ColDefs: '{grid.ColumnDefinitions}'");
 

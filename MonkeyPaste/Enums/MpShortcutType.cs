@@ -15,6 +15,7 @@
         // APPLICATION
         DecreaseFocus,
         IncreaseFocus,
+        //EnterKeyAction,
         ExitApplication,
         PasteToExternal,
         PasteSelection,

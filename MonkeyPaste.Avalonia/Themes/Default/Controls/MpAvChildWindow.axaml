@@ -14,23 +14,21 @@
                       RowDefinitions="Auto,*">
                     <!--  HEADER  -->
                     <Border x:Name="PART_NavContainer"
-                            IsVisible="{TemplateBinding ParentWindow,
-                                                        Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                            IsVisible="{TemplateBinding ShowHeader}"
                             Grid.Row="0"
                             Padding="5"
                             Background="{DynamicResource ThemeDarkColor}">
-                        <DockPanel Grid.Row="0"
-                                   x:Name="PART_PageNavPanel">
+                        <DockPanel x:Name="PART_PageNavPanel">
                             <!--  BACK BUTTON  -->
                             <Button x:Name="PART_PageNavBackButton"
                                     DockPanel.Dock="Left"
-                                    Classes="defaultButton noBg noHoverBg"
+                                    Classes="defaultButton noBg noHoverBg noBorder"
                                     IsVisible="{TemplateBinding BackCommand,
                                                                 Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                     Command="{TemplateBinding BackCommand}"
                                     CommandParameter="{Binding $self}">
-                                <Image Width="25"
-                                       Height="25"
+                                <Image Width="30"
+                                       Height="30"
                                        Source="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                             </Button>
 
@@ -59,15 +57,33 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
 
-                            <!--  TITLE  -->
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        Spacing="5">
 
-                            <TextBlock Text="{TemplateBinding Title}"
-                                       Effect="{StaticResource ThemeDropShadow}"
-                                       Foreground="{Binding Background, ElementName=PART_NavContainer, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
-                                       FontSize="26"
-                                       FontWeight="Bold"
-                                       VerticalAlignment="Center"
-                                       TextAlignment="Center" />
+                                <!--  ICON  -->
+
+                                <!--<Image IsVisible="{TemplateBinding Icon,
+                                                                   Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                       Width="25"
+                                       Height="25"
+                                       Source="{TemplateBinding Icon}"
+                                       VerticalAlignment="Center" />-->
+
+                                <!--  TITLE  -->
+
+                                <TextBlock x:Name="TitleTextBlock"
+                                           Text="{TemplateBinding Title}"
+                                           Effect="{StaticResource ThemeDropShadow}"
+                                           IsVisible="{TemplateBinding Title,
+                                                                       Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                           Foreground="{Binding Background, ElementName=PART_NavContainer, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                                           FontSize="26"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           TextAlignment="Center" />
+
+                            </StackPanel>
 
 
                         </DockPanel>
@@ -76,6 +92,7 @@
 
                     <!--  CONTENT  -->
                     <ContentPresenter Grid.Row="1"
+                                      Background="{TemplateBinding Background}"
                                       Content="{TemplateBinding Content}" />
                 </Grid>
             </ControlTemplate>

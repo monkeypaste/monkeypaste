@@ -17,18 +17,21 @@
         <TransformOperations x:Key="SwitchlessRadioButtonTransformOps">translateX(-15px)</TransformOperations>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+        <!--  CNTR ORIENTATION  -->
         <Style Selector="Grid#SidebarButtonGroupContainerGrid">
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch" />
-            <Setter Property="VerticalAlignment"
-                    Value="Stretch" />
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalRowDefinitions"
+                    Value="*,*,0,*,*,*" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalColumnDefinitions"
+                    Value="*,*,0,*,*,*" />
         </Style>
-        <Style Selector="Grid#SidebarButtonGroupContainerGrid.horizontal">
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch" />
-            <Setter Property="VerticalAlignment"
-                    Value="Stretch" />
+
+        <Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile">
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalRowDefinitions"
+                    Value="*,*,*,*,*,0" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalColumnDefinitions"
+                    Value="*,*,*,*,*,0" />
         </Style>
+
         <!--  SIDEBAR RADIO BUTTONS  -->
         <Style Selector="RadioButton.sidebarRadio">
             <Setter Property="local:MpAvDropExtension.IsEnabled"
@@ -122,15 +125,39 @@
             <Setter Property="local:MpAvImageTintExtension.Tint"
                     Value="{DynamicResource HoverSelectedBorderBrush}" />
         </Style>
+
+        <!--  TRAY TOGGLE  -->
+
+        <Style Selector="ToggleButton#ToggleClipTrayButton">
+            <!--<Setter Property="Margin"
+                    Value="0,10,0,10" />-->
+        </Style>
+        <Style Selector="Grid#SidebarButtonGroupContainerGrid.horizontal ToggleButton#ToggleClipTrayButton">
+            <!--<Setter Property="Margin"
+                    Value="10,0,10,0" />-->
+        </Style>
+        <Style Selector="ToggleButton#ToggleClipTrayButton Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource FilterImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent3Color}" />
+        </Style>
+        <Style Selector="ToggleButton#ToggleClipTrayButton:checked Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource PinImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent3Color}" />
+        </Style>
     </local:MpAvUserControl.Styles>
 
     <Grid x:Name="SidebarButtonGroupContainerGrid"
+          Classes="oriented"
+          Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           Classes.horizontal="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
           HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch"
-          RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+          VerticalAlignment="Stretch">
+
+        <!--  TAGS  -->
+
         <RadioButton x:Name="TagTreeToggleButton"
-                     Grid.Row="0"
+                     local:MpAvOrientedGridExtension.HorizontalRow="0"
+                     local:MpAvOrientedGridExtension.VerticalColumn="0"
                      GroupName="SidebarButtonGroup"
                      Classes="sidebarRadio switchless"
                      RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
@@ -172,8 +199,12 @@
             </Grid>
 
         </RadioButton>
+
+        <!--  CLIPBOARD  -->
+
         <RadioButton x:Name="ClipboardHandlerToggleButton"
-                     Grid.Row="1"
+                     local:MpAvOrientedGridExtension.HorizontalRow="1"
+                     local:MpAvOrientedGridExtension.VerticalColumn="1"
                      GroupName="SidebarButtonGroup"
                      Classes="sidebarRadio switchless"
                      RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
@@ -186,8 +217,27 @@
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource ClipboardSvg}" />
         </RadioButton>
+
+        <!--  CLIP TRAY TOGGLE  -->
+
+        <ToggleButton x:Name="ToggleClipTrayButton"
+                      Classes="noBg noHoverBg noBorder"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Margin="5"
+                      local:MpAvOrientedGridExtension.HorizontalRow="2"
+                      local:MpAvOrientedGridExtension.VerticalColumn="2"
+                      IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                      Command="{Binding ToggleExpandQueryTrayCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                      IsChecked="{Binding IsPinTrayVisible, Mode=OneWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+            <Image />
+        </ToggleButton>
+
+        <!--  ANALYZERS  -->
+
         <RadioButton x:Name="AnalyzerToggleButton"
-                     Grid.Row="2"
+                     local:MpAvOrientedGridExtension.HorizontalRow="3"
+                     local:MpAvOrientedGridExtension.VerticalColumn="3"
                      GroupName="SidebarButtonGroup"
                      Classes="sidebarRadio switchless"
                      RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
@@ -200,8 +250,12 @@
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource BrainOutlineSvg}" />
         </RadioButton>
+
+        <!--  ACTIONS  -->
+
         <RadioButton x:Name="ActionsToggleButton"
-                     Grid.Row="3"
+                     local:MpAvOrientedGridExtension.HorizontalRow="4"
+                     local:MpAvOrientedGridExtension.VerticalColumn="4"
                      GroupName="SidebarButtonGroup"
                      Classes="sidebarRadio switchless"
                      RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
@@ -214,10 +268,14 @@
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource BoltSvg}" />
         </RadioButton>
+
+        <!--  MODES  -->
+
         <RadioButton x:Name="AppModeToggleButton"
-                     IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                     IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                      Classes.mouseMode="{Binding IsAnyMouseModeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                     Grid.Row="4"
+                     local:MpAvOrientedGridExtension.HorizontalRow="5"
+                     local:MpAvOrientedGridExtension.VerticalColumn="5"
                      local:MpAvImageTintExtension.IsEnabled="True"
                      GroupName="EmptyGroup"
                      Classes="sidebarRadio switchless tt_near_bottom"

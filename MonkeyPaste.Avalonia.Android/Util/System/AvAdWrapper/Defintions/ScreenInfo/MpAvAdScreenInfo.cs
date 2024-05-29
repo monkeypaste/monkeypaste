@@ -98,19 +98,19 @@ namespace MonkeyPaste.Avalonia.Android {
                 WorkingArea = GetWorkArea(IsVertical);
             }
         }
-
         public override void Rotate(double angle) {
             bool is_portrait = angle != 270 && angle != 90;
             Bounds = GetBounds(is_portrait);
             WorkingArea = GetWorkArea(is_portrait);
         }
+
         #endregion
 
         #region Protected Methods
         #endregion
 
         #region Private Methods
-        
+
         private MpRect GetBounds(bool is_vert) {
             var ps = is_vert ? new PixelSize((int)_sw, (int)_sh) : new PixelSize((int)_sh, (int)_sw);
             return new PixelRect(ps).ToPortableRect(Scaling);

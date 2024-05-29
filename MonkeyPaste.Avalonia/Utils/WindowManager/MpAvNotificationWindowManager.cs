@@ -112,9 +112,11 @@ namespace MonkeyPaste.Avalonia {
 #endif
                 case MpAvLoaderNotificationViewModel:
 #if WINDOWED
+                    var mwo = MpAvPrefViewModel.Instance.MainWindowOrientationStr.ToEnum<MpMainWindowOrientationType>();
+                    bool is_vert = mwo == MpMainWindowOrientationType.Left || mwo == MpMainWindowOrientationType.Right;
                     var w = new Window() {
-                        Width = 360,
-                        Height = 740,
+                        Width = is_vert ? 360:740,
+                        Height = is_vert ? 740:360,
                         DataContext = nvmb
                     };
                     w.Classes.Add("windowed-mode");
@@ -211,6 +213,18 @@ namespace MonkeyPaste.Avalonia {
             }
             nw.Closed += OnWindowClosed;
             nw.EffectiveViewportChanged += Nw_EffectiveViewportChanged;
+
+#if MOBILE_OR_WINDOWED
+            if(nw.Classes.Contains("toast")) {
+                nw.Classes.Add("slideIn");
+            }
+
+            if(nvmb is MpAvUserActionNotificationViewModel uavm) {
+                nw.BackCommand = uavm.BackCommand;
+            } else if(nvmb is MpAvLoaderNotificationViewModel) {
+                nw.ShowHeader = false;
+            }
+#endif
             try {
                 if (nvmb.Owner != null) {
                     nw.Show(nvmb.Owner);

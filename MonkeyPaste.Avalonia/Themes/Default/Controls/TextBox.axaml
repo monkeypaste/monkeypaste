@@ -14,7 +14,7 @@
         <Setter Property="FlowDirection"
                 Value="LeftToRight" />
     </Style>
-    <Style Selector=":is(Window).rtl :is(TextBox)">
+    <Style Selector=":is(local|MpAvWindow).rtl :is(TextBox)">
         <Setter Property="FlowDirection"
                 Value="RightToLeft" />
     </Style>
@@ -22,7 +22,7 @@
         <Setter Property="FlowDirection"
                 Value="LeftToRight" />
     </Style>
-    <Style Selector=":is(Window).rtl AutoCompleteBox">
+    <Style Selector=":is(local|MpAvWindow).rtl AutoCompleteBox">
         <Setter Property="FlowDirection"
                 Value="RightToLeft" />
     </Style>
@@ -68,7 +68,7 @@
     </Style>
 
     <!--  DARK PASSWORD BUTTON  -->
-    <Style Selector=":is(Window).dark TextBox.revealPasswordButton">
+    <Style Selector=":is(local|MpAvWindow).dark TextBox.revealPasswordButton">
         <Style.Resources>
             <SolidColorBrush x:Key="TextControlButtonBackground">Transparent</SolidColorBrush>
             <SolidColorBrush x:Key="TextControlButtonBackgroundPointerOver">Transparent</SolidColorBrush>

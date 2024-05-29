@@ -450,6 +450,8 @@ namespace MonkeyPaste.Avalonia {
                 //    tl = Math.Min(75d / 100d, tl + (10d / 100d));
                 //}
                 hex = MpColorHelpers.ColorFromHsl(th, ts, tl).ToHex(true);
+            } else {
+
             }
             hex.ToPortableColor().ColorToHsv(out double h, out double s, out double v);
 

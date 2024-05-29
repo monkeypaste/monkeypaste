@@ -47,6 +47,25 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 return App.PrimaryView is not MpAvMainView;
             });
+        
+        public ICommand EnterKeyCommand => new MpCommand(
+             () => {
+                 var fc = MpAvFocusManager.Instance.FocusElement as Control;
+                 if (fc.TryGetSelfOrAncestorDataContext<MpAvTagTileViewModel>(out var ttvm)) {
+                     ttvm.SelectThisTagCommand.Execute(null);
+                     return;
+                 }
+             },
+            () => {
+
+                if (MpAvFocusManager.Instance.FocusElement is not Control fc) {
+                    return false;
+                }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvTagTileViewModel>(out var ttvm)) {
+                    return ttvm.CanSelect;
+                }
+                return false;
+            });
 
         public ICommand RenameCommand => new MpCommand(
             () => {

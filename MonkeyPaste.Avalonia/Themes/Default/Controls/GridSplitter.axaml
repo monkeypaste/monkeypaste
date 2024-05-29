@@ -87,15 +87,15 @@
     </Style>
     <!--  PLUGIN BROWSER SPLITTER  -->
 
-    <Style Selector=":is(Window) > local|MpAvPluginBrowserView GridSplitter.pluginBrowserSplitter">
+    <Style Selector=":is(local|MpAvWindow) > local|MpAvPluginBrowserView GridSplitter.pluginBrowserSplitter">
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>
-    <Style Selector=":is(Window) > local|MpAvPluginBrowserView GridSplitter.pluginBrowserSplitter:pointerover">
+    <Style Selector=":is(local|MpAvWindow) > local|MpAvPluginBrowserView GridSplitter.pluginBrowserSplitter:pointerover">
         <Setter Property="Background"
                 Value="{DynamicResource ThemeDarkColor}" />
     </Style>
-    <Style Selector=":is(Window).dark > local|MpAvPluginBrowserView GridSplitter.pluginBrowserSplitter:pointerover">
+    <Style Selector=":is(local|MpAvWindow).dark > local|MpAvPluginBrowserView GridSplitter.pluginBrowserSplitter:pointerover">
         <Setter Property="Background"
                 Value="{DynamicResource ThemeLightColor}" />
     </Style>

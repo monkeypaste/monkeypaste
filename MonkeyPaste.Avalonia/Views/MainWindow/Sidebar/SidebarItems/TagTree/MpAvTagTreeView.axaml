@@ -70,6 +70,8 @@
 
     </local:MpAvUserControl.Styles>
     <TreeView x:Name="TagTreeView"
+              Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                       
               Cursor="{Binding IsBusy, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=Wait|unset}"
               local:MpAvHelpAnchorExtension.IsEnabled="True"
               local:MpAvHelpAnchorExtension.LinkType="Collections"

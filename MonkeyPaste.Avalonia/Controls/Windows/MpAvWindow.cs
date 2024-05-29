@@ -55,8 +55,10 @@ namespace MonkeyPaste.Avalonia {
             DataContext as MpIWindowViewModel;
 
         #region Overrides
-#if !MOBILE_OR_WINDOWED
-        //protected override Type StyleKeyOverride => typeof(MpAvWindow); 
+#if MOBILE_OR_WINDOWED
+        protected override Type StyleKeyOverride => typeof(MpAvWindow);
+#else
+        protected override Type StyleKeyOverride => typeof(MpAvWindow); 
 #endif
         #endregion
 

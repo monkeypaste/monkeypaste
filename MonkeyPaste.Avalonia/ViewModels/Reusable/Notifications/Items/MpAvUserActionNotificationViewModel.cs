@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public bool HasParams =>
-            Body is MpAvAnalyticItemPresetViewModel;
+            Body is MpAvIParameterCollectionViewModel;
         public override bool CanPin => true;
 
         public override bool ShowOptionsButton =>

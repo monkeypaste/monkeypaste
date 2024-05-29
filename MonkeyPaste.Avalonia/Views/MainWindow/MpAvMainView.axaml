@@ -11,21 +11,19 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvMainView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Border#SelectedSidebarContainerBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource MainWindowBgBrush}" />
+        </Style>
+        <Style Selector="Border#SelectedSidebarContainerBorder.mobile">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeDarkColor}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <local:MpAvUserControl.RenderTransform>
         <TranslateTransform />
     </local:MpAvUserControl.RenderTransform>
-    <local:MpAvUserControl.Styles>
-        <!--<Style Selector="Viewbox#SidebarViewbox">
-            <Setter Property="Stretch"
-                    Value="Uniform" />
-            <Setter Property="StretchDirection"
-                    Value="DownOnly" />
-        </Style>
-        <Style Selector="Viewbox#SidebarViewbox.desktop">
-            <Setter Property="Stretch"
-                    Value="None" />
-        </Style>-->
-    </local:MpAvUserControl.Styles>
     <Canvas x:Name="MainWindowCanvas"
             Width="{Binding MainWindowWidth}"
             Height="{Binding MainWindowHeight}">
@@ -63,8 +61,8 @@
                 <!--  SELECTED SIDEBAR ITEM  -->
                 <Border x:Name="SelectedSidebarContainerBorder"
                         x:DataType="local:MpAvSidebarItemCollectionViewModel"
+                        Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                         DataContext="{x:Static local:MpAvSidebarItemCollectionViewModel.Instance}"
-                        Background="{DynamicResource MainWindowBgBrush}"
                         Grid.Column="1"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">

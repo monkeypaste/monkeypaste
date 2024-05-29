@@ -1444,7 +1444,8 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.Query.TotalAvailableItemsInQuery == 0;
 
         public bool IsPinTrayEmpty =>
-            !InternalPinnedItems.Any();
+            !InternalPinnedItems.Any() ||
+            (InternalPinnedItems.All(x=>x == PinTrayCachePlaceholder));
 
         private bool _isPinTrayVisible = true;
         public bool IsPinTrayVisible {
@@ -5009,6 +5010,15 @@ namespace MonkeyPaste.Avalonia {
                 MpAvClipTrayContainerView.Instance.ClipTraySplitter
                     .ApplyDelta(delta);
                 IsPinTrayVisible = false;
+            });
+        
+        public ICommand ToggleExpandQueryTrayCommand => new MpCommand(
+            () => {
+                if(IsPinTrayVisible) {
+                    ExpandQueryTrayCommand.Execute(null);
+                } else {
+                    ExpandPinTrayCommand.Execute(null);
+                }
             });
 
         public ICommand SelectClipTileTransactionNodeCommand => new MpAsyncCommand<object>(

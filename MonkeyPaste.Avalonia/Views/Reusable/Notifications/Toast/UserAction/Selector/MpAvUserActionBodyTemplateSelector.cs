@@ -15,7 +15,13 @@ namespace MonkeyPaste.Avalonia {
             string key = "TextBodyTemplate";
             if (param is MpAvUserActionNotificationViewModel uanvm) {
                 if (uanvm.HasParams) {
-                    key = "ParameterCollectionTemplate";
+                    if(uanvm.Body is MpAvAnalyticItemPresetViewModel) {
+                        key = "ExecParamCollectionTemplate";
+                    } else if (uanvm.Body is MpAvSettingsFrameViewModel) {
+                        key = "PrefParamCollectionTemplate";
+                    } else {
+                        MpDebug.Break($"Unknown ntf body {uanvm.Body}");
+                    }
                 } else if (uanvm.ShowTextBox) {
                     key = "TextBoxTemplate";
                 } else if (uanvm.ShowBusySpinner || uanvm.ShowProgressSpinner) {
