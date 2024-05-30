@@ -25,7 +25,18 @@ namespace MonkeyPaste.Avalonia {
         MpIShortcutGestureLocator,
         MpIDndUserCancelNotifier {
 
+        #region Private Variables
+
+        private SimpleGlobalHook _hook;
+
+        private MpAvKeyGestureHelper<KeyCode> _keyboardGestureHelper = new MpAvKeyGestureHelper<KeyCode>();
+        private MpAvShortcutViewModel _exact_match;
+
+        #endregion
+
         #region Constants
+
+        public const double MIN_GLOBAL_DRAG_DIST = 20;
 
         #endregion
 
@@ -54,21 +65,6 @@ namespace MonkeyPaste.Avalonia {
             false;
 #endif
         static bool ALLOW_GLOBAL_INPUT = ALLOW_GLOBAL_KEYBOARD_INPUT || ALLOW_GLOBAL_MOUSE_INPUT;
-
-        public const double MIN_GLOBAL_DRAG_DIST = 20;
-
-        #endregion
-
-        #region Private Variables
-
-        private SimpleGlobalHook _hook;
-
-        private MpAvKeyGestureHelper<KeyCode> _keyboardGestureHelper = new MpAvKeyGestureHelper<KeyCode>();
-        private MpAvShortcutViewModel _exact_match;
-
-        #endregion
-
-        #region Statics
 
         private static MpAvShortcutCollectionViewModel _instance;
         public static MpAvShortcutCollectionViewModel Instance => _instance ?? (_instance = new MpAvShortcutCollectionViewModel());
@@ -443,6 +439,10 @@ namespace MonkeyPaste.Avalonia {
                         {
                             MpShortcutType.ClearPinTray,
                             MpAvClipTrayViewModel.Instance.UnpinAllCommand
+                        },
+                        {
+                            MpShortcutType.EnterKeyAction,
+                            MpAvApplicationCommand.Instance.EnterKeyCommand
                         },
 #if DEBUG
 		                {

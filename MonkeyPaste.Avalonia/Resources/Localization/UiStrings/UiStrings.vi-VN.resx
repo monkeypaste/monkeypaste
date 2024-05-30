@@ -2999,4 +2999,10 @@ Các phím tắt toàn cầu hiện có thể được bật trong menu khay h�
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Sao chép vào clipboard</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Ghim</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Truy vấn</value>
+  </data>
 </root>

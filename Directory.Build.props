@@ -111,7 +111,7 @@
     <PlatformShortName>uwp</PlatformShortName> 
     <StartupOutputType>WinExe</StartupOutputType>
     <BuildScriptsDir>$(BuildScriptsRootDir)\windows</BuildScriptsDir>
-    <IsWindowed>true</IsWindowed>    
+    <IsWindowed>false</IsWindowed>    
   </PropertyGroup>
 
   <PropertyGroup Condition="$(UseWap) == 'True' And $(BuildOs) == 'WINDOWS'">

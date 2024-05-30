@@ -2999,4 +2999,10 @@ Globale snelkoppelingen kunnen nu worden ingeschakeld in het menu System Tray</v
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Gekopieerd naar het klembord</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Vastgemaakt</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Vraag</value>
+  </data>
 </root>

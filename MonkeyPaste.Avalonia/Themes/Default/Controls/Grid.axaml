@@ -6,10 +6,6 @@
         <Setter Property="local:MpAvOrientedGridExtension.IsEnabled"
                 Value="True" />
         <Setter Property="local:MpAvOrientedGridExtension.Orientation"
-                Value="Horizontal" />
-    </Style>
-    <Style Selector="Grid.oriented.mobile">
-        <Setter Property="local:MpAvOrientedGridExtension.Orientation"
                 Value="{Binding Orientation, Source={x:Static local:MpAvThemeViewModel.Instance}}" />
     </Style>
 </Styles>

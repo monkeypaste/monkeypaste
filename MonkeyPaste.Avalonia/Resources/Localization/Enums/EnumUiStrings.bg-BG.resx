@@ -1186,4 +1186,10 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>Превключване на глобалните куки</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>Модални настройки Рамково меню</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>Въведете Key Action</value>
+  </data>
 </root>

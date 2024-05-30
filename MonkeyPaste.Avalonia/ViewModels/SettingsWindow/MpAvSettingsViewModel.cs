@@ -167,6 +167,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsFilterExpanded { get; private set; } =
+#if MOBILE_OR_WINDOWED
+            false;
+#else
+            true;
+#endif
         public MpSettingsTabType DefaultSelectedTab {
             get {
                 if (string.IsNullOrEmpty(MpAvPrefViewModel.Instance.LastSelectedSettingsTabTypeStr)) {
@@ -1432,6 +1438,16 @@ namespace MonkeyPaste.Avalonia {
                 };
                 //sw.Classes.Add("fadeIn");
             }
+#if MOBILE_OR_WINDOWED
+            sw.MenuItems = [
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "SearchImage",
+                    Command = ToggleExpandFilterCommand
+                }
+                ];
+            //sw.WidthRatio = 0.9;
+            //sw.HeightRatio = 0.9;
+#endif
 
             void Sw_Opened(object sender, EventArgs e) {
                 sw.Activate();
@@ -1455,7 +1471,6 @@ namespace MonkeyPaste.Avalonia {
             return sw;
         }
         private void UpdateFilters() {
-
             TabLookup.ForEach(x => x.Value.ForEach(y => y.OnPropertyChanged(nameof(y.FilteredItems))));
             OnPropertyChanged(nameof(FilteredTabLookup));
             OnPropertyChanged(nameof(FilteredAccountFrames));
@@ -1470,6 +1485,17 @@ namespace MonkeyPaste.Avalonia {
 
             IsTabButtonVisible3 = MpAvShortcutCollectionViewModel.Instance.FilteredItems.Any();
 
+#if MOBILE_OR_WINDOWED
+            var fc = TabLookup.SelectMany(x => x.Value);
+            if(string.IsNullOrEmpty(FilterText)) {
+                // unexpand all non-user expanded frames
+                fc.ForEach(x => x.RestoreExpandedCommand.Execute(null));
+            } else {
+                // expand visible frames
+                fc.Where(x => x.IsVisible && !x.IsExpanded)
+                    .ForEach(x => x.ExpandFrameCommand.Execute("system"));
+            }
+#endif
             AddOrUpdateRecentFilterTextsAsync(FilterText).FireAndForgetSafeAsync();
         }
         private async Task AddOrUpdateRecentFilterTextsAsync(string st) {
@@ -1807,12 +1833,12 @@ namespace MonkeyPaste.Avalonia {
                 if (IsWindowOpen) {
                     IsWindowActive = true;
                 } else {
-#if MULTI_WINDOW
+//#if MULTI_WINDOW
                     var sw = CreateSettingsWindow();
                     sw.Show(); 
-#else
-                    MpAvMenuView.ShowMenu(args as Control, this);
-#endif
+//#else
+//                    MpAvMenuView.ShowMenu(args as Control, this);
+//#endif
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }
                 await SelectTabCommand.ExecuteAsync(args);
@@ -2045,7 +2071,27 @@ namespace MonkeyPaste.Avalonia {
                 MpAvAppRestarter.ShutdownWithRestartTaskAsync("Restoring Default Preferences").FireAndForgetSafeAsync();
 
             });
-
+        public ICommand ExpandFilterCommand => new MpCommand<object>(
+            (args) => {
+                IsFilterExpanded = true;
+                if(MpAvWindowManager.LocateWindow(this) is not { } sw ||
+                    sw.Content is not MpAvSettingsView sv) {
+                    return;
+                }
+                sv.FilterBox.TrySetFocusAsync().FireAndForgetSafeAsync();
+            });
+        public ICommand UnexpandFilterCommand => new MpCommand<object>(
+            (args) => {
+                IsFilterExpanded = false;
+            });
+        public ICommand ToggleExpandFilterCommand => new MpCommand<object>(
+            (args) => {
+                if (IsFilterExpanded) {
+                    UnexpandFilterCommand.Execute(null);
+                } else {
+                    ExpandFilterCommand.Execute(null);
+                }
+            });
         #endregion
     }
 }

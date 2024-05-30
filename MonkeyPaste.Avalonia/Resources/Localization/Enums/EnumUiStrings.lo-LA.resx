@@ -1186,4 +1186,10 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>Toggle Hooks Global</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>ເມນູການຕັ້ງຄ່າແບບ Modal</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>ໃສ່ການປະຕິບັດທີ່ສໍາຄັນ</value>
+  </data>
 </root>

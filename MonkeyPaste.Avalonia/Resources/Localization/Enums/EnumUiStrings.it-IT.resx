@@ -1186,4 +1186,10 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>Attiva ganci globali</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>Menu del fotogramma delle impostazioni modali</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>Immettere l'azione chiave</value>
+  </data>
 </root>

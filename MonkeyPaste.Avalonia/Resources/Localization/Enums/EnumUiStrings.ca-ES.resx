@@ -1186,4 +1186,10 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>Commuta els ganxos globals</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>Menú de marc de configuració modal</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>Introduïu l'acció clau</value>
+  </data>
 </root>

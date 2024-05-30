@@ -2999,4 +2999,10 @@
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>클립 보드에 복사</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>고정</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>질문</value>
+  </data>
 </root>

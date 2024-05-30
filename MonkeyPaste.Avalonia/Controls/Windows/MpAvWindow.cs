@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
 #if MOBILE_OR_WINDOWED
         protected override Type StyleKeyOverride => typeof(MpAvWindow);
 #else
-        protected override Type StyleKeyOverride => typeof(MpAvWindow); 
+        //protected override Type StyleKeyOverride => typeof(MpAvWindow); 
 #endif
         #endregion
 

@@ -2999,4 +2999,10 @@ Les raccourcis mondiaux peuvent désormais être activés dans le menu du platea
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Copié dans le presse-papier</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Épinglé</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Requête</value>
+  </data>
 </root>

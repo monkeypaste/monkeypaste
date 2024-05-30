@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvZoomFactorView : MpAvUserControl<MpIZoomFactorViewModel> {
         bool IsSliderHorizontal =>
 #if MULTI_WINDOW
-            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation
+            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation;
 #else   
                 true;
 #endif

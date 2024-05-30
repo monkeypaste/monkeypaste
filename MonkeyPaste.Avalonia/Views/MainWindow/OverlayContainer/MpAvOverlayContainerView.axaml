@@ -8,10 +8,7 @@
              d:DesignWidth="800"
              d:DesignHeight="450"
              x:Class="MonkeyPaste.Avalonia.MpAvOverlayContainerView">
-    <UserControl.Styles>
-    </UserControl.Styles>
-    <Canvas x:Name="OverlayCanvas"
-            Background="Transparent"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch" />
+    <TransitioningContentControl HorizontalAlignment="Left"
+                                 VerticalAlignment="Top"
+                                 x:Name="OverlayContentControl" />
 </UserControl>

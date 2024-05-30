@@ -3064,4 +3064,10 @@ Qlobal Qısayolları indi Sistem Tablası Menyusunda aktivləşdirmək olar</val
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Buferə kopyalandı</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Saxlanmış</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Sorğu</value>
+  </data>
 </root>

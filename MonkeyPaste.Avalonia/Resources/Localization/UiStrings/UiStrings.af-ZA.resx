@@ -2999,4 +2999,10 @@ Globale kortpaaie kan nou in die System Tray Menu geaktiveer word</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Gekopieer na knipbord</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Vasgespeld</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Navraag</value>
+  </data>
 </root>

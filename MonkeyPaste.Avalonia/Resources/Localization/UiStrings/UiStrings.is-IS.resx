@@ -2999,4 +2999,10 @@ Nú er hægt að virkja alþjóðlegar flýtileiðir í kerfisbakkavalmyndinni</
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Afritað á klemmuspjald</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Fest</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Fyrirspurn</value>
+  </data>
 </root>

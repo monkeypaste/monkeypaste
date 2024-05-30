@@ -2999,4 +2999,10 @@ Os atalhos globais agora podem ser ativados no menu da bandeja do sistema</value
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Copiado para a área de transferência</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Preso</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Consulta</value>
+  </data>
 </root>

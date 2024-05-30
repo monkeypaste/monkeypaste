@@ -2446,6 +2446,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter Key Action.
+        /// </summary>
+        public static string MpShortcutType_EnterKeyAction {
+            get {
+                return ResourceManager.GetString("MpShortcutType_EnterKeyAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit Application.
         /// </summary>
         public static string MpShortcutType_ExitApplication {

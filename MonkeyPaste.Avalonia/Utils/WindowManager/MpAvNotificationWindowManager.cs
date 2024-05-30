@@ -138,6 +138,9 @@ namespace MonkeyPaste.Avalonia {
                         Topmost = true,
                         ShowActivated = true
                     };
+                    if (Mp.Services != null && Mp.Services.ScreenInfoCollection == null) {
+                        Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(nw);
+                    }
                     App.Current.SetMainWindow(nw); 
 #endif
                     break;

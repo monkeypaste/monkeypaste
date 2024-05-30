@@ -2999,4 +2999,10 @@ A globális parancsikonok már engedélyezhetők a rendszer tálca menüben</val
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>A vágólapra másolt</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Rögzített</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Lekérdezés</value>
+  </data>
 </root>

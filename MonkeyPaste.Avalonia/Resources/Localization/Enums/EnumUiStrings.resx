@@ -1248,4 +1248,7 @@
   <data name="WatcherChangeTypes_All" xml:space="preserve">
     <value>All</value>
   </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>Enter Key Action</value>
+  </data>
 </root>

@@ -147,9 +147,9 @@
 
         </Style>
     </local:MpAvUserControl.Styles>
-    <!--
-        OUTER CNTR GRID
-    -->
+  
+    <!-- OUTER CNTR GRID -->
+  
     <Grid x:Name="PluginRootContainer"
           Classes="oriented"
           Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"

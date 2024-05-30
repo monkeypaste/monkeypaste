@@ -1766,8 +1766,8 @@ namespace MonkeyPaste.Avalonia {
             MpRect svr = new MpRect(
                 pad_origin,
                 pad_origin,
-                ObservedQueryTrayScreenWidth - pad_extent,
-                ObservedQueryTrayScreenHeight - pad_extent);
+                Math.Max(0,ObservedQueryTrayScreenWidth - pad_extent),
+                Math.Max(0,ObservedQueryTrayScreenHeight - pad_extent));
 
             MpRect ctvm_rect = ctvm.ScreenRect;
             MpPoint delta_scroll_offset = svr.FindTranslation(ctvm_rect);

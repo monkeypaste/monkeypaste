@@ -3064,4 +3064,10 @@ Hozirgi kunda tizimning trafik menyusida global yorliq yoqilishi mumkin</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Clipboardga ko'chirilgan</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Zebo</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>So'rov</value>
+  </data>
 </root>

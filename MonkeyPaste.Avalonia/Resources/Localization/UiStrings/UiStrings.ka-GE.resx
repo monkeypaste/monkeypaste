@@ -2999,4 +2999,10 @@ Monkeypaste მოწყობილობაზე
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>გადაწერილი ბუფერული</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>დაინიშნა</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>გამოკითხვა</value>
+  </data>
 </root>

@@ -2999,4 +2999,10 @@
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>ናብ ቅንጥብጣብ ሰሌዳ ዝተቐድሐ</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>ፒን ዝተለኽየ .</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>ሕቶ</value>
+  </data>
 </root>

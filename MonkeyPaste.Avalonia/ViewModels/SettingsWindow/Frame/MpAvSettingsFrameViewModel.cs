@@ -195,13 +195,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsExpanded { get; private set; } =
+#if MOBILE_OR_WINDOWED
+            false;
+#else
+            true;
+#endif
+        public bool IsUserExpanded { get; private set; }
         public MpSettingsFrameType FrameType { get; set; } = MpSettingsFrameType.None;
 
 
         public bool IsVisible { get; set; } = true;
 
         public MpTooltipHintType FrameHintType { get; set; }
-        #endregion
+#endregion
 
         #region Layout
 
@@ -213,7 +220,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string FrameHint { get; set; }
         #endregion
-        #endregion
+#endregion
 
         #region Constructors
         public MpAvSettingsFrameViewModel() : this(MpSettingsFrameType.None) {
@@ -282,6 +289,32 @@ namespace MonkeyPaste.Avalonia {
 
 
         #region Commands
+        public ICommand RestoreExpandedCommand => new MpCommand(
+            () => {
+                if(IsUserExpanded) {
+                    ExpandFrameCommand.Execute(null);
+                } else {
+                    UnexpandFrameCommand.Execute(null);
+                }
+            });
+        public ICommand ExpandFrameCommand => new MpCommand<object>(
+            (args) => {
+                IsExpanded = true;
+                IsUserExpanded = args == null;
+            });
+        public ICommand UnexpandFrameCommand => new MpCommand<object>(
+            (args) => {
+                IsExpanded = false;
+                IsUserExpanded = false;
+            });
+        public ICommand ToggleExpandFrameCommand => new MpCommand<object>(
+            (args) => {
+                if(IsExpanded) {
+                    UnexpandFrameCommand.Execute(null);
+                } else {
+                    ExpandFrameCommand.Execute(null);
+                }
+            });
         #endregion
     }
 }

@@ -2999,4 +2999,10 @@ Pintasan global kini boleh didayakan dalam menu dulang sistem</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Disalin ke papan klip</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Disematkan</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Pertanyaan</value>
+  </data>
 </root>

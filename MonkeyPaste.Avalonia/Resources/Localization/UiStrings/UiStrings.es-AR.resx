@@ -2999,4 +2999,10 @@ Los atajos globales ahora se pueden habilitar en el menú de la bandeja del sist
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Copiado al portapapeles</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Cubierto</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Consulta</value>
+  </data>
 </root>

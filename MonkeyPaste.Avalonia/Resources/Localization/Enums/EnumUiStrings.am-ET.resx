@@ -1200,4 +1200,10 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>ግሎባል መንጠቆዎችን ቀያይር</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>የሞዳል ቅንጅቶች ፍሬም ሜኑ</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>ቁልፍ ተግባር አስገባ</value>
+  </data>
 </root>

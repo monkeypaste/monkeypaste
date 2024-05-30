@@ -2999,4 +2999,10 @@ feedback@monkeypaste.com</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Алмашуу буферине көчүрүлдү</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Кадалды</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Суроо</value>
+  </data>
 </root>

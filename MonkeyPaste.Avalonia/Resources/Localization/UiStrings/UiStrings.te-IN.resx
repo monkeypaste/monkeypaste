@@ -2999,4 +2999,10 @@ feedback@monkeypaste.com</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>క్లిప్‌బోర్డ్‌కు కాపీ చేయబడింది</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>పిన్</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>ప్రశ్న</value>
+  </data>
 </root>

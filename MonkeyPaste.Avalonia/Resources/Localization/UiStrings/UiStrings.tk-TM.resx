@@ -2999,4 +2999,10 @@ Global gysga ýollar ulgam tromy menýusynda başlap biler</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Paneline göçürildi</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Gysgyç</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Talap</value>
+  </data>
 </root>

@@ -2999,4 +2999,10 @@
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തി</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>പിൻചെയ്തു</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>ചോദ ചിഹ്നമിടുക</value>
+  </data>
 </root>

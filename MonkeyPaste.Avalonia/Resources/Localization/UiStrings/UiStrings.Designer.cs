@@ -4997,6 +4997,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pinned.
+        /// </summary>
+        public static string PinTraySidebarLabel {
+            get {
+                return ResourceManager.GetString("PinTraySidebarLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear.
         /// </summary>
         public static string PinTrayUnpinAllLabel {
@@ -6248,6 +6257,15 @@ namespace MonkeyPaste.Avalonia {
         public static string QueryTrayNoSelection {
             get {
                 return ResourceManager.GetString("QueryTrayNoSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Query.
+        /// </summary>
+        public static string QueryTraySidebarLabel {
+            get {
+                return ResourceManager.GetString("QueryTraySidebarLabel", resourceCulture);
             }
         }
         

@@ -2999,4 +2999,10 @@ Le scorciatoie globali possono ora essere abilitate nel menu del vassoio di sist
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Copiato negli appunti</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Appuntato</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Domanda</value>
+  </data>
 </root>

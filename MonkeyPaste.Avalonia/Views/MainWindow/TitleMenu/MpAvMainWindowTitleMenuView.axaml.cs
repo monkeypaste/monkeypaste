@@ -60,12 +60,12 @@ namespace MonkeyPaste.Avalonia {
             }
 
             _curOrientation = (MpMainWindowOrientationType)cur_face_idx;
-            MpConsole.WriteLine("");
-            MpConsole.WriteLine("Window Drag mp: " + mw_mp);
-            MpConsole.WriteLine("Screen Drag mp: " + screen_mp);
-            MpConsole.WriteLine("Cur Orientation: " + _curOrientation);
-            MpConsole.WriteLine($"Scaling: {MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling}");
-            MpConsole.WriteLine("");
+            //MpConsole.WriteLine("");
+            //MpConsole.WriteLine("Window Drag mp: " + mw_mp);
+            //MpConsole.WriteLine("Screen Drag mp: " + screen_mp);
+            //MpConsole.WriteLine("Cur Orientation: " + _curOrientation);
+            //MpConsole.WriteLine($"Scaling: {MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling}");
+            //MpConsole.WriteLine("");
             if (MpAvMainWindowViewModel.Instance.MainWindowOrientationType != _curOrientation) {
                 MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(_curOrientation);
             }

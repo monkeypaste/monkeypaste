@@ -2999,4 +2999,10 @@ feedback@monkeypaste.com</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Копирано в клипборда</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Фиксирано</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Запитване</value>
+  </data>
 </root>

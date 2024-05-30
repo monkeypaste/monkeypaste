@@ -2999,4 +2999,10 @@ Is féidir aicearraí domhanda a chumasú anois sa roghchlár tráidire córais<
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Cóipeáilte go gearrthaisce</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Baraithe</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Cheist</value>
+  </data>
 </root>

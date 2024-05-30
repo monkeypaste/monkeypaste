@@ -71,13 +71,12 @@
     </local:MpAvUserControl.Styles>
     <TreeView x:Name="TagTreeView"
               Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                       
               Cursor="{Binding IsBusy, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=Wait|unset}"
               local:MpAvHelpAnchorExtension.IsEnabled="True"
               local:MpAvHelpAnchorExtension.LinkType="Collections"
               Classes="tagTree"
               Classes.tagDrag="{Binding IsAnyDragging}"
-              Margin="0"
+              Margin="0,15,0,0"
               Padding="0,0,0,150"
               SelectionMode="Single"
               AutoScrollToSelectedItem="False"

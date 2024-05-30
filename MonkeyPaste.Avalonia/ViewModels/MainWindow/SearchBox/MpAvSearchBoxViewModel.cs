@@ -247,6 +247,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(IsExpanded):
+                    MpMessenger.SendGlobal(MpMessageType.SearchVisibilityChanged);
+
                     if (IsExpanded) {
                         HasExpanded = true;
                     }
@@ -312,8 +314,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void FocusSearchBox() {
-            if (MpAvMainView.Instance.GetVisualDescendant<MpAvSearchBoxView>() is not MpAvSearchBoxView sbv ||
-                   sbv.GetVisualDescendant<TextBox>() is not { } tb) {
+            if (MpAvMainView.Instance.FilterMenuView.SearchBoxView.GetVisualDescendant<TextBox>() is not { } tb) {
                 return;
             }
             tb.TrySetFocusAsync(NavigationMethod.Pointer).FireAndForgetSafeAsync();
@@ -374,10 +375,22 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleIsSearchBoxExpandedCommand => new MpCommand(
             () => {
-                IsExpanded = !IsExpanded;
-                if (IsExpanded) {
-                    FocusSearchBox();
+                if(IsExpanded) {
+                    UnexpandSearchBoxCommand.Execute(null);
+                } else {
+                    ExpandSearchBoxCommand.Execute(null);
                 }
+            });
+
+        public ICommand ExpandSearchBoxCommand => new MpCommand(
+            () => {
+                IsExpanded = true;
+                FocusSearchBox();
+            });
+        
+        public ICommand UnexpandSearchBoxCommand => new MpCommand(
+            () => {
+                IsExpanded = false;
             });
 
         public ICommand ClearTextCommand => new MpCommand<object>(

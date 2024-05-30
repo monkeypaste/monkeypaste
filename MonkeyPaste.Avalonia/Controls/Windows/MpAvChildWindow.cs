@@ -1,8 +1,10 @@
 ﻿using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Avalonia.Diagnostics;
 using Avalonia.Input;
 using Avalonia.Input.TextInput;
@@ -25,8 +27,9 @@ using System.Windows.Input;
 using AvKeyGesture = Avalonia.Input.KeyGesture;
 
 namespace MonkeyPaste.Avalonia {
-        
-    [DoNotNotify]
+
+    [DoNotNotify] 
+    [TemplatePart("PART_NavContainer", typeof(Border))]
     public class MpAvChildWindow : MpAvUserControl {
         #region Private Variables
         #endregion
@@ -80,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly StyledProperty<bool> ShowActivatedProperty =
             AvaloniaProperty.Register<MpAvChildWindow, bool>(
                 name: nameof(ShowActivated),
-                defaultValue: default);
+                defaultValue: true);
 
         #endregion
 
@@ -286,33 +289,75 @@ namespace MonkeyPaste.Avalonia {
 
         public static readonly AttachedProperty<ICommand> BackCommandProperty =
             AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, ICommand>(
-                nameof(BackCommand));
+                nameof(BackCommand),
+                new MpCommand<object>(
+                    (args) => {
+#if MOBILE_OR_WINDOWED
+                        if (args is not MpAvChildWindow cw) {
+                            cw = MpAvWindowManager.ActiveWindow;
+                            if (cw == null) {
+                                return;
+                            }
+                        }
+                        cw.Close(); 
+#else
+                        return;
+#endif
+                    }));
 
         public ICommand BackCommand {
             get => GetValue(BackCommandProperty);
             set => SetValue(BackCommandProperty, value);
         }
+
         #endregion
 
-        #region Parent Window
+        #region BackCommandParameter
 
-        public static readonly AttachedProperty<MpAvChildWindow> ParentWindowProperty =
-            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, MpAvChildWindow>(
-                nameof(ParentWindow), default, false);
-        public MpAvChildWindow ParentWindow {
-            get => GetValue(ParentWindowProperty);
-            set => SetValue(ParentWindowProperty, value);
+        public static readonly AttachedProperty<object> BackCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, object>(
+                nameof(BackCommandParameter));
+
+        public object BackCommandParameter {
+            get => GetValue(BackCommandParameterProperty) ?? this;
+            set => SetValue(BackCommandParameterProperty, value);
         }
+
         #endregion
         
         #region ShowHeader
 
         public static readonly AttachedProperty<bool> ShowHeaderProperty =
             AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, bool>(
-                nameof(ShowHeader), default, true);
+                nameof(ShowHeader), true);
         public bool ShowHeader {
             get => GetValue(ShowHeaderProperty);
             set => SetValue(ShowHeaderProperty, value);
+        }
+
+        #endregion
+        
+        #region OpenTransition
+
+        public static readonly AttachedProperty<IPageTransition> OpenTransitionProperty =
+            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, IPageTransition>(
+                nameof(OpenTransition), 
+                new MpAvDirectionalPageSlide(TimeSpan.FromSeconds(0.5)) { IsDirBackwards = true });
+        public IPageTransition OpenTransition {
+            get => GetValue(OpenTransitionProperty);
+            set => SetValue(OpenTransitionProperty, value);
+        }
+        #endregion
+        
+        #region CloseTransition
+
+        public static readonly AttachedProperty<IPageTransition> CloseTransitionProperty =
+            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, IPageTransition>(
+                nameof(CloseTransition), 
+                new MpAvDirectionalPageSlide(TimeSpan.FromSeconds(0.5)));
+        public IPageTransition CloseTransition {
+            get => GetValue(CloseTransitionProperty);
+            set => SetValue(CloseTransitionProperty, value);
         }
         #endregion
         
@@ -326,6 +371,9 @@ namespace MonkeyPaste.Avalonia {
             set => SetValue(MenuItemsProperty, value);
         }
         #endregion
+
+        public double WidthRatio { get; set; } = 1.0d;
+        public double HeightRatio { get; set; } = 1.0d;
 
         #endregion
 
@@ -369,7 +417,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            ocv.AddChild(this);
+            ocv.ShowWindow(this);
         }
         public void Show(Window owner) {
             Show();
@@ -379,8 +427,12 @@ namespace MonkeyPaste.Avalonia {
         }
         public void Activate() {
             // TODO Focus this child window here
+#if MOBILE_OR_WINDOWED
             MpAvWindowManager.AllWindows.ForEach(x => x.IsActive = x == this);
-            Activated?.Invoke(this, EventArgs.Empty);
+#else
+            Activated?.Invoke(this, EventArgs.Empty); 
+            return;
+#endif
         }
         public void Deactivate() {
             // TODO Focus this child window here
@@ -391,11 +443,13 @@ namespace MonkeyPaste.Avalonia {
             // TODO detach from MpAvMainView
             MpConsole.WriteLine($"Child Window '{Title}' closed");
 
+            Deactivate();
+
             if (MpAvOverlayContainerView.Instance is not { } ocv) {
                 return;
             }
             
-            if(ocv.RemoveChild(this)) {
+            if(ocv.RemoveWindow(this)) {
                 Closed?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -435,32 +489,26 @@ namespace MonkeyPaste.Avalonia {
         protected virtual void OnClosing(WindowClosingEventArgs e) {
             Closing?.Invoke(this, e);
         }
+
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e) {
+            base.OnApplyTemplate(e);
+            if(e.NameScope.Find<Border>("PART_NavContainer") is not { } hb) {
+                return;
+            }
+            hb.Height =
+               // MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize +
+                MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength;
+        }
         #endregion
 
         #region Private Methods
         private void SetupWindow() {
-            Width = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width;
-            Height = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height;
-
-            if (ParentWindow == default) {
-#if WINDOWED
-                ParentWindow = MpAvWindowManager.ActiveWindow;
-#else
-                ParentWindow = MpAvWindowManager.ActiveWindow.GetVisualDescendant<MpAvChildWindow>(); 
-#endif
-            }
-            //Title = uavm.Title;
-            //if(uavm.IconSourceObj != null) {
-            //    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(
-            //        uavm.IconSourceObj, typeof(MpAvWindowIcon), 
-            //        MpThemeResourceKey.ThemeInteractiveColor.ToString(), null) as MpAvWindowIcon;
-            //}
+            Width = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width * WidthRatio;
+            Height = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height * HeightRatio;
         }
         #endregion
 
         #region Commands
         #endregion
     }
-
-
 }

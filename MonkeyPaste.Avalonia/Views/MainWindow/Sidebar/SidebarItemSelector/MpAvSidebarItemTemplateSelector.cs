@@ -41,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
             }
             var c = AvailableTemplates[keyStr].Build(param);
 #if MOBILE_OR_WINDOWED
-            if(sbivm is MpAvTagTreeView) {
+            if(sbivm is MpAvTagTrayViewModel) {
                 return c;
             }
             return new Viewbox() {

@@ -2999,4 +2999,10 @@ Ka taea e te waa poto poto te ao i roto i te tahua Tray punaha</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Kapohia ki te papatahi</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Titi</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Uiui</value>
+  </data>
 </root>

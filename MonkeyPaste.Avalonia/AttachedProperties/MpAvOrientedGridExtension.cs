@@ -248,18 +248,18 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Orientation AvaloniaProperty
-        public static Orientation GetOrientation(AvaloniaObject obj) {
+        public static Orientation? GetOrientation(AvaloniaObject obj) {
             return obj.GetValue(OrientationProperty);
         }
 
-        public static void SetOrientation(AvaloniaObject obj, Orientation value) {
+        public static void SetOrientation(AvaloniaObject obj, Orientation? value) {
             obj.SetValue(OrientationProperty, value);
         }
 
-        public static readonly AttachedProperty<Orientation> OrientationProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, Orientation>(
+        public static readonly AttachedProperty<Orientation?> OrientationProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, Orientation?>(
                 "Orientation",
-                Orientation.Horizontal);
+                null);
 
         private static void HandleOrientationChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if(!GetIsEnabled(element) ||
@@ -338,8 +338,9 @@ namespace MonkeyPaste.Avalonia {
         #region Helpers
 
         private static void OrientGrid(Grid grid) {
-            Orientation orientation = GetOrientation(grid);
-            //grid.BeginInit();
+            if(GetOrientation(grid) is not { } orientation) {
+                return;
+            }
             
             var rd =
                 orientation == Orientation.Horizontal ?
@@ -354,7 +355,6 @@ namespace MonkeyPaste.Avalonia {
             grid.ColumnDefinitions.Clear();
             grid.ColumnDefinitions.AddRange(cd ?? new ColumnDefinitions("*"));
 
-            //grid.EndInit();
             MpConsole.WriteLine($"Grid '{grid.Name}' Orientation: '{orientation}'");
             MpConsole.WriteLine($"Grid '{grid.Name}' RowDefs: '{grid.RowDefinitions}'");
             MpConsole.WriteLine($"Grid '{grid.Name}' ColDefs: '{grid.ColumnDefinitions}'");
@@ -364,10 +364,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private static void OrientChild(Control child) {
-            if(GetContainerGrid(child) is not Grid grid) {
+            if(GetContainerGrid(child) is not Grid grid ||
+                GetOrientation(grid) is not { } orientation) {
                 return;
             }
-            Orientation orientation = GetOrientation(grid);
+
             int r = orientation == Orientation.Horizontal ? GetHorizontalRow(child) : GetVerticalRow(child);
             int c = orientation == Orientation.Horizontal ? GetHorizontalColumn(child) : GetVerticalColumn(child);
             int rs = orientation == Orientation.Horizontal ? GetHorizontalRowSpan(child) : GetVerticalRowSpan(child);

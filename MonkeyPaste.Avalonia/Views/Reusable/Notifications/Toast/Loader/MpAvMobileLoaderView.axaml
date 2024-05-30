@@ -57,11 +57,13 @@
                                        LabelBrush="Transparent"
                                        Percent="{Binding PercentLoaded}" />
 
-            <!--  LOGO  -->
+            <!--
+                LOGO
+                Classes.show-spinner="{Binding ShowSpinner}"
+                Classes.shake="{Binding ShowSpinner}"
+            -->
             <Image x:Name="LogoImage"
                    Classes="applogo"
-                   Classes.show-spinner="{Binding ShowSpinner}"
-                   Classes.shake="{Binding ShowSpinner}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center">
                 <Image.RenderTransform>

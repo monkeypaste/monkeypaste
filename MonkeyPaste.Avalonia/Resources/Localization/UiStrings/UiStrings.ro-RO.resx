@@ -2999,4 +2999,10 @@ Comenzile rapide globale pot fi acum activate în meniul tăvii de sistem</value
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Copiat în clipboard</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Fixat</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Interogare</value>
+  </data>
 </root>

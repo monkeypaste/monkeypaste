@@ -1186,4 +1186,10 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>గ్లోబల్ హుక్స్ టోగుల్ చేయండి</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>మోడల్ సెట్టింగుల ఫ్రేమ్ మెను</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>కీ చర్యను నమోదు చేయండి</value>
+  </data>
 </root>

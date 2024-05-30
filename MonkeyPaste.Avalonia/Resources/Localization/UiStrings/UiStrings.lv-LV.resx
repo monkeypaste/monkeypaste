@@ -2999,4 +2999,10 @@ Globālās saīsnes tagad var iespējot Sistēmas paplātes izvēlnē</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Kopē pie starpliktuves</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Saspiests</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Vaicājums</value>
+  </data>
 </root>

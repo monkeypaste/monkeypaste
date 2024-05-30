@@ -1599,6 +1599,8 @@ namespace MonkeyPaste.Avalonia {
                 // first pass adjusts grid definitions, most measuring dimensions aren't updated yet
                 MpAvMainView.Instance.UpdateContentLayout();
 
+                MpAvThemeViewModel.Instance.OnPropertyChanged(nameof(MpAvThemeViewModel.Instance.Orientation));
+
                 await Task.Delay(300);
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeEnd);
                 // second pass finishes change with the right measurements

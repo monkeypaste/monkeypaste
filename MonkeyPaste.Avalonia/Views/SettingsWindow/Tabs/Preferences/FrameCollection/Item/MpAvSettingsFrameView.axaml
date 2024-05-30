@@ -15,6 +15,14 @@
                        IsVisible="{Binding IsVisible}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsFrameView">
     <UserControl.Styles>
+        <Style Selector="Image#ExpanderImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowRightImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+        </Style>
+        <Style Selector="Image#ExpanderImage.expanded">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+        </Style>
     </UserControl.Styles>
     <local:MpAvClipBorder Padding="5"
                           BorderThickness="0"
@@ -25,24 +33,33 @@
                         Spacing="5">
                 <StackPanel Classes="header frame"
                             Orientation="Horizontal">
+                    <Button Classes="defaultButton noBg noHoverBg noBorder"
+                            Command="{Binding ToggleExpandFrameCommand}"
+                            IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}">
+                        <Image x:Name="ExpanderImage"
+                               Classes.expanded="{Binding IsExpanded}"
+                               Classes="frame header icon" />
+                    </Button>
                     <Image Classes="frame header icon"
                            IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                            Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="frame header text"
                                Text="{Binding LabelText}" />
                     <local:MpAvToolTipHintView ToolTipText="{Binding FrameHint}"
-                                                   Classes.info="{Binding FrameHintType, ConverterParameter=Info, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
-                                                   Classes.warning="{Binding FrameHintType, ConverterParameter=Warning, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
-                                                   Classes.error="{Binding FrameHintType, ConverterParameter=Error, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
-                                                   IsVisible="{Binding FrameHint, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
+                                               Classes.info="{Binding FrameHintType, ConverterParameter=Info, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                                               Classes.warning="{Binding FrameHintType, ConverterParameter=Warning, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                                               Classes.error="{Binding FrameHintType, ConverterParameter=Error, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                                               IsVisible="{Binding FrameHint, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
 
                 </StackPanel>
 
                 <Border Classes="labelUnderline"
+                        IsVisible="{Binding IsExpanded}"
                         Margin="0" />
             </StackPanel>
             <local:MpAvParameterCollectionView x:Name="ParameterCollectionView"
                                                Grid.Row="1"
+                                               IsVisible="{Binding IsExpanded}"
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Top" />
         </Grid>

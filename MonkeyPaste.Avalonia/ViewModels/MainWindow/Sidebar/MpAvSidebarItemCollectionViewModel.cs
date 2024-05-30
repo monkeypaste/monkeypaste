@@ -56,7 +56,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public double ButtonGroupFixedDimensionLength => 40;
+        public double ButtonGroupFixedDimensionLength =>
+#if MOBILE_OR_WINDOWED
+            60;
+#else
+            40;
+#endif
 
         public double SelectedItemWidth {
             get {
@@ -107,14 +112,14 @@ namespace MonkeyPaste.Avalonia {
                 PlacementMode.Right :
                 PlacementMode.Top;
 
-        #endregion
+#endregion
 
         #region State
 
         bool HasSetStartupSelection { get; set; } = false;
         #endregion
 
-        #endregion
+#endregion
 
         #region Constructors
         private MpAvSidebarItemCollectionViewModel() {
@@ -213,6 +218,9 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SelectedItemHeight));
                     MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChanged);
                     break;
+                case nameof(SelectedItem):
+                    OnPropertyChanged(nameof(SelectedItemIdx));
+                    break;
                 case nameof(SelectedItemIdx):
 
                     break;
@@ -229,14 +237,19 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(MouseModeVerticalOffset));
                     break;
                 case MpMessageType.MainWindowOpened:
-#if MULTI_WINDOW
+//#if MULTI_WINDOW
                     if (MpAvMainWindowViewModel.Instance.IsMainWindowInHiddenLoadState ||
                                     HasSetStartupSelection) {
                         break;
                     }
                     SelectSidebarItemCommand.Execute(MpAvTagTrayViewModel.Instance);
                     HasSetStartupSelection = true;
-#endif
+                    //Dispatcher.UIThread.Post(async () => {
+                    //    // BUG Oriented grid not picking up initial state on horizontal startup
+                    //    await Task.Delay(300);
+                    //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.MainWindowLayoutOrientation));
+                    //});
+//#endif
                     break;
             }
         }
@@ -245,13 +258,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand SelectSidebarItemCommand => new MpCommand<object>(
-            (args) => {
+        public ICommand SelectSidebarItemCommand => new MpAsyncCommand<object>(
+            async(args) => {
                 var sbivm = args as MpISidebarItemViewModel;
                 if (sbivm == null) {
                     return;
                 }
                 SelectedItem = sbivm;
+
+                // BUG pre-selecting tags doesn't show selected in sidebar buttons, waiting a bit..
+                await Task.Delay(300);
+                OnPropertyChanged(nameof(SelectedItemIdx));
+                OnPropertyChanged(nameof(SelectedItem));
             });
 
         public ICommand ToggleIsSidebarItemSelectedCommand => new MpCommand<object>(

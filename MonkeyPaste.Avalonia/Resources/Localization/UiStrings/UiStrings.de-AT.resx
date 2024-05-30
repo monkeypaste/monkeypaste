@@ -2999,4 +2999,10 @@ Globale Kürzel können jetzt im Taskleistenmenü aktiviert werden.</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>In die Zwischenablage kopiert</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Angepinnt</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Abfrage</value>
+  </data>
 </root>

@@ -150,8 +150,6 @@
     
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvChildWindow.axaml" />
     
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSettings.axaml" />
-    
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvWindow.axaml" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.shared.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.$(PlatformShortName).cs" />
@@ -209,6 +207,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>EnumUiStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Localization\UiStrings\UiStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UiStrings.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   

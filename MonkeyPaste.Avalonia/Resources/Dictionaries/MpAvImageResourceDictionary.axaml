@@ -98,6 +98,8 @@
     <sys:String x:Key="ClearGridImage">avares://MonkeyPaste.Avalonia/Assets/Images/cleargrid.png</sys:String>
     <sys:String x:Key="EdgeArrowUpImage">avares://MonkeyPaste.Avalonia/Assets/Images/edgearrowup.png</sys:String>
     <sys:String x:Key="EdgeArrowDownImage">avares://MonkeyPaste.Avalonia/Assets/Images/edgearrowdown.png</sys:String>
+    <sys:String x:Key="EdgeArrowRightImage">avares://MonkeyPaste.Avalonia/Assets/Images/edgearrowright.png</sys:String>
+    <sys:String x:Key="EdgeArrowLeftImage">avares://MonkeyPaste.Avalonia/Assets/Images/edgearrowleft.png</sys:String>
     <sys:String x:Key="BinocularsImage">avares://MonkeyPaste.Avalonia/Assets/Images/binoculars.png</sys:String>
     <sys:String x:Key="BinocularsTiltedImage">avares://MonkeyPaste.Avalonia/Assets/Images/binocularstilted.png</sys:String>
     <sys:String x:Key="MouseNoneClickImage">avares://MonkeyPaste.Avalonia/Assets/Images/mousenoneclick.png</sys:String>

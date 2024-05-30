@@ -252,7 +252,9 @@ namespace MonkeyPaste.Avalonia {
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("JigsawImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 Content = new MpAvPluginBrowserView(),
-                BackCommand = BackCommand
+#if MOBILE_OR_WINDOWED
+                BackCommand = BackCommand 
+#endif
             };
             pbw.Background =
                 MpAvThemeViewModel.Instance.IsThemeDark ?

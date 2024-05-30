@@ -2999,4 +2999,10 @@ feedback@monkeypales.com</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>បានចម្លងទៅក្ដារតម្បៀតខ្ទាស់</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>ខ្ទាស់</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>សយរ</value>
+  </data>
 </root>

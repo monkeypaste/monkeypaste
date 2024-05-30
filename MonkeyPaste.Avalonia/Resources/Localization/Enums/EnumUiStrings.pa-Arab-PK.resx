@@ -1186,4 +1186,10 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>ਗਲੋਬਲ ਹੁੱਕਜ਼ ਨੂੰ ਟੌਗਲ ਕਰੋ</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>ਮਾਡਲ ਸੈਟਿੰਗ ਫਰੇਮ ਮੀਨੂ</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>ਕੁੰਜੀ ਕਾਰਵਾਈ ਦਰਜ ਕਰੋ</value>
+  </data>
 </root>

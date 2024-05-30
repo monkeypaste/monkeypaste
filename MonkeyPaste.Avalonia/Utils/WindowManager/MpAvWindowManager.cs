@@ -179,8 +179,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static string ToWindowTitleText(this string title) {
+#if MOBILE_OR_WINDOWED
+            return title;
+#else
             string prefix = string.IsNullOrEmpty(title) ? string.Empty : $"{title} - ";
             return $"{prefix}{Mp.Services.ThisAppInfo.ThisAppProductName}";
+#endif
         }
 
         public static Visual GetTopLevel(this Visual visual, bool logical = false) {
@@ -197,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
             return actual_tl;
         }
 
-        #endregion
+#endregion
 
         #region Private Methods
 

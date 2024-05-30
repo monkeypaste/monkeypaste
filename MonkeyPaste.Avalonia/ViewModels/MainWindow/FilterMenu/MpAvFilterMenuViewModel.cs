@@ -16,8 +16,9 @@ namespace MonkeyPaste.Avalonia {
         #region Layout
         public int FilterAnimTimeMs => 300; // NOTE needs to match resource time
         public double DefaultFilterMenuFixedSize =>
-#if DESKTOP
-        40;
+#if MOBILE_OR_WINDOWED
+        MpAvSearchBoxViewModel.Instance.IsExpanded ?
+            40 : 40;
 #else
             40;
 #endif
@@ -60,6 +61,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.SearchVisibilityChanged:
+                    MpAvMainView.Instance.UpdateContentLayout();
+                    break;
                 case MpMessageType.MainWindowLoadComplete:
                 case MpMessageType.ResizingMainWindowComplete:
                 case MpMessageType.MainWindowOrientationChangeEnd:

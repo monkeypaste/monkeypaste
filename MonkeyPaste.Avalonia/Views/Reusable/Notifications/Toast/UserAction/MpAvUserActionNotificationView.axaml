@@ -13,7 +13,6 @@
                        x:CompileBindings="True"
                        x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationView">
     <local:MpAvUserControl.Styles>
-        <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvSettings.axaml" />
         <!--  PROGRESS SPINNER  -->
 
         <!--  PARAM LISTBOXITEM  -->
@@ -259,16 +258,6 @@
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
-                                    </Border>
-                                </DataTemplate>
-
-                                <!--  PREF PARAMS  -->
-                                <DataTemplate x:Key="PrefParamCollectionTemplate"
-                                              x:DataType="local:MpAvUserActionNotificationViewModel">
-
-                                    <Border DataContext="{Binding Body}"
-                                            MinWidth="250">
-                                        <local:MpAvSettingsFrameView />
                                     </Border>
                                 </DataTemplate>
 

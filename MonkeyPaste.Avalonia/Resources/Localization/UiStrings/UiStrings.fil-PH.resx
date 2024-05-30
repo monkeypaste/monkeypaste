@@ -2999,4 +2999,10 @@ Maaari na ngayong paganahin ang mga global shortcut sa menu ng System Tray</valu
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Kinopya sa clipboard</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Naka -pin</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Tanong</value>
+  </data>
 </root>

@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
 
         public double ZoomSliderValueLength =>
 #if MULTI_WINDOW
-        3; 
+            3; 
 #else
             10;
 #endif

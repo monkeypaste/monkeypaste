@@ -188,21 +188,6 @@
                 </Button>
 
             </StackPanel>
-
-            <!--  MOBILE EXPAND QUERY TRAY BUTTON  -->
-            <Button x:Name="ExpandQueryTrayButton"
-                    Classes="defaultButton clipTrayButton outlineOver clipTrayBackButton"
-                    Command="{Binding ExpandQueryTrayCommand}">
-                <Button.IsVisible>
-                    <MultiBinding Converter="{x:Static BoolConverters.And}">
-                        <Binding Path="IsMobileOrWindowed"
-                                 Source="{x:Static local:MpAvThemeViewModel.Instance}" />
-                        <Binding Path="IsAnyTagActive"
-                                 Source="{x:Static local:MpAvTagTrayViewModel.Instance}" />
-                    </MultiBinding>
-                </Button.IsVisible>
-            </Button>
-
         </Grid>
     </Border>
 </local:MpAvUserControl>

@@ -2999,4 +2999,10 @@ Monkeypaste на уредот
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Копирано на Клипборд</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Закачен</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Барање</value>
+  </data>
 </root>

@@ -42,12 +42,16 @@ namespace MonkeyPaste.Avalonia {
         public static void Init(MpAvMainWindowViewModel mwvm) {
 #if DESKTOP
             var mw = new MpAvMainWindow() {
-                DataContext = mwvm
+                DataContext = mwvm,
+#if MOBILE_OR_WINDOWED
+                ShowHeader = false 
+#endif
             };
             _instance = mw.Content as MpAvMainView;
 
             if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
 #if WINDOWED
+
                 App.SetPrimaryView(_instance);
 #else
                 desktop.MainWindow = mw;
@@ -57,6 +61,18 @@ namespace MonkeyPaste.Avalonia {
             _instance = new MpAvMainView() {
                 DataContext = mwvm
             };
+#endif
+
+#if MOBILE_OR_WINDOWED
+            //_instance.BackCommand = MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand;
+            //_instance.BackCommandParameter = MpSettingsTabType.Preferences;
+            //_instance.MenuItems = [
+            //    new MpAvMenuItemViewModel() {
+            //        IconSourceObj = "SearchImage",
+            //        Command = MpAvSearchBoxViewModel.Instance.ExpandSearchBoxCommand
+            //    }
+            //    ];
+            _instance.ShowHeader = false;
 #endif
         }
 

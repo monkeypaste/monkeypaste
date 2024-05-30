@@ -2999,4 +2999,10 @@ Bellach gellir galluogi Llwybrau Byr Byd-eang yn y Ddewislen Hambwrdd System</va
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Wedi'i gopïo i'r clipfwrdd</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Wedi'i binio</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Ymholiad</value>
+  </data>
 </root>

@@ -2999,4 +2999,10 @@ Globaalsed otseteed saab nüüd süsteemialuse menüüs lubada</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Kopeeritud lõikelauale</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Kinnitatud</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Päring</value>
+  </data>
 </root>

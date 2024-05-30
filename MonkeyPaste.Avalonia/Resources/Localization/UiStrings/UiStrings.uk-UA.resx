@@ -2999,4 +2999,10 @@
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Скопіюється в буфер обміну</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Закріплений</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Запит</value>
+  </data>
 </root>

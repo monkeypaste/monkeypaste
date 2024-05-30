@@ -2999,4 +2999,10 @@ Dabar „System Tray“ meniu galima įjungti globalius nuorodas</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Nukopijuota į mainų sritį</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Prigludęs</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Užklausa</value>
+  </data>
 </root>

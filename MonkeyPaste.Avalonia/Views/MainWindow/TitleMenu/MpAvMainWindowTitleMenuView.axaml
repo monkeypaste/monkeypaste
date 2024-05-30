@@ -43,7 +43,7 @@
             <Setter Property="Content">
                 <Setter.Value>
                     <Template>
-                        <Image Source="{Binding Source={StaticResource BurgerImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                        <Image Source="{Binding Source={StaticResource CogImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                     </Template>
                 </Setter.Value>
             </Setter>
@@ -275,6 +275,7 @@
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
                     Classes="noBg noHoverBg noBorder"
+                    IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.IsEnabled="True"
                     local:MpAvPointerCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.RightPressCommandParameter="CW">

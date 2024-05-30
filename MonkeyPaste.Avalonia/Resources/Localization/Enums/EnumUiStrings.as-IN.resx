@@ -1186,4 +1186,10 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>গ্লোবেল হুক টগল কৰক</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>মডাল ছেটিংছ ফ্ৰেম মেনু</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>মূল কাৰ্য্য সুমুৱাওক</value>
+  </data>
 </root>

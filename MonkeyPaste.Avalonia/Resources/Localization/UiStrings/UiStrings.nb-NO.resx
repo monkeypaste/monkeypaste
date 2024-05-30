@@ -2999,4 +2999,10 @@ Globale snarveier kan nå aktiveres i systemskuffenyen</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Kopiert til utklippstavle</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Festet</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Spørsmål</value>
+  </data>
 </root>

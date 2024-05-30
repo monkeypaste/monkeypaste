@@ -18,27 +18,24 @@
                             Grid.Row="0"
                             Padding="5"
                             Background="{DynamicResource ThemeDarkColor}">
-                        <DockPanel x:Name="PART_PageNavPanel">
+                        <Grid>
                             <!--  BACK BUTTON  -->
                             <Button x:Name="PART_PageNavBackButton"
-                                    DockPanel.Dock="Left"
-                                    Classes="defaultButton noBg noHoverBg noBorder"
+                                    HorizontalAlignment="Left"
+                                    Classes="noBg noHoverBg noBorder"
                                     IsVisible="{TemplateBinding BackCommand,
                                                                 Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                     Command="{TemplateBinding BackCommand}"
-                                    CommandParameter="{Binding $self}">
-                                <Image Width="30"
-                                       Height="30"
-                                       Source="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                                    CommandParameter="{TemplateBinding BackCommandParameter}">
+                                <Image Source="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                             </Button>
 
                             <!--  HEADER MENU  -->
                             <ItemsControl x:Name="PART_PageNavMenu"
-                                          DockPanel.Dock="Right"
                                           IsVisible="{TemplateBinding MenuItems,
                                                                       Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                           ItemsSource="{TemplateBinding MenuItems}"
-                                          HorizontalAlignment="Center"
+                                          HorizontalAlignment="Right"
                                           VerticalAlignment="Center">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -48,45 +45,27 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate x:DataType="local:MpAvMenuItemViewModel">
                                         <Button x:Name="HeaderMenuButton"
-                                                Classes="defaultButton"
+                                                Classes="noBg noHoverBg noBorder"
                                                 Command="{Binding Command}"
                                                 CommandParameter="{Binding CommandParameter}">
-                                            <Image Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                                            <Image Width="30"
+                                                   Height="30"
+                                                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                                         </Button>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
 
-                            <StackPanel Orientation="Horizontal"
-                                        HorizontalAlignment="Center"
-                                        Spacing="5">
-
-                                <!--  ICON  -->
-
-                                <!--<Image IsVisible="{TemplateBinding Icon,
-                                                                   Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                       Width="25"
-                                       Height="25"
-                                       Source="{TemplateBinding Icon}"
-                                       VerticalAlignment="Center" />-->
-
-                                <!--  TITLE  -->
-
-                                <TextBlock x:Name="TitleTextBlock"
-                                           Text="{TemplateBinding Title}"
-                                           Effect="{StaticResource ThemeDropShadow}"
-                                           IsVisible="{TemplateBinding Title,
-                                                                       Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                           Foreground="{Binding Background, ElementName=PART_NavContainer, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
-                                           FontSize="26"
-                                           FontWeight="Bold"
-                                           VerticalAlignment="Center"
-                                           TextAlignment="Center" />
-
-                            </StackPanel>
-
-
-                        </DockPanel>
+                            <TextBlock x:Name="TitleTextBlock"
+                                       HorizontalAlignment="Center"
+                                       Text="{TemplateBinding Title}"
+                                       Effect="{StaticResource ThemeBgDropShadow}"
+                                       Foreground="{Binding Background, ElementName=PART_NavContainer, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                                       FontSize="26"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center"
+                                       TextAlignment="Center" />
+                        </Grid>
 
                     </Border>
 

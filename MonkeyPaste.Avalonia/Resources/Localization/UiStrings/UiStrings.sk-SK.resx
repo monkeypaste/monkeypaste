@@ -2999,4 +2999,10 @@ Globálne skratky je teraz možné povoliť v ponuke System Tray</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Skopírované do schránky</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Pripnutý</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Dopyt</value>
+  </data>
 </root>

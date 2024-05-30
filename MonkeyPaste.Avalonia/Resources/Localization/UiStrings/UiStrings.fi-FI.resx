@@ -2999,4 +2999,10 @@ Globaalit pikakuvakkeet voidaan nyt ottaa käyttöön järjestelmälokero -valik
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Kopioitu leikepöydälle</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Kiinnitetty</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Kysely</value>
+  </data>
 </root>

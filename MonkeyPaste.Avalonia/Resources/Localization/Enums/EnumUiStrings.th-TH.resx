@@ -1186,4 +1186,10 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>สลับตะขอทั่วโลก</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>เมนูเฟรมการตั้งค่าโมดัล</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>ป้อนการกระทำที่สำคัญ</value>
+  </data>
 </root>

@@ -128,11 +128,11 @@ namespace MonkeyPaste.Avalonia {
         #region Layout
 
         public Orientation Orientation =>
-            Mp.Services == null ||
-            Mp.Services.StartupState == null ||
-            !Mp.Services.StartupState.IsReady ||
+            //Mp.Services == null ||
+            //Mp.Services.StartupState == null ||
+           // !Mp.Services.StartupState.IsReady ||
             MpAvMainWindowViewModel.Instance.IsVerticalOrientation ?
-                Orientation.Vertical : Orientation.Horizontal;
+                Orientation.Vertical : Orientation.Horizontal; 
 
         #endregion
 

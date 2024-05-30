@@ -17,8 +17,6 @@ namespace MonkeyPaste.Avalonia {
                 if (uanvm.HasParams) {
                     if(uanvm.Body is MpAvAnalyticItemPresetViewModel) {
                         key = "ExecParamCollectionTemplate";
-                    } else if (uanvm.Body is MpAvSettingsFrameViewModel) {
-                        key = "PrefParamCollectionTemplate";
                     } else {
                         MpDebug.Break($"Unknown ntf body {uanvm.Body}");
                     }

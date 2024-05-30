@@ -2999,4 +2999,10 @@ MonkeyPaste روی دستگاه
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>کپی شده در کلیپ بورد</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>بریده شده</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>پرس و جو</value>
+  </data>
 </root>

@@ -2999,4 +2999,10 @@ Shkurtoret globale tani mund të aktivizohen në menunë e tabaka të sistemit</
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Kopjuar në clipboard</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>I varur</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Pyetje</value>
+  </data>
 </root>

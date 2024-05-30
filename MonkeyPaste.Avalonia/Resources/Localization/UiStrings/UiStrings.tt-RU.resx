@@ -2999,4 +2999,10 @@ Changeзгәрешләр өчен сылтамага иярегез
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Буферга күчерелгән</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Кадакланган</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Сорау</value>
+  </data>
 </root>

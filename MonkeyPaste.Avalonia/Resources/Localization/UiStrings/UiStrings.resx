@@ -3090,4 +3090,10 @@ Global Shortcuts can now be enabled in the System Tray Menu</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Copied to clipboard</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Pinned</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Query</value>
+  </data>
 </root>

@@ -2999,4 +2999,10 @@ Globalne skróty można teraz włączyć w menu taca systemu</value>
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>Skopiowane do schowka</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>Przypięty</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>Zapytanie</value>
+  </data>
 </root>

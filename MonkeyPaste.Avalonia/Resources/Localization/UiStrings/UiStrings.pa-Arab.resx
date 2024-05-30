@@ -3064,4 +3064,10 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="MobileCopiedNtfText" xml:space="preserve">
     <value>ਕਲਿੱਪਬੋਰਡ ਵਿੱਚ ਨਕਲ ਕੀਤਾ</value>
   </data>
+  <data name="PinTraySidebarLabel" xml:space="preserve">
+    <value>ਪਿੰਨਡ</value>
+  </data>
+  <data name="QueryTraySidebarLabel" xml:space="preserve">
+    <value>ਸਵਾਲ</value>
+  </data>
 </root>

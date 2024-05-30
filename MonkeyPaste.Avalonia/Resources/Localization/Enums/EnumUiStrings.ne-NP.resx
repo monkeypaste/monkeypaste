@@ -1186,4 +1186,10 @@
   <data name="MpShortcutType_ToggleGlobalHooks" xml:space="preserve">
     <value>वैश्थापल हुकहरू टगल गर्नुहोस्</value>
   </data>
+  <data name="MpNotificationType_ModalSettingsFrameMenu" xml:space="preserve">
+    <value>मोडल सेटिंग्स फ्रेम मेनू</value>
+  </data>
+  <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
+    <value>कुञ्जी कार्य प्रविष्ट गर्नुहोस्</value>
+  </data>
 </root>
