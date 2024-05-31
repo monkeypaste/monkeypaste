@@ -50,7 +50,7 @@
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Notifications.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/RadioButton.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/SelectingItemsControl.axaml" />
-    <!--<StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ScrollViewer.axaml" />-->
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ScrollViewer.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/SplitButton.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/TemplatedControl.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/TextBlock.axaml" />

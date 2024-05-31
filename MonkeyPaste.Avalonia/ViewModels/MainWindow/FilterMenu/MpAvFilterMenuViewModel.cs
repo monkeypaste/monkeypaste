@@ -61,9 +61,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.SearchVisibilityChanged:
-                    MpAvMainView.Instance.UpdateContentLayout();
-                    break;
                 case MpMessageType.MainWindowLoadComplete:
                 case MpMessageType.ResizingMainWindowComplete:
                 case MpMessageType.MainWindowOrientationChangeEnd:

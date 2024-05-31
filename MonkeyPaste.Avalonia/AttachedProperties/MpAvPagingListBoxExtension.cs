@@ -632,7 +632,6 @@ namespace MonkeyPaste.Avalonia {
                 PreviewControlPointerPressedHandler);
         }
 
-
         private static void PreviewControlPointerPressedHandler(object s, PointerPressedEventArgs e) {
             // when user clicks always halt any animated scrolling
             var lb = s as ListBox;

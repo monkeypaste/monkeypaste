@@ -93,29 +93,25 @@
 
   <!-- WINDOWS -->
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
-    <!-- (people not me should probably not set this to true) -->
-    <!-- When changing this not a bad idea to rebuild plugins -->
     <UseWap>false</UseWap>
-    <!-- NOTE when ConfigForHotReload is enabled, UseWap must be false-->
-    <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
-    <Tfm>10.0.22621.0</Tfm>
     <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP</DefineConstants>
     <MainProjectName>MonkeyPaste.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
-    <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <UseOutSysCef>false</UseOutSysCef>
     <UseCefNet>false</UseCefNet>
     <UseSugarWv>true</UseSugarWv>
-    <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
-    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
-    <PlatformShortName>uwp</PlatformShortName> 
+    <PlatformShortName>uwp</PlatformShortName>
     <StartupOutputType>WinExe</StartupOutputType>
     <BuildScriptsDir>$(BuildScriptsRootDir)\windows</BuildScriptsDir>
-    <IsWindowed>false</IsWindowed>    
+    <IsWindowed>true</IsWindowed>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(UseWap) == 'True' And $(BuildOs) == 'WINDOWS'">
+    <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
+    <Tfm>10.0.22621.0</Tfm>
     <MainTargetFramework>$(DefaultTargetFramework)-windows$(Tfm)</MainTargetFramework>
+    <TargetRuntimeIdentifiers>win-x64</TargetRuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <DefineConstants>$(DefineConstants);WAP;</DefineConstants>
   </PropertyGroup>
   

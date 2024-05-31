@@ -70,7 +70,7 @@
 
         <Style Selector="DockPanel#OuterContainer.mobile local|MpAvSettingsFrameView">
             <Setter Property="MinWidth"
-                    Value="175" />
+                    Value="300" />
             <Setter Property="BorderThickness"
                     Value="0" />
         </Style>

@@ -602,7 +602,9 @@ namespace MonkeyPaste.Avalonia {
                     col = col + 1;
                 }
 
-                totalTileSize = new MpSize(col * DefaultQueryItemWidth, row * DefaultQueryItemHeight);
+                totalTileSize = new MpSize(
+                    col * DefaultQueryItemWidth, 
+                    row * DefaultQueryItemHeight);
             }
             QueryTrayTotalTileWidth = totalTileSize.Width;
             QueryTrayTotalTileHeight = totalTileSize.Height;
@@ -1148,11 +1150,11 @@ namespace MonkeyPaste.Avalonia {
                 if (ListOrientation == Orientation.Horizontal) {
                     int fixed_cols = (int)Math.Floor(DesiredMaxTileRight / DefaultQueryItemWidth);
 
-                    return fixed_cols;
+                    return Math.Max(1,fixed_cols);
                 } else {
                     int fixed_rows = (int)Math.Floor(DesiredMaxTileBottom / DefaultQueryItemHeight);
 
-                    return fixed_rows;
+                    return Math.Max(1,fixed_rows);
                 }
             }
         }
@@ -1902,8 +1904,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpSize GetCurrentPinTrayRatio() {
 #if WINDOWED
-            return GetDefaultPinTrayRatio();
-            //return IsPinTrayVisible ? GetDefaultPinTrayRatio(1) : GetDefaultPinTrayRatio(0);
+            //return GetDefaultPinTrayRatio();
+            return IsPinTrayVisible ? GetDefaultPinTrayRatio(1) : GetDefaultPinTrayRatio(0);
 #else
             return GetDefaultPinTrayRatio();
 #endif

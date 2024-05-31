@@ -15,6 +15,15 @@
                        IsVisible="{Binding IsVisible}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsFrameView">
     <UserControl.Styles>
+
+        <!--  EXPANDER  -->
+        <Style Selector="StackPanel#FrameHeaderPanel.mobile"
+               x:DataType="local:MpAvSettingsFrameViewModel">
+            <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
+                    Value="True" />
+            <Setter Property="local:MpAvPointerCommandExtension.LeftReleasedCommand"
+                    Value="{Binding ToggleExpandFrameCommand}" />
+        </Style>
         <Style Selector="Image#ExpanderImage">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource EdgeArrowRightImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
@@ -29,22 +38,38 @@
                           CornerRadius="10"
                           BorderBrush="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}">
         <Grid RowDefinitions="Auto,*">
-            <StackPanel Orientation="Vertical"
+
+            <!--  HEADER  -->
+
+            <StackPanel x:Name="FrameHeaderPanel"
+                        Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                        Orientation="Vertical"
                         Spacing="5">
                 <StackPanel Classes="header frame"
                             Orientation="Horizontal">
+
+                    <!--  EXPAND BUTTON  -->
+
                     <Button Classes="defaultButton noBg noHoverBg noBorder"
-                            Command="{Binding ToggleExpandFrameCommand}"
                             IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}">
                         <Image x:Name="ExpanderImage"
                                Classes.expanded="{Binding IsExpanded}"
                                Classes="frame header icon" />
                     </Button>
+
+                    <!--  FRAME ICON  -->
+
                     <Image Classes="frame header icon"
                            IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                            Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+
+                    <!--  FRAME TITLE  -->
+
                     <TextBlock Classes="frame header text"
                                Text="{Binding LabelText}" />
+
+                    <!--  FRAME HINT  -->
+
                     <local:MpAvToolTipHintView ToolTipText="{Binding FrameHint}"
                                                Classes.info="{Binding FrameHintType, ConverterParameter=Info, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
                                                Classes.warning="{Binding FrameHintType, ConverterParameter=Warning, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
@@ -53,10 +78,14 @@
 
                 </StackPanel>
 
+                <!--  UNDERLINE  -->
+
                 <Border Classes="labelUnderline"
                         IsVisible="{Binding IsExpanded}"
                         Margin="0" />
             </StackPanel>
+
+            <!--  PARAMS  -->
             <local:MpAvParameterCollectionView x:Name="ParameterCollectionView"
                                                Grid.Row="1"
                                                IsVisible="{Binding IsExpanded}"

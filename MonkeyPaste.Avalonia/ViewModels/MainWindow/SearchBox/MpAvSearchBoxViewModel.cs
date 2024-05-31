@@ -247,8 +247,6 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(IsExpanded):
-                    MpMessenger.SendGlobal(MpMessageType.SearchVisibilityChanged);
-
                     if (IsExpanded) {
                         HasExpanded = true;
                     }

@@ -1,7 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using PropertyChanged;
+using System;
 using System.Linq;
 using System.Windows.Input;
 
@@ -20,6 +22,9 @@ namespace MonkeyPaste.Avalonia {
         public const string ERROR_PREFIX = "#error#";
         public const string LINK_PREFIX = "#link#";
         public const string INFO_PREFIX = "#info#";
+        #endregion
+
+        #region Statics
 
         static string[] _prefixes = [
             WARN_PREFIX,
@@ -114,12 +119,9 @@ namespace MonkeyPaste.Avalonia {
             }
             ttv.ToolTipText = ToolTipText;
             ttv.Classes.AddRange(this.Classes.Where(x => _prefixes.Any(y => y.Contains(x))));
-
-            if (ttv.Classes.Contains("link")) {
-
-            }
         }
 
+#if !MOBILE_OR_WINDOWED
         protected override void OnPointerEntered(PointerEventArgs e) {
             base.OnPointerEntered(e);
 
@@ -131,11 +133,25 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnPointerExited(PointerEventArgs e) {
             base.OnPointerExited(e);
-
             ToolTip.SetIsOpen(this, false);
-        }
+        } 
+#endif
         protected override void OnPointerReleased(PointerReleasedEventArgs e) {
             base.OnPointerReleased(e);
+
+#if MOBILE_OR_WINDOWED
+            if (!ToolTip.GetIsOpen(this)) {
+                if(TopLevel.GetTopLevel(this) is not { } tl) {
+                    return;
+                }
+                ToolTip.SetIsOpen(this, true);
+                void OnTopLevelPressed(object sender, EventArgs e) {
+                    tl.RemoveHandler(Control.PointerPressedEvent, OnTopLevelPressed);
+                    ToolTip.SetIsOpen(this, false);
+                }
+                tl.AddHandler(Control.PointerPressedEvent, OnTopLevelPressed, RoutingStrategies.Tunnel);
+            } 
+#endif
             if (Command != null) {
                 Command.Execute(CommandParameter);
             }

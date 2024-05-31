@@ -496,8 +496,9 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             hb.Height =
+                ShowHeader ?
                // MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize +
-                MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength;
+                MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength : 0;
         }
         #endregion
 
