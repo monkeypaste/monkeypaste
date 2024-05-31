@@ -9,13 +9,12 @@
                     Value="Transparent" />
             <Setter Property="Template">
                 <ControlTemplate>
-                    <Grid ColumnDefinitions="*,Auto"
+                    <Grid Name="PART_ContainerGrid"
+                          ColumnDefinitions="*,Auto"
                           RowDefinitions="*,Auto">
                         <ScrollContentPresenter Name="PART_ContentPresenter"
                                                 Grid.Row="0"
                                                 Grid.Column="0"
-                                                Grid.RowSpan="2"
-                                                Grid.ColumnSpan="2"
                                                 Background="{TemplateBinding Background}"
                                                 HorizontalSnapPointsType="{TemplateBinding HorizontalSnapPointsType}"
                                                 HorizontalSnapPointsAlignment="{TemplateBinding HorizontalSnapPointsAlignment}"
@@ -24,8 +23,6 @@
                                                 ScrollViewer.IsScrollInertiaEnabled="{TemplateBinding IsScrollInertiaEnabled}"
                                                 Padding="{TemplateBinding Padding}">
                             <ScrollContentPresenter.GestureRecognizers>
-                                <!--  IsScrollInertiaEnabled="{Binding IsScrollInertiaEnabled, RelativeSource={RelativeSource TemplatedParent}}"  -->
-                                <!--  IsScrollInertiaEnabled="False"  -->
                                 <ScrollGestureRecognizer CanHorizontallyScroll="{Binding CanHorizontallyScroll, ElementName=PART_ContentPresenter}"
                                                          CanVerticallyScroll="{Binding CanVerticallyScroll, ElementName=PART_ContentPresenter}"
                                                          IsScrollInertiaEnabled="{Binding (ScrollViewer.IsScrollInertiaEnabled), ElementName=PART_ContentPresenter}" />

@@ -36,6 +36,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
         const double HEADER_HEIGHT_RATIO = 0.125;
+        public const double TRANSITION_TIME_S = 0.25d;
         #endregion
 
         #region Statics
@@ -245,9 +246,23 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        //public bool IsActive =>
-        //    this.GetSelfAndVisualDescendants().OfType<Control>().Any(x => x.IsFocused);
-        public bool IsActive { get; private set; }
+
+        private bool _isActive;
+        public bool IsActive { 
+            get {
+                if(TopLevel.GetTopLevel(this) is Window real_win &&
+                    !real_win.IsActive) {
+                    // only for windowed mode so clip tray doesn't think clipboard changes are internal
+                    return false;
+                }
+                return _isActive;
+            }
+            private set {
+                if(_isActive != value) {
+                    _isActive = value;
+                }
+            }
+        }
         public object Owner { get; set; }
 
         public object DialogResult { get; set; }
@@ -342,7 +357,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<IPageTransition> OpenTransitionProperty =
             AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, IPageTransition>(
                 nameof(OpenTransition), 
-                new MpAvDirectionalPageSlide(TimeSpan.FromSeconds(0.5)) { IsDirBackwards = true });
+                new MpAvDirectionalPageSlide(TimeSpan.FromSeconds(TRANSITION_TIME_S)) { IsDirBackwards = true });
         public IPageTransition OpenTransition {
             get => GetValue(OpenTransitionProperty);
             set => SetValue(OpenTransitionProperty, value);
@@ -354,7 +369,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<IPageTransition> CloseTransitionProperty =
             AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, IPageTransition>(
                 nameof(CloseTransition), 
-                new MpAvDirectionalPageSlide(TimeSpan.FromSeconds(0.5)));
+                new MpAvDirectionalPageSlide(TimeSpan.FromSeconds(TRANSITION_TIME_S)));
         public IPageTransition CloseTransition {
             get => GetValue(CloseTransitionProperty);
             set => SetValue(CloseTransitionProperty, value);
@@ -429,10 +444,8 @@ namespace MonkeyPaste.Avalonia {
             // TODO Focus this child window here
 #if MOBILE_OR_WINDOWED
             MpAvWindowManager.AllWindows.ForEach(x => x.IsActive = x == this);
-#else
-            Activated?.Invoke(this, EventArgs.Empty); 
-            return;
 #endif
+            Activated?.Invoke(this, EventArgs.Empty); 
         }
         public void Deactivate() {
             // TODO Focus this child window here
@@ -504,6 +517,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void SetupWindow() {
+            if(this.DataContext is MpAvNotificationViewModelBase) {
+                return;
+            }
             Width = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width * WidthRatio;
             Height = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height * HeightRatio;
         }

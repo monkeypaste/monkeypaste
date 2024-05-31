@@ -213,9 +213,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>UiStrings.resx</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\_InnerContainer\Mobile\Vertical\MpAvMainInnerView_mv.axaml.cs">
+      <DependentUpon>MpAvMainInnerView_mv.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   
   <ItemGroup>
+    <Folder Include="Views\MainWindow\_InnerContainer\Desktop\" />
     <Folder Include="Views\Mobile\" />
   </ItemGroup>  
 </Project>

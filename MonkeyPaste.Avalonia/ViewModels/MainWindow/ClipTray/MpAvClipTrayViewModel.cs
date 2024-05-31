@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -378,18 +379,18 @@ namespace MonkeyPaste.Avalonia {
                          //HoverItem.IsPinned ||
                          !HoverItem.IsSubSelectionEnabled);
 
-                MpConsole.WriteLine($"Can touch scroll: {can_touch_scroll}");
-                if (!can_touch_scroll) {
-                    MpConsole.WriteLine($"Mp.Services.PlatformInfo.IsTouchInputEnabled: {Mp.Services.PlatformInfo.IsTouchInputEnabled}");
-                    MpConsole.WriteLine($"QueryItems.All(x => !x.CanResize): {QueryItems.All(x => !x.CanResize)}");
-                    if(HoverItem == null) {
-                        MpConsole.WriteLine($"HoverItem is null");
-                    } else {
+                //MpConsole.WriteLine($"Can touch scroll: {can_touch_scroll}");
+                //if (!can_touch_scroll) {
+                //    MpConsole.WriteLine($"Mp.Services.PlatformInfo.IsTouchInputEnabled: {Mp.Services.PlatformInfo.IsTouchInputEnabled}");
+                //    MpConsole.WriteLine($"QueryItems.All(x => !x.CanResize): {QueryItems.All(x => !x.CanResize)}");
+                //    if(HoverItem == null) {
+                //        MpConsole.WriteLine($"HoverItem is null");
+                //    } else {
 
-                        MpConsole.WriteLine($"HoverItem.IsPinned: {HoverItem.IsPinned}");
-                        MpConsole.WriteLine($"!HoverItem.IsSubSelectionEnabled: {!HoverItem.IsSubSelectionEnabled}");
-                    }
-                }
+                //        MpConsole.WriteLine($"HoverItem.IsPinned: {HoverItem.IsPinned}");
+                //        MpConsole.WriteLine($"!HoverItem.IsSubSelectionEnabled: {!HoverItem.IsSubSelectionEnabled}");
+                //    }
+                //}
                 return can_touch_scroll;
             }
         }
@@ -504,17 +505,17 @@ namespace MonkeyPaste.Avalonia {
         }
         public double ScrollFrictionX {
             get {
-                if (Mp.Services.PlatformInfo.IsDesktop) {
+                if (MpAvThemeViewModel.Instance.IsMultiWindow) {
                     return LayoutType == MpClipTrayLayoutType.Stack ? 0.85 : 0.5;
                 }
-                return 0.3;
+                return 0.75;
             }
         }
 
 
         public double ScrollFrictionY {
             get {
-                if (Mp.Services.PlatformInfo.IsDesktop) {
+                if (MpAvThemeViewModel.Instance.IsMultiWindow) {
                     return LayoutType == MpClipTrayLayoutType.Stack ? 0.85 : 0.5;
                 }
                 return 0.0;
@@ -4294,7 +4295,7 @@ namespace MonkeyPaste.Avalonia {
             if (loadOffsetIdx + loadCount > MaxClipTrayQueryIdx) {
                 // clamp load qidx to max query total count
                 //loadOffsetIdx = MaxLoadQueryIdx;
-
+                loadCount = Math.Max(0,MaxClipTrayQueryIdx - TailQueryIdx - loadOffsetIdx);
             }
 
             #endregion

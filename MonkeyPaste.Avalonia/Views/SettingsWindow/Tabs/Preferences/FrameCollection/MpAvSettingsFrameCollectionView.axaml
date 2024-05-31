@@ -11,8 +11,25 @@
                        d:DesignHeight="750"
                        x:CompileBindings="False"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsFrameCollectionView">
+    <UserControl.Styles>
+
+        <!--  EXPANDER  -->
+
+        <Style Selector="ItemsControl#SettingsFrameItemsControl.mobile local|MpAvSettingsFrameView.mobile"
+               x:DataType="local:MpAvSettingsFrameViewModel">
+            <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
+                    Value="True" />
+            <Setter Property="local:MpAvPointerCommandExtension.LeftReleaseCommand"
+                    Value="{Binding ExpandFrameCommand}" />
+            <Setter Property="Background"
+                    Value="{StaticResource HitTestableTransparent}" />
+            <Setter Property="Width"
+                    Value="{Binding $parent[ItemsControl].Bounds.Width}" />
+        </Style>
+    </UserControl.Styles>
     <ItemsControl x:Name="SettingsFrameItemsControl"
                   ItemsSource="{Binding}"
+                  Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   ScrollViewer.VerticalScrollBarVisibility="Auto">
         <ItemsControl.ItemTemplate>

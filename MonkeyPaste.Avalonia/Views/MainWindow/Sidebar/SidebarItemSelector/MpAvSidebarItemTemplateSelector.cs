@@ -44,12 +44,12 @@ namespace MonkeyPaste.Avalonia {
             if(sbivm is MpAvTagTrayViewModel) {
                 return c;
             }
-            return new Viewbox() {
-                Name = "SidebarItemViewbox",
-                Stretch = Stretch.UniformToFill,
-                Margin = new Thickness(10),
-                Child = new ScrollViewer() {
-                    Content = c
+            return new ScrollViewer() {
+                Content = new Viewbox() {
+                    Name = "SidebarItemViewbox",
+                    Stretch = Stretch.UniformToFill,
+                    Margin = new Thickness(10),
+                    Child = c
                 }
             };
             //return c;

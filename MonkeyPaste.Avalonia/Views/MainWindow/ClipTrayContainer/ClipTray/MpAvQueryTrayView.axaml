@@ -14,6 +14,14 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvQueryTrayView">
 
     <local:MpAvUserControl.Styles>
+        <!--  MOBILE SCROLL GESTURE  -->
+        <!--<Style Selector="local|MpAvPagingScrollViewer /template/ ScrollContentPresenter, ListBox#ClipTrayListBox /template/ ScrollContentPresenter"
+               x:DataType="local:MpAvClipTrayViewModel">
+            <Setter Property="CanHorizontallyScroll"
+                    Value="{Binding CanScrollX}" />
+            <Setter Property="CanVerticallyScroll"
+                    Value="{Binding CanScrollY}" />
+        </Style>-->
 
 
         <!--  PIN PLACHOLDER DBL CLICK  -->
@@ -65,13 +73,14 @@
         <Border x:Name="QueryTrayContainerBorder"
                 Grid.Row="0"
                 Grid.RowSpan="2"
+                Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                 local:MpAvSizeObserverExtension.IsEnabled="True"
                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedQueryTrayScreenWidth, Mode=TwoWay}"
                 local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedQueryTrayScreenHeight, Mode=TwoWay}">
             <local:MpAvPagingScrollViewer x:Name="ClipTrayScrollViewer"
                                           HorizontalScrollBarVisibility="{Binding IsQueryHorizontalScrollBarVisible, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
                                           VerticalScrollBarVisibility="{Binding IsQueryVerticalScrollBarVisible, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
-                                          IsScrollInertiaEnabled="False"
+                                          IsScrollInertiaEnabled="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                           HorizontalAlignment="Left"
                                           VerticalAlignment="Top"
                                           AllowAutoHide="True"

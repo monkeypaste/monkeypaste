@@ -17,13 +17,6 @@
     <UserControl.Styles>
 
         <!--  EXPANDER  -->
-        <Style Selector="StackPanel#FrameHeaderPanel.mobile"
-               x:DataType="local:MpAvSettingsFrameViewModel">
-            <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
-                    Value="True" />
-            <Setter Property="local:MpAvPointerCommandExtension.LeftReleasedCommand"
-                    Value="{Binding ToggleExpandFrameCommand}" />
-        </Style>
         <Style Selector="Image#ExpanderImage">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource EdgeArrowRightImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
@@ -51,6 +44,7 @@
                     <!--  EXPAND BUTTON  -->
 
                     <Button Classes="defaultButton noBg noHoverBg noBorder"
+                            Command="{Binding ToggleExpandFrameCommand}"
                             IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}">
                         <Image x:Name="ExpanderImage"
                                Classes.expanded="{Binding IsExpanded}"

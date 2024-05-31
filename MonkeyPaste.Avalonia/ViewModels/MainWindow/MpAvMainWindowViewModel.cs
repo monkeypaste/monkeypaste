@@ -873,7 +873,7 @@ namespace MonkeyPaste.Avalonia {
             SetupMainWindowSize();
             if (screens_changed || mw_screen_changed) {
                 // screen changed, update layout here
-                MpAvMainView.Instance.UpdateContentLayout();
+                MpAvMainView.Instance.UpdateMainViewLayout();
             }
         }
 
@@ -1595,14 +1595,14 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
 
                 // first pass adjusts grid definitions, most measuring dimensions aren't updated yet
-                MpAvMainView.Instance.UpdateContentLayout();
+                MpAvMainView.Instance.UpdateMainViewLayout();
 
                 MpAvThemeViewModel.Instance.OnPropertyChanged(nameof(MpAvThemeViewModel.Instance.Orientation));
 
                 await Task.Delay(300);
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeEnd);
                 // second pass finishes change with the right measurements
-                MpAvMainView.Instance.UpdateContentLayout();
+                MpAvMainView.Instance.UpdateMainViewLayout();
                 IsMainWindowOrientationChanging = false;
             });
 

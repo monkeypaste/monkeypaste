@@ -521,7 +521,7 @@ namespace MonkeyPaste.Avalonia {
                 // expands query tray
                 await Task.Delay(1);
                 //MpAvClipTrayViewModel.Instance.ExpandQueryTrayCommand.Execute(null);
-                MpAvMainView.Instance.UpdateLayout();
+                MpAvMainView.Instance.UpdateMainViewLayout();
             });
 
         public ICommand GenericTestCommand5 => new MpAsyncCommand(

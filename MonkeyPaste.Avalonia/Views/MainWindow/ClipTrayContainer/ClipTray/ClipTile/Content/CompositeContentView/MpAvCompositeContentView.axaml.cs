@@ -31,6 +31,7 @@ public partial class MpAvCompositeContentView : MpAvUserControl<MpAvClipTileView
             !e.IsLeftPress(hp) ||
             hp.IsSelectionEnabled ||
             BindingContext is not MpAvClipTileViewModel ctvm ||
+            !ctvm.CanDrag ||
             ctvm.GetContentView() is not MpAvIContentWebViewDragSource cv) {
             return;
         }

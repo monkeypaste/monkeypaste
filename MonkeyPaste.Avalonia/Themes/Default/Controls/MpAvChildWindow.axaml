@@ -32,6 +32,7 @@
 
                             <!--  HEADER MENU  -->
                             <ItemsControl x:Name="PART_PageNavMenu"
+                                          Padding="5"
                                           IsVisible="{TemplateBinding MenuItems,
                                                                       Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                           ItemsSource="{TemplateBinding MenuItems}"
@@ -48,9 +49,7 @@
                                                 Classes="noBg noHoverBg noBorder"
                                                 Command="{Binding Command}"
                                                 CommandParameter="{Binding CommandParameter}">
-                                            <Image Width="30"
-                                                   Height="30"
-                                                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                                            <Image Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                                         </Button>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

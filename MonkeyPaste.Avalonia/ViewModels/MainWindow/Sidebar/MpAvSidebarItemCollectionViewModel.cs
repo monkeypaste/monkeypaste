@@ -192,7 +192,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     NotifySidebarSelectionChanging();
 
-                    MpAvMainView.Instance.UpdateContentLayout();
+                    MpAvMainView.Instance.UpdateMainViewLayout();
                     OnPropertyChanged(nameof(SelectedItemIdx));
 
                     if (SelectedItem is MpICloseWindowViewModel cwvm &&

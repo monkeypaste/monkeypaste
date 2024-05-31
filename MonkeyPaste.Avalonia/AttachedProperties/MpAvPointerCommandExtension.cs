@@ -127,6 +127,40 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region DoubleLeftReleaseCommand AvaloniaProperty
+        public static ICommand GetDoubleLeftReleaseCommand(AvaloniaObject obj) {
+            return obj.GetValue(DoubleLeftReleaseCommandProperty);
+        }
+
+        public static void SetDoubleLeftReleaseCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(DoubleLeftReleaseCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> DoubleLeftReleaseCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "DoubleLeftReleaseCommand",
+                null,
+                false);
+
+        #endregion
+
+        #region DoubleLeftReleaseCommandParameter AvaloniaProperty
+        public static object GetDoubleLeftReleaseCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(DoubleLeftReleaseCommandParameterProperty);
+        }
+
+        public static void SetDoubleLeftReleaseCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(DoubleLeftReleaseCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> DoubleLeftReleaseCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "DoubleLeftReleaseCommandParameter",
+                null,
+                false);
+
+        #endregion
+
         #region RightPressCommand AvaloniaProperty
         public static ICommand GetRightPressCommand(AvaloniaObject obj) {
             return obj.GetValue(RightPressCommandProperty);
@@ -306,7 +340,8 @@ namespace MonkeyPaste.Avalonia {
                 bool has_any_press =
                     GetLeftPressCommand(control) != null ||
                     GetRightPressCommand(control) != null ||
-                    GetDoubleLeftPressCommand(control) != null;
+                    GetDoubleLeftPressCommand(control) != null ||
+                    GetDoubleLeftReleaseCommandParameter(control) != null;
 
                 if (has_any_press) {
                     if (control is Button b && GetLeftPressCommand(control) != null) {
@@ -357,6 +392,8 @@ namespace MonkeyPaste.Avalonia {
                          GetLeftReleaseCommand(control).CanExecute(GetLeftReleaseCommandParameter(control));
                     bool can_double_left_press = GetDoubleLeftPressCommand(control) != null &&
                         GetDoubleLeftPressCommand(control).CanExecute(GetDoubleLeftPressCommandParameter(control));
+                    bool can_double_left_release = GetDoubleLeftReleaseCommand(control) != null &&
+                        GetDoubleLeftReleaseCommand(control).CanExecute(GetDoubleLeftReleaseCommandParameter(control));
                     bool can_hold = GetRouteHoldToRightPress(control) &&
                           GetRightPressCommand(control) != null &&
                           GetRightPressCommand(control).CanExecute(GetRightPressCommandParameter(control));
@@ -364,6 +401,7 @@ namespace MonkeyPaste.Avalonia {
                     bool needs_double_delay_check =
                         // press vs double press
                         (can_left_press || can_left_release) && can_double_left_press;
+                        //can_double_left_press || can_double_left_release;
 
                     bool needs_hold_check =
                           // press vs hold

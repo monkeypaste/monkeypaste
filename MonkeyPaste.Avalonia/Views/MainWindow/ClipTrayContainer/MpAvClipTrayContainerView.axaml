@@ -71,6 +71,12 @@
                     Value="{Binding BoundWidth}" />
             <Setter Property="Height"
                     Value="{Binding BoundHeight}" />
+        </Style>
+
+        <!--  TILE LBI HTT  -->
+
+        <Style Selector="Grid#ClipTrayContainerGrid:not(.mobile) ListBox.clipTileListBox > ListBoxItem, Grid#ClipTrayContainerGrid:not(.mobile) Border#QueryTrayContainerBorder local|MpAvClipTileView"
+               x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="IsHitTestVisible">
                 <Setter.Value>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -82,6 +88,13 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!--<Style Selector="Grid#ClipTrayContainerGrid.mobile ListBox.clipTileListBox > ListBoxItem, Grid#ClipTrayContainerGrid.mobile Border#QueryTrayContainerBorder local|MpAvClipTileView"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="IsHitTestVisible"
+                    Value="False" />
+
+        </Style>-->
 
         <!--  TILE SHADOWS  -->
 
@@ -164,6 +177,7 @@
     <!--  NOTE! Layout is in mw code behind orientation change  -->
     <Grid x:Name="ClipTrayContainerGrid"
           Background="{DynamicResource ClipTrayBgColor}"
+          Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           Classes.shadows="{Binding ShowTileShadow}"
           Classes.busy="{Binding IsAnyBusy}"
           Classes.scrolling="{Binding HasScrollVelocity}"

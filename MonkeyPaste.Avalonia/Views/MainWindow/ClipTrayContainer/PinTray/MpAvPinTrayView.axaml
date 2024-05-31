@@ -71,7 +71,8 @@
     <Border x:Name="PinTrayContainerBorder"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
-        <Grid HorizontalAlignment="Stretch"
+        <Grid x:Name="PinTrayContainerGrid"
+              HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Border HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"

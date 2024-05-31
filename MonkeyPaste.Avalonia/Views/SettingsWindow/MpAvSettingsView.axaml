@@ -56,6 +56,10 @@
 
         <!--  FRAMES  -->
         <Style Selector="local|MpAvSettingsFrameView">
+            <Setter Property="CornerRadius"
+                    Value="10" />
+            <Setter Property="Padding"
+                    Value="10,5" />
             <Setter Property="Margin"
                     Value="10" />
             <Setter Property="MinWidth"
@@ -67,11 +71,24 @@
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeWhiteBrush}" />
         </Style>
+        <Style Selector="DockPanel#OuterContainer.mobile local|MpAvSettingsFrameView">
+            <Setter Property="Margin"
+                    Value="0,10,10,10" />
+        </Style>
 
         <Style Selector="DockPanel#OuterContainer.mobile local|MpAvSettingsFrameView">
             <Setter Property="MinWidth"
                     Value="300" />
             <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
+
+        <Style Selector="DockPanel#OuterContainer TransitioningContentControl#SettingsTransitioningContentControl">
+            <Setter Property="Margin"
+                    Value="10,5,20,5" />
+        </Style>
+        <Style Selector="DockPanel#OuterContainer.mobile TransitioningContentControl#SettingsTransitioningContentControl">
+            <Setter Property="Margin"
                     Value="0" />
         </Style>
 
@@ -352,12 +369,6 @@
         </Style>
 
         <!--  PREF FRAME BG  -->
-        <Style Selector="local|MpAvSettingsFrameView">
-            <Setter Property="CornerRadius"
-                    Value="10" />
-            <Setter Property="Padding"
-                    Value="10,5" />
-        </Style>
         <Style Selector="local|MpAvSettingsFrameView:pointerover,local|MpAvSettingsFrameView:focus-within">
             <Setter Property="Background">
                 <Setter.Value>
@@ -499,7 +510,6 @@
 
             </ScrollViewer.Transitions>
             <TransitioningContentControl x:Name="SettingsTransitioningContentControl"
-                                         Margin="10,5,20,5"
                                          Content="{Binding SelectedTabIdx}">
                 <TransitioningContentControl.PageTransition>
                     <CrossFade Duration="0:00:00.500" />

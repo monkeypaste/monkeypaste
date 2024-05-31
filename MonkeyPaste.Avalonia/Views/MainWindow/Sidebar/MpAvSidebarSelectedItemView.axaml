@@ -1,0 +1,95 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="pcl:MpISidebarItemViewModel"
+                       x:DataType="pcl:MpISidebarItemViewModel"
+                       x:CompileBindings="False"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       DataContext="{Binding SelectedItem, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                       x:Class="MonkeyPaste.Avalonia.MpAvSidebarSelectedItemView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="ContentControl#SelectedSidebarContentControl">
+            <Setter Property="Background"
+                    Value="{DynamicResource MainWindowBgBrush}" />
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <Transitions>
+                        <DoubleTransition Property="Height"
+                                          Duration="0:0:2" />
+                    </Transitions>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ContentControl#SelectedSidebarContentControl.mobile">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeAccent5BgColor}" />
+            <Setter Property="Effect"
+                    Value="drop-shadow(0 0 15 Black)" />
+            <Setter Property="Margin"
+                    Value="5,10,5,0" />
+            <Setter Property="CornerRadius"
+                    Value="20,20,0,0" />
+        </Style>
+        <Style Selector="ContentControl#SelectedSidebarContentControl.mobile.horiz">
+            <Setter Property="Effect"
+                    Value="drop-shadow(0 0 15 Black)" />
+            <Setter Property="Margin"
+                    Value="0,5,10,5" />
+            <Setter Property="CornerRadius"
+                    Value="0,20,20,0" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <ContentControl x:Name="SelectedSidebarContentControl"
+                    Classes.horiz="{Binding IsHorizontal, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                    Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    VerticalContentAlignment="Stretch"
+                    local:MpAvSizeObserverExtension.IsEnabled="True"
+                    local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
+                    local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}"
+                    Content="{Binding}">
+        <ContentControl.DataTemplates>
+            <local:MpAvSidebarItemTemplateSelector>
+                <!--  TAG TREE  -->
+                <DataTemplate x:Key="TagTreeViewTemplate"
+                              x:DataType="local:MpAvTagTrayViewModel">
+                    <local:MpAvTagTreeView Margin="0,0,0,0"
+                                           HorizontalAlignment="Stretch"
+                                           HorizontalContentAlignment="Stretch" />
+
+                </DataTemplate>
+
+                <!--  CLIPBOARD HANDLER  -->
+                <DataTemplate x:Key="ClipboardHandlerSelectorViewTemplate"
+                              x:DataType="local:MpAvClipboardHandlerCollectionViewModel">
+                    <local:MpAvClipboardHandlerSelectorView HorizontalAlignment="Stretch"
+                                                            HorizontalContentAlignment="Stretch" />
+
+
+                </DataTemplate>
+                <!--  ANALYZERS  -->
+                <DataTemplate x:Key="AnalyticItemSelectorViewTemplate"
+                              x:DataType="local:MpAvAnalyticItemCollectionViewModel">
+                    <local:MpAvAnalyticItemSelectorView HorizontalAlignment="Stretch"
+                                                        HorizontalContentAlignment="Stretch" />
+
+                </DataTemplate>
+                <!--  ACTIONS  -->
+                <DataTemplate x:Key="TriggerActionChooserViewTemplate"
+                              x:DataType="local:MpAvTriggerCollectionViewModel">
+
+                    <local:MpAvTriggerActionChooserView IsVisible="{Binding !IsWindowOpen}"
+                                                        HorizontalAlignment="Stretch"
+                                                        HorizontalContentAlignment="Stretch" />
+                </DataTemplate>
+            </local:MpAvSidebarItemTemplateSelector>
+        </ContentControl.DataTemplates>
+    </ContentControl>
+</local:MpAvUserControl>

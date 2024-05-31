@@ -231,6 +231,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool CanDrag {
+            get {
+                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                    return true;
+                }
+                return IsSelected && IsSubSelectionEnabled;
+            }
+        }
+
         public DateTime LastSelectedDateTime { get; set; }
         public DateTime? LastDeselectedDateTime { get; set; }
 

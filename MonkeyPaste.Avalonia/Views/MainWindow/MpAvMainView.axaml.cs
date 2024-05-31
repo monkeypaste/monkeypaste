@@ -138,28 +138,43 @@ namespace MonkeyPaste.Avalonia {
 
         #region Orientation Updates
 
-        public void UpdateContentLayout() {
+        public void UpdateMainViewLayout() {
+            UpdateContentLayout();
+            UpdateSidebarGridsplitter();
+            UpdateTitleLayout();
+            UpdateEdgyTooltips();
+            ClampContentSizes();
+
+            //UpdateResizerLayout();
+            //mwtg.InvalidateAll();
+
+            //// NOTE this is trying to fix empty message centering...
+            //ctrcv_ctrv_cg.InvalidateAll();
+            //ctrcv_ptr_cg.InvalidateAll();
+        }
+
+        private void UpdateContentLayout() {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var ctrvm = MpAvClipTrayViewModel.Instance;
             var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
             //var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
 
-            var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
+            var mwtg = this.MainWindowTrayGrid;
 
-            var sbbg = this.FindControl<MpAvSidebarButtonGroupView>("SidebarButtonGroup");
-            var ssbcb = this.FindControl<Border>("SelectedSidebarContainerBorder");
-            var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
-            var ctrcb = this.FindControl<Border>("ClipTrayContainerBorder");
+            var sbbg = this.SidebarButtonGroup;
+            var ssbcb = this.SelectedSidebarContainerBorder;
+            var sbgs = this.SidebarGridSplitter;
+            var ctrcb = this.ClipTrayContainerBorder;
 
-            var ctrcv = this.FindControl<MpAvClipTrayContainerView>("ClipTrayContainerView");
-            var ctrcv_cg = ctrcv.FindControl<Grid>("ClipTrayContainerGrid");
-            var ctrcv_ptrv = ctrcv.FindControl<MpAvPinTrayView>("PinTrayView");
-            var ctrcv_ptr_lb = ctrcv_ptrv.FindControl<ListBox>("PinTrayListBox");
-            var ctrcv_ptr_cg = ctrcv_ptrv.FindControl<Border>("PinTrayContainerBorder").Child as Grid;
-            var ctrcv_gs = ctrcv.FindControl<GridSplitter>("ClipTraySplitter");
-            var ctrcv_ctrv = ctrcv.FindControl<MpAvQueryTrayView>("ClipTrayView");
-            var ctrcv_ctrv_cg = ctrcv_ctrv.FindControl<Grid>("QueryTrayContainerGrid");
-            var ctrcv_ctr_lb = ctrcv_ctrv.FindControl<ListBox>("ClipTrayListBox");
+            var ctrcv = this.ClipTrayContainerView;
+            var ctrcv_cg = ctrcv.ClipTrayContainerGrid;
+            var ctrcv_ptrv = ctrcv.PinTrayView;
+            var ctrcv_ptr_lb = ctrcv_ptrv.PinTrayListBox;
+            var ctrcv_ptr_cg = ctrcv_ptrv.PinTrayContainerGrid;
+            var ctrcv_gs = ctrcv.ClipTraySplitter;
+            var ctrcv_ctrv = ctrcv.ClipTrayView;
+            var ctrcv_ctrv_cg = ctrcv_ctrv.QueryTrayContainerGrid;
+            var ctrcv_ctr_lb = ctrcv_ctrv.ClipTrayListBox;
 
             var pin_tray_ratio = MpAvClipTrayViewModel.Instance.GetCurrentPinTrayRatio();
             mwtg.RowDefinitions.Clear();
@@ -172,9 +187,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
             double dbl_gs_fixed_length = gs_fixed_length * 2;
 
-            if (mwvm.IsHorizontalOrientation) {
-                // HORIZONTAL
-
+            void SetupHorizontal() {
                 mwtg.RowDefinitions.Add(new RowDefinition(new GridLength(0, GridUnitType.Auto)));
                 mwtg.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
 
@@ -228,6 +241,10 @@ namespace MonkeyPaste.Avalonia {
                 // cliptray container border
                 Grid.SetRow(ctrcb, 1);
                 Grid.SetColumn(ctrcb, 2);
+#if MOBILE_OR_WINDOWED
+                Grid.SetColumn(ctrcb, 1);
+                Grid.SetColumnSpan(ctrcb, 2);
+#endif
 
                 // cliptraycontainer column definitions (horizontal)
                 ctrcv_cg.RowDefinitions.Clear();
@@ -286,8 +303,9 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(ctrcv_ctrv, 1);
 
                 ctrcv_ctr_lb.Margin = new Thickness(0);
-            } else {
-                // VERTICAL 
+            }
+
+            void SetupVertical() {
                 var ctrcb_rd = new RowDefinition(1, GridUnitType.Star);
                 ctrcb_rd.Bind(
                     RowDefinition.HeightProperty,
@@ -323,6 +341,9 @@ namespace MonkeyPaste.Avalonia {
                 // cliptray container view
                 Grid.SetRow(ctrcb, 0);
                 Grid.SetColumn(ctrcb, 0);
+#if MOBILE_OR_WINDOWED
+                Grid.SetRowSpan(ctrcb, 2);
+#endif
 
                 // sidebar content
                 Grid.SetRow(ssbcb, 1);
@@ -405,80 +426,36 @@ namespace MonkeyPaste.Avalonia {
 #endif
             }
 
-            UpdateSidebarGridsplitter();
-            UpdateTitleLayout();
-            UpdateEdgyTooltips();
-            ClampContentSizes();
-            //UpdateResizerLayout();
-            mwtg.InvalidateAll();
-
-            // NOTE this is trying to fix empty message centering...
-            ctrcv_ctrv_cg.InvalidateAll();
-            ctrcv_ptr_cg.InvalidateAll();
-        }
-
-        private void UpdateEdgyTooltips() {
-            var sbg = this.FindControl<MpAvSidebarButtonGroupView>("SidebarButtonGroup");
-            var sb_edgies = sbg
-                .GetVisualDescendants<Control>()
-                .Where(x => x.Classes.Any(x => x.StartsWith("tt_")));
-
-            // clear old edgies
-            foreach (var sbc in sb_edgies) {
-                var to_remove_classes = sbc.Classes.Where(x => x.StartsWith("tt_")).ToList();
-                ;
-                foreach (var to_remove_class in to_remove_classes) {
-                    sbc.Classes.Remove(to_remove_class);
-                }
-            }
-
-            IEnumerable<Control> new_edgies = null;
-
-            switch (BindingContext.MainWindowOrientationType) {
-                case MpMainWindowOrientationType.Left:
-                case MpMainWindowOrientationType.Right:
-                    new_edgies = sbg.GetVisualDescendants<Button>();
-                    break;
-                case MpMainWindowOrientationType.Top:
-                    new_edgies = new[] { sbg.GetVisualDescendants<Button>().FirstOrDefault() };
-                    break;
-                case MpMainWindowOrientationType.Bottom:
-                    new_edgies = new[] { sbg.GetVisualDescendants<Button>().LastOrDefault() };
-                    break;
-            }
-
-            string edgy_tooltip_class =
-                $"tt_near_{BindingContext.MainWindowOrientationType.ToString().ToLowerInvariant()}";
-
-            foreach (var sbc in new_edgies.Where(x => x != null)) {
-                sbc.Classes.Add(edgy_tooltip_class);
+            if (mwvm.IsHorizontalOrientation) {
+                SetupHorizontal();
+            } else {
+                SetupVertical();
             }
         }
-
         private void UpdateTitleLayout() {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var tmvm = MpAvMainWindowTitleMenuViewModel.Instance;
             var fmvm = MpAvFilterMenuViewModel.Instance;
 
-            var mwcg = this.FindControl<Grid>("MainWindowContainerGrid");
-            var tmv = this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView");
-            var fmv = this.FindControl<MpAvFilterMenuView>("FilterMenuView");
-            var ttrv = fmv.FindControl<MpAvTagTrayView>("TagTrayView");
-            var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
+            var mwcg = this.MainWindowContainerGrid;
+            var tmv = this.MainWindowTitleView;
+            var fmv = this.FilterMenuView;
+            var ttrv = fmv.TagTrayView;
+            var mwtg = this.MainWindowTrayGrid;
 
-            var tmv_cg = tmv.FindControl<Grid>("TitlePanel");
-            var tmv_lsp = tmv.FindControl<StackPanel>("LeftStackPanel");
-            var tmv_wohb = tmv.FindControl<Button>("WindowOrientationHandleButton");
-            var tmv_rsp = tmv.FindControl<StackPanel>("RightStackPanel");
-            var tmv_gltb = tmv.FindControl<Control>("GridLayoutToggleButton");
-            var tmv_min_btn = tmv.FindControl<Button>("MinimizeMainWindowButton");
+            var tmv_cg = tmv.TitlePanel;
+            var tmv_lsp = tmv.LeftStackPanel;
+            var tmv_wohb = tmv.WindowOrientationHandleButton;
+            var tmv_rsp = tmv.RightStackPanel;
+            var tmv_gltb = tmv.GridLayoutToggleButton;
+            var tmv_min_btn = tmv.MinimizeMainWindowButton;
 
-            var tmv_zfv = tmv.FindControl<MpAvZoomFactorView>("ZoomFactorView");
-            var tmv_zoom_slider_track_b = tmv_zfv.FindControl<Border>("ZoomTrackLine");
-            var tmv_zoom_slider_min_b = tmv_zfv.FindControl<Border>("ZoomMinLine");
-            var tmv_zoom_slider_def_b = tmv_zfv.FindControl<Border>("ZoomDefaultLine");
-            var tmv_zoom_slider_max_b = tmv_zfv.FindControl<Border>("ZoomMaxLine");
-            var tmv_zoom_slider_val_b = tmv_zfv.FindControl<Border>("CurValLine");
+            var tmv_zfv = tmv.ZoomFactorView;
+            var tmv_zoom_slider_track_b = tmv_zfv.ZoomTrackLine;
+            var tmv_zoom_slider_min_b = tmv_zfv.ZoomMinLine;
+            var tmv_zoom_slider_def_b = tmv_zfv.ZoomDefaultLine;
+            var tmv_zoom_slider_max_b = tmv_zfv.ZoomMaxLine;
+            var tmv_zoom_slider_val_b = tmv_zfv.CurValLine;
 
             double resizer_short_side = 0;
 
@@ -497,8 +474,7 @@ namespace MonkeyPaste.Avalonia {
 #else
                 mwvm.MainWindowOrientationType;
 #endif
-
-            if (is_horiz) {
+            void DoHorizontal() {
                 // HORIZONTAL
                 tmv.MaxHeight = MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength;
                 tmv.MaxWidth = double.PositiveInfinity;
@@ -584,9 +560,10 @@ namespace MonkeyPaste.Avalonia {
                 tmv_min_btn.Margin = new Thickness(5, 0, 0, 0);
                 //tmv_zoom_slider_val_btn.HorizontalAlignment = HorizontalAlignment.Center;
                 //tmv_zoom_slider_val_btn.VerticalAlignment = VerticalAlignment.Stretch;
-            } else {
-                // VERTICAL
-                tmv.MaxHeight = double.PositiveInfinity; 
+            }
+
+            void DoVertical() {
+                tmv.MaxHeight = double.PositiveInfinity;
                 tmv.MaxWidth = tmvm.DefaultTitleMenuFixedLength;
 
                 tmvm.TitleMenuWidth = tmvm.DefaultTitleMenuFixedLength;
@@ -677,6 +654,12 @@ namespace MonkeyPaste.Avalonia {
                 tmv_min_btn.Margin = new Thickness(0, 0, 0, 0);
             }
 
+            if (is_horiz) {
+                DoHorizontal();
+            } else {
+                DoVertical();
+            }
+
             tmv_zfv.UpdateMarkerPositions();
         }
 
@@ -686,16 +669,15 @@ namespace MonkeyPaste.Avalonia {
             var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
             var mwtmvm = MpAvMainWindowTitleMenuViewModel.Instance;
             var fmvm = MpAvFilterMenuViewModel.Instance;
-
-            var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
-            //var sbcv = this.FindControl<MpAvSidebarContainerView>("SidebarContainerView");
-            var ssbcb = this.FindControl<Border>("SelectedSidebarContainerBorder");
-            var sbbg = this.FindControl<MpAvSidebarButtonGroupView>("SidebarButtonGroup");
-            var ctrcb = this.FindControl<Border>("ClipTrayContainerBorder");
-            var ctrcv = this.FindControl<MpAvClipTrayContainerView>("ClipTrayContainerView");
-            var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
-
             var ssbivm = MpAvSidebarItemCollectionViewModel.Instance.SelectedItem;
+
+            var sbgs = this.SidebarGridSplitter;
+            var ssbcb = this.SelectedSidebarContainerBorder;
+            var sbbg = this.SidebarButtonGroup;
+            var ctrcb = this.ClipTrayContainerBorder;
+            var ctrcv = this.ClipTrayContainerView;
+            var mwtg = this.MainWindowTrayGrid;
+
 
             bool is_opening = ssbivm != null;
             bool is_closing = BindingContext.IsHorizontalOrientation ? ssbcb.Bounds.Width > 0 : ssbcb.Bounds.Height > 0;
@@ -736,7 +718,7 @@ namespace MonkeyPaste.Avalonia {
             sbgs.IsVisible = is_opening && ssbivm.CanResize;
 
             bool skip_anim =
-#if DESKTOP
+#if MOBILE_OR_WINDOWED
                 true; // mwvm.IsMainWindowOrientationDragging;
 #else
                 true;
@@ -859,6 +841,43 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void UpdateEdgyTooltips() {
+            var sbg = this.FindControl<MpAvSidebarButtonGroupView>("SidebarButtonGroup");
+            var sb_edgies = sbg
+                .GetVisualDescendants<Control>()
+                .Where(x => x.Classes.Any(x => x.StartsWith("tt_")));
+
+            // clear old edgies
+            foreach (var sbc in sb_edgies) {
+                var to_remove_classes = sbc.Classes.Where(x => x.StartsWith("tt_")).ToList();
+                ;
+                foreach (var to_remove_class in to_remove_classes) {
+                    sbc.Classes.Remove(to_remove_class);
+                }
+            }
+
+            IEnumerable<Control> new_edgies = null;
+
+            switch (BindingContext.MainWindowOrientationType) {
+                case MpMainWindowOrientationType.Left:
+                case MpMainWindowOrientationType.Right:
+                    new_edgies = sbg.GetVisualDescendants<Button>();
+                    break;
+                case MpMainWindowOrientationType.Top:
+                    new_edgies = new[] { sbg.GetVisualDescendants<Button>().FirstOrDefault() };
+                    break;
+                case MpMainWindowOrientationType.Bottom:
+                    new_edgies = new[] { sbg.GetVisualDescendants<Button>().LastOrDefault() };
+                    break;
+            }
+
+            string edgy_tooltip_class =
+                $"tt_near_{BindingContext.MainWindowOrientationType.ToString().ToLowerInvariant()}";
+
+            foreach (var sbc in new_edgies.Where(x => x != null)) {
+                sbc.Classes.Add(edgy_tooltip_class);
+            }
+        }
         #endregion
 
         #endregion
