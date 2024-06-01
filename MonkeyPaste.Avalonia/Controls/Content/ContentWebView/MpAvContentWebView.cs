@@ -1394,7 +1394,7 @@ namespace MonkeyPaste.Avalonia {
                 nameof(ContentScale),
                 x => x.ContentScale,
                 (x, o) => x.ContentScale = o,
-                MpCopyItem.DEFAULT_ZOOM_FACTOR);
+                MpCopyItem.ZOOM_FACTOR_DEFAULT);
 
         private void OnContentScaleChanged() {
             if (!IsEditorLoaded) {

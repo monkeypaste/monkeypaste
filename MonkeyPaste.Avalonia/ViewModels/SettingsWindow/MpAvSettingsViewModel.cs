@@ -1422,7 +1422,7 @@ namespace MonkeyPaste.Avalonia {
                         .Convert("LoginImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     DataContext = this,
-                    Content = new MpAvSettingsView()
+                    Content = MpAvSettingsView.Instance
                 };
             } else {
                 sw = new MpAvWindow() {
@@ -1434,7 +1434,7 @@ namespace MonkeyPaste.Avalonia {
                         .Convert("CogColorImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     DataContext = this,
-                    Content = new MpAvSettingsView()
+                    Content = MpAvSettingsView.Instance
                 };
                 //sw.Classes.Add("fadeIn");
             }
@@ -2075,10 +2075,11 @@ namespace MonkeyPaste.Avalonia {
             (args) => {
                 IsFilterExpanded = true;
                 if(MpAvWindowManager.LocateWindow(this) is not { } sw ||
-                    sw.Content is not MpAvSettingsView sv) {
+                    sw.Content is not MpAvSettingsView sv ||
+                    sv.FilterBox.GetVisualDescendant<TextBox>() is not { } tb) {
                     return;
                 }
-                sv.FilterBox.TrySetFocusAsync().FireAndForgetSafeAsync();
+                tb.TrySetFocusAsync().FireAndForgetSafeAsync();
             });
         public ICommand UnexpandFilterCommand => new MpCommand<object>(
             (args) => {

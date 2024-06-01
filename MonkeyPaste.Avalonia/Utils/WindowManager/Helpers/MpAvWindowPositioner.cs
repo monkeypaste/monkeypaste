@@ -12,7 +12,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-        public static PixelPoint GetSystemTrayWindowPosition(MpAvWindow w, double pad = 10) {
+        public static PixelPoint GetSystemTrayWindowPosition(MpAvWindow w, 
+            double pad =
+#if MOBILE_OR_WINDOWED
+            0
+#else
+            10 
+#endif
+            ) {
             Size s = GetWindowSize(w);
             // NOTE this should account for mw show behavior (i think) show 'system tray' is BR of active monitor
             // TODO test when other window behaviors are implemented
@@ -109,6 +116,9 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.ScreenInfoCollection.Primary != null) {
                 th = 0;
                 width = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width;
+                if(w.DataContext is MpAvLoaderNotificationViewModel) {
+                    height = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height;
+                }
             }
 #endif
             return new Size(width, height + th);

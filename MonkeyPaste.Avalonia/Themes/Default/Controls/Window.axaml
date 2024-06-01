@@ -4,7 +4,7 @@
         xmlns:local="using:MonkeyPaste.Avalonia"
         xmlns:pcl="using:MonkeyPaste">
 
-    <Style Selector=":is(Window).windowed-mode">
+    <Style Selector=":is(local|MpAvWindow).windowed-mode">
         <!--<Setter Property="Width"
                 Value="360" />
         <Setter Property="Height"
@@ -14,13 +14,13 @@
         <!--<Setter Property="CanResize"
                 Value="False" />-->
     </Style>
-    <!--<Style Selector=":is(Window).windowed-mode.vertical">
+    <!--<Style Selector=":is(local|MpAvWindow).windowed-mode.vertical">
         <Setter Property="Width"
                 Value="360" />
         <Setter Property="Height"
                 Value="740" />
     </Style>
-    <Style Selector=":is(Window).windowed-mode.horizontal">
+    <Style Selector=":is(local|MpAvWindow).windowed-mode.horizontal">
         <Setter Property="Width"
                 Value="740" />
         <Setter Property="Height"

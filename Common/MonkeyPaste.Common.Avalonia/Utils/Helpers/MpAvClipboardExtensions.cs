@@ -90,12 +90,17 @@ namespace MonkeyPaste.Common.Avalonia {
                 return output;
             }
 
-            if (Application.Current.GetMainTopLevel() is not { } tl ||
+            try {
+                if (Application.Current.GetMainTopLevel() is not { } tl ||
                 tl.Clipboard is not { } cb) {
+                    return new();
+                }
+                var result = await cb.ToDataObjectAsync(formatFilter, retryCount);
+                return result.DataFormatLookup.ToDictionary(x => x.Key, x => x.Value);
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine($"ReadClipboard async error.", ex);
                 return new();
             }
-            var result = await cb.ToDataObjectAsync(formatFilter, retryCount);
-            return result.DataFormatLookup.ToDictionary(x => x.Key, x => x.Value);
         }
         public static async Task WriteToClipboardAsync(Dictionary<string, object> dataFormatLookup) {
             if (!Dispatcher.UIThread.CheckAccess()) {

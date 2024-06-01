@@ -75,11 +75,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIZoomFactorViewModel Implementation
         public double MinZoomFactor =>
-            MpCopyItem.MIN_ZOOM_FACTOR;
+            MpCopyItem.ZOOM_FACTOR_MIN;
         public double MaxZoomFactor =>
-            MpCopyItem.MAX_ZOOM_FACTOR;
+            MpCopyItem.ZOOM_FACTOR_MAX;
         public double DefaultZoomFactor =>
-            MpCopyItem.DEFAULT_ZOOM_FACTOR;
+            MpCopyItem.ZOOM_FACTOR_DEFAULT;
         public double StepDelta =>
             MpCopyItem.ZOOM_FACTOR_STEP;
 
@@ -978,7 +978,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsCornerButtonsVisible {
             get {
 #if MOBILE_OR_WINDOWED
-                return false;
+                return IsSelected;
 #else
                 if (IsFrozen) {
                     return false;
@@ -1003,7 +1003,7 @@ namespace MonkeyPaste.Avalonia {
         public double ZoomFactor {
             get {
                 if (CopyItem == null) {
-                    return MpCopyItem.DEFAULT_ZOOM_FACTOR;
+                    return MpCopyItem.ZOOM_FACTOR_DEFAULT;
                 }
                 return CopyItem.ZoomFactor;
             }

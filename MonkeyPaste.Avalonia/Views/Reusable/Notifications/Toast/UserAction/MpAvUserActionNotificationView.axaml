@@ -13,6 +13,13 @@
                        x:CompileBindings="True"
                        x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationView">
     <local:MpAvUserControl.Styles>
+        <!--  MOBILE/DESKTOP  -->
+        <Style Selector="Border#OuterBorder Image#IconImage">
+            <Setter Property="Width"
+                    Value="64" />
+            <Setter Property="Height"
+                    Value="64" />
+        </Style>
         <!--  PROGRESS SPINNER  -->
 
         <!--  PARAM LISTBOXITEM  -->
@@ -85,42 +92,11 @@
             </Setter>
         </Style>
 
-        <!--  MESSAGE WRAPPING  -->
-        <Style Selector="ScrollViewer#BodyScrollViewer">
-            <Setter Property="HorizontalScrollBarVisibility"
-                    Value="Auto" />
-            <Setter Property="VerticalScrollBarVisibility"
-                    Value="Auto" />
-        </Style>
-
-        <Style Selector="ScrollViewer#BodyScrollViewer ContentControl">
-            <Setter Property="Margin"
-                    Value="0,0,20,20" />
-        </Style>
-        <Style Selector="SelectableTextBlock#MessageBody">
-            <Setter Property="TextWrapping"
-                    Value="NoWrap" />
-        </Style>
-
-        <Style Selector="ScrollViewer#BodyScrollViewer.singleline">
-            <Setter Property="HorizontalScrollBarVisibility"
-                    Value="Hidden" />
-            <Setter Property="VerticalScrollBarVisibility"
-                    Value="Hidden" />
-        </Style>
-        <Style Selector="ScrollViewer#BodyScrollViewer.singleline ContentControl">
-            <Setter Property="Margin"
-                    Value="0,0,0,0" />
-        </Style>
-        <Style Selector="ScrollViewer#BodyScrollViewer.singleline SelectableTextBlock#MessageBody">
-            <Setter Property="TextWrapping"
-                    Value="WrapWithOverflow" />
-            <Setter Property="Width"
-                    Value="{Binding $parent[ScrollViewer].Bounds.Width}" />
-        </Style>
     </local:MpAvUserControl.Styles>
-    <Border HorizontalAlignment="Stretch"
+    <Border x:Name="OuterBorder"
+            HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
+            Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
             MinHeight="100"
             BorderThickness="7"
             Padding="3,5,10,5"
@@ -136,29 +112,27 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <!--  ICON  -->
-            <Image Grid.Row="0"
+            <Image x:Name="IconImage"
+                   Grid.Row="0"
                    Grid.Column="0"
-                   Width="64"
-                   Height="64"
                    Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}"
                    Stretch="Uniform"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
                    Margin="0,0,10,0">
-                <Image.IsVisible>
+                <!--<Image.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
                         <Binding Path="IconSourceObj"
                                  Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
                         <Binding Path="!IsMobileOrWindowed"
                                  Source="{x:Static local:MpAvThemeViewModel.Instance}" />
                     </MultiBinding>
-                </Image.IsVisible>
+                </Image.IsVisible>-->
             </Image>
 
             <DockPanel Grid.Column="1">
                 <!--  TITLE  -->
-                <StackPanel DockPanel.Dock="Top"
-                            IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}">
+                <StackPanel DockPanel.Dock="Top">
                     <TextBlock MaxWidth="{Binding #TitleUnderline.Bounds.Width}"
                                MinHeight="30"
                                FontSize="24"
@@ -182,19 +156,15 @@
 
                 <!--  BODY  -->
                 <ScrollViewer x:Name="BodyScrollViewer"
+                              MaxHeight="300"
+                              IsScrollInertiaEnabled="True"
                               HorizontalScrollBarVisibility="Auto"
                               VerticalScrollBarVisibility="Auto"
                               AllowAutoHide="True"
                               Margin="0,5,5,5">
-                    <Classes.singleline>
-                        <MultiBinding Converter="{x:Static BoolConverters.And}">
-                            <Binding Path="Body"
-                                     Converter="{x:Static local:MpAvStringToIsSingleLineConverter.Instance}" />
-                            <Binding Path="!ShowTextBox" />
-                        </MultiBinding>
-                    </Classes.singleline>
 
-                    <ContentControl HorizontalAlignment="Stretch"
+                    <ContentControl Margin="0,0,20,20"
+                                    HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     Content="{Binding}">
                         <ContentControl.DataTemplates>
@@ -209,6 +179,8 @@
                                                          FontWeight="SemiBold"
                                                          Background="Transparent"
                                                          Focusable="True"
+                                                         TextWrapping="WrapWithOverflow"
+                                                         Width="{Binding $parent[ScrollViewer].Bounds.Width}"
                                                          Foreground="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
                                                          Text="{Binding Body}" />
                                 </DataTemplate>

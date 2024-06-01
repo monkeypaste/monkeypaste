@@ -7,10 +7,10 @@
         <sys:TimeSpan x:Key="InDelaysDur">0:0:0.5</sys:TimeSpan>
     </Styles.Resources>
 
-    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/Fade.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/FadeWindow.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/Pulse.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/Shake.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/SlideWindow.axaml" />
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/Transitions.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/WelcomeWindowGrow.axaml" />
 </Styles>

@@ -22,7 +22,7 @@
         <Setter Property="Transitions">
             <Transitions>
                 <TransformOperationsTransition Property="RenderTransform"
-                                               Duration="0:0:.075" />
+                                               Duration="0:0:0.275" />
             </Transitions>
         </Setter>
     </Style>

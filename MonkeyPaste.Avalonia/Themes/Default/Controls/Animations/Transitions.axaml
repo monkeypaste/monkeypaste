@@ -1,0 +1,95 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Styles.Resources>
+        <sys:TimeSpan x:Key="DefTransitionDur">0:0:0.3</sys:TimeSpan>
+    </Styles.Resources>
+
+    <!--  FADE  -->
+    <Style Selector=":is(TemplatedControl).fade">
+        <Setter Property="Transitions">
+            <Setter.Value>
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="{StaticResource DefTransitionDur}" />
+                </Transitions>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style Selector=":is(Decorator).fade">
+        <Setter Property="Transitions">
+            <Setter.Value>
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="{StaticResource DefTransitionDur}" />
+                </Transitions>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  FADE IN  -->
+    <Style Selector="Image.fadeIn">
+        <Setter Property="Opacity"
+                Value="0" />
+        <Setter Property="Transitions">
+            <Setter.Value>
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="{StaticResource DefTransitionDur}" />
+                </Transitions>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector="Image.fadeIn[IsVisible=true]">
+        <Setter Property="Opacity"
+                Value="1" />
+    </Style>
+
+
+    <!--  EXPAND HEIGHT  -->
+    <Style Selector=":is(Decorator).expand-height">
+        <Setter Property="Transitions">
+            <Setter.Value>
+                <Transitions>
+                    <DoubleTransition Property="Height"
+                                      Duration="{StaticResource DefTransitionDur}" />
+                </Transitions>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector=":is(TemplatedControl).expand-height">
+        <Setter Property="Transitions">
+            <Setter.Value>
+                <Transitions>
+                    <DoubleTransition Property="Height"
+                                      Duration="{StaticResource DefTransitionDur}" />
+                </Transitions>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  EXPAND WIDTH  -->
+
+    <Style Selector=":is(Decorator).expand-width">
+        <Setter Property="Transitions">
+            <Setter.Value>
+                <Transitions>
+                    <DoubleTransition Property="Height"
+                                      Duration="{StaticResource DefTransitionDur}" />
+                </Transitions>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector=":is(TemplatedControl).expand-width">
+        <Setter Property="Transitions">
+            <Setter.Value>
+                <Transitions>
+                    <DoubleTransition Property="Height"
+                                      Duration="{StaticResource DefTransitionDur}" />
+                </Transitions>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</Styles>

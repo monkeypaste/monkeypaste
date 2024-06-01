@@ -335,34 +335,38 @@ namespace MonkeyPaste.Avalonia {
         #region Control Event Handlers
 
         private static void EnabledControl_AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
-            if (s is Control control) {
-                bool press_added = false;
-                bool has_any_press =
-                    GetLeftPressCommand(control) != null ||
-                    GetRightPressCommand(control) != null ||
-                    GetDoubleLeftPressCommand(control) != null ||
-                    GetDoubleLeftReleaseCommandParameter(control) != null;
+            if (s is not Control control) {
+                return;
+            }
+            if(GetLeftPressCommandParameter(control) is string test && test == "test") {
 
-                if (has_any_press) {
-                    if (control is Button b && GetLeftPressCommand(control) != null) {
-                        // NOTE pointerpress is swallowed by button unless tunneled, may need for other controls too...
-                        b.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
-                    }
+            }
+            bool press_added = false;
+            bool has_any_press =
+                GetLeftPressCommand(control) != null ||
+                GetRightPressCommand(control) != null ||
+                GetDoubleLeftPressCommand(control) != null ||
+                GetDoubleLeftReleaseCommandParameter(control) != null;
+
+            if (has_any_press) {
+                if (control is Button b && GetLeftPressCommand(control) != null) {
+                    // NOTE pointerpress is swallowed by button unless tunneled, may need for other controls too...
+                    b.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
+                }
+                control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
+                press_added = true;
+
+            }
+
+            if (GetLeftReleaseCommand(control) != null || GetRightReleaseCommand(control) != null) {
+                control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, GetRoutingStrategy(control));
+            }
+
+            if (GetRouteHoldToRightPress(control) &&
+                (GetRightPressCommand(control) is not null || GetRightReleaseCommand(control) is not null)) {
+                control.AddHandler(Control.HoldingEvent, Control_Holding, RoutingStrategies.Tunnel);
+                if (!press_added) {
                     control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
-                    press_added = true;
-                    
-                }
-
-                if (GetLeftReleaseCommand(control) != null || GetRightReleaseCommand(control) != null) {
-                    control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, GetRoutingStrategy(control));
-                }
-
-                if (GetRouteHoldToRightPress(control) &&
-                    (GetRightPressCommand(control) is not null || GetRightReleaseCommand(control) is not null)) {
-                    control.AddHandler(Control.HoldingEvent, Control_Holding, RoutingStrategies.Tunnel);
-                    if(!press_added) {
-                        control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
-                    }
                 }
             }
         }

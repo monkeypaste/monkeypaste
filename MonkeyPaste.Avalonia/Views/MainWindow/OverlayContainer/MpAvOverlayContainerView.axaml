@@ -8,7 +8,19 @@
              d:DesignWidth="800"
              d:DesignHeight="450"
              x:Class="MonkeyPaste.Avalonia.MpAvOverlayContainerView">
-    <TransitioningContentControl HorizontalAlignment="Left"
-                                 VerticalAlignment="Top"
-                                 x:Name="OverlayContentControl" />
+    <!--<ItemsControl x:Name="OverlayItemsControl"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <TransitioningContentControl x:Name="OverlayContentControl" />
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Grid />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+    </ItemsControl>-->
+    <Grid x:Name="OverlayGrid" />
 </UserControl>

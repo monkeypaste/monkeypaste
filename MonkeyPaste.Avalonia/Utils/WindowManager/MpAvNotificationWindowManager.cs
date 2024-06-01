@@ -8,6 +8,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System;
+using static Avalonia.Animation.PageSlide;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -117,7 +118,8 @@ namespace MonkeyPaste.Avalonia {
                     var w = new Window() {
                         Width = is_vert ? 360:740,
                         Height = is_vert ? 740:360,
-                        DataContext = nvmb
+                        DataContext = nvmb,
+                        WindowStartupLocation = WindowStartupLocation.CenterScreen
                     };
                     w.Classes.Add("windowed-mode");
                     if (Mp.Services != null && Mp.Services.ScreenInfoCollection == null) {
@@ -218,14 +220,15 @@ namespace MonkeyPaste.Avalonia {
             nw.EffectiveViewportChanged += Nw_EffectiveViewportChanged;
 
 #if MOBILE_OR_WINDOWED
-            if(nw.Classes.Contains("toast")) {
-                nw.Classes.Add("slideIn");
-            }
-
-            if(nvmb is MpAvUserActionNotificationViewModel uavm) {
+            
+            nw.ShowHeader = false;
+            if (nvmb is MpAvUserActionNotificationViewModel uavm) {
                 nw.BackCommand = uavm.BackCommand;
+                nw.OpenTransition = MpChildWindowTransition.SlideInFromTop;
+                nw.CloseTransition = MpChildWindowTransition.SlideOutToTop;
             } else if(nvmb is MpAvLoaderNotificationViewModel) {
-                nw.ShowHeader = false;
+                nw.OpenTransition = MpChildWindowTransition.None;
+                nw.CloseTransition = MpChildWindowTransition.None;
             }
 #endif
             try {

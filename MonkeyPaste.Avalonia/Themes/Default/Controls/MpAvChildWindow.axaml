@@ -8,6 +8,17 @@
                                Height="740" />
     </Design.PreviewWith>
     <Style Selector=":is(local|MpAvChildWindow)">
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="RenderTransformOrigin"
+                Value="0,0" />
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform />
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid x:DataType="local:MpAvChildWindow"

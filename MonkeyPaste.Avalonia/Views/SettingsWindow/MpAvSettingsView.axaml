@@ -395,6 +395,7 @@
             <Setter Property="MaxWidth"
                     Value="120" />
         </Style>-->
+
     </local:MpAvUserControl.Styles>
     <DockPanel x:Name="OuterContainer"
                Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
@@ -413,8 +414,9 @@
                                         BorderBrush="Silver" />
 
             <!--  FILTER TEXTBOX  -->
-            <Border Height="50"
-                    IsVisible="{Binding IsFilterExpanded}"
+            <Border x:Name="FilterBorder"
+                    Classes="expand-height"
+                    Height="{Binding IsFilterExpanded, ConverterParameter=50|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                     HorizontalAlignment="Stretch"
                     BorderThickness="0,0,0,1.5"
                     BorderBrush="Silver">
@@ -500,7 +502,7 @@
         </Border>
         <!--  Content  -->
         <ScrollViewer x:Name="BodyScrollViewer"
-                      IsScrollInertiaEnabled="False"
+                      IsScrollInertiaEnabled="True"
                       BringIntoViewOnFocusChange="False">
             <ScrollViewer.Transitions>
                 <Transitions>

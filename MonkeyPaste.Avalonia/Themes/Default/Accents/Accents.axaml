@@ -23,7 +23,7 @@
         <FontFamily x:Key="DefaultEditableFontFamilyFont">Arial</FontFamily>
         <FontFamily x:Key="DefaultReadOnlyFontFamilyFont">Segoe UI</FontFamily>
 
-        <SolidColorBrush x:Key="HitTestableTransparent" Color="Black" Opacity="0.01" />
+        <SolidColorBrush x:Key="HitTestableTransparent">#03000000</SolidColorBrush>
 
         <SolidColorBrush x:Key="EnabledHighlightBrush">Lime</SolidColorBrush>
         <SolidColorBrush x:Key="DisabledHighlightBrush">Red</SolidColorBrush>

@@ -7,11 +7,11 @@
         <sys:Double x:Key="DefaultNotificationWidth">350</sys:Double>
         <sys:Double x:Key="DefaultNotificationHeight">150</sys:Double>
     </Styles.Resources>
-    <Style Selector=":is(Window).notificationWindow:not(.resizable)">
+    <Style Selector=":is(local|MpAvWindow).notificationWindow:not(.resizable)">
         <Setter Property="CanResize"
                 Value="False" />
     </Style>
-    <Style Selector=":is(Window).notificationWindow.resizable">
+    <Style Selector=":is(local|MpAvWindow).notificationWindow.resizable">
         <Setter Property="CanResize"
                 Value="True" />
         <Setter Property="Width"
@@ -19,7 +19,7 @@
         <Setter Property="MinWidth"
                 Value="350" />
     </Style>
-    <Style Selector=":is(Window).notificationWindow:not(.welcome)"
+    <Style Selector=":is(local|MpAvWindow).notificationWindow:not(.welcome)"
            x:DataType="local:MpAvNotificationViewModelBase">
         <Setter Property="IsVisible"
                 Value="{Binding IsVisible}" />
@@ -50,17 +50,17 @@
     </Style>
     <!--  PARAM USER ACTION NTF (default isn't wide enough for param coll)  -->
 
-    <Style Selector=":is(Window).notificationWindow.userAction.reset, :is(Window).notificationWindow.userAction.params">
+    <Style Selector=":is(local|MpAvWindow).notificationWindow.userAction.reset, :is(local|MpAvWindow).notificationWindow.userAction.params">
         <Setter Property="Width"
                 Value="450" />
     </Style>
 
-    <Style Selector=":is(Window).notificationWindow.loader"
+    <Style Selector=":is(local|MpAvWindow).notificationWindow.loader"
            x:DataType="local:MpAvNotificationViewModelBase">
         <Setter Property="ShowActivated"
                 Value="True" />
     </Style>
-    <Style Selector=":is(Window).notificationWindow.loader:not(.linux)"
+    <Style Selector=":is(local|MpAvWindow).notificationWindow.loader:not(.linux)"
            x:DataType="local:MpAvNotificationViewModelBase">
         <!--  linux will show 2 taskbar icons so don't show  -->
         <Setter Property="ShowInTaskbar"
@@ -68,13 +68,13 @@
     </Style>
 
 
-    <Style Selector=":is(Window).notificationWindow > Border">
+    <Style Selector=":is(local|MpAvWindow).notificationWindow > Border">
         <Setter Property="CornerRadius"
                 Value="5" />
     </Style>
 
 
-    <Style Selector=":is(Window).notificationWindow Button:not(.optionsButton):not(.link):not(.iconBtn)">
+    <Style Selector=":is(local|MpAvWindow).notificationWindow Button:not(.optionsButton):not(.link):not(.iconBtn)">
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
         <Setter Property="VerticalAlignment"
@@ -103,11 +103,11 @@
                 Value="50" />
     </Style>
 
-    <Style Selector=":is(Window).notificationWindow Button:not(.optionsButton):not(.link):not(.iconBtn):pointerover /template/ ContentPresenter">
+    <Style Selector=":is(local|MpAvWindow).notificationWindow Button:not(.optionsButton):not(.link):not(.iconBtn):pointerover /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="{DynamicResource ThemeGrayAccent1Color}" />
     </Style>
-    <Style Selector=":is(Window).userAction Button:not(.optionsButton):not(.link):not(.iconBtn):pointerover">
+    <Style Selector=":is(local|MpAvWindow).userAction Button:not(.optionsButton):not(.link):not(.iconBtn):pointerover">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
         <Setter Property="Background"

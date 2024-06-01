@@ -242,8 +242,8 @@ namespace MonkeyPaste.Avalonia {
                                     HasSetStartupSelection) {
                         break;
                     }
-                    SelectSidebarItemCommand.Execute(MpAvTagTrayViewModel.Instance);
                     HasSetStartupSelection = true;
+                    SelectSidebarItemCommand.Execute(MpAvTagTrayViewModel.Instance);
                     //Dispatcher.UIThread.Post(async () => {
                     //    // BUG Oriented grid not picking up initial state on horizontal startup
                     //    await Task.Delay(300);

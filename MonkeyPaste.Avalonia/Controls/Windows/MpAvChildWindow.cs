@@ -27,7 +27,14 @@ using System.Windows.Input;
 using AvKeyGesture = Avalonia.Input.KeyGesture;
 
 namespace MonkeyPaste.Avalonia {
-
+    [Flags]
+    public enum MpChildWindowTransition : long {
+        None = 0,
+        SlideInFromLeft = 1L << 0,
+        SlideOutToLeft = 1L << 1,
+        SlideInFromTop = 1L << 2,
+        SlideOutToTop = 1L << 3
+    }
     [DoNotNotify] 
     [TemplatePart("PART_NavContainer", typeof(Border))]
     public class MpAvChildWindow : MpAvUserControl {
@@ -234,15 +241,23 @@ namespace MonkeyPaste.Avalonia {
                 //if(MpAvMainView.Instance == null) {
                 //    return default;
                 //}
+                if(TopLevel.GetTopLevel(this) is not { } tl ||
+                    this.TranslatePoint(new(),tl) is not { } scaled_pos) {
+                    return default;
+                }
                 double scale = this.VisualPixelDensity();
-                return new MpPoint(CanvasX, CanvasY).ToAvPixelPoint(scale);
+                return scaled_pos.ToPortablePoint().ToAvPixelPoint(scale);
             }
             set {
                 if (Position.X != value.X || Position.Y != value.Y) {
+                    if (this.RenderTransform is not TransformGroup tg ||
+                        tg.Children.OfType<TranslateTransform>().FirstOrDefault() is not { } tt) {
+                        return;
+                    }
                     double scale = this.VisualPixelDensity();
                     var p = value.ToPortablePoint(scale);
-                    CanvasX = p.X;
-                    CanvasY = p.Y;
+                    tt.X = p.X;
+                    tt.Y = p.Y;
                 }
             }
         }
@@ -271,32 +286,6 @@ namespace MonkeyPaste.Avalonia {
 
         public IWindowImpl PlatformImpl =>
             null;
-
-        #endregion
-
-        #region CanvasX Property
-        public double CanvasX {
-            get { return GetValue(CanvasXProperty); }
-            set { SetValue(CanvasXProperty, value); }
-        }
-
-        public static readonly StyledProperty<double> CanvasXProperty =
-            AvaloniaProperty.Register<MpAvChildWindow, double>(
-                name: nameof(CanvasX),
-                defaultValue: default);
-
-        #endregion
-
-        #region CanvasY Property
-        public double CanvasY {
-            get { return GetValue(CanvasYProperty); }
-            set { SetValue(CanvasYProperty, value); }
-        }
-
-        public static readonly StyledProperty<double> CanvasYProperty =
-            AvaloniaProperty.Register<MpAvChildWindow, double>(
-                name: nameof(CanvasY),
-                defaultValue: default);
 
         #endregion
 
@@ -354,11 +343,11 @@ namespace MonkeyPaste.Avalonia {
         
         #region OpenTransition
 
-        public static readonly AttachedProperty<IPageTransition> OpenTransitionProperty =
-            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, IPageTransition>(
+        public static readonly AttachedProperty<MpChildWindowTransition> OpenTransitionProperty =
+            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, MpChildWindowTransition>(
                 nameof(OpenTransition), 
-                new MpAvDirectionalPageSlide(TimeSpan.FromSeconds(TRANSITION_TIME_S)) { IsDirBackwards = true });
-        public IPageTransition OpenTransition {
+                MpChildWindowTransition.SlideInFromLeft);
+        public MpChildWindowTransition OpenTransition {
             get => GetValue(OpenTransitionProperty);
             set => SetValue(OpenTransitionProperty, value);
         }
@@ -366,11 +355,11 @@ namespace MonkeyPaste.Avalonia {
         
         #region CloseTransition
 
-        public static readonly AttachedProperty<IPageTransition> CloseTransitionProperty =
-            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, IPageTransition>(
+        public static readonly AttachedProperty<MpChildWindowTransition> CloseTransitionProperty =
+            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, MpChildWindowTransition>(
                 nameof(CloseTransition), 
-                new MpAvDirectionalPageSlide(TimeSpan.FromSeconds(TRANSITION_TIME_S)));
-        public IPageTransition CloseTransition {
+                MpChildWindowTransition.SlideOutToLeft);
+        public MpChildWindowTransition CloseTransition {
             get => GetValue(CloseTransitionProperty);
             set => SetValue(CloseTransitionProperty, value);
         }
@@ -389,6 +378,14 @@ namespace MonkeyPaste.Avalonia {
 
         public double WidthRatio { get; set; } = 1.0d;
         public double HeightRatio { get; set; } = 1.0d;
+
+        bool IsBaseLevelWindow =>
+#if MOBILE_OR_WINDOWED
+            this is MpAvMainWindow ||
+            this is MpAvMainView;
+#else
+            false;
+#endif
 
         #endregion
 
@@ -424,9 +421,10 @@ namespace MonkeyPaste.Avalonia {
         }
         public void Show() {
             SetupWindow();
-            if (MpAvOverlayContainerView.Instance is not { } ocv) {
-                if(Parent is Window w) {
-                    Activate();
+            if (MpAvOverlayContainerView.Instance is not { } ocv ||
+                IsBaseLevelWindow) {
+                Activate();
+                if (Parent is Window w) {
                     w.Show();
                 }
                 return;
@@ -486,7 +484,6 @@ namespace MonkeyPaste.Avalonia {
                 Activate();
             }
         }
-
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
             OnOpened(EventArgs.Empty);
@@ -517,7 +514,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void SetupWindow() {
-            if(this.DataContext is MpAvNotificationViewModelBase) {
+            if(this.DataContext is MpAvUserActionNotificationViewModel) {
                 return;
             }
             Width = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width * WidthRatio;

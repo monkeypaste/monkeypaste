@@ -25,6 +25,24 @@
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource EdgeArrowDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
         </Style>
+
+        <Style Selector="StackPanel#FrameHeaderPanel.mobile"
+               x:DataType="local:MpAvSettingsFrameViewModel">
+            <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
+                    Value="True" />
+            <Setter Property="local:MpAvPointerCommandExtension.RoutingStrategy"
+                    Value="Tunnel" />
+            <Setter Property="local:MpAvPointerCommandExtension.IsEventHandled"
+                    Value="False" />
+            <Setter Property="local:MpAvPointerCommandExtension.LeftPressCommand"
+                    Value="{Binding ExpandFrameCommand}" />
+            <Setter Property="Background"
+                    Value="{StaticResource HitTestableTransparent}" />
+            <Setter Property="MinWidth"
+                    Value="{Binding $parent[ItemsControl].Bounds.Width}" />
+            <Setter Property="Margin"
+                    Value="10" />
+        </Style>
     </UserControl.Styles>
     <local:MpAvClipBorder Padding="5"
                           BorderThickness="0"

@@ -43,7 +43,7 @@ namespace MonkeyPaste {
 
     public class MpQuillLoadContentRequestMessage {
         public bool isPopOut { get; set; }
-        public double editorScale { get; set; } = MpCopyItem.DEFAULT_ZOOM_FACTOR;
+        public double editorScale { get; set; } = MpCopyItem.ZOOM_FACTOR_DEFAULT;
         public bool breakBeforeLoad { get; set; }
         public int contentId { get; set; }
         public bool isSubSelectionEnabled { get; set; }

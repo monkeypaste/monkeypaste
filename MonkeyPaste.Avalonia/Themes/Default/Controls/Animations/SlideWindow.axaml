@@ -6,11 +6,16 @@
         <sys:TimeSpan x:Key="SlideDur">0:0:0.5</sys:TimeSpan>
     </Styles.Resources>
 
-    <Style Selector="Window.slide-in-right">
+    <Style Selector=":is(local|MpAvWindow).slide-in-right">
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform />
+            </Setter.Value>
+        </Setter>
         <Setter Property="TranslateTransform.X"
                 Value="360" />
     </Style>
-    <Style Selector="Window.slide-in-right[IsVisible=true]">
+    <Style Selector=":is(local|MpAvWindow).slide-in-right[IsVisible=true]">
         <Style.Animations>
             <Animation Duration="{StaticResource SlideDur}"
                        FillMode="Forward">
@@ -25,12 +30,17 @@
             </Animation>
         </Style.Animations>
     </Style>
-  
-   <Style Selector="Window.slide-in-top">
+
+    <Style Selector=":is(local|MpAvWindow).slide-in-top">
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TranslateTransform />
+            </Setter.Value>
+        </Setter>
         <Setter Property="TranslateTransform.Y"
                 Value="-360" />
     </Style>
-    <Style Selector="Window.slide-in-top[IsVisible=true]">
+    <Style Selector=":is(local|MpAvWindow).slide-in-top[IsVisible=true]">
         <Style.Animations>
             <Animation Duration="{StaticResource SlideDur}"
                        FillMode="Forward">

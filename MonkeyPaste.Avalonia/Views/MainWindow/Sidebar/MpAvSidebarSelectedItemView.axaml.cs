@@ -1,10 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia;
-
-public partial class MpAvSidebarSelectedItemView : MpAvUserControl<MpISidebarItemViewModel>
+[DoNotNotify]
+public partial class MpAvSidebarSelectedItemView : UserControl
 {
     public MpAvSidebarSelectedItemView()
     {
