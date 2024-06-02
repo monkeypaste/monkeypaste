@@ -15,6 +15,8 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using System.Diagnostics;
+
 
 
 #if WINDOWS
@@ -343,9 +345,8 @@ namespace MonkeyPaste.Common.Avalonia {
         
         public static async Task<string[]> GetFormatsSafeAsync(this IClipboard cb, int retryCount = 0) {
             if (cb == null) {
-                return new string[] { };
+                return [];
             }
-            await WaitForClipboardAsync();
             if (!Dispatcher.UIThread.CheckAccess()) {
                 var result = await Dispatcher.UIThread.InvokeAsync(async () => {
                     var formats = await cb.GetFormatsSafeAsync(retryCount);
@@ -354,13 +355,17 @@ namespace MonkeyPaste.Common.Avalonia {
                 return result;
             }
             try {
+                bool succss = await WaitForClipboardAsync();
+                if(!succss) {
+                    throw new TimeoutException("Waitforclipboard timeout");
+                }
                 var result = await cb.GetFormatsAsync();
                 CloseClipboard();
                 return result;
             }
             catch (COMException) {
                 if (retryCount >= OLE_RETRY_COUNT) {
-                    return new string[] { };
+                    return [];
                 }
                 await Task.Delay(OLE_RETRY_DELAY_MS);
                 var retry_result = await cb.GetFormatsSafeAsync(++retryCount);
@@ -368,12 +373,12 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error getting clipboard formats", ex);
-                return new string[] { };
+                return [];
             }
         }
 
         public static async Task<object> GetDataSafeAsync(this IClipboard cb, string format, int retryCount = OLE_RETRY_COUNT) {
-            await WaitForClipboardAsync();
+            
             // 
             if (!Dispatcher.UIThread.CheckAccess()) {
                 var result = await Dispatcher.UIThread.InvokeAsync(async () => {
@@ -383,6 +388,10 @@ namespace MonkeyPaste.Common.Avalonia {
                 return result;
             }
             try {
+                bool success = await WaitForClipboardAsync();
+                if(!success) {
+                    throw new TimeoutException($"WaitForClipboard timeout");
+                }
                 object result = await cb.GetDataAsync(format).TimeoutAfter(TimeSpan.FromSeconds(1));
                 CloseClipboard();
                 return result;
@@ -414,18 +423,20 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static async Task SetDataObjectSafeAsync(this IClipboard cb, IDataObject ido, int retryCount = 0) {
-            await WaitForClipboardAsync();
-
             try {
                 //#if MAC
                 //                await ido.WriteToPasteboardAsync(false);
                 //#else
-
+                bool success = await WaitForClipboardAsync();
+                if(!success) {
+                    throw new TimeoutException("Timeout waiting for open clipboard");
+                }
                 await cb.SetDataObjectAsync(ido);
                 //#endif
-                CloseClipboard();
             }
-            catch (COMException) {
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error setting dataobject.", ex);
+                CloseClipboard();
                 if (retryCount >= OLE_RETRY_COUNT) {
                     return;
                 }
@@ -473,28 +484,53 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             return true;
         }
-        private static async Task WaitForClipboardAsync() {
-            await Task.Delay(0);
+
+        private static async Task<bool> WaitForClipboardAsync(int wait_timeout_ms = 10_000) {
 #if WINDOWS
-            if (OperatingSystem.IsWindows()) {
-                try {
-                    bool canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
-                    while (!canOpen) {
-                        await Task.Delay(OLE_RETRY_DELAY_MS);
-                        canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
+            try {
+                bool canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
+                Stopwatch sw = Stopwatch.StartNew();
+                while (!canOpen) {
+                    await Task.Delay(OLE_RETRY_DELAY_MS);
+                    canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
+                    if(sw.Elapsed >= TimeSpan.FromMilliseconds(wait_timeout_ms)) {
+                        MpConsole.WriteLine($"wait for clipboard timeout (checking is open)");
+                        return false;
                     }
-                } catch(Exception ex) {
-                    MpConsole.WriteTraceLine($"WaitForClipboard async error.", ex);
                 }
+                return true;
+                // NOTE don't open clipboard since avalonia will open it
+
+                //if(Application.Current.GetMainTopLevel() is not { } tl ||
+                //    tl.TryGetPlatformHandle() is not { } ph) {
+                //    MpConsole.WriteLine($"wait for clipboard no top level.");
+                //    return;
+                //}
+                //sw.Restart();
+                //bool isOpen = WinApi.OpenClipboard(ph.Handle);
+                //while(!isOpen) {
+                //    await Task.Delay(OLE_RETRY_DELAY_MS);
+                //    isOpen = WinApi.OpenClipboard(ph.Handle);
+                //    if (sw.Elapsed >= TimeSpan.FromSeconds(3)) {
+                //        MpConsole.WriteLine($"wait for clipboard timeout (opening)");
+                //        return;
+                //    }
+                //}
             }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"WaitForClipboard async error.", ex);
+                return false;
+            }
+#else
+            await Task.Delay(0);
+            return true;
 #endif
         }
 
         private static void CloseClipboard() {
 #if WINDOWS
-            if (OperatingSystem.IsWindows()) {
-                WinApi.CloseClipboard();
-            }
+
+            WinApi.CloseClipboard();
 #endif
         }
     }
