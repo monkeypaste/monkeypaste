@@ -32,6 +32,10 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
             this.AttachedToVisualTree += MpAvQueryTrayView_AttachedToVisualTree;
 
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                // BUG can't set selectionMode in styles...
+                this.QueryTrayListBox.SelectionMode = SelectionMode.Toggle;
+            }
 
             if (this.FindControl<ScrollViewer>("QueryRepeaterScrollViewer") is ScrollViewer sv) {
                 sv.AddHandler(PointerWheelChangedEvent, QueryRepeaterScrollViewer_PointerWheelChanged, RoutingStrategies.Tunnel);
@@ -65,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
         #region Drop
 
         private void InitDnd() {
-            if (this.FindControl<ListBox>("ClipTrayListBox") is not ListBox ctrlb) {
+            if (this.FindControl<ListBox>("QueryTrayListBox") is not ListBox ctrlb) {
                 return;
             }
 
@@ -246,7 +250,7 @@ namespace MonkeyPaste.Avalonia {
             }
             Dispatcher.UIThread.Post(() => {
                 var sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");
-                var lb = this.FindControl<ListBox>("ClipTrayListBox");
+                var lb = this.FindControl<ListBox>("QueryTrayListBox");
                 var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalScaledMouseLocation;
                 if (MpAvPagingListBoxExtension.CheckAndDoAutoScrollJump(sv, lb, gmp)) {
                     // drag is over a tray track and is thumb dragging

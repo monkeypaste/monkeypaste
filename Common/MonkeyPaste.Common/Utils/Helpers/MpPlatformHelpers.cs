@@ -46,7 +46,8 @@ namespace MonkeyPaste.Common {
 
         public static string GetSolutionDir() {
             string sln_path = typeof(MpPlatformHelpers).Assembly.GetCustomAttribute<MpSolutionPathAttribute>().Value;
-            return Path.GetDirectoryName(sln_path);
+            string dir = Path.GetDirectoryName(sln_path);
+            return dir;
         }
 
         public static string GetStorageDir() {

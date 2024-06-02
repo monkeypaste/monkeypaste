@@ -2673,7 +2673,7 @@ namespace MonkeyPaste.Avalonia {
                 var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalUnscaledMouseLocation;
                 var drop_ctvml = AllActiveItems.Where(x => !x.IsWindowOpen);
                 var lbil =
-                    MpAvQueryTrayView.Instance.ClipTrayListBox.GetLogicalDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext))
+                    MpAvQueryTrayView.Instance.QueryTrayListBox.GetLogicalDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext))
                     .Union(MpAvPinTrayView.Instance.PinTrayListBox.GetLogicalDescendants<ListBoxItem>().Where(x => drop_ctvml.Contains(x.DataContext)));
                 foreach (var lbi in lbil) {
                     if (!lbi.IsAttachedToVisualTree() ||

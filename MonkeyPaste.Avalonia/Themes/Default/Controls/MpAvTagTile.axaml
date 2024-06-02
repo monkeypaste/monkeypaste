@@ -40,4 +40,30 @@
         <Setter Property="MinWidth"
                 Value="80" />
     </Style>
+
+    <Style Selector=":is(Control).tag-cmds"
+           x:DataType="local:MpAvTagTileViewModel">
+        <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
+                Value="True" />
+        <Setter Property="local:MpAvPointerCommandExtension.RoutingStrategy"
+                Value="Tunnel" />
+        <!--<Setter Property="local:MpAvPointerCommandExtension.IsEventHandled"
+                Value="False" />-->
+        <Setter Property="local:MpAvPointerCommandExtension.LeftReleaseCommand"
+                Value="{Binding SelectThisTagCommand}" />
+        <Setter Property="local:MpAvPointerCommandExtension.LeftReleaseCommandParameter"
+                Value="{Binding $self}" />
+        <Setter Property="local:MpAvPointerCommandExtension.RightPressCommand"
+                Value="{Binding ShowContextMenuCommand}" />
+        <Setter Property="local:MpAvPointerCommandExtension.RightPressCommandParameter"
+                Value="{Binding $self}" />
+        <Setter Property="local:MpAvPointerCommandExtension.DoubleLeftPressCommand"
+                Value="{Binding RenameTagCommand}" />
+        <Setter Property="local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter"
+                Value="IsPressEvent" />
+        <Setter Property="local:MpAvIsHoveringExtension.IsEnabled"
+                Value="True" />
+        <Setter Property="local:MpAvIsHoveringExtension.IsHovering"
+                Value="{Binding IsHovering, Mode=TwoWay}" />
+    </Style>
 </Styles>

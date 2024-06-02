@@ -1284,7 +1284,7 @@ namespace MonkeyPaste.Avalonia {
             if (match_to_execute.RoutingType == MpRoutingType.Pre) {
                 Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(new[] { new[] { e.Data.KeyCode }.ToList() }.ToList());
             }
-            Dispatcher.UIThread.Invoke(() => {
+            Dispatcher.UIThread.Post(() => {
                 match_to_execute.PerformShortcutCommand.Execute(null);
             });
             if (match_to_execute.RoutingType == MpRoutingType.Post) {

@@ -44,6 +44,13 @@
                     Value="False" />
         </Style>
 
+        <!--  TAG POINTER CMDS  -->
+
+        <Style Selector="Grid#TagViewContainerGrid">
+            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
+                    Value="tag-cmds" />
+        </Style>
+
     </local:MpAvUserControl.Styles>
 
     <Grid x:Name="TagTrayContainerGrid"

@@ -15,7 +15,7 @@
 
     <local:MpAvUserControl.Styles>
         <!--  MOBILE SCROLL GESTURE  -->
-        <!--<Style Selector="local|MpAvPagingScrollViewer /template/ ScrollContentPresenter, ListBox#ClipTrayListBox /template/ ScrollContentPresenter"
+        <!--<Style Selector="local|MpAvPagingScrollViewer /template/ ScrollContentPresenter, ListBox#QueryTrayListBox /template/ ScrollContentPresenter"
                x:DataType="local:MpAvClipTrayViewModel">
             <Setter Property="CanHorizontallyScroll"
                     Value="{Binding CanScrollX}" />
@@ -86,7 +86,7 @@
                                           AllowAutoHide="True"
                                           Width="{Binding $parent.Bounds.Width}"
                                           Height="{Binding $parent.Bounds.Height}">
-                <ListBox x:Name="ClipTrayListBox"
+                <ListBox x:Name="QueryTrayListBox"
                          Classes="clipTileListBox queryListBox"
                          Classes.bright="{Binding $self.Background, Converter={x:Static local:MpAvBrushToIsBrightBoolConverter.Instance}}"
                          IsTextSearchEnabled="False"

@@ -312,7 +312,7 @@
                                             <Image Width="20"
                                                    Height="20"
                                                    Stretch="UniformToFill"
-                                                   Source="{Binding IconSourceObj, ConverterParameter=test, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+                                                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
                                         </Border>
 
                                         <!--  IS ACTIVE LABEL  -->

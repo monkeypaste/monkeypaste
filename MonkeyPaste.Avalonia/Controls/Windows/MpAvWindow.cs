@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Platform;
 using Avalonia.Diagnostics;
+using Avalonia.LogicalTree;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -10,6 +11,7 @@ using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -164,7 +166,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override string ToString() {
-            return $"MpAvWindow = '{this.Title}'";
+            return $"MpAvWindow = '{(this.Title.IsNullOrWhiteSpace() && DataContext != null ? DataContext : this.Title)}'";
         }
 
         public void ShowDevTools() {
@@ -176,7 +178,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-        protected override void OnClosing(WindowClosingEventArgs e) {
+        protected override void OnClosing(CancelEventArgs e) {
             base.OnClosing(e);
             if (e.Cancel || !this.Classes.Contains("fadeOut") || this.Classes.Contains("closing")) {
                 return;
@@ -189,6 +191,11 @@ namespace MonkeyPaste.Avalonia {
                 this.Close();
                 this.Classes.Remove("closing");
             });
+        }
+        protected override void OnDataContextChanged(EventArgs e) {
+            base.OnDataContextChanged(e);
+
+            Classes.Add(WindowType.ToString());
         }
         #endregion
 

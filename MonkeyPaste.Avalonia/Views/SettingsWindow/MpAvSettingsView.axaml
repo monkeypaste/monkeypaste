@@ -73,7 +73,9 @@
         </Style>
         <Style Selector="DockPanel#OuterContainer.mobile local|MpAvSettingsFrameView">
             <Setter Property="Margin"
-                    Value="0,10,10,10" />
+                    Value="0,0,10,0" />
+            <Setter Property="MinHeight"
+                    Value="0" />
         </Style>
 
         <Style Selector="DockPanel#OuterContainer.mobile local|MpAvSettingsFrameView">
@@ -523,9 +525,8 @@
                             <!--<local:MpAvAccountView />-->
                             <local:MpAvSyncView />
                         </DataTemplate>
-                        <DataTemplate x:Key="PreferencesTemplate"
-                                      x:DataType="local:MpAvSettingsViewModel">
-                            <local:MpAvSettingsFrameCollectionView DataContext="{Binding FilteredPreferenceFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
+                        <DataTemplate x:Key="PreferencesTemplate">
+                            <local:MpAvSettingsFrameCollectionView DataContext="{x:Static local:MpAvSettingsViewModel.Instance}" />
                         </DataTemplate>
                         <DataTemplate x:Key="InteropTemplate">
                             <local:MpAvInteropView />

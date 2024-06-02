@@ -20,6 +20,12 @@
             <Setter Property="Height"
                     Value="64" />
         </Style>
+        <Style Selector="Border#OuterBorder.mobile Image#IconImage">
+            <Setter Property="Width"
+                    Value="32" />
+            <Setter Property="Height"
+                    Value="32" />
+        </Style>
         <!--  PROGRESS SPINNER  -->
 
         <!--  PARAM LISTBOXITEM  -->

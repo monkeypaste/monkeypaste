@@ -21,7 +21,8 @@ namespace MonkeyPaste.Avalonia {
         MpAvIMenuItemViewModel,
         MpICloseWindowViewModel,
         MpIActiveWindowViewModel,
-        MpIWantsTopmostWindowViewModel {
+        MpIWantsTopmostWindowViewModel,
+        MpAvIHeaderMenuViewModel {
         #region Private Variables
 
         private string[] _restartContentParams => new string[] {
@@ -70,6 +71,27 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpAvIHeaderMenuViewModel Implementation
+        IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
+            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor);
+        IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
+            (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
+        string MpAvIHeaderMenuViewModel.HeaderTitle =>
+            UiStrings.CommonSettingsTitle;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
+            [
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "SearchImage",
+                    Command = ToggleExpandFilterCommand
+                }
+            ];
+        ICommand MpAvIHeaderMenuViewModel.BackCommand =>
+            null;
+        object MpAvIHeaderMenuViewModel.BackCommandParameter =>
+            null;
+
+        #endregion
 
         #region MpAvIMenuItemViewModel Implementation
         ICommand MpAvIMenuItemViewModel.Command =>
@@ -166,7 +188,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        public override bool UsesIsLoaded =>
+            true;
         public bool IsFilterExpanded { get; private set; } =
 #if MOBILE_OR_WINDOWED
             false;
@@ -257,9 +280,14 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitAsync() {
-            await InitSettingFramesAsync();
-            UpdateFilters();
-            InitRuntimeParams();
+            await Task.Delay(1);
+            Dispatcher.UIThread.Post(async () => {
+                IsLoaded = false;
+                await InitSettingFramesAsync();
+                UpdateFilters();
+                InitRuntimeParams();
+                IsLoaded = true;
+            }, (DispatcherPriority)((int)DispatcherPriority.Normal - 1));
         }
         #endregion
 
@@ -1422,7 +1450,7 @@ namespace MonkeyPaste.Avalonia {
                         .Convert("LoginImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     DataContext = this,
-                    Content = MpAvSettingsView.Instance
+                    Content = new MpAvSettingsView()
                 };
             } else {
                 sw = new MpAvWindow() {
@@ -1434,20 +1462,10 @@ namespace MonkeyPaste.Avalonia {
                         .Convert("CogColorImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     DataContext = this,
-                    Content = MpAvSettingsView.Instance
+                    Content = new MpAvSettingsView()
                 };
                 //sw.Classes.Add("fadeIn");
             }
-#if MOBILE_OR_WINDOWED
-            sw.MenuItems = [
-                new MpAvMenuItemViewModel() {
-                    IconSourceObj = "SearchImage",
-                    Command = ToggleExpandFilterCommand
-                }
-                ];
-            //sw.WidthRatio = 0.9;
-            //sw.HeightRatio = 0.9;
-#endif
 
             void Sw_Opened(object sender, EventArgs e) {
                 sw.Activate();

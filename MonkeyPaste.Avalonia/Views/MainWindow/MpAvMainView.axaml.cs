@@ -42,10 +42,7 @@ namespace MonkeyPaste.Avalonia {
         public static void Init(MpAvMainWindowViewModel mwvm) {
 #if DESKTOP
             var mw = new MpAvMainWindow() {
-                DataContext = mwvm,
-#if MOBILE_OR_WINDOWED
-                ShowHeader = false 
-#endif
+                DataContext = mwvm
             };
             _instance = mw.Content as MpAvMainView;
 
@@ -72,7 +69,6 @@ namespace MonkeyPaste.Avalonia {
             //        Command = MpAvSearchBoxViewModel.Instance.ExpandSearchBoxCommand
             //    }
             //    ];
-            _instance.ShowHeader = false;
 #endif
         }
 
@@ -174,7 +170,7 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv_gs = ctrcv.ClipTraySplitter;
             var ctrcv_ctrv = ctrcv.ClipTrayView;
             var ctrcv_ctrv_cg = ctrcv_ctrv.QueryTrayContainerGrid;
-            var ctrcv_ctr_lb = ctrcv_ctrv.ClipTrayListBox;
+            var ctrcv_ctr_lb = ctrcv_ctrv.QueryTrayListBox;
 
             var pin_tray_ratio = MpAvClipTrayViewModel.Instance.GetCurrentPinTrayRatio();
             mwtg.RowDefinitions.Clear();

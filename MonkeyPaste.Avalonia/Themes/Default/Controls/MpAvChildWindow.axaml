@@ -7,6 +7,42 @@
                                Width="360"
                                Height="740" />
     </Design.PreviewWith>
+
+    <!--  TITLE  -->
+    <Style Selector="TextBlock#TitleTextBlock">
+        <Setter Property="Text"
+                Value="{Binding $parent[local:MpAvChildWindow].Title}" />
+    </Style>
+
+    <Style Selector="TextBlock#TitleTextBlock.has-title"
+           x:DataType="local:MpAvIHeaderMenuViewModel">
+        <Setter Property="Text"
+                Value="{Binding HeaderTitle}" />
+    </Style>
+
+    <!--  BACK BUTTON  -->
+    <Style Selector=":is(Button)#BackButton">
+        <Setter Property="Command"
+                Value="{Binding $parent[local:MpAvChildWindow].DefaultBackCommand}" />
+    </Style>
+    <Style Selector=":is(Button)#BackButton.has-back-cmd"
+           x:DataType="local:MpAvIHeaderMenuViewModel">
+        <Setter Property="Command"
+                Value="{Binding BackCommand}" />
+        <Setter Property="CommandParameter"
+                Value="{Binding BackCommandParameter}" />
+    </Style>
+
+    <!--  MENU BUTTONS  -->
+    <Style Selector=":is(Button)#HeaderMenuButton.has-cmd-param"
+           x:DataType="local:MpAvIMenuItemViewModel">
+        <Setter Property="CommandParameter"
+                Value="{Binding CommandParameter}" />
+    </Style>
+    <Style Selector=":is(Button)#HeaderMenuButton">
+        <Setter Property="CommandParameter"
+                Value="{Binding $self}" />
+    </Style>
     <Style Selector=":is(local|MpAvChildWindow)">
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
@@ -25,28 +61,26 @@
                       RowDefinitions="Auto,*">
                     <!--  HEADER  -->
                     <Border x:Name="PART_NavContainer"
-                            IsVisible="{TemplateBinding ShowHeader}"
-                            Grid.Row="0"
-                            Padding="5"
-                            Background="{DynamicResource ThemeDarkColor}">
-                        <Grid>
+                            Height="{Binding DefaultTitleMenuFixedLength, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}"
+                            IsVisible="{TemplateBinding HeaderViewModel,
+                                                        Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                            Grid.Row="0">
+                        <Grid x:DataType="local:MpAvIHeaderMenuViewModel"
+                              Background="{Binding HeaderBackground}"
+                              DataContext="{TemplateBinding HeaderViewModel}">
                             <!--  BACK BUTTON  -->
-                            <Button x:Name="PART_PageNavBackButton"
+                            <Button x:Name="BackButton"
                                     HorizontalAlignment="Left"
                                     Classes="noBg noHoverBg noBorder"
-                                    IsVisible="{TemplateBinding BackCommand,
-                                                                Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                    Command="{TemplateBinding BackCommand}"
-                                    CommandParameter="{TemplateBinding BackCommandParameter}">
+                                    Classes.has-back-cmd="{Binding BackCommand, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                                 <Image Source="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                             </Button>
 
                             <!--  HEADER MENU  -->
                             <ItemsControl x:Name="PART_PageNavMenu"
                                           Padding="5"
-                                          IsVisible="{TemplateBinding MenuItems,
-                                                                      Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                          ItemsSource="{TemplateBinding MenuItems}"
+                                          IsVisible="{Binding HeaderMenuItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                          ItemsSource="{Binding HeaderMenuItems}"
                                           HorizontalAlignment="Right"
                                           VerticalAlignment="Center">
                                 <ItemsControl.ItemsPanel>
@@ -59,7 +93,7 @@
                                         <Button x:Name="HeaderMenuButton"
                                                 Classes="noBg noHoverBg noBorder"
                                                 Command="{Binding Command}"
-                                                CommandParameter="{Binding CommandParameter}">
+                                                Classes.has-cmd-param="{Binding CommandParameter, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                                             <Image Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                                         </Button>
                                     </DataTemplate>
@@ -68,9 +102,9 @@
 
                             <TextBlock x:Name="TitleTextBlock"
                                        HorizontalAlignment="Center"
-                                       Text="{TemplateBinding Title}"
+                                       Classes.has-title="{Binding HeaderTitle, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                        Effect="{StaticResource ThemeBgDropShadow}"
-                                       Foreground="{Binding Background, ElementName=PART_NavContainer, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                                       Foreground="{Binding HeaderForeground}"
                                        FontSize="26"
                                        FontWeight="Bold"
                                        VerticalAlignment="Center"
@@ -83,6 +117,20 @@
                     <ContentPresenter Grid.Row="1"
                                       Background="{TemplateBinding Background}"
                                       Content="{TemplateBinding Content}" />
+
+                    <local:MpAvBusySpinnerView Grid.RowSpan="2"
+                                               x:DataType="local:MpAvViewModelBase"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Height="70"
+                                               Classes="squareByHeight">
+                        <local:MpAvBusySpinnerView.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="UsesIsLoaded" />
+                                <Binding Path="!IsLoaded" />
+                            </MultiBinding>
+                        </local:MpAvBusySpinnerView.IsVisible>
+                    </local:MpAvBusySpinnerView>
                 </Grid>
             </ControlTemplate>
         </Setter>

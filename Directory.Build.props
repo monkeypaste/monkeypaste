@@ -24,6 +24,8 @@
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
     <!-- This removes duplicate warnings for cef dylibs -->
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    <LangVersion>Latest</LangVersion>
   </PropertyGroup>
 
   <!-- GLOBAL PACKAGE VERSIONS -->

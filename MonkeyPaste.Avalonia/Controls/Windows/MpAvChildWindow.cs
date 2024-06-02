@@ -21,6 +21,7 @@ using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -35,8 +36,16 @@ namespace MonkeyPaste.Avalonia {
         SlideInFromTop = 1L << 2,
         SlideOutToTop = 1L << 3
     }
+
+    public interface MpAvIHeaderMenuViewModel : MpIViewModel {
+        IEnumerable<MpAvIMenuItemViewModel> HeaderMenuItems { get; }
+        string HeaderTitle { get; }
+        IBrush HeaderBackground { get; }
+        IBrush HeaderForeground { get; }
+        ICommand BackCommand { get; }
+        object BackCommandParameter { get; }
+    }
     [DoNotNotify] 
-    [TemplatePart("PART_NavContainer", typeof(Border))]
     public class MpAvChildWindow : MpAvUserControl {
         #region Private Variables
         #endregion
@@ -289,58 +298,24 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region BackCommand
+        #region HeaderViewModel
 
-        public static readonly AttachedProperty<ICommand> BackCommandProperty =
-            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, ICommand>(
-                nameof(BackCommand),
-                new MpCommand<object>(
-                    (args) => {
-#if MOBILE_OR_WINDOWED
-                        if (args is not MpAvChildWindow cw) {
-                            cw = MpAvWindowManager.ActiveWindow;
-                            if (cw == null) {
-                                return;
-                            }
-                        }
-                        cw.Close(); 
-#else
-                        return;
-#endif
-                    }));
+        public static readonly AttachedProperty<MpAvIHeaderMenuViewModel> HeaderViewModelProperty =
+            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, MpAvIHeaderMenuViewModel>(
+                nameof(HeaderViewModel));
 
-        public ICommand BackCommand {
-            get => GetValue(BackCommandProperty);
-            set => SetValue(BackCommandProperty, value);
+        public MpAvIHeaderMenuViewModel HeaderViewModel {
+            get => GetValue(HeaderViewModelProperty);
+            set => SetValue(HeaderViewModelProperty, value);
         }
 
         #endregion
 
-        #region BackCommandParameter
 
-        public static readonly AttachedProperty<object> BackCommandParameterProperty =
-            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, object>(
-                nameof(BackCommandParameter));
-
-        public object BackCommandParameter {
-            get => GetValue(BackCommandParameterProperty) ?? this;
-            set => SetValue(BackCommandParameterProperty, value);
-        }
-
+        #region Appearance
         #endregion
-        
-        #region ShowHeader
 
-        public static readonly AttachedProperty<bool> ShowHeaderProperty =
-            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, bool>(
-                nameof(ShowHeader), true);
-        public bool ShowHeader {
-            get => GetValue(ShowHeaderProperty);
-            set => SetValue(ShowHeaderProperty, value);
-        }
-
-        #endregion
-        
+        #region Layout        
         #region OpenTransition
 
         public static readonly AttachedProperty<MpChildWindowTransition> OpenTransitionProperty =
@@ -364,16 +339,7 @@ namespace MonkeyPaste.Avalonia {
             set => SetValue(CloseTransitionProperty, value);
         }
         #endregion
-        
-        #region MenuItems
 
-        public static readonly AttachedProperty<IEnumerable<MpAvMenuItemViewModel>> MenuItemsProperty =
-            AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, IEnumerable<MpAvMenuItemViewModel>>(
-                nameof(MenuItems), default, false);
-        public IEnumerable<MpAvMenuItemViewModel> MenuItems {
-            get => GetValue(MenuItemsProperty);
-            set => SetValue(MenuItemsProperty, value);
-        }
         #endregion
 
         public double WidthRatio { get; set; } = 1.0d;
@@ -392,7 +358,7 @@ namespace MonkeyPaste.Avalonia {
         #region Events
         public event EventHandler Opened;
         public event EventHandler Closed;
-        public event EventHandler<WindowClosingEventArgs> Closing;
+        public event EventHandler<CancelEventArgs> Closing;
 
         public event EventHandler Activated;
         public event EventHandler Deactivated;
@@ -400,7 +366,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvChildWindow() {
-
         }
         #endregion
 
@@ -451,7 +416,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void Close() {
-            // TODO detach from MpAvMainView
+            var closing_args = new CancelEventArgs();
+            OnClosing(closing_args);
+            if(closing_args.Cancel) {
+                MpConsole.WriteLine($"Close canceled");
+                return;
+            }
+
             MpConsole.WriteLine($"Child Window '{Title}' closed");
 
             Deactivate();
@@ -496,33 +467,47 @@ namespace MonkeyPaste.Avalonia {
             Closed?.Invoke(this, EventArgs.Empty);
         }
 
-        protected virtual void OnClosing(WindowClosingEventArgs e) {
+        protected virtual void OnClosing(CancelEventArgs e) {
             Closing?.Invoke(this, e);
         }
 
-        protected override void OnApplyTemplate(TemplateAppliedEventArgs e) {
-            base.OnApplyTemplate(e);
-            if(e.NameScope.Find<Border>("PART_NavContainer") is not { } hb) {
-                return;
+
+        protected override void OnDataContextChanged(EventArgs e) {
+            base.OnDataContextChanged(e);
+            if(HeaderViewModel == null) {
+                HeaderViewModel = DataContext as MpAvIHeaderMenuViewModel;
             }
-            hb.Height =
-                ShowHeader ?
-               // MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize +
-                MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength : 0;
+
         }
         #endregion
 
         #region Private Methods
         private void SetupWindow() {
-            if(this.DataContext is MpAvUserActionNotificationViewModel) {
-                return;
+            if(WidthRatio >= 0) {
+                Width = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width * WidthRatio;
             }
-            Width = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width * WidthRatio;
-            Height = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height * HeightRatio;
+            if(HeightRatio >= 0) {
+                Height = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height * HeightRatio;
+            }
         }
         #endregion
 
         #region Commands
+        public ICommand DefaultBackCommand => new MpCommand<object>(
+                    (args) => {
+                        //#if MOBILE_OR_WINDOWED
+                        //                        if (args is not MpAvChildWindow cw) {
+                        //                            cw = MpAvWindowManager.ActiveWindow;
+                        //                            if (cw == null) {
+                        //                                return;
+                        //                            }
+                        //                        }
+                        //                        cw.Close();
+                        //#else
+                        //                        return;
+                        //#endif
+                        Close();
+                    });
         #endregion
     }
 }

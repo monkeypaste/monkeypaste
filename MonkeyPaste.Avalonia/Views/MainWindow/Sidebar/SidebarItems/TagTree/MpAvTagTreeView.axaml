@@ -31,6 +31,11 @@
                     Value="Disabled" />
             <Setter Property="IsExpanded"
                     Value="{Binding IsExpanded, Mode=TwoWay}" />
+            <Setter Property="Width"
+                    Value="{Binding $parent[TreeView].Bounds.Width}" />
+            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
+                    Value="tag-cmds" />
+
         </Style>
         <Style Selector="TreeView#TagTreeView TreeViewItem:selected /template/ Border#PART_LayoutRoot">
             <Setter Property="Background"

@@ -22,7 +22,8 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvPluginBrowserViewModel :
         MpAvViewModelBase,
         MpICloseWindowViewModel,
-        MpIWantsTopmostWindowViewModel {
+        MpIWantsTopmostWindowViewModel,
+        MpAvIHeaderMenuViewModel {
         #region Private Variables
         #endregion
 
@@ -39,6 +40,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpAvIHeaderMenuViewModel Implementation
+        IBrush MpAvIHeaderMenuViewModel.HeaderBackground => 
+            MpAvThemeViewModel.Instance.IsThemeDark ?
+                    Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeLightColor) :
+                    Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor);
+        IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
+            (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
+        string MpAvIHeaderMenuViewModel.HeaderTitle =>
+            null;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
+            null;
+        ICommand MpAvIHeaderMenuViewModel.BackCommand =>
+            null;
+        object MpAvIHeaderMenuViewModel.BackCommandParameter =>
+            null;
+
+        #endregion
 
         #region MpIWantsTopmostWindowViewModel Implementation
         bool MpIWantsTopmostWindowViewModel.WantsTopmost =>
@@ -251,10 +270,7 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("JigsawImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Content = new MpAvPluginBrowserView(),
-#if MOBILE_OR_WINDOWED
-                BackCommand = BackCommand 
-#endif
+                Content = new MpAvPluginBrowserView()
             };
             pbw.Background =
                 MpAvThemeViewModel.Instance.IsThemeDark ?

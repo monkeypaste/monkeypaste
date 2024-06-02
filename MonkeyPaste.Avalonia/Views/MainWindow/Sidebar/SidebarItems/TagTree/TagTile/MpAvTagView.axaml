@@ -31,7 +31,7 @@
             <Setter Property="Background"
                     Value="{DynamicResource TagTileSelectedBgColor}" />
         </Style>
-        <Style Selector="Border#TagNameBorder:pointerover:not(.isselected)">
+        <Style Selector="Border#TagNameBorder.hover:not(.isselected)">
             <Setter Property="Background"
                     Value="{DynamicResource TagTileHoverBgColor}" />
         </Style>
@@ -170,14 +170,6 @@
                 local:MpAvIsHoveringExtension.IsEnabled="True"
                 local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="TagViewContainerGrid"
-              local:MpAvPointerCommandExtension.IsEnabled="True"
-              local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
-              local:MpAvPointerCommandExtension.LeftReleaseCommand="{Binding SelectThisTagCommand}"
-              local:MpAvPointerCommandExtension.LeftReleaseCommandParameter="{Binding $self}"
-              local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowContextMenuCommand}"
-              local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
-              local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding RenameTagCommand}"
-              local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="IsPressEvent"
               Cursor="Hand"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch"
@@ -191,6 +183,7 @@
                     HorizontalAlignment="Stretch"
                     MinHeight="20"
                     local:MpAvHelpAnchorExtension.IsEnabled="True"
+                    Classes.hover="{Binding IsHovering}"
                     Classes.drag="{Binding IsDragging}"
                     Classes.islinked="{Binding IsLinkedToSelectedClipTile}"
                     Classes.isselected="{Binding IsSelected}"

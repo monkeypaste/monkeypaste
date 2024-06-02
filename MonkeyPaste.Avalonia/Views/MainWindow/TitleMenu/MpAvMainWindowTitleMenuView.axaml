@@ -253,7 +253,7 @@
 
             <!--  Zoom Factor Slider  -->
             <local:MpAvZoomFactorView x:Name="ZoomFactorView"
-                                      IsVisible="{Binding SelectedCopyItemId, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, ConverterParameter=test, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
+                                      IsVisible="{Binding SelectedCopyItemId, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
 
             <!--  Layout Toggle Button  -->
 

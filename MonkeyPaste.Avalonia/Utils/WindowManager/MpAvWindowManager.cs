@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel;
+
 
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;
@@ -289,7 +291,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void Window_Closing(object sender, WindowClosingEventArgs e) {
+        private static void Window_Closing(object sender, CancelEventArgs e) {
             if (sender is not MpAvWindow w) {
                 return;
             }

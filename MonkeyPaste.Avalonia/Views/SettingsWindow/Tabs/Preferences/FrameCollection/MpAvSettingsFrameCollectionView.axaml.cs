@@ -12,7 +12,7 @@ using System.Collections.ObjectModel;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvSettingsFrameCollectionView : MpAvUserControl<object> {
+    public partial class MpAvSettingsFrameCollectionView : MpAvUserControl<MpAvSettingsViewModel> {
         public MpAvSettingsFrameCollectionView() {
             InitializeComponent();
         }

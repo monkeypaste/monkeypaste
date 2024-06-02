@@ -13,6 +13,7 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,7 +42,8 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpIResizableViewModel,
         MpITextContentViewModel,
-        MpIContextMenuViewModel {
+        MpIContextMenuViewModel,
+        MpAvIHeaderMenuViewModel{
 
         #region Private Variables
 
@@ -72,6 +74,31 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+
+        #region MpAvIHeaderMenuViewModel Implementation
+        IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
+           CopyItemHexColor.IsNullOrEmpty() ?
+            TitleLayerHexColors.FirstOrDefault().ToAvBrush(force_alpha: 1) :
+            CopyItemHexColor.ToAvBrush();
+        IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
+            (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
+
+        string MpAvIHeaderMenuViewModel.HeaderTitle =>
+            CopyItemTitle;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
+            [
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "Dots3x1Image",
+                    Command = ShowContextMenuCommand
+                }
+            ];
+        ICommand MpAvIHeaderMenuViewModel.BackCommand =>
+            null;
+        object MpAvIHeaderMenuViewModel.BackCommandParameter =>
+            null;
+
+        #endregion
 
         #region MpIZoomFactorViewModel Implementation
         public double MinZoomFactor =>
@@ -462,6 +489,9 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return 0;
                 }
+                if(MpAvThemeViewModel.Instance.IsMobileOrWindowed && IsWindowOpen) {
+                    return 0;
+                }
                 if (!IsSubSelectionEnabled || !IsWindowOpen) {
                     return IsPinned ? Parent.DefaultPinItemWidth : Parent.DefaultQueryItemWidth;
                 }
@@ -545,6 +575,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 dw = Math.Max(dw, EDITOR_TOOLBAR_MIN_WIDTH);
                 if (IsWindowOpen) {
+                    if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                        return Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width;
+                    }
                     return dw;
                 }
                 if (IsPinned) {
@@ -1822,6 +1855,7 @@ namespace MonkeyPaste.Avalonia {
                             DisableSubSelectionCommand.Execute(null);
                         }
                     }
+                    MpAvMainWindowViewModel.Instance.SetHeaderMenu(IsSelected ? this : null);
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
                     Parent.NotifySelectionChanged();
                     break;
@@ -2103,10 +2137,16 @@ namespace MonkeyPaste.Avalonia {
             var pow = new MpAvWindow() {
                 DataContext = this,
                 ShowInTaskbar = true,
-                Background = Brushes.Transparent,
+                Background = 
+                    MpAvThemeViewModel.Instance.IsMobileOrWindowed ? 
+                        Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor) : 
+                        Brushes.Transparent,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 Content = cached_view ?? new MpAvClipTileView(),
-                CornerRadius = Mp.Services.PlatformResource.GetResource<CornerRadius>("TileCornerRadius")
+                CornerRadius = 
+                    MpAvThemeViewModel.Instance.IsMobileOrWindowed ?
+                        new CornerRadius() :
+                        Mp.Services.PlatformResource.GetResource<CornerRadius>("TileCornerRadius")
             };
             if (pow.Content is MpAvClipTileView ctv &&
                 ctv.Content is MpAvClipBorder cb) {
@@ -2121,14 +2161,14 @@ namespace MonkeyPaste.Avalonia {
             #region Window Bindings
 
             pow.Bind(
-                Window.MinWidthProperty,
+                Control.MinWidthProperty,
                 new Binding() {
                     Source = this,
                     Path = nameof(MinWidth)
                 });
 
             pow.Bind(
-                Window.TitleProperty,
+                MpAvWindow.TitleProperty,
                 new Binding() {
                     Source = this,
                     Path = nameof(WindowTitle)
@@ -2223,17 +2263,24 @@ namespace MonkeyPaste.Avalonia {
             wv.ContentLoaded += ContentLoaded;
         }
         private void HandleThisPopoutActivate(MpAvWindow pow, EventArgs e) {
-
             Parent.SelectClipTileCommand.Execute(CopyItemId);
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed &&
+                GetContentView() is Control c) {
+                c.InvalidateAll();
+            }
         }
 
-        private void HandleThisPopoutClosing(MpAvWindow pow, WindowClosingEventArgs e) {
-            MpConsole.WriteLine($"tile popout closing called. reason: '{e.CloseReason}' programmatic: '{e.IsProgrammatic}'");
-            if(e.IsProgrammatic) {
-                // state already stored
-                return;
+        private void HandleThisPopoutClosing(MpAvWindow pow, CancelEventArgs e) {
+
+            MpConsole.WriteLine($"tile popout closing called. reason: '{ce.CloseReason}' programmatic: '{ce.IsProgrammatic}'");
+            if (e is WindowClosingEventArgs ce &&
+                ce.IsProgrammatic) {
+                if(ce.IsProgrammatic) {
+                    // state already stored
+                    return;
+                }
+                e.Cancel = true;
             }
-            e.Cancel = true;
 
             Dispatcher.UIThread.Post(async () => {
                 IsBusy = true;
@@ -2274,7 +2321,7 @@ namespace MonkeyPaste.Avalonia {
             }
             popout_ctvm.HandleThisPopoutActivate(pow, e);
         }
-        private void closing_handler(object sender, WindowClosingEventArgs e) {
+        private void closing_handler(object sender, CancelEventArgs e) {
             if (sender is not MpAvWindow pow ||
                 pow.DataContext is not MpAvClipTileViewModel popout_ctvm) {
                 return;

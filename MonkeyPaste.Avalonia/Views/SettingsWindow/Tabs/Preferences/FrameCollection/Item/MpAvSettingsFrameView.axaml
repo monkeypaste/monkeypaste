@@ -26,7 +26,11 @@
                     Value="{Binding Source={StaticResource EdgeArrowDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
         </Style>
 
-        <Style Selector="StackPanel#FrameHeaderPanel.mobile"
+        <Style Selector="local|MpAvClipBorder#OuterBorder">
+            <Setter Property="Padding"
+                    Value="5" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#OuterBorder.mobile StackPanel#FrameHeaderPanel"
                x:DataType="local:MpAvSettingsFrameViewModel">
             <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
                     Value="True" />
@@ -35,16 +39,16 @@
             <Setter Property="local:MpAvPointerCommandExtension.IsEventHandled"
                     Value="False" />
             <Setter Property="local:MpAvPointerCommandExtension.LeftPressCommand"
-                    Value="{Binding ExpandFrameCommand}" />
+                    Value="{Binding ToggleExpandFrameCommand}" />
             <Setter Property="Background"
                     Value="{StaticResource HitTestableTransparent}" />
             <Setter Property="MinWidth"
                     Value="{Binding $parent[ItemsControl].Bounds.Width}" />
-            <Setter Property="Margin"
-                    Value="10" />
+
         </Style>
     </UserControl.Styles>
-    <local:MpAvClipBorder Padding="5"
+    <local:MpAvClipBorder x:Name="OuterBorder"
+                          Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           BorderThickness="0"
                           CornerRadius="10"
                           BorderBrush="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}">
@@ -53,7 +57,6 @@
             <!--  HEADER  -->
 
             <StackPanel x:Name="FrameHeaderPanel"
-                        Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                         Orientation="Vertical"
                         Spacing="5">
                 <StackPanel Classes="header frame"
@@ -61,13 +64,10 @@
 
                     <!--  EXPAND BUTTON  -->
 
-                    <Button Classes="defaultButton noBg noHoverBg noBorder"
-                            Command="{Binding ToggleExpandFrameCommand}"
-                            IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}">
-                        <Image x:Name="ExpanderImage"
-                               Classes.expanded="{Binding IsExpanded}"
-                               Classes="frame header icon" />
-                    </Button>
+                    <Image x:Name="ExpanderImage"
+                           IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                           Classes.expanded="{Binding IsExpanded}"
+                           Classes="frame header icon" />
 
                     <!--  FRAME ICON  -->
 

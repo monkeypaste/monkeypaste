@@ -591,6 +591,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public MpAvIHeaderMenuViewModel HeaderMenuViewModel { get; private set; }
+
         #endregion
 
         #endregion
@@ -683,6 +685,10 @@ namespace MonkeyPaste.Avalonia {
 
             MpMessenger.SendGlobal(MpMessageType.MainWindowLoadComplete);
             FinishMainWindowLoadAsync().FireAndForgetSafeAsync();
+        }
+
+        public void SetHeaderMenu(MpAvIHeaderMenuViewModel hmvm) {
+            HeaderMenuViewModel = hmvm;
         }
 
         #endregion

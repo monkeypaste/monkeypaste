@@ -19,6 +19,23 @@
         </sys:TimeSpan>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+        <!--  MOBILE SPECIFICS  -->
+
+        <Style Selector="Grid#ClipTrayContainerGrid:not(.mobile) ListBox.clipTileListBox > ListBoxItem, Grid#ClipTrayContainerGrid:not(.mobile) Border#QueryTrayContainerBorder local|MpAvClipTileView"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="IsHitTestVisible">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="!HasScrollVelocity"
+                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                        <Binding Path="!IsTouchScrolling"
+                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
         <!--  TILE OPACITY TRANSITION  -->
         <Style Selector="ListBox.clipTilListBox > ListBoxItem, Border#QueryTrayContainerBorder local|MpAvClipTileView">
             <Setter Property="Transitions">
@@ -72,29 +89,6 @@
             <Setter Property="Height"
                     Value="{Binding BoundHeight}" />
         </Style>
-
-        <!--  TILE LBI HTT  -->
-
-        <Style Selector="Grid#ClipTrayContainerGrid:not(.mobile) ListBox.clipTileListBox > ListBoxItem, Grid#ClipTrayContainerGrid:not(.mobile) Border#QueryTrayContainerBorder local|MpAvClipTileView"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="IsHitTestVisible">
-                <Setter.Value>
-                    <MultiBinding Converter="{x:Static BoolConverters.And}">
-                        <Binding Path="!HasScrollVelocity"
-                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
-                        <Binding Path="!IsTouchScrolling"
-                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
-                    </MultiBinding>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!--<Style Selector="Grid#ClipTrayContainerGrid.mobile ListBox.clipTileListBox > ListBoxItem, Grid#ClipTrayContainerGrid.mobile Border#QueryTrayContainerBorder local|MpAvClipTileView"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="IsHitTestVisible"
-                    Value="False" />
-
-        </Style>-->
 
         <!--  TILE SHADOWS  -->
 

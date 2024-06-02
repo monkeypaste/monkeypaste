@@ -45,6 +45,8 @@ namespace MonkeyPaste.Avalonia {
         [JsonIgnore]
         public virtual bool IsLoaded { get; set; }
 
+        public virtual bool UsesIsLoaded { get; }
+
 
         [JsonIgnore]
         public bool IgnoreHasModelChanged { get; set; } = false;

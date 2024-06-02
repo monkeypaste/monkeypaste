@@ -2,7 +2,7 @@
    <PropertyGroup>
     <OutputType>Library</OutputType>
     <Nullable>disable</Nullable>
-     <LangVersion>$(DefaultLangVersion)</LangVersion>
+     
     <TargetFramework>$(CommonTargetFramework)</TargetFramework>
      <!--<Platforms>$(DefaultPlatforms)</Platforms>-->
      <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
@@ -15,7 +15,6 @@
      <!--<Platforms>x64;AnyCPU</Platforms>-->
     <!--<WarningLevel>4</WarningLevel>-->
     <!--<TrimMode>copyused</TrimMode>--> 
-     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
      <!--<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>-->
     <!--<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>-->
      
@@ -213,13 +212,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>UiStrings.resx</DependentUpon>
     </Compile>
-    <Compile Update="Views\MainWindow\_InnerContainer\Mobile\Vertical\MpAvMainInnerView_mv.axaml.cs">
-      <DependentUpon>MpAvMainInnerView_mv.axaml</DependentUpon>
+    <Compile Update="Views\Reusable\Mobile\MpAvMobileHeaderView.axaml.cs">
+      <DependentUpon>MpAvMobileHeaderView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="Views\MainWindow\_InnerContainer\Desktop\" />
     <Folder Include="Views\Mobile\" />
   </ItemGroup>  
 </Project>

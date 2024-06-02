@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:MonkeyPaste.Avalonia"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             x:Name="HeaderView"
+             x:Class="MonkeyPaste.Avalonia.MpAvMobileHeaderView">
+    <UserControl.Styles>
+        <Style Selector=":is(Button)#HeaderMenuButton"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="CommandParameter"
+                    Value="{Binding CommandParameter}" />
+        </Style>
+        <Style Selector=":is(Button)#HeaderMenuButton.self-ref-cmd-param">
+            <Setter Property="CommandParameter"
+                    Value="{Binding $self}" />
+        </Style>
+    </UserControl.Styles>
+    <!--  HEADER  -->
+    <Border x:DataType="local:MpAvIHeaderMenuViewModel"
+            Height="{Binding DefaultTitleMenuFixedLength, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}"
+            Padding="5">
+        <Grid>
+            <!--  BACK BUTTON  -->
+            <Button x:Name="BackButton"
+                    HorizontalAlignment="Left"
+                    Classes="noBg noHoverBg noBorder"
+                    IsVisible="{Binding BackCommand, ElementName=HeaderView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                    Command="{Binding BackCommand, ElementName=HeaderView}"
+                    CommandParameter="{Binding BackCommandParameter, ElementName=HeaderView}">
+                <Image Source="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+            </Button>
+
+            <!--  HEADER MENU  -->
+            <ItemsControl x:Name="NavMenu"
+                          Padding="5"
+                          IsVisible="{Binding MenuItems, ElementName=HeaderView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                          ItemsSource="{Binding MenuItems, ElementName=HeaderView}"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Center">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="local:MpAvIMenuItemViewModel">
+                        <Button x:Name="HeaderMenuButton"
+                                Classes="noBg noHoverBg noBorder"
+                                Command="{Binding Command}"
+                                Classes.self-ref-cmd-param="{Binding ., ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                            <Image local:MpAvImageTintExtension.IsEnabled="True"
+                                   local:MpAvImageTintExtension.Tint="{Binding Foreground, ElementName=HeaderView}"
+                                   local:MpAvImageTintExtension.ImageResourceObj="{Binding IconSourceObj}" />
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock x:Name="TitleTextBlock"
+                       HorizontalAlignment="Center"
+                       Text="{Binding Title, ElementName=HeaderView}"
+                       Effect="{StaticResource ThemeBgDropShadow}"
+                       Foreground="{Binding Foreground, ElementName=HeaderView}"
+                       FontSize="26"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       TextAlignment="Center" />
+        </Grid>
+
+    </Border>
+</UserControl>

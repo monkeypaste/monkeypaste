@@ -1959,6 +1959,7 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
         private void GrowView() {
+            
             double nw = Math.Max(BindingContext.DesiredWidth, BindingContext.BoundWidth);
             double nh = Math.Max(BindingContext.BoundHeight, BindingContext.BoundHeight); //no change
             Resize(nw, nh);

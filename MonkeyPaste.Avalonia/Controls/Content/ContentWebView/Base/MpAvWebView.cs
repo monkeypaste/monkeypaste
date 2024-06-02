@@ -230,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
                     ctvm.IsWindowOpen) {
                     //return;
                 }
-                Dispatcher.UIThread.Invoke(() => InnerWebView.ExecuteScriptAsync(script).FireAndForgetSafeAsync());
+                Dispatcher.UIThread.Post(() => InnerWebView.ExecuteScriptAsync(script).FireAndForgetSafeAsync());
             }
             catch (Exception ex) {
                 MpConsole.WriteLine($"Error executing script!", true);

@@ -243,12 +243,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     HasSetStartupSelection = true;
-                    SelectSidebarItemCommand.Execute(MpAvTagTrayViewModel.Instance);
-                    //Dispatcher.UIThread.Post(async () => {
-                    //    // BUG Oriented grid not picking up initial state on horizontal startup
-                    //    await Task.Delay(300);
-                    //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.MainWindowLayoutOrientation));
-                    //});
+                    //SelectSidebarItemCommand.Execute(MpAvTagTrayViewModel.Instance);
 //#endif
                     break;
             }

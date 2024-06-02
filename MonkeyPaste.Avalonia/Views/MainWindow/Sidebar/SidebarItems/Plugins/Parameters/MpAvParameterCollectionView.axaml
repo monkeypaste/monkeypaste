@@ -166,7 +166,9 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:MpAvPluginParameterItemView HorizontalAlignment="Stretch"
+                    <local:MpAvPluginParameterItemView Loaded="ParameterItemView_Loaded"
+                                                       Unloaded="ParameterItemView_Unloaded"
+                                                       HorizontalAlignment="Stretch"
                                                        Classes.invalid="{Binding !IsValid}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -202,7 +204,7 @@
                                 <sys:String>'</sys:String>
                             </Binding.Source>
                         </Binding>
-                        <Binding Path="LabelText"/>
+                        <Binding Path="LabelText" />
                         <Binding>
                             <Binding.Source>
                                 <sys:String>'</sys:String>

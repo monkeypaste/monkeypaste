@@ -221,11 +221,10 @@ namespace MonkeyPaste.Avalonia {
 
 #if MOBILE_OR_WINDOWED
             
-            nw.ShowHeader = false;
             if (nvmb is MpAvUserActionNotificationViewModel uavm) {
-                nw.BackCommand = uavm.BackCommand;
                 nw.OpenTransition = MpChildWindowTransition.SlideInFromTop;
                 nw.CloseTransition = MpChildWindowTransition.SlideOutToTop;
+                nw.HeightRatio = -1; // use default height
             } else if(nvmb is MpAvLoaderNotificationViewModel) {
                 nw.OpenTransition = MpChildWindowTransition.None;
                 nw.CloseTransition = MpChildWindowTransition.None;

@@ -66,12 +66,12 @@
             <Setter Property="IsScrollWheelEnabled"
                     Value="{Binding IsSubSelectionEnabled}" />
         </Style>
-
     </local:MpAvUserControl.Styles>
     <Border x:Name="PinTrayContainerBorder"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Grid x:Name="PinTrayContainerGrid"
+              Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Border HorizontalAlignment="Stretch"

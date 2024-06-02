@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <Nullable>disable</Nullable>
+    <LangVersion>$(DefaultLangVersion)</LangVersion>
     <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <TargetFramework>$(CommonTargetFramework)</TargetFramework>

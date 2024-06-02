@@ -205,8 +205,8 @@
                           local:MpAvPointerCommandExtension.IsEnabled="True"
                           local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
                           local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding DoubleLeftClickHandlerCommand}"
-                          local:MpAvPointerCommandExtension.RightReleaseCommand="{Binding ShowContextMenuCommand}"
-                          local:MpAvPointerCommandExtension.RightReleaseCommandParameter="{Binding $self}"
+                          local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowContextMenuCommand}"
+                          local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="{StaticResource TileCornerRadius}">
