@@ -107,7 +107,7 @@
             <Setter Property="Background"
                     Value="{DynamicResource ClipTileContentBackgroundBrush}" />
         </Style>
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout">
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout, local|MpAvClipBorder#ClipTileContainerBorder.userColor.mobile.popout">
             <Setter Property="Background"
                     Value="{DynamicResource ModalClipTileContentBackgroundBrush}" />
         </Style>
@@ -181,6 +181,7 @@
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
+                          Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           Classes.append="{Binding IsAppendNotifier}"
                           Classes.appendpaused="{Binding IsAppendPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           Classes.popout="{Binding IsWindowOpen}"

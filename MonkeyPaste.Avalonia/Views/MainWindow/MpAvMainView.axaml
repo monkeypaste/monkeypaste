@@ -35,18 +35,6 @@
                   Grid.Row="3"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
-                <!--  SIDEBAR BUTTONS  -->
-                <local:MpAvSidebarButtonGroupView x:Name="SidebarButtonGroup"
-                                                  Grid.Column="0"
-                                                  Padding="3"
-                                                  HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Stretch"
-                                                  HorizontalContentAlignment="Stretch"
-                                                  VerticalContentAlignment="Stretch">
-                    <local:MpAvSidebarButtonGroupView.Background>
-                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-                    </local:MpAvSidebarButtonGroupView.Background>
-                </local:MpAvSidebarButtonGroupView>
 
                 <!--  CONTENT TRAY CONTAINER  -->
 
@@ -89,6 +77,18 @@
                                                local:MpAvPointerCommandExtension.RightPressCommand="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                                                local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding SelectedItemIdx, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}" />
 
+                <!--  SIDEBAR BUTTONS  -->
+                <local:MpAvSidebarButtonGroupView x:Name="SidebarButtonGroup"
+                                                  Grid.Column="0"
+                                                  Padding="3"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Stretch"
+                                                  HorizontalContentAlignment="Stretch"
+                                                  VerticalContentAlignment="Stretch">
+                    <local:MpAvSidebarButtonGroupView.Background>
+                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                    </local:MpAvSidebarButtonGroupView.Background>
+                </local:MpAvSidebarButtonGroupView>
             </Grid>
 
 

@@ -85,5 +85,12 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
         }
+
+        public static double FpsToTimeStep(this double fps) {
+            return 1000d / fps / 1000d;
+        }
+        public static int FpsToDelayTime(this double fps) {
+            return (int)(1000d / fps);
+        }
     }
 }

@@ -73,7 +73,7 @@
         </Style>
         <Style Selector="DockPanel#OuterContainer.mobile local|MpAvSettingsFrameView">
             <Setter Property="Margin"
-                    Value="0,0,10,0" />
+                    Value="10,0,10,0" />
             <Setter Property="MinHeight"
                     Value="0" />
         </Style>

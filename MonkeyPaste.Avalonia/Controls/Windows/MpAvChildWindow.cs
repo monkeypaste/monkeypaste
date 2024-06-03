@@ -34,7 +34,9 @@ namespace MonkeyPaste.Avalonia {
         SlideInFromLeft = 1L << 0,
         SlideOutToLeft = 1L << 1,
         SlideInFromTop = 1L << 2,
-        SlideOutToTop = 1L << 3
+        SlideOutToTop = 1L << 3,
+        FadeIn = 1L << 4,
+        FadeOut = 1L << 5,
     }
 
     public interface MpAvIHeaderMenuViewModel : MpIViewModel {
@@ -44,6 +46,11 @@ namespace MonkeyPaste.Avalonia {
         IBrush HeaderForeground { get; }
         ICommand BackCommand { get; }
         object BackCommandParameter { get; }
+    }
+
+    public interface MpILoadableViewModel : MpIViewModel {
+        bool IsLoadable { get; }
+        bool IsLoaded { get; set; }
     }
     [DoNotNotify] 
     public class MpAvChildWindow : MpAvUserControl {
@@ -316,12 +323,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Layout        
+
         #region OpenTransition
 
         public static readonly AttachedProperty<MpChildWindowTransition> OpenTransitionProperty =
             AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, MpChildWindowTransition>(
                 nameof(OpenTransition), 
-                MpChildWindowTransition.SlideInFromLeft);
+                MpChildWindowTransition.SlideInFromLeft | MpChildWindowTransition.FadeIn);
         public MpChildWindowTransition OpenTransition {
             get => GetValue(OpenTransitionProperty);
             set => SetValue(OpenTransitionProperty, value);
@@ -333,7 +341,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<MpChildWindowTransition> CloseTransitionProperty =
             AvaloniaProperty.RegisterAttached<MpAvChildWindow, Control, MpChildWindowTransition>(
                 nameof(CloseTransition), 
-                MpChildWindowTransition.SlideOutToLeft);
+                MpChildWindowTransition.SlideOutToLeft | MpChildWindowTransition.FadeOut);
         public MpChildWindowTransition CloseTransition {
             get => GetValue(CloseTransitionProperty);
             set => SetValue(CloseTransitionProperty, value);

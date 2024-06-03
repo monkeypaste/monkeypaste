@@ -47,8 +47,8 @@
                 Value="True" />
         <Setter Property="local:MpAvPointerCommandExtension.RoutingStrategy"
                 Value="Tunnel" />
-        <!--<Setter Property="local:MpAvPointerCommandExtension.IsEventHandled"
-                Value="False" />-->
+        <Setter Property="local:MpAvPointerCommandExtension.IsEventHandled"
+                Value="False" />
         <Setter Property="local:MpAvPointerCommandExtension.LeftReleaseCommand"
                 Value="{Binding SelectThisTagCommand}" />
         <Setter Property="local:MpAvPointerCommandExtension.LeftReleaseCommandParameter"

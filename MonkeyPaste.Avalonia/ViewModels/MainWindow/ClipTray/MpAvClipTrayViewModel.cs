@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -3686,6 +3687,10 @@ namespace MonkeyPaste.Avalonia {
                      // 2. new duplicate was in pin tray
                      // 3. internal pinned to popout
 
+                     if(!ctvm_to_pin.IsWindowOpen) {
+                         ctvm_to_pin.WasInternallyPinned = true;
+                     }
+
                      int cur_pin_idx = PinnedItems.IndexOf(ctvm_to_pin);
                      if (cur_pin_idx < 0) {
                          cur_pin_idx = PinnedItems.IndexOf(PinnedItems.FirstOrDefault(x => x.CopyItemId == ctvm_to_pin.CopyItemId));
@@ -3752,7 +3757,7 @@ namespace MonkeyPaste.Avalonia {
                  if (query_ctvm_to_pin != null &&
                     ctvm_to_pin_query_idx >= 0
                     ) {
-                     // re-init queyr item to become pin-placeholder
+                     // re-init query item to become pin-placeholder
                      await query_ctvm_to_pin.InitializeAsync(ctvm_to_pin.CopyItem, ctvm_to_pin_query_idx);
                  }
                  await Task.Delay(200);
@@ -3769,7 +3774,13 @@ namespace MonkeyPaste.Avalonia {
                          await Task.Delay(100);
                      }
                      QueryCommand.Execute(string.Empty);
+                     if(MpAvThemeViewModel.Instance.IsMobileOrWindowed &&
+                        !ctvm_to_pin.IsWindowOpen) {
+                         // when query tile pinned split the view to optionally toggle to pin tray
+                         PeakAtPinTrayCommand.Execute(ctvm_to_pin);
+                     }
                  }
+
 
                  OnPropertyChanged(nameof(Items));
                  OnPropertyChanged(nameof(PinnedItems));
@@ -3813,7 +3824,9 @@ namespace MonkeyPaste.Avalonia {
                  PinOpCopyItemId = unpinned_ctvm.CopyItemId;
 
                  PinnedItems.Remove(unpinned_ctvm);
+                 bool from_popout = false;
                  if (unpinned_ctvm.IsWindowOpen) {
+                     from_popout = true;
                      bool was_closed = await unpinned_ctvm.ClosePopoutAsync();
                      if (!was_closed) {
                          // cancel unpin (must be appending)
@@ -3834,6 +3847,15 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(ObservedQueryTrayScreenHeight));
 
                  ClearAllSelection(false);
+
+                 if(unpinned_ctvm.WasInternallyPinned) {
+                     unpinned_ctvm.WasInternallyPinned = false;
+                     if(from_popout) {
+                         // repin interanlly after closing popout
+                         PinTileCommand.Execute(unpinned_ctvm);
+                         return;
+                     }
+                 }
                  MpAvClipTileViewModel to_select_ctvm = null;
 
                  if (pin_placeholder_ctvm == null) {
@@ -4989,6 +5011,41 @@ namespace MonkeyPaste.Avalonia {
                 SetPinTrayRatio(def_ratio);
             });
 
+        public ICommand PeakAtPinTrayCommand => new MpCommand<object>(
+            (args) => {
+                if(args is not MpAvClipTileViewModel pinned_ctvm) {
+                    return;
+                }
+                // split view an scroll to pinned tile
+                Vector delta =
+                    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                        new Vector(MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width * 0.25, 0) :
+                        new Vector(0, MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Height * 0.25);
+                MpAvClipTrayContainerView.Instance.ClipTraySplitter
+                    .ApplyDelta(delta);
+                MpAvClipTrayViewModel.Instance.IsPinTrayVisible = true;
+
+                // if next tap is in pin tray expand it it other wise unexpand
+                if(TopLevel.GetTopLevel(MpAvMainView.Instance) is not { } tl) {
+                    return;
+                }
+                void OnTopLevel_PointerReleased(object sender, PointerReleasedEventArgs e) {
+                    tl.PointerReleased -= OnTopLevel_PointerReleased;
+                    if(e.Source is not Control c) {
+                        return;
+                    }
+                    if(c.GetVisualAncestor<MpAvPinTrayView>() != null) {
+                        ExpandPinTrayCommand.Execute(null);
+                    } else {
+                        ExpandQueryTrayCommand.Execute(null);
+                    }
+                }
+                tl.AddHandler(TopLevel.PointerReleasedEvent, OnTopLevel_PointerReleased, RoutingStrategies.Tunnel);
+                ScrollIntoView(pinned_ctvm);
+            }, (args) => {
+                return !IsPinTrayVisible;
+            });
+        
         public ICommand ExpandPinTrayCommand => new MpCommand(
             () => {
 

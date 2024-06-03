@@ -188,7 +188,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public override bool UsesIsLoaded =>
+        public override bool IsLoadable =>
             true;
         public bool IsFilterExpanded { get; private set; } =
 #if MOBILE_OR_WINDOWED
@@ -280,14 +280,14 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitAsync() {
-            await Task.Delay(1);
-            Dispatcher.UIThread.Post(async () => {
-                IsLoaded = false;
+            //await Task.Delay(1);
+            //Dispatcher.UIThread.Post(async () => {
+                //IsLoaded = false;
                 await InitSettingFramesAsync();
                 UpdateFilters();
                 InitRuntimeParams();
-                IsLoaded = true;
-            }, (DispatcherPriority)((int)DispatcherPriority.Normal - 1));
+                //IsLoaded = true;
+            //}, (DispatcherPriority)((int)DispatcherPriority.Normal - 1));
         }
         #endregion
 

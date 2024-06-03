@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -508,7 +509,13 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                MpAvClipTrayContainerView.Instance.ClipTraySplitter.ApplyDelta(new Vector(-100,0));
+                Vector delta =
+                    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                        new Vector(MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width * 0.5, 0) :
+                        new Vector(0, MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Height * 0.25);
+                MpAvClipTrayContainerView.Instance.ClipTraySplitter
+                    .ApplyDelta(delta);
+                MpAvClipTrayViewModel.Instance.IsPinTrayVisible = true;
             });
         public ICommand GenericTestCommand3 => new MpAsyncCommand(
             async () => {
@@ -527,19 +534,12 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand5 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                if(MpAvWindowManager.LocateWindow(MpAvPluginBrowserViewModel.Instance) is not { } pbw ||
-                    pbw.GetVisualDescendant<MpAvPluginBrowserView>() is not { } pbv ||
-                    pbv.PluginRootContainer is not { } prc ||
-                    pbv.PluginHeaderContainer is not { } phc) {
+                
+                if(MpAvMainView.Instance.SidebarGridSplitter is not { } gs) {
                     return;
                 }
-                if(prc.Classes.Contains("mobile")) {
-                    prc.Classes.Remove("mobile");
-                    phc.Classes.Remove("mobile");
-                } else {
-                    prc.Classes.Add("mobile");
-                    phc.Classes.Add("mobile");
-                }
+                gs.ApplyDelta(new Vector(0, -50));
+
             });
 
         #endregion

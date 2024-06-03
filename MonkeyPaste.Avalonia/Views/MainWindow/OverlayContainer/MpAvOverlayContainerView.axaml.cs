@@ -9,6 +9,7 @@ using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using DynamicData;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
@@ -24,11 +25,13 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvOverlayContainerView : MpAvUserControl {
         #region Private Variables
-        List<(MpAvChildWindow cw, bool is_closing, CancellationTokenSource cts, CancellationToken ct)> AnimatingWindows { get; set; } = [];
+        List<MpAvChildWindow> AnimatingWindows { get; set; } = [];
         #endregion
 
         #region Constants
-        const double DEFAULT_ANIM_TIME_S = 0.5d; // needs to match MpAvChildWindow anim durations
+        const double DEFAULT_ANIM_TIME_S = 0.5d; 
+        const double DEFAULT_ANIM_FPS = 50; 
+
         #endregion
 
         #region Statics
@@ -67,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
             }
 #endif
 
-            if (!CanAnimate(cw, false)) {
+            if (!CanShowOrHide(cw)) {
                 MpConsole.WriteLine($"Window '{cw.DataContext}' SHOW CANCELED");
                 return;
             }
@@ -78,47 +81,41 @@ namespace MonkeyPaste.Avalonia {
 
             void OnChildLoaded(object sender, EventArgs e) {
                 cw.Loaded -= OnChildLoaded;
-                if(cw.RenderTransform is not TransformGroup tg ||
-                    tg.Children.OfType<TranslateTransform>().FirstOrDefault() is not { } tt) {
-                    return;
-                }
-
-                if(cw.OpenTransition.HasFlag(MpChildWindowTransition.SlideInFromLeft)) {
-                    tt.X = -(cw.Bounds.Width/2);
-                }
-                if(cw.OpenTransition.HasFlag(MpChildWindowTransition.SlideInFromTop)) {
-                    tt.Y = -(cw.Bounds.Height/2);
-                }
+                BusySpinner.IsVisible = false;
                 Dispatcher.UIThread.Post(async () => {
-                    await AnimateAsync(cw, tt, MpPoint.Zero, false);
+                    cw.SetCurrentValue(OpacityProperty, 1);
+                    await AnimateAsync(cw, false);
+
+                    if (cw.DataContext is MpILoadableViewModel lvm &&
+                        lvm.IsLoadable) {
+                        lvm.IsLoaded = true;
+                    }
                     cw.Activate();
                 });
             }
+            if(cw.DataContext is MpILoadableViewModel lvm &&
+                lvm.IsLoadable) {
+                lvm.IsLoaded = false;
+            }
+            BusySpinner.IsVisible = true;
+            // load window transparent to get dimensions 
             cw.SetCurrentValue(OpacityProperty, 0);
             cw.Loaded += OnChildLoaded;
             OverlayGrid.Children.Add(cw);
+
             this.IsHitTestVisible = OverlayGrid.Children.Any();
         }
 
         public bool RemoveWindow(MpAvChildWindow cw) {
-            if(!OverlayGrid.Children.Contains(cw) ||
-                cw.RenderTransform is not TransformGroup tg ||
-                tg.Children.OfType<TranslateTransform>().FirstOrDefault() is not { } tt) {
+            if(!OverlayGrid.Children.Contains(cw)) {
                 return false;
             }
-            if (!CanAnimate(cw, true)) {
+            if (!CanShowOrHide(cw)) {
                 MpConsole.WriteLine($"Window '{cw.DataContext}' CLOSE CANCELED");
                 return false;
             }
             Dispatcher.UIThread.Post(async () => {
-                MpPoint end = new MpPoint(tt.X, tt.Y);
-                if (cw.CloseTransition.HasFlag(MpChildWindowTransition.SlideOutToLeft)) {
-                    end.X = -(cw.Bounds.Width/2);
-                }
-                if (cw.CloseTransition.HasFlag(MpChildWindowTransition.SlideOutToTop)) {
-                    end.Y = -(cw.Bounds.Height/2);
-                }
-                await AnimateAsync(cw, tt, end, true);
+                await AnimateAsync(cw, true);
                 OverlayGrid.Children.Remove(cw);
                 this.IsHitTestVisible = OverlayGrid.Children.Any();
 
@@ -151,55 +148,90 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private bool CanAnimate(MpAvChildWindow cw, bool isClosing) {
-            if (AnimatingWindows.Where(x => x.cw == cw) is { } cw_animl) {
-                if(cw_animl.Where(x => x.is_closing == !isClosing) is { } op_animl &&
-                    op_animl.Any()) {
-                    op_animl.ForEach(x => x.cts.Cancel());
-                }
-                
-                if (cw_animl.Any(x => x.is_closing == isClosing)) {
-                    return false;
-                }
-                var cts = new CancellationTokenSource();
-                AnimatingWindows.Add((cw, isClosing, cts, cts.Token));
+        private async Task AnimateAsync(MpAvChildWindow cw, bool isClosing, double t_s = DEFAULT_ANIM_TIME_S, double fps = DEFAULT_ANIM_FPS) {
+            if (cw.RenderTransform is not TransformGroup tg ||
+                tg.Children.OfType<TranslateTransform>().FirstOrDefault() is not { } tt) {
+                return;
             }
-            return true;
-        }
-        private async Task AnimateAsync(MpAvChildWindow cw, TranslateTransform tt, MpPoint end, bool isClosing, double t_s = DEFAULT_ANIM_TIME_S) {
-            var start = new MpPoint(tt.X, tt.Y);
-            MpConsole.WriteLine($"Animation [STARTED] '{cw.DataContext}' start:{start} end:{end} is_out:{isClosing}");
-            var d = end - start;
-            double time_step = 20d / 1000d;
-            var tt_v = (d / t_s) * time_step;
-            double op_v = (isClosing ? -1 : 1) * ((1 / t_s) * time_step);
-            double dt = 0;
-            while (true) {
-                if(AnimatingWindows.Where(x=>x.cw == cw && isClosing == x.is_closing && x.ct.IsCancellationRequested) is { } cl &&
-                    cl.Any()) {
-                    tt.X = start.X;
-                    tt.Y = start.Y;
-                    cl.ForEach(x => x.cts.Dispose());
-                    cl.ToList().ForEach(x => AnimatingWindows.Remove(x));
-                    MpConsole.WriteLine($"Animation [CANCELED] '{cw.DataContext}' start:{start} end:{end} is_out:{isClosing}");
-                    return;
+            double offset_factor = 0.5;
+            MpPoint tt_start = new(tt.X,tt.Y);
+            MpPoint tt_end = new(tt.X,tt.Y);
+            double op_start = cw.Opacity;
+            double op_end = cw.Opacity;
+            MpChildWindowTransition trans;
+            trans = isClosing ? cw.CloseTransition : cw.OpenTransition;
+            foreach(MpChildWindowTransition cwt in Enum.GetValues(typeof(MpChildWindowTransition))) {
+                if(!trans.HasFlag(cwt)) {
+                    continue;
                 }
+                switch (cwt) {
+                    case MpChildWindowTransition.SlideInFromTop:
+                        tt_start.Y = -cw.Bounds.Height * offset_factor;
+                        break;
+                    case MpChildWindowTransition.SlideOutToTop:
+                        tt_end.Y = -cw.Bounds.Height * offset_factor;
+                        break;
+                    case MpChildWindowTransition.SlideInFromLeft:
+                        tt_start.X = -cw.Bounds.Width * offset_factor;
+                        break;
+                    case MpChildWindowTransition.SlideOutToLeft:
+                        tt_end.X = -cw.Bounds.Width * offset_factor;
+                        break;
+                    case MpChildWindowTransition.FadeIn:
+                        op_end = 1;
+                        break;
+                    case MpChildWindowTransition.FadeOut:
+                        op_end = 0;
+                        break;
+                }
+            }
+            tt.X = tt_start.X;
+            tt.Y = tt_start.Y;
+            cw.Opacity = op_start;
+            
+
+            MpConsole.WriteLine($"Animation [STARTED] '{cw.DataContext}' start:{tt_start} end:{tt_end} is_out:{isClosing}");
+
+            double dt = 0;
+            double time_step = fps.FpsToTimeStep();
+            int delay_ms = fps.FpsToDelayTime();
+
+            var tt_d = tt_end - tt_start;
+            var tt_v = (tt_d / t_s) * time_step;
+            double op_d = op_end - op_start;
+            double op_v = (op_d / t_s) * time_step;
+            while (true) {
                 tt.X += tt_v.X;
                 tt.Y += tt_v.Y;
                 cw.Opacity += op_v;
-                await Task.Delay(20);
+                await Task.Delay(delay_ms);
                 dt += time_step;
                 if (dt >= t_s) {
-                    cw.Opacity = isClosing ? 0 : 1;
-                    tt.X = end.X;
-                    tt.Y = end.Y;
-                    if(AnimatingWindows.Where(x=>x.cw == cw && x.is_closing == isClosing) is { } al) {
-                        al.ForEach(x => x.cts.Dispose());
-                        al.ToList().ForEach(x => AnimatingWindows.Remove(x));
-                    }
+                    // animation complete, ensure it uses end props 
+                    cw.Opacity = op_end;
+                    tt.X = tt_end.X;
+                    tt.Y = tt_end.Y;
                     break;
                 }
             }
+            RemoveAnimation(cw);
+        }
+
+        private bool RemoveAnimation(MpAvChildWindow cw) {
+            if (cw.DataContext is MpIAnimatable anim_vm) {
+                anim_vm.IsAnimating = false;
+            }
+            return AnimatingWindows.Remove(cw);
+        }
+        private bool CanShowOrHide(MpAvChildWindow cw) {
+            if (AnimatingWindows.Contains(cw)) {
+                return false;
+            }
+            AnimatingWindows.Add(cw);
+            if(cw.DataContext is MpIAnimatable anim_vm) {
+                anim_vm.IsAnimating = true;
+            }
+            return true;
         }
         #endregion
 

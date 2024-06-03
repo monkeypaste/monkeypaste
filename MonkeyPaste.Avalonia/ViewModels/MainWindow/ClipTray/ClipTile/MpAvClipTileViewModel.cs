@@ -76,6 +76,11 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
 
+        #region MpILoadableViewModel Implementation
+        public override bool IsLoadable => 
+            true;
+        #endregion
+
         #region MpAvIHeaderMenuViewModel Implementation
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
            CopyItemHexColor.IsNullOrEmpty() ?
@@ -665,6 +670,8 @@ namespace MonkeyPaste.Avalonia {
         public int PinPlaceholderCopyItemId { get; set; }
         public bool IsPinPlaceholder =>
             PinPlaceholderCopyItemId > 0;
+
+        public bool WasInternallyPinned { get; set; }
 
         public bool HasPinPlaceholder =>
             PlaceholderForThisPinnedItem != null;
@@ -1776,6 +1783,11 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
         private void MpAvClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
+                case nameof(IsAnimating):
+                    if(!IsAnimating && IsWindowOpen) {
+                        FinishChildWindowOpen();
+                    }
+                    break;
                 case nameof(IsAppendNotifier):
                     if (IsAppendNotifier) {
                         IsSubSelectionEnabled = true;
@@ -2264,18 +2276,14 @@ namespace MonkeyPaste.Avalonia {
         }
         private void HandleThisPopoutActivate(MpAvWindow pow, EventArgs e) {
             Parent.SelectClipTileCommand.Execute(CopyItemId);
-            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed &&
-                GetContentView() is Control c) {
-                c.InvalidateAll();
-            }
         }
 
         private void HandleThisPopoutClosing(MpAvWindow pow, CancelEventArgs e) {
 
-            MpConsole.WriteLine($"tile popout closing called. reason: '{ce.CloseReason}' programmatic: '{ce.IsProgrammatic}'");
             if (e is WindowClosingEventArgs ce &&
                 ce.IsProgrammatic) {
-                if(ce.IsProgrammatic) {
+                MpConsole.WriteLine($"tile popout closing called. reason: '{ce.CloseReason}' programmatic: '{ce.IsProgrammatic}'");
+                if (ce.IsProgrammatic) {
                     // state already stored
                     return;
                 }
@@ -2353,6 +2361,18 @@ namespace MonkeyPaste.Avalonia {
 
             _isContentReadOnly = false;
             OnPropertyChanged(nameof(IsContentReadOnly));
+        }
+        private void FinishChildWindowOpen() {
+           // HACK webview only animates halfway out for some reason, toggling alignment fixes it
+            if(MpAvThemeViewModel.Instance.IsMultiWindow ||
+                GetContentView() is not Control cwv) {
+                return;
+            }
+            Dispatcher.UIThread.Post(async () => {
+                cwv.HorizontalAlignment = HorizontalAlignment.Left;
+                await Task.Delay(250);
+                cwv.HorizontalAlignment = HorizontalAlignment.Stretch;
+            });
         }
         private void ResetDataTemplate() {
             // NOTE in compatibility mode content template must be reselected

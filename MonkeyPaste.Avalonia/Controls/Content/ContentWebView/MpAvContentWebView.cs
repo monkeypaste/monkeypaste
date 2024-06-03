@@ -1959,7 +1959,6 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
         private void GrowView() {
-            
             double nw = Math.Max(BindingContext.DesiredWidth, BindingContext.BoundWidth);
             double nh = Math.Max(BindingContext.BoundHeight, BindingContext.BoundHeight); //no change
             Resize(nw, nh);
@@ -1970,6 +1969,9 @@ namespace MonkeyPaste.Avalonia {
             Resize(nw, nh);
         }
         private void Resize(double nw, double nh) {
+            if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                return;
+            }
             // NOTE trying to isolate this cause persistent size gets lost
             // keeping animation smooth so waiting till end to make sure its set
 

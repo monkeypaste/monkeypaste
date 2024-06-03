@@ -21,7 +21,8 @@
                   ScrollViewer.VerticalScrollBarVisibility="Auto">
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="local:MpAvSettingsFrameViewModel">
-                <local:MpAvSettingsFrameView Classes.selected="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                <local:MpAvSettingsFrameView MinWidth="{Binding $parent[ItemsControl].Bounds.Width}"
+                                             Classes.selected="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                     <local:MpAvSettingsFrameView.IsVisible>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="FilteredItems"
