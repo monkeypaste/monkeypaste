@@ -29,22 +29,16 @@ namespace MonkeyPaste.Avalonia {
         public double ZoomSliderLength => 125;
         public double ZoomSliderLineWidth => 1;
 
+        public double ZoomSliderLineLengthRatio =>
+            MpAvThemeViewModel.Instance.IsMultiWindow ? 0.5 : 0.25;
         public double ZoomSliderValueLength =>
-#if MULTI_WINDOW
-            3; 
-#else
-            10;
-#endif
+            MpAvThemeViewModel.Instance.IsMultiWindow ? 3 : 5;
         public double ZoomSliderShortMargin => 3;
         public double ZoomSliderLongMargin => 10;
 
         public double TitleDragHandleLongLength => 50;
         public double DefaultTitleMenuFixedLength =>
-#if MULTI_WINDOW
-        20;
-#else
-        50;
-#endif
+            MpAvThemeViewModel.Instance.IsMultiWindow ? 20 : 50;
         public double TitleMenuWidth { get; set; }
         public double TitleMenuHeight { get; set; }
 

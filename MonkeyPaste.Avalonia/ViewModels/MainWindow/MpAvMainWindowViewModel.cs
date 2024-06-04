@@ -140,10 +140,9 @@ namespace MonkeyPaste.Avalonia {
                     return MainWindowHeight -
                         MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
-                        //MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength -
-                        (MpAvSidebarItemCollectionViewModel.Instance.SelectedItem == null ?
-                            MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength : 
-                            -MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength) -
+                        //(MpAvSidebarItemCollectionViewModel.Instance.SelectedItem == null ?
+                        //    MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength :
+                        //    -MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength) -
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
 #else
                     return MainWindowHeight -

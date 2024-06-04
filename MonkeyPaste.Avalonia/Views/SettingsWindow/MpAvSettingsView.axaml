@@ -34,6 +34,15 @@
                     Value="{DynamicResource ThemeCompliment3DarkColor}" />
         </Style>
 
+        <Style Selector="DockPanel#OuterContainer Border#FilterBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeCompliment3DarkColor}" />
+        </Style>
+        <Style Selector="DockPanel#OuterContainer.dark Border#FilterBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeCompliment3Color}" />
+        </Style>
+
         <!--  FOOTER  -->
 
         <Style Selector="Button.footer">
@@ -415,7 +424,7 @@
                                         BorderThickness="0,0,0,1.5"
                                         BorderBrush="Silver" />
 
-            <!--  FILTER TEXTBOX  -->
+            <!--  FILTER ROW  -->
             <Border x:Name="FilterBorder"
                     Classes="expand-height"
                     Height="{Binding IsFilterExpanded, ConverterParameter=50|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
@@ -435,9 +444,7 @@
                                       VerticalContentAlignment="Center">
                     <Grid>
 
-                        <!--
-                            FILTER TEXTBOX
-                        -->
+                        <!--  FILTER TEXTBOX  -->
 
                         <AutoCompleteBox x:Name="FilterBox"
                                          MinWidth="150"

@@ -65,7 +65,7 @@
                                                ResizeDirection="Columns"
                                                HorizontalAlignment="Right"
                                                VerticalAlignment="Stretch"
-                                               IsVisible="False"
+                                               IsVisible="{Binding SelectedItem, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                Classes.sidebarSplitter="True"
                                                Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                                Classes.vertical="{Binding !IsVerticalOrientation}"
@@ -74,6 +74,7 @@
                                                local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
                                                local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetSelectedSidebarSplitterCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                                                local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="{Binding $self}"
+                                               local:MpAvPointerCommandExtension.RouteHoldToRightPress="False"
                                                local:MpAvPointerCommandExtension.RightPressCommand="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                                                local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding SelectedItemIdx, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}" />
 

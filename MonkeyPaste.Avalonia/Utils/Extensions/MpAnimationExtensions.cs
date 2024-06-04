@@ -1,13 +1,16 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAnimationExtensions {
         public static void AnimateSize(
             this MpIBoundSizeViewModel bsvm,
             MpSize new_size,
+            Control control = null,
             Func<bool> onComplete = null,
             Func<MpSizeChangeEventArgs, bool> onTick = null,
             double ntfAnimThresholdDelta = 10.0d) {
@@ -63,6 +66,10 @@ namespace MonkeyPaste.Avalonia {
                     MpAnimationHelpers.Spring(ref ch, ref vy, nh, delay_ms / 1000.0d, zeta, omega);
                     bsvm.ContainerBoundWidth = cw;
                     bsvm.ContainerBoundHeight = ch;
+                    if (control != null) {
+                        control.Width = cw;
+                        control.Height = ch;
+                    }
                     onTick?.Invoke(new MpSizeChangeEventArgs(new MpSize(lw, lh), new MpSize(cw, ch)));
 
                     await Task.Delay(delay_ms);
@@ -76,6 +83,10 @@ namespace MonkeyPaste.Avalonia {
                 lh = bsvm.ContainerBoundHeight;
                 bsvm.ContainerBoundWidth = nw;
                 bsvm.ContainerBoundHeight = nh;
+                if (control != null) {
+                    control.Width = nw;
+                    control.Height = nh;
+                }
 
                 onTick?.Invoke(new MpSizeChangeEventArgs(new MpSize(lw, lh), new MpSize(cw, ch)));
                 onComplete?.Invoke();

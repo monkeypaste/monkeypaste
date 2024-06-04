@@ -1,6 +1,8 @@
 ﻿#editorToolbar {
     background-color: var(--editortoolbarbgcolor);
     border-color: var(--editortoolbarsepbgcolor);
+    display: flex;
+    flex-wrap: wrap;
 }
 
 #editorToolbar button:hover:not(.disabled) svg, #createTableToolbarButton:hover:not(.disabled) svg {

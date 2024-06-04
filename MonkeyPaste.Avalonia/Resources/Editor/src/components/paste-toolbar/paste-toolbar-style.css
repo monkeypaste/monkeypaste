@@ -2,9 +2,11 @@
     background-color: var(--pastetoolbarbgcolor);
     /*height: 10vh;*/
     min-height: 65px;
-    min-width: 850px;
+    max-width: 100%;
     bottom: -50px;
     padding: 0 0 15px 0;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 body.popOut #pasteToolbar {
@@ -30,6 +32,7 @@ body.popOut #pasteToolbar {
 #pasteButtonAndModeContainer {
     display: inline-flex;
     align-items: center;
+    margin-left: auto;
 }
 
 #pasteButton {

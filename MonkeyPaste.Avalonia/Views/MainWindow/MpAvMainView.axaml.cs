@@ -15,6 +15,12 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
+    public enum MpMainViewUpdateType {
+        None = 0,
+        SidebarOpen,
+        SidebarClose,
+        //Animating
+    }
     [DoNotNotify]
     public partial class MpAvMainView :
 #if WINDOWED
@@ -134,19 +140,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Orientation Updates
 
-        public void UpdateMainViewLayout() {
+        bool skip_sidebar = false;
+        public void UpdateMainViewLayout(MpMainViewUpdateType updateType = MpMainViewUpdateType.None) {
             UpdateContentLayout();
-            UpdateSidebarGridsplitter();
-            UpdateTitleLayout();
+            UpdateContainerLayout();
+            UpdateSidebarGridsplitter(updateType);
             UpdateEdgyTooltips();
-            ClampContentSizes();
+            ClampContentSizes(); 
 
-            //UpdateResizerLayout();
-            //mwtg.InvalidateAll();
-
-            //// NOTE this is trying to fix empty message centering...
-            //ctrcv_ctrv_cg.InvalidateAll();
-            //ctrcv_ptr_cg.InvalidateAll();
+            
         }
 
         private void UpdateContentLayout() {
@@ -179,7 +181,7 @@ namespace MonkeyPaste.Avalonia {
 #if MULTI_WINDOW
                 MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength; 
 #else
-                0;
+                MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength; //0;
 #endif
             double dbl_gs_fixed_length = gs_fixed_length * 2;
 
@@ -325,6 +327,7 @@ namespace MonkeyPaste.Avalonia {
                         Mode = BindingMode.TwoWay,
                         Converter = MpAvDoubleToGridLengthConverter.Instance
                     });
+                //var ssbcb_rd = new RowDefinition(Math.Max(0, sbicvm.ContainerBoundHeight), GridUnitType.Pixel);
 
                 var sbbg_rd = new RowDefinition(
                     new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
@@ -390,14 +393,14 @@ namespace MonkeyPaste.Avalonia {
 
                 ctrcv_cg.RowDefinitions = new RowDefinitions() { ptrv_rd, ctrv_rd };
 
-                if (MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
-                    ctrcv_ptr_lb.Padding = new Thickness(dbl_gs_fixed_length);
-                } else {
-                    ctrcv_ptr_lb.Padding = new Thickness();
-                }
+                //if (MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
+                //    ctrcv_ptr_lb.Padding = new Thickness(dbl_gs_fixed_length);
+                //} else {
+                //    ctrcv_ptr_lb.Padding = new Thickness();
+                //}
 
-                // add margin for grid splitter size so boxshadow is symmetrical
-                ctrcv_ptrv.Margin = new Thickness(0, 0, 0, gs_fixed_length);
+                //// add margin for grid splitter size so boxshadow is symmetrical
+                //ctrcv_ptrv.Margin = new Thickness(0, 0, 0, gs_fixed_length);
 
                 // clip/pin tray grid splitter
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -428,7 +431,7 @@ namespace MonkeyPaste.Avalonia {
                 SetupVertical();
             }
         }
-        private void UpdateTitleLayout() {
+        private void UpdateContainerLayout() {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var tmvm = MpAvMainWindowTitleMenuViewModel.Instance;
             var fmvm = MpAvFilterMenuViewModel.Instance;
@@ -659,7 +662,7 @@ namespace MonkeyPaste.Avalonia {
             tmv_zfv.UpdateMarkerPositions();
         }
 
-        private void UpdateSidebarGridsplitter() {
+        private void UpdateSidebarGridsplitter(MpMainViewUpdateType updateType) {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var ctrvm = MpAvClipTrayViewModel.Instance;
             var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
@@ -671,12 +674,10 @@ namespace MonkeyPaste.Avalonia {
             var ssbcb = this.SelectedSidebarContainerBorder;
             var sbbg = this.SidebarButtonGroup;
             var ctrcb = this.ClipTrayContainerBorder;
-            var ctrcv = this.ClipTrayContainerView;
             var mwtg = this.MainWindowTrayGrid;
 
-
-            bool is_opening = ssbivm != null;
-            bool is_closing = BindingContext.IsHorizontalOrientation ? ssbcb.Bounds.Width > 0 : ssbcb.Bounds.Height > 0;
+            bool is_opening = updateType == MpMainViewUpdateType.SidebarOpen;
+            bool is_closing = updateType == MpMainViewUpdateType.SidebarClose;
             double mw_w = mwvm.MainWindowWidth;
             double mw_h = mwvm.MainWindowHeight;
 
@@ -686,23 +687,27 @@ namespace MonkeyPaste.Avalonia {
 
             // get new sidebar size and calculate new cliptray size from sidebar size
             if (BindingContext.IsHorizontalOrientation) {
-                avail_w = mw_w - sbicvm.ButtonGroupFixedDimensionLength;
-                avail_h = mwtg.Bounds.Height;
+                avail_w = mwvm.AvailableContentAndSidebarWidth;//mw_w - sbicvm.ButtonGroupFixedDimensionLength;
+                avail_h = mwvm.AvailableContentAndSidebarHeight;//mwtg.Bounds.Height;
 
-                nsbi_w = is_opening ? ssbivm.DefaultSidebarWidth : 0;
+                nsbi_w = is_closing ? 0 : ssbivm == null ? 0 : is_opening ? ssbivm.DefaultSidebarWidth : ssbivm.SidebarWidth;
                 nsbi_h = mwtg.Bounds.Height;
 
-                nctrcb_w = mw_w - sbicvm.ButtonGroupFixedDimensionLength - nsbi_w;
+                nctrcb_w = MpAvThemeViewModel.Instance.IsMobileOrWindowed ?
+                    avail_w :
+                    mw_w - sbicvm.ButtonGroupFixedDimensionLength - nsbi_w;
                 nctrcb_h = mwtg.Bounds.Height;
             } else {
-                avail_w = mwtg.Bounds.Width;
-                avail_h = mw_h - sbicvm.ButtonGroupFixedDimensionLength; //  - fmvm.FilterMenuHeight;
+                avail_w = mwvm.AvailableContentAndSidebarWidth;//mwtg.Bounds.Width;
+                avail_h = mwvm.AvailableContentAndSidebarHeight;//mw_h - sbicvm.ButtonGroupFixedDimensionLength; //  - fmvm.FilterMenuHeight;
 
                 nsbi_w = mwtg.Bounds.Width;
-                nsbi_h = is_opening ? ssbivm.DefaultSidebarHeight : 0;
+                nsbi_h = is_closing ? 0: ssbivm == null ? 0 : is_opening ? ssbivm.DefaultSidebarHeight : ssbivm.SidebarHeight;
 
                 nctrcb_w = mwtg.Bounds.Width;
-                nctrcb_h = mw_h - sbicvm.ButtonGroupFixedDimensionLength; // - fmvm.FilterMenuHeight; // - nsbi_h
+                nctrcb_h = MpAvThemeViewModel.Instance.IsMobileOrWindowed ?
+                    avail_h :
+                    mw_h - sbicvm.ButtonGroupFixedDimensionLength; // - fmvm.FilterMenuHeight; // - nsbi_h
             }
 
             nsbi_w = Math.Max(0, nsbi_w);
@@ -710,12 +715,13 @@ namespace MonkeyPaste.Avalonia {
             nctrcb_w = Math.Max(0, nctrcb_w);
             nctrcb_h = Math.Max(0, nctrcb_h);
 
-            ssbcb.IsVisible = true;
-            sbgs.IsVisible = is_opening && ssbivm.CanResize;
+            //ssbcb.IsVisible = true;
+            //sbgs.IsVisible = is_opening && ssbivm.CanResize;
+            //sbgs.IsVisible = !is_closing;
 
             bool skip_anim =
 #if MOBILE_OR_WINDOWED
-                true; // mwvm.IsMainWindowOrientationDragging;
+                true;// updateType == MpMainViewUpdateType.None; // mwvm.IsMainWindowOrientationDragging;
 #else
                 true;
 #endif
@@ -723,19 +729,24 @@ namespace MonkeyPaste.Avalonia {
             if (skip_anim) {
                 // skip animate on orientation change because current values maybe transitioning 
                 // otherwise random flickering or target size is wrong
+
                 sbicvm.ContainerBoundWidth = nsbi_w;
                 sbicvm.ContainerBoundHeight = nsbi_h;
 
                 ctrvm.ContainerBoundWidth = nctrcb_w;
                 ctrvm.ContainerBoundHeight = nctrcb_h;
+
+
                 if (mwvm.IsMainWindowOrientationDragging) {
                     ClampContentSizes();
                 } else {
                     UpdateClipTrayContainerSize(null);
                 }
-
                 return;
             }
+            ctrvm.ContainerBoundWidth = nctrcb_w;
+            ctrvm.ContainerBoundHeight = nctrcb_h;
+            
 
             //sbicvm.ContainerBoundWidth = nsbi_w;
             //sbicvm.ContainerBoundHeight = nsbi_h;
@@ -744,14 +755,19 @@ namespace MonkeyPaste.Avalonia {
             //ctrvm.ContainerBoundHeight = nctrcb_h;
             //UpdateClipTrayContainerSize(null);
 
-            sbicvm.AnimateSize(new MpSize(nsbi_w, nsbi_h));
-            ctrvm.AnimateSize(
-                new MpSize(nctrcb_w, nctrcb_h),
-                () => {
-                    // onComplete handler
-                    UpdateClipTrayContainerSize(null);
-                    return true;
-                });
+            //sbicvm.AnimateSize(
+            //    new MpSize(nsbi_w, nsbi_h),
+            //    control: ssbcb);
+
+            //ctrvm.AnimateSize(
+            //    new MpSize(nctrcb_w, nctrcb_h),
+            //    control: ctrcb,
+            //    onComplete: () => {
+            //        // onComplete handler
+            //        UpdateClipTrayContainerSize(null);
+            //        return true;
+            //    });
+            return;
         }
 
         private void UpdateClipTrayContainerSize(MpPoint splitter_delta) {
@@ -775,12 +791,21 @@ namespace MonkeyPaste.Avalonia {
             double mw_h = mwvm.MainWindowHeight;
 
             if (BindingContext.IsHorizontalOrientation) {
-                ctrvm.ContainerBoundWidth = Math.Max(0,
+                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                    ctrvm.ContainerBoundWidth = Math.Max(0,
                     mw_w - sbicvm.ButtonGroupFixedDimensionLength - sbicvm.ContainerBoundWidth);
+                } else {
+                    ctrvm.ContainerBoundWidth = mwvm.AvailableContentAndSidebarWidth;
+                }
             } else {
-                ctrvm.ContainerBoundHeight = Math.Max(0,
-                    mw_h - sbicvm.ButtonGroupFixedDimensionLength - sbicvm.ContainerBoundHeight -
-                    fmvm.FilterMenuHeight);
+                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                    ctrvm.ContainerBoundHeight = Math.Max(0,
+                        mw_h - sbicvm.ButtonGroupFixedDimensionLength - sbicvm.ContainerBoundHeight -
+                        fmvm.FilterMenuHeight);
+                } else {
+                    ctrvm.ContainerBoundHeight = mwvm.AvailableContentAndSidebarHeight;
+
+                }
             }
 
             ClampContentSizes();
@@ -819,8 +844,11 @@ namespace MonkeyPaste.Avalonia {
             double h_diff = th - mwvm.AvailableContentAndSidebarHeight;
             if (h_diff > 0) {
                 // too big
-                double nctr_h = Math.Max(0, ctrvm.ContainerBoundHeight - (h_diff / 2));
-                double nsbic_h = Math.Max(0, sbicvm.ContainerBoundHeight - (h_diff / 2));
+                //double nctr_h = Math.Max(0, ctrvm.ContainerBoundHeight - (h_diff / 2));
+                //double nsbic_h = Math.Max(0, sbicvm.ContainerBoundHeight - (h_diff / 2));
+                double factor = MpAvThemeViewModel.Instance.IsMultiWindow ? 2 : 1;
+                double nctr_h = Math.Max(0, ctrvm.ContainerBoundHeight - (h_diff / factor));
+                double nsbic_h = Math.Max(0, sbicvm.ContainerBoundHeight - (h_diff / factor));
                 ctrvm.ContainerBoundHeight = nctr_h;
                 sbicvm.ContainerBoundHeight = nsbic_h;
 
@@ -886,9 +914,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.SidebarItemSizeChanged:
                 case MpMessageType.PinTraySizeChanged:
                 case MpMessageType.PinTrayResizeEnd:
-                case MpMessageType.SidebarItemSizeChanged:
                 case MpMessageType.SidebarItemSizeChangeEnd:
                 case MpMessageType.MainWindowOrientationChangeEnd:
                     if (msg == MpMessageType.MainWindowOrientationChangeEnd) {
@@ -914,6 +942,7 @@ namespace MonkeyPaste.Avalonia {
             //}
             //UpdateClipTrayContainerSize(e.Vector.ToPortablePoint());
             ClampContentSizes();
+            //UpdateSidebarGridsplitter(MpMainViewUpdateType.None);
         }
 
         #endregion

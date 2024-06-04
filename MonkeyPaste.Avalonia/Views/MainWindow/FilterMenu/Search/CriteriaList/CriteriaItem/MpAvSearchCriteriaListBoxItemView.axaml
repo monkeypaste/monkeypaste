@@ -13,6 +13,15 @@
                        d:DesignHeight="50"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
+        <!--  MOBILE  -->
+        <Style Selector="Grid#CriteriaItemContainerGrid ListBox#OptionsListBox /template/ StackPanel.optionsPanel">
+            <Setter Property="Orientation"
+                    Value="Horizontal" />
+        </Style>
+        <Style Selector="Grid#CriteriaItemContainerGrid.mobile ListBox#OptionsListBox /template/ StackPanel.optionsPanel">
+            <Setter Property="Orientation"
+                    Value="Vertical" />
+        </Style>
         <Style Selector="Grid#CriteriaItemContainerGrid.dragging">
             <Setter Property="Background"
                     Value="{DynamicResource ThemeAccent5Brush}" />
@@ -53,6 +62,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="CriteriaItemContainerGrid"
+          Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           Classes.dragging="{Binding IsDragging}"
           ColumnDefinitions="Auto,*">
 
@@ -82,15 +92,10 @@
 
             <!--  JOIN CRITERIA ITEM HEADER  -->
 
-            <DockPanel DockPanel.Dock="Top"
-                       HorizontalAlignment="Left"
-                       IsVisible="{Binding IsJoinPanelVisible}">
-                <TextBlock DockPanel.Dock="Right"
-                           FontWeight="SemiBold"
-                           Classes="alterOnly"
-                           Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCustomJoinHeaderLabel}"
-                           Margin="5,0,0,0"
-                           VerticalAlignment="Center" />
+            <Grid DockPanel.Dock="Top"
+                  ColumnDefinitions="0.5*,0.5*"
+                  HorizontalAlignment="Left"
+                  IsVisible="{Binding IsJoinPanelVisible}">
                 <ComboBox Classes="criteriaComboBox joinComboBox alterOnly"
                           ItemsSource="{Binding JoinTypeLabels}"
                           SelectedIndex="{Binding SelectedJoinTypeIdx, Mode=TwoWay}">
@@ -101,7 +106,14 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-            </DockPanel>
+                <TextBlock Grid.Column="1"
+                           FontWeight="SemiBold"
+                           Classes="alterOnly"
+                           TextWrapping="WrapWithOverflow"
+                           Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCustomJoinHeaderLabel}"
+                           Margin="5,0"
+                           VerticalAlignment="Center" />
+            </Grid>
 
             <Grid x:Name="CriteriaRowButtonsContainer"
                   DockPanel.Dock="Right"
@@ -149,7 +161,8 @@
 
             <!--  OPTIONS LISTBOX  -->
 
-            <ListBox Background="Transparent"
+            <ListBox x:Name="OptionsListBox"
+                     Background="Transparent"
                      Classes="optionsList"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -159,7 +172,7 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <!--<WrapPanel />-->
-                        <StackPanel Orientation="Horizontal" />
+                        <StackPanel Classes="optionsPanel" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.Resources>

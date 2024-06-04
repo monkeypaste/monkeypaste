@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-        const double DEFAULT_ANIM_TIME_S = 0.5d; 
+        const double DEFAULT_ANIM_TIME_S = 0.25d; 
         const double DEFAULT_ANIM_FPS = 50; 
 
         #endregion

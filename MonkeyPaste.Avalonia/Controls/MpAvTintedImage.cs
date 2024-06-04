@@ -17,7 +17,8 @@ namespace MonkeyPaste.Avalonia {
 
         public static readonly AttachedProperty<IBrush> TintProperty =
             AvaloniaProperty.RegisterAttached<MpAvTintedImage, Control, IBrush>(
-                nameof(Tint));
+                nameof(Tint),
+                defaultValue: Brushes.Black);
 
         public IBrush Tint {
             get => GetValue(TintProperty);
@@ -54,6 +55,7 @@ namespace MonkeyPaste.Avalonia {
             }
             ib.Source = Source as IImageBrushSource;
             this.Background = Tint;
+            this.InvalidateVisual();
         }
     }
 }

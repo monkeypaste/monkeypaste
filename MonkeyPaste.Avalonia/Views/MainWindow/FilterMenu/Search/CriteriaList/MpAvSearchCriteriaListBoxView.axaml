@@ -28,6 +28,7 @@
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
 
+
         <!--  ALTER ONLY  -->
         <Style Selector="DockPanel#SearchCriteriaContainer:not(.alterable) :is(Control).alterOnly">
             <Setter Property="local:MpAvShowDisabledTooltipExtension.ShowOnDisabled"
@@ -90,6 +91,13 @@
             <Setter Property="Height"
                     Value="{Binding CriteriaItemHeight, FallbackValue=0, TargetNullValue=0}" />
         </Style>
+        <Style Selector="DockPanel#SearchCriteriaContainer.mobile ListBox.criteriaList > ListBoxItem">
+            <!--  NOTE LBI Borders are transparent during dnd to see drop lines  -->
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="Width"
+                    Value="{Binding $parent[ListBox].Bounds.Width}" />
+        </Style>
 
         <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(odd) /template/ ContentPresenter">
             <Setter Property="Background"
@@ -107,7 +115,7 @@
                     Value="0" />
         </Style>
 
-        <Style Selector="ListBox.criteriaList > ListBoxItem:pointerover Grid#CriteriaItemContainerGrid Grid#CriteriaRowButtonsContainer">
+        <Style Selector="ListBox.criteriaList > ListBoxItem:pointerover Grid#CriteriaItemContainerGrid Grid#CriteriaRowButtonsContainer, ListBox.criteriaList > ListBoxItem:selected Grid#CriteriaItemContainerGrid Grid#CriteriaRowButtonsContainer">
             <Setter Property="Opacity"
                     Value="1" />
         </Style>
@@ -229,6 +237,7 @@
                Background="{DynamicResource SearchCriteriaBgBrush}"
                local:MpAvHelpAnchorExtension.IsEnabled="True"
                local:MpAvHelpAnchorExtension.LinkType="Filters"
+               Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                Classes.drag="{Binding IsAnyDragging}"
                Classes.alterable="{Binding CanAlter}">
         <local:MpAvSearchCriteriaHeaderView DockPanel.Dock="Top"

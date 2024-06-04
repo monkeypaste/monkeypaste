@@ -1301,6 +1301,11 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsRestoringSelection { get; set; }
 
+        public bool IsPinTrayPeeking { get; set; }
+
+        public bool IsTraySplitterVisible =>
+            MpAvThemeViewModel.Instance.IsMultiWindow || IsPinTrayPeeking;
+
         #region Append
 
         ConcurrentDictionary<string,MpRecentAppendItemInfo> RecentAppendItemLookup { get; set; } = [];
@@ -3777,7 +3782,7 @@ namespace MonkeyPaste.Avalonia {
                      if(MpAvThemeViewModel.Instance.IsMobileOrWindowed &&
                         !ctvm_to_pin.IsWindowOpen) {
                          // when query tile pinned split the view to optionally toggle to pin tray
-                         PeakAtPinTrayCommand.Execute(ctvm_to_pin);
+                         PeekAtPinTrayCommand.Execute(ctvm_to_pin);
                      }
                  }
 
@@ -5011,7 +5016,7 @@ namespace MonkeyPaste.Avalonia {
                 SetPinTrayRatio(def_ratio);
             });
 
-        public ICommand PeakAtPinTrayCommand => new MpCommand<object>(
+        public ICommand PeekAtPinTrayCommand => new MpCommand<object>(
             (args) => {
                 if(args is not MpAvClipTileViewModel pinned_ctvm) {
                     return;
@@ -5031,7 +5036,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 void OnTopLevel_PointerReleased(object sender, PointerReleasedEventArgs e) {
                     tl.PointerReleased -= OnTopLevel_PointerReleased;
-                    if(e.Source is not Control c) {
+
+                    IsPinTrayPeeking = true;
+                    if (e.Source is not Control c) {
                         return;
                     }
                     if(c.GetVisualAncestor<MpAvPinTrayView>() != null) {
@@ -5040,6 +5047,7 @@ namespace MonkeyPaste.Avalonia {
                         ExpandQueryTrayCommand.Execute(null);
                     }
                 }
+                IsPinTrayPeeking = true;
                 tl.AddHandler(TopLevel.PointerReleasedEvent, OnTopLevel_PointerReleased, RoutingStrategies.Tunnel);
                 ScrollIntoView(pinned_ctvm);
             }, (args) => {

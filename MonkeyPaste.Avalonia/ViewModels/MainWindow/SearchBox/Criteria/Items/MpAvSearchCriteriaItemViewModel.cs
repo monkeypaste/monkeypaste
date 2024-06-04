@@ -946,9 +946,11 @@ namespace MonkeyPaste.Avalonia {
         #region Layout       
 
         public double CriteriaItemHeight =>
-            Parent == null ? 0 :
-                Parent.DefaultCriteriaRowHeight * (IsJoinPanelVisible ? 2 : 1) +
-                (Parent.CriteriaDropLineHeight * 2);
+            MpAvThemeViewModel.Instance.IsMobileOrWindowed ? 
+                double.NaN :
+                Parent == null ? 0 :
+                    Parent.DefaultCriteriaRowHeight * (IsJoinPanelVisible ? 2 : 1) +
+                    (Parent.CriteriaDropLineHeight * 2);
         #endregion
 
         #region State

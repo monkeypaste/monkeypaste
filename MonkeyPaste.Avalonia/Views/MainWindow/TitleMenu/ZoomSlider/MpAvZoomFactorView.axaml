@@ -64,6 +64,7 @@
 
         <!--  CUR VAL LINE  -->
         <Border x:Name="CurValLine"
+                CornerRadius="5"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Classes="zoomLine zoomValueLine">

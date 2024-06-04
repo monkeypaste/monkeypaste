@@ -1,6 +1,9 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -156,25 +159,42 @@ namespace MonkeyPaste.Avalonia {
         }
         private void NotifySidebarSelectionChanging() {
             Dispatcher.UIThread.Post(async () => {
+                //if (MpAvMainView.Instance.SidebarGridSplitter is not { } gs) {
+                //    return;
+                //}
+                //double t_s = 2;
+                //double fps = 50;
+                //double dt = 0;
+                //double time_step = fps.FpsToTimeStep();
+                //int delay_ms = fps.FpsToDelayTime();
+                //bool is_opening = SelectedItem != null;
+                //double dir = is_opening ? 1 : -1;
+                //var ss_start = is_opening ? MpPoint.Zero : 
+                //    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                //        new MpPoint(LastSelectedItem.SidebarWidth,0) :
+                //        new MpPoint(0,LastSelectedItem.SidebarHeight);
+                //var ss_end = !is_opening ? MpPoint.Zero :
+                //    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                //        new MpPoint(SelectedItem.SidebarWidth, 0) :
+                //        new MpPoint(0, SelectedItem.SidebarHeight);
+                //var ss_d = ss_end - ss_start;
+                //var ss_v = (ss_d / t_s) * time_step * dir;
+                //while (true) {
+                //    gs.RaiseEvent(new VectorEventArgs() {
+                //        RoutedEvent = GridSplitter.DragDeltaEvent,
+                //        Source = gs,
+                //        Vector = new Vector(ss_v.X, ss_v.Y)
+                //    });
+                //    MpAvMainView.Instance.UpdateMainViewLayout(is_opening ? MpMainViewUpdateType.SidebarOpen : MpMainViewUpdateType.SidebarClose);
+                //    await Task.Delay(delay_ms);
+                //    dt += time_step;
+                //    if (dt >= t_s) {
+                //        // animation complete, ensure it uses end props 
+                //        break;
+                //    }
+                //}
+
                 MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeBegin);
-                var sw = Stopwatch.StartNew();
-                while (!IsAnimating) {
-                    // wait for anim to start
-                    if (sw.ElapsedMilliseconds > 3_000) {
-                        // time out, anim not significant size
-                        break;
-                    }
-                    await Task.Delay(100);
-                }
-                sw.Restart();
-                while (IsAnimating) {
-                    if (sw.ElapsedMilliseconds > 3_000) {
-                        // time out, anim not significant size
-                        break;
-                    }
-                    // wait for anim to finish
-                    await Task.Delay(100);
-                }
                 MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeEnd);
             });
         }
@@ -192,7 +212,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     NotifySidebarSelectionChanging();
 
-                    MpAvMainView.Instance.UpdateMainViewLayout();
+                    MpAvMainView.Instance.UpdateMainViewLayout(SelectedItem == null ? MpMainViewUpdateType.SidebarClose: MpMainViewUpdateType.SidebarOpen);
                     OnPropertyChanged(nameof(SelectedItemIdx));
 
                     if (SelectedItem is MpICloseWindowViewModel cwvm &&

@@ -456,7 +456,6 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(UpdateTopmost);
                 return;
             }
-
 #if WINDOWS
             nint last_handle = WinApi.HWND_TOPMOST;
             for (int i = 0; i < TopmostWindowsByZOrder.Count; i++) {

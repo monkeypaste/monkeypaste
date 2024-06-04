@@ -1,8 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,8 @@ namespace MonkeyPaste.Avalonia {
         MpAvViewModelBase,
         MpIWantsTopmostWindowViewModel,
         MpICloseWindowViewModel,
-        MpIExpandableViewModel {
+        MpIExpandableViewModel,
+        MpAvIHeaderMenuViewModel {
 
         #region Private Variable
         //private Window _criteriaWindow;
@@ -36,6 +39,26 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+        #region MpAvIHeaderMenuViewModel Implementation
+        IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
+            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor);
+        IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
+            (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
+        string MpAvIHeaderMenuViewModel.HeaderTitle =>
+            null;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
+            [
+                //new MpAvMenuItemViewModel() {
+                //    IconSourceObj = "SearchImage",
+                //    Command = ToggleExpandFilterCommand
+                //}
+            ];
+        ICommand MpAvIHeaderMenuViewModel.BackCommand =>
+            null;
+        object MpAvIHeaderMenuViewModel.BackCommandParameter =>
+            null;
+
+        #endregion
 
         #region MpIWindowViewModel Implementation
         public MpWindowType WindowType =>
@@ -383,6 +406,10 @@ namespace MonkeyPaste.Avalonia {
 
                 //MpAvResizeExtension.ResizeByDelta(MpAvSearchCriteriaListBoxView.Instance, 0, delta_open_height, false);
                 Items.ForEach(x => x.Items.ForEach(y => y.OnPropertyChanged(nameof(y.SelectedItemIdx))));
+
+                //if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                //    OpenCriteriaWindowCommand.Execute(null);
+                //}
             } else {
                 if (IsPendingQuery && IsAllCriteriaEmpty && !IsCriteriaWindowOpen) {
                     // discard pending if nothing changed

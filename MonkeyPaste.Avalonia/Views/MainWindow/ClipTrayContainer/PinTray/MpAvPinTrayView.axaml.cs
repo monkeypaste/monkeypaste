@@ -36,10 +36,6 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
-            if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                // BUG can't set selectionMode in styles...
-                this.PinTrayListBox.SelectionMode = SelectionMode.Toggle;
-            }
             var ptrlb = this.FindControl<ListBox>("PinTrayListBox");
             ptrlb.AddHandler(KeyDownEvent, PinTrayListBox_KeyDown, RoutingStrategies.Tunnel);
         }

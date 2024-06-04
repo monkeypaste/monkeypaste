@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -538,8 +539,14 @@ namespace MonkeyPaste.Avalonia {
                 if(MpAvMainView.Instance.SidebarGridSplitter is not { } gs) {
                     return;
                 }
-                gs.ApplyDelta(new Vector(0, -50));
-
+                gs.IsVisible = true;
+                //gs.ApplyDelta(new Vector(0, -50));
+                gs.RaiseEvent(new VectorEventArgs() {
+                    RoutedEvent = GridSplitter.DragDeltaEvent,
+                    Source = gs,
+                    Vector = new Vector(0, 10)
+                });
+                MpAvMainView.Instance.UpdateMainViewLayout();
             });
 
         #endregion

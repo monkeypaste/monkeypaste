@@ -158,15 +158,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!--  SPLITTER DIMENSIONS  -->
-        <Style Selector="GridSplitter#ClipTraySplitter.mobile.horizontal">
-            <Setter Property="Height"
-                    Value="0" />
-        </Style>
-        <Style Selector="GridSplitter#ClipTraySplitter.mobile.vertical">
-            <Setter Property="Width"
-                    Value="0" />
-        </Style>
     </local:MpAvUserControl.Styles>
     <!--  NOTE! Layout is in mw code behind orientation change  -->
     <Grid x:Name="ClipTrayContainerGrid"
@@ -194,6 +185,7 @@
         -->
         <local:MpAvMovableGridSplitter x:Name="ClipTraySplitter"
                                        Classes.clipTraySplitter="True"
+                                       IsVisible="{Binding IsTraySplitterVisible}"
                                        Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                        Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                        Classes.vertical="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
