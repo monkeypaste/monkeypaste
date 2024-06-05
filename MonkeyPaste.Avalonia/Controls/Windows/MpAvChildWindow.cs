@@ -353,7 +353,7 @@ namespace MonkeyPaste.Avalonia {
         public double WidthRatio { get; set; } = 1.0d;
         public double HeightRatio { get; set; } = 1.0d;
 
-        bool IsBaseLevelWindow =>
+        public bool IsBaseLevelWindow =>
 #if MOBILE_OR_WINDOWED
             this is MpAvMainWindow ||
             this is MpAvMainView;

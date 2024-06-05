@@ -109,7 +109,86 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        public Grid RootGrid { get; }
+        MpSize BoundContentAndSidebarSize {
+            get {
+                var ctrvm = MpAvClipTrayViewModel.Instance;
+                var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
+                double bound_w = 0;
+                double bound_h = 0;
+                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                    if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                        bound_w = ctrvm.ContainerBoundWidth + sbicvm.ContainerBoundWidth;
+                        bound_h = Math.Max(ctrvm.ContainerBoundHeight, sbicvm.ContainerBoundHeight);
+                    } else {
+                        bound_w = Math.Max(ctrvm.ContainerBoundWidth, sbicvm.ContainerBoundWidth);
+                        bound_h = ctrvm.ContainerBoundHeight + sbicvm.ContainerBoundHeight;
+                    }
+                } else {
+                    // only use clip cntr on mobile since it spans into sidebar cell
+                    bound_w = ctrvm.ContainerBoundWidth;
+                    bound_h = ctrvm.ContainerBoundHeight;
+                }
+                
+                return new MpSize(Math.Max(0,bound_w), Math.Max(0,bound_h));
+            }
+        }
+        MpSize ActualContentAndSidebarSize {
+            get {
+                double actual_w = 0;
+                double actual_h = 0;
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    actual_w = MainWindowTrayGrid.Bounds.Width -
+                                SidebarButtonGroup.Bounds.Width;
+                    actual_h = MainWindowTrayGrid.Bounds.Height;
+                } else {
+                    actual_w = MainWindowTrayGrid.Bounds.Width;
+                    actual_h = MainWindowTrayGrid.Bounds.Height -
+                                SidebarButtonGroup.Bounds.Height;
+                }
+                return new MpSize(Math.Max(0,actual_w), Math.Max(0,actual_h));
+            }
+        }
+        MpSize AvailableContentAndSidebarSize {
+            get {
+                // NOTE the only difference between mobile/multi-window are:
+                // 1. In Multi-Window mode the title is always on the inside edge (for resize and drag)
+                // 2. In Multi-window mode the sidebar is in its own grid cell.
+                //    On mobile the clip cntr view spans both cells so sidebars float over clip cntr
+
+                double avail_w = 0;
+                double avail_h = 0;
+                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                    if(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                        avail_w = MainWindowContainerGrid.Bounds.Width -
+                                    SidebarButtonGroup.Bounds.Width;
+                        avail_h = MainWindowContainerGrid.Bounds.Height -
+                                    MainWindowTitleView.Bounds.Height -
+                                    FilterMenuView.Bounds.Height;
+                    } else {
+                        avail_w = MainWindowContainerGrid.Bounds.Width -
+                                    MainWindowTitleView.Bounds.Width;
+                        avail_h = MainWindowContainerGrid.Bounds.Height -
+                                    FilterMenuView.Bounds.Height -
+                                    SidebarButtonGroup.Bounds.Height;
+                    }
+                } else {
+                    if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                        avail_w = MainWindowContainerGrid.Bounds.Width -
+                                    SidebarButtonGroup.Bounds.Width;
+                        avail_h = MainWindowContainerGrid.Bounds.Height -
+                                    MainWindowTitleView.Bounds.Height -
+                                    FilterMenuView.Bounds.Height;
+                    } else {
+                        avail_w = MainWindowContainerGrid.Bounds.Width;
+                        avail_h = MainWindowContainerGrid.Bounds.Height -
+                                    MainWindowTitleView.Bounds.Height -
+                                    FilterMenuView.Bounds.Height -
+                                    SidebarButtonGroup.Bounds.Height;
+                    }
+                }
+                return new MpSize(Math.Max(0,avail_w), Math.Max(0,avail_h));
+            }
+        }
 
         #endregion
 
@@ -124,8 +203,7 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Stretch;
-            RootGrid = this.FindControl<Grid>("MainWindowContainerGrid");
-
+            
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
             //sidebarSplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChangeBegin);
             //sidebarSplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChangeEnd);
@@ -140,13 +218,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Orientation Updates
 
-        bool skip_sidebar = false;
         public void UpdateMainViewLayout(MpMainViewUpdateType updateType = MpMainViewUpdateType.None) {
             UpdateContentLayout();
             UpdateContainerLayout();
-            UpdateSidebarGridsplitter(updateType);
             UpdateEdgyTooltips();
-            ClampContentSizes(); 
+            UpdateGridBindings(); 
 
             
         }
@@ -162,7 +238,6 @@ namespace MonkeyPaste.Avalonia {
             var sbbg = this.SidebarButtonGroup;
             var ssbcb = this.SelectedSidebarContainerBorder;
             var sbgs = this.SidebarGridSplitter;
-            var ctrcb = this.ClipTrayContainerBorder;
 
             var ctrcv = this.ClipTrayContainerView;
             var ctrcv_cg = ctrcv.ClipTrayContainerGrid;
@@ -192,25 +267,27 @@ namespace MonkeyPaste.Avalonia {
                 var sbbg_cd = new ColumnDefinition(
                     new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
 
-                var ssbcb_cd = new ColumnDefinition(Math.Max(0, sbicvm.ContainerBoundWidth), GridUnitType.Pixel);
-                ssbcb_cd.Bind(
-                    ColumnDefinition.WidthProperty,
-                    new Binding() {
-                        Source = sbicvm,
-                        Path = nameof(sbicvm.ContainerBoundWidth),
-                        Mode = BindingMode.TwoWay,
-                        Converter = MpAvDoubleToGridLengthConverter.Instance
-                    });
+                var ssbcb_cd = new ColumnDefinition(0, GridUnitType.Auto);
+                //var ssbcb_cd = new ColumnDefinition(Math.Max(0, sbicvm.ContainerBoundWidth), GridUnitType.Pixel);
+                //ssbcb_cd.Bind(
+                //    ColumnDefinition.WidthProperty,
+                //    new Binding() {
+                //        Source = sbicvm,
+                //        Path = nameof(sbicvm.ContainerBoundWidth),
+                //        Mode = BindingMode.TwoWay,
+                //        Converter = MpAvDoubleToGridLengthConverter.Instance
+                //    });
 
-                var ctrcb_cd = new ColumnDefinition(Math.Max(0, ctrvm.ContainerBoundWidth), GridUnitType.Pixel);
-                ctrcb_cd.Bind(
-                    ColumnDefinition.WidthProperty,
-                    new Binding() {
-                        Source = ctrvm,
-                        Path = nameof(ctrvm.ContainerBoundWidth),
-                        Mode = BindingMode.TwoWay,
-                        Converter = MpAvDoubleToGridLengthConverter.Instance
-                    });
+                var ctrcb_cd = new ColumnDefinition(1, GridUnitType.Star);
+                //var ctrcb_cd = new ColumnDefinition(Math.Max(0, ctrvm.ContainerBoundWidth), GridUnitType.Pixel);
+                //ctrcb_cd.Bind(
+                //    ColumnDefinition.WidthProperty,
+                //    new Binding() {
+                //        Source = ctrvm,
+                //        Path = nameof(ctrvm.ContainerBoundWidth),
+                //        Mode = BindingMode.TwoWay,
+                //        Converter = MpAvDoubleToGridLengthConverter.Instance
+                //    });
 
                 mwtg.ColumnDefinitions.Add(sbbg_cd);
                 mwtg.ColumnDefinitions.Add(ssbcb_cd);
@@ -237,12 +314,13 @@ namespace MonkeyPaste.Avalonia {
                 sbgs.ResizeDirection = GridResizeDirection.Columns;
 
                 // cliptray container border
-                Grid.SetRow(ctrcb, 1);
-                Grid.SetColumn(ctrcb, 2);
-#if MOBILE_OR_WINDOWED
-                Grid.SetColumn(ctrcb, 1);
-                Grid.SetColumnSpan(ctrcb, 2);
-#endif
+                Grid.SetRow(ctrcv, 1);
+                Grid.SetColumn(ctrcv, 2);
+
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    Grid.SetColumn(ctrcv, 1);
+                    Grid.SetColumnSpan(ctrcv, 2);
+                }
 
                 // cliptraycontainer column definitions (horizontal)
                 ctrcv_cg.RowDefinitions.Clear();
@@ -268,20 +346,26 @@ namespace MonkeyPaste.Avalonia {
                     ColumnDefinition.MinWidthProperty,
                     new Binding() {
                         Source = MpAvClipTrayViewModel.Instance,
-                        Path = nameof(MpAvClipTrayViewModel.Instance.MinClipTrayScreenWidth)
+                        Path = nameof(MpAvClipTrayViewModel.Instance.MinQueryTrayScreenWidth)
+                    });
+                ctrv_cd.Bind(
+                    ColumnDefinition.MaxWidthProperty,
+                    new Binding() {
+                        Source = MpAvClipTrayViewModel.Instance,
+                        Path = nameof(MpAvClipTrayViewModel.Instance.MaxQueryTrayScreenWidth)
                     });
 
                 ctrcv_cg.ColumnDefinitions = new ColumnDefinitions() { ptrv_cd, ctrv_cd };
 
                 // pin tray listbox padding (horizontal) for head/tail drop adorners
-                if (MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
-                    ctrcv_ptr_lb.Padding = new Thickness(dbl_gs_fixed_length, 0, dbl_gs_fixed_length, 0);
-                } else {
-                    ctrcv_ptr_lb.Padding = new Thickness();
-                }
+                //if (MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
+                //    ctrcv_ptr_lb.Padding = new Thickness(dbl_gs_fixed_length, 0, dbl_gs_fixed_length, 0);
+                //} else {
+                //    ctrcv_ptr_lb.Padding = new Thickness();
+                //}
 
-                // add margin for grid splitter size so boxshadow is symmetrical
-                ctrcv_ptrv.Margin = new Thickness(0, 0, gs_fixed_length, 0);
+                //// add margin for grid splitter size so boxshadow is symmetrical
+                //ctrcv_ptrv.Margin = new Thickness(0, 0, gs_fixed_length, 0);
 
                 // clip/pin tray grid splitter
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Right;
@@ -305,29 +389,29 @@ namespace MonkeyPaste.Avalonia {
 
             void SetupVertical() {
                 var ctrcb_rd = new RowDefinition(1, GridUnitType.Star);
-                ctrcb_rd.Bind(
-                    RowDefinition.HeightProperty,
-                    new Binding() {
-                        Source = ctrvm,
-                        Path = nameof(ctrvm.ContainerBoundHeight),
-                        Mode = BindingMode.TwoWay,
-                        Converter = MpAvDoubleToGridLengthConverter.Instance
-                    });
+                //ctrcb_rd.Bind(
+                //    RowDefinition.HeightProperty,
+                //    new Binding() {
+                //        Source = ctrvm,
+                //        Path = nameof(ctrvm.ContainerBoundHeight),
+                //        Mode = BindingMode.TwoWay,
+                //        Converter = MpAvDoubleToGridLengthConverter.Instance
+                //    });
 
-                ctrcb_rd.Bind(
-                    RowDefinition.MaxHeightProperty,
-                    new Binding() { Source = ctrvm, Path = nameof(ctrvm.MaxContainerScreenHeight) });
+                //ctrcb_rd.Bind(
+                //    RowDefinition.MaxHeightProperty,
+                //    new Binding() { Source = ctrvm, Path = nameof(ctrvm.MaxContainerScreenHeight) });
 
-                var ssbcb_rd = new RowDefinition(Math.Max(0, sbicvm.ContainerBoundHeight), GridUnitType.Pixel);
-                ssbcb_rd.Bind(
-                    RowDefinition.HeightProperty,
-                    new Binding() {
-                        Source = sbicvm,
-                        Path = nameof(sbicvm.ContainerBoundHeight),
-                        Mode = BindingMode.TwoWay,
-                        Converter = MpAvDoubleToGridLengthConverter.Instance
-                    });
+                var ssbcb_rd = new RowDefinition(0, GridUnitType.Auto);
                 //var ssbcb_rd = new RowDefinition(Math.Max(0, sbicvm.ContainerBoundHeight), GridUnitType.Pixel);
+                //ssbcb_rd.Bind(
+                //    RowDefinition.HeightProperty,
+                //    new Binding() {
+                //        Source = sbicvm,
+                //        Path = nameof(sbicvm.ContainerBoundHeight),
+                //        Mode = BindingMode.TwoWay,
+                //        Converter = MpAvDoubleToGridLengthConverter.Instance
+                //    });
 
                 var sbbg_rd = new RowDefinition(
                     new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
@@ -338,11 +422,12 @@ namespace MonkeyPaste.Avalonia {
                 mwtg.RowDefinitions.Add(sbbg_rd);
 
                 // cliptray container view
-                Grid.SetRow(ctrcb, 0);
-                Grid.SetColumn(ctrcb, 0);
-#if MOBILE_OR_WINDOWED
-                Grid.SetRowSpan(ctrcb, 2);
-#endif
+                Grid.SetRow(ctrcv, 0);
+                Grid.SetColumn(ctrcv, 0);
+
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    Grid.SetRowSpan(ctrcv, 2);
+                }
 
                 // sidebar content
                 Grid.SetRow(ssbcb, 1);
@@ -388,7 +473,7 @@ namespace MonkeyPaste.Avalonia {
                     RowDefinition.MinHeightProperty,
                     new Binding() {
                         Source = MpAvClipTrayViewModel.Instance,
-                        Path = nameof(MpAvClipTrayViewModel.Instance.MinClipTrayScreenHeight)
+                        Path = nameof(MpAvClipTrayViewModel.Instance.MinQueryTrayScreenHeight)
                     });
 
                 ctrcv_cg.RowDefinitions = new RowDefinitions() { ptrv_rd, ctrv_rd };
@@ -662,207 +747,22 @@ namespace MonkeyPaste.Avalonia {
             tmv_zfv.UpdateMarkerPositions();
         }
 
-        private void UpdateSidebarGridsplitter(MpMainViewUpdateType updateType) {
-            var mwvm = MpAvMainWindowViewModel.Instance;
+        private bool UpdateGridBindings() {
+            // returns true if no clamping needed
             var ctrvm = MpAvClipTrayViewModel.Instance;
             var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
-            var mwtmvm = MpAvMainWindowTitleMenuViewModel.Instance;
-            var fmvm = MpAvFilterMenuViewModel.Instance;
-            var ssbivm = MpAvSidebarItemCollectionViewModel.Instance.SelectedItem;
-
-            var sbgs = this.SidebarGridSplitter;
-            var ssbcb = this.SelectedSidebarContainerBorder;
-            var sbbg = this.SidebarButtonGroup;
-            var ctrcb = this.ClipTrayContainerBorder;
-            var mwtg = this.MainWindowTrayGrid;
-
-            bool is_opening = updateType == MpMainViewUpdateType.SidebarOpen;
-            bool is_closing = updateType == MpMainViewUpdateType.SidebarClose;
-            double mw_w = mwvm.MainWindowWidth;
-            double mw_h = mwvm.MainWindowHeight;
-
-            double nsbi_w, nsbi_h;
-            double nctrcb_w, nctrcb_h;
-            double avail_w, avail_h;
-
-            // get new sidebar size and calculate new cliptray size from sidebar size
-            if (BindingContext.IsHorizontalOrientation) {
-                avail_w = mwvm.AvailableContentAndSidebarWidth;//mw_w - sbicvm.ButtonGroupFixedDimensionLength;
-                avail_h = mwvm.AvailableContentAndSidebarHeight;//mwtg.Bounds.Height;
-
-                nsbi_w = is_closing ? 0 : ssbivm == null ? 0 : is_opening ? ssbivm.DefaultSidebarWidth : ssbivm.SidebarWidth;
-                nsbi_h = mwtg.Bounds.Height;
-
-                nctrcb_w = MpAvThemeViewModel.Instance.IsMobileOrWindowed ?
-                    avail_w :
-                    mw_w - sbicvm.ButtonGroupFixedDimensionLength - nsbi_w;
-                nctrcb_h = mwtg.Bounds.Height;
-            } else {
-                avail_w = mwvm.AvailableContentAndSidebarWidth;//mwtg.Bounds.Width;
-                avail_h = mwvm.AvailableContentAndSidebarHeight;//mw_h - sbicvm.ButtonGroupFixedDimensionLength; //  - fmvm.FilterMenuHeight;
-
-                nsbi_w = mwtg.Bounds.Width;
-                nsbi_h = is_closing ? 0: ssbivm == null ? 0 : is_opening ? ssbivm.DefaultSidebarHeight : ssbivm.SidebarHeight;
-
-                nctrcb_w = mwtg.Bounds.Width;
-                nctrcb_h = MpAvThemeViewModel.Instance.IsMobileOrWindowed ?
-                    avail_h :
-                    mw_h - sbicvm.ButtonGroupFixedDimensionLength; // - fmvm.FilterMenuHeight; // - nsbi_h
+            var diff = AvailableContentAndSidebarSize - BoundContentAndSidebarSize;
+            bool is_valid = diff.IsValueEqual(MpPoint.Zero,1);
+            if(!is_valid) {
+                // only clamp clip cntr since sidebar animates 
+                MpConsole.WriteLine($"Invalid content size! Avail: {AvailableContentAndSidebarSize} Bound: {BoundContentAndSidebarSize} diff: {diff}",true);
+                ctrvm.ContainerBoundWidth += diff.X;
+                ctrvm.ContainerBoundHeight += diff.Y;
+                var diff2 = AvailableContentAndSidebarSize - BoundContentAndSidebarSize;
+                MpConsole.WriteLine($"Fixed diff: {diff2}",false,true);
+                MpDebug.Assert(diff2.IsValueEqual(MpPoint.Zero), $"Clamp error. Bindings broken or something", silent: true);
             }
-
-            nsbi_w = Math.Max(0, nsbi_w);
-            nsbi_h = Math.Max(0, nsbi_h);
-            nctrcb_w = Math.Max(0, nctrcb_w);
-            nctrcb_h = Math.Max(0, nctrcb_h);
-
-            //ssbcb.IsVisible = true;
-            //sbgs.IsVisible = is_opening && ssbivm.CanResize;
-            //sbgs.IsVisible = !is_closing;
-
-            bool skip_anim =
-#if MOBILE_OR_WINDOWED
-                true;// updateType == MpMainViewUpdateType.None; // mwvm.IsMainWindowOrientationDragging;
-#else
-                true;
-#endif
-
-            if (skip_anim) {
-                // skip animate on orientation change because current values maybe transitioning 
-                // otherwise random flickering or target size is wrong
-
-                sbicvm.ContainerBoundWidth = nsbi_w;
-                sbicvm.ContainerBoundHeight = nsbi_h;
-
-                ctrvm.ContainerBoundWidth = nctrcb_w;
-                ctrvm.ContainerBoundHeight = nctrcb_h;
-
-
-                if (mwvm.IsMainWindowOrientationDragging) {
-                    ClampContentSizes();
-                } else {
-                    UpdateClipTrayContainerSize(null);
-                }
-                return;
-            }
-            ctrvm.ContainerBoundWidth = nctrcb_w;
-            ctrvm.ContainerBoundHeight = nctrcb_h;
-            
-
-            //sbicvm.ContainerBoundWidth = nsbi_w;
-            //sbicvm.ContainerBoundHeight = nsbi_h;
-
-            //ctrvm.ContainerBoundWidth = nctrcb_w;
-            //ctrvm.ContainerBoundHeight = nctrcb_h;
-            //UpdateClipTrayContainerSize(null);
-
-            //sbicvm.AnimateSize(
-            //    new MpSize(nsbi_w, nsbi_h),
-            //    control: ssbcb);
-
-            //ctrvm.AnimateSize(
-            //    new MpSize(nctrcb_w, nctrcb_h),
-            //    control: ctrcb,
-            //    onComplete: () => {
-            //        // onComplete handler
-            //        UpdateClipTrayContainerSize(null);
-            //        return true;
-            //    });
-            return;
-        }
-
-        private void UpdateClipTrayContainerSize(MpPoint splitter_delta) {
-            var mwvm = MpAvMainWindowViewModel.Instance;
-            var ctrvm = MpAvClipTrayViewModel.Instance;
-            var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
-            var mwtmvm = MpAvMainWindowTitleMenuViewModel.Instance;
-            var fmvm = MpAvFilterMenuViewModel.Instance;
-
-            if (mwvm.IsMainWindowOrientationDragging) {
-                return;
-            }
-
-            if (mwvm.IsVerticalOrientation &&
-                splitter_delta != null) {
-                // BUG grid splitter doesn't drag in vertical automatically, must manually adjust
-                sbicvm.ContainerBoundHeight -= splitter_delta.Y;
-            }
-
-            double mw_w = mwvm.MainWindowWidth;
-            double mw_h = mwvm.MainWindowHeight;
-
-            if (BindingContext.IsHorizontalOrientation) {
-                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
-                    ctrvm.ContainerBoundWidth = Math.Max(0,
-                    mw_w - sbicvm.ButtonGroupFixedDimensionLength - sbicvm.ContainerBoundWidth);
-                } else {
-                    ctrvm.ContainerBoundWidth = mwvm.AvailableContentAndSidebarWidth;
-                }
-            } else {
-                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
-                    ctrvm.ContainerBoundHeight = Math.Max(0,
-                        mw_h - sbicvm.ButtonGroupFixedDimensionLength - sbicvm.ContainerBoundHeight -
-                        fmvm.FilterMenuHeight);
-                } else {
-                    ctrvm.ContainerBoundHeight = mwvm.AvailableContentAndSidebarHeight;
-
-                }
-            }
-
-            ClampContentSizes();
-        }
-
-        public void ClampContentSizes() {
-            var mwvm = MpAvMainWindowViewModel.Instance;
-            var ctrvm = MpAvClipTrayViewModel.Instance;
-            var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
-            var mwtmvm = MpAvMainWindowTitleMenuViewModel.Instance;
-            var fmvm = MpAvFilterMenuViewModel.Instance;
-
-            double tw = ctrvm.ContainerBoundWidth + sbicvm.ContainerBoundWidth;
-            double th = ctrvm.ContainerBoundHeight + sbicvm.ContainerBoundHeight;
-
-            double w_diff = tw - mwvm.AvailableContentAndSidebarWidth;
-            if (w_diff > 0) {
-                // too big
-                //double nctr_w = Math.Max(0, ctrvm.ContainerBoundWidth - (w_diff / 2));
-                //double nsbic_w = Math.Max(0, sbicvm.ContainerBoundWidth - (w_diff / 2));
-                //ctrvm.ContainerBoundWidth = nctr_w;
-                //sbicvm.ContainerBoundWidth = nsbic_w;
-                //if (ctrvm.ContainerBoundWidth <= 0) {
-                //    // NOTE this only clamps when it becomes 0, which seems to be in 
-                //    // orientation change w/ sidebar visible
-                //    ctrvm.ContainerBoundWidth = MIN_TRAY_VAR_DIM_LENGTH;
-                //    sbicvm.ContainerBoundWidth = tw - MIN_TRAY_VAR_DIM_LENGTH;
-                //}
-
-                ctrvm.ContainerBoundWidth -= Math.Abs(w_diff);
-            } else if (w_diff < 0) {
-                // too small
-                ctrvm.ContainerBoundWidth += Math.Abs(w_diff);
-            }
-
-            double h_diff = th - mwvm.AvailableContentAndSidebarHeight;
-            if (h_diff > 0) {
-                // too big
-                //double nctr_h = Math.Max(0, ctrvm.ContainerBoundHeight - (h_diff / 2));
-                //double nsbic_h = Math.Max(0, sbicvm.ContainerBoundHeight - (h_diff / 2));
-                double factor = MpAvThemeViewModel.Instance.IsMultiWindow ? 2 : 1;
-                double nctr_h = Math.Max(0, ctrvm.ContainerBoundHeight - (h_diff / factor));
-                double nsbic_h = Math.Max(0, sbicvm.ContainerBoundHeight - (h_diff / factor));
-                ctrvm.ContainerBoundHeight = nctr_h;
-                sbicvm.ContainerBoundHeight = nsbic_h;
-
-                if (ctrvm.ContainerBoundHeight <= 0) {
-                    // NOTE this only clamps when it becomes 0, which seems to be in 
-                    // orientation change w/ sidebar visible
-                    ctrvm.ContainerBoundHeight = MIN_TRAY_VAR_DIM_LENGTH;
-                    sbicvm.ContainerBoundHeight = th - MIN_TRAY_VAR_DIM_LENGTH;
-                }
-                //sbicvm.ContainerBoundHeight -= Math.Abs(h_diff);
-            } else if (h_diff < 0) {
-                // too small
-                sbicvm.ContainerBoundHeight += Math.Abs(h_diff);
-            }
+            return is_valid;
         }
 
         private void UpdateEdgyTooltips() {
@@ -914,10 +814,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.SidebarItemSizeChanged:
+                //case MpMessageType.SidebarItemSizeChanged:
+                //case MpMessageType.SidebarItemSizeChangeEnd:
                 case MpMessageType.PinTraySizeChanged:
                 case MpMessageType.PinTrayResizeEnd:
-                case MpMessageType.SidebarItemSizeChangeEnd:
                 case MpMessageType.MainWindowOrientationChangeEnd:
                     if (msg == MpMessageType.MainWindowOrientationChangeEnd) {
                         if (this.GetVisualDescendant<MpAvZoomFactorView>() is { } zfv) {
@@ -927,7 +827,7 @@ namespace MonkeyPaste.Avalonia {
 
                     Dispatcher.UIThread.Post(async () => {
                         await Task.Delay(300);
-                        MpAvMainView.Instance.ClampContentSizes();
+                        UpdateGridBindings();
                     });
                     break;
             }
@@ -937,12 +837,11 @@ namespace MonkeyPaste.Avalonia {
         #region Event Handlers
 
         private void SidebarSplitter_DragDelta(object sender, VectorEventArgs e) {
-            //if (!e.Vector.X.IsNumber() || !e.Vector.Y.IsNumber()) {
-            //    MpDebug.Break();
-            //}
-            //UpdateClipTrayContainerSize(e.Vector.ToPortablePoint());
-            ClampContentSizes();
-            //UpdateSidebarGridsplitter(MpMainViewUpdateType.None);
+            double delta_x = e.Vector.X.IsNumber() ? e.Vector.X : 0;
+            double delta_y = e.Vector.Y.IsNumber() ? e.Vector.Y : 0;
+            var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
+            //sbicvm.ContainerBoundWidth += delta_x;
+            //sbicvm.ContainerBoundHeight += delta_y;
         }
 
         #endregion

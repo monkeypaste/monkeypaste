@@ -94,6 +94,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpAvIMenuItemViewModel Implementation
+
+        string MpAvIMenuItemViewModel.IconTintHexStr =>
+            null;
         ICommand MpAvIMenuItemViewModel.Command =>
             null;
         object MpAvIMenuItemViewModel.CommandParameter =>

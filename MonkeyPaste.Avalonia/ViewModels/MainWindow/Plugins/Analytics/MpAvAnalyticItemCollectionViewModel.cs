@@ -106,14 +106,14 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
                     return MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
-                double w = DefaultSelectorColumnVarDimLength;
+                double def_w = DefaultSelectorColumnVarDimLength;
                 if (SelectedPresetViewModel != null) {
-                    w += DefaultParameterColumnVarDimLength;
+                    def_w += DefaultParameterColumnVarDimLength;
                 }
-#if MOBILE_OR_WINDOWED
-                w = Math.Min(w, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width);
-#endif
-                return w;
+                if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    def_w = Math.Min(def_w, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width / 2);
+                }
+                return def_w;
             }
         }
         public double DefaultSidebarHeight {
@@ -121,11 +121,14 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                     return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
                 }
-                double h = DefaultSelectorColumnVarDimLength;
+                double def_h = DefaultSelectorColumnVarDimLength;
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    def_h = Math.Min(def_h, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height / 2);
+                }
                 //if (SelectedPresetViewModel != null) {
                 //    h += _defaultParameterColumnVarDimLength;
                 //}
-                return h;
+                return def_h;
             }
         }
         public double SidebarWidth { get; set; } = 0;

@@ -3096,4 +3096,11 @@ Global Shortcuts can now be enabled in the System Tray Menu</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Query</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin Browser - {0}</value>
+    <comment>Plugin Name</comment>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin Browser</value>
+  </data>
 </root>

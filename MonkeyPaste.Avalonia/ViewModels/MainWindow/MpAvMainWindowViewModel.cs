@@ -117,49 +117,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public double AvailableContentAndSidebarWidth {
-            get {
-                if (IsVerticalOrientation) {
-#if MOBILE_OR_WINDOWED
-                    return MainWindowWidth;
-#else                    
-                    return MainWindowWidth -
-                        MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuWidth;
-#endif
-                }
-                return MainWindowWidth -
-                        MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
-            }
-        }
-
-        public double AvailableContentAndSidebarHeight {
-            get {
-                if (IsVerticalOrientation) {
-#if MOBILE_OR_WINDOWED
-                    var test = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
-                    return MainWindowHeight -
-                        MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
-                        MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
-                        //(MpAvSidebarItemCollectionViewModel.Instance.SelectedItem == null ?
-                        //    MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength :
-                        //    -MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength) -
-                        MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
-#else
-                    return MainWindowHeight -
-                        MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
-                        MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
-#endif
-                }
-#if MOBILE_OR_WINDOWED
-                return MainWindowHeight -
-                        MpAvFilterMenuViewModel.Instance.FilterMenuHeight;
-#else
-                return MainWindowHeight -
-                        MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
-                        MpAvFilterMenuViewModel.Instance.FilterMenuHeight;
-#endif
-            }
-        }
 
         public double MainWindowDefaultHorizontalHeightRatio =>
 #if WINDOWS
@@ -720,20 +677,20 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(MainWindowLeft):
                     double rl = MainWindowLeft - MainWindowOpenedScreenRect.Left;
-                    Canvas.SetLeft(MpAvMainView.Instance.RootGrid, rl);
+                    Canvas.SetLeft(MpAvMainView.Instance.MainWindowContainerGrid, rl);
                     break;
                 case nameof(MainWindowTop):
                     double rt = MainWindowTop - MainWindowOpenedScreenRect.Top;
-                    Canvas.SetTop(MpAvMainView.Instance.RootGrid, rt);
+                    Canvas.SetTop(MpAvMainView.Instance.MainWindowContainerGrid, rt);
                     break;
                 case nameof(MainWindowRight):
                     double rr = MainWindowRight - MainWindowOpenedScreenRect.Right;
-                    Canvas.SetRight(MpAvMainView.Instance.RootGrid, rr);
+                    Canvas.SetRight(MpAvMainView.Instance.MainWindowContainerGrid, rr);
                     break;
                 case nameof(MainWindowBottom):
                     double rb = MainWindowBottom - MainWindowOpenedScreenRect.Bottom;
 
-                    Canvas.SetBottom(MpAvMainView.Instance.RootGrid, rb);
+                    Canvas.SetBottom(MpAvMainView.Instance.MainWindowContainerGrid, rb);
                     break;
 
                 case nameof(IsMainWindowVisible):

@@ -138,7 +138,11 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarWidth {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return 750;
+                    double def_w = 750;
+                    if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                        def_w = Math.Min(def_w, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width / 2);
+                    }
+                    return def_w;
                 } else {
                     return MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
@@ -149,7 +153,11 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                     return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
                 } else {
-                    return 300;
+                    double def_h = 300;
+                    if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                        def_h = Math.Min(def_h, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height / 2);
+                    }
+                    return def_h;
                 }
             }
         }

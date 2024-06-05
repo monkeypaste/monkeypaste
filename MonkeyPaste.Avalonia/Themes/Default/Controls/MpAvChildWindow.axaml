@@ -34,20 +34,6 @@
     </Style>
 
     <!--  MENU BUTTONS  -->
-    <Style Selector=":is(Button)#HeaderMenuButton.has-cmd-param"
-           x:DataType="local:MpAvIMenuItemViewModel">
-        <Setter Property="CommandParameter"
-                Value="{Binding CommandParameter}" />
-    </Style>
-    <Style Selector=":is(Button)#HeaderMenuButton">
-        <Setter Property="CommandParameter"
-                Value="{Binding $self}" />
-    </Style>
-
-    <Style Selector=":is(Button).menu">
-        <Setter Property="Margin"
-                Value="10" />
-    </Style>
     <Style Selector=":is(local|MpAvChildWindow)">
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
@@ -76,36 +62,20 @@
                             <!--  BACK BUTTON  -->
                             <Button x:Name="BackButton"
                                     HorizontalAlignment="Left"
-                                    Classes="noBg noHoverBg noBorder menu"
+                                    Classes="noBg noHoverBg noBorder defaultButton"
                                     Classes.has-back-cmd="{Binding BackCommand, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                                <Image Source="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                                <Image Width="25"
+                                       Height="25"
+                                       Source="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
                             </Button>
 
                             <!--  HEADER MENU  -->
-                            <ItemsControl x:Name="PART_PageNavMenu"
-                                          Padding="5"
-                                          IsVisible="{Binding HeaderMenuItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                          ItemsSource="{Binding HeaderMenuItems}"
-                                          HorizontalAlignment="Right"
-                                          VerticalAlignment="Center">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate x:DataType="local:MpAvMenuItemViewModel">
-                                        <Button x:Name="HeaderMenuButton"
-                                                Classes="noBg noHoverBg noBorder menu"
-                                                Command="{Binding Command}"
-                                                Classes.has-cmd-param="{Binding CommandParameter, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                                            <Grid ColumnDefinitions="Auto,*">
-                                                <Image Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
-                                            </Grid>
-                                        </Button>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                            <local:MpAvMenuStripView x:Name="ActionMenu"
+                                                     DataContext="{Binding HeaderMenuItems}"
+                                                     HorizontalAlignment="Right"
+                                                     VerticalAlignment="Center" />
+
+
 
                             <TextBlock x:Name="TitleTextBlock"
                                        HorizontalAlignment="Center"

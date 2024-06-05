@@ -49,7 +49,6 @@
             </Setter>
         </Style>
 
-        <!--  BUTTONS  -->
         <Style Selector="Grid#TitlePanel ToggleButton#SettingsToggleButton">
             <Setter Property="Content">
                 <Setter.Value>
@@ -59,6 +58,36 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style Selector="Grid#TitlePanel local|MpAvMenuStripView#ActionMenu">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#TitlePanel TextBlock#TitleTextBlock">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#TitlePanel.mobile.sel">
+            <Setter Property="Background"
+                    Value="{Binding SelectedItem.DisplayColor, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
+        </Style>
+        <Style Selector="Grid#TitlePanel.mobile.sel :is(Button)#MainWindowCycleOrientationCcwButton">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#TitlePanel.mobile.sel :is(Button)#GridLayoutToggleButton">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#TitlePanel.mobile.sel local|MpAvMenuStripView#ActionMenu">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+        <Style Selector="Grid#TitlePanel.mobile.sel TextBlock#TitleTextBlock">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+        <!--  BUTTONS  -->
 
         <Style Selector="Border#MinimizeBorder">
             <Setter Property="Background"
@@ -92,18 +121,24 @@
 
         <!--  DRAG HANDLE  -->
 
-        <Style Selector="Button#WindowOrientationHandleButton Image">
+        <Style Selector="Button#WindowOrientationHandleButton local|MpAvTintedImage">
+            <Setter Property="Tint"
+                    Value="{DynamicResource ThemeInteractiveBrush}" />
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
 
-        <Style Selector="Button#WindowOrientationHandleButton:pointerover Image">
+        <Style Selector="Button#WindowOrientationHandleButton:pointerover local|MpAvTintedImage">
+            <Setter Property="Tint"
+                    Value="{DynamicResource ThemeAccent1Brush}" />
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent1Color}" />
+                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
-        <Style Selector="Button#WindowOrientationHandleButton:pressed Image">
+        <Style Selector="Button#WindowOrientationHandleButton:pressed local|MpAvTintedImage">
+            <Setter Property="Tint"
+                    Value="{DynamicResource ThemeGrayAccent1Brush}" />
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeGrayAccent1Color}" />
+                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
 
         <!--  RESIZER  -->
@@ -158,7 +193,9 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TitlePanel"
+          x:CompileBindings="False"
           Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+          Classes.sel="{Binding IsAnySelected, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <!--  LEFT  -->
@@ -171,6 +208,7 @@
             <!--  SETTINGS BUTTON  -->
 
             <ToggleButton x:Name="SettingsToggleButton"
+                          Margin="5,0,0,0"
                           Classes="noBg noHoverBg"
                           Command="{Binding ToggleShowSettingsWindowCommand, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
                           CommandParameter="{Binding $self}"
@@ -239,10 +277,23 @@
             <Button.RenderTransform>
                 <RotateTransform />
             </Button.RenderTransform>
-            <Image HorizontalAlignment="Stretch"
-                   VerticalAlignment="Stretch"
-                   Margin="5,0" />
+            <local:MpAvTintedImage HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   Margin="5,0" />
         </Button>
+
+        <!--  MIDDLE (SEL CTVM TILE [MOBILE ONLY])  -->
+        <TextBlock x:Name="TitleTextBlock"
+                   x:DataType="local:MpAvClipTileViewModel"
+                   DataContext="{Binding SelectedItem, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                   Text="{Binding CopyItemTitle}"
+                   HorizontalAlignment="Center"
+                   Effect="{StaticResource ThemeBgDropShadow}"
+                   Foreground="{DynamicResource ThemeInteractiveBrush}"
+                   FontSize="26"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center"
+                   TextAlignment="Center" />
 
         <!--  RIGHT  -->
 
@@ -255,6 +306,10 @@
             <local:MpAvZoomFactorView x:Name="ZoomFactorView"
                                       IsVisible="{Binding SelectedCopyItemId, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
 
+            <!--  CORNER BTN MENU (MOBILE ONLY)  -->
+
+            <local:MpAvMenuStripView x:Name="ActionMenu"
+                                     DataContext="{Binding SelectedItem.HeaderMenuItems, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
             <!--  Layout Toggle Button  -->
 
             <ToggleButton x:Name="GridLayoutToggleButton"
@@ -275,7 +330,6 @@
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
                     Classes="noBg noHoverBg noBorder"
-                    IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.IsEnabled="True"
                     local:MpAvPointerCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.RightPressCommandParameter="CW">

@@ -75,7 +75,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-
         #region MpILoadableViewModel Implementation
         public override bool IsLoadable => 
             true;
@@ -83,16 +82,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIHeaderMenuViewModel Implementation
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
-           CopyItemHexColor.IsNullOrEmpty() ?
-            TitleLayerHexColors.FirstOrDefault().ToAvBrush(force_alpha: 1) :
-            CopyItemHexColor.ToAvBrush();
+           DisplayColor.ToAvBrush(force_alpha: 1);
         IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
             (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
 
         string MpAvIHeaderMenuViewModel.HeaderTitle =>
             CopyItemTitle;
-        IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
+        public IEnumerable<MpAvIMenuItemViewModel> HeaderMenuItems =>
             [
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = IsPinned ? "PinnedImage": "PinImage",
+                    IconTintHexStr = IsPinned ? MpSystemColors.limegreen : null,
+                    Command = MpAvClipTrayViewModel.Instance.PinTileCommand,
+                    CommandParameter = this
+                },
+            new MpAvMenuItemViewModel() {
+                    IconSourceObj = "EditImage",
+                    Command = ToggleIsContentReadOnlyCommand,
+                    IsVisible = !IsWindowOpen
+                },
                 new MpAvMenuItemViewModel() {
                     IconSourceObj = "Dots3x1Image",
                     Command = ShowContextMenuCommand
@@ -460,6 +468,11 @@ namespace MonkeyPaste.Avalonia {
                 return wt;
             }
         }
+
+        public string DisplayColor =>
+            CopyItemHexColor.IsNullOrEmpty() ?
+                TitleLayerHexColors.FirstOrDefault().AdjustAlpha(1) :
+                CopyItemHexColor;
 
         #endregion
 
@@ -1879,6 +1892,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsPlaceholder));
                     break;
                 case nameof(IsPinned):
+                    OnPropertyChanged(nameof(HeaderMenuItems));
                     OnPropertyChanged(nameof(PinButtonAngle));
                     OnPropertyChanged(nameof(IsPlaceholder));
                     ResetTileSizeToDefaultCommand.Execute(null);
@@ -2651,6 +2665,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 return CanEdit && IsContentReadOnly;
             });
+
         public ICommand ToggleIsContentReadOnlyCommand => new MpAsyncCommand(
             async () => {
                 if (!IsContentReadOnly) {
@@ -2674,14 +2689,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return EnableContentReadOnlyCommand.CanExecute(null);
             });
-        public ICommand ToggleEditContentCommand => new MpCommand(
-            () => {
-                if (!IsSelected && IsContentReadOnly) {
-                    IsSelected = true;
-                }
-                IsContentReadOnly = !IsContentReadOnly;
-
-            }, () => IsTextItem);
         public MpIAsyncCommand<object> ShareCommand => new MpAsyncCommand<object>(
             async (args) => {
                 string pt = CopyItemData.ToPlainText("html");

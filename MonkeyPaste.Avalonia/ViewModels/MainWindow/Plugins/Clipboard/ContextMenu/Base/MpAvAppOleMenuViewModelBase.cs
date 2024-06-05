@@ -11,6 +11,8 @@ namespace MonkeyPaste.Avalonia {
 
         string MpAvIMenuItemViewModel.IconBorderHexColor =>
             MpSystemColors.Transparent;
+        string MpAvIMenuItemViewModel.IconTintHexStr =>
+            null;
         public bool IsHovering { get; set; }
         public object CommandParameter { get; }
         public string InputGestureText { get; }

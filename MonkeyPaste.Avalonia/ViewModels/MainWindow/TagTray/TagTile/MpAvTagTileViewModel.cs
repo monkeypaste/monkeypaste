@@ -48,6 +48,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIMenuItemViewModel Implementation
 
+        string MpAvIMenuItemViewModel.IconTintHexStr =>
+            null;
         public string IconBorderHexColor =>
             TagHexColor.IsHexStringBright() ? MpSystemColors.black : MpSystemColors.White;
 

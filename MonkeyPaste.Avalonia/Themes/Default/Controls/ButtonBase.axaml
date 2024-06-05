@@ -54,7 +54,7 @@
                 Value="{DynamicResource ThemeAccent1Color}" />
     </Style>
 
-    <Style Selector=":is(Button).defaultButton Image">
+    <Style Selector=":is(Button).defaultButton Image, :is(Button).defaultButton local|MpAvTintedImage">
         <Setter Property="Margin"
                 Value="0" />
         <Setter Property="Width"

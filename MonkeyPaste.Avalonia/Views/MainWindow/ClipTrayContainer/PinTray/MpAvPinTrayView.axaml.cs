@@ -35,7 +35,10 @@ namespace MonkeyPaste.Avalonia {
 
             InitializeComponent();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
-
+            if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                // BUG can't set selectionMode in styles...
+                this.PinTrayListBox.SelectionMode = SelectionMode.Toggle;
+            }
             var ptrlb = this.FindControl<ListBox>("PinTrayListBox");
             ptrlb.AddHandler(KeyDownEvent, PinTrayListBox_KeyDown, RoutingStrategies.Tunnel);
         }
@@ -75,8 +78,8 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnPointerReleased(PointerReleasedEventArgs e) {
             base.OnPointerReleased(e);
-            if(MpAvMainView.Instance.RootGrid.GetVisualDescendant<MpAvPlainHtmlConverterWebView>() is { } cwv) {
-                foreach(var c in MpAvMainView.Instance.RootGrid.Children) {
+            if(MpAvMainView.Instance.MainWindowContainerGrid.GetVisualDescendant<MpAvPlainHtmlConverterWebView>() is { } cwv) {
+                foreach(var c in MpAvMainView.Instance.MainWindowContainerGrid.Children) {
                     if(c == cwv) {
                         c.IsVisible = true;
                         c.Width = MpAvMainView.Instance.Width;

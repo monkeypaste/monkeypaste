@@ -170,7 +170,7 @@ namespace MonkeyPaste.Avalonia {
                     ConverterWebView.Width = 200;
                     ConverterWebView.Height = 200;
                 }
-                Dispatcher.UIThread.Post(async () => {
+                Dispatcher.UIThread.Post((Action)(async () => {
                     // NOTE need to ntf loaded or mv won't be created
                     MpAvMainView mv = null;
                     while (true) {
@@ -180,8 +180,8 @@ namespace MonkeyPaste.Avalonia {
                         }
                         await Task.Delay(100);
                     }
-                    mv.RootGrid.Children.Add(ConverterWebView);
-                });
+                    mv.MainWindowContainerGrid.Children.Add((Control)ConverterWebView);
+                }));
             }
 
             IsBusy = false;

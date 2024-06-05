@@ -31,6 +31,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIMenuItemViewModel Implementation
 
+        string MpAvIMenuItemViewModel.IconTintHexStr =>
+            null;
         ICommand MpAvIMenuItemViewModel.Command => new MpAsyncCommand<object>(
             async (args) => {
                 var menu_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(

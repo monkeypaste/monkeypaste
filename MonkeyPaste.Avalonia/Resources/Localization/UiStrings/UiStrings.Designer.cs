@@ -5069,6 +5069,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plugin Browser - {0}.
+        /// </summary>
+        public static string PluginBrowserFormattedWindowTitle {
+            get {
+                return ResourceManager.GetString("PluginBrowserFormattedWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Install.
         /// </summary>
         public static string PluginBrowserInstallLabel {
@@ -5200,6 +5209,15 @@ namespace MonkeyPaste.Avalonia {
         public static string PluginBrowserVersionLabel {
             get {
                 return ResourceManager.GetString("PluginBrowserVersionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin Browser.
+        /// </summary>
+        public static string PluginBrowserWindowTitle {
+            get {
+                return ResourceManager.GetString("PluginBrowserWindowTitle", resourceCulture);
             }
         }
         

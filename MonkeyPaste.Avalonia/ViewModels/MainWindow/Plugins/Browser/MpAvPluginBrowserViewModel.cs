@@ -49,11 +49,11 @@ namespace MonkeyPaste.Avalonia {
         IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
             (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
         string MpAvIHeaderMenuViewModel.HeaderTitle =>
-            null;
+            UiStrings.PluginBrowserWindowTitle;
         IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
             null;
         ICommand MpAvIHeaderMenuViewModel.BackCommand =>
-            null;
+            BackCommand;
         object MpAvIHeaderMenuViewModel.BackCommandParameter =>
             null;
 
@@ -102,11 +102,10 @@ namespace MonkeyPaste.Avalonia {
 
         public string WindowTitle {
             get {
-                string sufffix = string.Empty;
-                if (SelectedItem != null) {
-                    sufffix = $": {SelectedItem.PluginTitle}";
+                if(SelectedItem == null) {
+                    return UiStrings.PluginBrowserWindowTitle;
                 }
-                return $"Plugin Browser{sufffix}";
+                return UiStrings.PluginBrowserFormattedWindowTitle.Format(SelectedItem.PluginTitle);
             }
         }
 
@@ -183,6 +182,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     OnPropertyChanged(nameof(IsSelectedBusy));
+                    OnPropertyChanged(nameof(WindowTitle));
+                    if(this is MpAvIHeaderMenuViewModel hmivm) {
+                        hmivm.OnPropertyChanged(nameof(hmivm.HeaderTitle));
+                    }
                     break;
                 case nameof(IsAnyBusy):
                     OnPropertyChanged(nameof(IsSelectedBusy));
@@ -385,12 +388,8 @@ namespace MonkeyPaste.Avalonia {
         
         public ICommand BackCommand => new MpCommand<object>(
             (args) => {
-                if(args is not Control c ||
-                    c.GetVisualAncestor<MpAvChildWindow>() is not { } cw) {
-                    return;
-                }
                 if(SelectedItem == null) {
-                    cw.Close();
+                    IsWindowOpen = false;
                 } else {
                     ClearPluginSelectionCommand.Execute(null);
                 }

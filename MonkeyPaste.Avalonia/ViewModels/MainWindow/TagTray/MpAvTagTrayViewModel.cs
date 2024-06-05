@@ -42,6 +42,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIMenuItemViewModel Implementation
 
+        string MpAvIMenuItemViewModel.IconTintHexStr =>
+            null;
         string MpAvIMenuItemViewModel.IconBorderHexColor =>
             MpSystemColors.Transparent;
 

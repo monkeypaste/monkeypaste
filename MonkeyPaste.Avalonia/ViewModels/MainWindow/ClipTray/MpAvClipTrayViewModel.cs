@@ -354,8 +354,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIAnimatedSizeViewModel Implementation
         // NOTE this are NOT bound in xaml, bound in mw.UpdateContentLayout
-        public double ContainerBoundWidth { get; set; }
-        public double ContainerBoundHeight { get; set; }
+        private double _containerBoundWidth;
+        public double ContainerBoundWidth {
+            get => _containerBoundWidth;
+            set {
+                if (ContainerBoundWidth != value && value >= 0) {
+                    _containerBoundWidth = value;
+                    OnPropertyChanged(nameof(ContainerBoundWidth));
+                }
+            }
+        }
+        private double _containerBoundHeight;
+        public double ContainerBoundHeight {
+            get => _containerBoundHeight;
+            set {
+                if (ContainerBoundHeight != value && value >= 0) {
+                    _containerBoundHeight = value;
+                    OnPropertyChanged(nameof(ContainerBoundHeight));
+                }
+            }
+        }
 
         double MpIBoundSizeViewModel.ContainerBoundWidth {
             get => ContainerBoundWidth;
@@ -1065,80 +1083,44 @@ namespace MonkeyPaste.Avalonia {
             ObservedContainerScreenWidth / MpAvThemeViewModel.PHI;
 
 
+        public double MaxContainerScreenWidth =>
+            MpAvMainView.Instance == null ? 0 : MpAvMainView.Instance.ClipTrayContainerView.Bounds.Width;
+
+        public double MaxContainerScreenHeight =>
+            MpAvMainView.Instance == null ? 0 : MpAvMainView.Instance.ClipTrayContainerView.Bounds.Height;
+
         public double MinPinTrayScreenWidth =>
-            IsPinTrayVisible ? MinClipOrPinTrayScreenWidth : 0;
+            IsPinTrayVisible ? 
+                MpAvThemeViewModel.Instance.IsMobileOrWindowed ? MaxContainerScreenWidth :
+                MinQueryOrPinTrayScreenWidth : 0;
         public double MinPinTrayScreenHeight =>
-            IsPinTrayVisible ? MinClipOrPinTrayScreenHeight : 0;
+            IsPinTrayVisible ?
+                MpAvThemeViewModel.Instance.IsMobileOrWindowed ? MaxContainerScreenHeight :
+                MinQueryOrPinTrayScreenHeight : 0;
+
+        public double MaxPinTrayScreenWidth =>
+            IsPinTrayVisible ? MaxContainerScreenWidth : 0;
+
+        public double MaxPinTrayScreenHeight =>
+            IsPinTrayVisible ? MaxContainerScreenHeight : 0;
+
+        public double MinQueryTrayScreenWidth =>
+            IsQueryTrayVisible ?
+                MpAvThemeViewModel.Instance.IsMobileOrWindowed ? MaxContainerScreenWidth :
+                MinQueryOrPinTrayScreenWidth : 0;
+        public double MinQueryTrayScreenHeight =>
+            IsQueryTrayVisible ?
+                MpAvThemeViewModel.Instance.IsMobileOrWindowed ? MaxContainerScreenHeight :
+                MinQueryOrPinTrayScreenHeight : 0;
         
-        public double MaxPinTrayScreenWidth {
-            get {
-                // if (ListOrientation == Orientation.Horizontal) {
-                //     return Math.Max(0, ObservedContainerScreenWidth - MinClipTrayScreenWidth);
-                // }
-                // return double.PositiveInfinity;
-                return MaxContainerScreenWidth;
-            }
-        }
-
-        public double MaxPinTrayScreenHeight {
-            get {
-                // if (ListOrientation == Orientation.Horizontal) {
-                //     return double.PositiveInfinity;
-                // }
-                // return Math.Max(0, ObservedContainerScreenHeight - MinClipTrayScreenHeight);
-                return MaxContainerScreenHeight;
-            }
-        }
-
-        public double MaxContainerScreenWidth {
-            get {
-                if (ListOrientation == Orientation.Horizontal) {
-                    return
-                        MpAvMainWindowViewModel.Instance.MainWindowWidth -
-                        MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarWidth;
-                }
-                return
-                            MpAvMainWindowViewModel.Instance.MainWindowWidth -
-#if MULTI_WINDOW
-                            MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength; 
-#else
-                            0;
-#endif
-            }
-        }
-
-        public double MaxContainerScreenHeight {
-            get {
-                if (ListOrientation == Orientation.Horizontal) {
-                    return
-                        MpAvMainWindowViewModel.Instance.MainWindowHeight -
-                        MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength -
-                        MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize;
-                }
-                return
-                        MpAvMainWindowViewModel.Instance.MainWindowHeight -
-                        //MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarHeight -
-                        MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength -
-                        MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize;
-            }
-        }
-
-        public double MinClipTrayScreenWidth =>
-            MinClipOrPinTrayScreenWidth;
-        public double MinClipTrayScreenHeight =>
-            MinClipOrPinTrayScreenHeight;
-        public double MinClipOrPinTrayScreenWidth =>
-#if DESKTOP
-        0;
-#else
-        0;
-#endif
-        public double MinClipOrPinTrayScreenHeight =>
-#if DESKTOP
-        0;
-#else
-        0;
-#endif
+        public double MaxQueryTrayScreenWidth =>
+            IsQueryTrayVisible ? MaxContainerScreenWidth : 0;
+        public double MaxQueryTrayScreenHeight =>
+            IsQueryTrayVisible ? MaxContainerScreenHeight : 0;
+        public double MinQueryOrPinTrayScreenWidth =>
+            0;
+        public double MinQueryOrPinTrayScreenHeight =>
+            0;
         public double MaxTileWidth =>
             double.PositiveInfinity;// Math.Max(0, ObservedQueryTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
         public double MaxTileHeight =>
@@ -1284,6 +1266,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsAnySelected =>
+            SelectedItem != null && !SelectedItem.IsAnyPlaceholder;
+
+
         List<string> PendingRejectedItemGuids { get; set; } = [];
         public int PinOpCopyItemId { get; set; } = -1;
 
@@ -1459,16 +1446,30 @@ namespace MonkeyPaste.Avalonia {
         private bool _isPinTrayVisible = true;
         public bool IsPinTrayVisible {
             get {
-#if MOBILE_OR_WINDOWED
-                return _isPinTrayVisible;
-#else
+                if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    return _isPinTrayVisible;
+                }
                 return true;
-#endif
             }
             set {
                 if(_isPinTrayVisible != value) {
                     _isPinTrayVisible = value;
                     OnPropertyChanged(nameof(IsPinTrayVisible));
+                }
+            }
+        }
+        private bool _isQueryTrayVisible = true;
+        public bool IsQueryTrayVisible {
+            get {
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    return _isQueryTrayVisible;
+                }
+                return true;
+            }
+            set {
+                if (_isQueryTrayVisible != value) {
+                    _isQueryTrayVisible = value;
+                    OnPropertyChanged(nameof(IsQueryTrayVisible));
                 }
             }
         }
@@ -2289,6 +2290,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedItem):
                     MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
                     OnPropertyChanged(nameof(SelectedCopyItemId));
+                    OnPropertyChanged(nameof(IsAnySelected));
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(CanScroll));
@@ -2937,6 +2939,17 @@ namespace MonkeyPaste.Avalonia {
             UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
         }
 
+        private void UpdateConstraints() {
+            OnPropertyChanged(nameof(MaxPinTrayScreenHeight));
+            OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
+            OnPropertyChanged(nameof(MinPinTrayScreenHeight));
+            OnPropertyChanged(nameof(MinPinTrayScreenWidth));
+            
+            OnPropertyChanged(nameof(MaxQueryTrayScreenHeight));
+            OnPropertyChanged(nameof(MaxQueryTrayScreenWidth));
+            OnPropertyChanged(nameof(MinQueryTrayScreenHeight));
+            OnPropertyChanged(nameof(MinQueryTrayScreenWidth));
+        }
         public async Task UpdateEmptyPropertiesAsync() {
             // send signal immediatly but also wait and send for busy dependants
             OnPropertyChanged(nameof(IsPinTrayEmpty));
@@ -4897,7 +4910,7 @@ namespace MonkeyPaste.Avalonia {
                     // the space is passed to the editor so pausing toggling for space to get out ur system
                     await Task.Delay(DISABLE_READ_ONLY_DELAY_MS);
                 }
-                SelectedItem.ToggleEditContentCommand.Execute(null);
+                SelectedItem.ToggleIsContentReadOnlyCommand.Execute(null);
             },
             () => {
                 if (SelectedItem == null) {
@@ -5028,7 +5041,7 @@ namespace MonkeyPaste.Avalonia {
                         new Vector(0, MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Height * 0.25);
                 MpAvClipTrayContainerView.Instance.ClipTraySplitter
                     .ApplyDelta(delta);
-                MpAvClipTrayViewModel.Instance.IsPinTrayVisible = true;
+                IsPinTrayVisible = true;
 
                 // if next tap is in pin tray expand it it other wise unexpand
                 if(TopLevel.GetTopLevel(MpAvMainView.Instance) is not { } tl) {
@@ -5066,6 +5079,8 @@ namespace MonkeyPaste.Avalonia {
                     .ApplyDelta(delta);
                 
                 IsPinTrayVisible = true;
+                IsQueryTrayVisible = false;
+                UpdateConstraints();
             });
         
         public ICommand ExpandQueryTrayCommand => new MpCommand(
@@ -5078,6 +5093,8 @@ namespace MonkeyPaste.Avalonia {
                 MpAvClipTrayContainerView.Instance.ClipTraySplitter
                     .ApplyDelta(delta);
                 IsPinTrayVisible = false;
+                IsQueryTrayVisible = true;
+                UpdateConstraints();
             });
         
         public ICommand ToggleExpandQueryTrayCommand => new MpCommand(

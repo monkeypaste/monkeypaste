@@ -24,7 +24,8 @@ namespace MonkeyPaste.Avalonia {
         MpIActiveWindowViewModel,
         MpISelectableViewModel,
         MpISidebarItemViewModel,
-        MpIDesignerSettingsViewModel {
+        MpIDesignerSettingsViewModel,
+        MpAvIHeaderMenuViewModel {
         #region Private Variables
 
         #endregion
@@ -42,6 +43,25 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpAvIHeaderMenuViewModel Implementation
+        IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
+            FocusAction == null ?
+            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor) :
+            FocusAction.ActionBackgroundHexColor.ToAvBrush();
+        IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
+            (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
+        string MpAvIHeaderMenuViewModel.HeaderTitle =>
+            null;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
+            [
+            ];
+        ICommand MpAvIHeaderMenuViewModel.BackCommand =>
+            null;
+        object MpAvIHeaderMenuViewModel.BackCommandParameter =>
+            null;
+
+        #endregion
 
         #region MpIZoomFactorViewModel Implementation
 
@@ -326,7 +346,11 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
                     return MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
-                return Math.Min(_defaultSelectorColumnVarDimLength_horiz, MpAvMainWindowViewModel.Instance.MainWindowWidth);
+                double def_w = Math.Min(_defaultSelectorColumnVarDimLength_horiz, MpAvMainWindowViewModel.Instance.MainWindowWidth);
+                if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    def_w = Math.Min(def_w, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width / 2);
+                }
+                return def_w;
             }
         }
         public double DefaultSidebarHeight {
@@ -337,11 +361,14 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                     return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
                 }
-                double h = _defaultSelectorColumnVarDimLength_vert;
+                double def_h = _defaultSelectorColumnVarDimLength_vert;
                 //if (SelectedItem != null) {
                 //    //h += _defaultParameterColumnVarDimLength;
                 //}
-                return h;
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    def_h = Math.Min(def_h, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height / 2);
+                }
+                return def_h;
             }
         }
         public double SidebarWidth { get; set; } = 0;
@@ -584,6 +611,11 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                     OnPropertyChanged(nameof(FocusActionName));
+                    if(this is MpAvIHeaderMenuViewModel hmvm) {
+                        hmvm.OnPropertyChanged(nameof(hmvm.HeaderBackground));
+                        hmvm.OnPropertyChanged(nameof(hmvm.HeaderForeground));
+                        hmvm.OnPropertyChanged(nameof(hmvm.HeaderMenuItems));
+                    }
                     break;
                 case nameof(SelectedTrigger):
                     FocusAction = SelectedTrigger;

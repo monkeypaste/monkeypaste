@@ -535,18 +535,21 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand5 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                
-                if(MpAvMainView.Instance.SidebarGridSplitter is not { } gs) {
-                    return;
-                }
-                gs.IsVisible = true;
-                //gs.ApplyDelta(new Vector(0, -50));
-                gs.RaiseEvent(new VectorEventArgs() {
-                    RoutedEvent = GridSplitter.DragDeltaEvent,
-                    Source = gs,
-                    Vector = new Vector(0, 10)
-                });
-                MpAvMainView.Instance.UpdateMainViewLayout();
+
+                //if(MpAvMainView.Instance.SidebarGridSplitter is not { } gs) {
+                //    return;
+                //}
+                //gs.IsVisible = true;
+                ////gs.ApplyDelta(new Vector(0, -50));
+                //gs.RaiseEvent(new VectorEventArgs() {
+                //    RoutedEvent = GridSplitter.DragDeltaEvent,
+                //    Source = gs,
+                //    Vector = new Vector(0, 10)
+                //});
+                //MpAvMainView.Instance.UpdateMainViewLayout();
+
+                MpAvSidebarItemCollectionViewModel.Instance.ContainerBoundHeight += 25;
+                //MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= 25;
             });
 
         #endregion

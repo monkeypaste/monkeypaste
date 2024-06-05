@@ -1,0 +1,62 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="using:MonkeyPaste.Avalonia"
+             x:CompileBindings="False"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             x:Class="MonkeyPaste.Avalonia.MpAvMenuStripView">
+    <UserControl.Styles>
+
+        <!--  MENU BUTTONS  -->
+        <Style Selector=":is(Button)#HeaderMenuButton.has-cmd-param"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="CommandParameter"
+                    Value="{Binding CommandParameter}" />
+        </Style>
+        <Style Selector=":is(Button)#HeaderMenuButton">
+            <Setter Property="CommandParameter"
+                    Value="{Binding $self}" />
+            <Setter Property="Margin"
+                    Value="8,0,0,0" />
+        </Style>
+
+        <Style Selector=":is(Button)#HeaderMenuButton.has-tint local|MpAvTintedImage"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="Tint"
+                    Value="{Binding IconTintHexStr, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
+        </Style>
+        <Style Selector=":is(Button)#HeaderMenuButton local|MpAvTintedImage">
+            <Setter Property="Tint"
+                    Value="{DynamicResource ThemeInteractiveBrush}" />
+        </Style>
+    </UserControl.Styles>
+    <ItemsControl x:Name="MenuItemsControl"
+                  Padding="5"
+                  IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                  ItemsSource="{Binding .}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="local:MpAvIMenuItemViewModel">
+                <Button x:Name="HeaderMenuButton"
+                        Classes="noBg noHoverBg noBorder"
+                        Command="{Binding Command}"
+                        Classes.has-tint="{Binding IconTintHexStr, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                        Classes.has-cmd-param="{Binding CommandParameter, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <local:MpAvTintedImage Width="25"
+                                               Height="25"
+                                               Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    </Grid>
+                </Button>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

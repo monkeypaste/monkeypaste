@@ -12,6 +12,33 @@
              d:DesignHeight="450"
              x:Class="MonkeyPaste.Avalonia.MpAvSidebarSelectedItemView">
     <UserControl.Styles>
+        <!--  MOBILE COLLAPSE  -->
+        <Style Selector="Button#CollapseSidebarButton">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+            <Setter Property="Margin"
+                    Value="0,15,0,0" />
+        </Style>
+        <Style Selector="Button#CollapseSidebarButton local|MpAvTintedImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+
+        <Style Selector="Button#CollapseSidebarButton.horiz">
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Margin"
+                    Value="0,0,15,0" />
+        </Style>
+        <Style Selector="Button#CollapseSidebarButton.horiz local|MpAvTintedImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowLeftImage}, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <!--  MOBILE CONTENT CONTROL EDGE EFFECTS  -->
         <Style Selector="ContentControl#SelectedSidebarContentControl">
             <Setter Property="Background"
                     Value="{DynamicResource MainWindowBgBrush}" />
@@ -43,54 +70,65 @@
                     Value="0,20,20,0" />
         </Style>
     </UserControl.Styles>
-    <ContentControl x:Name="SelectedSidebarContentControl"
-                    x:DataType="pcl:MpISidebarItemViewModel"
-                    DataContext="{Binding SelectedItem}"
-                    Classes.horiz="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-                    Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    HorizontalContentAlignment="Stretch"
-                    VerticalContentAlignment="Stretch"
-                    local:MpAvSizeObserverExtension.IsEnabled="True"
-                    local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
-                    local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}"
-                    Content="{Binding}">
-        <ContentControl.DataTemplates>
-            <local:MpAvSidebarItemTemplateSelector>
-                <!--  TAG TREE  -->
-                <DataTemplate x:Key="TagTreeViewTemplate"
-                              x:DataType="local:MpAvTagTrayViewModel">
-                    <local:MpAvTagTreeView Margin="0,0,0,0"
-                                           HorizontalAlignment="Stretch"
-                                           HorizontalContentAlignment="Stretch" />
+    <Grid x:Name="OuterContainer"
+          Classes="oriented">
+        <ContentControl x:Name="SelectedSidebarContentControl"
+                        x:DataType="pcl:MpISidebarItemViewModel"
+                        DataContext="{Binding SelectedItem}"
+                        Classes.horiz="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                        Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        Background="{Binding SidebarBgHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+                        local:MpAvSizeObserverExtension.IsEnabled="True"
+                        local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
+                        local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}"
+                        Content="{Binding}">
+            <ContentControl.DataTemplates>
+                <local:MpAvSidebarItemTemplateSelector>
+                    <!--  TAG TREE  -->
+                    <DataTemplate x:Key="TagTreeViewTemplate"
+                                  x:DataType="local:MpAvTagTrayViewModel">
+                        <local:MpAvTagTreeView Margin="0,0,0,0"
+                                               HorizontalAlignment="Stretch"
+                                               HorizontalContentAlignment="Stretch" />
 
-                </DataTemplate>
+                    </DataTemplate>
 
-                <!--  CLIPBOARD HANDLER  -->
-                <DataTemplate x:Key="ClipboardHandlerSelectorViewTemplate"
-                              x:DataType="local:MpAvClipboardHandlerCollectionViewModel">
-                    <local:MpAvClipboardHandlerSelectorView HorizontalAlignment="Stretch"
+                    <!--  CLIPBOARD HANDLER  -->
+                    <DataTemplate x:Key="ClipboardHandlerSelectorViewTemplate"
+                                  x:DataType="local:MpAvClipboardHandlerCollectionViewModel">
+                        <local:MpAvClipboardHandlerSelectorView HorizontalAlignment="Stretch"
+                                                                HorizontalContentAlignment="Stretch" />
+
+
+                    </DataTemplate>
+                    <!--  ANALYZERS  -->
+                    <DataTemplate x:Key="AnalyticItemSelectorViewTemplate"
+                                  x:DataType="local:MpAvAnalyticItemCollectionViewModel">
+                        <local:MpAvAnalyticItemSelectorView HorizontalAlignment="Stretch"
                                                             HorizontalContentAlignment="Stretch" />
 
+                    </DataTemplate>
+                    <!--  ACTIONS  -->
+                    <DataTemplate x:Key="TriggerActionChooserViewTemplate"
+                                  x:DataType="local:MpAvTriggerCollectionViewModel">
 
-                </DataTemplate>
-                <!--  ANALYZERS  -->
-                <DataTemplate x:Key="AnalyticItemSelectorViewTemplate"
-                              x:DataType="local:MpAvAnalyticItemCollectionViewModel">
-                    <local:MpAvAnalyticItemSelectorView HorizontalAlignment="Stretch"
-                                                        HorizontalContentAlignment="Stretch" />
-
-                </DataTemplate>
-                <!--  ACTIONS  -->
-                <DataTemplate x:Key="TriggerActionChooserViewTemplate"
-                              x:DataType="local:MpAvTriggerCollectionViewModel">
-
-                    <local:MpAvTriggerActionChooserView IsVisible="{Binding !IsWindowOpen}"
-                                                        HorizontalAlignment="Stretch"
-                                                        HorizontalContentAlignment="Stretch" />
-                </DataTemplate>
-            </local:MpAvSidebarItemTemplateSelector>
-        </ContentControl.DataTemplates>
-    </ContentControl>
+                        <local:MpAvTriggerActionChooserView IsVisible="{Binding !IsWindowOpen}"
+                                                            HorizontalAlignment="Stretch"
+                                                            HorizontalContentAlignment="Stretch" />
+                    </DataTemplate>
+                </local:MpAvSidebarItemTemplateSelector>
+            </ContentControl.DataTemplates>
+        </ContentControl>
+        <Button x:Name="CollapseSidebarButton"
+                Classes="defaultButton noBg noHoverBg noBorder"
+                Classes.horiz="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                Command="{Binding ToggleIsSidebarItemSelectedCommand}">
+            <local:MpAvTintedImage Tint="{DynamicResource ThemeInteractiveBrush}" />
+        </Button>
+    </Grid>
 </UserControl>

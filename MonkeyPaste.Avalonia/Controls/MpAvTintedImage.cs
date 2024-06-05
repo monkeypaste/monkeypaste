@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -55,7 +56,7 @@ namespace MonkeyPaste.Avalonia {
             }
             ib.Source = Source as IImageBrushSource;
             this.Background = Tint;
-            this.InvalidateVisual();
+            this.InvalidateAll();
         }
     }
 }

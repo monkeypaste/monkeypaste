@@ -38,22 +38,19 @@
 
                 <!--  CONTENT TRAY CONTAINER  -->
 
-                <Border x:Name="ClipTrayContainerBorder"
-                        Grid.Column="2"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch">
-                    <local:MpAvClipTrayContainerView x:Name="ClipTrayContainerView"
-                                                     Grid.Column="2"
-                                                     local:MpAvSizeObserverExtension.IsEnabled="True"
-                                                     local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
-                                                     local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedContainerScreenHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
-                                                     HorizontalAlignment="Stretch"
-                                                     VerticalAlignment="Stretch" />
-                </Border>
+                <local:MpAvClipTrayContainerView x:Name="ClipTrayContainerView"
+                                                 Width="{Binding ContainerBoundWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                                                 Height="{Binding ContainerBoundHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                                                 local:MpAvSizeObserverExtension.IsEnabled="True"
+                                                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
+                                                 local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedContainerScreenHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Stretch" />
 
                 <!--  SELECTED SIDEBAR ITEM  -->
                 <local:MpAvSidebarSelectedItemView x:Name="SelectedSidebarContainerBorder"
-                                                   Grid.Column="1"
+                                                   Width="{Binding ContainerBoundWidth, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                                                   Height="{Binding ContainerBoundHeight, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch" />
 
@@ -65,7 +62,6 @@
                                                ResizeDirection="Columns"
                                                HorizontalAlignment="Right"
                                                VerticalAlignment="Stretch"
-                                               IsVisible="{Binding SelectedItem, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                Classes.sidebarSplitter="True"
                                                Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                                Classes.vertical="{Binding !IsVerticalOrientation}"
@@ -76,7 +72,17 @@
                                                local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="{Binding $self}"
                                                local:MpAvPointerCommandExtension.RouteHoldToRightPress="False"
                                                local:MpAvPointerCommandExtension.RightPressCommand="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                                               local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding SelectedItemIdx, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}" />
+                                               local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding SelectedItemIdx, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}">
+                    <local:MpAvMovableGridSplitter.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="SelectedItem"
+                                     Source="{x:Static local:MpAvSidebarItemCollectionViewModel.Instance}"
+                                     Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                            <Binding Path="IsMultiWindow"
+                                     Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                        </MultiBinding>
+                    </local:MpAvMovableGridSplitter.IsVisible>
+                </local:MpAvMovableGridSplitter>
 
                 <!--  SIDEBAR BUTTONS  -->
                 <local:MpAvSidebarButtonGroupView x:Name="SidebarButtonGroup"

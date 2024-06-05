@@ -320,7 +320,8 @@
         <SolidColorBrush x:Key="PluginParameterItemBgBrush2" Color="{DynamicResource ThemeCompliment2Color}" Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
 
         <SolidColorBrush x:Key="PluginParameterItemHoverBgBrush" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
-        <!--  TAG TREE  -->
+
+        <!--  SIDEBAR BGS  -->
         <SolidColorBrush x:Key="TagTreeBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  CLIPBOARD SIDEBAR  -->

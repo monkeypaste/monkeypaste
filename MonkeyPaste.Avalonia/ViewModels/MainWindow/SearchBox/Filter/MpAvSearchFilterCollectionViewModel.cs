@@ -18,6 +18,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpAvIMenuItemCollectionViewModel Implementation
+
+        string MpAvIMenuItemViewModel.IconTintHexStr =>
+            null;
         string MpAvIMenuItemViewModel.IconBorderHexColor =>
             MpSystemColors.Transparent;
         public bool IsHovering { get; set; }

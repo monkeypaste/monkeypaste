@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,9 +30,26 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIAnimatedSizeViewModel Implementation
-
-        public double ContainerBoundWidth { get; set; }
-        public double ContainerBoundHeight { get; set; }
+        private double _containerBoundWidth;
+        public double ContainerBoundWidth { 
+            get => _containerBoundWidth;
+            set {
+                if(ContainerBoundWidth != value && value >= 0) {
+                    _containerBoundWidth = value;
+                    OnPropertyChanged(nameof(ContainerBoundWidth));
+                }
+            }
+        }
+        private double _containerBoundHeight;
+        public double ContainerBoundHeight {
+            get => _containerBoundHeight;
+            set {
+                if (ContainerBoundHeight != value && value >= 0) {
+                    _containerBoundHeight = value;
+                    OnPropertyChanged(nameof(ContainerBoundHeight));
+                }
+            }
+        }
 
         public bool IsAnimating { get; set; }
         #endregion
@@ -133,6 +151,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+        public void UpdateSidebarSize(double delta_w, double delta_h) {
+            ContainerBoundWidth += delta_w;
+            ContainerBoundHeight += delta_h;
+
+            if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                MpAvClipTrayViewModel.Instance.ContainerBoundWidth -= delta_w;
+                MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= delta_h;
+            } 
+        }
         #endregion
 
         #region Protected Methods
@@ -157,48 +184,76 @@ namespace MonkeyPaste.Avalonia {
             Items.Add(sbivm);
             sbivm.PropertyChanged += Sbivm_PropertyChanged;
         }
-        private void NotifySidebarSelectionChanging() {
-            Dispatcher.UIThread.Post(async () => {
-                //if (MpAvMainView.Instance.SidebarGridSplitter is not { } gs) {
-                //    return;
-                //}
-                //double t_s = 2;
-                //double fps = 50;
-                //double dt = 0;
-                //double time_step = fps.FpsToTimeStep();
-                //int delay_ms = fps.FpsToDelayTime();
-                //bool is_opening = SelectedItem != null;
-                //double dir = is_opening ? 1 : -1;
-                //var ss_start = is_opening ? MpPoint.Zero : 
-                //    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                //        new MpPoint(LastSelectedItem.SidebarWidth,0) :
-                //        new MpPoint(0,LastSelectedItem.SidebarHeight);
-                //var ss_end = !is_opening ? MpPoint.Zero :
-                //    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                //        new MpPoint(SelectedItem.SidebarWidth, 0) :
-                //        new MpPoint(0, SelectedItem.SidebarHeight);
-                //var ss_d = ss_end - ss_start;
-                //var ss_v = (ss_d / t_s) * time_step * dir;
-                //while (true) {
-                //    gs.RaiseEvent(new VectorEventArgs() {
-                //        RoutedEvent = GridSplitter.DragDeltaEvent,
-                //        Source = gs,
-                //        Vector = new Vector(ss_v.X, ss_v.Y)
-                //    });
-                //    MpAvMainView.Instance.UpdateMainViewLayout(is_opening ? MpMainViewUpdateType.SidebarOpen : MpMainViewUpdateType.SidebarClose);
-                //    await Task.Delay(delay_ms);
-                //    dt += time_step;
-                //    if (dt >= t_s) {
-                //        // animation complete, ensure it uses end props 
-                //        break;
-                //    }
-                //}
+        private async Task HandleSidebarSelectionChangedAsync() {
+            double start_w,start_h,end_w,end_h;
+            bool is_horiz = MpAvMainWindowViewModel.Instance.IsHorizontalOrientation;
+            if(SelectedItem == null) {
+                // closing
+                start_w = LastSelectedItem.SidebarWidth;
+                start_h = LastSelectedItem.SidebarHeight;
+                if(is_horiz) {
+                    end_w = 0;
+                    end_h = start_h;
+                } else {
+                    end_w = start_w;
+                    end_h = 0;
+                }
+            } else {
+                // opening
+                if(is_horiz) {
+                    start_w = 0;
+                    start_h = SelectedItem.DefaultSidebarHeight;
+                    end_w = SelectedItem.DefaultSidebarWidth;
+                    end_h = start_h;
+                } else {
+                    start_w = SelectedItem.DefaultSidebarWidth;
+                    start_h = 0;
+                    end_w = start_w;
+                    end_h = SelectedItem.DefaultSidebarHeight;
+                }
+            }
+            var ss_start = new MpSize(start_w, start_h);
+            var ss_end = new MpSize(end_w, end_h);
+            await AnimateSidebarAsync(ss_start, ss_end, 0.1, 100);     
 
-                MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeBegin);
-                MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeEnd);
-            });
+            if(SelectedItem is not null && 
+                SelectedItem.LastSelectedDateTime == default &&
+                MpAvMainView.Instance.SelectedSidebarContainerBorder
+                .SelectedSidebarContentControl.GetVisualDescendants<ScrollViewer>() is { } svl) {
+                // on initial selection of a sidebar reset all scroll viewers (avalonia scrolls to random place, can't fix it
+                svl.ForEach(x => x.ScrollToHome());                
+            }
+
+            if (SelectedItem is MpICloseWindowViewModel cwvm &&
+                cwvm.IsWindowOpen &&
+                MpAvWindowManager.LocateWindow(SelectedItem) is MpAvWindow w) {
+                // trigger sidebar pop out
+                w.WindowState = WindowState.Normal;
+                w.Activate();
+            }
         }
+        private async Task AnimateSidebarAsync(MpSize start, MpSize end, double tt = 0.25, double fps = 120) {
+            ContainerBoundWidth = start.Width;
+            ContainerBoundHeight = start.Height;
 
+            double dt = 0;
+            double time_step = fps.FpsToTimeStep();
+            int delay_ms = fps.FpsToDelayTime();
+
+            var ss_d = end - start;
+            var ss_v = (ss_d / tt) * time_step;
+            while (true) {
+                UpdateSidebarSize(ss_v.X, ss_v.Y);
+                await Task.Delay(delay_ms);
+                dt += time_step;
+                if (dt >= tt) {
+                    // animation complete
+                    ContainerBoundWidth = end.Width;
+                    ContainerBoundHeight = end.Height;
+                    break;
+                }
+            }
+        }
         private void MpAvSidebarItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(SelectedItem):
@@ -210,19 +265,8 @@ namespace MonkeyPaste.Avalonia {
                         LastSelectedItem = SelectedItem;
                         SelectedItem.OnPropertyChanged(nameof(SelectedItem.IsSelected));
                     }
-                    NotifySidebarSelectionChanging();
-
-                    MpAvMainView.Instance.UpdateMainViewLayout(SelectedItem == null ? MpMainViewUpdateType.SidebarClose: MpMainViewUpdateType.SidebarOpen);
                     OnPropertyChanged(nameof(SelectedItemIdx));
-
-                    if (SelectedItem is MpICloseWindowViewModel cwvm &&
-                        cwvm.IsWindowOpen &&
-                        MpAvWindowManager.LocateWindow(SelectedItem) is MpAvWindow w) {
-                        // trigger sidebar pop out
-                        w.WindowState = WindowState.Normal;
-                        w.Activate();
-                        //w.Topmost = true;
-                    }
+                    HandleSidebarSelectionChangedAsync().FireAndForgetSafeAsync();                    
                     break;
             }
         }

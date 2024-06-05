@@ -24,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
         bool IsThreeState { get; }
         bool IsSubMenuOpen { get; set; }
         string IconBorderHexColor { get; }
+        string IconTintHexStr { get; }
         MpMenuItemType MenuItemType { get; }
         IEnumerable<MpAvIMenuItemViewModel> SubItems { get; }
     }

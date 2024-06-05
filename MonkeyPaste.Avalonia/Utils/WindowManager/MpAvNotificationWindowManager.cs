@@ -226,8 +226,8 @@ namespace MonkeyPaste.Avalonia {
                 nw.CloseTransition = MpChildWindowTransition.SlideOutToTop;
                 nw.HeightRatio = -1; // use default height
             } else if(nvmb is MpAvLoaderNotificationViewModel) {
-                nw.OpenTransition = MpChildWindowTransition.None;
-                nw.CloseTransition = MpChildWindowTransition.None;
+                nw.OpenTransition = MpChildWindowTransition.FadeIn;
+                nw.CloseTransition = MpChildWindowTransition.FadeOut | MpChildWindowTransition.SlideOutToTop;
             }
 #endif
             try {
