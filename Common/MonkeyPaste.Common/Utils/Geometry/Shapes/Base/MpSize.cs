@@ -11,7 +11,7 @@ namespace MonkeyPaste.Common {
             NewSize = newSize;
         }
     }
-    public class MpSize : MpIIsFuzzyValueEqual<MpSize> {
+    public class MpSize : MpPoint, MpIIsFuzzyValueEqual<MpSize> {
         //public static MpSize Parse(string text) {
         //    text = text.Trim();
         //    if(text.Contains())
@@ -37,6 +37,15 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Properties
+
+        public override double X { 
+            get => Width; 
+            set => Width = value; 
+        }
+        public override double Y { 
+            get => Height; 
+            set => Height = value; 
+        }
 
         private double _width;
         public double Width {

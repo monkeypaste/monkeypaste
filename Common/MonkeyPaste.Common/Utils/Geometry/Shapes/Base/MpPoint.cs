@@ -66,9 +66,9 @@ namespace MonkeyPaste.Common {
 
         #region Properties
 
-        public double[] Values => new double[] { X, Y };
-        public double X { get; set; } = 0;
-        public double Y { get; set; } = 0;
+        public virtual double X { get; set; } = 0;
+        public virtual double Y { get; set; } = 0;
+        public double[] Values => [X, Y];
         #endregion
 
         #region Events
