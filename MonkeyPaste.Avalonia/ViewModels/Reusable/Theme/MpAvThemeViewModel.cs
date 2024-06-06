@@ -232,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
 #if WINDOWED
             true;
 #else
-            false;
+            MpAvPrefViewModel.Instance == null ? false : MpAvPrefViewModel.Instance.IsWindowed;
 #endif
 
         public bool IsMobileOrWindowed =>

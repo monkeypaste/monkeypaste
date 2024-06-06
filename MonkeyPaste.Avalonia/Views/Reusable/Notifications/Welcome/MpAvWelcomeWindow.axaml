@@ -142,13 +142,13 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top">
                 <Button x:Name="MinimizeButton"
-                        Classes="outline outlineOver noBg noHoverBg noBorder noHoverBorder windowButton">
+                        Classes="outline outlineOver no-bg no-hover-bg no-border noHoverBorder windowButton">
                     <Border />
                 </Button>
                 <Button x:Name="CloseButton"
                         Command="{Binding ExitApplicationCommand, Source={x:Static local:MpAvSystemTrayViewModel.Instance}}"
                         CommandParameter="welcome"
-                        Classes="outline outlineOver noBg noHoverBg noBorder noHoverBorder windowButton close">
+                        Classes="outline outlineOver no-bg no-hover-bg no-border noHoverBorder windowButton close">
                     <Grid>
                         <Border RenderTransform="rotate(-45deg)" />
                         <Border RenderTransform="rotate(45deg)" />
@@ -235,12 +235,12 @@
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right">
                     <Button Margin="0,0,5,0"
-                            Classes="defaultButton textOnlyButton navButton"
+                            Classes="default-button textOnlyButton navButton"
                             Command="{Binding SelectPrevPageCommand}">
 
                         <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.WelcomePreviousButtonLabel}" />
                     </Button>
-                    <Button Classes="defaultButton textOnlyButton navButton"
+                    <Button Classes="default-button textOnlyButton navButton"
                             IsVisible="{Binding !IsVisible, ElementName=FinishButton}"
                             Command="{Binding SelectNextPageCommand}">
 
@@ -257,7 +257,7 @@
 
                     <Button x:Name="FinishButton"
                             HorizontalAlignment="Right"
-                            Classes="defaultButton textOnlyButton navButton"
+                            Classes="default-button textOnlyButton navButton"
                             IsVisible="{Binding CanFinish}"
                             Command="{Binding FinishWelcomeCommand}">
 

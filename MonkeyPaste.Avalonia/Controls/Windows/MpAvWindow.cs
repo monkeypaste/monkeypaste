@@ -201,9 +201,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void Init() {
-#if DEBUG && !WINDOWED
-            this.AttachDevTools(DefaultDevToolOptions);
-#endif
             Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon;
             
             if (MpAvPrefViewModel.Instance.IsThemeDark) {

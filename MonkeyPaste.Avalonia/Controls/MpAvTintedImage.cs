@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Metadata;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
@@ -16,8 +17,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Tint
 
-        public static readonly AttachedProperty<IBrush> TintProperty =
-            AvaloniaProperty.RegisterAttached<MpAvTintedImage, Control, IBrush>(
+        public static readonly StyledProperty<IBrush> TintProperty =
+            AvaloniaProperty.Register<MpAvTintedImage,IBrush>(
                 nameof(Tint),
                 defaultValue: Brushes.Black);
 
@@ -30,8 +31,8 @@ namespace MonkeyPaste.Avalonia {
         
         #region Source
 
-        public static readonly AttachedProperty<IImage> SourceProperty =
-            AvaloniaProperty.RegisterAttached<MpAvTintedImage, Control, IImage>(
+        public static readonly StyledProperty<IImage> SourceProperty =
+            AvaloniaProperty.Register<MpAvTintedImage, IImage>(
                 nameof(Source));
 
         public IImage Source {
@@ -42,21 +43,23 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #endregion
-        public MpAvTintedImage() {
-            this.GetObservable(SourceProperty).Subscribe(value => Init()).AddDisposable(this);
-            this.GetObservable(TintProperty).Subscribe(value => Init()).AddDisposable(this);
+        static MpAvTintedImage() {
+            AffectsRender<Image>(SourceProperty, TintProperty);
+            SourceProperty.Changed.AddClassHandler<MpAvTintedImage>((x, y) => Init(x));
+            TintProperty.Changed.AddClassHandler<MpAvTintedImage>((x, y) => Init(x));
         }
 
-        private void Init() {
-            if(this.OpacityMask is not ImageBrush ib) {
+        private static void Init(MpAvTintedImage ti) {
+            if (ti.OpacityMask is not ImageBrush ib) {
                 ib = new ImageBrush() {
                     TileMode = TileMode.None
                 };
-                this.OpacityMask = ib;
+                ti.OpacityMask = ib;
             }
-            ib.Source = Source as IImageBrushSource;
-            this.Background = Tint;
-            this.InvalidateAll();
+            ib.Source = ti.Source as IImageBrushSource;
+            ti.Background = ti.Tint;
+            ti.InvalidateVisual();
         }
+        public MpAvTintedImage() { }
     }
 }

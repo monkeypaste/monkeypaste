@@ -27,7 +27,7 @@
             <!--  BACK BUTTON  -->
             <Button x:Name="BackButton"
                     HorizontalAlignment="Left"
-                    Classes="noBg noHoverBg noBorder"
+                    Classes="no-bg no-hover-bg no-border"
                     IsVisible="{Binding BackCommand, ElementName=HeaderView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                     Command="{Binding BackCommand, ElementName=HeaderView}"
                     CommandParameter="{Binding BackCommandParameter, ElementName=HeaderView}">
@@ -49,7 +49,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="local:MpAvIMenuItemViewModel">
                         <Button x:Name="HeaderMenuButton"
-                                Classes="noBg noHoverBg noBorder"
+                                Classes="no-bg no-hover-bg no-border"
                                 Command="{Binding Command}"
                                 Classes.self-ref-cmd-param="{Binding ., ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                             <Image local:MpAvImageTintExtension.IsEnabled="True"

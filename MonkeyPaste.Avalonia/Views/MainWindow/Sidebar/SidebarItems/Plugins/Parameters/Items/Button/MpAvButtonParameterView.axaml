@@ -43,7 +43,7 @@
                     IsVisible="{Binding IsLink}">
                 <TextBlock Text="{Binding Title}" />
             </Button>
-            <Button Classes="param defaultButton"
+            <Button Classes="param default-button"
                     IsVisible="{Binding !IsLink}"
                     MinWidth="100">
                 <Grid>

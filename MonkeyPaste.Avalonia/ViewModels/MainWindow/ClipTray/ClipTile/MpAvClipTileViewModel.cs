@@ -1030,17 +1030,16 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsCornerButtonsVisible {
             get {
-#if MOBILE_OR_WINDOWED
-                return IsSelected;
-#else
+                if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    return false;
+                }
                 if (IsFrozen) {
                     return false;
-                }                
+                }
                 if (IsWindowOpen || IsSubSelectionEnabled || IsSelected || (IsHovering && !Parent.IsAnyDropOverTrays)) {
                     return true;
                 }
                 return false;
-#endif
             }
         }
 

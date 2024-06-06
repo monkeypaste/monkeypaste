@@ -90,7 +90,7 @@
                                             Grid.Row="0"
                                             HorizontalAlignment="Right"
                                             Cursor="Hand"
-                                            Classes="noBg noHoverBg outlineOver"
+                                            Classes="no-bg no-hover-bg outlineOver"
                                             Command="{Binding ShowTriggerSelectorMenuCommand}"
                                             CommandParameter="{Binding $self}">
                                         <ToolTip.Tip>

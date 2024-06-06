@@ -208,7 +208,7 @@
                             CommandParameter="{Binding $self}"
                             local:MpAvDropExtension.IsEnabled="True"
                             local:MpAvDropExtension.DragEnterCommand="{Binding ExpandFromDragCommand}"
-                            Classes="noBg noHoverBg noBorder">
+                            Classes="no-bg no-hover-bg no-border">
                         <ToolTip.Tip>
                             <local:MpAvToolTipView ToolTipText="{Binding SearchButtonTooltipText}" />
                         </ToolTip.Tip>
@@ -267,7 +267,7 @@
                             <Button x:Name="PreviousTemplateButton"
                                     TabIndex="2"
                                     Grid.Column="0"
-                                    Classes="noBg noHoverBg navButton noBorder"
+                                    Classes="no-bg no-hover-bg navButton no-border"
                                     Margin="0,5"
                                     Width="{Binding $self.Bounds.Height}"
                                     VerticalAlignment="Stretch"
@@ -284,7 +284,7 @@
                             <Button x:Name="NextTemplateButton"
                                     TabIndex="3"
                                     Grid.Column="1"
-                                    Classes="noBg noHoverBg navButton noBorder"
+                                    Classes="no-bg no-hover-bg navButton no-border"
                                     Margin="0,5"
                                     Width="{Binding $self.Bounds.Height}"
                                     VerticalAlignment="Stretch"
@@ -377,7 +377,7 @@
                       local:MpAvDropExtension.IsEnabled="True"
                       local:MpAvDropExtension.DragEnterCommand="{Binding ExpandCriteriaFromDragEnterCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       IsChecked="{Binding IsExpanded, Mode=TwoWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
-                      Classes="noBg noHoverBg outlineOver"
+                      Classes="no-bg no-hover-bg outlineOver"
                       Classes.popout="{Binding IsCriteriaWindowOpen, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       Classes.active="{Binding IsAdvSearchActive, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
             <ToolTip.Tip>

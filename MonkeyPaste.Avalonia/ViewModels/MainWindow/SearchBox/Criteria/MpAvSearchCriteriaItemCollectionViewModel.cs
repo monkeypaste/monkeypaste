@@ -87,6 +87,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ObservableCollection<MpAvSearchCriteriaItemViewModel> Items { get; set; } = new ObservableCollection<MpAvSearchCriteriaItemViewModel>();
 
+
         public IEnumerable<MpAvSearchCriteriaItemViewModel> SortedItems =>
             Items.OrderBy(x => x.SortOrderIdx).ToList();
 
@@ -101,6 +102,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsVerticalOrientation {
+            get {
+                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                    return !IsCriteriaWindowOpen && MpAvMainWindowViewModel.Instance.IsVerticalOrientation;
+                }
+                return true;
+            }
+        }
+        
+        
         public string DisabledInputTooltip =>
             CanAlter ? string.Empty : UiStrings.CommonReadOnlyElmDisabledToolTip;
         public bool IsAnyDragging =>
@@ -318,6 +329,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.MainWindowOrientationChangeEnd:
                 case MpMessageType.TagSelectionChanged:
                     RefreshProperties();
                     break;
@@ -327,6 +339,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsExpanded)));
                     break;
                 case nameof(IgnoreHasModelChanged):
                     Items.ForEach(x => x.IgnoreHasModelChanged = IgnoreHasModelChanged);
@@ -381,6 +394,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(SelectedItem));
             OnPropertyChanged(nameof(IsCriteriaWindowOpen));
             OnPropertyChanged(nameof(IsPendingQuery));
+            OnPropertyChanged(nameof(IsVerticalOrientation));
         }
 
         private Tuple<int, int>[] GetCurrentSearchItemSaveCheckState() {

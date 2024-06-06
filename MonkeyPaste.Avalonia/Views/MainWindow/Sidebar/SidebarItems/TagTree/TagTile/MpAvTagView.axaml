@@ -341,7 +341,7 @@
         </Grid>
         <Button x:Name="AddTagButton"
                 Grid.Row="0"
-                Classes="noBg noHoverBg outlineOver"
+                Classes="no-bg no-hover-bg outlineOver"
                 VerticalAlignment="Center"
                 CornerRadius="7"
                 Width="30"

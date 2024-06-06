@@ -128,7 +128,7 @@
 
                     <!--  ADD APP CUSTOM FORMATS BUTTON  -->
 
-                    <DropDownButton Classes="defaultButton iconTextButton dataGridAddButton"
+                    <DropDownButton Classes="default-button iconTextButton dataGridAddButton"
                                     Command="{Binding ShowAddAppPopupMenuCommand}"
                                     CommandParameter="{Binding $self, ConverterParameter=formats, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
                         <DockPanel>
@@ -370,7 +370,7 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Button x:Name="DeleteAppPasteButton"
-                                                        Classes="defaultButton outline outlineOver remove"
+                                                        Classes="default-button outline outlineOver remove"
                                                         Command="{Binding RemoveAppComponentCommand, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}"
                                                         CommandParameter="{Binding ., ConverterParameter=formats, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}" />
                                             </DataTemplate>
@@ -416,7 +416,7 @@
 
                     <!--  ADD APP BUTTON  -->
 
-                    <DropDownButton Classes="defaultButton iconTextButton dataGridAddButton"
+                    <DropDownButton Classes="default-button iconTextButton dataGridAddButton"
                                     Command="{Binding ShowAddAppPopupMenuCommand}"
                                     CommandParameter="{Binding $self, ConverterParameter=shortcuts, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
                         <DockPanel>
@@ -511,7 +511,7 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Button x:Name="DeleteAppPasteButton"
-                                                        Classes="defaultButton outline outlineOver remove"
+                                                        Classes="default-button outline outlineOver remove"
                                                         Command="{Binding RemoveAppComponentCommand, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}"
                                                         CommandParameter="{Binding ., ConverterParameter=shortcuts, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}" />
                                             </DataTemplate>
@@ -584,7 +584,7 @@
 
                                 <!--  ADD APP BUTTON  -->
 
-                                <DropDownButton Classes="defaultButton iconTextButton dataGridAddButton"
+                                <DropDownButton Classes="default-button iconTextButton dataGridAddButton"
                                                 Command="{Binding ShowAddAppPopupMenuCommand}"
                                                 CommandParameter="{Binding $self, ConverterParameter=rejects, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
                                     <DockPanel>
@@ -635,7 +635,7 @@
                                                     <DataGridTemplateColumn.CellTemplate>
                                                         <DataTemplate>
                                                             <Button x:Name="DeleteAppPasteButton"
-                                                                    Classes="defaultButton outline outlineOver remove"
+                                                                    Classes="default-button outline outlineOver remove"
                                                                     Command="{Binding RemoveAppComponentCommand, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}"
                                                                     CommandParameter="{Binding ., ConverterParameter=rejects, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}" />
                                                         </DataTemplate>
@@ -714,7 +714,7 @@
                                                    DataContext="{x:Static local:MpAvUrlCollectionViewModel.Instance}">
                                             <Button DockPanel.Dock="Bottom"
                                                     HorizontalAlignment="Right"
-                                                    Classes="defaultButton iconTextButton dataGridAddButton"
+                                                    Classes="default-button iconTextButton dataGridAddButton"
                                                     Command="{Binding AddRejectUrlCommand}"
                                                     CommandParameter="domain">
                                                 <DockPanel>
@@ -772,7 +772,7 @@
                                                                 <DataGridTemplateColumn.CellTemplate>
                                                                     <DataTemplate>
                                                                         <Button x:Name="UnrejectDomainButton"
-                                                                                Classes="defaultButton outline outlineOver remove"
+                                                                                Classes="default-button outline outlineOver remove"
                                                                                 Command="{Binding UnrejectCommand}"
                                                                                 CommandParameter="domain" />
                                                                     </DataTemplate>
@@ -825,7 +825,7 @@
                                                    DataContext="{x:Static local:MpAvUrlCollectionViewModel.Instance}">
                                             <Button DockPanel.Dock="Bottom"
                                                     HorizontalAlignment="Right"
-                                                    Classes="defaultButton iconTextButton dataGridAddButton"
+                                                    Classes="default-button iconTextButton dataGridAddButton"
                                                     Command="{Binding AddRejectUrlCommand}"
                                                     CommandParameter="page">
                                                 <DockPanel>
@@ -883,7 +883,7 @@
                                                                 <DataGridTemplateColumn.CellTemplate>
                                                                     <DataTemplate>
                                                                         <Button x:Name="UnrejectPageButton"
-                                                                                Classes="defaultButton outline outlineOver remove page"
+                                                                                Classes="default-button outline outlineOver remove page"
                                                                                 local:MpAvShowDisabledTooltipExtension.ShowOnDisabled="True"
                                                                                 Command="{Binding UnrejectCommand}"
                                                                                 CommandParameter="page" />

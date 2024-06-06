@@ -16,12 +16,7 @@ namespace MonkeyPaste.Avalonia {
         #region Layout
         public int FilterAnimTimeMs => 300; // NOTE needs to match resource time
         public double DefaultFilterMenuFixedSize =>
-#if MOBILE_OR_WINDOWED
-        MpAvSearchBoxViewModel.Instance.IsExpanded ?
-            40 : 40;
-#else
-            40;
-#endif
+            MpAvThemeViewModel.Instance.IsMobileOrWindowed ? 50 : 40;
 
         public double FilterMenuHeight { get; set; }
 
@@ -72,39 +67,35 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void UpdateFilterLayouts() {
+            var fmv = MpAvMainView.Instance.FilterMenuView;
             var ttrvm = MpAvTagTrayViewModel.Instance;
-            double total_item_width = ttrvm.PinnedItems.Count() * 130.0d;
 
-            double sbw = MpAvSearchBoxViewModel.Instance.IsExpanded ?
-                335.0d :
-                ObservedSearchBoxWidth;
+            if(fmv.TagTrayView.IsVisible) {
+                MaxTagTrayScreenWidth =
+                fmv.Bounds.Width -
+                fmv.SearchBoxView.Bounds.Width -
+                fmv.SortView.Bounds.Width;
 
-            double svw = MpAvClipTileSortDirectionViewModel.Instance.IsExpanded ?
-                160 :
-                ObservedSortViewWidth;
-
-            MaxTagTrayScreenWidth =
-                ObservedFilterMenuWidth -
-                svw -
-                sbw;
-
-            if (total_item_width > MaxTagTrayScreenWidth) {
-                double total_navs_width = ((ttrvm.NavButtonSize + 15) * 2);
-                MaxTagTrayScreenWidth -= total_navs_width;
-                ttrvm.IsNavButtonsVisible = MaxTagTrayScreenWidth > total_navs_width;
+                double total_item_width = fmv.TagTrayView.IsVisible ? fmv.TagTrayView.TagTray.Bounds.Width : 0;
+                if (total_item_width > MaxTagTrayScreenWidth) {
+                    double total_navs_width = ((ttrvm.NavButtonSize + 15) * 2);
+                    MaxTagTrayScreenWidth -= total_navs_width;
+                    ttrvm.IsNavButtonsVisible = MaxTagTrayScreenWidth > total_navs_width;
+                } else {
+                    ttrvm.IsNavButtonsVisible = false;
+                }
+                MaxTagTrayScreenWidth = Math.Max(0, MaxTagTrayScreenWidth); 
+                
+                MaxSearchBoxWidth =
+                fmv.Bounds.Width -
+                    fmv.TagTrayView.Bounds.Width -
+                    fmv.SortView.Bounds.Width;
             } else {
-                ttrvm.IsNavButtonsVisible = false;
+                MaxTagTrayScreenWidth = 0;
+                MaxSearchBoxWidth = double.PositiveInfinity;
             }
-            MaxTagTrayScreenWidth = Math.Max(0, MaxTagTrayScreenWidth);
 
-            MaxSearchBoxWidth =
-                Math.Max(
-                    MpAvSearchBoxViewModel.Instance.IsExpanded ?
-                        sbw :
-                        35,
-                    ObservedFilterMenuWidth -
-                    ObservedTagTrayWidth -
-                    svw);
+            
 
         }
         #endregion

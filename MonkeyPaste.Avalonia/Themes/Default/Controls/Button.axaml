@@ -23,6 +23,10 @@
                 Value="Transparent" />
     </Style>
     <!--  LINK TEXT  -->
+    <Style Selector="Button.link.no-underline :is(TextBlock)">
+        <Setter Property="TextDecorations"
+                Value="{x:Null}" />
+    </Style>
     <Style Selector="Button.link :is(TextBlock)">
         <Setter Property="Foreground"
                 Value="{DynamicResource ThemeAccent5BgColor}" />
@@ -58,7 +62,7 @@
         <Setter Property="Command"
                 Value="{Binding ShowPluginBrowserCommand, Source={x:Static local:MpAvPluginBrowserViewModel.Instance}}" />
         <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
-                Value="defaultButton noBg noHoverBg outline outlineOver square" />
+                Value="default-button no-bg no-hover-bg outline outlineOver square" />
         <Setter Property="Content">
             <Setter.Value>
                 <Template>

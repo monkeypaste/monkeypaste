@@ -46,14 +46,12 @@
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="local:MpAvIMenuItemViewModel">
                 <Button x:Name="HeaderMenuButton"
-                        Classes="noBg noHoverBg noBorder"
+                        Classes="no-bg no-hover-bg no-border default-button header-button"
                         Command="{Binding Command}"
                         Classes.has-tint="{Binding IconTintHexStr, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                         Classes.has-cmd-param="{Binding CommandParameter, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                     <Grid ColumnDefinitions="Auto,*">
-                        <local:MpAvTintedImage Width="25"
-                                               Height="25"
-                                               Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                        <local:MpAvTintedImage Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                     </Grid>
                 </Button>
             </DataTemplate>

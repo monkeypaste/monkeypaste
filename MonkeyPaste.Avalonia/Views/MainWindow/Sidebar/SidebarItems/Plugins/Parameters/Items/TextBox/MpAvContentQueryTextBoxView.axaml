@@ -168,7 +168,7 @@
 
             <Button x:Name="FilterButton"
                     Grid.Column="2"
-                    Classes="defaultButton noBg noHoverBg noBorder outerButton"
+                    Classes="default-button no-bg no-hover-bg no-border outerButton"
                     Command="{Binding ShowQueryMenuCommand}"
                     CommandParameter="{Binding $self}">
                 <Button.IsVisible>
@@ -187,7 +187,7 @@
 
             <ToggleButton x:Name="PopOutTextBoxButton"
                           Grid.Column="3"
-                          Classes="defaultButton noBg noHoverBg noBorder outerButton"
+                          Classes="default-button no-bg no-hover-bg no-border outerButton"
                           IsChecked="{Binding IsWindowOpen, Mode=OneWay}"
                           Command="{Binding OpenPopOutWindowCommand}">
                 <ToggleButton.IsVisible>

@@ -67,7 +67,7 @@
         </Grid.ColumnDefinitions>
 
         <RepeatButton x:Name="TagTrayNavLeftButton"
-                      Classes="noBg noHoverBg"
+                      Classes="no-bg no-hover-bg"
                       HorizontalAlignment="Left"
                       Grid.Column="0"
                       Margin="5"

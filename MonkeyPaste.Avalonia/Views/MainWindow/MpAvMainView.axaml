@@ -24,6 +24,7 @@
             <!--  Filter Menu  -->
             <local:MpAvFilterMenuView x:Name="FilterMenuView"
                                       Grid.Row="1"
+                                      Height="{Binding FilterMenuHeight, Source={x:Static local:MpAvFilterMenuViewModel.Instance}}"
                                       local:MpAvSizeObserverExtension.IsEnabled="True"
                                       local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedFilterMenuWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}"
                                       HorizontalAlignment="Stretch"

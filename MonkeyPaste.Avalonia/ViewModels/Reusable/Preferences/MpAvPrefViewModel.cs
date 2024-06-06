@@ -223,7 +223,7 @@ namespace MonkeyPaste.Avalonia {
         private bool _isWindowed = false;
         public bool IsWindowed {
             get {
-#if WINDOWED
+#if MOBILE_OR_WINDOWED
                 return true;
 #else                
                 return _isWindowed;

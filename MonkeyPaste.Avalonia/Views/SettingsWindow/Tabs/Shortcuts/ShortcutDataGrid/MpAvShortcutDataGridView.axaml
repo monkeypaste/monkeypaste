@@ -131,7 +131,7 @@
                             <DataTemplate>
                                 <Button x:Name="ResetOrDeleteButton"
                                         Classes.canDelete="{Binding CanDelete}"
-                                        Classes="defaultButton outline outlineOver resetdelete"
+                                        Classes="default-button outline outlineOver resetdelete"
                                         IsEnabled="{Binding CanDeleteOrReset}"
                                         HorizontalAlignment="Center"
                                         local:MpAvPointerCommandExtension.IsEnabled="True"

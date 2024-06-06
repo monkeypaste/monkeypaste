@@ -406,7 +406,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         {
                             MpShortcutType.ManuallyAddFromClipboard,
-                            MpAvClipTrayViewModel.Instance.AddItemWhileIgnoringClipboardCommand
+                            MpAvClipTrayViewModel.Instance.AddClipboardAsItemCommand
                         },
                         {
                             MpShortcutType.ZoomInOnSelection,

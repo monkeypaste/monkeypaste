@@ -18,19 +18,19 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Grid#FilterDockPanel.vert.sort-expanded local|MpAvTagTrayView">
+        <Style Selector="Grid#FilterDockPanel.vert.sort-expanded local|MpAvTagTrayView, Grid#FilterDockPanel.mobile.sort-expanded local|MpAvTagTrayView">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Grid#FilterDockPanel.vert.sort-expanded local|MpAvSearchBoxView">
+        <Style Selector="Grid#FilterDockPanel.vert.sort-expanded local|MpAvSearchBoxView, Grid#FilterDockPanel.mobile.sort-expanded local|MpAvSearchBoxView">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Grid#FilterDockPanel.vert.search-expanded local|MpAvTagTrayView">
+        <Style Selector="Grid#FilterDockPanel.vert.search-expanded local|MpAvTagTrayView, Grid#FilterDockPanel.mobile.search-expanded local|MpAvTagTrayView">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Grid#FilterDockPanel.vert.search-expanded local|MpAvClipTileSortView">
+        <Style Selector="Grid#FilterDockPanel.vert.search-expanded local|MpAvClipTileSortView, Grid#FilterDockPanel.mobile.search-expanded local|MpAvClipTileSortView">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>

@@ -70,6 +70,7 @@ namespace MonkeyPaste.Avalonia {
                 SelectedItem = value < 0 || value >= Items.Count ? null : Items[value];
             }
         }
+        public MpISidebarItemViewModel BoundItem { get; private set; }
         public MpISidebarItemViewModel SelectedItem { get; private set; }
         public MpISidebarItemViewModel LastSelectedItem { get; set; }
 
@@ -187,7 +188,8 @@ namespace MonkeyPaste.Avalonia {
         private async Task HandleSidebarSelectionChangedAsync() {
             double start_w,start_h,end_w,end_h;
             bool is_horiz = MpAvMainWindowViewModel.Instance.IsHorizontalOrientation;
-            if(SelectedItem == null) {
+            bool is_closing = SelectedItem == null;
+            if(is_closing) {
                 // closing
                 start_w = LastSelectedItem.SidebarWidth;
                 start_h = LastSelectedItem.SidebarHeight;
@@ -262,11 +264,16 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     if (SelectedItem != null) {
+                        BoundItem = SelectedItem;
                         LastSelectedItem = SelectedItem;
                         SelectedItem.OnPropertyChanged(nameof(SelectedItem.IsSelected));
                     }
-                    OnPropertyChanged(nameof(SelectedItemIdx));
-                    HandleSidebarSelectionChangedAsync().FireAndForgetSafeAsync();                    
+                    Dispatcher.UIThread.Post(async () => {
+                        await HandleSidebarSelectionChangedAsync();
+                        OnPropertyChanged(nameof(SelectedItemIdx));
+                        BoundItem = SelectedItem;
+                    });
+                  
                     break;
             }
         }

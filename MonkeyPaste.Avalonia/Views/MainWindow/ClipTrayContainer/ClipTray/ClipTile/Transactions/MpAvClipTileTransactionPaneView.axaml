@@ -94,7 +94,7 @@
                    VerticalAlignment="Center">
             <Button x:Name="CloseTransactionsButton"
                     DockPanel.Dock="Left"
-                    Classes="noBg noHoverBg"
+                    Classes="no-bg no-hover-bg"
                     VerticalAlignment="Stretch"
                     Command="{Binding ToggleTransactionPaneOpenCommand}">
                 <Image VerticalAlignment="Stretch"
@@ -111,7 +111,7 @@
                           DataContext="{Binding SelectedTransaction}"
                           IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                           DockPanel.Dock="Right"
-                          Classes="noBg noHoverBg outline outlineOver"
+                          Classes="no-bg no-hover-bg outline outlineOver"
                           Command="{Binding TogglePlainTextCommand}"
                           CommandParameter="{Binding $self}"
                           IsChecked="{Binding IsPlainTextView, Mode=OneWay}">
@@ -173,7 +173,7 @@
                             <Button x:Name="DeleteTransButton"
                                     Width="20"
                                     Grid.Column="2"
-                                    Classes="noBg noHoverBg outlineOver squareByWidth"
+                                    Classes="no-bg no-hover-bg outlineOver squareByWidth"
                                     Command="{Binding DeleteThisTransactionCommand}"
                                     IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}">
                                 <ToolTip.Tip>

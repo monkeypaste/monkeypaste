@@ -44,7 +44,7 @@
                                         <!--  EXECUTE ANALYSIS BUTTON  -->
 
                                         <Button IsVisible="{Binding !PresetViewModel.Parent.IsBusy}"
-                                                Classes="defaultButton iconTextButton"
+                                                Classes="default-button iconTextButton"
                                                 Command="{Binding PresetViewModel.ExecutePresetAnalysisOnSelectedContentCommand}">
                                             <DockPanel>
                                                 <Image Source="{Binding ., Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand, Source={StaticResource ExecuteImage}}" />
@@ -61,7 +61,7 @@
                                     </Grid>
 
                                     <!--  RESET PARAM BUTTON  -->
-                                    <Button Classes="defaultButton outline outlineOver"
+                                    <Button Classes="default-button outline outlineOver"
                                             IsVisible="{Binding CanRestore}"
                                             Command="{Binding RestoreRequestPresetValuesCommand}">
                                         <ToolTip.Tip>

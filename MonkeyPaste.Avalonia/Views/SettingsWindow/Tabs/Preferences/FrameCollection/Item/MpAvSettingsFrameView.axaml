@@ -18,17 +18,12 @@
 
         <!--  EXPANDER  -->
         <Style Selector="local|MpAvTintedImage#ExpanderImage">
-            <!--<Setter Property="RenderTransform"
-                    Value="none" />-->
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource EdgeArrowRightImage}, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
         <Style Selector="local|MpAvTintedImage#ExpanderImage.expanded">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource EdgeArrowDownImage}, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-
-            <!--<Setter Property="RenderTransform"
-                    Value="rotate(90deg)" />-->
         </Style>
 
         <Style Selector="local|MpAvClipBorder#OuterBorder">

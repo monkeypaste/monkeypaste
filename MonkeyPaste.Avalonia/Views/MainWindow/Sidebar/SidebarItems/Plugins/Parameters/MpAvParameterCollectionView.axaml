@@ -106,7 +106,7 @@
                 Command="{Binding CancelCommand}"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Classes="defaultButton saveOrCancelButton squareByHeight">
+                Classes="default-button saveOrCancelButton squareByHeight">
             <Grid RowDefinitions="25,15"
                   HorizontalAlignment="Stretch">
                 <Image Grid.Row="0"
@@ -127,7 +127,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Command="{Binding SaveCommand}"
-                Classes="defaultButton saveOrCancelButton squareByHeight">
+                Classes="default-button saveOrCancelButton squareByHeight">
             <Grid RowDefinitions="25,15"
                   HorizontalAlignment="Stretch">
                 <Image Grid.Row="0"

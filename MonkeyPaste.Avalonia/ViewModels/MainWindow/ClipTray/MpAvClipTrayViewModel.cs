@@ -1091,12 +1091,14 @@ namespace MonkeyPaste.Avalonia {
 
         public double MinPinTrayScreenWidth =>
             IsPinTrayVisible ? 
-                MpAvThemeViewModel.Instance.IsMobileOrWindowed ? MaxContainerScreenWidth :
-                MinQueryOrPinTrayScreenWidth : 0;
+                MpAvThemeViewModel.Instance.IsMobileOrWindowed ?
+                    MaxContainerScreenWidth * (IsPinTrayPeeking ? 0.5:1) :
+                    MinQueryOrPinTrayScreenWidth : 0;
         public double MinPinTrayScreenHeight =>
             IsPinTrayVisible ?
-                MpAvThemeViewModel.Instance.IsMobileOrWindowed ? MaxContainerScreenHeight :
-                MinQueryOrPinTrayScreenHeight : 0;
+                MpAvThemeViewModel.Instance.IsMobileOrWindowed ?
+                    MaxContainerScreenHeight * (IsPinTrayPeeking ? 0.5 : 1) :
+                    MinQueryOrPinTrayScreenHeight : 0;
 
         public double MaxPinTrayScreenWidth =>
             IsPinTrayVisible ? MaxContainerScreenWidth : 0;
@@ -1195,7 +1197,10 @@ namespace MonkeyPaste.Avalonia {
         public bool ShowTileShadow { get; set; } = true;
 
         public string EmptyQueryTrayText { get; private set; }
+
+        bool IsNoSelectionQuery { get; set; }
         private string GetEmptyQueryTrayText() {
+            IsNoSelectionQuery = false;
             if (Mp.Services == null ||
                     Mp.Services.StartupState == null) {
                 return string.Empty;
@@ -1211,6 +1216,7 @@ namespace MonkeyPaste.Avalonia {
                 tag_name = UiStrings.QueryTrayEmptyPendingTagName;
             } else {
                 if (MpAvTagTrayViewModel.Instance.LastSelectedActiveItem == null) {
+                    IsNoSelectionQuery = true;
                     return UiStrings.QueryTrayNoSelection;
                 }
                 tag_name = MpAvTagTrayViewModel.Instance.LastSelectedActiveItem.TagName;
@@ -1267,6 +1273,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsAnySelectedAndTrayVisible =>
+            IsAnySelected ?
+                SelectedItem.IsPinned == IsPinTrayVisible :
+                false;
         public bool IsAnySelected =>
             SelectedItem != null && !SelectedItem.IsAnyPlaceholder;
 
@@ -1406,16 +1416,17 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public bool CanAddItemWhileIgnoringClipboard {
+        public bool CanAddClipboard {
             get {
                 return
-                    IsIgnoringClipboardChanges &&
                     Mp.Services != null &&
                     Mp.Services.ClipboardMonitor != null &&
                     Mp.Services.ClipboardMonitor.LastClipboardDataObject != null &&
                     LastAddedClipboardDataObject.IsDataNotEqual(Mp.Services.ClipboardMonitor.LastClipboardDataObject);
             }
         }
+        public bool CanAddItemWhileIgnoringClipboard =>
+            IsIgnoringClipboardChanges && CanAddClipboard;
 
         public bool IsIgnoringClipboardChanges { get; set; }
         MpPortableDataObject LastAddedClipboardDataObject { get; set; }
@@ -2256,6 +2267,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(LastAddedClipboardDataObject):
+                    OnPropertyChanged(nameof(CanAddClipboard));
                     OnPropertyChanged(nameof(CanAddItemWhileIgnoringClipboard));
                     break;
                 case nameof(PinOpCopyItemId):
@@ -2291,6 +2303,7 @@ namespace MonkeyPaste.Avalonia {
                     MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
                     OnPropertyChanged(nameof(SelectedCopyItemId));
                     OnPropertyChanged(nameof(IsAnySelected));
+                    OnPropertyChanged(nameof(IsAnySelectedAndTrayVisible));
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(CanScroll));
@@ -2803,6 +2816,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
+            OnPropertyChanged(nameof(CanAddClipboard));
             OnPropertyChanged(nameof(CanAddItemWhileIgnoringClipboard));
 
             bool is_startup_ido = Mp.Services.ClipboardMonitor.IsStartupClipboard;
@@ -3399,6 +3413,21 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private readonly object _pasteLockObj = new object();
+
+        private async Task<MpPortableDataObject> GetClipDataObjectAsync(MpAvClipTileViewModel ctvm, MpPortableProcessInfo pi, bool ignoreSelection) {
+            MpPortableDataObject mpdo = null;
+            var cv = ctvm.GetContentView();
+            if (cv == null) {
+                if (ctvm.CopyItem != null) {
+                    mpdo = ctvm.GetDataObjectByModel(false, pi);
+                }
+            } else if (cv is MpAvIContentDragSource ds) {
+                mpdo = await ds.GetDataObjectAsync(
+                    formats: ctvm.GetOleFormats(false, pi),
+                    ignore_selection: ignoreSelection);
+            }
+            return mpdo;
+        }
         private async Task PasteClipTileAsync(MpAvClipTileViewModel ctvm, MpPasteSourceType pasteSource) {
             MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
             if (IsPasting) {
@@ -3418,21 +3447,11 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
             }
 
-            MpPortableDataObject mpdo = null;
             ctvm.IsPasting = true;
             CurPasteOrDragItem = ctvm;
 
             MpPortableProcessInfo pi = Mp.Services.ProcessWatcher.LastProcessInfo;
-            var cv = ctvm.GetContentView();
-            if (cv == null) {
-                if (ctvm.CopyItem != null) {
-                    mpdo = ctvm.GetDataObjectByModel(false, pi);
-                }
-            } else if (cv is MpAvIContentDragSource ds) {
-                mpdo = await ds.GetDataObjectAsync(
-                    formats: ctvm.GetOleFormats(false, pi),
-                    ignore_selection: pasteSource == MpPasteSourceType.Hotkey);
-            }
+            MpPortableDataObject mpdo = await GetClipDataObjectAsync(ctvm, pi, pasteSource == MpPasteSourceType.Hotkey);
 
             // NOTE paste success is very crude, false positive is likely
             bool success = await Mp.Services.ExternalPasteHandler.PasteDataObjectAsync(mpdo, pi);
@@ -4647,8 +4666,21 @@ namespace MonkeyPaste.Avalonia {
             });
 
         public ICommand PasteFromClipTilePasteButtonCommand => new MpCommand<object>(
-            (args) => {
-                PasteClipTileAsync(args as MpAvClipTileViewModel, MpPasteSourceType.PasteButton).FireAndForgetSafeAsync();
+            async (args) => {
+                if(args is not MpAvClipTileViewModel ctvm) {
+                    return;
+                }
+                if(MpAvThemeViewModel.Instance.IsMobile) {
+                    var avdo = await GetClipDataObjectAsync(ctvm, null, false);
+                    await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true);
+
+                    Mp.Services.NotificationBuilder.ShowMessageAsync(
+                        MpNotificationType.Message, 
+                        title: UiStrings.ClipboardSetMessage,
+                        iconSourceObj: "ClipboardImage").FireAndForgetSafeAsync();
+                    return;
+                }
+                PasteClipTileAsync(ctvm, MpPasteSourceType.PasteButton).FireAndForgetSafeAsync();
             },
             (args) => {
                 if (args is MpAvClipTileViewModel ctvm) {
@@ -5037,23 +5069,25 @@ namespace MonkeyPaste.Avalonia {
                 // split view an scroll to pinned tile
                 Vector delta =
                     MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                        new Vector(MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width * 0.25, 0) :
-                        new Vector(0, MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Height * 0.25);
+                        new Vector(MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width * 0.5, 0) :
+                        new Vector(0, MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Height * 0.5);
                 MpAvClipTrayContainerView.Instance.ClipTraySplitter
                     .ApplyDelta(delta);
-                IsPinTrayVisible = true;
 
                 // if next tap is in pin tray expand it it other wise unexpand
                 if(TopLevel.GetTopLevel(MpAvMainView.Instance) is not { } tl) {
                     return;
                 }
                 void OnTopLevel_PointerReleased(object sender, PointerReleasedEventArgs e) {
-                    tl.PointerReleased -= OnTopLevel_PointerReleased;
-
-                    IsPinTrayPeeking = true;
                     if (e.Source is not Control c) {
                         return;
                     }
+                    if(c.GetVisualAncestors().Any(x=>x == MpAvClipTrayContainerView.Instance.ClipTraySplitter)) {
+                        // ignore splitter movement
+                        return;
+                    }
+                    tl.PointerReleased -= OnTopLevel_PointerReleased;
+                    IsPinTrayPeeking = false;
                     if(c.GetVisualAncestor<MpAvPinTrayView>() != null) {
                         ExpandPinTrayCommand.Execute(null);
                     } else {
@@ -5061,6 +5095,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
                 IsPinTrayPeeking = true;
+                IsPinTrayVisible = true;
                 tl.AddHandler(TopLevel.PointerReleasedEvent, OnTopLevel_PointerReleased, RoutingStrategies.Tunnel);
                 ScrollIntoView(pinned_ctvm);
             }, (args) => {
@@ -5139,13 +5174,19 @@ namespace MonkeyPaste.Avalonia {
             }, (args) => {
                 return args != null;
             });
-
-        public MpIAsyncCommand AddItemWhileIgnoringClipboardCommand => new MpAsyncCommand(
+        private async Task AddItemFromCurrentClipboardAsync() {
+            if(!CanAddClipboard) {
+                return;
+            }
+            await BuildFromDataObjectAsync(Mp.Services.ClipboardMonitor.LastClipboardDataObject as MpAvDataObject, false, MpDataObjectSourceType.ClipboardWatcher);
+        }
+        public MpIAsyncCommand AddClipboardAsItemCommand => new MpAsyncCommand(
             async () => {
                 // BUG cmd execute isn't updating when visibility changes via CanAddItemWhileIgnoringClipboard
-                await BuildFromDataObjectAsync(Mp.Services.ClipboardMonitor.LastClipboardDataObject as MpAvDataObject, false, MpDataObjectSourceType.ClipboardWatcher);
-            });
 
+                await AddItemFromCurrentClipboardAsync();
+            });
+        
         public MpIAsyncCommand DeleteAllContentCommand => new MpAsyncCommand(
             async () => {
                 var result = await Mp.Services.PlatformMessageBox.ShowYesNoMessageBoxAsync(
@@ -5743,7 +5784,14 @@ namespace MonkeyPaste.Avalonia {
 
                 }
             });
-
+        public ICommand FollowNoSelectionCommand => new MpCommand(
+            () => {
+                MpAvSidebarItemCollectionViewModel.Instance
+                .SelectSidebarItemCommand.Execute(MpAvTagTrayViewModel.Instance);
+            },
+            () => {
+                return IsNoSelectionQuery;
+            });
 
 
         public ICommand UpdatePasteInfoMessageCommand => new MpCommand<object>(

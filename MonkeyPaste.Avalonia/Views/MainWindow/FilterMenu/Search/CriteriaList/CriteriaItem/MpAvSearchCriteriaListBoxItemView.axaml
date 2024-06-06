@@ -18,13 +18,29 @@
             <Setter Property="Orientation"
                     Value="Horizontal" />
         </Style>
-        <Style Selector="Grid#CriteriaItemContainerGrid.mobile ListBox#OptionsListBox /template/ StackPanel.optionsPanel">
+        <Style Selector="Grid#CriteriaItemContainerGrid.vert ListBox#OptionsListBox /template/ StackPanel.optionsPanel">
             <Setter Property="Orientation"
                     Value="Vertical" />
         </Style>
         <Style Selector="Grid#CriteriaItemContainerGrid.dragging">
             <Setter Property="Background"
                     Value="{DynamicResource ThemeAccent5Brush}" />
+        </Style>
+        <Style Selector="Grid#CriteriaItemContainerGrid.vert DockPanel#SearchCriteriaContainer ListBox.criteriaList > ListBoxItem">
+            <!--  NOTE LBI Borders are transparent during dnd to see drop lines  -->
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="Width"
+                    Value="{Binding $parent[ListBox].Bounds.Width}" />
+        </Style>
+        <!--  EXPANDER  -->
+        <Style Selector="ToggleButton#ExpandButton local|MpAvTintedImage#ExpanderImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <Style Selector="ToggleButton#ExpandButton:checked local|MpAvTintedImage#ExpanderImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowUpImage}, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
         <!--  RE-ORDER BUTTONS  -->
         <Style Selector="Button#CriteriaDragButton Image">
@@ -48,13 +64,17 @@
         </Style>
 
         <!--  INDENT  -->
-        <Style Selector="DockPanel Grid#CriteriaRowButtonsContainer">
+        <Style Selector="Grid#CriteriaItemContainerGrid:not(.mobile) Grid#CriteriaRowButtonsContainer">
             <Setter Property="Margin"
                     Value="0,0,10,0" />
         </Style>
-        <Style Selector="DockPanel.indented Grid#CriteriaRowButtonsContainer">
+        <Style Selector="Grid#CriteriaItemContainerGrid.mobile.can-expand Grid#CriteriaRowButtonsContainer">
             <Setter Property="Margin"
-                    Value="0,0,10,0" />
+                    Value="0,0,0,5" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+            <Setter Property="VerticalAlignment"
+                    Value="Bottom" />
         </Style>
         <Style Selector="DockPanel.indented ListBox">
             <Setter Property="Margin"
@@ -62,7 +82,9 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="CriteriaItemContainerGrid"
+          Classes.can-expand="{Binding IsVisible, ElementName=ExpandButton}"
           Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+          Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
           Classes.dragging="{Binding IsDragging}"
           ColumnDefinitions="Auto,*">
 
@@ -73,7 +95,7 @@
                 IsVisible="{Binding CanRemoveOrSortThisCriteriaItem}"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                Classes="noBg noHoverBg outlineOver"
+                Classes="no-bg no-hover-bg outlineOver"
                 Cursor="SizeAll"
                 Margin="15,0,0,0"
                 Width="25"
@@ -123,7 +145,7 @@
 
                 <Button x:Name="AddCriteriaItemButton"
                         Grid.Column="0"
-                        Classes="defaultButton outline outlineOver addRemoveBtn noBg noHoverBg alterOnly"
+                        Classes="default-button outline outlineOver addRemoveBtn no-bg no-hover-bg alterOnly"
                         Command="{Binding AddNextCriteriaItemCommand}">
 
                     <ToolTip.Tip>
@@ -136,7 +158,7 @@
 
                 <Button x:Name="RemoveCriteriaItemButton"
                         Grid.Column="1"
-                        Classes="defaultButton outline outlineOver addRemoveBtn removeBtn noBg noHoverBg alterOnly"
+                        Classes="default-button outline outlineOver addRemoveBtn removeBtn no-bg no-hover-bg alterOnly"
                         Command="{Binding RemoveThisCriteriaItemCommand}">
                     <ToolTip.Tip>
                         <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCriteriaRemoveRowTooltip}" />
@@ -149,7 +171,7 @@
 
                 <Button x:Name="SpecialJoinTypeButton"
                         Grid.Column="2"
-                        Classes="defaultButton outline outlineOver addRemoveBtn noBg noHoverBg alterOnly"
+                        Classes="default-button outline outlineOver addRemoveBtn no-bg no-hover-bg alterOnly"
                         IsVisible="{Binding !IsJoinPanelVisible}"
                         Command="{Binding SelectCustomNextJoinTypeCommand}">
                     <ToolTip.Tip>
@@ -171,7 +193,6 @@
                      ItemsSource="{Binding Items}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <!--<WrapPanel />-->
                         <StackPanel Classes="optionsPanel" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
@@ -192,6 +213,29 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </DockPanel>
-        <!--</StackPanel>-->
+
+        <!--  EXPAND BUTTON  -->
+        <ToggleButton x:Name="ExpandButton"
+                      Grid.Column="1"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Top"
+                      Classes="default-button no-bg no-hover-bg no-border"
+                      IsChecked="{Binding IsExpanded, Mode=OneWay}"
+                      Command="{Binding ToggleExpandCriteriaItemCommand}">
+            <ToggleButton.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="IsMobileOrWindowed"
+                             Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                    <Binding Path="Items"
+                             Converter="{x:Static local:MpAvCollectionToIsMultipleBoolConverter.Instance}" />
+                </MultiBinding>
+            </ToggleButton.IsVisible>
+            <local:MpAvTintedImage x:Name="ExpanderImage"
+                                   Width="25"
+                                   Height="25"
+                                   Tint="{Binding $parent[ListBoxItem].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                                   IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                                   Classes.expanded="{Binding IsExpanded}" />
+        </ToggleButton>
     </Grid>
 </local:MpAvUserControl>

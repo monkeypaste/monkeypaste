@@ -24,10 +24,9 @@
             <!--  MUST MATCH VM VALUE  -->
             5
         </sys:Double>
-        <sys:Double x:Key="CriteriaOptionMinWidth">150</sys:Double>
+        <sys:Double x:Key="CriteriaOptionMinWidth">165</sys:Double>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
-
 
         <!--  ALTER ONLY  -->
         <Style Selector="DockPanel#SearchCriteriaContainer:not(.alterable) :is(Control).alterOnly">
@@ -91,12 +90,14 @@
             <Setter Property="Height"
                     Value="{Binding CriteriaItemHeight, FallbackValue=0, TargetNullValue=0}" />
         </Style>
-        <Style Selector="DockPanel#SearchCriteriaContainer.mobile ListBox.criteriaList > ListBoxItem">
-            <!--  NOTE LBI Borders are transparent during dnd to see drop lines  -->
-            <Setter Property="HorizontalAlignment"
-                    Value="Left" />
-            <Setter Property="Width"
-                    Value="{Binding $parent[ListBox].Bounds.Width}" />
+
+        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(odd)">
+            <Setter Property="Background"
+                    Value="{DynamicResource SearchCriteriaRowBgBrush1}" />
+        </Style>
+        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(even)">
+            <Setter Property="Background"
+                    Value="{DynamicResource SearchCriteriaRowBgBrush2}" />
         </Style>
 
         <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(odd) /template/ ContentPresenter">
@@ -110,7 +111,7 @@
 
         <!--  CRITERIA ROW OPTIONS  -->
 
-        <Style Selector="ListBox.criteriaList > ListBoxItem Grid#CriteriaItemContainerGrid Grid#CriteriaRowButtonsContainer">
+        <Style Selector="ListBox.criteriaList:not(.mobile) > ListBoxItem Grid#CriteriaItemContainerGrid Grid#CriteriaRowButtonsContainer">
             <Setter Property="Opacity"
                     Value="0" />
         </Style>
@@ -249,6 +250,7 @@
         <ListBox x:Name="SearchCriteriaListBox"
                  Grid.Row="1"
                  Classes="criteriaList"
+                 Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                  Classes.windowed="{Binding IsCriteriaWindowOpen}"
                  Background="{DynamicResource SearchCriteriaBgBrush}"
                  BorderThickness="1"

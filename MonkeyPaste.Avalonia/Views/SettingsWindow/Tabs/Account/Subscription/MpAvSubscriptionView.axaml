@@ -251,7 +251,7 @@
             <ToggleSwitch x:Name="MonthlyToggleButton"
                           Grid.Row="0"
                           Margin="0,0,0,5"
-                          Classes="defaultButton"
+                          Classes="default-button"
                           HorizontalAlignment="Right"
                           VerticalAlignment="Center"
                           IsChecked="{Binding IsMonthlyEnabled, Mode=TwoWay, FallbackValue=True, TargetNullValue=True}"
@@ -494,7 +494,7 @@
                     Margin="0,3,0,0"
                     Grid.Row="2"
                     Loaded="BuyButton_Loaded"
-                    Classes="defaultButton"
+                    Classes="default-button"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Command="{Binding PurchaseSubscriptionCommand}"
@@ -549,7 +549,7 @@
             <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonConnectionFailedCaption}"
                        Classes="emptyOverlayText" />
             <Button Grid.Row="1"
-                    Classes="defaultButton textOnlyButton"
+                    Classes="default-button textOnlyButton"
                     HorizontalAlignment="Center"
                     IsVisible="{Binding !IsBusy}"
                     Command="{Binding ReinitializeCommand}">

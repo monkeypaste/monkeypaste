@@ -256,17 +256,17 @@
                 </Style>
             </DockPanel.Styles>
             <Button DockPanel.Dock="Left"
-                    Classes="defaultButton textOnlyButton"
+                    Classes="default-button textOnlyButton"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding $self}"
                     Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonCancelLabel}" />
             <Button DockPanel.Dock="Right"
-                    Classes="defaultButton textOnlyButton"
+                    Classes="default-button textOnlyButton"
                     Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonOkLabel}"
                     Command="{Binding OkCommand}"
                     CommandParameter="{Binding $self}" />
 
-            <Button Classes="defaultButton textOnlyButton"
+            <Button Classes="default-button textOnlyButton"
                     Command="{Binding ClearCommand}"
                     Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonClearText}"
                     IsVisible="{Binding !IsEmpty}" />

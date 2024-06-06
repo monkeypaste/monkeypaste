@@ -195,7 +195,7 @@
 
                     <ToggleButton x:Name="ShowGridToggleButton"
                                   Grid.Column="0"
-                                  Classes="defaultButton textOnlyButton outline outlineOver"
+                                  Classes="default-button textOnlyButton outline outlineOver"
                                   Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.TriggerDesignerToggleGridLabel}"
                                   IsChecked="{Binding IsGridVisible, Mode=TwoWay}"
                                   IsEnabled="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
@@ -206,7 +206,7 @@
 
                     <Button x:Name="ResetViewButton"
                             Grid.Column="2"
-                            Classes="defaultButton textOnlyButton outline outlineOver"
+                            Classes="default-button textOnlyButton outline outlineOver"
                             Command="{Binding ResetDesignerViewCommand}"
                             Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonResetLabel}" />
 
@@ -216,10 +216,16 @@
                     <!--  POP OUT WINDOW BUTTON  -->
 
                     <Button x:Name="ShowDesignerWindowButton"
-                            Classes="noBg noHoverBg defaultButton outline outlineOver"
+                            Classes="no-bg no-hover-bg default-button outline outlineOver"
                             Grid.Column="4"
-                            Command="{Binding ShowDesignerWindowCommand}"
-                            IsVisible="{Binding !IsWindowOpen}">
+                            Command="{Binding ShowDesignerWindowCommand}">
+                        <Button.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="!IsWindowOpen" />
+                                <Binding Path="IsMultiWindow"
+                                         Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                            </MultiBinding>
+                        </Button.IsVisible>
                         <ToolTip.Tip>
                             <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                                    ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCriteriaHeadePopoutTooltipText}" />
@@ -274,7 +280,7 @@
                         VerticalAlignment="Stretch"
                         Background="Transparent"
                         BorderThickness="0"
-                        Classes="noBg noHoverBg"
+                        Classes="no-bg no-hover-bg"
                         Command="{Binding ShowTriggerSelectorMenuCommand}"
                         CommandParameter="{Binding $self}">
                     <StackPanel Orientation="Vertical">
@@ -294,9 +300,8 @@
                                        VerticalAlignment="Center"
                                        Fill="DimGray" />
                         </Grid>
-                        <Label HorizontalAlignment="Center">
-                            Add New
-                        </Label>
+                        <Label HorizontalAlignment="Center"
+                               Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.AddNewActionLabel}" />
                     </StackPanel>
                 </Button>
             </Border>

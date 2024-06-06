@@ -38,7 +38,6 @@
             <Setter Property="Height"
                     Value="25" />
         </Style>
-
         <Style Selector="Grid#TitlePanel.mobile ToggleButton#SettingsToggleButton">
             <Setter Property="Content">
                 <Setter.Value>
@@ -58,10 +57,17 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style Selector="Grid#TitlePanel local|MpAvMenuStripView#ActionMenu">
             <Setter Property="IsVisible"
                     Value="False" />
+        </Style>
+        <Style Selector="Grid#TitlePanel local|MpAvZoomFactorView#ZoomFactorView">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#TitlePanel.sel:not(.mobile) local|MpAvZoomFactorView#ZoomFactorView, Grid#TitlePanel.sel.mobile:not(.vert) local|MpAvZoomFactorView#ZoomFactorView">
+            <Setter Property="IsVisible"
+                    Value="True" />
         </Style>
         <Style Selector="Grid#TitlePanel TextBlock#TitleTextBlock">
             <Setter Property="IsVisible"
@@ -194,8 +200,9 @@
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TitlePanel"
           x:CompileBindings="False"
+          Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
           Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-          Classes.sel="{Binding IsAnySelected, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+          Classes.sel="{Binding IsAnySelectedAndTrayVisible, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <!--  LEFT  -->
@@ -209,7 +216,7 @@
 
             <ToggleButton x:Name="SettingsToggleButton"
                           Margin="5,0,0,0"
-                          Classes="noBg noHoverBg"
+                          Classes="no-bg no-hover-bg"
                           Command="{Binding ToggleShowSettingsWindowCommand, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
                           CommandParameter="{Binding $self}"
                           IsChecked="{Binding IsWindowOpen, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=OneWay}"
@@ -226,7 +233,7 @@
                           IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=OneWay}"
                           Command="{Binding ToggleMainWindowLockCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                           CommandParameter="{Binding $self}"
-                          Classes="noBg noHoverBg">
+                          Classes="no-bg no-hover-bg">
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.MainWindowTitleLockLabel}"
                                            InputGestureText="{Binding ., ConverterParameter=ToggleMainWindowLocked, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
@@ -241,7 +248,7 @@
                     Width="20"
                     Height="20"
                     Command="{Binding ForceMinimizeMainWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-                    Classes="noBg noHoverBg noBorder noHoverBorder">
+                    Classes="no-bg no-hover-bg no-border noHoverBorder">
                 <Button.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
                         <Binding Path="IsDesktop"
@@ -269,7 +276,7 @@
                 BorderThickness="0"
                 Cursor="SizeAll"
                 IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                Classes="noBg noHoverBg outlineOver"
+                Classes="no-bg no-hover-bg outlineOver"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Stretch"
                 Padding="0"
@@ -303,8 +310,7 @@
                     HorizontalAlignment="Right">
 
             <!--  Zoom Factor Slider  -->
-            <local:MpAvZoomFactorView x:Name="ZoomFactorView"
-                                      IsVisible="{Binding SelectedCopyItemId, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
+            <local:MpAvZoomFactorView x:Name="ZoomFactorView" />
 
             <!--  CORNER BTN MENU (MOBILE ONLY)  -->
 
@@ -313,7 +319,7 @@
             <!--  Layout Toggle Button  -->
 
             <ToggleButton x:Name="GridLayoutToggleButton"
-                          Classes="noBg noHoverBg noBorder"
+                          Classes="no-bg no-hover-bg no-border"
                           Command="{Binding ToggleLayoutTypeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           IsChecked="{Binding IsGridLayout, Mode=OneWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           ToolTip.ShowDelay="0">
@@ -329,7 +335,7 @@
             <Button x:Name="MainWindowCycleOrientationCcwButton"
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
-                    Classes="noBg noHoverBg noBorder"
+                    Classes="no-bg no-hover-bg no-border"
                     local:MpAvPointerCommandExtension.IsEnabled="True"
                     local:MpAvPointerCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.RightPressCommandParameter="CW">

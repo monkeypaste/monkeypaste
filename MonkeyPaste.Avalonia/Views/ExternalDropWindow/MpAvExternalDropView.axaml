@@ -67,7 +67,7 @@
             <!--  HIDE WIDGET BUTTON (SHOULD BE HIDDEN WHEN NOT WITHIN DROP WIZARD)  -->
 
             <Button x:Name="HideDropMenuBorder"
-                    Classes="noBg noHoverBg square"
+                    Classes="no-bg no-hover-bg square"
                     local:MpAvDropExtension.IsEnabled="True"
                     local:MpAvDropExtension.DragEnterCommand="{Binding CancelDropWidgetCommand}"
                     local:MpAvDropExtension.DragEnterCommandParameter="{Binding $self}"

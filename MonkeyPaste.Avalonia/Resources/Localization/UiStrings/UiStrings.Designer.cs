@@ -1565,6 +1565,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add New.
+        /// </summary>
+        public static string AddNewActionLabel {
+            get {
+                return ResourceManager.GetString("AddNewActionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Url already exists: &apos;{0}&apos;.
         /// </summary>
         public static string AddUrlNtfDupText {
@@ -1975,6 +1984,15 @@ namespace MonkeyPaste.Avalonia {
         public static string ClipboardPluginHandlersHeader {
             get {
                 return ResourceManager.GetString("ClipboardPluginHandlersHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard Set.
+        /// </summary>
+        public static string ClipboardSetMessage {
+            get {
+                return ResourceManager.GetString("ClipboardSetMessage", resourceCulture);
             }
         }
         

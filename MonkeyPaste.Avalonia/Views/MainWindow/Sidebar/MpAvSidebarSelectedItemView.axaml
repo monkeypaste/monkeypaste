@@ -74,7 +74,7 @@
           Classes="oriented">
         <ContentControl x:Name="SelectedSidebarContentControl"
                         x:DataType="pcl:MpISidebarItemViewModel"
-                        DataContext="{Binding SelectedItem}"
+                        DataContext="{Binding BoundItem}"
                         Classes.horiz="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                         Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                         HorizontalAlignment="Stretch"
@@ -124,7 +124,7 @@
             </ContentControl.DataTemplates>
         </ContentControl>
         <Button x:Name="CollapseSidebarButton"
-                Classes="defaultButton noBg noHoverBg noBorder"
+                Classes="default-button no-bg no-hover-bg no-border"
                 Classes.horiz="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                 IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                 Command="{Binding ToggleIsSidebarItemSelectedCommand}">

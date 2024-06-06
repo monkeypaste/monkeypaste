@@ -25,7 +25,7 @@
     </local:MpAvUserControl.Styles>
     <Button x:Name="ClearButton"
             KeyboardNavigation.IsTabStop="False"
-            Classes="defaultButton noBg noHoverBg noBorder"
+            Classes="default-button no-bg no-hover-bg no-border"
             Command="{Binding ClearCommand, ElementName=ClearTextButton}"
             CommandParameter="{Binding ClearCommandParameter, ElementName=ClearTextButton}">
         <Grid x:Name="ClearTextContainerGrid"

@@ -232,7 +232,7 @@
                 <Button x:Name="RefreshFilterButton"
                         VerticalAlignment="Stretch"
                         HorizontalAlignment="Center"
-                        Classes="defaultButton noBg noHoverBg outline outlineOver square"
+                        Classes="default-button no-bg no-hover-bg outline outlineOver square"
                         IsEnabled="{Binding !IsBusy}"
                         Command="{Binding PerformFilterCommand}"
                         CommandParameter="Click">
@@ -292,7 +292,7 @@
 
                 <!--  HELP BUTTON  -->
                 <Button x:Name="ShowPluginHelpButton"
-                        Classes="defaultButton noBg noHoverBg outline outlineOver square"
+                        Classes="default-button no-bg no-hover-bg outline outlineOver square"
                         Command="{Binding NavigateToHelpLinkCommand, Source={x:Static local:MpAvHelpViewModel.Instance}}"
                         CommandParameter="Plugins">
                     <ToolTip.Tip>
@@ -304,7 +304,7 @@
                 <!--  OPEN FOLDER BUTTON  -->
                 <Button x:Name="OpenPluginFolderButton"
                         IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                        Classes="defaultButton noBg noHoverBg outline outlineOver square"
+                        Classes="default-button no-bg no-hover-bg outline outlineOver square"
                         Command="{Binding OpenPluginFolderCommand}">
                     <ToolTip.Tip>
                         <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PluginBrowserOpenPluginFolder}" />

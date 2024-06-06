@@ -108,7 +108,7 @@
                         Spacing="5">
                 <!--  ENABLE APPEND BUTTON  -->
                 <Button x:Name="EnableAppendButton"
-                        Classes="defaultButton iconOnlyButton squareByHeight"
+                        Classes="default-button iconOnlyButton squareByHeight"
                         Height="{Binding Bounds.Height, ElementName=DefaultPasteButton}"
                         Command="{Binding ToggleAppendLineModeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
                     <Button.Resources>
@@ -137,7 +137,7 @@
                 </Button>
                 <!--  DEFAULT PASTE BUTTON  -->
                 <SplitButton x:Name="DefaultPasteButton"
-                             Classes="defaultButton iconTextButton paste-button"
+                             Classes="default-button iconTextButton paste-button"
                              IsVisible="{Binding IsPasteDefault, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
                     <SplitButton.Resources>
                         <SolidColorBrush x:Key="SplitButtonBackground" Color="{DynamicResource ThemePasteButtonDefaultBgColor}" />
@@ -153,7 +153,7 @@
                 </SplitButton>
                 <!--  CUSTOM PASTE BUTTON  -->
                 <SplitButton x:Name="CustomPasteButton"
-                             Classes="defaultButton iconTextButton paste-button"
+                             Classes="default-button iconTextButton paste-button"
                              IsVisible="{Binding !IsPasteDefault, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
                     <SplitButton.Resources>
                         <SolidColorBrush x:Key="SplitButtonBackground" Color="{DynamicResource ThemePasteButtonCustomBgColor}" />

@@ -116,60 +116,8 @@
                     Value="0,0,15,0" />
         </Style>
 
-        <!--  MOBILE/DESKTOP ORIENTATION  -->
-
-        <!--  DESKTOP  -->
-        <Style Selector="Grid#OuterGrid :is(Button)#PinTileButton">
-            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
-                    Value="top left" />
-        </Style>
-        <Style Selector="Grid#OuterGrid :is(Button)#OpenWindowButton"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
-                    Value="top right" />
-            <Setter Property="IsVisible"
-                    Value="{Binding !IsWindowOpen}" />
-        </Style>
-        <Style Selector="Grid#OuterGrid :is(Button)#ClipTileHotkeyButton">
-            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
-                    Value="bottom left" />
-        </Style>
-        <Style Selector="Grid#OuterGrid :is(Button)#ClipTileToggleEditButton">
-            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
-                    Value="bottom right" />
-        </Style>
-        <Style Selector="Grid#OuterGrid :is(Button)#ShowContextMenuButton">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-
-        <!--  MOBILE  -->
-        <Style Selector="Grid#OuterGrid.mobile :is(Button)#PinTileButton">
-            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
-                    Value="bottom left" />
-        </Style>
-        <Style Selector="Grid#OuterGrid.mobile :is(Button)#OpenWindowButton">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="Grid#OuterGrid.mobile :is(Button)#ClipTileHotkeyButton">
-            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
-                    Value="False" />
-        </Style>
-        <Style Selector="Grid#OuterGrid.mobile :is(Button)#ClipTileToggleEditButton">
-            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
-                    Value="bottom right" />
-        </Style>
-        <Style Selector="Grid#OuterGrid.mobile :is(Button)#ShowContextMenuButton"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="local:MpAvClassHelperExtension.ClassesToAdd"
-                    Value="top right" />
-            <Setter Property="IsVisible"
-                    Value="{Binding !IsWindowOpen}" />
-        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="OuterGrid"
-          Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           Classes.tileHover="{Binding IsHovering}"
           Classes.subselect="{Binding IsSubSelectionEnabled}"
           Classes.windowed="{Binding IsWindowOpen}"
@@ -181,14 +129,13 @@
         <!--  TL Pin Tile Button  -->
 
         <ToggleButton x:Name="PinTileButton"
-                      Classes="noBg noHoverBg noBorder cornerButton"
+                      Classes="no-bg no-hover-bg no-border cornerButton top left"
                       local:MpAvIsHoveringExtension.IsEnabled="True"
                       local:MpAvIsHoveringExtension.IsHovering="{Binding IsPinButtonHovering, Mode=TwoWay}"
                       local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleTileIsPinnedCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                       local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
                       IsChecked="{Binding IsPinned}"
                       IsVisible="{Binding !IsWindowOpen}">
-
             <ToggleButton.Transitions>
                 <Transitions>
                     <DoubleTransition Property="RotateTransform.Angle"
@@ -210,7 +157,7 @@
         <!--  TR Pop Out Button  -->
 
         <Button x:Name="OpenWindowButton"
-                Classes="noBg noHoverBg noBorder cornerButton"
+                Classes="no-bg no-hover-bg no-border cornerButton top right"
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding PinToPopoutWindowCommand}"
                 local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}">
             <ToolTip.Tip>
@@ -221,20 +168,10 @@
 
         </Button>
 
-        <!--  TR Context Menu (mobile)  -->
-
-        <Button x:Name="ShowContextMenuButton"
-                Classes="noBg noHoverBg noBorder cornerButton"
-                local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowContextMenuCommand}"
-                local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding $self}">
-            <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource Dots3x1Image}" />
-
-        </Button>
-
         <!--  BL Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
                 local:MpAvPointerCommandExtension.IsEnabled="False"
-                Classes="noBg noHoverBg noBorder cornerButton tt_near_bottom"
+                Classes="no-bg no-hover-bg no-border cornerButton bottom left tt_near_bottom"
                 Command="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
                 CommandParameter="{Binding}">
             <ToolTip.Tip>
@@ -247,7 +184,7 @@
 
         <!--  BR Edit Toggle Button  -->
         <ToggleButton x:Name="ClipTileToggleEditButton"
-                      Classes="noBg noHoverBg noBorder cornerButton tt_near_bottom"
+                      Classes="no-bg no-hover-bg no-border cornerButton bottom right tt_near_bottom"
                       local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsContentReadOnlyCommand}"
                       IsChecked="{Binding !IsContentReadOnly, Mode=OneWay}">
             <ToggleButton.IsVisible>

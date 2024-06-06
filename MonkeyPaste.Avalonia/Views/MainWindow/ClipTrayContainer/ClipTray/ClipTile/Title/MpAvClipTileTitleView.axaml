@@ -220,7 +220,7 @@
                 Grid.Column="1"
                 Margin="0,0,15,0"
                 ClipToBounds="False"
-                Classes="noBg noHoverBg"
+                Classes="no-bg no-hover-bg"
                 Classes.shakeOnce="{Binding TransactionCollectionViewModel.DoShake}"
                 Command="{Binding TransactionCollectionViewModel.OpenTransactionPaneCommand}"
                 BorderThickness="0"

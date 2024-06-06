@@ -51,22 +51,22 @@
                 <Grid x:DataType="local:MpAvChildWindow"
                       RowDefinitions="Auto,*">
                     <!--  HEADER  -->
-                    <Border x:Name="PART_NavContainer"
+                    <Border x:Name="HeaderPanel"
                             Height="{Binding DefaultTitleMenuFixedLength, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}"
                             IsVisible="{TemplateBinding HeaderViewModel,
                                                         Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                             Grid.Row="0">
                         <Grid x:DataType="local:MpAvIHeaderMenuViewModel"
+                              x:Name="HeaderContainer"
                               Background="{Binding HeaderBackground}"
                               DataContext="{TemplateBinding HeaderViewModel}">
                             <!--  BACK BUTTON  -->
                             <Button x:Name="BackButton"
                                     HorizontalAlignment="Left"
-                                    Classes="noBg noHoverBg noBorder defaultButton"
+                                    Classes="no-bg no-hover-bg no-border default-button header-button"
                                     Classes.has-back-cmd="{Binding BackCommand, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                                <Image Width="25"
-                                       Height="25"
-                                       Source="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                                <local:MpAvTintedImage Tint="{Binding Background, ElementName=HeaderContainer, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                                                       Source="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                             </Button>
 
                             <!--  HEADER MENU  -->

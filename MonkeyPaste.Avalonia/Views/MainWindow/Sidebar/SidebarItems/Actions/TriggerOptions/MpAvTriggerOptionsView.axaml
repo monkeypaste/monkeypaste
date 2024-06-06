@@ -151,7 +151,7 @@
         <!--  ENABLED TOGGLE  -->
         <ToggleButton x:Name="EnableTriggerToggleButton"
                       Grid.Column="0"
-                      Classes="defaultButton contrastFg"
+                      Classes="default-button contrastFg"
                       Foreground="Black"
                       IsThreeState="False"
                       IsChecked="{Binding IsTriggerEnabled, Mode=OneWay}"
@@ -183,7 +183,7 @@
 
         <Button x:Name="DuplicateTriggerButton"
                 Grid.Column="2"
-                Classes="defaultButton outline outlineOver"
+                Classes="default-button outline outlineOver"
                 Command="{Binding DuplicateTriggerCommand}"
                 Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDuplicateLabel}" />
 
@@ -195,7 +195,7 @@
         <Button x:Name="DeleteTriggerButton"
                 Grid.Column="4"
                 IsEnabled="{Binding CanDelete}"
-                Classes="defaultButton outline outlineOver"
+                Classes="default-button outline outlineOver"
                 Command="{Binding DeleteThisTriggerCommand}"
                 CommandParameter="{Binding $self}"
                 Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonDeleteLabel}" />

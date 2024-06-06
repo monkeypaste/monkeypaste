@@ -55,7 +55,7 @@
             <!--  RETRY BUTTON  -->
             <Button x:Name="RetryButton"
                     Grid.Row="1"
-                    Classes="defaultButton textOnlyButton"
+                    Classes="default-button textOnlyButton"
                     HorizontalAlignment="Center">
                 <Button.Resources>
                     <Thickness x:Key="ButtonPadding">10,3,10,3</Thickness>

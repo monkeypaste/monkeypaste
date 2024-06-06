@@ -72,7 +72,7 @@
 
                             <Button x:Name="DeleteRowButton"
                                     Grid.Column="1"
-                                    Classes="defaultButton"
+                                    Classes="default-button"
                                     IsVisible="{Binding CanDeleteOrMove}"
                                     Margin="1,0,0,0"
                                     Width="20"
@@ -85,7 +85,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <Button Grid.Row="1"
-                    Classes="defaultButton"
+                    Classes="default-button"
                     Margin="0,5,20,0"
                     HorizontalAlignment="Right"
                     Command="{Binding AddValueCommand}">

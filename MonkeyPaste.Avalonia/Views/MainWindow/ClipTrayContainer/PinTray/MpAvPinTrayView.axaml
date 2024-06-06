@@ -142,26 +142,24 @@
 
             <!--  IsEmpty Overlay  -->
 
-            <Border x:Name="PinTrayEmptyContainer"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    IsHitTestVisible="False"
+            <Button x:Name="PinTrayEmptyContainer"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Classes="link"
+                    Command="{Binding AddClipboardAsItemCommand}"
                     IsVisible="{Binding IsPinTrayEmpty}"
                     Background="Transparent">
                 <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PinTrayEmptyLabel}"
                            Classes="disabled emptyOverlayText" />
-            </Border>
+            </Button>
 
             <!--  BUTTON GRID  -->
             <StackPanel x:Name="ButtonPanel"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        Spacing="7"
-                        Margin="0,5,20,0">
+                        Spacing="7">
                 <!--  UNPIN All/Busy  -->
 
                 <Button x:Name="UnpinAllButton"
-                        Classes="defaultButton clipTrayButton"
+                        Classes="default-button clipTrayButton"
                         IsEnabled="{Binding !IsPinTrayBusy}"
                         Command="{Binding UnpinAllCommand}">
                     <ToolTip.Tip>
@@ -196,9 +194,9 @@
                 <!--  ADD FROM CLIPBOARD BUTTON  -->
 
                 <Button x:Name="AddFromClipboardButton"
-                        Classes="defaultButton clipTrayButton outlineOver"
+                        Classes="default-button clipTrayButton outlineOver"
                         IsVisible="{Binding CanAddItemWhileIgnoringClipboard}"
-                        Command="{Binding AddItemWhileIgnoringClipboardCommand}">
+                        Command="{Binding AddClipboardAsItemCommand}">
                     <Image Source="{Binding Source={StaticResource BullsEyeImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent2Color}" />
                     <ToolTip.Tip>
                         <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ManuallyAddFromClipboard, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"

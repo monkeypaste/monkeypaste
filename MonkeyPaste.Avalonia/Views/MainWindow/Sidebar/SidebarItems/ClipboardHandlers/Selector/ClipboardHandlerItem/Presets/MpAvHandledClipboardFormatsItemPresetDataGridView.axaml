@@ -129,7 +129,7 @@
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
                                     <Button x:Name="PresetIcon"
                                             IsHitTestVisible="{Binding !IsGeneratedDefaultPreset}"
-                                            Classes="defaultButton noBg noHoverBg outlineOver square"
+                                            Classes="default-button no-bg no-hover-bg outlineOver square"
                                             local:MpAvPointerCommandExtension.IsEnabled="True"
                                             local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
                                             local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding $self}">
@@ -175,7 +175,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
                                     <ToggleButton x:Name="EditToggleButton"
-                                                  Classes="defaultButton noBg noHoverBg outlineOver square"
+                                                  Classes="default-button no-bg no-hover-bg outlineOver square"
                                                   local:MpAvPointerCommandExtension.IsEnabled="True"
                                                   local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsLabelReadOnlyCommand}"
                                                   IsChecked="{Binding !IsLabelReadOnly, Mode=OneWay}">
@@ -211,7 +211,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
                                     <Button x:Name="DuplicateButton"
-                                            Classes="defaultButton noBg noHoverBg outlineOver square"
+                                            Classes="default-button no-bg no-hover-bg outlineOver square"
                                             IsEnabled="{Binding !Parent.IsBusy}"
                                             local:MpAvPointerCommandExtension.IsEnabled="True"
                                             local:MpAvPointerCommandExtension.LeftPressCommand="{Binding DuplicateThisPresetCommand}">
@@ -242,7 +242,7 @@
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
                                     <!--  NOTE cmd parameter set to req format in trans style, null in sidebar  -->
                                     <Button x:Name="ResetOrDeleteButton"
-                                            Classes="defaultButton noBg noHoverBg outlineOver square"
+                                            Classes="default-button no-bg no-hover-bg outlineOver square"
                                             IsEnabled="{Binding !Parent.IsBusy}"
                                             local:MpAvPointerCommandExtension.IsEnabled="True"
                                             local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ResetOrDeleteThisPresetCommand}">
@@ -270,7 +270,7 @@
                 <!--  ADD PRESET BUTTON  -->
 
                 <Button Grid.Row="1"
-                        Classes="defaultButton iconTextButton"
+                        Classes="default-button iconTextButton"
                         HorizontalAlignment="Right"
                         HorizontalContentAlignment="Right"
                         Command="{Binding CreateNewPresetCommand}">

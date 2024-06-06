@@ -502,7 +502,7 @@
             <DockPanel>
                 <Button x:Name="ResetButton"
                         IsVisible="{Binding IsPrefTabSelected}"
-                        Classes="defaultButton textOnlyButton footer"
+                        Classes="default-button textOnlyButton footer"
                         Margin="10"
                         DockPanel.Dock="Left"
                         Content="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PrefRestoreDefaultsLabel}"
