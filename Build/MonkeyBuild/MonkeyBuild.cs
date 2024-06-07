@@ -22,7 +22,7 @@ namespace MonkeyBuild {
         DO_REMOTE_LEDGER,
         DO_LOCAL_CULTURE_INDEX,
         DO_REMOTE_CULTURE_INDEX,
-        LOCAL_MOVE_CORE_TO_DAT,
+        MOVE_DAT_RESOURCES,
         REMOTE_MOVE_CORE_TO_DAT,
         GEN_LOCALIZED_MANIFESTS,
         GEN_EMPTY_RESX,
@@ -144,7 +144,7 @@ namespace MonkeyBuild {
             "YoloImageAnnotator",
         ];
 
-        static string[] ASSET_DIRS => [
+        static string[] DatResourceDirs => [
             Path.Combine(
                 MpPlatformHelpers.GetSolutionDir(),
                 "MonkeyPaste.Avalonia",
@@ -243,15 +243,15 @@ namespace MonkeyBuild {
             Trace.AutoFlush = true;
             MpConsole.IsConsoleApp = true;
             MpConsole.HideAllStamps = true;
-            SelectTasks();
-            Console.Clear();
-            MpConsole.WriteLine($"Tasks: {string.Join(", ",BuildTasks.Select(x=>x.ToString()))}");
-            MpConsole.WriteLine("Starting...");
+            while(SelectTasks()) {
+                Console.Clear();
+                MpConsole.WriteLine($"Tasks: {string.Join(", ", BuildTasks.Select(x => x.ToString()))}");
+                MpConsole.WriteLine("Starting...");
 
-            ProcessAll();
-
-            MpConsole.WriteLine("Done.. press key to finish");
-            Console.ReadLine();
+                ProcessAll();
+                MpConsole.WriteLine("Done.. press key to continue");
+                Console.ReadLine();
+            }                        
         }
         static void ProcessAll() {
             if (BuildTasks.Contains(MpBuildFlags.GEN_EDITOR_UISTRS)) {
@@ -299,8 +299,8 @@ namespace MonkeyBuild {
             if (BuildTasks.Contains(MpBuildFlags.DO_REMOTE_CULTURE_INDEX)) {
                 CreateCultureIndex(true);
             }
-            if (BuildTasks.Contains(MpBuildFlags.LOCAL_MOVE_CORE_TO_DAT)) {
-                MoveCoresToDat_local();
+            if (BuildTasks.Contains(MpBuildFlags.MOVE_DAT_RESOURCES)) {
+                MoveDatResources();
             }
             if (BuildTasks.Contains(MpBuildFlags.REMOTE_MOVE_CORE_TO_DAT)) {
                 MoveCoresToDat_remote();
@@ -314,7 +314,9 @@ namespace MonkeyBuild {
         }
 
         #region Menu
-        static void SelectTasks() {
+        static bool SelectTasks() {
+            // returns false when quit was selected
+
             Console.Clear();
             var task_names = Enum.GetNames(typeof(MpBuildFlags));
             foreach(var (task_name,idx) in task_names.WithIndex()) {
@@ -324,24 +326,34 @@ namespace MonkeyBuild {
                 }
                 MpConsole.WriteLine($"{idx}.{task_name}");
             }
+            MpConsole.WriteLine($"{task_names.Count()}.QUIT");
             MpConsole.WriteLine($"Select tasks/flags (# seperated by comma):");
             var tasks_str = Console.ReadLine().SplitNoEmpty(",").Select(x=>x.Trim());
+            if(tasks_str.IsNullOrEmpty()) {
+                // default quit
+                return false;
+            }
 
             foreach(var task_str in tasks_str) {
                 if(!int.TryParse(task_str,out int task_idx) || task_idx < 0 || task_idx >= task_names.Length) {
+                    if(task_idx == task_names.Count()) {
+                        // quit selected
+                        return false;
+                    }
                     continue;
                 }
                 if(task_idx == 0) {
                     BuildTasks.Clear();
                     SelectPlugins();
                     SelectTasks();
-                    return;
+                    return true;
                 }
                 BuildTasks.AddOrReplace(task_names[task_idx].ToEnum<MpBuildFlags>());
             }
             if(!BuildTasks.Contains(MpBuildFlags.DEBUG) && !BuildTasks.Contains(MpBuildFlags.RELEASE)) {
                 BuildTasks.Add(MpBuildFlags.DEBUG);
             }
+            return true;
         }
 
         static void SelectPlugins() {
@@ -1156,7 +1168,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
 
             MpConsole.WriteLine($"[REMOTE] Moving core plugins to dat DONE", false, true);
         }
-        static void MoveCoresToDat_local() {
+        static void MoveDatResources() {
             MpConsole.WriteLine($"[LOCAL] Moving core plugins to dat STARTED", true);
             void DoLocalMove(bool is_debug) {
                 string root_pack_dir = GetPackagesDir(is_debug);
@@ -1170,6 +1182,7 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     MpFileIo.CreateDirectory(proj_dat_dir);
                 }
 
+                // MOVE CORE PLUGINS
                 foreach (string core_plugin_name in WorkingCorePlugins) {
                     string core_plugin_zip_path = Path.Combine(root_pack_dir, $"{core_plugin_name}.zip");
                     if (!core_plugin_zip_path.IsFile()) {
@@ -1184,6 +1197,34 @@ TrailerThumbnail15,1054,Relative path (or URL to file in Partner Center),
                     string target_dat_path = Path.Combine(proj_dat_dir, $"{core_mf.guid}.zip");
                     MpFileIo.CopyFileOrDirectory(core_plugin_zip_path, target_dat_path, forceOverwrite: true);
                     MpConsole.WriteLine(target_dat_path);
+                }
+
+                // MOVE OTHER RESOURCES
+                string install_update_suffix = string.Empty;
+                string resources_install_dir =
+                    Path.Combine(
+                        MpPlatformHelpers.GetStorageDir(is_debug),
+                        "Resources");
+                if(resources_install_dir.IsDirectory()) {
+                    MpFileIo.DeleteDirectory(resources_install_dir);
+                    MpFileIo.CreateDirectory(resources_install_dir);
+                    install_update_suffix = $" install UPDATED";
+                }
+                foreach (string res_dir in DatResourceDirs) {
+                    // zip resource dir into dat dir
+                    string dest_dat_zip =
+                        Path.Combine(proj_dat_dir, $"{Path.GetFileName(res_dir)}.zip");
+                    if(dest_dat_zip.IsFileOrDirectory()) {
+                        // dest dir exists, remove or zip throws exception
+                        MpFileIo.DeleteFileOrDirectory(dest_dat_zip);
+                    }
+                    ZipFile.CreateFromDirectory(res_dir, dest_dat_zip, CompressionLevel.Fastest, true);
+
+                    // attempt to update working install w/ new data
+                    if (!install_update_suffix.IsNullOrEmpty()) {
+                        ZipFile.ExtractToDirectory(dest_dat_zip, resources_install_dir);
+                    }
+                    MpConsole.WriteLine($"Resource '{Path.GetFileName(res_dir)}' Moved to dat{install_update_suffix}");                    
                 }
             }
 
