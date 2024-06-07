@@ -56,9 +56,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static PixelPoint GetWindowPositionByAnchorVisual(MpAvWindow nw, Visual owner_c) {
-            var anchor_s_origin = owner_c.PointToScreen(new Point());
-            var anchor_s_size = owner_c.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
-            var nw_s_size = nw.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
+            double scaling = MpAvThemeViewModel.Instance.IsWindowed ? 1 : owner_c.VisualPixelDensity();
+            PixelPoint anchor_s_origin = MpAvThemeViewModel.Instance.IsWindowed ?
+                owner_c.TranslatePoint(new(),MpAvMainView.Instance).Value.ToPortablePoint().ToAvPixelPoint(scaling) :
+                owner_c.PointToScreen(new Point());
+            
+            var anchor_s_size = owner_c.Bounds.Size.ToAvPixelSize(scaling);
+            var nw_s_size = 
+                nw.Bounds.Size.IsDefault() ? GetWindowSize(nw).ToAvPixelSize(scaling) : 
+                nw.Bounds.Size.ToAvPixelSize(scaling);
             double nw_x = anchor_s_origin.X + (anchor_s_size.Width / 2) - (nw_s_size.Width / 2);
             double nw_y = anchor_s_origin.Y + (anchor_s_size.Height / 2) - (nw_s_size.Height / 2);
 

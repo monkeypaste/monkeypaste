@@ -95,6 +95,9 @@ function updateFontSizePickerToSelection(forcedSize = null, sel = null) {
     }
     let fontSizeFound = false;
 
+    if (document.getElementsByClassName('ql-size ql-picker').length == 0) {
+        return;
+    }
     let font_picker_elm = document.getElementsByClassName('ql-size ql-picker')[0];
     let font_picker_label_elm = font_picker_elm.getElementsByClassName('ql-picker-label')[0];
     let font_picker_options_elm = font_picker_elm.getElementsByClassName('ql-picker-options')[0];

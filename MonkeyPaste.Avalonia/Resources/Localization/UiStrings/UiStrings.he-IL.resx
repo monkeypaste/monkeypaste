@@ -3005,4 +3005,16 @@ feedback@monkeypaste.com</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>שאילתא</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>דפדפן תוסף - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>דפדפן תוסף</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>סט לוח</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>הוסף חדש</value>
+  </data>
 </root>

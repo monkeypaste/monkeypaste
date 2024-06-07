@@ -3005,4 +3005,16 @@ Globale kortpaaie kan nou in die System Tray Menu geaktiveer word</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Navraag</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Inpropblaaier - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Inpropblaaier</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Klembord stel</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Voeg nuwe</value>
+  </data>
 </root>

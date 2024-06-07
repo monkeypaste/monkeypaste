@@ -160,6 +160,7 @@
         <Button x:Name="QueryTrayEmptyContainer"
                 Grid.Row="1"
                 Classes="link"
+                Classes.no-underline="{Binding IsNoSelectionQuery}"
                 Command="{Binding FollowNoSelectionCommand}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -174,7 +175,7 @@
                 </MultiBinding>
             </Button.IsVisible>
             <TextBlock Text="{Binding EmptyQueryTrayText}"
-                       Classes="disabled emptyOverlayText" />
+                       Classes="emptyOverlayText" />
         </Button>
 
 

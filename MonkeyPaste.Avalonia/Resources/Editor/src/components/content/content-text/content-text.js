@@ -261,7 +261,7 @@ function getRangeRects(range, isWindowOrigin = true, inflateToLineHeight = true,
 	range = cleanDocRange(range);
 
 	let range_rects = [];
-	if (!range) {
+	if (!range || range.index >= getDocLength()) {
 		return range_rects;
 	}
 	if (range.length == 0) {
@@ -393,7 +393,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 }
 
 function getBlotAtDocIdx(docIdx, isSearching = false) {
-	if (!globals.quill) {
+	if (!globals.quill || docIdx < 0) {
 		return null;
 	}
 	let leaf = globals.quill.getLeaf(docIdx);

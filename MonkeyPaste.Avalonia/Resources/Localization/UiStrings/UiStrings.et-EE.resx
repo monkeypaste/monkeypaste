@@ -3005,4 +3005,16 @@ Globaalsed otseteed saab nüüd süsteemialuse menüüs lubada</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Päring</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Pistikprogrammi brauser - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Pistikprogrammide brauser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Lõikelauakomplekt</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Lisage uus</value>
+  </data>
 </root>

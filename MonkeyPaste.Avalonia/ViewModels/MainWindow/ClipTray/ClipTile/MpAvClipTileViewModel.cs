@@ -2180,6 +2180,10 @@ namespace MonkeyPaste.Avalonia {
                 ctv.DataContext = this;
             }
             pow.Classes.Add("content-window");
+#if SUGAR_WV
+            // mark window as 'air-space' so ntf's can deal with z-index issues
+            pow.Classes.Add("air-space");
+#endif
             //pow.Classes.Add("fadeIn");
             //pow.Classes.Add("fadeOut");
 

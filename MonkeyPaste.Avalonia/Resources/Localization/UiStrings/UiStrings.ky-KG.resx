@@ -3005,4 +3005,16 @@ feedback@monkeypaste.com</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Суроо</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Плагин браузери - {0}</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Жаңы кошуу</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin Browser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Алмашуу буферинин топтому</value>
+  </data>
 </root>

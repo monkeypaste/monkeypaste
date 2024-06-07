@@ -7,6 +7,55 @@
 // #endregion Life Cycle
 
 // #region Getters
+async function getEditorAsImageAsync() {
+    var img_base64 = null;
+    var sw = performance.now();
+    //let disp = document.getElementById('overlayCanvas').style.display;
+    //document.getElementById('overlayCanvas').style.display = 'none';
+
+    html2canvas(
+        document.body,
+        {
+            backgroundColor: '#00ff00'
+            //allowTaint: true,
+            //logging: true,
+            //ignoreElements: (element) => {
+            //    if (element == document.body) {
+            //        //return false;
+            //    }
+            //    if (isChildOfElement(element, document.head, true) ||
+            //        isChildOfElement(element, getEditorContainerElement(), true)) {
+            //        return false;
+            //    }
+            //    return true;
+            //}
+        }
+    ).then(
+        function (canvas) {
+            //document.body.appendChild(canvas);
+            let canvas_url = canvas.toDataURL('image/png');
+            canvas_url = canvas_url.split(',')[1];
+            log(canvas_url);
+            img_base64 = canvas_url;
+            //document.body.removeChild(canvas);
+        }
+    );
+    //html2canvas(document.body).then(canvas => {
+    //    img_base64 = canvas.toDataURL("image/png").split(';base64,')[1];
+    //});
+    while (true) {
+        if (img_base64 != null) {
+            break;
+        }
+        if (performance.now() - sw > 3000) {
+            // timeout
+            break;
+        }
+        await delay(100);
+    }
+    //document.getElementById('overlayCanvas').style.display = disp;
+    //return img_base64;
+}
 
 async function getDocRangeAsImageAsync(sel) {
     // from https://stackoverflow.com/a/41585230/105028

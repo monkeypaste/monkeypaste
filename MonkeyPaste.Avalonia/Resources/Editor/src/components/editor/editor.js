@@ -466,6 +466,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 
 	loadLinkHandlers(true);
 	populateFindReplaceResults();
+	//hljs.highlightAll();
 
 	let suppress_text_change_ntf = isTextChangeSupressed();
 

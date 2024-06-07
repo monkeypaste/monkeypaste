@@ -1,7 +1,7 @@
 ﻿#editorToolbar {
     background-color: var(--editortoolbarbgcolor);
     border-color: var(--editortoolbarsepbgcolor);
-    display: flex;
+    display: flex !important;
     flex-wrap: wrap;
 }
 
@@ -29,7 +29,7 @@
     transition: var(--toolbartransitionms) cubic-bezier(.47,1.64,.41,.8);
     transition-property: bottom;
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     min-height: 40px;
     bottom: -40px;
     width: 100%;

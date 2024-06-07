@@ -3005,4 +3005,16 @@ feedback@monkeyptaste.com</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Сұрақ</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Плагин браузері - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Плагин браузері</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Аралық сақтағыш жиынтығы</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Жаңа қосу</value>
+  </data>
 </root>

@@ -26,5 +26,4 @@ namespace MonkeyPaste.Avalonia {
             throw new NotSupportedException();
         }
     }
-
 }

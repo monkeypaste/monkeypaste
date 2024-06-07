@@ -3005,4 +3005,16 @@ Monkeypaste на уредот
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Барање</value>
   </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Комплет за таблата со исечоци</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Додади ново</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Прелистувач на приклучоци - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Прелистувач за приклучоци</value>
+  </data>
 </root>

@@ -3005,4 +3005,16 @@ furedback@monkeypaste.com</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>வினவல்</value>
   </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>கிளிப்போர்டு செட்</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>புதிதாக சேர்க்கவும்</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>செருகுநிரல் உலாவி - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>செருகுநிரல் உலாவி</value>
+  </data>
 </root>

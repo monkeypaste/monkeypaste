@@ -3005,4 +3005,16 @@ Les dreceres globals ara es poden activar al menú de la safata del sistema</val
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Consulta</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Navegador de connectors: {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Navegador de connectors</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Conjunt de porta-retalls</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Afegir nou</value>
+  </data>
 </root>

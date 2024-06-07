@@ -3005,4 +3005,16 @@ Ka taea e te waa poto poto te ao i roto i te tahua Tray punaha</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Uiui</value>
   </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Pūtirotiro plugin</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Tautuhi Clipboard</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Tāpiri hōu</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Pūtirotiro Mono - {0}</value>
+  </data>
 </root>

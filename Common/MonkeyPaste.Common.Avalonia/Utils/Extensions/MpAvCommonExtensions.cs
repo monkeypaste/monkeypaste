@@ -271,8 +271,9 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
         public static void RenderToFile(this Control target, string path) {
-            if (target.RenderToBitmap() is RenderTargetBitmap rtb) {
-                rtb.Save(path);
+            if (target.RenderToBitmap() is RenderTargetBitmap rtb &&
+                rtb.ToAvBitmap() is { }  bmp) {
+                bmp.Save(path);
                 rtb.Dispose();
             }
         }

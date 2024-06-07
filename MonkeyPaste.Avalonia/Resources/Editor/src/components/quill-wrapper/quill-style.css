@@ -56,18 +56,6 @@ button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
     caret-color: var(--caretcolor) !important;
 }
 
-#editor.light .ql-editor code:not(.font-color-override-on) {
-    color: dimgray !important;
-}
-#editor.light .ql-editor code:not(.font-bg-color-override-on) {
-    background-color: silver !important;
-}
-#editor.dark .ql-editor code:not(.font-color-override-on) {
-    color: silver !important;
-}
-#editor.dark .ql-editor code:not(.font-bg-color-override-on) {
-    background-color: dimgray !important;
-}
 
 .ql-editor::selection {    
   color: var(--selfgcolor);
@@ -170,13 +158,6 @@ button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
         padding: 2px 4px;
     }
 
-.ql-code-block-container {
-    background-color: unset !important;
-    color: unset !important;
-    font-family: unset !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
 
 #editor a {
     color: var(--linkcolor) !important;
@@ -188,4 +169,26 @@ button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
 #editor.dark:not(.no-select) tr:hover a,
 #editor.dark:not(.no-select) tr.selected a {
     color: blue !important;
+}
+
+/* syntax */
+
+#editor.light .ql-editor code:not(.font-color-override-on) {
+    color: dimgray !important;
+}
+#editor.light .ql-editor code:not(.font-bg-color-override-on) {
+    background-color: silver !important;
+}
+#editor.dark .ql-editor code:not(.font-color-override-on) {
+    color: silver !important;
+}
+#editor.dark .ql-editor code:not(.font-bg-color-override-on) {
+    background-color: dimgray !important;
+}
+.ql-code-block-container {
+    background-color: unset !important;
+    color: unset !important;
+    font-family: unset !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }

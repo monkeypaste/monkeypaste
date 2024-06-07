@@ -3005,4 +3005,16 @@ Global gysga ýollar ulgam tromy menýusynda başlap biler</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Talap</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Page Popgin brauzeri - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin brauzeri</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Paneli tagta</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Täze goşuň</value>
+  </data>
 </root>

@@ -3005,4 +3005,16 @@
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>استفسار</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>پلگ ان براؤزر - {0}</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>نیا شامل کریں</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>پلگ ان براؤزر</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>کلپ بورڈ سیٹ</value>
+  </data>
 </root>

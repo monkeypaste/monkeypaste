@@ -3005,4 +3005,16 @@ Globální zkratky lze nyní povolit v nabídce hlavního panelu</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Dotaz</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Prohlížeč pluginu – {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Prohlížeč pluginů</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Sada schránky</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Přidat nový</value>
+  </data>
 </root>

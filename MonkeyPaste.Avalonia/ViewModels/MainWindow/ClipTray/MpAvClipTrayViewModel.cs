@@ -1198,7 +1198,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string EmptyQueryTrayText { get; private set; }
 
-        bool IsNoSelectionQuery { get; set; }
+        public bool IsNoSelectionQuery { get; set; }
         private string GetEmptyQueryTrayText() {
             IsNoSelectionQuery = false;
             if (Mp.Services == null ||
@@ -5788,10 +5788,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 MpAvSidebarItemCollectionViewModel.Instance
                 .SelectSidebarItemCommand.Execute(MpAvTagTrayViewModel.Instance);
-            },
-            () => {
-                return IsNoSelectionQuery;
-            });
+            }); 
 
 
         public ICommand UpdatePasteInfoMessageCommand => new MpCommand<object>(

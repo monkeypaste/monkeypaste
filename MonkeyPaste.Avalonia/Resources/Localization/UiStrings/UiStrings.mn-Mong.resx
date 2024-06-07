@@ -3005,4 +3005,16 @@ FEEDBOWY@monkeypue.com</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Асуух</value>
   </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin хөтөч</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Шинээр нэмэх</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin Browser - {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Түр санах ойн багц</value>
+  </data>
 </root>

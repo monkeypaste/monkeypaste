@@ -232,6 +232,13 @@ namespace MonkeyPaste.Avalonia {
             UpdateContent(hc, true);
         }
         private static void OnTextChanged(HtmlControl hc) {
+            if(hc.Text != null && hc.Text.Length > 100_000) {
+                string pt = hc.Text;
+                if(hc.Text.IsStringHtmlDocument()) {
+                    pt = hc.Text.ToPlainText("html");
+                }
+                hc.Text = pt.Substring(0,10_000);
+            }
             UpdateContent(hc);
         }
         private static void UpdateContent(HtmlControl hc, bool set_style = false) {

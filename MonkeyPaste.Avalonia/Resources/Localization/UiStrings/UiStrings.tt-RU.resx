@@ -3005,4 +3005,16 @@ Changeзгәрешләр өчен сылтамага иярегез
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Сорау</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Плагин браузеры - {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Буфер</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Яңа өстәгез</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Плагин браузеры</value>
+  </data>
 </root>

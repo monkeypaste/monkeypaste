@@ -164,7 +164,7 @@ function deleteFocusTemplate() {
         'okcancel',
         'WarningImage')
         .then(result => {
-            if (isNullOrUndefined(result) || result == false || result == 'false') {
+            if (isNullOrUndefined(result) || result == false || result.toLowerCase() == 'false') {
                 log('delete canceled');
                 return;
             }

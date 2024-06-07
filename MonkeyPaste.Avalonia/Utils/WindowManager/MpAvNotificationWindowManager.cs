@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break();
             }
 
-            if (Mp.Services.PlatformInfo.IsDesktop) {
+            if (MpAvThemeViewModel.Instance.IsDesktop) {
                 ShowDesktopNotification(nvmb);
             } else {
                 ShowMobileNotification(nvmb);
@@ -153,9 +153,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
 
-#if WINDOWS
+#if WINDOWS 
 
-            if (nvmb is not MpAvWelcomeNotificationViewModel &&
+            if (MpAvThemeViewModel.Instance.IsMultiWindow &&
+                nvmb is not MpAvWelcomeNotificationViewModel &&
                 nw != null &&
                 nw.TryGetPlatformHandle() is { } ph) {
 
@@ -191,6 +192,11 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     nw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 }
+                if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    nw.WindowStartupLocation = WindowStartupLocation.Manual;
+                    nvmb.AnchorTarget = MpAvMainView.Instance;
+                    nw.Position = MpAvWindowPositioner.GetWindowPositionByAnchorVisual(nw, nvmb.AnchorTarget);
+                }
             } else {
                 nvmb.Owner = null;
                 nvmb.AnchorTarget = null;
@@ -219,17 +225,22 @@ namespace MonkeyPaste.Avalonia {
             nw.Closed += OnWindowClosed;
             nw.EffectiveViewportChanged += Nw_EffectiveViewportChanged;
 
-#if MOBILE_OR_WINDOWED
-            
-            if (nvmb is MpAvUserActionNotificationViewModel uavm) {
-                nw.OpenTransition = MpChildWindowTransition.SlideInFromTop;
-                nw.CloseTransition = MpChildWindowTransition.SlideOutToTop;
-                nw.HeightRatio = -1; // use default height
-            } else if(nvmb is MpAvLoaderNotificationViewModel) {
-                nw.OpenTransition = MpChildWindowTransition.FadeIn;
-                nw.CloseTransition = MpChildWindowTransition.FadeOut | MpChildWindowTransition.SlideOutToTop;
+
+            if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                if (nvmb is MpAvUserActionNotificationViewModel uavm) {
+                    if(nvmb.IsModal) {
+                        nw.OpenTransition = MpChildWindowTransition.FadeIn;
+                        nw.CloseTransition = MpChildWindowTransition.FadeOut;
+                    } else {
+                        nw.OpenTransition = MpChildWindowTransition.SlideInFromTop;
+                        nw.CloseTransition = MpChildWindowTransition.SlideOutToTop;
+                    }
+                    nw.HeightRatio = -1; // use default height
+                } else if (nvmb is MpAvLoaderNotificationViewModel) {
+                    nw.OpenTransition = MpChildWindowTransition.FadeIn;
+                    nw.CloseTransition = MpChildWindowTransition.FadeOut | MpChildWindowTransition.SlideOutToTop;
+                }
             }
-#endif
             try {
                 if (nvmb.Owner != null) {
                     nw.Show(nvmb.Owner);

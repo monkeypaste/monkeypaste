@@ -3005,4 +3005,16 @@ feedback@monkeypaste.com</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>ప్రశ్న</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>ప్లగిన్ బ్రౌజర్ - {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>క్లిప్‌బోర్డ్ సెట్</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>ప్లగిన్ బ్రౌజర్</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>కొత్తది జత పరచండి</value>
+  </data>
 </root>

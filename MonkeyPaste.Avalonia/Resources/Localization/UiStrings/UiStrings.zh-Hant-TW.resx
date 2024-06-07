@@ -3005,4 +3005,16 @@ feathback@monkeypaste.com</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>詢問</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>插件瀏覽器 -  {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>插件瀏覽器</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>剪貼板集</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>添新</value>
+  </data>
 </root>

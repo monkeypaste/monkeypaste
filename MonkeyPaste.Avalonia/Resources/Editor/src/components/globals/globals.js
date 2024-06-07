@@ -1040,6 +1040,7 @@
 
 	// #region THEME
 
+	IsThemeEnabled: true,
 	EditorTheme: 'light',
 	ThemeColorOverrideAttrb: null,
 	ThemeBgColorOverrideAttrb: null,

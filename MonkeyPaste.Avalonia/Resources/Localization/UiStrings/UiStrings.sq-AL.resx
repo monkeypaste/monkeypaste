@@ -3005,4 +3005,16 @@ Shkurtoret globale tani mund të aktivizohen në menunë e tabaka të sistemit</
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Pyetje</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Shfletuesi i pluginit - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Shfletues</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Set i tabelës së fragmenteve</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Shto nje te ri</value>
+  </data>
 </root>

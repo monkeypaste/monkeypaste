@@ -6,9 +6,14 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		/// host load error case
 		debugger;
 	}
-	//hljs.configure({   // optionally configure hljs
-	//	languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml']
-	//});
+	hljs.configure({   // optionally configure hljs
+		languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml'],
+		ignoreUnescapedHTML: true,
+		throwUnescapedHTML: false,
+		//cssSelector: 'div'
+	});
+
+	//hljs.initHighlightingOnLoad();
 	Quill.debug('error');
 	let quillOptions = {
 		//debug: true,
@@ -23,11 +28,9 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		formats: ['background'],
 		modules: {
 			toolbar: toolbarId,
-			//syntax: {
-			//	highlight: highlightCode,
-			//	interval: 100
-			//},
+			//syntax: { hljs },
 			syntax: true
+			//syntax: text => hljs.highlightAuto(text).value
 		}
 	}
 
@@ -41,8 +44,8 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		e.preventDefault();
 	});
 
+
 	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
-	hljs.initHighlighting();
 
 	log('quill version: ' + Quill.version);
 	return quill_instance;

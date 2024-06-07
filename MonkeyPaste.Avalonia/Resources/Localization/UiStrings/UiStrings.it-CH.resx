@@ -3005,4 +3005,16 @@ Le scorciatoie globali possono ora essere abilitate nel menu del vassoio di sist
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Domanda</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Browser plugin - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Browser plugin</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Set di appunti</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Aggiungere nuova</value>
+  </data>
 </root>

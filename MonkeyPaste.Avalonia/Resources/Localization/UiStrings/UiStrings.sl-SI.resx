@@ -3005,4 +3005,16 @@ Globalne bližnjice je zdaj mogoče omogočiti v meniju System pladnja</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Poizvedba</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Brskalnik vtičnikov – {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Brskalnik vtičnikov</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Set odložišča</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Dodaj novo</value>
+  </data>
 </root>

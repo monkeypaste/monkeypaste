@@ -3005,4 +3005,16 @@ Globalni prečaci sada mogu biti omogućeni u izborniku Sistemske ladice</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Upit</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Preglednik dodatka - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Dodatak</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Set za raspršivanje</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Dodaj novi</value>
+  </data>
 </root>

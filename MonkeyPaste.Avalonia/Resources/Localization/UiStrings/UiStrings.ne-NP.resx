@@ -3005,4 +3005,16 @@
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>प्रश्न</value>
   </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>क्लिपबोर्ड सेट</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>नयाँ थप्नुहोस्</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>प्लगइन ब्राउजर - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>प्लगइन ब्राउजर</value>
+  </data>
 </root>

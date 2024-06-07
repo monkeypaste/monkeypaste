@@ -3005,4 +3005,16 @@ A globális parancsikonok már engedélyezhetők a rendszer tálca menüben</val
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Lekérdezés</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin böngésző - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin böngésző</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Vágólapkészlet</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Új hozzáadása</value>
+  </data>
 </root>

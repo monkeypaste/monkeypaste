@@ -50,13 +50,16 @@ namespace MonkeyPaste.Common {
             return dir;
         }
 
-        public static string GetStorageDir() {
-            string app_name =
+        public static string GetStorageDir(bool? is_debug = null) {
+            if(!is_debug.HasValue) {
+                is_debug =
 #if DEBUG
-                "MonkeyPaste_DEBUG";
+                    true;
 #else
-                            "MonkeyPaste";
+                    false;
 #endif
+            }
+            string app_name = is_debug.Value ? "MonkeyPaste_DEBUG" : "MonkeyPaste";
             string storage_dir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 app_name);
@@ -117,7 +120,7 @@ namespace MonkeyPaste.Common {
             return package_cache_path;
 #else
             return local_storage_path;
-#endif            
+#endif
         }
 
         public static string NewLineByEnv(MpUserDeviceType deviceType) {

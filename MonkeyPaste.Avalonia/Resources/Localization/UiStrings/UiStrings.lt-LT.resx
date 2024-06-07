@@ -3005,4 +3005,16 @@ Dabar „System Tray“ meniu galima įjungti globalius nuorodas</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Užklausa</value>
   </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Papildinio naršyklė</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Pridėti naują</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Papildinių naršyklė – {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Iškarpinės rinkinys</value>
+  </data>
 </root>

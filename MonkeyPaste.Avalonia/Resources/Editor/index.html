@@ -36,14 +36,15 @@
 
     <!-- EXTERNAL STYLES BEGIN -->
     <!--<link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">-->
-
     <link href="lib/Quill/quill.snow.css" rel="stylesheet" />
+    <!--<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />-->
     <!--<link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.snow.css" rel="stylesheet" />-->
 
     <link href="lib/jquery-context-menus/src/context-menu.css" rel="stylesheet" />
     <link href="lib/Quill-Better-Table/quill-better-table.css" rel="stylesheet" type="text/css" />
-    <!--<link href="lib/HighlightJs/github.min.css" rel="stylesheet" />-->
-    <link href="lib/HighlightJs/monokai-sublime.min.css" rel="stylesheet" />
+    <link href="lib/HighlightJs/github.min.css" rel="stylesheet" />
+    <!--<link href="lib/HighlightJs/monokai-sublime.min.css" rel="stylesheet" />-->
+    <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" rel="stylesheet">-->
     <!--<link href="lib/katex/katex.min.css" rel="stylesheet" />-->
     <!-- EXTERNAL STYLES END -->
     <!-- INTERNAL STYLES BEGIN -->
@@ -74,10 +75,10 @@
     <link href="src/components/table/table-style.css" rel="stylesheet" />
     <link href="src/components/table/toolbar/create-table-style.css" rel="stylesheet" />
     <link href="src/components/common/toolbar/common-toolbar-style.css" rel="stylesheet" />
-
     <!-- INTERNAL STYLES END -->
     <!-- EXTERNAL APIS BEGIN -->
     <script defer src="lib/HighlightJs/highlight.min.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>-->
 
     <script defer src="lib/Quill/2.0.0-dev.3/quill.min.js"></script>
     <script defer src="lib/Quill-Better-Table/quill-better-table/dist/quill-better-table.js"></script>
@@ -173,6 +174,7 @@
     <script defer src="src/components/font/fontFamily.js"></script>
     <script defer src="src/components/font/fontSize.js"></script>
     <script defer src="src/components/font/fontcolor.js"></script>
+    <script defer src="src/components/syntax/syntax.js"></script>
     <script defer src="src/components/clipboard/clipboard.js"></script>
     <script defer src="src/components/shortcuts/shortcuts.js"></script>
     <script defer src="src/components/dragdrop/drag.js"></script>
@@ -310,7 +312,7 @@
         <!-- BLOCK QUOTE-->
         <button class="ql-blockquote hidden"></button>
         <!-- CODE BLOCK -->
-        <button class="ql-code-block"></button>
+        <button class="ql-code-block hidden"></button>
         <div class="toolbar-separator hidden"></div>
         <!-- LIST -->
         <button id="listToolbarPopupButton" class="svg-key-list-bullet"></button>
@@ -324,9 +326,10 @@
         <div class="toolbar-separator hidden"></div>
         <!-- FLOW DIRECTION -->
         <button class="ql-direction hidden" value="rtl"></button>
-        <div class="toolbar-separator"></div>
+        <div class="toolbar-separator hidden"></div>
         <!-- LINK -->
         <button id="linkEditorToolbarButton"
+                class="hidden"
                 ui-tooltip-key="EditorInsertLinkLabel"
                 hover-tooltip></button>
         <button class="ql-image hidden"
@@ -336,7 +339,7 @@
                 ui-tooltip-key="EditorInsertVideoLabel"
                 hover-tooltip></button>
         <!--<button class="ql-formula"></button>-->
-        <div class="toolbar-separator"></div>
+        <div class="toolbar-separator hidden"></div>
         <!-- FIND/REPLACE -->
         <button id="findReplaceToolbarButton" 
                 class="svg-key-findreplace svg-no-defaults" 

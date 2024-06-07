@@ -3005,4 +3005,16 @@
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>ሕቶ</value>
   </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>ፕላግ-ኢን መርበብ ሓበሬታ</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>ቅንጥብጣብ ሰሌዳ ስብስብ</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>ሓድሽ ምውሳኽ</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>ፕላጊን ዳህሳሲ - {0}</value>
+  </data>
 </root>

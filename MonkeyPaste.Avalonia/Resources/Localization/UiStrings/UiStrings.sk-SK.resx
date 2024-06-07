@@ -3005,4 +3005,16 @@ Globálne skratky je teraz možné povoliť v ponuke System Tray</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Dopyt</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Prehliadač doplnkov - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Prehliadač doplnkov</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Pridať nové</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Súprava schránky</value>
+  </data>
 </root>

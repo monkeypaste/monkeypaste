@@ -48,7 +48,8 @@
         </Setter>
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid x:DataType="local:MpAvChildWindow"
+                <Grid x:Name="ContainerGrid"
+                      x:DataType="local:MpAvChildWindow"
                       RowDefinitions="Auto,*">
                     <!--  HEADER  -->
                     <Border x:Name="HeaderPanel"
@@ -75,6 +76,7 @@
                                                      HorizontalAlignment="Right"
                                                      VerticalAlignment="Center" />
 
+                            <!--  TITLE  -->
 
 
                             <TextBlock x:Name="TitleTextBlock"
@@ -85,7 +87,22 @@
                                        FontSize="26"
                                        FontWeight="Bold"
                                        VerticalAlignment="Center"
-                                       TextAlignment="Center" />
+                                       TextWrapping="WrapWithOverflow"
+                                       TextAlignment="Center">
+                                <TextBlock.MaxWidth>
+                                    <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                                                  ConverterParameter="*">
+                                        <Binding Path="Bounds.Width"
+                                                 ElementName="HeaderPanel" />
+                                        <Binding>
+                                            <Binding.Source>
+                                                <sys:Double>0.5</sys:Double>
+                                            </Binding.Source>
+                                        </Binding>
+                                    </MultiBinding>
+                                </TextBlock.MaxWidth>
+
+                            </TextBlock>
                         </Grid>
 
                     </Border>

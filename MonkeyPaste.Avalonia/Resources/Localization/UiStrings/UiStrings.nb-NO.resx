@@ -3005,4 +3005,16 @@ Globale snarveier kan nå aktiveres i systemskuffenyen</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Spørsmål</value>
   </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin Browser</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin-nettleser – {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Utklippstavlesett</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Legg til ny</value>
+  </data>
 </root>

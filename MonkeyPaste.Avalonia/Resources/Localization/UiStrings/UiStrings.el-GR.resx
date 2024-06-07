@@ -3005,4 +3005,16 @@ feedble@monkeypaste.com</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Ερώτηση</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Πρόγραμμα περιήγησης προσθηκών - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin Browser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Σύνολο προχείρου</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Προσθεσε νεο</value>
+  </data>
 </root>

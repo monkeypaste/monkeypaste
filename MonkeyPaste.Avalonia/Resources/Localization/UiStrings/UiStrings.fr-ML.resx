@@ -3005,4 +3005,16 @@ Les raccourcis mondiaux peuvent désormais être activés dans le menu du platea
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Requête</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Navigateur de plugin - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Navigateur de plugin</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Ensemble de presse-papiers</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Ajouter un nouveau</value>
+  </data>
 </root>

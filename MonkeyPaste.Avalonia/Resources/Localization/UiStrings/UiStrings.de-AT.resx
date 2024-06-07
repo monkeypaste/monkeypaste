@@ -3005,4 +3005,16 @@ Globale Kürzel können jetzt im Taskleistenmenü aktiviert werden.</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Abfrage</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin-Browser - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin-Browser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Klemmbrett-Set</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Neue hinzufügen</value>
+  </data>
 </root>

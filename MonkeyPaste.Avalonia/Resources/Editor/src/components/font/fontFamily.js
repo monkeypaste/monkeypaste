@@ -214,6 +214,9 @@ function updateFontFamilyPickerToSelection(force_ff_dv = null, sel = null) {
     }
 
     let picker_label_elm = getFontFamilyToolbarPickerLabel();
+    if (isNullOrUndefined(picker_label_elm)) {
+        return;
+    }
     picker_label_elm.setAttribute('data-label', getFontFamilyDataValueFontFamily(cur_ff_dv));
 
     

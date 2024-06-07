@@ -3005,4 +3005,16 @@ Maaari na ngayong paganahin ang mga global shortcut sa menu ng System Tray</valu
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Tanong</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin Browser - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin Browser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Set ng clipboard</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Magdagdag ng bago</value>
+  </data>
 </root>

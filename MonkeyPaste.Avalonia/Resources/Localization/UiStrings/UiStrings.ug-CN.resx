@@ -3005,4 +3005,16 @@ tempo@Monkepaste.com</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>سوئال</value>
   </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>قىستۇرما توركۆرگۈ</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>يېڭى قوشۇڭ</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>قىستۇرما توركۆرگۈ - {0}</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>چاپلاش تاختىسى</value>
+  </data>
 </root>

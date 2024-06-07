@@ -3005,4 +3005,16 @@ Os atalhos globais agora podem ser ativados no menu da bandeja do sistema</value
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Consulta</value>
   </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Adicionar novo</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Navegador de plug-in - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Navegador de plug-ins</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Conjunto de área de transferência</value>
+  </data>
 </root>

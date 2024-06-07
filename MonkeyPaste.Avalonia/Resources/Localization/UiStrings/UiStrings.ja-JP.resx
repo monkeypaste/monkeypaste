@@ -3005,4 +3005,16 @@ feedback@monkeypaste.com</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>クエリ</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>プラグインブラウザ -  {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>プラグインブラウザ</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>新しく追加する</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>クリップボードセット</value>
+  </data>
 </root>

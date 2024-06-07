@@ -3005,4 +3005,16 @@ FANDUCE@ONKEYPASTET.com</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>ଜିଜ୍ଞାସା</value>
   </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>କ୍ଲିପବୋର୍ଡ ସେଟ୍ |</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>ନୂତନ ଯୋଡନ୍ତୁ</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ବ୍ରାଉଜର୍ - {0} |</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>ପ୍ଲଗଇନ୍ ବ୍ରାଉଜର୍ |</value>
+  </data>
 </root>

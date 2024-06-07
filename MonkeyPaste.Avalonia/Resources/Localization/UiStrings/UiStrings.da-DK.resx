@@ -3005,4 +3005,16 @@ Globale genveje kan nu aktiveres i systembakkemenuen</value>
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Forespørgsel</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin-browser - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Plugin browser</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Udklipsholder sæt</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Tilføj ny</value>
+  </data>
 </root>

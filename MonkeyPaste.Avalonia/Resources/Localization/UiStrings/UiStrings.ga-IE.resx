@@ -3005,4 +3005,16 @@ Is féidir aicearraí domhanda a chumasú anois sa roghchlár tráidire córais<
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Cheist</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Brabhsálaí breiseáin - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Brabhsálaí breiseáin</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Tacar gearrthaisce</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Cuir nua leis</value>
+  </data>
 </root>

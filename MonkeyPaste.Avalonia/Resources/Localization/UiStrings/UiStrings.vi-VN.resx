@@ -3005,4 +3005,16 @@ Các phím tắt toàn cầu hiện có thể được bật trong menu khay h�
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Truy vấn</value>
   </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Trình duyệt plugin - {0}</value>
+  </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Trình duyệt plugin</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Bộ tạm</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Thêm mới</value>
+  </data>
 </root>

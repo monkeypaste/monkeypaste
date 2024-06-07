@@ -3005,4 +3005,16 @@ Nú er hægt að virkja alþjóðlegar flýtileiðir í kerfisbakkavalmyndinni</
   <data name="QueryTraySidebarLabel" xml:space="preserve">
     <value>Fyrirspurn</value>
   </data>
+  <data name="PluginBrowserWindowTitle" xml:space="preserve">
+    <value>Viðbót vafra</value>
+  </data>
+  <data name="ClipboardSetMessage" xml:space="preserve">
+    <value>Klemmuspjald sett</value>
+  </data>
+  <data name="AddNewActionLabel" xml:space="preserve">
+    <value>Bæta við nýju</value>
+  </data>
+  <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
+    <value>Plugin vafri - {0}</value>
+  </data>
 </root>
