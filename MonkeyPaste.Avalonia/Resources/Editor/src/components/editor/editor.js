@@ -20,6 +20,7 @@ function initEditor() {
 	initScroll();
 	initTooltip();
 	initTemplates();
+	initSyntax();
 	initMacros();
 	initOverlay();
 	//initHistory();
@@ -92,6 +93,7 @@ function getEditorZoom() {
 	let zoom_prop_val = parseFloat(getElementComputedStyleProp(document.body, '--editorzoom').replace('%', '')) / 100;
 	return zoom_prop_val;
 }
+
 
 // #endregion Getters
 
@@ -465,6 +467,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	}
 
 	loadLinkHandlers(true);
+	updateSyntaxBlocks(true);
 	populateFindReplaceResults();
 	//hljs.highlightAll();
 

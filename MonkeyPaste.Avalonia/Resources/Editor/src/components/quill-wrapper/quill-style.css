@@ -158,37 +158,50 @@ button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
         padding: 2px 4px;
     }
 
+/*.ql-editor h1 {*/
+    /*line-height: 84px !important;*/
+    /*font-size: 42px !important;
+}
+.ql-editor h2 {*/
+    /*line-height: 64px !important;*/
+    /*font-size: 32px !important;
+}
+.ql-editor h3  {*/
+    /*line-height: 64px !important;*/
+    /*font-size: 32px !important;
+}
+.ql-editor h4 {*/
+    /*line-height: 48px !important;*/
+    /*font-size: 24px !important;
+}
+.ql-editor h5 {
+    line-height: 48px !important;
+    font-size: 24px !important;
+}
+.ql-editor h6 {
+    line-height: 40px !important;
+    font-size: 20px !important;
+}*/
 
-#editor a {
-    color: var(--linkcolor) !important;
+.ql-snow .ql-tooltip[data-mode=link]::before {
+    content: attr(data-before);
 }
-#editor a:hover {
-    color: var(--linkhovercolor) !important;
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+    border-right: 0px;
+    /*content: 'Save';*/
+    content: attr(data-after);
+    padding-right: 0px;
+}
+/* NOTE not sure where this one is but it should be localized */
+.ql-snow .ql-tooltip a.ql-action::after {
+    border-right: 1px solid #ccc;
+    content: 'Edit';
+    /*content: attr(data-after);*/
+    margin-left: 16px;
+    padding-right: 8px;
 }
 
-#editor.dark:not(.no-select) tr:hover a,
-#editor.dark:not(.no-select) tr.selected a {
-    color: blue !important;
-}
 
-/* syntax */
-
-#editor.light .ql-editor code:not(.font-color-override-on) {
-    color: dimgray !important;
-}
-#editor.light .ql-editor code:not(.font-bg-color-override-on) {
-    background-color: silver !important;
-}
-#editor.dark .ql-editor code:not(.font-color-override-on) {
-    color: silver !important;
-}
-#editor.dark .ql-editor code:not(.font-bg-color-override-on) {
-    background-color: dimgray !important;
-}
-.ql-code-block-container {
-    background-color: unset !important;
-    color: unset !important;
-    font-family: unset !important;
-    margin: 0 !important;
-    padding: 0 !important;
+.ql-editor > * {
+   /*cursor: unset;*/ 
 }

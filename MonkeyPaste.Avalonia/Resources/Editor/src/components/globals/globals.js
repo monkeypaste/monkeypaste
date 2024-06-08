@@ -834,6 +834,14 @@
 	ShortcutKeysLookup: {},
 	// #endregion
 
+	// #region Syntax
+	SYNTAX_THEME_PREFIX: 'syntax-theme',
+	SyntaxThemeClassAttrb: null,
+	DefaultSyntaxTheme: 'monokai-sublime',
+	SelectedSyntaxTheme: 'monokai-sublime',
+	SyntaxThemes: [],
+	// #endregion
+
 	// #region SVG 
 	SVG_CLASS_PREFIX: 'svg-key-',
 	SVG_NO_DEFAULT_CLASS: 'svg-no-defaults',

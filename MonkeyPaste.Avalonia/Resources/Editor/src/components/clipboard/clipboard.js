@@ -5,7 +5,7 @@
 // #region Life Cycle
 
 function initClipboard() {
-    startClipboardHandler();
+    //startClipboardHandler();
     initAllMatchers();
 }
 

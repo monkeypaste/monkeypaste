@@ -102,24 +102,27 @@ function updateFontSizePickerToSelection(forcedSize = null, sel = null) {
     let font_picker_label_elm = font_picker_elm.getElementsByClassName('ql-picker-label')[0];
     let font_picker_options_elm = font_picker_elm.getElementsByClassName('ql-picker-options')[0];
 
-    font_picker_label_elm.setAttribute('data-value', curFontSize);
-    Array.from(font_picker_options_elm.children)
-        .forEach((fontSizeSpan) => {
-            fontSizeSpan.classList.remove('ql-selected');
-            if (fontSizeSpan.getAttribute('data-value').toLowerCase() == curFontSize.toLowerCase()) {
-                fontSizeSpan.classList.add('ql-selected');
-                fontSizeFound = true;
-            }
-        });
-
-    if (!fontSizeFound) {
-        let sizeElm = font_picker_options_elm.firstChild.cloneNode();
-
-        sizeElm.setAttribute('data-value', curFontSize);
-        sizeElm.classList.add('ql-selected');
-        font_picker_label_elm.innerHTML += sizeElm.outerHTML;
+    if (font_picker_label_elm) {
+        font_picker_label_elm.setAttribute('data-value', curFontSize);
     }
+    if (font_picker_options_elm && font_picker_options_elm.children) {
+        Array.from(font_picker_options_elm.children)
+            .forEach((fontSizeSpan) => {
+                fontSizeSpan.classList.remove('ql-selected');
+                if (fontSizeSpan.getAttribute('data-value').toLowerCase() == curFontSize.toLowerCase()) {
+                    fontSizeSpan.classList.add('ql-selected');
+                    fontSizeFound = true;
+                }
+            });
 
+        if (!fontSizeFound) {
+            let sizeElm = font_picker_options_elm.firstChild.cloneNode();
+
+            sizeElm.setAttribute('data-value', curFontSize);
+            sizeElm.classList.add('ql-selected');
+            font_picker_label_elm.innerHTML += sizeElm.outerHTML;
+        }
+    }
 }
 
 function hideFontSizeDropDown() {

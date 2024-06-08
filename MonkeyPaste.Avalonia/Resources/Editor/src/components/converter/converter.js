@@ -22,7 +22,41 @@ function initPlainHtmlConverter() {
 // #endregion Life Cycle
 
 // #region Getters
+function getEditorInlineStyleHtml() {
+	let sup_guid = suppressTextChanged();
 
+	// store original html
+	let editor_elm = getEditorElement();
+	let orig_html = editor_elm.outerHTML;
+
+	// convert all relevant props to inline and get html
+	let props = [
+		//'background',
+		'color',
+		'direction',
+		'font-family',
+		'font-size',
+		'font-stretch',
+		'font-style',
+		'text-decoration'
+	];
+	computedStyleToInlineStyle(editor_elm, true, props);
+	let result = editor_elm.innerHTML;
+
+	// restore original html
+	editor_elm.outerHTML = orig_html;
+	unsupressTextChanged(sup_guid);
+
+	// remove any syntax ui
+	let result_doc = globals.DomParser.parseFromString(result, 'text/html');
+	result_doc.querySelectorAll('select.ql-ui').forEach(x => x.remove());
+
+	// escape entities
+	result = encodeHtmlSpecialEntitiesFromHtmlDoc(null, result_doc);
+	// remove <br>
+	result = convertHtmlLineBreaks(result_doc.body.innerHTML);
+	return result;
+}
 // #endregion Getters
 
 // #region Setters
@@ -38,6 +72,7 @@ function isPlainHtmlConverter() {
 
 // #region Actions
 function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
+	
 	let stop = startStopwatch('conversion time');
 
 	if (!globals.IsConverterLoaded) {
@@ -95,13 +130,13 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 		output_html = verifyConv(verifyText, output_html, needs_encoding, ENFORCE_VALIDATE);
 	}
 
-	setEditorHtml(output_html);
+	//setEditorHtml(output_html);
 	let output_delta = convertHtmlToDelta(output_html);
-	let themed_html = getHtml(null, true, false, true, true);
+	//let themed_html = getHtml(null, true, false, true, true);
+	let themed_html = getEditorInlineStyleHtml();
+	//setEditorHtml(themed_html);
 	output_html = convertHtmlLineBreaks(output_html);
-	//log('');
-	//log('RichHtml: ');
-	//log(output_html);
+
 	stop();
 	return {
 		themed_html: themed_html,

@@ -610,9 +610,9 @@ function isStringContainSpecialHtmlEntities(str) {
     return globals.HtmlEntitiesLookup.find(x => str.includes(x[0])) != null;
 }
 
-function encodeHtmlSpecialEntitiesFromHtmlDoc(htmlStr) {
+function encodeHtmlSpecialEntitiesFromHtmlDoc(htmlStr,htmlDoc = null) {
     // create temp dom of htmlStr and escape special chars in text nodes	
-    let html_doc = globals.DomParser.parseFromString(htmlStr, 'text/html');
+    let html_doc = htmlDoc || globals.DomParser.parseFromString(htmlStr, 'text/html');
     let text_elms = getAllTextElementsInElement(html_doc.body);
     for (var i = 0; i < text_elms.length; i++) {
         let text_elm = text_elms[i];
@@ -934,3 +934,22 @@ function strFormat(b) {
 }
 
 
+function computedStyleToInlineStyle(element, recursive = false, properties = null) {
+    if (!element) {
+        throw new Error('No element specified.');
+    }
+
+    if (recursive) {
+        Array.prototype.forEach.call(element.children, (child) => {
+            computedStyleToInlineStyle(child, recursive, properties);
+        });
+    }
+
+    const computedStyle = getComputedStyle(element);
+    Array.prototype.forEach.call(
+        properties || computedStyle,
+        (property) => {
+            element.style[property] = computedStyle.getPropertyValue(property);
+        }
+    );
+}

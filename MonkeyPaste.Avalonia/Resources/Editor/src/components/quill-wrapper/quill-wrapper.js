@@ -6,12 +6,12 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		/// host load error case
 		debugger;
 	}
-	hljs.configure({   // optionally configure hljs
-		languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml'],
-		ignoreUnescapedHTML: true,
-		throwUnescapedHTML: false,
-		//cssSelector: 'div'
-	});
+	//hljs.configure({   // optionally configure hljs
+	//	languages: ['javascript', 'ruby', 'python', 'xml', 'html', 'xhtml'],
+	//	ignoreUnescapedHTML: true,
+	//	throwUnescapedHTML: false,
+	//	//cssSelector: 'div'
+	//});
 
 	//hljs.initHighlightingOnLoad();
 	Quill.debug('error');
@@ -28,8 +28,8 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		formats: ['background'],
 		modules: {
 			toolbar: toolbarId,
-			//syntax: { hljs },
-			syntax: true
+			syntax: { hljs },
+			//syntax: true
 			//syntax: text => hljs.highlightAuto(text).value
 		}
 	}
@@ -85,7 +85,10 @@ function getRootHtml() {
 	return globals.quill.root.innerHTML;
 }
 
-function getHtml(range, encodeHtmlEntities = true, restoreContentColors = true, useInlineStyles = false, convertLineBreaks = true) {
+function getHtml(range = null, encodeHtmlEntities = true, restoreContentColors = true, useInlineStyles = false, convertLineBreaks = true) {
+	if (isNullOrUndefined(window.QuillDeltaToHtmlConverter)) {
+		return getRootHtml();
+	}
 	if (globals.ContentItemType != 'Text' ||
 		(isTableInDocument() && isNullOrUndefined(range))) {
 		let root_html = getRootHtml();

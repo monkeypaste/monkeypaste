@@ -2041,8 +2041,8 @@ namespace MonkeyPaste.Avalonia {
             if (apply_changes) {
                 // only after add or (un)link to trash/favorites
 
-                await TrashOrDeleteCopyItemIdAsycn(cap_info.ToBeTrashed_ciid, false, true);
-                await TrashOrDeleteCopyItemIdAsycn(cap_info.ToBeRemoved_ciid, true, true);
+                await TrashOrDeleteCopyItemIdAsync(cap_info.ToBeTrashed_ciid, false, true);
+                await TrashOrDeleteCopyItemIdAsync(cap_info.ToBeRemoved_ciid, true, true);
 
                 // refresh cap for view changes
                 var updated_cap_info = await MpAvAccountTools.Instance.RefreshCapInfoAsync(account_type, MpAccountCapCheckType.Refresh);
@@ -2856,7 +2856,7 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
-        private async Task TrashOrDeleteCopyItemIdAsycn(int ciid, bool isDelete, bool ignorePostSel = false) {
+        private async Task TrashOrDeleteCopyItemIdAsync(int ciid, bool isDelete, bool ignorePostSel = false) {
             if (ciid == 0) {
                 return;
             }
@@ -2882,6 +2882,7 @@ namespace MonkeyPaste.Avalonia {
                 await MpAvTagTrayViewModel.Instance.TrashTagViewModel
                     .LinkCopyItemCommand.ExecuteAsync(ciid);
             }
+            OnPropertyChanged(nameof(IsAnySelectedAndTrayVisible));
         }
 
         private async Task<MpAvClipTileViewModel> CreateOrRetrieveClipTileViewModelAsync(object ci_or_ciid) {
@@ -4807,7 +4808,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand TrashSelectedClipCommand => new MpAsyncCommand(
             async () => {
-                await TrashOrDeleteCopyItemIdAsycn(SelectedItem.CopyItemId, false);
+                await TrashOrDeleteCopyItemIdAsync(SelectedItem.CopyItemId, false);
             },
             () => {
                 bool can_trash = SelectedItem != null && !SelectedItem.IsTrashed;
@@ -4822,7 +4823,7 @@ namespace MonkeyPaste.Avalonia {
             });
         public MpIAsyncCommand DeleteSelectedClipCommand => new MpAsyncCommand(
             async () => {
-                await TrashOrDeleteCopyItemIdAsycn(SelectedItem.CopyItemId, true);
+                await TrashOrDeleteCopyItemIdAsync(SelectedItem.CopyItemId, true);
             },
             () => {
                 bool can_delete =
@@ -4837,7 +4838,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PermanentlyDeleteSelectedClipFromShortcutCommand => new MpAsyncCommand(
             async () => {
-                await TrashOrDeleteCopyItemIdAsycn(SelectedItem.CopyItemId, true);
+                await TrashOrDeleteCopyItemIdAsync(SelectedItem.CopyItemId, true);
             },
             () => {
                 bool can_delete =
