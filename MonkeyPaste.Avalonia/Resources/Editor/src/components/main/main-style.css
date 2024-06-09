@@ -3,6 +3,8 @@ html {
 }
 
 body {
+    --codebg: rgba(248,248,242,var(--editableopacity));
+    --codefg: rgba(35,36,31,var(--editableopacity));
     --noselectbgcolor: rgba(0,0,0,0);
     --subselecteditorbgcolor: rgba(189, 188, 188,var(--editableopacity));
     --editableeditorbgcolor: rgba(255, 248, 220,var(--editableopacity));

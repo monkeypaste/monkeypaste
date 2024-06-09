@@ -1215,6 +1215,11 @@ namespace MonkeyPaste.Avalonia {
         }
         private MpQuillDefaultsRequestMessage GetDefaultsMessage() {
             return new MpQuillDefaultsRequestMessage() {
+                // TODO when using dynamic plugins wwwroot should be relative dir from local storage
+                // NOTE! wwwroot needs to include trailing slash
+                wwwroot = string.Empty,
+                selectedSyntaxTheme = MpAvPrefViewModel.Instance.SelectedSyntaxTheme,
+                isMobile = MpAvThemeViewModel.Instance.IsMobileOrWindowed,
                 internalSourceBaseUri = Mp.Services.SourceRefTools.InternalSourceBaseUri,
                 minLogLevel = (int)MpConsole.MinLogLevel,
                 isDebug = MpDebug.IsDebug,

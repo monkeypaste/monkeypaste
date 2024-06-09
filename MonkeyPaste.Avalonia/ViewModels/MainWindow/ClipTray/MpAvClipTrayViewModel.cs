@@ -5246,6 +5246,10 @@ namespace MonkeyPaste.Avalonia {
                 ctvml
                 .Select(x => x.PersistContentStateCommand.ExecuteAsync(null)));
 
+            // clear cached content style
+            MpAvHtmlStylerExtension.ResetStyleType(MpHtmlStyleType.Content);
+
+
             ctvml.ForEach(x => x.IsEditorLoaded = false);
             ctvml.ForEach(x => x.OnPropertyChanged(nameof(x.IsAnyBusy)));
 

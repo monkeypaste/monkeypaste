@@ -5,7 +5,7 @@
 // #region Life Cycle
 
 function initClipboard() {
-    //startClipboardHandler();
+    startClipboardHandler();
     initAllMatchers();
 }
 
@@ -13,13 +13,12 @@ function initAllMatchers() {
     initLineBreakMatcher();
     initWhitespaceMatcher();
     initPreSwapMatcher();
-    initCodeMatcher();
     //initHeaderConverterMatcherMatcher();
 
-    if (isPlainHtmlConverter()) {
-        initFontColorMatcher();
-        return;
-    }
+    //if (isPlainHtmlConverter()) {
+    //    initFontColorMatcher();
+    //    return;
+    //}
     initSpecialCharacterMatcher();
     initFontColorMatcher();
     initLinkMatcher();
@@ -59,17 +58,6 @@ function initPreSwapMatcher() {
             //delete delta.ops[0].insert.template;
             //delta.ops[0].insert = '';
         }
-        return delta;
-    });
-}
-function initCodeMatcher() {
-    if (Quill === undefined) {
-        /// host load error case
-        debugger;
-    }
-    let Delta = Quill.imports.delta;
-
-    globals.quill.clipboard.addMatcher('code', function (node, delta) {
         return delta;
     });
 }
@@ -332,8 +320,6 @@ function getClipboardEnabledElements() {
 // #endregion Setters
 
 // #region State
-
-
 function isHtmlFormat(lwc_format) {
     const result =
         lwc_format == 'html format' ||
@@ -406,6 +392,7 @@ function stopClipboardHandler() {
         x.removeEventListener('copy', onCopy);
     });
 }
+
 
 // #endregion Actions
 

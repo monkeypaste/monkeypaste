@@ -31,6 +31,7 @@ namespace MonkeyPaste.Avalonia {
             //nameof(MpAvPrefViewModel.Instance.ShowInTaskSwitcher),
             nameof(MpAvPrefViewModel.Instance.IsLoggingEnabled),
             nameof(MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled),
+            nameof(MpAvPrefViewModel.Instance.SelectedSyntaxTheme),
         };
 
         private string[] _reinitContentParams => new string[] {
@@ -504,7 +505,21 @@ namespace MonkeyPaste.Avalonia {
                                                     value = MpRuntimePrefParamType.ThemeHexColor.ToString()
                                                 }
                                             }
-                                        }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.SelectedSyntaxTheme),
+                                            controlType = MpParameterControlType.ComboBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = UiStrings.PrefSyntaxThemeLabel,
+                                            description = UiStrings.PrefSyntaxThemeHint,
+                                            values = 
+                                                MpAvSyntaxThemeHelpers.SyntaxThemeNames
+                                                .Select(x=>new MpParameterValueFormat() {
+                                                    isDefault = MpAvPrefViewModel.Instance.SelectedSyntaxTheme == x,
+                                                    label = x.Replace("-"," ").ToProperCase(),
+                                                    value = x,
+                                                }).ToList()
+                                        },
                                     }
                                 }
                             }

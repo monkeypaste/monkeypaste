@@ -1043,6 +1043,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool IsDetailVisible =>
+            MpAvThemeViewModel.Instance.IsMultiWindow ?
+                IsCornerButtonsVisible :
+                IsSelected;
+
         public bool IsContentAndTitleReadOnly => IsContentReadOnly && IsTitleReadOnly;
 
         public bool IsContextMenuOpen { get; set; } = false;
@@ -1795,6 +1800,9 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
         private void MpAvClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
+                case nameof(IsCornerButtonsVisible):
+                    OnPropertyChanged(nameof(IsDetailVisible));
+                    break;
                 case nameof(IsAnimating):
                     if(!IsAnimating && IsWindowOpen) {
                         FinishChildWindowOpen();

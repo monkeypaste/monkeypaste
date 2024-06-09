@@ -9,7 +9,9 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Input;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
@@ -22,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
     public static class MpAvHtmlStylerExtension {
         private static Dictionary<MpHtmlStyleType, string> _stylesLookup = [];
+        private static (string name,string data) _syntaxStyle;
         static MpAvHtmlStylerExtension() {
             //if (MpAvThemeViewModel.Instance != null &&
             //    MpAvThemeViewModel.Instance.CustomFontFamilyNames != null) {
@@ -38,6 +41,7 @@ namespace MonkeyPaste.Avalonia {
             IsEnabledProperty.Changed.AddClassHandler<HtmlControl>((x, y) => HandleIsEnabledChanged(x, y));
 
             // need handlers for any css related properties
+            SyntaxThemeNameProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x,true));
             HtmlStyleTypeProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
             DefaultFontSizeProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
             DefaultFontFamilyProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
@@ -47,6 +51,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region SyntaxThemeName AvaloniaProperty
+        public static string GetSyntaxThemeName(AvaloniaObject obj) {
+            return obj.GetValue(SyntaxThemeNameProperty);
+        }
+
+        public static void SetSyntaxThemeName(AvaloniaObject obj, string value) {
+            obj.SetValue(SyntaxThemeNameProperty, value);
+        }
+
+        public static readonly AttachedProperty<string> SyntaxThemeNameProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, string>(
+                "SyntaxThemeName",
+                null);
+
+        #endregion
+        
         #region HtmlStyleType AvaloniaProperty
         public static MpHtmlStyleType GetHtmlStyleType(AvaloniaObject obj) {
             return obj.GetValue(HtmlStyleTypeProperty);
@@ -232,19 +252,16 @@ namespace MonkeyPaste.Avalonia {
             UpdateContent(hc, true);
         }
         private static void OnTextChanged(HtmlControl hc) {
-            if(hc.Text != null && hc.Text.Length > 100_000) {
-                string pt = hc.Text;
-                if(hc.Text.IsStringHtmlDocument()) {
-                    pt = hc.Text.ToPlainText("html");
-                }
-                hc.Text = pt.Substring(0,10_000);
-            }
             UpdateContent(hc);
         }
         private static void UpdateContent(HtmlControl hc, bool set_style = false) {
             if (set_style) {
                 // for some reason changing the style sheet makes html disappear so only setting on load now
                 hc.BaseStylesheet = GetStyleSheet(hc);
+                
+            }
+
+            if (hc.Text != null && hc.Text != "<html><body></body></html>") {
             }
             if (!hc.Text.ToStringOrEmpty().IsStringHtmlDocument()) {
                 // ensure text is full html doc or stylesheet stuff doesn't work
@@ -548,12 +565,12 @@ namespace MonkeyPaste.Avalonia {
             if (_stylesLookup.TryGetValue(style_type, out string css) && !GetIsUniqueStyleRequired(hc)) {
                 return css;
             }
-            string css_str = DefaultStyleSheet;
+            var sb = new StringBuilder(DefaultStyleSheet);
             //string css_str = string.Empty;
-
+            string type_style = string.Empty;
             switch (style_type) {
                 case MpHtmlStyleType.Content:
-                    css_str += string.Format(@"
+                    type_style = string.Format(@"
 * {{ margin: 0; padding: 0; }}
 body {{ color: {0}; font-size: {1}px; font-family: {2}; white-space: normal;  word-break: break-all; }}
 p {{ height: 1em; line-height: 1.42; margin: 0; padding: 0; }}
@@ -575,7 +592,7 @@ Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContent
                     break;
                 case MpHtmlStyleType.Tooltip:
                 default:
-                    css_str += string.Format(
+                    type_style = string.Format(
 @"* {{ margin: 0; padding: 0; }}
 body {{ color: {0}; font-size: {1}px; font-family: {2}; line-height: 1; }}
 p {{ margin: 0; height: 1em; line-height: 1; }}
@@ -589,10 +606,26 @@ MpSystemColors.gold1.RemoveHexAlpha()
                         );
                     break;
             }
+
+            sb.AppendLine(type_style);
+
+            if (GetSyntaxThemeName(hc) is string theme_name) {
+                if(_syntaxStyle.IsDefault() || _syntaxStyle.name != theme_name) {
+                    _syntaxStyle.name = theme_name;
+                    _syntaxStyle.data = MpAvSyntaxThemeHelpers.ReadThemeText(theme_name);
+                }
+                sb.AppendLine(_syntaxStyle.data);
+            }
+
+            string css_str = sb.ToString();
             if (!GetIsUniqueStyleRequired(hc)) {
                 _stylesLookup.Add(style_type, css_str);
             }
             return css_str;
+        }
+
+        public static void ResetStyleType(MpHtmlStyleType styleType) {
+            _stylesLookup.Remove(styleType);
         }
     }
 

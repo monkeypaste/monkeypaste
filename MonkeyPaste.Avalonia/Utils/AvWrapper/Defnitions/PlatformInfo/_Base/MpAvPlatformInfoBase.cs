@@ -271,6 +271,13 @@ namespace MonkeyPaste.Avalonia {
                 return Path.Combine(ResourcesDir, "Editor", "index.html");
             }
         }
+        public virtual string ThemesDir =>
+            Path.Combine(
+                Path.GetDirectoryName(EditorPath), 
+                "src", 
+                "components",
+                "syntax",
+                "hljs-styles");
         public virtual string TermsPath {
             get {
                 return Path.Combine(ResourcesDir, "Legal", "terms.html");

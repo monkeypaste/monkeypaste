@@ -50,6 +50,8 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
 
         [JsonIgnore]
+        public const string DEF_SYNTAX_THEME = "monokai-sublime";
+        [JsonIgnore]
         public const string PREF_FILE_NAME = "mp.pref";
 
         [JsonIgnore]
@@ -319,6 +321,7 @@ namespace MonkeyPaste.Avalonia {
         #region Preferences
 
         #region Look & Feel
+        public string SelectedSyntaxTheme { get; set; } = DEF_SYNTAX_THEME;
         public bool ShowContentTitles { get; set; } = true;
         public string ThemeTypeName { get; set; } = DEFAULT_THEME_TYPE_NAME;
         public string ThemeColor { get; set; } = DEFAULT_THEME_HEX_COLOR;

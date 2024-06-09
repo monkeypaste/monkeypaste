@@ -139,6 +139,7 @@ namespace MonkeyPaste.Avalonia {
         #region Appearance
 
 
+
         public bool IsRtl {
             get =>
                 GetThemeValue<bool>(MpThemeResourceKey.IsRtl);

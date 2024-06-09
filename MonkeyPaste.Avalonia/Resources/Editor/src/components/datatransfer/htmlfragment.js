@@ -121,37 +121,70 @@ function parseHtmlFromHtmlClipboardFragment(cbDataStr) {
     return cbData;
 }
 
-function parseHtmlFragmentVersion(cbDataStr) {
-    let version_parts = cbDataStr.split('Version:');
-    if (version_parts.length < 2) {
-        return null;
-    }
-    let version_num_parts = version_parts[1].split('\n');
-    if (version_num_parts.length < 2) {
-        return null;
-    }
-    return version_num_parts[0];
+function parseHtmlFragmentVersionStr(cbDataStr) {
+    return parseHtmlFragmentValueStr('Version', cbDataStr)
 }
 
+function parseFragmentInt(keyName,cbDataStr) {
+    let idx = parseInt(parseHtmlFragmentValueStr(keyName, cbDataStr));
+    if (isNumber(idx)) {
+        return idx;
+    }
+    return -1;
+}
+
+
+function parseHtmlFragmentValueStr(keyName, cbDataStr) {
+    let key_parts = cbDataStr.split(`${keyName}:`);
+    if (key_parts.length < 2) {
+        return null;
+    }
+    let key_value_parts = key_parts[1].split('\n');
+    if (key_value_parts.length < 2) {
+        return null;
+    }
+    return key_value_parts[0];
+}
+
+function parseFragmentHtml(cbDataStr) {
+    let sidx = parseFragmentInt('StartHTML', cbDataStr);
+    let eidx = parseFragmentInt('EndHTML', cbDataStr);
+    if (sidx < 0 || eidx < 0) {
+        log('error parsing html range. sidx: ' + sidx + ' eidx: ' + eidx);
+        return '';
+    }
+    let te = new TextEncoder();
+    let data_bytes = te.encode(cbDataStr);
+    // using sidx+1 cause 1st byte is \n
+    let frag_bytes = data_bytes.slice(sidx, eidx + 1);
+    let result = new TextDecoder().decode(frag_bytes);
+    return result;
+}
+
+function parseFragment_old(htmlStr) {
+    let htmlStartToken = '<!--StartFragment-->';
+    let htmlEndToken = '<!--EndFragment-->';
+    const frag_start_idx = htmlStr.indexOf(htmlStartToken);
+    if (frag_start_idx >= 0) {
+        let html_start_idx = frag_start_idx + htmlStartToken.length;
+        let html_end_idx = htmlStr.indexOf(htmlEndToken);
+        let html_length = html_end_idx - html_start_idx;
+        return substringByLength(htmlStr, html_start_idx, html_length);
+    }
+    return '';
+}
 function cleanHtmlForFragmentMarkers(htmlStr) {
 
-    let version = parseHtmlFragmentVersion(htmlStr);
+    let version = parseHtmlFragmentVersionStr(htmlStr);
     if (version == null) {
         return htmlStr;
     }
+
     if (version.startsWith('0.9')) {
     // NOTE reading raw clipboard format html (at least from chrome on windows)
     // has line breaks at opening/closing of <body> tag which get picked up
-    // so this pulls inner fragment out which will not have those
-        let htmlStartToken = '<!--StartFragment-->';
-        let htmlEndToken = '<!--EndFragment-->';
-        const frag_start_idx = htmlStr.indexOf(htmlStartToken);
-        if (frag_start_idx >= 0) {
-            let html_start_idx = frag_start_idx + htmlStartToken.length;
-            let html_end_idx = htmlStr.indexOf(htmlEndToken);
-            let html_length = html_end_idx - html_start_idx;
-            return substringByLength(htmlStr, html_start_idx, html_length);
-        }
+        // so this pulls inner fragment out which will not have those
+        return parseFragmentHtml(htmlStr);
     } else if (version.startsWith('1.0')) {
         // just returning everything after EndFragment line
         let end_html_line_parts = htmlStr.split('EndFragment:');

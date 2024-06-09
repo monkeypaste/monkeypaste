@@ -140,6 +140,7 @@
                              local:MpAvHighlightTextExtension.HighlightRanges="{Binding HighlightRanges}"
                              local:MpAvHighlightTextExtension.ActiveHighlightIdx="{Binding ActiveHighlightIdx}"
                              local:MpAvHtmlStylerExtension.IsEnabled="True"
+                             local:MpAvHtmlStylerExtension.SyntaxThemeName="{Binding SelectedSyntaxTheme, Source={x:Static local:MpAvPrefViewModel.Instance}}"
                              local:MpAvHtmlStylerExtension.HtmlStyleType="Content"
                              local:MpAvHtmlStylerExtension.DefaultFontSize="{Binding DefaultFontSize, Source={x:Static local:MpAvPrefViewModel.Instance}}"
                              local:MpAvHtmlStylerExtension.DefaultFontFamily="{Binding DefaultEditableFontFamily, Source={x:Static local:MpAvPrefViewModel.Instance}}"

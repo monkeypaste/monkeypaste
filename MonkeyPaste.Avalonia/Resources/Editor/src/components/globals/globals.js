@@ -193,7 +193,7 @@
 	// #endregion
 
 	// #region CONVERTER
-
+	IsConverter: false,
 	IsConverterLoaded: false,
 	HtmlEntitiesLookup: [
 		[`&`, `&amp;`],
@@ -285,6 +285,8 @@
 	WebEnv: 'Web',
 	UknownEnv: 'Unknown',
 	EnvName: "",
+	IsMobile: false,
+	wwwroot: '',
 	// #endregion
 
 	// #region FORMAT PAIN

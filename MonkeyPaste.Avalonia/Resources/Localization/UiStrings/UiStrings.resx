@@ -3109,4 +3109,10 @@ Global Shortcuts can now be enabled in the System Tray Menu</value>
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>Clipboard Set</value>
   </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>The theme used for blocks of code detected in text clips.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntax Theme</value>
+  </data>
 </root>

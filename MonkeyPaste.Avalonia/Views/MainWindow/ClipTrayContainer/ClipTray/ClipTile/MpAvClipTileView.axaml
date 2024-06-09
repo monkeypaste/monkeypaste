@@ -427,7 +427,7 @@
                   Background="{Binding BorderBrush, ElementName=ClipTileContainerBorder}"
                   Classes.subselect="{Binding IsSubSelectionEnabled}"
                   Classes.detailTooltip="{Binding DetailTooltipText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                  IsVisible="{Binding IsCornerButtonsVisible}"
+                  IsVisible="{Binding IsDetailVisible}"
                   local:MpAvIsHoveringExtension.IsEnabled="True"
                   local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverDetailGrid, Mode=TwoWay}"
                   HorizontalAlignment="Stretch"

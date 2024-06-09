@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace CoreOleHandler {
     public class CoreOleParamBuilder : MpISupportHeadlessClipboardComponentFormat {
-        const int DEF_MAX_TEXT = 50_000;
+        const int DEF_MAX_TEXT = -1;//50_000;
         const int MAX_MAX_TEXT = 1_000_000;
         string PluginGuid => "cf2ec03f-9edd-45e9-a605-2a2df71e03bd";
         string IconDir => @".\Resources\Images";

@@ -6153,6 +6153,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The theme used for blocks of code detected in text clips..
+        /// </summary>
+        public static string PrefSyntaxThemeHint {
+            get {
+                return ResourceManager.GetString("PrefSyntaxThemeHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Syntax Theme.
+        /// </summary>
+        public static string PrefSyntaxThemeLabel {
+            get {
+                return ResourceManager.GetString("PrefSyntaxThemeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Caution! Other palette colors are chosen using math not eyes! So be aware some color and style combinations may not have proper contrast for readability..
         /// </summary>
         public static string PrefThemeColorHint {

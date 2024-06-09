@@ -22,6 +22,8 @@ namespace MonkeyPaste {
         public bool isConverter { get; set; }
     }
     public class MpQuillDefaultsRequestMessage {
+        public string wwwroot { get; set; }
+        public string selectedSyntaxTheme { get; set; }
         public string internalSourceBaseUri { get; set; }
         public int minLogLevel { get; set; }
         public bool isDebug { get; set; }
@@ -30,6 +32,7 @@ namespace MonkeyPaste {
         public bool isSpellCheckEnabled { get; set; }
         public string currentTheme { get; set; }
         public double bgOpacity { get; set; }
+        public bool isMobile { get; set; }
 
         public string cultureCode { get; set; }
         public bool isRightToLeft { get; set; }

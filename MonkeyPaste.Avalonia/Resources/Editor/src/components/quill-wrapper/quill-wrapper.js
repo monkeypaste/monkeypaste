@@ -28,7 +28,11 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		formats: ['background'],
 		modules: {
 			toolbar: toolbarId,
-			syntax: { hljs },
+			syntax: {
+				hljs,
+				// NOTE 1_000 is the default interval, but convert needs to be synchronous
+				interval: 0//globals.IsConverter ? 0 : 1_000
+			},
 			//syntax: true
 			//syntax: text => hljs.highlightAuto(text).value
 		}
@@ -86,9 +90,17 @@ function getRootHtml() {
 }
 
 function getHtml(range = null, encodeHtmlEntities = true, restoreContentColors = true, useInlineStyles = false, convertLineBreaks = true) {
-	if (isNullOrUndefined(window.QuillDeltaToHtmlConverter)) {
-		return getRootHtml();
+	if (range == null) {
+		let root_html = getRootHtml();
+		let root_doc = globals.DomParser.parseFromString(root_html, 'text/html');
+		if (Array.from(root_doc.querySelectorAll('pre.ql-code-block-container')).length > 0) {
+			// remove language selector thing
+			root_doc.querySelectorAll('select.ql-ui').forEach(x => x.remove());
+		}
+		root_html = root_doc.documentElement.outerHTML;
+		return root_html;
 	}
+
 	if (globals.ContentItemType != 'Text' ||
 		(isTableInDocument() && isNullOrUndefined(range))) {
 		let root_html = getRootHtml();

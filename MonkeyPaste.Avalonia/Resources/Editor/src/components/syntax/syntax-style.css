@@ -18,10 +18,15 @@
     padding: 0 !important;
 }*/
 
-.ql-code-block-container .ql-ui:not(.syntax-theme-picker) {
+#editor.desktop .ql-code-block-container .ql-ui {
     /* hide language picker */
-    /*display: none;*/
+    display: none;
 }
-.ql-code-block-container .ql-ui .syntax-theme-picker {
-    right: 100px;
+#editor.desktop .ql-code-block-container:hover .ql-ui {
+    /* hide language picker */
+    display: unset;
+}
+.ql-snow .ql-editor .ql-code-block-container {
+    background-color: var(--codebg);
+    color: var(--codefg);
 }

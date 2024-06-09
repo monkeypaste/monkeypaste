@@ -1,7 +1,7 @@
 
 // #region Life Cycle
-function initLocalizer(cc) {    
-    let src_str = `src/components/localizer/UiStrings.${cc}.js`;
+function initLocalizer(cc) {
+    let src_str = `${globals.wwwroot}src/components/localizer/UiStrings.${cc}.js`;
     let culture_script_elm = document.createElement('script');
     culture_script_elm.classList.add('culture-script');
     culture_script_elm.setAttribute('defer', null);
