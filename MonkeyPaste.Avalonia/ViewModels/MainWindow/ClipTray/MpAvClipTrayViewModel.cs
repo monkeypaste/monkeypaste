@@ -3651,7 +3651,7 @@ namespace MonkeyPaste.Avalonia {
                 return CanTileNavigate();
             });
 
-
+        DateTime? last_tile_pinned_dt;
         public MpIAsyncCommand<object> PinTileCommand => new MpAsyncCommand<object>(
              async (args) => {
                  MpPinType pinType = MpPinType.Internal;
@@ -3695,6 +3695,11 @@ namespace MonkeyPaste.Avalonia {
                      MpDebug.Break();
                      return;
                  }
+                 if(last_tile_pinned_dt.HasValue && DateTime.Now - last_tile_pinned_dt.Value < TimeSpan.FromSeconds(5)) {
+                     MpDebug.Break($"All tiles getting pinned bug is happening!");
+                 }
+                 last_tile_pinned_dt = DateTime.Now;
+
                  PinOpCopyItemId = ctvm_to_pin.CopyItemId;
 
                  string persist_args = pin_as_editable.IsTrue() ? "editable" : null;
@@ -3724,10 +3729,6 @@ namespace MonkeyPaste.Avalonia {
                      // 1. drop from pin tray (sort)
                      // 2. new duplicate was in pin tray
                      // 3. internal pinned to popout
-
-                     if(!ctvm_to_pin.IsWindowOpen) {
-                         ctvm_to_pin.WasInternallyPinned = true;
-                     }
 
                      int cur_pin_idx = PinnedItems.IndexOf(ctvm_to_pin);
                      if (cur_pin_idx < 0) {
@@ -3832,6 +3833,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> UnpinTileCommand => new MpAsyncCommand<object>(
              async (args) => {
+                 // when pin tray was visible before popout it means this tile was pinned before so repin it
+                 
 
                  MpAvClipTileViewModel pin_placeholder_ctvm = null;
                  MpAvClipTileViewModel unpinned_ctvm = null;
@@ -3852,6 +3855,12 @@ namespace MonkeyPaste.Avalonia {
                      return;
                  }
 
+                 bool unpin_to_internal =
+                    MpAvThemeViewModel.Instance.IsMobileOrWindowed && 
+                    unpinned_ctvm.IsWindowClosing &&
+                    IsPinTrayVisible && 
+                    !IsPinTrayPeeking;
+
                  unpinned_ctvm.StoreSelectionStateCommand.Execute(null);
                  await unpinned_ctvm.PersistContentStateCommand.ExecuteAsync(null);
 
@@ -3861,21 +3870,19 @@ namespace MonkeyPaste.Avalonia {
 
                  PinOpCopyItemId = unpinned_ctvm.CopyItemId;
 
-                 PinnedItems.Remove(unpinned_ctvm);
-                 bool from_popout = false;
+                 if(unpin_to_internal) {
+
+                 } else {
+                     PinnedItems.Remove(unpinned_ctvm);
+                 }
                  if (unpinned_ctvm.IsWindowOpen) {
-                     from_popout = true;
                      bool was_closed = await unpinned_ctvm.ClosePopoutAsync();
                      if (!was_closed) {
                          // cancel unpin (must be appending)
                          return;
                      }
                  }
-                 unpinned_ctvm.IsContentReadOnly = true;
-
-                 //if (!IsAnyTilePinned) {
-                 //    ObservedPinTrayScreenWidth = 0;
-                 //}
+                 unpinned_ctvm.EnableContentReadOnlyCommand.Execute(null);
 
                  OnPropertyChanged(nameof(PinnedItems));
                  OnPropertyChanged(nameof(IsAnyTilePinned));
@@ -3886,17 +3893,12 @@ namespace MonkeyPaste.Avalonia {
 
                  ClearAllSelection(false);
 
-                 if(unpinned_ctvm.WasInternallyPinned) {
-                     unpinned_ctvm.WasInternallyPinned = false;
-                     if(from_popout) {
-                         // repin interanlly after closing popout
-                         PinTileCommand.Execute(unpinned_ctvm);
-                         return;
-                     }
-                 }
+                 
                  MpAvClipTileViewModel to_select_ctvm = null;
 
-                 if (pin_placeholder_ctvm == null) {
+                 if(unpin_to_internal) {
+                     to_select_ctvm = unpinned_ctvm;
+                 } else if (pin_placeholder_ctvm == null) {
                      // unpinned tile no longer in any view, remove its persistent props 
                      unpinned_ctvm.TriggerUnloadedNotification(false);
                  } else {
@@ -5135,6 +5137,7 @@ namespace MonkeyPaste.Avalonia {
         
         public ICommand ToggleExpandQueryTrayCommand => new MpCommand(
             () => {
+                ClearAllSelection();
                 if(IsPinTrayVisible) {
                     ExpandQueryTrayCommand.Execute(null);
                 } else {

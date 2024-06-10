@@ -3017,4 +3017,13 @@ Global Shortcuts can now be enabled in the System Tray Menu</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Add New</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>The theme used for blocks of code detected in text clips.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntax Theme</value>
+  </data>
 </root>

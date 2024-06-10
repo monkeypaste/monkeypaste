@@ -73,6 +73,7 @@
                             <!--  HEADER MENU  -->
                             <local:MpAvMenuStripView x:Name="ActionMenu"
                                                      DataContext="{Binding HeaderMenuItems}"
+                                                     Foreground="{Binding Foreground, ElementName=TitleTextBlock}"
                                                      HorizontalAlignment="Right"
                                                      VerticalAlignment="Center" />
 
@@ -82,7 +83,7 @@
                             <TextBlock x:Name="TitleTextBlock"
                                        HorizontalAlignment="Center"
                                        Classes.has-title="{Binding HeaderTitle, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                       Effect="{StaticResource ThemeBgDropShadow}"
+                                       Classes="contrast-drop-shadow"
                                        Foreground="{Binding HeaderForeground}"
                                        FontSize="26"
                                        FontWeight="Bold"

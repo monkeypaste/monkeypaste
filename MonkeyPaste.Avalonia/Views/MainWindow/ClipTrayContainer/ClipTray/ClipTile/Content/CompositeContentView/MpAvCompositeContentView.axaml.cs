@@ -3,10 +3,12 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System.Linq;
+using System.Threading.Tasks;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia;
@@ -14,12 +16,31 @@ namespace MonkeyPaste.Avalonia;
 public partial class MpAvCompositeContentView : MpAvUserControl<MpAvClipTileViewModel> {
     public MpAvCompositeContentView() {
         InitializeComponent();
+        EditableTextContentControl.EffectiveViewportChanged += EditableTextContentControl_EffectiveViewportChanged;
     }
+
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
         InitDnd();
     }
+
+
+    private void EditableTextContentControl_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
+        // seems intermittent or maybe platform specific (happens on windows)
+        // but when webview is shrunk to 0 size the panel doesn't resize and gets stuck,
+        // toggling visibility fixes it, might be a more direct way but it works...
+        if(EditableTextContentControl.Width != 0 || EditableTextContentControl.Height != 0 || !EditableTextContentControl.IsVisible) {
+            return;
+        }
+        Dispatcher.UIThread.Post(async () => {
+            await Task.Delay(100);
+            EditableTextContentControl.IsVisible = false;
+            await Task.Delay(300);
+            EditableTextContentControl.IsVisible = true;
+        });
+    }
+    #region Dnd
     private void InitDnd() {
         ReadOnlyWebView.AddHandler(PointerPressedEvent, ReadOnlyWebView_PointerPressed, RoutingStrategies.Tunnel);
     }
@@ -52,5 +73,7 @@ public partial class MpAvCompositeContentView : MpAvUserControl<MpAvClipTileView
 
 #endif
     }
+
+    #endregion
 
 }

@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `เทมเพลตถัดไป`,
 	EditorPasteButtonAppendBeginLabel: `ผนวก...`,
 	EditorPasteButtonLabel: `แปะ`,
+	EditorPasteButtonLabelMobile: `สำเนา`,
 	EditorPasteTemplateWatermark: `ป้อนข้อความ Paste ...`,
 	EditorPrevTemplateLabel: `เทมเพลตก่อนหน้า`,
 	EditorRegExLabel: ` การแสดงออกปกติ`,

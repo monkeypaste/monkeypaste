@@ -431,7 +431,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            MpConsole.WriteLine($"Child Window '{Title}' closed");
 
             Deactivate();
 
@@ -440,6 +439,7 @@ namespace MonkeyPaste.Avalonia {
             }
             
             if(ocv.RemoveWindow(this)) {
+                MpConsole.WriteLine($"Child Window '{Title}' closed");
                 Closed?.Invoke(this, EventArgs.Empty);
             }
         }

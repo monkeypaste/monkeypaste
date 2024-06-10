@@ -3017,4 +3017,13 @@ monkeypaste ໃນອຸປະກອນ
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>ເພີ່ມໃໝ່</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ສໍາເນົາ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ຫົວຂໍ້ທີ່ໃຊ້ສໍາລັບລະຫັດຂອງລະຫັດທີ່ຖືກກວດພົບໃນຄລິບຂໍ້ຄວາມ.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ຫົວຂໍ້ syntax</value>
+  </data>
 </root>

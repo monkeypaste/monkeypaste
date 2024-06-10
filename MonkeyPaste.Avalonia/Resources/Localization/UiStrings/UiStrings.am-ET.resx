@@ -3017,4 +3017,13 @@
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>አዲስ አስገባ</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ቅጂ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>በጽሑፍ ቅንጥቦች ውስጥ ለኮድ ብሎኮች ጥቅም ላይ የዋለው ጭብጥ።</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>የአገባብ ጭብጥ</value>
+  </data>
 </root>

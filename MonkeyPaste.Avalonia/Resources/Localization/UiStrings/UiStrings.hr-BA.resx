@@ -3017,4 +3017,13 @@ Globalni prečaci sada mogu biti omogućeni u izborniku Sistemske ladice</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Dodaj novi</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopirati</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tema koja se koristi za blokove koda otkrivenih u tekstualnim isječcima.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema sintakse</value>
+  </data>
 </root>

@@ -3017,4 +3017,13 @@ Os atalhos globais agora podem ser ativados no menu da bandeja do sistema</value
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>Conjunto de área de transferência</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>cópia de</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>O tema usado para blocos de código detectado nos clipes de texto.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema sintaxe</value>
+  </data>
 </root>

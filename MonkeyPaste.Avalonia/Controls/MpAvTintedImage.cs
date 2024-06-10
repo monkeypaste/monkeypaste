@@ -50,15 +50,23 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Init(MpAvTintedImage ti) {
-            if (ti.OpacityMask is not ImageBrush ib) {
-                ib = new ImageBrush() {
-                    TileMode = TileMode.None
-                };
+            var ib = GetImageBrush(ti.Source as IImageBrushSource);
+            if (ti.Tint == null) {
+                // treat Tint == null as special case to not tint image
+                ti.OpacityMask = null;
+                ti.Background = ib;
+            } else {
                 ti.OpacityMask = ib;
+                ti.Background = ti.Tint;
             }
-            ib.Source = ti.Source as IImageBrushSource;
-            ti.Background = ti.Tint;
             ti.InvalidateVisual();
+        }
+
+        private static ImageBrush GetImageBrush(IImageBrushSource source) {
+            return new ImageBrush() {
+                TileMode = TileMode.None,
+                Source = source
+            };
         }
         public MpAvTintedImage() { }
     }

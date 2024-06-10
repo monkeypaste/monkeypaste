@@ -82,7 +82,7 @@ namespace MonkeyPaste.Avalonia {
                         // when image
                         // NOTE only using top row w/o last column
                         int max = MpSystemColors.COLOR_PALETTE_COLS - 2;
-                        int randColorSeed = valueStr.Length;
+                        int randColorSeed = valueStr.ToCharArray().Sum(x => (int)x);
                         if (valueStr.IsStringImageResourceKey() &&
                             Mp.Services.PlatformResource.GetResource<string>(valueStr) is string res_path) {
                             // when paramValue is key add its resource path's length to vary color more

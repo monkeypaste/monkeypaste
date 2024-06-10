@@ -392,12 +392,6 @@
         <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPointerOver" Color="White" Opacity="1" />
 
         <!--  EFFECTS  -->
-        <DropShadowEffect x:Key="EmptyDropShadow"
-                          OffsetX="0"
-                          OffsetY="0"
-                          Color="{DynamicResource ThemeInteractiveColor}"
-                          BlurRadius="0"
-                          Opacity="0.0" />
 
         <DropShadowEffect x:Key="ThemeBlackDropShadow"
                           OffsetX="1"
@@ -405,6 +399,20 @@
                           Color="{DynamicResource ThemeBlackColor}"
                           BlurRadius="3"
                           Opacity="0.8" />
+        <DropShadowEffect x:Key="ThemeWhiteDropShadow"
+                          OffsetX="1"
+                          OffsetY="1"
+                          Color="{DynamicResource ThemeWhiteColor}"
+                          BlurRadius="3"
+                          Opacity="0.8" />
+
+        <DropShadowEffect x:Key="EmptyDropShadow"
+                          OffsetX="0"
+                          OffsetY="0"
+                          Color="{DynamicResource ThemeInteractiveColor}"
+                          BlurRadius="0"
+                          Opacity="0.0" />
+
 
         <DropShadowEffect x:Key="ThemeDropShadow"
                           OffsetX="1"

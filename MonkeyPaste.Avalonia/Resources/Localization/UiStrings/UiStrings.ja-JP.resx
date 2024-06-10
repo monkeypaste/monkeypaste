@@ -3017,4 +3017,13 @@ feedback@monkeypaste.com</value>
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>クリップボードセット</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>テキストクリップで検出されたコードブロックに使用されるテーマ。</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>構文テーマ</value>
+  </data>
 </root>

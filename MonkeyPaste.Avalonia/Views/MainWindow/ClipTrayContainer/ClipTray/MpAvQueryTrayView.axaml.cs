@@ -32,10 +32,10 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
             this.AttachedToVisualTree += MpAvQueryTrayView_AttachedToVisualTree;
 
-            if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                // BUG can't set selectionMode in styles...
-                this.QueryTrayListBox.SelectionMode = SelectionMode.Toggle;
-            }
+            //if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+            //    // BUG can't set selectionMode in styles...
+            //    this.QueryTrayListBox.SelectionMode = SelectionMode.Toggle;
+            //}
 
             if (this.FindControl<ScrollViewer>("QueryRepeaterScrollViewer") is ScrollViewer sv) {
                 sv.AddHandler(PointerWheelChangedEvent, QueryRepeaterScrollViewer_PointerWheelChanged, RoutingStrategies.Tunnel);

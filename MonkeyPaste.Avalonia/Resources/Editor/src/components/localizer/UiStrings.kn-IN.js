@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `ಮುಂದಿನ ಟೆಂಪ್ಲೇಟ್`,
 	EditorPasteButtonAppendBeginLabel: `ಸೇರಿಸಿ ...`,
 	EditorPasteButtonLabel: `ಅಂಟಿಸು`,
+	EditorPasteButtonLabelMobile: `ನಕಲು`,
 	EditorPasteTemplateWatermark: `ಪೇಸ್ಟ್ ಪಠ್ಯವನ್ನು ನಮೂದಿಸಿ ...`,
 	EditorPrevTemplateLabel: `ಹಿಂದಿನ ಟೆಂಪ್ಲೇಟ್`,
 	EditorRegExLabel: ` ನಿಯಮಿತ ಅಭಿವ್ಯಕ್ತಿ`,

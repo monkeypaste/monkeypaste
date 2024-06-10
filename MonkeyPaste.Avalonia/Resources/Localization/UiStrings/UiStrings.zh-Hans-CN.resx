@@ -3017,4 +3017,13 @@ feathback@monkeypaste.com</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>添新</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>该主题用于文本剪辑中检测到的代码块。</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>语法主题</value>
+  </data>
 </root>

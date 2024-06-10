@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `كېيىنكى قېلىپ`,
 	EditorPasteButtonAppendBeginLabel: `قوشۇلدى ...`,
 	EditorPasteButtonLabel: `چاپلاڭ`,
+	EditorPasteButtonLabelMobile: `كۆپەيتىلگەن`,
 	EditorPasteTemplateWatermark: `چاپلاش تېكىستىنى كىرگۈزۈڭ ...`,
 	EditorPrevTemplateLabel: `ئىلگىرىكى قېلىپ`,
 	EditorRegExLabel: ` دائىملىق ئىپادىلەش`,

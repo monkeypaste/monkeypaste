@@ -3017,4 +3017,13 @@ tempo@Monkepaste.com</value>
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>چاپلاش تاختىسى</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>كۆپەيتىلگەن</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>تېما تېكىست قىستۇرمىدا بايقالغان كودقا ئىشلىتىلگەن تېما.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntax تېمىسى</value>
+  </data>
 </root>

@@ -3017,4 +3017,13 @@ Globalne skróty można teraz włączyć w menu taca systemu</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Dodaj nowe</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopiuj</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Motyw używany do bloków kodu wykrytych w klipach tekstowych.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Motyw składni</value>
+  </data>
 </root>

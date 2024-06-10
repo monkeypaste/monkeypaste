@@ -84,17 +84,19 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
         public static async Task<Dictionary<string, object>> ReadClipboardAsync(string[] formatFilter = default, int retryCount = 0) {
-            if (!Dispatcher.UIThread.CheckAccess()) {
-                var output = await Dispatcher.UIThread.InvokeAsync(async() => { 
-                    var result = await ReadClipboardAsync(formatFilter, retryCount); 
-                    return result; 
-                });
-                return output;
-            }
+            
 
             try {
+                if (!Dispatcher.UIThread.CheckAccess()) {
+                    var output = await Dispatcher.UIThread.InvokeAsync(async () => {
+                        var result = await ReadClipboardAsync(formatFilter, retryCount);
+                        return result;
+                    });
+                    return output;
+                }
+
                 if (Application.Current.GetMainTopLevel() is not { } tl ||
-                tl.Clipboard is not { } cb) {
+                    tl.Clipboard is not { } cb) {
                     return new();
                 }
                 var result = await cb.ToDataObjectAsync(formatFilter, retryCount);
@@ -401,7 +403,8 @@ namespace MonkeyPaste.Common.Avalonia {
                 CloseClipboard();
                 return null;
             }
-            catch (COMException) {
+            catch (COMException ex) {
+                MpConsole.WriteTraceLine($"Error reading cb format: '{format}' Retries remaining: {retryCount}.", ex);
                 if (retryCount <= 0) {
                     CloseClipboard();
                     return null;

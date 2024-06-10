@@ -3017,4 +3017,13 @@ feedback@monkeypaste.com</value>
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>Алмашуу буферинин топтому</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Көчүрүү</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Тексттик клиптерде аныкталган код блокторун пайдалануу темасы.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Синтаксистик тема</value>
+  </data>
 </root>

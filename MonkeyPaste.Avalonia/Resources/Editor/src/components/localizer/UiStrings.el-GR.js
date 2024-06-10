@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `Επόμενο πρότυπο`,
 	EditorPasteButtonAppendBeginLabel: `Προσαρτώ...`,
 	EditorPasteButtonLabel: `Επικόλληση`,
+	EditorPasteButtonLabelMobile: `αντίγραφο`,
 	EditorPasteTemplateWatermark: `Εισαγάγετε κείμενο επικόλλησης ...`,
 	EditorPrevTemplateLabel: `Προηγούμενο πρότυπο`,
 	EditorRegExLabel: ` Κοινή έκφραση`,

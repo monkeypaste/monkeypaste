@@ -35,7 +35,6 @@
             </Setter>
         </Style>
 
-
         <!--  TILE OPACITY TRANSITION  -->
         <Style Selector="ListBox.clipTilListBox > ListBoxItem, Border#QueryTrayContainerBorder local|MpAvClipTileView">
             <Setter Property="Transitions">

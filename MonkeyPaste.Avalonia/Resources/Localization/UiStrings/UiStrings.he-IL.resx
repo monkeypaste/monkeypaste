@@ -3017,4 +3017,13 @@ feedback@monkeypaste.com</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>הוסף חדש</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>עותק</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>הנושא המשמש לבלוקי קוד שהתגלו בקטעי טקסט.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>נושא תחביר</value>
+  </data>
 </root>

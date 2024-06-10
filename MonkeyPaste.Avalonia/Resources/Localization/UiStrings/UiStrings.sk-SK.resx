@@ -3017,4 +3017,13 @@ Globálne skratky je teraz možné povoliť v ponuke System Tray</value>
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>Súprava schránky</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopírovať</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Téma použitá pre bloky kódu zistených v textových klipoch.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Téma syntaxe</value>
+  </data>
 </root>

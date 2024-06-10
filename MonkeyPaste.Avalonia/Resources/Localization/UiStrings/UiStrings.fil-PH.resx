@@ -3017,4 +3017,13 @@ Maaari na ngayong paganahin ang mga global shortcut sa menu ng System Tray</valu
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Magdagdag ng bago</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopya</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Ang tema na ginamit para sa mga bloke ng code na napansin sa mga text clip.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema ng Syntax</value>
+  </data>
 </root>

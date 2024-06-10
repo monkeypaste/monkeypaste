@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `គំរូបន្ទាប់`,
 	EditorPasteButtonAppendBeginLabel: `បន្ថែមទៀត ...`,
 	EditorPasteButtonLabel: `រេនាយោហរការ`,
+	EditorPasteButtonLabelMobile: `ការចម្លង`,
 	EditorPasteTemplateWatermark: `បញ្ចូលអត្ថបទបិទភ្ជាប់ ...`,
 	EditorPrevTemplateLabel: `គំរូមុន`,
 	EditorRegExLabel: ` កន្សោមធម្មតា`,

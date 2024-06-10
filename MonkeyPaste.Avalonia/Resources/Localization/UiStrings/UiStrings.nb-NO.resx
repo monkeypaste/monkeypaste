@@ -3017,4 +3017,13 @@ Globale snarveier kan nå aktiveres i systemskuffenyen</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Legg til ny</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopiere</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Temaet som ble brukt for blokker med kode oppdaget i tekstklipp.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntaks -tema</value>
+  </data>
 </root>

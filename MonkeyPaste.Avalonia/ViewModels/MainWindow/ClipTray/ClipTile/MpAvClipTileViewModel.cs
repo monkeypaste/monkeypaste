@@ -89,23 +89,24 @@ namespace MonkeyPaste.Avalonia {
         string MpAvIHeaderMenuViewModel.HeaderTitle =>
             CopyItemTitle;
         public IEnumerable<MpAvIMenuItemViewModel> HeaderMenuItems =>
-            [
+            new MpAvMenuItemViewModel[] {
                 new MpAvMenuItemViewModel() {
                     IconSourceObj = IsPinned ? "PinnedImage": "PinImage",
                     IconTintHexStr = IsPinned ? MpSystemColors.limegreen : null,
-                    Command = MpAvClipTrayViewModel.Instance.PinTileCommand,
+                    IsVisible = !IsWindowOpen,
+                    Command = MpAvClipTrayViewModel.Instance.ToggleTileIsPinnedCommand,
                     CommandParameter = this
                 },
-            new MpAvMenuItemViewModel() {
+                new MpAvMenuItemViewModel() {
                     IconSourceObj = "EditImage",
+                    IsVisible = !IsWindowOpen,
                     Command = ToggleIsContentReadOnlyCommand,
-                    IsVisible = !IsWindowOpen
                 },
                 new MpAvMenuItemViewModel() {
                     IconSourceObj = "Dots3x1Image",
                     Command = ShowContextMenuCommand
                 }
-            ];
+            }.Where(x=>x.IsVisible);
         ICommand MpAvIHeaderMenuViewModel.BackCommand =>
             null;
         object MpAvIHeaderMenuViewModel.BackCommandParameter =>
@@ -643,13 +644,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
-        public bool IsSugarWv =>
-#if SUGAR_WV
-            true;
-#else
-            false;
-#endif
+        public bool IsWindowClosing { get; private set; }
+        bool IsDetailCycling { get; set; }
         public MpCopyItemType LastCopyItemType { get; private set; }
 
         private string _searchableText = string.Empty;
@@ -684,8 +680,12 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPinPlaceholder =>
             PinPlaceholderCopyItemId > 0;
 
-        public bool WasInternallyPinned { get; set; }
-
+        public bool IsSugarWv =>
+#if SUGAR_WV
+            true;
+#else
+            false;
+#endif
         public bool HasPinPlaceholder =>
             PlaceholderForThisPinnedItem != null;
 
@@ -749,12 +749,27 @@ namespace MonkeyPaste.Avalonia {
 #else
             Parent != null && Parent.LayoutType == MpClipTrayLayoutType.Grid;
 #endif
+        public bool IsOverDetailGrid { get; set; }
 
         private int SelectedDetailIdx { get; set; } = 0;
-
-        public bool IsOverDetailGrid { get; set; }
         public bool IsHovering { get; set; }
-        public bool IsPasteBarHovering { get; set; }
+
+        private bool _isPasteBarHovering;
+        public bool IsPasteBarHovering {
+            get {
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    // no hover so always show append
+                    return true;
+                }
+                return _isPasteBarHovering;
+            }
+            set {
+                    if(_isPasteBarHovering != value) {
+                    _isPasteBarHovering = value;
+                    OnPropertyChanged(nameof(IsPasteBarHovering));
+                }
+                }
+        }
         public bool IsContentHovering { get; set; }
 
         public bool IsPlaceholderForThisPinnedItemHovering =>
@@ -1833,6 +1848,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(IsHovering):
+                    if(IsHovering) {
+                        StartDetailCycleTimerAsync().FireAndForgetSafeAsync();
+                    }
                     // refresh busy
                     OnPropertyChanged(nameof(IsAnyBusy));
                     OnPropertyChanged(nameof(KeyString));
@@ -1851,18 +1869,12 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsPlaceholderForThisPinnedItemHovering):
                     OnPropertyChanged(nameof(IsImplicitHover));
                     break;
-                case nameof(IsOverDetailGrid):
-                    if (!IsOverDetailGrid) {
-                        break;
-                    }
-
-                    CycleDetailCommand.Execute(null);
-                    break;
                 case nameof(IsBusy):
                     OnPropertyChanged(nameof(IsAnyBusy));
                     break;
                 case nameof(IsSelected):
                     if (IsSelected) {
+                        StartDetailCycleTimerAsync().FireAndForgetSafeAsync();
                         LastSelectedDateTime = DateTime.Now;
                         if (Parent.SelectedItem != this) {
                             Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
@@ -2314,11 +2326,13 @@ namespace MonkeyPaste.Avalonia {
                 }
                 e.Cancel = true;
             }
-
+            IsWindowClosing = true;
+            
             Dispatcher.UIThread.Post(async () => {
                 IsBusy = true;
                 await MpAvClipTrayViewModel.Instance.UnpinTileCommand.ExecuteAsync(this);
                 pow.Close();
+                IsWindowClosing = false;
                 IsBusy = false;
             });
         }
@@ -2465,6 +2479,36 @@ namespace MonkeyPaste.Avalonia {
 
             IsSubSelectionEnabled =
                 MpAvPersistentClipTilePropertiesHelper.IsPersistentIsSubSelectable_ById(CopyItemId, QueryOffsetIdx);
+        }
+
+        private async Task StartDetailCycleTimerAsync() {
+            if(IsDetailCycling) {
+                return;
+            }
+            IsDetailCycling = true;
+            DateTime last_cycle_dt = DateTime.Now;
+            while(true) {
+                if(IsAnyPlaceholder) {
+                    break;
+                }
+                if(!IsSelected && !IsHovering) {
+                    break;
+                }
+                if(IsOverDetailGrid) {
+                    while(IsOverDetailGrid) {
+                        // don't auto cycle when hovering on actual detail
+                        await Task.Delay(100);
+                    }
+                    // on leave reset cycle
+                    last_cycle_dt = DateTime.Now;
+                }
+                if(DateTime.Now - last_cycle_dt > TimeSpan.FromSeconds(7)) {
+                    CycleDetailCommand.Execute(null);
+                    last_cycle_dt = DateTime.Now;
+                }
+                await Task.Delay(100);
+            }
+            IsDetailCycling = false;
         }
         #endregion
 

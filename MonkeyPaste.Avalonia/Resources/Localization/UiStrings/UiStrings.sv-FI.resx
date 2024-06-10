@@ -3017,4 +3017,13 @@ Globala genvägar kan nu vara aktiverade i systemfack -menyn</value>
   <data name="PluginBrowserWindowTitle" xml:space="preserve">
     <value>Plugin webbläsare</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopiera</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Temat som används för kodblock som upptäcks i textklipp.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntaxtema</value>
+  </data>
 </root>

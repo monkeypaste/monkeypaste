@@ -2,7 +2,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:sys="using:System"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
                        x:DataType="local:MpAvClipTileViewModel"
@@ -424,6 +424,9 @@
             <Grid x:Name="DetailContainerGrid"
                   Grid.Row="2"
                   Height="15"
+                  local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                  local:MpAvPointerCommandExtension.IsEventHandled="True"
+                  local:MpAvPointerCommandExtension.LeftPressCommand="{Binding CycleDetailCommand}"
                   Background="{Binding BorderBrush, ElementName=ClipTileContainerBorder}"
                   Classes.subselect="{Binding IsSubSelectionEnabled}"
                   Classes.detailTooltip="{Binding DetailTooltipText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
@@ -441,18 +444,31 @@
                                                        Duration="0:0:0.1" />
                     </Transitions>
                 </Grid.Transitions>
-                <TextBlock x:Name="DetailTextBlock"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Bottom"
-                           Background="Transparent"
-                           MinHeight="10"
-                           MinWidth="50"
-                           FontSize="10"
-                           Margin="0,0,0,1"
-                           TextAlignment="Center"
-                           Foreground="{Binding BorderBrush, ElementName=ClipTileContainerBorder, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
-                           IsHitTestVisible="False"
-                           Text="{Binding DetailText}" />
+                <TransitioningContentControl HorizontalAlignment="Center"
+                                             HorizontalContentAlignment="Center"
+                                             Content="{Binding DetailText}">
+                    <TransitioningContentControl.PageTransition>
+                        <CrossFade FadeInEasing="ExponentialEaseIn"
+                                   FadeOutEasing="ExponentialEaseOut"
+                                   Duration="0:00:01.0" />
+                    </TransitioningContentControl.PageTransition>
+                    <TransitioningContentControl.ContentTemplate>
+                        <DataTemplate DataType="sys:String">
+                            <TextBlock x:Name="DetailTextBlock"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Bottom"
+                                       Background="Transparent"
+                                       MinHeight="10"
+                                       MinWidth="50"
+                                       FontSize="10"
+                                       Margin="0,0,0,1"
+                                       TextAlignment="Center"
+                                       Foreground="{Binding BorderBrush, ElementName=ClipTileContainerBorder, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                                       IsHitTestVisible="False"
+                                       Text="{Binding .}" />
+                        </DataTemplate>
+                    </TransitioningContentControl.ContentTemplate>
+                </TransitioningContentControl>
             </Grid>
 
             <!--  CORNER BUTTONS  -->

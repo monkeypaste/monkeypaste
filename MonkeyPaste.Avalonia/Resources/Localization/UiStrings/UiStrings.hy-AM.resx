@@ -3017,4 +3017,13 @@ feedback@monkepte.com</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Ավելացնել նոր</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Պատճեն</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Թեման, որն օգտագործվում է տեքստի տեսահոլովակում հայտնաբերված ծածկագրերի բլոկների համար:</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntax թեման</value>
+  </data>
 </root>

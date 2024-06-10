@@ -3017,4 +3017,13 @@ Nú er hægt að virkja alþjóðlegar flýtileiðir í kerfisbakkavalmyndinni</
   <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
     <value>Plugin vafri - {0}</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Afritaðu</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Þemað sem notað er fyrir kóða kóða sem greindist í textaklemmum.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Setningafræði þema</value>
+  </data>
 </root>

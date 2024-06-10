@@ -3017,4 +3017,13 @@
   <data name="PluginBrowserWindowTitle" xml:space="preserve">
     <value>प्लगइन ब्राउजर</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>कापी</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>पाठ क्लिपहरूमा कोडका लागि प्रयोग गरिएको विषयवस्तु पत्ता लगाउनुहोस्।</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>सिन्ट्याक्स विषयवस्तु</value>
+  </data>
 </root>

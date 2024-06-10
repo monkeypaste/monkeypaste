@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `Дараагийн загвар`,
 	EditorPasteButtonAppendBeginLabel: `Нэмэх ...`,
 	EditorPasteButtonLabel: `Товч`,
+	EditorPasteButtonLabelMobile: `Хуулах`,
 	EditorPasteTemplateWatermark: `Буулгах текстийг оруулна уу ...`,
 	EditorPrevTemplateLabel: `Өмнөх загвар`,
 	EditorRegExLabel: ` Тогтмол илэрхийлэл`,

@@ -3017,4 +3017,13 @@ Globalne bližnjice je zdaj mogoče omogočiti v meniju System pladnja</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Dodaj novo</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopirati</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tema, ki se uporablja za bloke kode, odkrite v besedilnih posnetkih.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema sintakse</value>
+  </data>
 </root>

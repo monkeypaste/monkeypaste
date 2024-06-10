@@ -89,7 +89,10 @@ function setConverterContent(formatType, dataStr, verifyText) {
 		return;
 	}
 	// pasting html always adds leading new line
-	deleteText({ index: 0, length: 1 }, Quill.sources.USER);
+	if (isHtmlClipboardFormat(dataStr)) {
+		deleteText({ index: 0, length: 1 }, Quill.sources.USER);
+	}
+	
 	// remove trailing new line
 	deleteText({ index: getDocLength() - 1, length: 1 }, Quill.sources.USER);
 	updateQuill();

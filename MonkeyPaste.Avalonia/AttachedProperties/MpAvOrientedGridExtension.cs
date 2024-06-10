@@ -355,9 +355,9 @@ namespace MonkeyPaste.Avalonia {
             grid.ColumnDefinitions.Clear();
             grid.ColumnDefinitions.AddRange(cd ?? new ColumnDefinitions("*"));
 
-            MpConsole.WriteLine($"Grid '{grid.Name}' Orientation: '{orientation}'");
-            MpConsole.WriteLine($"Grid '{grid.Name}' RowDefs: '{grid.RowDefinitions}'");
-            MpConsole.WriteLine($"Grid '{grid.Name}' ColDefs: '{grid.ColumnDefinitions}'");
+            //MpConsole.WriteLine($"Grid '{grid.Name}' Orientation: '{orientation}'");
+            //MpConsole.WriteLine($"Grid '{grid.Name}' RowDefs: '{grid.RowDefinitions}'");
+            //MpConsole.WriteLine($"Grid '{grid.Name}' ColDefs: '{grid.ColumnDefinitions}'");
 
             foreach (var child in grid.Children) {
                 OrientChild(child);
@@ -378,7 +378,7 @@ namespace MonkeyPaste.Avalonia {
             Grid.SetColumn(child, c);
             Grid.SetRowSpan(child, rs);
             Grid.SetColumnSpan(child, cs);
-            MpConsole.WriteLine($"Control '{child.Name}' R: {r} C: {c} RS: {rs} CS: {cs}");
+            //MpConsole.WriteLine($"Control '{child.Name}' R: {r} C: {c} RS: {rs} CS: {cs}");
         }
         private static Grid GetContainerGrid(Control element) {
             if (element.Parent is not Grid grid) {

@@ -31,7 +31,7 @@
         </Style>
         <Style Selector=":is(Button)#HeaderMenuButton local|MpAvTintedImage">
             <Setter Property="Tint"
-                    Value="{DynamicResource ThemeInteractiveBrush}" />
+                    Value="{Binding $self.Foreground}" />
         </Style>
     </UserControl.Styles>
     <ItemsControl x:Name="MenuItemsControl"
@@ -51,7 +51,8 @@
                         Classes.has-tint="{Binding IconTintHexStr, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                         Classes.has-cmd-param="{Binding CommandParameter, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                     <Grid ColumnDefinitions="Auto,*">
-                        <local:MpAvTintedImage Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                        <local:MpAvTintedImage Foreground="{Binding $parent[UserControl].Foreground}"
+                                               Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                     </Grid>
                 </Button>
             </DataTemplate>

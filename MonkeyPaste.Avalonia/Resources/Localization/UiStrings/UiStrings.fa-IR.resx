@@ -3017,4 +3017,13 @@ MonkeyPaste روی دستگاه
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>جدید اضافه کن</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>کپی 🀄</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>موضوع مورد استفاده برای بلوک های کد شناسایی شده در کلیپ های متن.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>تم نحوی</value>
+  </data>
 </root>

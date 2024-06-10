@@ -3017,4 +3017,13 @@ feedback@monkeypaste.com</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Добави нов</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>копие</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Темата, използвана за блокове от код, открити в текстови клипове.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Тема за синтаксис</value>
+  </data>
 </root>

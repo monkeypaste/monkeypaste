@@ -26,6 +26,8 @@
         <Style Selector="Grid#TitlePanel.mobile StackPanel.edge-cntr">
             <Setter Property="VerticalAlignment"
                     Value="Center" />
+            <Setter Property="Spacing"
+                    Value="3" />
         </Style>
         <Style Selector="Grid#TitlePanel.mobile StackPanel.edge-cntr :is(Button)">
             <Setter Property="VerticalAlignment"
@@ -38,25 +40,7 @@
             <Setter Property="Height"
                     Value="25" />
         </Style>
-        <Style Selector="Grid#TitlePanel.mobile ToggleButton#SettingsToggleButton">
-            <Setter Property="Content">
-                <Setter.Value>
-                    <Template>
-                        <Image Source="{Binding Source={StaticResource CogImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
-                    </Template>
-                </Setter.Value>
-            </Setter>
-        </Style>
 
-        <Style Selector="Grid#TitlePanel ToggleButton#SettingsToggleButton">
-            <Setter Property="Content">
-                <Setter.Value>
-                    <Template>
-                        <PathIcon Data="{StaticResource CogSvg}" />
-                    </Template>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <Style Selector="Grid#TitlePanel local|MpAvMenuStripView#ActionMenu">
             <Setter Property="IsVisible"
                     Value="False" />
@@ -225,6 +209,16 @@
                     <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonSettingsTitle}"
                                            InputGestureText="{Binding ., ConverterParameter=ShowSettings, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
                 </ToolTip.Tip>
+                <Grid>
+
+                    <PathIcon IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                              Data="{StaticResource CogSvg}" />
+                    <local:MpAvTintedImage Width="20"
+                                           Height="20"
+                                           IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                                           Tint="{Binding Background, ElementName=TitlePanel, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                                           Source="{Binding Source={StaticResource CogImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                </Grid>
             </ToggleButton>
 
             <!--  LOCK BUTTON  -->
@@ -295,8 +289,8 @@
                    DataContext="{Binding SelectedItem, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                    Text="{Binding CopyItemTitle}"
                    HorizontalAlignment="Center"
-                   Effect="{StaticResource ThemeBgDropShadow}"
-                   Foreground="{DynamicResource ThemeInteractiveBrush}"
+                   Classes="contrast-drop-shadow"
+                   Foreground="{Binding Background, ElementName=TitlePanel, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                    FontSize="26"
                    FontWeight="Bold"
                    VerticalAlignment="Center"
@@ -315,6 +309,7 @@
             <!--  CORNER BTN MENU (MOBILE ONLY)  -->
 
             <local:MpAvMenuStripView x:Name="ActionMenu"
+                                     Foreground="{Binding Background, ElementName=TitlePanel, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                                      DataContext="{Binding SelectedItem.HeaderMenuItems, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
             <!--  Layout Toggle Button  -->
 
@@ -344,6 +339,18 @@
                 </ToolTip.Tip>
 
                 <PathIcon Data="{StaticResource RotateCcwSvg}" />
+            </Button>
+
+            <!--  SYS TRAY MENU (MOBILE ONLY)  -->
+            <Button x:Name="ShowSysTrayMenuButton"
+                    Classes="no-bg no-hover-bg no-border"
+                    IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                    Command="{Binding ShowSysTrayContextMenu, Source={x:Static local:MpAvSystemTrayViewModel.Instance}}"
+                    CommandParameter="{Binding $self}">
+                <local:MpAvTintedImage Width="20"
+                                       Height="20"
+                                       Tint="{Binding Background, ElementName=TitlePanel, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                                       Source="{Binding Source={StaticResource Dots3x1Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
             </Button>
         </StackPanel>
 

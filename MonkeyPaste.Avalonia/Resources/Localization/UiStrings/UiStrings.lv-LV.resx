@@ -3017,4 +3017,13 @@ Globālās saīsnes tagad var iespējot Sistēmas paplātes izvēlnē</value>
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>Starpliktuves komplekts</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopija</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tēma, kas izmantota koda blokiem, kas atklāts teksta klipos.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Sintakses tēma</value>
+  </data>
 </root>

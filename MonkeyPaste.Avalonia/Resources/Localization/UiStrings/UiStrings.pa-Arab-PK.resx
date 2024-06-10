@@ -3082,4 +3082,13 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="PluginBrowserWindowTitle" xml:space="preserve">
     <value>ਪਲੱਗਇਨ ਬਰਾਊਜ਼ਰ</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ਕਾਪੀ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ਟੈਕਸਟ ਕਲਿੱਪ ਵਿੱਚ ਖੋਜਿਆ ਕੋਡ ਦੇ ਬਲਾਕਾਂ ਲਈ ਥੀਮ.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ਸਿੰਟੈਕਸ ਥੀਮ</value>
+  </data>
 </root>

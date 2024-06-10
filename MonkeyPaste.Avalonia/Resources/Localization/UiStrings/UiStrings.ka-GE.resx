@@ -3017,4 +3017,13 @@ Monkeypaste მოწყობილობაზე
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Ახლის დამატება</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ასლი</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>თემა, რომელიც გამოიყენება ტექსტური კლიპებში გამოვლენილი კოდის ბლოკებისთვის.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>სინტაქსის თემა</value>
+  </data>
 </root>

@@ -3017,4 +3017,13 @@ Shkurtoret globale tani mund të aktivizohen në menunë e tabaka të sistemit</
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Shto nje te ri</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopjoj</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tema e përdorur për blloqe kodesh të zbuluara në klipet e tekstit.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema e sintaksës</value>
+  </data>
 </root>

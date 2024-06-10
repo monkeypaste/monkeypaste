@@ -31,7 +31,6 @@ namespace MonkeyPaste.Avalonia {
             //nameof(MpAvPrefViewModel.Instance.ShowInTaskSwitcher),
             nameof(MpAvPrefViewModel.Instance.IsLoggingEnabled),
             nameof(MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled),
-            nameof(MpAvPrefViewModel.Instance.SelectedSyntaxTheme),
         };
 
         private string[] _reinitContentParams => new string[] {
@@ -44,6 +43,7 @@ namespace MonkeyPaste.Avalonia {
             nameof(MpAvPrefViewModel.Instance.ThemeColor),
             nameof(MpAvPrefViewModel.Instance.GlobalBgOpacity),
             nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
+            nameof(MpAvPrefViewModel.Instance.SelectedSyntaxTheme),
         };
 
         public string[] HiddenParamIds => new string[] {

@@ -3017,4 +3017,13 @@ FANDUCE@ONKEYPASTET.com</value>
   <data name="PluginBrowserWindowTitle" xml:space="preserve">
     <value>ପ୍ଲଗଇନ୍ ବ୍ରାଉଜର୍ |</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>କପି କରନ୍ତୁ |</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ପାଠ୍ୟ କ୍ଲିପ୍ସରେ ଚିହ୍ନଟ ହୋଇଥିବା କୋଡ୍ ର ବ୍ଲକଗୁଡିକ ପାଇଁ ବ୍ୟବହୃତ ଥିମ୍ |</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ବାକ୍ୟବିନ୍ୟାସ ଥିମ୍ |</value>
+  </data>
 </root>

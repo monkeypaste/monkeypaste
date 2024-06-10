@@ -18,13 +18,9 @@
     padding: 0 !important;
 }*/
 
-#editor.desktop .ql-code-block-container .ql-ui {
+.ql-code-block-container .ql-ui {
     /* hide language picker */
     display: none;
-}
-#editor.desktop .ql-code-block-container:hover .ql-ui {
-    /* hide language picker */
-    display: unset;
 }
 .ql-snow .ql-editor .ql-code-block-container {
     background-color: var(--codebg);

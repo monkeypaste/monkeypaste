@@ -3017,4 +3017,13 @@
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>Набір буфера обміну</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Копіювати</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Тема, що використовується для блоків коду, виявлених у текстових кліпах.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Тема синтаксису</value>
+  </data>
 </root>

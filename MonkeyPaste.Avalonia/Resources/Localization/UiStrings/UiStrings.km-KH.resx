@@ -3017,4 +3017,13 @@ feedback@monkeypales.com</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>បន្ថែម​ថ្មី</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ការចម្លង</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ស្បែកដែលបានប្រើសម្រាប់ប្លុកនៃកូដដែលបានរកឃើញនៅក្នុងឈុតអត្ថបទ។</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ស្បែកវាក្យសម្ព័ន្ធ</value>
+  </data>
 </root>

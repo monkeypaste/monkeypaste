@@ -71,6 +71,21 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style Selector="Border#PasteToolbarOuterBorder.mobile SplitButton.paste-button"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Template>
+                        <DockPanel>
+                            <Image Source="{Binding PasteButtonIconBase64, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
+                            <TextBlock FontSize="16"
+                                       FontWeight="DemiBold"
+                                       Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.EditorPasteButtonLabelMobile}" />
+                        </DockPanel>
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <!--  PASTE BUTTON ICON  -->
         <Style Selector="SplitButton.paste-button Image">
             <Setter Property="Width"
@@ -96,6 +111,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="PasteToolbarOuterBorder"
+            Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
             Background="Teal"
             BorderThickness="1"
             BorderBrush="Black">

@@ -85,8 +85,6 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(StableAvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="$(StableAvaloniaVersion)" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.10.9" />
-    <PackageReference Include="Dock.Avalonia" Version="11.0.0.7" />
-    <PackageReference Include="Dock.Model" Version="11.0.0.7" />
     <PackageReference Include="Markdig" Version="0.37.0" />
     <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" />
     <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />

@@ -3017,4 +3017,13 @@ Shortcuts globali issa jistgħu jiġu attivati ​​fil-menu tat-trej tas-siste
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>Sett Clipboard</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopja</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>It-tema użata għal blokki ta 'kodiċi misjuba fi klipps tat-test.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema tas-sintassi</value>
+  </data>
 </root>

@@ -3017,4 +3017,13 @@ Globální zkratky lze nyní povolit v nabídce hlavního panelu</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Přidat nový</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>kopírovat</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Motiv používaný pro bloky kódu detekované v textových klipech.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Téma syntaxe</value>
+  </data>
 </root>

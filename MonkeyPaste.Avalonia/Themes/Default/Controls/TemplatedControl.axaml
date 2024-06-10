@@ -68,4 +68,10 @@
         <Setter Property="BorderBrush"
                 Value="{Binding $self.Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}, ConverterParameter=compliment}" />
     </Style>
+
+    <!--  CONTRAST DROP SHADOW  -->
+    <Style Selector=":is(TemplatedControl).contrast-drop-shadow">
+        <Setter Property="Effect"
+                Value="{Binding $self.Foreground, Converter={x:Static local:MpAvBrushToDropShadowEffectConverter.Instance}}" />
+    </Style>
 </Styles>

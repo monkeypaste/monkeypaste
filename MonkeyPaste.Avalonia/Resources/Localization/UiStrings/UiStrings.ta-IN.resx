@@ -3017,4 +3017,13 @@ furedback@monkeypaste.com</value>
   <data name="PluginBrowserWindowTitle" xml:space="preserve">
     <value>செருகுநிரல் உலாவி</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>நகலெடு</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>உரை கிளிப்களில் கண்டறியப்பட்ட குறியீட்டின் தொகுதிகளுக்கு பயன்படுத்தப்படும் தீம்.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>தொடரியல் தீம்</value>
+  </data>
 </root>

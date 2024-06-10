@@ -3017,4 +3017,13 @@ Los atajos globales ahora se pueden habilitar en el menú de la bandeja del sist
   <data name="PluginBrowserWindowTitle" xml:space="preserve">
     <value>Navegador de complementos</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>El tema utilizado para bloques de código detectados en clips de texto.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema de sintaxis</value>
+  </data>
 </root>

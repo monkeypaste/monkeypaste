@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `اگلا ٹیمپلیٹ`,
 	EditorPasteButtonAppendBeginLabel: `ضمیمہ ...`,
 	EditorPasteButtonLabel: `چسپاں کریں`,
+	EditorPasteButtonLabelMobile: `کاپی`,
 	EditorPasteTemplateWatermark: `پیسٹ متن درج کریں ...`,
 	EditorPrevTemplateLabel: `پچھلا ٹیمپلیٹ`,
 	EditorRegExLabel: ` باقاعدہ اظہار`,

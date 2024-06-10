@@ -3017,4 +3017,13 @@ A globális parancsikonok már engedélyezhetők a rendszer tálca menüben</val
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Új hozzáadása</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Másolat</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>A szöveges klipekben észlelt kódblokkokhoz használt téma.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Szintaxis téma</value>
+  </data>
 </root>

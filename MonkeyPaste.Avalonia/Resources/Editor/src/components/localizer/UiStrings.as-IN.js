@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `পৰৱৰ্তী সাঁচ`,
 	EditorPasteButtonAppendBeginLabel: `append...`,
 	EditorPasteButtonLabel: `পেষ্ট কৰক`,
+	EditorPasteButtonLabelMobile: `কপি কৰক`,
 	EditorPasteTemplateWatermark: `লিখনী পেষ্ট কৰক...`,
 	EditorPrevTemplateLabel: `পূৰ্বৰ সাঁচ`,
 	EditorRegExLabel: ` নিয়মিত অভিব্যক্তি`,

@@ -3017,4 +3017,13 @@ Ukupna restauracija ne može biti zagarantovana i može smanjiti performanse ili
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Додај нови</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Копија</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Тема која се користи за блокове кода откривених у снимцима за текст.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Тема синтаксе</value>
+  </data>
 </root>

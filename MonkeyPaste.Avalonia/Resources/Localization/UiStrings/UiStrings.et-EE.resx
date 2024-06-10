@@ -3017,4 +3017,13 @@ Globaalsed otseteed saab nüüd süsteemialuse menüüs lubada</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Lisage uus</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Koopia</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tekstiklippides tuvastatud koodiplokkide jaoks kasutatav teema.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Süntaksiteema</value>
+  </data>
 </root>

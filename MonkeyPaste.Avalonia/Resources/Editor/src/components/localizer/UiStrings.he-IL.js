@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `התבנית הבאה`,
 	EditorPasteButtonAppendBeginLabel: `לְצַרֵף...`,
 	EditorPasteButtonLabel: `לְהַדבִּיק`,
+	EditorPasteButtonLabelMobile: `עותק`,
 	EditorPasteTemplateWatermark: `הזן טקסט הדבק ...`,
 	EditorPrevTemplateLabel: `תבנית קודמת`,
 	EditorRegExLabel: ` הבעה רגילה`,

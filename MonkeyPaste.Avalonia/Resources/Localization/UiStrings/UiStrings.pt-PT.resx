@@ -3017,4 +3017,13 @@ Os atalhos globais agora podem ser ativados no menu da bandeja do sistema</value
   <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
     <value>Navegador de plug-in - {0}</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>cópia de</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>O tema usado para blocos de código detectado nos clipes de texto.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema sintaxe</value>
+  </data>
 </root>

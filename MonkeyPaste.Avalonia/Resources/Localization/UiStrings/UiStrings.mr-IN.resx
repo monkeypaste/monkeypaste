@@ -3017,4 +3017,13 @@
   <data name="PluginBrowserWindowTitle" xml:space="preserve">
     <value>प्लगइन ब्राउझर</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>कॉपी</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>मजकूर क्लिपमध्ये आढळलेल्या कोडच्या ब्लॉक्ससाठी वापरलेली थीम.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>वाक्यरचना थीम</value>
+  </data>
 </root>

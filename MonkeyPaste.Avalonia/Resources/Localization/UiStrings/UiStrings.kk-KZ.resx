@@ -3017,4 +3017,13 @@ feedback@monkeyptaste.com</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Жаңа қосу</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Еліктеу</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Мәтіндік клиптерде анықталған код блоктарында қолданылатын тақырып.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Синтаксис тақырыбы</value>
+  </data>
 </root>

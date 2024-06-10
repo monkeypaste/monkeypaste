@@ -3017,4 +3017,13 @@ feedback@monkeypaste.com</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>కొత్తది జత పరచండి</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>కాపీ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>టెక్స్ట్ క్లిప్‌లలో కనుగొనబడిన కోడ్ బ్లాక్‌ల కోసం ఉపయోగించే థీమ్.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>సింటాక్స్ థీమ్</value>
+  </data>
 </root>

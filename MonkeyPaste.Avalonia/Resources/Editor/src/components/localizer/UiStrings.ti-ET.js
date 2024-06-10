@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `ዝቕጽል ቅጥዒ`,
 	EditorPasteButtonAppendBeginLabel: `ምውሳኽ...`,
 	EditorPasteButtonLabel: `ምልጣፍ .`,
+	EditorPasteButtonLabelMobile: `ቅዳሕ`,
 	EditorPasteTemplateWatermark: `ጽሑፍ ምልጣፍ ኣእቱ...`,
 	EditorPrevTemplateLabel: `ቅድሚ ሕጂ ዝነበረ ቅጥዒ`,
 	EditorRegExLabel: ` ስሩዕ መግለጺ`,

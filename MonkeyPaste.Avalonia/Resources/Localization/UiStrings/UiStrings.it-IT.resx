@@ -3017,4 +3017,13 @@ Le scorciatoie globali possono ora essere abilitate nel menu del vassoio di sist
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Aggiungere nuova</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>copia</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Il tema utilizzato per i blocchi di codice rilevati nelle clip di testo.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema di sintassi</value>
+  </data>
 </root>

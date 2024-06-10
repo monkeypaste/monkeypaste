@@ -3017,4 +3017,13 @@ Globaalit pikakuvakkeet voidaan nyt ottaa käyttöön järjestelmälokero -valik
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Lisää uusi</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopio</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Teema, jota käytetään tekstilasissa havaittuihin koodilohkoihin.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntaksiteema</value>
+  </data>
 </root>

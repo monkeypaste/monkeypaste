@@ -3017,4 +3017,13 @@
   <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
     <value>ፕላጊን ዳህሳሲ - {0}</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ቅዳሕ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ኣብ ጽሑፍ ክሊፓት ንብሎኮታት ኮድ ዝውዕል ቴማ።</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ስነ-ቓል ቴማ .</value>
+  </data>
 </root>

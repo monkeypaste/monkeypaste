@@ -3017,4 +3017,13 @@ Global gysga ýollar ulgam tromy menýusynda başlap biler</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Täze goşuň</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Göçürmek</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tekst kliplerde tapylan kod bloklary üçin ulanylýan mowzuk.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Sintaksis mowzugy</value>
+  </data>
 </root>

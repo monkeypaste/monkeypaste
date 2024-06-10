@@ -3017,4 +3017,13 @@
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>नया जोड़ो</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>प्रतिलिपि</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>टेक्स्ट क्लिप में पता चला कोड के ब्लॉक के लिए उपयोग किया जाने वाला विषय।</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>वाक्यविन्यास थीम</value>
+  </data>
 </root>

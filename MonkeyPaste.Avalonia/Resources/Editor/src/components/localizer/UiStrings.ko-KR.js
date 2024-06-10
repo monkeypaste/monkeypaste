@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `다음 템플릿`,
 	EditorPasteButtonAppendBeginLabel: `추가 ...`,
 	EditorPasteButtonLabel: `반죽`,
+	EditorPasteButtonLabelMobile: `복사`,
 	EditorPasteTemplateWatermark: `페이스트 텍스트를 입력하십시오 ...`,
 	EditorPrevTemplateLabel: `이전 템플릿`,
 	EditorRegExLabel: ` 정규 표현`,

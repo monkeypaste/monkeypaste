@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `അടുത്ത ടെംപ്ലേറ്റ്`,
 	EditorPasteButtonAppendBeginLabel: `കൂട്ടിച്ചേർക്കുക ...`,
 	EditorPasteButtonLabel: `പേസ്റ്റ്`,
+	EditorPasteButtonLabelMobile: `പകര്ത്തുക`,
 	EditorPasteTemplateWatermark: `ഒട്ടിക്കുക വാചകം നൽകുക ...`,
 	EditorPrevTemplateLabel: `മുമ്പത്തെ ടെംപ്ലേറ്റ്`,
 	EditorRegExLabel: ` പതിവ് എക്സ്പ്രഷൻ`,

@@ -3017,4 +3017,13 @@ Qlobal Qısayolları indi Sistem Tablası Menyusunda aktivləşdirmək olar</val
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Yeni əlavə et</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Surətini çıxarmaq</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Mətn kliplərində aşkarlanan kod blokları üçün istifadə olunan mövzu.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Sintaksis mövzusu</value>
+  </data>
 </root>

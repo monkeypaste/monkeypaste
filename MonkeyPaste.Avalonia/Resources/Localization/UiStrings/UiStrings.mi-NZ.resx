@@ -3017,4 +3017,13 @@ Ka taea e te waa poto poto te ao i roto i te tahua Tray punaha</value>
   <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
     <value>Pūtirotiro Mono - {0}</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Tauira</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Ko te kaupapa i whakamahia mo te poraka waehere kua kitea i roto i nga topenga kuputuhi.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Kaupapa Syntax</value>
+  </data>
 </root>

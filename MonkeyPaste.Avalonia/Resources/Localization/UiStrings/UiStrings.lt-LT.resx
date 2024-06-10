@@ -3017,4 +3017,13 @@ Dabar „System Tray“ meniu galima įjungti globalius nuorodas</value>
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>Iškarpinės rinkinys</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopijuoti</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>TEKSTO KOMPLEKSO KODENTO BLOKS NAUDOJAMA TEMACIJA.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Sintaksės tema</value>
+  </data>
 </root>

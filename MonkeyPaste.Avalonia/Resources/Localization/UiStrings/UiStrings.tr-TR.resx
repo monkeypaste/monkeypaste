@@ -3017,4 +3017,13 @@ Global kısayollar artık sistem tepsisi menüsünde etkinleştirilebilir</value
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>Pano Seti</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopya</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Metin kliplerinde algılanan kod blokları için kullanılan tema.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Sözdizimi teması</value>
+  </data>
 </root>

@@ -3017,4 +3017,13 @@ Bellach gellir galluogi Llwybrau Byr Byd-eang yn y Ddewislen Hambwrdd System</va
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Ychwanegu Newydd</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Copïan</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Y thema a ddefnyddir ar gyfer blociau o god a ganfyddir mewn clipiau testun.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Thema Cystrawen</value>
+  </data>
 </root>

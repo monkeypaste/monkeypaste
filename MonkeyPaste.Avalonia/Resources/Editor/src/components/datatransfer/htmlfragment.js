@@ -89,12 +89,13 @@ function parseHtmlFromHtmlClipboardFragment(cbDataStr) {
     // PARSE URL
 
     let cbData = {
+        isFragment: false,
         sourceUrl: '',
         html: cbDataStr
     };
     if (!isHtmlClipboardFormat(cbDataStr)) {
         if (containsHtmlClipboardFragment(cbDataStr)) {
-            // NOTE this shouldn't really happen but in case fragment wasn't parsed
+            cbData.isFragment = true;
             cbData.html = cleanHtmlForFragmentMarkers(cbDataStr);
         }
         return cbData;
@@ -116,13 +117,15 @@ function parseHtmlFromHtmlClipboardFragment(cbDataStr) {
     // PARSE HTML
     if (containsHtmlClipboardFragment(cbDataStr)) {
         cbData.html = cleanHtmlForFragmentMarkers(cbDataStr);
+        cbData.isFragment = true;
     }
 
     return cbData;
 }
 
 function parseHtmlFragmentVersionStr(cbDataStr) {
-    return parseHtmlFragmentValueStr('Version', cbDataStr)
+    let result = parseHtmlFragmentValueStr('Version', cbDataStr);
+    return result;
 }
 
 function parseFragmentInt(keyName,cbDataStr) {
@@ -162,21 +165,22 @@ function parseFragmentHtml(cbDataStr) {
 }
 
 function parseFragment_old(htmlStr) {
-    let htmlStartToken = '<!--StartFragment-->';
-    let htmlEndToken = '<!--EndFragment-->';
+    let htmlStartToken = '<html>';
+    let htmlEndToken = '</html>';
     const frag_start_idx = htmlStr.indexOf(htmlStartToken);
     if (frag_start_idx >= 0) {
         let html_start_idx = frag_start_idx + htmlStartToken.length;
-        let html_end_idx = htmlStr.indexOf(htmlEndToken);
+        let html_end_idx = htmlStr.lastIndexOf(htmlEndToken);
         let html_length = html_end_idx - html_start_idx;
-        return substringByLength(htmlStr, html_start_idx, html_length);
+        let result = substringByLength(htmlStr, html_start_idx, html_length);
+        return result;
     }
     return '';
 }
 function cleanHtmlForFragmentMarkers(htmlStr) {
 
     let version = parseHtmlFragmentVersionStr(htmlStr);
-    if (version == null) {
+    if (isNullOrEmpty(version)) {
         return htmlStr;
     }
 
@@ -184,7 +188,7 @@ function cleanHtmlForFragmentMarkers(htmlStr) {
     // NOTE reading raw clipboard format html (at least from chrome on windows)
     // has line breaks at opening/closing of <body> tag which get picked up
         // so this pulls inner fragment out which will not have those
-        return parseFragmentHtml(htmlStr);
+        htmlStr = parseFragment_old(htmlStr);
     } else if (version.startsWith('1.0')) {
         // just returning everything after EndFragment line
         let end_html_line_parts = htmlStr.split('EndFragment:');

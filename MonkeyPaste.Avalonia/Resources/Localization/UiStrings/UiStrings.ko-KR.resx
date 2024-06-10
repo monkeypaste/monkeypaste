@@ -3017,4 +3017,13 @@
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>새로운 걸 더하다</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>복사</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>텍스트 클립에서 감지 된 코드 블록에 사용되는 테마.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>구문 테마</value>
+  </data>
 </root>

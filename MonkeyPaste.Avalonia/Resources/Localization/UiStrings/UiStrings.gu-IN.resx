@@ -3017,4 +3017,13 @@
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>નવો ઉમેરો</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>નકલ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ટેક્સ્ટ ક્લિપ્સમાં શોધાયેલ કોડના બ્લોક્સ માટે વપરાયેલી થીમ.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>વાક્યબંધી થીમ</value>
+  </data>
 </root>

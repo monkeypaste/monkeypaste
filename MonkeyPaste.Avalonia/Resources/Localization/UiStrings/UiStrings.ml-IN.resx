@@ -3017,4 +3017,13 @@
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>പുതിയത് ചേർക്കുക</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>പകര്ത്തുക</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ടെക്സ്റ്റ് ക്ലിപ്പുകളിൽ കണ്ടെത്തിയ കോഡ് ബ്ലോക്കുകൾക്കായി ഉപയോഗിക്കുന്ന തീം.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>വാക്യഘടന തീം</value>
+  </data>
 </root>

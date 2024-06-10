@@ -3017,4 +3017,13 @@ Is féidir aicearraí domhanda a chumasú anois sa roghchlár tráidire córais<
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Cuir nua leis</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Cóip</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>An téama a úsáidtear le haghaidh bloic chóid a aimsíodh i gclipeanna téacs.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Téama comhréir</value>
+  </data>
 </root>

@@ -84,5 +84,11 @@
         DefaultNotificationWidth,
         DefaultNotificationHeight,
         #endregion
+
+        #region Effects
+
+        ThemeBlackDropShadow,
+        ThemeWhiteDropShadow
+        #endregion
     }
 }

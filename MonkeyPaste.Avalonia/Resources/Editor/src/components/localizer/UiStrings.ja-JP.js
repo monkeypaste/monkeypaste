@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `次のテンプレート`,
 	EditorPasteButtonAppendBeginLabel: `追加...`,
 	EditorPasteButtonLabel: `ペースト`,
+	EditorPasteButtonLabelMobile: `コピー`,
 	EditorPasteTemplateWatermark: `貼り付けテキストを入力してください...`,
 	EditorPrevTemplateLabel: `前のテンプレート`,
 	EditorRegExLabel: ` 正規表現`,

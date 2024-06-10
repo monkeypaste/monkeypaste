@@ -3017,4 +3017,13 @@ Les dreceres globals ara es poden activar al menú de la safata del sistema</val
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Afegir nou</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Còpia</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>El tema utilitzat per als blocs de codi detectats en clips de text.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema de sintaxi</value>
+  </data>
 </root>

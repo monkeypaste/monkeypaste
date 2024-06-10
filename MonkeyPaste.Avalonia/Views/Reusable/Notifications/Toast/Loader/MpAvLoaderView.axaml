@@ -183,6 +183,7 @@
         </Grid>
 
         <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"
+                                     Opacity="0"
                                      Grid.Row="1"
                                      ClipToBounds="False"
                                      Margin="0,0,20,3"

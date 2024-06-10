@@ -3017,4 +3017,13 @@ Các phím tắt toàn cầu hiện có thể được bật trong menu khay h�
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Thêm mới</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Sao chép</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Chủ đề được sử dụng cho các khối mã được phát hiện trong các clip văn bản.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Chủ đề cú pháp</value>
+  </data>
 </root>

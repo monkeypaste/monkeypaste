@@ -3017,4 +3017,13 @@ feedback@monkeypaste.com</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>اضف جديد</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ينسخ</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>السمة المستخدمة لكتل التعليمات البرمجية المكتشفة في المقاطع النصية.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>موضوع بناء الجملة</value>
+  </data>
 </root>

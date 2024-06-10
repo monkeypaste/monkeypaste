@@ -3017,4 +3017,13 @@ Comenzile rapide globale pot fi acum activate în meniul tăvii de sistem</value
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>Set Clipboard</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Copie</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tema folosită pentru blocurile de cod detectate în clipuri de text.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema sintaxei</value>
+  </data>
 </root>

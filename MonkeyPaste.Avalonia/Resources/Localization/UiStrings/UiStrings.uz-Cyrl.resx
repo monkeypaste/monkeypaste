@@ -3082,4 +3082,13 @@ Hozirgi kunda tizimning trafik menyusida global yorliq yoqilishi mumkin</value>
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>Vaqtinchalik almashish buferi to'plami</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Nusxa ko'chirmoq</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Matnli kliplarda aniqlangan kod bloklari uchun ishlatiladigan mavzu.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Sintaksis mavzusi</value>
+  </data>
 </root>

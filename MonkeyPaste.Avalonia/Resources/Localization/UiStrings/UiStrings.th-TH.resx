@@ -3017,4 +3017,13 @@ feedback@monkeypaste.com</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>เพิ่มใหม่</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>สำเนา</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ชุดรูปแบบที่ใช้สำหรับบล็อกของรหัสที่ตรวจพบในคลิปข้อความ</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ธีมไวยากรณ์</value>
+  </data>
 </root>

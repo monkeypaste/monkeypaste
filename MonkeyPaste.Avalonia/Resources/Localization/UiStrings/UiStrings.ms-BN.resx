@@ -3017,4 +3017,13 @@ Pintasan global kini boleh didayakan dalam menu dulang sistem</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Tambah baru</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Salinan</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tema yang digunakan untuk blok kod yang dikesan dalam klip teks.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Tema sintaks</value>
+  </data>
 </root>

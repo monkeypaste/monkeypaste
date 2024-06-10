@@ -3017,4 +3017,13 @@ Monkeypaste на уредот
   <data name="PluginBrowserWindowTitle" xml:space="preserve">
     <value>Прелистувач за приклучоци</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Копија</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Темата што се користи за блокови на код откриена во клипови со текст.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Синтакса тема</value>
+  </data>
 </root>

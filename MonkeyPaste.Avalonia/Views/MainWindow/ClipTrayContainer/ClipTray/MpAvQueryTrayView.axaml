@@ -125,6 +125,14 @@
                          Width="{Binding QueryTrayTotalWidth}"
                          Height="{Binding QueryTrayTotalHeight}"
                          ItemsSource="{Binding Items}">
+                    <ListBox.SelectionMode>
+                        <MultiBinding Converter="{x:Static local:MpAvMultiBoolToSelectionModeConverter.Instance}"
+                                      ConverterParameter="AND|Toggle|Single">
+                            <Binding Path="IsMobileOrWindowed"
+                                     Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                            <Binding Path="!IsPinTrayPeeking" />
+                        </MultiBinding>
+                    </ListBox.SelectionMode>
                     <ListBox.Resources>
                         <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
                         <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>

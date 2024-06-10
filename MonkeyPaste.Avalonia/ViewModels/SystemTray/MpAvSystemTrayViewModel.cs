@@ -51,6 +51,7 @@ namespace MonkeyPaste.Avalonia {
                         // SHOW/HIDE MW
 
                         new MpAvMenuItemViewModel() {
+                            IsVisible = MpAvThemeViewModel.Instance.IsMultiWindow,
                             HeaderSrcObj = MpAvMainWindowViewModel.Instance,
                             HeaderPropPath = nameof(MpAvMainWindowViewModel.Instance.ShowOrHideLabel),
                             IconSrcBindingObj = MpAvMainWindowViewModel.Instance,
@@ -66,6 +67,7 @@ namespace MonkeyPaste.Avalonia {
                         // PAUSE/RESUME CB
 
                         new MpAvMenuItemViewModel() {
+                            IsVisible = MpAvThemeViewModel.Instance.IsMultiWindow,
                             HeaderSrcObj = MpAvClipTrayViewModel.Instance,
                             HeaderPropPath = nameof(MpAvClipTrayViewModel.Instance.PlayOrPauseLabel),
                             IconSrcBindingObj = MpAvClipTrayViewModel.Instance,
@@ -182,6 +184,7 @@ namespace MonkeyPaste.Avalonia {
                         // SETTINGS
 
                         new MpAvMenuItemViewModel() {
+                            IsVisible = MpAvThemeViewModel.Instance.IsMultiWindow,
                             Header = UiStrings.CommonSettingsTitle,
                             IconSourceObj = "CogColorImage",
                             CommandSrcObj = MpAvSettingsViewModel.Instance,
@@ -297,6 +300,7 @@ namespace MonkeyPaste.Avalonia {
                         // QUIT
 
                         new MpAvMenuItemViewModel() {
+                            IsVisible = MpAvThemeViewModel.Instance.IsMultiWindow,
                             Header = UiStrings.SysTrayQuitHeader,
                             IconResourceKey = "SignOutImage",
                             Command = ExitApplicationCommand,
@@ -473,6 +477,13 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.UserTrayCmd, $"systray cmd - '{args.ToStringOrEmpty("no detail (likely quit cmd) ")}'");
             });
 
+        public ICommand ShowSysTrayContextMenu => new MpCommand<object>(
+            (args) => {
+                if(args is not Control c) {
+                    return;
+                }
+                MpAvMenuView.ShowMenu(c, TrayMenuItemViewModel);
+            });
 
         #region Test Commands
         public ICommand NavigateToCefNetUriCommand => new MpAsyncCommand(

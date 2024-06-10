@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `આગલું નમૂના`,
 	EditorPasteButtonAppendBeginLabel: `જોડો ...`,
 	EditorPasteButtonLabel: `આંચકો`,
+	EditorPasteButtonLabelMobile: `નકલ`,
 	EditorPasteTemplateWatermark: `પેસ્ટ ટેક્સ્ટ દાખલ કરો ...`,
 	EditorPrevTemplateLabel: `પાછલું નમૂના`,
 	EditorRegExLabel: ` નિયમિત સમીકરણ`,

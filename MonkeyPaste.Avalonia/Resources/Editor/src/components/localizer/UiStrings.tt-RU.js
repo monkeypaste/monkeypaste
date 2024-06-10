@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `Киләсе шаблон`,
 	EditorPasteButtonAppendBeginLabel: `Кушымта ...`,
 	EditorPasteButtonLabel: `Паста`,
+	EditorPasteButtonLabelMobile: `Күчереп алу`,
 	EditorPasteTemplateWatermark: `Паста текстын кертегез ...`,
 	EditorPrevTemplateLabel: `Элеккеге шаблон`,
 	EditorRegExLabel: ` Регуляр белдерү`,

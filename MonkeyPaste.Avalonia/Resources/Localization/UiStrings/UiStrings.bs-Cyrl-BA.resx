@@ -3082,4 +3082,13 @@ Globalne prečice sada mogu biti omogućene u System Tray meniju</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Dodaj novi</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopija</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Tema koja se koristi za blokove koda otkrivene u tekstualnim isječcima.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntax Theme</value>
+  </data>
 </root>

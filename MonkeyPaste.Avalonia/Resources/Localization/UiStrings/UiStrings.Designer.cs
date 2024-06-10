@@ -3541,6 +3541,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        public static string EditorPasteButtonLabelMobile {
+            get {
+                return ResourceManager.GetString("EditorPasteButtonLabelMobile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter paste text....
         /// </summary>
         public static string EditorPasteTemplateWatermark {

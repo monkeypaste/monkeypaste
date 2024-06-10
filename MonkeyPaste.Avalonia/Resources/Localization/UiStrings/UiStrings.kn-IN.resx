@@ -3017,4 +3017,13 @@
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>ಹೊಸದನ್ನು ಸೇರಿಸಿ</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>ನಕಲು</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ಪಠ್ಯ ತುಣುಕುಗಳಲ್ಲಿ ಪತ್ತೆಯಾದ ಕೋಡ್‌ನ ಬ್ಲಾಕ್‌ಗಳಿಗೆ ಬಳಸುವ ಥೀಮ್.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>ಸಿಂಟ್ಯಾಕ್ಸ್ ಥೀಮ್</value>
+  </data>
 </root>

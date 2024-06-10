@@ -3017,4 +3017,13 @@ Les raccourcis mondiaux peuvent désormais être activés dans le menu du platea
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Ajouter un nouveau</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Copie</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Le thème utilisé pour les blocs de code détectés dans les clips de texte.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Thème de syntaxe</value>
+  </data>
 </root>

@@ -3017,4 +3017,13 @@ Globale kortpaaie kan nou in die System Tray Menu geaktiveer word</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Voeg nuwe</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopieër</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Die tema wat gebruik word vir blokke kode wat in tekssnitte opgespoor word.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Sintaksis tema</value>
+  </data>
 </root>

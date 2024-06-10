@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `Modèle suivant`,
 	EditorPasteButtonAppendBeginLabel: `Ajouter...`,
 	EditorPasteButtonLabel: `Pâte`,
+	EditorPasteButtonLabelMobile: `Copie`,
 	EditorPasteTemplateWatermark: `Entrez le texte de la pâte ...`,
 	EditorPrevTemplateLabel: `Modèle précédent`,
 	EditorRegExLabel: ` Expression régulière`,

@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `Следващ шаблон`,
 	EditorPasteButtonAppendBeginLabel: `Добавяне ...`,
 	EditorPasteButtonLabel: `Поставете`,
+	EditorPasteButtonLabelMobile: `копие`,
 	EditorPasteTemplateWatermark: `Въведете текст на паста ...`,
 	EditorPrevTemplateLabel: `Предишен шаблон`,
 	EditorRegExLabel: ` Редовно изразяване`,

@@ -1,4 +1,5 @@
-﻿using Avalonia.Layout;
+﻿using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -202,6 +203,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
         public string PlatformShortName =>
 #if WINDOWS
             "windows";

@@ -34,6 +34,7 @@ var UiStrings = {
 	EditorNextTemplateLabel: `الگوی بعدی`,
 	EditorPasteButtonAppendBeginLabel: `ضمیمه ...`,
 	EditorPasteButtonLabel: `خمیر`,
+	EditorPasteButtonLabelMobile: `کپی 🀄`,
 	EditorPasteTemplateWatermark: `متن خمیر را وارد کنید ...`,
 	EditorPrevTemplateLabel: `الگوی قبلی`,
 	EditorRegExLabel: ` عبارت منظم`,

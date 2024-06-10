@@ -3017,4 +3017,13 @@
   <data name="ClipboardSetMessage" xml:space="preserve">
     <value>کلپ بورڈ سیٹ</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>کاپی</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>ٹیکسٹ کلپس میں پائے جانے والے کوڈ کے بلاکس کے لئے استعمال ہونے والا تھیم۔</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>نحو تھیم</value>
+  </data>
 </root>

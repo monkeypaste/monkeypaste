@@ -3017,4 +3017,13 @@ Globale genveje kan nu aktiveres i systembakkemenuen</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Tilføj ny</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopi</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Temaet, der bruges til kodeblokke, der registreres i tekstklip.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntakstema</value>
+  </data>
 </root>

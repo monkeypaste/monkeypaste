@@ -3017,4 +3017,13 @@ Globale snelkoppelingen kunnen nu worden ingeschakeld in het menu System Tray</v
   <data name="PluginBrowserFormattedWindowTitle" xml:space="preserve">
     <value>Plug-inbrowser - {0}</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>Kopiëren</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Het thema dat wordt gebruikt voor codeblokken die zijn gedetecteerd in tekstclips.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Syntaxis thema</value>
+  </data>
 </root>

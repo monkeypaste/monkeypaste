@@ -3017,4 +3017,13 @@ feedble@monkeypaste.com</value>
   <data name="AddNewActionLabel" xml:space="preserve">
     <value>Προσθεσε νεο</value>
   </data>
+  <data name="EditorPasteButtonLabelMobile" xml:space="preserve">
+    <value>αντίγραφο</value>
+  </data>
+  <data name="PrefSyntaxThemeHint" xml:space="preserve">
+    <value>Το θέμα που χρησιμοποιείται για μπλοκ κώδικα που εντοπίζονται σε κλιπ κειμένου.</value>
+  </data>
+  <data name="PrefSyntaxThemeLabel" xml:space="preserve">
+    <value>Θέμα Σύνταξης</value>
+  </data>
 </root>
