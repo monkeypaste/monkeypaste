@@ -31,7 +31,6 @@
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/GridSplitter.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Image.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Label.axaml" />
-    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ListBox.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvChildWindow.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvClipTile.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvMainWindowTitle.axaml" />

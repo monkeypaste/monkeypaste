@@ -8,32 +8,7 @@
                                Height="740" />
     </Design.PreviewWith>
 
-    <!--  TITLE  -->
-    <Style Selector="TextBlock#TitleTextBlock">
-        <Setter Property="Text"
-                Value="{Binding $parent[local:MpAvChildWindow].Title}" />
-    </Style>
 
-    <Style Selector="TextBlock#TitleTextBlock.has-title"
-           x:DataType="local:MpAvIHeaderMenuViewModel">
-        <Setter Property="Text"
-                Value="{Binding HeaderTitle}" />
-    </Style>
-
-    <!--  BACK BUTTON  -->
-    <Style Selector=":is(Button)#BackButton">
-        <Setter Property="Command"
-                Value="{Binding $parent[local:MpAvChildWindow].DefaultBackCommand}" />
-    </Style>
-    <Style Selector=":is(Button)#BackButton.has-back-cmd"
-           x:DataType="local:MpAvIHeaderMenuViewModel">
-        <Setter Property="Command"
-                Value="{Binding BackCommand}" />
-        <Setter Property="CommandParameter"
-                Value="{Binding BackCommandParameter}" />
-    </Style>
-
-    <!--  MENU BUTTONS  -->
     <Style Selector=":is(local|MpAvChildWindow)">
         <Setter Property="HorizontalAlignment"
                 Value="Left" />
@@ -52,60 +27,11 @@
                       x:DataType="local:MpAvChildWindow"
                       RowDefinitions="Auto,*">
                     <!--  HEADER  -->
-                    <Border x:Name="HeaderPanel"
-                            Height="{Binding DefaultTitleMenuFixedLength, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}"
-                            IsVisible="{TemplateBinding HeaderViewModel,
-                                                        Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                            Grid.Row="0">
-                        <Grid x:DataType="local:MpAvIHeaderMenuViewModel"
-                              x:Name="HeaderContainer"
-                              Background="{Binding HeaderBackground}"
-                              DataContext="{TemplateBinding HeaderViewModel}">
-                            <!--  BACK BUTTON  -->
-                            <Button x:Name="BackButton"
-                                    HorizontalAlignment="Left"
-                                    Classes="no-bg no-hover-bg no-border default-button header-button"
-                                    Classes.has-back-cmd="{Binding BackCommand, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                                <local:MpAvTintedImage Tint="{Binding Background, ElementName=HeaderContainer, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
-                                                       Source="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                            </Button>
-
-                            <!--  HEADER MENU  -->
-                            <local:MpAvMenuStripView x:Name="ActionMenu"
-                                                     DataContext="{Binding HeaderMenuItems}"
-                                                     Foreground="{Binding Foreground, ElementName=TitleTextBlock}"
-                                                     HorizontalAlignment="Right"
-                                                     VerticalAlignment="Center" />
-
-                            <!--  TITLE  -->
-
-
-                            <TextBlock x:Name="TitleTextBlock"
-                                       HorizontalAlignment="Center"
-                                       Classes.has-title="{Binding HeaderTitle, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                       Classes="contrast-drop-shadow"
-                                       Foreground="{Binding HeaderForeground}"
-                                       FontSize="26"
-                                       FontWeight="Bold"
-                                       VerticalAlignment="Center"
-                                       TextWrapping="WrapWithOverflow"
-                                       TextAlignment="Center">
-                                <TextBlock.MaxWidth>
-                                    <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
-                                                  ConverterParameter="*">
-                                        <Binding Path="Bounds.Width"
-                                                 ElementName="HeaderPanel" />
-                                        <Binding>
-                                            <Binding.Source>
-                                                <sys:Double>0.5</sys:Double>
-                                            </Binding.Source>
-                                        </Binding>
-                                    </MultiBinding>
-                                </TextBlock.MaxWidth>
-
-                            </TextBlock>
-                        </Grid>
-
+                    <Border IsVisible="{TemplateBinding HeaderViewModel, Converter={x:Static local:MpAvHeaderMenuViewModelToIsVisibleConverter.Instance}}">
+                        <local:MpAvHeaderMenuView x:Name="HeaderPanel"
+                                                  x:DataType="local:MpAvIHeaderMenuViewModel"
+                                                  DataContext="{TemplateBinding HeaderViewModel}"
+                                                  Height="{Binding DefaultTitleMenuFixedLength, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}" />
                     </Border>
 
                     <!--  CONTENT  -->

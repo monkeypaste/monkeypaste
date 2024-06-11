@@ -8,6 +8,8 @@ using Avalonia.Media;
 using Avalonia.Threading;
 #if SUGAR_WV
 using AvaloniaWebView;
+//using HotAvalonia;
+
 #endif
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -130,6 +132,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public override void Initialize() {
+            //this.EnableHotReload();
             AvaloniaXamlLoader.Load(this);
         }
 #if SUGAR_WV

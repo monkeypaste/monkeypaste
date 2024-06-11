@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
                     string newColor = await ShowCustomColorMenuAsync(
                         selectedColor: selectedColor,
                         title: null,
-                        ucvm: ucvm);
+                        ucvmObj: ucvm);
                 }
             });
 
@@ -70,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task<string> ShowCustomColorMenuAsync(
             string selectedColor,
             string title = null,
-            MpIUserColorViewModel ucvm = null,
+            object ucvmObj = null,
             object owner = null,
             string[] fixedPalette = null,
             bool allowAlpha = false) {
@@ -102,10 +102,10 @@ namespace MonkeyPaste.Avalonia {
                 //    MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
                 //}
                 if (result is string newColor) {
-                    if (ucvm != null) {
+                    if (ucvmObj is MpIUserColorViewModel ucvm) {
 
                         ucvm.UserHexColor = newColor;
-                        MpConsole.WriteLine($"Custom color for '{ucvm}' set to '{newColor}'");
+                        MpConsole.WriteLine($"Custom color for '{ucvmObj}' set to '{newColor}'");
                     }
                     return newColor;
                 }

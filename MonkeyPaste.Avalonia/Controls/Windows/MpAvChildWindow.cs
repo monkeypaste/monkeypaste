@@ -39,6 +39,9 @@ namespace MonkeyPaste.Avalonia {
         FadeOut = 1L << 5,
     }
 
+    public interface MpAvIIsVisibleViewModel : MpIViewModel {
+        bool IsVisible { get; }
+    }
     public interface MpAvIHeaderMenuViewModel : MpIViewModel {
         IEnumerable<MpAvIMenuItemViewModel> HeaderMenuItems { get; }
         string HeaderTitle { get; }
@@ -46,6 +49,9 @@ namespace MonkeyPaste.Avalonia {
         IBrush HeaderForeground { get; }
         ICommand BackCommand { get; }
         object BackCommandParameter { get; }
+    }
+
+    public interface MpAvIFocusHeaderMenuViewModel : MpAvIHeaderMenuViewModel {
     }
 
     public interface MpILoadableViewModel : MpIViewModel {
@@ -501,21 +507,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand DefaultBackCommand => new MpCommand<object>(
-                    (args) => {
-                        //#if MOBILE_OR_WINDOWED
-                        //                        if (args is not MpAvChildWindow cw) {
-                        //                            cw = MpAvWindowManager.ActiveWindow;
-                        //                            if (cw == null) {
-                        //                                return;
-                        //                            }
-                        //                        }
-                        //                        cw.Close();
-                        //#else
-                        //                        return;
-                        //#endif
-                        Close();
-                    });
         #endregion
     }
 }

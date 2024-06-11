@@ -76,8 +76,8 @@
             <Setter Property="Cursor"
                     Value="Arrow" />
         </Style>
-
-        <!--  TILE LBI SIZE  -->
+      
+      <!--  TILE LBI SIZE  -->
 
         <Style Selector="ListBox.clipTileListBox > ListBoxItem, Border#QueryTrayContainerBorder local|MpAvClipTileView"
                x:DataType="local:MpAvClipTileViewModel">

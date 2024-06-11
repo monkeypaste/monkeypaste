@@ -6,6 +6,7 @@
                        xmlns:pcl="using:MonkeyPaste"
                        x:TypeArguments="local:MpAvMainWindowViewModel"
                        x:DataType="local:MpAvMainWindowViewModel"
+                       Focusable="True"
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        d:DesignWidth="800"

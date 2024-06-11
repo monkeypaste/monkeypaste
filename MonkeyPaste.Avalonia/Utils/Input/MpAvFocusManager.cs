@@ -2,14 +2,6 @@
 using System;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpIFocusableViewModel : MpIViewModel {
-        bool IsFocus { get; set; }
-        int Level { get; }
-        MpIFocusableViewModel Parent { get; }
-        MpIFocusableViewModel Next { get; }
-        MpIFocusableViewModel Previous { get; }
-        MpIFocusableViewModel FirstChild { get; }
-    }
 
     public class MpAvFocusManager : MpIFocusMonitor {
         private Type[] _inputControlTypes { get; set; } = new Type[] {

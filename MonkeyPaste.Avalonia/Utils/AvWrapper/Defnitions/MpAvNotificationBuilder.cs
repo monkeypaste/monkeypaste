@@ -59,15 +59,6 @@ namespace MonkeyPaste.Avalonia {
                 iconSourceObj: iconSourceObj);
         }
 
-        public async Task<MpNotificationDialogResultType> ShowLoaderNotificationAsync(MpIProgressLoaderViewModel loader) {
-            var result = await ShowNotificationAsync(
-                title: loader.Title,
-                notificationType: MpNotificationType.Loader,
-                maxShowTimeMs: -1,
-                loader: loader);
-            return result;
-        }
-
         public async Task<MpNotificationDialogResultType> ShowNotificationAsync(
             MpNotificationType notificationType = MpNotificationType.None,
             string title = "",
@@ -79,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
             object anchor = null,
             ICommand fixCommand = null,
             object fixCommandArgs = null,
-            MpIProgressLoaderViewModel loader = null,
+            object loader = null,
             object owner = null,
             object otherArgs = null) {
             if (body == null) {

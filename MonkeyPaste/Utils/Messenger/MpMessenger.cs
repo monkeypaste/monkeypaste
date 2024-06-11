@@ -71,6 +71,8 @@ namespace MonkeyPaste {
 
         TraySelectionChanged,
 
+        FocusItemChanged,
+
         PreTrayLayoutChange,
         PostTrayLayoutChange,
 

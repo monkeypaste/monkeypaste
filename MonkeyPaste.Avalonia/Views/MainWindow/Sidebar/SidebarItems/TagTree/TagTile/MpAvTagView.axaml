@@ -145,7 +145,7 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="StackPanel#OuterTagPanel:not(.pinned).can-add.hover Button#AddTagButton, StackPanel#OuterTagPanel:not(.pinned).can-add.sel Button#AddTagButton">
+        <Style Selector="StackPanel#OuterTagPanel:not(.pinned):not(.mobile).can-add.hover Button#AddTagButton, StackPanel#OuterTagPanel:not(.pinned).can-add.sel Button#AddTagButton">
             <Setter Property="IsVisible"
                     Value="True" />
         </Style>
@@ -167,9 +167,14 @@
                 Classes.can-add="{Binding CanAddChild}"
                 Classes.hover="{Binding IsHovering}"
                 Classes.sel="{Binding IsSelected}"
+                Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                 local:MpAvIsHoveringExtension.IsEnabled="True"
                 local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="TagViewContainerGrid"
+              local:MpAvPointerCommandExtension.IsEnabled="True"
+              local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+              local:MpAvPointerCommandExtension.IsEventHandled="False"
+              local:MpAvPointerCommandExtension.LeftPressCommand="{Binding SelectThisTagCommand}"
               Cursor="Hand"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch"

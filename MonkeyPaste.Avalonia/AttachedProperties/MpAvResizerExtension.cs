@@ -11,13 +11,6 @@ using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public enum MpResizeEdgeType {
-        None = 0,
-        Left,
-        Top,
-        Right,
-        Bottom
-    }
 
     [DoNotNotify]
     public static class MpAvResizeExtension {

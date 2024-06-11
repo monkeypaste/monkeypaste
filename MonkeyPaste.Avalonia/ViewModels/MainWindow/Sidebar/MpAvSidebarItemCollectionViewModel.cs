@@ -232,6 +232,11 @@ namespace MonkeyPaste.Avalonia {
                 // trigger sidebar pop out
                 w.WindowState = WindowState.Normal;
                 w.Activate();
+            } else if(MpAvThemeViewModel.Instance.IsMobileOrWindowed &&
+                        SelectedItem is MpAvTriggerCollectionViewModel && 
+                        MpAvMainView.Instance.GetVisualDescendant<MpAvTriggerActionChooserView>() is { } tw) {
+                tw.Focus();
+                MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
             }
         }
         private async Task AnimateSidebarAsync(MpSize start, MpSize end, double tt = 0.25, double fps = 120) {

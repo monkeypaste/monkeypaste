@@ -4,6 +4,7 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       Focusable="True"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        DataContext="{x:Static local:MpAvTriggerCollectionViewModel.Instance}"
                        x:TypeArguments="local:MpAvTriggerCollectionViewModel"
@@ -12,6 +13,103 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
+        <!--  MOBILE STUFF  -->
+        <Style Selector="Border#ActionDesignerInnerContainerBorder">
+            <Setter Property="MinHeight"
+                    Value="100" />
+        </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer.mobile Border#ActionDesignerInnerContainerBorder">
+            <Setter Property="MinHeight"
+                    Value="350" />
+        </Style>
+
+        <Style Selector="Border#ActionPropertyOuterContainer">
+            <Setter Property="MinWidth"
+                    Value="350" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer.mobile Border#ActionPropertyOuterContainer">
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+        </Style>
+
+        <Style Selector="Border#SelectedTriggerContainer">
+            <Setter Property="MinWidth"
+                    Value="350" />
+        </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer.mobile Border#SelectedTriggerContainer">
+            <Setter Property="MinWidth"
+                    Value="0" />
+        </Style>
+
+        <Style Selector="Grid#TriggerSidebarContainer">
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumnDefinitions"
+                    Value="Auto,*" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalRowDefinitions"
+                    Value="Auto,*" />
+        </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer:not(.mobile):not(.popout) Grid#TriggerSidebarContainer">
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalRowDefinitions">
+                <Setter.Value>
+                    <RowDefinitions>
+                        <RowDefinition Height="*"
+                                       MaxHeight="{Binding ObservedContainerScreenHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
+                    </RowDefinitions>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="Border#TriggerSidebarOuterContainer:not(.popout) Border#ActionDesignerOuterContainerBorder">
+            <Setter Property="MinHeight"
+                    Value="350" />
+        </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer:not(.popout):not(.horiz) Border#ActionDesignerOuterContainerBorder">
+            <!--<Setter Property="MinHeight"
+                    Value="0" />-->
+        </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer:not(.mobile).popout ScrollViewer#TriggerScrollViewer, Border#TriggerSidebarOuterContainer:not(.mobile).popout ScrollViewer#PropertyScrollViewer">
+            <Setter Property="HorizontalScrollBarVisibility"
+                    Value="Hidden" />
+            <Setter Property="VerticalScrollBarVisibility"
+                    Value="Hidden" />
+        </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer:not(.mobile).horiz ScrollViewer#TriggerScrollViewer">
+            <Setter Property="HorizontalScrollBarVisibility"
+                    Value="Hidden" />
+            <Setter Property="VerticalScrollBarVisibility"
+                    Value="Hidden" />
+        </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer:not(.mobile).horiz ScrollViewer#PropertyScrollViewer">
+            <Setter Property="HorizontalScrollBarVisibility"
+                    Value="Auto" />
+            <Setter Property="VerticalScrollBarVisibility"
+                    Value="Auto" />
+        </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer:not(.mobile) ScrollViewer#TriggerScrollViewer">
+            <Setter Property="HorizontalScrollBarVisibility"
+                    Value="Auto" />
+            <Setter Property="VerticalScrollBarVisibility"
+                    Value="Auto" />
+        </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer:not(.mobile) ScrollViewer#PropertyScrollViewer">
+            <Setter Property="HorizontalScrollBarVisibility"
+                    Value="Hidden" />
+            <Setter Property="VerticalScrollBarVisibility"
+                    Value="Hidden" />
+        </Style>
+
+        <!--  EXPANDER  -->
+        <Style Selector="ToggleButton#ExpandButton local|MpAvTintedImage#ExpanderImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <Style Selector="ToggleButton#ExpandButton:checked local|MpAvTintedImage#ExpanderImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowUpImage}, ConverterParameter=test, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+
+        <!--  HEADER  -->
         <Style Selector="Border#ActionPropertyOuterContainer">
             <Setter Property="MaxHeight"
                     Value="{x:Static sys:Double.PositiveInfinity}" />
@@ -37,28 +135,30 @@
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeWhiteColor}" />
         </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer.mobile Border.headeredBorder">
+            <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="TriggerSidebarOuterContainer"
+            Classes.horiz="{Binding IsHorizontal}"
+            Classes.popout="{Binding IsWindowOpen}"
+            Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <ScrollViewer x:Name="TriggerScrollViewer"
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
             <Grid x:Name="TriggerSidebarContainer"
-                  RowDefinitions="Auto,*"
-                  ColumnDefinitions="*"
+                  Classes="oriented"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
                 <!--  TRIGGER SELECTOR & SELECTED ACTION PROPERTY COLUMN  -->
 
                 <Border x:Name="ActionPropertyOuterContainer"
                         Classes.horiz="{Binding IsHorizontal}"
-                        MinWidth="350"
-                        HorizontalAlignment="Left"
                         VerticalAlignment="Stretch">
                     <ScrollViewer x:Name="PropertyScrollViewer"
-                                  Grid.Column="0"
-                                  Grid.Row="0"
                                   VerticalAlignment="Stretch"
                                   HorizontalScrollBarVisibility="Hidden"
                                   VerticalScrollBarVisibility="Hidden">
@@ -67,8 +167,7 @@
                               VerticalAlignment="Stretch">
 
                             <!--  TRIGGER SELECTOR HEADER  -->
-                            <Border Grid.Row="0"
-                                    Classes="headeredBorder"
+                            <Border Classes="headeredBorder"
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="Stretch">
                                 <Grid RowDefinitions="Auto,Auto,Auto"
@@ -76,7 +175,8 @@
 
                                     <!--  TRIGGER LABEL  -->
 
-                                    <Label Grid.Row="0"
+                                    <Label x:Name="TriggerLabel"
+                                           Grid.Row="0"
                                            Grid.Column="0"
                                            HorizontalAlignment="Left"
                                            VerticalAlignment="Top"
@@ -87,6 +187,7 @@
                                     <!--  ADD TRIGGER BUTTON  -->
 
                                     <Button x:Name="AddTriggerButton"
+                                            IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                             Grid.Row="0"
                                             HorizontalAlignment="Right"
                                             Cursor="Hand"
@@ -102,6 +203,20 @@
                                                Height="15" />
                                     </Button>
 
+                                    <!--  EXPAND BUTTON  -->
+                                    <ToggleButton x:Name="ExpandButton"
+                                                  Grid.Row="0"
+                                                  IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                                                  HorizontalAlignment="Right"
+                                                  VerticalAlignment="Top"
+                                                  Classes="default-button no-bg no-hover-bg no-border"
+                                                  IsChecked="{Binding IsPropertyViewExpanded}">
+                                        <local:MpAvTintedImage x:Name="ExpanderImage"
+                                                               Width="25"
+                                                               Height="25"
+                                                               Tint="{Binding Foreground, ElementName=TriggerLabel}" />
+                                    </ToggleButton>
+
                                     <!--  TRIGGER UNDERLINE  -->
 
                                     <Border Grid.Row="1"
@@ -113,7 +228,8 @@
 
                                     <Grid Grid.Row="2"
                                           ColumnDefinitions="Auto,Auto"
-                                          RowDefinitions="Auto,Auto">
+                                          RowDefinitions="Auto,Auto"
+                                          IsVisible="{Binding IsPropertyViewExpanded}">
 
                                         <!--  TRIGGER SELECTOR  -->
 
@@ -155,13 +271,15 @@
 
 
                             <!--  SELECTED TRIGGER ACTION PROPERTY  -->
-                            <Border Grid.Row="1"
+                            <Border x:Name="SelectedTriggerContainer"
+                                    IsVisible="{Binding IsChecked, ElementName=ExpandButton}"
+                                    Grid.Row="1"
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="Stretch"
-                                    MinWidth="350"
                                     Classes="headeredBorder"
                                     DataContext="{Binding FocusAction}">
-                                <local:MpAvActionPropertyView IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, FallbackValue=False, TargetNullValue=False}" />
+                                <local:MpAvActionPropertyView ClipToBounds="False"
+                                                              IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, FallbackValue=False, TargetNullValue=False}" />
                             </Border>
                         </Grid>
 
@@ -184,6 +302,8 @@
                 <!--  SELECTED TRIGGER DESIGNER COLUMN  -->
 
                 <Border x:Name="ActionDesignerOuterContainerBorder"
+                        local:MpAvOrientedGridExtension.HorizontalColumn="1"
+                        local:MpAvOrientedGridExtension.VerticalRow="1"
                         MaxHeight="{Binding Bounds.Height, ElementName=TriggerSidebarOuterContainer}"
                         Margin="10"
                         HorizontalAlignment="Stretch"
@@ -192,7 +312,6 @@
                             ClipToBounds="True"
                             BorderBrush="White"
                             BorderThickness="5"
-                            MinHeight="100"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
                         <local:MpAvActionDesignerView HorizontalAlignment="Stretch"

@@ -8,7 +8,7 @@ namespace MonkeyPaste {
         Task<string> ShowCustomColorMenuAsync(
             string selectedColor,
             string title = null,
-            MpIUserColorViewModel ucvm = null,
+            object ucvm = null,
             object owner = null,
             string[] fixedPalette = null,
             bool allowAlpha = false);

@@ -25,6 +25,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region Pointer Commands
+
         #region LeftPressCommand AvaloniaProperty
         public static ICommand GetLeftPressCommand(AvaloniaObject obj) {
             return obj.GetValue(LeftPressCommandProperty);
@@ -226,6 +228,8 @@ namespace MonkeyPaste.Avalonia {
                 "RightReleaseCommandParameter",
                 null,
                 false);
+
+        #endregion
 
         #endregion
 

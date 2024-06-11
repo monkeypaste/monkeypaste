@@ -1,5 +1,7 @@
 ﻿
+using AngleSharp.Dom;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -40,18 +42,21 @@ namespace MonkeyPaste.Avalonia {
         MpIInvokableAction,
         MpIParameterHostViewModel,
         MpAvIParameterCollectionViewModel,
-        MpIPopupMenuPicker {
+        MpIPopupMenuPicker,
+        MpAvIFocusHeaderMenuViewModel {
 
         #region Private Variables
 
         private bool _isShowingValidationMsg = false;
         private bool _isSettingChildRestorePoint = false;
         #endregion
+
         #region Constants
 
         public const string INPUT_TYPE_PARAM_ID = "InputType";
 
         #endregion
+
         #region Statics
 
         public static string GetDefaultActionIconResourceKey(object actionOrTriggerVmOrTriggerType) {
@@ -149,6 +154,33 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpAvIFocusHeaderMenuViewModel Implementation
+        public bool IsFocused { get; set; }
+        IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
+           ActionBackgroundHexColor.ToAvBrush(force_alpha: 1);
+        IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
+            (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
+
+        string MpAvIHeaderMenuViewModel.HeaderTitle =>
+            Label;
+        public IEnumerable<MpAvIMenuItemViewModel> HeaderMenuItems =>
+            new MpAvMenuItemViewModel[] {
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "PlusImage",
+                    Command = ShowAddChildMenuCommand
+                },
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "Dots3x1Image",
+                    Command = ShowContextMenuCommand
+                }
+            };
+        ICommand MpAvIHeaderMenuViewModel.BackCommand =>
+            null;
+        object MpAvIHeaderMenuViewModel.BackCommandParameter =>
+            null;
+
+        #endregion
 
         #region MpIDraggableViewModel Implementation
 
@@ -352,7 +384,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuViewModel Implementation
 
-        protected virtual MpAvMenuItemViewModel GetAddContextMenuItem() {
+        protected virtual MpAvMenuItemViewModel GetAddContextMenuItem(bool isFromPopup) {
+            if(isFromPopup && MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                // add menu shown in separate header action on mobile
+                return new MpAvMenuItemViewModel() { IsVisible = false };
+            }
             return new MpAvMenuItemViewModel() {
                 Header = UiStrings.CommonAddLabel,
                 HasLeadingSeparator = true,
@@ -422,7 +458,7 @@ namespace MonkeyPaste.Avalonia {
                             IsVisible = move_items.Any() && !IsTrigger,
                             SubItems = move_items.ToList()
                         },
-                        GetAddContextMenuItem(),
+                        GetAddContextMenuItem(true),
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
                             IsVisible = !IsTrigger && CanDelete,
@@ -1257,6 +1293,9 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(Label):
                     ActionArgs.ForEach(x => x.OnPropertyChanged(nameof(x.FullLabel)));
+                    if(this is MpAvIHeaderMenuViewModel hmvm) {
+                        hmvm.OnPropertyChanged(nameof(hmvm.HeaderTitle));
+                    }
                     break;
                 case nameof(IsSelected):
                     if (IsSelected) {
@@ -1618,7 +1657,7 @@ namespace MonkeyPaste.Avalonia {
             });
 
 
-        public ICommand ShowAddChildContextMenuCommand => new MpCommand<object>(
+        public ICommand ShowContextMenuCommand => new MpCommand<object>(
             (args) => {
                 if (Parent.FocusAction != this) {
                     Parent.FocusAction = this;
@@ -1626,6 +1665,16 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMenuView.ShowMenu(
                     target: args as Control,
                     dc: ContextMenuViewModel);
+            });
+
+        public ICommand ShowAddChildMenuCommand => new MpCommand<object>(
+            (args) => {
+                if (Parent.FocusAction != this) {
+                    Parent.FocusAction = this;
+                }
+                MpAvMenuView.ShowMenu(
+                    target: args as Control,
+                    dc: GetAddContextMenuItem(false));
             });
 
         public ICommand ChangeParentCommand => new MpAsyncCommand<object>(

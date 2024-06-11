@@ -110,7 +110,7 @@ namespace MonkeyPaste.Avalonia {
             null;
         bool MpAvIMenuItemViewModel.StaysOpenOnClick { get; }
         bool MpAvIMenuItemViewModel.HasLeadingSeparator { get; }
-        bool MpAvIMenuItemViewModel.IsVisible =>
+        bool MpAvIIsVisibleViewModel.IsVisible =>
             true;
         bool? MpAvIMenuItemViewModel.IsChecked { get; }
         bool MpAvIMenuItemViewModel.IsThreeState { get; }

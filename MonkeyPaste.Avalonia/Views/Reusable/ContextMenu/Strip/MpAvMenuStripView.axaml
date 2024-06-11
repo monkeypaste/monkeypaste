@@ -37,7 +37,7 @@
     <ItemsControl x:Name="MenuItemsControl"
                   Padding="5"
                   IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                  ItemsSource="{Binding .}">
+                  ItemsSource="{Binding ., Converter={x:Static local:MpAvCollectionToVisibleCollectionConverter.Instance}}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <StackPanel Orientation="Horizontal" />

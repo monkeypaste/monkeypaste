@@ -2279,27 +2279,8 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsBusy):
                     OnPropertyChanged(nameof(IsAnyBusy));
                     break;
-                //case nameof(IsAnyBusy):
-                //    if (!IsAnyBusy) {
-                //        break;
-                //    }
-                //    Dispatcher.UIThread.Post(async () => {
-                //        while (true) {
-                //            if (PercentLoaded >= 1) {
-                //                return;
-                //            }
-                //            await Task.Delay(100);
-                //        }
-                //    });
-                //    break;
-                //case nameof(ModalClipTileViewModel):
-                //    if (ModalClipTileViewModel == null) {
-                //        return;
-                //    }
-                //    ModalClipTileViewModel.OnPropertyChanged(nameof(ModalClipTileViewModel.CopyItemId));
-
-                //    break;
                 case nameof(SelectedItem):
+                    MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
                     MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
                     OnPropertyChanged(nameof(SelectedCopyItemId));
                     OnPropertyChanged(nameof(IsAnySelected));
@@ -5056,6 +5037,7 @@ namespace MonkeyPaste.Avalonia {
                 if (ctvm != null) {
                     ctvm.IsSelected = true;
                 }
+                MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
             });
 
         public ICommand ResetTraySplitterCommand => new MpCommand<object>(

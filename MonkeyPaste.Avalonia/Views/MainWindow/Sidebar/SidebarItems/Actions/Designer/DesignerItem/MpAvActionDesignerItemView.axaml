@@ -154,7 +154,7 @@
             local:MpAvBoundsObserverExtension.IsEnabled="True"
             local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerItemBounds, Mode=TwoWay}"
             local:MpAvPointerCommandExtension.IsEnabled="True"
-            local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowAddChildContextMenuCommand}"
+            local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowContextMenuCommand}"
             local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
             local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
             Classes.dragOver="{Binding IsDragOver}">

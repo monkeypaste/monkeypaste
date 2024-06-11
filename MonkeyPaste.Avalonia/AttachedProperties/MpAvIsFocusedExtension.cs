@@ -15,9 +15,32 @@ namespace MonkeyPaste.Avalonia {
         static MpAvIsFocusedExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
             IsFocusedProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsFocusedBindingChanged(x, y));
+            IsFocusedNotifierProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsFocusedNotifierChanged(x, y));
         }
 
         #region Properties
+
+        #region IsFocusedNotifier AvaloniaProperty
+        public static bool GetIsFocusedNotifier(AvaloniaObject obj) {
+            return obj.GetValue(IsFocusedNotifierProperty);
+        }
+
+        public static void SetIsFocusedNotifier(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsFocusedNotifierProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsFocusedNotifierProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsFocusedNotifier",
+                false);
+        private static void HandleIsFocusedNotifierChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
+            if(!GetIsEnabled(element)) {
+                return;
+            }
+            SetIsFocused(element, GetIsFocusedNotifier(element));
+            MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
+        }
+        #endregion
 
         #region IsFocused AvaloniaProperty
         public static bool GetIsFocused(AvaloniaObject obj) {

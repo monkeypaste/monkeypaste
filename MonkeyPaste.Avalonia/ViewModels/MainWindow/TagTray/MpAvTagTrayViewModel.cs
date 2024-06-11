@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
         string MpAvIMenuItemViewModel.InputGestureText { get; }
         bool MpAvIMenuItemViewModel.StaysOpenOnClick => false;
         bool MpAvIMenuItemViewModel.HasLeadingSeparator => true;
-        bool MpAvIMenuItemViewModel.IsVisible => true;
+        bool MpAvIIsVisibleViewModel.IsVisible => true;
         bool? MpAvIMenuItemViewModel.IsChecked => false;
         bool MpAvIMenuItemViewModel.IsThreeState => false;
         bool MpAvIMenuItemViewModel.IsSubMenuOpen { get; set; }
@@ -415,6 +415,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(ShowAddTagButton));
                     OnPropertyChanged(nameof(ShowAddTagButton));
                     OnPropertyChanged(nameof(LastSelectedTagName));
+                    MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
                     break;
             }
         }

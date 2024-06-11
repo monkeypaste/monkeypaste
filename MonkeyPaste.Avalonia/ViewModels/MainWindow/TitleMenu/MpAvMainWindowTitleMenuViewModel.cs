@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMainWindowTitleMenuViewModel : MpAvViewModelBase {
@@ -11,6 +12,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region View Models
+
+        public MpAvIFocusHeaderMenuViewModel FocusHeaderViewModel {
+            get {
+                if (MpAvFocusManager.Instance.FocusElement is not Control fc ||
+                    !fc.TryGetSelfOrAncestorDataContext<MpAvIFocusHeaderMenuViewModel>(out var hmvm)) {
+                    return null;
+                }
+                return hmvm;
+            }
+        }
+        #endregion
         #region Appearance
 
 
@@ -75,6 +88,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.FocusItemChanged:
+                    OnPropertyChanged(nameof(FocusHeaderViewModel));
+                    break;
                 case MpMessageType.MainWindowActivated:
                 case MpMessageType.MainWindowDeactivated:
                 case MpMessageType.MainWindowOpened:

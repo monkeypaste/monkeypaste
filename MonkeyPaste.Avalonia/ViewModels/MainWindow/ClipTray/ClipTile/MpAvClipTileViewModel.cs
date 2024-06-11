@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
         MpIResizableViewModel,
         MpITextContentViewModel,
         MpIContextMenuViewModel,
-        MpAvIHeaderMenuViewModel{
+        MpAvIFocusHeaderMenuViewModel{
 
         #region Private Variables
 
@@ -80,7 +80,8 @@ namespace MonkeyPaste.Avalonia {
             true;
         #endregion
 
-        #region MpAvIHeaderMenuViewModel Implementation
+        #region MpAvIFocusHeaderMenuViewModel Implementation
+        public bool IsFocused { get; set; }
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
            DisplayColor.ToAvBrush(force_alpha: 1);
         IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
@@ -89,7 +90,7 @@ namespace MonkeyPaste.Avalonia {
         string MpAvIHeaderMenuViewModel.HeaderTitle =>
             CopyItemTitle;
         public IEnumerable<MpAvIMenuItemViewModel> HeaderMenuItems =>
-            new MpAvMenuItemViewModel[] {
+            [
                 new MpAvMenuItemViewModel() {
                     IconSourceObj = IsPinned ? "PinnedImage": "PinImage",
                     IconTintHexStr = IsPinned ? MpSystemColors.limegreen : null,
@@ -106,7 +107,7 @@ namespace MonkeyPaste.Avalonia {
                     IconSourceObj = "Dots3x1Image",
                     Command = ShowContextMenuCommand
                 }
-            }.Where(x=>x.IsVisible);
+            ];
         ICommand MpAvIHeaderMenuViewModel.BackCommand =>
             null;
         object MpAvIHeaderMenuViewModel.BackCommandParameter =>
@@ -977,6 +978,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
         }
+
 
         public bool IsPasting { get; set; } = false;
 
@@ -1899,7 +1901,6 @@ namespace MonkeyPaste.Avalonia {
                             DisableSubSelectionCommand.Execute(null);
                         }
                     }
-                    MpAvMainWindowViewModel.Instance.SetHeaderMenu(IsSelected ? this : null);
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
                     Parent.NotifySelectionChanged();
                     break;

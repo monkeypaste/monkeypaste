@@ -73,7 +73,7 @@
     <Grid x:Name="OuterContainer"
           Classes="oriented">
         <ContentControl x:Name="SelectedSidebarContentControl"
-                        x:DataType="pcl:MpISidebarItemViewModel"
+                        x:DataType="local:MpISidebarItemViewModel"
                         DataContext="{Binding BoundItem}"
                         Classes.horiz="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                         Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"

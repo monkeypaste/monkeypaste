@@ -105,9 +105,9 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
-        string MpIShortcutGestureLocator.LocateByCommand(MpIShortcutCommandViewModel scvm) =>
+        string MpIShortcutGestureLocator.LocateByCommand(object scvm) =>
 
-            GetViewModelCommandShortcutKeyString(scvm);
+            GetViewModelCommandShortcutKeyString(scvm as MpIShortcutCommandViewModel);
 
         object MpIShortcutGestureLocator.LocateSourceByType(MpShortcutType sct) {
             if (Items.FirstOrDefault(x => x.ShortcutType == sct) is MpAvShortcutViewModel scvm) {

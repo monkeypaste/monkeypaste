@@ -18,11 +18,6 @@ using MonkeyPaste.Common.Wpf;
 #endif
 
 namespace MonkeyPaste.Avalonia {
-
-    public interface MpIWindowStateViewModel : MpIWindowViewModel {
-        WindowState WindowState { get; set; }
-    }
-
     public static class MpAvWindowManager {
         #region Private Variables
         private static Dictionary<MpAvWindow, IEnumerable<IDisposable>> _dispLookup = new Dictionary<MpAvWindow, IEnumerable<IDisposable>>();

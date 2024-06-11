@@ -218,14 +218,15 @@
                     <Button x:Name="ShowDesignerWindowButton"
                             Classes="no-bg no-hover-bg default-button outline outlineOver"
                             Grid.Column="4"
-                            Command="{Binding ShowDesignerWindowCommand}">
-                        <Button.IsVisible>
+                            Command="{Binding ShowDesignerWindowCommand}"
+                            IsVisible="{Binding !IsWindowOpen}">
+                        <!--<Button.IsVisible>
                             <MultiBinding Converter="{x:Static BoolConverters.And}">
                                 <Binding Path="!IsWindowOpen" />
                                 <Binding Path="IsMultiWindow"
                                          Source="{x:Static local:MpAvThemeViewModel.Instance}" />
                             </MultiBinding>
-                        </Button.IsVisible>
+                        </Button.IsVisible>-->
                         <ToolTip.Tip>
                             <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                                    ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SearchCriteriaHeadePopoutTooltipText}" />

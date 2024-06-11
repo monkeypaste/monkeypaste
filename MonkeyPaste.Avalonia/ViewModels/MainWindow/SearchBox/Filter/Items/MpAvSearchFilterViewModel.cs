@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
             MpMenuItemType.Checkable;
         bool MpAvIMenuItemViewModel.StaysOpenOnClick =>
             true;
-        bool MpAvIMenuItemViewModel.IsVisible =>
+        bool MpAvIIsVisibleViewModel.IsVisible =>
             true;
         bool MpAvIMenuItemViewModel.IsThreeState =>
             false;

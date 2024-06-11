@@ -54,7 +54,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="local:MpAvAnalyticItemPresetViewModel">
                     <Grid RowDefinitions="Auto,*">
-                        <!--<TextBlock x:DataType="pcl:MpILabelTextViewModel"
+                        <!--<TextBlock x:DataType="local:MpILabelTextViewModel"
                                    Text="{Binding LabelText}" />-->
                         <ListBox x:Name="SharedParameterListBox"
                                  Classes="paramHost"

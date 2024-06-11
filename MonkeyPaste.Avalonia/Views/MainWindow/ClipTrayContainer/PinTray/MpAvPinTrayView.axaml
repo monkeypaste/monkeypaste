@@ -103,7 +103,7 @@
                 </Border.Background>
             </Border>
             <ListBox x:Name="PinTrayListBox"
-                     Classes="clipTileListBox pinListBox"
+                     Classes="clipTileListBox pinListBox focus-item-vm"
                      Classes.bright="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToIsBrightBoolConverter.Instance}}"
                      Background="Transparent"
                      MaxWidth="{Binding MaxPinTrayScreenWidth}"
@@ -114,15 +114,6 @@
                      VerticalAlignment="Stretch"
                      SelectedItem="{Binding SelectedPinTrayItem, Mode=TwoWay}"
                      ItemsSource="{Binding PinnedItems}">
-
-                <ListBox.SelectionMode>
-                    <MultiBinding Converter="{x:Static local:MpAvMultiBoolToSelectionModeConverter.Instance}"
-                                  ConverterParameter="AND|Toggle|Single">
-                        <Binding Path="IsMobileOrWindowed"
-                                 Source="{x:Static local:MpAvThemeViewModel.Instance}" />
-                        <Binding Path="!IsPinTrayPeeking" />
-                    </MultiBinding>
-                </ListBox.SelectionMode>
                 <ListBox.Resources>
                     <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>

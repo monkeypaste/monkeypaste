@@ -128,7 +128,11 @@ namespace MonkeyPaste.Avalonia {
             // init cefnet (if needed) BEFORE window creation
             // or chromium child process stuff will re-initialize (and show loader again)
             await LoadItemsAsync(BaseItems);
-            await Mp.Services.NotificationBuilder.ShowLoaderNotificationAsync(this);
+            await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                title: this.Title,
+                notificationType: MpNotificationType.Loader,
+                maxShowTimeMs: -1,
+                loader: this);
         }
         public async Task BeginLoaderAsync() {
             await LoadItemsAsync(CoreItems);

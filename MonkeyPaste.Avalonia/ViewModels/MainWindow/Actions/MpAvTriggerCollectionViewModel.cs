@@ -25,7 +25,8 @@ namespace MonkeyPaste.Avalonia {
         MpISelectableViewModel,
         MpISidebarItemViewModel,
         MpIDesignerSettingsViewModel,
-        MpAvIHeaderMenuViewModel {
+        MpAvIFocusHeaderMenuViewModel 
+        {
         #region Private Variables
 
         #endregion
@@ -44,17 +45,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpAvIHeaderMenuViewModel Implementation
+        #region MpAvIFocusHeaderMenuViewModel Implementation
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
-            FocusAction == null ?
-            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor) :
-            FocusAction.ActionBackgroundHexColor.ToAvBrush();
+            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment2Color);
         IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
             (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
         string MpAvIHeaderMenuViewModel.HeaderTitle =>
-            null;
+            UiStrings.ActionDesignerWindowTitle.Replace("'{0}'",string.Empty);
         IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
             [
+            new MpAvMenuItemViewModel() {
+                    IconSourceObj = "PlusImage",
+                    Command = ShowTriggerSelectorMenuCommand
+                },
             ];
         ICommand MpAvIHeaderMenuViewModel.BackCommand =>
             null;
@@ -398,6 +401,15 @@ namespace MonkeyPaste.Avalonia {
         public MpAvTriggerActionViewModelBase SelectedTrigger { get; set; }
         public MpAvActionViewModelBase FocusAction { get; set; }
 
+        public MpAvIHeaderMenuViewModel FocusHeaderViewModel {
+            get {
+                if(FocusAction == null) {
+                    return this;
+                }
+                return FocusAction;
+            }
+        }
+
         #endregion
 
         #region Appearance
@@ -407,6 +419,9 @@ namespace MonkeyPaste.Avalonia {
 
         public Orientation SidebarOrientation {
             get {
+                if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    return MpAvMainWindowViewModel.Instance.MainWindowLayoutOrientation;
+                }
                 if (IsWindowOpen) {
                     return Orientation.Horizontal;
                 }
@@ -420,7 +435,21 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        private bool _isPropertyViewExpanded = true;
+        public bool IsPropertyViewExpanded {
+            get {
+                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                    return true;
+                }
+                return _isPropertyViewExpanded;
+            }
+            set {
+                if(_isPropertyViewExpanded != value) {
+                    _isPropertyViewExpanded = value;
+                    OnPropertyChanged(nameof(IsPropertyViewExpanded));
+                }
+            }
+        }
         public bool HasShown { get; set; }
         public string[] DefaultActionGuids => new string[] {
             DEFAULT_ANNOTATOR_ANALYZE_GUID,
@@ -431,7 +460,7 @@ namespace MonkeyPaste.Avalonia {
             FocusAction == null ? string.Empty : FocusAction.Label;
 
         public bool IsHorizontal =>
-            SidebarOrientation == Orientation.Horizontal;
+                SidebarOrientation == Orientation.Horizontal;
 
 
         public int SelectedTriggerIdx {
@@ -598,6 +627,8 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
         private void MpAvTriggerCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(IsSelected):
+                    break;
                 case nameof(FocusAction):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     OnPropertyChanged(nameof(SelectedTriggerIdx));
@@ -616,6 +647,8 @@ namespace MonkeyPaste.Avalonia {
                         hmvm.OnPropertyChanged(nameof(hmvm.HeaderForeground));
                         hmvm.OnPropertyChanged(nameof(hmvm.HeaderMenuItems));
                     }
+                    OnPropertyChanged(nameof(FocusHeaderViewModel));
+                    MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
                     break;
                 case nameof(SelectedTrigger):
                     FocusAction = SelectedTrigger;
@@ -707,16 +740,25 @@ namespace MonkeyPaste.Avalonia {
 
         private MpAvWindow CreateDesignerWindow() {
             // WINDOW
+            var tacv = new MpAvTriggerActionChooserView();
+            Control content = tacv;
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                content = new Viewbox() {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Child = tacv
+                };
+            }
 
             var dw = new MpAvWindow() {
-                Width = 1000,
-                Height = 500,
+                Width = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? double.NaN : 1000,
+                Height = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? double.NaN : 500,
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BoltImage", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Content = new MpAvTriggerActionChooserView(),
+                Content = content,
                 DataContext = this,
-                Padding = new Thickness(10),
+                Padding = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? new(): new Thickness(10),
                 Background = Brushes.DimGray
             };
             dw.Classes.Add("fadeIn");
@@ -733,6 +775,17 @@ namespace MonkeyPaste.Avalonia {
                 ResetDesignerViewCommand.Execute(null);
                 MpAvSidebarItemCollectionViewModel.Instance.ToggleIsSidebarItemSelectedCommand.Execute(this);
             }
+#if MOBILE_OR_WINDOWED
+
+            dw.Bind(
+                MpAvChildWindow.HeaderViewModelProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(FocusHeaderViewModel)
+                }
+                );
+
+#endif
 
             dw.Opened += OnOpened;
             return dw;
