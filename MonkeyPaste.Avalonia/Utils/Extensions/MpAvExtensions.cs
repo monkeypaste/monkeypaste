@@ -32,6 +32,16 @@ namespace MonkeyPaste.Avalonia {
         private static Dictionary<AvaloniaObject, List<IDisposable>> _disposableLookup = [];
         #endregion
 
+        #region Headers
+
+        public static void RefreshHeaderProperties(this MpAvIHeaderMenuViewModel hmvm) {
+            hmvm.OnPropertyChanged(nameof(hmvm.HeaderBackground));
+            hmvm.OnPropertyChanged(nameof(hmvm.HeaderForeground));
+            hmvm.OnPropertyChanged(nameof(hmvm.HeaderMenuItems));
+            hmvm.OnPropertyChanged(nameof(hmvm.HeaderTitle));
+        }
+        #endregion
+
         #region Plugins
 
         public static MpIManagePluginComponents GetComponentManager(this MpManifestFormat mf) {

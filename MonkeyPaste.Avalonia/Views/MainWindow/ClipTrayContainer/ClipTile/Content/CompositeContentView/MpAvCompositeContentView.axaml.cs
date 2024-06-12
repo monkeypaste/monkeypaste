@@ -8,6 +8,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
@@ -17,13 +18,20 @@ public partial class MpAvCompositeContentView : MpAvUserControl<MpAvClipTileView
     public MpAvCompositeContentView() {
         InitializeComponent();
         EditableTextContentControl.EffectiveViewportChanged += EditableTextContentControl_EffectiveViewportChanged;
+        EditableTextContentControl.Classes.CollectionChanged += Classes_CollectionChanged;
     }
 
+    private void Classes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+        if(e.OldItems != null && e.OldItems.OfType<string>().Any(x=>x == "active")) {
+
+        }
+    }
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
         InitDnd();
     }
+
 
 
     private void EditableTextContentControl_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
@@ -34,6 +42,7 @@ public partial class MpAvCompositeContentView : MpAvUserControl<MpAvClipTileView
             return;
         }
         Dispatcher.UIThread.Post(async () => {
+            MpConsole.WriteLine($"Fixing wv for zero size");
             await Task.Delay(100);
             EditableTextContentControl.IsVisible = false;
             await Task.Delay(300);

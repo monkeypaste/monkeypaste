@@ -787,7 +787,8 @@ namespace MonkeyPaste.Avalonia {
                                 interactive: this,
                                 mp: new MpPoint(pointerMsg.clientX, pointerMsg.clientY),
                                 KeyModifiers.None,
-                                isLocalMp: true);
+                                isLocalMp: true,
+                                isLeftButton: pointerMsg.isLeft);
                             this.RaiseEvent(pe);
                             return;
                         }
@@ -1591,10 +1592,15 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
+           
             BindingContext.IgnoreHasModelChanged = true;
 
-            BindingContext.SearchableText = contentChanged_ntf.itemPlainText;
+            string pt = contentChanged_ntf.itemPlainText.ToStringOrEmpty().Replace("\n", Environment.NewLine);
+            bool did_content_change = BindingContext.SearchableText != pt;
+            if(did_content_change) {
 
+            }
+            BindingContext.SearchableText = pt;
             if (contentChanged_ntf.itemData != null) {
                 bool is_empty = contentChanged_ntf.itemData.IsNullOrWhitespaceHtmlString();
                 if (is_empty &&
@@ -1610,6 +1616,9 @@ namespace MonkeyPaste.Avalonia {
                 MpJsonExtensions.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(contentChanged_ntf.dataTransferCompletedRespFragment) is
                 MpQuillDataTransferCompletedNotification dtcn) {
                 ProcessDataTransferCompleteResponse(dtcn);
+            }
+            if(did_content_change) {
+                //MpAvAnalyticItemCollectionViewModel.Instance.ApplyCoreAnnotatorCommand.Execute(BindingContext);
             }
 
 

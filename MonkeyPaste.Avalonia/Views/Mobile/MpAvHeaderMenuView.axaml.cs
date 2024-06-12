@@ -28,7 +28,13 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand DefaultBackCommand => new MpCommand<object>(
                     (args) => {
-                        if(this.DataContext is MpAvIFocusHeaderMenuViewModel) {
+                        bool is_popup = false;
+                        if(this.DataContext is MpICloseWindowViewModel cwvm) {
+                            is_popup = cwvm.IsWindowOpen;
+                        }
+                        if(this.DataContext is MpAvIFocusHeaderMenuViewModel &&
+                            !is_popup) {
+
                             MpAvMainView.Instance.Focus();
                         } else if(this.GetVisualAncestor<MpAvChildWindow>() is { } cw) {
                             cw.Close();

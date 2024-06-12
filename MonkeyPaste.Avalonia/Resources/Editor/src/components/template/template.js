@@ -911,7 +911,7 @@ function updateTemplatesAfterSelectionChange() {
         // - move caret -1
     // then clear at insert class from all templates
     // and if updated extent is at template idx (must be done here since its silent) 
-    if (!globals.IsLoaded || isDragging()) {
+    if (!globals.IsEditorLoaded || isDragging()) {
         return;
     }
     if (isShowingPasteToolbar()) {

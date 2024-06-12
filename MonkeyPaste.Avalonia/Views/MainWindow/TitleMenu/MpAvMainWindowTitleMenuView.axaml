@@ -328,7 +328,7 @@
                 IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                 local:MpAvPointerCommandExtension.IsEnabled="True"
                 local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding WindowSizeToDefaultCommand}"
-                local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"
                 local:MpAvResizeExtension.MinHeight="{Binding MainWindowMinHeight}"
                 local:MpAvResizeExtension.MaxHeight="{Binding MainWindowMaxHeight}"
                 local:MpAvResizeExtension.MinWidth="{Binding MainWindowMinWidth}"

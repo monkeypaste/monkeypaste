@@ -22,7 +22,7 @@ function loadContentAsync(
 	// NOTE only called fromHost (or tester which calls _ext)
 
 	let sup_guid = suppressTextChanged();
-	globals.IsLoadingContent = true;
+	setIsContentLoaded(false);
 
 	let is_reload = contentHandle == globals.ContentHandle;
 	let was_sub_sel_enabled = null;
@@ -143,8 +143,7 @@ function loadContentAsync(
 		disableReadOnly();
 	}	
 
-	globals.IsLoadingContent = false;
-	setEditorPlaceholderText('');
+	setIsContentLoaded(true);
 	// signal content loaded (atm used by scrollToAppendIdx)
 	getEditorContainerElement().dispatchEvent(globals.ContentLoadedEvent);
 
@@ -337,7 +336,10 @@ function getContentHeightByType() {
 // #endregion Getters
 
 // #region Setters
-
+function setIsContentLoaded(isContentLoaded) {
+	globals.IsContentLoaded = isContentLoaded;
+	updateEditorPlaceholderText();
+}
 // #endregion Setters
 
 // #region State
@@ -413,7 +415,7 @@ function appendContentData(data) {
 }
 
 function loadContentDataAsync(contentData) {
-	// enusre globals.IsLoaded is false so msg'ing doesn't get clogged up
+	// enusre globals.IsEditorLoaded is false so msg'ing doesn't get clogged up
 	setEditorIsLoaded(false);
 
 	if (globals.ContentItemType == 'Image') {

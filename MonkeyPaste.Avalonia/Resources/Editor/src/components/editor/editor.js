@@ -2,7 +2,7 @@
 // #region Life Cycle
 
 function initEditor() {
-	if (globals.IsLoaded) {
+	if (globals.IsEditorLoaded) {
 		log('editor already initialized, ignoring init');
 		return;
 	}
@@ -120,7 +120,8 @@ function setEditorPlaceholderText(text) {
 }
 
 function setEditorIsLoaded(isLoaded) {
-	globals.IsLoaded = isLoaded;
+	globals.IsEditorLoaded = isLoaded;
+	updateEditorPlaceholderText();
 }
 
 // #endregion Setters
@@ -184,7 +185,7 @@ function isEditorFocused() {
 // #region Actions
 
 function updateEditorPlaceholderText() {
-	let plt = UiStrings.EditorWatermark;
+	let plt = globals.IsEditorLoaded && globals.IsContentLoaded ? '' : UiStrings.EditorWatermark;
 	setEditorPlaceholderText(plt);
 }
 function hideEditorScrollbars() {
@@ -457,7 +458,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	
 	updateAllElements();
 
-	if (!globals.IsLoaded || globals.IsLoadingContent) {
+	if (!globals.IsEditorLoaded || !globals.IsContentLoaded) {
 		return;
 	}
 	addHistoryItem(delta, oldDelta);
@@ -473,7 +474,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 
 	let suppress_text_change_ntf = isTextChangeSupressed();
 
-	if (globals.IsLoaded &&
+	if (globals.IsEditorLoaded &&
 		!suppress_text_change_ntf &&		
 		isDeltaContainTemplate(delta) &&
 		isAnyTemplateToolbarElementFocused()) {

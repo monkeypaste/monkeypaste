@@ -427,6 +427,15 @@ namespace MonkeyPaste.Avalonia {
                     inputFormatType = MpDataFormatType.FileList;
                     break;
             }
+
+            if (inputFormatType == MpDataFormatType.Rtf2Html &&
+                avdo.TryGetData<MpPortableProcessInfo>(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out var pi) &&
+                (pi.ProcessPath.ToStringOrEmpty().EndsWith("dev.exe") || 
+                 pi.ProcessPath.ToStringOrEmpty().EndsWith("devenv.exe"))) {
+                // handle special case of vs rtf so converter treats it as a code block
+                inputFormatType = MpDataFormatType.VsRtf2Html;
+                MpConsole.WriteLine($"CopyItem marked as VsRtf2Html");
+            }
             return itemData;
         }
 

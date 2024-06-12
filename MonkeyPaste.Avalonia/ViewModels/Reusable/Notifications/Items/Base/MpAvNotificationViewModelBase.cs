@@ -288,6 +288,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsCloseAnimated {
+            get {
+                return true;
+            }
+        }
+        public bool IsAnimating { get; set; }
         public MpNotificationDialogResultType DialogResult { get; protected set; }
         public bool IsLoader =>
             this is MpAvLoaderNotificationViewModel;

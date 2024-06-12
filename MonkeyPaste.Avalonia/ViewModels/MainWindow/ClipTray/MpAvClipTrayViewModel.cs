@@ -2279,7 +2279,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsBusy):
                     OnPropertyChanged(nameof(IsAnyBusy));
                     break;
+                case nameof(SelectedCopyItemId):
+                    break;
                 case nameof(SelectedItem):
+
                     MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
                     MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
                     OnPropertyChanged(nameof(SelectedCopyItemId));
@@ -2384,6 +2387,9 @@ namespace MonkeyPaste.Avalonia {
                     if (!CanTouchScroll) {
                         IsTouchScrolling = false;
                     }
+                    break;
+                case nameof(IsAnyHovering):
+
                     break;
             }
         }

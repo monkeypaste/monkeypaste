@@ -294,7 +294,7 @@ function updateAllSizeAndPositions() {
 }
 
 function updateAllElements() {
-	if (!globals.IsLoaded) {
+	if (!globals.IsEditorLoaded) {
 		return;
 	}
 	updateAllSizeAndPositions();

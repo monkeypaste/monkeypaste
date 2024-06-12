@@ -89,12 +89,19 @@ function setConverterContent(formatType, dataStr, verifyText) {
 		return;
 	}
 	// pasting html always adds leading new line
-	if (isHtmlClipboardFormat(dataStr)) {
+	let data_starts_with_new_line = verifyText && verifyText.length > 0 && verifyText[0] == '\n';
+	let conv_starts_with_new_line = getText({ index: 0, length: 1 }) == '\n';
+	if (conv_starts_with_new_line && !data_starts_with_new_line) {
 		deleteText({ index: 0, length: 1 }, Quill.sources.USER);
 	}
 	
 	// remove trailing new line
 	deleteText({ index: getDocLength() - 1, length: 1 }, Quill.sources.USER);
+
+	if (formatType == 'vsrtf2html') {
+		// treat visual studio rtf as code block
+		formatDocRange(getDocAsRange(), { 'code-block': 'plain' }, 'user')
+	}
 	updateQuill();
 }
 
@@ -149,7 +156,7 @@ function convertPlainHtml(dataStr, formatType, verifyText) {
 	let conv_doc = globals.DomParser.parseFromString(conv_html, 'text/html');
 	if (Array.from(conv_doc.querySelectorAll('pre.ql-code-block-container')).length > 0) {
 		// doc contains code blocks
-		globals.quill.getModule('syntax').highlight(null, true);
+		highlightSyntax();
 		// //get processed highlighting (should have spans now)
 		conv_html = getHtml();
 		conv_doc = globals.DomParser.parseFromString(conv_html, 'text/html');

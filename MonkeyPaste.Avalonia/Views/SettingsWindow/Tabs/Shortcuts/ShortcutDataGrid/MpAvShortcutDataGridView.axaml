@@ -136,7 +136,7 @@
                                         HorizontalAlignment="Center"
                                         local:MpAvPointerCommandExtension.IsEnabled="True"
                                         local:MpAvPointerCommandExtension.LeftPressCommand="{Binding DeleteOrResetThisShortcutCommand}"
-                                        local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel">
+                                        local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel">
                                     <Image />
                                 </Button>
                             </DataTemplate>

@@ -10,7 +10,6 @@
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"
-                       Cursor="Hand"
                        x:Class="MonkeyPaste.Avalonia.MpAvHeaderMenuView">
     <local:MpAvUserControl.Styles>
         <!--  TITLE  -->

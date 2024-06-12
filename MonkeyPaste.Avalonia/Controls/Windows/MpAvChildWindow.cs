@@ -326,6 +326,36 @@ namespace MonkeyPaste.Avalonia {
 
 
         #region Appearance
+
+        #endregion
+
+        #region State
+
+        public bool IsClosing { get; set; }
+
+
+
+        #region IsVisible Property
+
+        private bool _isVisible;
+        public new bool IsVisible {
+            get => IsClosing ? true : _isVisible;
+            set {
+                if (_isVisible != value) {
+                    _isVisible = value;
+                    if (IsClosing) {
+                        return;
+                    }
+                    SetValue(IsVisibleProperty, _isVisible);
+                }
+            }
+        }
+
+        public static new readonly StyledProperty<bool> IsVisibleProperty =
+            AvaloniaProperty.Register<MpAvChildWindow, bool>(nameof(IsVisible), true);
+
+        #endregion
+
         #endregion
 
         #region Layout        
@@ -437,13 +467,23 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-
             Deactivate();
-
+            IsClosing = true;
+            
             if (MpAvOverlayContainerView.Instance is not { } ocv) {
                 return;
             }
             
+            void OnChildRemoved(object sender, MpAvChildWindow removed_cw) {
+                if(removed_cw != this) {
+                    return;
+                }
+                ocv.OnChildRemoved -= OnChildRemoved;
+                IsClosing = false;
+                IsVisible = false;
+            }
+
+            ocv.OnChildRemoved += OnChildRemoved;
             if(ocv.RemoveWindow(this)) {
                 MpConsole.WriteLine($"Child Window '{Title}' closed");
                 Closed?.Invoke(this, EventArgs.Empty);

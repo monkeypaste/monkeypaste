@@ -15,8 +15,8 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             var result = brush_hex.IsHexStringBright() ?
-                Mp.Services.PlatformResource.GetResource<Effect>(MpThemeResourceKey.ThemeWhiteDropShadow) :
-                Mp.Services.PlatformResource.GetResource<Effect>(MpThemeResourceKey.ThemeBlackDropShadow);
+                Mp.Services.PlatformResource.GetResource<Effect>(MpThemeResourceKey.ThemeBlackDropShadow) :
+                Mp.Services.PlatformResource.GetResource<Effect>(MpThemeResourceKey.ThemeWhiteDropShadow);
             return result;
         }
 

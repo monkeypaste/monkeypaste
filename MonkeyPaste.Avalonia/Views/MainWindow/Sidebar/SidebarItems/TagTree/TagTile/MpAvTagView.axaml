@@ -172,8 +172,8 @@
                 local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="TagViewContainerGrid"
               local:MpAvPointerCommandExtension.IsEnabled="True"
-              local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
-              local:MpAvPointerCommandExtension.IsEventHandled="False"
+              local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"
+              local:MpAvPointerCommandExtension.DefaultIsEventHandled="False"
               local:MpAvPointerCommandExtension.LeftPressCommand="{Binding SelectThisTagCommand}"
               Cursor="Hand"
               HorizontalAlignment="Stretch"

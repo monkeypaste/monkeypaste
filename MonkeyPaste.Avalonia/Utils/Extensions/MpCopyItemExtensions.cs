@@ -177,6 +177,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpDataFormatType.Csv:
                 case MpDataFormatType.DeltaJson:
                 case MpDataFormatType.Rtf2Html:
+                case MpDataFormatType.VsRtf2Html:
                     return MpCopyItemType.Text;
                 case MpDataFormatType.Png:
                 case MpDataFormatType.Tiff:

@@ -14,16 +14,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
+        private MpAvIFocusHeaderMenuViewModel _focusHeaderMenuViewModel;
         public MpAvIFocusHeaderMenuViewModel FocusHeaderViewModel {
             get {
-                if (MpAvFocusManager.Instance.FocusElement is not Control fc ||
-                    !fc.TryGetSelfOrAncestorDataContext<MpAvIFocusHeaderMenuViewModel>(out var hmvm)) {
-                    return null;
+                if(IsFocusHeaderFrozen) {
+                    return _focusHeaderMenuViewModel;
                 }
-                return hmvm;
+                var fc = MpAvFocusManager.Instance.FocusElement as Control;
+                if (fc != null && fc.TryGetSelfOrAncestorDataContext<MpAvIFocusHeaderMenuViewModel>(out var hmvm)) {
+                    _focusHeaderMenuViewModel = hmvm;
+                } else {
+                    _focusHeaderMenuViewModel = null;
+                }
+                return _focusHeaderMenuViewModel;
             }
         }
         #endregion
+
         #region Appearance
 
 
@@ -64,6 +71,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool IsFocusHeaderFrozen { get; set; }
         public bool IsZoomSliderHovering { get; set; }
         #endregion
 

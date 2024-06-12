@@ -17,6 +17,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvViewModelBase,
         MpIAnimatedSizeViewModel {
         #region Private Variable
+        private Control _currentSidebarItem;
         #endregion
 
         #region Constants
@@ -152,15 +153,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public void UpdateSidebarSize(double delta_w, double delta_h) {
-            ContainerBoundWidth += delta_w;
-            ContainerBoundHeight += delta_h;
-
-            if(MpAvThemeViewModel.Instance.IsMultiWindow) {
-                MpAvClipTrayViewModel.Instance.ContainerBoundWidth -= delta_w;
-                MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= delta_h;
-            } 
-        }
         #endregion
 
         #region Protected Methods
@@ -186,6 +178,7 @@ namespace MonkeyPaste.Avalonia {
             sbivm.PropertyChanged += Sbivm_PropertyChanged;
         }
         private async Task HandleSidebarSelectionChangedAsync() {
+
             double start_w,start_h,end_w,end_h;
             bool is_horiz = MpAvMainWindowViewModel.Instance.IsHorizontalOrientation;
             bool is_closing = SelectedItem == null;
@@ -216,30 +209,41 @@ namespace MonkeyPaste.Avalonia {
             }
             var ss_start = new MpSize(start_w, start_h);
             var ss_end = new MpSize(end_w, end_h);
-            await AnimateSidebarAsync(ss_start, ss_end, 0.1, 100);     
+            await AnimateSidebarAsync(ss_start, ss_end, is_closing, 0.1, 100);
 
-            if(SelectedItem is not null && 
+            // reset sidebar scroll
+            if (SelectedItem is not null &&
                 SelectedItem.LastSelectedDateTime == default &&
                 MpAvMainView.Instance.SelectedSidebarContainerBorder
                 .SelectedSidebarContentControl.GetVisualDescendants<ScrollViewer>() is { } svl) {
                 // on initial selection of a sidebar reset all scroll viewers (avalonia scrolls to random place, can't fix it
-                svl.ForEach(x => x.ScrollToHome());                
+                svl.ForEach(x => x.ScrollToHome());
             }
 
+            // handle sidebar focus
             if (SelectedItem is MpICloseWindowViewModel cwvm &&
                 cwvm.IsWindowOpen &&
                 MpAvWindowManager.LocateWindow(SelectedItem) is MpAvWindow w) {
                 // trigger sidebar pop out
                 w.WindowState = WindowState.Normal;
                 w.Activate();
-            } else if(MpAvThemeViewModel.Instance.IsMobileOrWindowed &&
-                        SelectedItem is MpAvTriggerCollectionViewModel && 
+            } else if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                if(SelectedItem is MpAvTriggerCollectionViewModel &&
                         MpAvMainView.Instance.GetVisualDescendant<MpAvTriggerActionChooserView>() is { } tw) {
-                tw.Focus();
+
+                    tw.Focus();
+                } else if(SelectedItem == null) {
+                    MpAvMainView.Instance.Focus();
+                }
                 MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
             }
         }
-        private async Task AnimateSidebarAsync(MpSize start, MpSize end, double tt = 0.25, double fps = 120) {
+        private async Task AnimateSidebarAsync(
+            MpSize start, 
+            MpSize end, 
+            bool isClosing,
+            double tt = 0.25, 
+            double fps = 120) {
             ContainerBoundWidth = start.Width;
             ContainerBoundHeight = start.Height;
 
@@ -249,17 +253,29 @@ namespace MonkeyPaste.Avalonia {
 
             var ss_d = end - start;
             var ss_v = (ss_d / tt) * time_step;
+
+            double op_start = isClosing ? 1 : 0;
+            double op_end = isClosing ? 0 : 1;
+            double op_d = op_end - op_start;
+            double op_v = (op_d / tt) * time_step;
+            double op_cur = op_start;
+            SetSidebarContentOpacity(op_cur);
+
             while (true) {
-                UpdateSidebarSize(ss_v.X, ss_v.Y);
+                UpdateSidebarSizeByDelta(ss_v.X, ss_v.Y);
+                op_cur += op_v;
+                SetSidebarContentOpacity(op_cur);
                 await Task.Delay(delay_ms);
                 dt += time_step;
                 if (dt >= tt) {
                     // animation complete
                     ContainerBoundWidth = end.Width;
                     ContainerBoundHeight = end.Height;
+                    SetSidebarContentOpacity(op_end);
                     break;
                 }
             }
+            _currentSidebarItem = null;
         }
         private void MpAvSidebarItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -325,6 +341,27 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
+        private void UpdateSidebarSizeByDelta(double delta_w, double delta_h) {
+            ContainerBoundWidth += delta_w;
+            ContainerBoundHeight += delta_h;
+
+            if (MpAvThemeViewModel.Instance.IsMultiWindow) {
+                MpAvClipTrayViewModel.Instance.ContainerBoundWidth -= delta_w;
+                MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= delta_h;
+            }
+        }
+
+        private void SetSidebarContentOpacity(double opacity) {
+            if (_currentSidebarItem == null &&
+                MpAvMainView.Instance.SelectedSidebarContainerBorder.GetVisualDescendants<MpAvUserControl>().OfType<MpAvISidebarContentView>().FirstOrDefault() is Control sbc) {
+                _currentSidebarItem = sbc;
+            }
+            if(_currentSidebarItem == null) {
+                return;
+            }
+            _currentSidebarItem.Opacity = opacity;
+        }
         #endregion
 
         #region Commands

@@ -46,6 +46,7 @@
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="local:MpAvIMenuItemViewModel">
                 <Button x:Name="HeaderMenuButton"
+                        Click="StripButton_Click"
                         Classes="no-bg no-hover-bg no-border default-button header-button"
                         Command="{Binding Command}"
                         Classes.has-tint="{Binding IconTintHexStr, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"

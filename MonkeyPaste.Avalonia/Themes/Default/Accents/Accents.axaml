@@ -394,16 +394,16 @@
         <!--  EFFECTS  -->
 
         <DropShadowEffect x:Key="ThemeBlackDropShadow"
-                          OffsetX="1"
-                          OffsetY="1"
+                          OffsetX="3"
+                          OffsetY="3"
                           Color="{DynamicResource ThemeBlackColor}"
-                          BlurRadius="3"
+                          BlurRadius="1"
                           Opacity="0.8" />
         <DropShadowEffect x:Key="ThemeWhiteDropShadow"
-                          OffsetX="1"
-                          OffsetY="1"
+                          OffsetX="3"
+                          OffsetY="3"
                           Color="{DynamicResource ThemeWhiteColor}"
-                          BlurRadius="3"
+                          BlurRadius="1"
                           Opacity="0.8" />
 
         <DropShadowEffect x:Key="EmptyDropShadow"

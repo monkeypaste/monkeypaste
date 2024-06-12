@@ -15,10 +15,10 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvMobileLoaderView">
 
     <local:MpAvUserControl.Background>
-        <RadialGradientBrush Center="100%, 100%" GradientOrigin="100%, 90%" Radius="1.0">
+        <RadialGradientBrush Center="100%, 100%" GradientOrigin="100%, 95%" Radius="1.0">
             <RadialGradientBrush.GradientStops>
-                <GradientStop Color="Purple" Offset="0" />
-                <GradientStop Color="DarkViolet" Offset="1" />
+                <GradientStop Color="{DynamicResource ThemeColor}" Offset="0" />
+                <GradientStop Color="{DynamicResource ThemeDarkColor}" Offset="1" />
             </RadialGradientBrush.GradientStops>
         </RadialGradientBrush>
     </local:MpAvUserControl.Background>
@@ -52,8 +52,8 @@
                                        Width="150"
                                        Height="150"
                                        ArcWidth="1.5"
-                                       RingBrush="Gold"
-                                       PercentBrush="Cyan"
+                                       RingBrush="{DynamicResource ThemeAccent1BgColor}"
+                                       PercentBrush="{DynamicResource ThemeAccent5Brush}"
                                        LabelBrush="Transparent"
                                        Percent="{Binding PercentLoaded}" />
 

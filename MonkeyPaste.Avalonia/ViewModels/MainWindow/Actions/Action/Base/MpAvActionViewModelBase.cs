@@ -403,7 +403,8 @@ namespace MonkeyPaste.Avalonia {
                                 Header = x.EnumToUiString(),
                                 //IconResourceKey = GetDefaultActionIconResourceKey(x),
                                 //IconTintHexStr = GetActionHexColor(x),
-                                IconSourceObj = new object[] { GetActionHexColor(x), GetDefaultActionIconResourceKey(x) },
+                                IconTintHexStr = GetActionHexColor(x),
+                                IconSourceObj = GetDefaultActionIconResourceKey(x),
                                 Command = AddChildActionCommand,
                                 CommandParameter = x
                             }).ToList()

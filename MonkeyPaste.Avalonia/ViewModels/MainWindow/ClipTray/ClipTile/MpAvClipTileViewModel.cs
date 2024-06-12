@@ -650,7 +650,19 @@ namespace MonkeyPaste.Avalonia {
         public MpCopyItemType LastCopyItemType { get; private set; }
 
         private string _searchableText = string.Empty;
-        public string SearchableText { get; set; } = string.Empty;
+        public string SearchableText {
+            get => _searchableText;
+            set {
+                if(_searchableText != value) {
+                    _searchableText = value;
+                    if(IsLoaded) {
+                        IsContentChangeModelChange = true;
+                        HasModelChanged = true;
+                    }
+                    OnPropertyChanged(nameof(SearchableText));
+                }
+            }
+        }
         public bool IsAnimating { get; set; }
         bool IsContentChangeModelChange { get; set; }
         public bool CanDrop {
@@ -1371,6 +1383,7 @@ namespace MonkeyPaste.Avalonia {
             MpCopyItem ci,
             int queryOffset = -1,
             bool isRestoringSelection = false) {
+            IsLoaded = false;
             //IsBusy = true;
             await Task.Delay(1);
 
@@ -1458,6 +1471,7 @@ namespace MonkeyPaste.Avalonia {
             }
 #endif
             IsBusy = false;
+            IsLoaded = true;
         }
 
         public async Task InitTitleLayersAsync() {
@@ -1520,6 +1534,7 @@ namespace MonkeyPaste.Avalonia {
             }
             //TitleLayerHexColors = hexColors.Select((x, i) => x.AdjustAlpha((double)MpRandom.Rand.Next(40, 120) / 255)).ToArray();
             //TitleLayerZIndexes = new List<int> { 1, 2, 3 }.Randomize().ToArray();
+            this.RefreshHeaderProperties();
         }
 
         private async Task<List<string>> GetTitleColorsAsync() {
@@ -2655,20 +2670,24 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand ShowContextMenuCommand => new MpCommand<object>(
             (args) => {
-                var control = args as Control;
-                if (control == null) {
+                if (args is not Control control) {
                     return;
                 }
-
-                IsSelected = true;
+                MpAvClipTileViewModel ctvm = this;
+                if(IsPinPlaceholder) {
+                    ctvm = PinnedItemForThisPlaceholder;
+                }
+                if(!ctvm.IsSelected) {
+                    ctvm.IsSelected = true;
+                }
+                
                 MpAvMenuView.ShowMenu(
                     target: control,
                     dc: ContextMenuViewModel);
             }, (args) => {
                 return
                     !IsTitleFocused &&
-                    CanShowContextMenu &&
-                    !IsPinPlaceholder;
+                    CanShowContextMenu;
             });
         public MpIAsyncCommand<object> PersistContentStateCommand => new MpAsyncCommand<object>(
             async (args) => {

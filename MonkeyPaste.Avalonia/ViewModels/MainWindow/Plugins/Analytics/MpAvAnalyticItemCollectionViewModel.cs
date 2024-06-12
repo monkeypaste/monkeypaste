@@ -455,8 +455,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ApplyCoreAnnotatorCommand => new MpCommand<object>(
-            (args) => {
+        public MpIAsyncCommand<object> ApplyCoreAnnotatorCommand => new MpAsyncCommand<object>(
+            async (args) => {
                 var ctvm = args as MpAvClipTileViewModel;
                 if (ctvm == null) {
                     return;
@@ -468,7 +468,7 @@ namespace MonkeyPaste.Avalonia {
                 if (core_aipvm == null) {
                     return;
                 }
-                core_aipvm.Parent.PerformAnalysisCommand.Execute(new object[] { core_aipvm, ctvm.CopyItem });
+                await core_aipvm.Parent.PerformAnalysisCommand.ExecuteAsync(new object[] { core_aipvm, ctvm.CopyItem });
             });
 
         #endregion

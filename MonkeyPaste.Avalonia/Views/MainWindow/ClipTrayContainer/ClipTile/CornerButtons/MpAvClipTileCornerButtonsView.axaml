@@ -16,9 +16,9 @@
         <Style Selector=":is(Button)">
             <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
                     Value="True" />
-            <Setter Property="local:MpAvPointerCommandExtension.RoutingStrategy"
+            <Setter Property="local:MpAvPointerCommandExtension.DefaultRoutingStrategy"
                     Value="Tunnel" />
-            <!--<Setter Property="local:MpAvPointerCommandExtension.IsEventHandled"
+            <!--<Setter Property="local:MpAvPointerCommandExtension.DefaultIsEventHandled"
                     Value="True" />-->
             <Setter Property="Padding"
                     Value="0" />

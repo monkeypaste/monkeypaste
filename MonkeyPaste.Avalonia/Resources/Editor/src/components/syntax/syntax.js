@@ -127,6 +127,9 @@ function setSelectedSyntaxTheme(themeName) {
 
 // #region Actions
 
+function highlightSyntax() {
+    globals.quill.getModule('syntax').highlight(null, true);
+}
 function updateSyntaxBlocks(fromTextChanged) {
     let code_blocks = getAllCodeBlocks();
     for (var i = 0; i < code_blocks.length; i++) {

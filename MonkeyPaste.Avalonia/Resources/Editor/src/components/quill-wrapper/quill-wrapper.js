@@ -68,7 +68,7 @@ function getText(range, selectionOnly = false) {
 	//updateQuill();
 	range = range == null ? { index: 0, length: getDocLength() } : range;
 	let text = '';
-	if (globals.IsLoaded && selectionOnly) {
+	if (globals.IsEditorLoaded && selectionOnly) {
 		let encoded_text = getEncodedContentText(range);
 		text = getDecodedContentText(encoded_text);
 	} else {
@@ -245,7 +245,6 @@ function setContents(delta, source = 'api') {
 // #endregion State
 
 // #region Actions
-
 
 function quillFindBlot(elm, bubble = false) {
 	if (Quill === undefined) {

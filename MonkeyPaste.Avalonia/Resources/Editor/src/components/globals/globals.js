@@ -174,7 +174,7 @@
 	ContentHandle: null,
 	ContentItemType: 'Text',
 	ContentId: 0,
-	IsLoadingContent: false,
+	IsContentLoaded: false,
 	ContentLoadedEvent: null,
 
 	// #region TEXT
@@ -733,7 +733,7 @@
 	// #endregion
 
 	// #region MAIN
-	IsLoaded: false,
+	IsEditorLoaded: false,
 	IsReloading: false,
 	DomParser: new DOMParser(),
 	DomSerializer: new XMLSerializer(),

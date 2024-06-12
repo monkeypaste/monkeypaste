@@ -53,6 +53,12 @@ function unsetAttrThemeColorVal(attributes, isBg) {
 
 // #region State
 
+function isNodeThemable(node) {
+    if (isNullOrUndefined(node) || isClassInElementPath(node, ['ql-code-block', 'ql-code-block-container'])) {
+        return false;
+    }
+    return true;
+}
 function isThemeColorOverriden(attr) {
     if (!attr || attr['themecoloroverride'] === undefined) {
         return false;
@@ -208,8 +214,8 @@ function adjustFgToTheme(fg_color_obj) {
     return css_rgba;
 }
 
-function applyThemeToDelta(delta) {
-    if (!globals.IsThemeEnabled) {
+function applyThemeToDelta(node, delta) {
+    if (!globals.IsThemeEnabled || !isNodeThemable(node)) {
         return delta;
     }
     if (!delta || delta.ops === undefined || delta.ops.length == 0) {

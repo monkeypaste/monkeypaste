@@ -28,8 +28,8 @@ function loadTextContent(itemDataStr) {
 		delta = decodeHtmlEntitiesInDeltaInserts(delta);
 		setContents(delta, 'silent');
 	}
-	
 
+	highlightSyntax();
 	loadTemplates();
 	loadLinkHandlers();
 	enableTableContextMenu();

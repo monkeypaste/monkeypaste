@@ -34,9 +34,9 @@
                x:DataType="local:MpAvSettingsFrameViewModel">
             <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
                     Value="True" />
-            <Setter Property="local:MpAvPointerCommandExtension.RoutingStrategy"
+            <Setter Property="local:MpAvPointerCommandExtension.DefaultRoutingStrategy"
                     Value="Tunnel" />
-            <Setter Property="local:MpAvPointerCommandExtension.IsEventHandled"
+            <Setter Property="local:MpAvPointerCommandExtension.DefaultIsEventHandled"
                     Value="False" />
             <Setter Property="local:MpAvPointerCommandExtension.LeftPressCommand"
                     Value="{Binding ToggleExpandFrameCommand}" />

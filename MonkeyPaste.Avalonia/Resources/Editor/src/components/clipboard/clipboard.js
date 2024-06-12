@@ -171,7 +171,7 @@ function initCheckableListMatcher() {
 }
 function initFontColorMatcher() {
     globals.quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
-        let result = applyThemeToDelta(delta);
+        let result = applyThemeToDelta(node,delta);
         return result;
     });
 }

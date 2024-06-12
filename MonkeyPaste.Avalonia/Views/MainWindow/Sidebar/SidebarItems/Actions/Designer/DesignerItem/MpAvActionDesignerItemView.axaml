@@ -156,7 +156,8 @@
             local:MpAvPointerCommandExtension.IsEnabled="True"
             local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowContextMenuCommand}"
             local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
-            local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+            local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"
+            local:MpAvPointerCommandExtension.RouteRightPressToHold="False"
             Classes.dragOver="{Binding IsDragOver}">
         <StackPanel HorizontalAlignment="Center"
                     Orientation="Vertical">

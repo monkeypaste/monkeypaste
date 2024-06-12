@@ -642,11 +642,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                     OnPropertyChanged(nameof(FocusActionName));
-                    if(this is MpAvIHeaderMenuViewModel hmvm) {
-                        hmvm.OnPropertyChanged(nameof(hmvm.HeaderBackground));
-                        hmvm.OnPropertyChanged(nameof(hmvm.HeaderForeground));
-                        hmvm.OnPropertyChanged(nameof(hmvm.HeaderMenuItems));
-                    }
+                    this.RefreshHeaderProperties();
                     OnPropertyChanged(nameof(FocusHeaderViewModel));
                     MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
                     break;

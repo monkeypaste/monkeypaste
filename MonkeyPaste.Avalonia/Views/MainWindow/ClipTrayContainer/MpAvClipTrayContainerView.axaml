@@ -190,7 +190,7 @@
                                        Classes.vertical="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                                        Classes.horizontal="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                                        local:MpAvPointerCommandExtension.IsEnabled="True"
-                                       local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                                       local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"
                                        local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetTraySplitterCommand}"
                                        local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="{Binding $self}" />
 

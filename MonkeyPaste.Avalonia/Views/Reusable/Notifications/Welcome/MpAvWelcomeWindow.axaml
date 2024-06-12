@@ -221,7 +221,7 @@
                                     Classes="rejectWindowMove"
                                     Classes.isselected="{Binding IsSelected}"
                                     local:MpAvPointerCommandExtension.IsEnabled="True"
-                                    local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                                    local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"
                                     local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ProgressMarkerClickCommand}">
                                 <ToolTip.Tip>
                                     <local:MpAvToolTipView ToolTipText="{Binding Title}" />

@@ -798,8 +798,8 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static bool IsRightPress(this PointerPressedEventArgs ppea, Visual? control) {
-            return ppea.GetCurrentPoint(control)
-                            .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
+            var cp = ppea.GetCurrentPoint(control);
+            return cp.Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
         }
 
         public static bool IsLeftRelease(this PointerReleasedEventArgs ppea, Visual? control) {

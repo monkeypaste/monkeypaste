@@ -46,8 +46,19 @@ namespace MonkeyPaste.Avalonia {
             PlacementMode placementMode = PlacementMode.Pointer,
             PopupAnchor popupAnchor = PopupAnchor.TopLeft,
             MpPoint offset = null) {
-            if (target == null || !target.IsAttachedToVisualTree()) {
+            if (target == null) {
                 return null;
+            }
+            if(!target.IsAttachedToVisualTree()) {
+                while(target != null) {
+                    target = target.Parent as Control;
+                    if(target != null && target.IsAttachedToVisualTree()) {
+                        break;
+                    }
+                }
+                if(target == null) {
+                    return null;
+                }
             }
 
             if (showByPointer) {

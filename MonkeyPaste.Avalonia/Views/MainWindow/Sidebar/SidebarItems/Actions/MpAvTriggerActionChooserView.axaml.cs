@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
     /// <summary>
     /// Interaction logic for MpAnalyticItemSelectorView.xaml
     /// </summary>
-    public partial class MpAvTriggerActionChooserView : MpAvUserControl<MpAvTriggerCollectionViewModel> {
+    public partial class MpAvTriggerActionChooserView : MpAvUserControl<MpAvTriggerCollectionViewModel>, MpAvISidebarContentView {
         public MpAvTriggerActionChooserView() {
             InitializeComponent();
             if (BindingContext != null) {

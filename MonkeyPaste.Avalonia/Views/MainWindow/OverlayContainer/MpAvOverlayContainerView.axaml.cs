@@ -51,6 +51,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Events
+        public event EventHandler<MpAvChildWindow> OnChildRemoved;
+        #endregion
+
         #region Constructors
         public MpAvOverlayContainerView() {
             MpDebug.Assert(_instance == null, "Singleton error");
@@ -117,9 +121,11 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             Dispatcher.UIThread.Post(async () => {
-                await AnimateAsync(cw, true);
-                OverlayGrid.Children.Remove(cw);
-                this.IsHitTestVisible = OverlayGrid.Children.Any();
+            await AnimateAsync(cw, true);
+            if (OverlayGrid.Children.Remove(cw)) {
+                OnChildRemoved?.Invoke(this, cw);
+            }
+            this.IsHitTestVisible = OverlayGrid.Children.Any();
 
                 if (TopWindow == null) {
 #if MOBILE_OR_WINDOWED
