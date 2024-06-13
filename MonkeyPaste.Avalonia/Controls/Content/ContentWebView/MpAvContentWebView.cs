@@ -1618,7 +1618,7 @@ namespace MonkeyPaste.Avalonia {
                 ProcessDataTransferCompleteResponse(dtcn);
             }
             if(did_content_change) {
-                //MpAvAnalyticItemCollectionViewModel.Instance.ApplyCoreAnnotatorCommand.Execute(BindingContext);
+                MpAvAnalyticItemCollectionViewModel.Instance.ApplyCoreAnnotatorCommand.Execute(BindingContext);
             }
 
 

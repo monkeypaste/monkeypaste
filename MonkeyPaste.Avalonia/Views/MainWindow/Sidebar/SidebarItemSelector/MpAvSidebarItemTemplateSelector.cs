@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
@@ -12,8 +13,8 @@ namespace MonkeyPaste.Avalonia {
 
 
     public class MpAvSidebarItemTemplateSelector : IDataTemplate {
+        public static ScrollViewer ContentScrollViewer { get; private set; }
         [Content]
-
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         Control ITemplate<object, Control>.Build(object param) {
@@ -41,10 +42,11 @@ namespace MonkeyPaste.Avalonia {
             }
             var c = AvailableTemplates[keyStr].Build(param);
 #if MOBILE_OR_WINDOWED
+            ContentScrollViewer = null;
             if(sbivm is MpAvTagTrayViewModel) {
                 return c;
             }
-            return new ScrollViewer() {
+            var sv = new ScrollViewer() {
                 Content = new Viewbox() {
                     Name = "SidebarItemViewbox",
                     Stretch = Stretch.UniformToFill,
@@ -52,7 +54,8 @@ namespace MonkeyPaste.Avalonia {
                     Child = c
                 }
             };
-            //return c;
+            ContentScrollViewer = sv;
+            return sv;
 #else
             return c;
 #endif

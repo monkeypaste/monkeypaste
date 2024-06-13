@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
 
             foreach(var (path,r) in paths.WithIndex()) {     
                 var img_elm = doc.CreateElement("img");
-                img_elm.SetAttributeValue("src", Mp.Services.IconBuilder.GetPathIconBase64(path).ToBase64ImageUrl());
+                img_elm.SetAttributeValue("src", Mp.Services.IconBuilder.GetPathIconBase64(path, MpIconSize.MediumIcon32).ToBase64ImageUrl());
                 
                 var img_cell = doc.CreateElement("td",img_elm);
                 img_cell.SetAttributeValue("data-row", (r + 1).ToString());

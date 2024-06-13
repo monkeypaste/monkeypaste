@@ -277,6 +277,7 @@ function updateAllSizeAndPositions() {
 	updateAnnotationSizesAndPositions();
 	updateScrollBarSizeAndPositions();
 	updateTablesSizesAndPositions();
+	updateWrapToolbarButtonToSelection();
 
 	if (globals.EnvName == "android") {
 		//var viewportBottom = window.scrollY + window.innerHeight;

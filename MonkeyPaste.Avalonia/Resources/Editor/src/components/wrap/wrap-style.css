@@ -1,0 +1,3 @@
+#wrapToolbarButton.toggled line, #wrapToolbarButton.toggled path, #wrapToolbarButton.toggled polyline {
+    stroke: var(--optselectcolor);
+}

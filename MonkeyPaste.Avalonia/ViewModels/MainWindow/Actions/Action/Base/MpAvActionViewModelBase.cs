@@ -176,7 +176,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             };
         ICommand MpAvIHeaderMenuViewModel.BackCommand =>
-            null;
+            MpAvSidebarItemCollectionViewModel.Instance.FocusSidebarOrFallbackCommand;
         object MpAvIHeaderMenuViewModel.BackCommandParameter =>
             null;
 

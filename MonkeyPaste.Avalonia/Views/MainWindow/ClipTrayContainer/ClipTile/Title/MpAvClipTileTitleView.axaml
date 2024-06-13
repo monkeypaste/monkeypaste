@@ -218,14 +218,16 @@
         <!--  ICON  -->
         <Button x:Name="ClipTileAppIconImageButton"
                 Grid.Column="1"
-                Margin="0,0,15,0"
+                Margin="0,0,10,0"
                 ClipToBounds="False"
-                Classes="no-bg no-hover-bg"
+                Height="50"
+                Classes="no-bg no-hover-bg squareByHeight"
                 Classes.shakeOnce="{Binding TransactionCollectionViewModel.DoShake}"
-                Command="{Binding TransactionCollectionViewModel.OpenTransactionPaneCommand}"
+                Command="{Binding AppIconTapCommand}"
+                CommandParameter="{Binding $self}"
                 BorderThickness="0"
                 HorizontalAlignment="Right"
-                VerticalAlignment="Stretch"
+                VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center">
             <Interaction.Behaviors>

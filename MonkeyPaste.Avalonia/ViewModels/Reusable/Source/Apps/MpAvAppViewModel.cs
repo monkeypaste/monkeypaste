@@ -338,6 +338,12 @@ namespace MonkeyPaste.Avalonia {
                         IsRejected = false;
                     }
                 }
+            },
+            () => {
+                if(Parent == null) {
+                    return false;
+                }
+                return Parent.CanRejectApps;
             });
 
 

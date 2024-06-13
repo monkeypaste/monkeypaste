@@ -36,6 +36,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool CanRejectUrls =>
+            !MpAvThemeViewModel.Instance.IsMobileOrWindowed;
+
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
 
         #endregion
@@ -231,6 +234,9 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 SelectedItem = uvm;
+            },
+            (args) => {
+                return CanRejectUrls;
             });
         #endregion
     }

@@ -20,9 +20,17 @@
 
 .ql-code-block-container .ql-ui {
     /* hide language picker */
-    display: none;
+    /*display: none;*/
+}
+pre {
+    /* prevent default 'pre' white-space val */
+    white-space: inherit !important;
 }
 .ql-snow .ql-editor .ql-code-block-container {
     background-color: var(--codebg);
     color: var(--codefg);
+}
+
+#editor.unwrap pre.ql-code-block-container {
+    width: fit-content;
 }

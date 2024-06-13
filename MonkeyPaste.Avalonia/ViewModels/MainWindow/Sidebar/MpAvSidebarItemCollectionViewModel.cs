@@ -153,6 +153,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+
         #endregion
 
         #region Protected Methods
@@ -228,14 +229,7 @@ namespace MonkeyPaste.Avalonia {
                 w.WindowState = WindowState.Normal;
                 w.Activate();
             } else if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                if(SelectedItem is MpAvTriggerCollectionViewModel &&
-                        MpAvMainView.Instance.GetVisualDescendant<MpAvTriggerActionChooserView>() is { } tw) {
-
-                    tw.Focus();
-                } else if(SelectedItem == null) {
-                    MpAvMainView.Instance.Focus();
-                }
-                MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
+                FocusSidebarOrFallbackCommand.Execute(null);
             }
         }
         private async Task AnimateSidebarAsync(
@@ -446,6 +440,17 @@ namespace MonkeyPaste.Avalonia {
 
                 MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= dh;
                 MpAvSidebarItemCollectionViewModel.Instance.ContainerBoundHeight += dh;
+            });
+
+        public ICommand FocusSidebarOrFallbackCommand => new MpCommand(
+            () => {
+                if (SelectedItem is MpAvTriggerCollectionViewModel &&
+                        MpAvMainView.Instance.GetVisualDescendant<MpAvTriggerActionChooserView>() is { } tw) {
+
+                    tw.FocusThisHeader();
+                } else if (SelectedItem == null) {
+                    MpAvMainView.Instance.FocusThisHeader();
+                }
             });
 
         #endregion

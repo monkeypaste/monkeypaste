@@ -22,6 +22,10 @@ button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
     fill: var(--optselectcolor) !important;
 }
 
+button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
+    fill: var(--optselectcolor) !important;
+}
+
 .ql-picker-label {
     color: var(--editortoolbarbuttoncolor) !important;
 }

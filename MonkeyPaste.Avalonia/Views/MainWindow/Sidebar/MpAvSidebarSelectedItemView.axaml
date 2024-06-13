@@ -1,17 +1,18 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="using:MonkeyPaste.Avalonia"
              xmlns:pcl="using:MonkeyPaste"
              x:DataType="local:MpAvSidebarItemCollectionViewModel"
+             x:TypeArguments="local:MpAvSidebarItemCollectionViewModel"
              x:CompileBindings="True"
              DataContext="{x:Static local:MpAvSidebarItemCollectionViewModel.Instance}"
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
              x:Class="MonkeyPaste.Avalonia.MpAvSidebarSelectedItemView">
-    <UserControl.Styles>
+    <local:MpAvUserControl.Styles>
         <!--  MOBILE COLLAPSE  -->
         <Style Selector="Button#CollapseSidebarButton">
             <Setter Property="HorizontalAlignment"
@@ -69,12 +70,17 @@
             <Setter Property="CornerRadius"
                     Value="0,20,20,0" />
         </Style>
-    </UserControl.Styles>
+        <Style Selector="ContentControl#SelectedSidebarContentControl.mobile /template/ ScrollViewer">
+            <Setter Property="IsScrollChainingEnabled"
+                    Value="False" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Grid x:Name="OuterContainer"
           Classes="oriented">
         <ContentControl x:Name="SelectedSidebarContentControl"
                         x:DataType="local:MpISidebarItemViewModel"
                         DataContext="{Binding BoundItem}"
+                        ScrollViewer.BringIntoViewOnFocusChange="False"
                         Classes.horiz="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                         Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                         HorizontalAlignment="Stretch"
@@ -131,4 +137,4 @@
             <local:MpAvTintedImage Tint="{DynamicResource ThemeInteractiveBrush}" />
         </Button>
     </Grid>
-</UserControl>
+</local:MpAvUserControl>

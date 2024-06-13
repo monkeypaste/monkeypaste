@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     [DoNotNotify]
-    public partial class MpAvTagView : MpAvUserControl<MpAvTagTileViewModel> {
+    public partial class MpAvTagView : MpAvUserControl<MpAvTagTileViewModel>, MpAvIFocusHeaderMenuView {
         #region Private Variables
         #endregion
 

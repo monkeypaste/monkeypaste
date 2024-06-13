@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public interface MpIPathToPlatformIcon {
 
-        string GetPathIconBase64(string path, MpIconSize iconSize = MpIconSize.MediumIcon32);
-        string GetPathIconBase64(string path, nint handle, MpIconSize iconSize = MpIconSize.MediumIcon32);
+        string GetPathIconBase64(string path, MpIconSize iconSize);
+        string GetPathIconBase64(string path, nint handle, MpIconSize iconSize);
     }
 
     public interface MpIIconBuilder : MpIPathToPlatformIcon {

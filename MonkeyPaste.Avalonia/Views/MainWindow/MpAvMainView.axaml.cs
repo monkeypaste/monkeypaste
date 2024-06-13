@@ -29,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvUserControl<MpAvMainWindowViewModel>,
 #endif
         MpAvIResizableControl,
+        MpAvIFocusHeaderMenuView,
         MpIAsyncObject {
         #region Private Variables
 

@@ -54,6 +54,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool CanRejectApps =>
+            !MpAvThemeViewModel.Instance.IsMobileOrWindowed;
+        public bool CanNavigateToApp =>
+            !MpAvThemeViewModel.Instance.IsMobileOrWindowed;
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
 
         public bool DoSelectedPulse {
@@ -537,7 +541,7 @@ namespace MonkeyPaste.Avalonia {
                         .Where(x => exisiting_avml.All(y => !y.ToProcessInfo().IsValueEqual(x)) && !x.IsValueEqual(ThisAppViewModel.ToProcessInfo()))
                         .OrderBy(x => x.ApplicationName)
                         .Select(x => new MpAvMenuItemViewModel() {
-                            IconSourceObj = Mp.Services.IconBuilder.GetPathIconBase64(x.ProcessPath, x.Handle),
+                            IconSourceObj = Mp.Services.IconBuilder.GetPathIconBase64(x.ProcessPath, x.Handle, MpIconSize.MediumIcon32),
                             Header = x.ApplicationName,
                             Command = AddAppComponentCommand,
                             CommandParameter = new object[] { x, add_type }
@@ -601,6 +605,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
                 cm.Closed += _cmInstance_MenuClosed;
+            },
+            (args) => {
+                return CanRejectApps;
             });
 
         #endregion

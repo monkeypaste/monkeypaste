@@ -86,6 +86,13 @@
                     Value="16" />
         </Style>
 
+        <Style Selector="MenuItem.mobile local|MpAvTintedImage">
+            <Setter Property="Width"
+                    Value="28" />
+            <Setter Property="Height"
+                    Value="28" />
+        </Style>
+
         <Style Selector="MenuItem local|MpAvTintedImage.tinted"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="Tint"
@@ -116,6 +123,12 @@
             <Setter Property="Foreground"
                     Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
+        <Style Selector="MenuItem.mobile TextBlock.textheader">
+            <Setter Property="FontSize"
+                    Value="24" />
+            <Setter Property="MaxWidth"
+                    Value="300" />
+        </Style>
 
         <!--  SEPARATOR  -->
 
@@ -136,7 +149,8 @@
                     <!--  DEFAULT  -->
                     <DataTemplate x:Key="Default"
                                   x:DataType="local:MpAvIMenuItemViewModel">
-                        <MenuItem Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}"
+                        <MenuItem Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                                  Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}"
                                   Classes.hasGesture="{Binding InputGestureText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                             <MenuItem.Resources>
                                 <Thickness x:Key="MenuIconPresenterMargin">0,0,6,0</Thickness>
@@ -157,6 +171,7 @@
                     <DataTemplate x:Key="Checkable"
                                   x:DataType="local:MpAvIMenuItemViewModel">
                         <MenuItem Classes="checkable"
+                                  Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                   Classes.hasGesture="{Binding InputGestureText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>
@@ -203,7 +218,7 @@
                     <DataTemplate x:Key="CheckableWithIcon"
                                   x:DataType="local:MpAvIMenuItemViewModel">
                         <MenuItem Classes="checkable checkWithIcon"
-                                  Classes.mobile="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                                  Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                   Classes.hasGesture="{Binding InputGestureText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>

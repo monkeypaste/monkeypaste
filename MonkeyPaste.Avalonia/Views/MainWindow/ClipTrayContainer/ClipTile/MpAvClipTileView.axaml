@@ -176,6 +176,13 @@
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
         </Style>
+
+        <!--  APP ICON OPACITY  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.hover Button#ClipTileAppIconImageButton, local|MpAvClipBorder#ClipTileContainerBorder.sel Button#ClipTileAppIconImageButton">
+            <Setter Property="Opacity"
+                    Value="0.25" />
+        </Style>
+
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
@@ -245,32 +252,6 @@
                 </ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <!--  TITLE  -->
-
-            <local:MpAvClipTileTitleView x:Name="TileTitleView"
-                                         Grid.Row="0"
-                                         IsVisible="{Binding IsTitleVisible}"
-                                         Height="{Binding MaxTitleHeight, FallbackValue=0, TargetNullValue=0}"
-                                         HorizontalAlignment="Stretch"
-                                         VerticalAlignment="Stretch">
-                <!--<local:MpAvClipTileTitleView.IsVisible>
-                    <MultiBinding Converter="{x:Static BoolConverters.And}">
-                        <Binding Path="!IsSelected"
-                                 Source="{x:Static local:MpAvPrefViewModel.Instance}" />
-                      <Binding Path="ShowContentTitles"
-                                 Source="{x:Static local:MpAvPrefViewModel.Instance}" />
-                        <Binding Path="!IsAppendNotifier" />
-                        <Binding Path="!IsFrozen"
-                                 FallbackValue="False"
-                                 TargetNullValue="False" />
-                        <Binding Path="IsContentReadOnly" />
-                        <Binding Path="!TransactionCollectionViewModel.IsTransactionPaneOpen"
-                                 FallbackValue="False"
-                                 TargetNullValue="False" />
-                    </MultiBinding>
-                </local:MpAvClipTileTitleView.IsVisible>-->
-            </local:MpAvClipTileTitleView>
-
             <!--  CONTENT  -->
             <local:MpAvClipTileContentView x:Name="ClipTileContentView"
                                            Background="{StaticResource HitTestableTransparent}"
@@ -283,6 +264,17 @@
                                            local:MpAvIsHoveringExtension.IsHovering="{Binding IsContentHovering, Mode=TwoWay}"
                                            HorizontalAlignment="Stretch"
                                            VerticalAlignment="Stretch" />
+
+            <!--  TITLE  -->
+
+            <local:MpAvClipTileTitleView x:Name="TileTitleView"
+                                         Grid.Row="0"
+                                         ClipToBounds="False"
+                                         IsVisible="{Binding IsTitleVisible}"
+                                         Height="{Binding MaxTitleHeight, FallbackValue=0, TargetNullValue=0}"
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Stretch" />
+
 
             <!--  CAP OVERLAY  -->
 

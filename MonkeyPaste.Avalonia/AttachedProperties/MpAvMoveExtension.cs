@@ -293,59 +293,61 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Control_PointerMoved(object sender, PointerEventArgs e) {
-            if (sender is Control control &&
-                control.DataContext is MpAvActionViewModelBase avmb) {
-                if (_lastMousePosition == null ||
+            if (sender is not Control control ||
+                control.DataContext is not MpAvActionViewModelBase avmb) {
+                return;                
+            }
+            if (_lastMousePosition == null ||
                     _mouseDownPosition == null) {
-                    // pointer not pressed, ignore
+                // pointer not pressed, ignore
+                return;
+            }
+            Visual relativeTo = GetRelativeTo(control) ?? control;
+            var mw_mp = e.GetPosition(relativeTo).ToPortablePoint();
+            MpPoint delta = mw_mp - _lastMousePosition;
+            _lastMousePosition = mw_mp;
+            if (GetIsMoving(control)) {
+                if (!e.IsLeftDown(control)) {
+                    FinishMove(control);
                     return;
                 }
-                Visual relativeTo = GetRelativeTo(control) ?? control;
-                var mw_mp = e.GetPosition(relativeTo).ToPortablePoint();
-                MpPoint delta = mw_mp - _lastMousePosition;
-                _lastMousePosition = mw_mp;
-                if (GetIsMoving(control)) {
-                    if (!e.IsLeftDown(control)) {
-                        FinishMove(control);
-                        return;
-                    }
-                    Move(control, delta.X, delta.Y);
-                    return;
-                }
-                if (mw_mp.Distance(_mouseDownPosition) >= MIN_MOVE_DIST) {
-                    // NOTE only set as moving once its actually moving (to allow hold to execute)
-                    SetIsMoving(control, true);
-                    // bring position tracking to current state (will be next move signal)
-                    _lastMousePosition = _mouseDownPosition;
-                }
+                Move(control, delta.X, delta.Y);
+                return;
+            }
+            if (mw_mp.Distance(_mouseDownPosition) >= MIN_MOVE_DIST) {
+                // NOTE only set as moving once its actually moving (to allow hold to execute)
+                SetIsMoving(control, true);
+                // bring position tracking to current state (will be next move signal)
+                _lastMousePosition = _mouseDownPosition;
             }
         }
 
         private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
-            if (sender is Control control) {
-                //e.Pointer.Capture(null);
-                FinishMove(control);
+            if (sender is not Control control) {
+                return;                
             }
+            e.Pointer.Capture(null);
+            FinishMove(control);
         }
 
         private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
-            if (sender is Control control) {
-                if (MpAvZoomBorder.IsTranslating) {
-                    return;
-                }
-                Visual relativeTo = GetRelativeTo(control) ?? control;
-
-                _mouseDownPosition = e.GetPosition(relativeTo).ToPortablePoint();
-                _lastMousePosition = _mouseDownPosition;
-                //if (GetBeginMoveCommand(control) is ICommand beginMoveCmd) {
-                //    beginMoveCmd.Execute(GetBeginMoveCommandParameter(control));
-                //} else if (control.DataContext is MpISelectableViewModel svm) {
-                //    svm.IsSelected = true;
-                //}
-                //e.Pointer.Capture(control);
-                //SetIsMoving(control, true);
-                //e.Handled = true;
+            if (sender is not Control control ||
+                MpAvZoomBorder.IsTranslating) {
+                return;
             }
+
+            Visual relativeTo = GetRelativeTo(control) ?? control;
+
+            _mouseDownPosition = e.GetPosition(relativeTo).ToPortablePoint();
+            _lastMousePosition = _mouseDownPosition;
+            if (GetBeginMoveCommand(control) is ICommand beginMoveCmd) {
+                beginMoveCmd.Execute(GetBeginMoveCommandParameter(control));
+            } else if (control.DataContext is MpISelectableViewModel svm) {
+                svm.IsSelected = true;
+            }
+            e.Pointer.Capture(control);
+            SetIsMoving(control, true);
+            e.Handled = true;
         }
 
         private static void Control_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {

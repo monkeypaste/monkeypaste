@@ -38,6 +38,7 @@ namespace MonkeyPaste.Avalonia {
         public const double DEFAULT_MIN_SCALE = 0.1;
         public const double DEFAULT_MAX_SCALE = 3.0d;
         const double DEFAULT_SCALE = 1.0d;
+        const double MAX_TRANSLATE_OFFSET_MAGNITUDE = 1_000;
         #endregion
 
         #region Statics
@@ -59,8 +60,17 @@ namespace MonkeyPaste.Avalonia {
                     Command = ShowTriggerSelectorMenuCommand
                 },
             ];
-        ICommand MpAvIHeaderMenuViewModel.BackCommand =>
-            null;
+        ICommand MpAvIHeaderMenuViewModel.BackCommand => new MpCommand(
+            () => {
+                if(FocusAction == null) {
+                    MpAvMainView.Instance.FocusThisHeader();
+                } else {
+                    FocusAction = null;
+                    if(MpAvMainView.Instance.GetVisualDescendant<MpAvTriggerActionChooserView>() is { } tacv) {
+                        tacv.FocusThisHeader();
+                    }
+                }
+            });
         object MpAvIHeaderMenuViewModel.BackCommandParameter =>
             null;
 
@@ -168,7 +178,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public double TranslateOffsetX {
             get {
-                return ParseTranslationOffset(DesignerSettingsArg).X;
+                return Math.Clamp(ParseTranslationOffset(DesignerSettingsArg).X,-MAX_TRANSLATE_OFFSET_MAGNITUDE,MAX_TRANSLATE_OFFSET_MAGNITUDE);
             }
             set {
                 if (Math.Abs(TranslateOffsetX - value) > 0.1) {
@@ -179,7 +189,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public double TranslateOffsetY {
             get {
-                return ParseTranslationOffset(DesignerSettingsArg).Y;
+                return Math.Clamp(ParseTranslationOffset(DesignerSettingsArg).Y,-MAX_TRANSLATE_OFFSET_MAGNITUDE,MAX_TRANSLATE_OFFSET_MAGNITUDE);
             }
             set {
                 if (Math.Abs(TranslateOffsetY - value) > 0.1) {
@@ -628,6 +638,10 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvTriggerCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
+                    ResetDesignerViewCommand.Execute(null);
+                    break;
+                case nameof(SidebarOrientation):
+                    ResetDesignerViewCommand.Execute(null);
                     break;
                 case nameof(FocusAction):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
@@ -991,7 +1005,15 @@ namespace MonkeyPaste.Avalonia {
                 MpAvActionViewModelBase toSelect_avmb = null;
                 int focusArgNum = 0;
                 string error_text = null;
-                if (args is MpAvActionViewModelBase) {
+                if(args is Control c && c.DataContext is MpAvActionViewModelBase avmb) {
+                    // select from action designer
+                    toSelect_avmb = avmb;
+                    if(c.GetVisualAncestor<MpAvActionDesignerItemView>() is { } adiv) {
+                        adiv.FocusThisHeader();
+                    } else {
+                        MpDebug.Break("Where's the item view?");
+                    }
+                } else if (args is MpAvActionViewModelBase) {
                     toSelect_avmb = args as MpAvActionViewModelBase;
                 } else if (args is int actionId) {
                     toSelect_avmb = Items.FirstOrDefault(x => x.ActionId == actionId);
@@ -1025,6 +1047,9 @@ namespace MonkeyPaste.Avalonia {
             }, (args) => {
                 MpAvActionViewModelBase toSelect_avmb = null;
                 int focusArgNum = -1;
+                if(args is Control c && c.DataContext is MpAvActionViewModelBase avmb) {
+                    toSelect_avmb = avmb;
+                }
                 if (args is MpAvActionViewModelBase) {
                     toSelect_avmb = args as MpAvActionViewModelBase;
                 } else if (args is int actionId) {

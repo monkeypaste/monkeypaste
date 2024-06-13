@@ -166,6 +166,7 @@ namespace MonkeyPaste.Avalonia {
 
                                     // add domain reject thing (if not top level)
                                     if (!MpUrlHelpers.IsUrlTopLevel(url.UrlPath) &&
+                                        MpAvUrlCollectionViewModel.Instance.CanRejectUrls &&
                                         MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == url.Id) is { } uvm) {
 
                                         // TOGGLE REJECT SOURCE DOMAIN

@@ -75,7 +75,7 @@ function isPlainHtmlConverter() {
 function setConverterContent(formatType, dataStr, verifyText) {
 	// NOTE this mimics quills onPaste
 	let text = formatType == 'plaintext' ? dataStr : verifyText;
-	let html = formatType == 'plaintext' ? null : cleanHtmlForFragmentMarkers(dataStr);
+	let html = formatType == 'plaintext' ? null : cleanHtmlForFragmentMarkers(dataStr, verifyText);
 	setEditorText('');
 	let range = getDocAsRange();
 	const formats = getFormatAtDocIdx(range.index);

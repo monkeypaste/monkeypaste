@@ -184,12 +184,10 @@ function showAllScrollbars() {
 }
 
 function unwrapContentScroll() {
-    getEditorContainerElement().classList.add('unwrap');
-    updateAllElements();
+    disableWrap();
 }
 function wrapContentScroll() {
-    getEditorContainerElement().classList.remove('unwrap');
-    updateAllElements();
+    enableWrap();
 }
 function scrollToHome() {
     getEditorContainerElement().scrollTop = 0;

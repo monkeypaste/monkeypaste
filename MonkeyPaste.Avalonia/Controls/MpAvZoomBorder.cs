@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -209,7 +210,13 @@ namespace MonkeyPaste.Avalonia {
         public MpAvZoomBorder() : base() {
             this.GestureRecognizers.Add(new PinchGestureRecognizer());
             this.AddHandler(Gestures.PinchEvent, MpAvZoomBorder_Pinch);
+
+            this.AddHandler(PointerPressedEvent, MpAvZoomBorder_PointerPressed, RoutingStrategies.Tunnel);
+            this.AddHandler(PointerMovedEvent, MpAvZoomBorder_PointerMoved, RoutingStrategies.Tunnel);
+            this.AddHandler(PointerReleasedEvent, MpAvZoomBorder_PointerReleased, RoutingStrategies.Tunnel);
         }
+
+
 
         #endregion
 
@@ -281,22 +288,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-        protected override void OnPointerPressed(PointerPressedEventArgs e) {
-            base.OnPointerPressed(e);
-            e.Handled = true;
-            child_PreviewMouseLeftButtonDown(Child, e);
-        }
-        protected override void OnPointerReleased(PointerReleasedEventArgs e) {
-            base.OnPointerReleased(e);
-            e.Handled = true;
-            child_MouseLeftButtonUp(Child, e);
-        }
-
-        protected override void OnPointerMoved(PointerEventArgs e) {
-            base.OnPointerMoved(e);
-            e.Handled = true;
-            child_MouseMove(Child, e);
-        }
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
@@ -321,6 +312,9 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {
             base.OnPointerWheelChanged(e);
+            if(!this.IsKeyboardFocusWithin) {
+                return;
+            }
 
             child_MouseWheel(Child, e);
         }
@@ -331,6 +325,48 @@ namespace MonkeyPaste.Avalonia {
 
         #region Gesture Handlers
 
+
+        private void MpAvZoomBorder_PointerPressed(object sender, PointerPressedEventArgs e) {
+            if (Child == null ||
+                MpAvMoveExtension.IsAnyMoving ||
+                e.Source is not Control sc ||
+                sc.GetVisualAncestor<MpAvActionDesignerItemView>() is { } press_iv) {
+                return;
+            }
+            _last_mp = e.GetPosition(this).ToPortablePoint();
+            IsTranslating = true;
+            e.Pointer.Capture(this);
+            e.Handled = true;
+        }
+
+
+        private void MpAvZoomBorder_PointerMoved(object sender, PointerEventArgs e) {
+            if (Child == null || !IsTranslating) {
+                return;
+            }
+            e.Handled = true;
+            var mp = e.GetPosition(this).ToPortablePoint();
+            if(_last_mp == null) {
+                _last_mp = mp;
+            }
+            var v = _last_mp - mp;
+            TranslateOrigin(v.X, v.Y);
+            this.Redraw();
+            _last_mp = mp;
+        }
+
+        private void MpAvZoomBorder_PointerReleased(object sender, PointerReleasedEventArgs e) {
+
+            e.Pointer.Capture(null);
+            if (Child == null || !IsTranslating) {
+                return;
+            }
+            IsTranslating = false;
+            e.Handled = true;
+            if (DataContext is MpAvTriggerCollectionViewModel acvm) {
+                acvm.HasModelChanged = true;
+            }
+        }
         private void MpAvZoomBorder_Pinch(object sender, PinchEventArgs e) {
             MpConsole.WriteLine($"Pinch Scale: {e.Scale} Scale Origin: {e.ScaleOrigin}");
             if (_lastScale == null && _lastScaleOrigin == null) {
@@ -356,45 +392,11 @@ namespace MonkeyPaste.Avalonia {
             Zoom(zoom, e.GetPosition(Child));
         }
 
-        private void child_PreviewMouseLeftButtonDown(object sender, PointerPressedEventArgs e) {
-            if (Child != null && !MpAvMoveExtension.IsAnyMoving) {
-                _last_mp = e.GetPosition(this).ToPortablePoint();
-                e.Pointer.Capture(this);
-                if (e.Pointer.Captured != this) {
-                    var capturer = e.Pointer.Captured;
-                    MpDebug.Break();
-                } else {
-                    IsTranslating = true;
-                    e.Handled = true;
-                }
-            }
-        }
-
-        private void child_MouseLeftButtonUp(object sender, PointerReleasedEventArgs e) {
-            if (Child != null) {
-                IsTranslating = false;
-                e.Pointer.Capture(null);
-                if (DataContext is MpAvTriggerCollectionViewModel acvm) {
-                    acvm.HasModelChanged = true;
-                }
-            }
-        }
 
         void child_PreviewMouseRightButtonDown(object sender, PointerPressedEventArgs e) {
             this.Reset();
         }
 
-        private void child_MouseMove(object sender, PointerEventArgs e) {
-            if (Child != null) {
-                if (IsTranslating) {
-                    var mp = e.GetPosition(this).ToPortablePoint();
-                    var v = _last_mp - mp;
-                    TranslateOrigin(v.X, v.Y);
-                    this.Redraw();
-                    _last_mp = mp;
-                }
-            }
-        }
 
         #endregion
 

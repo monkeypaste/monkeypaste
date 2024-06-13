@@ -76,6 +76,7 @@
     <link href="src/components/table/toolbar/create-table-style.css" rel="stylesheet" />
     <link href="src/components/common/toolbar/common-toolbar-style.css" rel="stylesheet" />
     <link href="src/components/syntax/syntax-style.css" rel="stylesheet" />
+    <link href="src/components/wrap/wrap-style.css" rel="stylesheet" />
     <!-- INTERNAL STYLES END -->
     <!-- EXTERNAL APIS BEGIN -->
     <script defer src="lib/HighlightJs/highlight.min.js"></script>
@@ -209,6 +210,7 @@
     <script defer src="src/components/findreplace/findreplace.js"></script>
     <script defer src="src/components/tooltip/tooltip.js"></script>
     <script defer src="src/components/history/history.js"></script>
+    <script defer src="src/components/wrap/wrap.js"></script>
     <script defer src="src/components/editor/editor.js"></script>
     <script defer src="src/components/main/main.js"></script>
     <!-- INTERNAL API END -->
@@ -303,6 +305,8 @@
         <div class="toolbar-separator"></div>
         <!-- ALIGN -->
         <button id="alignEditorToolbarButton"></button>
+        <button id="wrapToolbarButton"
+                class="svg-key-wrap svg-no-defaults"></button>
         <div class="toolbar-separator"></div>
         <!-- CREATE TABLE -->
         <span id="createTableToolbarButton" class="ql-Table-Input ql-picker hidden">

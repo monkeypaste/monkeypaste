@@ -35,11 +35,11 @@ namespace MonkeyPaste.Avalonia {
                         if(this.DataContext is MpAvIFocusHeaderMenuViewModel &&
                             !is_popup) {
 
-                            MpAvMainView.Instance.Focus();
+                            MpAvMainView.Instance.FocusThisHeader();
                         } else if(this.GetVisualAncestor<MpAvChildWindow>() is { } cw) {
                             cw.Close();
+                            MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
                         }
-                        MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
                     });
         #endregion
     }

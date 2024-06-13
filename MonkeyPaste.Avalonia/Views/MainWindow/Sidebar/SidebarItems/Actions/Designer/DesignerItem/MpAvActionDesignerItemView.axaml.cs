@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
     /// <summary>
     /// Interaction logic for MpActionDesignerItemView.xaml
     /// </summary>
-    public partial class MpAvActionDesignerItemView : MpAvUserControl<MpAvActionViewModelBase> {
+    public partial class MpAvActionDesignerItemView : MpAvUserControl<MpAvActionViewModelBase>, MpAvIFocusHeaderMenuView {
         public MpAvActionDesignerItemView() {
             InitializeComponent();
             InitShortcuts();

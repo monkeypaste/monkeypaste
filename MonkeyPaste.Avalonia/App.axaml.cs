@@ -8,7 +8,6 @@ using Avalonia.Media;
 using Avalonia.Threading;
 #if SUGAR_WV
 using AvaloniaWebView;
-//using HotAvalonia;
 
 #endif
 using MonkeyPaste.Common;
@@ -20,6 +19,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+
+#if ENABLE_XAML_HOT_RELOAD
+using HotAvalonia; 
+#endif
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -132,7 +135,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public override void Initialize() {
-            //this.EnableHotReload();
+#if ENABLE_XAML_HOT_RELOAD
+            this.EnableHotReload(); 
+#endif
             AvaloniaXamlLoader.Load(this);
         }
 #if SUGAR_WV

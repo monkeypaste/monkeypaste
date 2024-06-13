@@ -116,6 +116,7 @@
 
             <local:MpAvZoomBorder HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
+                                  Focusable="True"
                                   local:MpAvBoundsObserverExtension.IsEnabled="True"
                                   local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
                                   local:MpAvBoundsObserverExtension.ToScreen="True"
@@ -171,7 +172,8 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="local:MpAvActionViewModelBase">
-                            <local:MpAvActionDesignerItemView ClipToBounds="False" />
+                            <local:MpAvActionDesignerItemView Focusable="True"
+                                                              ClipToBounds="False" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

@@ -2802,6 +2802,41 @@ namespace MonkeyPaste.Avalonia {
                 }
                 ZoomFactor = Math.Clamp(newZoomFactor, MinZoomFactor, MaxZoomFactor);
             });
+        public ICommand AppIconTapCommand => new MpCommand<object>(
+            (args) => {
+                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                    TransactionCollectionViewModel.OpenTransactionPaneCommand.Execute(args);
+                    return;
+                }
+                if (args is not Control c ||
+                    TransactionCollectionViewModel.CreateTransaction == null ||
+                    TransactionCollectionViewModel.CreateTransaction.Sources.Where(x => x.CanNavigateToSource) is not { } nav_sources) {
+                    return;
+                }
+
+                var mivm = new MpAvMenuItemViewModel() {
+                    SubItems = nav_sources.Select(x =>
+                        new MpAvMenuItemViewModel() {
+                            IconSourceObj = x.IconSourceObj,
+                            Header = UiStrings.CommonOpenLabel,
+                            Command = MpAvUriNavigator.Instance.NavigateToUriCommand,
+                            CommandParameter = x.SourceUri
+                        })
+                };
+
+                MpAvMenuView.ShowMenu(c, mivm);
+            },
+            (args) => {
+                if (MpAvThemeViewModel.Instance.IsMultiWindow) {
+                    return TransactionCollectionViewModel.OpenTransactionPaneCommand.CanExecute(args);
+                }
+                if (TransactionCollectionViewModel.CreateTransaction != null &&
+                    TransactionCollectionViewModel.CreateTransaction.Sources.Where(x => x.CanNavigateToSource) is { } nav_sources) {
+                    return nav_sources.Any();
+                }
+                return false;
+            });
+
         public ICommand DragEnterCommand => new MpCommand(() => {
             if (IsTileDragging) {
                 // don't flip view for self drop

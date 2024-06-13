@@ -147,7 +147,7 @@ namespace MonkeyPaste.Common.Avalonia {
             while (result == default) {
                 result = visual.GetVisualDescendant<T>(includeSelf);
                 await Task.Delay(100);
-                if (sw.ElapsedMilliseconds >= timeOutMs) {
+                if (sw.ElapsedMilliseconds >= timeOutMs && timeOutMs >= 0) {
                     MpConsole.WriteLine($"GetVisualDescendantAsync from {visual.GetType()} to {typeof(T)} timeout {timeOutMs} reached.");
                     return null;
                 }

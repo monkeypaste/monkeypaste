@@ -18,6 +18,7 @@ function initEditor() {
 	initContentClassAttributes();
 
 	initScroll();
+	initWrap();
 	initTooltip();
 	initTemplates();
 	initSyntax();

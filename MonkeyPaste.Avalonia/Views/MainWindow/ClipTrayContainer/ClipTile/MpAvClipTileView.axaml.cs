@@ -7,7 +7,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel> {
+    public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel>, MpAvIFocusHeaderMenuView {
         public MpAvClipTileView() {
             InitializeComponent();
 
