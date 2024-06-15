@@ -36,6 +36,7 @@ namespace MonkeyPaste.Avalonia {
         private string[] _reinitContentParams => new string[] {
             nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
             nameof(MpAvPrefViewModel.Instance.DefaultEditableFontFamily),
+            nameof(MpAvPrefViewModel.Instance.DefaultCodeFontFamily),
             nameof(MpAvPrefViewModel.Instance.IsDataTransferDestinationFormattingEnabled),
             nameof(MpAvPrefViewModel.Instance.DefaultFontSize),
             nameof(MpAvPrefViewModel.Instance.IsSpellCheckEnabled),
@@ -558,6 +559,22 @@ namespace MonkeyPaste.Avalonia {
                                                 .OrderBy(x=>x)
                                                 .Select(x=>new MpParameterValueFormat() {
                                                     isDefault = MpAvThemeViewModel.Instance.DefaultEditableFontFamily.ToLowerInvariant() == x.ToLowerInvariant(),
+                                                    value = x
+                                                }).ToList()
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.DefaultCodeFontFamily),
+                                            controlType = MpParameterControlType.ComboBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = UiStrings.PrefCodeFontLabel,
+                                            values =
+                                                FontManager.Current.SystemFonts
+                                                .Select(x=>x.Name)
+                                                .Where(x=>!string.IsNullOrEmpty(x))
+                                                .Union(MpAvThemeViewModel.Instance.CustomFontFamilyNames)
+                                                .OrderBy(x=>x)
+                                                .Select(x=>new MpParameterValueFormat() {
+                                                    isDefault = MpAvPrefViewModel.Instance.DefaultCodeFontFamily.ToLowerInvariant() == x.ToLowerInvariant(),
                                                     value = x
                                                 }).ToList()
                                         },
@@ -1337,6 +1354,14 @@ namespace MonkeyPaste.Avalonia {
                 },
                 {
                     nameof(MpAvPrefViewModel.Instance.DefaultEditableFontFamily),
+                    (piv) => {
+                        if(piv.GetVisualDescendant<ComboBox>() is not ComboBox cb) {
+                            return;
+                        }
+                        SetupFontFamilyComboBox(cb);
+                    }
+                },{
+                    nameof(MpAvPrefViewModel.Instance.DefaultCodeFontFamily),
                     (piv) => {
                         if(piv.GetVisualDescendant<ComboBox>() is not ComboBox cb) {
                             return;

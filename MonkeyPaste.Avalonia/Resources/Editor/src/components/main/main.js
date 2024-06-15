@@ -85,6 +85,9 @@ function initDefaults(defaultsObj) {
 	if (!isNullOrUndefined(defaultsObj.bgOpacity)) {
 		setElementComputedStyleProp(document.body, '--editableopacity', parseFloat(defaultsObj.bgOpacity));
 	}
+	if (!isNullOrUndefined(defaultsObj.syntaxFontFamily)) {
+		setElementComputedStyleProp(document.body, '--syntaxFontFamily', defaultsObj.syntaxFontFamily);
+	}
 
 	const bg_opacity = isRunningOnHost() ? 0 : 1;// 
 	const code_opacity = parseFloat(getElementComputedStyleProp(document.body, '--editableopacity'));

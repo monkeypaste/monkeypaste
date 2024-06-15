@@ -47,6 +47,7 @@ body {
     --editorzoom: 100%;
     --linkcolor: 'blue';
     --linkhovercolor: 'red';
+    --syntaxFontFamily: 'Consolas';
     margin: 0px;
     padding: 0px;
     font-family: var(--defaultFontFamily);

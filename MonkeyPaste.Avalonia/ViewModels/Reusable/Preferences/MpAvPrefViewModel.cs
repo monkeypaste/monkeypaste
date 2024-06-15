@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
 
         [JsonIgnore]
-        public const string DEF_SYNTAX_THEME = "monokai-sublime";
+        public const string DEF_SYNTAX_THEME = "monokai";
         [JsonIgnore]
         public const string PREF_FILE_NAME = "mp.pref";
 
@@ -64,6 +64,7 @@ namespace MonkeyPaste.Avalonia {
         public const string BASELINE_DEFAULT_READ_ONLY_FONT = "Nunito";
         public const string BASELINE_DEFAULT_READ_ONLY_FONT2 = "Tahoma";
         public const string BASELINE_DEFAULT_CONTENT_FONT = "Arial";
+        public const string BASELINE_DEFAULT_CODE_FONT = "Consolas";
 
         [JsonIgnore]
         public const bool ENCRYPT_DB = true;
@@ -339,6 +340,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string DefaultReadOnlyFontFamily { get; set; } = BASELINE_DEFAULT_READ_ONLY_FONT;
         public string DefaultEditableFontFamily { get; set; } = BASELINE_DEFAULT_CONTENT_FONT;
+        public string DefaultCodeFontFamily { get; set; } = BASELINE_DEFAULT_CODE_FONT;
         public double DefaultFontSize { get; set; } = BASE_DEFAULT_FONT_SIZE;
 
         public bool HideCapWarnings { get; set; }
