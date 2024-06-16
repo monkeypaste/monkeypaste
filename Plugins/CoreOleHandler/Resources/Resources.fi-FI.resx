@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Tiedoston laajennusta käytetään, kun '{0}' käytetään tiedoston luomiseen pyytämällä.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Koodin korostamiseksi käytä 'pre' -tunnistetta muuten RTF: tä käsitellään normaalina rikkaina tekstinä.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML -kappaletunniste</value>
+  </data>
 </root>

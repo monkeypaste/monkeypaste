@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>امتداد الملف المستخدم عند استخدام '{0}' لإنشاء ملف حسب الطلب.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>لتمييز التعليمات البرمجية، استخدم علامة "PRE" وإلا فسيتم التعامل مع RTF كنص منسق عادي.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>علامة فقرة HTML</value>
+  </data>
 </root>

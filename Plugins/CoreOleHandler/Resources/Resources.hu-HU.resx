@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>A '{0}' fájl kiterjesztése használata egy fájl igény szerinti létrehozásához használható.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>A kód kiemeléséhez használja a 'Pre' címkét, különben az RTF -et normál gazdag szövegként kezelik.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML bekezdés címke</value>
+  </data>
 </root>

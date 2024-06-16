@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>'{0}' tələb üzrə fayl yaratmaq üçün istifadə edildikdə istifadə olunan fayl uzantısı.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Kodu vurğulamaq üçün "PRE" etiketindən istifadə edin, əks halda RTF normal zəngin mətn kimi qəbul ediləcək.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML paraqraf etiketi</value>
+  </data>
 </root>

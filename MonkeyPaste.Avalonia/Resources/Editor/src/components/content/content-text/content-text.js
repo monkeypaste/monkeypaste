@@ -6,8 +6,6 @@
 
 function loadTextContent(itemDataStr) {
 	globals.quill.enable(true);
-	//setRootHtml(itemDataStr)
-	//log('loading text content: ' + itemDataStr);
 
 	// HTML LOAD NOTES
 	// templates work
@@ -28,8 +26,8 @@ function loadTextContent(itemDataStr) {
 		delta = decodeHtmlEntitiesInDeltaInserts(delta);
 		setContents(delta, 'silent');
 	}
+	
 
-	highlightSyntax();
 	loadTemplates();
 	loadLinkHandlers();
 	enableTableContextMenu();
@@ -39,6 +37,7 @@ function loadTextContent(itemDataStr) {
 	} else {
 		getEditorContainerElement().classList.remove('table-only');
 	}
+	highlightSyntax();
 }
 
 // #endregion Life Cycle
@@ -46,6 +45,7 @@ function loadTextContent(itemDataStr) {
 // #region Getters
 
 function getTextContentData() {
+	forceSyntax();
 	let qhtml = '';
 	if (isContentATable()) {
 		// NOTE delta-to-html will loose tables. This probably means this will loose templates

@@ -77,7 +77,6 @@
                               MaxWidth="600"
                               IsVisible="{Binding IsHtml, ElementName=ToolTipView}"
                               local:MpAvHtmlStylerExtension.HtmlStyleType="Tooltip"
-                              local:MpAvHtmlStylerExtension.IsUniqueStyleRequired="True"
                               local:MpAvHtmlStylerExtension.DefaultFontSize="14"
                               local:MpAvHtmlStylerExtension.DefaultHexColor="{Binding Background, ElementName=TooltipOuterContainer, ConverterParameter=hex, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                               local:MpAvHtmlStylerExtension.IsEnabled="True"

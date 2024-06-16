@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Faila paplašinājums, ko izmanto, kad tiek izmantots faila izveidošanai pēc pieprasījuma.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Koda izcelšanai izmantojiet tagu “Pre”, pretējā gadījumā RTF tiks uzskatīts par parastu bagātīgu tekstu.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML rindkopas tags</value>
+  </data>
 </root>

@@ -3026,4 +3026,7 @@ Pintasan global kini boleh didayakan dalam menu dulang sistem</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Tema sintaks</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaks</value>
+  </data>
 </root>

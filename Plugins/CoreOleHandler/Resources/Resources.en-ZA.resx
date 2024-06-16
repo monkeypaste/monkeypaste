@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>The file extension used when '{0}' is used to create a file on-demand.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>For code highlighting use the 'PRE' tag otherwise the RTF will be treated as normal rich text.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML Paragraph Tag</value>
+  </data>
 </root>

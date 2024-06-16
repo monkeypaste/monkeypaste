@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>De bestandsextensie die wordt gebruikt wanneer '{0}' wordt gebruikt om een ​​bestand op aanvraag te maken.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Gebruik voor code -markering de 'pre' -tag, anders wordt de RTF behandeld als normale rijke tekst.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML -paragraaf -tag</value>
+  </data>
 </root>

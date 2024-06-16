@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Přípona souboru používaná při použití '{0}' k vytvoření souboru na vyžádání.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Pro zvýraznění kódu použijte značku 'PRE', jinak bude RTF považováno za normální formátovaný text.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Značka odstavce HTML</value>
+  </data>
 </root>

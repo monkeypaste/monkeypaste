@@ -3026,4 +3026,7 @@ Global gysga ýollar ulgam tromy menýusynda başlap biler</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Sintaksis mowzugy</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksis</value>
+  </data>
 </root>

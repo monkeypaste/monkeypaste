@@ -23,7 +23,6 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public static class MpAvHtmlStylerExtension {
-        private static Dictionary<MpHtmlStyleType, string> _stylesLookup = [];
         private static (string name,string data) _syntaxStyle;
         static MpAvHtmlStylerExtension() {
             //if (MpAvThemeViewModel.Instance != null &&
@@ -41,6 +40,7 @@ namespace MonkeyPaste.Avalonia {
             IsEnabledProperty.Changed.AddClassHandler<HtmlControl>((x, y) => HandleIsEnabledChanged(x, y));
 
             // need handlers for any css related properties
+            WrapTextProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x,true));
             SyntaxThemeNameProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x,true));
             HtmlStyleTypeProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
             DefaultFontSizeProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
@@ -83,6 +83,22 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region WrapText AvaloniaProperty
+        public static bool GetWrapText(AvaloniaObject obj) {
+            return obj.GetValue(WrapTextProperty);
+        }
+
+        public static void SetWrapText(AvaloniaObject obj, bool value) {
+            obj.SetValue(WrapTextProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> WrapTextProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "WrapText",
+                true);
+
+        #endregion
+        
         #region DefaultFontSize AvaloniaProperty
         public static double GetDefaultFontSize(AvaloniaObject obj) {
             return obj.GetValue(DefaultFontSizeProperty);
@@ -148,22 +164,6 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<bool> ShowUnderlinesProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
                 "ShowUnderlines",
-                false);
-
-        #endregion
-
-        #region IsUniqueStyleRequired AvaloniaProperty
-        public static bool GetIsUniqueStyleRequired(AvaloniaObject obj) {
-            return obj.GetValue(IsUniqueStyleRequiredProperty);
-        }
-
-        public static void SetIsUniqueStyleRequired(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsUniqueStyleRequiredProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> IsUniqueStyleRequiredProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "IsUniqueStyleRequired",
                 false);
 
         #endregion
@@ -255,17 +255,15 @@ namespace MonkeyPaste.Avalonia {
             UpdateContent(hc);
         }
         private static void UpdateContent(HtmlControl hc, bool set_style = false) {
+            string html_doc_str = hc.Text.ToStringOrEmpty();
             if (set_style) {
                 // for some reason changing the style sheet makes html disappear so only setting on load now
                 hc.BaseStylesheet = GetStyleSheet(hc);
-                
+                hc.Text = null;
             }
 
-            if (hc.Text != null && hc.Text != "<html><body></body></html>") {
-            }
-            if (!hc.Text.ToStringOrEmpty().IsStringHtmlDocument()) {
+            if (!html_doc_str.ToStringOrEmpty().IsStringHtmlDocument()) {
                 // ensure text is full html doc or stylesheet stuff doesn't work
-                string html_doc_str = hc.Text.ToStringOrEmpty();
                 if (!html_doc_str.StartsWith("<")) {
                     // BUG htmlRenderer seems to ignore raw text element html
                     if (html_doc_str.Contains("\n") || html_doc_str.Contains("<br>") || html_doc_str.Contains("<br/>")) {
@@ -274,8 +272,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
                 html_doc_str = html_doc_str.ToHtmlDocumentFromTextOrPartialHtml();
-                hc.SetHtml(html_doc_str);
             }
+            hc.SetHtml(html_doc_str);
         }
 
         private static void ToggleUnderlines(HtmlControl hc) {
@@ -562,32 +560,43 @@ namespace MonkeyPaste.Avalonia {
         private static string GetStyleSheet(HtmlControl hc) {
             // NOTE this is sample css from HtmlRenderer proj:
             var style_type = GetHtmlStyleType(hc);
-            if (_stylesLookup.TryGetValue(style_type, out string css) && !GetIsUniqueStyleRequired(hc)) {
-                return css;
-            }
+
             var sb = new StringBuilder(DefaultStyleSheet);
             //string css_str = string.Empty;
             string type_style = string.Empty;
             switch (style_type) {
                 case MpHtmlStyleType.Content:
+                    string body_wrap = GetWrapText(hc) ? "white-space: normal;  word-break: break-all;" : "white-space: pre;";
+                    string code_wrap = GetWrapText(hc) ? "white-space: pre-wrap;" : "white-space: pre;";
                     type_style = string.Format(@"
 * {{ margin: 0; padding: 0; }}
-body {{ color: {0}; font-size: {1}px; font-family: {2}; white-space: normal;  word-break: break-all; }}
-p {{ height: 1em; line-height: 1.42; margin: 0; padding: 0; }}
-.underline {{ text-decoration: underline; line-height: 1.42; text-underline-offset: -2; }}
+body {{ color: {0}; font-size: {1}px; font-family: {2}; {10} }}
+p {{ height: 1em; line-height: 1.2em; margin: 0; padding: 0; }}
+h6 {{ line-height: 2em; }}
+h5 {{ line-height: 2.2em; }}
+h4 {{ line-height: 2.4em; }}
+h3 {{ line-height: 2.6em; }}
+h2 {{ line-height: 2.8em; }}
+h1 {{ line-height: 3em; }}
+.underline {{ text-decoration: underline; text-underline-offset: -2; }}
 .highlight-inactive {{ background-color: {3}; color: {4}; }}
 .highlight-active {{ background-color: {5}; color: {6}; }}
 a:link {{ text-decoration: none; color: {7}; }}
-a:hover {{ text-decoration: underline; color: {8}; text-underline-offset: -2; }}",
+a:hover {{ text-decoration: underline; color: {8}; text-underline-offset: -2; }}
+div.ql-code-block, code.ql-code-block {{ {11} }}
+pre, code {{ font-family: {9}; }}",
 Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor).ToPortableColor().ToHex(true), //0
 GetDefaultFontSize(hc), //1
-GetDefaultFontFamily(hc), //2
+GetDefaultFontFamily(hc).ToCssStringPropValue(), //2
 Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightInactiveColor).ToPortableColor().ToHex(true), //3
 Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightInactiveColor).ToPortableColor().ToHex(true).ToContrastForegoundColor(remove_alpha: true), //4
 Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).ToPortableColor().ToHex(true), //5
 Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeHighlightActiveColor).ToPortableColor().ToHex(true).ToContrastForegoundColor(remove_alpha: true), //6
 Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkColor).ToPortableColor().ToHex(true), //7
-Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkHoverColor).ToPortableColor().ToHex(true) //8
+Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeContentLinkHoverColor).ToPortableColor().ToHex(true), //8
+MpAvPrefViewModel.Instance.DefaultCodeFontFamily.ToCssStringPropValue(), //9
+body_wrap, //10
+code_wrap //11
 );
                     break;
                 case MpHtmlStyleType.Tooltip:
@@ -601,7 +610,7 @@ a:link {{ text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}",
 GetDefaultHexColor(hc).RemoveHexAlpha(), //0
 GetDefaultFontSize(hc), //1
-GetDefaultFontFamily(hc), //2
+GetDefaultFontFamily(hc).ToCssStringPropValue(), //2
 MpSystemColors.gold1.RemoveHexAlpha()
                         );
                     break;
@@ -618,14 +627,7 @@ MpSystemColors.gold1.RemoveHexAlpha()
             }
 
             string css_str = sb.ToString();
-            if (!GetIsUniqueStyleRequired(hc)) {
-                _stylesLookup.Add(style_type, css_str);
-            }
             return css_str;
-        }
-
-        public static void ResetStyleType(MpHtmlStyleType styleType) {
-            _stylesLookup.Remove(styleType);
         }
     }
 

@@ -18,22 +18,13 @@
 
         <!--  PASTE TOOLBAR TRANSITIONS  -->
 
-        <Style Selector="local|MpAvPasteToolbarView,ContentControl#EditableTextContentControl">
+        <Style Selector="local|MpAvPasteToolbarView">
             <Setter Property="Transitions">
                 <Transitions>
                     <ThicknessTransition Property="Margin"
                                          Duration="0:0:0.2" />
                 </Transitions>
             </Setter>
-        </Style>
-        <!--  WEBVIEW DETAIL HOVER MARGIN  -->
-        <Style Selector="ContentControl#EditableTextContentControl">
-            <Setter Property="Margin"
-                    Value="0,0,0,0" />
-        </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid:not(.show-read-only) ContentControl#EditableTextContentControl">
-            <Setter Property="Margin"
-                    Value="0,0,0,0" />
         </Style>
         <!--  PASTE TOOLBAR SHOW/HIDE (needs anim class to animate)  -->
         <Style Selector="local|MpAvPasteToolbarView:not(.anim)">
@@ -67,26 +58,22 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only :is(Control).plain-content-view.active, Grid#CompositeWebViewContainerGrid.anim :is(Control).plain-content-view.active">
+        <!--<Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only :is(Control).plain-content-view.active, Grid#CompositeWebViewContainerGrid.anim :is(Control).plain-content-view.active">
             <Setter Property="IsVisible"
                     Value="True" />
-        </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid ContentControl#EditableTextContentControl">
-            <!--<Setter Property="IsVisible"
-                    Value="True" />-->
+        </Style>-->
+        <!--<Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvContentWebViewContainer#EditableWebView">
             <Setter Property="Width"
                     Value="{StaticResource NaN}" />
             <Setter Property="Height"
                     Value="{StaticResource NaN}" />
         </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only ContentControl#EditableTextContentControl, Grid#CompositeWebViewContainerGrid.anim ContentControl#EditableTextContentControl">
-            <!--<Setter Property="IsVisible"
-                    Value="False" />-->
+        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only local|MpAvContentWebViewContainer#EditableWebView, Grid#CompositeWebViewContainerGrid.anim local|MpAvContentWebViewContainer#EditableWebView">
             <Setter Property="Width"
                     Value="0" />
             <Setter Property="Height"
                     Value="0" />
-        </Style>
+        </Style>-->
 
         <!--  RO/RW BEHAVIOR ATTACHMENT  -->
         <Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvContentWebView">
@@ -140,6 +127,7 @@
                              local:MpAvHighlightTextExtension.HighlightRanges="{Binding HighlightRanges}"
                              local:MpAvHighlightTextExtension.ActiveHighlightIdx="{Binding ActiveHighlightIdx}"
                              local:MpAvHtmlStylerExtension.IsEnabled="True"
+                             local:MpAvHtmlStylerExtension.WrapText="{Binding IsWrappingEnabled}"
                              local:MpAvHtmlStylerExtension.SyntaxThemeName="{Binding SelectedSyntaxTheme, Source={x:Static local:MpAvPrefViewModel.Instance}}"
                              local:MpAvHtmlStylerExtension.HtmlStyleType="Content"
                              local:MpAvHtmlStylerExtension.DefaultFontSize="{Binding DefaultFontSize, Source={x:Static local:MpAvPrefViewModel.Instance}}"
@@ -157,10 +145,12 @@
             </local:MpAvHtmlPanel.IsSelectionEnabled>
         </local:MpAvHtmlPanel>
         <!--  IMAGE VIEW  -->
-        <local:MpAvImageContentView Classes="content-zoom plain-content-view"
+        <local:MpAvImageContentView x:Name="ImageViewer"
+                                    Classes="content-zoom plain-content-view"
                                     Classes.active="{Binding CopyItemType, ConverterParameter=Image, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}" />
         <!--  FILE-LIST VIEW  -->
-        <local:MpAvFileListContentView Classes="content-zoom plain-content-view"
+        <local:MpAvFileListContentView x:Name="FileListViewer"
+                                       Classes="content-zoom plain-content-view"
                                        Classes.active="{Binding CopyItemType, ConverterParameter=FileList, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}" />
         <!--  EDITABLE TEXT  -->
         <ContentControl x:Name="EditableTextContentControl"

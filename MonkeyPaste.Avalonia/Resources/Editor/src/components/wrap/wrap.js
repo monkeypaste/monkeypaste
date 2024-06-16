@@ -18,6 +18,14 @@ function getWrapToolbarElement() {
 
 // #region Setters
 
+function setWrap(isWrapEnabled) {
+	if (isWrapEnabled) {
+		enableWrap();
+	} else {
+		disableWrap();
+	}
+}
+
 // #endregion Setters
 
 // #region State

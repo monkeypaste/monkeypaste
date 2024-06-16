@@ -3026,4 +3026,7 @@ Globaalit pikakuvakkeet voidaan nyt ottaa käyttöön järjestelmälokero -valik
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Syntaksiteema</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntaksi</value>
+  </data>
 </root>

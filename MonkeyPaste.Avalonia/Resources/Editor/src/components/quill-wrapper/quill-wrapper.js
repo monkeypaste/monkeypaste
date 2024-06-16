@@ -33,8 +33,6 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 				// NOTE 1_000 is the default interval, but convert needs to be synchronous
 				interval: 0//globals.IsConverter ? 0 : 1_000
 			},
-			//syntax: true
-			//syntax: text => hljs.highlightAuto(text).value
 		}
 	}
 
@@ -47,7 +45,6 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 	quill_instance.getModule("toolbar").container.addEventListener("mousedown", (e) => {
 		e.preventDefault();
 	});
-
 
 	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
 
@@ -235,6 +232,13 @@ function setHtmlInRange(range, htmlStr, source = 'api', decodeTemplates = false)
 }
 
 function setContents(delta, source = 'api') {
+	if (isString(delta)) {
+		if (isNullOrWhiteSpace(delta)) {
+			delta = new Quill.imports.delta();
+		} else {
+			delta = JSON.parse(delta);
+		}		
+	}
 	globals.quill.setContents(delta,source);
 }
 

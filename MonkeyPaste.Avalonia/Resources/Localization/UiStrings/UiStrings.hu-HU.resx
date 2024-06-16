@@ -3026,4 +3026,7 @@ A globális parancsikonok már engedélyezhetők a rendszer tálca menüben</val
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Szintaxis téma</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Szintaxis</value>
+  </data>
 </root>

@@ -3026,4 +3026,7 @@ Globalni prečaci sada mogu biti omogućeni u izborniku Sistemske ladice</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Tema sintakse</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksa</value>
+  </data>
 </root>

@@ -3026,4 +3026,7 @@
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>구문 테마</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>통사론</value>
+  </data>
 </root>

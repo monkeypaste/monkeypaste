@@ -129,6 +129,12 @@ function setEditorIsLoaded(isLoaded) {
 
 // #region State
 
+function isEditorEmpty() {
+	if (getText() == '\n') {
+		return true;
+	}
+	return false;
+}
 function isShowingEditorToolbar() {
 	$(".ql-toolbar").css("display") != "none";
 }
@@ -226,18 +232,14 @@ function focusEditor() {
 	globals.quill.focus();
 	getEditorElement().focus();
 }
-
-
 function disableTextWrapping() {
 	getEditorElement().style.whiteSpace = 'nowrap';
 	getEditorElement().style.width = Number.MAX_SAFE_INTEGER + 'px';
 }
-
 function enableTextWrapping() {
 	getEditorElement().style.whiteSpace = '';
 	getEditorElement().style.width = '';
 }
-
 function createLink() {
 	var range = globals.quill.getSelection(true);
 	if (range) {
@@ -251,8 +253,6 @@ function createLink() {
 		console.table("\nhtml:\n" + getHtml());
 	}
 }
-
-
 function enableReadOnly(fromHost = false) {
 	getEditorElement().style.caretColor = 'transparent';
 	if (isReadOnly()) {
@@ -373,6 +373,15 @@ function disableSubSelection(fromHost = false) {
 	log('sub-selection DISABLED from: '+(fromHost ? 'HOST':'INTERNAL'));
 }
 
+function checkAndClearEmptyContent() {
+	// deleting all content doesn't remove head blocks format and its annoying sometimes
+	// so if doc is empty clear all formatting
+	if (!isEditorEmpty()) {
+		return;
+	}
+	setEditorText('');
+}
+
 function suppressTextChanged(guid = null) {
 	guid = guid == null ? generateGuid() : guid;
 	let was_found = false;
@@ -468,10 +477,9 @@ function onEditorTextChanged(delta, oldDelta, source) {
 		updateTemplatesAfterTextChanged();
 	}
 
+	checkAndClearEmptyContent();
 	loadLinkHandlers(true);
-	updateSyntaxBlocks(true);
 	populateFindReplaceResults();
-	//hljs.highlightAll();
 
 	let suppress_text_change_ntf = isTextChangeSupressed();
 

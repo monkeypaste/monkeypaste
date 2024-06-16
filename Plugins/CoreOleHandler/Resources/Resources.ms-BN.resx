@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Pelanjutan fail yang digunakan apabila '{0}' digunakan untuk membuat fail atas permintaan.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Untuk kod yang menonjolkan Gunakan tag 'pra' jika tidak, RTF akan dianggap sebagai teks kaya yang normal.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Tag perenggan HTML</value>
+  </data>
 </root>

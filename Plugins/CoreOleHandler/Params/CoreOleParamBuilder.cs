@@ -142,6 +142,22 @@ namespace CoreOleHandler {
                         value = new MpParameterValueFormat(true.ToString(), true),
                         paramId = GetParamId(format, isReader, "tohtml")
                     });
+                    if(isReader && OperatingSystem.IsWindows()) {
+                        pfl.Add(new MpParameterFormat() {
+                            label = Resources.RtfParaTagNameLabel,
+                            description = Resources.RtfParaTagNameHint,
+                            controlType = MpParameterControlType.ComboBox,
+                            unitType = MpParameterValueUnitType.PlainText,
+                            values = 
+                                new string[] { "P", "PRE" }
+                                .Select((x,idx)=>new MpParameterValueFormat() {
+                                    isDefault = idx == 0,
+                                    label = x,
+                                    value = x
+                            }).ToList(),
+                            paramId = GetParamId(format, isReader, "htmlpartagname")
+                        });
+                    }
                     break;
                 case var _ when format == MpPortableDataFormats.Html:
                 case var _ when format == MpPortableDataFormats.Xhtml:

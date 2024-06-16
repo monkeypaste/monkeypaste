@@ -3026,4 +3026,7 @@ feedble@monkeypaste.com</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Θέμα Σύνταξης</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Σύνταξη</value>
+  </data>
 </root>

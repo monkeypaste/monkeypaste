@@ -3026,4 +3026,7 @@ Globale kortpaaie kan nou in die System Tray Menu geaktiveer word</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Sintaksis tema</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksis</value>
+  </data>
 </root>

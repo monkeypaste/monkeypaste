@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
                 // remove old refs
                 var stale_wvl = result.Skip(1);
                 // TODO? do these need further processing? besides hiding from locator?
-                _allItems = _allItems.Where(x => stale_wvl.Contains(x)).ToList();
+                _allItems = _allItems.Where(x => !stale_wvl.Contains(x)).ToList();
 
                 MpConsole.WriteLine($"{stale_wvl.Count()} stale webviews removed for item '{result[0].DataContext}'");
             }

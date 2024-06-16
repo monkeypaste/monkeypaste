@@ -3026,4 +3026,7 @@
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Тема синтаксису</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Синтаксис</value>
+  </data>
 </root>

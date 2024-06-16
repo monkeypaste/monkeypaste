@@ -3026,4 +3026,7 @@ Các phím tắt toàn cầu hiện có thể được bật trong menu khay h�
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Chủ đề cú pháp</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Cú pháp</value>
+  </data>
 </root>

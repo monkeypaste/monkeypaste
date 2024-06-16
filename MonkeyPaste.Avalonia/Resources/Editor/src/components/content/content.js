@@ -14,7 +14,8 @@ function loadContentAsync(
 	paste_button_info,
 	break_before_load,
 	editor_scale,
-	is_pop_out) {
+	is_pop_out,
+	is_wrap_enabled) {
 	if (break_before_load) {
 		log('breaking before load called...');
 		debugger;
@@ -108,6 +109,8 @@ function loadContentAsync(
 			loadAnnotations(annotationsJsonStr);
 		//}
 
+		setWrap(is_wrap_enabled);
+
 		updateAllElements();
 		updateQuill();
 
@@ -146,8 +149,9 @@ function loadContentAsync(
 	setIsContentLoaded(true);
 	// signal content loaded (atm used by scrollToAppendIdx)
 	getEditorContainerElement().dispatchEvent(globals.ContentLoadedEvent);
-
+	
 	unsupressTextChanged(sup_guid);
+
 
 	if (is_reload) {
 		log('Editor re-loaded');

@@ -3026,4 +3026,7 @@ Globālās saīsnes tagad var iespējot Sistēmas paplātes izvēlnē</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Sintakses tēma</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintakse</value>
+  </data>
 </root>

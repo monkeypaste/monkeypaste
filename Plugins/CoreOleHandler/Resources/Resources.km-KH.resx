@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>ផ្នែកបន្ថែមឯកសារដែលបានប្រើនៅពេល '{0}' ត្រូវបានប្រើដើម្បីបង្កើតឯកសារតាមតម្រូវការ។</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>សម្រាប់ការបន្លិចកូដប្រើស្លាក 'មុន' បើមិនដូច្នោះទេ RTF នឹងត្រូវបានចាត់ទុកជាអត្ថបទសម្បូរបែបធម្មតា។</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>ស្លាកកថាខណ្ឌ HTML</value>
+  </data>
 </root>

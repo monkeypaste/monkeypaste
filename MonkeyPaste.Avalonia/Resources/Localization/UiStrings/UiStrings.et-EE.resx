@@ -3026,4 +3026,7 @@ Globaalsed otseteed saab nüüd süsteemialuse menüüs lubada</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Süntaksiteema</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Süntaks</value>
+  </data>
 </root>

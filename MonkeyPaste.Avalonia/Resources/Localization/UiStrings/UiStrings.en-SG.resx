@@ -3026,4 +3026,7 @@ Global Shortcuts can now be enabled in the System Tray Menu</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Syntax Theme</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntax</value>
+  </data>
 </root>

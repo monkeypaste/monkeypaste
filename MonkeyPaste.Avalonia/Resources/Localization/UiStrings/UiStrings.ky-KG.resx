@@ -3026,4 +3026,7 @@ feedback@monkeypaste.com</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Синтаксистик тема</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Синтаксис</value>
+  </data>
 </root>

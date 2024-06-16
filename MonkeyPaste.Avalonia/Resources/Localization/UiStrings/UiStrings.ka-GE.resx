@@ -3026,4 +3026,7 @@ Monkeypaste მოწყობილობაზე
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>სინტაქსის თემა</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Სინტაქსი</value>
+  </data>
 </root>

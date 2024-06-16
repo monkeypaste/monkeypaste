@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Filtypenavnet, der bruges, når '{0}' bruges til at oprette en fil on-demand.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>For at fremhæve kode, brug 'PRE'-tagget, ellers vil RTF'en blive behandlet som normal rig tekst.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML-afsnitstag</value>
+  </data>
 </root>

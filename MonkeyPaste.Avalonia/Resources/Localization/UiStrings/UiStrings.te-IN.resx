@@ -3026,4 +3026,7 @@ feedback@monkeypaste.com</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>సింటాక్స్ థీమ్</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>సింటాక్స్</value>
+  </data>
 </root>

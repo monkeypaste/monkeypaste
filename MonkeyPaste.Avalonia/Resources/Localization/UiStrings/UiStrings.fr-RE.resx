@@ -3026,4 +3026,7 @@ Les raccourcis mondiaux peuvent désormais être activés dans le menu du platea
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Thème de syntaxe</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntaxe</value>
+  </data>
 </root>

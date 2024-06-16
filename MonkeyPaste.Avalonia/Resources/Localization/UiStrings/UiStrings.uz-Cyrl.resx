@@ -3091,4 +3091,7 @@ Hozirgi kunda tizimning trafik menyusida global yorliq yoqilishi mumkin</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Sintaksis mavzusi</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksis</value>
+  </data>
 </root>

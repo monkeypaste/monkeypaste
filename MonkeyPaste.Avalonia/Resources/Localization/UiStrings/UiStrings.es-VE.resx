@@ -3026,4 +3026,7 @@ Los atajos globales ahora se pueden habilitar en el menú de la bandeja del sist
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Tema de sintaxis</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaxis</value>
+  </data>
 </root>

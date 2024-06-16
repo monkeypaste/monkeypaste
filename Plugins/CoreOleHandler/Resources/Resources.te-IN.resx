@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>ఫైల్ ఆన్-డిమాండ్‌ను సృష్టించడానికి '{0}' ఉపయోగించినప్పుడు ఉపయోగించిన ఫైల్ పొడిగింపు.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>కోడ్ హైలైటింగ్ కోసం 'ప్రీ' ట్యాగ్‌ను ఉపయోగించండి లేకపోతే RTF సాధారణ రిచ్ టెక్స్ట్‌గా పరిగణించబడుతుంది.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML పేరా ట్యాగ్</value>
+  </data>
 </root>

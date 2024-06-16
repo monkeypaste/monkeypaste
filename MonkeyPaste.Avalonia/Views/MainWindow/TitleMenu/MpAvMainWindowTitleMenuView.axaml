@@ -307,11 +307,20 @@
         </StackPanel>
 
         <!--  HEADER (MOBILE ONLY)  -->
-        <Border IsVisible="{Binding FocusHeaderViewModel, Converter={x:Static local:MpAvHeaderMenuViewModelToIsVisibleConverter.Instance}}">
-            <local:MpAvHeaderMenuView x:Name="HeaderPanel"
-                                      x:DataType="local:MpAvIHeaderMenuViewModel"
-                                      DataContext="{Binding FocusHeaderViewModel}" />
-        </Border>
+        <TransitioningContentControl Content="{Binding FocusHeaderViewModel}">
+            <TransitioningContentControl.PageTransition>
+                <PageSlide Orientation="Horizontal"
+                           Duration="0:00:00.25" />
+            </TransitioningContentControl.PageTransition>
+            <TransitioningContentControl.ContentTemplate>
+                <DataTemplate DataType="local:MpAvIHeaderMenuViewModel">
+                    <local:MpAvHeaderMenuView x:Name="HeaderPanel"
+                                              x:DataType="local:MpAvIHeaderMenuViewModel"
+                                              IsVisible="{Binding ., Converter={x:Static local:MpAvHeaderMenuViewModelToIsVisibleConverter.Instance}}"
+                                              DataContext="{Binding .}" />
+                </DataTemplate>
+            </TransitioningContentControl.ContentTemplate>
+        </TransitioningContentControl>
 
 
         <!--  RESIZER  -->

@@ -3026,4 +3026,7 @@ feedback@monkeypaste.com</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>構文テーマ</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>構文</value>
+  </data>
 </root>

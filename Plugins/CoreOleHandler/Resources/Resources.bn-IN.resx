@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>একটি ফাইল অন-ডিমান্ড তৈরি করতে যখন '{0}' ব্যবহার করা হয় তখন ব্যবহৃত ফাইল এক্সটেনশন।</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>কোড হাইলাইট করার জন্য 'PRE' ট্যাগ ব্যবহার করুন অন্যথায় RTF কে সাধারণ রিচ টেক্সট হিসাবে গণ্য করা হবে।</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML অনুচ্ছেদ ট্যাগ</value>
+  </data>
 </root>

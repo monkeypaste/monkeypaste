@@ -3026,4 +3026,7 @@
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>वाक्यविन्यास थीम</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>वाक्य - विन्यास</value>
+  </data>
 </root>

@@ -3026,4 +3026,7 @@ Globální zkratky lze nyní povolit v nabídce hlavního panelu</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Téma syntaxe</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntax</value>
+  </data>
 </root>

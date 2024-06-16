@@ -3026,4 +3026,7 @@ Monkeypaste на уредот
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Синтакса тема</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Синтакса</value>
+  </data>
 </root>

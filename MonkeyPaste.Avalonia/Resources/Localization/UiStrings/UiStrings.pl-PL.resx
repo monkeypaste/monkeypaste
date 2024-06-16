@@ -3026,4 +3026,7 @@ Globalne skróty można teraz włączyć w menu taca systemu</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Motyw składni</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Składnia</value>
+  </data>
 </root>

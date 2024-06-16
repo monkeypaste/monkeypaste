@@ -3026,4 +3026,7 @@ Comenzile rapide globale pot fi acum activate în meniul tăvii de sistem</value
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Tema sintaxei</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaxă</value>
+  </data>
 </root>

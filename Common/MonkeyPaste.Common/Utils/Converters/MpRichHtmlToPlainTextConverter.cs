@@ -26,6 +26,12 @@ namespace MonkeyPaste.Common {
                 foreach(var pre_div in pre_divs) {
                     pre_div.InsertAfter(doc.CreateTextNode(envNewLine), pre_div.LastChild);
                 }
+                
+                var pre_codes = pre_nodes.SelectMany(x => x.SafeSelectNodes("//code")).Where(x=>x.HasClass("ql-code-block"));
+                pre_codes.SelectMany(x => x.SafeSelectNodes("//br")).ForEach(x => x.Remove());
+                foreach(var pre_code in pre_codes) {
+                    pre_code.InsertAfter(doc.CreateTextNode(envNewLine), pre_code.LastChild);
+                }
             }
             var break_nodes = doc.DocumentNode.SafeSelectNodes("//br");
             foreach (HtmlNode node in break_nodes) {

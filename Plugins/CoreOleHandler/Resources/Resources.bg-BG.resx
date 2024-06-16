@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Разширението на файла, използвано, когато „{0}“ се използва за създаване на файл при поискване.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>За осветяване на кода използвайте етикета „PRE“, в противен случай RTF ще се третира като нормален форматиран текст.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML етикет за абзац</value>
+  </data>
 </root>

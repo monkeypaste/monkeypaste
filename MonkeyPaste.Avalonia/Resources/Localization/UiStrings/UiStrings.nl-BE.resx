@@ -3026,4 +3026,7 @@ Globale snelkoppelingen kunnen nu worden ingeschakeld in het menu System Tray</v
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Syntaxis thema</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntaxis</value>
+  </data>
 </root>

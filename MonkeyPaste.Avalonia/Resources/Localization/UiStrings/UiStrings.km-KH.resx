@@ -3026,4 +3026,7 @@ feedback@monkeypales.com</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>ស្បែកវាក្យសម្ព័ន្ធ</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>វាក្យសម្ពេច</value>
+  </data>
 </root>

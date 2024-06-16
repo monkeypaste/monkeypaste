@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Rozszerzenie pliku używane, gdy „{0}” służy do utworzenia pliku na żądanie.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Do podświetlenia kodu użyj znacznika „przed”, w przeciwnym razie RTF będzie traktowany jako normalny tekst bogaty.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Tag akapitu HTML</value>
+  </data>
 </root>

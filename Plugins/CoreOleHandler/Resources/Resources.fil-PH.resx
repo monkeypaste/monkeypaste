@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Ang extension ng file na ginamit kapag ang '{0}' ay ginagamit upang lumikha ng isang file on-demand.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Para sa pag -highlight ng code gamitin ang 'pre' tag kung hindi man ang RTF ay ituturing bilang normal na mayaman na teksto.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML Tagika Tag</value>
+  </data>
 </root>

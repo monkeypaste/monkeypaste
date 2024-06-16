@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Ekstenzija fajla koja se koristi kada se '{0}' koristi za kreiranje fajla na zahtjev.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Za isticanje koda koristite oznaku 'PRE', inače će RTF biti tretiran kao normalan obogaćeni tekst.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML oznaka paragrafa</value>
+  </data>
 </root>

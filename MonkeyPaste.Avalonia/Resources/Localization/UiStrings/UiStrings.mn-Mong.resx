@@ -3026,4 +3026,7 @@ FEEDBOWY@monkeypue.com</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Синтакс сэдэв</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Синтакс</value>
+  </data>
 </root>

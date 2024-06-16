@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Ugani wa faili uliotumiwa wakati '{0}' hutumiwa kuunda faili inayohitajika.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Kwa msimbo unaoangazia tumia lebo ya 'Pre' vinginevyo RTF itachukuliwa kama maandishi ya kawaida tajiri.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Tag ya aya ya HTML</value>
+  </data>
 </root>

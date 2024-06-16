@@ -3026,4 +3026,7 @@ Global kısayollar artık sistem tepsisi menüsünde etkinleştirilebilir</value
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Sözdizimi teması</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sözdizimi</value>
+  </data>
 </root>

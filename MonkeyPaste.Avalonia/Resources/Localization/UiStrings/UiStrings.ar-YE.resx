@@ -3026,4 +3026,7 @@ feedback@monkeypaste.com</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>موضوع بناء الجملة</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>بناء الجملة</value>
+  </data>
 </root>

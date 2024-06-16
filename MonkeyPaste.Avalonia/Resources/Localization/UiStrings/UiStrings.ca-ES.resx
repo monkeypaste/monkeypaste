@@ -3026,4 +3026,7 @@ Les dreceres globals ara es poden activar al menú de la safata del sistema</val
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Tema de sintaxi</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaxi</value>
+  </data>
 </root>

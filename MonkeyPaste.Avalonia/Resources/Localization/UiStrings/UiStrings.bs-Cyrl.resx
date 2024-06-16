@@ -3091,4 +3091,7 @@ Globalne prečice sada mogu biti omogućene u System Tray meniju</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Syntax Theme</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksa</value>
+  </data>
 </root>

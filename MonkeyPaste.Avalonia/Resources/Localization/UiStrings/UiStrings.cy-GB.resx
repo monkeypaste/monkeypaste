@@ -3026,4 +3026,7 @@ Bellach gellir galluogi Llwybrau Byr Byd-eang yn y Ddewislen Hambwrdd System</va
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Thema Cystrawen</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Cystrawen</value>
+  </data>
 </root>

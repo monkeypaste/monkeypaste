@@ -3026,4 +3026,7 @@ Os atalhos globais agora podem ser ativados no menu da bandeja do sistema</value
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Tema sintaxe</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaxe</value>
+  </data>
 </root>

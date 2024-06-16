@@ -102,10 +102,11 @@ function setConverterContent(formatType, dataStr, verifyText) {
 		// treat visual studio rtf as code block
 		formatDocRange(getDocAsRange(), { 'code-block': 'plain' }, 'user')
 	}
+	//cleanEscapedSyntaxTokens();
 	updateQuill();
 }
 
-async function testConvert() {
+function testConvert() {
 	let text = `class CodeSyntax extends Syntax {
   // override initListener to avoid creating selection box
   initListener() {}
@@ -141,7 +142,12 @@ SourceURL:https://stackoverflow.com/questions/67917499/quill-2-0-0-beta4-auto-sy
 </body>
 </html>`
 
-	convertPlainHtml(html_frag, 'html', text);
+	return convertPlainHtml(html_frag, 'html', text);
+}
+
+function testConvertAndLoad() {
+	let result = testConvert();
+	loadTextContent(result.html);
 }
 function convertPlainHtml(dataStr, formatType, verifyText) {
 	if (!globals.IsConverterLoaded && isRunningOnHost()) {
@@ -149,32 +155,14 @@ function convertPlainHtml(dataStr, formatType, verifyText) {
 		return null;
 	}
 	setConverterContent(formatType, dataStr, verifyText);
-
-	let base_delta = getDelta();
-	let conv_html = getRootHtml();
-
-	let conv_doc = globals.DomParser.parseFromString(conv_html, 'text/html');
-	if (Array.from(conv_doc.querySelectorAll('pre.ql-code-block-container')).length > 0) {
-		// doc contains code blocks
-		highlightSyntax();
-		// //get processed highlighting (should have spans now)
-		conv_html = getHtml();
-		conv_doc = globals.DomParser.parseFromString(conv_html, 'text/html');
-	}
-	conv_html = conv_doc.documentElement.outerHTML;
-	setRootHtml(conv_html);
-	let conv_delta = getDelta();
-	let diff = getFirstDifferenceIdx(JSON.stringify(base_delta), JSON.stringify(conv_delta));
-	log(conv_html);
-	if (diff < 0) {
-		log('conv success');
-	} else {
-		log('conv failed. idx: ' + diff);
-	}
+	forceSyntax();
+	
+	let conv_html = getHtml();
+	let conv_delta = convertHtmlToDelta(conv_html);
 	return {
 		themed_html: conv_html,
 		html: conv_html,
-		delta: base_delta,
+		delta: conv_delta,
 		valid: diff < 0
 	};
 }

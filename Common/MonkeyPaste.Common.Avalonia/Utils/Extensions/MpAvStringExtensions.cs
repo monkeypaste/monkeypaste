@@ -9,7 +9,13 @@ using MonkeyPaste.Common.Wpf;
 #endif
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvStringExtensions {
-        
+        public static string ToCssStringPropValue(this string str) {
+            // makes sure things like font-family w/ spaces are padded with ''
+            if(str.Contains(" ")) {
+                return $"'{str}'";
+            }
+            return str;
+        }
         public static bool IsAvResourceString(this string str) {
             if (string.IsNullOrEmpty(str)) {
                 return false;
@@ -53,13 +59,13 @@ namespace MonkeyPaste.Common.Avalonia {
             return false;
         }
 
-        public static string RtfToHtml(this string str) {
+        public static string RtfToHtml(this string str, string paragraphTagName = "p") {
             if (!str.IsStringRtf()) {
                 return str;
             }
 
 #if WINDOWS
-            string qhtml = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter.ConvertFormatToHtml(str);
+            string qhtml = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter.ConvertFormatToHtml(str, new MpWpfRtfToHtmlConverterProps() { ParagraphTagName = paragraphTagName});
             return qhtml;
 #elif MAC
             string qhtml = MpAvMacHelpers.RtfToHtml(str);

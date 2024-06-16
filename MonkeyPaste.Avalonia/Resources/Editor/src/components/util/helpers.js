@@ -310,7 +310,7 @@ function substringByLength(str, sIdx, length) {
     // js subsring is by sidx,eidx
     // cs substring is by sidx,length
     // this mimics cs for ported code, etc.
-    if (length == 0) {
+    if (length <= 0) {
         return '';
     }
     if (!length) {
@@ -663,7 +663,7 @@ function encodeHtmlSpecialEntitiesFromPlainText(str) {
     return str;
 }
 
-function decodeHtmlSpecialEntities(str) {
+function decodeHtmlSpecialEntities(str, excluded = []) {
     if (!isString(str)) {
         // NOTE important return input if not strig for clipboard matcher
         return str;
@@ -672,6 +672,9 @@ function decodeHtmlSpecialEntities(str) {
         return '';
     }
     for (var i = 0; i < globals.HtmlEntitiesLookup.length; i++) {
+        if (excluded.includes(globals.HtmlEntitiesLookup[i][1])) {
+            continue;
+        }
         str = str.replaceAll(globals.HtmlEntitiesLookup[i][1], globals.HtmlEntitiesLookup[i][0]);
     }
     return str;

@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Úsáidtear an síneadh comhaid nuair a úsáidtear '{0}' chun comhad a chruthú ar éileamh.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Le haghaidh aibhsiú an chóid bain úsáid as an gclib 'réamh' ar shlí eile, déileálfar leis an RTF mar ghnáth -théacs saibhir.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Clib mír html</value>
+  </data>
 </root>

@@ -3026,4 +3026,7 @@ Ka taea e te waa poto poto te ao i roto i te tahua Tray punaha</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Kaupapa Syntax</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Kōrutaki</value>
+  </data>
 </root>

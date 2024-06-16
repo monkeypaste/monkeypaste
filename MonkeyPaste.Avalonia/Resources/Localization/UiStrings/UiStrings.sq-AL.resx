@@ -3026,4 +3026,7 @@ Shkurtoret globale tani mund të aktivizohen në menunë e tabaka të sistemit</
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Tema e sintaksës</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksë</value>
+  </data>
 </root>

@@ -52,7 +52,6 @@ function initPreSwapMatcher() {
     let Delta = Quill.imports.delta;
 
     globals.quill.clipboard.addMatcher('pre', function (node, delta) {
-
         if (node.hasAttribute('templateguid')) {
             delta.ops[0].attributes = delta.ops[0].insert.template;
             //delete delta.ops[0].insert.template;
@@ -68,7 +67,6 @@ function initSpecialCharacterMatcher() {
         debugger;
     }
     let Delta = Quill.imports.delta;
-
     globals.quill.clipboard.addMatcher(Node.TEXT_NODE, function (node, delta) {
         if (node.parentNode.tagName != 'CODE') {
             return delta;
@@ -77,6 +75,24 @@ function initSpecialCharacterMatcher() {
 
         return new Delta().insert(decodeHtmlSpecialEntities(node.data));
     });    
+
+    //globals.quill.clipboard.addMatcher(Node.TEXT_NODE, function (node, delta) {
+    //    if (node.parentNode.tagName != 'SPAN' && node.parentNode.parentNode.tagName != 'CODE') {
+    //        return delta;
+    //    }
+    //    // this worksaround xml/html syntax not working
+    //    // since hljs needs html/xml to be escaped to detect keywords
+    //    // but since quill wraps output in spans, it doesn't unescape
+    //    let enc_data = encodeHtmlSpecialEntitiesFromPlainText(node.data);
+    //    if (enc_data == node.data) {
+    //        return new Delta().insert(enc_data);
+    //    }
+    //    // BUG no matter what i do quill strips the 'syntax-escaped' class attrib
+    //    // so a unique const is prefixed then after text changed syntax comp knows this
+    //    // was api encoded then decodes and removes prefix
+    //    return new Delta().insert(globals.SYNTAX_ESCAPED_TOKEN_START + enc_data + globals.SYNTAX_ESCAPED_TOKEN_END, {'syntax-escaped': true});
+    //});
+    
 }
 
 function initWhitespaceMatcher() {
@@ -91,31 +107,6 @@ function initWhitespaceMatcher() {
         if(node.data.match(/[^\n\S]|\t/)) {
             return new Delta().insert(node.data);
         }
-        return delta;
-    });    
-}
-
-function initHeaderConverterMatcherMatcher() {
-    // BUG header blots don't use font sizes and full line blots so converting to big spans
-    if (Quill === undefined) {
-        /// host load error case
-        debugger;
-    }
-    let Delta = Quill.imports.delta;
-    let headers = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
-    let sizes = ['42px','32px','32px','24px','24px','20px']
-    globals.quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
-        // this fixes whitespace issues 
-        let h_idx = headers.indexOf(node.tagName.toLowerCase())
-        if (h_idx < 0) {
-            return delta;
-        }
-        delta.forEach((op) => {
-            if (isNullOrUndefined(op.attributes)) {
-                op.attributes = {};
-            }
-            op.attributes.size = sizes[h_idx];
-        });
         return delta;
     });    
 }

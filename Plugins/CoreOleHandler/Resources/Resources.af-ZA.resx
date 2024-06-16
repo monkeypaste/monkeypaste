@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Die lêeruitbreiding wat gebruik word wanneer '{0}' gebruik word om 'n lêer op aanvraag te skep.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Vir kode-uitlig gebruik die 'PRE' tag anders sal die RTF as normale ryk teks hanteer word.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML Paragraaf Tag</value>
+  </data>
 </root>

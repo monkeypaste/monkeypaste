@@ -49,24 +49,6 @@
                     Value="False" />
         </Style>
 
-        <!--  UNPIN ALL/BUSY BUTTON  -->
-        <Style Selector="Grid#PinTrayContainerGrid StackPanel#ButtonPanel">
-            <Setter Property="HorizontalAlignment"
-                    Value="Right" />
-            <Setter Property="VerticalAlignment"
-                    Value="Top" />
-            <Setter Property="Margin"
-                    Value="0,5,20,0" />
-        </Style>
-        <Style Selector="Grid#PinTrayContainerGrid.mobile StackPanel#ButtonPanel">
-            <Setter Property="HorizontalAlignment"
-                    Value="Right" />
-            <Setter Property="VerticalAlignment"
-                    Value="Bottom" />
-            <Setter Property="Margin"
-                    Value="5" />
-        </Style>
-
         <Style Selector="Button#UnpinAllButton Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
@@ -135,7 +117,7 @@
                     <ItemsPanelTemplate>
                         <WrapPanel HorizontalAlignment="Stretch"
                                    VerticalAlignment="Stretch"
-                                   Margin="0,0,40,0" />
+                                   Margin="0,20,0,0" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
@@ -155,6 +137,9 @@
 
             <!--  BUTTON GRID  -->
             <StackPanel x:Name="ButtonPanel"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="5"
                         Spacing="7">
                 <!--  UNPIN All/Busy  -->
 

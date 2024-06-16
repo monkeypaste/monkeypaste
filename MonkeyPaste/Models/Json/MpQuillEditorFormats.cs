@@ -28,6 +28,7 @@ namespace MonkeyPaste {
         public int minLogLevel { get; set; }
         public bool isDebug { get; set; }
         public string defaultFontFamily { get; set; }
+        public string syntaxFontFamily { get; set; }
         public string defaultFontSize { get; set; }
         public bool isSpellCheckEnabled { get; set; }
         public string currentTheme { get; set; }
@@ -53,6 +54,7 @@ namespace MonkeyPaste {
         // fragment 'MpQuillPasteButtonInfoMessage'
         public string pasteButtonInfoFragment { get; set; }
         public bool isReadOnly { get; set; }
+        public bool isWrappingEnabled { get; set; }
         public string contentHandle { get; set; }
         public string contentType { get; set; }
 
@@ -412,5 +414,8 @@ namespace MonkeyPaste {
         public double clientY { get; set; }
         public string eventType { get; set; }
         public bool isLeft { get; set; }
+    }
+    public class MpQuillWrapChangedEventMessage {
+        public bool isWrappingEnabled { get; set; }
     }
 }

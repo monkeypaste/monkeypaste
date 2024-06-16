@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>फ़ाइल एक्सटेंशन का उपयोग किया जाता है जब '{0}' का उपयोग फ़ाइल ऑन-डिमांड बनाने के लिए किया जाता है।</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>कोड हाइलाइटिंग के लिए 'प्री' टैग का उपयोग करें अन्यथा RTF को सामान्य समृद्ध पाठ के रूप में माना जाएगा।</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Html अनुच्छेद टैग</value>
+  </data>
 </root>

@@ -3026,4 +3026,7 @@ monkeypaste ໃນອຸປະກອນ
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>ຫົວຂໍ້ syntax</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>ການລອບຄົ້ນວົງຈອນ</value>
+  </data>
 </root>

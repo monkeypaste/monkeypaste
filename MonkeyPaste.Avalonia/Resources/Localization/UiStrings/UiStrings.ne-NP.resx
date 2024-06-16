@@ -3026,4 +3026,7 @@
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>सिन्ट्याक्स विषयवस्तु</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>वाक्षकहरू</value>
+  </data>
 </root>

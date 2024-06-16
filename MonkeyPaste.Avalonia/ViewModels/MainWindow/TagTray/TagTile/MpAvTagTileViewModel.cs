@@ -1403,8 +1403,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 Parent.SelectTagCommand.Execute(TagId);
-
-                MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
+                this.FocusThisHeader();
             }, (args) => {
                 return IsTagNameReadOnly;
             });

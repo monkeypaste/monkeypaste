@@ -99,6 +99,12 @@ namespace MonkeyPaste.Avalonia {
                     CommandParameter = this
                 },
                 new MpAvMenuItemViewModel() {
+                    IconSourceObj = "WrapImage",
+                    IconTintHexStr = IsWrappingEnabled ? MpSystemColors.limegreen : null,
+                    IsVisible = !IsWindowOpen && CopyItemType != MpCopyItemType.Image,
+                    Command = ToggleIsWrappingEnabledCommand
+                },
+                new MpAvMenuItemViewModel() {
                     IconSourceObj = "EditImage",
                     IsVisible = !IsWindowOpen,
                     Command = ToggleIsContentReadOnlyCommand,
@@ -645,6 +651,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsWrappingEnabled { get; set; }
         public bool IsWindowClosing { get; private set; }
         bool IsDetailCycling { get; set; }
         public MpCopyItemType LastCopyItemType { get; private set; }
@@ -692,16 +700,6 @@ namespace MonkeyPaste.Avalonia {
         public int PinPlaceholderCopyItemId { get; set; }
         public bool IsPinPlaceholder =>
             PinPlaceholderCopyItemId > 0;
-
-        public bool IsSugarWv =>
-#if SUGAR_WV
-            true;
-#else
-            false;
-#endif
-        public bool HasPinPlaceholder =>
-            PlaceholderForThisPinnedItem != null;
-
         public bool IsPlaceholder =>
            CopyItem == null &&
            !IsPinPlaceholder;
@@ -709,6 +707,14 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyPlaceholder =>
             IsPlaceholder ||
             IsPinPlaceholder;
+
+        public bool IsSugarWv =>
+#if SUGAR_WV
+            true;
+#else
+            false;
+#endif
+
 
         public bool IsFrozen =>
             IsPinPlaceholder || IsTrashed;
@@ -1907,6 +1913,7 @@ namespace MonkeyPaste.Avalonia {
                             // only focus tile if search isn't focused cause search as you type will take focus from search box
                             FocusContainerAsync(NavigationMethod.Pointer).FireAndForgetSafeAsync();
                         }
+                        this.FocusThisHeader();
                     } else {
                         LastDeselectedDateTime = DateTime.Now;
                         if (!IsWindowOpen &&
@@ -2529,6 +2536,19 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+
+        public ICommand ToggleIsWrappingEnabledCommand => new MpCommand(
+            () => {
+                IsWrappingEnabled = !IsWrappingEnabled;
+                if(GetContentView() is not MpAvContentWebView wv) {
+                    return;
+                }
+                var msg = new MpQuillWrapChangedEventMessage() {
+                    isWrappingEnabled = IsWrappingEnabled
+                };
+                wv.SendMessage($"wrapChanged_ext('{msg.SerializeObjectToBase64()}')");
+            });
+        
         public ICommand TileDragBeginCommand => new MpCommand(
             () => {
                 //MpAvDragDropManager.StartDragCheck(this);
@@ -2827,6 +2847,9 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMenuView.ShowMenu(c, mivm);
             },
             (args) => {
+                if(Parent == null || Parent.HasScrollVelocity) {
+                    return false;
+                }
                 if (MpAvThemeViewModel.Instance.IsMultiWindow) {
                     return TransactionCollectionViewModel.OpenTransactionPaneCommand.CanExecute(args);
                 }

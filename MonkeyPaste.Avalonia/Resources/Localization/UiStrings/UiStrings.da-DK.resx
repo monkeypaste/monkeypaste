@@ -3026,4 +3026,7 @@ Globale genveje kan nu aktiveres i systembakkemenuen</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Syntakstema</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntaks</value>
+  </data>
 </root>

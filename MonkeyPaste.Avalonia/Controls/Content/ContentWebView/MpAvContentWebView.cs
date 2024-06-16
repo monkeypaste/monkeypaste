@@ -1226,6 +1226,7 @@ namespace MonkeyPaste.Avalonia {
                 isDebug = MpDebug.IsDebug,
                 cultureCode = MpAvCurrentCultureViewModel.Instance.CurrentCulture.Name,
                 isRightToLeft = MpAvPrefViewModel.Instance.IsTextRightToLeft,
+                syntaxFontFamily = MpAvPrefViewModel.Instance.DefaultCodeFontFamily,
                 defaultFontFamily = MpAvPrefViewModel.Instance.DefaultEditableFontFamily,
                 defaultFontSize = MpAvPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
                 isSpellCheckEnabled = MpAvPrefViewModel.Instance.IsSpellCheckEnabled,
@@ -1252,6 +1253,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var loadContentMsg = new MpQuillLoadContentRequestMessage() {
+                isWrappingEnabled = BindingContext.IsWrappingEnabled,
                 isPopOut = BindingContext.IsWindowOpen,
                 editorScale = ContentScale,
                 contentId = BindingContext.CopyItemId,
@@ -1732,6 +1734,7 @@ namespace MonkeyPaste.Avalonia {
             if (BindingContext == null || !IsEditorLoaded) {
                 return;
             }
+            
             Dispatcher.UIThread.Post(async () => {
                 if (IsContentReadOnly) {
                     if (!BindingContext.IsWindowOpen) {

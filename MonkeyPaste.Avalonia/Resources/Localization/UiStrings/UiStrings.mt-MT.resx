@@ -3026,4 +3026,7 @@ Shortcuts globali issa jistgħu jiġu attivati ​​fil-menu tat-trej tas-siste
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Tema tas-sintassi</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintassi</value>
+  </data>
 </root>

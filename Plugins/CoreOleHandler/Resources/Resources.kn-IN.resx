@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>ಬೇಡಿಕೆಯ ಮೇರೆಗೆ ಫೈಲ್ ಅನ್ನು ರಚಿಸಲು '{0}' ಅನ್ನು ಬಳಸಿದಾಗ ಬಳಸುವ ಫೈಲ್ ವಿಸ್ತರಣೆ.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>ಕೋಡ್ ಹೈಲೈಟ್ ಮಾಡಲು 'ಪೂರ್ವ' ಟ್ಯಾಗ್ ಬಳಸಿ ಇಲ್ಲದಿದ್ದರೆ ಆರ್‌ಟಿಎಫ್ ಅನ್ನು ಸಾಮಾನ್ಯ ಶ್ರೀಮಂತ ಪಠ್ಯವೆಂದು ಪರಿಗಣಿಸಲಾಗುತ್ತದೆ.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML ಪ್ಯಾರಾಗ್ರಾಫ್ ಟ್ಯಾಗ್</value>
+  </data>
 </root>

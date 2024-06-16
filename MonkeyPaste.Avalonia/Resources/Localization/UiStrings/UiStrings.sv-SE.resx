@@ -3026,4 +3026,7 @@ Globala genvägar kan nu vara aktiverade i systemfack -menyn</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Syntaxtema</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntax</value>
+  </data>
 </root>

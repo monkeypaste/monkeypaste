@@ -3026,4 +3026,7 @@ Ukupna restauracija ne može biti zagarantovana i može smanjiti performanse ili
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Тема синтаксе</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Синтакса</value>
+  </data>
 </root>

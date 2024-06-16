@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
             ];
         ICommand MpAvIHeaderMenuViewModel.BackCommand => new MpCommand(
             () => {
-                if(FocusAction == null) {
+                if(FocusAction == null || MpAvMainWindowTitleMenuViewModel.Instance.FocusHeaderViewModel == this) {
                     MpAvMainView.Instance.FocusThisHeader();
                 } else {
                     FocusAction = null;

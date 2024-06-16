@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>જ્યારે '{0}' નો ઉપયોગ ફાઇલ ઓન-ડિમાન્ડ બનાવવા માટે થાય છે ત્યારે ફાઇલ એક્સ્ટેંશનનો ઉપયોગ થાય છે.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>કોડ હાઇલાઇટિંગ માટે 'પ્રિ' ટ tag ગનો ઉપયોગ કરો અન્યથા આરટીએફને સામાન્ય સમૃદ્ધ ટેક્સ્ટ તરીકે ગણવામાં આવશે.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>એચટીએમએલ ફકરા ટ tag ગ</value>
+  </data>
 </root>

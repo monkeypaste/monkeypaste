@@ -3026,4 +3026,7 @@ Dabar „System Tray“ meniu galima įjungti globalius nuorodas</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Sintaksės tema</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksė</value>
+  </data>
 </root>

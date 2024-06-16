@@ -62,7 +62,8 @@ function loadContentAsync_ext(loadContentMsgStr_base64) {
 		paste_button_info,
 		req.breakBeforeLoad,
 		req.editorScale,
-		req.isPopOut);
+		req.isPopOut,
+		req.isWrappingEnabled);
 	//	.then(x => {
 	//		result = x;
 	//	});
@@ -338,6 +339,12 @@ function setEditorZoom_ext(scaleMsgBase64Str) {
 	// input 'MpQuillEditorScaleChangedMessage'
 	let req = toJsonObjFromBase64Str(scaleMsgBase64Str);
 	setEditorZoom(req.editorScale);
+}
+
+function wrapChanged_ext(wrapChangedBase64Str) {
+	// input 'MpQuillWrapChangedEventMessage'
+	let req = toJsonObjFromBase64Str(wrapChangedBase64Str);
+	setWrap(req.isWrappingEnabled);
 }
 //function setSelection_ext(selMsgBase64Str) {
 //	// input 'MpQuillSelectionChangedMessage'

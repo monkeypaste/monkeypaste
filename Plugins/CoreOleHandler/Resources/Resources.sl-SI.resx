@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Razširitev datoteke, uporabljena, ko se '{0}' uporablja za ustvarjanje datoteke na zahtevo.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Za poudarjanje kode uporabite oznako "Pre", sicer bo RTF obravnavan kot običajno bogato besedilo.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Oznaka odstavka HTML</value>
+  </data>
 </root>

@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>Ekstensi file yang digunakan saat '{0}' digunakan untuk membuat file sesuai permintaan.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>Untuk menyorot kode, gunakan tag 'pra' jika tidak, RTF akan diperlakukan sebagai teks kaya normal.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>Tag paragraf html</value>
+  </data>
 </root>

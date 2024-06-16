@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>ऑन-डिमांड फाइल तयार करण्यासाठी '{0}' वापरला जातो तेव्हा वापरलेला फाईल विस्तार.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>कोड हायलाइट करण्यासाठी 'प्री' टॅग वापरा अन्यथा आरटीएफला सामान्य समृद्ध मजकूर मानले जाईल.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML परिच्छेद टॅग</value>
+  </data>
 </root>

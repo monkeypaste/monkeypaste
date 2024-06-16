@@ -3091,4 +3091,7 @@ Qlobal Qısayolları indi Sistem Tablası Menyusunda aktivləşdirmək olar</val
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Sintaksis mövzusu</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Sintaksis</value>
+  </data>
 </root>

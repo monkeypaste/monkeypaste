@@ -5512,6 +5512,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Syntax.
+        /// </summary>
+        public static string PrefCodeFontLabel {
+            get {
+                return ResourceManager.GetString("PrefCodeFontLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Content.
         /// </summary>
         public static string PrefContentFontLabel {

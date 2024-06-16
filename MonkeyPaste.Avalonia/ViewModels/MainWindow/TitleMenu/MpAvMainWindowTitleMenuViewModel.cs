@@ -17,16 +17,24 @@ namespace MonkeyPaste.Avalonia {
         private MpAvIFocusHeaderMenuViewModel _focusHeaderMenuViewModel;
         public MpAvIFocusHeaderMenuViewModel FocusHeaderViewModel {
             get {
-                if(IsFocusHeaderFrozen) {
-                    return _focusHeaderMenuViewModel;
-                }
-                var fc = MpAvFocusManager.Instance.FocusElement as Control;
-                if (fc != null && fc.TryGetSelfOrAncestorDataContext<MpAvIFocusHeaderMenuViewModel>(out var hmvm)) {
-                    _focusHeaderMenuViewModel = hmvm;
-                } else {
-                    _focusHeaderMenuViewModel = null;
-                }
+                //if(IsFocusHeaderFrozen) {
+                //    return _focusHeaderMenuViewModel;
+                //}
+                //var fc = MpAvFocusManager.Instance.FocusElement as Control;
+                //if (fc != null && 
+                //    fc is not MpAvMainView &&
+                //    fc.TryGetSelfOrAncestorDataContext<MpAvIFocusHeaderMenuViewModel>(out var hmvm)) {
+                //    _focusHeaderMenuViewModel = hmvm;
+                //} else {
+                //    _focusHeaderMenuViewModel = null;
+                //}
                 return _focusHeaderMenuViewModel;
+            }
+            set {
+                if(_focusHeaderMenuViewModel != value) {
+                    _focusHeaderMenuViewModel = value;
+                    OnPropertyChanged(nameof(FocusHeaderViewModel));
+                }
             }
         }
         #endregion

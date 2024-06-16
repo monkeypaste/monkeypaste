@@ -3026,4 +3026,7 @@
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>ስነ-ቓል ቴማ .</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>ስነ-ቓል .</value>
+  </data>
 </root>

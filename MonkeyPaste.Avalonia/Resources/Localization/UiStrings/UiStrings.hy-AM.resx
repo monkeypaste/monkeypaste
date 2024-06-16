@@ -3026,4 +3026,7 @@ feedback@monkepte.com</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Syntax թեման</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Շարահյուսություն</value>
+  </data>
 </root>

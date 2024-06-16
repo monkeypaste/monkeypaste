@@ -3026,4 +3026,7 @@ Maaari na ngayong paganahin ang mga global shortcut sa menu ng System Tray</valu
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Tema ng Syntax</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntax</value>
+  </data>
 </root>

@@ -1,58 +1,13 @@
-.ql-stroke {
-    stroke: var(--editortoolbarbuttoncolor) !important;
-    stroke-width: 1px !important;
-}
-
-.ql-fill, .ql-path {
-    fill: var(--editortoolbarbuttoncolor) !important;
-}
-
-button.locked .ql-stroke {
-    stroke: var(--insertselectcolor) !important;
-}
-
-button.locked .ql-fill, button.locked .ql-path {
-    fill: var(--insertselectcolor) !important;
-}
-button.toggled:not(.locked) .ql-stroke {
-    stroke: var(--optselectcolor) !important;
-}
-
-button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
-    fill: var(--optselectcolor) !important;
-}
-
-button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
-    fill: var(--optselectcolor) !important;
-}
-
 .ql-picker-label {
     color: var(--editortoolbarbuttoncolor) !important;
 }
 
-
-
-.no-fill {
-    fill: transparent !important;
-}
-
-.disabled .ql-stroke, .disabled .ql-path {
-    stroke: white !important;
-    fill: white !important;
-}
 
 .ql-editor.ql-blank::before {
     /* empty placeholder*/
     color: var(--defcontentfgcolor) !important;
 }
 
-
-.template-type-icon .ql-fill, .paste-toolbar-icon .ql-fill {
-    fill: white !important;
-}
-.template-type-icon .ql-stroke, .paste-toolbar-icon .ql-stroke {
-    stroke: white;
-}
 
 .ql-editor {
     height: auto;
@@ -208,4 +163,29 @@ button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
 
 .ql-editor > * {
    /*cursor: unset;*/ 
+}
+
+
+.ql-editor p {
+    line-height: 1.2em;
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+}
+.ql-editor h6 {
+    line-height: 2em;
+}
+.ql-editor h5 {
+    line-height: 2.2em;
+}
+.ql-editor h4 {
+    line-height: 2.4em;
+}
+.ql-editor h3 {
+    line-height: 2.6em;
+}
+.ql-editor h2 {
+    line-height: 2.8em;
+}
+.ql-editor h1 {
+    line-height: 3em;
 }

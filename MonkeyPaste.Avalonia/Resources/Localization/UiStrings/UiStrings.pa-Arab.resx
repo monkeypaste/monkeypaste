@@ -3091,4 +3091,7 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>ਸਿੰਟੈਕਸ ਥੀਮ</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>ਸਿੰਟੈਕਸ</value>
+  </data>
 </root>

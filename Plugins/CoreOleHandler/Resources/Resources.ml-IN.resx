@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>ആവശ്യാനുസരണം ഒരു ഫയൽ സൃഷ്ടിക്കാൻ '{0}' ഉപയോഗിക്കുമ്പോൾ ഉപയോഗിക്കുന്ന ഫയൽ വിപുലീകരണം.</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>ഹൈലൈറ്റിംഗ് കോഡ് ഹൈലൈറ്റിംഗിനായി 'പ്രീ' ടാഗ് ഉപയോഗിക്കുക അല്ലെങ്കിൽ ആർടിഎഫിന് സാധാരണ സമ്പന്ന വാചകമായി കണക്കാക്കും.</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML ഖണ്ഡിക ടാഗ്</value>
+  </data>
 </root>

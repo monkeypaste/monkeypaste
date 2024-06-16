@@ -3026,4 +3026,7 @@ MonkeyPaste روی دستگاه
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>تم نحوی</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>نحو</value>
+  </data>
 </root>

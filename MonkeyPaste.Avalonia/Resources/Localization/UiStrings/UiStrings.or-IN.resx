@@ -3026,4 +3026,7 @@ FANDUCE@ONKEYPASTET.com</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>ବାକ୍ୟବିନ୍ୟାସ ଥିମ୍ |</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>ବାକ୍ୟବିନ୍ୟାସ</value>
+  </data>
 </root>

@@ -457,6 +457,24 @@ namespace CoreOleHandler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For code highlighting use the &apos;PRE&apos; tag otherwise the RTF will be treated as normal rich text..
+        /// </summary>
+        public static string RtfParaTagNameHint {
+            get {
+                return ResourceManager.GetString("RtfParaTagNameHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTML Paragraph Tag.
+        /// </summary>
+        public static string RtfParaTagNameLabel {
+            get {
+                return ResourceManager.GetString("RtfParaTagNameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Text.
         /// </summary>
         public static string TextFormatLabel {

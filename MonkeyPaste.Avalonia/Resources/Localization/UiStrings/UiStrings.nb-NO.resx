@@ -3026,4 +3026,7 @@ Globale snarveier kan nå aktiveres i systemskuffenyen</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Syntaks -tema</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntaks</value>
+  </data>
 </root>

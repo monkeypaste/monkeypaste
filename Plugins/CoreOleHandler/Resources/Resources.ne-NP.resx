@@ -222,4 +222,10 @@
   <data name="ToFileExtHint" xml:space="preserve">
     <value>फाईल विस्तार प्रयोग जब '{0}' मा एक फाईल निर्माण गर्न प्रयोग गरीन्छ।</value>
   </data>
+  <data name="RtfParaTagNameHint" xml:space="preserve">
+    <value>कोड हाइबिलाइडिंगको लागि 'पूर्व' ट्याग प्रयोग गर्नुहोस् अन्यथा RTF सामान्य धनी पाठको रूपमा व्यवहार गरिनेछ।</value>
+  </data>
+  <data name="RtfParaTagNameLabel" xml:space="preserve">
+    <value>HTML अनुच्छेद ट्याग</value>
+  </data>
 </root>

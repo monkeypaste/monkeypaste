@@ -2279,11 +2279,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsBusy):
                     OnPropertyChanged(nameof(IsAnyBusy));
                     break;
-                case nameof(SelectedCopyItemId):
-                    break;
                 case nameof(SelectedItem):
-
-                    MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
                     MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
                     OnPropertyChanged(nameof(SelectedCopyItemId));
                     OnPropertyChanged(nameof(IsAnySelected));
@@ -2870,6 +2866,7 @@ namespace MonkeyPaste.Avalonia {
                     .LinkCopyItemCommand.ExecuteAsync(ciid);
             }
             OnPropertyChanged(nameof(IsAnySelectedAndTrayVisible));
+            MpAvMainView.Instance.FocusThisHeader();
         }
 
         private async Task<MpAvClipTileViewModel> CreateOrRetrieveClipTileViewModelAsync(object ci_or_ciid) {
@@ -5236,10 +5233,6 @@ namespace MonkeyPaste.Avalonia {
             await Task.WhenAll(
                 ctvml
                 .Select(x => x.PersistContentStateCommand.ExecuteAsync(null)));
-
-            // clear cached content style
-            MpAvHtmlStylerExtension.ResetStyleType(MpHtmlStyleType.Content);
-
 
             ctvml.ForEach(x => x.IsEditorLoaded = false);
             ctvml.ForEach(x => x.OnPropertyChanged(nameof(x.IsAnyBusy)));

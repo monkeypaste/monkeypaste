@@ -3026,4 +3026,7 @@ Is féidir aicearraí domhanda a chumasú anois sa roghchlár tráidire córais<
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Téama comhréir</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Comhrtán</value>
+  </data>
 </root>

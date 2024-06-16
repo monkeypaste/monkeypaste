@@ -3026,4 +3026,7 @@
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>সিনট্যাক্স থিম</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>বাক্য গঠন</value>
+  </data>
 </root>

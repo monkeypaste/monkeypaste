@@ -61,11 +61,15 @@
             </Style.Animations>
         </Style>
     </local:MpAvUserControl.Styles>
-    <Grid x:Name="TitleContainerGrid"
-          ColumnDefinitions="0.7*,0.3*">
+    <Grid x:Name="TitleContainerGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
         <!--  SWIRL  -->
 
-        <Viewbox HorizontalAlignment="Left"
+        <Viewbox Grid.ColumnSpan="2"
+                 HorizontalAlignment="Left"
                  VerticalAlignment="Top"
                  IsVisible="{Binding IsTitleLayersVisible, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                  Width="{Binding Bounds.Width, ElementName=TitleContainerGrid}"
@@ -218,7 +222,7 @@
         <!--  ICON  -->
         <Button x:Name="ClipTileAppIconImageButton"
                 Grid.Column="1"
-                Margin="0,0,10,0"
+                Margin="0,0,5,0"
                 ClipToBounds="False"
                 Height="50"
                 Classes="no-bg no-hover-bg squareByHeight"

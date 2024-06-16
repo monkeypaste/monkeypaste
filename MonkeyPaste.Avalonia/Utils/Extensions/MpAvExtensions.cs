@@ -41,16 +41,19 @@ namespace MonkeyPaste.Avalonia {
             hmvm.OnPropertyChanged(nameof(hmvm.HeaderTitle));
         }
         
+        public static void FocusThisHeader(this MpAvIFocusHeaderMenuViewModel hmvm) {
+            MpAvMainWindowTitleMenuViewModel.Instance.FocusHeaderViewModel = hmvm;
+        }
+        
         public static void FocusThisHeader(this MpAvIFocusHeaderMenuView hmv) {
-            if(hmv is not Control c) {
-                return;
-            }
-            if(!c.IsFocused && !c.IsKeyboardFocusWithin) {
-                c.Focus();
-            }
+            if(hmv is MpAvMainView) {
+                MpAvMainWindowTitleMenuViewModel.Instance.FocusHeaderViewModel = null;
+            } else if(hmv is Control c &&
+                c.DataContext is MpAvIFocusHeaderMenuViewModel hmvm) {
+                MpAvMainWindowTitleMenuViewModel.Instance.FocusHeaderViewModel = hmvm;
+            } else {
 
-            MpDebug.Assert(c.IsFocused || c.IsKeyboardFocusWithin, $"Focus for '{hmv}' failed");
-            MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
+            }
         }
         #endregion
 

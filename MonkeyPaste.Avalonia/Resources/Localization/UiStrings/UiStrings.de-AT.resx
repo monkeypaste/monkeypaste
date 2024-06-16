@@ -3026,4 +3026,7 @@ Globale Kürzel können jetzt im Taskleistenmenü aktiviert werden.</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Syntax-Thema</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntax</value>
+  </data>
 </root>

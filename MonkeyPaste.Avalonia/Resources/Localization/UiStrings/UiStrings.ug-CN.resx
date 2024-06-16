@@ -3026,4 +3026,7 @@ tempo@Monkepaste.com</value>
   <data name="PrefSyntaxThemeLabel" xml:space="preserve">
     <value>Syntax تېمىسى</value>
   </data>
+  <data name="PrefCodeFontLabel" xml:space="preserve">
+    <value>Syntax</value>
+  </data>
 </root>
