@@ -175,8 +175,20 @@ namespace MonkeyPaste.Avalonia {
                     Command = ShowContextMenuCommand
                 }
             };
-        ICommand MpAvIHeaderMenuViewModel.BackCommand =>
-            MpAvSidebarItemCollectionViewModel.Instance.FocusSidebarOrFallbackCommand;
+        ICommand MpAvIHeaderMenuViewModel.BackCommand => new MpCommand(
+            () => {
+                if(MpAvWindowManager.ActiveWindow is not { } aw ||
+                aw.Content is not Viewbox vb || 
+                vb.Child is not MpAvTriggerActionChooserView tac) {
+                    return;
+                }
+                if(Parent.IsWindowOpen) {
+                    MpAvOverlayContainerView.Instance.TopWindow.HeaderViewModel = Parent;
+                } else {
+                    tac.FocusThisHeader();
+                }
+                
+            });
         object MpAvIHeaderMenuViewModel.BackCommandParameter =>
             null;
 

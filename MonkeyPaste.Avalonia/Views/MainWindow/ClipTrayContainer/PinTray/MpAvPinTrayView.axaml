@@ -65,12 +65,25 @@
             <Setter Property="IsScrollWheelEnabled"
                     Value="{Binding IsSubSelectionEnabled}" />
         </Style>
+
+        <!--  BUTTON STRIP  -->
+        <Style Selector="Grid#PinTrayContainerGrid StackPanel#ButtonPanel"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
+        <Style Selector="Grid#PinTrayContainerGrid.vert StackPanel#ButtonPanel"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="PinTrayContainerBorder"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Grid x:Name="PinTrayContainerGrid"
               Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+              Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Border HorizontalAlignment="Stretch"

@@ -242,7 +242,6 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {
                             Header =UiStrings.ClipTilePasteHereHeaderLabel,
-                            //AltNavIdx = 6,
                             IconResourceKey = "PasteImage",
                             Command = PasteHereFromContextMenuCommand,
                             IsVisible = false,
@@ -251,7 +250,6 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() {
                             IsVisible = CurPasteInfoMessage.infoId != null,
                             Header = CurPasteInfoMessage.pasteButtonTooltipText,
-                            //AltNavIdx = 0,
                             IconSourceObj = CurPasteInfoMessage.pasteButtonIconBase64,
                             Command = PasteSelectedClipTileFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.PasteToExternal },
@@ -259,21 +257,19 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
                             Header = UiStrings.CommonDeleteLabel,
-                            //AltNavIdx = 0,
                             IconResourceKey = "TrashCanImage",
                             Command = TrashSelectedClipCommand,
                             ShortcutArgs = new object[] { MpShortcutType.DeleteSelectedItems },
                         },
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.CommonDuplicateLabel,
-                            //AltNavIdx = 0,
                             IconResourceKey = "DuplicateImage",
                             Command = DuplicateSelectedClipsCommand,
                             ShortcutArgs = new object[] { MpShortcutType.Duplicate },
                         },
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.CommonRenameLabel,
-                            IsVisible = MpAvPrefViewModel.Instance.ShowContentTitles,
+                            IsVisible = SelectedItem.IsTitleVisible,
                             IconResourceKey = "RenameImage",
                             Command = EditSelectedTitleCommand,
                             ShortcutArgs = new object[] { MpShortcutType.Rename },
@@ -281,18 +277,32 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
                             Header = UiStrings.SettingsInteropAppOleFormatButtonPointerOverLabel,
-                            //AltNavIdx = 0,
+                            IsVisible = SelectedItem.CopyItemType == MpCopyItemType.Text && SelectedItem.IsContentReadOnly,
                             IconResourceKey = "EditContentImage",
                             Command = EditSelectedContentCommand,
                             ShortcutArgs = new object[] { MpShortcutType.ToggleContentReadOnly },
                         },
                         new MpAvMenuItemViewModel() {
+                            Header = UiStrings.CommonViewLabel,
+                            IsVisible = SelectedItem.CopyItemType != MpCopyItemType.Text && !SelectedItem.IsWindowOpen,
+                            IconResourceKey = "OpenImage",
+                            Command = SelectedItem.PinToPopoutWindowCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.OpenInWindow },
+                        },
+                        new MpAvMenuItemViewModel() {
                             Header = UiStrings.ClipTileFindReplaceHeader,
+                            IsVisible = SelectedItem.CopyItemType != MpCopyItemType.Image,
                             IconResourceKey = "SearchImage",
                             Command = EnableFindAndReplaceForSelectedItem,
                             ShortcutArgs = new object[] { MpShortcutType.FindAndReplaceSelectedItem },
                         },
-
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.WrapTextMenuLabel,
+                            IconSourceObj = "WrapImage",
+                            IconTintHexStr = SelectedItem.IsWrappingEnabled ? MpSystemColors.limegreen : null,
+                            IsVisible = !SelectedItem.IsWindowOpen && SelectedItem.CopyItemType == MpCopyItemType.Text,
+                            Command = SelectedItem.ToggleIsWrappingEnabledCommand
+                        },
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
                             Header = UiStrings.CommonRefreshTooltip,
@@ -1084,7 +1094,11 @@ namespace MonkeyPaste.Avalonia {
 
 
         public double MaxContainerScreenWidth =>
-            MpAvMainView.Instance == null ? 0 : MpAvMainView.Instance.ClipTrayContainerView.Bounds.Width;
+            MpAvMainView.Instance == null ?
+                0 :
+                    //MpAvThemeViewModel.Instance.IsMultiWindow || MpAvMainWindowViewModel.Instance.IsVerticalOrientation ?
+                    MpAvMainView.Instance.ClipTrayContainerView.Bounds.Width;// :
+                    //MpAvMainView.Instance.AvailableContentAndSidebarSize.Width - MpAvMainView.Instance.SelectedSidebarContainerBorder.Bounds.Width;
 
         public double MaxContainerScreenHeight =>
             MpAvMainView.Instance == null ? 0 : MpAvMainView.Instance.ClipTrayContainerView.Bounds.Height;
@@ -1114,7 +1128,7 @@ namespace MonkeyPaste.Avalonia {
             IsQueryTrayVisible ?
                 MpAvThemeViewModel.Instance.IsMobileOrWindowed ? MaxContainerScreenHeight :
                 MinQueryOrPinTrayScreenHeight : 0;
-        
+
         public double MaxQueryTrayScreenWidth =>
             IsQueryTrayVisible ? MaxContainerScreenWidth : 0;
         public double MaxQueryTrayScreenHeight =>
@@ -1789,6 +1803,17 @@ namespace MonkeyPaste.Avalonia {
                 pad_origin,
                 Math.Max(0,ObservedQueryTrayScreenWidth - pad_extent),
                 Math.Max(0,ObservedQueryTrayScreenHeight - pad_extent));
+
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                double sb_w = MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarWidth;
+                double sb_h = MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarHeight;
+
+                if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
+                    svr.Bottom -= sb_h;
+                } else {
+                    svr.Left += sb_w;
+                }
+            }
 
             MpRect ctvm_rect = ctvm.ScreenRect;
             MpPoint delta_scroll_offset = svr.FindTranslation(ctvm_rect);
@@ -3897,9 +3922,12 @@ namespace MonkeyPaste.Avalonia {
 
                      to_select_ctvm = pin_placeholder_ctvm;
                  }
-                 int to_select_ciid = to_select_ctvm == null ? 0 : to_select_ctvm.CopyItemId;
+                 int to_select_ciid = to_select_ctvm == null ? unpinned_ciid : to_select_ctvm.CopyItemId;
                  while (!QueryCommand.CanExecute(string.Empty)) { await Task.Delay(100); }
                  QueryCommand.Execute(string.Empty);
+                 while(IsQuerying) {
+                     await Task.Delay(100);
+                 }
                  to_select_ctvm = to_select_ciid == 0 ? null : AllItems.FirstOrDefault(x => x.CopyItemId == to_select_ciid);
 
                  if (to_select_ctvm == null) {
@@ -4426,6 +4454,7 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(IsAnyBusy));
             OnPropertyChanged(nameof(IsQueryEmpty));
+            OnPropertyChanged(nameof(Items));
 
             sw.Stop();
             MpConsole.WriteLine($"Update tray of {recycle_idxs.Count} items took: " + sw.ElapsedMilliseconds);

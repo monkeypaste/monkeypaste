@@ -88,9 +88,9 @@
 
         <Style Selector="MenuItem.mobile local|MpAvTintedImage">
             <Setter Property="Width"
-                    Value="28" />
+                    Value="18" />
             <Setter Property="Height"
-                    Value="28" />
+                    Value="18" />
         </Style>
 
         <Style Selector="MenuItem local|MpAvTintedImage.tinted"
@@ -125,7 +125,7 @@
         </Style>
         <Style Selector="MenuItem.mobile TextBlock.textheader">
             <Setter Property="FontSize"
-                    Value="24" />
+                    Value="18" />
             <Setter Property="MaxWidth"
                     Value="300" />
             <Setter Property="Margin"

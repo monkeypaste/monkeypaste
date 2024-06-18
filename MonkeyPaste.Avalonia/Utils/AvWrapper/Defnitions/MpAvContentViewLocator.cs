@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -30,15 +31,30 @@ namespace MonkeyPaste.Avalonia {
                             .SelectMany(x => x.GetLogicalDescendants<MpAvContentTextBox>())
                             .FirstOrDefault(x => x.BindingContext != null && x.BindingContext.CopyItemId == ciid && !x.BindingContext.IsPinPlaceholder);
             }
-            if (result.Count > 1) {
+            if (result.Count > 1 &&
+                result[0].DataContext is MpAvClipTileViewModel ctvm) {
+                if(ctvm.IsPinPlaceholder &&
+                    ctvm.PinnedItemForThisPlaceholder != null) {
+                    ctvm = ctvm.PinnedItemForThisPlaceholder;
+                }
+                var external_cv =
+                        result
+                        .OfType<Control>()
+                        .FirstOrDefault(x => x.GetVisualAncestor<MpAvClipTrayContainerView>() == null) as MpIContentView;
+                if (ctvm.IsWindowOpen) {
+                    return external_cv;
+                }
+                return result
+                        .OfType<Control>()
+                        .FirstOrDefault(x => x.GetVisualAncestor<MpAvClipTrayContainerView>() == null) as MpIContentView;
                 // is this during a pin toggle? was this item pinned?
                 //MpDebug.Break();
                 // remove old refs
-                var stale_wvl = result.Skip(1);
+                //var stale_wvl = result.Skip(1);
                 // TODO? do these need further processing? besides hiding from locator?
-                _allItems = _allItems.Where(x => !stale_wvl.Contains(x)).ToList();
+                //_allItems = _allItems.Where(x => !stale_wvl.Contains(x)).ToList();
 
-                MpConsole.WriteLine($"{stale_wvl.Count()} stale webviews removed for item '{result[0].DataContext}'");
+                //MpConsole.WriteLine($"{stale_wvl.Count()} stale webviews removed for item '{result[0].DataContext}'");
             }
             return result[0];
         }

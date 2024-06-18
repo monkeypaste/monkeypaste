@@ -31,18 +31,19 @@
             <Setter Property="local:MpAvOrientedGridExtension.VerticalColumnDefinitions"
                     Value="*,*,*,*,*,0" />
         </Style>
-        <Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile.vert">
+        <!--<Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile.vert">
             <Setter Property="RenderTransform"
                     Value="translateX(-15px)" />
         </Style>
         <Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile:not(.vert)">
             <Setter Property="RenderTransform"
-                    Value="translateX(-20px)" />
+                    Value="translateX(-15px)" />
         </Style>
-        <!--<Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile :is(Button).sidebarRadio Path">
+        <Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile:not(.vert) :is(Button).sidebarRadio Path, Grid#SidebarButtonGroupContainerGrid.mobile:not(.vert) :is(Button).sidebarRadio Image, Grid#SidebarButtonGroupContainerGrid.mobile:not(.vert) :is(Button).sidebarRadio local|MpAvTintedImage, Grid#SidebarButtonGroupContainerGrid.mobile:not(.vert) :is(Button).sidebarRadio TextBlock.short">
             <Setter Property="RenderTransform"
                     Value="translateX(7px)" />
-        </Style>
+        </Style>-->
+        <!--
         <Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile ToggleButton">
             <Setter Property="RenderTransform"
                     Value="translateX(7px)" />
@@ -64,6 +65,8 @@
         <Style Selector="RadioButton.sidebarRadio">
             <Setter Property="local:MpAvDropExtension.IsEnabled"
                     Value="True" />
+            <Setter Property="Theme"
+                    Value="{StaticResource SwitchlessRadioButton}" />
             <Setter Property="local:MpAvDropExtension.DragEnterCommand"
                     Value="{Binding SidebarButtonDragEnterCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}" />
             <Setter Property="local:MpAvDropExtension.DragEnterCommandParameter"
@@ -104,6 +107,11 @@
                     Value="Center" />
             <Setter Property="VerticalAlignment"
                     Value="Center" />
+        </Style>
+
+        <Style Selector=":is(Button).sidebarRadio PathIcon /template/ Viewbox">
+            <Setter Property="ClipToBounds"
+                    Value="False" />
         </Style>
 
         <Style Selector=":is(Button).sidebarRadio Image">
@@ -186,6 +194,9 @@
                     Value="*,Auto" />
         </Style>
 
+        <Style Selector="Grid.btn-grid.tray-toggle">
+
+        </Style>
         <Style Selector="Grid.btn-grid TextBlock">
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalRow"
                     Value="1" />
@@ -211,7 +222,14 @@
 
         <!--  MULTI WINDOW STUFF  -->
 
-        <Style Selector="Grid#SidebarButtonGroupContainerGrid:not(.mobile) :is(Button).sidebarRadio PathIcon, Grid#SidebarButtonGroupContainerGrid:not(.mobile) :is(Button).sidebarRadio Image">
+        <Style Selector="Grid#SidebarButtonGroupContainerGrid:not(.mobile) :is(Button).sidebarRadio PathIcon">
+            <Setter Property="Width"
+                    Value="24" />
+            <Setter Property="Height"
+                    Value="24" />
+        </Style>
+
+        <Style Selector="Grid#SidebarButtonGroupContainerGrid:not(.mobile) :is(Button).sidebarRadio Image">
             <Setter Property="Width"
                     Value="24" />
             <Setter Property="Height"
@@ -235,10 +253,15 @@
 
     <Grid x:Name="SidebarButtonGroupContainerGrid"
           Classes="oriented"
+          Width="{Binding $parent.Bounds.Width}"
+          Height="{Binding $parent.Bounds.Height}"
           Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
+        <Grid.Resources>
+            <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="Transparent" />
+        </Grid.Resources>
 
         <!--  TAGS  -->
 
@@ -316,13 +339,13 @@
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
                      GroupName="NoGroup"
-                     Classes="sidebarRadio switchless"
+                     Classes="sidebarRadio switchless short"
                      local:MpAvOrientedGridExtension.HorizontalRow="2"
                      local:MpAvOrientedGridExtension.VerticalColumn="2"
                      IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                      Command="{Binding ToggleExpandQueryTrayCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                      IsChecked="{Binding IsPinTrayVisible, Mode=OneWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
-            <Grid Classes="btn-grid">
+            <Grid Classes="btn-grid tray-toggle">
                 <Image />
                 <TextBlock />
             </Grid>
@@ -334,7 +357,7 @@
                      local:MpAvOrientedGridExtension.HorizontalRow="3"
                      local:MpAvOrientedGridExtension.VerticalColumn="3"
                      GroupName="SidebarButtonGroup"
-                     Classes="sidebarRadio switchless"
+                     Classes="sidebarRadio switchless short"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="2"
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|2, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
@@ -354,7 +377,7 @@
                      local:MpAvOrientedGridExtension.HorizontalRow="4"
                      local:MpAvOrientedGridExtension.VerticalColumn="4"
                      GroupName="SidebarButtonGroup"
-                     Classes="sidebarRadio switchless"
+                     Classes="sidebarRadio switchless short"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="3"
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|3, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">

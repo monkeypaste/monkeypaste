@@ -1,6 +1,51 @@
 // #region Life Cycle
 function initSyntax() {
     setSelectedSyntaxTheme(globals.SelectedSyntaxTheme);
+    initLanguageSelectors();
+    initSyntaxDomWatcher();
+    let code_tb_btn_elm = getEditorToolbarElement().querySelector('.ql-code-block');
+    if (isNullOrUndefined(code_tb_btn_elm)) {
+        return;
+    }
+    addClickOrKeyClickEventListener(code_tb_btn_elm, onCodeBlockToolbarElementClick);
+}
+
+function initLanguageSelectors() {
+    getAllCodeBlocks().forEach(x => {
+        initCodeBlock(x);
+    });
+}
+
+function initCodeBlock(preElm) {
+    let sel_elm = getCodeBlockLanguageSelectorElement(preElm);
+    if (isNullOrUndefined(sel_elm)) {
+        return;
+    }
+    sel_elm.addEventListener('change', onLanguageChanged);
+}
+
+function initSyntaxDomWatcher() {
+    let observer = new MutationObserver(mutations => {
+        for (let mutation of mutations) {
+            // examine new nodes, there is something to highlight
+            for (let node of mutation.addedNodes) {
+                if (!(node instanceof HTMLElement)) {
+                    continue;
+                }
+                if (!node.classList.contains('ql-code-block-container') ||
+                    node.tagName != 'PRE') {
+                    continue;
+                }
+                initCodeBlock(node);
+            }
+        }
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+    });
 }
 // #endregion Life Cycle
 
@@ -10,6 +55,19 @@ function getAllCodeBlocks() {
     return Array.from(document.querySelectorAll('pre.ql-code-block-container'));
 }
 
+function getCodeBlockLanguageSelectorElement(codeBlockPreElm) {
+    if (isNullOrUndefined(codeBlockPreElm)) {
+        return null;
+    }
+    return codeBlockPreElm.querySelector('select.ql-ui');
+}
+
+function getCodeBlockLanguage(codeBlockPreElm) {
+    if (isNullOrUndefined(codeBlockPreElm)) {
+        return;
+    }
+    return codeBlockPreElm.querySelector('div').getAttribute('data-language');
+}
 // #endregion Getters
 
 // #region Setters
@@ -30,6 +88,18 @@ function setSelectedSyntaxTheme(themeName) {
     globals.SelectedSyntaxTheme = themeName;
     log('syntax theme changed to: ' + themeName);
 }
+
+function setCodeBlockLanguage(pre_elm, lang, reset, source = 'api') {
+    let pre_doc_range = getElementDocRange(pre_elm);
+    if (isNullOrUndefined(pre_doc_range)) {
+        debugger;
+        return;
+    }
+    if (reset) {
+        formatDocRange(pre_doc_range, { 'code-block': false }, source);
+    }
+    formatDocRange(pre_doc_range, { 'code-block': lang }, source);
+}
 // #endregion Setters
 
 // #region State
@@ -37,28 +107,6 @@ function setSelectedSyntaxTheme(themeName) {
 // #endregion State
 
 // #region Actions
-
-function highlightSyntaxDelayed(delayMs = 500) {
-    var sup_guid = suppressTextChanged();
-    let pre_elms = getAllCodeBlocks();
-    for (var i = 0; i < pre_elms.length; i++) {
-        let pre_elm = pre_elms[i];
-        let pre_doc_range = getElementDocRange(pre_elm);
-        // clear code block
-        formatDocRange(pre_doc_range, { 'code-block': false });
-    }
-    sleep(delayMs)
-        .then(() => {
-            for (var i = 0; i < pre_elms.length; i++) {
-                let pre_elm = pre_elms[i];
-                let pre_doc_range = getElementDocRange(pre_elm);
-                // reformat code block
-                formatDocRange(pre_doc_range, { 'code-block': 'plain' });
-            }
-
-            unsupressTextChanged(sup_guid);
-        });    
-}
 
 function highlightSyntax() {
     // BUG trying to restore previously highlighted html doesn't work,
@@ -69,11 +117,8 @@ function highlightSyntax() {
     let pre_elms = getAllCodeBlocks();
     for (var i = 0; i < pre_elms.length; i++) {
         let pre_elm = pre_elms[i];
-        let pre_doc_range = getElementDocRange(pre_elm);
-        // clear code block
-        formatDocRange(pre_doc_range, { 'code-block': false });
-        // reformat code block
-        formatDocRange(pre_doc_range, { 'code-block': 'plain' });
+        let lang = getCodeBlockLanguage(pre_elm);
+        setCodeBlockLanguage(pre_elm, lang, true);
     }
 
     unsupressTextChanged(sup_guid);
@@ -117,4 +162,15 @@ function testHl() {
 // #endregion Actions
 
 // #region Event Handlers
+function onLanguageChanged(e) {
+    let cur_lang = e.currentTarget.value;
+    let code_block_elm = e.currentTarget.parentNode;
+    let code_block_elm_idx = getAllCodeBlocks().indexOf(code_block_elm);
+    log('code block #' + code_block_elm_idx + ' lang changed to: ' + cur_lang);
+    setCodeBlockLanguage(code_block_elm, cur_lang, 'user');
+}
+
+function onCodeBlockToolbarElementClick(e) {
+    initLanguageSelectors();
+}
 // #endregion Event Handlers

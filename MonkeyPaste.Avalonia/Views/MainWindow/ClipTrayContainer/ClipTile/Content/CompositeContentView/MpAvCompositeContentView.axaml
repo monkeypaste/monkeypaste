@@ -48,27 +48,43 @@
         </Style>
 
         <!--  PLAIN CONTENT VIEWS  -->
-        <Style Selector=":is(Control).plain-content-view">
+        <Style Selector=":is(Control).content-view">
             <Setter Property="Grid.RowSpan"
                     Value="1" />
         </Style>
 
         <!--  READ ONLY / WEBVIEW OPACITY TOGGLE  -->
-        <Style Selector="Grid#CompositeWebViewContainerGrid :is(Control).plain-content-view">
+        <Style Selector=":is(Control).content-view:not(.always-show):not(.active)">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <!--<Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only :is(Control).plain-content-view.active, Grid#CompositeWebViewContainerGrid.anim :is(Control).plain-content-view.active">
+        <!--<Style Selector="Grid#CompositeContainer.show-read-only :is(Control).content-view.read-only.active">
             <Setter Property="IsVisible"
                     Value="True" />
         </Style>-->
-        <!--<Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvContentWebViewContainer#EditableWebView">
+        <Style Selector="Grid#CompositeContainer:not(.anim) :is(Control).content-view.always-show">
+            <Setter Property="Width"
+                    Value="{Binding $parent[Grid].Bounds.Width}" />
+            <Setter Property="Height"
+                    Value="{Binding $parent[Grid].Bounds.Height}" />
+        </Style>
+        <Style Selector="Grid#CompositeContainer.show-read-only :is(Control).content-view.active.always-show">
+            <Setter Property="Width"
+                    Value="0" />
+            <Setter Property="Height"
+                    Value="0" />
+        </Style>
+        <!--<Style Selector="Grid#CompositeContainer.show-read-only :is(Control).content-view.active, Grid#CompositeContainer.anim :is(Control).content-view.active">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>-->
+        <!--<Style Selector="Grid#CompositeContainer local|MpAvContentWebViewContainer#EditableWebView">
             <Setter Property="Width"
                     Value="{StaticResource NaN}" />
             <Setter Property="Height"
                     Value="{StaticResource NaN}" />
         </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only local|MpAvContentWebViewContainer#EditableWebView, Grid#CompositeWebViewContainerGrid.anim local|MpAvContentWebViewContainer#EditableWebView">
+        <Style Selector="Grid#CompositeContainer.show-read-only local|MpAvContentWebViewContainer#EditableWebView, Grid#CompositeContainer.anim local|MpAvContentWebViewContainer#EditableWebView">
             <Setter Property="Width"
                     Value="0" />
             <Setter Property="Height"
@@ -76,7 +92,7 @@
         </Style>-->
 
         <!--  RO/RW BEHAVIOR ATTACHMENT  -->
-        <Style Selector="Grid#CompositeWebViewContainerGrid local|MpAvContentWebView">
+        <Style Selector="Grid#CompositeContainer local|MpAvContentWebView">
             <Setter Property="Interaction.Behaviors">
                 <Setter.Value>
                     <BehaviorCollection>
@@ -85,11 +101,11 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only local|MpAvContentWebView">
+        <Style Selector="Grid#CompositeContainer.show-read-only local|MpAvContentWebView">
             <Setter Property="Interaction.Behaviors"
                     Value="{x:Null}" />
         </Style>
-        <Style Selector="Grid#CompositeWebViewContainerGrid.show-read-only local|MpAvHtmlPanel">
+        <Style Selector="Grid#CompositeContainer.show-read-only local|MpAvHtmlPanel">
             <Setter Property="Interaction.Behaviors">
                 <Setter.Value>
                     <BehaviorCollection>
@@ -99,7 +115,7 @@
             </Setter>
         </Style>
     </local:MpAvUserControl.Styles>
-    <Grid x:Name="CompositeWebViewContainerGrid"
+    <Grid x:Name="CompositeContainer"
           Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           Classes.anim="{Binding IsAnimating}"
           RowDefinitions="*,Auto">
@@ -110,9 +126,11 @@
                 <Binding Path="!IsDropOverTile" />
             </MultiBinding>
         </Classes.show-read-only>
+
         <!--  READ ONLY WEBVIEW  -->
+
         <local:MpAvHtmlPanel x:Name="ReadOnlyWebView"
-                             Classes="content-zoom plain-content-view"
+                             Classes="content-zoom content-view read-only"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"
                              Margin="5"
@@ -144,35 +162,51 @@
                 </MultiBinding>
             </local:MpAvHtmlPanel.IsSelectionEnabled>
         </local:MpAvHtmlPanel>
+
         <!--  IMAGE VIEW  -->
+
         <local:MpAvImageContentView x:Name="ImageViewer"
-                                    Classes="content-zoom plain-content-view"
-                                    Classes.active="{Binding CopyItemType, ConverterParameter=Image, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}" />
+                                    Classes="content-zoom content-view read-only"
+                                    Classes.active="{Binding CopyItemType, ConverterParameter=Image, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}">
+        </local:MpAvImageContentView>
+
         <!--  FILE-LIST VIEW  -->
+
         <local:MpAvFileListContentView x:Name="FileListViewer"
-                                       Classes="content-zoom plain-content-view"
+                                       Classes="content-zoom content-view read-only"
                                        Classes.active="{Binding CopyItemType, ConverterParameter=FileList, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}" />
-        <!--  EDITABLE TEXT  -->
-        <ContentControl x:Name="EditableTextContentControl"
-                        Grid.RowSpan="2"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Content="{Binding}">
-            <ContentControl.DataTemplates>
-                <local:MpAvEditableTextContentTemplateSelector>
-                    <DataTemplate x:Key="PlainTextTemplate"
-                                  DataType="local:MpAvClipTileViewModel">
-                        <local:MpAvPlainTextContentView />
-                    </DataTemplate>
-                    <DataTemplate x:Key="EditableWebViewTemplate"
-                                  DataType="local:MpAvClipTileViewModel">
-                        <local:MpAvContentWebViewContainer x:Name="EditableWebView"
-                                                           HorizontalAlignment="Stretch"
-                                                           VerticalAlignment="Stretch" />
-                    </DataTemplate>
-                </local:MpAvEditableTextContentTemplateSelector>
-            </ContentControl.DataTemplates>
-        </ContentControl>
+
+        <!--  EDITABLE PLAIN TEXT  -->
+
+        <local:MpAvPlainTextContentView x:Name="PlainTextEditView"
+                                        Grid.RowSpan="2"
+                                        Classes="content-zoom content-view">
+            <Classes.active>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="CopyItemType"
+                             Converter="{x:Static local:MpAvEnumToBoolConverter.Instance}"
+                             ConverterParameter="Text" />
+                    <Binding Path="!IsRichHtmlContentEnabled"
+                             Source="{x:Static local:MpAvPrefViewModel.Instance}" />
+                </MultiBinding>
+            </Classes.active>
+
+        </local:MpAvPlainTextContentView>
+
+        <!--  EDITABLE RICH TEXT  -->
+
+        <local:MpAvContentWebViewContainer x:Name="EditableWebView"
+                                           Classes="content-view always-show"
+                                           Grid.RowSpan="2"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch">
+            <Classes.active>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="IsRichHtmlContentEnabled"
+                             Source="{x:Static local:MpAvPrefViewModel.Instance}" />
+                </MultiBinding>
+            </Classes.active>
+        </local:MpAvContentWebViewContainer>
 
         <!--  PASTE TOOLBAR  -->
 

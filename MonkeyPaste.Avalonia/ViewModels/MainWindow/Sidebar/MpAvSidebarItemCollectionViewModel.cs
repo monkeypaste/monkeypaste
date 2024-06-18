@@ -228,7 +228,8 @@ namespace MonkeyPaste.Avalonia {
                 // trigger sidebar pop out
                 w.WindowState = WindowState.Normal;
                 w.Activate();
-            } else if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+            } 
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
                 FocusSidebarOrFallbackCommand.Execute(null);
             }
         }
@@ -273,6 +274,11 @@ namespace MonkeyPaste.Avalonia {
         }
         private void MpAvSidebarItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(ContainerBoundWidth):
+                    if(MpAvThemeViewModel.Instance.IsMobileOrWindowed && MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                        MpAvClipTrayContainerView.Instance.Margin = new Thickness(ContainerBoundWidth, 0, 0, 0);
+                    }
+                break;
                 case nameof(SelectedItem):
                     if (MpAvMainView.Instance == null) {
                         return;
@@ -450,6 +456,8 @@ namespace MonkeyPaste.Avalonia {
                     tw.FocusThisHeader();
                 } else if (SelectedItem == null) {
                     MpAvMainView.Instance.FocusThisHeader();
+                } else {
+
                 }
             });
 

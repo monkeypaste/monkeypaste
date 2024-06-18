@@ -205,12 +205,6 @@ function showEditorScrollbars() {
 	showElementScrollbars(getEditorContainerElement());
 }
 
-function hideAllToolbars() {
-	hideEditorToolbar();
-	hideEditTemplateToolbar();
-	hidePasteToolbar();
-}
-
 function updateEditorSizesAndPositions() {
 	let wh = window.visualViewport.height;
 

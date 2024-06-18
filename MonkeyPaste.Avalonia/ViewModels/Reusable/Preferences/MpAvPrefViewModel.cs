@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
 
         [JsonIgnore]
-        public const string DEF_SYNTAX_THEME = "monkey-shine";
+        public const string DEF_SYNTAX_THEME = "monokai-sublime";
         [JsonIgnore]
         public const string PREF_FILE_NAME = "mp.pref";
 

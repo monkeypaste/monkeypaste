@@ -173,6 +173,9 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="local:MpAvActionViewModelBase">
                             <local:MpAvActionDesignerItemView Focusable="True"
+                                                              local:MpAvPointerCommandExtension.IsEnabled="True"
+                                                              local:MpAvPointerCommandExtension.LeftReleaseCommand="{Binding SelectActionCommand, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}"
+                                                              local:MpAvPointerCommandExtension.LeftReleaseCommandParameter="{Binding $self}"
                                                               ClipToBounds="False" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>

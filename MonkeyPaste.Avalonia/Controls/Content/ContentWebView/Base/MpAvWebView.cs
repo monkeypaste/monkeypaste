@@ -195,6 +195,23 @@ namespace MonkeyPaste.Avalonia {
                 });
                 return;
             }
+            if(InnerWebView.PlatformWebView == null) {
+                // when PlatformWebView is null sugarwv will crash after setting url
+                // so wait for it to load or timeout
+                Dispatcher.UIThread.Post(async () => {
+                    var sw = Stopwatch.StartNew();
+                    while (InnerWebView.PlatformWebView == null) {
+                        if (sw.Elapsed >= TimeSpan.FromSeconds(5)) {
+                            MpConsole.WriteLine($"{DataContext} navigate timeout. No platform webview");
+                            return;
+                        }
+                        await Task.Delay(100);
+                    }
+                    Navigate(urlStr);
+                });
+                return;
+                
+            }
             InnerWebView.Url = new Uri(urlStr, UriKind.Absolute);
 #endif
         }

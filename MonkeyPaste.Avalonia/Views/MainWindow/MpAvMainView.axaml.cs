@@ -149,7 +149,7 @@ namespace MonkeyPaste.Avalonia {
                 return new MpSize(Math.Max(0,actual_w), Math.Max(0,actual_h));
             }
         }
-        MpSize AvailableContentAndSidebarSize {
+        public MpSize AvailableContentAndSidebarSize {
             get {
                 // NOTE the only difference between mobile/multi-window are:
                 // 1. In Multi-Window mode the title is always on the inside edge (for resize and drag)

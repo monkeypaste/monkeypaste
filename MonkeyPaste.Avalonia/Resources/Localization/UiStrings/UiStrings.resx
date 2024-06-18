@@ -3121,4 +3121,10 @@ Global Shortcuts can now be enabled in the System Tray Menu</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Syntax</value>
   </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Wrap Text</value>
+  </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>View</value>
+  </data>
 </root>

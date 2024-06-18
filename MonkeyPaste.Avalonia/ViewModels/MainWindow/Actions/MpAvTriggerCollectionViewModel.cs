@@ -62,6 +62,10 @@ namespace MonkeyPaste.Avalonia {
             ];
         ICommand MpAvIHeaderMenuViewModel.BackCommand => new MpCommand(
             () => {
+                if(IsWindowOpen) {
+                    IsWindowOpen = false;
+                    return;
+                }
                 if(FocusAction == null || MpAvMainWindowTitleMenuViewModel.Instance.FocusHeaderViewModel == this) {
                     MpAvMainView.Instance.FocusThisHeader();
                 } else {
@@ -349,7 +353,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpISidebarItemViewModel Implementation
 
-        private double _defaultSelectorColumnVarDimLength_horiz = 800;
+        private double _defaultSelectorColumnVarDimLength_horiz =>
+            MpAvThemeViewModel.Instance.IsMobileOrWindowed ? 400 : 800;
         private double _defaultSelectorColumnVarDimLength_vert = 400;
         public double DefaultSidebarWidth {
             get {
@@ -360,9 +365,9 @@ namespace MonkeyPaste.Avalonia {
                     return MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
                 double def_w = Math.Min(_defaultSelectorColumnVarDimLength_horiz, MpAvMainWindowViewModel.Instance.MainWindowWidth);
-                if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                    def_w = Math.Min(def_w, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width / 2);
-                }
+                //if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                //    def_w = Math.Min(def_w, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width / 2);
+                //}
                 return def_w;
             }
         }
@@ -1049,6 +1054,11 @@ namespace MonkeyPaste.Avalonia {
                 int focusArgNum = -1;
                 if(args is Control c && c.DataContext is MpAvActionViewModelBase avmb) {
                     toSelect_avmb = avmb;
+                    if(c is MpAvActionDesignerItemView adiv && 
+                        avmb.IsSelected) {
+                        // HACK deal w/ canceled action header to show again w/o changing selection
+                        adiv.FocusThisHeader();
+                    }
                 }
                 if (args is MpAvActionViewModelBase) {
                     toSelect_avmb = args as MpAvActionViewModelBase;

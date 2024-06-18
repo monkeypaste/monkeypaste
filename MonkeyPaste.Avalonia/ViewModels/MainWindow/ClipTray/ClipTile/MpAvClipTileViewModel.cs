@@ -98,17 +98,17 @@ namespace MonkeyPaste.Avalonia {
                     Command = MpAvClipTrayViewModel.Instance.ToggleTileIsPinnedCommand,
                     CommandParameter = this
                 },
-                new MpAvMenuItemViewModel() {
-                    IconSourceObj = "WrapImage",
-                    IconTintHexStr = IsWrappingEnabled ? MpSystemColors.limegreen : null,
-                    IsVisible = !IsWindowOpen && CopyItemType != MpCopyItemType.Image,
-                    Command = ToggleIsWrappingEnabledCommand
-                },
-                new MpAvMenuItemViewModel() {
-                    IconSourceObj = "EditImage",
-                    IsVisible = !IsWindowOpen,
-                    Command = ToggleIsContentReadOnlyCommand,
-                },
+                //new MpAvMenuItemViewModel() {
+                //    IconSourceObj = "WrapImage",
+                //    IconTintHexStr = IsWrappingEnabled ? MpSystemColors.limegreen : null,
+                //    IsVisible = !IsWindowOpen && CopyItemType != MpCopyItemType.Image,
+                //    Command = ToggleIsWrappingEnabledCommand
+                //},
+                //new MpAvMenuItemViewModel() {
+                //    IconSourceObj = "EditImage",
+                //    IsVisible = !IsWindowOpen,
+                //    Command = ToggleIsContentReadOnlyCommand,
+                //},
                 new MpAvMenuItemViewModel() {
                     IconSourceObj = "Dots3x1Image",
                     Command = ShowContextMenuCommand
@@ -651,7 +651,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
         public bool IsWrappingEnabled { get; set; }
         public bool IsWindowClosing { get; private set; }
         bool IsDetailCycling { get; set; }
@@ -1046,6 +1045,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsAppendNotifier ||
                     IsFrozen ||
                     !IsContentReadOnly ||
+                    (MpAvThemeViewModel.Instance.IsMobileOrWindowed && IsWindowOpen) ||
                     (!IsPinned &&
                         (MpAvTagTrayViewModel.Instance.TrashTagViewModel != null &&
                          MpAvTagTrayViewModel.Instance.TrashTagViewModel.IsSelected)) ||
@@ -2287,7 +2287,7 @@ namespace MonkeyPaste.Avalonia {
             if (success && !IsSelected) {
                 IsSelected = true;
             }
-            MpConsole.WriteLine($"Focusing '{this}' with method '{focusType}' {success.ToTestResultLabel()}");
+            //MpConsole.WriteLine($"Focusing '{this}' with method '{focusType}' {success.ToTestResultLabel()}");
             return success;
         }
 
@@ -2348,6 +2348,9 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 e.Cancel = true;
+            }
+            if(IsWindowClosing || !IsWindowOpen) {
+                return;
             }
             IsWindowClosing = true;
             
@@ -2731,9 +2734,9 @@ namespace MonkeyPaste.Avalonia {
             });
         public MpIAsyncCommand PinToPopoutWindowCommand => new MpAsyncCommand(
             async () => {
-                //if (!IsSelected) {
-                //    IsSelected = true;
-                //}
+                if (!IsSelected) {
+                    IsSelected = true;
+                }
                 await Parent.PinTileCommand.ExecuteAsync(new object[] { this, MpPinType.Window });
             }, () => {
                 return !IsWindowOpen && Parent != null;

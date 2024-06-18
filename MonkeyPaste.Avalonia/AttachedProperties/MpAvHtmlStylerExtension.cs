@@ -255,25 +255,23 @@ namespace MonkeyPaste.Avalonia {
             UpdateContent(hc);
         }
         private static void UpdateContent(HtmlControl hc, bool set_style = false) {
+            bool needs_set = false;
             string html_doc_str = hc.Text.ToStringOrEmpty();
             if (set_style) {
                 // for some reason changing the style sheet makes html disappear so only setting on load now
                 hc.BaseStylesheet = GetStyleSheet(hc);
                 hc.Text = null;
+                needs_set = true;
             }
 
             if (!html_doc_str.ToStringOrEmpty().IsStringHtmlDocument()) {
                 // ensure text is full html doc or stylesheet stuff doesn't work
-                if (!html_doc_str.StartsWith("<")) {
-                    // BUG htmlRenderer seems to ignore raw text element html
-                    if (html_doc_str.Contains("\n") || html_doc_str.Contains("<br>") || html_doc_str.Contains("<br/>")) {
-                        // multi-line 
-
-                    }
-                }
                 html_doc_str = html_doc_str.ToHtmlDocumentFromTextOrPartialHtml();
+                needs_set = true;
             }
-            hc.SetHtml(html_doc_str);
+            if(needs_set) {
+                hc.SetHtml(html_doc_str);
+            }
         }
 
         private static void ToggleUnderlines(HtmlControl hc) {

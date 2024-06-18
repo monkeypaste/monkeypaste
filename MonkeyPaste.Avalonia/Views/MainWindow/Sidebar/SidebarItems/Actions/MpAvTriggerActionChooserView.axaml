@@ -44,7 +44,7 @@
         </Style>
 
         <Style Selector="Grid#TriggerSidebarContainer">
-            <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumnDefinitions"
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalRowDefinitions"
                     Value="Auto,*" />
             <Setter Property="local:MpAvOrientedGridExtension.VerticalRowDefinitions"
                     Value="Auto,*" />
@@ -58,6 +58,21 @@
                     </RowDefinitions>
                 </Setter.Value>
             </Setter>
+        </Style>
+
+        <Style Selector="Border#TriggerSidebarOuterContainer Border#ActionDesignerOuterContainerBorder">
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalRow"
+                    Value="1" />
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumn"
+                    Value="0" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalRow"
+                    Value="1" />
+        </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer.mobile.popout.horiz Border#ActionDesignerOuterContainerBorder">
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalRow"
+                    Value="0" />
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumn"
+                    Value="1" />
         </Style>
 
         <Style Selector="Border#TriggerSidebarOuterContainer:not(.popout) Border#ActionDesignerOuterContainerBorder">
@@ -138,6 +153,12 @@
         <Style Selector="Border#TriggerSidebarOuterContainer.mobile Border.headeredBorder">
             <Setter Property="BorderThickness"
                     Value="0" />
+        </Style>
+
+        <!--  SCROLL VIEWERS  -->
+        <Style Selector="ScrollViewer">
+            <Setter Property="IsScrollChainingEnabled"
+                    Value="False" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="TriggerSidebarOuterContainer"
@@ -302,8 +323,6 @@
                 <!--  SELECTED TRIGGER DESIGNER COLUMN  -->
 
                 <Border x:Name="ActionDesignerOuterContainerBorder"
-                        local:MpAvOrientedGridExtension.HorizontalColumn="1"
-                        local:MpAvOrientedGridExtension.VerticalRow="1"
                         MaxHeight="{Binding Bounds.Height, ElementName=TriggerSidebarOuterContainer}"
                         Margin="10"
                         HorizontalAlignment="Stretch"

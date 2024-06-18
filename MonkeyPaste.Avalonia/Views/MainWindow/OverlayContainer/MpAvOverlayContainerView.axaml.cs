@@ -160,6 +160,7 @@ namespace MonkeyPaste.Avalonia {
                 tg.Children.OfType<TranslateTransform>().FirstOrDefault() is not { } tt) {
                 return;
             }
+
             double offset_factor = 0.5;
             MpPoint tt_start = new(tt.X,tt.Y);
             MpPoint tt_end = new(tt.X,tt.Y);

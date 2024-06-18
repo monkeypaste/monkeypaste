@@ -15,6 +15,7 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -434,7 +435,17 @@ namespace MonkeyPaste.Avalonia {
                 IsBaseLevelWindow) {
                 Activate();
                 if (Parent is Window w) {
+                    // loader or main view
                     w.Show();
+                } else {
+                    // a ntf during startup
+                    Dispatcher.UIThread.Post(async () => {
+                        while(MpAvOverlayContainerView.Instance == null) {
+                            await Task.Delay(100);
+                        }
+                        Show();
+                        return;
+                    });
                 }
                 return;
             }

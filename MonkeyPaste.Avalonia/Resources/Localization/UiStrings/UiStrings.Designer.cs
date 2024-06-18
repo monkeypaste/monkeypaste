@@ -3071,6 +3071,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View.
+        /// </summary>
+        public static string CommonViewLabel {
+            get {
+                return ResourceManager.GetString("CommonViewLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please wait....
         /// </summary>
         public static string CommonWaitLabel {
@@ -8404,6 +8413,15 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeTranslatedTitle {
             get {
                 return ResourceManager.GetString("WelcomeTranslatedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap Text.
+        /// </summary>
+        public static string WrapTextMenuLabel {
+            get {
+                return ResourceManager.GetString("WrapTextMenuLabel", resourceCulture);
             }
         }
     }
