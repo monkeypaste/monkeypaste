@@ -15,10 +15,30 @@
     <local:MpAvUserControl.RenderTransform>
         <TranslateTransform />
     </local:MpAvUserControl.RenderTransform>
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Grid#MainWindowContainerGrid.mobile">
+            <Setter Property="ToolTip.VerticalOffset"
+                    Value="40" />
+            <Setter Property="ToolTip.Placement"
+                    Value="Top" />
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView x:Name="MainWindowToolTip"
+                                               Classes="fade"
+                                               ToolTipText="{Binding MainWindowToolTipText, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
+
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Canvas x:Name="MainWindowCanvas"
             Width="{Binding MainWindowWidth}"
             Height="{Binding MainWindowHeight}">
         <Grid x:Name="MainWindowContainerGrid"
+              Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+              Background="{DynamicResource MainWindowBgBrush}"
               Width="{Binding MainWindowWidth}"
               Height="{Binding MainWindowHeight}">
 
@@ -29,7 +49,7 @@
                                       local:MpAvSizeObserverExtension.IsEnabled="True"
                                       local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedFilterMenuWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}"
                                       HorizontalAlignment="Stretch"
-                                      VerticalAlignment="Center" />
+                                      VerticalAlignment="Stretch" />
 
             <!--  CONTENT ROW  -->
 
@@ -89,15 +109,10 @@
                 <!--  SIDEBAR BUTTONS  -->
                 <local:MpAvSidebarButtonGroupView x:Name="SidebarButtonGroup"
                                                   Grid.Column="0"
-                                                  Padding="3"
                                                   HorizontalAlignment="Stretch"
                                                   VerticalAlignment="Stretch"
                                                   HorizontalContentAlignment="Stretch"
-                                                  VerticalContentAlignment="Stretch">
-                    <local:MpAvSidebarButtonGroupView.Background>
-                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-                    </local:MpAvSidebarButtonGroupView.Background>
-                </local:MpAvSidebarButtonGroupView>
+                                                  VerticalContentAlignment="Stretch" />
             </Grid>
 
 

@@ -58,7 +58,7 @@
             <Setter Property="Effect"
                     Value="drop-shadow(0 0 15 Black)" />
             <Setter Property="Margin"
-                    Value="5,10,5,0" />
+                    Value="5,5,5,0" />
             <Setter Property="CornerRadius"
                     Value="20,20,0,0" />
         </Style>
@@ -66,9 +66,9 @@
             <Setter Property="Effect"
                     Value="drop-shadow(0 0 15 Black)" />
             <Setter Property="Margin"
-                    Value="0,0,0,0" />
+                    Value="0,5,5,5" />
             <Setter Property="CornerRadius"
-                    Value="0" />
+                    Value="0,20,20,0" />
         </Style>
         <Style Selector="ContentControl#SelectedSidebarContentControl.mobile /template/ ScrollViewer">
             <Setter Property="IsScrollChainingEnabled"

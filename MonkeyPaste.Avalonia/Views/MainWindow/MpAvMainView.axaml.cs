@@ -110,6 +110,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        
+
         MpSize BoundContentAndSidebarSize {
             get {
                 var ctrvm = MpAvClipTrayViewModel.Instance;
@@ -219,7 +221,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Orientation Updates
 
-        public void UpdateMainViewLayout(MpMainViewUpdateType updateType = MpMainViewUpdateType.None) {
+        public void UpdateMainViewLayout() {
             UpdateContentLayout();
             UpdateContainerLayout();
             UpdateEdgyTooltips();
@@ -641,8 +643,8 @@ namespace MonkeyPaste.Avalonia {
                 tmv_zoom_slider_val_b.Width = tmvm.ZoomSliderValueLength;
                 tmv_zoom_slider_val_b.Height = tmvm.DefaultTitleMenuFixedLength * 0.5;
 
-                tmv_gltb.Margin = new Thickness(10, 0, 0, 0);
-                tmv_min_btn.Margin = new Thickness(5, 0, 0, 0);
+                //tmv_gltb.Margin = new Thickness(10, 0, 0, 0);
+                //tmv_min_btn.Margin = new Thickness(5, 0, 0, 0);
                 //tmv_zoom_slider_val_btn.HorizontalAlignment = HorizontalAlignment.Center;
                 //tmv_zoom_slider_val_btn.VerticalAlignment = VerticalAlignment.Stretch;
             }
@@ -735,8 +737,8 @@ namespace MonkeyPaste.Avalonia {
                 ;
                 tmv_zoom_slider_val_b.Height = tmvm.ZoomSliderValueLength;
 
-                tmv_gltb.Margin = new Thickness(0, 10, 0, 0);
-                tmv_min_btn.Margin = new Thickness(0, 0, 0, 0);
+                //tmv_gltb.Margin = new Thickness(0, 10, 0, 0);
+                //tmv_min_btn.Margin = new Thickness(0, 0, 0, 0);
             }
 
             if (is_horiz) {
@@ -809,6 +811,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Overrides
 
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnAttachedToVisualTree(e);
+            if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                return;
+            }
+            UpdateMainViewLayout();
+        }
         #endregion
 
         #region Private Methods

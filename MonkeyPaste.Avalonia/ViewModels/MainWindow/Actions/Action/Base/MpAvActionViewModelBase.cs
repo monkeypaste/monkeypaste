@@ -180,6 +180,12 @@ namespace MonkeyPaste.Avalonia {
                 if(MpAvWindowManager.ActiveWindow is not { } aw ||
                 aw.Content is not Viewbox vb || 
                 vb.Child is not MpAvTriggerActionChooserView tac) {
+                    if(MpAvMainWindowTitleMenuViewModel.Instance.FocusHeaderViewModel == Parent) {
+                        MpAvMainWindowTitleMenuViewModel.Instance.FocusHeaderViewModel = null;
+                    } else {
+                        Parent.FocusThisHeader();
+                    }
+                    
                     return;
                 }
                 if(Parent.IsWindowOpen) {
@@ -701,7 +707,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (X != value) {
-                    Action.X = value;
+                    Action.X = Math.Clamp(value,-MpAvTriggerCollectionViewModel.MAX_TRANSLATE_OFFSET_MAGNITUDE, MpAvTriggerCollectionViewModel.MAX_TRANSLATE_OFFSET_MAGNITUDE);
                     HasModelChanged = !IsMoving;
                     OnPropertyChanged(nameof(X));
                     OnPropertyChanged(nameof(Location));
@@ -718,7 +724,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (Y != value) {
-                    Action.Y = value;
+                    Action.Y = Math.Clamp(value, -MpAvTriggerCollectionViewModel.MAX_TRANSLATE_OFFSET_MAGNITUDE, MpAvTriggerCollectionViewModel.MAX_TRANSLATE_OFFSET_MAGNITUDE);
                     HasModelChanged = !IsMoving;
                     OnPropertyChanged(nameof(Y));
                     OnPropertyChanged(nameof(Location));

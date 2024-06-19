@@ -55,8 +55,6 @@
         <Style Selector="local|MpAvPinTrayView Border#PinTrayContainerBorder">
             <Setter Property="Background"
                     Value="{DynamicResource PinTrayBgBrush}" />
-            <Setter Property="BoxShadow"
-                    Value="inset 0 0 10 10 #46000000" />
         </Style>
 
         <Style Selector="local|MpAvPinTrayView.dragover Border#PinTrayContainerBorder, local|MpAvQueryTrayView.dragover Border#QueryTrayContainerBorder">
@@ -76,8 +74,8 @@
             <Setter Property="Cursor"
                     Value="Arrow" />
         </Style>
-      
-      <!--  TILE LBI SIZE  -->
+
+        <!--  TILE LBI SIZE  -->
 
         <Style Selector="ListBox.clipTileListBox > ListBoxItem, Border#QueryTrayContainerBorder local|MpAvClipTileView"
                x:DataType="local:MpAvClipTileViewModel">

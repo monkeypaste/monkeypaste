@@ -87,6 +87,12 @@
             <Setter Property="TextAlignment"
                     Value="Center" />
         </Style>
+
+        <!--  LISTBOX AUTOSCROLL  -->
+        <Style Selector="ListBox#PluginParameterListBox, ListBox.paramValueListBox">
+            <Setter Property="AutoScrollToSelectedItem"
+                    Value="False" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="ParameterContainerGrid"
           HorizontalAlignment="Stretch"

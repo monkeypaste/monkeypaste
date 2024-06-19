@@ -100,4 +100,5 @@
         <Setter Property="VerticalAlignment"
                 Value="Stretch" />
     </Style>
+  
 </Styles>

@@ -595,7 +595,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpEditorBindingFunctionType.notifySetClipboardRequested:
                     ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillEditorSetClipboardRequestNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorSetClipboardRequestNotification setClipboardReq) {
-                        ctvm.CopyToClipboardCommand.Execute(null);
+                        ctvm.CopyToClipboardCommand.Execute("editor");
                     }
                     break;
                 case MpEditorBindingFunctionType.notifyPasteRequest:

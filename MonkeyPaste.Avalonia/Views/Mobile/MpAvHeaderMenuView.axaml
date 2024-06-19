@@ -53,53 +53,58 @@
                     Value="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Grid x:Name="HeaderContainer"
-          Background="{Binding HeaderBackground}">
-        <!--  BACK BUTTON  -->
-        <Button x:Name="BackButton"
-                HorizontalAlignment="Left"
-                Classes="no-bg no-hover-bg no-border default-button header-button"
-                Classes.has-back-cmd="{Binding BackCommand, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-            <local:MpAvTintedImage Tint="{Binding Background, ElementName=HeaderContainer, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />
-        </Button>
+    <Border x:Name="HeaderBorder"
+            Background="{Binding HeaderBackground}"
+            BoxShadow="inset 0 0 5 5 #46FFFFFF">
 
-        <!--  ACTION MENU  -->
-        <local:MpAvMenuStripView x:Name="ActionMenu"
-                                 DataContext="{Binding HeaderMenuItems}"
-                                 Foreground="{Binding Foreground, ElementName=TitleTextBlock}"
-                                 HorizontalAlignment="Right"
-                                 VerticalAlignment="Center" />
+        <Grid x:Name="HeaderContainer"
+              Margin="7,0">
+            <!--  BACK BUTTON  -->
+            <Button x:Name="BackButton"
+                    HorizontalAlignment="Left"
+                    Classes="no-bg no-hover-bg no-border default-button header-button"
+                    Classes.has-back-cmd="{Binding BackCommand, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                <local:MpAvTintedImage Tint="{Binding Background, ElementName=HeaderBorder, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />
+            </Button>
 
-        <!--  TITLE  -->
+            <!--  ACTION MENU  -->
+            <local:MpAvMenuStripView x:Name="ActionMenu"
+                                     DataContext="{Binding HeaderMenuItems}"
+                                     Foreground="{Binding Foreground, ElementName=TitleTextBlock}"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Center" />
 
-        <Viewbox HorizontalAlignment="Center"
-                 Margin="0,5">
-            <TextBlock x:Name="TitleTextBlock"
-                       Classes.has-title="{Binding HeaderTitle, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                       Effect="{Binding $self.Foreground, Converter={x:Static local:MpAvBrushToDropShadowEffectConverter.Instance}}"
-                       Foreground="{Binding HeaderForeground}"
-                       FontSize="26"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       TextWrapping="WrapWithOverflow"
-                       TextAlignment="Center">
+            <!--  TITLE  -->
 
-                <TextBlock.MaxWidth>
-                    <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
-                                  ConverterParameter="*">
-                        <Binding Path="Bounds.Width"
-                                 ElementName="HeaderMenuView" />
-                        <Binding>
-                            <Binding.Source>
-                                <sys:Double>0.5</sys:Double>
-                            </Binding.Source>
-                        </Binding>
-                    </MultiBinding>
-                </TextBlock.MaxWidth>
+            <Viewbox HorizontalAlignment="Center"
+                     Margin="0,5">
+                <TextBlock x:Name="TitleTextBlock"
+                           Classes.has-title="{Binding HeaderTitle, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                           Effect="{Binding $self.Foreground, Converter={x:Static local:MpAvBrushToDropShadowEffectConverter.Instance}}"
+                           Foreground="{Binding HeaderForeground}"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           TextWrapping="WrapWithOverflow"
+                           TextAlignment="Center">
 
-            </TextBlock>
+                    <TextBlock.MaxWidth>
+                        <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                                      ConverterParameter="*">
+                            <Binding Path="Bounds.Width"
+                                     ElementName="HeaderMenuView" />
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:Double>0.5</sys:Double>
+                                </Binding.Source>
+                            </Binding>
+                        </MultiBinding>
+                    </TextBlock.MaxWidth>
 
-        </Viewbox>
-    </Grid>
+                </TextBlock>
 
+            </Viewbox>
+        </Grid>
+
+    </Border>
 </local:MpAvUserControl>

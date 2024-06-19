@@ -1796,26 +1796,32 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // Only query items from here
+            MpRect ctvm_rect = ctvm.ScreenRect;
+            double cx = ctvm_rect.X;
+            double cy = ctvm_rect.Y;
+
             double pad_origin = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
             double pad_extent = ScrollBarFixedAxisSize;
-            MpRect svr = new MpRect(
-                pad_origin,
-                pad_origin,
-                Math.Max(0,ObservedQueryTrayScreenWidth - pad_extent),
-                Math.Max(0,ObservedQueryTrayScreenHeight - pad_extent));
+            double x = pad_origin;
+            double y = pad_origin;
+            double w = ObservedQueryTrayScreenWidth - ScrollBarFixedAxisSize;
+            double h = ObservedQueryTrayScreenHeight - ScrollBarFixedAxisSize;
 
             if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
                 double sb_w = MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarWidth;
                 double sb_h = MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarHeight;
 
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
-                    svr.Bottom -= sb_h;
+                    h = Math.Max(0, h - sb_h);
                 } else {
-                    svr.Left += sb_w;
+                    x += sb_w;
+                    w = Math.Max(0,w - sb_w);
+                    cx += x;
                 }
             }
 
-            MpRect ctvm_rect = ctvm.ScreenRect;
+            ctvm_rect = new MpRect(cx, cy, ctvm_rect.Width, ctvm_rect.Height);
+            MpRect svr = new MpRect(x,y,w,h);
             MpPoint delta_scroll_offset = svr.FindTranslation(ctvm_rect);
 
             var target_offset = ScrollOffset + delta_scroll_offset;
@@ -2309,6 +2315,10 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SelectedCopyItemId));
                     OnPropertyChanged(nameof(IsAnySelected));
                     OnPropertyChanged(nameof(IsAnySelectedAndTrayVisible));
+                    if(!IsAnySelectedAndTrayVisible && MpAvMainWindowTitleMenuViewModel.Instance.FocusHeaderViewModel is MpAvClipTileViewModel) {
+                        // hide header when sel not on active tray
+                        MpAvMainWindowTitleMenuViewModel.Instance.FocusHeaderViewModel = null;
+                    }
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(CanScroll));
@@ -4583,7 +4593,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand CopySelectedClipFromShortcutCommand => new MpAsyncCommand(
             async () => {
-                await SelectedItem.CopyToClipboardCommand.ExecuteAsync();
+                await SelectedItem.CopyToClipboardCommand.ExecuteAsync("shortcut");
             },
             () => {
                 bool canCopy =

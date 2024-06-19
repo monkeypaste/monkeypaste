@@ -13,9 +13,6 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvSidebarButtonGroupView">
-    <local:MpAvUserControl.Resources>
-        <TransformOperations x:Key="SwitchlessRadioButtonTransformOps">translateX(-15px)</TransformOperations>
-    </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  CNTR ORIENTATION  -->
         <Style Selector="Grid#SidebarButtonGroupContainerGrid">
@@ -31,36 +28,10 @@
             <Setter Property="local:MpAvOrientedGridExtension.VerticalColumnDefinitions"
                     Value="*,*,*,*,*,0" />
         </Style>
-        <!--<Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile.vert">
-            <Setter Property="RenderTransform"
-                    Value="translateX(-15px)" />
+        <Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile.vert RadioButton#ToggleClipTrayButton TextBlock">
+            <!--<Setter Property="RenderTransform"
+                    Value="translateY(7px)" />-->
         </Style>
-        <Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile:not(.vert)">
-            <Setter Property="RenderTransform"
-                    Value="translateX(-15px)" />
-        </Style>
-        <Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile:not(.vert) :is(Button).sidebarRadio Path, Grid#SidebarButtonGroupContainerGrid.mobile:not(.vert) :is(Button).sidebarRadio Image, Grid#SidebarButtonGroupContainerGrid.mobile:not(.vert) :is(Button).sidebarRadio local|MpAvTintedImage, Grid#SidebarButtonGroupContainerGrid.mobile:not(.vert) :is(Button).sidebarRadio TextBlock.short">
-            <Setter Property="RenderTransform"
-                    Value="translateX(7px)" />
-        </Style>-->
-        <!--
-        <Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile ToggleButton">
-            <Setter Property="RenderTransform"
-                    Value="translateX(7px)" />
-        </Style>
-        <Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile.horizontal :is(Button).sidebarRadio Path">
-            <Setter Property="RenderTransform"
-                    Value="translateX(0px)" />
-        </Style>
-        <Style Selector="Grid#SidebarButtonGroupContainerGrid.mobile.horizontal ToggleButton">
-            <Setter Property="RenderTransform"
-                    Value="translateX(0px)" />
-        </Style>
-
-        <Style Selector="PathIcon, PathIcon /template/ Viewbox, :is(Button).sidebarRadio Image">
-            <Setter Property="ClipToBounds"
-                    Value="False" />
-        </Style>-->
         <!--  SIDEBAR RADIO BUTTONS  -->
         <Style Selector="RadioButton.sidebarRadio">
             <Setter Property="local:MpAvDropExtension.IsEnabled"
@@ -186,12 +157,14 @@
         </Style>
 
         <Style Selector="Grid.btn-grid">
+            <Setter Property="Height"
+                    Value="40" />
             <Setter Property="local:MpAvOrientedGridExtension.IsEnabled"
                     Value="True" />
             <Setter Property="local:MpAvOrientedGridExtension.Orientation"
                     Value="Horizontal" />
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalRowDefinitions"
-                    Value="*,Auto" />
+                    Value="25,15" />
         </Style>
 
         <Style Selector="Grid.btn-grid.tray-toggle">
@@ -250,54 +223,55 @@
                     Value="*,0" />
         </Style>
     </local:MpAvUserControl.Styles>
+    <Border Background="{DynamicResource ThemeGrayAccent3Brush}"
+            BoxShadow="inset 0 0 3 3 #469B979E">
+        <Grid x:Name="SidebarButtonGroupContainerGrid"
+              Classes="oriented"
+              Width="{Binding $parent.Bounds.Width}"
+              Height="{Binding $parent.Bounds.Height}"
+              Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+              Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <Grid.Resources>
+                <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="Transparent" />
+            </Grid.Resources>
 
-    <Grid x:Name="SidebarButtonGroupContainerGrid"
-          Classes="oriented"
-          Width="{Binding $parent.Bounds.Width}"
-          Height="{Binding $parent.Bounds.Height}"
-          Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-          Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-          HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch">
-        <Grid.Resources>
-            <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="Transparent" />
-        </Grid.Resources>
+            <!--  TAGS  -->
 
-        <!--  TAGS  -->
-
-        <RadioButton x:Name="TagTreeToggleButton"
-                     local:MpAvOrientedGridExtension.HorizontalRow="0"
-                     local:MpAvOrientedGridExtension.VerticalColumn="0"
-                     GroupName="SidebarButtonGroup"
-                     Classes="sidebarRadio switchless"
-                     Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                     CommandParameter="0"
-                     IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|0, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
-            <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarCollectionsToolTip}" />
-            </ToolTip.Tip>
-            <Grid Classes="inner-container"
-                  ClipToBounds="False">
-                <Grid Classes="btn-grid">
-                    <PathIcon Data="{StaticResource BooksSvg}" />
-                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarCollectionsToolTip}" />
-                </Grid>
-                <!--  BADGE  -->
-                <Border Background="Red"
-                        ClipToBounds="False"
-                        Width="10"
-                        Height="10"
-                        CornerRadius="7.5"
-                        BorderThickness="1"
-                        BorderBrush="White"
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Left"
-                        RenderTransform="translateX(-5px) translateY(-5px)"
-                        IsVisible="{Binding BadgeCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, Source={x:Static local:MpAvTagTrayViewModel.Instance}}">
-                    <!--<Grid>
-                    -->
-                    <!--  NOTE Text won't horizontally align unless in grid  -->
-                    <!--
+            <RadioButton x:Name="TagTreeToggleButton"
+                         local:MpAvOrientedGridExtension.HorizontalRow="0"
+                         local:MpAvOrientedGridExtension.VerticalColumn="0"
+                         GroupName="SidebarButtonGroup"
+                         Classes="sidebarRadio switchless"
+                         Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                         CommandParameter="0"
+                         IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|0, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarCollectionsToolTip}" />
+                </ToolTip.Tip>
+                <Grid Classes="inner-container"
+                      ClipToBounds="False">
+                    <Grid Classes="btn-grid">
+                        <PathIcon Data="{StaticResource BooksSvg}" />
+                        <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarCollectionsToolTip}" />
+                    </Grid>
+                    <!--  BADGE  -->
+                    <Border Background="Red"
+                            ClipToBounds="False"
+                            Width="10"
+                            Height="10"
+                            CornerRadius="7.5"
+                            BorderThickness="1"
+                            BorderBrush="White"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            RenderTransform="translateX(-5px) translateY(-5px)"
+                            IsVisible="{Binding BadgeCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, Source={x:Static local:MpAvTagTrayViewModel.Instance}}">
+                        <!--<Grid>
+                        -->
+                        <!--  NOTE Text won't horizontally align unless in grid  -->
+                        <!--
                         <TextBlock Foreground="White"
                                    FontSize="10"
                                    MinWidth="15"
@@ -307,139 +281,140 @@
                                    VerticalAlignment="Stretch"
                                    Text="{Binding BadgeCount}" />
                     </Grid>-->
-                </Border>
-            </Grid>
-
-        </RadioButton>
-
-        <!--  CLIPBOARD  -->
-
-        <RadioButton x:Name="ClipboardHandlerToggleButton"
-                     local:MpAvOrientedGridExtension.HorizontalRow="1"
-                     local:MpAvOrientedGridExtension.VerticalColumn="1"
-                     GroupName="SidebarButtonGroup"
-                     Classes="sidebarRadio switchless no-sel"
-                     Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                     CommandParameter="1"
-                     IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|1, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
-
-            <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarClipboardHandlersToolTip}" />
-            </ToolTip.Tip>
-
-            <Grid Classes="btn-grid">
-                <PathIcon Data="{StaticResource ClipboardSvg}" />
-                <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarClipboardHandlersToolTip}" />
-            </Grid>
-        </RadioButton>
-
-        <!--  CLIP TRAY TOGGLE  -->
-
-        <RadioButton x:Name="ToggleClipTrayButton"
-                     HorizontalAlignment="Center"
-                     VerticalAlignment="Center"
-                     GroupName="NoGroup"
-                     Classes="sidebarRadio switchless short"
-                     local:MpAvOrientedGridExtension.HorizontalRow="2"
-                     local:MpAvOrientedGridExtension.VerticalColumn="2"
-                     IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                     Command="{Binding ToggleExpandQueryTrayCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                     IsChecked="{Binding IsPinTrayVisible, Mode=OneWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
-            <Grid Classes="btn-grid tray-toggle">
-                <Image />
-                <TextBlock />
-            </Grid>
-        </RadioButton>
-
-        <!--  ANALYZERS  -->
-
-        <RadioButton x:Name="AnalyzerToggleButton"
-                     local:MpAvOrientedGridExtension.HorizontalRow="3"
-                     local:MpAvOrientedGridExtension.VerticalColumn="3"
-                     GroupName="SidebarButtonGroup"
-                     Classes="sidebarRadio switchless short"
-                     Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                     CommandParameter="2"
-                     IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|2, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
-
-            <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonAnalyzeButtonLabel}" />
-            </ToolTip.Tip>
-            <Grid Classes="btn-grid">
-                <PathIcon Data="{StaticResource BrainOutlineSvg}" />
-                <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonAnalyzeButtonLabel}" />
-            </Grid>
-        </RadioButton>
-
-        <!--  ACTIONS  -->
-
-        <RadioButton x:Name="ActionsToggleButton"
-                     local:MpAvOrientedGridExtension.HorizontalRow="4"
-                     local:MpAvOrientedGridExtension.VerticalColumn="4"
-                     GroupName="SidebarButtonGroup"
-                     Classes="sidebarRadio switchless short"
-                     Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                     CommandParameter="3"
-                     IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|3, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
-
-            <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarTriggersToolTip}" />
-            </ToolTip.Tip>
-
-            <Grid Classes="btn-grid">
-                <PathIcon Data="{StaticResource BoltSvg}" />
-                <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarTriggersToolTip}" />
-            </Grid>
-        </RadioButton>
-
-        <!--  MODES  -->
-
-        <RadioButton x:Name="AppModeToggleButton"
-                     IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                     Classes.mouseMode="{Binding IsAnyMouseModeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                     local:MpAvOrientedGridExtension.HorizontalRow="5"
-                     local:MpAvOrientedGridExtension.VerticalColumn="5"
-                     local:MpAvImageTintExtension.IsEnabled="True"
-                     GroupName="EmptyGroup"
-                     Classes="sidebarRadio switchless tt_near_bottom"
-                     Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                     CommandParameter="4"
-                     IsEnabled="{Binding !IsIgnoringClipboardChanges}">
-            <RadioButton.Resources>
-                <!--<SolidColorBrush x:Key="FlyoutPresenterBackground">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="FlyoutBorderThemeBrush">Transparent</SolidColorBrush>-->
-                <Thickness x:Key="FlyoutContentThemePadding">0,0,0,0</Thickness>
-                <Thickness x:Key="FlyoutBorderThemePadding">0,0,0,0</Thickness>
-                <sys:Double x:Key="FlyoutThemeMinWidth">0</sys:Double>
-                <sys:Double x:Key="FlyoutThemeMinHeight">0</sys:Double>
-            </RadioButton.Resources>
-            <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarMouseModesToolTip}" />
-            </ToolTip.Tip>
-            <RadioButton.Flyout>
-                <Flyout Placement="{Binding MouseModeFlyoutPlacement, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                        HorizontalOffset="{Binding MouseModeHorizontalOffset, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                        VerticalOffset="{Binding MouseModeVerticalOffset, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}">
-                    <Panel>
-                        <local:MpAvAppModeFlyoutView HorizontalAlignment="Stretch"
-                                                     VerticalAlignment="Stretch" />
-                    </Panel>
-                </Flyout>
-            </RadioButton.Flyout>
-
-            <Grid Classes="btn-grid">
-                <Grid>
-                    <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource MouseNoneClickImage}" />
-
-                    <Image IsVisible="{Binding IsAutoCopyMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                           local:MpAvImageTintExtension.ImageResourceObj="{StaticResource MouseLeftClickImage}" />
-                    <Image IsVisible="{Binding IsRightClickPasteMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                           local:MpAvImageTintExtension.ImageResourceObj="{StaticResource MouseRightClickImage}" />
-                    <Image IsVisible="{Binding IsDropWidgetEnabled, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}}"
-                           local:MpAvImageTintExtension.ImageResourceObj="{StaticResource MouseFilledBaseImage}" />
+                    </Border>
                 </Grid>
-                <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarMouseModesToolTip}" />
-            </Grid>
-        </RadioButton>
-    </Grid>
+
+            </RadioButton>
+
+            <!--  CLIPBOARD  -->
+
+            <RadioButton x:Name="ClipboardHandlerToggleButton"
+                         local:MpAvOrientedGridExtension.HorizontalRow="1"
+                         local:MpAvOrientedGridExtension.VerticalColumn="1"
+                         GroupName="SidebarButtonGroup"
+                         Classes="sidebarRadio switchless"
+                         Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                         CommandParameter="1"
+                         IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|1, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
+
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarClipboardHandlersToolTip}" />
+                </ToolTip.Tip>
+
+                <Grid Classes="btn-grid">
+                    <PathIcon Data="{StaticResource ClipboardSvg}" />
+                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarClipboardHandlersToolTip}" />
+                </Grid>
+            </RadioButton>
+
+            <!--  CLIP TRAY TOGGLE  -->
+
+            <RadioButton x:Name="ToggleClipTrayButton"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         GroupName="NoGroup"
+                         Classes="sidebarRadio switchless short"
+                         local:MpAvOrientedGridExtension.HorizontalRow="2"
+                         local:MpAvOrientedGridExtension.VerticalColumn="2"
+                         IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                         Command="{Binding ToggleExpandQueryTrayCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                         IsChecked="{Binding IsPinTrayVisible, Mode=OneWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+                <Grid Classes="btn-grid tray-toggle">
+                    <Image />
+                    <TextBlock Margin="" />
+                </Grid>
+            </RadioButton>
+
+            <!--  ANALYZERS  -->
+
+            <RadioButton x:Name="AnalyzerToggleButton"
+                         local:MpAvOrientedGridExtension.HorizontalRow="3"
+                         local:MpAvOrientedGridExtension.VerticalColumn="3"
+                         GroupName="SidebarButtonGroup"
+                         Classes="sidebarRadio switchless short"
+                         Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                         CommandParameter="2"
+                         IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|2, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
+
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonAnalyzeButtonLabel}" />
+                </ToolTip.Tip>
+                <Grid Classes="btn-grid">
+                    <PathIcon Data="{StaticResource BrainOutlineSvg}" />
+                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonAnalyzeButtonLabel}" />
+                </Grid>
+            </RadioButton>
+
+            <!--  ACTIONS  -->
+
+            <RadioButton x:Name="ActionsToggleButton"
+                         local:MpAvOrientedGridExtension.HorizontalRow="4"
+                         local:MpAvOrientedGridExtension.VerticalColumn="4"
+                         GroupName="SidebarButtonGroup"
+                         Classes="sidebarRadio switchless short"
+                         Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                         CommandParameter="3"
+                         IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|3, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
+
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarTriggersToolTip}" />
+                </ToolTip.Tip>
+
+                <Grid Classes="btn-grid">
+                    <PathIcon Data="{StaticResource BoltSvg}" />
+                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarTriggersToolTip}" />
+                </Grid>
+            </RadioButton>
+
+            <!--  MODES  -->
+
+            <RadioButton x:Name="AppModeToggleButton"
+                         IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                         Classes.mouseMode="{Binding IsAnyMouseModeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                         local:MpAvOrientedGridExtension.HorizontalRow="5"
+                         local:MpAvOrientedGridExtension.VerticalColumn="5"
+                         local:MpAvImageTintExtension.IsEnabled="True"
+                         GroupName="EmptyGroup"
+                         Classes="sidebarRadio switchless tt_near_bottom"
+                         Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                         CommandParameter="4"
+                         IsEnabled="{Binding !IsIgnoringClipboardChanges}">
+                <RadioButton.Resources>
+                    <!--<SolidColorBrush x:Key="FlyoutPresenterBackground">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="FlyoutBorderThemeBrush">Transparent</SolidColorBrush>-->
+                    <Thickness x:Key="FlyoutContentThemePadding">0,0,0,0</Thickness>
+                    <Thickness x:Key="FlyoutBorderThemePadding">0,0,0,0</Thickness>
+                    <sys:Double x:Key="FlyoutThemeMinWidth">0</sys:Double>
+                    <sys:Double x:Key="FlyoutThemeMinHeight">0</sys:Double>
+                </RadioButton.Resources>
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarMouseModesToolTip}" />
+                </ToolTip.Tip>
+                <RadioButton.Flyout>
+                    <Flyout Placement="{Binding MouseModeFlyoutPlacement, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                            HorizontalOffset="{Binding MouseModeHorizontalOffset, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                            VerticalOffset="{Binding MouseModeVerticalOffset, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}">
+                        <Panel>
+                            <local:MpAvAppModeFlyoutView HorizontalAlignment="Stretch"
+                                                         VerticalAlignment="Stretch" />
+                        </Panel>
+                    </Flyout>
+                </RadioButton.Flyout>
+
+                <Grid Classes="btn-grid">
+                    <Grid>
+                        <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource MouseNoneClickImage}" />
+
+                        <Image IsVisible="{Binding IsAutoCopyMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                               local:MpAvImageTintExtension.ImageResourceObj="{StaticResource MouseLeftClickImage}" />
+                        <Image IsVisible="{Binding IsRightClickPasteMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                               local:MpAvImageTintExtension.ImageResourceObj="{StaticResource MouseRightClickImage}" />
+                        <Image IsVisible="{Binding IsDropWidgetEnabled, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}}"
+                               local:MpAvImageTintExtension.ImageResourceObj="{StaticResource MouseFilledBaseImage}" />
+                    </Grid>
+                    <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarMouseModesToolTip}" />
+                </Grid>
+            </RadioButton>
+        </Grid>
+    </Border>
 </local:MpAvUserControl>

@@ -37,8 +37,8 @@ namespace MonkeyPaste.Avalonia {
 
         public const double DEFAULT_MIN_SCALE = 0.1;
         public const double DEFAULT_MAX_SCALE = 3.0d;
+        public const double MAX_TRANSLATE_OFFSET_MAGNITUDE = 1_000;
         const double DEFAULT_SCALE = 1.0d;
-        const double MAX_TRANSLATE_OFFSET_MAGNITUDE = 1_000;
         #endregion
 
         #region Statics
@@ -355,7 +355,7 @@ namespace MonkeyPaste.Avalonia {
 
         private double _defaultSelectorColumnVarDimLength_horiz =>
             MpAvThemeViewModel.Instance.IsMobileOrWindowed ? 400 : 800;
-        private double _defaultSelectorColumnVarDimLength_vert = 400;
+        private double _defaultSelectorColumnVarDimLength_vert = 350;
         public double DefaultSidebarWidth {
             get {
                 if (IsWindowOpen) {
@@ -384,7 +384,7 @@ namespace MonkeyPaste.Avalonia {
                 //    //h += _defaultParameterColumnVarDimLength;
                 //}
                 if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                    def_h = Math.Min(def_h, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height / 2);
+                    def_h = Math.Min(def_h, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height / 3);
                 }
                 return def_h;
             }
@@ -473,10 +473,6 @@ namespace MonkeyPaste.Avalonia {
 
         public string FocusActionName =>
             FocusAction == null ? string.Empty : FocusAction.Label;
-
-        public bool IsHorizontal =>
-                SidebarOrientation == Orientation.Horizontal;
-
 
         public int SelectedTriggerIdx {
             get => Triggers.IndexOf(SelectedTrigger);
@@ -707,7 +703,6 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 case MpMessageType.SidebarItemSizeChanged:
                     OnPropertyChanged(nameof(SidebarOrientation));
-                    OnPropertyChanged(nameof(IsHorizontal));
                     break;
                 case MpMessageType.SelectedSidebarItemChangeEnd:
                     if (!IsSelected) {
@@ -788,7 +783,9 @@ namespace MonkeyPaste.Avalonia {
             void OnOpened(object sender, EventArgs e) {
                 dw.Opened -= OnOpened;
                 ResetDesignerViewCommand.Execute(null);
-                MpAvSidebarItemCollectionViewModel.Instance.ToggleIsSidebarItemSelectedCommand.Execute(this);
+                if(!IsSelected) {
+                    MpAvSidebarItemCollectionViewModel.Instance.ToggleIsSidebarItemSelectedCommand.Execute(this);
+                }                
             }
 #if MOBILE_OR_WINDOWED
 
@@ -1054,7 +1051,7 @@ namespace MonkeyPaste.Avalonia {
                 int focusArgNum = -1;
                 if(args is Control c && c.DataContext is MpAvActionViewModelBase avmb) {
                     toSelect_avmb = avmb;
-                    if(c is MpAvActionDesignerItemView adiv && 
+                    if(c.GetVisualAncestor<MpAvActionDesignerItemView>() is { } adiv && 
                         avmb.IsSelected) {
                         // HACK deal w/ canceled action header to show again w/o changing selection
                         adiv.FocusThisHeader();

@@ -155,7 +155,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     double def_h = 300;
                     if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                        def_h = Math.Min(def_h, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height / 2);
+                        def_h = Math.Min(def_h, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height / 3);
                     }
                     return def_h;
                 }

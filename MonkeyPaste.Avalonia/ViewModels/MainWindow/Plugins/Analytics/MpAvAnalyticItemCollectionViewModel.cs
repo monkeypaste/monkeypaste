@@ -123,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 double def_h = DefaultSelectorColumnVarDimLength;
                 if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                    def_h = Math.Min(def_h, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height / 2);
+                    def_h = Math.Min(def_h, Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Height / 3);
                 }
                 //if (SelectedPresetViewModel != null) {
                 //    h += _defaultParameterColumnVarDimLength;

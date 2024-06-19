@@ -143,6 +143,8 @@
                                   WarningBrush1="{DynamicResource DefaultWarningBrush1}"
                                   WarningBrush2="{DynamicResource DefaultWarningBrush2}">
                 <ListBox x:Name="ActionDesignerListBox"
+                         ScrollViewer.IsScrollChainingEnabled="False"
+                         AutoScrollToSelectedItem="False"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch"
                          Classes="actionDesigner"

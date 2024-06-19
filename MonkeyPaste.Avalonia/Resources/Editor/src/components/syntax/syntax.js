@@ -64,9 +64,13 @@ function getCodeBlockLanguageSelectorElement(codeBlockPreElm) {
 
 function getCodeBlockLanguage(codeBlockPreElm) {
     if (isNullOrUndefined(codeBlockPreElm)) {
-        return;
+        return null;
     }
-    return codeBlockPreElm.querySelector('div').getAttribute('data-language');
+    let div_elm = codeBlockPreElm.querySelector('div');
+    if (isNullOrUndefined(div_elm) || !div_elm.hasAttribute('data-language')) {
+        return null;
+    }
+    return div_elm.getAttribute('data-language');
 }
 // #endregion Getters
 
@@ -118,6 +122,7 @@ function highlightSyntax() {
     for (var i = 0; i < pre_elms.length; i++) {
         let pre_elm = pre_elms[i];
         let lang = getCodeBlockLanguage(pre_elm);
+        lang = lang == null ? 'plain' : lang;
         setCodeBlockLanguage(pre_elm, lang, true);
     }
 

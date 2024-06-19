@@ -391,6 +391,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public string MainWindowToolTipText { get; private set; }
         public object ShowOrHideIconSourceObj =>
             new object[] {
                 IsMainWindowOpen ? "ClosedEyeImage" : "OpenImage",
@@ -398,6 +399,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool HasLayoutProcessed { get; set; }
 
         MpIPlatformScreenInfo LastOpenedScreenInfo { get; set; }
         public WindowState WindowState { get; set; } = WindowState.Normal;
@@ -1650,6 +1653,26 @@ namespace MonkeyPaste.Avalonia {
                 // since event is triggered on double DOWN and OS (windows) still treats up as task change
                 await Task.Delay(1000);
                 IsMainWindowSilentLocked = false;
+            });
+        
+        public MpIAsyncCommand<object> SetMainWindowToolTipCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if(args is not string tipText ||
+                    ToolTip.GetTip(MpAvMainView.Instance.MainWindowContainerGrid) is not Control tt) { 
+                    return;
+                }
+                MainWindowToolTipText = tipText;
+                tt.Opacity = 0;
+                ToolTip.SetIsOpen(MpAvMainView.Instance.MainWindowContainerGrid, true);
+                tt.Opacity = 1;
+                await Task.Delay(3_000);
+                tt.Opacity = 0;
+                await Task.Delay(300); // this delay should match DefTransitionDur
+                ToolTip.SetIsOpen(MpAvMainView.Instance.MainWindowContainerGrid, false);
+                MainWindowToolTipText = null;
+            },
+            (args) => {
+                return MpAvThemeViewModel.Instance.IsMobileOrWindowed;
             });
 
         #endregion

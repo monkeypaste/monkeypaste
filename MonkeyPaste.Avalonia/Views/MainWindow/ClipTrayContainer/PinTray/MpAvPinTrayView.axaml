@@ -67,37 +67,39 @@
         </Style>
 
         <!--  BUTTON STRIP  -->
-        <Style Selector="Grid#PinTrayContainerGrid StackPanel#ButtonPanel"
-               x:DataType="local:MpAvClipTileViewModel">
+        <Style Selector="Grid#PinTrayContainerGrid.mobile.sel StackPanel#ButtonPanel">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#PinTrayContainerGrid.mobile StackPanel#ButtonPanel">
             <Setter Property="HorizontalAlignment"
                     Value="Left" />
         </Style>
-        <Style Selector="Grid#PinTrayContainerGrid.vert StackPanel#ButtonPanel"
-               x:DataType="local:MpAvClipTileViewModel">
+        <Style Selector="Grid#PinTrayContainerGrid.mobile.vert StackPanel#ButtonPanel, Grid#PinTrayContainerGrid StackPanel#ButtonPanel">
             <Setter Property="HorizontalAlignment"
                     Value="Right" />
         </Style>
+        <Style Selector="Grid#PinTrayContainerGrid ListBox#PinTrayListBox /template/ WrapPanel">
+            <Setter Property="Margin"
+                    Value="0,20,0,0" />
+        </Style>
+        <Style Selector="Grid#PinTrayContainerGrid.mobile ListBox#PinTrayListBox /template/ WrapPanel">
+            <Setter Property="Margin"
+                    Value="0" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="PinTrayContainerBorder"
+            BoxShadow="inset 0 0 10 10 #46000000"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Grid x:Name="PinTrayContainerGrid"
+              Classes.sel="{Binding IsAnySelectedAndTrayVisible}"
               Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
               Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
-            <Border HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    IsVisible="False"
-                    IsHitTestVisible="False"
-                    Opacity="0.2">
-                <Border.Background>
-                    <ImageBrush DestinationRect="0 0 690 690"
-                                TileMode="Tile"
-                                Source="{Binding Source={StaticResource BurlapTextureImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                </Border.Background>
-            </Border>
             <ListBox x:Name="PinTrayListBox"
+                     AutoScrollToSelectedItem="True"
                      Classes="clipTileListBox pinListBox focus-item-vm"
                      Classes.bright="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToIsBrightBoolConverter.Instance}}"
                      Background="Transparent"
@@ -129,8 +131,7 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel HorizontalAlignment="Stretch"
-                                   VerticalAlignment="Stretch"
-                                   Margin="0,20,0,0" />
+                                   VerticalAlignment="Stretch" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
@@ -149,9 +150,8 @@
             </Button>
 
             <!--  BUTTON GRID  -->
-            <StackPanel x:Name="ButtonPanel"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
+            <StackPanel x:Name="ButtonPanelButtonPanel"
+                        IsVisible="{Binding IsMultiWindow, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                         Margin="5"
                         Spacing="7">
                 <!--  UNPIN All/Busy  -->

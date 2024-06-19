@@ -44,7 +44,7 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Grid#TitlePanel.sel:not(.mobile) local|MpAvZoomFactorView#ZoomFactorView, Grid#TitlePanel.sel.mobile:not(.vert) local|MpAvZoomFactorView#ZoomFactorView">
+        <Style Selector="Grid#TitlePanel.sel local|MpAvZoomFactorView#ZoomFactorView">
             <Setter Property="IsVisible"
                     Value="True" />
         </Style>
@@ -263,10 +263,31 @@
             <!--  Zoom Factor Slider  -->
             <local:MpAvZoomFactorView x:Name="ZoomFactorView" />
 
+            <!--  UNPIN ALL (MOBILE ONLY)  -->
+
+            <Button x:Name="UnpinAllButton"
+                    Command="{Binding UnpinAllCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                    Classes="no-bg no-hover-bg no-border">
+                <Button.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="IsMobileOrWindowed"
+                                 Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                        <Binding Path="IsPinTrayVisible"
+                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                        <Binding Path="InternalPinnedItems"
+                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}"
+                                 Converter="{x:Static local:MpAvCollectionToIsMultipleBoolConverter.Instance}" />
+                    </MultiBinding>
+                </Button.IsVisible>
+                <local:MpAvTintedImage Classes="squareByHeight"
+                                       Tint="{DynamicResource ThemeInteractiveBrush}"
+                                       Source="{Binding Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            </Button>
+
             <!--  Layout Toggle Button  -->
 
             <ToggleButton x:Name="GridLayoutToggleButton"
-                          Classes="no-bg no-hover-bg no-border"
+                          Classes="default-button no-bg no-hover-bg no-border"
                           Command="{Binding ToggleLayoutTypeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           IsChecked="{Binding IsGridLayout, Mode=OneWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           ToolTip.ShowDelay="0">

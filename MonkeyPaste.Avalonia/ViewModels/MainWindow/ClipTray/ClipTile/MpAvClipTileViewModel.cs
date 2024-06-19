@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
             (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
 
         string MpAvIHeaderMenuViewModel.HeaderTitle =>
-            CopyItemTitle;
+            string.Empty;// CopyItemTitle;
         public IEnumerable<MpAvIMenuItemViewModel> HeaderMenuItems =>
             [
                 new MpAvMenuItemViewModel() {
@@ -98,17 +98,22 @@ namespace MonkeyPaste.Avalonia {
                     Command = MpAvClipTrayViewModel.Instance.ToggleTileIsPinnedCommand,
                     CommandParameter = this
                 },
-                //new MpAvMenuItemViewModel() {
-                //    IconSourceObj = "WrapImage",
-                //    IconTintHexStr = IsWrappingEnabled ? MpSystemColors.limegreen : null,
-                //    IsVisible = !IsWindowOpen && CopyItemType != MpCopyItemType.Image,
-                //    Command = ToggleIsWrappingEnabledCommand
-                //},
-                //new MpAvMenuItemViewModel() {
-                //    IconSourceObj = "EditImage",
-                //    IsVisible = !IsWindowOpen,
-                //    Command = ToggleIsContentReadOnlyCommand,
-                //},
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "WrapImage",
+                    IconTintHexStr = IsWrappingEnabled ? MpSystemColors.limegreen : null,
+                    IsVisible = !IsWindowOpen && CopyItemType != MpCopyItemType.Image,
+                    Command = ToggleIsWrappingEnabledCommand
+                },
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "CopyImage",
+                    Command = CopyToClipboardCommand,
+                    CommandParameter = "header"
+                },
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "EditImage",
+                    IsVisible = !IsWindowOpen,
+                    Command = ToggleIsContentReadOnlyCommand,
+                },
                 new MpAvMenuItemViewModel() {
                     IconSourceObj = "Dots3x1Image",
                     Command = ShowContextMenuCommand
@@ -2239,12 +2244,14 @@ namespace MonkeyPaste.Avalonia {
                     Path = nameof(MinWidth)
                 });
 
-            pow.Bind(
-                MpAvWindow.TitleProperty,
-                new Binding() {
-                    Source = this,
-                    Path = nameof(WindowTitle)
-                });
+            if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                pow.Bind(
+                    MpAvWindow.TitleProperty,
+                    new Binding() {
+                        Source = this,
+                        Path = nameof(WindowTitle)
+                    });
+            }
 
             if (pow.Content is Control c) {
                 // BUG hover doesn't work binding to window
@@ -2647,9 +2654,12 @@ namespace MonkeyPaste.Avalonia {
                 IsTitleReadOnly = true;
                 CopyItem.WriteToDatabaseAsync().FireAndForgetSafeAsync(this);
             });
-        public MpIAsyncCommand CopyToClipboardCommand => new MpAsyncCommand(
-            async () => {
-                if (IsTitleFocused) {
+        public MpIAsyncCommand<object> CopyToClipboardCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if(args is not string copySource) {
+                    return;
+                }
+                if (IsTitleFocused && copySource == "shortcut") {
                     return;
                 }
                 //IsBusy = true;
@@ -2672,6 +2682,9 @@ namespace MonkeyPaste.Avalonia {
                 // wait extra for cb watcher to know about data
                 //await Task.Delay(300);
                 //IsBusy = false;
+                if(copySource == "header") {
+                    MpAvMainWindowViewModel.Instance.SetMainWindowToolTipCommand.Execute(UiStrings.ClipboardSetMessage);
+                }
             });
         public ICommand CycleDetailCommand => new MpCommand<object>(
             (args) => {

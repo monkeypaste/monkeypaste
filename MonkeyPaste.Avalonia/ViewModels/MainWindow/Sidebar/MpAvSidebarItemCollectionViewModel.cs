@@ -275,19 +275,19 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvSidebarItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(ContainerBoundWidth):
-                    if(MpAvThemeViewModel.Instance.IsMobileOrWindowed && MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    if(MpAvThemeViewModel.Instance.IsMobileOrWindowed && 
+                        MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                         MpAvClipTrayContainerView.Instance.Margin = new Thickness(ContainerBoundWidth, 0, 0, 0);
+                    } else {
+                        MpAvClipTrayContainerView.Instance.Margin = new();
                     }
                 break;
                 case nameof(SelectedItem):
-                    if (MpAvMainView.Instance == null) {
-                        return;
-                    }
-
-                    if (SelectedItem != null) {
+                    Items.ForEach(x => x.IsSelected = x == SelectedItem);
+                    if (SelectedItem == null) {
+                    } else {
                         BoundItem = SelectedItem;
                         LastSelectedItem = SelectedItem;
-                        SelectedItem.OnPropertyChanged(nameof(SelectedItem.IsSelected));
                     }
                     Dispatcher.UIThread.Post(async () => {
                         await HandleSidebarSelectionChangedAsync();
@@ -323,10 +323,14 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.MainWindowLoadComplete:
                     Init();
                     break;
+                case MpMessageType.MainWindowOrientationChangeBegin:
+                    MpAvClipTrayContainerView.Instance.Margin = new();
+                    break;
                 case MpMessageType.MainWindowOrientationChangeEnd:
                     OnPropertyChanged(nameof(MouseModeFlyoutPlacement));
                     OnPropertyChanged(nameof(MouseModeHorizontalOffset));
                     OnPropertyChanged(nameof(MouseModeVerticalOffset));
+                    OnPropertyChanged(nameof(ContainerBoundWidth));
                     break;
                 case MpMessageType.MainWindowOpened:
 //#if MULTI_WINDOW
