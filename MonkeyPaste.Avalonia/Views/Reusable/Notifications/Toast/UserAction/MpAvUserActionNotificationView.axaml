@@ -169,7 +169,7 @@
                               AllowAutoHide="True"
                               Margin="0,5,5,5">
 
-                    <ContentControl Margin="0,0,20,20"
+                    <ContentControl Margin="0,0,0,20"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     Content="{Binding}">

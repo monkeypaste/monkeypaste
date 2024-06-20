@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -211,6 +213,10 @@ namespace MonkeyPaste.Avalonia {
             var ss_start = new MpSize(start_w, start_h);
             var ss_end = new MpSize(end_w, end_h);
             await AnimateSidebarAsync(ss_start, ss_end, is_closing, 0.1, 100);
+            if(is_closing) {
+                // manually clear both dim AFTER animation (or constraints could be wrong after orientation change)
+                ResetSize();
+            }
 
             // reset sidebar scroll
             if (SelectedItem is not null &&
@@ -232,6 +238,11 @@ namespace MonkeyPaste.Avalonia {
             if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
                 FocusSidebarOrFallbackCommand.Execute(null);
             }
+            SetupClipTrayForSidebar();
+        }
+        private void ResetSize() {
+            ContainerBoundWidth = 0;
+            ContainerBoundHeight = 0;
         }
         private async Task AnimateSidebarAsync(
             MpSize start, 
@@ -239,48 +250,32 @@ namespace MonkeyPaste.Avalonia {
             bool isClosing,
             double tt = 0.25, 
             double fps = 120) {
-            ContainerBoundWidth = start.Width;
-            ContainerBoundHeight = start.Height;
-
-            double dt = 0;
-            double time_step = fps.FpsToTimeStep();
-            int delay_ms = fps.FpsToDelayTime();
-
-            var ss_d = end - start;
-            var ss_v = (ss_d / tt) * time_step;
-
             double op_start = isClosing ? 1 : 0;
             double op_end = isClosing ? 0 : 1;
-            double op_d = op_end - op_start;
-            double op_v = (op_d / tt) * time_step;
-            double op_cur = op_start;
-            SetSidebarContentOpacity(op_cur);
 
-            while (true) {
-                UpdateSidebarSizeByDelta(ss_v.X, ss_v.Y);
-                op_cur += op_v;
-                SetSidebarContentOpacity(op_cur);
-                await Task.Delay(delay_ms);
-                dt += time_step;
-                if (dt >= tt) {
-                    // animation complete
-                    ContainerBoundWidth = end.Width;
-                    ContainerBoundHeight = end.Height;
-                    SetSidebarContentOpacity(op_end);
-                    break;
-                }
-            }
+            await Task.WhenAll([
+                start.AnimatePointAsync(
+                    end: end,
+                    tts: tt,
+                    fps: fps,
+                    tick: (d) => {
+                        SetSidebarSizeByDelta(d.X,d.Y);
+                    }),
+                op_start.AnimateDoubleAsync(
+                    end: op_end,
+                    tts: tt,
+                    fps: fps,
+                    tick: (d) => {
+                        SetSidebarContentOpacity(d);
+                    })
+                ]);
             _currentSidebarItem = null;
         }
         private void MpAvSidebarItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(ContainerBoundHeight):
                 case nameof(ContainerBoundWidth):
-                    if(MpAvThemeViewModel.Instance.IsMobileOrWindowed && 
-                        MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                        MpAvClipTrayContainerView.Instance.Margin = new Thickness(ContainerBoundWidth, 0, 0, 0);
-                    } else {
-                        MpAvClipTrayContainerView.Instance.Margin = new();
-                    }
+                    SetupClipTrayForSidebar();
                 break;
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.IsSelected = x == SelectedItem);
@@ -331,6 +326,12 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(MouseModeHorizontalOffset));
                     OnPropertyChanged(nameof(MouseModeVerticalOffset));
                     OnPropertyChanged(nameof(ContainerBoundWidth));
+                    if(SelectedItem == null) {
+                        SetupClipTrayForSidebar();
+                    } else {
+                        ResetSize();
+                        HandleSidebarSelectionChangedAsync().FireAndForgetSafeAsync();
+                    }
                     break;
                 case MpMessageType.MainWindowOpened:
 //#if MULTI_WINDOW
@@ -345,14 +346,53 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void SetupClipTrayForSidebar() {
+            if(MpAvThemeViewModel.Instance.IsMultiWindow ||
+                MpAvClipTrayContainerView.Instance is not { } ctrcv) {
+                return;
+            }
 
-        private void UpdateSidebarSizeByDelta(double delta_w, double delta_h) {
-            ContainerBoundWidth += delta_w;
-            ContainerBoundHeight += delta_h;
+            bool fix_empties = false;
+            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                // move left margin so beginning of list is visible...
+
+                ////ctrcv.Padding = new Thickness(ContainerBoundWidth, 0, 0, 0);
+
+                //fix_empties = ContainerBoundWidth > 0;
+            } else {
+                MpAvClipTrayContainerView.Instance.Padding = new();
+            }
+            MpAvClipTrayViewModel.Instance.ContainerBoundWidth = MpAvClipTrayViewModel.Instance.MaxContainerScreenWidth;
+            MpAvClipTrayViewModel.Instance.ContainerBoundHeight = MpAvClipTrayViewModel.Instance.MaxContainerScreenHeight;
+            MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.MaxContainerScreenWidth));
+            MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.MaxContainerScreenHeight));
+
+            if (fix_empties) {
+                // adjust empty msgs so theyre visible...
+                ctrcv.PinTrayView.PinTrayEmptyContainer.HorizontalAlignment = HorizontalAlignment.Left;
+                ctrcv.PinTrayView.PinTrayEmptyContainer.MaxWidth = ctrcv.Bounds.Width - ContainerBoundWidth;
+
+                ctrcv.QueryTrayView.QueryTrayEmptyContainer.HorizontalAlignment = HorizontalAlignment.Left;
+                ctrcv.QueryTrayView.QueryTrayEmptyContainer.MaxWidth = ctrcv.Bounds.Width - ContainerBoundWidth;
+            } else {
+                ctrcv.PinTrayView.PinTrayEmptyContainer.HorizontalAlignment = HorizontalAlignment.Center;
+                ctrcv.PinTrayView.PinTrayEmptyContainer.MaxWidth = double.PositiveInfinity;
+
+                ctrcv.QueryTrayView.QueryTrayEmptyContainer.HorizontalAlignment = HorizontalAlignment.Center;
+                ctrcv.QueryTrayView.QueryTrayEmptyContainer.MaxWidth = double.PositiveInfinity;
+            }
+        }
+
+
+        private void SetSidebarSizeByDelta(double w, double h) {
+            double dw = w - ContainerBoundWidth;
+            double dh = h - ContainerBoundHeight;
+            ContainerBoundWidth = w;
+            ContainerBoundHeight = h;
 
             if (MpAvThemeViewModel.Instance.IsMultiWindow) {
-                MpAvClipTrayViewModel.Instance.ContainerBoundWidth -= delta_w;
-                MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= delta_h;
+                MpAvClipTrayViewModel.Instance.ContainerBoundWidth -= dw;
+                MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= dh;
             }
         }
 
@@ -417,6 +457,7 @@ namespace MonkeyPaste.Avalonia {
                     SelectedItemIdx = itemIdx;
                 }
                 OnPropertyChanged(nameof(SelectedItemIdx));
+                
             });
 
         public ICommand SidebarButtonDragEnterCommand => new MpCommand<object>(

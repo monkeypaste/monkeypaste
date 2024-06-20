@@ -103,5 +103,47 @@ namespace MonkeyPaste.Avalonia {
         public static int FpsToDelayTime(this double fps) {
             return (int)(1000d / fps);
         }
+
+        public static async Task AnimatePointAsync(this MpPoint start, MpPoint end, double tts, double fps, Action<MpPoint> tick) {
+            double dt = 0;
+            double time_step = fps.FpsToTimeStep();
+            int delay_ms = fps.FpsToDelayTime();
+
+            var d = end - start;
+            var v = (d / tts) * time_step;
+            MpPoint cur = start;
+            while (true) {
+                tick?.Invoke(cur);
+                cur += v;
+                await Task.Delay(delay_ms);
+                dt += time_step;
+                if (dt >= tts) {
+                    // animation complete, ensure it uses end props      
+                    tick?.Invoke(end);
+                    break;
+                }
+            }
+        }
+        
+        public static async Task AnimateDoubleAsync(this double start, double end, double tts, double fps, Action<double> tick) {
+            double dt = 0;
+            double time_step = fps.FpsToTimeStep();
+            int delay_ms = fps.FpsToDelayTime();
+
+            var d = end - start;
+            var v = (d / tts) * time_step;
+            double cur = start;
+            while (true) {
+                tick?.Invoke(cur);
+                cur += v;
+                await Task.Delay(delay_ms);
+                dt += time_step;
+                if (dt >= tts) {
+                    // animation complete, ensure it uses end props      
+                    tick?.Invoke(end);
+                    break;
+                }
+            }
+        }
     }
 }

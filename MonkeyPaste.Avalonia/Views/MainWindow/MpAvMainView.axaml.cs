@@ -118,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
                 var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
                 double bound_w = 0;
                 double bound_h = 0;
-                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                //if(MpAvThemeViewModel.Instance.IsMultiWindow) {
                     if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                         bound_w = ctrvm.ContainerBoundWidth + sbicvm.ContainerBoundWidth;
                         bound_h = Math.Max(ctrvm.ContainerBoundHeight, sbicvm.ContainerBoundHeight);
@@ -126,11 +126,11 @@ namespace MonkeyPaste.Avalonia {
                         bound_w = Math.Max(ctrvm.ContainerBoundWidth, sbicvm.ContainerBoundWidth);
                         bound_h = ctrvm.ContainerBoundHeight + sbicvm.ContainerBoundHeight;
                     }
-                } else {
-                    // only use clip cntr on mobile since it spans into sidebar cell
-                    bound_w = ctrvm.ContainerBoundWidth;
-                    bound_h = ctrvm.ContainerBoundHeight;
-                }
+                //} else {
+                //    // only use clip cntr on mobile since it spans into sidebar cell
+                //    bound_w =  ctrvm.ContainerBoundWidth;
+                //    bound_h = ctrvm.ContainerBoundHeight;
+                //}
                 
                 return new MpSize(Math.Max(0,bound_w), Math.Max(0,bound_h));
             }
@@ -248,7 +248,7 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv_ptr_lb = ctrcv_ptrv.PinTrayListBox;
             var ctrcv_ptr_cg = ctrcv_ptrv.PinTrayContainerGrid;
             var ctrcv_gs = ctrcv.ClipTraySplitter;
-            var ctrcv_ctrv = ctrcv.ClipTrayView;
+            var ctrcv_ctrv = ctrcv.QueryTrayView;
             var ctrcv_ctrv_cg = ctrcv_ctrv.QueryTrayContainerGrid;
             var ctrcv_ctr_lb = ctrcv_ctrv.QueryTrayListBox;
 
@@ -321,8 +321,8 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(ctrcv, 2);
 
                 if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                    Grid.SetColumn(ctrcv, 1);
-                    Grid.SetColumnSpan(ctrcv, 2);
+                    //Grid.SetColumn(ctrcv, 1);
+                    //Grid.SetColumnSpan(ctrcv, 2);
                 }
 
                 // cliptraycontainer column definitions (horizontal)
@@ -344,7 +344,9 @@ namespace MonkeyPaste.Avalonia {
                     });
 
                 // cliptray column definition
-                var ctrv_cd = new ColumnDefinition(new GridLength(1 - pin_tray_ratio.Width, GridUnitType.Star));
+                double ratio = MpAvThemeViewModel.Instance.IsMultiWindow ?
+                    1 - pin_tray_ratio.Width : 1;
+                var ctrv_cd = new ColumnDefinition(new GridLength(ratio, GridUnitType.Star));
                 ctrv_cd.Bind(
                     ColumnDefinition.MinWidthProperty,
                     new Binding() {
@@ -429,7 +431,7 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(ctrcv, 0);
 
                 if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                    Grid.SetRowSpan(ctrcv, 2);
+                    //Grid.SetRowSpan(ctrcv, 2);
                 }
 
                 // sidebar content
@@ -471,7 +473,9 @@ namespace MonkeyPaste.Avalonia {
                     });
 
                 //cliptray row definitions
-                var ctrv_rd = new RowDefinition(new GridLength(1 - pin_tray_ratio.Height, GridUnitType.Star));
+                double ratio = MpAvThemeViewModel.Instance.IsMultiWindow ?
+                    1 - pin_tray_ratio.Width : 1;
+                var ctrv_rd = new RowDefinition(new GridLength(ratio, GridUnitType.Star));
                 ctrv_rd.Bind(
                     RowDefinition.MinHeightProperty,
                     new Binding() {
@@ -756,13 +760,13 @@ namespace MonkeyPaste.Avalonia {
             var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
             var diff = AvailableContentAndSidebarSize - BoundContentAndSidebarSize;
             bool is_valid = diff.IsValueEqual(MpPoint.Zero,1);
-            if(!is_valid) {
+            if (!is_valid) {
                 // only clamp clip cntr since sidebar animates 
-                MpConsole.WriteLine($"Invalid content size! Avail: {AvailableContentAndSidebarSize} Bound: {BoundContentAndSidebarSize} diff: {diff}",true);
+                MpConsole.WriteLine($"Invalid content size! Avail: {AvailableContentAndSidebarSize} Bound: {BoundContentAndSidebarSize} diff: {diff}", true);
                 ctrvm.ContainerBoundWidth += diff.X;
                 ctrvm.ContainerBoundHeight += diff.Y;
                 var diff2 = AvailableContentAndSidebarSize - BoundContentAndSidebarSize;
-                MpConsole.WriteLine($"Fixed diff: {diff2}",false,true);
+                MpConsole.WriteLine($"Fixed diff: {diff2}", false, true);
                 MpDebug.Assert(diff2.IsValueEqual(MpPoint.Zero), $"Clamp error. Bindings broken or something", silent: true);
             }
             return is_valid;

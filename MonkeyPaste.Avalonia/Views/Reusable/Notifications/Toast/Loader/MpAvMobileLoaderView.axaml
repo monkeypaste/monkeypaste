@@ -40,59 +40,69 @@
                     Value="40" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <StackPanel HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                DataContext="{Binding ProgressLoader}"
-                Spacing="15">
-        <Grid Width="150"
-              Height="150">
-            <local:MpAvProgressSpinner HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       ShowBusyWhenDone="False"
-                                       Width="150"
-                                       Height="150"
-                                       ArcWidth="1.5"
-                                       RingBrush="{DynamicResource ThemeAccent1BgColor}"
-                                       PercentBrush="{DynamicResource ThemeAccent5Brush}"
-                                       LabelBrush="Transparent"
-                                       Percent="{Binding PercentLoaded}" />
+    <Grid>
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    DataContext="{Binding ProgressLoader}"
+                    Spacing="15">
+            <Grid Width="150"
+                  Height="150">
+                <local:MpAvProgressSpinner HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           ShowBusyWhenDone="False"
+                                           Width="150"
+                                           Height="150"
+                                           ArcWidth="1.5"
+                                           RingBrush="{DynamicResource ThemeAccent1BgColor}"
+                                           PercentBrush="{DynamicResource ThemeAccent5Brush}"
+                                           LabelBrush="Transparent"
+                                           Percent="{Binding PercentLoaded}" />
 
-            <!--
-                LOGO
-                Classes.show-spinner="{Binding ShowSpinner}"
-                Classes.shake="{Binding ShowSpinner}"
-            -->
-            <Image x:Name="LogoImage"
-                   Classes="applogo"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center">
-                <Image.RenderTransform>
-                    <RotateTransform />
-                </Image.RenderTransform>
-            </Image>
+                <!--
+                    LOGO
+                    Classes.show-spinner="{Binding ShowSpinner}"
+                    Classes.shake="{Binding ShowSpinner}"
+                -->
+                <Image x:Name="LogoImage"
+                       Classes="applogo"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
+                    <Image.RenderTransform>
+                        <RotateTransform />
+                    </Image.RenderTransform>
+                </Image>
 
-        </Grid>
+            </Grid>
 
-        <!--  PROGRESS INFO  -->
-        <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"
-                                     IsVisible="False"
-                                     Opacity="{Binding ShowSpinner, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
-                                     HorizontalAlignment="Center"
-                                     Content="{Binding Body}">
-            <TransitioningContentControl.PageTransition>
-                <CrossFade Duration="0:00:00.500" />
-            </TransitioningContentControl.PageTransition>
-            <TransitioningContentControl.ContentTemplate>
-                <DataTemplate DataType="sys:String">
-                    <TextBlock x:Name="ProgressInfoBlock"
-                               Foreground="WhiteSmoke"
-                               ClipToBounds="False"
-                               FontSize="12"
-                               TextAlignment="Center"
-                               Text="{Binding}" />
-                </DataTemplate>
-            </TransitioningContentControl.ContentTemplate>
-        </TransitioningContentControl>
+            <!--  PROGRESS INFO  -->
+            <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"
+                                         IsVisible="False"
+                                         Opacity="{Binding ShowSpinner, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                                         HorizontalAlignment="Center"
+                                         Content="{Binding Body}">
+                <TransitioningContentControl.PageTransition>
+                    <CrossFade Duration="0:00:00.500" />
+                </TransitioningContentControl.PageTransition>
+                <TransitioningContentControl.ContentTemplate>
+                    <DataTemplate DataType="sys:String">
+                        <TextBlock x:Name="ProgressInfoBlock"
+                                   Foreground="WhiteSmoke"
+                                   ClipToBounds="False"
+                                   FontSize="12"
+                                   TextAlignment="Center"
+                                   Text="{Binding}" />
+                    </DataTemplate>
+                </TransitioningContentControl.ContentTemplate>
+            </TransitioningContentControl>
 
-    </StackPanel>
+        </StackPanel>
+
+        <TextBlock HorizontalAlignment="Right"
+                   VerticalAlignment="Bottom"
+                   TextAlignment="Right"
+                   FontSize="8"
+                   Margin="3"
+                   Foreground="{Binding Source={DynamicResource ThemeColor}, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
+                   Text="{Binding ThisAppVersionDisplayValue, Source={x:Static local:MpAvThisAppVersionViewModel.Instance}}" />
+    </Grid>
 </local:MpAvUserControl>

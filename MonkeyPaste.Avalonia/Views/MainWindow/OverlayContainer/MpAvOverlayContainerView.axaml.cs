@@ -194,35 +194,26 @@ namespace MonkeyPaste.Avalonia {
                         break;
                 }
             }
-            tt.X = tt_start.X;
-            tt.Y = tt_start.Y;
-            cw.Opacity = op_start;
-            
-
             MpConsole.WriteLine($"Animation [STARTED] '{cw.DataContext}' start:{tt_start} end:{tt_end} is_out:{isClosing}");
 
-            double dt = 0;
-            double time_step = fps.FpsToTimeStep();
-            int delay_ms = fps.FpsToDelayTime();
-
-            var tt_d = tt_end - tt_start;
-            var tt_v = (tt_d / t_s) * time_step;
-            double op_d = op_end - op_start;
-            double op_v = (op_d / t_s) * time_step;
-            while (true) {
-                tt.X += tt_v.X;
-                tt.Y += tt_v.Y;
-                cw.Opacity += op_v;
-                await Task.Delay(delay_ms);
-                dt += time_step;
-                if (dt >= t_s) {
-                    // animation complete, ensure it uses end props 
-                    cw.Opacity = op_end;
-                    tt.X = tt_end.X;
-                    tt.Y = tt_end.Y;
-                    break;
-                }
-            }
+            await Task.WhenAll([
+                tt_start.AnimatePointAsync(
+                    end: tt_end,
+                    tts: t_s,
+                    fps: fps,
+                    tick: (d) => {
+                        tt.X = d.X;
+                        tt.Y = d.Y;
+                    }),
+                op_start.AnimateDoubleAsync(
+                    end: op_end,
+                    tts: t_s,
+                    fps: fps,
+                    tick: (d) => {
+                        cw.Opacity = d;
+                    })
+                ]);
+            
             RemoveAnimation(cw);
         }
 

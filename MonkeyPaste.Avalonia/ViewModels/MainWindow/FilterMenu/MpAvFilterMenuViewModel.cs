@@ -71,13 +71,16 @@ namespace MonkeyPaste.Avalonia {
             var ttrvm = MpAvTagTrayViewModel.Instance;
 
             if(fmv.TagTrayView.IsVisible) {
+                double tag_tray_pad = 25;
                 MaxTagTrayScreenWidth =
                 fmv.Bounds.Width -
                 fmv.SearchBoxView.Bounds.Width -
-                fmv.SortView.Bounds.Width;
+                fmv.SortView.Bounds.Width -
+                tag_tray_pad;
 
                 double total_item_width = fmv.TagTrayView.IsVisible ? fmv.TagTrayView.TagTray.Bounds.Width : 0;
-                if (total_item_width > MaxTagTrayScreenWidth) {
+                if (MpAvThemeViewModel.Instance.IsMultiWindow &&
+                    total_item_width >= MaxTagTrayScreenWidth) {
                     double total_navs_width = ((ttrvm.NavButtonSize + 15) * 2);
                     MaxTagTrayScreenWidth -= total_navs_width;
                     ttrvm.IsNavButtonsVisible = MaxTagTrayScreenWidth > total_navs_width;

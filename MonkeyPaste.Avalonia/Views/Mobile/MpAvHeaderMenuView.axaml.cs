@@ -10,6 +10,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvHeaderMenuView : MpAvUserControl<MpAvIHeaderMenuViewModel> {
 
+        public static event EventHandler<MpAvIHeaderMenuViewModel> OnDefaultBackCommandInvoked;
         public MpAvHeaderMenuView() {
             InitializeComponent();
         }
@@ -29,7 +30,9 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DefaultBackCommand => new MpCommand<object>(
                     (args) => {
                         bool is_popup = false;
-                        if(this.DataContext is MpICloseWindowViewModel cwvm) {
+                        MpAvIHeaderMenuViewModel hmvm = this.DataContext as MpAvIHeaderMenuViewModel;
+
+                        if (this.DataContext is MpICloseWindowViewModel cwvm) {
                             is_popup = cwvm.IsWindowOpen;
                         }
                         if(this.DataContext is MpAvIFocusHeaderMenuViewModel &&
@@ -40,6 +43,7 @@ namespace MonkeyPaste.Avalonia {
                             cw.Close();
                             MpMessenger.SendGlobal(MpMessageType.FocusItemChanged);
                         }
+                        OnDefaultBackCommandInvoked?.Invoke(this, hmvm);
                     });
         #endregion
     }

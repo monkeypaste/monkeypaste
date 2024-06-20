@@ -400,6 +400,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsOrientationLocked { get; set; }
+
         public bool HasLayoutProcessed { get; set; }
 
         MpIPlatformScreenInfo LastOpenedScreenInfo { get; set; }
@@ -1565,6 +1567,9 @@ namespace MonkeyPaste.Avalonia {
                 // second pass finishes change with the right measurements
                 MpAvMainView.Instance.UpdateMainViewLayout();
                 IsMainWindowOrientationChanging = false;
+            },
+            (args) => {
+                return !IsOrientationLocked;
             });
 
         public ICommand ToggleMainWindowLockCommand => new MpCommand<object>(

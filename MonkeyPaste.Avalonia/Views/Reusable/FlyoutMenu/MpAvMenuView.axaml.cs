@@ -86,6 +86,9 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 _cm = cm;
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    UpdateMobileHandlers(true);
+                }
             }
             void OnContextMenuClosed(object sender, EventArgs e) {
                 if(sender is not ContextMenu cm) {
@@ -93,12 +96,17 @@ namespace MonkeyPaste.Avalonia {
                 }
                 cm.Opened -= OnContextMenuOpened;
                 cm.Closed -= OnContextMenuClosed;
-                if(cm == _cm) {
+                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                    UpdateMobileHandlers(false);
+                }
+                if (cm == _cm) {
                     _cm = null;
                 }                
             }
             target.ContextMenu.Opened += OnContextMenuOpened;
             target.ContextMenu.Closed += OnContextMenuClosed;
+
+            
 
             target.ContextMenu.Open(target);
 
@@ -151,6 +159,27 @@ namespace MonkeyPaste.Avalonia {
                 tl.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
             }
 #endif
+        }
+
+        private static void UpdateMobileHandlers(bool do_attach) {
+            void OnPointerPressed(object sender, PointerPressedEventArgs e) {
+                e.Handled = true;
+            }
+            void OnPointerReleased(object sender, PointerReleasedEventArgs e) {
+
+            }
+
+            if(do_attach) {
+                _cm.AddHandler(Control.PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
+                _cm.AddHandler(Control.PointerReleasedEvent, OnPointerReleased, RoutingStrategies.Tunnel);
+                //MpAvWindowManager.AllWindows.ForEach(x => x.AddHandler(Control.PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel));
+                //MpAvWindowManager.AllWindows.ForEach(x => x.AddHandler(Control.PointerReleasedEvent, OnPointerReleased, RoutingStrategies.Tunnel));
+            } else {
+                _cm.RemoveHandler(Control.PointerPressedEvent, OnPointerPressed);
+                _cm.RemoveHandler(Control.PointerReleasedEvent, OnPointerReleased);
+                //MpAvWindowManager.AllWindows.ForEach(x => x.RemoveHandler(Control.PointerPressedEvent, OnPointerPressed));
+                //MpAvWindowManager.AllWindows.ForEach(x => x.RemoveHandler(Control.PointerReleasedEvent, OnPointerReleased));
+            }
         }
     }
 }

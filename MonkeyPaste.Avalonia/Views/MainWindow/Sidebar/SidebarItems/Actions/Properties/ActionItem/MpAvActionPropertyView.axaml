@@ -130,7 +130,7 @@
         <Border Grid.Row="2"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch">
-            <StackPanel Orientation="Vertical">
+            <Grid RowDefinitions="Auto,*,Auto">
 
                 <!--  ACTION HEADER  -->
 
@@ -143,12 +143,14 @@
                                                     Effect="drop-shadow(3 3 7 black)"
                                                     HorizontalAlignment="Stretch" />
                 <!--  ACTION PARAMS  -->
-                <local:MpAvParameterCollectionView Margin="0,0,0,5"
+                <local:MpAvParameterCollectionView Grid.Row="1"
+                                                   Margin="0,0,0,5"
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch" />
                 <!--  ANALYZE SUB-PARAM COLLECTION  -->
                 <Border x:DataType="local:MpAvAnalyzeActionViewModel"
                         x:CompileBindings="False"
+                        Grid.Row="2"
                         Margin="20,0,0,0"
                         IsVisible="{Binding ActionType, ConverterParameter=Analyze, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}">
                     <local:MpAvParameterCollectionView IsVisible="{Binding SelectedPreset, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
@@ -156,7 +158,7 @@
                                                        HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Stretch" />
                 </Border>
-            </StackPanel>
+            </Grid>
         </Border>
     </Grid>
 </local:MpAvUserControl>

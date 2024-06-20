@@ -42,9 +42,9 @@
         <Style Selector="ListBox.queryListBox > ListBoxItem"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Canvas.Left"
-                    Value="{Binding TrayX}" />
+                    Value="{Binding QueryTrayX}" />
             <Setter Property="Canvas.Top"
-                    Value="{Binding TrayY}" />
+                    Value="{Binding QueryTrayY}" />
             <Setter Property="Opacity"
                     Value="{Binding IsPlaceholder, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}" />
             <!--<Setter Property="Opacity">
@@ -160,6 +160,7 @@
         <Button x:Name="QueryTrayEmptyContainer"
                 Grid.Row="1"
                 Classes="link"
+                ClipToBounds="False"
                 Classes.no-underline="{Binding IsNoSelectionQuery}"
                 Command="{Binding FollowNoSelectionCommand}"
                 HorizontalAlignment="Center"

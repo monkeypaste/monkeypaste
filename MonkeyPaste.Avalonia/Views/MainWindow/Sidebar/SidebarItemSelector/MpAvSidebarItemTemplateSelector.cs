@@ -6,6 +6,8 @@ using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
+using PropertyChanged;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,7 +15,6 @@ namespace MonkeyPaste.Avalonia {
 
 
     public class MpAvSidebarItemTemplateSelector : IDataTemplate {
-        public static ScrollViewer ContentScrollViewer { get; private set; }
         [Content]
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
@@ -41,24 +42,21 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             var c = AvailableTemplates[keyStr].Build(param);
-#if MOBILE_OR_WINDOWED
-            ContentScrollViewer = null;
-            if(sbivm is MpAvTagTrayViewModel) {
-                return c;
-            }
-            var sv = new ScrollViewer() {
-                Content = new Viewbox() {
-                    Name = "SidebarItemViewbox",
-                    Stretch = Stretch.UniformToFill,
-                    Margin = new Thickness(10),
-                    Child = c
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                if (sbivm is MpAvTagTrayViewModel ||
+                    sbivm is MpAvTriggerCollectionViewModel) {
+                    return c;
                 }
-            };
-            ContentScrollViewer = sv;
-            return sv;
-#else
+                return new ScrollViewer() {
+                    Content = new Viewbox() {
+                        Name = "SidebarItemViewbox",
+                        Stretch = Stretch.UniformToFill,
+                        Margin = new Thickness(10),
+                        Child = c
+                    }
+                };
+            }
             return c;
-#endif
         }
 
         public bool Match(object data) {

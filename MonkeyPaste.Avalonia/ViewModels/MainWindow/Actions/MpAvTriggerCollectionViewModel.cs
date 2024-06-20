@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -62,17 +63,10 @@ namespace MonkeyPaste.Avalonia {
             ];
         ICommand MpAvIHeaderMenuViewModel.BackCommand => new MpCommand(
             () => {
-                if(IsWindowOpen) {
-                    IsWindowOpen = false;
-                    return;
-                }
-                if(FocusAction == null || MpAvMainWindowTitleMenuViewModel.Instance.FocusHeaderViewModel == this) {
-                    MpAvMainView.Instance.FocusThisHeader();
-                } else {
-                    FocusAction = null;
-                    if(MpAvMainView.Instance.GetVisualDescendant<MpAvTriggerActionChooserView>() is { } tacv) {
-                        tacv.FocusThisHeader();
-                    }
+                IsWindowOpen = false;
+                MpAvMainView.Instance.FocusThisHeader();
+                if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItem == this) {
+                    MpAvSidebarItemCollectionViewModel.Instance.ToggleIsSidebarItemSelectedCommand.Execute(this);
                 }
             });
         object MpAvIHeaderMenuViewModel.BackCommandParameter =>
@@ -639,6 +633,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvTriggerCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
+                    HandleSidebarSelChange();
                     ResetDesignerViewCommand.Execute(null);
                     break;
                 case nameof(SidebarOrientation):
@@ -716,6 +711,30 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void HandleSidebarSelChange() {
+            if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                return;
+            }
+
+            Dispatcher.UIThread.Post(async () => {
+                if(IsSelected) {
+                    if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
+                        await MpAvMainWindowViewModel.Instance.CycleOrientationCommand.ExecuteAsync("CW");
+                    }
+
+                    ShowDesignerWindowCommand.Execute(null);
+
+                    var tacv = await MpAvWindowManager.ActiveWindow.GetVisualDescendantAsync<MpAvTriggerActionChooserView>(true,5_000);
+                    if(tacv != null) {
+                        tacv.ActionDesignerOuterContainerBorder.MinWidth = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width / 2;
+                    }
+                } else {
+                    (this as MpAvIFocusHeaderMenuViewModel).BackCommand.Execute(null);
+                }
+                MpAvMainWindowViewModel.Instance.IsOrientationLocked = IsSelected;
+                
+            });
+        }
 
         public async Task RestoreAllEnabledAsync() {
             // NOTE this is only called on init and needs to wait for dependant vm's to load so wait here
@@ -1012,6 +1031,7 @@ namespace MonkeyPaste.Avalonia {
                     toSelect_avmb = avmb;
                     if(c.GetVisualAncestor<MpAvActionDesignerItemView>() is { } adiv) {
                         adiv.FocusThisHeader();
+
                     } else {
                         MpDebug.Break("Where's the item view?");
                     }

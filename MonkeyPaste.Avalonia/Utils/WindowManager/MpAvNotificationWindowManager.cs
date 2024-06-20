@@ -8,6 +8,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System;
+using System.Threading.Tasks;
 using static Avalonia.Animation.PageSlide;
 
 namespace MonkeyPaste.Avalonia {

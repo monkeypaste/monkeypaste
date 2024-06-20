@@ -25,7 +25,7 @@
                 <Setter.Value>
                     <Template>
                         <local:MpAvToolTipView x:Name="MainWindowToolTip"
-                                               Classes="fade"
+                                               Classes="fade mini-msg"
                                                ToolTipText="{Binding MainWindowToolTipText, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
 
                     </Template>

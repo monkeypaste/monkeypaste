@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public double GetQueryTrayRatio() {
-            return MpAvClipTrayContainerView.Instance.ClipTrayView.Bounds.Width /
+            return MpAvClipTrayContainerView.Instance.QueryTrayView.Bounds.Width /
                 MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width;
         }
 

@@ -27,6 +27,23 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
+        #region Appearance
+
+        public string ThisAppVersionDisplayValue {
+            get {
+                string debug_prefix =
+#if DEBUG
+                    "[DEBUG] ";
+#else
+                    string.Empty;
+#endif
+                return $"{debug_prefix}{ThisAppVersion.ToString()}";
+            }
+        }
+
+#endregion
+        
         #region State
 
         public bool IsOutOfDate =>
@@ -58,8 +75,10 @@ namespace MonkeyPaste.Avalonia {
         public Version UpToDateAppVersion { get; private set; }
 
         public Version LastNotfiedVersion { get; set; }
+
         #endregion
-        #endregion
+
+#endregion
 
         #region Constructors
         public MpAvThisAppVersionViewModel() : base() {

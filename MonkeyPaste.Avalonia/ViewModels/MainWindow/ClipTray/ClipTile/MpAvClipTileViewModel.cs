@@ -98,6 +98,12 @@ namespace MonkeyPaste.Avalonia {
                     Command = MpAvClipTrayViewModel.Instance.ToggleTileIsPinnedCommand,
                     CommandParameter = this
                 },
+
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "OpenEyeImage",
+                    Command = Parent.ScrollClipIntoViewCommand,
+                    CommandParameter = this
+                },
                 new MpAvMenuItemViewModel() {
                     IconSourceObj = "WrapImage",
                     IconTintHexStr = IsWrappingEnabled ? MpSystemColors.limegreen : null,
@@ -560,25 +566,22 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public double TrayX { get; set; }// => TrayLocation.X;
-        public double TrayY { get; set; }// => TrayLocation.Y;
-        public MpPoint TrayLocation =>
-            new MpPoint(TrayX, TrayY);
-        //public MpPoint TrayLocation { get; set; } = MpPoint.Zero;
+        public double QueryTrayX { get; set; }
+        public double QueryTrayY { get; set; }
+        public MpPoint QueryTrayLocation =>
+            new MpPoint(QueryTrayX, QueryTrayY);
+        //public MpPoint QueryTrayLocation { get; set; } = MpPoint.Zero;
 
         public double ObservedWidth { get; set; }
         public double ObservedHeight { get; set; }
         public double BoundWidth { get; set; }
         public double BoundHeight { get; set; }
         public MpRect TrayRect =>
-            new MpRect(TrayX, TrayY, BoundWidth, BoundHeight);
+            new MpRect(QueryTrayX, QueryTrayY, BoundWidth, BoundHeight);
 
-        public MpRect ScreenRect =>
-            Parent == null ? MpRect.Empty : new MpRect(TrayLocation - Parent.ScrollOffset, new MpSize(BoundWidth, BoundHeight));
+        public MpRect QueryTrayScrollRect =>
+            Parent == null ? MpRect.Empty : new MpRect(QueryTrayLocation - Parent.ScrollOffset, new MpSize(BoundWidth, BoundHeight));
 
-
-        public double ReadOnlyWidth => MinWidth;
-        public double ReadOnlyHeight => MinHeight;
 
         public double DesiredWidth {
             get {
@@ -617,42 +620,7 @@ namespace MonkeyPaste.Avalonia {
                 return Math.Min(dw, Parent.ObservedQueryTrayScreenWidth - Parent.ScrollBarFixedAxisSize);
             }
         }
-        public double EditableWidth {
-            get {
-                if (Parent == null) {
-                    return 0;
-                }
-                if (HasTemplates) {
-                    return PASTE_TEMPLATE_TOOLBAR_MIN_WIDTH;
-                }
-                if (IsPinned) {
-                    if (IsWindowOpen) {
-                        return BoundWidth;
-                    }
-                    return Math.Min(EDITOR_TOOLBAR_MIN_WIDTH, Parent.ObservedPinTrayScreenWidth);
-                }
-                if (Parent.LayoutType == MpClipTrayLayoutType.Grid && !IsWindowOpen) {
-                    return BoundWidth;
-                }
-                return Math.Min(EDITOR_TOOLBAR_MIN_WIDTH, Parent.ObservedQueryTrayScreenWidth);
-            }
-        }
 
-        public double EditableHeight {
-            get {
-                if (Parent == null) {
-                    return 0;
-                }
-                if (IsExpanded) {
-                    return BoundHeight;
-                }
-                if (IsPinned) {
-                    return Math.Max(Parent.PinTrayFixedDimensionLength, BoundHeight);
-                }
-
-                return Math.Max(Parent.QueryTrayFixedDimensionLength, BoundHeight);
-            }
-        }
         #endregion
 
         #region State
@@ -849,9 +817,9 @@ namespace MonkeyPaste.Avalonia {
         public string TemplateRichHtml { get; set; }
 
         public bool IsAnyQueryCornerVisible =>
-            Parent == null ? false : ScreenRect.IsAnyPointWithinOtherRect(Parent.QueryTrayScreenRect);
+            Parent == null ? false : QueryTrayScrollRect.IsAnyPointWithinOtherRect(Parent.QueryTrayScreenRect);
         public bool IsAllQueryCornersVisible =>
-            Parent == null ? false : ScreenRect.IsAllPointWithinOtherRect(Parent.QueryTrayScreenRect);
+            Parent == null ? false : QueryTrayScrollRect.IsAllPointWithinOtherRect(Parent.QueryTrayScreenRect);
 
         public bool IsDevToolsVisible { get; set; } = false;
 
@@ -1450,8 +1418,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsAnyBusy));
             OnPropertyChanged(nameof(KeyString));
 
-            OnPropertyChanged(nameof(TrayX));
-            OnPropertyChanged(nameof(TrayY));
+            OnPropertyChanged(nameof(QueryTrayX));
+            OnPropertyChanged(nameof(QueryTrayY));
             OnPropertyChanged(nameof(Next));
             OnPropertyChanged(nameof(Prev));
             OnPropertyChanged(nameof(IsPinPlaceholder));
@@ -1902,6 +1870,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsSelected):
                     if (IsSelected) {
+                        if(MpAvThemeViewModel.Instance.IsMobileOrWindowed &&
+                            !IsSubSelectionEnabled) {
+                            EnableSubSelectionCommand.Execute(null);
+                        }
                         StartDetailCycleTimerAsync().FireAndForgetSafeAsync();
                         LastSelectedDateTime = DateTime.Now;
                         if (Parent.SelectedItem != this) {
@@ -2148,8 +2120,8 @@ namespace MonkeyPaste.Avalonia {
                     TransactionCollectionViewModel.OnPropertyChanged(nameof(TransactionCollectionViewModel.MaxWidth));
                     Parent.UpdateTileLocationCommand.Execute(Next);
                     break;
-                case nameof(TrayX):
-                case nameof(TrayY):
+                case nameof(QueryTrayX):
+                case nameof(QueryTrayY):
                     if (Next == null) {
                         break;
                     }

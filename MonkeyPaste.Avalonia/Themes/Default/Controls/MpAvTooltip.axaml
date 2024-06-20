@@ -38,4 +38,13 @@
         <Setter Property="Background"
                 Value="{DynamicResource ThemeAccent3Brush}" />
     </Style>
+
+    <!--  MINI-MSG  -->
+
+    <Style Selector="local|MpAvToolTipView.mini-msg Border">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource ThemeGrayAccent3Color}" />
+        <Setter Property="Background"
+                Value="{DynamicResource ThemeGrayAccent3Color}" />
+    </Style>
 </Styles>

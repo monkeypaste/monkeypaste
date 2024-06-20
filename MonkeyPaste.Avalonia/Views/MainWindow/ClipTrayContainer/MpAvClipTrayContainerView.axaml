@@ -164,7 +164,8 @@
           Classes.busy="{Binding IsAnyBusy}"
           Classes.scrolling="{Binding HasScrollVelocity}"
           Classes.iprqBusy="{Binding IsInPlaceRequerying}"
-          Classes.vert="{Binding IsVerticalOrientation}"
+          Classes.vert-list="{Binding IsVerticalOrientation}"
+          Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <!--  PIN TRAY  -->
@@ -193,7 +194,7 @@
                                        local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="{Binding $self}" />
 
         <!--  QUERY TRAY  -->
-        <local:MpAvQueryTrayView x:Name="ClipTrayView"
+        <local:MpAvQueryTrayView x:Name="QueryTrayView"
                                  Classes.dragover="{Binding IsDragOverQueryTray}" />
     </Grid>
 </local:MpAvUserControl>

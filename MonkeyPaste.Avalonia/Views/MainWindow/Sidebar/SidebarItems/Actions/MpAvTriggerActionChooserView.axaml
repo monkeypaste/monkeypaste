@@ -172,6 +172,18 @@
             <Setter Property="ScrollViewer.IsScrollChainingEnabled"
                     Value="False" />
         </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer.mobile ScrollViewer">
+            <Setter Property="VerticalScrollBarVisibility"
+                    Value="Hidden" />
+            <Setter Property="HorizontalScrollBarVisibility"
+                    Value="Hidden" />
+        </Style>
+        <Style Selector="Border#TriggerSidebarOuterContainer.popout.mobile ScrollViewer">
+            <Setter Property="VerticalScrollBarVisibility"
+                    Value="Auto" />
+            <Setter Property="HorizontalScrollBarVisibility"
+                    Value="Auto" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="TriggerSidebarOuterContainer"
             Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
@@ -180,8 +192,8 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <ScrollViewer x:Name="TriggerScrollViewer"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto">
+                                HorizontalScrollBarVisibility="Disabled"
+                                VerticalScrollBarVisibility="Auto">
             <Grid x:Name="TriggerSidebarContainer"
                   Classes="oriented"
                   HorizontalAlignment="Stretch"
@@ -191,9 +203,9 @@
                 <Border x:Name="ActionPropertyOuterContainer"
                         VerticalAlignment="Stretch">
                     <ScrollViewer x:Name="PropertyScrollViewer"
-                                  VerticalAlignment="Stretch"
-                                  HorizontalScrollBarVisibility="Hidden"
-                                  VerticalScrollBarVisibility="Hidden">
+                                            VerticalAlignment="Stretch"
+                                            HorizontalScrollBarVisibility="Hidden"
+                                            VerticalScrollBarVisibility="Hidden">
                         <Grid RowDefinitions="Auto,*"
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Stretch">
@@ -304,8 +316,8 @@
 
                             <!--  SELECTED TRIGGER ACTION PROPERTY  -->
                             <Border x:Name="SelectedTriggerContainer"
-                                    IsVisible="{Binding IsChecked, ElementName=ExpandButton}"
                                     Grid.Row="1"
+                                    IsVisible="{Binding IsChecked, ElementName=ExpandButton}"
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="Stretch"
                                     Classes="headeredBorder"
