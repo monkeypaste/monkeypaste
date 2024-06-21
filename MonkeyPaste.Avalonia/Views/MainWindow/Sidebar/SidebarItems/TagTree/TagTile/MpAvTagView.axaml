@@ -145,7 +145,7 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="StackPanel#OuterTagPanel:not(.pinned):not(.mobile).can-add.hover Button#AddTagButton, StackPanel#OuterTagPanel:not(.pinned).can-add.sel Button#AddTagButton">
+        <Style Selector="StackPanel#OuterTagPanel:not(.pinned):not(.mobile).can-add.hover Button#AddTagButton, StackPanel#OuterTagPanel:not(.mobile):not(.pinned).can-add.sel Button#AddTagButton">
             <Setter Property="IsVisible"
                     Value="True" />
         </Style>

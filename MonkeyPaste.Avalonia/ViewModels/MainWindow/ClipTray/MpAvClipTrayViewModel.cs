@@ -1763,7 +1763,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Invokers
 
-        public void ScrollIntoView(object obj) {
+        public async void ScrollIntoView(object obj) {
             MpAvClipTileViewModel ctvm = null;
             if (obj is MpAvClipTileViewModel) {
                 ctvm = obj as MpAvClipTileViewModel;
@@ -1880,18 +1880,36 @@ namespace MonkeyPaste.Avalonia {
             ctvm_rect = new MpRect(cx, cy, ctvm_rect.Width, ctvm_rect.Height);
             MpRect svr = new MpRect(x, y, w, h);
             delta_scroll_offset = svr.FindTranslation(ctvm_rect);
-
+            MpPoint source_offset = null;
+            MpPoint target_offset = null;
+            ScrollViewer sv = null;
             if(ctvm.IsPinned) {
                 if(MpAvPinTrayView.Instance.PinTrayListBox.GetVisualDescendant<ScrollViewer>() is { } ptr_sv) {
-                    var target_offset = ptr_sv.Offset.ToPortablePoint() + delta_scroll_offset;
-                    ptr_sv.ScrollToPoint(target_offset);
+                    sv = ptr_sv;
+                    source_offset = ptr_sv.Offset.ToPortablePoint();
+                    target_offset = ptr_sv.Offset.ToPortablePoint() + delta_scroll_offset;
                 }
             } else {
-                var target_offset = ScrollOffset + delta_scroll_offset;
+                source_offset = ScrollOffset;
+                target_offset = ScrollOffset + delta_scroll_offset;
                 ScrollVelocity = MpPoint.Zero;
-                ForceScrollOffset(target_offset, "scrollIntoView");
             }
-            IsScrollingIntoView = false;
+
+            Dispatcher.UIThread.Post(async () => {
+                await source_offset.AnimatePointAsync(
+                    end: target_offset,
+                    tts: 1.0d,
+                    fps: 60,
+                    tick: (d) => {
+                        if(ctvm.IsPinned) {
+                            sv.ScrollToPoint(d,false);
+                        } else {
+                            ForceScrollOffset(d, "scrollIntoView");
+                        }
+                    });
+
+                IsScrollingIntoView = false;
+            });
         }
 
         #endregion
@@ -2015,12 +2033,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpSize GetCurrentPinTrayRatio() {
-#if WINDOWED
-            //return GetDefaultPinTrayRatio();
-            return IsPinTrayVisible ? GetDefaultPinTrayRatio(1) : GetDefaultPinTrayRatio(0);
-#else
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                return IsPinTrayVisible ? GetDefaultPinTrayRatio(1) : GetDefaultPinTrayRatio(0);
+
+            }
             return GetDefaultPinTrayRatio();
-#endif
         }
 
         private MpSize GetDefaultPinTrayRatio(double var_dim_len = DEFAULT_PIN_TRAY_RATIO) {
@@ -2359,6 +2376,12 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(ContainerBoundWidth):
+                    OnPropertyChanged(nameof(MaxContainerScreenWidth));
+                    break;
+                case nameof(ContainerBoundHeight):
+                    OnPropertyChanged(nameof(MaxContainerScreenHeight));
+                    break;
                 case nameof(MaxContainerScreenWidth):
                     OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
                     OnPropertyChanged(nameof(MaxQueryTrayScreenWidth));
@@ -5198,6 +5221,7 @@ namespace MonkeyPaste.Avalonia {
                     tick: (d) => {
                         MpAvClipTrayContainerView.Instance.ClipTraySplitter.ApplyDelta(d.ToAvVector());
                     });
+                //MpAvClipTrayContainerView.Instance.ClipTraySplitter.ApplyDelta(delta);
                 
 
                 // if next tap is in pin tray expand it it other wise unexpand
@@ -5225,19 +5249,20 @@ namespace MonkeyPaste.Avalonia {
                 tl.AddHandler(TopLevel.PointerReleasedEvent, OnTopLevel_PointerReleased, RoutingStrategies.Tunnel);
                 ScrollIntoView(pinned_ctvm);
             }, (args) => {
-                return !IsPinTrayVisible;
+                //return !IsPinTrayVisible;
+                return false;
             });
         
         public ICommand ExpandPinTrayCommand => new MpCommand(
             () => {
 
                 // expands pin tray
-                Vector delta =
-                    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                        new Vector(MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width, 0) :
-                        new Vector(0, MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Height);
-                MpAvClipTrayContainerView.Instance.ClipTraySplitter
-                    .ApplyDelta(delta);
+                //Vector delta =
+                //    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                //        new Vector(MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width, 0) :
+                //        new Vector(0, MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Height);
+                //MpAvClipTrayContainerView.Instance.ClipTraySplitter
+                //    .ApplyDelta(delta);
                 
                 IsPinTrayVisible = true;
                 IsQueryTrayVisible = false;
@@ -5247,12 +5272,12 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ExpandQueryTrayCommand => new MpCommand(
             () => {
                 // expands query tray
-                Vector delta =
-                    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                        new Vector(-MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width, 0) :
-                        new Vector(0, -MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Height);
-                MpAvClipTrayContainerView.Instance.ClipTraySplitter
-                    .ApplyDelta(delta);
+                //Vector delta =
+                //    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                //        new Vector(-MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width, 0) :
+                //        new Vector(0, -MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Height);
+                //MpAvClipTrayContainerView.Instance.ClipTraySplitter
+                //    .ApplyDelta(delta);
                 IsPinTrayVisible = false;
                 IsQueryTrayVisible = true;
                 UpdateConstraints();

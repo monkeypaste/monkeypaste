@@ -817,12 +817,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpMainWindowShowBehaviorType.Mouse:
                     // NOTE need to use unscaled pointer position to locate screen since scaling is per monitor
                     if (mw.Screens.ScreenFromPoint_WORKS(MpAvShortcutCollectionViewModel.Instance.GlobalUnscaledMouseLocation) is { } pointer_screen) {
-                        MpRect scaled_screen =
-#if WINDOWED
-                            pointer_screen.Bounds;
-#else
+                        MpRect scaled_screen = MpAvThemeViewModel.Instance.IsMobileOrWindowed ?
+                            pointer_screen.Bounds :
                             pointer_screen.Bounds.ToPortableRect(pointer_screen.Scaling);
-#endif
                         mw_screen = sic.Screens.FirstOrDefault(x => x.Bounds.IsEqual(scaled_screen, 1));
                     }
                     break;
@@ -1526,22 +1523,22 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(MainWindowTransformAngle));
                 if (!MpAvThemeViewModel.Instance.IsMultiWindow && did_change) {
                     MainWindowScreen.Rotate(MainWindowTransformAngle);
-#if WINDOWED
-                    if (TopLevel.GetTopLevel(MpAvMainView.Instance) is Window w) {
+                    if (MpAvThemeViewModel.Instance.IsMobileOrWindowed &&
+                        TopLevel.GetTopLevel(MpAvMainView.Instance) is Window w) {
                         //w.CanResize = true;
                         //var new_bounds = new MpRect(0, 0, w.Bounds.Height, w.Bounds.Width);
                         //w.Width = new_bounds.Width;
                         //w.Height = new_bounds.Height;
                         //w.CanResize = false;
                         //w.CanResize = true;
-                        if(IsHorizontalOrientation) {
+                        if (IsHorizontalOrientation) {
                             w.Width = 740;
                             w.Height = 360;
                         } else {
                             w.Width = 360;
                             w.Height = 740;
                         }
-                        if(w.Content is MpAvWindow cw) {
+                        if (w.Content is MpAvWindow cw) {
                             cw.Width = w.Width;
                             cw.Height = w.Height;
                         }
@@ -1549,7 +1546,6 @@ namespace MonkeyPaste.Avalonia {
                         Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(w);
                         MpMessenger.SendGlobal(MpMessageType.ScreenInfoChanged);
                     }
-#endif
                 }
                 OnPropertyChanged(nameof(MainWindowScreen));
                 SetupMainWindowSize(true);

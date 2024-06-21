@@ -25,28 +25,14 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvHtmlStylerExtension {
         private static (string name,string data) _syntaxStyle;
         static MpAvHtmlStylerExtension() {
-            //if (MpAvThemeViewModel.Instance != null &&
-            //    MpAvThemeViewModel.Instance.CustomFontFamilyNames != null) {
-            //    try {
-            //        MpAvThemeViewModel.Instance
-            //        .CustomFontFamilyNames
-            //        .ForEach(x =>
-            //            HtmlRender.AddFontFamily(MpAvStringToFontFamilyConverter.Instance.Convert(x, null, null, null) as FontFamily));
-            //    }
-            //    catch (Exception ex) {
-            //        MpConsole.WriteTraceLine($"Error initializing html font familys.", ex);
-            //    }
-            //}
-            IsEnabledProperty.Changed.AddClassHandler<HtmlControl>((x, y) => HandleIsEnabledChanged(x, y));
-
-            // need handlers for any css related properties
-            WrapTextProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x,true));
-            SyntaxThemeNameProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x,true));
-            HtmlStyleTypeProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
-            DefaultFontSizeProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
-            DefaultFontFamilyProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
-            DefaultHexColorProperty.Changed.AddClassHandler<HtmlControl>((x, y) => UpdateContent(x));
-            ShowUnderlinesProperty.Changed.AddClassHandler<HtmlControl>((x, y) => ToggleUnderlines(x));
+            IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
+            WrapTextProperty.Changed.AddClassHandler<Control>((x, y) => UpdateContent(x,true));
+            SyntaxThemeNameProperty.Changed.AddClassHandler<Control>((x, y) => UpdateContent(x,true));
+            HtmlStyleTypeProperty.Changed.AddClassHandler<Control>((x, y) => UpdateContent(x));
+            DefaultFontSizeProperty.Changed.AddClassHandler<Control>((x, y) => UpdateContent(x));
+            DefaultFontFamilyProperty.Changed.AddClassHandler<Control>((x, y) => UpdateContent(x));
+            DefaultHexColorProperty.Changed.AddClassHandler<Control>((x, y) => UpdateContent(x));
+            ShowUnderlinesProperty.Changed.AddClassHandler<Control>((x, y) => ToggleUnderlines(x));
         }
 
         #region Properties
@@ -129,7 +115,9 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<string> DefaultFontFamilyProperty =
             AvaloniaProperty.RegisterAttached<object, Control, string>(
                 "DefaultFontFamily",
-                MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily);
+                MpAvPrefViewModel.Instance == null ?
+                    MpAvPrefViewModel.BASELINE_DEFAULT_READ_ONLY_FONT :
+                    MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily);
 
         #endregion
 
@@ -215,7 +203,7 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false);
 
-        private static void HandleIsEnabledChanged(HtmlControl hc, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleIsEnabledChanged(Control hc, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 hc.AttachedToVisualTree += Hc_AttachedToVisualTree;
                 if (hc.IsAttachedToVisualTree()) {
@@ -254,7 +242,10 @@ namespace MonkeyPaste.Avalonia {
         private static void OnTextChanged(HtmlControl hc) {
             UpdateContent(hc);
         }
-        private static void UpdateContent(HtmlControl hc, bool set_style = false) {
+        private static void UpdateContent(Control control, bool set_style = false) {
+            if(control is not HtmlControl hc) {
+                return;
+            }
             bool needs_set = false;
             string html_doc_str = hc.Text.ToStringOrEmpty();
             if (set_style) {
@@ -274,7 +265,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void ToggleUnderlines(HtmlControl hc) {
+        private static void ToggleUnderlines(Control control) {
+            if(control is not HtmlControl hc) {
+                return;
+            }
             if (hc is not MpAvHtmlPanel hp ||
                 hp.Text.ToHtmlDocument() is not { } doc) {
                 return;

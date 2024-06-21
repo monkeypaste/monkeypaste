@@ -187,8 +187,8 @@ namespace MonkeyPaste.Avalonia {
             bool is_closing = SelectedItem == null;
             if(is_closing) {
                 // closing
-                start_w = LastSelectedItem.SidebarWidth;
-                start_h = LastSelectedItem.SidebarHeight;
+                start_w = LastSelectedItem == null ? 0 : LastSelectedItem.SidebarWidth;
+                start_h = LastSelectedItem == null ? 0 : LastSelectedItem.SidebarHeight;
                 if(is_horiz) {
                     end_w = 0;
                     end_h = start_h;
@@ -235,14 +235,13 @@ namespace MonkeyPaste.Avalonia {
                 w.WindowState = WindowState.Normal;
                 w.Activate();
             } 
+
             if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
                 FocusSidebarOrFallbackCommand.Execute(null);
             }
-            SetupClipTrayForSidebar();
         }
         private void ResetSize() {
-            ContainerBoundWidth = 0;
-            ContainerBoundHeight = 0;
+            SetSidebarSizeByDelta(-ContainerBoundWidth, -ContainerBoundHeight);
         }
         private async Task AnimateSidebarAsync(
             MpSize start, 
@@ -273,10 +272,6 @@ namespace MonkeyPaste.Avalonia {
         }
         private void MpAvSidebarItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(ContainerBoundHeight):
-                case nameof(ContainerBoundWidth):
-                    SetupClipTrayForSidebar();
-                break;
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.IsSelected = x == SelectedItem);
                     if (SelectedItem == null) {
@@ -319,19 +314,14 @@ namespace MonkeyPaste.Avalonia {
                     Init();
                     break;
                 case MpMessageType.MainWindowOrientationChangeBegin:
-                    MpAvClipTrayContainerView.Instance.Margin = new();
+                    ResetSize();
                     break;
                 case MpMessageType.MainWindowOrientationChangeEnd:
                     OnPropertyChanged(nameof(MouseModeFlyoutPlacement));
                     OnPropertyChanged(nameof(MouseModeHorizontalOffset));
                     OnPropertyChanged(nameof(MouseModeVerticalOffset));
                     OnPropertyChanged(nameof(ContainerBoundWidth));
-                    if(SelectedItem == null) {
-                        SetupClipTrayForSidebar();
-                    } else {
-                        ResetSize();
-                        HandleSidebarSelectionChangedAsync().FireAndForgetSafeAsync();
-                    }
+                    HandleSidebarSelectionChangedAsync().FireAndForgetSafeAsync();
                     break;
                 case MpMessageType.MainWindowOpened:
 //#if MULTI_WINDOW
@@ -346,42 +336,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private void SetupClipTrayForSidebar() {
-            if(MpAvThemeViewModel.Instance.IsMultiWindow ||
-                MpAvClipTrayContainerView.Instance is not { } ctrcv) {
-                return;
-            }
-
-            bool fix_empties = false;
-            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                // move left margin so beginning of list is visible...
-
-                ////ctrcv.Padding = new Thickness(ContainerBoundWidth, 0, 0, 0);
-
-                //fix_empties = ContainerBoundWidth > 0;
-            } else {
-                MpAvClipTrayContainerView.Instance.Padding = new();
-            }
-            MpAvClipTrayViewModel.Instance.ContainerBoundWidth = MpAvClipTrayViewModel.Instance.MaxContainerScreenWidth;
-            MpAvClipTrayViewModel.Instance.ContainerBoundHeight = MpAvClipTrayViewModel.Instance.MaxContainerScreenHeight;
-            MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.MaxContainerScreenWidth));
-            MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.MaxContainerScreenHeight));
-
-            if (fix_empties) {
-                // adjust empty msgs so theyre visible...
-                ctrcv.PinTrayView.PinTrayEmptyContainer.HorizontalAlignment = HorizontalAlignment.Left;
-                ctrcv.PinTrayView.PinTrayEmptyContainer.MaxWidth = ctrcv.Bounds.Width - ContainerBoundWidth;
-
-                ctrcv.QueryTrayView.QueryTrayEmptyContainer.HorizontalAlignment = HorizontalAlignment.Left;
-                ctrcv.QueryTrayView.QueryTrayEmptyContainer.MaxWidth = ctrcv.Bounds.Width - ContainerBoundWidth;
-            } else {
-                ctrcv.PinTrayView.PinTrayEmptyContainer.HorizontalAlignment = HorizontalAlignment.Center;
-                ctrcv.PinTrayView.PinTrayEmptyContainer.MaxWidth = double.PositiveInfinity;
-
-                ctrcv.QueryTrayView.QueryTrayEmptyContainer.HorizontalAlignment = HorizontalAlignment.Center;
-                ctrcv.QueryTrayView.QueryTrayEmptyContainer.MaxWidth = double.PositiveInfinity;
-            }
-        }
 
 
         private void SetSidebarSizeByDelta(double w, double h) {
@@ -390,10 +344,8 @@ namespace MonkeyPaste.Avalonia {
             ContainerBoundWidth = w;
             ContainerBoundHeight = h;
 
-            if (MpAvThemeViewModel.Instance.IsMultiWindow) {
-                MpAvClipTrayViewModel.Instance.ContainerBoundWidth -= dw;
-                MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= dh;
-            }
+            MpAvClipTrayViewModel.Instance.ContainerBoundWidth -= dw;
+            MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= dh;
         }
 
         private void SetSidebarContentOpacity(double opacity) {

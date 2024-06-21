@@ -3,7 +3,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-        <sys:TimeSpan x:Key="DefTransitionDur">0:0:0.3</sys:TimeSpan>
+        <sys:TimeSpan x:Key="DefTransitionDur">0:0:0.5</sys:TimeSpan>
     </Styles.Resources>
 
     <!--  FADE  -->
@@ -76,7 +76,7 @@
         <Setter Property="Transitions">
             <Setter.Value>
                 <Transitions>
-                    <DoubleTransition Property="Height"
+                    <DoubleTransition Property="Width"
                                       Duration="{StaticResource DefTransitionDur}" />
                 </Transitions>
             </Setter.Value>
@@ -86,7 +86,7 @@
         <Setter Property="Transitions">
             <Setter.Value>
                 <Transitions>
-                    <DoubleTransition Property="Height"
+                    <DoubleTransition Property="Width"
                                       Duration="{StaticResource DefTransitionDur}" />
                 </Transitions>
             </Setter.Value>

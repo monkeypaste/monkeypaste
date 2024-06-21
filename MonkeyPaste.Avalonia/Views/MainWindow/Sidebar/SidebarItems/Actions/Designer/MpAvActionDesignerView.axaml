@@ -135,6 +135,9 @@
                                   TailWidth="3"
                                   TipLength="20"
                                   TipWidth="10"
+                                  Scale="{Binding ZoomFactor, Mode=TwoWay}"
+                                  TranslateOffsetX="{Binding TranslateOffsetX, Mode=TwoWay}"
+                                  TranslateOffsetY="{Binding TranslateOffsetY, Mode=TwoWay}"
                                   TransitionLineDefaultBorderBrush="{DynamicResource ThemeWhiteColor}"
                                   TransitionLineDisabledFillBrush="{DynamicResource DisabledHighlightBrush}"
                                   TransitionLineEnabledFillBrush="{DynamicResource EnabledHighlightBrush}"
@@ -165,8 +168,8 @@
                                     ClipToBounds="False">
                                 <Canvas.RenderTransform>
                                     <TransformGroup>
-                                        <ScaleTransform ScaleX="{Binding ZoomFactor, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" ScaleY="{Binding ZoomFactor, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
-                                        <TranslateTransform X="{Binding TranslateOffsetX, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" Y="{Binding TranslateOffsetY, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
+                                        <ScaleTransform ScaleX="{Binding ZoomFactor, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" ScaleY="{Binding ZoomFactor, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
+                                        <TranslateTransform X="{Binding TranslateOffsetX, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" Y="{Binding TranslateOffsetY, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
                                     </TransformGroup>
                                 </Canvas.RenderTransform>
                             </Canvas>

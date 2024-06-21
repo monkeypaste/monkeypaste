@@ -760,12 +760,14 @@ namespace MonkeyPaste.Common.Avalonia {
             sv.ScrollToPoint(new_offset);
         }
 
-        public static void ScrollToPoint(this ScrollViewer sv, MpPoint p) {
+        public static void ScrollToPoint(this ScrollViewer sv, MpPoint p, bool invalidate = true) {
             sv.ScrollToHorizontalOffset(p.X);
             sv.ScrollToVerticalOffset(p.Y);
 
-            sv.InvalidateMeasure();
-            sv.InvalidateArrange();
+            if(invalidate) {
+                sv.InvalidateMeasure();
+                sv.InvalidateArrange();
+            }
         }
 
         public static void ScrollToHorizontalOffset(this ScrollViewer sv, double xOffset) {
@@ -991,6 +993,10 @@ namespace MonkeyPaste.Common.Avalonia {
             prect.TranslateOrigin(relativeTo, toScreen);
             return prect;
         }
+        public static MpRect ToPortableRect(this MpRect rect, Control relativeTo = null, bool toScreen = false) {
+            // NOTE just for WINDOWED compat
+            return rect.ToAvRect().ToPortableRect(relativeTo, toScreen);
+        }
 
         public static Rect ToAvRect(this MpRect rect) {
             return new Rect(rect.Location.ToAvPoint(), rect.Size.ToAvSize());
@@ -998,6 +1004,10 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static MpRect ToPortableRect(this PixelRect rect, double pixelDensity) {
             return new MpRect(rect.Position.ToPortablePoint(pixelDensity), rect.Size.ToPortableSize(pixelDensity));
+        }
+        public static MpRect ToPortableRect(this MpRect rect, double pixelDensity) {
+            // NOTE just for WINDOWED compat
+            return rect.ToAvPixelRect(pixelDensity).ToPortableRect(pixelDensity);
         }
 
         public static PixelRect ToAvPixelRect(this MpRect rect, double pixelDensity) {

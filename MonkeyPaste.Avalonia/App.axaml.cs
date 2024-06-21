@@ -8,7 +8,6 @@ using Avalonia.Media;
 using Avalonia.Threading;
 #if SUGAR_WV
 using AvaloniaWebView;
-
 #endif
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -57,11 +56,10 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-#if WINDOWED
-                    return desktop.MainWindow.Content as Control;
-#else
-                    return desktop.MainWindow; 
-#endif
+                    if(MpAvThemeViewModel.Instance.IsWindowed) {
+                        return desktop.MainWindow.Content as Control;
+                    }
+                    return desktop.MainWindow;
                 }
                 if (_instance.ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
                     return mobile.MainView;
@@ -159,7 +157,6 @@ namespace MonkeyPaste.Avalonia {
 
             ReportCommandLineArgs(Args);
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
-
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
 #if CEFNET_WV

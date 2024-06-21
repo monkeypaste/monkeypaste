@@ -223,8 +223,8 @@
                     Value="*,0" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Border Background="{DynamicResource ThemeGrayAccent3Brush}"
-            BoxShadow="inset 0 0 3 3 #469B979E">
+    <Border Classes="light-bevel-3"
+            Background="{DynamicResource ThemeGrayAccent3Brush}">
         <Grid x:Name="SidebarButtonGroupContainerGrid"
               Classes="oriented"
               Width="{Binding $parent.Bounds.Width}"

@@ -40,4 +40,19 @@ namespace MonkeyPaste.Avalonia {
         };
 
     }
+    public class DesignTriggerCollectionViewModel : MpAvTriggerCollectionViewModel {
+        public DesignTriggerCollectionViewModel() {
+            var trigger = new MpAvContentAddTriggerViewModel(this) {
+                Action = new MpAction() {
+                    ActionType = MpActionType.Trigger,
+                    Arg1 = "1,0,0,true", // scale, trans-x,trans-y,show grid
+                    Arg2 = "true", // isEnabled
+                    Arg3 = MpTriggerType.ClipAdded.ToString(),
+                    Label = "Test Trigger",
+                    Description = "Test Description"
+                }
+            };
+            Items.Add(trigger);
+        }
+    }
 }

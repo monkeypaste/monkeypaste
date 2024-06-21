@@ -104,14 +104,13 @@ namespace MonkeyPaste.Avalonia {
             MpAvWindow nw = null;
             switch (nvmb) {
                 case MpAvWelcomeNotificationViewModel:
-#if WINDOWED
-                    return;
-#else
+                    if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                        return;
+                    }
                     nw = new MpAvWelcomeWindow() {
                         DataContext = nvmb
-                    }; 
+                    };
                     break;
-#endif
                 case MpAvLoaderNotificationViewModel:
 #if WINDOWED
                     var mwo = MpAvPrefViewModel.Instance.MainWindowOrientationStr.ToEnum<MpMainWindowOrientationType>();
