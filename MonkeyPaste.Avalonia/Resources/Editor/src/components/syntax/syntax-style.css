@@ -26,6 +26,7 @@ code.ql-code-block {
 
 #editor.unwrap pre.ql-code-block-container {
     width: fit-content;
+    min-width: 100%;
 }
 
 div.ql-code-block, code.ql-code-block, span.ql-code-block {

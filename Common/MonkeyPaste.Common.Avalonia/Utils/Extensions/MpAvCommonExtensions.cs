@@ -761,6 +761,9 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static void ScrollToPoint(this ScrollViewer sv, MpPoint p, bool invalidate = true) {
+            if(sv == null) {
+                return;
+            }
             sv.ScrollToHorizontalOffset(p.X);
             sv.ScrollToVerticalOffset(p.Y);
 
@@ -771,6 +774,9 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static void ScrollToHorizontalOffset(this ScrollViewer sv, double xOffset) {
+            if(sv == null) {
+                return;
+            }
             var newOffset = new Vector(
                 Math.Max(0, Math.Min(sv.Extent.Width, xOffset)),
                 sv.Offset.Y);

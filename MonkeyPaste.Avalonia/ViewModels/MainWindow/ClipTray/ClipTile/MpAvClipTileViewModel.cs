@@ -81,6 +81,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpAvIFocusHeaderMenuViewModel Implementation
+
+        MpAvHeaderBackButtonType MpAvIHeaderMenuViewModel.BackButtonType =>
+            MpAvHeaderBackButtonType.Close;
         public bool IsFocused { get; set; }
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
            DisplayColor.ToAvBrush(force_alpha: 1);
@@ -2177,6 +2180,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Popout Window
         private MpAvWindow CreatePopoutWindow(MpAvClipTileView cached_view) {
+            Control content = cached_view ?? new MpAvClipTileView();
             int orig_ciid = CopyItemId;
 
             var pow = new MpAvWindow() {
@@ -2187,7 +2191,7 @@ namespace MonkeyPaste.Avalonia {
                         Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor) : 
                         Brushes.Transparent,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", typeof(MpAvWindowIcon), null, null) as MpAvWindowIcon,
-                Content = cached_view ?? new MpAvClipTileView(),
+                Content = content,
                 CornerRadius = 
                     MpAvThemeViewModel.Instance.IsMobileOrWindowed ?
                         new CornerRadius() :

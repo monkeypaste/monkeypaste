@@ -181,7 +181,6 @@ namespace MonkeyPaste.Avalonia {
             sbivm.PropertyChanged += Sbivm_PropertyChanged;
         }
         private async Task HandleSidebarSelectionChangedAsync() {
-
             double start_w,start_h,end_w,end_h;
             bool is_horiz = MpAvMainWindowViewModel.Instance.IsHorizontalOrientation;
             bool is_closing = SelectedItem == null;
@@ -217,6 +216,7 @@ namespace MonkeyPaste.Avalonia {
                 // manually clear both dim AFTER animation (or constraints could be wrong after orientation change)
                 ResetSize();
             }
+            MpAvMainView.Instance.UpdateMainViewLayout();
 
             // reset sidebar scroll
             if (SelectedItem is not null &&
@@ -280,9 +280,11 @@ namespace MonkeyPaste.Avalonia {
                         LastSelectedItem = SelectedItem;
                     }
                     Dispatcher.UIThread.Post(async () => {
+                        MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeBegin);
                         await HandleSidebarSelectionChangedAsync();
                         OnPropertyChanged(nameof(SelectedItemIdx));
                         BoundItem = SelectedItem;
+                        MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeEnd);
                     });
                   
                     break;
@@ -343,9 +345,12 @@ namespace MonkeyPaste.Avalonia {
             double dh = h - ContainerBoundHeight;
             ContainerBoundWidth = w;
             ContainerBoundHeight = h;
-
-            MpAvClipTrayViewModel.Instance.ContainerBoundWidth -= dw;
-            MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= dh;
+            
+            if(MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
+                MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= dh;
+            } else {
+                MpAvClipTrayViewModel.Instance.ContainerBoundWidth -= dw;
+            }
         }
 
         private void SetSidebarContentOpacity(double opacity) {

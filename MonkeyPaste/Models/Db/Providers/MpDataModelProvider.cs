@@ -127,6 +127,20 @@ namespace MonkeyPaste {
         }
 
         #endregion
+        
+        #region GetTriggerDesignerSettingsByLabel
+
+        public static async Task<MpTriggerDesignerSettings> GetTriggerDesignerSettingsByActionId(int actionId) {
+            // NOTE select columns CANNOT be parameterized
+            string query = $"select * from MpTriggerDesignerSettings where fk_MpActionId=?";
+            var result = await MpDb.QueryAsync<MpTriggerDesignerSettings>(query, actionId);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
+
+        #endregion
 
         #region MpUserDevice
 

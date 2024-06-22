@@ -49,6 +49,9 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpAvIFocusHeaderMenuViewModel Implementation
+
+        MpAvHeaderBackButtonType MpAvIHeaderMenuViewModel.BackButtonType =>
+            MpAvHeaderBackButtonType.Close;
         public bool IsFocused { get; set; }
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
            TagHexColor.ToAvBrush(force_alpha: 1);

@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarWidth {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
-                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Width;
                 }
                 double def_w = DefaultSelectorColumnVarDimLength;
                 if (SelectedPresetViewModel != null) {
@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarHeight {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Height;
                 }
                 double def_h = DefaultSelectorColumnVarDimLength;
                 if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {

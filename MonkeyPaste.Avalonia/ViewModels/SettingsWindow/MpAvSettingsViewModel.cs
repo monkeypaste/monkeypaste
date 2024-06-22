@@ -75,6 +75,9 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpAvIHeaderMenuViewModel Implementation
+
+        MpAvHeaderBackButtonType MpAvIHeaderMenuViewModel.BackButtonType =>
+            MpAvHeaderBackButtonType.Arrow;
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
             Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor);
         IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>

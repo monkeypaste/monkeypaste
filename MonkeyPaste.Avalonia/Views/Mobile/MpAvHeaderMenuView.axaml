@@ -37,20 +37,13 @@
                     Value="{Binding BackCommandParameter}" />
         </Style>
 
-        <Style Selector=":is(Button)#BackButton local|MpAvTintedImage"
-               x:DataType="local:MpAvIHeaderMenuViewModel">
+        <Style Selector=":is(Button)#BackButton.arrow local|MpAvTintedImage">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
-        <Style Selector=":is(Button)#BackButton local|MpAvTintedImage"
-               x:DataType="local:MpAvIFocusHeaderMenuViewModel">
+        <Style Selector=":is(Button)#BackButton.close local|MpAvTintedImage">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource CloseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-        </Style>
-        <Style Selector=":is(Button)#BackButton.popout local|MpAvTintedImage"
-               x:DataType="local:MpAvIFocusHeaderMenuViewModel">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource LeftImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="HeaderBorder"
@@ -62,6 +55,8 @@
             <!--  BACK BUTTON  -->
             <Button x:Name="BackButton"
                     HorizontalAlignment="Left"
+                    Classes.arrow="{Binding BackButtonType, ConverterParameter=Arrow, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                    Classes.close="{Binding BackButtonType, ConverterParameter=Close, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
                     Classes="no-bg no-hover-bg no-border default-button header-button"
                     Classes.has-back-cmd="{Binding BackCommand, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                 <local:MpAvTintedImage Tint="{Binding Background, ElementName=HeaderBorder, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />

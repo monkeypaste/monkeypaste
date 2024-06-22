@@ -94,6 +94,8 @@
         <SolidColorBrush x:Key="ThemeWhiteBrush" Color="{DynamicResource ThemeWhiteColor}" />
 
         <SolidColorBrush x:Key="ThemeBrush" Color="{DynamicResource ThemeColor}" />
+        <SolidColorBrush x:Key="ThemeLightBrush" Color="{DynamicResource ThemeLightColor}" />
+        <SolidColorBrush x:Key="ThemeDarkBrush" Color="{DynamicResource ThemeDarkColor}" />
 
         <SolidColorBrush x:Key="ThemeInteractiveBrush" Color="{DynamicResource ThemeInteractiveColor}" />
         <SolidColorBrush x:Key="ThemeInteractiveBgBrush" Color="{DynamicResource ThemeInteractiveBgColor}" />

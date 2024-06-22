@@ -109,6 +109,19 @@ namespace MonkeyPaste {
                 return cloned_a;
             }
 
+            if(ActionType == MpActionType.Trigger) {
+                var dp = await MpDataModelProvider.GetTriggerDesignerSettingsByActionId(Id);
+                if(dp != null) {
+                    _ = await MpTriggerDesignerSettings.CreateAsync(
+                        actionId: cloned_a.Id,
+                        x: dp.TranslateOffsetX,
+                        y: dp.TranslateOffsetY,
+                        zoomFactor: dp.ZoomFactor,
+                        showGrid: dp.IsGridVisible);
+
+                }
+            }
+
             // CLONE CHILDREN & UPDATE PARENT
             cloned_a.Children = new List<MpAction>();
 
@@ -260,6 +273,10 @@ namespace MonkeyPaste {
 
             if (!suppressWrite) {
                 await mr.WriteToDatabaseAsync();
+
+                if(actionType == MpActionType.Trigger) {
+                    _ = await MpTriggerDesignerSettings.CreateAsync(actionId: mr.Id);
+                }
             }
             return mr;
         }
@@ -267,6 +284,13 @@ namespace MonkeyPaste {
         public override async Task DeleteFromDatabaseAsync() {
             var apvl = await MpDataModelProvider.GetAllParameterHostValuesAsync(MpParameterHostType.Action, Id);
             await Task.WhenAll(apvl.Select(x => x.DeleteFromDatabaseAsync()));
+
+            if(ActionType == MpActionType.Trigger) {
+                var dp = await MpDataModelProvider.GetTriggerDesignerSettingsByActionId(Id);
+                if(dp != null) {
+                    await dp.DeleteFromDatabaseAsync();
+                }
+            }
 
             await base.DeleteFromDatabaseAsync();
         }

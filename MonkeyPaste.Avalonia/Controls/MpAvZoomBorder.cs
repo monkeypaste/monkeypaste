@@ -52,11 +52,6 @@ namespace MonkeyPaste.Avalonia {
         public Control Child =>
             Content as Control;
 
-        #region DesignerItem AvaloniaProperty
-        public MpIDesignerSettingsViewModel DesignerItem => DataContext as MpIDesignerSettingsViewModel;
-
-        #endregion
-
         #region ShowGrid AvaloniaProperty
         public bool ShowGrid {
             get { return (bool)GetValue(ShowGridProperty); }
@@ -276,10 +271,6 @@ namespace MonkeyPaste.Avalonia {
             if (ShowGrid) {
                 DrawGrid(ctx);
             }
-            if (DesignerItem == null) {
-                return;
-            }
-
             DrawItemEffects(ctx);
         }
 
@@ -290,19 +281,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void Zoom(double scaleDelta, Point relative_anchor) {
-            if (DesignerItem == null) {
-                return;
-            }
             double scale = Scale;
 
             if (scale < MinScale) {
                 return;
             }
-            scale += scaleDelta;
-            double zoomCorrected = scaleDelta * scale;
-            scale += zoomCorrected;
+            //scale += scaleDelta;
+            //double zoomCorrected = scaleDelta * scale;
+            //scale += zoomCorrected;
 
-            scale = Math.Min(MaxScale, Math.Max(MinScale, scale));
+            scale = Math.Clamp(scale + scaleDelta, MinScale, MaxScale);
             Scale = scale;
 
             var t = new MpPoint(TranslateOffsetX, TranslateOffsetY) * scale;
@@ -310,8 +298,9 @@ namespace MonkeyPaste.Avalonia {
             //relative_anchor *= scale;
             //MpPoint abs = (relative_anchor) + t;
             //t = abs - relative_anchor;// * scale;
-            TranslateOffsetX = t.X;
-            TranslateOffsetY = t.Y;
+
+            //TranslateOffsetX = t.X;
+            //TranslateOffsetY = t.Y;
 
             if (DataContext is MpAvTriggerCollectionViewModel acvm) {
                 acvm.HasModelChanged = true;
@@ -351,7 +340,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {
             base.OnPointerWheelChanged(e);
-            if (Child == null || DesignerItem == null) {
+            if (Child == null) {
                 return;
             }
             double zoom = e.Delta.Y > 0 ? WHEEL_ZOOM_DELTA : -WHEEL_ZOOM_DELTA;
@@ -364,6 +353,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void OnScaleChanged() {
+            return;
             _lastScale = _lastScale ?? Scale;
             if(Math.Abs(Scale-_lastScale.Value) < 0.001) {
                 return;
@@ -446,21 +436,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Grid Rendering
         private void DrawGrid(DrawingContext dc) {
-            if (DesignerItem == null) {
-                return;
-            }
-
-            var di = DesignerItem;
-
             double w = Bounds.Width;
             double h = Bounds.Height;
 
-            double offset_x = di.TranslateOffsetX;
-            double offset_y = di.TranslateOffsetY;
+            double offset_x = TranslateOffsetX;
+            double offset_y = TranslateOffsetY;
 
             //var st = GetScaleTransform(Child);
-            int HorizontalGridLineCount = (int)((w / GridLineSpacing) * (1 / di.ZoomFactor));
-            int VerticalGridLineCount = (int)((h / GridLineSpacing) * (1 / di.ZoomFactor));
+            int HorizontalGridLineCount = (int)((w / GridLineSpacing) * (1 / Scale));
+            int VerticalGridLineCount = (int)((h / GridLineSpacing) * (1 / Scale));
 
             int major_count = 5;
             double major_thickness = 2;
@@ -621,15 +605,16 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
         private MpRect GetTranslatedActionShapeRect(MpAvActionViewModelBase avm) {
-            if (this.GetVisualDescendant<ListBox>() is ListBox lb &&
-                GetActionShape(avm) is Shape s) {
-                var s_rect = s.Bounds.ToPortableRect();
-                var s_center = s.TranslatePoint(new Point(s.Bounds.Width / 2, s.Bounds.Height / 2), lb).Value.ToPortablePoint();
-                s_center /= Scale;
-                s_rect.Move(s_center);
-                return s_rect;
+            if (this.GetVisualDescendant<ListBox>() is not ListBox lb ||
+                GetActionShape(avm) is not Shape s) {
+                return MpRect.Empty;
             }
-            return MpRect.Empty;
+
+            var s_rect = s.Bounds.ToPortableRect();
+            var s_center = s.TranslatePoint(new Point(/*s.Bounds.Width / 2, s.Bounds.Height / 2*/), this).Value.ToPortablePoint();
+            s_center /= Scale;
+            s_rect.Move(s_center);
+            return s_rect;
         }
         private void DrawActionShadow(DrawingContext ctx, MpAvActionViewModelBase avm) {
             double scale = avm.Parent.ZoomFactor;
@@ -654,22 +639,14 @@ namespace MonkeyPaste.Avalonia {
                 }
             } else if (s is Polygon pg) {
                 using (ctx.PushTransform(
-                    Matrix.CreateScale(scale, scale) //*
-                                                     //Matrix.CreateTranslation(origin.X, origin.Y)
-                    )) {
+                    Matrix.CreateScale(scale, scale))) {
 
                     var pg_trans = (pg.Bounds.ToPortableRect().Location + shape_rect.TopLeft + shadow_offset).ToAvPoint();
                     ctx.DrawGeometry(shadow_brush, new Pen(Brushes.Transparent), GetPointGeometry(pg.Points, pg_trans));
                 }
             } else if (s is Rectangle r) {
                 using (ctx.PushTransform(
-                    Matrix.CreateScale(scale, scale) //*
-                                                     //Matrix.CreateTranslation(origin.X, origin.Y)
-                    )) {
-                    //var rect = r.Bounds.ToPortableRect();
-                    //rect.Move(origin);
-                    //rect.Size.Width *= scale;
-                    //rect.Size.Height *= scale;
+                    Matrix.CreateScale(scale, scale))) {
                     var tl = shape_rect.TopLeft + shadow_offset;
                     ctx.DrawRectangle(shadow_brush, new Pen(Brushes.Transparent), new Rect(tl.ToAvPoint(), r.Bounds.Size));
                 }
@@ -693,10 +670,6 @@ namespace MonkeyPaste.Avalonia {
                 GradientStops = new GradientStops(),
                 StartPoint = new RelativePoint(pp.ToAvPoint(), RelativeUnit.Absolute),
                 EndPoint = new RelativePoint(p.ToAvPoint(), RelativeUnit.Absolute)
-                //StartPoint = new RelativePoint(new Point(), RelativeUnit.Relative),
-                //EndPoint = new RelativePoint((p - pp).Normalized.ToAvPoint(), RelativeUnit.Relative)
-                //StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
-                //EndPoint = new RelativePoint(1, 0, RelativeUnit.Relative)
             };
 
             int strip_count = (int)((double)(pp - p).Length / 15d);

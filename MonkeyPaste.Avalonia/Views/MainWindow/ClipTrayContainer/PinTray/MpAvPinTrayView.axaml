@@ -99,7 +99,7 @@
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <ListBox x:Name="PinTrayListBox"
-                     AutoScrollToSelectedItem="True"
+                     AutoScrollToSelectedItem="False"
                      Classes="clipTileListBox pinListBox focus-item-vm"
                      Classes.bright="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToIsBrightBoolConverter.Instance}}"
                      Background="Transparent"

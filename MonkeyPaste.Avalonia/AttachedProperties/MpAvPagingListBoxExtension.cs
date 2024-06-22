@@ -870,10 +870,10 @@ namespace MonkeyPaste.Avalonia {
 
                 if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
                     // force single axis scrolling (really hard to understand where/what causes)
-                    if(!GetCanScrollX(lb)) {
+                    if (!GetCanScrollX(lb)) {
                         SetAllOffsets(lb, x: 0);
                     }
-                    if(!GetCanScrollY(lb)) {
+                    if (!GetCanScrollY(lb)) {
                         SetAllOffsets(lb, y: 0);
                     }
                     // ntf ctrvm of scroll for query,etc.

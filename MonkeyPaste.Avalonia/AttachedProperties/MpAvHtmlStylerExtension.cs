@@ -576,7 +576,8 @@ h1 {{ line-height: 3em; }}
 a:link {{ text-decoration: none; color: {7}; }}
 a:hover {{ text-decoration: underline; color: {8}; text-underline-offset: -2; }}
 div.ql-code-block, code.ql-code-block {{ {11} }}
-pre, code {{ font-family: {9}; }}",
+pre, code {{ font-family: {9}; }}
+pre code.hljs {{ overflow-x: unset !important; padding: unset !important; }} code.hljs {{ padding: unset !important; }}",
 Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor).ToPortableColor().ToHex(true), //0
 GetDefaultFontSize(hc), //1
 GetDefaultFontFamily(hc).ToCssStringPropValue(), //2

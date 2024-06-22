@@ -15,17 +15,6 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
         }
 
-
-        protected override void OnLoaded(RoutedEventArgs e) {
-            base.OnLoaded(e);
-            if (this.GetVisualAncestor<MpAvOverlayContainerView>() != null) {
-                this.BackButton.Classes.Add("popout");
-            } else {
-                this.BackButton.Classes.Remove("popout");
-            }
-
-        }
-
         #region Commands
         public ICommand DefaultBackCommand => new MpCommand<object>(
                     (args) => {

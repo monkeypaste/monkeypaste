@@ -156,6 +156,8 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpAvIFocusHeaderMenuViewModel Implementation
+        MpAvHeaderBackButtonType MpAvIHeaderMenuViewModel.BackButtonType =>
+            MpAvHeaderBackButtonType.Close;
         public bool IsFocused { get; set; }
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
            ActionBackgroundHexColor.ToAvBrush(force_alpha: 1);
@@ -178,14 +180,7 @@ namespace MonkeyPaste.Avalonia {
         ICommand MpAvIHeaderMenuViewModel.BackCommand => new MpCommand(
             () => {
                 if(MpAvWindowManager.ActiveWindow is not { } aw ||
-                aw.Content is not Viewbox vb || 
-                vb.Child is not MpAvTriggerActionChooserView tac) {
-                    if(MpAvMainWindowTitleMenuViewModel.Instance.FocusHeaderViewModel == Parent) {
-                        MpAvMainWindowTitleMenuViewModel.Instance.FocusHeaderViewModel = null;
-                    } else {
-                        Parent.FocusThisHeader();
-                    }
-                    
+                aw.GetVisualDescendant<MpAvTriggerActionChooserView>() is not { } tac) {                    
                     return;
                 }
                 if(Parent.IsWindowOpen) {
@@ -998,7 +993,8 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public virtual async Task InitializeAsync(MpAction a) {
-            IsBusy = true;
+            bool was_busy = IsBusy;
+            IsBusy = was_busy;
 
             Action = a;
 
@@ -1043,7 +1039,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IconResourceObj));
 
 
-            IsBusy = false;
+            IsBusy = was_busy;
         }
 
         protected virtual void Param_vm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -1302,8 +1298,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
-
         #endregion
 
         #region Private Methods
@@ -1344,8 +1338,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
-                        //HasModelChanged = false;
-
                         Dispatcher.UIThread.Post(async () => {
                             IsBusy = true;
 
@@ -1404,6 +1396,7 @@ namespace MonkeyPaste.Avalonia {
             //}
             OnPropertyChanged(nameof(Items));
         }
+
         private void ActionParam_OnValidate(object sender, EventArgs e) {
             Dispatcher.UIThread.Post(() => {
                 ValidateActionAndDescendantsAsync().FireAndForgetSafeAsync(this);

@@ -718,6 +718,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpTag>();
             await _connectionAsync.CreateTableAsync<MpTextTemplate>();
             await _connectionAsync.CreateTableAsync<MpTransactionSource>(); 
+            await _connectionAsync.CreateTableAsync<MpTriggerDesignerSettings>();
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUser>();
             await _connectionAsync.CreateTableAsync<MpUserDevice>();

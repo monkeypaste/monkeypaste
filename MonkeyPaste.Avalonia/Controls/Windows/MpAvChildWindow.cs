@@ -40,6 +40,11 @@ namespace MonkeyPaste.Avalonia {
         FadeOut = 1L << 5,
     }
 
+    public enum MpAvHeaderBackButtonType {
+        None = 0,
+        Arrow,
+        Close
+    }
     public interface MpAvIIsVisibleViewModel : MpIViewModel {
         bool IsVisible { get; }
     }
@@ -50,6 +55,7 @@ namespace MonkeyPaste.Avalonia {
         IBrush HeaderForeground { get; }
         ICommand BackCommand { get; }
         object BackCommandParameter { get; }
+        MpAvHeaderBackButtonType BackButtonType { get; }
     }
 
     public interface MpAvIFocusHeaderMenuViewModel : MpAvIHeaderMenuViewModel {

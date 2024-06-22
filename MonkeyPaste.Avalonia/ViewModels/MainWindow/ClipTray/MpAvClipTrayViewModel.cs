@@ -572,8 +572,9 @@ namespace MonkeyPaste.Avalonia {
                 if (IsScrollDisabled ||
                     MpAvMainWindowViewModel.Instance.IsMainWindowOpening ||
                    !MpAvMainWindowViewModel.Instance.IsMainWindowOpen ||
-                    IsRequerying/* ||
-                   IsScrollingIntoView*/) {
+                    IsRequerying// ||
+                   //IsScrollingIntoView
+                   ) {
                     return false;
                 }
 
@@ -1835,7 +1836,6 @@ namespace MonkeyPaste.Avalonia {
 
             MpRect ctvm_rect = MpRect.Empty;
             MpPoint delta_scroll_offset = MpPoint.Zero;
-            double w, h;
 
             if(ctvm.IsPinned) {
                 MpDebug.Assert(MpAvThemeViewModel.Instance.IsMobileOrWindowed, $"PinTray scroll into view should only be manual on mobile");
@@ -1847,38 +1847,11 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 ctvm_rect = ctvm_lbi.Bounds.ToPortableRect();
-                w = ptr_lb.Bounds.Width;
-                h = ptr_lb.Bounds.Height;
             } else {
-                ctvm_rect = ctvm.QueryTrayScrollRect;                
-                w = ObservedQueryTrayScreenWidth;
-                h = ObservedQueryTrayScreenHeight;
+                ctvm_rect = ctvm.QueryTrayScrollRect;     
             }
-            double cx = ctvm_rect.X;
-            double cy = ctvm_rect.Y;
 
-            double pad_origin = 0;// MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
-            double x = pad_origin;
-            double y = pad_origin;
-
-            double pad_extent = 0;// ScrollBarFixedAxisSize;
-            w -= pad_extent;
-            h -= pad_extent;
-
-            if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                double sb_w = MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarWidth;
-                double sb_h = MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarHeight;
-
-                if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
-                    h = Math.Max(0, h - sb_h);
-                } else {
-                    x += sb_w;
-                    w = Math.Max(0, w - sb_w);
-                    cx += x;
-                }
-            }
-            ctvm_rect = new MpRect(cx, cy, ctvm_rect.Width, ctvm_rect.Height);
-            MpRect svr = new MpRect(x, y, w, h);
+            MpRect svr = new MpRect(MpAvClipTrayContainerView.Instance.Bounds.Size.ToPortableSize());//new MpRect(x, y, w, h);
             delta_scroll_offset = svr.FindTranslation(ctvm_rect);
             MpPoint source_offset = null;
             MpPoint target_offset = null;
@@ -1890,26 +1863,36 @@ namespace MonkeyPaste.Avalonia {
                     target_offset = ptr_sv.Offset.ToPortablePoint() + delta_scroll_offset;
                 }
             } else {
-                source_offset = ScrollOffset;
-                target_offset = ScrollOffset + delta_scroll_offset;
-                ScrollVelocity = MpPoint.Zero;
+                if(MpAvQueryTrayView.Instance.ClipTrayScrollViewer is { } qtr_sv) {
+                    sv = qtr_sv;
+                    source_offset = ScrollOffset;
+                    target_offset = ScrollOffset + delta_scroll_offset;
+                    ScrollVelocity = MpPoint.Zero;
+                }
             }
 
-            Dispatcher.UIThread.Post(async () => {
-                await source_offset.AnimatePointAsync(
-                    end: target_offset,
-                    tts: 1.0d,
-                    fps: 60,
-                    tick: (d) => {
-                        if(ctvm.IsPinned) {
-                            sv.ScrollToPoint(d,false);
-                        } else {
-                            ForceScrollOffset(d, "scrollIntoView");
-                        }
-                    });
+            //Dispatcher.UIThread.Post(async () => {
+            //    await source_offset.AnimatePointAsync(
+            //        end: target_offset,
+            //        tts: 1.0d,
+            //        fps: 20,
+            //        tick: (d) => {
+            //            if (ctvm.IsPinned) {
+            //                sv.ScrollToPoint(d, false);
+            //            } else {
+            //                ForceScrollOffset(d, "scrollIntoView");
+            //                //ScrollOffset = d;
+            //            }
+            //        });
 
-                IsScrollingIntoView = false;
-            });
+            //    IsScrollingIntoView = false;
+            //});
+            if (ctvm.IsPinned) {
+                sv.ScrollToPoint(target_offset, false);
+            } else {
+                ForceScrollOffset(target_offset, "scrollIntoView");
+            }
+            IsScrollingIntoView = false;
         }
 
         #endregion
@@ -2534,6 +2517,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.SelectedSidebarItemChangeEnd:
                     //ScrollToAnchor();
                     RefreshQueryTrayLayout();
+                    ScrollIntoView(SelectedItem);
                     break;
                 case MpMessageType.SidebarItemSizeChangeBegin:
                     //SetScrollAnchor();
@@ -3316,7 +3300,8 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (target_ctvm != null &&
-                    !target_ctvm.IsPinPlaceholder) {
+                    !target_ctvm.IsPinPlaceholder
+                        ) {
                     break;
                 }
                 cur_ctvm = target_ctvm;

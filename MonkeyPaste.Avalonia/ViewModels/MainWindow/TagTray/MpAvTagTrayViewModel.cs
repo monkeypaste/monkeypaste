@@ -129,14 +129,14 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                     return 225;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
                 } else {
-                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Width; //MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
             }
         }
         public double DefaultSidebarHeight {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Height;
                 } else {
                     return 250;
                 }

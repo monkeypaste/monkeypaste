@@ -61,7 +61,6 @@ namespace MonkeyPaste.Avalonia {
             _instance = this;
             InitializeComponent();
             this.IsHitTestVisible = false;
-            OverlayGrid.Children.CollectionChanged += Children_CollectionChanged;
         }
 
 
@@ -232,30 +231,6 @@ namespace MonkeyPaste.Avalonia {
                 anim_vm.IsAnimating = true;
             }
             return true;
-        }
-        private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            Dispatcher.UIThread.Post(async () => {
-                // wait for collection change to finish to avoid weird enumerable exceptions
-                await Task.Delay(300);
-                HandleAirSpaceWindows();
-            });
-        }
-
-        private void HandleAirSpaceWindows() {
-            var airspace_windows = OverlayGrid.Children.Where(x => x.Classes.Contains("air-space"));
-            if(!airspace_windows.Any()) {
-                // no problems or top window has air-space
-                return;
-            }
-            if(airspace_windows.Contains(TopWindow)) {
-                if(!TopWindow.IsVisible) {
-                    // restore visibility
-                    TopWindow.IsVisible = true;
-                }
-                return;
-            }
-            // some lower window has air space
-            airspace_windows.ForEach(x => x.IsVisible = false);
         }
         #endregion
 

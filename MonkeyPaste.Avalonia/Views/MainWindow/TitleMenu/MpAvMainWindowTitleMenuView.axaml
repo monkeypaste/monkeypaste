@@ -357,7 +357,7 @@
                     Classes.top="{Binding IsTopOrientation}"
                     Classes.right="{Binding IsRightOrientation}"
                     Classes.bottom="{Binding IsBottomOrientation}"
-                    IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                    IsVisible="{Binding IsMultiWindow, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.IsEnabled="True"
                     local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding WindowSizeToDefaultCommand}"
                     local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"

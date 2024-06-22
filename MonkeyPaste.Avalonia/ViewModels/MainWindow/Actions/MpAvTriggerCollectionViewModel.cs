@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         MpISelectableViewModel,
         MpISidebarItemViewModel,
         MpIDesignerSettingsViewModel,
-        MpAvIFocusHeaderMenuViewModel 
+        MpAvIHeaderMenuViewModel 
         {
         #region Private Variables
 
@@ -51,6 +51,9 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpAvIFocusHeaderMenuViewModel Implementation
+
+        MpAvHeaderBackButtonType MpAvIHeaderMenuViewModel.BackButtonType =>
+            MpAvHeaderBackButtonType.Arrow;
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
             Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment2Color);
         IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
@@ -157,44 +160,44 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsGridVisible {
             get {
-                return ParseShowGrid(DesignerSettingsArg);
+                return SelectedTrigger == null ? true : SelectedTrigger.IsGridVisible;
             }
             set {
-                if (IsGridVisible != value) {
-                    SetDesignerItemSettings(ZoomFactor, TranslateOffsetX, TranslateOffsetY, value);
+                if (IsGridVisible != value && SelectedTrigger != null) {
+                    SelectedTrigger.IsGridVisible = value;
                     OnPropertyChanged(nameof(IsGridVisible));
                 }
             }
         }
         public double ZoomFactor {
             get {
-                return ParseScale(DesignerSettingsArg);
+                return SelectedTrigger == null ? 1 : SelectedTrigger.ZoomFactor;
             }
             set {
-                if (ZoomFactor != value) {
-                    SetDesignerItemSettings(Math.Clamp(value, MinZoomFactor, MaxZoomFactor), TranslateOffsetX, TranslateOffsetY, IsGridVisible);
+                if (ZoomFactor != value && SelectedTrigger != null) {
+                    SelectedTrigger.ZoomFactor = value;
                     OnPropertyChanged(nameof(ZoomFactor));
                 }
             }
         }
         public double TranslateOffsetX {
             get {
-                return ParseTranslationOffset(DesignerSettingsArg).X;
+                return SelectedTrigger == null ? 0 : SelectedTrigger.TranslateOffsetX;
             }
             set {
-                if (Math.Abs(TranslateOffsetX - value) > 0.1) {
-                    SetDesignerItemSettings(ZoomFactor, Math.Round(value, 1), TranslateOffsetY, IsGridVisible);
+                if (Math.Abs(TranslateOffsetX - value) > 0.1 && SelectedTrigger != null) {
+                    SelectedTrigger.TranslateOffsetX = value;
                     OnPropertyChanged(nameof(TranslateOffsetX));
                 }
             }
         }
         public double TranslateOffsetY {
             get {
-                return ParseTranslationOffset(DesignerSettingsArg).Y;
+                return SelectedTrigger == null ? 0 : SelectedTrigger.TranslateOffsetY;
             }
             set {
-                if (Math.Abs(TranslateOffsetY - value) > 0.1) {
-                    SetDesignerItemSettings(ZoomFactor, TranslateOffsetX, Math.Round(value, 1), IsGridVisible);
+                if (Math.Abs(TranslateOffsetY - value) > 0.1 && SelectedTrigger != null) {
+                    SelectedTrigger.TranslateOffsetY = value;
                     OnPropertyChanged(nameof(TranslateOffsetY));
                 }
             }
@@ -210,7 +213,7 @@ namespace MonkeyPaste.Avalonia {
                         mv.GetVisualDescendant<MpAvZoomBorder>() is MpAvZoomBorder mw_zb) {
                 zb = mw_zb;
             }
-            bool simple_reset = zb == null;
+            bool simple_reset = true || zb == null || SelectedTrigger == null;
             if(simple_reset) {
                 ZoomFactor = 1;
                 var focus_loc = GetDesignerItemCenter(FocusAction);
@@ -220,14 +223,38 @@ namespace MonkeyPaste.Avalonia {
             }
             MpAvActionViewModelBase focus_avm = FocusAction ?? SelectedTrigger;
 
-            SelectedTrigger.SelfAndAllDescendants
-                .ForEach(x => x.Location = x.Location - focus_avm.Location);
+            //SelectedTrigger.SelfAndAllDescendants
+            //    .ForEach(x => x.Location = x.Location - focus_avm.Location);
+            double pad = 30;
+            MpRect total_rect = DesignerItemsRect.Inflate(pad,pad);
+            // 125, -30
+            var test = total_rect.Center;
+            double hw = ObservedDesignerBounds.Width / 2;
+            double hh = ObservedDesignerBounds.Height / 2;
+            double hw2 = focus_avm.ObservedDesignerItemBounds.Width;
+            double hh2 = focus_avm.ObservedDesignerItemBounds.Height/4;
+            TranslateOffsetX = hw - focus_avm.Location.X - hw2;
+            TranslateOffsetY = hh - focus_avm.Location.Y - hh2;
+            //TranslateOffsetX = DesignerCenterLocation.X;
+            //TranslateOffsetY = DesignerCenterLocation.Y - hh;
 
-            TranslateOffsetX = DesignerCenterLocation.X;
-            TranslateOffsetY = DesignerCenterLocation.Y;
+            //TranslateOffsetX = total_rect.Left;
+            //TranslateOffsetY = total_rect.Bottom;
 
-            var scale = DesignerItemsRect.Size / ObservedDesignerBounds.Size;
-            ZoomFactor = Math.Min(scale.X,scale.Y);
+            //TranslateOffsetX = -total_rect.Centroid().X;
+            //TranslateOffsetY = -total_rect.Centroid().Y;
+
+            // goal: 0, 125
+            //TranslateOffsetX = 0;
+            //TranslateOffsetY = 0;
+
+            //var scale = ObservedDesignerBounds.Size / total_rect.Size;
+            var scale = total_rect.Size / ObservedDesignerBounds.Size;
+
+            ZoomFactor = Math.Max(MinZoomFactor,Math.Min(scale.X,scale.Y));
+
+
+            ZoomFactor = 1;
             //MpRect total_rect = null;//DesignerItemsRect;
             //var lb = zb.GetVisualDescendant<ListBox>();
             //for (int i = 0; i < lb.ItemCount; i++) {
@@ -260,8 +287,6 @@ namespace MonkeyPaste.Avalonia {
             //TranslateOffsetX = -304;
             //TranslateOffsetY = -1553;
 
-        }, () => {
-            return FocusAction != null;
         });
 
         private MpPoint GetDesignerItemCenter(MpAvActionViewModelBase avm) {
@@ -278,87 +303,31 @@ namespace MonkeyPaste.Avalonia {
 
         public MpRect DesignerItemsRect {
             get {
-                MpRect total_rect = null;
-                SelectedTrigger.SelfAndAllDescendants.ForEach(x =>
-                    total_rect = total_rect.Union(
-                        new MpRect(
-                            GetDesignerItemOrigin(x),
-                            new MpSize(DesignerItemDiameter, DesignerItemDiameter))));
-                return total_rect;
+                double l = double.MaxValue, t = double.MaxValue, r = double.MinValue, b = double.MinValue;
+                foreach(var avm in SelectedTrigger.SelfAndAllDescendants) {
+                    var avm_rect = new MpRect(
+                            avm.Location,
+                            new MpSize(DesignerItemDiameter, DesignerItemDiameter));
+                    l = Math.Min(l, avm_rect.Left);
+                    t = Math.Min(t, avm_rect.Top);
+                    r = Math.Max(r, avm_rect.Right);
+                    b = Math.Max(b, avm_rect.Bottom);
+
+                }
+                return new MpRect(l,t,Math.Max(0,r-l),Math.Max(0,b-t));
             }
         }
         public MpRect ObservedDesignerBounds { get; set; } = MpRect.Empty;
         public double DesignerItemDiameter => 50;
 
         public MpPoint DesignerCenterLocation => 
-            (ObservedDesignerBounds.Size.ToPortablePoint() / 2) - (DesignerItemDiameter / 1);
+            (ObservedDesignerBounds.Size.ToPortablePoint() / 2) - (DesignerItemDiameter / 2);
         public MpPoint DefaultDesignerItemLocationLocation =>
             MpPoint.Zero;//new MpPoint(-DesignerItemDiameter / 2, -DesignerItemDiameter / 2);
 
 
         public double FocusActionScreenX => FocusAction == null ? 0 : (DesignerCenterLocation.X - FocusAction.X) + (DesignerItemDiameter / 2);
         public double FocusActionScreenY => FocusAction == null ? 0 : (DesignerCenterLocation.Y - FocusAction.Y) + (DesignerItemDiameter / 2);
-        #endregion
-
-        #region Designer Model Parsing Helpers
-
-        string DesignerSettingsArg {
-            get => SelectedTrigger == null ? null : SelectedTrigger.Arg1;
-            set {
-                if (SelectedTrigger == null) {
-                    return;
-                }
-                SelectedTrigger.Arg1 = value;
-            }
-        }
-        private void SetDesignerItemSettings(double scale, double offsetX, double offsetY, bool showGrid) {
-            string arg2 = string.Join(
-                ",",
-                new string[] {
-                    scale.ToString(),
-                    offsetX.ToString(), offsetY.ToString(),
-                    showGrid.ToString()});
-            DesignerSettingsArg = arg2;
-        }
-
-        private double ParseScale(string text) {
-            if (string.IsNullOrEmpty(DesignerSettingsArg)) {
-                return 1.0d;
-            }
-            var arg2Parts = DesignerSettingsArg.SplitNoEmpty(",");
-            if (arg2Parts.Length > 0) {
-                return arg2Parts[0].ParseOrConvertToDouble(1d);
-            }
-            return 1.0d;
-        }
-
-        private MpPoint ParseTranslationOffset(string text) {
-            if (string.IsNullOrEmpty(DesignerSettingsArg)) {
-                return DesignerCenterLocation;
-            }
-            var arg2Parts = DesignerSettingsArg.SplitNoEmpty(",");
-            if (arg2Parts.Length >= 3) {
-                return new MpPoint() {
-                    X = arg2Parts[1].ParseOrConvertToDouble(0d),
-                    Y = arg2Parts[2].ParseOrConvertToDouble(0d)
-                };
-            }
-            return DesignerCenterLocation;
-        }
-        private bool ParseShowGrid(string text) {
-            if (SelectedTrigger == null) {
-                return false;
-            }
-            if (string.IsNullOrEmpty(DesignerSettingsArg)) {
-                return true;
-            }
-            var arg2Parts = DesignerSettingsArg.SplitNoEmpty(",");
-            if (arg2Parts.Length >= 4) {
-                return arg2Parts[3].ToLowerInvariant() == "true";
-            }
-            return true;
-        }
-
         #endregion
 
         #endregion
@@ -374,7 +343,7 @@ namespace MonkeyPaste.Avalonia {
                     return 0;
                 }
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
-                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Width;
                 }
                 double def_w = Math.Min(_defaultSelectorColumnVarDimLength_horiz, MpAvMainWindowViewModel.Instance.MainWindowWidth);
                 //if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
@@ -389,7 +358,7 @@ namespace MonkeyPaste.Avalonia {
                     return 0;
                 }
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
+                    return MpAvMainView.Instance.MainWindowTrayGrid.Bounds.Height;
                 }
                 double def_h = _defaultSelectorColumnVarDimLength_vert;
                 //if (SelectedItem != null) {
@@ -686,6 +655,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsGridVisible));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActionDesignerVisible)));
                     OnPropertyChanged(nameof(Items));
+                    ResetDesignerViewCommand.Execute(null);
                     break;
             }
         }
