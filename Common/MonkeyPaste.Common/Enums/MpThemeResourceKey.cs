@@ -24,6 +24,16 @@
 
         ThemeHiColor,
         ThemeLoColor,
+        ThemeHi1Color,
+        ThemeLo1Color,
+        ThemeHi2Color,
+        ThemeLo2Color,
+        ThemeHi3Color,
+        ThemeLo3Color,
+        ThemeHi4Color,
+        ThemeLo4Color,
+        ThemeHi5Color,
+        ThemeLo5Color,
 
         ThemeBlackColor,
         ThemeWhiteColor,

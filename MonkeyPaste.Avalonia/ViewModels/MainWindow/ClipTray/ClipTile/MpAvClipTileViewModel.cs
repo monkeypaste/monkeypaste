@@ -87,9 +87,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFocused { get; set; }
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
            DisplayColor.ToAvBrush(force_alpha: 1);
-        IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
-            (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
-
+        
         string MpAvIHeaderMenuViewModel.HeaderTitle =>
             string.Empty;// CopyItemTitle;
         public IEnumerable<MpAvIMenuItemViewModel> HeaderMenuItems =>

@@ -54,7 +54,7 @@
 
         <Style Selector="local|MpAvPinTrayView Border#PinTrayContainerBorder">
             <Setter Property="Background"
-                    Value="{DynamicResource PinTrayBgBrush}" />
+                    Value="{Binding Source={DynamicResource PinTrayBgBrush}, ConverterParameter=mid, Converter={x:Static local:MpAvBrushToMutedBrushConverter.Instance}}" />
         </Style>
 
         <Style Selector="local|MpAvPinTrayView.dragover Border#PinTrayContainerBorder, local|MpAvQueryTrayView.dragover Border#QueryTrayContainerBorder">

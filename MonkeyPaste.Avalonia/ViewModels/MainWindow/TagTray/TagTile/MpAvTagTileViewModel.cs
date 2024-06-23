@@ -55,9 +55,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFocused { get; set; }
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
            TagHexColor.ToAvBrush(force_alpha: 1);
-        IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
-            (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
-
+        
         string MpAvIHeaderMenuViewModel.HeaderTitle =>
             TagName;
         public IEnumerable<MpAvIMenuItemViewModel> HeaderMenuItems =>
@@ -1063,7 +1061,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(TagHexColor):
                     if(this is MpAvIFocusHeaderMenuViewModel fhvm) {
                         fhvm.OnPropertyChanged(nameof(fhvm.HeaderBackground));
-                        fhvm.OnPropertyChanged(nameof(fhvm.HeaderForeground));
                     }
                     Dispatcher.UIThread.Post(async () => {
                         while (HasModelChanged) {

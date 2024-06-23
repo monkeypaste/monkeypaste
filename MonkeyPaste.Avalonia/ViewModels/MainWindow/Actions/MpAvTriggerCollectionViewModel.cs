@@ -56,9 +56,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvHeaderBackButtonType.Arrow;
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
             Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment2Color);
-        IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
-            (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
-        string MpAvIHeaderMenuViewModel.HeaderTitle =>
+         string MpAvIHeaderMenuViewModel.HeaderTitle =>
             UiStrings.ActionDesignerWindowTitle.Replace("'{0}'",string.Empty);
         IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
             [
@@ -373,7 +371,7 @@ namespace MonkeyPaste.Avalonia {
         public double SidebarWidth { get; set; } = 0;
         public double SidebarHeight { get; set; } = 0;
         public string SidebarBgHexColor =>
-            (Mp.Services.PlatformResource.GetResource("ActionPropertyListBgBrush") as IBrush).ToHex();
+            (Mp.Services.PlatformResource.GetResource("ActionBgBrush") as IBrush).ToHex();
 
         bool MpISidebarItemViewModel.CanResize =>
             !IsWindowOpen;
@@ -717,7 +715,7 @@ namespace MonkeyPaste.Avalonia {
                         //tacv.ActionDesignerOuterContainerBorder.MinWidth = Mp.Services.ScreenInfoCollection.Primary.WorkingArea.Width / 2;
                     }
                 } else {
-                    (this as MpAvIFocusHeaderMenuViewModel).BackCommand.Execute(null);
+                    (this as MpAvIHeaderMenuViewModel).BackCommand.Execute(null);
                 }
                 MpAvMainWindowViewModel.Instance.IsOrientationLocked = IsSelected;
                 
@@ -776,7 +774,7 @@ namespace MonkeyPaste.Avalonia {
                 Content = content,
                 DataContext = this,
                 Padding = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? new(): new Thickness(10),
-                Background = Brushes.DimGray
+                Background = Mp.Services.PlatformResource.GetResource<IBrush>("ActionBgBrush")
             };
             dw.Classes.Add("fadeIn");
             dw.Bind(

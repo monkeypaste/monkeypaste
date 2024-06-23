@@ -37,8 +37,8 @@
             <Setter Property="local:MpAvPointerCommandExtension.DefaultRoutingStrategy"
                     Value="Tunnel" />
             <Setter Property="local:MpAvPointerCommandExtension.DefaultIsEventHandled"
-                    Value="False" />
-            <Setter Property="local:MpAvPointerCommandExtension.LeftPressCommand"
+                    Value="True" />
+            <Setter Property="local:MpAvPointerCommandExtension.LeftReleaseCommand"
                     Value="{Binding ToggleExpandFrameCommand}" />
             <Setter Property="Background"
                     Value="{StaticResource HitTestableTransparent}" />
@@ -121,9 +121,10 @@
             <!--  PARAMS  -->
             <local:MpAvParameterCollectionView x:Name="ParameterCollectionView"
                                                Grid.Row="1"
-                                               IsVisible="{Binding IsExpanded}"
+                                               Classes="expand-height"
+                                               Height="{Binding IsExpanded, ConverterParameter=NaN|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                                                HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Top" />
+                                               VerticalAlignment="Stretch" />
         </Grid>
     </local:MpAvClipBorder>
 

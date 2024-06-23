@@ -194,7 +194,9 @@ namespace MonkeyPaste.Avalonia {
 
             bool is_done = false;
             void OnLoadComplete(object sender, EventArgs e) {
-                AssociatedObject.LoadComplete -= OnLoadComplete;
+                if(AssociatedObject != null) {
+                    AssociatedObject.LoadComplete -= OnLoadComplete;
+                }
                 is_done = true;
             }
             AssociatedObject.LoadComplete += OnLoadComplete;

@@ -63,7 +63,7 @@ namespace MonkeyPaste {
             double zoomFactor = 1,
             bool showGrid = true,
             bool suppressWrite = false) {
-            if(actionId <= 0) {
+            if(actionId <= 0 && !suppressWrite) {
                 throw new Exception($"Trigger props must have action id");
             }
 

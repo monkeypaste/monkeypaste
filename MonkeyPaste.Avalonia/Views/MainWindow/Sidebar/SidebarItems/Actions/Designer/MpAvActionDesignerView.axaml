@@ -120,7 +120,7 @@
                                   local:MpAvBoundsObserverExtension.IsEnabled="True"
                                   local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
                                   local:MpAvBoundsObserverExtension.ToScreen="True"
-                                  Background="{StaticResource HitTestableTransparent}"
+                                  Background="{DynamicResource HitTestableTransparent}"
                                   Classes="actionDesigner"
                                   ClipToBounds="False"
                                   GridLineBrush="BurlyWood"

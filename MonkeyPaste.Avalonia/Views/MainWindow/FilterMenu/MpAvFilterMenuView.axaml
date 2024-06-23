@@ -45,7 +45,7 @@
                     Value="False" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Border Background="{StaticResource MainWindowBgBrush}"
+    <Border Background="{Binding Source={DynamicResource FilterMenuBgBrush}, ConverterParameter=mid, Converter={x:Static local:MpAvBrushToMutedBrushConverter.Instance}}"
             Classes="dark-bevel-3">
         <Grid x:Name="FilterDockPanel"
               Classes.pin="{Binding IsPinTrayVisible, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"

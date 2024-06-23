@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
@@ -88,6 +89,8 @@ namespace MonkeyPaste.Avalonia {
                     SystemDecorations = SystemDecorations.Full,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
                     Content = new MpAvColorPickerView(selectedColor, fixedPalette, allowAlpha),
+                    Background = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? 
+                        Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor) : null
                 };
 
                 // NOTE pre-closing context menu cause it'll make funny activation behavior

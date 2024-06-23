@@ -3,7 +3,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-        <sys:TimeSpan x:Key="DefTransitionDur">0:0:0.5</sys:TimeSpan>
+        <sys:TimeSpan x:Key="DefTransitionDur">0:0:5.5</sys:TimeSpan>
     </Styles.Resources>
 
     <!--  FADE  -->

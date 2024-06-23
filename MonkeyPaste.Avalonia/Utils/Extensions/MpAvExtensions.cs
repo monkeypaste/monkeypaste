@@ -36,7 +36,6 @@ namespace MonkeyPaste.Avalonia {
 
         public static void RefreshHeaderProperties(this MpAvIHeaderMenuViewModel hmvm) {
             hmvm.OnPropertyChanged(nameof(hmvm.HeaderBackground));
-            hmvm.OnPropertyChanged(nameof(hmvm.HeaderForeground));
             hmvm.OnPropertyChanged(nameof(hmvm.HeaderMenuItems));
             hmvm.OnPropertyChanged(nameof(hmvm.HeaderTitle));
         }

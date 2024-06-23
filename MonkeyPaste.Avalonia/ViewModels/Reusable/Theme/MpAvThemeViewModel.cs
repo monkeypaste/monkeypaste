@@ -504,18 +504,14 @@ namespace MonkeyPaste.Avalonia {
             //pres = Math.Min(0.9d, Math.Max(0.5d, pres));
             prev = Math.Max(0.5d, prev);
             hex = MpColorHelpers.ColorFromHsv(preh, pres, prev).ToHex(true);
-
             hex.ToPortableColor().ColorToHsl(out double th, out double ts, out double tl);
             if (is_dark) {
-                //if (is_dark) {
                 tl = Math.Max(25d / 100d, tl - (15d / 100d));
-                //} else {
-                //    tl = Math.Min(75d / 100d, tl + (10d / 100d));
-                //}
-                hex = MpColorHelpers.ColorFromHsl(th, ts, tl).ToHex(true);
             } else {
 
+                //    tl = Math.Min(75d / 100d, tl + (10d / 100d));
             }
+            hex = MpColorHelpers.ColorFromHsl(th, ts, tl).ToHex(true);
             hex.ToPortableColor().ColorToHsv(out double h, out double s, out double v);
 
             // triadic    
@@ -554,9 +550,13 @@ namespace MonkeyPaste.Avalonia {
             // 9, 10, 11
 
             // when theme CHANGED from default/light to dark or vice versa swap most/least darkest gray references
-            string dark_gray = MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.3d)).ToHex(true); //MpSystemColors.dimgray.RemoveHexAlpha();
-            string med_gray = MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.1d)).ToHex(true); //MpSystemColors.gray.RemoveHexAlpha();
-            string light_gray = MpColorHelpers.ColorFromHsv(h, 0.05d, 0.9d).ToHex(true); //MpSystemColors.lightgray.RemoveHexAlpha();
+            //string dark_gray = MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.3d)).ToHex(true); 
+            //string med_gray = MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.1d)).ToHex(true); 
+            //string light_gray = MpColorHelpers.ColorFromHsv(h, 0.05d, 0.9d).ToHex(true); 
+            double gray_s = 0.03d;
+            string dark_gray = MpColorHelpers.ColorFromHsv(h, gray_s, 0.32).ToHex(true);
+            string med_gray = MpColorHelpers.ColorFromHsv(h, gray_s, 0.71).ToHex(true);
+            string light_gray = MpColorHelpers.ColorFromHsv(h, gray_s, 0.86d).ToHex(true);
             if (tt == MpThemeType.Light) {
                 palette.AddRange(new[] { dark_gray, med_gray, light_gray });
             } else {
@@ -606,10 +606,39 @@ namespace MonkeyPaste.Avalonia {
             palette.Add(MpColorHelpers.ColorFromHsl(th, ts, 0.8d).ToHex(true));
             // 28
             palette.Add(MpColorHelpers.ColorFromHsl(th, ts, 0.2d).ToHex(true));
+
+            double mute_s = MpAvBrushToMutedBrushConverter.DEF_MUTE_S;
+            double mute_l_hi = MpAvBrushToMutedBrushConverter.DEF_MUTE_L_HI;
+            double mute_l_lo = MpAvBrushToMutedBrushConverter.DEF_MUTE_L_LO;
             // 29
-            palette.Add(MpColorHelpers.ColorFromHsl(th, ts, 0.9d).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsl(th, mute_s, mute_l_hi).ToHex(true));
             // 30
-            palette.Add(MpColorHelpers.ColorFromHsl(th, ts, 0.1d).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsl(th, mute_s, mute_l_lo).ToHex(true));
+
+            // 31
+            palette.Add(MpColorHelpers.ColorFromHsl(h3_oc, mute_s, mute_l_hi).ToHex(true));
+            // 32
+            palette.Add(MpColorHelpers.ColorFromHsl(h3_oc, mute_s, mute_l_lo).ToHex(true));
+            
+            // 33
+            palette.Add(MpColorHelpers.ColorFromHsl(h1_te, mute_s, mute_l_hi).ToHex(true));
+            // 34
+            palette.Add(MpColorHelpers.ColorFromHsl(h1_te, mute_s, mute_l_lo).ToHex(true));
+            
+            // 35
+            palette.Add(MpColorHelpers.ColorFromHsl(h2_te, mute_s, mute_l_hi).ToHex(true));
+            // 36
+            palette.Add(MpColorHelpers.ColorFromHsl(h2_te, mute_s, mute_l_lo).ToHex(true));
+
+            // 37
+            palette.Add(MpColorHelpers.ColorFromHsl((h1_te - 30d).Wrap(0, 360), mute_s, mute_l_hi).ToHex(true));
+            // 38
+            palette.Add(MpColorHelpers.ColorFromHsl((h1_te - 30d).Wrap(0, 360), mute_s, mute_l_lo).ToHex(true));
+            
+            // 39
+            palette.Add(MpColorHelpers.ColorFromHsl(h3_te, mute_s, mute_l_hi).ToHex(true));
+            // 40
+            palette.Add(MpColorHelpers.ColorFromHsl(h3_te, mute_s, mute_l_lo).ToHex(true));
 
             var colors = palette.Select(x => x.ToAvColor()).ToArray();
             SetThemeColor(MpThemeResourceKey.ThemeColor, colors[0]);
@@ -656,6 +685,21 @@ namespace MonkeyPaste.Avalonia {
 
             SetThemeColor(MpThemeResourceKey.ThemeHiColor, is_dark ? colors[30] : colors[29]);
             SetThemeColor(MpThemeResourceKey.ThemeLoColor, is_dark ? colors[29] : colors[30]);
+
+            SetThemeColor(MpThemeResourceKey.ThemeHi1Color, is_dark ? colors[32] : colors[31]);
+            SetThemeColor(MpThemeResourceKey.ThemeLo1Color, is_dark ? colors[31] : colors[32]);
+
+            SetThemeColor(MpThemeResourceKey.ThemeHi2Color, is_dark ? colors[34] : colors[33]);
+            SetThemeColor(MpThemeResourceKey.ThemeLo2Color, is_dark ? colors[33] : colors[34]);
+
+            SetThemeColor(MpThemeResourceKey.ThemeHi3Color, is_dark ? colors[36] : colors[35]);
+            SetThemeColor(MpThemeResourceKey.ThemeLo3Color, is_dark ? colors[35] : colors[36]);
+
+            SetThemeColor(MpThemeResourceKey.ThemeHi4Color, is_dark ? colors[38] : colors[37]);
+            SetThemeColor(MpThemeResourceKey.ThemeLo4Color, is_dark ? colors[37] : colors[38]);
+
+            SetThemeColor(MpThemeResourceKey.ThemeHi5Color, is_dark ? colors[40] : colors[39]);
+            SetThemeColor(MpThemeResourceKey.ThemeLo5Color, is_dark ? colors[39] : colors[40]);
 
             // NON-DYNAMIC COLORS
             SetThemeValue(

@@ -80,8 +80,6 @@ namespace MonkeyPaste.Avalonia {
             MpAvHeaderBackButtonType.Arrow;
         IBrush MpAvIHeaderMenuViewModel.HeaderBackground =>
             Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor);
-        IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
-            (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
         string MpAvIHeaderMenuViewModel.HeaderTitle =>
             UiStrings.CommonSettingsTitle;
         IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>
@@ -89,6 +87,24 @@ namespace MonkeyPaste.Avalonia {
                 new MpAvMenuItemViewModel() {
                     IconSourceObj = "SearchImage",
                     Command = ToggleExpandFilterCommand
+                },
+                new MpAvMenuItemViewModel() {
+                    IconSourceObj = "Dots3x1Image",
+                    Command = new MpCommand<object>(
+                        (args)=>{
+                            if(args is not Control c) {
+                                return;
+                            }
+                            var sub_menu = new MpAvMenuItemViewModel() {
+                                SubItems = [
+                                    new MpAvMenuItemViewModel() {
+                                        Header = UiStrings.PrefRestoreDefaultsLabel,
+                                        Command = RestoreDefaultsCommand
+                                    }
+                                    ]
+                            };
+                            MpAvMenuView.ShowMenu(c, sub_menu);
+                        })
                 }
             ];
         ICommand MpAvIHeaderMenuViewModel.BackCommand =>

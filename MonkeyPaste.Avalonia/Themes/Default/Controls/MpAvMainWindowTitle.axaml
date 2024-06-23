@@ -9,7 +9,7 @@
     </Style>
     <Style Selector="Window#AvMainWindow:focus-within local|MpAvMainWindowTitleMenuView Border#TitleBorder">
         <Setter Property="Background"
-                Value="{DynamicResource TitleMenuActiveBgBrush}" />
+                Value="{Binding Source={DynamicResource TitleMenuActiveBgBrush}, ConverterParameter=mid, Converter={x:Static local:MpAvBrushToMutedBrushConverter.Instance}}" />
     </Style>
 
 

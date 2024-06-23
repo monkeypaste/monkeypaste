@@ -117,7 +117,8 @@ namespace MonkeyPaste {
                         x: dp.TranslateOffsetX,
                         y: dp.TranslateOffsetY,
                         zoomFactor: dp.ZoomFactor,
-                        showGrid: dp.IsGridVisible);
+                        showGrid: dp.IsGridVisible,
+                        suppressWrite: suppressWrite);
 
                 }
             }

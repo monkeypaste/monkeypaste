@@ -336,6 +336,7 @@
                                     IsVisible="{Binding IsChecked, ElementName=ExpandButton}"
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="Stretch"
+                                    Width="{Binding Bounds.Width, ElementName=TriggerComboBox}"
                                     Classes="headeredBorder"
                                     DataContext="{Binding FocusAction}">
                                 <local:MpAvActionPropertyView ClipToBounds="False"

@@ -20,7 +20,7 @@
         <!--  MOBILE ONLY  -->
         <Style Selector="Border#TitleBorder.mobile">
             <Setter Property="Background"
-                    Value="{DynamicResource TitleMenuActiveBgBrush}" />
+                    Value="{Binding Source={DynamicResource TitleMenuActiveBgBrush}, ConverterParameter=mid, Converter={x:Static local:MpAvBrushToMutedBrushConverter.Instance}}" />
         </Style>
 
         <Style Selector="Border#TitleBorder.mobile StackPanel.edge-cntr">

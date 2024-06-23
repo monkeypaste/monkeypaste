@@ -52,7 +52,6 @@ namespace MonkeyPaste.Avalonia {
         IEnumerable<MpAvIMenuItemViewModel> HeaderMenuItems { get; }
         string HeaderTitle { get; }
         IBrush HeaderBackground { get; }
-        IBrush HeaderForeground { get; }
         ICommand BackCommand { get; }
         object BackCommandParameter { get; }
         MpAvHeaderBackButtonType BackButtonType { get; }

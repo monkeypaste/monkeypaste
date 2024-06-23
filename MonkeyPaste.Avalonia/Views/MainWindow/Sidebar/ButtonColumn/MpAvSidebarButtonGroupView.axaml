@@ -224,7 +224,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Border Classes="light-bevel-3"
-            Background="{DynamicResource ThemeGrayAccent3Brush}">
+            Background="{DynamicResource SidebarButtonsBgBrush}">
         <Grid x:Name="SidebarButtonGroupContainerGrid"
               Classes="oriented"
               Width="{Binding $parent.Bounds.Width}"

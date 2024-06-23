@@ -46,9 +46,9 @@
                     Value="{Binding Source={StaticResource CloseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
     </local:MpAvUserControl.Styles>
-  
+
     <Border x:Name="HeaderBorder"
-            Background="{Binding HeaderBackground}"
+            Background="{Binding HeaderBackground, ConverterParameter=mid, Converter={x:Static local:MpAvBrushToMutedBrushConverter.Instance}}"
             Classes="light-bevel-5">
 
         <Grid x:Name="HeaderContainer"
@@ -77,7 +77,7 @@
                 <TextBlock x:Name="TitleTextBlock"
                            Classes.has-title="{Binding HeaderTitle, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                            Effect="{Binding $self.Foreground, Converter={x:Static local:MpAvBrushToDropShadowEffectConverter.Instance}}"
-                           Foreground="{Binding HeaderForeground}"
+                           Foreground="{Binding Background, ElementName=HeaderBorder, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
                            FontSize="26"
                            FontWeight="Bold"
                            VerticalAlignment="Center"

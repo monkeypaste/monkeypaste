@@ -493,12 +493,18 @@
 
         <!--  Footer  -->
         <Border x:Name="FooterContainer"
-                IsVisible="{Binding !IsLoginOnly}"
                 DockPanel.Dock="Bottom"
                 HorizontalAlignment="Stretch"
                 BorderThickness="0,1.5,0,0"
                 BorderBrush="Silver"
                 MinHeight="48">
+            <Border.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!IsLoginOnly" />
+                    <Binding Path="IsMultiWindow"
+                             Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                </MultiBinding>
+            </Border.IsVisible>
             <DockPanel>
                 <Button x:Name="ResetButton"
                         IsVisible="{Binding IsPrefTabSelected}"

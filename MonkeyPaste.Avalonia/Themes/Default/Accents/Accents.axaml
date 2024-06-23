@@ -253,7 +253,7 @@
         <SolidColorBrush x:Key="ContentLinkColor_dark" Color="Cyan" />
         <SolidColorBrush x:Key="ContentLinkHoverColor_dark" Color="Salmon" />
 
-        <SolidColorBrush x:Key="MainWindowBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="MainWindowBgBrush" Color="{DynamicResource ThemeHiColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  GRID SPLITTERS  -->
 
@@ -304,6 +304,7 @@
         <SolidColorBrush x:Key="TitleMenuInactiveBgBrush" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  FILTER MENU  -->
+        <SolidColorBrush x:Key="FilterMenuBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ADV SEARCH  -->
         <SolidColorBrush x:Key="SearchCriteriaBgBrush" Color="{DynamicResource ThemeCompliment5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
@@ -312,8 +313,6 @@
         <SolidColorBrush x:Key="SearchCriteriaRowBgBrush2" Color="{DynamicResource ThemeCompliment5DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <!--  SIDE BAR  -->
-
-        <SolidColorBrush x:Key="SidebarButtonGroupBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  PARAMETERS  -->
 
@@ -324,20 +323,20 @@
         <SolidColorBrush x:Key="PluginParameterItemHoverBgBrush" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
 
         <!--  SIDEBAR BGS  -->
-        <SolidColorBrush x:Key="TagTreeBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="TagTreeBgBrush" Color="{DynamicResource ThemeHi1Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  CLIPBOARD SIDEBAR  -->
 
-        <SolidColorBrush x:Key="ClipboardSidebarBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ClipboardSidebarBgBrush" Color="{DynamicResource ThemeHiC2olor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ANALYZER SIDEBAR  -->
 
-        <SolidColorBrush x:Key="AnalyzerSidebarBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="AnalyzerSidebarBgBrush" Color="{DynamicResource ThemeHi3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ACTION SIDEBAR  -->
 
-        <SolidColorBrush x:Key="ActionPropertyListBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
-        <SolidColorBrush x:Key="ActionDesignerBgBrush" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ActionBgBrush" Color="{DynamicResource ThemeHi4Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ActionDesignerBgBrush" Color="{DynamicResource ThemeLo5Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  TAG TILE  -->
         <!--  BG  -->
@@ -356,11 +355,10 @@
         <SolidColorBrush x:Key="ContentTrayDragOverBgBrush" Color="{DynamicResource ThemeCompliment1DarkColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
         <!--  CLIP TRAY  -->
 
-        <SolidColorBrush x:Key="ClipTrayBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ClipTrayBgBrush" Color="{DynamicResource ThemeHiColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  PIN TRAY  -->
         <SolidColorBrush x:Key="PinTrayBgBrush" Color="{DynamicResource ThemeCompliment1Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
-        <SolidColorBrush x:Key="PinTrayShadowBrush" Color="{DynamicResource ThemeCompliment1DarkColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
 
         <!--  CLIP TILE  -->
@@ -376,7 +374,7 @@
 
         <!--  BORDER  -->
         <!--  SETTINGS WINDOW  -->
-        <SolidColorBrush x:Key="SettingsWindowBgBrush" Color="{DynamicResource ThemeColor}" />
+        <SolidColorBrush x:Key="SettingsWindowBgBrush" Color="{DynamicResource ThemeHiColor}" />
 
         <!--  TOGGLE SWITCH  -->
 

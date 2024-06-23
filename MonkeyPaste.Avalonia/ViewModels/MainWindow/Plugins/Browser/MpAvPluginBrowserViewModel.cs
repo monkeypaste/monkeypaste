@@ -49,8 +49,6 @@ namespace MonkeyPaste.Avalonia {
             MpAvThemeViewModel.Instance.IsThemeDark ?
                     Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeLightColor) :
                     Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeDarkColor);
-        IBrush MpAvIHeaderMenuViewModel.HeaderForeground =>
-            (this as MpAvIHeaderMenuViewModel).HeaderBackground.ToHex().ToContrastForegoundColor().ToAvBrush();
         string MpAvIHeaderMenuViewModel.HeaderTitle =>
             UiStrings.PluginBrowserWindowTitle;
         IEnumerable<MpAvIMenuItemViewModel> MpAvIHeaderMenuViewModel.HeaderMenuItems =>

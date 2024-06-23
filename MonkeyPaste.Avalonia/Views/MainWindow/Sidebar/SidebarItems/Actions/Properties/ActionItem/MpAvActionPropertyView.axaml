@@ -128,19 +128,20 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Bottom" />
         <Border Grid.Row="2"
+                BorderThickness="1"
+                ClipToBounds="False"
+                CornerRadius="10"
+                BorderBrush="{Binding ActionBackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
+                Background="{Binding ActionBackgroundHexColor, ConverterParameter=mutedmid, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+                Effect="drop-shadow(3 3 7 black)"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch">
             <Grid RowDefinitions="Auto,*,Auto">
 
                 <!--  ACTION HEADER  -->
 
-                <local:MpAvActionPropertyHeaderView CornerRadius="10"
-                                                    BorderBrush="{Binding $self.Background, ConverterParameter=compliment, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
-                                                    Background="{Binding ActionBackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
-                                                    Padding="5,0"
+                <local:MpAvActionPropertyHeaderView Padding="5,0"
                                                     Margin="0,0,0,10"
-                                                    ClipToBounds="False"
-                                                    Effect="drop-shadow(3 3 7 black)"
                                                     HorizontalAlignment="Stretch" />
                 <!--  ACTION PARAMS  -->
                 <local:MpAvParameterCollectionView Grid.Row="1"
