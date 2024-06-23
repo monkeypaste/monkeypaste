@@ -3029,4 +3029,10 @@ Los atajos globales ahora se pueden habilitar en el menú de la bandeja del sist
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaxis</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Vista</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Envolver texto</value>
+  </data>
 </root>

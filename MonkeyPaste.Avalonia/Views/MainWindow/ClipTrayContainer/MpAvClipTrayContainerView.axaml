@@ -158,7 +158,7 @@
     </local:MpAvUserControl.Styles>
     <!--  NOTE! Layout is in mw code behind orientation change  -->
     <Grid x:Name="ClipTrayContainerGrid"
-          Background="{DynamicResource ClipTrayBgColor}"
+          Background="{DynamicResource ClipTrayBgBrush}"
           Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           Classes.shadows="{Binding ShowTileShadow}"
           Classes.busy="{Binding IsAnyBusy}"

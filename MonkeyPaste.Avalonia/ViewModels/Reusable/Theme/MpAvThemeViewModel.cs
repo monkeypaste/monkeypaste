@@ -1,15 +1,21 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Layout;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -369,10 +375,63 @@ namespace MonkeyPaste.Avalonia {
             return (T)Mp.Services?.PlatformResource?.GetResource(trk.ToString());
         }
 
-        private void SetThemeValue(MpThemeResourceKey trk, object value) {
-            Mp.Services?.PlatformResource?.SetResource(trk.ToString(), value);
-
+        private void SetThemeValue(MpThemeResourceKey trk, object value) {            
+            Mp.Services?.PlatformResource?.SetResource(trk.ToString(), value, false);
         }
+        
+        private void SetThemeColor(MpThemeResourceKey trk, Color color, MpThemeResourceKey opacityKey = MpThemeResourceKey.GlobalBgOpacity) {
+            // set theme color resource
+            string color_key = trk.ToString();
+            Mp.Services?.PlatformResource?.SetResource(color_key, color, true);
+
+            // create brush using color and opacity bindings
+            SolidColorBrush scb = new SolidColorBrush() {
+                Color = color,
+                Opacity = GetThemeValue<double>(opacityKey,1)
+            };
+            string brush_key = color_key.Replace("Color", "Brush");
+            Mp.Services?.PlatformResource?.SetResource(brush_key, scb, true);
+        }
+
+        private string GetThemeCss() {
+            var sb = new StringBuilder();
+            var props = new Dictionary<string, string>();
+            foreach(MpThemeResourceKey key in Enum.GetValues(typeof(MpThemeResourceKey))) {
+                if(!key.ToString().EndsWith("Color")) {
+                    continue;
+                }
+                var valObj = Mp.Services?.PlatformResource?.GetResource(key.ToString());
+                string hex = null;
+                if (valObj is IBrush b) {
+                    hex = b.ToHex();
+                } else if (valObj is Color c) {
+                    hex = c.ToHex();
+                }
+                if(string.IsNullOrWhiteSpace(hex)) {
+                    continue;
+                }
+                props.AddOrReplace(key.ToString(), hex);
+
+            }
+            foreach(var kvp in Application.Current.Resources) {
+                string hex = null;
+                var valObj = kvp.Value;
+                if (valObj is SolidColorBrush scb) {
+                    hex = scb.ToHex();
+                } else if (valObj is Color c) {
+                    hex = c.ToHex();
+                } else {
+                    continue;
+                }
+                if (string.IsNullOrWhiteSpace(hex)) {
+                    continue;
+                }
+                props.AddOrReplace(kvp.Key.ToString(), hex);
+            }
+            props.OrderBy(x => x.Key).ForEach(x => sb.AppendLine($".{x.Key} {{ background-color: {MpColorHelpers.HexToWebHex(x.Value)}}}"));
+            return sb.ToString();
+        }
+
         private void CreatePalette() {
             // test: #b511db
 
@@ -437,6 +496,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             MpThemeType tt = MpAvPrefViewModel.Instance.ThemeType;
+            bool is_dark = tt == MpThemeType.Dark;
             string hex = MpAvPrefViewModel.Instance.ThemeColor;
             // prepass selected color to get decent chroma
             // V >= 50, S >= 50
@@ -446,8 +506,8 @@ namespace MonkeyPaste.Avalonia {
             hex = MpColorHelpers.ColorFromHsv(preh, pres, prev).ToHex(true);
 
             hex.ToPortableColor().ColorToHsl(out double th, out double ts, out double tl);
-            if (tt == MpThemeType.Dark) {
-                //if (tt == MpThemeType.Dark) {
+            if (is_dark) {
+                //if (is_dark) {
                 tl = Math.Max(25d / 100d, tl - (15d / 100d));
                 //} else {
                 //    tl = Math.Min(75d / 100d, tl + (10d / 100d));
@@ -520,7 +580,7 @@ namespace MonkeyPaste.Avalonia {
             // 19
             palette.Add(MpColorHelpers.GetDarkerHexColor(MpColorHelpers.ColorFromHsv(h, 0.3d, 0.9d).ToHex(true)));
 
-            if (tt == MpThemeType.Dark) {
+            if (is_dark) {
                 // 20 (fg)
                 palette.Add(palette[13]);
                 // 21 (bg)
@@ -546,73 +606,83 @@ namespace MonkeyPaste.Avalonia {
             palette.Add(MpColorHelpers.ColorFromHsl(th, ts, 0.8d).ToHex(true));
             // 28
             palette.Add(MpColorHelpers.ColorFromHsl(th, ts, 0.2d).ToHex(true));
+            // 29
+            palette.Add(MpColorHelpers.ColorFromHsl(th, ts, 0.9d).ToHex(true));
+            // 30
+            palette.Add(MpColorHelpers.ColorFromHsl(th, ts, 0.1d).ToHex(true));
 
             var colors = palette.Select(x => x.ToAvColor()).ToArray();
-            SetThemeValue(MpThemeResourceKey.ThemeColor, colors[0]);
-            SetThemeValue(MpThemeResourceKey.ThemeAccent1BgColor, colors[1]);
-            SetThemeValue(MpThemeResourceKey.ThemeAccent5BgColor, colors[2]);
-            SetThemeValue(MpThemeResourceKey.ThemeAccent5Color, colors[3]);
-            SetThemeValue(MpThemeResourceKey.ThemeAccent3Color, colors[4]);
-            SetThemeValue(MpThemeResourceKey.ThemeAccent2Color, colors[5]);
-            SetThemeValue(MpThemeResourceKey.ThemeAccent1Color, colors[6]);
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment1Color, colors[7]);
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment1DarkColor, colors[8]);
+            SetThemeColor(MpThemeResourceKey.ThemeColor, colors[0]);
+            SetThemeColor(MpThemeResourceKey.ThemeAccent1BgColor, colors[1]);
+            SetThemeColor(MpThemeResourceKey.ThemeAccent5BgColor, colors[2]);
+            SetThemeColor(MpThemeResourceKey.ThemeAccent5Color, colors[3]);
+            SetThemeColor(MpThemeResourceKey.ThemeAccent3Color, colors[4]);
+            SetThemeColor(MpThemeResourceKey.ThemeAccent2Color, colors[5]);
+            SetThemeColor(MpThemeResourceKey.ThemeAccent1Color, colors[6]);
+            SetThemeColor(MpThemeResourceKey.ThemeCompliment1Color, colors[7]);
+            SetThemeColor(MpThemeResourceKey.ThemeCompliment1DarkColor, colors[8]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeGrayAccent1Color, colors[9]);
-            SetThemeValue(MpThemeResourceKey.ThemeGrayAccent2Color, colors[10]);
-            SetThemeValue(MpThemeResourceKey.ThemeGrayAccent3Color, colors[11]);
+            SetThemeColor(MpThemeResourceKey.ThemeGrayAccent1Color, colors[9]);
+            SetThemeColor(MpThemeResourceKey.ThemeGrayAccent2Color, colors[10]);
+            SetThemeColor(MpThemeResourceKey.ThemeGrayAccent3Color, colors[11]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeBlackColor, colors[12]);
-            SetThemeValue(MpThemeResourceKey.ThemeWhiteColor, colors[13]);
+            SetThemeColor(MpThemeResourceKey.ThemeBlackColor, colors[12]);
+            SetThemeColor(MpThemeResourceKey.ThemeWhiteColor, colors[13]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeAccent4Color, colors[14]);
-            SetThemeValue(MpThemeResourceKey.ThemeAccent4BgColor, colors[15]);
+            SetThemeColor(MpThemeResourceKey.ThemeAccent4Color, colors[14]);
+            SetThemeColor(MpThemeResourceKey.ThemeAccent4BgColor, colors[15]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment2Color, colors[16]);
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment2DarkColor, colors[17]);
+            SetThemeColor(MpThemeResourceKey.ThemeCompliment2Color, colors[16]);
+            SetThemeColor(MpThemeResourceKey.ThemeCompliment2DarkColor, colors[17]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment3Color, colors[18]);
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment3DarkColor, colors[19]);
+            SetThemeColor(MpThemeResourceKey.ThemeCompliment3Color, colors[18]);
+            SetThemeColor(MpThemeResourceKey.ThemeCompliment3DarkColor, colors[19]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeInteractiveColor, colors[20]);
-            SetThemeValue(MpThemeResourceKey.ThemeInteractiveBgColor, colors[21]);
+            SetThemeColor(MpThemeResourceKey.ThemeInteractiveColor, colors[20], MpThemeResourceKey.GlobalInteractiveOpacity);
+            SetThemeColor(MpThemeResourceKey.ThemeInteractiveBgColor, colors[21], MpThemeResourceKey.GlobalInteractiveBgOpacity);
 
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment4Color, colors[22]);
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment4DarkColor, colors[23]);
+            SetThemeColor(MpThemeResourceKey.ThemeCompliment4Color, colors[22]);
+            SetThemeColor(MpThemeResourceKey.ThemeCompliment4DarkColor, colors[23]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment5Color, colors[24]);
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment5DarkColor, colors[25]);
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment5LighterColor, colors[26]);
+            SetThemeColor(MpThemeResourceKey.ThemeCompliment5Color, colors[24]);
+            SetThemeColor(MpThemeResourceKey.ThemeCompliment5DarkColor, colors[25]);
+            SetThemeColor(MpThemeResourceKey.ThemeCompliment5LighterColor, colors[26]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeLightColor, colors[27]);
-            SetThemeValue(MpThemeResourceKey.ThemeDarkColor, colors[28]);
+            SetThemeColor(MpThemeResourceKey.ThemeLightColor, colors[27]);
+            SetThemeColor(MpThemeResourceKey.ThemeDarkColor, colors[28]);
+            
+            SetThemeColor(MpThemeResourceKey.ThemeLightBgColor, colors[29]);
+            SetThemeColor(MpThemeResourceKey.ThemeDarkBgColor, colors[30]);
+
+            SetThemeColor(MpThemeResourceKey.ThemeHiColor, is_dark ? colors[30] : colors[29]);
+            SetThemeColor(MpThemeResourceKey.ThemeLoColor, is_dark ? colors[29] : colors[30]);
 
             // NON-DYNAMIC COLORS
             SetThemeValue(
                 MpThemeResourceKey.ThemeContentLinkColor,
-                tt == MpThemeType.Dark ?
+                is_dark ?
                     Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkColor_dark") :
                     Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkColor_light"));
             
             SetThemeValue(
                 MpThemeResourceKey.ThemeContentLinkHoverColor,
-                tt == MpThemeType.Dark ?
+                is_dark ?
                     Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkHoverColor_dark") :
                     Mp.Services.PlatformResource.GetResource<IBrush>("ContentLinkHoverColor_light"));
 
             SetThemeValue(
                 MpThemeResourceKey.ThemePasteToolbarBgColor,
-                tt == MpThemeType.Dark ?
+                is_dark ?
                     Mp.Services.PlatformResource.GetResource<Color>("PasteToolbarBgColor_dark") :
                     Mp.Services.PlatformResource.GetResource<Color>("PasteToolbarBgColor"));
             SetThemeValue(
                 MpThemeResourceKey.ThemePasteButtonDefaultBgColor,
-                tt == MpThemeType.Dark ?
+                is_dark ?
                     Mp.Services.PlatformResource.GetResource<Color>("PasteButtonDefaultBgColor_dark") :
                     Mp.Services.PlatformResource.GetResource<Color>("PasteButtonDefaultBgColor"));
             SetThemeValue(
                 MpThemeResourceKey.ThemePasteButtonCustomBgColor,
-                tt == MpThemeType.Dark ?
+                is_dark ?
                     Mp.Services.PlatformResource.GetResource<Color>("PasteButtonCustomBgColor_dark") :
                     Mp.Services.PlatformResource.GetResource<Color>("PasteButtonCustomBgColor"));
 
@@ -638,6 +708,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+        public ICommand SaveThemeToFileCommand => new MpCommand(
+            () => {
+                Dispatcher.UIThread.Post(() => {
+                    CreatePalette();
+                    string theme_css_path = @"C:\Users\tkefauver\Desktop\theme.css";
+                    string theme_css_text = GetThemeCss();
+                    MpFileIo.WriteTextToFile(theme_css_path, theme_css_text);
+                });
+            });
         #endregion
     }
 }

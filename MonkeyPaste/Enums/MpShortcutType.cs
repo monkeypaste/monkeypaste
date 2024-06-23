@@ -59,6 +59,7 @@
         ResetSelectionZoom,
         ClearPinTray,
         ToggleGlobalHooks,
+        ToggleXamlHotReload,
 
         // CUT-OFF 
         MAX_APP_SHORTCUT,

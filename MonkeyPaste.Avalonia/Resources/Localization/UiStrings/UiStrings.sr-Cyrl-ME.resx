@@ -3029,4 +3029,10 @@
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Синтакса</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Поглед</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Преломити текст</value>
+  </data>
 </root>

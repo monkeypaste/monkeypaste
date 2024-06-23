@@ -3029,4 +3029,10 @@ feedback@monkepte.com</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Շարահյուսություն</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Տեղավորել</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Փաթեթավորեք տեքստը</value>
+  </data>
 </root>

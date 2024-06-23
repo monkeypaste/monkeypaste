@@ -3029,4 +3029,10 @@
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>통사론</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>보다</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>텍스트를 랩합니다</value>
+  </data>
 </root>

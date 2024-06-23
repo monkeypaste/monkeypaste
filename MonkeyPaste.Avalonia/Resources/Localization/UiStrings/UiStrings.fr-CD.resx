@@ -3029,4 +3029,10 @@ Les raccourcis mondiaux peuvent désormais être activés dans le menu du platea
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Syntaxe</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Voir</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Envelopper du texte</value>
+  </data>
 </root>

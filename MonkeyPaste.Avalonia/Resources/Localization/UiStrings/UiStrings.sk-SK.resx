@@ -3029,4 +3029,10 @@ Globálne skratky je teraz možné povoliť v ponuke System Tray</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Syntax</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>vyhliadka</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Obtekanie textu</value>
+  </data>
 </root>

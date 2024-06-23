@@ -3029,4 +3029,10 @@ Shortcuts globali issa jistgħu jiġu attivati ​​fil-menu tat-trej tas-siste
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintassi</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Veduta</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Test Kebbeb</value>
+  </data>
 </root>

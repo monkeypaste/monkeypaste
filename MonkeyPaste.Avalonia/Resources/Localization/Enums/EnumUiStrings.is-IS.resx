@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>Sláðu inn lykilaðgerð</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Skiptu um xaml heitt endurhleðslu</value>
+  </data>
 </root>

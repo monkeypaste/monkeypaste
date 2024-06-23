@@ -3029,4 +3029,10 @@ Bellach gellir galluogi Llwybrau Byr Byd-eang yn y Ddewislen Hambwrdd System</va
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Cystrawen</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Golygfa</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Lapiwch Testun</value>
+  </data>
 </root>

@@ -3029,4 +3029,10 @@ Monkeypaste на уредот
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Синтакса</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Преглед</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Завиткан текст</value>
+  </data>
 </root>

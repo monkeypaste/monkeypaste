@@ -3029,4 +3029,10 @@ feedback@monkeypaste.com</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>بناء الجملة</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>منظر</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>دوران النص</value>
+  </data>
 </root>

@@ -3029,4 +3029,10 @@ Globale snelkoppelingen kunnen nu worden ingeschakeld in het menu System Tray</v
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Syntaxis</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Weergave</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Wikkel tekst</value>
+  </data>
 </root>

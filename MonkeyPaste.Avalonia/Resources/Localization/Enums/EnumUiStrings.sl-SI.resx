@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>Vnesite ključno dejanje</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Preklopite xaml vroče nalaganje</value>
+  </data>
 </root>

@@ -3029,4 +3029,10 @@ FEEDBOWY@monkeypue.com</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Синтакс</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Харагдац</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Текст</value>
+  </data>
 </root>

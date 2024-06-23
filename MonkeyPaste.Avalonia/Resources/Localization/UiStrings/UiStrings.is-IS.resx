@@ -3029,4 +3029,10 @@ Nú er hægt að virkja alþjóðlegar flýtileiðir í kerfisbakkavalmyndinni</
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Setningafræði</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Útsýni</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Vafðu texta</value>
+  </data>
 </root>

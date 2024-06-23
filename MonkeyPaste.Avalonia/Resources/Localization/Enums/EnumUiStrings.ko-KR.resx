@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>키 조치를 입력하십시오</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>XAML 핫 리로드 토글</value>
+  </data>
 </root>

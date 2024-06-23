@@ -3029,4 +3029,10 @@ Is féidir aicearraí domhanda a chumasú anois sa roghchlár tráidire córais<
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Comhrtán</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Amharc ar</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Téacs Timfhilleadh</value>
+  </data>
 </root>

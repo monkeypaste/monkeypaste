@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>Voer de sleutelactie in</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Schakel XAML Hot Reload</value>
+  </data>
 </root>

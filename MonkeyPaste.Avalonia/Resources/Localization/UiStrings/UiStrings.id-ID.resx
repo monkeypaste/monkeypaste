@@ -3029,4 +3029,10 @@ Pintasan global sekarang dapat diaktifkan di menu baki sistem</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaksis</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Melihat</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Bungkus teks</value>
+  </data>
 </root>

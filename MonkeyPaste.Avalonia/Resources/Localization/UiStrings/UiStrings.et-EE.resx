@@ -3029,4 +3029,10 @@ Globaalsed otseteed saab nüüd süsteemialuse menüüs lubada</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Süntaks</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Vaade</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Mähisekst</value>
+  </data>
 </root>

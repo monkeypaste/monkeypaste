@@ -3029,4 +3029,10 @@
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>ಅಂತರ್ರಚನೆ</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ನೋಟ</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>ಪಠ್ಯವನ್ನು ಸುತ್ತು</value>
+  </data>
 </root>

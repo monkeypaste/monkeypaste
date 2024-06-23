@@ -3029,4 +3029,10 @@
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>वाक्षकहरू</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>दृश्य</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>पाठ लपेट्नुहोस्</value>
+  </data>
 </root>

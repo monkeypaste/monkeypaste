@@ -3029,4 +3029,10 @@ Global gysga ýollar ulgam tromy menýusynda başlap biler</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaksis</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Görüş</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>DRAPE Teksti</value>
+  </data>
 </root>

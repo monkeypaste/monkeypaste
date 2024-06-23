@@ -3029,4 +3029,10 @@ Globální zkratky lze nyní povolit v nabídce hlavního panelu</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Syntax</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Pohled</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Obtékání textu</value>
+  </data>
 </root>

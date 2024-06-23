@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>പ്രധാന പ്രവർത്തനം നൽകുക</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Xaml Hot Holl ലോഡുചെയ്യാൻ ടോഗിൾ ചെയ്യുക</value>
+  </data>
 </root>

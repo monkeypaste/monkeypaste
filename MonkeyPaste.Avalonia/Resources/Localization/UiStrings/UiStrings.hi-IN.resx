@@ -3029,4 +3029,10 @@
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>वाक्य - विन्यास</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>देखना</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>पाठ को आवृत करना</value>
+  </data>
 </root>

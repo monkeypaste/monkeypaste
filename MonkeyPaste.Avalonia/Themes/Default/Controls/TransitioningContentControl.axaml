@@ -1,0 +1,23 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+
+    <Style Selector="TransitioningContentControl.header"
+           x:DataType="local:MpAvIHeaderMenuViewModel">
+        <Setter Property="TransitioningContentControl.PageTransition">
+            <Setter.Value>
+                <PageSlide Orientation="Horizontal"
+                           Duration="0:00:00.25" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector="TransitioningContentControl.header"
+           x:DataType="local:MpAvIFocusHeaderMenuViewModel">
+        <Setter Property="TransitioningContentControl.PageTransition">
+            <Setter.Value>
+                <CrossFade Duration="0:00:00.25" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+</Styles>

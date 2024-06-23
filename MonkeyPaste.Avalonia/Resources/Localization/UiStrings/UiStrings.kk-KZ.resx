@@ -3029,4 +3029,10 @@ feedback@monkeyptaste.com</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Синтаксис</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Көзқарас</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Мәтін орап алыңыз</value>
+  </data>
 </root>

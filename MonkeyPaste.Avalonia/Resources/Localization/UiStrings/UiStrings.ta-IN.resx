@@ -3029,4 +3029,10 @@ furedback@monkeypaste.com</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>தொடரியல்</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>பார்வை</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>உரையை மடக்கு</value>
+  </data>
 </root>

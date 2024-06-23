@@ -3029,4 +3029,10 @@ Changeзгәрешләр өчен сылтамага иярегез
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Синтаксис</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Карау</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Текстны төрү</value>
+  </data>
 </root>

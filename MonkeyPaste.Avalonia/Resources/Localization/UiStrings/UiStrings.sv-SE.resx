@@ -3029,4 +3029,10 @@ Globala genvägar kan nu vara aktiverade i systemfack -menyn</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Syntax</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Se</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Lindningstext</value>
+  </data>
 </root>

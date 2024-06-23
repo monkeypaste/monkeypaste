@@ -3094,4 +3094,10 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>ਸਿੰਟੈਕਸ</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ਵੇਖੋ</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>ਟੈਕਸਟ ਲਪੇਟੋ</value>
+  </data>
 </root>

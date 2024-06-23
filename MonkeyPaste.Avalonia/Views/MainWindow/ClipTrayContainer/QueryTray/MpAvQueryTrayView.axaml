@@ -90,7 +90,7 @@
                          Classes="clipTileListBox queryListBox"
                          Classes.bright="{Binding $self.Background, Converter={x:Static local:MpAvBrushToIsBrightBoolConverter.Instance}}"
                          IsTextSearchEnabled="False"
-                         Background="{DynamicResource ClipTrayBgColor}"
+                         Background="{DynamicResource ClipTrayBgBrush}"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Top"
                          BorderThickness="0"

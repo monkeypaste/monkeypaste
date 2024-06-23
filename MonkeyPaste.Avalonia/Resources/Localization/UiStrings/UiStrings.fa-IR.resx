@@ -3029,4 +3029,10 @@ MonkeyPaste روی دستگاه
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>نحو</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>چشم انداز</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>متن بسته بندی</value>
+  </data>
 </root>

@@ -356,7 +356,7 @@
         <SolidColorBrush x:Key="ContentTrayDragOverBgBrush" Color="{DynamicResource ThemeCompliment1DarkColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
         <!--  CLIP TRAY  -->
 
-        <SolidColorBrush x:Key="ClipTrayBgColor" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ClipTrayBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  PIN TRAY  -->
         <SolidColorBrush x:Key="PinTrayBgBrush" Color="{DynamicResource ThemeCompliment1Color}" Opacity="{DynamicResource GlobalBgOpacity}" />

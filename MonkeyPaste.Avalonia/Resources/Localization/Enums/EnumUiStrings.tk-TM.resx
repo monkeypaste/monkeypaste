@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>Esasy hereketi giriziň</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Xaaml gyzgyn ýük ýüklenmek</value>
+  </data>
 </root>

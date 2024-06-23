@@ -3029,4 +3029,10 @@
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>বাক্য গঠন</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>দেখুন</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>টেক্সট মোড়ানো</value>
+  </data>
 </root>

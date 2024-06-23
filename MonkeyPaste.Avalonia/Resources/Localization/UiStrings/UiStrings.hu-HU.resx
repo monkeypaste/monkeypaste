@@ -3029,4 +3029,10 @@ A globális parancsikonok már engedélyezhetők a rendszer tálca menüben</val
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Szintaxis</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Kilátás</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Csomagolási szöveg</value>
+  </data>
 </root>

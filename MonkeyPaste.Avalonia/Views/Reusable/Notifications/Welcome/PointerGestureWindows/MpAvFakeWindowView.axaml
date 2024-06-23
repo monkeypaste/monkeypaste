@@ -15,7 +15,7 @@
         <!--  MW BACKGROUND  -->
         <Style Selector="Border#PlaceholderWindow">
             <Setter Property="Background"
-                    Value="{DynamicResource ClipTrayBgColor}" />
+                    Value="{DynamicResource ClipTrayBgBrush}" />
         </Style>
         <Style Selector="Border#PlaceholderWindow.dragover">
             <Setter Property="Background"

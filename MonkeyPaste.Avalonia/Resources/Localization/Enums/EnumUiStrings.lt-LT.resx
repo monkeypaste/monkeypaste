@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>Įveskite pagrindinį veiksmą</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Perjunkite „Xaml Hot Reload“</value>
+  </data>
 </root>

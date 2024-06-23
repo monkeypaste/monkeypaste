@@ -3029,4 +3029,10 @@ Globalni prečaci sada mogu biti omogućeni u izborniku Sistemske ladice</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaksa</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Pogled</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Zamotati tekst</value>
+  </data>
 </root>

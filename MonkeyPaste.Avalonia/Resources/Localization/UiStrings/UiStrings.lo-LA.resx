@@ -3029,4 +3029,10 @@ monkeypaste ໃນອຸປະກອນ
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>ການລອບຄົ້ນວົງຈອນ</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ທັດສະນະ</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>ຫໍ່ຕົວຫນັງສື</value>
+  </data>
 </root>

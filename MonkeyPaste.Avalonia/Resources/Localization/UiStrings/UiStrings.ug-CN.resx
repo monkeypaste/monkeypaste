@@ -3029,4 +3029,10 @@ tempo@Monkepaste.com</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Syntax</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>كۆرۈش</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>تېكىستنى ئوراپ قويۇڭ</value>
+  </data>
 </root>

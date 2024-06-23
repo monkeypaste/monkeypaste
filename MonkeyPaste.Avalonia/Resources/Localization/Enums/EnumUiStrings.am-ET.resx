@@ -1206,4 +1206,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>ቁልፍ ተግባር አስገባ</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>የ Xaml ሙቅ ዳግም ጫን ቀይር</value>
+  </data>
 </root>

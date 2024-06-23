@@ -80,6 +80,7 @@ namespace MonkeyPaste.Avalonia {
                             new string[] { "31ff874c-35fe-445d-b0e6-62828c775c78", "Enter", MpShortcutType.EnterKeyAction.ToString(), MpRoutingType.Internal.ToString()},
 #if DEBUG
                             new string[] { "15f42684-7e50-40fc-8dc8-6a1a6b1bed3f", "F4", MpShortcutType.ToggleGlobalHooks.ToString(), MpRoutingType.Override.ToString(),"False","False"},
+                            new string[] { "eedd7eb5-a880-4bd9-9ba3-527a3eb9d2a7", "F3", MpShortcutType.ToggleXamlHotReload.ToString(), MpRoutingType.Override.ToString(),"False","False"},
 #else
                             new string[] { "15f42684-7e50-40fc-8dc8-6a1a6b1bed3f", string.Empty, MpShortcutType.ToggleGlobalHooks.ToString(), MpRoutingType.Override.ToString(),"False","False"},
 #endif

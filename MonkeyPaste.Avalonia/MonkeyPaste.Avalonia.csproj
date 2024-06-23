@@ -151,6 +151,8 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvWindow.axaml" />
     
     <AvaloniaXaml Remove="Themes\Default\Controls\ToggleSwitch.axaml" />
+    
+    <AvaloniaXaml Remove="Themes\Default\Controls\TransitioningContentControl.axaml" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.shared.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.$(PlatformShortName).cs" />
   </ItemGroup>  
@@ -167,7 +169,7 @@
   </ItemGroup>
   
   <!-- HOT RELOAD -->
-  <!--<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <DefineConstants>$(DefineConstants);ENABLE_XAML_HOT_RELOAD</DefineConstants>
   </PropertyGroup>
 
@@ -175,7 +177,7 @@
     <PackageReference Condition="$(DefineConstants.Contains(ENABLE_XAML_HOT_RELOAD))" Include="Avalonia.Markup.Xaml.Loader" Version="$(AvaloniaVersion)" />
     <PackageReference Condition="$(DefineConstants.Contains(ENABLE_XAML_HOT_RELOAD))" Include="HotAvalonia" Version="1.1.1" />
     <PackageReference Include="HotAvalonia.Extensions" Version="1.1.1" PrivateAssets="All" />
-  </ItemGroup>-->
+  </ItemGroup>
     
   <!-- LOCALIZATION RESOURCES-->
 

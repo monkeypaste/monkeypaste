@@ -3029,4 +3029,10 @@ Comenzile rapide globale pot fi acum activate în meniul tăvii de sistem</value
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaxă</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Vedere</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Încadra textul</value>
+  </data>
 </root>

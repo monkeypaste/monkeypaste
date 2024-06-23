@@ -3029,4 +3029,10 @@ feedback@monkeypaste.com</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Синтаксис</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Көрүү</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Текстти ороо</value>
+  </data>
 </root>

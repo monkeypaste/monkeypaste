@@ -14,6 +14,7 @@
                 case MpShortcutType.ToggleListenToClipboard:
                 case MpShortcutType.ManuallyAddFromClipboard:
                 case MpShortcutType.ToggleGlobalHooks:
+                case MpShortcutType.ToggleXamlHotReload:
 
                 // USER
                 case MpShortcutType.PasteCopyItem:

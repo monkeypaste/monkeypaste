@@ -3029,4 +3029,10 @@ Os atalhos globais agora podem ser ativados no menu da bandeja do sistema</value
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaxe</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Visualizar</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Enrole o texto</value>
+  </data>
 </root>

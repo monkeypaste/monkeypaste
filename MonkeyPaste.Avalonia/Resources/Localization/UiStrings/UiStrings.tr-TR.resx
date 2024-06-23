@@ -3029,4 +3029,10 @@ Global kısayollar artık sistem tepsisi menüsünde etkinleştirilebilir</value
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sözdizimi</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Görüş</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Sarma Metni</value>
+  </data>
 </root>

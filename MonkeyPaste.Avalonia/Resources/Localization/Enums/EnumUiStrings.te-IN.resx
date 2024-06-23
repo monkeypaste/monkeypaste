@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>కీ చర్యను నమోదు చేయండి</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Xaml హాట్ రీలోడ్ టోగుల్ చేయండి</value>
+  </data>
 </root>

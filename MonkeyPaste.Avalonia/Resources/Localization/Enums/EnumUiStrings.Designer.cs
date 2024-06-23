@@ -2860,6 +2860,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Toggle Xaml Hot Reload.
+        /// </summary>
+        public static string MpShortcutType_ToggleXamlHotReload {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ToggleXamlHotReload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Undo.
         /// </summary>
         public static string MpShortcutType_Undo {

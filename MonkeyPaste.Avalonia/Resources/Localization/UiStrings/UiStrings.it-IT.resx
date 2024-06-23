@@ -3029,4 +3029,10 @@ Le scorciatoie globali possono ora essere abilitate nel menu del vassoio di sist
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintassi</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Visualizzazione</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Avvolgere il testo</value>
+  </data>
 </root>

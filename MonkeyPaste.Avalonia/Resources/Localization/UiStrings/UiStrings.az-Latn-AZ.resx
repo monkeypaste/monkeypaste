@@ -3094,4 +3094,10 @@ Qlobal Qısayolları indi Sistem Tablası Menyusunda aktivləşdirmək olar</val
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaksis</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Baxış</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Mətni Bükün</value>
+  </data>
 </root>

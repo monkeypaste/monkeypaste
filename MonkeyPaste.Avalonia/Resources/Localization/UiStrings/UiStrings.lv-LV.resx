@@ -3029,4 +3029,10 @@ Globālās saīsnes tagad var iespējot Sistēmas paplātes izvēlnē</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintakse</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Skats</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Aptināt tekstu</value>
+  </data>
 </root>

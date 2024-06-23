@@ -3094,4 +3094,10 @@ Hozirgi kunda tizimning trafik menyusida global yorliq yoqilishi mumkin</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaksis</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Ko'rinish</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Matnni o'rash</value>
+  </data>
 </root>

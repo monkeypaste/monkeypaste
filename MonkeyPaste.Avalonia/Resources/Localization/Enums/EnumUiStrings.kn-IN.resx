@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>ಕೀ ಕ್ರಿಯೆಯನ್ನು ನಮೂದಿಸಿ</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Xaml ಹಾಟ್ ರಿಲೋಡ್ ಅನ್ನು ಟಾಗಲ್ ಮಾಡಿ</value>
+  </data>
 </root>

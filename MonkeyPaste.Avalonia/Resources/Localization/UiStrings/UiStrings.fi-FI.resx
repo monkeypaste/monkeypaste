@@ -3029,4 +3029,10 @@ Globaalit pikakuvakkeet voidaan nyt ottaa käyttöön järjestelmälokero -valik
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Syntaksi</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Näkymä</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Kääriä teksti</value>
+  </data>
 </root>

@@ -3029,4 +3029,10 @@ feathback@monkeypaste.com</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>句法</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>看法</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>包裹文字</value>
+  </data>
 </root>

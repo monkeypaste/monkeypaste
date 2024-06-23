@@ -28,10 +28,18 @@
                       RowDefinitions="Auto,*">
                     <!--  HEADER  -->
                     <Border IsVisible="{TemplateBinding HeaderViewModel, Converter={x:Static local:MpAvHeaderMenuViewModelToIsVisibleConverter.Instance}}">
-                        <local:MpAvHeaderMenuView x:Name="HeaderPanel"
-                                                  x:DataType="local:MpAvIHeaderMenuViewModel"
-                                                  DataContext="{TemplateBinding HeaderViewModel}"
-                                                  Height="{Binding DefaultTitleMenuFixedLength, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}" />
+
+                        <TransitioningContentControl x:DataType="local:MpAvIHeaderMenuViewModel"
+                                                     Classes="header"
+                                                     DataContext="{TemplateBinding HeaderViewModel}"
+                                                     Content="{Binding .}">
+                            <TransitioningContentControl.ContentTemplate>
+                                <DataTemplate DataType="local:MpAvIHeaderMenuViewModel">
+                                    <local:MpAvHeaderMenuView x:Name="HeaderPanel"
+                                                              Height="{Binding DefaultTitleMenuFixedLength, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}" />
+                                </DataTemplate>
+                            </TransitioningContentControl.ContentTemplate>
+                        </TransitioningContentControl>
                     </Border>
 
                     <!--  CONTENT  -->

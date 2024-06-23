@@ -3029,4 +3029,10 @@ Monkeypaste მოწყობილობაზე
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Სინტაქსი</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ხედი</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>შეფუთვის ტექსტი</value>
+  </data>
 </root>

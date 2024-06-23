@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>कुंजी कार्रवाई दर्ज करें</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>टॉगल Xaml हॉट रीलोड</value>
+  </data>
 </root>

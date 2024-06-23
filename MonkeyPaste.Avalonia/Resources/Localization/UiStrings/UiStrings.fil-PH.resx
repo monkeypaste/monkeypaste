@@ -3029,4 +3029,10 @@ Maaari na ngayong paganahin ang mga global shortcut sa menu ng System Tray</valu
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Syntax</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Tingnan</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>I -wrap ang teksto</value>
+  </data>
 </root>

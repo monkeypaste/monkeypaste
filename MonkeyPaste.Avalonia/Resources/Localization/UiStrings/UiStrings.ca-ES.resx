@@ -3029,4 +3029,10 @@ Les dreceres globals ara es poden activar al menú de la safata del sistema</val
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaxi</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Visió</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Ajustar el text</value>
+  </data>
 </root>

@@ -3029,4 +3029,10 @@
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>አገባብ</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>እይታ</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>ጥቅል ጽሑፍ</value>
+  </data>
 </root>

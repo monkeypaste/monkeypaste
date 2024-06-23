@@ -521,13 +521,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                Vector delta =
-                    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                        new Vector(MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Width * 0.5, 0) :
-                        new Vector(0, MpAvClipTrayContainerView.Instance.ClipTrayContainerGrid.Bounds.Height * 0.25);
-                MpAvClipTrayContainerView.Instance.ClipTraySplitter
-                    .ApplyDelta(delta);
-                MpAvClipTrayViewModel.Instance.IsPinTrayVisible = true;
+                MpAvShortcutCollectionViewModel.Instance.ResetAllShortcutsCommand.Execute(null);
             });
         public ICommand GenericTestCommand3 => new MpAsyncCommand(
             async () => {
@@ -546,92 +540,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand5 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                var themes = new string[] {
-                    "a11y-dark",
-        "a11y-light",
-        "agate",
-        "an-old-hope",
-        "androidstudio",
-        "arduino-light",
-        "arta",
-        "ascetic",
-        "atom-one-dark-reasonable",
-        "atom-one-dark",
-        "atom-one-light",
-        "brown-paper",
-        "codepen-embed",
-        "color-brewer",
-        "dark",
-        "default",
-        "devibeans",
-        "docco",
-        "far",
-        "felipec",
-        "foundation",
-        "github-dark-dimmed",
-        "github-dark",
-        "github",
-        "gml",
-        "googlecode",
-        "gradient-dark",
-        "gradient-light",
-        "grayscale",
-        "hybrid",
-        "idea",
-        "intellij-light",
-        "ir-black",
-        "isbl-editor-dark",
-        "isbl-editor-light",
-        "kimbie-dark",
-        "kimbie-light",
-        "lightfair",
-        "lioshi",
-        "magula",
-        "mono-blue",
-        "monokai-sublime",
-        "monokai",
-        "night-owl",
-        "nnfx-dark",
-        "nnfx-light",
-        "nord",
-        "obsidian",
-        "panda-syntax-dark",
-        "panda-syntax-light",
-        "paraiso-dark",
-        "paraiso-light",
-        "pojoaque",
-        "purebasic",
-        "qtcreator-dark",
-        "qtcreator-light",
-        "rainbow",
-        "routeros",
-        "school-book",
-        "shades-of-purple",
-        "srcery",
-        "stackoverflow-dark",
-        "stackoverflow-light",
-        "sunburst",
-        "tokyo-night-dark",
-        "tokyo-night-light",
-        "tomorrow-night-blue",
-        "tomorrow-night-bright",
-        "vs",
-        "vs2015",
-        "xcode",
-        "xt256",
-                };
-                string dir = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\Resources\Editor\src\components\syntax\hljs-styles";
-
-                foreach (var theme_name in themes) {
-                    string theme_uri = $"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/{theme_name}.min.css";
-                    string theme_text = await MpFileIo.ReadTextFromUriAsync(theme_uri);
-                    if(theme_text.IsNullOrWhiteSpace()) {
-                        MpConsole.WriteLine($"Error reading {theme_uri}");
-                        continue;
-                    }
-                    string theme_path = Path.Combine(dir, $"{theme_name}.min.css");
-                    MpFileIo.WriteTextToFile(theme_path, theme_text);
-                }
+                MpAvThemeViewModel.Instance.SaveThemeToFileCommand.Execute(null);
             });
 
         #endregion

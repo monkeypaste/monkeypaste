@@ -3029,4 +3029,10 @@ Shkurtoret globale tani mund të aktivizohen në menunë e tabaka të sistemit</
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaksë</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Pamje</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Mbështjell tekst</value>
+  </data>
 </root>

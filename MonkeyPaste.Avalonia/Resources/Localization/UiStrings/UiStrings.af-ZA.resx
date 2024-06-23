@@ -3029,4 +3029,10 @@ Globale kortpaaie kan nou in die System Tray Menu geaktiveer word</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaksis</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Beskou</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Omsluit teks</value>
+  </data>
 </root>

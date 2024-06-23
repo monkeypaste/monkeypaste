@@ -3029,4 +3029,10 @@ Globalne prečice sada mogu biti omogućene u System Tray meniju</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaksa</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Pogled</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Wrap Text</value>
+  </data>
 </root>

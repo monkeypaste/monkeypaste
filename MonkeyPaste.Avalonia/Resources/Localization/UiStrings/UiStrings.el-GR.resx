@@ -3029,4 +3029,10 @@ feedble@monkeypaste.com</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Σύνταξη</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Θέα</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Αναδίπλωση του κειμένου</value>
+  </data>
 </root>

@@ -3029,4 +3029,10 @@ Dabar „System Tray“ meniu galima įjungti globalius nuorodas</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Sintaksė</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Vaizdas</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Apvyniokite tekstą</value>
+  </data>
 </root>

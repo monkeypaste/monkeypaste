@@ -3029,4 +3029,10 @@ Njia za mkato za ulimwengu sasa zinaweza kuwezeshwa kwenye menyu ya tray ya mfum
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Syntax</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Mtazamo</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Funga maandishi</value>
+  </data>
 </root>

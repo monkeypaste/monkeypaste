@@ -85,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
             return default;
         }
 
-        public void SetResource(string resourceKey, object resourceValue) {
+        public void SetResource(string resourceKey, object resourceValue, bool addIfMissing) {
             if (string.IsNullOrEmpty(resourceKey)) {
                 return;
             }
@@ -97,9 +97,13 @@ namespace MonkeyPaste.Avalonia {
                 Application.Current.Styles.Resources[resourceKey] = resourceValue;
                 return;
             }
-            // whats the key? (should it be added?
-            MpDebug.Break();
-            return;
+            if(!addIfMissing) {
+                // whats the key? (should it be added?
+                MpDebug.Break();
+                return;
+            }
+            Application.Current.Resources.Add(new(resourceKey, resourceValue));
+            MpConsole.WriteLine($"Resource '{resourceKey}' added with value '{resourceValue}'");
         }
     }
 }

@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>Hyni në veprim kryesor</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Ndërroni ringarkimin e nxehtë XAML XAML</value>
+  </data>
 </root>

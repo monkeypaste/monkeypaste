@@ -3029,4 +3029,10 @@ feedback@monkeypales.com</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>វាក្យសម្ពេច</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>កមហើញ</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>រុំអត្ថបទ</value>
+  </data>
 </root>

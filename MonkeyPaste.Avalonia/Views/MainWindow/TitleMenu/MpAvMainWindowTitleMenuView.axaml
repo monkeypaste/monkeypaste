@@ -330,11 +330,9 @@
             </StackPanel>
 
             <!--  HEADER (MOBILE ONLY)  -->
-            <TransitioningContentControl Content="{Binding FocusHeaderViewModel}">
-                <TransitioningContentControl.PageTransition>
-                    <PageSlide Orientation="Horizontal"
-                               Duration="0:00:00.25" />
-                </TransitioningContentControl.PageTransition>
+            <TransitioningContentControl Classes="header"
+                                         DataContext="{Binding FocusHeaderViewModel}"
+                                         Content="{Binding .}">
                 <TransitioningContentControl.ContentTemplate>
                     <DataTemplate DataType="local:MpAvIHeaderMenuViewModel">
                         <local:MpAvHeaderMenuView x:Name="HeaderPanel"

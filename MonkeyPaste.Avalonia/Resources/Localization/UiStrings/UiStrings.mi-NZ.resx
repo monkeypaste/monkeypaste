@@ -3029,4 +3029,10 @@ Ka taea e te waa poto poto te ao i roto i te tahua Tray punaha</value>
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>Kōrutaki</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>Kitenga</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>Kuputuhi Kuputuhi</value>
+  </data>
 </root>

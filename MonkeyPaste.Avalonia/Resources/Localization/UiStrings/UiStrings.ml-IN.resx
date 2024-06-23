@@ -3029,4 +3029,10 @@
   <data name="PrefCodeFontLabel" xml:space="preserve">
     <value>സ്നാനക്സ്</value>
   </data>
+  <data name="CommonViewLabel" xml:space="preserve">
+    <value>ദര്ശനം</value>
+  </data>
+  <data name="WrapTextMenuLabel" xml:space="preserve">
+    <value>ചുരുക്ക് എഴുത്ത്</value>
+  </data>
 </root>

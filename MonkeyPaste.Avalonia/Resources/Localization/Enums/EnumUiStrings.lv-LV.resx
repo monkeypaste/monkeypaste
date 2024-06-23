@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>Ievadiet galveno darbību</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Pārslēgt XAML karsto pārlādēšanu</value>
+  </data>
 </root>

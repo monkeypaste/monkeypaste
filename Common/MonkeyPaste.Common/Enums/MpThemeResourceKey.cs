@@ -6,6 +6,9 @@
         GlobalBgOpacity_browser,
         GlobalBgOpacity_mobile,
         GlobalBgOpacity,
+        GlobalInteractiveBgOpacity,
+        GlobalDisabledOverlayOpacity,
+        GlobalInteractiveOpacity,
 
         #endregion
 
@@ -15,6 +18,12 @@
         ThemeColor,
         ThemeLightColor,
         ThemeDarkColor,
+
+        ThemeLightBgColor,
+        ThemeDarkBgColor,
+
+        ThemeHiColor,
+        ThemeLoColor,
 
         ThemeBlackColor,
         ThemeWhiteColor,

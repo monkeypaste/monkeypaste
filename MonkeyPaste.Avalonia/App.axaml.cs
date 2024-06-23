@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
-using Avalonia.Logging;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -18,6 +17,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows.Input;
 
 #if ENABLE_XAML_HOT_RELOAD
 using HotAvalonia; 
@@ -27,6 +27,14 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class App : Application {
         #region Private Variable
+
+        private bool is_xaml_hot_reload_enabled =
+#if ENABLE_XAML_HOT_RELOAD
+            true;
+#else
+            false;
+#endif
+
         #endregion
 
         #region Constants
@@ -119,7 +127,7 @@ namespace MonkeyPaste.Avalonia {
         public static event EventHandler FrameworkInitialized;
         public static event EventHandler FrameworkShutdown;
 #endif
-        #endregion
+#endregion
 
         #region Constructors
         public App() {
@@ -242,6 +250,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+        public ICommand ToggleXamlHotReloadCommand => new MpCommand(
+            () => {
+#if ENABLE_XAML_HOT_RELOAD
+                if(is_xaml_hot_reload_enabled) {
+                    Application.Current.DisableHotReload();
+                } else {
+                    Application.Current.EnableHotReload();
+                }
+                is_xaml_hot_reload_enabled = !is_xaml_hot_reload_enabled;
+                string msg = $"XAML Hot Reload: {(is_xaml_hot_reload_enabled ? "ENABLED" : "DISABLED")}";
+                MpConsole.WriteLine(msg);
+
+                Mp.Services.NotificationBuilder.ShowMessageAsync(MpNotificationType.Message,
+                    title: "XAML Hot Reload Changed",
+                    body: msg).FireAndForgetSafeAsync();
+#endif
+            });
+
         #endregion
 
 #if WINDOWS
@@ -261,38 +287,5 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 #endif
-    }
-
-    internal class MpAvLogSink : ILogSink {
-        private ILogSink _defSink;
-
-        private (LogEventLevel, string)[] _disabledLogs = {
-            (LogEventLevel.Warning,LogArea.Binding)
-        };
-        public static void Init() {
-            _ = new MpAvLogSink();
-        }
-        private MpAvLogSink() {
-            if (Logger.Sink != this) {
-                _defSink = Logger.Sink;
-            }
-
-            Logger.Sink = this;
-        }
-
-        public bool IsEnabled(LogEventLevel level, string area) {
-            if (!_defSink.IsEnabled(level, area)) {
-                return false;
-            }
-            return _disabledLogs.All(x => x.Item1 != level && x.Item2 != area);
-        }
-
-        public void Log(LogEventLevel level, string area, object source, string messageTemplate) {
-            _defSink.Log(level, area, source, messageTemplate);
-        }
-
-        public void Log(LogEventLevel level, string area, object source, string messageTemplate, params object[] propertyValues) {
-            _defSink.Log(level, area, source, messageTemplate, propertyValues);
-        }
     }
 }

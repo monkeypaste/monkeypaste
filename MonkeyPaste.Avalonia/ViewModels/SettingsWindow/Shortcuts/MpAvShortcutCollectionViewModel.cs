@@ -444,12 +444,17 @@ namespace MonkeyPaste.Avalonia {
                             MpShortcutType.EnterKeyAction,
                             MpAvApplicationCommand.Instance.EnterKeyCommand
                         },
-#if DEBUG
-		                {
+                        {
                             MpShortcutType.ToggleGlobalHooks,
                             ToggleGlobalHooksCommand
                         },  
+#if DEBUG
+		                {
+                            MpShortcutType.ToggleXamlHotReload,
+                            App.Instance.ToggleXamlHotReloadCommand
+                        },  
 #endif
+
                     };
                 }
                 return _appCommandLookup;

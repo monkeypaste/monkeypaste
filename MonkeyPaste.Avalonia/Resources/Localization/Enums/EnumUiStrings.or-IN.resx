@@ -1192,4 +1192,7 @@
   <data name="MpShortcutType_EnterKeyAction" xml:space="preserve">
     <value>କି କାର୍ଯ୍ୟ ପ୍ରବେଶ କରନ୍ତୁ |</value>
   </data>
+  <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
+    <value>Xaml ହଟ ପୁନ elo ଲୋଡ୍ ଟୋଗଲ୍ କରନ୍ତୁ |</value>
+  </data>
 </root>

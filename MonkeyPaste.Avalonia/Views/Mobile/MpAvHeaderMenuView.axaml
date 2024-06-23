@@ -46,6 +46,7 @@
                     Value="{Binding Source={StaticResource CloseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
     </local:MpAvUserControl.Styles>
+  
     <Border x:Name="HeaderBorder"
             Background="{Binding HeaderBackground}"
             Classes="light-bevel-5">
