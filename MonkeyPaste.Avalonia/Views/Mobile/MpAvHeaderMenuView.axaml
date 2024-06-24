@@ -48,7 +48,7 @@
     </local:MpAvUserControl.Styles>
 
     <Border x:Name="HeaderBorder"
-            Background="{Binding HeaderBackground, ConverterParameter=mid, Converter={x:Static local:MpAvBrushToMutedBrushConverter.Instance}}"
+            Background="{Binding HeaderBackground}"
             Classes="light-bevel-5">
 
         <Grid x:Name="HeaderContainer"

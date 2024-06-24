@@ -7,10 +7,10 @@ using System.Globalization;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvBrushToMutedBrushConverter : IValueConverter {
-        static double L_HI = 0.87d;
+        static double L_HI = 0.8d;
         static double L_LO = 0.2d;
         static double L_MID = 0.5d;
-        public static double DEF_MUTE_S => 0.17d;
+        public static double DEF_MUTE_S => 0.4d;
         public static double DEF_MUTE_L_HI => 
             MpAvThemeViewModel.Instance.IsThemeDark ? L_HI : L_LO;
         public static double DEF_MUTE_L_LO =>
@@ -29,6 +29,8 @@ namespace MonkeyPaste.Avalonia {
                     l = DEF_MUTE_L_LO;
                 } else if(paramStr.ToLower() == "mid") {
                     l = L_MID;
+                } else if(paramStr == "none") {
+                    return value;
                 }
             }
             s = DEF_MUTE_S;

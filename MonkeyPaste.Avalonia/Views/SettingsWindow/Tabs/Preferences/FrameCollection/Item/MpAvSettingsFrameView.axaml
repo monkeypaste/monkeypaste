@@ -29,6 +29,8 @@
         <Style Selector="local|MpAvClipBorder#OuterBorder">
             <Setter Property="Padding"
                     Value="5" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
         </Style>
         <Style Selector="local|MpAvClipBorder#OuterBorder.mobile StackPanel#FrameHeaderPanel"
                x:DataType="local:MpAvSettingsFrameViewModel">
@@ -57,7 +59,6 @@
     </UserControl.Styles>
     <local:MpAvClipBorder x:Name="OuterBorder"
                           Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                          BorderThickness="0"
                           CornerRadius="10"
                           BorderBrush="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}">
         <Grid RowDefinitions="Auto,*">

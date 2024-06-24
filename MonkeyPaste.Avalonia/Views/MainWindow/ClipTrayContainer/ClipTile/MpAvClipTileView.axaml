@@ -177,12 +177,6 @@
                     Value="{Binding Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
         </Style>
 
-        <!--  APP ICON OPACITY  -->
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.hover Button#ClipTileAppIconImageButton, local|MpAvClipBorder#ClipTileContainerBorder.sel Button#ClipTileAppIconImageButton">
-            <Setter Property="Opacity"
-                    Value="0.25" />
-        </Style>
-
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"

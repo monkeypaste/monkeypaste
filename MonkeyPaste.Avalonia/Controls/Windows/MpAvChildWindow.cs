@@ -273,7 +273,7 @@ namespace MonkeyPaste.Avalonia {
                     this.TranslatePoint(new(),tl) is not { } scaled_pos) {
                     return default;
                 }
-                double scale = this.VisualPixelDensity();
+                double scale = 1d;// this.VisualPixelDensity();
                 return scaled_pos.ToPortablePoint().ToAvPixelPoint(scale);
             }
             set {
@@ -282,7 +282,7 @@ namespace MonkeyPaste.Avalonia {
                         tg.Children.OfType<TranslateTransform>().FirstOrDefault() is not { } tt) {
                         return;
                     }
-                    double scale = this.VisualPixelDensity();
+                    double scale = 1d;//this.VisualPixelDensity();
                     var p = value.ToPortablePoint(scale);
                     tt.X = p.X;
                     tt.Y = p.Y;

@@ -353,13 +353,12 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void OnScaleChanged() {
-            return;
-            _lastScale = _lastScale ?? Scale;
-            if(Math.Abs(Scale-_lastScale.Value) < 0.001) {
-                return;
-            }
-            Zoom(Scale - _lastScale.Value, this.Bounds.Center);
-            _lastScale = Scale;
+            //_lastScale = _lastScale ?? Scale;
+            //if(Math.Abs(Scale-_lastScale.Value) < 0.001) {
+            //    return;
+            //}
+            //Zoom(Scale - _lastScale.Value, this.Bounds.Center);
+            //_lastScale = Scale;
         }
 
         #region Gesture Handlers

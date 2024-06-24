@@ -258,11 +258,8 @@
         <!--  GRID SPLITTERS  -->
 
         <SolidColorBrush x:Key="DefaultGridSplitterBrush" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-
         <SolidColorBrush x:Key="SidebarGridSplitterBrush" Color="{DynamicResource ThemeAccent5BgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-
         <SolidColorBrush x:Key="ClipTrayGridSplitterBrush" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-
         <SolidColorBrush x:Key="HoverDefaultGridSplitterBgBrush" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <!--  SIDEBAR BUTTONS  -->
         <SolidColorBrush x:Key="SidebarButtonsBgBrush" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
@@ -297,8 +294,6 @@
         <SolidColorBrush x:Key="HoverSelectedBorderBrush" Color="{DynamicResource ThemeAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="SelectedBorderBrush" Color="{DynamicResource ThemeAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-
-
         <!--  TITLE MENU  -->
         <SolidColorBrush x:Key="TitleMenuActiveBgBrush" Color="{DynamicResource ThemeAccent1BgColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
         <SolidColorBrush x:Key="TitleMenuInactiveBgBrush" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
@@ -323,15 +318,15 @@
         <SolidColorBrush x:Key="PluginParameterItemHoverBgBrush" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
 
         <!--  SIDEBAR BGS  -->
-        <SolidColorBrush x:Key="TagTreeBgBrush" Color="{DynamicResource ThemeHi1Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="TagTreeBgBrush" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  CLIPBOARD SIDEBAR  -->
 
-        <SolidColorBrush x:Key="ClipboardSidebarBgBrush" Color="{DynamicResource ThemeHiC2olor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ClipboardSidebarBgBrush" Color="{DynamicResource ThemeAccent4Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ANALYZER SIDEBAR  -->
 
-        <SolidColorBrush x:Key="AnalyzerSidebarBgBrush" Color="{DynamicResource ThemeHi3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="AnalyzerSidebarBgBrush" Color="{DynamicResource ThemeAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ACTION SIDEBAR  -->
 
@@ -355,7 +350,7 @@
         <SolidColorBrush x:Key="ContentTrayDragOverBgBrush" Color="{DynamicResource ThemeCompliment1DarkColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
         <!--  CLIP TRAY  -->
 
-        <SolidColorBrush x:Key="ClipTrayBgBrush" Color="{DynamicResource ThemeHiColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="QueryTrayBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  PIN TRAY  -->
         <SolidColorBrush x:Key="PinTrayBgBrush" Color="{DynamicResource ThemeCompliment1Color}" Opacity="{DynamicResource GlobalBgOpacity}" />

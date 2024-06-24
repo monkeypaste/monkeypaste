@@ -87,10 +87,10 @@
                                           Width="{Binding $parent.Bounds.Width}"
                                           Height="{Binding $parent.Bounds.Height}">
                 <ListBox x:Name="QueryTrayListBox"
+                         Background="Transparent"
                          Classes="clipTileListBox queryListBox"
-                         Classes.bright="{Binding $self.Background, Converter={x:Static local:MpAvBrushToIsBrightBoolConverter.Instance}}"
+                         Classes.bright="{Binding IsThemeLight, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                          IsTextSearchEnabled="False"
-                         Background="{DynamicResource ClipTrayBgBrush}"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Top"
                          BorderThickness="0"

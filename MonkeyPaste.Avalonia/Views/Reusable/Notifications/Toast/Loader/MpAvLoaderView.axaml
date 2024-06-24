@@ -196,6 +196,7 @@
             <TransitioningContentControl.ContentTemplate>
                 <DataTemplate DataType="sys:String">
                     <TextBlock x:Name="ProgressInfoBlock"
+                               IsVisible="False"
                                ClipToBounds="False"
                                Width="200"
                                FontSize="12"

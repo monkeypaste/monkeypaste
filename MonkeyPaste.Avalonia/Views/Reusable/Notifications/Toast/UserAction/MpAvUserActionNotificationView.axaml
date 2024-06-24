@@ -495,6 +495,21 @@
                                      Command="{Binding ShowOptionsPopupCommand}"
                                      CommandParameter="{Binding $self}"
                                      Foreground="{DynamicResource ThemeWhiteColor}" />
+
+            <!--  DISMISS BUTTON (MOBILE MSG ONLY)  -->
+            <Button x:Name="DismissButton"
+                    Grid.Column="1"
+                    RenderTransform="translateX(30px) translateY(15px)"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    IsVisible="{Binding ShowDismissButton}"
+                    Command="{Binding CloseNotificationCommand}"
+                    Classes="no-bg no-hover-bg no-border">
+                <local:MpAvTintedImage Width="15"
+                                       Height="15"
+                                       Tint="{DynamicResource ThemeGrayAccent2Brush}"
+                                       Source="{Binding Source={StaticResource CloseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            </Button>
         </Grid>
     </Border>
 </local:MpAvUserControl>

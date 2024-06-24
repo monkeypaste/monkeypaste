@@ -160,7 +160,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Resize Constraints
 
-        public double ResizerLength => 3;
+        public double ResizerLength => 6;
 
         public double MainWindowMinimumHorizontalHeight =>
 #if MULTI_WINDOW
@@ -817,9 +817,11 @@ namespace MonkeyPaste.Avalonia {
                 case MpMainWindowShowBehaviorType.Mouse:
                     // NOTE need to use unscaled pointer position to locate screen since scaling is per monitor
                     if (mw.Screens.ScreenFromPoint_WORKS(MpAvShortcutCollectionViewModel.Instance.GlobalUnscaledMouseLocation) is { } pointer_screen) {
-                        MpRect scaled_screen = MpAvThemeViewModel.Instance.IsMobileOrWindowed ?
-                            pointer_screen.Bounds :
-                            pointer_screen.Bounds.ToPortableRect(pointer_screen.Scaling);
+#if MOBILE_OR_WINDOWED
+                        MpRect scaled_screen = pointer_screen.Bounds; 
+#else
+                        MpRect scaled_screen = pointer_screen.Bounds.ToPortableRect(pointer_screen.Scaling);
+#endif
                         mw_screen = sic.Screens.FirstOrDefault(x => x.Bounds.IsEqual(scaled_screen, 1));
                     }
                     break;

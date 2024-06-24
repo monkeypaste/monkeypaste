@@ -83,6 +83,8 @@
         </Style>
 
         <Style Selector="Border#TriggerSidebarOuterContainer:not(.mobile):not(.popout) Grid#TriggerSidebarContainer">
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumnDefinitions"
+                    Value="Auto,*" />
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalRowDefinitions">
                 <Setter.Value>
                     <RowDefinitions>
@@ -95,9 +97,9 @@
 
         <Style Selector="Border#TriggerSidebarOuterContainer Border#ActionDesignerOuterContainerBorder">
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalRow"
-                    Value="1" />
-            <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumn"
                     Value="0" />
+            <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumn"
+                    Value="1" />
             <Setter Property="local:MpAvOrientedGridExtension.VerticalRow"
                     Value="1" />
         </Style>
@@ -146,9 +148,9 @@
         </Style>
         <Style Selector="Border#TriggerSidebarOuterContainer:not(.mobile) ScrollViewer#PropertyScrollViewer">
             <Setter Property="HorizontalScrollBarVisibility"
-                    Value="Hidden" />
+                    Value="Auto" />
             <Setter Property="VerticalScrollBarVisibility"
-                    Value="Hidden" />
+                    Value="Auto" />
         </Style>
 
         <!--  EXPANDER  -->
@@ -177,7 +179,7 @@
 
         <Style Selector="Border.headeredBorder">
             <Setter Property="BorderThickness"
-                    Value="2" />
+                    Value="0" />
             <Setter Property="CornerRadius"
                     Value="10" />
             <Setter Property="Margin"

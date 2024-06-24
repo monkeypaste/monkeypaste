@@ -16,6 +16,7 @@
         <TranslateTransform />
     </local:MpAvUserControl.RenderTransform>
     <local:MpAvUserControl.Styles>
+        <!--  MINI MSG (MOBILE ONLY)  -->
         <Style Selector="Grid#MainWindowContainerGrid.mobile">
             <Setter Property="ToolTip.VerticalOffset"
                     Value="40" />
@@ -32,91 +33,114 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!--  TRAY CNTR BG  -->
+        <Style Selector="Grid#MainWindowContainerGrid.mobile Border#MainWindowTrayPanel, Grid#MainWindowContainerGrid.desktop local|MpAvQueryTrayView Border#QueryTrayContainerBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource QueryTrayBgBrush}" />
+        </Style>
+        <Style Selector="Grid#MainWindowContainerGrid.mobile Border#MainWindowTrayPanel.pin-tray, Grid#MainWindowContainerGrid.desktop local|MpAvPinTrayView Border#PinTrayContainerBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource PinTrayBgBrush}" />
+        </Style>
+        <Style Selector="Grid#MainWindowContainerGrid.desktop local|MpAvPinTrayView.dragover Border#PinTrayContainerBorder, Grid#MainWindowContainerGrid.desktop local|MpAvQueryTrayView.dragover Border#QueryTrayContainerBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource ContentTrayDragOverBgBrush}" />
+        </Style>
+        <Style Selector="Grid#MainWindowContainerGrid.mobile Border#MainWindowTrayPanel, Grid#MainWindowContainerGrid.desktop local|MpAvPinTrayView Border#PinTrayContainerBorder, Grid#MainWindowContainerGrid.desktop local|MpAvQueryTrayView Border#QueryTrayContainerBorder">
+
+            <Setter Property="BoxShadow"
+                    Value="inset 0 0 10 10 #46000000" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Canvas x:Name="MainWindowCanvas"
             Width="{Binding MainWindowWidth}"
             Height="{Binding MainWindowHeight}">
         <Grid x:Name="MainWindowContainerGrid"
               Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+              Classes.desktop="{Binding IsMultiWindow, Source={x:Static local:MpAvThemeViewModel.Instance}}"
               Background="{DynamicResource MainWindowBgBrush}"
               Width="{Binding MainWindowWidth}"
               Height="{Binding MainWindowHeight}">
 
-            <!--  Filter Menu  -->
+            <!--  CONTENT ROW  -->
+            <Border x:Name="MainWindowTrayPanel"
+                    Grid.Row="2"
+                    Classes.pin-tray="{Binding IsPinTrayVisible, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
+                <Grid x:Name="MainWindowTrayGrid"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch">
+
+                    <!--  CONTENT TRAY CONTAINER  -->
+
+                    <local:MpAvClipTrayContainerView x:Name="ClipTrayContainerView"
+                                                     Width="{Binding ContainerBoundWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                                                     Height="{Binding ContainerBoundHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                                                     local:MpAvSizeObserverExtension.IsEnabled="True"
+                                                     local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
+                                                     local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedContainerScreenHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
+                                                     HorizontalAlignment="Stretch"
+                                                     VerticalAlignment="Stretch" />
+
+                    <!--  SELECTED SIDEBAR ITEM  -->
+                    <local:MpAvSidebarSelectedItemView x:Name="SelectedSidebarContainerBorder"
+                                                       Width="{Binding ContainerBoundWidth, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                                                       Height="{Binding ContainerBoundHeight, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                                                       HorizontalAlignment="Stretch"
+                                                       VerticalAlignment="Stretch" />
+
+
+                    <!--  SIDEBAR SPLITTER  -->
+
+                    <local:MpAvMovableGridSplitter x:Name="SidebarGridSplitter"
+                                                   Grid.Column="1"
+                                                   ResizeDirection="Columns"
+                                                   HorizontalAlignment="Right"
+                                                   VerticalAlignment="Stretch"
+                                                   Classes.sidebarSplitter="True"
+                                                   Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                                                   Classes.vertical="{Binding !IsVerticalOrientation}"
+                                                   Classes.horizontal="{Binding IsVerticalOrientation}"
+                                                   local:MpAvPointerCommandExtension.IsEnabled="True"
+                                                   local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"
+                                                   local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetSelectedSidebarSplitterCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                                                   local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="{Binding $self}"
+                                                   local:MpAvPointerCommandExtension.RouteRightPressToHold="False"
+                                                   local:MpAvPointerCommandExtension.RightPressCommand="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                                                   local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding SelectedItemIdx, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}">
+                        <local:MpAvMovableGridSplitter.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="SelectedItem"
+                                         Source="{x:Static local:MpAvSidebarItemCollectionViewModel.Instance}"
+                                         Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                                <Binding Path="IsMultiWindow"
+                                         Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                            </MultiBinding>
+                        </local:MpAvMovableGridSplitter.IsVisible>
+                    </local:MpAvMovableGridSplitter>
+
+                    <!--  SIDEBAR BUTTONS  -->
+                    <local:MpAvSidebarButtonGroupView x:Name="SidebarButtonGroup"
+                                                      Grid.Column="0"
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Stretch"
+                                                      HorizontalContentAlignment="Stretch"
+                                                      VerticalContentAlignment="Stretch" />
+                </Grid>
+            </Border>
+
+
+
+            <!--  FILTER MENU  -->
             <local:MpAvFilterMenuView x:Name="FilterMenuView"
                                       Grid.Row="1"
+                                      Classes="expand-height"
                                       Height="{Binding FilterMenuHeight, Source={x:Static local:MpAvFilterMenuViewModel.Instance}}"
                                       local:MpAvSizeObserverExtension.IsEnabled="True"
                                       local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedFilterMenuWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}"
                                       HorizontalAlignment="Stretch"
                                       VerticalAlignment="Stretch" />
-
-            <!--  CONTENT ROW  -->
-
-            <Grid x:Name="MainWindowTrayGrid"
-                  Grid.Row="3"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch">
-
-                <!--  CONTENT TRAY CONTAINER  -->
-
-                <local:MpAvClipTrayContainerView x:Name="ClipTrayContainerView"
-                                                 Width="{Binding ContainerBoundWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                                                 Height="{Binding ContainerBoundHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                                                 local:MpAvSizeObserverExtension.IsEnabled="True"
-                                                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
-                                                 local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedContainerScreenHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
-                                                 HorizontalAlignment="Stretch"
-                                                 VerticalAlignment="Stretch" />
-
-                <!--  SELECTED SIDEBAR ITEM  -->
-                <local:MpAvSidebarSelectedItemView x:Name="SelectedSidebarContainerBorder"
-                                                   Width="{Binding ContainerBoundWidth, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                                                   Height="{Binding ContainerBoundHeight, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                                                   HorizontalAlignment="Stretch"
-                                                   VerticalAlignment="Stretch" />
-
-
-                <!--  SIDEBAR SPLITTER  -->
-
-                <local:MpAvMovableGridSplitter x:Name="SidebarGridSplitter"
-                                               Grid.Column="1"
-                                               ResizeDirection="Columns"
-                                               HorizontalAlignment="Right"
-                                               VerticalAlignment="Stretch"
-                                               Classes.sidebarSplitter="True"
-                                               Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                                               Classes.vertical="{Binding !IsVerticalOrientation}"
-                                               Classes.horizontal="{Binding IsVerticalOrientation}"
-                                               local:MpAvPointerCommandExtension.IsEnabled="True"
-                                               local:MpAvPointerCommandExtension.DefaultRoutingStrategy="Tunnel"
-                                               local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetSelectedSidebarSplitterCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                                               local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="{Binding $self}"
-                                               local:MpAvPointerCommandExtension.RouteRightPressToHold="False"
-                                               local:MpAvPointerCommandExtension.RightPressCommand="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                                               local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding SelectedItemIdx, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}">
-                    <local:MpAvMovableGridSplitter.IsVisible>
-                        <MultiBinding Converter="{x:Static BoolConverters.And}">
-                            <Binding Path="SelectedItem"
-                                     Source="{x:Static local:MpAvSidebarItemCollectionViewModel.Instance}"
-                                     Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
-                            <Binding Path="IsMultiWindow"
-                                     Source="{x:Static local:MpAvThemeViewModel.Instance}" />
-                        </MultiBinding>
-                    </local:MpAvMovableGridSplitter.IsVisible>
-                </local:MpAvMovableGridSplitter>
-
-                <!--  SIDEBAR BUTTONS  -->
-                <local:MpAvSidebarButtonGroupView x:Name="SidebarButtonGroup"
-                                                  Grid.Column="0"
-                                                  HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Stretch"
-                                                  HorizontalContentAlignment="Stretch"
-                                                  VerticalContentAlignment="Stretch" />
-            </Grid>
-
-
-            <!--  Title Menu  -->
+            <!--  TITLE MENU  -->
             <local:MpAvMainWindowTitleMenuView x:Name="MainWindowTitleView"
                                                Grid.Row="0"
                                                MaxHeight="{Binding TitleMenuHeight, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}"

@@ -801,7 +801,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultQueryItemHeight =>
             _defaultQueryItemHeight;
 
-        private void UpdateDefaultItemSize() {
+        public void UpdateDefaultItemSize() {
             // NOTE safe_pad keeps content slightly smaller than container
             // where padding/margin may lead to false scrollbar visibility
             // (like 1 horiz layout pin item shows vert scrollbar)
@@ -1142,7 +1142,7 @@ namespace MonkeyPaste.Avalonia {
             IsPinTrayVisible ?
                 MpAvThemeViewModel.Instance.IsMobileOrWindowed ?
                     MaxContainerScreenHeight * (IsPinTrayPeeking ? 0.5 : 1) :
-                    MinQueryOrPinTrayScreenHeight : 0;
+                    MinQueryOrPinTrayScreenWidth : 0;
 
         public double MaxPinTrayScreenWidth =>
             IsPinTrayVisible ? MaxContainerScreenWidth : 0;
@@ -1764,7 +1764,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Invokers
 
-        public async void ScrollIntoView(object obj) {
+        public void ScrollIntoView(object obj) {
             MpAvClipTileViewModel ctvm = null;
             if (obj is MpAvClipTileViewModel) {
                 ctvm = obj as MpAvClipTileViewModel;

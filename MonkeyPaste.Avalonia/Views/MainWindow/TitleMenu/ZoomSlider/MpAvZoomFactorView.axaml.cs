@@ -89,7 +89,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void SetMarkerPosition(Control container, Control marker, double percent) {
-            if (marker.RenderTransform is not TranslateTransform tt) {
+            if (container == null ||
+                marker == null ||
+                marker.RenderTransform is not TranslateTransform tt) {
                 return;
             }
             double hw = marker.Bounds.Width * 0.5;

@@ -20,25 +20,45 @@
         <!--  MOBILE ONLY  -->
         <Style Selector="Border#TitleBorder.mobile">
             <Setter Property="Background"
-                    Value="{Binding Source={DynamicResource TitleMenuActiveBgBrush}, ConverterParameter=mid, Converter={x:Static local:MpAvBrushToMutedBrushConverter.Instance}}" />
+                    Value="{DynamicResource TitleMenuActiveBgBrush}" />
+        </Style>
+        <Style Selector="Border#TitleBorder Button#MainWindowCycleOrientationCcwButton">
+            <Setter Property="RenderTransform"
+                    Value="translateY(-2px)" />
+        </Style>
+        <Style Selector="Border#TitleBorder.mobile Button#MainWindowCycleOrientationCcwButton">
+            <Setter Property="RenderTransform"
+                    Value="translateY(-3px)" />
+        </Style>
+        <Style Selector="Border#TitleBorder ToggleButton#SettingsToggleButton">
+            <Setter Property="Margin"
+                    Value="0,0,0,0" />
+        </Style>
+        <Style Selector="Border#TitleBorder.mobile ToggleButton#SettingsToggleButton">
+            <Setter Property="Margin"
+                    Value="18,0,0,0" />
         </Style>
 
+        <Style Selector="StackPanel.edge-cntr">
+            <Setter Property="Spacing"
+                    Value="5" />
+        </Style>
         <Style Selector="Border#TitleBorder.mobile StackPanel.edge-cntr">
             <Setter Property="VerticalAlignment"
                     Value="Center" />
             <Setter Property="Spacing"
-                    Value="3" />
+                    Value="10" />
         </Style>
         <Style Selector="Border#TitleBorder.mobile StackPanel.edge-cntr :is(Button)">
             <Setter Property="VerticalAlignment"
                     Value="Center" />
         </Style>
 
-        <Style Selector="Border#TitleBorder.mobile :is(Button)">
+        <Style Selector="Border#TitleBorder.mobile :is(Button) local|MpAvTintedImage">
             <Setter Property="Width"
-                    Value="25" />
+                    Value="20" />
             <Setter Property="Height"
-                    Value="25" />
+                    Value="20" />
         </Style>
         <Style Selector="Border#TitleBorder local|MpAvZoomFactorView#ZoomFactorView">
             <Setter Property="IsVisible"
@@ -59,29 +79,34 @@
             <Setter Property="Background"
                     Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
-        <Style Selector="PathIcon">
-            <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeInteractiveColor}" />
-        </Style>
-        <Style Selector="PathIcon /template/ Path">
-            <Setter Property="Margin"
-                    Value="3" />
-        </Style>
-        <Style Selector="ToggleButton:checked /template/ ContentPresenter">
-            <Setter Property="Background"
-                    Value="Transparent" />
-        </Style>
-        <Style Selector="ToggleButton:checked PathIcon">
-            <Setter Property="Foreground"
+
+        <Style Selector="ToggleButton:checked local|MpAvTintedImage">
+            <Setter Property="Tint"
                     Value="{DynamicResource ThemeAccent3Color}" />
         </Style>
-        <Style Selector=":is(Button):pointerover PathIcon">
-            <Setter Property="Foreground"
+        <Style Selector=":is(Button) local|MpAvTintedImage">
+            <Setter Property="Tint"
+                    Value="{Binding Background, ElementName=TitleBorder, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}" />
+        </Style>
+        <Style Selector=":is(Button):pointerover local|MpAvTintedImage">
+            <Setter Property="Tint"
                     Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
 
         <!--  DRAG HANDLE  -->
 
+        <Style Selector="Button#WindowOrientationHandleButton local|MpAvTintedImage">
+            <Setter Property="Width"
+                    Value="50" />
+            <Setter Property="Height"
+                    Value="{StaticResource NaN}" />
+        </Style>
+        <Style Selector="Border#TitleBorder.vert Button#WindowOrientationHandleButton local|MpAvTintedImage">
+            <Setter Property="Width"
+                    Value="{StaticResource NaN}" />
+            <Setter Property="Height"
+                    Value="50" />
+        </Style>
         <Style Selector="Button#WindowOrientationHandleButton local|MpAvTintedImage">
             <Setter Property="Tint"
                     Value="{DynamicResource ThemeInteractiveBrush}" />
@@ -110,7 +135,7 @@
                     Value="{StaticResource HitTestableTransparent}" />
         </Style>
         <Style Selector="Border.resizer:pointerover">
-            <Setter Property="Background"
+            <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
 
@@ -120,7 +145,7 @@
             <Setter Property="Width"
                     Value="{StaticResource NaN}" />
             <Setter Property="Height"
-                    Value="{StaticResource ResizerLength}" />
+                    Value="6" />
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
         </Style>
@@ -128,7 +153,7 @@
             <Setter Property="Cursor"
                     Value="SizeWestEast" />
             <Setter Property="Width"
-                    Value="{StaticResource ResizerLength}" />
+                    Value="6" />
             <Setter Property="Height"
                     Value="{StaticResource NaN}" />
             <Setter Property="VerticalAlignment"
@@ -138,19 +163,37 @@
         <Style Selector="Border.resizer.left">
             <Setter Property="HorizontalAlignment"
                     Value="Right" />
+            <Setter Property="BorderThickness"
+                    Value="0,0,3,0" />
+            <Setter Property="RenderTransform"
+                    Value="translateX(3px)" />
         </Style>
         <Style Selector="Border.resizer.right">
             <Setter Property="HorizontalAlignment"
                     Value="Left" />
+            <Setter Property="BorderThickness"
+                    Value="3,0,0,0" />
+
+            <Setter Property="RenderTransform"
+                    Value="translateX(-3px)" />
         </Style>
 
         <Style Selector="Border.resizer.top">
             <Setter Property="VerticalAlignment"
                     Value="Bottom" />
+
+            <Setter Property="BorderThickness"
+                    Value="0,0,0,3" />
+
+            <Setter Property="RenderTransform"
+                    Value="translateY(3px)" />
         </Style>
         <Style Selector="Border.resizer.bottom">
             <Setter Property="VerticalAlignment"
                     Value="Top" />
+
+            <Setter Property="BorderThickness"
+                    Value="0,3,0,0" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="TitleBorder"
@@ -164,33 +207,19 @@
             <!--  LEFT  -->
 
             <StackPanel x:Name="LeftStackPanel"
-                        Classes="edge-cntr"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center">
+                        Classes="edge-cntr">
                 <!--  SETTINGS BUTTON  -->
 
                 <ToggleButton x:Name="SettingsToggleButton"
-                              Margin="5,0,0,0"
-                              Classes="no-bg no-hover-bg"
+                              Classes="default-button no-bg no-hover-bg"
                               Command="{Binding ToggleShowSettingsWindowCommand, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
                               CommandParameter="{Binding $self}"
-                              IsChecked="{Binding IsWindowOpen, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=OneWay}"
-                              ToolTip.ShowDelay="500">
+                              IsChecked="{Binding IsWindowOpen, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=OneWay}">
                     <ToolTip.Tip>
                         <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.CommonSettingsTitle}"
                                                InputGestureText="{Binding ., ConverterParameter=ShowSettings, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
                     </ToolTip.Tip>
-                    <Grid>
-
-                        <PathIcon IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                                  Data="{StaticResource CogSvg}" />
-                        <local:MpAvTintedImage Width="20"
-                                               Height="20"
-                                               IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                                               Tint="{Binding Background, ElementName=TitleBorder, Converter={x:Static local:MpAvColorToContrastColorConverter.Instance}}"
-                                               Source="{Binding Source={StaticResource CogImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
-                    </Grid>
+                    <local:MpAvTintedImage Source="{Binding Source={StaticResource CogImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </ToggleButton>
 
                 <!--  LOCK BUTTON  -->
@@ -199,18 +228,18 @@
                               IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=OneWay}"
                               Command="{Binding ToggleMainWindowLockCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                               CommandParameter="{Binding $self}"
-                              Classes="no-bg no-hover-bg">
+                              Classes="default-button no-bg no-hover-bg">
                     <ToolTip.Tip>
                         <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.MainWindowTitleLockLabel}"
                                                InputGestureText="{Binding ., ConverterParameter=ToggleMainWindowLocked, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
                     </ToolTip.Tip>
-                    <PathIcon Data="{StaticResource LockOutlineSvg}" />
+                    <local:MpAvTintedImage Source="{Binding Source={StaticResource LockImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </ToggleButton>
 
                 <!--  MINIMIZE BUTTON  -->
 
                 <Button x:Name="MinimizeMainWindowButton"
-                        Margin="5,0,0,0"
+                        Margin="0,0,0,0"
                         Width="20"
                         Height="20"
                         Command="{Binding ForceMinimizeMainWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
@@ -243,27 +272,33 @@
                     Cursor="SizeAll"
                     IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                     Classes="no-bg no-hover-bg outlineOver"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Stretch"
-                    Padding="0"
-                    Width="50">
+                    Padding="0">
                 <Button.RenderTransform>
                     <RotateTransform />
                 </Button.RenderTransform>
                 <local:MpAvTintedImage HorizontalAlignment="Stretch"
                                        VerticalAlignment="Stretch"
-                                       Margin="5,0" />
+                                       Source="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Button>
 
             <!--  RIGHT  -->
 
             <StackPanel x:Name="RightStackPanel"
-                        Classes="edge-cntr"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Right">
+                        Classes="edge-cntr">
 
-                <!--  Zoom Factor Slider  -->
+                <!--  ZOOM SLIDER  -->
                 <local:MpAvZoomFactorView x:Name="ZoomFactorView" />
+
+                <!--  TOGGLE FILTER EXPANDED  -->
+
+                <ToggleButton x:Name="FilterExpandedToggleButton"
+                              IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                              Classes="default-button no-bg no-hover-bg no-border"
+                              Command="{Binding ToggleIsFilterMenuExpandedCommand, Source={x:Static local:MpAvFilterMenuViewModel.Instance}}"
+                              IsChecked="{Binding IsExpanded, Mode=OneWay, Source={x:Static local:MpAvFilterMenuViewModel.Instance}}">
+                    <local:MpAvTintedImage Source="{Binding Source={StaticResource SearchImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+
+                </ToggleButton>
 
                 <!--  UNPIN ALL (MOBILE ONLY)  -->
 
@@ -281,9 +316,7 @@
                                      Converter="{x:Static local:MpAvCollectionToIsMultipleBoolConverter.Instance}" />
                         </MultiBinding>
                     </Button.IsVisible>
-                    <local:MpAvTintedImage Classes="squareByHeight"
-                                           Tint="{DynamicResource ThemeInteractiveBrush}"
-                                           Source="{Binding Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    <local:MpAvTintedImage Source="{Binding Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Button>
 
                 <!--  Layout Toggle Button  -->
@@ -293,11 +326,10 @@
                               Command="{Binding ToggleLayoutTypeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                               IsChecked="{Binding IsGridLayout, Mode=OneWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                               ToolTip.ShowDelay="0">
-                    <PathIcon Data="{StaticResource GridLayoutSvg}">
-                        <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.MainWindowTitleToggleGridLayoutToolTip}" />
-                        </ToolTip.Tip>
-                    </PathIcon>
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.MainWindowTitleToggleGridLayoutToolTip}" />
+                    </ToolTip.Tip>
+                    <local:MpAvTintedImage Source="{Binding Source={StaticResource GridImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </ToggleButton>
 
                 <!--  Orientation Cycle CCW Button  -->
@@ -305,15 +337,14 @@
                 <Button x:Name="MainWindowCycleOrientationCcwButton"
                         Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                         CommandParameter="CCW"
-                        Classes="no-bg no-hover-bg no-border"
+                        Classes="default-button no-bg no-hover-bg no-border"
                         local:MpAvPointerCommandExtension.IsEnabled="True"
                         local:MpAvPointerCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                         local:MpAvPointerCommandExtension.RightPressCommandParameter="CW">
                     <ToolTip.Tip>
                         <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.MainWindowTitleCycleOrientationToolTip}" />
                     </ToolTip.Tip>
-
-                    <PathIcon Data="{StaticResource RotateCcwSvg}" />
+                    <local:MpAvTintedImage Source="{Binding Source={StaticResource RotateImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Button>
 
                 <!--  SYS TRAY MENU (MOBILE ONLY)  -->
@@ -331,6 +362,7 @@
 
             <!--  HEADER (MOBILE ONLY)  -->
             <TransitioningContentControl Classes="header"
+                                         IsVisible="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                          DataContext="{Binding FocusHeaderViewModel}"
                                          Content="{Binding .}">
                 <TransitioningContentControl.ContentTemplate>

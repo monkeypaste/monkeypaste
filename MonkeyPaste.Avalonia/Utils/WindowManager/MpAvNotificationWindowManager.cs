@@ -152,17 +152,19 @@ namespace MonkeyPaste.Avalonia {
                     };
                     break;
             }
-
-#if WINDOWS 
-
             if (MpAvThemeViewModel.Instance.IsMultiWindow &&
                 nvmb is not MpAvWelcomeNotificationViewModel &&
                 nw != null &&
                 nw.TryGetPlatformHandle() is { } ph) {
-
+#if WINDOWS
                 MpAvToolWindow_Win32.SetAsToolWindow(ph.Handle);
-            }
 #endif
+                // BUG ntf styles don't seem to be registering, manually setting system decoration
+                nw.SystemDecorations = SystemDecorations.None;
+
+            }
+
+
 
             BeginOpen(nw);
         }
@@ -212,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
 
             var disp = nw.GetObservable(Control.BoundsProperty).Subscribe(value => PositionAllNtfs());
 
-            void Nw_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
+            void Nw_EffectiveViewportChanged(object sender, EventArgs e) {
                 PositionAllNtfs();
             }
 
@@ -224,11 +226,11 @@ namespace MonkeyPaste.Avalonia {
             }
             nw.Closed += OnWindowClosed;
             nw.EffectiveViewportChanged += Nw_EffectiveViewportChanged;
+            nw.Opened += Nw_EffectiveViewportChanged;
 
-
-            if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                if (nvmb is MpAvUserActionNotificationViewModel uavm) {
-                    if(nvmb.IsModal) {
+#if MOBILE_OR_WINDOWED
+            if (nvmb is MpAvUserActionNotificationViewModel uavm) {
+                    if (nvmb.IsModal) {
                         nw.OpenTransition = MpChildWindowTransition.FadeIn;
                         nw.CloseTransition = MpChildWindowTransition.FadeOut;
                     } else {
@@ -240,7 +242,7 @@ namespace MonkeyPaste.Avalonia {
                     nw.OpenTransition = MpChildWindowTransition.FadeIn;
                     nw.CloseTransition = MpChildWindowTransition.FadeOut | MpChildWindowTransition.SlideOutToTop;
                 }
-            }
+#endif
             try {
                 if (nvmb.Owner != null) {
                     nw.Show(nvmb.Owner);

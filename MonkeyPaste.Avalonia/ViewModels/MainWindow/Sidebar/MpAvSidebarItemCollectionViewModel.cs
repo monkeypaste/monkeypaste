@@ -345,8 +345,8 @@ namespace MonkeyPaste.Avalonia {
             double dh = h - ContainerBoundHeight;
             ContainerBoundWidth = w;
             ContainerBoundHeight = h;
-            
-            if(MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
+
+            if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
                 MpAvClipTrayViewModel.Instance.ContainerBoundHeight -= dh;
             } else {
                 MpAvClipTrayViewModel.Instance.ContainerBoundWidth -= dw;

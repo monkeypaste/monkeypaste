@@ -79,17 +79,8 @@
             <Setter Property="HorizontalAlignment"
                     Value="Right" />
         </Style>
-        <Style Selector="Grid#PinTrayContainerGrid ListBox#PinTrayListBox /template/ WrapPanel">
-            <Setter Property="Margin"
-                    Value="0,20,0,0" />
-        </Style>
-        <Style Selector="Grid#PinTrayContainerGrid.mobile ListBox#PinTrayListBox /template/ WrapPanel">
-            <Setter Property="Margin"
-                    Value="0" />
-        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="PinTrayContainerBorder"
-            BoxShadow="inset 0 0 10 10 #46000000"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Grid x:Name="PinTrayContainerGrid"
@@ -106,7 +97,7 @@
                      MaxWidth="{Binding MaxPinTrayScreenWidth}"
                      MaxHeight="{Binding MaxPinTrayScreenHeight}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      SelectedItem="{Binding SelectedPinTrayItem, Mode=TwoWay}"
@@ -136,7 +127,7 @@
                 </ListBox.ItemsPanel>
             </ListBox>
 
-            <!--  IsEmpty Overlay  -->
+            <!--  EMPTY OVERLAY  -->
 
             <Button x:Name="PinTrayEmptyContainer"
                     ClipToBounds="False"
@@ -151,9 +142,9 @@
             </Button>
 
             <!--  BUTTON GRID  -->
-            <StackPanel x:Name="ButtonPanelButtonPanel"
+            <StackPanel x:Name="ButtonPanel"
                         IsVisible="{Binding IsMultiWindow, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                        Margin="5"
+                        Margin="0,5,10,0"
                         Spacing="7">
                 <!--  UNPIN All/Busy  -->
 

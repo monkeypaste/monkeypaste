@@ -18,9 +18,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         public Control AdornedControl { get; private set; }
 
-        public MpAvAdornerBase(Control adornedControl) : base() {
+        public MpAvAdornerBase(Control ac) : base() {
             IsVisible = false;
-            AdornedControl = adornedControl;
+            AdornedControl = ac;
             if (AdornedControl != null) {
                 AdornedControl.Unloaded += AdornedControl_Unloaded;
                 AdornedControl.Loaded += AdornedControl_Loaded;
@@ -31,9 +31,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void AdornedControl_Loaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            var adornerLayer = AdornerLayer.GetAdornerLayer(AdornedControl);
-            adornerLayer.Children.Add(this);
-            AdornerLayer.SetAdornedElement(this, AdornedControl);
+            if (AdornedControl is not Control ac ||
+                AdornerLayer.GetAdornerLayer(ac) is not { } al) {
+                return;
+            }
+            al.Children.Add(this);
+            AdornerLayer.SetAdornedElement(this, ac);
         }
 
         private void AdornedControl_Unloaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
@@ -46,12 +49,13 @@ namespace MonkeyPaste.Avalonia {
 
 
         public virtual void Remove() {
-            if (AdornedControl is not Control adornedControl ||
-                AdornerLayer.GetAdornerLayer(adornedControl) is not { } al) {
+            if (AdornedControl is not Control ac ||
+                AdornerLayer.GetAdornerLayer(ac) is not { } al ||
+                this is not ISetLogicalParent slp) {
                 return;
             }
             al.Children.Remove(this);
-            ((ISetLogicalParent)this).SetParent(null);
+            slp.SetParent(null);
         }
         public virtual void Draw(bool? forceIsVisibleValue = null) {
             if (forceIsVisibleValue.HasValue) {

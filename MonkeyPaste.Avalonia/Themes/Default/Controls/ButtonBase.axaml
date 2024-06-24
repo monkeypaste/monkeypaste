@@ -107,4 +107,9 @@
         <Setter Property="Foreground"
                 Value="{DynamicResource ThemeGrayAccent3Brush}" />
     </Style>
+
+    <Style Selector="ToggleButton.no-bg:checked /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
 </Styles>

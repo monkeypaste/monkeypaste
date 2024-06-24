@@ -148,15 +148,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void ValidateUrlViewModels() {
-            var dups = Items.Where(x => Items.Any(y => y != x && x.IsValueEqual(y)));
-            if (dups.LastOrDefault() is { } dup_uvm) {
-                MpDebug.Break($"Url collection error, dups detected (removing newest ones!): {string.Join(Environment.NewLine,dups.Select(x=>x.UrlPath).Distinct())}",silent: true);
+            //var dups = Items.Where(x => Items.Any(y => y != x && x.IsValueEqual(y)));
+            //if (dups.LastOrDefault() is { } dup_uvm) {
+                //MpDebug.Break($"Url collection error, dups detected (removing newest ones!): {string.Join(Environment.NewLine,dups.Select(x=>x.UrlPath).Distinct())}",silent: true);
                 //Dispatcher.UIThread.Post(async () => {
                 //    await dup_uvm.Url.DeleteFromDatabaseAsync();
                 //    Items.Remove(dup_uvm);
                 //});
-            }
-
+            //}
         }
 
         #endregion

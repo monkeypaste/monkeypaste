@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvMainWindowTitleMenuView() {
             InitializeComponent();
 
-            var windowDragButton = this.FindControl<Control>("WindowOrientationHandleButton");
+            var windowDragButton = this.WindowOrientationHandleButton;
             windowDragButton.AddHandler(Control.PointerPressedEvent, WindowDragButton_PointerPressed, RoutingStrategies.Tunnel);
         }
 

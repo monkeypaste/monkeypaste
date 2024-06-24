@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Avalonia.Controls;
+using Avalonia.Media;
+using MonkeyPaste.Common;
+using System;
 using System.Linq;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvFilterMenuViewModel :
@@ -13,10 +17,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region State
+        public bool IsExpanded { get; set; } =
+#if MOBILE_OR_WINDOWED
+            false;
+#else
+            true;
+#endif
+
+        #endregion
+
         #region Layout
         public int FilterAnimTimeMs => 300; // NOTE needs to match resource time
         public double DefaultFilterMenuFixedSize =>
-            MpAvThemeViewModel.Instance.IsMobileOrWindowed ? 50 : 40;
+            !IsExpanded ? 0 : MpAvThemeViewModel.Instance.IsMobileOrWindowed ? 50 : 40;
 
         public double FilterMenuHeight { get; set; }
 
@@ -30,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #endregion
+#endregion
 
         #region Constructors
 
@@ -49,6 +63,9 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(ObservedSortViewWidth):
                 case nameof(ObservedTagTrayWidth):
                     UpdateFilterLayouts();
+                    break;
+                case nameof(IsExpanded):
+                    MpMessenger.SendGlobal(MpMessageType.FilterExpandedChanged);
                     break;
 
             }
@@ -96,11 +113,17 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 MaxTagTrayScreenWidth = 0;
                 MaxSearchBoxWidth = double.PositiveInfinity;
-            }
-
-            
-
+            }            
         }
+        #endregion
+
+        #region Commands
+
+        public ICommand ToggleIsFilterMenuExpandedCommand => new MpCommand(
+            () => {
+                IsExpanded = !IsExpanded;
+            });
+
         #endregion
     }
 }

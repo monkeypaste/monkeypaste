@@ -27,7 +27,7 @@
                     Value="False" />
         </Style>
 
-        <Style Selector="Grid#FilterDockPanel:not(.mobile) local|MpAvClipTileSortView">
+        <!--<Style Selector="Grid#FilterDockPanel:not(.mobile) local|MpAvClipTileSortView">
             <Setter Property="IsHitTestVisible"
                     Value="{Binding IsAnyTagActive, Source={x:Static local:MpAvTagTrayViewModel.Instance}}" />
             <Setter Property="Opacity"
@@ -38,14 +38,14 @@
                     Value="{Binding IsAnyTagActive, Source={x:Static local:MpAvTagTrayViewModel.Instance}}" />
             <Setter Property="Opacity"
                     Value="{Binding $self.IsHitTestVisible, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}" />
-        </Style>
+        </Style>-->
 
         <Style Selector="Grid#FilterDockPanel.mobile.pin local|MpAvClipTileSortView">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Border Background="{Binding Source={DynamicResource FilterMenuBgBrush}, ConverterParameter=mid, Converter={x:Static local:MpAvBrushToMutedBrushConverter.Instance}}"
+    <Border Background="{DynamicResource FilterMenuBgBrush}"
             Classes="dark-bevel-3">
         <Grid x:Name="FilterDockPanel"
               Classes.pin="{Binding IsPinTrayVisible, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"

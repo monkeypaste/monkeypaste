@@ -241,7 +241,7 @@ namespace MonkeyPaste.Avalonia {
 #if WINDOWED
             true;
 #else
-            MpAvPrefViewModel.Instance == null ? false : MpAvPrefViewModel.Instance.IsWindowed;
+            false;// MpAvPrefViewModel.Instance == null ? false : MpAvPrefViewModel.Instance.IsWindowed;
 #endif
 
         public bool IsMobileOrWindowed =>
@@ -413,21 +413,21 @@ namespace MonkeyPaste.Avalonia {
                 props.AddOrReplace(key.ToString(), hex);
 
             }
-            foreach(var kvp in Application.Current.Resources) {
-                string hex = null;
-                var valObj = kvp.Value;
-                if (valObj is SolidColorBrush scb) {
-                    hex = scb.ToHex();
-                } else if (valObj is Color c) {
-                    hex = c.ToHex();
-                } else {
-                    continue;
-                }
-                if (string.IsNullOrWhiteSpace(hex)) {
-                    continue;
-                }
-                props.AddOrReplace(kvp.Key.ToString(), hex);
-            }
+            //foreach(var kvp in Application.Current.Resources) {
+            //    string hex = null;
+            //    var valObj = kvp.Value;
+            //    if (valObj is SolidColorBrush scb) {
+            //        hex = scb.ToHex();
+            //    } else if (valObj is Color c) {
+            //        hex = c.ToHex();
+            //    } else {
+            //        continue;
+            //    }
+            //    if (string.IsNullOrWhiteSpace(hex)) {
+            //        continue;
+            //    }
+            //    props.AddOrReplace(kvp.Key.ToString(), hex);
+            //}
             props.OrderBy(x => x.Key).ForEach(x => sb.AppendLine($".{x.Key} {{ background-color: {MpColorHelpers.HexToWebHex(x.Value)}}}"));
             return sb.ToString();
         }

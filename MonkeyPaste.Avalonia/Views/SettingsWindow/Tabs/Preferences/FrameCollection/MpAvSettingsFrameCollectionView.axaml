@@ -16,6 +16,7 @@
     <UserControl.Styles>
     </UserControl.Styles>
     <ItemsControl x:Name="SettingsFrameItemsControl"
+                  Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                   ItemsSource="{Binding FilteredPreferenceFrames}"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   ScrollViewer.VerticalScrollBarVisibility="Auto">

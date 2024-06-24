@@ -79,7 +79,9 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFixing { get; set; } = false;
 
         public bool CanFix => FixCommand != null && FixCommand.CanExecute(FixCommandArgs);
-
+        public bool ShowDismissButton =>
+            MpAvThemeViewModel.Instance.IsMobileOrWindowed &&
+            ButtonsType == MpNotificationButtonsType.None;
         public bool ShowUpdateButton { get; set; }
         public bool ShowIgnoreButton { get; set; }
         public bool ShowFixButton => CanFix && !IsFixing;

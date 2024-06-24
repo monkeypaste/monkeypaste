@@ -178,8 +178,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-        protected override void OnClosing(CancelEventArgs e) {
-            base.OnClosing(e);
+        protected
+#if MOBILE_OR_WINDOWED
+         override  
+#endif
+            void OnClosing(CancelEventArgs e) {
+#if MOBILE_OR_WINDOWED
+            base.OnClosing(e); 
+#endif
             if (e.Cancel || !this.Classes.Contains("fadeOut") || this.Classes.Contains("closing")) {
                 return;
             }

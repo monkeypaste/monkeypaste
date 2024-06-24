@@ -31,6 +31,8 @@
 
     <!--  EMPTY TEXT  -->
     <Style Selector="TextBlock.emptyOverlayText">
+        <Setter Property="FontStyle"
+                Value="Italic" />
         <Setter Property="FontSize"
                 Value="42" />
         <Setter Property="Foreground"

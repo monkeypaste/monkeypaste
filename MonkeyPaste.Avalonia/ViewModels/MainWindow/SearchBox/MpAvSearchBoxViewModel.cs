@@ -214,11 +214,21 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsExpandAdvancedSearchButtonVisible));
                     break;
                 case MpMessageType.MainWindowInitialOpenComplete:
+                    if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                        break;
+                    }
                     Dispatcher.UIThread.Post(async () => {
+                        // expand searchbox so textbox is attached to v tree and can take focus on auto search
                         IsExpanded = true;
                         await Task.Delay(300);
                         IsExpanded = false;
                     });
+                    break;
+                case MpMessageType.FilterExpandedChanged:
+                    if(MpAvFilterMenuViewModel.Instance.IsExpanded && 
+                        !IsExpanded) {
+                        ToggleIsSearchBoxExpandedCommand.Execute(null);
+                    }
                     break;
             }
         }
@@ -345,30 +355,6 @@ namespace MonkeyPaste.Avalonia {
                     showByPointer: false,
                     PlacementMode.TopEdgeAlignedLeft,
                     PopupAnchor.BottomRight);
-
-                //bool HideOnClickHandler(object arg) {
-                //    if (arg is not MenuItem mi ||
-                //        mi.DataContext is not MpAvMenuItemViewModel mivm) {
-                //        return true;
-                //    }
-                //    SearchFilterCollectionViewModel.ValidateFilters(SearchFilterCollectionViewModel.Filters.FirstOrDefault(x => x == mivm.Identifier));
-                //    if (MpAvContextMenuView.Instance.GetVisualDescendants<MenuItem>() is IEnumerable<MenuItem> mil) {
-                //        foreach (var mi2 in mil) {
-                //            if (mi2.DataContext is not MpAvMenuItemViewModel mi_mivm ||
-                //                SearchFilterCollectionViewModel.Filters.FirstOrDefault(x => x == mi_mivm.Identifier) is not MpAvSearchFilterViewModel sfvm) {
-                //                continue;
-                //            }
-                //            MpAvMenuExtension.SetCheck(mi2, sfvm.IsChecked);
-                //        }
-                //    }
-                //    return false;
-                //}
-                //MpAvMenuExtension.ShowMenu(
-                //    target_control,
-                //    SearchFilterCollectionViewModel.PopupMenuViewModel,
-                //    hideOnClick: false,
-                //    //hideOnClickHandler: HideOnClickHandler,
-                //    placement: PlacementMode.Pointer);
             });
 
         public ICommand ToggleIsSearchBoxExpandedCommand => new MpCommand(

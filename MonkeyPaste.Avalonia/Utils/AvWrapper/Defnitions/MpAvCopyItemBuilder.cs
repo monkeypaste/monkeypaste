@@ -258,7 +258,7 @@ namespace MonkeyPaste.Avalonia {
                         MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Timed out, shouldn't happen...");
                         return;
                     }
-                    MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Will retry...");
+                    //MpConsole.WriteLine($"Ci builder error cannot find ci w/ guid '{ci_guid}'. Will retry...");
                     await Task.Delay(100);
                     ciid = await MpDataModelProvider.GetItemIdByGuidAsync<MpCopyItem>(ci_guid);
                 }

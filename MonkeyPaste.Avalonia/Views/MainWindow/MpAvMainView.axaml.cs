@@ -235,7 +235,7 @@ namespace MonkeyPaste.Avalonia {
             var ctrvm = MpAvClipTrayViewModel.Instance;
             var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
             //var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
-
+            var mwtb = this.MainWindowTrayPanel;
             var mwtg = this.MainWindowTrayGrid;
 
             var sbbg = this.SidebarButtonGroup;
@@ -271,26 +271,7 @@ namespace MonkeyPaste.Avalonia {
                     new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
 
                 var ssbcb_cd = new ColumnDefinition(0, GridUnitType.Auto);
-                //var ssbcb_cd = new ColumnDefinition(Math.Max(0, sbicvm.ContainerBoundWidth), GridUnitType.Pixel);
-                //ssbcb_cd.Bind(
-                //    ColumnDefinition.WidthProperty,
-                //    new Binding() {
-                //        Source = sbicvm,
-                //        Path = nameof(sbicvm.ContainerBoundWidth),
-                //        Mode = BindingMode.TwoWay,
-                //        Converter = MpAvDoubleToGridLengthConverter.Instance
-                //    });
-
                 var ctrcb_cd = new ColumnDefinition(1, GridUnitType.Star);
-                //var ctrcb_cd = new ColumnDefinition(Math.Max(0, ctrvm.ContainerBoundWidth), GridUnitType.Pixel);
-                //ctrcb_cd.Bind(
-                //    ColumnDefinition.WidthProperty,
-                //    new Binding() {
-                //        Source = ctrvm,
-                //        Path = nameof(ctrvm.ContainerBoundWidth),
-                //        Mode = BindingMode.TwoWay,
-                //        Converter = MpAvDoubleToGridLengthConverter.Instance
-                //    });
 
                 mwtg.ColumnDefinitions.Add(sbbg_cd);
                 mwtg.ColumnDefinitions.Add(ssbcb_cd);
@@ -319,11 +300,6 @@ namespace MonkeyPaste.Avalonia {
                 // cliptray container border
                 Grid.SetRow(ctrcv, 1);
                 Grid.SetColumn(ctrcv, 2);
-
-                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                    //Grid.SetColumn(ctrcv, 1);
-                    //Grid.SetColumnSpan(ctrcv, 2);
-                }
 
                 // cliptraycontainer column definitions (horizontal)
                 ctrcv_cg.RowDefinitions.Clear();
@@ -394,29 +370,7 @@ namespace MonkeyPaste.Avalonia {
 
             void SetupVertical() {
                 var ctrcb_rd = new RowDefinition(1, GridUnitType.Star);
-                //ctrcb_rd.Bind(
-                //    RowDefinition.HeightProperty,
-                //    new Binding() {
-                //        Source = ctrvm,
-                //        Path = nameof(ctrvm.ContainerBoundHeight),
-                //        Mode = BindingMode.TwoWay,
-                //        Converter = MpAvDoubleToGridLengthConverter.Instance
-                //    });
-
-                //ctrcb_rd.Bind(
-                //    RowDefinition.MaxHeightProperty,
-                //    new Binding() { Source = ctrvm, Path = nameof(ctrvm.MaxContainerScreenHeight) });
-
                 var ssbcb_rd = new RowDefinition(0, GridUnitType.Auto);
-                //var ssbcb_rd = new RowDefinition(Math.Max(0, sbicvm.ContainerBoundHeight), GridUnitType.Pixel);
-                //ssbcb_rd.Bind(
-                //    RowDefinition.HeightProperty,
-                //    new Binding() {
-                //        Source = sbicvm,
-                //        Path = nameof(sbicvm.ContainerBoundHeight),
-                //        Mode = BindingMode.TwoWay,
-                //        Converter = MpAvDoubleToGridLengthConverter.Instance
-                //    });
 
                 var sbbg_rd = new RowDefinition(
                     new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
@@ -429,10 +383,6 @@ namespace MonkeyPaste.Avalonia {
                 // cliptray container view
                 Grid.SetRow(ctrcv, 0);
                 Grid.SetColumn(ctrcv, 0);
-
-                if (MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                    //Grid.SetRowSpan(ctrcv, 2);
-                }
 
                 // sidebar content
                 Grid.SetRow(ssbcb, 1);
@@ -532,6 +482,7 @@ namespace MonkeyPaste.Avalonia {
             var tmv = this.MainWindowTitleView;
             var fmv = this.FilterMenuView;
             var ttrv = fmv.TagTrayView;
+            var mwtp = this.MainWindowTrayPanel;
             var mwtg = this.MainWindowTrayGrid;
 
             var tmv_cg = tmv.TitlePanel;
@@ -587,7 +538,7 @@ namespace MonkeyPaste.Avalonia {
                     mwcg.RowDefinitions.Add(tmv_rd);
 
                     Grid.SetRow(fmv, 0);
-                    Grid.SetRow(mwtg, 1);
+                    Grid.SetRow(mwtp, 1);
                     Grid.SetRow(tmv, 2);
 
                     tmv.Margin = new Thickness(0, 0, 0, resizer_short_side);
@@ -599,13 +550,13 @@ namespace MonkeyPaste.Avalonia {
 
                     Grid.SetRow(tmv, 0);
                     Grid.SetRow(fmv, 1);
-                    Grid.SetRow(mwtg, 2);
+                    Grid.SetRow(mwtp, 2);
 
                     tmv.Margin = new Thickness(0, resizer_short_side, 0, 0);
                 }
 
                 Grid.SetColumn(fmv, 0);
-                Grid.SetColumn(mwtg, 0);
+                Grid.SetColumn(mwtp, 0);
                 Grid.SetColumn(tmv, 0);
                 Grid.SetRowSpan(tmv, 1);
 
@@ -675,8 +626,8 @@ namespace MonkeyPaste.Avalonia {
                     Grid.SetRow(fmv, 0);
                     Grid.SetColumn(fmv, 0);
 
-                    Grid.SetRow(mwtg, 1);
-                    Grid.SetColumn(mwtg, 0);
+                    Grid.SetRow(mwtp, 1);
+                    Grid.SetColumn(mwtp, 0);
 
                     Grid.SetRow(tmv, 0);
                     Grid.SetColumn(tmv, 1);
@@ -691,8 +642,8 @@ namespace MonkeyPaste.Avalonia {
                     Grid.SetRow(fmv, 0);
                     Grid.SetColumn(fmv, 1);
 
-                    Grid.SetRow(mwtg, 1);
-                    Grid.SetColumn(mwtg, 1);
+                    Grid.SetRow(mwtp, 1);
+                    Grid.SetColumn(mwtp, 1);
 
                     Grid.SetRow(tmv, 0);
                     Grid.SetColumn(tmv, 0);
@@ -758,11 +709,19 @@ namespace MonkeyPaste.Avalonia {
             // returns true if no clamping needed
             var ctrvm = MpAvClipTrayViewModel.Instance;
             var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
+            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                ctrvm.ContainerBoundHeight = BoundContentAndSidebarSize.Height;
+                sbicvm.ContainerBoundHeight = BoundContentAndSidebarSize.Height;
+            } else {
+                ctrvm.ContainerBoundWidth = BoundContentAndSidebarSize.Width;
+                sbicvm.ContainerBoundWidth = BoundContentAndSidebarSize.Width;
+            }
             var diff = AvailableContentAndSidebarSize - BoundContentAndSidebarSize;
             bool is_valid = diff.IsValueEqual(MpPoint.Zero,1);
             if (!is_valid) {
                 // only clamp clip cntr since sidebar animates 
                 MpConsole.WriteLine($"Invalid content size! Avail: {AvailableContentAndSidebarSize} Bound: {BoundContentAndSidebarSize} diff: {diff}", true);
+               
                 ctrvm.ContainerBoundWidth += diff.X;
                 ctrvm.ContainerBoundHeight += diff.Y;
                 var diff2 = AvailableContentAndSidebarSize - BoundContentAndSidebarSize;
@@ -828,6 +787,17 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.FilterExpandedChanged:
+                    Dispatcher.UIThread.Post(async () => {
+                        // wait for animation to complete
+                        UpdateMainViewLayout();
+                        await Task.Delay(1_000);
+                        UpdateMainViewLayout();
+                        MpAvClipTrayViewModel.Instance.UpdateDefaultItemSize();
+
+                        //UpdateGridBindings();
+                    });
+                    break;
                 //case MpMessageType.SidebarItemSizeChanged:
                 //case MpMessageType.SidebarItemSizeChangeEnd:
                 case MpMessageType.PinTraySizeChanged:
