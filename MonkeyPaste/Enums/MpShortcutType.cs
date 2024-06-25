@@ -60,6 +60,7 @@
         ClearPinTray,
         ToggleGlobalHooks,
         ToggleXamlHotReload,
+        ToggleContentWrap,
 
         // CUT-OFF 
         MAX_APP_SHORTCUT,

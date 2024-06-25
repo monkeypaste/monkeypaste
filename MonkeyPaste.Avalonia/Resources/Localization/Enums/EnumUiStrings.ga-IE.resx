@@ -1195,4 +1195,7 @@
   <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
     <value>Toggle Xaml Reload Hot</value>
   </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>Cuir an t -ábhar ar leataobh</value>
+  </data>
 </root>

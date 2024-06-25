@@ -73,7 +73,7 @@ function loadContentAsync(
 
 		deactivateFindReplace(false);
 
-		loadContentDataAsync(contentData);
+		loadContentDataAsync(contentData, is_reload);
 
 		updateQuill();
 		if (!is_reload) {
@@ -108,7 +108,7 @@ function loadContentAsync(
 		//} else {
 			loadAnnotations(annotationsJsonStr);
 		//}
-
+		is_wrap_enabled = isRunningOnHost() || is_reload || globals.ContentItemType != 'Image' ? is_wrap_enabled : true;
 		setWrap(is_wrap_enabled);
 
 		updateAllElements();

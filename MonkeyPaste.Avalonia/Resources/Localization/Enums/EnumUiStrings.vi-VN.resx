@@ -1195,4 +1195,7 @@
   <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
     <value>Chuyển đổi XAML nóng lại nóng</value>
   </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>Chuyển đổi nội dung gói</value>
+  </data>
 </root>

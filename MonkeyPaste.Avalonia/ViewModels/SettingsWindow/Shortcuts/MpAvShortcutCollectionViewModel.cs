@@ -448,6 +448,10 @@ namespace MonkeyPaste.Avalonia {
                             MpShortcutType.ToggleGlobalHooks,
                             ToggleGlobalHooksCommand
                         },  
+                        {
+                            MpShortcutType.ToggleContentWrap,
+                            MpAvClipTrayViewModel.Instance.ToggleSelectedClipWrapFromShortcutCommand
+                        },  
 #if DEBUG
 		                {
                             MpShortcutType.ToggleXamlHotReload,
@@ -895,7 +899,7 @@ namespace MonkeyPaste.Avalonia {
                 .Distinct()
                 .Difference(Enum.GetNames(typeof(MpShortcutType)))
                 .SelectMany(x => MpAvDefaultDataCreator.DefaultShortcutDefinitions.Where(y => y[2] == x))
-                .Select(x => MpAvDefaultDataCreator.CreateDefaultShortcutAsync(x)));
+                .Select(x => MpAvDefaultDataCreator.CreateDefaultShortcutAsync(x,true)));
 
             new_shortcuts.ForEach(x => MpConsole.WriteLine($"New shortcut added: {x}"));
             scl.AddRange(new_shortcuts);

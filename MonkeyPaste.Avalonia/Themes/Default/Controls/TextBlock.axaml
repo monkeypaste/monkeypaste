@@ -42,7 +42,7 @@
         <Setter Property="TextWrapping"
                 Value="WrapWithOverflow" />
         <Setter Property="TextAlignment"
-                Value="Center" />
+                Value="Justify" />
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
         <Setter Property="VerticalAlignment"

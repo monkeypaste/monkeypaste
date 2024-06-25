@@ -28,6 +28,8 @@ using AvToolTip = Avalonia.Controls.ToolTip;
 #if WINDOWS
 using static System.Net.Mime.MediaTypeNames;
 using System.Windows.Media.Media3D;
+using System.Collections.ObjectModel;
+
 #endif
 
 #if CEFNET_WV
@@ -65,7 +67,6 @@ namespace MonkeyPaste.Avalonia {
         private MpQuillEditorContentChangedMessage _lastReadOnlyEnabledFromHostResp = null;
         private MpQuillEditorSelectionStateMessage _lastEditorSelectionStateMessage = null;
         private DateTime? _lastAppendStateChangeCompleteDt = null;
-
         #endregion
 
         #region Constants
@@ -468,6 +469,13 @@ namespace MonkeyPaste.Avalonia {
 
                 #region LAYOUT
 
+                case MpEditorBindingFunctionType.notifyWrapEnabledChanged:
+                    ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillWrapChangedEventMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillWrapChangedEventMessage wrapChangedMsg) {
+                        BindingContext.IsWrappingEnabled = wrapChangedMsg.isWrappingEnabled;
+                    }
+                    break;
+                
                 case MpEditorBindingFunctionType.notifyScrollBarVisibilityChanged:
                     ntf = MpJsonExtensions.DeserializeBase64Object<MpQuillOverrideScrollNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillOverrideScrollNotification scrollbarVisibleMsg) {
@@ -1038,6 +1046,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
         }
 
+
 #if CEFNET_WV
 
         //protected override void Dispose(bool disposing) {
@@ -1208,9 +1217,11 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
         }
+
         #endregion
 
         #region Private Methods
+
         private void InitDnd() {
 
         }
@@ -1713,6 +1724,7 @@ namespace MonkeyPaste.Avalonia {
             //}
         }
         #endregion
+
 
         #region IsContentReadOnly 
 

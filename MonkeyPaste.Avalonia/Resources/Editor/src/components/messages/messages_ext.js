@@ -344,7 +344,7 @@ function setEditorZoom_ext(scaleMsgBase64Str) {
 function wrapChanged_ext(wrapChangedBase64Str) {
 	// input 'MpQuillWrapChangedEventMessage'
 	let req = toJsonObjFromBase64Str(wrapChangedBase64Str);
-	setWrap(req.isWrappingEnabled);
+	setWrap(req.isWrappingEnabled, true);
 }
 //function setSelection_ext(selMsgBase64Str) {
 //	// input 'MpQuillSelectionChangedMessage'

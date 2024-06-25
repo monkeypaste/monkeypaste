@@ -2797,6 +2797,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Toggle Content Wrap.
+        /// </summary>
+        public static string MpShortcutType_ToggleContentWrap {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ToggleContentWrap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Toggle Filter Menu Visible.
         /// </summary>
         public static string MpShortcutType_ToggleFilterMenuVisible {

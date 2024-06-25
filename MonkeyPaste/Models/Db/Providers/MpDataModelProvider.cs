@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static SQLite.SQLite3;
 //using Xamarin.Forms;
 
 namespace MonkeyPaste {
@@ -732,6 +733,12 @@ namespace MonkeyPaste {
 
         #region MpShortcut
 
+        public static async Task<List<MpShortcut>> GetShortcutsByKeyStringAsync(string keystring) {
+            string query = string.Format(@"select * from MpShortcut where KeyString=?");
+            var result = await MpDb.QueryAsync<MpShortcut>(query, keystring);
+            return result;
+        }
+        
         public static async Task<MpShortcut> GetShortcutAsync(string shortcutTypeName, string commandParameter = null) {
             List<MpShortcut> result;
 

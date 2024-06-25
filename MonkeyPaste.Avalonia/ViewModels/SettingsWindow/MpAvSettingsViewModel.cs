@@ -34,6 +34,7 @@ namespace MonkeyPaste.Avalonia {
         };
 
         private string[] _reinitContentParams => new string[] {
+            nameof(MpAvPrefViewModel.Instance.IsContentWrapEnabledByDefault),
             nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
             nameof(MpAvPrefViewModel.Instance.DefaultEditableFontFamily),
             nameof(MpAvPrefViewModel.Instance.DefaultCodeFontFamily),
@@ -179,7 +180,10 @@ namespace MonkeyPaste.Avalonia {
             FilteredTabLookup == null ? null : FilteredTabLookup[MpSettingsTabType.Account];
 
         public IEnumerable<MpAvSettingsFrameViewModel> FilteredPreferenceFrames =>
-             FilteredTabLookup == null ? null : FilteredTabLookup[MpSettingsTabType.Preferences];
+             FilteredTabLookup == null ? 
+                null : 
+            FilteredTabLookup[MpSettingsTabType.Preferences]
+            .OrderBy(x=>x.Items.Where(x=>x.IsVisible).Count());
         public MpAvSettingsFrameViewModel SelectedItem {
             get =>
                 Items
@@ -1090,6 +1094,16 @@ namespace MonkeyPaste.Avalonia {
                                                     value = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled.ToString()
                                                 }
                                             }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.IsContentWrapEnabledByDefault),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = UiStrings.WrapTextMenuLabel,
+                                            value = new MpParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpAvPrefViewModel.Instance.IsContentWrapEnabledByDefault.ToString()
+                                                }
                                         },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.IsDataTransferDestinationFormattingEnabled),

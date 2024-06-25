@@ -1195,4 +1195,7 @@
   <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
     <value>XAML кайнар йөкләү</value>
   </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>Эчтәлек төрү</value>
+  </data>
 </root>

@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -625,7 +626,23 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public bool IsWrappingEnabled { get; set; }
+
+        private bool? _isWrappingEnabled;
+        public bool IsWrappingEnabled { 
+            get {
+                if(_isWrappingEnabled.HasValue) {
+                    // user set this tiles wrapping
+                    return _isWrappingEnabled.Value;
+                }
+                return MpAvPrefViewModel.Instance.IsContentWrapEnabledByDefault;
+            }
+            set {
+                if(!_isWrappingEnabled.HasValue || _isWrappingEnabled.Value != value) {
+                    _isWrappingEnabled = value;
+                    OnPropertyChanged(nameof(IsWrappingEnabled));
+                }
+            }
+        }
         public bool IsWindowClosing { get; private set; }
         bool IsDetailCycling { get; set; }
         public MpCopyItemType LastCopyItemType { get; private set; }
@@ -1378,6 +1395,7 @@ namespace MonkeyPaste.Avalonia {
             SearchableText = null;
             _contentView = null;
             if (!is_reload) {
+                _isWrappingEnabled = null;
                 IsWindowOpen = false;
                 if (CopyItemType != MpCopyItemType.None) {
                     LastCopyItemType = CopyItemType;
@@ -2337,6 +2355,11 @@ namespace MonkeyPaste.Avalonia {
             
             Dispatcher.UIThread.Post(async () => {
                 IsBusy = true;
+                // always ensure when window closes tile goes back to readonly
+                IsContentReadOnly = true;
+
+                // wait a bit for editor resp and content change to complete
+                await Task.Delay(1_500);
                 await MpAvClipTrayViewModel.Instance.UnpinTileCommand.ExecuteAsync(this);
                 pow.Close();
                 IsWindowClosing = false;

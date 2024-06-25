@@ -77,6 +77,7 @@ namespace MonkeyPaste.Avalonia {
                             new string[] { "73a4cfff-8cf9-456a-9e91-06c61bb160e2", "Control+Left", MpShortcutType.OrientMainWindowLeft.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] { "3df9acbe-1acf-4d1b-ba36-936369b1936f", "Control+Right", MpShortcutType.OrientMainWindowRight.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] { "88832664-68f5-4c4e-9c3a-4a34851d3f3f", "Control+Shift+W", MpShortcutType.ClearPinTray.ToString(), MpRoutingType.Internal.ToString()},
+                            new string[] { "8862a31e-06d1-49d0-b6d3-f42ba4381d41", "Control+Shift+W", MpShortcutType.ToggleContentWrap.ToString(), MpRoutingType.Internal.ToString()},
                             new string[] { "31ff874c-35fe-445d-b0e6-62828c775c78", "Enter", MpShortcutType.EnterKeyAction.ToString(), MpRoutingType.Internal.ToString()},
 #if DEBUG
                             new string[] { "15f42684-7e50-40fc-8dc8-6a1a6b1bed3f", "F4", MpShortcutType.ToggleGlobalHooks.ToString(), MpRoutingType.Override.ToString(),"False","False"},
@@ -292,14 +293,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public static async Task<MpShortcut> CreateDefaultShortcutAsync(string[] defaultShortcut) {
+        public static async Task<MpShortcut> CreateDefaultShortcutAsync(string[] defaultShortcut, bool resetIfDupKeyStringFound = false) {
             var sc = await MpShortcut.CreateAsync(
                     guid: defaultShortcut[0],
                     keyString: defaultShortcut[1],
                     shortcutType: defaultShortcut[2].ToEnum<MpShortcutType>(),
                     routeType: defaultShortcut[3].ToEnum<MpRoutingType>(),
                     isReadOnly: defaultShortcut.Length >= 5 ? bool.Parse(defaultShortcut[4]) : false,
-                    isInternalOnly: defaultShortcut.Length >= 6 ? bool.Parse(defaultShortcut[5]) : true);
+                    isInternalOnly: defaultShortcut.Length >= 6 ? bool.Parse(defaultShortcut[5]) : true,
+                    resetIfDupKeyStringFound: resetIfDupKeyStringFound);
             return sc;
         }
 

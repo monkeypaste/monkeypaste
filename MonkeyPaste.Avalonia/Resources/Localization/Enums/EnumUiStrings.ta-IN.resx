@@ -1195,4 +1195,7 @@
   <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
     <value>XAML சூடான மறுஏற்றம்</value>
   </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>உள்ளடக்க மடக்கை மாற்றவும்</value>
+  </data>
 </root>

@@ -92,6 +92,10 @@
             <Setter Property="Tint"
                     Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
+        <Style Selector="Border#TileBorder.vert:not(.mobile) :is(Button)">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+        </Style>
 
         <!--  DRAG HANDLE  -->
 
@@ -257,8 +261,8 @@
                                                InputGestureText="{Binding ., ConverterParameter=HideMainWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
                     </ToolTip.Tip>
                     <Border x:Name="MinimizeBorder"
-                            CornerRadius="5"
-                            Height="5"
+                            CornerRadius="0"
+                            Height="2.5"
                             Width="15"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center" />
@@ -268,6 +272,7 @@
 
             <!--  MIDDLE (DRAG HANDLE)  -->
             <Button x:Name="WindowOrientationHandleButton"
+                    ClipToBounds="False"
                     BorderThickness="0"
                     Cursor="SizeAll"
                     IsVisible="{Binding !IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
@@ -276,8 +281,10 @@
                 <Button.RenderTransform>
                     <RotateTransform />
                 </Button.RenderTransform>
-                <local:MpAvTintedImage HorizontalAlignment="Stretch"
+                <local:MpAvTintedImage x:Name="WindowOrientationHandleImage"
+                                       HorizontalAlignment="Stretch"
                                        VerticalAlignment="Stretch"
+                                       Width="{Binding TitleDragHandleLongLength, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}}"
                                        Source="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Button>
 

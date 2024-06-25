@@ -424,7 +424,7 @@ namespace MonkeyPaste.Avalonia {
 
                 //cliptray row definitions
                 double ratio = MpAvThemeViewModel.Instance.IsMultiWindow ?
-                    1 - pin_tray_ratio.Width : 1;
+                    1 - pin_tray_ratio.Height : 1;
                 var ctrv_rd = new RowDefinition(new GridLength(ratio, GridUnitType.Star));
                 ctrv_rd.Bind(
                     RowDefinition.MinHeightProperty,
@@ -569,6 +569,8 @@ namespace MonkeyPaste.Avalonia {
                 if (tmv_wohb.RenderTransform is RotateTransform rott) {
                     rott.Angle = 0;
                 }
+                //tmv_wohb.Width = MpAvMainWindowTitleMenuViewModel.Instance.TitleDragHandleLongLength;
+                //tmv_wohb.Height = double.NaN;
 
                 tmv_rsp.Orientation = Orientation.Horizontal;
                 tmv_rsp.HorizontalAlignment = HorizontalAlignment.Right;
@@ -661,6 +663,8 @@ namespace MonkeyPaste.Avalonia {
                 if (tmv_wohb.RenderTransform is RotateTransform rott) {
                     rott.Angle = 90;
                 }
+                //tmv_wohb.Width = double.NaN;
+                //tmv_wohb.Height = MpAvMainWindowTitleMenuViewModel.Instance.TitleDragHandleLongLength;
 
                 tmv_rsp.Orientation = Orientation.Vertical;
                 tmv_rsp.HorizontalAlignment = HorizontalAlignment.Stretch;

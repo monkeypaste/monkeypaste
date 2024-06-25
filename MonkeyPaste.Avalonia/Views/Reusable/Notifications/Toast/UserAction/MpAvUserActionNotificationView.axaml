@@ -162,7 +162,6 @@
 
                 <!--  BODY  -->
                 <ScrollViewer x:Name="BodyScrollViewer"
-                              MaxHeight="300"
                               IsScrollInertiaEnabled="True"
                               HorizontalScrollBarVisibility="Auto"
                               VerticalScrollBarVisibility="Auto"
@@ -186,7 +185,6 @@
                                                          Background="Transparent"
                                                          Focusable="True"
                                                          TextWrapping="WrapWithOverflow"
-                                                         Width="{Binding $parent[ScrollViewer].Bounds.Width}"
                                                          Foreground="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
                                                          Text="{Binding Body}" />
                                 </DataTemplate>

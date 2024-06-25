@@ -1195,4 +1195,7 @@
   <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
     <value>Lülitage xaml kuum uuesti laadimine</value>
   </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>Sisu mähise ümberlülitamine</value>
+  </data>
 </root>

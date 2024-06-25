@@ -1,5 +1,6 @@
 ﻿namespace MonkeyPaste {
     public enum MpEditorBindingFunctionType {
+        None = 0,
         // two-way (editor as source) *_get async requests
         getAllSharedTemplatesFromDb,
         getClipboardDataTransferObject,
@@ -50,6 +51,7 @@
         notifyAppendStateChangeComplete,
         notifyPointerEvent,
         notifyContentImageLoaded,
-        notifyDevToolsRequested
+        notifyDevToolsRequested,
+        notifyWrapEnabledChanged
     }
 }

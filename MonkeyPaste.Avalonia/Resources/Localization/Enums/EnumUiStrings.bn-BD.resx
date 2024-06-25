@@ -1195,4 +1195,7 @@
   <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
     <value>Xaml হট রিলোড টগল করুন</value>
   </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>সামগ্রী মোড়ানো টগল করুন</value>
+  </data>
 </root>

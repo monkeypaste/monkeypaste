@@ -1195,4 +1195,7 @@
   <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
     <value>Xaml ಹಾಟ್ ರಿಲೋಡ್ ಅನ್ನು ಟಾಗಲ್ ಮಾಡಿ</value>
   </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>ವಿಷಯದ ಸುತ್ತು ಟಾಗಲ್ ಮಾಡಿ</value>
+  </data>
 </root>

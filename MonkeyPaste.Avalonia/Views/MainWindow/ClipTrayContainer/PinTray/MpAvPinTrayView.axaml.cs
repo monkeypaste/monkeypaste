@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -42,6 +43,8 @@ namespace MonkeyPaste.Avalonia {
             var ptrlb = this.FindControl<ListBox>("PinTrayListBox");
             ptrlb.AddHandler(KeyDownEvent, PinTrayListBox_KeyDown, RoutingStrategies.Tunnel);
         }
+
+
         protected override void OnLoaded(RoutedEventArgs e) {
             base.OnLoaded(e);
             InitDnd();

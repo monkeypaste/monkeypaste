@@ -1195,4 +1195,7 @@
   <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
     <value>टॉगल एक्सएएमएल हॉट रीलोड</value>
   </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>सामग्री लपेटणे टॉगल</value>
+  </data>
 </root>

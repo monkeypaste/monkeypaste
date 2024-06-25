@@ -71,7 +71,7 @@
                     Value="10,5" />
             <Setter Property="Margin"
                     Value="10" />
-            <Setter Property="MinWidth"
+            <Setter Property="MaxWidth"
                     Value="300" />
             <Setter Property="MinHeight"
                     Value="50" />
@@ -88,6 +88,8 @@
         </Style>
 
         <Style Selector="DockPanel#OuterContainer.mobile local|MpAvSettingsFrameView">
+            <Setter Property="Width"
+                    Value="{StaticResource NaN}" />
             <Setter Property="MinWidth"
                     Value="300" />
             <Setter Property="BorderThickness"

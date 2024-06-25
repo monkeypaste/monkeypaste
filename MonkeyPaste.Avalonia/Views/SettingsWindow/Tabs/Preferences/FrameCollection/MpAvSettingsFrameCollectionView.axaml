@@ -14,6 +14,10 @@
                        d:DesignHeight="750"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsFrameCollectionView">
     <UserControl.Styles>
+        <Style Selector="ItemsControl.mobile local|MpAvSettingsFrameView">
+            <Setter Property="MinWidth"
+                    Value="{Binding $parent[ItemsControl].Bounds.Width}" />
+        </Style>
     </UserControl.Styles>
     <ItemsControl x:Name="SettingsFrameItemsControl"
                   Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
@@ -22,8 +26,7 @@
                   ScrollViewer.VerticalScrollBarVisibility="Auto">
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="local:MpAvSettingsFrameViewModel">
-                <local:MpAvSettingsFrameView MinWidth="{Binding $parent[ItemsControl].Bounds.Width}"
-                                             Classes.selected="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                <local:MpAvSettingsFrameView Classes.selected="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                     <local:MpAvSettingsFrameView.IsVisible>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="FilteredItems"

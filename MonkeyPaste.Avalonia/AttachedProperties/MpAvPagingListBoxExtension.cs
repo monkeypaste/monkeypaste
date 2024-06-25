@@ -881,6 +881,7 @@ namespace MonkeyPaste.Avalonia {
                     SetScrollOffsetY(lb, sv.Offset.Y);
                     return;
                 }
+
                 if (sv.DataContext is MpAvViewModelBase vm &&
                     vm.IsBusy) {
                     return;
@@ -903,8 +904,8 @@ namespace MonkeyPaste.Avalonia {
                 double vx = GetVelocityX(lb);
                 double vy = GetVelocityY(lb);
 
-                //MpConsole.WriteLine("vx: " + vx);
-                //MpConsole.WriteLine("vy: " + vy);
+                MpConsole.WriteLine("vx: " + vx);
+                MpConsole.WriteLine("vy: " + vy);
 
                 if (scrollOffsetX < 0 || scrollOffsetX > maxOffsetX) {
                     scrollOffsetX = Math.Min(maxOffsetX, Math.Max(0, scrollOffsetX));
@@ -918,34 +919,11 @@ namespace MonkeyPaste.Avalonia {
                 vx = Math.Abs(vx) < MIN_SCROLL_VELOCITY_MAGNITUDE ? 0 : vx;
                 vy = Math.Abs(vy) < MIN_SCROLL_VELOCITY_MAGNITUDE ? 0 : vy;
 
-
-                //if (_touch_accel == null) {
-                //    vx *= GetFrictionX(lb);
-                //    vy *= GetFrictionY(lb);
-                //} else {
-                //    _touch_accel *= new MpPoint(GetFrictionX(lb), GetFrictionY(lb));
-                //    if(_last_v == null) {
-                //        _last_v = MpPoint.Zero;
-                //    }
-
-                //    //vx *= GetFrictionX(lb);
-                //    //vy *= GetFrictionY(lb);
-
-                //    // x = v*t + 1/2*a*t^2.
-                //    // vf^2=vi^2 + 2*a*d
-                //    // vf^2 = vi^2 + 2ad
-                //    //var new_v = new MpPoint(vx, vy) + (_touch_accel * (0.5d * (double)(SCROLL_TICK_INTERVAL_MS ^ 2)));
-                //    var new_v = _last_v + (_touch_accel * (double)SCROLL_TICK_INTERVAL_MS);
-                //    vx = new_v.X;
-                //    vy = new_v.Y;
-                //    _last_v = new_v;
-                //    if (_touch_accel.Length.IsFuzzyZero()) {
-                //        _touch_accel = null;
-                //    }
-                //}
                 scrollOffsetX += vx;
                 scrollOffsetY += vy;
 
+                vx *= GetFrictionX(lb);
+                vy *= GetFrictionY(lb);
 
                 ApplyScrollOffset(lb, scrollOffsetX, scrollOffsetY);
 

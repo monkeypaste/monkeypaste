@@ -89,8 +89,7 @@ namespace MonkeyPaste.Avalonia {
                     SystemDecorations = SystemDecorations.Full,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
                     Content = new MpAvColorPickerView(selectedColor, fixedPalette, allowAlpha),
-                    Background = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? 
-                        Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor) : null
+                    Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor)
                 };
 
                 // NOTE pre-closing context menu cause it'll make funny activation behavior

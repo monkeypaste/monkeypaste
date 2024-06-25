@@ -29,6 +29,34 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         
+        #region Stretch
+
+        public static readonly StyledProperty<Stretch> StretchProperty =
+            AvaloniaProperty.Register<MpAvTintedImage, Stretch>(
+                nameof(Stretch),
+                Stretch.Uniform);
+
+        public Stretch Stretch {
+            get => GetValue(StretchProperty);
+            set => SetValue(StretchProperty, value);
+        }
+
+        #endregion
+        
+        #region StretchDirection
+
+        public static readonly StyledProperty<StretchDirection> StretchDirectionProperty =
+            AvaloniaProperty.Register<MpAvTintedImage, StretchDirection>(
+                nameof(StretchDirection),
+                StretchDirection.Both);
+
+        public StretchDirection StretchDirection {
+            get => GetValue(StretchDirectionProperty);
+            set => SetValue(StretchDirectionProperty, value);
+        }
+
+        #endregion
+        
         #region Source
 
         public static readonly StyledProperty<IImage> SourceProperty =
@@ -44,7 +72,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         static MpAvTintedImage() {
-            AffectsRender<Image>(SourceProperty, TintProperty);
+            AffectsRender<MpAvTintedImage>(SourceProperty, TintProperty);
+            AffectsMeasure<MpAvTintedImage>(SourceProperty, TintProperty);
             SourceProperty.Changed.AddClassHandler<MpAvTintedImage>((x, y) => Init(x));
             TintProperty.Changed.AddClassHandler<MpAvTintedImage>((x, y) => Init(x));
         }
@@ -60,6 +89,7 @@ namespace MonkeyPaste.Avalonia {
                 ti.Background = ti.Tint;
             }
             ti.InvalidateVisual();
+            ti.InvalidateMeasure();
         }
 
         private static ImageBrush GetImageBrush(IImageBrushSource source) {

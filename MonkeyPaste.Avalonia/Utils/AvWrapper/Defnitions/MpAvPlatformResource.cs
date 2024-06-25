@@ -103,7 +103,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             Application.Current.Resources.Add(new(resourceKey, resourceValue));
-            MpConsole.WriteLine($"Resource '{resourceKey}' added with value '{resourceValue}'");
+            //MpConsole.WriteLine($"Resource '{resourceKey}' added with value '{resourceValue}'");
         }
     }
 }

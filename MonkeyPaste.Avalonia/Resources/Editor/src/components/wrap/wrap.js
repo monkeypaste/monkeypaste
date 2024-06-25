@@ -41,13 +41,25 @@ function isWrapEnabled() {
 
 // #region Actions
 
-function enableWrap() {
+function enableWrap(fromHost = false) {
+	if (isWrapEnabled()) {
+		return;
+	}
 	getEditorContainerElement().classList.remove('unwrap');
 	updateAllElements();
+	if (!fromHost) {
+		onWrapEnabledChanged_ntf(true);
+	}
 }
-function disableWrap() {
+function disableWrap(fromHost = false) {
+	if (!isWrapEnabled()) {
+		return;
+	}
 	getEditorContainerElement().classList.add('unwrap');
 	updateAllElements();
+	if (!fromHost) {
+		onWrapEnabledChanged_ntf(false);
+	}
 }
 
 function setWrapToolbarButtonToggleState(isToggled) {

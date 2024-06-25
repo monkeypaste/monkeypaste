@@ -43,6 +43,11 @@
 
     <Style Selector=":is(Control).tag-cmds"
            x:DataType="local:MpAvTagTileViewModel">
+        <Style.Resources>
+            <local:MpAvPointerCommandRules x:Key="RightPressRules"
+                                           IsEventHandled="True"
+                                           Routing="Tunnel" />
+        </Style.Resources>
         <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
                 Value="True" />
         <Setter Property="local:MpAvPointerCommandExtension.DefaultRoutingStrategy"
@@ -57,6 +62,8 @@
                 Value="{Binding ShowContextMenuCommand}" />
         <Setter Property="local:MpAvPointerCommandExtension.RightPressCommandParameter"
                 Value="{Binding $self}" />
+        <Setter Property="local:MpAvPointerCommandExtension.RightPressRules"
+                Value="{StaticResource RightPressRules}" />
         <Setter Property="local:MpAvPointerCommandExtension.DoubleLeftPressCommand"
                 Value="{Binding RenameTagCommand}" />
         <Setter Property="local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter"

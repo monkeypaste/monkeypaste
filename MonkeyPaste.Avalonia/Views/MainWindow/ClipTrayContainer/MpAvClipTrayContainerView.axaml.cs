@@ -1,7 +1,9 @@
 using Avalonia.Controls;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTrayContainerView : MpAvUserControl<MpAvClipTrayViewModel> {
@@ -26,6 +28,19 @@ namespace MonkeyPaste.Avalonia {
             ClipTraySplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeBegin);
             ClipTraySplitter.DragCompleted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeEnd);
             ClipTraySplitter.DragDelta += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTraySizeChanged);
+
+            //PinTrayView.PinTrayEmptyContainer.Loaded += (s, e) => SetupEmptyMsgFix(PinTrayView.PinTrayEmptyContainer);
+            //QueryTrayView.QueryTrayEmptyContainer.Loaded += (s, e) => SetupEmptyMsgFix(QueryTrayView.QueryTrayEmptyContainer);
+        }
+
+
+        private void SetupEmptyMsgFix(Control empty_cntr) {
+            if (empty_cntr.GetVisualAncestors().OfType<Control>() is not { } empty_cntr_al) {
+                return;
+            }
+            empty_cntr_al.ForEach(x => x.EffectiveViewportChanged += (s, e) => {
+                empty_cntr.InvalidateAll();
+            });
         }
 
         private void MpAvClipTrayContainerView_DataContextChanged(object sender, EventArgs e) {

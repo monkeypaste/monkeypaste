@@ -322,6 +322,8 @@ namespace MonkeyPaste.Avalonia {
         #region Preferences
 
         #region Look & Feel
+
+        public bool IsContentWrapEnabledByDefault { get; set; } = true;
         public string SelectedSyntaxTheme { get; set; } = DEF_SYNTAX_THEME;
         public bool ShowContentTitles { get; set; } = true;
         public string ThemeTypeName { get; set; } = DEFAULT_THEME_TYPE_NAME;

@@ -1195,4 +1195,7 @@
   <data name="MpShortcutType_ToggleXamlHotReload" xml:space="preserve">
     <value>ٹوگل XAML گرم ، شہوت انگیز دوبارہ لوڈ</value>
   </data>
+  <data name="MpShortcutType_ToggleContentWrap" xml:space="preserve">
+    <value>مشمولات کی لپیٹ کو ٹوگل کریں</value>
+  </data>
 </root>
