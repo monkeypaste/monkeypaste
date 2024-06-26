@@ -3035,4 +3035,10 @@ tempo@Monkepaste.com</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>تېكىستنى ئوراپ قويۇڭ</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>تېزلەتمە</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>تېزلەتمە يېڭىلاش ...</value>
+  </data>
 </root>

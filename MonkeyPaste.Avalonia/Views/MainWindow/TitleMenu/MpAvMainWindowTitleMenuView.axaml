@@ -131,74 +131,56 @@
                     Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
 
-        <!--  RESIZER  -->
-        <Style Selector="Border.resizer">
-            <Setter Property="Cursor"
-                    Value="SizeNorthSouth" />
-            <Setter Property="Background"
-                    Value="{StaticResource HitTestableTransparent}" />
-        </Style>
-        <Style Selector="Border.resizer:pointerover">
-            <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeAccent1Color}" />
-        </Style>
+      <!--  RESIZER  -->
+      <Style Selector="Border.resizer">
+        <Setter Property="Cursor"
+                Value="SizeNorthSouth" />
+        <Setter Property="Background"
+                Value="{StaticResource HitTestableTransparent}" />
+      </Style>
+      <Style Selector="Border.resizer:pointerover">
+        <Setter Property="Background"
+                Value="{DynamicResource ThemeAccent1Color}" />
+      </Style>
 
-        <Style Selector="Border.resizer.bottom, Border.resizer.top">
-            <Setter Property="Cursor"
-                    Value="SizeNorthSouth" />
-            <Setter Property="Width"
-                    Value="{StaticResource NaN}" />
-            <Setter Property="Height"
-                    Value="6" />
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch" />
-        </Style>
-        <Style Selector="Border.resizer.left, Border.resizer.right">
-            <Setter Property="Cursor"
-                    Value="SizeWestEast" />
-            <Setter Property="Width"
-                    Value="6" />
-            <Setter Property="Height"
-                    Value="{StaticResource NaN}" />
-            <Setter Property="VerticalAlignment"
-                    Value="Stretch" />
-        </Style>
+      <Style Selector="Border.resizer.bottom, Border.resizer.top">
+        <Setter Property="Cursor"
+                Value="SizeNorthSouth" />
+        <Setter Property="Width"
+                Value="{StaticResource NaN}" />
+        <Setter Property="Height"
+                Value="{StaticResource ResizerLength}" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+      </Style>
+      <Style Selector="Border.resizer.left, Border.resizer.right">
+        <Setter Property="Cursor"
+                Value="SizeWestEast" />
+        <Setter Property="Width"
+                Value="{StaticResource ResizerLength}" />
+        <Setter Property="Height"
+                Value="{StaticResource NaN}" />
+        <Setter Property="VerticalAlignment"
+                Value="Stretch" />
+      </Style>
 
-        <Style Selector="Border.resizer.left">
-            <Setter Property="HorizontalAlignment"
-                    Value="Right" />
-            <Setter Property="BorderThickness"
-                    Value="0,0,3,0" />
-            <Setter Property="RenderTransform"
-                    Value="translateX(3px)" />
-        </Style>
-        <Style Selector="Border.resizer.right">
-            <Setter Property="HorizontalAlignment"
-                    Value="Left" />
-            <Setter Property="BorderThickness"
-                    Value="3,0,0,0" />
+      <Style Selector="Border.resizer.left">
+        <Setter Property="HorizontalAlignment"
+                Value="Right" />
+      </Style>
+      <Style Selector="Border.resizer.right">
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+      </Style>
 
-            <Setter Property="RenderTransform"
-                    Value="translateX(-3px)" />
-        </Style>
-
-        <Style Selector="Border.resizer.top">
-            <Setter Property="VerticalAlignment"
-                    Value="Bottom" />
-
-            <Setter Property="BorderThickness"
-                    Value="0,0,0,3" />
-
-            <Setter Property="RenderTransform"
-                    Value="translateY(3px)" />
-        </Style>
-        <Style Selector="Border.resizer.bottom">
-            <Setter Property="VerticalAlignment"
-                    Value="Top" />
-
-            <Setter Property="BorderThickness"
-                    Value="0,3,0,0" />
-        </Style>
+      <Style Selector="Border.resizer.top">
+        <Setter Property="VerticalAlignment"
+                Value="Bottom" />
+      </Style>
+      <Style Selector="Border.resizer.bottom">
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+      </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="TitleBorder"
             Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"

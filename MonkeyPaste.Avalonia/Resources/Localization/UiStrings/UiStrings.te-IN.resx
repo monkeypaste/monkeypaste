@@ -3035,4 +3035,10 @@ feedback@monkeypaste.com</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>టెక్స్ట్ వ్రాప్</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>సత్వరమార్గాన్ని కేటాయించండి ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>సత్వరమార్గాన్ని నవీకరించండి ...</value>
+  </data>
 </root>

@@ -3035,4 +3035,10 @@ feedback@monkeypales.com</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>រុំអត្ថបទ</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ចាត់តាំងផ្លូវកាត់ ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>ធ្វើបច្ចុប្បន្នភាពផ្លូវកាត់ ...</value>
+  </data>
 </root>

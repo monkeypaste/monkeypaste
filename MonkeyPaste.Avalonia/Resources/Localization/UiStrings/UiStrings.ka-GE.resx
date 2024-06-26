@@ -3035,4 +3035,10 @@ Monkeypaste მოწყობილობაზე
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>შეფუთვის ტექსტი</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>დაავალეთ მალსახმობი ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>განაახლეთ მალსახმობი ...</value>
+  </data>
 </root>

@@ -3035,4 +3035,10 @@ Globalni prečaci sada mogu biti omogućeni u izborniku Sistemske ladice</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Zamotati tekst</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Dodijelite prečac ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Ažuriranje prečaca ...</value>
+  </data>
 </root>

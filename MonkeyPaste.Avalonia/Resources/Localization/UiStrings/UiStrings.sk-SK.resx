@@ -3035,4 +3035,10 @@ Globálne skratky je teraz možné povoliť v ponuke System Tray</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Obtekanie textu</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Priraďte skratku ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Aktualizácia skratky ...</value>
+  </data>
 </root>

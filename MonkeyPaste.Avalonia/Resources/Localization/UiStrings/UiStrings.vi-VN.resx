@@ -3035,4 +3035,10 @@ Các phím tắt toàn cầu hiện có thể được bật trong menu khay h�
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Bao text</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Gán phím tắt ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Cập nhật phím tắt ...</value>
+  </data>
 </root>

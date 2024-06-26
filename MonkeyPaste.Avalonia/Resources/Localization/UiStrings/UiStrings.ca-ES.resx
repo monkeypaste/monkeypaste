@@ -3035,4 +3035,10 @@ Les dreceres globals ara es poden activar al menú de la safata del sistema</val
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Ajustar el text</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Assigna una drecera...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Actualitza la drecera...</value>
+  </data>
 </root>

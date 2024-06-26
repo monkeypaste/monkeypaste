@@ -3035,4 +3035,10 @@ Shortcuts globali issa jistgħu jiġu attivati ​​fil-menu tat-trej tas-siste
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Test Kebbeb</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Assenja shortcut ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Aġġorna shortcut ...</value>
+  </data>
 </root>

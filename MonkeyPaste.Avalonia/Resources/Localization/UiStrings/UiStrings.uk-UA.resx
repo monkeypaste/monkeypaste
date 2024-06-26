@@ -3035,4 +3035,10 @@
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Обернути текст</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Призначити ярлик ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Оновіть ярлик ...</value>
+  </data>
 </root>

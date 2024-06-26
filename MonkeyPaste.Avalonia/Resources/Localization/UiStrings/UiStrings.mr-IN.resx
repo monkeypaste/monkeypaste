@@ -3035,4 +3035,10 @@
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>मजकूर लपेटणे</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>शॉर्टकट नियुक्त करा ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>शॉर्टकट अद्यतनित करा ...</value>
+  </data>
 </root>

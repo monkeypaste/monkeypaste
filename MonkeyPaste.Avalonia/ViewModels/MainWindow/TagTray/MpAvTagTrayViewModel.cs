@@ -467,7 +467,10 @@ namespace MonkeyPaste.Avalonia {
             Items.ForEach(x => x.UpdateLinkToSelectedClipTile(tag_ids_for_selected_copy_item));
 
             // Notify clip tray context menu changed if was selected w/ right click
-            MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ContextMenuViewModel));
+            if(MpAvClipTrayViewModel.Instance.SelectedItem is not { } sctvm) {
+                return;
+            }
+            sctvm.OnPropertyChanged(nameof(sctvm.ContextMenuViewModel));
         }
 
         private async Task<MpAvTagTileViewModel> CreateTagTileViewModelAsync(MpTag tag) {

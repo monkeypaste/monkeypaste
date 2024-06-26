@@ -3035,4 +3035,10 @@ Global Shortcuts can now be enabled in the System Tray Menu</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Wrap Text</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Assign Shortcut...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Update Shortcut...</value>
+  </data>
 </root>

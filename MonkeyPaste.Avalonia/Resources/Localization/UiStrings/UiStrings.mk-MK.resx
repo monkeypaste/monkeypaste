@@ -3035,4 +3035,10 @@ Monkeypaste на уредот
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Завиткан текст</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Додели кратенка ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Ажурирајте кратенка ...</value>
+  </data>
 </root>

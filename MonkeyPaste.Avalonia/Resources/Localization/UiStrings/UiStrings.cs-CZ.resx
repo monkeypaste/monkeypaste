@@ -3035,4 +3035,10 @@ Globální zkratky lze nyní povolit v nabídce hlavního panelu</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Obtékání textu</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Přiřadit zástupce...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Aktualizovat zástupce...</value>
+  </data>
 </root>

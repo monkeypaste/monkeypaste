@@ -3035,4 +3035,10 @@ feedback@monkepte.com</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Փաթեթավորեք տեքստը</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Հանձնարարեք դյուրանցում ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Թարմացրեք դյուրանցումը ...</value>
+  </data>
 </root>

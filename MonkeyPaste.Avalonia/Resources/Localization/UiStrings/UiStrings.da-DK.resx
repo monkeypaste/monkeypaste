@@ -3035,4 +3035,10 @@ Globale genveje kan nu aktiveres i systembakkemenuen</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Ombryd tekst</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Tildel genvej...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Opdater genvej...</value>
+  </data>
 </root>

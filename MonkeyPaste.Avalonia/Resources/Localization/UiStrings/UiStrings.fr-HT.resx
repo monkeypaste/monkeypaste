@@ -3035,4 +3035,10 @@ Les raccourcis mondiaux peuvent désormais être activés dans le menu du platea
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Envelopper du texte</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Attribuer un raccourci ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Mettre à jour le raccourci ...</value>
+  </data>
 </root>

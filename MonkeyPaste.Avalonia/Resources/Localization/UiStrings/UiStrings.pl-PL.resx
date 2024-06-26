@@ -3035,4 +3035,10 @@ Globalne skróty można teraz włączyć w menu taca systemu</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Tekst owinięcia</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Przypisz skrót ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Zaktualizuj skrót ...</value>
+  </data>
 </root>

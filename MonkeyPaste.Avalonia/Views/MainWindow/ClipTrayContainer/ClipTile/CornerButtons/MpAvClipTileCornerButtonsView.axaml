@@ -103,6 +103,60 @@
                     Value="-45" />
         </Style>
 
+        <!--  BL WRAP TT  -->
+
+        <Style Selector="ToggleButton#ClipTileToggleWrapButton">
+            <Setter Property="IsVisible"
+                    Value="False" />
+            <Setter Property="ToolTip.Tip"
+                    Value="{x:Null}" />
+        </Style>
+
+        <Style Selector="ToggleButton#ClipTileToggleWrapButton.text">
+            <Setter Property="IsVisible"
+                    Value="True" />
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=ToggleContentWrap}"
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.WrapTextMenuLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ToggleButton#ClipTileToggleWrapButton:checked.text">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=ToggleContentWrap}"
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.UnwrapTextLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ToggleButton#ClipTileToggleWrapButton.image">
+            <Setter Property="IsVisible"
+                    Value="True" />
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=ToggleContentWrap}"
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.ScaleImageLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ToggleButton#ClipTileToggleWrapButton:checked.image">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=ToggleContentWrap}"
+                                               ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.UnscaleImageLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!--  MAC BOTTOM INDENT  -->
 
         <Style Selector="Grid#OuterGrid.mac.windowed :is(Button).bottom.left">
@@ -184,6 +238,7 @@
 
         <!--  TR Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
+                IsVisible="False"
                 Classes="no-bg no-hover-bg no-border cornerButton top right "
                 Command="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
                 CommandParameter="{Binding}">
@@ -197,13 +252,11 @@
 
         <!--  BL TOGGLE WRAP  -->
         <ToggleButton x:Name="ClipTileToggleWrapButton"
+                      Classes.text="{Binding CopyItemType, ConverterParameter=Text, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                      Classes.image="{Binding CopyItemType, ConverterParameter=Image, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
                       Classes="no-bg no-hover-bg no-border cornerButton bottom left tt_near_bottom"
                       Command="{Binding ToggleIsWrappingEnabledCommand}"
                       IsChecked="{Binding !IsWrappingEnabled, Mode=OneWay}">
-            <ToolTip.Tip>
-                <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}, ConverterParameter=ToggleContentWrap}"
-                                       ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.WrapTextMenuLabel}" />
-            </ToolTip.Tip>
             <local:MpAvTintedImage Source="{Binding Source={StaticResource WrapImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>
     </Grid>

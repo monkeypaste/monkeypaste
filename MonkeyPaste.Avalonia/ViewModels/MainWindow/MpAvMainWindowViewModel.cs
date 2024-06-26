@@ -798,6 +798,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpMessageType.ScreenInfoChanged:
                     break;
+                case MpMessageType.MainWindowSizeChanged:
+                case MpMessageType.MainWindowSizeChangeEnd:
+                    MpAvMainView.Instance.UpdateMainViewLayout();
+                    break;
             }
         }
 

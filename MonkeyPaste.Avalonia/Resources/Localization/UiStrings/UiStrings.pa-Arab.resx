@@ -3100,4 +3100,10 @@ Total restoration cannot be guaranteed and may reduce performance or even crash 
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>ਟੈਕਸਟ ਲਪੇਟੋ</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ਸ਼ਾਰਟਕੱਟ ਨਿਰਧਾਰਤ ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>ਸ਼ਾਰਟਕੱਟ ਅਪਡੇਟ ਕਰੋ ...</value>
+  </data>
 </root>

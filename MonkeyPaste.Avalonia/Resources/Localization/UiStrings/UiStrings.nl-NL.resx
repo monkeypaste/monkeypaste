@@ -3035,4 +3035,10 @@ Globale snelkoppelingen kunnen nu worden ingeschakeld in het menu System Tray</v
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Wikkel tekst</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Wijs snelkoppeling toe ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Snelkoppeling bijwerken ...</value>
+  </data>
 </root>

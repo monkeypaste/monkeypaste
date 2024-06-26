@@ -1934,6 +1934,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign Shortcut....
+        /// </summary>
+        public static string ClipAssignShortcutLabel {
+            get {
+                return ResourceManager.GetString("ClipAssignShortcutLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clipboard listener disabled.
         /// </summary>
         public static string ClipboardListenerDisabledText {
@@ -2347,6 +2356,15 @@ namespace MonkeyPaste.Avalonia {
         public static string ClipTrayDeleteAllMessageText {
             get {
                 return ResourceManager.GetString("ClipTrayDeleteAllMessageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Shortcut....
+        /// </summary>
+        public static string ClipUpdateShortcutLabel {
+            get {
+                return ResourceManager.GetString("ClipUpdateShortcutLabel", resourceCulture);
             }
         }
         
@@ -6369,6 +6387,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scale Image.
+        /// </summary>
+        public static string ScaleImageLabel {
+            get {
+                return ResourceManager.GetString("ScaleImageLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search in &apos;{0}&apos;.
         /// </summary>
         public static string SearchButtonTooltip {
@@ -7948,6 +7975,24 @@ namespace MonkeyPaste.Avalonia {
         public static string TriggersAddNewTriggerToolTip {
             get {
                 return ResourceManager.GetString("TriggersAddNewTriggerToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unscale Image.
+        /// </summary>
+        public static string UnscaleImageLabel {
+            get {
+                return ResourceManager.GetString("UnscaleImageLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unwrap Text.
+        /// </summary>
+        public static string UnwrapTextLabel {
+            get {
+                return ResourceManager.GetString("UnwrapTextLabel", resourceCulture);
             }
         }
         

@@ -3035,4 +3035,10 @@ monkeypaste ໃນອຸປະກອນ
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>ຫໍ່ຕົວຫນັງສື</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ກໍານົດທາງລັດ ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>ປັບປຸງທາງລັດ ...</value>
+  </data>
 </root>

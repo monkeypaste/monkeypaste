@@ -3035,4 +3035,10 @@ Globaalsed otseteed saab nüüd süsteemialuse menüüs lubada</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Mähisekst</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Määrake otsetee ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Värskendage otsetee ...</value>
+  </data>
 </root>

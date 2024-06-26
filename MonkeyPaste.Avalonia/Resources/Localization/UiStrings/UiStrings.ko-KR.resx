@@ -3035,4 +3035,10 @@
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>텍스트를 랩합니다</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>바로 가기 할당 ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>바로 가기 업데이트 ...</value>
+  </data>
 </root>

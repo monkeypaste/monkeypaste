@@ -3035,4 +3035,10 @@ Globalne prečice sada mogu biti omogućene u System Tray meniju</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Wrap Text</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Dodijeli prečicu...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Ažuriraj prečicu...</value>
+  </data>
 </root>

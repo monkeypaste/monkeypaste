@@ -3035,4 +3035,10 @@ Maaari na ngayong paganahin ang mga global shortcut sa menu ng System Tray</valu
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>I -wrap ang teksto</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Magtalaga ng shortcut ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>I -update ang Shortcut ...</value>
+  </data>
 </root>

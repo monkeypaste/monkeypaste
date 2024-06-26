@@ -3127,4 +3127,19 @@ Global Shortcuts can now be enabled in the System Tray Menu</value>
   <data name="CommonViewLabel" xml:space="preserve">
     <value>View</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Assign Shortcut...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Update Shortcut...</value>
+  </data>
+  <data name="ScaleImageLabel" xml:space="preserve">
+    <value>Scale Image</value>
+  </data>
+  <data name="UnscaleImageLabel" xml:space="preserve">
+    <value>Unscale Image</value>
+  </data>
+  <data name="UnwrapTextLabel" xml:space="preserve">
+    <value>Unwrap Text</value>
+  </data>
 </root>

@@ -3035,4 +3035,10 @@
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>ചുരുക്ക് എഴുത്ത്</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>കുറുക്കുവഴി നൽകുക ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>കുറുക്കുവഴി അപ്ഡേറ്റുചെയ്യുക ...</value>
+  </data>
 </root>

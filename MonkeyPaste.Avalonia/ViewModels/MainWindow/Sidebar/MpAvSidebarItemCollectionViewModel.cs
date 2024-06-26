@@ -124,19 +124,6 @@ namespace MonkeyPaste.Avalonia {
                MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize :
                ButtonGroupFixedDimensionLength + SelectedItemHeight;
 
-        public int MouseModeHorizontalOffset =>
-            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                20 : 10;
-
-        public int MouseModeVerticalOffset =>
-            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                0 : 10;
-
-        public PlacementMode MouseModeFlyoutPlacement =>
-            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                PlacementMode.Right :
-                PlacementMode.Top;
-
 #endregion
 
         #region State
@@ -319,10 +306,6 @@ namespace MonkeyPaste.Avalonia {
                     ResetSize();
                     break;
                 case MpMessageType.MainWindowOrientationChangeEnd:
-                    OnPropertyChanged(nameof(MouseModeFlyoutPlacement));
-                    OnPropertyChanged(nameof(MouseModeHorizontalOffset));
-                    OnPropertyChanged(nameof(MouseModeVerticalOffset));
-                    OnPropertyChanged(nameof(ContainerBoundWidth));
                     HandleSidebarSelectionChangedAsync().FireAndForgetSafeAsync();
                     break;
                 case MpMessageType.MainWindowOpened:

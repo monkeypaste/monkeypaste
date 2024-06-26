@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using System;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -374,10 +375,14 @@ namespace MonkeyPaste.Avalonia {
             int rs = orientation == Orientation.Horizontal ? GetHorizontalRowSpan(child) : GetVerticalRowSpan(child);
             int cs = orientation == Orientation.Horizontal ? GetHorizontalColumnSpan(child) : GetVerticalColumnSpan(child);
 
-            Grid.SetRow(child, r);
-            Grid.SetColumn(child, c);
-            Grid.SetRowSpan(child, rs);
-            Grid.SetColumnSpan(child, cs);
+           try {
+                Grid.SetRow(child, r);
+                Grid.SetColumn(child, c);
+                Grid.SetRowSpan(child, rs);
+                Grid.SetColumnSpan(child, cs);
+            } catch(Exception ex) {
+
+            }
             //MpConsole.WriteLine($"Control '{child.Name}' R: {r} C: {c} RS: {rs} CS: {cs}");
         }
         private static Grid GetContainerGrid(Control element) {

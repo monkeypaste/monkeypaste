@@ -3035,4 +3035,10 @@ Dabar „System Tray“ meniu galima įjungti globalius nuorodas</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Apvyniokite tekstą</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Priskirkite nuorodą ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Atnaujinkite nuorodą ...</value>
+  </data>
 </root>

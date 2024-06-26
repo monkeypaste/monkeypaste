@@ -3035,4 +3035,10 @@ Los atajos globales ahora se pueden habilitar en el menú de la bandeja del sist
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Envolver texto</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Asignar atajo ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Actualizar el acceso directo ...</value>
+  </data>
 </root>

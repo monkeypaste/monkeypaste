@@ -3035,4 +3035,10 @@ Nú er hægt að virkja alþjóðlegar flýtileiðir í kerfisbakkavalmyndinni</
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Vafðu texta</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Úthlutaðu flýtileið ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Uppfærðu flýtileið ...</value>
+  </data>
 </root>

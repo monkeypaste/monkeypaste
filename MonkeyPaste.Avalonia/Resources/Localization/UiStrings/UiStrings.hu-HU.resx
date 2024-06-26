@@ -3035,4 +3035,10 @@ A globális parancsikonok már engedélyezhetők a rendszer tálca menüben</val
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Csomagolási szöveg</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Rendeljen parancsikont ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Frissítse a parancsikont ...</value>
+  </data>
 </root>

@@ -3035,4 +3035,10 @@ Bellach gellir galluogi Llwybrau Byr Byd-eang yn y Ddewislen Hambwrdd System</va
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Lapiwch Testun</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Neilltuo llwybr byr...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Diweddaru llwybr byr...</value>
+  </data>
 </root>

@@ -190,8 +190,161 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContextMenuViewModel Implementation
 
-        public MpAvMenuItemViewModel ContextMenuViewModel =>
-            IsSelected ? Parent.ContextMenuViewModel : null;
+        public MpAvMenuItemViewModel ContextMenuViewModel {
+            get {
+                if (IsTrashed) {
+                    return new MpAvMenuItemViewModel() {
+                        SubItems = new List<MpAvMenuItemViewModel>() {
+                            new MpAvMenuItemViewModel() {
+                                Header = UiStrings.ClipTileTrashRestoreHeader,
+                                IconResourceKey =
+                                    MpAvAccountTools.Instance.IsContentAddPausedByAccount ?
+                                        MpContentCapInfo.ADD_BLOCKED_RESOURCE_KEY :
+                                        "ResetImage",
+                                Command = Parent.RestoreSelectedClipCommand,
+                            },
+                            new MpAvMenuItemViewModel() {
+                                HasLeadingSeparator = true,
+                                Header = UiStrings.ClipTilePermanentlyDeleteHeader,
+                                IconResourceKey = "TrashCanImage",
+                                Command = Parent.DeleteSelectedClipCommand,
+                                ShortcutArgs = new object[] { MpShortcutType.PermanentlyDelete },
+                            },
+                        }
+                    };
+                }
+
+                return new MpAvMenuItemViewModel() {
+                    SubItems = new List<MpAvIMenuItemViewModel>() {
+#if DEBUG
+                        new MpAvMenuItemViewModel() {
+                            Header = @"Show Dev Tools",
+                            Command = Parent.ShowDevToolsCommand,
+                            IsVisible = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled
+                        },
+#endif
+                        new MpAvMenuItemViewModel() {
+#if DEBUG
+                            HasLeadingSeparator = true,
+#endif
+                            Header = UiStrings.CommonCutOpLabel,
+                            IconResourceKey = "ScissorsImage",
+                            Command = Parent.CutSelectionFromContextMenuCommand,
+                            IsVisible = false,
+                            CommandParameter = true,
+                            ShortcutArgs = new object[] { MpShortcutType.CutSelection },
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.CommonCopyOpLabel,
+                            IconResourceKey = "CopyImage",
+                            Command = Parent.CopySelectionFromContextMenuCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.CopySelection },
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header =UiStrings.ClipTilePasteHereHeaderLabel,
+                            IconResourceKey = "PasteImage",
+                            Command = Parent.PasteHereFromContextMenuCommand,
+                            IsVisible = false,
+                            ShortcutArgs = new object[] { MpShortcutType.PasteSelection },
+                        },
+                        new MpAvMenuItemViewModel() {
+                            IsVisible = Parent.CurPasteInfoMessage.infoId != null,
+                            Header = Parent.CurPasteInfoMessage.pasteButtonTooltipText,
+                            IconSourceObj = Parent.CurPasteInfoMessage.pasteButtonIconBase64,
+                            Command = Parent.PasteSelectedClipTileFromContextMenuCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.PasteToExternal },
+                        },
+                        new MpAvMenuItemViewModel() {
+                            HasLeadingSeparator = true,
+                            Header = UiStrings.CommonDeleteLabel,
+                            IconResourceKey = "TrashCanImage",
+                            Command = Parent.TrashSelectedClipCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.DeleteSelectedItems },
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.CommonDuplicateLabel,
+                            IconResourceKey = "DuplicateImage",
+                            Command = Parent.DuplicateSelectedClipsCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.Duplicate },
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.CommonRenameLabel,
+                            IsVisible = IsTitleVisible,
+                            IconResourceKey = "RenameImage",
+                            Command = Parent.EditSelectedTitleCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.Rename },
+                        },
+                        new MpAvMenuItemViewModel() {
+                            HasLeadingSeparator = true,
+                            Header = UiStrings.SettingsInteropAppOleFormatButtonPointerOverLabel,
+                            IsVisible = CopyItemType == MpCopyItemType.Text && IsContentReadOnly,
+                            IconResourceKey = "EditContentImage",
+                            Command = Parent.EditSelectedContentCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.ToggleContentReadOnly },
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.CommonViewLabel,
+                            IsVisible = CopyItemType != MpCopyItemType.Text && !IsWindowOpen,
+                            IconResourceKey = "OpenImage",
+                            Command = PinToPopoutWindowCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.OpenInWindow },
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.ClipTileFindReplaceHeader,
+                            IsVisible = CopyItemType != MpCopyItemType.Image,
+                            IconResourceKey = "SearchImage",
+                            Command = Parent.EnableFindAndReplaceForSelectedItem,
+                            ShortcutArgs = new object[] { MpShortcutType.FindAndReplaceSelectedItem },
+                        },
+                        new MpAvMenuItemViewModel() {
+                            IsVisible = CopyItemType != MpCopyItemType.FileList,
+                            Header = 
+                                CopyItemType == MpCopyItemType.Text ?
+                                    IsWrappingEnabled ?
+                                        UiStrings.UnwrapTextLabel :
+                                        UiStrings.WrapTextMenuLabel :
+                                    IsWrappingEnabled ?
+                                        UiStrings.UnscaleImageLabel :
+                                        UiStrings.ScaleImageLabel,
+                            IconSourceObj = "WrapImage",
+                            IconTintHexStr = IsWrappingEnabled ? MpSystemColors.limegreen : null,
+                            Command = ToggleIsWrappingEnabledCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.ToggleContentWrap },
+                        },
+                        new MpAvMenuItemViewModel() {
+                            HasLeadingSeparator = true,
+                            Header = UiStrings.CommonRefreshTooltip,
+                            IconResourceKey = "ResetImage",
+                            Command = Parent.ReloadSelectedItemCommand,
+                            IsVisible = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled
+                        },
+                        // share
+                        new MpAvMenuItemViewModel() {
+                            HasLeadingSeparator = true,
+                            Header =UiStrings.ClipTileShareHeader,
+                            IconResourceKey = "ShareImage",
+                            Command = ShareCommand
+                        },
+                        // hotkey
+                        new MpAvMenuItemViewModel() {
+                            Header = ShortcutTooltipText,
+                            IconResourceKey = "JoystickImage",
+                            Command = MpAvShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand,
+                            CommandParameter = this,
+                            ShortcutArgs = new object[] { MpShortcutType.AssignShortcut },
+                        },
+                        // sources
+                        TransactionCollectionViewModel.ContextMenuViewModel,
+                        // analyzers
+                        MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(CopyItemType),
+                        // collections
+                        MpAvTagTrayViewModel.Instance,
+                        // colors                        
+                        MpAvMenuItemViewModel.GetColorPalleteMenuItemViewModel(this,true),
+                    },
+                };
+            }
+        }
 
         #endregion
 
@@ -742,8 +895,8 @@ namespace MonkeyPaste.Avalonia {
 
         public string ShortcutTooltipText =>
             string.IsNullOrEmpty(KeyString) ?
-                string.Format(UiStrings.ClipShortcutUnassignedTooltip, CopyItemTitle) :
-                UiStrings.ClipShortcutTooltip;
+                UiStrings.ClipAssignShortcutLabel :
+                UiStrings.ClipUpdateShortcutLabel;
 
 
         public bool IsResizerEnabled =>

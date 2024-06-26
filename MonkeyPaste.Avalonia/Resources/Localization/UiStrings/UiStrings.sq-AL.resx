@@ -3035,4 +3035,10 @@ Shkurtoret globale tani mund të aktivizohen në menunë e tabaka të sistemit</
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Mbështjell tekst</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Cakto shkurtore ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Përditësoni shkurtore ...</value>
+  </data>
 </root>

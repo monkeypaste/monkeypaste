@@ -3035,4 +3035,10 @@ Globaalit pikakuvakkeet voidaan nyt ottaa käyttöön järjestelmälokero -valik
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Kääriä teksti</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Määritä pikakuvake ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Päivitä pikakuvake ...</value>
+  </data>
 </root>

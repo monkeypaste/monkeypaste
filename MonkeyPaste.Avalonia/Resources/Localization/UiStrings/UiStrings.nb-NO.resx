@@ -3035,4 +3035,10 @@ Globale snarveier kan nå aktiveres i systemskuffenyen</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Bryte tekst</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Tilordne snarvei ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Oppdater snarvei ...</value>
+  </data>
 </root>

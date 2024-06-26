@@ -3035,4 +3035,10 @@ Pintasan global kini boleh didayakan dalam menu dulang sistem</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Balut teks</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Tetapkan pintasan ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Kemas kini pintasan ...</value>
+  </data>
 </root>

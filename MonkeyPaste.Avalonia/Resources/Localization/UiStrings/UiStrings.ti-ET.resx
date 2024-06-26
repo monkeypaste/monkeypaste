@@ -3035,4 +3035,10 @@
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>ጽሑፍ ምጥቕላል</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ኣቋራጭ ቦታ ምምዳብ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>update shortcut...</value>
+  </data>
 </root>

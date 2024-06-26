@@ -3035,4 +3035,10 @@ feedback@monkeypaste.com</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Обвиване на текст</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Задаване на пряк път...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Актуализиране на пряк път...</value>
+  </data>
 </root>

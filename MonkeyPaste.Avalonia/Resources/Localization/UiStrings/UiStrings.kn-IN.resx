@@ -3035,4 +3035,10 @@
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>ಪಠ್ಯವನ್ನು ಸುತ್ತು</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ಶಾರ್ಟ್‌ಕಟ್ ಅನ್ನು ನಿಯೋಜಿಸಿ ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>ಶಾರ್ಟ್‌ಕಟ್ ನವೀಕರಿಸಿ ...</value>
+  </data>
 </root>

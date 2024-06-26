@@ -149,26 +149,36 @@
 
         <!--  CONVERT SIMPLE/ TOGGLE EXPAND ADV BUTTON  -->
         <!--  UNCHECKED  -->
-        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.active):not(.popout) Image">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PlusSolidImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton local|MpAvTintedImage">
+            <Setter Property="Tint"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
 
-        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked.popout Image">
+        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:pointerover local|MpAvTintedImage">
+            <Setter Property="Tint"
+                    Value="{DynamicResource ThemeAccent1Color}" />
+        </Style>
+
+        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.active):not(.popout) local|MpAvTintedImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource PlusSolidImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+
+        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked.popout local|MpAvTintedImage">
             <Setter Property="Margin"
                     Value="3" />
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource CloseWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                    Value="{Binding Source={StaticResource CloseWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
-        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.popout).active Image">
+        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.popout).active local|MpAvTintedImage">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
 
         <!--  CHECKED  -->
-        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:checked Image">
+        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:checked local|MpAvTintedImage">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+                    Value="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
 
     </local:MpAvUserControl.Styles>
@@ -375,13 +385,13 @@
                       local:MpAvDropExtension.IsEnabled="True"
                       local:MpAvDropExtension.DragEnterCommand="{Binding ExpandCriteriaFromDragEnterCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       IsChecked="{Binding IsExpanded, Mode=TwoWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
-                      Classes="no-bg no-hover-bg outlineOver"
+                      Classes="default-button no-bg no-hover-bg"
                       Classes.popout="{Binding IsCriteriaWindowOpen, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       Classes.active="{Binding IsAdvSearchActive, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="{Binding ExpandTooltipText}" />
             </ToolTip.Tip>
-            <Image />
+            <local:MpAvTintedImage />
         </ToggleButton>
         <!--</StackPanel>-->
     </Grid>

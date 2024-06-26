@@ -3035,4 +3035,10 @@ MonkeyPaste روی دستگاه
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>متن بسته بندی</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>میانبر را اختصاص دهید ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>میانبر را به روز کنید ...</value>
+  </data>
 </root>

@@ -3035,4 +3035,10 @@ feedble@monkeypaste.com</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Αναδίπλωση του κειμένου</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Εκχώρηση συντόμευσης...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Ενημέρωση συντόμευσης...</value>
+  </data>
 </root>

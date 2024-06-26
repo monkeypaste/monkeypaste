@@ -3035,4 +3035,10 @@ Global kısayollar artık sistem tepsisi menüsünde etkinleştirilebilir</value
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Sarma Metni</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Kısayol atayın ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Kısayol güncelleme ...</value>
+  </data>
 </root>

@@ -3035,4 +3035,10 @@
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>اختتامی کلمات</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>شارٹ کٹ تفویض کریں ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>شارٹ کٹ کو اپ ڈیٹ کریں ...</value>
+  </data>
 </root>

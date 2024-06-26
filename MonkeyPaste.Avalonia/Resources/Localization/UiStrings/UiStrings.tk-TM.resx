@@ -3035,4 +3035,10 @@ Global gysga ýollar ulgam tromy menýusynda başlap biler</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>DRAPE Teksti</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Salgylanma belläň ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Gysgaça açyň ...</value>
+  </data>
 </root>

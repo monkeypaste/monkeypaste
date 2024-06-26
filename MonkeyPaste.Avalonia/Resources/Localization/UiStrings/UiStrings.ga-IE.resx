@@ -3035,4 +3035,10 @@ Is féidir aicearraí domhanda a chumasú anois sa roghchlár tráidire córais<
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Téacs Timfhilleadh</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Sannadh aicearra ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Nuashonraigh aicearra ...</value>
+  </data>
 </root>

@@ -3035,4 +3035,10 @@ Os atalhos globais agora podem ser ativados no menu da bandeja do sistema</value
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Enrole o texto</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Atribua atalho ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Atualizar atalho ...</value>
+  </data>
 </root>

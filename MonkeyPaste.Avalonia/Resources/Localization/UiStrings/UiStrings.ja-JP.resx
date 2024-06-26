@@ -3035,4 +3035,10 @@ feedback@monkeypaste.com</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>テキストを折り返す</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ショートカットを割り当てる...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>ショートカットを更新...</value>
+  </data>
 </root>

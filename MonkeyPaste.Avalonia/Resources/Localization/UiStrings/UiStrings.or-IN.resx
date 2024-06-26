@@ -3035,4 +3035,10 @@ FANDUCE@ONKEYPASTET.com</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>ପାଠ୍ୟକୁ ଗୁଡ଼ାଇ ରଖ |</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>ସର୍ଟକଟ୍ ନ୍ୟସ୍ତ କରନ୍ତୁ ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>ସର୍ଟକଟ୍ ଅପଡେଟ୍ କରନ୍ତୁ ...</value>
+  </data>
 </root>

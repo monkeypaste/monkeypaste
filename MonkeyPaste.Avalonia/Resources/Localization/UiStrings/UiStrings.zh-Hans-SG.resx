@@ -3035,4 +3035,10 @@ feathback@monkeypaste.com</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>包裹文字</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>分配快捷方式...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>更新快捷方式...</value>
+  </data>
 </root>

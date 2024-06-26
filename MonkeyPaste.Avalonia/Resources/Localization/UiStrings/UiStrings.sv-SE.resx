@@ -3035,4 +3035,10 @@ Globala genvägar kan nu vara aktiverade i systemfack -menyn</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Lindningstext</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Tilldela genväg ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Uppdatera genväg ...</value>
+  </data>
 </root>

@@ -3035,4 +3035,10 @@ Changeзгәрешләр өчен сылтамага иярегез
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Текстны төрү</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Кыска юл билгеләгез ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Кыска юл ...</value>
+  </data>
 </root>

@@ -391,9 +391,7 @@
                     <local:MpAvToolTipView ToolTipText="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.SidebarMouseModesToolTip}" />
                 </ToolTip.Tip>
                 <RadioButton.Flyout>
-                    <Flyout Placement="{Binding MouseModeFlyoutPlacement, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                            HorizontalOffset="{Binding MouseModeHorizontalOffset, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                            VerticalOffset="{Binding MouseModeVerticalOffset, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}">
+                    <Flyout Opening="Fo_Opening">
                         <Panel>
                             <local:MpAvAppModeFlyoutView HorizontalAlignment="Stretch"
                                                          VerticalAlignment="Stretch" />

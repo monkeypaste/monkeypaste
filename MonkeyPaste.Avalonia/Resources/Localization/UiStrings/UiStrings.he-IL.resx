@@ -3035,4 +3035,10 @@ feedback@monkeypaste.com</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>גלישת טקסט</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>הקצה קיצור דרך ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>עדכן קיצור דרך ...</value>
+  </data>
 </root>

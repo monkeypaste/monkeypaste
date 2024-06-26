@@ -263,28 +263,33 @@ namespace MonkeyPaste.Avalonia {
 
 
         protected virtual async Task ShowUserEnableChangeNotification() {
-            await Dispatcher.UIThread.InvokeAsync(async () => {
-                if (_isShowEnabledChangedNotification) {
-                    // BUG not sure why but IsEnable change gets fired twice so this avoids 2 notifications
-                    // maybe cause it depends on base Arg2? dunno tried to fix, sorry
-                    return;
-                }
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
+                // hide on mobile..
+                return;
+            }
+            if(!Dispatcher.UIThread.CheckAccess()) {
+                await Dispatcher.UIThread.InvokeAsync(ShowUserEnableChangeNotification);
+                return;
+            }
+            if (_isShowEnabledChangedNotification) {
+                // BUG not sure why but IsEnable change gets fired twice so this avoids 2 notifications
+                // maybe cause it depends on base Arg2? dunno tried to fix, sorry
+                return;
+            }
 
-                _isShowEnabledChangedNotification = true;
+            _isShowEnabledChangedNotification = true;
 
-                string enabledText = IsEnabled ? UiStrings.CommonEnabledLabel : UiStrings.CommonDisabledLabel;
-                string typeStr = ParentActionId == 0 ? UiStrings.TriggerLabel : UiStrings.ActionLabel;
-                string notificationText = $"{typeStr} '{FullName}':  {enabledText}";
+            string enabledText = IsEnabled ? UiStrings.CommonEnabledLabel : UiStrings.CommonDisabledLabel;
+            string typeStr = ParentActionId == 0 ? UiStrings.TriggerLabel : UiStrings.ActionLabel;
+            string notificationText = $"{typeStr} '{FullName}':  {enabledText}";
 
-                await Mp.Services.NotificationBuilder.ShowMessageAsync(
-                    iconSourceObj: IconResourceObj.ToString(),
-                    title: $"{typeStr.ToUpper()} {UiStrings.CommonStatusLabel}",
-                    body: notificationText,
-                    msgType: MpNotificationType.TriggerEnabled);
+            await Mp.Services.NotificationBuilder.ShowMessageAsync(
+                iconSourceObj: IconResourceObj.ToString(),
+                title: $"{typeStr.ToUpper()} {UiStrings.CommonStatusLabel}",
+                body: notificationText,
+                msgType: MpNotificationType.TriggerEnabled);
 
-                _isShowEnabledChangedNotification = false;
-
-            });
+            _isShowEnabledChangedNotification = false;
         }
 
         protected override async Task PerformActionAsync(object arg) {

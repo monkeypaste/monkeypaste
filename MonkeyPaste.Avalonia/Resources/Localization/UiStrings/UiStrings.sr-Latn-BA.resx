@@ -3035,4 +3035,10 @@ Ukupna restauracija ne može biti zagarantovana i može smanjiti performanse ili
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Преломити текст</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Доделите пречицу ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Ажурирајте пречицу ...</value>
+  </data>
 </root>

@@ -3035,4 +3035,10 @@ Globale kortpaaie kan nou in die System Tray Menu geaktiveer word</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Omsluit teks</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Ken kortpad toe...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Dateer kortpad op...</value>
+  </data>
 </root>

@@ -3100,4 +3100,10 @@ Hozirgi kunda tizimning trafik menyusida global yorliq yoqilishi mumkin</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Matnni o'rash</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Yorliqni tayinlang ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Yorliqni yangilash ...</value>
+  </data>
 </root>

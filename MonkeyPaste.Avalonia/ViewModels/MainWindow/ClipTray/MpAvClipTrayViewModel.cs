@@ -30,7 +30,6 @@ namespace MonkeyPaste.Avalonia {
         MpIPagingScrollViewerViewModel,
         MpIActionComponent,
         MpIAnimatedSizeViewModel,
-        MpIContextMenuViewModel,
         MpIContentQueryPage,
         MpIProgressIndicatorViewModel {
         #region Private Variables
@@ -187,179 +186,37 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIContextMenuItemViewModel Implementation
-        public MpAvMenuItemViewModel ContextMenuViewModel {
-            get {
-                if (SelectedItem == null) {
-                    return new MpAvMenuItemViewModel();
-                }
-                if (SelectedItem.IsTrashed) {
-                    return new MpAvMenuItemViewModel() {
-                        SubItems = new List<MpAvMenuItemViewModel>() {
-                            new MpAvMenuItemViewModel() {
-                                Header = UiStrings.ClipTileTrashRestoreHeader,
-                                IconResourceKey =
-                                    MpAvAccountTools.Instance.IsContentAddPausedByAccount ?
-                                        MpContentCapInfo.ADD_BLOCKED_RESOURCE_KEY :
-                                        "ResetImage",
-                                Command = RestoreSelectedClipCommand,
-                            },
-                            new MpAvMenuItemViewModel() {
-                                HasLeadingSeparator = true,
-                                Header = UiStrings.ClipTilePermanentlyDeleteHeader,
-                                IconResourceKey = "TrashCanImage",
-                                Command = DeleteSelectedClipCommand,
-                                ShortcutArgs = new object[] { MpShortcutType.PermanentlyDelete },
-                            },
-                        }
-                    };
-                }
+        
 
-                return new MpAvMenuItemViewModel() {
-                    SubItems = new List<MpAvIMenuItemViewModel>() {
-#if DEBUG
-                        new MpAvMenuItemViewModel() {
-                            Header = @"Show Dev Tools",
-                            Command = ShowDevToolsCommand,
-                            IsVisible = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled
-                        },
-#endif
-                        new MpAvMenuItemViewModel() {
-#if DEBUG
-                            HasLeadingSeparator = true,
-#endif
-                            Header = UiStrings.CommonCutOpLabel,
-                            IconResourceKey = "ScissorsImage",
-                            Command = CutSelectionFromContextMenuCommand,
-                            IsVisible = false,
-                            CommandParameter = true,
-                            ShortcutArgs = new object[] { MpShortcutType.CutSelection },
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.CommonCopyOpLabel,
-                            IconResourceKey = "CopyImage",
-                            Command = CopySelectionFromContextMenuCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.CopySelection },
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header =UiStrings.ClipTilePasteHereHeaderLabel,
-                            IconResourceKey = "PasteImage",
-                            Command = PasteHereFromContextMenuCommand,
-                            IsVisible = false,
-                            ShortcutArgs = new object[] { MpShortcutType.PasteSelection },
-                        },
-                        new MpAvMenuItemViewModel() {
-                            IsVisible = CurPasteInfoMessage.infoId != null,
-                            Header = CurPasteInfoMessage.pasteButtonTooltipText,
-                            IconSourceObj = CurPasteInfoMessage.pasteButtonIconBase64,
-                            Command = PasteSelectedClipTileFromContextMenuCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.PasteToExternal },
-                        },
-                        new MpAvMenuItemViewModel() {
-                            HasLeadingSeparator = true,
-                            Header = UiStrings.CommonDeleteLabel,
-                            IconResourceKey = "TrashCanImage",
-                            Command = TrashSelectedClipCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.DeleteSelectedItems },
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.CommonDuplicateLabel,
-                            IconResourceKey = "DuplicateImage",
-                            Command = DuplicateSelectedClipsCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.Duplicate },
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.CommonRenameLabel,
-                            IsVisible = SelectedItem.IsTitleVisible,
-                            IconResourceKey = "RenameImage",
-                            Command = EditSelectedTitleCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.Rename },
-                        },
-                        new MpAvMenuItemViewModel() {
-                            HasLeadingSeparator = true,
-                            Header = UiStrings.SettingsInteropAppOleFormatButtonPointerOverLabel,
-                            IsVisible = SelectedItem.CopyItemType == MpCopyItemType.Text && SelectedItem.IsContentReadOnly,
-                            IconResourceKey = "EditContentImage",
-                            Command = EditSelectedContentCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.ToggleContentReadOnly },
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.CommonViewLabel,
-                            IsVisible = SelectedItem.CopyItemType != MpCopyItemType.Text && !SelectedItem.IsWindowOpen,
-                            IconResourceKey = "OpenImage",
-                            Command = SelectedItem.PinToPopoutWindowCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.OpenInWindow },
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.ClipTileFindReplaceHeader,
-                            IsVisible = SelectedItem.CopyItemType != MpCopyItemType.Image,
-                            IconResourceKey = "SearchImage",
-                            Command = EnableFindAndReplaceForSelectedItem,
-                            ShortcutArgs = new object[] { MpShortcutType.FindAndReplaceSelectedItem },
-                        },
-                        new MpAvMenuItemViewModel() {
-                            Header = UiStrings.WrapTextMenuLabel,
-                            IconSourceObj = "WrapImage",
-                            IconTintHexStr = SelectedItem.IsWrappingEnabled ? MpSystemColors.limegreen : null,
-                            //IsVisible = !SelectedItem.IsWindowOpen && SelectedItem.CopyItemType == MpCopyItemType.Text,
-                            Command = SelectedItem.ToggleIsWrappingEnabledCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.ToggleContentWrap },
-                        },
-                        new MpAvMenuItemViewModel() {
-                            HasLeadingSeparator = true,
-                            Header = UiStrings.CommonRefreshTooltip,
-                            IconResourceKey = "ResetImage",
-                            Command = ReloadSelectedItemCommand,
-                            IsVisible = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled
-                        },
-                        // share
-                        new MpAvMenuItemViewModel() {
-                            HasLeadingSeparator = true,
-                            Header =UiStrings.ClipTileShareHeader,
-                            IconResourceKey = "ShareImage",
-                            Command = SelectedItem.ShareCommand
-                        },
-                        // sources
-                        SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
-                        // analyzers
-                        MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(SelectedItem.CopyItemType),
-                        // collections
-                        MpAvTagTrayViewModel.Instance,
-                        // colors                        
-                        MpAvMenuItemViewModel.GetColorPalleteMenuItemViewModel(SelectedItem,true),
-                    },
-                };
-            }
-        }
-
-        bool MpIContextMenuViewModel.IsContextMenuOpen {
-            get {
-                if (SelectedItem == null) {
-                    return false;
-                }
-                if (SelectedItem.IsContextMenuOpen ||
-                    SelectedItem.TransactionCollectionViewModel.IsContextMenuOpen) {
-                    return true;
-                }
-                return false;
-            }
-            set {
-                if (SelectedItem == null) {
-                    return;
-                }
-                if (value) {
-                    if (SelectedItem.IsHoveringOverSourceIcon) {
-                        SelectedItem.TransactionCollectionViewModel.IsContextMenuOpen = true;
-                        SelectedItem.IsContextMenuOpen = false;
-                    } else {
-                        SelectedItem.TransactionCollectionViewModel.IsContextMenuOpen = false;
-                        SelectedItem.IsContextMenuOpen = true;
-                    }
-                } else {
-                    SelectedItem.TransactionCollectionViewModel.IsContextMenuOpen = false;
-                    SelectedItem.IsContextMenuOpen = false;
-                }
-            }
-        }
+        //bool MpIContextMenuViewModel.IsContextMenuOpen {
+        //    get {
+        //        if (SelectedItem == null) {
+        //            return false;
+        //        }
+        //        if (SelectedItem.IsContextMenuOpen ||
+        //            SelectedItem.TransactionCollectionViewModel.IsContextMenuOpen) {
+        //            return true;
+        //        }
+        //        return false;
+        //    }
+        //    set {
+        //        if (SelectedItem == null) {
+        //            return;
+        //        }
+        //        if (value) {
+        //            if (SelectedItem.IsHoveringOverSourceIcon) {
+        //                SelectedItem.TransactionCollectionViewModel.IsContextMenuOpen = true;
+        //                SelectedItem.IsContextMenuOpen = false;
+        //            } else {
+        //                SelectedItem.TransactionCollectionViewModel.IsContextMenuOpen = false;
+        //                SelectedItem.IsContextMenuOpen = true;
+        //            }
+        //        } else {
+        //            SelectedItem.TransactionCollectionViewModel.IsContextMenuOpen = false;
+        //            SelectedItem.IsContextMenuOpen = false;
+        //        }
+        //    }
+        //}
 
         #endregion
 

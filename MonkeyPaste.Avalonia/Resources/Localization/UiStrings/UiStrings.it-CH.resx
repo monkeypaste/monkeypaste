@@ -3035,4 +3035,10 @@ Le scorciatoie globali possono ora essere abilitate nel menu del vassoio di sist
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Avvolgere il testo</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Assegna scorciatoia ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Aggiorna scorciatoia ...</value>
+  </data>
 </root>

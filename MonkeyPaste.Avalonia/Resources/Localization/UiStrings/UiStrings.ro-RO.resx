@@ -3035,4 +3035,10 @@ Comenzile rapide globale pot fi acum activate în meniul tăvii de sistem</value
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Încadra textul</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Alocați scurtătură ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Actualizați comanda rapidă ...</value>
+  </data>
 </root>

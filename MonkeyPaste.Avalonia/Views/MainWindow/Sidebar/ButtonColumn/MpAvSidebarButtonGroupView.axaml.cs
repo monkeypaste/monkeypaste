@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -14,12 +15,14 @@ namespace MonkeyPaste.Avalonia {
 
         private void Fo_Opening(object sender, System.EventArgs e) {
             var fo = sender as Flyout;
+            fo.HorizontalOffset = 0;
+            fo.VerticalOffset = 0;
             if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                fo.HorizontalOffset = 100;
-                fo.VerticalOffset = 5;
+                fo.Placement = PlacementMode.Right;
+                fo.PlacementAnchor = PopupAnchor.Right;
             } else {
-                fo.HorizontalOffset = 0;
-                fo.VerticalOffset = -100;
+                fo.Placement = PlacementMode.Top;
+                fo.PlacementAnchor = PopupAnchor.Top;
             }
         }
 

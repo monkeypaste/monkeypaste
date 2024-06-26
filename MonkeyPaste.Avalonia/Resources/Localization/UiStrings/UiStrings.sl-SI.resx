@@ -3035,4 +3035,10 @@ Globalne bližnjice je zdaj mogoče omogočiti v meniju System pladnja</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Zavijte besedilo</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Dodeli bližnjico ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Posodobi bližnjica ...</value>
+  </data>
 </root>

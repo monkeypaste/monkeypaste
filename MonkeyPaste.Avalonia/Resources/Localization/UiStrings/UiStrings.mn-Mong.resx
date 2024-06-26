@@ -3035,4 +3035,10 @@ FEEDBOWY@monkeypue.com</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Текст</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Богино товчлолыг хуваарилах ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Богино шинэчлэх ...</value>
+  </data>
 </root>

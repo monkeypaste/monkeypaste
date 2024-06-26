@@ -3035,4 +3035,10 @@ Pintasan global sekarang dapat diaktifkan di menu baki sistem</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Bungkus teks</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Tetapkan jalan pintas ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Perbarui jalan pintas ...</value>
+  </data>
 </root>

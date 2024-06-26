@@ -3035,4 +3035,10 @@ Globālās saīsnes tagad var iespējot Sistēmas paplātes izvēlnē</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Aptināt tekstu</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Piešķiriet saīsni ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Atjaunināt saīsni ...</value>
+  </data>
 </root>

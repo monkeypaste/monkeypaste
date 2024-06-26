@@ -3035,4 +3035,10 @@ feedback@monkeyptaste.com</value>
   <data name="WrapTextMenuLabel" xml:space="preserve">
     <value>Мәтін орап алыңыз</value>
   </data>
+  <data name="ClipAssignShortcutLabel" xml:space="preserve">
+    <value>Төте жолды тағайындаңыз ...</value>
+  </data>
+  <data name="ClipUpdateShortcutLabel" xml:space="preserve">
+    <value>Төте жолды жаңартыңыз ...</value>
+  </data>
 </root>
