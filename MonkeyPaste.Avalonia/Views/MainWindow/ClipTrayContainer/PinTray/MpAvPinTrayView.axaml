@@ -130,15 +130,11 @@
             <!--  EMPTY OVERLAY  -->
 
             <Button x:Name="PinTrayEmptyContainer"
-                    ClipToBounds="False"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Classes="link"
+                    Classes="link empty-overlay"
                     Command="{Binding AddClipboardAsItemCommand}"
-                    IsVisible="{Binding IsPinTrayEmpty}"
-                    Background="Transparent">
+                    IsVisible="{Binding IsPinTrayEmpty}">
                 <TextBlock Text="{Binding Source={x:Static local:R.U}, Path=CurrentUiStrings.PinTrayEmptyLabel}"
-                           Classes="disabled emptyOverlayText" />
+                           Classes="disabled" />
             </Button>
 
             <!--  BUTTON GRID  -->

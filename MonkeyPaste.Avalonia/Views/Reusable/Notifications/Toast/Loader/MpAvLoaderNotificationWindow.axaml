@@ -144,6 +144,7 @@
                     <Border HorizontalAlignment="Stretch"
                             VerticalAlignment="Bottom"
                             BorderThickness="0"
+                            IsVisible="False"
                             Classes="labelUnderline_long"
                             Height="1" />
                 </StackPanel>

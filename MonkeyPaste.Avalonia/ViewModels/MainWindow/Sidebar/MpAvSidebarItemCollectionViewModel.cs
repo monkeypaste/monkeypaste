@@ -198,22 +198,15 @@ namespace MonkeyPaste.Avalonia {
             }
             var ss_start = new MpSize(start_w, start_h);
             var ss_end = new MpSize(end_w, end_h);
+            IsAnimating = true;
             await AnimateSidebarAsync(ss_start, ss_end, is_closing, 0.1, 100);
+
             if(is_closing) {
                 // manually clear both dim AFTER animation (or constraints could be wrong after orientation change)
                 ResetSize();
             }
             MpAvMainView.Instance.UpdateMainViewLayout();
-
-            // reset sidebar scroll
-            if (SelectedItem is not null &&
-                SelectedItem.LastSelectedDateTime == default &&
-                MpAvMainView.Instance.SelectedSidebarContainerBorder
-                .SelectedSidebarContentControl.GetVisualDescendants<ScrollViewer>() is { } svl) {
-                // on initial selection of a sidebar reset all scroll viewers (avalonia scrolls to random place, can't fix it
-                svl.ForEach(x => x.ScrollToHome());
-            }
-
+            IsAnimating = false;
             // handle sidebar focus
             if (SelectedItem is MpICloseWindowViewModel cwvm &&
                 cwvm.IsWindowOpen &&
@@ -228,7 +221,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void ResetSize() {
-            SetSidebarSizeByDelta(-ContainerBoundWidth, -ContainerBoundHeight);
+            SetSidebarSize(-ContainerBoundWidth, -ContainerBoundHeight);
         }
         private async Task AnimateSidebarAsync(
             MpSize start, 
@@ -245,7 +238,7 @@ namespace MonkeyPaste.Avalonia {
                     tts: tt,
                     fps: fps,
                     tick: (d) => {
-                        SetSidebarSizeByDelta(d.X,d.Y);
+                        SetSidebarSize(d.X,d.Y);
                     }),
                 op_start.AnimateDoubleAsync(
                     end: op_end,
@@ -323,7 +316,10 @@ namespace MonkeyPaste.Avalonia {
 
 
 
-        private void SetSidebarSizeByDelta(double w, double h) {
+        public void SetSidebarSizeByDelta(double dw, double dh) {
+            SetSidebarSize(ContainerBoundWidth + dw, ContainerBoundHeight + dh);
+        }
+        public void SetSidebarSize(double w, double h) {
             double dw = w - ContainerBoundWidth;
             double dh = h - ContainerBoundHeight;
             ContainerBoundWidth = w;

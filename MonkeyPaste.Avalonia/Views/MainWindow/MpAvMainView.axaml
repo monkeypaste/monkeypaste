@@ -52,6 +52,16 @@
             <Setter Property="BoxShadow"
                     Value="inset 0 0 10 10 #46000000" />
         </Style>
+
+        <!--  SIDEBAR BUTTON GROUP  -->
+        <Style Selector="Grid#MainWindowContainerGrid.horiz local|MpAvSidebarButtonGroupView">
+            <Setter Property="Width"
+                    Value="{Binding ButtonGroupFixedDimensionLength, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}" />
+        </Style>
+        <Style Selector="Grid#MainWindowContainerGrid.vert local|MpAvSidebarButtonGroupView">
+            <Setter Property="Height"
+                    Value="{Binding ButtonGroupFixedDimensionLength, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Canvas x:Name="MainWindowCanvas"
             Width="{Binding MainWindowWidth}"
@@ -59,6 +69,8 @@
         <Grid x:Name="MainWindowContainerGrid"
               Classes.mobile="{Binding IsMobileOrWindowed, Source={x:Static local:MpAvThemeViewModel.Instance}}"
               Classes.desktop="{Binding IsMultiWindow, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+              Classes.vert="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+              Classes.horiz="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
               Background="{DynamicResource MainWindowBgBrush}"
               Width="{Binding MainWindowWidth}"
               Height="{Binding MainWindowHeight}">
@@ -68,36 +80,42 @@
                     Grid.Row="2"
                     Classes.pin-tray="{Binding IsPinTrayVisible, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
                 <Grid x:Name="MainWindowTrayGrid"
+                      Classes="oriented"
+                      local:MpAvOrientedGridExtension.HorizontalRowDefinitions="Auto,*"
+                      local:MpAvOrientedGridExtension.HorizontalColumnDefinitions="Auto,Auto,*"
+                      local:MpAvOrientedGridExtension.VerticalRowDefinitions="Auto,Auto,*"
+                      local:MpAvOrientedGridExtension.VerticalColumnDefinitions="*"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch">
-
                     <!--  CONTENT TRAY CONTAINER  -->
 
                     <local:MpAvClipTrayContainerView x:Name="ClipTrayContainerView"
-                                                     Width="{Binding ContainerBoundWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                                                     Height="{Binding ContainerBoundHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                                                     local:MpAvSizeObserverExtension.IsEnabled="True"
-                                                     local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
-                                                     local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedContainerScreenHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
-                                                     HorizontalAlignment="Stretch"
-                                                     VerticalAlignment="Stretch" />
+                                                     local:MpAvOrientedGridExtension.HorizontalRow="1"
+                                                     local:MpAvOrientedGridExtension.HorizontalColumn="2"
+                                                     local:MpAvSizeObserverExtension.ObservedWidth="{Binding ContainerBoundWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
+                                                     local:MpAvSizeObserverExtension.ObservedHeight="{Binding ContainerBoundHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
+                                                     Width="{Binding ContainerBoundWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
+                                                     Height="{Binding ContainerBoundHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}" />
 
                     <!--  SELECTED SIDEBAR ITEM  -->
                     <local:MpAvSidebarSelectedItemView x:Name="SelectedSidebarContainerBorder"
-                                                       Width="{Binding ContainerBoundWidth, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                                                       Height="{Binding ContainerBoundHeight, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
-                                                       HorizontalAlignment="Stretch"
-                                                       VerticalAlignment="Stretch" />
+                                                       local:MpAvOrientedGridExtension.HorizontalRowSpan="2"
+                                                       local:MpAvOrientedGridExtension.HorizontalColumn="1"
+                                                       local:MpAvOrientedGridExtension.VerticalRow="1"
+                                                       local:MpAvSizeObserverExtension.IsEnabled="True"
+                                                       local:MpAvSizeObserverExtension.ObservedWidth="{Binding ContainerBoundWidth, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Mode=TwoWay}"
+                                                       local:MpAvSizeObserverExtension.ObservedHeight="{Binding ContainerBoundHeight, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Mode=TwoWay}"
+                                                       Width="{Binding ContainerBoundWidth, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Mode=TwoWay}"
+                                                       Height="{Binding ContainerBoundHeight, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Mode=TwoWay}" />
 
 
                     <!--  SIDEBAR SPLITTER  -->
 
                     <local:MpAvMovableGridSplitter x:Name="SidebarGridSplitter"
-                                                   Grid.Column="1"
-                                                   ResizeDirection="Columns"
-                                                   HorizontalAlignment="Right"
-                                                   VerticalAlignment="Stretch"
-                                                   Classes.sidebarSplitter="True"
+                                                   local:MpAvOrientedGridExtension.HorizontalRowSpan="2"
+                                                   local:MpAvOrientedGridExtension.HorizontalColumn="2"
+                                                   local:MpAvOrientedGridExtension.VerticalRow="1"
+                                                   Classes="sidebarSplitter stretch"
                                                    Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                                    Classes.vertical="{Binding !IsVerticalOrientation}"
                                                    Classes.horizontal="{Binding IsVerticalOrientation}"
@@ -121,7 +139,9 @@
 
                     <!--  SIDEBAR BUTTONS  -->
                     <local:MpAvSidebarButtonGroupView x:Name="SidebarButtonGroup"
-                                                      Grid.Column="0"
+                                                      local:MpAvOrientedGridExtension.HorizontalColumn="0"
+                                                      local:MpAvOrientedGridExtension.HorizontalRowSpan="2"
+                                                      local:MpAvOrientedGridExtension.VerticalRow="2"
                                                       HorizontalAlignment="Stretch"
                                                       VerticalAlignment="Stretch"
                                                       HorizontalContentAlignment="Stretch"

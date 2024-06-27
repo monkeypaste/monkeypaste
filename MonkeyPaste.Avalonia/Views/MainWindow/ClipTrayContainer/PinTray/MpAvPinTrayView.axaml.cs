@@ -29,8 +29,8 @@ namespace MonkeyPaste.Avalonia {
         public MpAvPinTrayView() {
             if (Instance != null) {
                 // ensure singleton
-                MpDebug.Break();
-                return;
+                //MpDebug.Break();
+                //return;
             }
             Instance = this;
 

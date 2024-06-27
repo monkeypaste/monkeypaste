@@ -12,8 +12,8 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTrayContainerView() {
             if (Instance != null) {
                 // ensure singleton
-                MpDebug.Break();
-                return;
+                //MpDebug.Break();
+                //return;
             }
             Instance = this;
 

@@ -243,14 +243,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        double MpIBoundSizeViewModel.ContainerBoundWidth {
-            get => ContainerBoundWidth;
-            set => ContainerBoundWidth = value;
-        }
-        double MpIBoundSizeViewModel.ContainerBoundHeight {
-            get => ContainerBoundHeight;
-            set => ContainerBoundHeight = value;
-        }
         public bool IsAnimating { get; set; }
         #endregion
 
@@ -661,8 +653,8 @@ namespace MonkeyPaste.Avalonia {
             if (ListOrientation == Orientation.Vertical) {
                 //h = DEFAULT_UNEXPANDED_HEIGHT;
                 if(LayoutType == MpClipTrayLayoutType.Stack &&
-                    ObservedContainerScreenWidth > 0) {
-                    w = ObservedContainerScreenWidth - vsbw - safe_pad;
+                    ContainerBoundWidth > 0) {
+                    w = ContainerBoundWidth - vsbw - safe_pad;
                 }
             } else if (LayoutType == MpClipTrayLayoutType.Grid &&
                         Mp.Services.Query.TotalAvailableItemsInQuery > CurGridFixedCount) {
@@ -913,8 +905,8 @@ namespace MonkeyPaste.Avalonia {
         #region Layout
 
         #region Observed Dimensions
-        public double ObservedContainerScreenWidth { get; set; }
-        public double ObservedContainerScreenHeight { get; set; }
+        //public double ObservedContainerScreenWidth { get; set; }
+        //public double ObservedContainerScreenHeight { get; set; }
         public double ObservedPinTrayScreenWidth { get; set; }
         public double ObservedPinTrayScreenHeight { get; set; }
 
@@ -942,7 +934,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public double DefaultPinTrayWidth =>
-            ObservedContainerScreenWidth / MpAvThemeViewModel.PHI;
+            ContainerBoundWidth / MpAvThemeViewModel.PHI;
         public double MaxContainerScreenWidth {
             get {
                 if(MpAvMainView.Instance == null) {
@@ -2327,12 +2319,6 @@ namespace MonkeyPaste.Avalonia {
 
                 case nameof(IsAnyTilePinned):
                     MpMessenger.SendGlobal(MpMessageType.PinTrayEmptyOrHasTile);
-                    break;
-                case nameof(ObservedContainerScreenHeight):
-                    OnPropertyChanged(nameof(MaxPinTrayScreenHeight));
-                    break;
-                case nameof(ObservedContainerScreenWidth):
-                    OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
                     break;
                 case nameof(CanTouchScroll):
                     if (!CanTouchScroll) {

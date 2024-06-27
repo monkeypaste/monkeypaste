@@ -904,8 +904,8 @@ namespace MonkeyPaste.Avalonia {
                 double vx = GetVelocityX(lb);
                 double vy = GetVelocityY(lb);
 
-                MpConsole.WriteLine("vx: " + vx);
-                MpConsole.WriteLine("vy: " + vy);
+                //MpConsole.WriteLine("vx: " + vx);
+                //MpConsole.WriteLine("vy: " + vy);
 
                 if (scrollOffsetX < 0 || scrollOffsetX > maxOffsetX) {
                     scrollOffsetX = Math.Min(maxOffsetX, Math.Max(0, scrollOffsetX));

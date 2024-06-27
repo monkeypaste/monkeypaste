@@ -157,27 +157,25 @@
 
         <!--  EMPTY OVERLAY  -->
 
-        <Button x:Name="QueryTrayEmptyContainer"
-                Grid.Row="1"
-                Classes="link"
-                ClipToBounds="False"
-                Classes.no-underline="{Binding IsNoSelectionQuery}"
-                Command="{Binding FollowNoSelectionCommand}"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                IsHitTestVisible="{Binding IsNoSelectionQuery}"
-                Background="Transparent">
-            <Button.IsVisible>
-                <MultiBinding Converter="{x:Static BoolConverters.And}">
-                    <Binding Path="!IsRequerying" />
-                    <Binding Path="IsQueryEmpty" />
-                    <Binding Path="!IsVisible"
-                             ElementName="QueryTrayBusyOuterBorder" />
-                </MultiBinding>
-            </Button.IsVisible>
-            <TextBlock Text="{Binding EmptyQueryTrayText}"
-                       Classes="emptyOverlayText" />
-        </Button>
+        <Border x:Name="QueryTrayEmptyContainer"
+                Grid.Row="1">
+            <Button Classes="link empty-overlay"
+                    Classes.no-underline="{Binding IsNoSelectionQuery}"
+                    Command="{Binding FollowNoSelectionCommand}"
+                    IsHitTestVisible="{Binding IsNoSelectionQuery}">
+                <Button.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="!IsRequerying" />
+                        <Binding Path="IsQueryEmpty" />
+                        <Binding Path="!IsVisible"
+                                 ElementName="QueryTrayBusyOuterBorder" />
+                    </MultiBinding>
+                </Button.IsVisible>
+                <TextBlock Text="{Binding EmptyQueryTrayText}" />
+            </Button>
+        </Border>
+
+
 
 
         <!--  BUSY OVERLAY  -->

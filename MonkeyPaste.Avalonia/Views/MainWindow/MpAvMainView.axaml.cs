@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -32,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvIFocusHeaderMenuView,
         MpIAsyncObject {
         #region Private Variables
-
+        private MpPoint _lastSidebar_mp;
         #endregion
 
         #region Constants
@@ -204,14 +205,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             InitializeComponent();
-            HorizontalAlignment = HorizontalAlignment.Stretch;
-            VerticalAlignment = VerticalAlignment.Stretch;
-            
-            var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
-            //sidebarSplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChangeBegin);
-            //sidebarSplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChangeEnd);
-            sidebarSplitter.DragDelta += SidebarSplitter_DragDelta;
-
+            InitSidebarSplitter();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
@@ -236,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
             var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
             //var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
             var mwtb = this.MainWindowTrayPanel;
-            var mwtg = this.MainWindowTrayGrid;
+            //var mwtg = this.MainWindowTrayGrid;
 
             var sbbg = this.SidebarButtonGroup;
             var ssbcb = this.SelectedSidebarContainerBorder;
@@ -253,8 +247,8 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv_ctr_lb = ctrcv_ctrv.QueryTrayListBox;
 
             var pin_tray_ratio = MpAvClipTrayViewModel.Instance.GetCurrentPinTrayRatio();
-            mwtg.RowDefinitions.Clear();
-            mwtg.ColumnDefinitions.Clear();
+            //mwtg.RowDefinitions.Clear();
+            //mwtg.ColumnDefinitions.Clear();
             double gs_fixed_length =
 #if MULTI_WINDOW
                 MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength; 
@@ -264,42 +258,42 @@ namespace MonkeyPaste.Avalonia {
             double dbl_gs_fixed_length = gs_fixed_length * 2;
 
             void SetupHorizontal() {
-                mwtg.RowDefinitions.Add(new RowDefinition(new GridLength(0, GridUnitType.Auto)));
-                mwtg.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
+                //mwtg.RowDefinitions.Add(new RowDefinition(new GridLength(0, GridUnitType.Auto)));
+                //mwtg.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
 
-                var sbbg_cd = new ColumnDefinition(
-                    new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
+                //var sbbg_cd = new ColumnDefinition(
+                //    new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
 
-                var ssbcb_cd = new ColumnDefinition(0, GridUnitType.Auto);
-                var ctrcb_cd = new ColumnDefinition(1, GridUnitType.Star);
+                //var ssbcb_cd = new ColumnDefinition(0, GridUnitType.Auto);
+                //var ctrcb_cd = new ColumnDefinition(1, GridUnitType.Star);
 
-                mwtg.ColumnDefinitions.Add(sbbg_cd);
-                mwtg.ColumnDefinitions.Add(ssbcb_cd);
-                mwtg.ColumnDefinitions.Add(ctrcb_cd);
+                //mwtg.ColumnDefinitions.Add(sbbg_cd);
+                //mwtg.ColumnDefinitions.Add(ssbcb_cd);
+                //mwtg.ColumnDefinitions.Add(ctrcb_cd);
 
-                // sidebar buttons
-                Grid.SetRow(sbbg, 0);
-                Grid.SetRowSpan(sbbg, 2);
-                Grid.SetColumn(sbbg, 0);
+                //// sidebar buttons
+                //Grid.SetRow(sbbg, 0);
+                //Grid.SetRowSpan(sbbg, 2);
+                //Grid.SetColumn(sbbg, 0);
 
-                // sidebar content
-                Grid.SetRow(ssbcb, 0);
-                Grid.SetRowSpan(ssbcb, 2);
-                Grid.SetColumn(ssbcb, 1);
+                //// sidebar content
+                //Grid.SetRow(ssbcb, 0);
+                //Grid.SetRowSpan(ssbcb, 2);
+                //Grid.SetColumn(ssbcb, 1);
 
-                // sidebar splitter
-                Grid.SetRow(sbgs, 0);
-                Grid.SetRowSpan(sbgs, 2);
-                Grid.SetColumn(sbgs, 1);
-                sbgs.Height = double.NaN;
-                sbgs.VerticalAlignment = VerticalAlignment.Stretch;
-                sbgs.Width = gs_fixed_length;
-                sbgs.HorizontalAlignment = HorizontalAlignment.Right;
-                sbgs.ResizeDirection = GridResizeDirection.Columns;
+                //// sidebar splitter
+                //Grid.SetRow(sbgs, 0);
+                //Grid.SetRowSpan(sbgs, 2);
+                //Grid.SetColumn(sbgs, 1);
+                //sbgs.Height = double.NaN;
+                //sbgs.VerticalAlignment = VerticalAlignment.Stretch;
+                //sbgs.Width = gs_fixed_length;
+                //sbgs.HorizontalAlignment = HorizontalAlignment.Right;
+                //sbgs.ResizeDirection = GridResizeDirection.Columns;
 
-                // cliptray container border
-                Grid.SetRow(ctrcv, 1);
-                Grid.SetColumn(ctrcv, 2);
+                //// cliptray container border
+                //Grid.SetRow(ctrcv, 1);
+                //Grid.SetColumn(ctrcv, 2);
 
                 // cliptraycontainer column definitions (horizontal)
                 ctrcv_cg.RowDefinitions.Clear();
@@ -369,40 +363,40 @@ namespace MonkeyPaste.Avalonia {
             }
 
             void SetupVertical() {
-                var ctrcb_rd = new RowDefinition(1, GridUnitType.Star);
-                var ssbcb_rd = new RowDefinition(0, GridUnitType.Auto);
+                //var ctrcb_rd = new RowDefinition(1, GridUnitType.Star);
+                //var ssbcb_rd = new RowDefinition(0, GridUnitType.Auto);
 
-                var sbbg_rd = new RowDefinition(
-                    new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
-                sbbg_rd.MinHeight = sbicvm.ButtonGroupFixedDimensionLength;
+                //var sbbg_rd = new RowDefinition(
+                //    new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
+                //sbbg_rd.MinHeight = sbicvm.ButtonGroupFixedDimensionLength;
 
-                mwtg.RowDefinitions.Add(ctrcb_rd);
-                mwtg.RowDefinitions.Add(ssbcb_rd);
-                mwtg.RowDefinitions.Add(sbbg_rd);
+                //mwtg.RowDefinitions.Add(ctrcb_rd);
+                //mwtg.RowDefinitions.Add(ssbcb_rd);
+                //mwtg.RowDefinitions.Add(sbbg_rd);
 
-                // cliptray container view
-                Grid.SetRow(ctrcv, 0);
-                Grid.SetColumn(ctrcv, 0);
+                //// cliptray container view
+                //Grid.SetRow(ctrcv, 0);
+                //Grid.SetColumn(ctrcv, 0);
 
-                // sidebar content
-                Grid.SetRow(ssbcb, 1);
-                Grid.SetRowSpan(ssbcb, 1);
-                Grid.SetColumn(ssbcb, 0);
+                //// sidebar content
+                //Grid.SetRow(ssbcb, 1);
+                //Grid.SetRowSpan(ssbcb, 1);
+                //Grid.SetColumn(ssbcb, 0);
 
-                // sidebar splitter
-                Grid.SetRow(sbgs, 1);
-                Grid.SetRowSpan(sbgs, 1);
-                Grid.SetColumn(sbgs, 0);
-                sbgs.Height = gs_fixed_length;
-                sbgs.Width = double.NaN;
-                sbgs.VerticalAlignment = VerticalAlignment.Top;
-                sbgs.HorizontalAlignment = HorizontalAlignment.Stretch;
-                sbgs.ResizeDirection = GridResizeDirection.Rows;
+                //// sidebar splitter
+                //Grid.SetRow(sbgs, 1);
+                //Grid.SetRowSpan(sbgs, 1);
+                //Grid.SetColumn(sbgs, 0);
+                //sbgs.Height = gs_fixed_length;
+                //sbgs.Width = double.NaN;
+                //sbgs.VerticalAlignment = VerticalAlignment.Top;
+                //sbgs.HorizontalAlignment = HorizontalAlignment.Stretch;
+                //sbgs.ResizeDirection = GridResizeDirection.Rows;
 
-                // sidebar buttons
-                Grid.SetRow(sbbg, 2);
-                Grid.SetRowSpan(sbbg, 1);
-                Grid.SetColumn(sbbg, 0);
+                //// sidebar buttons
+                //Grid.SetRow(sbbg, 2);
+                //Grid.SetRowSpan(sbbg, 1);
+                //Grid.SetColumn(sbbg, 0);
 
                 // cliptraycontainer column definitions (vertical)
                 ctrcv_cg.ColumnDefinitions.Clear();
@@ -709,30 +703,36 @@ namespace MonkeyPaste.Avalonia {
             tmv_zfv.UpdateMarkerPositions();
         }
 
-        private bool UpdateGridBindings() {
-            // returns true if no clamping needed
+        private void UpdateGridBindings() {
             var ctrvm = MpAvClipTrayViewModel.Instance;
             var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
+            // clamp stretch dims
             if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                ctrvm.ContainerBoundHeight = BoundContentAndSidebarSize.Height;
-                sbicvm.ContainerBoundHeight = BoundContentAndSidebarSize.Height;
+                ctrvm.ContainerBoundHeight = AvailableContentAndSidebarSize.Height;
+                sbicvm.ContainerBoundHeight = AvailableContentAndSidebarSize.Height;
             } else {
-                ctrvm.ContainerBoundWidth = BoundContentAndSidebarSize.Width;
-                sbicvm.ContainerBoundWidth = BoundContentAndSidebarSize.Width;
+                ctrvm.ContainerBoundWidth = AvailableContentAndSidebarSize.Width;
+                sbicvm.ContainerBoundWidth = AvailableContentAndSidebarSize.Width;
+            }
+            // initial case (no sidebar should be open)
+            if(ctrvm.ContainerBoundWidth <= 0) {
+                ctrvm.ContainerBoundWidth = AvailableContentAndSidebarSize.Width;
+            }
+            if(ctrvm.ContainerBoundHeight <= 0) {
+                ctrvm.ContainerBoundHeight = AvailableContentAndSidebarSize.Height;
             }
             var diff = AvailableContentAndSidebarSize - BoundContentAndSidebarSize;
-            bool is_valid = diff.IsValueEqual(MpPoint.Zero,1);
+            bool is_valid = diff.IsValueEqual(MpPoint.Zero, 1);
             if (!is_valid) {
                 // only clamp clip cntr since sidebar animates 
                 MpConsole.WriteLine($"Invalid content size! Avail: {AvailableContentAndSidebarSize} Bound: {BoundContentAndSidebarSize} diff: {diff}", true);
-               
+
                 ctrvm.ContainerBoundWidth += diff.X;
                 ctrvm.ContainerBoundHeight += diff.Y;
                 var diff2 = AvailableContentAndSidebarSize - BoundContentAndSidebarSize;
                 MpConsole.WriteLine($"Fixed diff: {diff2}", false, true);
                 MpDebug.Assert(diff2.IsValueEqual(MpPoint.Zero), $"Clamp error. Bindings broken or something", silent: true);
             }
-            return is_valid;
         }
 
         private void UpdateEdgyTooltips() {
@@ -822,14 +822,44 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        #region Event Handlers
+        #region Sidebar Splitter
+        private void InitSidebarSplitter() {
+            SidebarGridSplitter.AddHandler(Control.PointerPressedEvent, SidebarSplitter_PointerPressed, RoutingStrategies.Tunnel);
+            SidebarGridSplitter.AddHandler(Control.PointerReleasedEvent, SidebarSplitter_PointerReleased, RoutingStrategies.Tunnel);
+            SidebarGridSplitter.PointerMoved += SidebarSplitter_PointerMoved;
+        }
 
-        private void SidebarSplitter_DragDelta(object sender, VectorEventArgs e) {
-            double delta_x = e.Vector.X.IsNumber() ? e.Vector.X : 0;
-            double delta_y = e.Vector.Y.IsNumber() ? e.Vector.Y : 0;
-            var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
-            //sbicvm.ContainerBoundWidth += delta_x;
-            //sbicvm.ContainerBoundHeight += delta_y;
+        private void SidebarSplitter_PointerMoved(object sender, PointerEventArgs e) {
+            if (sender is not Control c ||
+                !e.IsLeftDown(c)) {
+                return;
+            }
+            var mp = e.GetPosition(MpAvMainView.Instance).ToPortablePoint();
+            if (_lastSidebar_mp == null) {
+                _lastSidebar_mp = mp;
+            }
+            var diff = mp - _lastSidebar_mp;
+            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                MpAvSidebarItemCollectionViewModel.Instance.SetSidebarSizeByDelta(diff.X, 0);
+            } else {
+                MpAvSidebarItemCollectionViewModel.Instance.SetSidebarSizeByDelta(0, -diff.Y);
+            }
+            _lastSidebar_mp = mp;
+        }
+
+        private void SidebarSplitter_PointerReleased(object sender, PointerReleasedEventArgs e) {
+            e.Handled = true;
+            e.Pointer.Capture(null);
+            _lastSidebar_mp = null;
+        }
+
+        private void SidebarSplitter_PointerPressed(object sender, PointerPressedEventArgs e) {
+            if (sender is not Control c) {
+                return;
+            }
+            e.Handled = true;
+            e.Pointer.Capture(c);
+            _lastSidebar_mp = e.GetPosition(MpAvMainView.Instance).ToPortablePoint();
         }
 
         #endregion
