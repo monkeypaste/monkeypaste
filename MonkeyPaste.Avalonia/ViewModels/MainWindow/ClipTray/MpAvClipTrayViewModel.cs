@@ -354,8 +354,9 @@ namespace MonkeyPaste.Avalonia {
         public double ScrollVelocityY { get; set; }
         public double ScrollWheelDampeningX {
             get {
+                // NOTE larger the value the less dampening
                 if (LayoutType == MpClipTrayLayoutType.Stack) {
-                    return 0.03d;
+                    return 0.01d;
                 }
                 return 0.03d;
             }
@@ -370,8 +371,9 @@ namespace MonkeyPaste.Avalonia {
         }
         public double ScrollFrictionX {
             get {
+                // NOTE the larger the value the less friction
                 if (MpAvThemeViewModel.Instance.IsMultiWindow) {
-                    return LayoutType == MpClipTrayLayoutType.Stack ? 0.85 : 0.5;
+                    return LayoutType == MpClipTrayLayoutType.Stack ? 0.5 : 0.5;
                 }
                 return 0.75;
             }
@@ -381,7 +383,7 @@ namespace MonkeyPaste.Avalonia {
         public double ScrollFrictionY {
             get {
                 if (MpAvThemeViewModel.Instance.IsMultiWindow) {
-                    return LayoutType == MpClipTrayLayoutType.Stack ? 0.85 : 0.5;
+                    return LayoutType == MpClipTrayLayoutType.Stack ? 0.95 : 0.5;
                 }
                 return 0.0;
             }
@@ -1365,6 +1367,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsQuerying { get; set; } = false;
         public bool IsSubQuerying { get; set; } = false;
         public int SparseLoadMoreRemaining { get; set; }
+        public bool IsPinTrayHovering { get; set; }
+        public bool IsQueryTrayHovering { get; set; }
 
         #region Paste Button
 
@@ -1665,7 +1669,7 @@ namespace MonkeyPaste.Avalonia {
             MpSize svr_size = MpAvClipTrayContainerView.Instance.Bounds.Size.ToPortableSize();
             if (ctvm.IsPinned) {
                 MpDebug.Assert(MpAvThemeViewModel.Instance.IsMobileOrWindowed, $"PinTray scroll into view should only be manual on mobile");
-                if(ctvm.GetContentView() is not Control c ||
+                if (ctvm.GetContentView() is not Control c ||
                     c.GetVisualAncestor<ListBoxItem>() is not { } ctvm_lbi ||
                     ctvm_lbi.GetVisualAncestor<ItemsPresenter>() is not { } ptr_lb) {
                     // shouldn't happen
@@ -1673,7 +1677,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 ctvm_rect = ctvm_lbi.Bounds.ToPortableRect();
-                if(MpAvThemeViewModel.Instance.IsMultiWindow) {
+                if (MpAvThemeViewModel.Instance.IsMultiWindow) {
                     svr_size = ptr_lb.Bounds.Size.ToPortableSize();
                 }
             } else {
@@ -1688,14 +1692,14 @@ namespace MonkeyPaste.Avalonia {
             MpPoint source_offset = null;
             MpPoint target_offset = null;
             ScrollViewer sv = null;
-            if(ctvm.IsPinned) {
-                if(MpAvPinTrayView.Instance.PinTrayListBox.GetVisualDescendant<ScrollViewer>() is { } ptr_sv) {
+            if (ctvm.IsPinned) {
+                if (MpAvPinTrayView.Instance.PinTrayListBox.GetVisualDescendant<ScrollViewer>() is { } ptr_sv) {
                     sv = ptr_sv;
                     source_offset = ptr_sv.Offset.ToPortablePoint();
                     target_offset = ptr_sv.Offset.ToPortablePoint() + delta_scroll_offset;
                 }
             } else {
-                if(MpAvQueryTrayView.Instance.ClipTrayScrollViewer is { } qtr_sv) {
+                if (MpAvQueryTrayView.Instance.ClipTrayScrollViewer is { } qtr_sv) {
                     sv = qtr_sv;
                     source_offset = ScrollOffset;
                     target_offset = ScrollOffset + delta_scroll_offset;
@@ -2191,6 +2195,11 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(ScrollVelocityX):
+                    if(ScrollVelocityX == 0) {
+
+                    }
+                    break;
                 case nameof(ContainerBoundWidth):
                     OnPropertyChanged(nameof(MaxContainerScreenWidth));
                     break;
@@ -2280,9 +2289,12 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(HasScrollVelocity):
-                    if (HasScrollVelocity) {
+                    //if (HasScrollVelocity ||
+                    //    VisibleFromTopLeftQueryItems.FirstOrDefault() is not { } leftest_ctvm) {
+                    //    break;
+                    //}
+                    //ScrollIntoView(leftest_ctvm,true);
 
-                    }
                     //MpPlatformWrapper.Services.Cursor.IsCursorFrozen = HasScrollVelocity;
 
                     //if (HasScrollVelocity) {

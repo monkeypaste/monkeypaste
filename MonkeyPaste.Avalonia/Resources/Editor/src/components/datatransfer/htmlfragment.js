@@ -207,7 +207,6 @@ function cleanHtmlForFragmentMarkers(htmlOrHtmlFragStr, verifyText) {
         }
         next_line_parts.splice(0, 1);
         htmlOrHtmlFragStr = next_line_parts.join('\n');
-        return result;
     } else {
         log(`unknown html fragment type: ${version}`);
         debugger;

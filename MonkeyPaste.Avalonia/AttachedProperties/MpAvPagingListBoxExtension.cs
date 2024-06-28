@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
-        public const int SCROLL_TICK_INTERVAL_MS = 20;
+        public const int SCROLL_FPS = 50;
         public const double MIN_SCROLL_VELOCITY_MAGNITUDE = 0.1d;
 
         #endregion
@@ -157,6 +157,20 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region IsScrollingIntoView 
+        public static bool GetIsScrollingIntoView(AvaloniaObject obj) {
+            return obj.GetValue(IsScrollingIntoViewProperty);
+        }
+        public static void SetIsScrollingIntoView(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsScrollingIntoViewProperty, value);
+        }
+        public static readonly AttachedProperty<bool> IsScrollingIntoViewProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "IsScrollingIntoView",
+                false,
+                false);
+
+        #endregion
         #endregion
 
         #region Scrollbar Properties
@@ -579,7 +593,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var timer = new DispatcherTimer(DispatcherPriority.Normal);
                 timer.Tag = lb;
-                timer.Interval = new TimeSpan(0, 0, 0, 0, SCROLL_TICK_INTERVAL_MS);
+                timer.Interval = ((double)SCROLL_FPS).FpsToDelayTime();// new TimeSpan(0, 0, 0, 0, SCROLL_FPS.);
                 timer.Tick += HandleWorldTimerTick;
 
                 timer.Start();
@@ -922,8 +936,12 @@ namespace MonkeyPaste.Avalonia {
                 scrollOffsetX += vx;
                 scrollOffsetY += vy;
 
-                vx *= GetFrictionX(lb);
-                vy *= GetFrictionY(lb);
+                if (GetIsScrollingIntoView(lb)) {
+                    // no friction
+                } else { 
+                    vx *= GetFrictionX(lb);
+                    vy *= GetFrictionY(lb);
+                }
 
                 ApplyScrollOffset(lb, scrollOffsetX, scrollOffsetY);
 

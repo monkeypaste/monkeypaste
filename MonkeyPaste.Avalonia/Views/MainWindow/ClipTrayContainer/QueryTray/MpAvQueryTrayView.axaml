@@ -100,6 +100,7 @@
                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
                          local:MpAvPagingListBoxExtension.IsEnabled="True"
+                         local:MpAvPagingListBoxExtension.IsScrollingIntoView="{Binding IsScrollingIntoView}"
                          local:MpAvPagingListBoxExtension.FrictionX="{Binding ScrollFrictionX}"
                          local:MpAvPagingListBoxExtension.WheelDampeningX="{Binding ScrollWheelDampeningX}"
                          local:MpAvPagingListBoxExtension.FrictionY="{Binding ScrollFrictionY}"

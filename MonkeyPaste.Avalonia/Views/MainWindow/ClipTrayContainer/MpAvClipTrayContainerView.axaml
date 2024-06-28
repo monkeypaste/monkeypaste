@@ -158,6 +158,8 @@
           VerticalAlignment="Stretch">
         <!--  PIN TRAY  -->
         <local:MpAvPinTrayView x:Name="PinTrayView"
+                               local:MpAvIsHoveringExtension.IsEnabled="True"
+                               local:MpAvIsHoveringExtension.IsHovering="{Binding IsPinTrayHovering, Mode=TwoWay}"
                                Classes.dragover="{Binding IsDragOverPinTray}"
                                MinWidth="{Binding MinPinTrayScreenWidth}"
                                MinHeight="{Binding MinPinTrayScreenHeight}"
@@ -183,6 +185,8 @@
 
         <!--  QUERY TRAY  -->
         <local:MpAvQueryTrayView x:Name="QueryTrayView"
+                                 local:MpAvIsHoveringExtension.IsEnabled="True"
+                                 local:MpAvIsHoveringExtension.IsHovering="{Binding IsQueryTrayHovering, Mode=TwoWay}"
                                  Classes.dragover="{Binding IsDragOverQueryTray}" />
     </Grid>
 </local:MpAvUserControl>

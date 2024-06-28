@@ -100,20 +100,20 @@ namespace MonkeyPaste.Avalonia {
         public static double FpsToTimeStep(this double fps) {
             return 1000d / fps / 1000d;
         }
-        public static int FpsToDelayTime(this double fps) {
-            return (int)(1000d / fps);
+        public static TimeSpan FpsToDelayTime(this double fps) {
+            return TimeSpan.FromMilliseconds(1000d / fps);
         }
 
-        public static async Task AnimatePointAsync(this MpPoint start, MpPoint end, double tts, double fps, Action<MpPoint> tick) {
+        public static async Task AnimatePointAsync(this MpPoint start, MpPoint end, double tts, double fps, Action<MpPoint> tick, bool tickWithVelocity = false) {
             double dt = 0;
             double time_step = fps.FpsToTimeStep();
-            int delay_ms = fps.FpsToDelayTime();
+            var delay_ms = fps.FpsToDelayTime();
 
             var d = end - start;
             var v = (d / tts) * time_step;
             MpPoint cur = start;
             while (true) {
-                tick?.Invoke(cur);
+                tick?.Invoke(tickWithVelocity ? v : cur);
                 cur += v;
                 await Task.Delay(delay_ms);
                 dt += time_step;
@@ -125,16 +125,16 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         
-        public static async Task AnimateDoubleAsync(this double start, double end, double tts, double fps, Action<double> tick) {
+        public static async Task AnimateDoubleAsync(this double start, double end, double tts, double fps, Action<double> tick, bool tickWithVelocity = false) {
             double dt = 0;
             double time_step = fps.FpsToTimeStep();
-            int delay_ms = fps.FpsToDelayTime();
+            var delay_ms = fps.FpsToDelayTime();
 
             var d = end - start;
             var v = (d / tts) * time_step;
             double cur = start;
             while (true) {
-                tick?.Invoke(cur);
+                tick?.Invoke(tickWithVelocity ? v : cur);
                 cur += v;
                 await Task.Delay(delay_ms);
                 dt += time_step;

@@ -776,6 +776,9 @@ namespace MonkeyPaste.Avalonia {
                 Padding = MpAvThemeViewModel.Instance.IsMobileOrWindowed ? new(): new Thickness(10),
                 Background = Mp.Services.PlatformResource.GetResource<IBrush>("ActionBgBrush")
             };
+            if(MpAvThemeViewModel.Instance.IsMobileOrWindowed && dw.Background is SolidColorBrush scb) {
+                dw.Background = dw.Background.AdjustOpacity(1);
+            }
             dw.Classes.Add("fadeIn");
             dw.Bind(
                 Window.TitleProperty,

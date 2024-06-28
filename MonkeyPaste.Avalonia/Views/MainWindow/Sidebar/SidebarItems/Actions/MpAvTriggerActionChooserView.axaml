@@ -72,7 +72,7 @@
             <Setter Property="local:MpAvOrientedGridExtension.VerticalRowDefinitions"
                     Value="Auto,*" />
         </Style>
-        <Style Selector="Grid#TriggerSidebarContainer:not(.mobile).popout">
+        <Style Selector="Grid#TriggerSidebarContainer.desktop.popout">
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalRowDefinitions"
                     Value="*" />
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumnDefinitions"
@@ -83,7 +83,7 @@
                     Value="Auto,0.5*" />
         </Style>
 
-        <Style Selector="Border#TriggerSidebarOuterContainer.mobile.popout:not(.vert) Grid#TriggerSidebarContainer">
+        <Style Selector="Border#TriggerSidebarOuterContainer.mobile Grid#TriggerSidebarContainer">
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalRowDefinitions"
                     Value="*" />
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumnDefinitions"
@@ -122,10 +122,14 @@
             <Setter Property="local:MpAvOrientedGridExtension.VerticalRow"
                     Value="1" />
         </Style>
-        <Style Selector="Border#TriggerSidebarOuterContainer.mobile.popout:not(.vert) Border#ActionDesignerOuterContainerBorder">
+        <Style Selector="Border#TriggerSidebarOuterContainer.mobile Border#ActionDesignerOuterContainerBorder">
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalRow"
                     Value="0" />
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumn"
+                    Value="1" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalRow"
+                    Value="0" />
+            <Setter Property="local:MpAvOrientedGridExtension.VerticalColumn"
                     Value="1" />
         </Style>
         <Style Selector="Border#TriggerSidebarOuterContainer.desktop.int.vert Border#ActionDesignerOuterContainerBorder">
@@ -134,7 +138,7 @@
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumn"
                     Value="0" />
         </Style>
-        <Style Selector="Border#TriggerSidebarOuterContainer.popout:not(.mobile) Border#ActionDesignerOuterContainerBorder">
+        <Style Selector="Border#TriggerSidebarOuterContainer.desktop.popout Border#ActionDesignerOuterContainerBorder">
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalRow"
                     Value="0" />
             <Setter Property="local:MpAvOrientedGridExtension.HorizontalColumn"
@@ -157,15 +161,15 @@
             </Setter>
         </Style>
 
-        <Style Selector="Border#TriggerSidebarOuterContainer.mobile.popout:not(.vert) Border#ActionDesignerOuterContainerBorder">
+        <Style Selector="Border#TriggerSidebarOuterContainer.mobile.popout.horiz Border#ActionDesignerOuterContainerBorder">
             <Setter Property="MinWidth"
                     Value="{StaticResource DefMinWidth}" />
         </Style>
-        <Style Selector="Border#TriggerSidebarOuterContainer:not(.popout) Border#ActionDesignerOuterContainerBorder">
+        <Style Selector="Border#TriggerSidebarOuterContainer.int Border#ActionDesignerOuterContainerBorder">
             <Setter Property="MinHeight"
                     Value="{StaticResource DefMinHeight}" />
         </Style>
-        <Style Selector="Border#TriggerSidebarOuterContainer:not(.popout):not(.vert) Border#ActionDesignerOuterContainerBorder">
+        <Style Selector="Border#TriggerSidebarOuterContainer.int.horiz Border#ActionDesignerOuterContainerBorder">
             <!--<Setter Property="MinHeight"
                     Value="0" />-->
         </Style>
@@ -194,7 +198,7 @@
             <Setter Property="MaxHeight"
                     Value="{Binding Bounds.Height, ElementName=TriggerSidebarOuterContainer}" />
         </Style>
-        <Style Selector="Border#TriggerSidebarOuterContainer.popout:not(.mobile) Border#ActionDesignerOuterContainerBorder">
+        <Style Selector="Border#TriggerSidebarOuterContainer.popout.desktop Border#ActionDesignerOuterContainerBorder">
             <Setter Property="Height">
                 <Setter.Value>
                     <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"

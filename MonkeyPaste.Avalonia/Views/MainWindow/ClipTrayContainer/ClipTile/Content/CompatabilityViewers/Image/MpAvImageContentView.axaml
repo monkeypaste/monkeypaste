@@ -3,15 +3,24 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
-                       xmlns:pcl="using:MonkeyPaste"
                        x:DataType="local:MpAvClipTileViewModel"
                        x:TypeArguments="local:MpAvClipTileViewModel"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvImageContentView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Image#ContentImage">
+            <Setter Property="Stretch"
+                    Value="None" />
+        </Style>
+        <Style Selector="Image#ContentImage.scale">
+            <Setter Property="Stretch"
+                    Value="Uniform" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Image x:Name="ContentImage"
-           Stretch="{Binding IsWrappingEnabled, ConverterParameter=Uniform|None, Converter={x:Static local:MpAvBoolToStretchConverter.Instance}}"
+           Classes.scale="{Binding IsWrappingEnabled}"
            Source="{Binding CopyItemData, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}"
            HorizontalAlignment="Stretch"
            VerticalAlignment="Stretch" />

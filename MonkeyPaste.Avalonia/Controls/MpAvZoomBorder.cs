@@ -138,12 +138,33 @@ namespace MonkeyPaste.Avalonia {
 
         #region Bg Grid Properties
 
-        public IBrush GridLineBrush { get; set; } = Brushes.LightBlue;
+        #region GridLineBrush
+        public IBrush GridLineBrush {
+            get { return (IBrush)GetValue(GridLineBrushProperty); }
+            set { SetValue(GridLineBrushProperty, value); }
+        }
+
+        public static readonly StyledProperty<IBrush> GridLineBrushProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, IBrush>(
+                nameof(GridLineBrush),
+                Brushes.LightBlue,
+                false);
+        #endregion
+
+        #region OriginBrush
+        public IBrush OriginBrush {
+            get { return (IBrush)GetValue(OriginBrushProperty); }
+            set { SetValue(OriginBrushProperty, value); }
+        }
+
+        public static readonly StyledProperty<IBrush> OriginBrushProperty =
+            AvaloniaProperty.Register<MpAvZoomBorder, IBrush>(
+                nameof(OriginBrush),
+                Brushes.LightBlue,
+                false);
+        #endregion
         public double GridLineThickness { get; set; } = 1;
-
-        public IBrush OriginBrush { get; set; } = Brushes.Cyan;
         public double OriginThickness { get; set; } = 3;
-
         public int GridLineSpacing { get; set; } = 35;
 
         #endregion

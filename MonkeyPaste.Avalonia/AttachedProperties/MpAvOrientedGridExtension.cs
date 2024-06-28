@@ -376,6 +376,11 @@ namespace MonkeyPaste.Avalonia {
             int cs = orientation == Orientation.Horizontal ? GetHorizontalColumnSpan(child) : GetVerticalColumnSpan(child);
 
            try {
+                r = Math.Clamp(r, 0, grid.RowDefinitions.Count);
+                rs = Math.Clamp(rs, 0, grid.RowDefinitions.Count);
+                c = Math.Clamp(c, 0, grid.ColumnDefinitions.Count);
+                cs = Math.Clamp(cs, 0, grid.ColumnDefinitions.Count);
+
                 Grid.SetRow(child, r);
                 Grid.SetColumn(child, c);
                 Grid.SetRowSpan(child, rs);

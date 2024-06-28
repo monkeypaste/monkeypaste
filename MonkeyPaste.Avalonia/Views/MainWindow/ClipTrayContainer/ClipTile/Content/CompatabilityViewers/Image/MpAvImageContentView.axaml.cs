@@ -11,9 +11,5 @@ namespace MonkeyPaste.Avalonia;
 public partial class MpAvImageContentView : MpAvUserControl<MpAvClipTileViewModel> {
     public MpAvImageContentView() {
         InitializeComponent();
-        this.ContentImage.GetObservable(Image.StretchProperty).Subscribe(value => OnStrechChanged());
-    }
-    private void OnStrechChanged() {
-        this.ContentImage.InvalidateAll();
     }
 }

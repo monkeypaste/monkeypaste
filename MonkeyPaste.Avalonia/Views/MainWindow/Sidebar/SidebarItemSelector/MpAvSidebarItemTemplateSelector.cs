@@ -44,8 +44,11 @@ namespace MonkeyPaste.Avalonia {
             }
             var c = AvailableTemplates[keyStr].Build(param);
             if(MpAvThemeViewModel.Instance.IsMobileOrWindowed) {
-                if (sbivm is not MpAvTagTrayViewModel &&
-                    sbivm is not MpAvTriggerCollectionViewModel) {
+                if(sbivm is MpAvTriggerCollectionViewModel) {
+                    // action designer forced as window on mobile
+                    return null;
+                }
+                if (sbivm is not MpAvTagTrayViewModel) {
                     c = new ScrollViewer() {
                         Content = new Viewbox() {
                             Name = "SidebarItemViewbox",
