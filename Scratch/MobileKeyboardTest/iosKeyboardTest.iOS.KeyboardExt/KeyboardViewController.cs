@@ -1,23 +1,26 @@
-using Avalonia.Controls;
+using Avalonia;
 using Avalonia.iOS;
-using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Threading;
+using CoreFoundation;
 using CoreGraphics;
-using EventKit;
 using Foundation;
 using ObjCRuntime;
 using System;
-using System.Collections.Generic;
 using UIKit;
 
-namespace iosKeyboardTest.iOS.KeyboardExt
-{
-    public partial class KeyboardViewController : UIInputViewController, iosIKeyboardInputConnection {    
+namespace iosKeyboardTest.iOS.KeyboardExt {
+    [Register("KeyboardViewController")]
+    public class KeyboardViewController : UIInputViewController, iosIKeyboardInputConnection,IAvaloniaViewController {    
         #region Private Variables
         UIButton nextKeyboardButton;
-        //UIStackView stv;
+        UIStackView stv;
+        UIView kbv; 
+        
+        private UIStatusBarStyle? _preferredStatusBarStyle;
+        private bool? _prefersStatusBarHidden;
         //UIView av;
-       //DateTime ctorDt = default, loadDt = default;
+        //DateTime ctorDt = default, loadDt = default;
         #endregion
 
         #region Constants
@@ -30,18 +33,68 @@ namespace iosKeyboardTest.iOS.KeyboardExt
         //        null :
         //        (KeyboardView.Content as Control).DataContext as KeyboardViewModel;
 
-        //public static void CreateKeyboardView() {
-            //var kbv = KeyboardViewModel.CreateKeyboardView(null, iosDisplayInfo.ScaledSize);
-            //KeyboardView = new AvaloniaView() {
-            //    TranslatesAutoresizingMaskIntoConstraints = true,
-            //    Content = kbv
-            //};
-            //var kb_size = new CGSize(kbv.Width * iosDisplayInfo.Scaling, kbv.Height * iosDisplayInfo.Scaling);
-            //KeyboardView.Frame = new CGRect(new(), kb_size);
-        //}
+        AvaloniaView CreateKeyboardView() {
+            //var ui_kbv = Dispatcher.UIThread.Invoke(() => {
+                //var kbv = KeyboardViewModel.CreateKeyboardView(this, iosDisplayInfo.ScaledSize);
+                var ui_kbv = new AvaloniaView() {
+                    //Content = kbv
+                    Content = new Avalonia.Controls.Border() { Width = 600, Height = 600, Background = Brushes.Brown}
+                };
+                //var kb_size = new CGSize(kbv.Width * iosDisplayInfo.Scaling, kbv.Height * iosDisplayInfo.Scaling);
+                //var kb_size = new CGSize(5000,5000);
+                //ui_kbv.Frame = new CGRect(new(), kb_size);
+                return ui_kbv;
+            //});
+            //return ui_kbv;
+        }
         #endregion
 
         #region Interfaces
+
+        #region IAvaloniaViewController Implementation
+
+        public Thickness SafeAreaPadding { get; private set; }
+
+        public event EventHandler SafeAreaPaddingChanged;
+
+        public override void ViewDidLayoutSubviews() {
+            base.ViewDidLayoutSubviews();
+            var size = View?.Frame.Size ?? default;
+            var frame = View?.SafeAreaLayoutGuide.LayoutFrame ?? default;
+            var safeArea = new Thickness(frame.Left, frame.Top, size.Width - frame.Right, size.Height - frame.Bottom);
+            if (SafeAreaPadding != safeArea) {
+                SafeAreaPadding = safeArea;
+                SafeAreaPaddingChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        /// <inheritdoc/>
+        public override bool PrefersStatusBarHidden() {
+            return _prefersStatusBarHidden ??= base.PrefersStatusBarHidden();
+        }
+
+        /// <inheritdoc/>
+        public override UIStatusBarStyle PreferredStatusBarStyle() {
+            // don't set _preferredStatusBarStyle value if it's null, so we can keep "default" there instead of actual app style.
+            return _preferredStatusBarStyle ?? base.PreferredStatusBarStyle();
+        }
+
+        UIStatusBarStyle IAvaloniaViewController.PreferredStatusBarStyle {
+            get => _preferredStatusBarStyle ?? UIStatusBarStyle.Default;
+            set {
+                _preferredStatusBarStyle = value;
+                SetNeedsStatusBarAppearanceUpdate();
+            }
+        }
+
+        bool IAvaloniaViewController.PrefersStatusBarHidden {
+            get => _prefersStatusBarHidden ?? false; // false is default on ios/ipados
+            set {
+                _prefersStatusBarHidden = value;
+                SetNeedsStatusBarAppearanceUpdate();
+            }
+        }
+        #endregion
 
         #region iosIKeyboardInputConnection Implementation
         bool iosIKeyboardInputConnection.NeedsInputModeSwitchKey =>
@@ -62,6 +115,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt
             View.EndEditing(true);
         }
         #endregion
+
         #endregion
 
         #region Properties
@@ -69,11 +123,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt
 
         #region Constructors
         public KeyboardViewController(IntPtr handle) : base(handle) {
-            //av = CreateKeyboardView();
-            //ctorDt = DateTime.Now;
-            //if(KeyboardViewModel != null) {
-            //    KeyboardViewModel.SetInputConnection(this);
-            //}
+            // don't do stuff here
         }
         #endregion
 
@@ -93,9 +143,9 @@ namespace iosKeyboardTest.iOS.KeyboardExt
         public override void ViewDidLoad() {
             base.ViewDidLoad();
             //loadDt = DateTime.Now;
-            //if(View is UIStackView) {
-            //    return;
-            //}
+            if (View is AvaloniaView) {
+                return;
+            }
             //View = CreateKeyboardView();
             //View.AddSubview(av);
             //var nextKeyboardButtonLeftSideConstraint = NSLayoutConstraint.Create(av, NSLayoutAttribute.Left, NSLayoutRelation.Equal, View, NSLayoutAttribute.Left, 1.0f, 0.0f);
@@ -108,29 +158,50 @@ namespace iosKeyboardTest.iOS.KeyboardExt
             nextKeyboardButton.SizeToFit();
             nextKeyboardButton.TranslatesAutoresizingMaskIntoConstraints = false;
             nextKeyboardButton.AddTarget(this, new Selector("advanceToNextInputMode"), UIControlEvent.TouchUpInside);
-            
+
             //Console.WriteLine($"ViewDidLoad called. View Rect: '{View.Bounds}'");
-            //stv = new UIStackView() {
-            //    BackgroundColor = UIColor.Magenta,
-            //    Axis = UILayoutConstraintAxis.Vertical,
-            //    TranslatesAutoresizingMaskIntoConstraints = false,
-            //};
-            ////var kbv = CreateKeyboardView(out var size);
-            ////stv.AddArrangedSubview(kbv);
+            stv = new UIStackView() {
+                BackgroundColor = UIColor.Magenta,
+                Axis = UILayoutConstraintAxis.Vertical,
+                //TranslatesAutoresizingMaskIntoConstraints = false,
+            };
+
+            //var kbv = CreateKeyboardView();
+            //stv.AddArrangedSubview(kbv);
             //var size = KeyboardView.Frame.Size;
-            //stv.AddArrangedSubview(nextKeyboardButton);
-            //stv.Frame = new CGRect(0, 0, size.Width, size.Height + 50);
+            //stv.AddArrangedSubview(kbv);
+            Dispatcher.UIThread.Invoke(() => {
+                View = CreateKeyboardView();
+                View.BackgroundColor = UIColor.Purple;
+                //kbv.Frame = new CGRect(0, 0, 1000, 1000);
+                //stv.AddSubview(kbv);
+                //View.AddConstraints(new NSLayoutConstraint[] {
+                //    CreateConstraint(kbv, View, NSLayoutAttribute.Left),
+                //    //CreateConstraint(kbv, View, NSLayoutAttribute.Top),
+                //    CreateConstraint(kbv, View, NSLayoutAttribute.Right),
+                //    CreateConstraint(kbv, View, NSLayoutAttribute.Bottom)
+                //});
+                (View as AvaloniaView).InitWithController(this);
+                //kbv.SizeToFit();
+                //stv.AddArrangedSubview(nextKeyboardButton);
 
-            var subView = nextKeyboardButton;
-
-            View.AddSubview(subView);
-
-            View.AddConstraints(new NSLayoutConstraint[] {
-                CreateConstraint(subView, View, NSLayoutAttribute.Left),
-                //CreateConstraint(subView, View, NSLayoutAttribute.Top),
-                //CreateConstraint(subView, View, NSLayoutAttribute.Right),
-                CreateConstraint(subView, View, NSLayoutAttribute.Bottom)
             });
+            //stv.AddArrangedSubview(nextKeyboardButton);
+            ////stv.Frame = new CGRect(0, 0, size.Width, size.Height + 50);
+            ////stv.Frame = new CGRect(0, 0, 5000,5000);
+            ////stv.Frame = kbv.Frame;
+
+            //var subView = stv;
+
+            //View.AddSubview(subView);
+            ////View.Frame = new CGRect(0, 0, 500, 500);
+            //View.BackgroundColor = UIColor.Orange;
+            //View.AddConstraints(new NSLayoutConstraint[] {
+            //    CreateConstraint(subView, View, NSLayoutAttribute.Left),
+            //    CreateConstraint(subView, View, NSLayoutAttribute.Top),
+            //    CreateConstraint(subView, View, NSLayoutAttribute.Right),
+            //    CreateConstraint(subView, View, NSLayoutAttribute.Bottom)
+            //});
         }
         public override void TextWillChange(IUITextInput textInput) {
             // The app is about to change the document's contents. Perform any preparation here.
@@ -164,5 +235,55 @@ namespace iosKeyboardTest.iOS.KeyboardExt
 
         #region Commands
         #endregion
+    }
+
+    public class AvaloniaInputViewController : UIInputViewController, IAvaloniaViewController {
+        private UIStatusBarStyle? _preferredStatusBarStyle;
+        private bool? _prefersStatusBarHidden;
+
+        /// <inheritdoc/>
+        public override void ViewDidLayoutSubviews() {
+            base.ViewDidLayoutSubviews();
+            var size = View?.Frame.Size ?? default;
+            var frame = View?.SafeAreaLayoutGuide.LayoutFrame ?? default;
+            var safeArea = new Thickness(frame.Left, frame.Top, size.Width - frame.Right, size.Height - frame.Bottom);
+            if (SafeAreaPadding != safeArea) {
+                SafeAreaPadding = safeArea;
+                SafeAreaPaddingChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        /// <inheritdoc/>
+        public override bool PrefersStatusBarHidden() {
+            return _prefersStatusBarHidden ??= base.PrefersStatusBarHidden();
+        }
+
+        /// <inheritdoc/>
+        public override UIStatusBarStyle PreferredStatusBarStyle() {
+            // don't set _preferredStatusBarStyle value if it's null, so we can keep "default" there instead of actual app style.
+            return _preferredStatusBarStyle ?? base.PreferredStatusBarStyle();
+        }
+
+        UIStatusBarStyle IAvaloniaViewController.PreferredStatusBarStyle {
+            get => _preferredStatusBarStyle ?? UIStatusBarStyle.Default;
+            set {
+                _preferredStatusBarStyle = value;
+                SetNeedsStatusBarAppearanceUpdate();
+            }
+        }
+
+        bool IAvaloniaViewController.PrefersStatusBarHidden {
+            get => _prefersStatusBarHidden ?? false; // false is default on ios/ipados
+            set {
+                _prefersStatusBarHidden = value;
+                SetNeedsStatusBarAppearanceUpdate();
+            }
+        }
+
+        /// <inheritdoc/>
+        public Thickness SafeAreaPadding { get; private set; }
+
+        /// <inheritdoc/>
+        public event EventHandler SafeAreaPaddingChanged;
     }
 }

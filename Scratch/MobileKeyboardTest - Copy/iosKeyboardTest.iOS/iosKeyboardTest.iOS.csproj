@@ -6,15 +6,21 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
   
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <CreatePackage>false</CreatePackage>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <CreatePackage>false</CreatePackage>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Entitlements.plist" />
+    <None Remove="Entitlements.plist" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
-    <ProjectReference Include="..\iosKeyboardTest.iOS.KeyboardExt\iosKeyboardTest.iOS.KeyboardExt.csproj">
-      <IsAppExtension>true</IsAppExtension>
-      <IsWatchExtension>false</IsWatchExtension>
-    </ProjectReference>
   </ItemGroup>
 </Project>
