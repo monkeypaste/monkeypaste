@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup>
+     <TargetFramework>net8.0-ios</TargetFramework>
+     <OutputType>Library</OutputType>
+     <Nullable>disable</Nullable>
+     <ApplicationId>com.iosKeyboardTest.iOS.KeyboardExt</ApplicationId>
+     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+     <ApplicationVersion>1</ApplicationVersion>
+     <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
+   </PropertyGroup>
+
+   <PropertyGroup>
+     <IsAppExtension>true</IsAppExtension>
+     <IsWatchExtension>false</IsWatchExtension>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+     <CreatePackage>false</CreatePackage>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+     <CreatePackage>false</CreatePackage>
+   </PropertyGroup>
+  
+   <ItemGroup>
+     <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
+   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
+  </ItemGroup>
+</Project>
