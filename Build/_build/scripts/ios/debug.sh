@@ -34,4 +34,5 @@ cd "../../../../ios/iosTest.iOS/"
 
 
 dotnet build -t:Run -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} ${DEVICE_ARG}${DEVICE_ID}
+dotnet build -t:Run -f net8.0-ios -p:RuntimeIdentifier="iossimulator-x64" -p:_DeviceName="D57D4990-6DCF-4D75-AC49-C3B7AD0959F4"
 #dotnet publish -c ${CONFIG} -f ${FRAMEWORK} -p:RuntimeIdentifier=${RUNTIME} ${DEVICE_ARG}${DEVICE_ID}

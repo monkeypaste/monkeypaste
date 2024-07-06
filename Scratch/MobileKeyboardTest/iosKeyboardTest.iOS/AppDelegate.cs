@@ -1,12 +1,7 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.iOS;
-using Avalonia.Media;
 using Avalonia.ReactiveUI;
 using Foundation;
-//using iosKeyboardTest.iOS.KeyboardExt;
-using System;
-using UIKit;
 
 namespace iosKeyboardTest.iOS;
 
@@ -23,16 +18,46 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
         return base.CustomizeAppBuilder(builder)
             .WithInterFont()
             .UseReactiveUI()
-            //.AfterSetup(_ => {
-            //    //if(MainView.IsMainViewLoaded) {
-            //    //    Console.WriteLine("Already loaded");
-            //    //    KeyboardViewController.CreateKeyboardView();
-            //    //} else {
-            //    //    MainView.OnMainViewLoaded += (s, e) => {
-            //    //        KeyboardViewController.CreateKeyboardView();
-            //    //    };
-            //    //}
-            //})
+            //.UseMaui<MauiApplication>(this)
+            .AfterSetup(_ => {
+                //KeyboardExtHelper.
+                //KeyboardViewController.InitAv();
+                //if (MainView.IsMainViewLoaded) {
+                //    Console.WriteLine("Already loaded");
+                //    //KeyboardViewController.CreateKeyboardView();
+                //} else {
+                //    MainView.OnMainViewLoaded += (s, e) => {
+                //        //KeyboardViewController.CreateKeyboardView();
+                //        //iosExtAvaloniaViewLoader.AvViewObj = new AvaloniaView() {
+                //        //    Content = new Avalonia.Controls.Border() {
+                //        //        Width = 600,
+                //        //        Height = 600,
+                //        //        Background = Brushes.Brown
+                //        //    }
+                //        //};
+                //        //iosExtAvaloniaViewLoader.AvViewObj = MauiApplication.Instance.Handler.MauiContext;
+
+                //        //DispatchQueue.MainQueue.DispatchAsync(() => {
+                //        //    var alert = UIAlertController.Create("Test title", "Test msg", UIAlertControllerStyle.Alert);
+                //        //    var ok = UIAlertAction.Create("OK", UIAlertActionStyle.Default, (x) => {
+                //        //        Debug.WriteLine("whatever");
+                //        //    });
+                //        //    alert.AddAction(ok);
+                //        //    this.Window.RootViewController.PresentViewController(alert, true, null);
+                //        //});
+                //    };
+                //}
+
+            })
             ;
     }
+
+
 }
+
+//public class MauiApplication : Microsoft.Maui.Controls.Application {
+//    public static MauiApplication Instance { get; private set; }
+//    public MauiApplication() {
+//        Instance = this;
+//    }
+//}

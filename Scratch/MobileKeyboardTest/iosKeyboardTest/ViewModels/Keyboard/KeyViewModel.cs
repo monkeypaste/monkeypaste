@@ -1,5 +1,7 @@
 ﻿using Avalonia;
-
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.VisualTree;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -16,15 +18,7 @@ namespace iosKeyboardTest
         #region Constants
         #endregion
 
-        #region Statics
-        static double Pad => 20;
-        static string[] MisAlignedCharacters => [
-            //"✖️",
-            "♠️",
-            "♣️"
-            ];
-
-        
+        #region Statics 
         
         #endregion
 
@@ -34,8 +28,8 @@ namespace iosKeyboardTest
         #region Properties
 
         #region View Models
-        KeyboardViewModel Parent { get; set; }
-        KeyViewModel PrevKeyViewModel { get; set; }
+        public KeyboardViewModel Parent { get; set; }
+        public KeyViewModel PrevKeyViewModel { get; set; }
         #endregion
 
         #region Appearance
@@ -46,25 +40,79 @@ namespace iosKeyboardTest
                 {
                     return string.Empty;
                 }
-                int idx = (int)CharSet >= Characters.Count ? 0 : (int)CharSet;
-                return Characters[idx] ?? string.Empty;
+
+                return Characters[CharIdx] ?? string.Empty;
             }
         }
 
-        public string DisplayValue =>
+        public string SecondaryValue {
+            get {
+                int next_idx = CharIdx + 1;
+                if (next_idx >= Characters.Count) {
+                    return string.Empty;
+                }
+                return Characters[next_idx] ?? string.Empty;
+            }
+        }
+        public string PrimaryValue =>
             IsShifted ? CurrentChar.ToUpper() : CurrentChar;
         public bool IsVisible =>
-            !string.IsNullOrEmpty(DisplayValue);
+            !string.IsNullOrEmpty(PrimaryValue);
         #endregion
 
         #region Layout
-        public double X =>
-            PrevKeyViewModel == null ?
+
+        #region Factors
+        double OuterPadX => IsHoldKey ? Parent.DefaultKeyWidth * 0.01 : Parent.DefaultKeyWidth * 0.2;
+        double OuterPadY => IsHoldKey ? 0 : Parent.KeyHeight * 0.15;
+        double PrimaryFontSizeRatio => 0.5;
+        double SecondaryFontSizeRatio => 0.25;
+        double SecondaryRatio => 0.25;
+        string[] MisAlignedCharacters => [
+            //"✖️",
+            "♠️",
+            "♣️"
+            ];
+
+        #endregion
+        public double RadiusX => 5;
+        public double RadiusY => 5;
+        public double PrimaryFontSize =>
+            Math.Min(InnerWidth, InnerHeight) * PrimaryFontSizeRatio;
+        public double SecondaryFontSize =>
+            Math.Min(InnerWidth, InnerHeight) * SecondaryFontSizeRatio;
+        private double? _x;
+        public double X {
+            get {
+                if(_x.HasValue) {
+                    return _x.Value;
+                }
+                return PrevKeyViewModel == null ?
                 0 :
                 PrevKeyViewModel.X + PrevKeyViewModel.Width;
-
-        public double Y =>
-            Row * Height;
+            }
+            set {
+                if(X != value) {
+                    _x = value;
+                    this.RaisePropertyChanged(nameof(X));
+                }
+            }
+        }
+        private double? _y;
+        public double Y {
+            get {
+                if(_y.HasValue) {
+                    return _y.Value;
+                }
+                return Row * Height;
+            }
+            set {
+                if (Y != value) {
+                    _y = value;
+                    this.RaisePropertyChanged(nameof(Y));
+                }
+            }
+        }
 
         public double Width =>
             ColumnSpan * (SpecialKeyType == SpecialKeyType.None ?
@@ -73,10 +121,10 @@ namespace iosKeyboardTest
         public double Height =>
             Parent.KeyHeight;
         public double InnerWidth =>
-            Width - Pad;
+            Width - OuterPadX;
         public double InnerHeight =>
-            Height - Pad;
-        //public Rect Bounds => new Rect(X, Y, Width, Height);
+            Height - OuterPadY;
+
         public double OuterTranslateX =>
             NeedsOuterTranslate && IsVisible ?
                 Parent.DefaultKeyWidth / 2 : 0;
@@ -86,9 +134,12 @@ namespace iosKeyboardTest
         #endregion
 
         #region State
+        public bool IsHoldFocusKey { get; set; }
+        public bool IsHolding { get; set; }
+        public bool IsHoldKey { get; set; }
         public bool NeedsOuterTranslate { get; set; }
         public bool NeedsSymbolTranslate =>
-            MisAlignedCharacters.Contains(DisplayValue);
+            MisAlignedCharacters.Contains(PrimaryValue);
         public bool IsSpecial =>
             SpecialKeyType != SpecialKeyType.None;
         public bool IsShiftOn =>
@@ -110,10 +161,14 @@ namespace iosKeyboardTest
             get => Parent.ShiftState;
             set => Parent.ShiftState = value;
         }
+
+        int CharIdx =>
+            (int)CharSet >= Characters.Count ? 0 : (int)CharSet;
         #endregion
 
         #region Model
         public SpecialKeyType SpecialKeyType { get; set; }
+        public ObservableCollection<string> SecondaryCharacters { get; set; } = ["A","B","C"];
         public ObservableCollection<string> Characters { get; set; } = [];
         #endregion
 
@@ -130,7 +185,7 @@ namespace iosKeyboardTest
         #region Public Methods
         public override string ToString()
         {
-            return $"{DisplayValue} X:{(int)X} Y:{(int)Y} W:{(int)Width} H:{(int)Height}";
+            return $"{PrimaryValue} X:{(int)X} Y:{(int)Y} W:{(int)Width} H:{(int)Height}";
         }
         #endregion
 
@@ -138,70 +193,11 @@ namespace iosKeyboardTest
         #endregion
 
         #region Private Methods
-        void ToggleSymbolSet() {
-            if (CharSet == CharSetType.Letters) {
-                CharSet = CharSetType.Symbols1;
-            } else {
-                CharSet = CharSetType.Letters;
-            }
-        }
-        void HandleShift() {
-            if (CharSet == CharSetType.Letters) {
-                if (ShiftState == ShiftStateType.ShiftLock) {
-                    ShiftState = ShiftStateType.None;
-                } else {
-                    ShiftState = (ShiftStateType)((int)ShiftState + 1);
-                }
-            } else {
-                if (CharSet == CharSetType.Symbols1) {
-                    CharSet = CharSetType.Symbols2;
-                } else {
-                    CharSet = CharSetType.Symbols1;
-                }
-            }
-        }
+        
         #endregion
 
         #region Commands
-        public ICommand KeyTapCommand => ReactiveCommand.Create<object>((args) => {
-            if (Parent == null ||
-                args is not MyKeyView c) {
-                return;
-            }
-            switch (SpecialKeyType) {
-                case SpecialKeyType.Shift:
-                    HandleShift();
-                    break;
-                case SpecialKeyType.SymbolToggle:
-                    ToggleSymbolSet();
-                    break;
-                case SpecialKeyType.Backspace:
-                    Parent.InputConnection?.OnDelete();
-                    break;
-                case SpecialKeyType.Enter:
-                    Parent.InputConnection?.OnDone();
-                    break;
-                default:
-                    Parent.InputConnection?.OnText(DisplayValue);
-                    break;
-            }
-            try {
-                Parent.RefreshKeyboardState();
-            }
-            catch (Exception ex) {
-                Console.WriteLine(ex.ToString());
-            }
-            Console.WriteLine($"Tapped {CurrentChar}");
-        });
-        public ICommand KeyHoldCommand => ReactiveCommand.Create<object>((args) => {
-            if (Parent == null ||
-                args is not MyKeyView b || 
-                b.DataContext is not KeyViewModel kvm) {
-                return;
-            }
-            Parent.RefreshKeyboardState();
-            Console.WriteLine($"Hold {kvm.CurrentChar}");
-        });
+        
         #endregion
     }
 }

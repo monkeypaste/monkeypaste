@@ -1,23 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
  <PropertyGroup>
-     <TargetFramework>net8.0-ios</TargetFramework>
+     <TargetFrameworks>net8.0-ios</TargetFrameworks>
+     <RuntimeIdentifiers>ios-arm64</RuntimeIdentifiers>
      <OutputType>Library</OutputType>
      <Nullable>disable</Nullable>
      <ApplicationId>com.iosKeyboardTest.iOS.KeyboardExt</ApplicationId>
      <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
      <ApplicationVersion>1</ApplicationVersion>
      <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
+    <!--<UseMaui>true</UseMaui>-->
+    <DeviceSpecificBuild>false</DeviceSpecificBuild>
    </PropertyGroup>
 
    <PropertyGroup>
      <IsAppExtension>true</IsAppExtension>
      <IsWatchExtension>false</IsWatchExtension>
+     <CodesignKey>Apple Development: Created via API (79M7T3S5XK)</CodesignKey>
+     <CodesignProvision>VS: com.iosKeyboardTest.iOS.KeyboardExt Development</CodesignProvision>
    </PropertyGroup>
-  
+
+   <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
+     <CodesignKey>Apple Development: Created via API (79M7T3S5XK)</CodesignKey>
+     <CodesignProvision>VS: com.iosKeyboardTest.iOS.KeyboardExt Development</CodesignProvision>
+   </PropertyGroup>
+
    <ItemGroup>
-     <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
+     <Compile Remove="Main.cs" />
    </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
+    <!--<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.61" />-->
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\iosKeyboardTest\iosKeyboardTest.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="App.axaml" />
   </ItemGroup>
 </Project>

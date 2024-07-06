@@ -1,24 +1,41 @@
+using AuthenticationServices;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.iOS;
 using Avalonia.Media;
 using Avalonia.Threading;
+using CoreAnimation;
 using CoreFoundation;
 using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
 using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using UIKit;
+using Thickness = Avalonia.Thickness;
 
 namespace iosKeyboardTest.iOS.KeyboardExt {
-    [Register("KeyboardViewController")]
-    public class KeyboardViewController : UIInputViewController, iosIKeyboardInputConnection,IAvaloniaViewController {    
+#pragma warning disable CA1010
+    public partial class KeyboardViewController : UIInputViewController, iosIKeyboardInputConnection, IAvaloniaViewController {    
+#pragma warning restore CA1010
+
         #region Private Variables
         UIButton nextKeyboardButton;
-        UIStackView stv;
-        UIView kbv; 
-        
-        private UIStatusBarStyle? _preferredStatusBarStyle;
-        private bool? _prefersStatusBarHidden;
+        UIButton showErrorButton;
+        UIStackView outerStackView;
+        UIStackView innerStackView;
+
+        CGSize keyboardSize = new CGSize(1000, 300);
+        MyKeyboardView kb;
+        AvaloniaView kbv;
+        AppDelegate ad;
+
+        string error = "NO ERROR";
+
         //UIView av;
         //DateTime ctorDt = default, loadDt = default;
         #endregion
@@ -27,32 +44,14 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         #endregion
 
         #region Statics
-        //static AvaloniaView KeyboardView { get; set; }
-        //static KeyboardViewModel KeyboardViewModel =>
-        //    KeyboardView == null || KeyboardView.Content == null ?
-        //        null :
-        //        (KeyboardView.Content as Control).DataContext as KeyboardViewModel;
-
-        AvaloniaView CreateKeyboardView() {
-            //var ui_kbv = Dispatcher.UIThread.Invoke(() => {
-                //var kbv = KeyboardViewModel.CreateKeyboardView(this, iosDisplayInfo.ScaledSize);
-                var ui_kbv = new AvaloniaView() {
-                    //Content = kbv
-                    Content = new Avalonia.Controls.Border() { Width = 600, Height = 600, Background = Brushes.Brown}
-                };
-                //var kb_size = new CGSize(kbv.Width * iosDisplayInfo.Scaling, kbv.Height * iosDisplayInfo.Scaling);
-                //var kb_size = new CGSize(5000,5000);
-                //ui_kbv.Frame = new CGRect(new(), kb_size);
-                return ui_kbv;
-            //});
-            //return ui_kbv;
-        }
         #endregion
 
         #region Interfaces
 
         #region IAvaloniaViewController Implementation
 
+        private UIStatusBarStyle? _preferredStatusBarStyle;
+        private bool? _prefersStatusBarHidden;
         public Thickness SafeAreaPadding { get; private set; }
 
         public event EventHandler SafeAreaPaddingChanged;
@@ -133,75 +132,20 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             base.DidReceiveMemoryWarning();
             // Release any cached data, images, etc that aren't in use.
         }
-
+        public override void LoadView() {
+            base.LoadView();
+            InitAv();
+        }
         public override void UpdateViewConstraints() {
             base.UpdateViewConstraints();
 
             // Add custom view sizing constraints here
         }
-
+        
         public override void ViewDidLoad() {
             base.ViewDidLoad();
-            //loadDt = DateTime.Now;
-            if (View is AvaloniaView) {
-                return;
-            }
-            //View = CreateKeyboardView();
-            //View.AddSubview(av);
-            //var nextKeyboardButtonLeftSideConstraint = NSLayoutConstraint.Create(av, NSLayoutAttribute.Left, NSLayoutRelation.Equal, View, NSLayoutAttribute.Left, 1.0f, 0.0f);
-            //var nextKeyboardButtonBottomConstraint = NSLayoutConstraint.Create(av, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, View, NSLayoutAttribute.Bottom, 1.0f, 0.0f);
-            //View.AddConstraints(new[] { nextKeyboardButtonLeftSideConstraint, nextKeyboardButtonBottomConstraint });
-
-
-            nextKeyboardButton = new UIButton(UIButtonType.System);
-            nextKeyboardButton.SetTitle($"Startup time: ", UIControlState.Normal);
-            nextKeyboardButton.SizeToFit();
-            nextKeyboardButton.TranslatesAutoresizingMaskIntoConstraints = false;
-            nextKeyboardButton.AddTarget(this, new Selector("advanceToNextInputMode"), UIControlEvent.TouchUpInside);
-
-            //Console.WriteLine($"ViewDidLoad called. View Rect: '{View.Bounds}'");
-            stv = new UIStackView() {
-                BackgroundColor = UIColor.Magenta,
-                Axis = UILayoutConstraintAxis.Vertical,
-                //TranslatesAutoresizingMaskIntoConstraints = false,
-            };
-
-            //var kbv = CreateKeyboardView();
-            //stv.AddArrangedSubview(kbv);
-            //var size = KeyboardView.Frame.Size;
-            //stv.AddArrangedSubview(kbv);
-            Dispatcher.UIThread.Invoke(() => {
-                View = CreateKeyboardView();
-                View.BackgroundColor = UIColor.Purple;
-                //kbv.Frame = new CGRect(0, 0, 1000, 1000);
-                //stv.AddSubview(kbv);
-                //View.AddConstraints(new NSLayoutConstraint[] {
-                //    CreateConstraint(kbv, View, NSLayoutAttribute.Left),
-                //    //CreateConstraint(kbv, View, NSLayoutAttribute.Top),
-                //    CreateConstraint(kbv, View, NSLayoutAttribute.Right),
-                //    CreateConstraint(kbv, View, NSLayoutAttribute.Bottom)
-                //});
-                (View as AvaloniaView).InitWithController(this);
-                //kbv.SizeToFit();
-                //stv.AddArrangedSubview(nextKeyboardButton);
-
-            });
-            //stv.AddArrangedSubview(nextKeyboardButton);
-            ////stv.Frame = new CGRect(0, 0, size.Width, size.Height + 50);
-            ////stv.Frame = new CGRect(0, 0, 5000,5000);
-            ////stv.Frame = kbv.Frame;
-
-            //var subView = stv;
-
-            //View.AddSubview(subView);
-            ////View.Frame = new CGRect(0, 0, 500, 500);
-            //View.BackgroundColor = UIColor.Orange;
-            //View.AddConstraints(new NSLayoutConstraint[] {
-            //    CreateConstraint(subView, View, NSLayoutAttribute.Left),
-            //    CreateConstraint(subView, View, NSLayoutAttribute.Top),
-            //    CreateConstraint(subView, View, NSLayoutAttribute.Right),
-            //    CreateConstraint(subView, View, NSLayoutAttribute.Bottom)
-            //});
+            SetupKeyboardView();
+            //InputView.AddSubview(new AvaloniaView());
         }
         public override void TextWillChange(IUITextInput textInput) {
             // The app is about to change the document's contents. Perform any preparation here.
@@ -227,63 +171,154 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         #endregion
 
         #region Private Methods
+        private void InitAv() {
+            try {
+                if (ad == null) {
+                    ad = new AppDelegate();
+                    ad.FinishedLaunching(UIApplication.SharedApplication, null);
+                }
+                kb = KeyboardViewModel.CreateKeyboardView(this, iosDisplayInfo.ScaledSize, iosDisplayInfo.Scaling, out var unscaledSize);
+                keyboardSize = new CGSize(unscaledSize.Width/ iosDisplayInfo.Scaling, unscaledSize.Height/iosDisplayInfo.Scaling);
+                kbv = new AvaloniaView() {
+                    Content = kb
+                };
+                kbv.InitWithController(this);
+            }
+            catch (Exception ex) {
+                error = string.IsNullOrWhiteSpace(ex.Message) ? "EMPTY ERROR" : ex.Message;
+            }
+        }
+        void SetupKeyboardView() {
+            outerStackView = new UIStackView() {
+                BackgroundColor = UIColor.Magenta,
+                Axis = UILayoutConstraintAxis.Vertical,
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                Spacing = 5
+            };
+            View.AddSubview(outerStackView);
 
-        private NSLayoutConstraint CreateConstraint(UIView view, UIView parentView, NSLayoutAttribute attr) {
-            return NSLayoutConstraint.Create(view, attr, NSLayoutRelation.Equal, parentView, attr, 1f, 0f);
+            NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
+                    outerStackView.HeightAnchor.ConstraintGreaterThanOrEqualTo(300),
+                    outerStackView.TopAnchor.ConstraintEqualTo(View.TopAnchor),
+                    outerStackView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor),
+                    outerStackView.LeftAnchor.ConstraintEqualTo(View.LeftAnchor),
+                    outerStackView.RightAnchor.ConstraintEqualTo(View.RightAnchor),
+                    });
+
+
+            try {
+                if (kbv == null) {
+                    InitAv();
+                }
+                outerStackView.AddArrangedSubview(kbv);
+
+                NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
+                    kbv.HeightAnchor.ConstraintGreaterThanOrEqualTo(keyboardSize.Height),
+                    });
+            }
+            catch (Exception ex) {
+                error = string.IsNullOrWhiteSpace(ex.Message) ? "EMPTY ERROR" : ex.Message;
+            }
+
+            innerStackView = new UIStackView() {
+                BackgroundColor = UIColor.Purple,
+                Axis = UILayoutConstraintAxis.Horizontal,
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                Spacing = 5
+            };
+            outerStackView.AddArrangedSubview(innerStackView);
+            NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
+                innerStackView.LeftAnchor.ConstraintEqualTo(outerStackView.LeftAnchor),
+                innerStackView.RightAnchor.ConstraintEqualTo(outerStackView.RightAnchor),
+                });
+
+
+
+            nextKeyboardButton = new UIButton(UIButtonType.System);
+            string title = kbv == null ? "NO KB" : "YUUUUUUP";
+            nextKeyboardButton.SetTitle(title, UIControlState.Normal);
+            nextKeyboardButton.SizeToFit();
+            //nextKeyboardButton.TranslatesAutoresizingMaskIntoConstraints = false;
+            nextKeyboardButton.AddTarget(this, new Selector("advanceToNextInputMode"), UIControlEvent.TouchUpInside);
+            innerStackView.AddArrangedSubview(nextKeyboardButton);
+            //NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[] {
+            //    nextKeyboardButton.LeftAnchor.ConstraintEqualTo(View.LeftAnchor),
+            //    nextKeyboardButton.BottomAnchor.ConstraintEqualTo(View.BottomAnchor),
+            //});
+
+
+            showErrorButton = new UIButton(UIButtonType.System);
+            showErrorButton.SetTitle(error, UIControlState.Normal);
+            showErrorButton.SizeToFit();
+            //showErrorButton.TranslatesAutoresizingMaskIntoConstraints = false;
+            showErrorButton.TouchUpInside += (s, e) => {
+                //DispatchQueue.MainQueue.DispatchAsync(() => {
+                var alert = UIAlertController.Create(error, error, UIAlertControllerStyle.Alert);
+                var ok = UIAlertAction.Create("OK", UIAlertActionStyle.Default, (x) => {
+                    Debug.WriteLine("whatever");
+                });
+                alert.AddAction(ok);
+                this.PresentViewController(alert, true, null);
+                //});
+            };
+            innerStackView.AddArrangedSubview(showErrorButton);
+            //NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[] {
+            //    showErrorButton.RightAnchor.ConstraintEqualTo(View.RightAnchor),
+            //    showErrorButton.TopAnchor.ConstraintEqualTo(nextKeyboardButton.TopAnchor),
+            //});
+
+
+
+
+            DispatchQueue.GetGlobalQueue(DispatchQueuePriority.Default).DispatchAsync(async () => {
+                //var ui_kbv = iosExtAvaloniaViewLoader.AvViewObj as AvaloniaView;
+                await Task.Delay(300);
+
+                //var ui_kbv = Dispatcher.UIThread.Invoke(() => {
+                //TestAvaloniaView.SharedLayer = View.Layer;
+                //var ui_kbv = new AvaloniaView() {
+                //    Content = new Avalonia.Controls.Border() {
+                //        Width = 600,
+                //        Height = 600,
+                //        Background = Brushes.Brown
+                //    }
+                //};
+                //    return ui_kbv;
+                //});
+                DispatchQueue.MainQueue.DispatchAsync(() => {
+
+
+                    //if(iosExtAvaloniaViewLoader.AvViewObj is IMauiContext ctx) {
+
+                    //    var cv = new Border() {
+                    //        WidthRequest = 600,
+                    //        HeightRequest = 600,
+                    //        BackgroundColor = Colors.Cyan
+                    //    }.ToPlatform(ctx);
+                    //    InputView.AddSubview(cv);
+                    //}
+
+                    //InitAv();
+
+                    //var ui_kbv = new AvaloniaView() {
+                    //    Content = new Avalonia.Controls.Border() {
+                    //        Width = 600,
+                    //        Height = 600,
+                    //        Background = Brushes.Brown
+                    //    }
+                    //};
+
+                    //View.AddSubview(ui_kbv);
+                    //NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[] {
+                    //    ui_kbv.WidthAnchor.ConstraintGreaterThanOrEqualTo(600),
+                    //    ui_kbv.HeightAnchor.ConstraintGreaterThanOrEqualTo(600),
+                    //});
+                });
+            });
         }
         #endregion
 
         #region Commands
         #endregion
-    }
-
-    public class AvaloniaInputViewController : UIInputViewController, IAvaloniaViewController {
-        private UIStatusBarStyle? _preferredStatusBarStyle;
-        private bool? _prefersStatusBarHidden;
-
-        /// <inheritdoc/>
-        public override void ViewDidLayoutSubviews() {
-            base.ViewDidLayoutSubviews();
-            var size = View?.Frame.Size ?? default;
-            var frame = View?.SafeAreaLayoutGuide.LayoutFrame ?? default;
-            var safeArea = new Thickness(frame.Left, frame.Top, size.Width - frame.Right, size.Height - frame.Bottom);
-            if (SafeAreaPadding != safeArea) {
-                SafeAreaPadding = safeArea;
-                SafeAreaPaddingChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        /// <inheritdoc/>
-        public override bool PrefersStatusBarHidden() {
-            return _prefersStatusBarHidden ??= base.PrefersStatusBarHidden();
-        }
-
-        /// <inheritdoc/>
-        public override UIStatusBarStyle PreferredStatusBarStyle() {
-            // don't set _preferredStatusBarStyle value if it's null, so we can keep "default" there instead of actual app style.
-            return _preferredStatusBarStyle ?? base.PreferredStatusBarStyle();
-        }
-
-        UIStatusBarStyle IAvaloniaViewController.PreferredStatusBarStyle {
-            get => _preferredStatusBarStyle ?? UIStatusBarStyle.Default;
-            set {
-                _preferredStatusBarStyle = value;
-                SetNeedsStatusBarAppearanceUpdate();
-            }
-        }
-
-        bool IAvaloniaViewController.PrefersStatusBarHidden {
-            get => _prefersStatusBarHidden ?? false; // false is default on ios/ipados
-            set {
-                _prefersStatusBarHidden = value;
-                SetNeedsStatusBarAppearanceUpdate();
-            }
-        }
-
-        /// <inheritdoc/>
-        public Thickness SafeAreaPadding { get; private set; }
-
-        /// <inheritdoc/>
-        public event EventHandler SafeAreaPaddingChanged;
     }
 }

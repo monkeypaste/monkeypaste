@@ -36,17 +36,16 @@ namespace iosKeyboardTest.Android
         {
             try
             {
-                var kbv = KeyboardViewModel.CreateKeyboardView(this, AndroidDisplayInfo.ScaledSize);
                 var av = new AvaloniaView(MainActivity.Instance)
                 {
                     Focusable = false,
-                    Content = kbv
+                    Content = KeyboardViewModel.CreateKeyboardView(this, AndroidDisplayInfo.ScaledSize, AndroidDisplayInfo.Scaling, out var unscaledSize)
                 };
 
                 var cntr2 = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.keyboard_layout_view, null);
                 cntr2.AddView(av);
                 cntr2.Focusable = false;
-                var cntr = new KeyboardLinearLayout(MainActivity.Instance, (int)(kbv.Height * AndroidDisplayInfo.Scaling));
+                var cntr = new KeyboardLinearLayout(MainActivity.Instance, (int)unscaledSize.Height);
                 cntr.AddView(cntr2);
                 return cntr;
             } catch(Exception ex)

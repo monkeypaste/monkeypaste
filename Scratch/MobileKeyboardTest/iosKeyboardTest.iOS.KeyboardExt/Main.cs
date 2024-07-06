@@ -1,6 +1,6 @@
 using UIKit;
 
-namespace iosKeyboardTest.iOS;
+namespace iosKeyboardTest.iOS.KeyboardExt;
 
 public class Application
 {
