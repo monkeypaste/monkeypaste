@@ -8,13 +8,15 @@ namespace iosKeyboardTest
         Shift,
         Backspace,
         SymbolToggle,
-        Enter,
+        NumberSymbolsToggle,
         Tab,
         CapsLock,
         Emoji,
         ArrowLeft,
         ArrowRight,
-        NextKeyboard
+        NextKeyboard,
+        Enter, // PrimarySpecial
+        Next, // PrimarySpecial
     }
     public enum ShiftStateType
     {
@@ -26,7 +28,9 @@ namespace iosKeyboardTest
     {
         Letters = 0,
         Symbols1,
-        Symbols2
+        Symbols2,
+        Numbers1,
+        Numbers2,
     }
 
     [Flags]

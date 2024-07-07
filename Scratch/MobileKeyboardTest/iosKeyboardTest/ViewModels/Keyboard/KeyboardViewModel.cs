@@ -2,13 +2,16 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using DynamicData;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Size = Avalonia.Size;
 
@@ -20,21 +23,9 @@ namespace iosKeyboardTest
         #endregion
 
         #region Constants
-        const double KEYBOARD_SCREEN_HEIGHT_RATIO = 0.3;
         #endregion
 
         #region Statics
-
-        public static MyKeyboardView CreateKeyboardView(IKeyboardInputConnection inputConn, Size screenSize, double scale, out Size unscaledSize) {
-            var kbvm = new KeyboardViewModel(inputConn, screenSize);
-            var kbv = new MyKeyboardView() {
-                DataContext = kbvm,
-                Width = kbvm.KeyboardWidth,
-                Height = kbvm.KeyboardHeight
-            };
-            unscaledSize = new Size(kbvm.KeyboardWidth * scale, kbvm.KeyboardHeight * scale);
-            return kbv;
-        }
         #endregion
 
         #region Interfaces
@@ -43,27 +34,31 @@ namespace iosKeyboardTest
         #region Properties
 
         #region View Models
-        public KeyViewModel HoldingKeyViewModel =>
-            Keys.FirstOrDefault(x => x.IsHolding);
-        public KeyViewModel HoldingFocusKeyViewModel =>
-            Keys.FirstOrDefault(x => x.IsHoldFocusKey);
+        public KeyboardMainViewModel Parent { get; private set; }
         public ObservableCollection<KeyViewModel> Keys { get; set; } = [];
+        public KeyViewModel PressedKeyViewModel =>
+            Keys
+            .FirstOrDefault(x =>x != null && x.IsPressed);
+        public KeyViewModel ActiveKeyViewModel =>
+            Keys
+            .FirstOrDefault(x => x != null && x.IsActiveKey);
+
+        public IEnumerable<KeyViewModel> PopupKeys =>
+            Keys
+            .Where(x => x != null && x.IsPopupKey)
+            .OrderBy(x => x.PopupKeyIdx);
         IEnumerable<IEnumerable<KeyViewModel>> Rows =>
-            Keys.OrderBy(x => x.Column).GroupBy(x => x.Row);
+            Keys.Where(x=>x != null && x.Column.HasValue && x.Row.HasValue)
+            .OrderBy(x => x.Column)
+            .GroupBy(x => x.Row.Value);
         #endregion
 
         #region Layout
 
-
-        private Size _screenSize;
-        public Size ScreenSize {
-            get {
-                if (_screenSize == null) {
-                    return new Size(500, 500);
-                }
-                return _screenSize;
-            }
-        }
+        public int MaxColCount =>
+            Rows.Max(x => x.Count());
+        public Size ScreenSize =>
+            Parent.ScreenSize;
 
         private double _defKeyWidth = -1;
         public double DefaultKeyWidth { 
@@ -71,7 +66,7 @@ namespace iosKeyboardTest
             {
                 if(_defKeyWidth <= 0)
                 {
-                    _defKeyWidth = KeyboardWidth / Rows.Max(x => x.Count());
+                    _defKeyWidth = KeyboardWidth / MaxColCount;
 
                 }
                 return _defKeyWidth;
@@ -92,16 +87,30 @@ namespace iosKeyboardTest
 
         double SpecialKeyWidthRatio => 1.5d;
         public double SpecialKeyWidth =>
-            DefaultKeyWidth * SpecialKeyWidthRatio;
+            DefaultKeyWidth * (IsNumbers ? 1:SpecialKeyWidthRatio);
 
         public double KeyboardWidth =>
             ScreenSize.Width;
         public double KeyboardHeight =>
-            ScreenSize.Height * KEYBOARD_SCREEN_HEIGHT_RATIO;
+            ScreenSize.Height * KeyboardMainViewModel.TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO;
 
         #endregion
 
         #region State
+        public bool IsNumbers =>
+            KeyboardFlags.HasFlag(KeyboardFlags.Numbers);
+        KeyboardFlags KeyboardFlags { get; set; }
+        bool IsHoldPopupVisible =>
+            PopupKeys.Any() &&
+            PressedKeyViewModel != null &&
+            ActiveKeyViewModel != null &&
+            PressedKeyViewModel.PrimaryValue != ActiveKeyViewModel.PrimaryValue;
+        uint RepeatCount { get; set; }
+
+        TimeSpan MinHoldDur => TimeSpan.FromMilliseconds(300);
+        //TimeSpan MinRepeatDur => TimeSpan.FromMilliseconds((int)(300/(RepeatCount == 0 ? 1:RepeatCount)));
+        TimeSpan MinRepeatDur => TimeSpan.FromMilliseconds(300);
+        public Point? KeyboardPointerLocation { get; private set; }
         public CharSetType CharSet { get; set; }
         public ShiftStateType ShiftState { get; set; }
         IKeyboardInputConnection InputConnection { get; set; }
@@ -109,13 +118,14 @@ namespace iosKeyboardTest
         #endregion
 
         #region Constructors
-        public KeyboardViewModel() : this(null,default) { }
-        private KeyboardViewModel(IKeyboardInputConnection inputConn, Size screenSize) 
+        public KeyboardViewModel() : this(null,null) { }
+        public KeyboardViewModel(KeyboardMainViewModel parent, IKeyboardInputConnection inputConn) 
         {
-            Console.WriteLine("kbvm ctor called");
-            _screenSize = screenSize;
-            SetInputConnection(inputConn);
-            Init();
+            Debug.WriteLine("kbvm ctor called");
+            Parent = parent ?? new();
+            SetInputConnection(inputConn); 
+            RefreshLayout();
+            Init(KeyboardFlags.Tablet);
         }
         #endregion
 
@@ -123,10 +133,81 @@ namespace iosKeyboardTest
         public void SetInputConnection(IKeyboardInputConnection conn) {
             InputConnection = conn;
         }
-        public void RefreshKeyboardState() {
-            this.RaisePropertyChanged(nameof(Keys));
+        public void RefreshLayout() {
+            _defKeyWidth = -1;
+            _keyHeight = -1;
+            RefreshKeyboardState();
+        }
+        public void SetPointerLocation(Point? mp) {
+            var last_pressed_kvm = PressedKeyViewModel;
+            var last_active_kvm = ActiveKeyViewModel;
+            var new_pressed_kvm = mp.HasValue ? GetKeyUnderPoint(mp.Value) : null;
+            KeyboardPointerLocation = mp;
 
-            foreach (var row in Rows) {
+            if (KeyboardPointerLocation.HasValue &&
+                (last_pressed_kvm == new_pressed_kvm || IsHoldPopupVisible)) {
+                // still over same key
+
+            } else {
+                if (last_pressed_kvm == null) {
+                    // new press
+                    PressKey(new_pressed_kvm);
+                    StartHoldTimer();
+                } else if (new_pressed_kvm == null) {
+                    // release
+                    ReleaseKey(last_active_kvm);
+                    ClearHoldKeys(true);
+                } else if(last_pressed_kvm != new_pressed_kvm) {
+                    // drag enter
+                    ClearHoldKeys(true);
+                    PressKey(new_pressed_kvm);
+                    StartHoldTimer();
+                }
+            }
+            if(!KeyboardPointerLocation.HasValue) {
+                // this shouldn't be needed but maybe due to desktop
+                ClearHoldKeys(true);
+            }
+            RefreshKeyboardState();
+        }
+
+        #endregion
+
+        #region Protected Methods
+        #endregion
+
+        #region Private Methods
+        void Init(KeyboardFlags flags)
+        {
+            KeyboardFlags = flags;
+            var keys = GetKeys(KeyboardFlags);
+            for(int r = 0; r < keys.Count; r++)
+            {
+                KeyViewModel prev_kvm = null;
+                for(int c = 0; c < keys[r].Count; c++)
+                {
+                    var keyObj = keys[r][c];
+                    int cur_col = prev_kvm == null ? 0 : prev_kvm.Column.Value + prev_kvm.ColumnSpan;
+                    var kvm = CreateKeyViewModel(keys[r][c], r, cur_col,prev_kvm);
+                    Keys.Add(kvm);
+                    prev_kvm = kvm;
+                }
+            }
+            RefreshKeyboardState();
+        }
+        KeyViewModel GetKeyUnderPoint(Point p) {
+            var result = Keys
+                .Where(x => x != null)
+                .Select(x => (x, new Rect(x.X, x.Y, x.Width, x.Height)))
+                .FirstOrDefault(x => x.Item2.Contains(p));
+            return result.x;
+        }
+        void RefreshKeyboardState() {
+            this.RaisePropertyChanged(nameof(Keys));
+            this.RaisePropertyChanged(nameof(KeyboardWidth));
+            this.RaisePropertyChanged(nameof(KeyboardHeight));
+
+            foreach (var row in Rows.ToList()) {
                 // center middle row for non-symbol char set
                 bool needs_trans = row.Any(x => !x.IsVisible);
                 foreach (var key in row) {
@@ -135,6 +216,9 @@ namespace iosKeyboardTest
             }
 
             foreach (var key in Keys) {
+                if(key == null) {
+                    continue;
+                }
                 key.RaisePropertyChanged(nameof(key.PrimaryValue));
                 key.RaisePropertyChanged(nameof(key.SecondaryValue));
                 key.RaisePropertyChanged(nameof(key.IsShiftOn));
@@ -148,59 +232,32 @@ namespace iosKeyboardTest
                 key.RaisePropertyChanged(nameof(key.IsVisible));
                 key.RaisePropertyChanged(nameof(key.OuterTranslateX));
                 key.RaisePropertyChanged(nameof(key.NeedsSymbolTranslate));
-                key.RaisePropertyChanged(nameof(key.IsHoldFocusKey));
-                Console.Write(key.PrimaryValue);
+                key.RaisePropertyChanged(nameof(key.IsActiveKey));
+                key.RaisePropertyChanged(nameof(key.IsPressed));
+                //Debug.WriteLine(key.PrimaryValue);
             }
         }
-        #endregion
 
-        #region Protected Methods
-        #endregion
+        KeyViewModel CreatePopUpKeyViewModel(KeyViewModel source_kvm, int popup_idx, bool show_self) {
+            if(source_kvm == null ||  
+                source_kvm.IsSpecial ||
+                popup_idx < 0 || 
+                popup_idx >= 
+                source_kvm.SecondaryCharacters.Count) {
+                if(show_self && source_kvm != null && !source_kvm.IsSpecial) {
+                    // only show self on input keys
+                } else {
 
-        #region Private Methods
-        private void Init()
-        {
-            var keys = GetKeys(KeyboardFlags.Phone);
-            for(int r = 0; r < keys.Count; r++)
-            {
-                KeyViewModel prev_kvm = null;
-                for(int c = 0; c < keys[r].Count; c++)
-                {
-                    var keyObj = keys[r][c];
-                    int cur_col = prev_kvm == null ? 0 : prev_kvm.Column + prev_kvm.ColumnSpan;
-                    var kvm = CreateKeyViewModel(keys[r][c], r, cur_col,prev_kvm);
-                    Keys.Add(kvm);
-                    prev_kvm = kvm;
+                    return null;
                 }
             }
-            RefreshKeyboardState();
+            string disp_val = show_self ? source_kvm.PrimaryValue : source_kvm.SecondaryCharacters[popup_idx];
+            var pu_kvm = CreateKeyViewModel(disp_val, null, null, PopupKeys.LastOrDefault());
+            pu_kvm.PopupKeyIdx = popup_idx;
+            return pu_kvm;
         }
-
-        private List<List<object>> GetKeys(KeyboardFlags kbFlags) {
-            List<List<object>> keys = null;
-            if(kbFlags.HasFlag(KeyboardFlags.Phone)) {
-                keys = new List<List<object>>
-                {
-                    (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]),
-                    (["q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
-                    (["a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧"]),
-                    ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", SpecialKeyType.Backspace]),
-                    ([SpecialKeyType.SymbolToggle, "comma", " ", ".", SpecialKeyType.Enter])
-                };
-            } else {
-                keys = new List<List<object>>
-                {
-                    (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", SpecialKeyType.Backspace]),
-                    ([SpecialKeyType.Tab, "q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
-                    ([SpecialKeyType.CapsLock, "a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧", SpecialKeyType.Enter]),
-                    ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", "comma",".", SpecialKeyType.Shift]),
-                    ([SpecialKeyType.SymbolToggle,SpecialKeyType.Emoji, " ", SpecialKeyType.ArrowLeft, SpecialKeyType.ArrowRight, SpecialKeyType.NextKeyboard])
-                };
-            }
-            return keys;
-        }
-
-        private KeyViewModel CreateKeyViewModel(object keyObj, int r, int c, KeyViewModel prev)
+        
+        KeyViewModel CreateKeyViewModel(object keyObj, int? r, int? c, KeyViewModel prev)
         {
             var kvm = new KeyViewModel(this,prev)
             {
@@ -236,8 +293,65 @@ namespace iosKeyboardTest
             }
             return kvm;
         }
+        string GetAlphasForNumeric(string num) {
+            switch(num) {
+                default:
+                    return string.Empty;
+                case "2":
+                    return "ABC";
+                case "3":
+                    return "DEF";
+                case "4":
+                    return "GHI";
+                case "5":
+                    return "JKL";
+                case "6":
+                    return "MNO";
+                case "7":
+                    return "PQRS";
+                case "8":
+                    return "TUV";
+                case "9":
+                    return "WXYZ";
+                case "0":
+                    return "+";
+            }
+        }
+        List<List<object>> GetKeys(KeyboardFlags kbFlags) {
+            List<List<object>> keys = null;
+            if (kbFlags.HasFlag(KeyboardFlags.Phone)) {
+                if (kbFlags.HasFlag(KeyboardFlags.Numbers)) {
+                    keys = new List<List<object>>
+                {
+                    (["1,(", "2,/", "3,)", SpecialKeyType.Backspace]),
+                    (["4,N", "5,comma", "6,.", SpecialKeyType.Next]),
+                    (["7,*", "8,;", "9,#", SpecialKeyType.NumberSymbolsToggle]),
+                    (["*,-", "0,+", "#,__", "comma"])
+                };
+                } else {
+                    keys = new List<List<object>>
+                {
+                    (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]),
+                    (["q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
+                    (["a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧"]),
+                    ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", SpecialKeyType.Backspace]),
+                    ([SpecialKeyType.SymbolToggle, "comma", " ", ".", SpecialKeyType.Enter])
+                };
+                }
 
-        private IEnumerable<string> GetSpecialKeyChars(SpecialKeyType skt)
+            } else {
+                keys = new List<List<object>>
+                {
+                    (["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", SpecialKeyType.Backspace]),
+                    ([SpecialKeyType.Tab, "q,+,`", "w,×,~", "e,÷,\\", "r,=,|", "t,/,{", "y,_,}", "u,<,€", "i,>,£", "o,[,¥", "p,],₩"]),
+                    ([SpecialKeyType.CapsLock, "a,!,○", "s,@,•", "d,#,⚪", "f,$,⚫", "g,%,□", "h,^,🔳", "j,&,♤", "k,*,♡", "l,(,♢", "none,),♧", SpecialKeyType.Enter]),
+                    ([SpecialKeyType.Shift, "z,-,☆", "x,',▪", "c,\",▫", "v,:,≪", "b,;,≫", "n,comma,¡", "m,?,¿", "comma",".", SpecialKeyType.Shift]),
+                    ([SpecialKeyType.SymbolToggle,SpecialKeyType.Emoji, " ", SpecialKeyType.ArrowLeft, SpecialKeyType.ArrowRight, SpecialKeyType.NextKeyboard])
+                };
+            }
+            return keys;
+        }
+        IEnumerable<string> GetSpecialKeyChars(SpecialKeyType skt)
         {
             switch(skt)
             {
@@ -248,6 +362,15 @@ namespace iosKeyboardTest
                     yield return "1/2";
                     yield return "2/2";
                     break;
+                case SpecialKeyType.Tab:
+                    yield return "Tab";
+                    break;
+                case SpecialKeyType.CapsLock:
+                    yield return "Caps Lock";
+                    break;
+                case SpecialKeyType.Next:
+                    yield return "Next";
+                    break;
                 case SpecialKeyType.Backspace:
                     yield return "⌫";
                     break;
@@ -255,18 +378,34 @@ namespace iosKeyboardTest
                     yield return "!#1";
                     yield return "ABC";
                     break;
+                case SpecialKeyType.NumberSymbolsToggle:
+                    yield return "*+#";
+                    yield return "123";
+                    break;
                 case SpecialKeyType.Enter:
                     yield return "⏎";
                     break;
 
             }
         }
-
         void ToggleSymbolSet() {
+            if(CharSet == CharSetType.Numbers1) {
+                CharSet = CharSetType.Numbers2;
+            } else if(CharSet == CharSetType.Numbers2) {
+                CharSet = CharSetType.Numbers1;
+            }
+
             if (CharSet == CharSetType.Letters) {
                 CharSet = CharSetType.Symbols1;
             } else {
                 CharSet = CharSetType.Letters;
+            }
+        }
+        void ToggleCapsLock() {
+            if(ShiftState == ShiftStateType.ShiftLock) {
+                ShiftState = ShiftStateType.None;
+            } else {
+                ShiftState = ShiftStateType.ShiftLock;
             }
         }
         void HandleShift() {
@@ -285,104 +424,138 @@ namespace iosKeyboardTest
             }
         }
 
-        public void ClearHoldKeys() {
-            var to_remove = Keys.Where(x => x.IsHoldKey).ToList();
+        void ClearHoldKeys(bool isRelease = false) {
+            var to_remove = Keys.Where(x => x != null && x.IsPopupKey).ToList();
             foreach (var rmv in to_remove) {
                 Keys.Remove(rmv);
             }
             
-            var to_clear = Keys.Where(x => x.IsHolding).ToList();
-            foreach (var rmv in to_clear) {
-                rmv.IsHolding = false;
+            if(isRelease) {
+                var to_clear = Keys.Where(x => x != null && x.IsPressed).ToList();
+                foreach (var rmv in to_clear) {
+                    rmv.IsPressed = false;
+                }
+            }
+        }
+        static int hold_timer_count = 0;
+        private void StartHoldTimer() {
+            hold_timer_count++;
+            if(PressedKeyViewModel == null) {
+                FinishHoldTimer();
+                return;
+            }
+            Dispatcher.UIThread.Post(async () => {
+                var cur_pressed_kvm = PressedKeyViewModel;
+                var hold_sw = Stopwatch.StartNew();
+                while(true) {
+                    if(cur_pressed_kvm != PressedKeyViewModel) {
+                        // no longer holding
+                        FinishHoldTimer();
+                        return;
+                    }
+                    if(cur_pressed_kvm.CanRepeat) {
+                        // only backspace key
+                        if(hold_sw.Elapsed >= MinRepeatDur) {
+                            RepeatCount++;
+                            hold_sw.Restart();
+                            Console.WriteLine($"Repeat: {RepeatCount}");
+                            for (int i = 0; i < RepeatCount; i++) {
+                                ReleaseKey(cur_pressed_kvm,true);
+                            }
+                        }
+                    } else {
+                        if (hold_sw.Elapsed >= MinHoldDur) {
+                            // hold
+                            ShowHoldPopup(cur_pressed_kvm);
+                            FinishHoldTimer();
+                            return;
+                        }
+                    }
+                    
+                    await Task.Delay(30);
+                }
+            });
+        }
+        void FinishHoldTimer() {
+            hold_timer_count--;
+            Debug.WriteLine($"Hold timer done. Remaining: {hold_timer_count}");
+        }
+
+        void ShowPressPopup(KeyViewModel kvm) {
+            ClearHoldKeys();
+
+            if (kvm != null && kvm.HasPressPopup) {
+                kvm.IsPressed = true;
+                var sec_kvm = CreatePopUpKeyViewModel(kvm, 0, true);
+                Keys.Add(sec_kvm);
             }
             RefreshKeyboardState();
         }
-        #endregion
-
-        #region Commands
-        public ICommand KeyTapCommand => ReactiveCommand.Create<object>((args) => {
-            bool was_hold = false;
-            if (args is not MyKeyView c ||
-                c.DataContext is not KeyViewModel kvm) {
-                if(args is KeyViewModel hold_kvm) {
-                    // triggered hold key tap
-                    kvm = hold_kvm;
-                    was_hold = true;
-                } else {
-                    return;
+        void ShowHoldPopup(KeyViewModel kvm) {
+            ClearHoldKeys();
+            if(kvm != null) {
+                for (int i = 0; i < kvm.SecondaryCharacters.Count; i++) {
+                    var sec_kvm = CreatePopUpKeyViewModel(kvm, i, false);
+                    Keys.Add(sec_kvm);
                 }
+            }
+            RefreshKeyboardState();
+        }
+        void ShowPullKey(KeyViewModel kvm) {
+
+        }
+        void PressKey(KeyViewModel kvm) {
+            if(kvm == null) {
+                return;
+            }
+            kvm.IsPressed = true;
+            ShowPressPopup(kvm);
+            Debug.WriteLine($"Hold {kvm.CurrentChar}");
+        }
+        void ReleaseKey(KeyViewModel kvm, bool isRepeat = false) {
+            if (kvm == null) {
+                return;
             }
             switch (kvm.SpecialKeyType) {
                 case SpecialKeyType.Shift:
                     HandleShift();
                     break;
                 case SpecialKeyType.SymbolToggle:
+                case SpecialKeyType.NumberSymbolsToggle:
                     ToggleSymbolSet();
                     break;
                 case SpecialKeyType.Backspace:
                     InputConnection?.OnDelete();
                     break;
                 case SpecialKeyType.Enter:
+                case SpecialKeyType.Next:
                     InputConnection?.OnDone();
                     break;
+                case SpecialKeyType.CapsLock:
+                    ToggleCapsLock();
+                    break;
                 case SpecialKeyType.NextKeyboard:
-                    if (InputConnection is iosIKeyboardInputConnection ios_ic) {
+                    if (InputConnection is IKeyboardInputConnection_ios ios_ic) {
                         ios_ic.OnInputModeSwitched();
                     }
                     break;
+
                 default:
                     InputConnection?.OnText(kvm.PrimaryValue);
+
+                    if (ShiftState == ShiftStateType.Shift) {
+                        ShiftState = ShiftStateType.None;
+                    }
                     break;
             }
-            try {
-                if(was_hold) {
-                    ClearHoldKeys();
-                } else {
-                    RefreshKeyboardState();
-                }
-                
+            if(kvm.CanRepeat && !isRepeat) {
+                RepeatCount = 0;
             }
-            catch (Exception ex) {
-                Console.WriteLine(ex.ToString());
-            }
-            Console.WriteLine($"Tapped {kvm.CurrentChar}");
-        });
-        public ICommand KeyHoldCommand => ReactiveCommand.Create<object>((args) => {
+            //Debug.WriteLine($"Tapped {kvm.CurrentChar}");
+        }
+        #endregion
 
-            if (args is not Control b || 
-                b.GetVisualAncestors().OfType<MyKeyboardView>().FirstOrDefault() is not { } kbv ||
-                b.DataContext is not KeyViewModel kvm ||
-                !kvm.SecondaryCharacters.Any()) {
-                return;
-            }
-            void OnRelease(object seder, EventArgs e) {
-                ClearHoldKeys();
-                kbv.RemoveHandler(Control.PointerReleasedEvent, OnRelease);
-            }
-            ClearHoldKeys();
-            kbv.AddHandler(Control.PointerReleasedEvent, OnRelease, RoutingStrategies.Tunnel);
-            kvm.IsHolding = true;
-            double cur_x = kvm.X;
-            double cur_y = kvm.Y - kvm.Height;
-            foreach(var sec_char in kvm.SecondaryCharacters) {
-                var sec_kvm = CreateKeyViewModel(sec_char, 0, 0, null);
-                sec_kvm.IsHoldKey = true;
-                sec_kvm.NeedsOuterTranslate = kvm.NeedsOuterTranslate;
-                sec_kvm.X = cur_x;
-                sec_kvm.Y = cur_y;
-                Keys.Add(sec_kvm);
-                cur_x += sec_kvm.Width;
-                if(HoldingFocusKeyViewModel == null) {
-                    sec_kvm.IsHoldFocusKey = true;
-                }
-            }
-            RefreshKeyboardState();
-            this.RaisePropertyChanged(nameof(Keys));
-            
-            Console.WriteLine($"Hold {kvm.CurrentChar}");
-        });
-
-
+        #region Commands
         #endregion
     }
 }

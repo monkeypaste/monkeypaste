@@ -31,7 +31,7 @@ namespace iosKeyboardTest {
             if (!args.Contains(WAIT_FOR_DEBUG_ARG)) {
                 return;
             }
-            Console.WriteLine("Attach debugger and use 'Set next statement'");
+            Debug.WriteLine("Attach debugger and use 'Set next statement'");
             while (true) {
                 Thread.Sleep(100);
                 if (Debugger.IsAttached) {

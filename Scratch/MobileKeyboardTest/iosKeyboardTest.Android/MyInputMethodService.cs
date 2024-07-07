@@ -5,7 +5,6 @@ using Android.Content.Res;
 using Android.Graphics;
 using Android.Hardware.Lights;
 using Android.InputMethodServices;
-using Android.OS;
 using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
@@ -15,7 +14,7 @@ using Avalonia.Android;
 using Avalonia.Layout;
 
 using System;
-
+using System.Diagnostics;
 using Color = Android.Graphics.Color;
 using Exception = System.Exception;
 using View = Android.Views.View;
@@ -39,7 +38,7 @@ namespace iosKeyboardTest.Android
                 var av = new AvaloniaView(MainActivity.Instance)
                 {
                     Focusable = false,
-                    Content = KeyboardViewModel.CreateKeyboardView(this, AndroidDisplayInfo.ScaledSize, AndroidDisplayInfo.Scaling, out var unscaledSize)
+                    Content = KeyboardMainViewModel.CreateKeyboardView(this, AndroidDisplayInfo.ScaledSize, AndroidDisplayInfo.Scaling, out var unscaledSize)
                 };
 
                 var cntr2 = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.keyboard_layout_view, null);
@@ -50,7 +49,7 @@ namespace iosKeyboardTest.Android
                 return cntr;
             } catch(Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Debug.WriteLine(ex.ToString());
             }
             return null;
         }
@@ -59,7 +58,7 @@ namespace iosKeyboardTest.Android
 
         private void StartClipboardChecker(Context context, string source)
         {
-            Console.WriteLine($"Clipboard watcher started [{source}]");
+            Debug.WriteLine($"Clipboard watcher started [{source}]");
             _cbListener = new ClipboardListener(context);
             _cbListener.Start();
 
@@ -67,7 +66,7 @@ namespace iosKeyboardTest.Android
             void OnCbChanged(object sender, object e)
             {
                 var test = this.CurrentInputConnection.GetSelectedTextFormatted(GetTextFlags.WithStyles);
-                Console.WriteLine($"Clipboard changed [{source}]");
+                Debug.WriteLine($"Clipboard changed [{source}]");
                 var pc = _cbListener.ClipboardManager.PrimaryClip;
                 for(int i = 0; i < pc.ItemCount; i++)
                 {

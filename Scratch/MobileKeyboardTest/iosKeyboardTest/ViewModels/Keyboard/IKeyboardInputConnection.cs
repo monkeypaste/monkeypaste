@@ -1,4 +1,6 @@
-﻿namespace iosKeyboardTest
+﻿using Avalonia.Controls;
+
+namespace iosKeyboardTest
 {
     public interface IKeyboardInputConnection
     {
@@ -6,8 +8,11 @@
         void OnDelete();
         void OnDone();
     }
-    public interface iosIKeyboardInputConnection : IKeyboardInputConnection {
+    public interface IKeyboardInputConnection_ios : IKeyboardInputConnection {
         bool NeedsInputModeSwitchKey { get; }
         void OnInputModeSwitched();
+    }
+    public interface IKeyboardInputConnection_desktop : IKeyboardInputConnection {
+        void SetInputSource(TextBox textBox);
     }
 }

@@ -1,6 +1,8 @@
-﻿using System;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.ReactiveUI;
+using System;
+using System.Linq;
+using System.Text;
 
 namespace iosKeyboardTest.Desktop;
 
@@ -19,5 +21,8 @@ sealed class Program
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace()
-            .UseReactiveUI();
+            .UseReactiveUI()
+        .AfterSetup(_=> {
+            MainView.ForceInputConn(new DesktopInputConnection());
+        });
 }

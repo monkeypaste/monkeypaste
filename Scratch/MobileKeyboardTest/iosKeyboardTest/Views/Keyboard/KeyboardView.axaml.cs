@@ -14,12 +14,10 @@ using System.Linq;
 namespace iosKeyboardTest
 {
 
-    public partial class MyKeyboardView : UserControl
-    {
-        public MyKeyboardView() 
+    public partial class KeyboardView : UserControl {
+        public KeyboardView() 
         {
             InitializeComponent();
         }
-
     }
 }

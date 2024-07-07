@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace iosKeyboardTest.iOS.KeyboardExt {
     public class App : Application {
+        public static event EventHandler OnInitialized;
         public override void Initialize() {
             AvaloniaXamlLoader.Load(this);
         }
@@ -16,6 +17,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             if (ApplicationLifetime is not ISingleViewApplicationLifetime singleViewPlatform) {
                 return;
             }
+            OnInitialized?.Invoke(this, EventArgs.Empty);
             singleViewPlatform.MainView = new MainView {
                 DataContext = new MainViewModel()
             };

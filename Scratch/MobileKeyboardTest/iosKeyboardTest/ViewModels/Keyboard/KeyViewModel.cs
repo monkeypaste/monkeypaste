@@ -6,6 +6,7 @@ using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 
@@ -30,6 +31,8 @@ namespace iosKeyboardTest
         #region View Models
         public KeyboardViewModel Parent { get; set; }
         public KeyViewModel PrevKeyViewModel { get; set; }
+        KeyViewModel PopupKeyParent =>
+            IsPopupKey ? Parent.PressedKeyViewModel : null;
         #endregion
 
         #region Appearance
@@ -55,7 +58,7 @@ namespace iosKeyboardTest
             }
         }
         public string PrimaryValue =>
-            IsShifted ? CurrentChar.ToUpper() : CurrentChar;
+            IsShifted && IsInput ? CurrentChar.ToUpper() : CurrentChar;
         public bool IsVisible =>
             !string.IsNullOrEmpty(PrimaryValue);
         #endregion
@@ -63,8 +66,16 @@ namespace iosKeyboardTest
         #region Layout
 
         #region Factors
-        double OuterPadX => IsHoldKey ? Parent.DefaultKeyWidth * 0.01 : Parent.DefaultKeyWidth * 0.2;
-        double OuterPadY => IsHoldKey ? 0 : Parent.KeyHeight * 0.15;
+        double DefaultOuterPadX =>
+            Math.Min(5, Parent.DefaultKeyWidth / Parent.MaxColCount);
+        double OuterPadX =>
+            IsPopupKey ? 0 : DefaultOuterPadX;
+        double OuterPadY => 
+            IsPopupKey ? 
+                0 : 
+                Parent.KeyHeight * 0.15;
+        double PopupOffsetX => 0;
+        double PopupOffsetY => 0;
         double PrimaryFontSizeRatio => 0.5;
         double SecondaryFontSizeRatio => 0.25;
         double SecondaryRatio => 0.25;
@@ -74,48 +85,42 @@ namespace iosKeyboardTest
             "♣️"
             ];
 
-        #endregion
         public double RadiusX => 5;
         public double RadiusY => 5;
+        #endregion
         public double PrimaryFontSize =>
             Math.Min(InnerWidth, InnerHeight) * PrimaryFontSizeRatio;
         public double SecondaryFontSize =>
             Math.Min(InnerWidth, InnerHeight) * SecondaryFontSizeRatio;
-        private double? _x;
         public double X {
             get {
-                if(_x.HasValue) {
-                    return _x.Value;
+                if(PrevKeyViewModel == null) {
+                    if(IsPopupKey && PopupKeyParent is { } pressed_kvm) {
+                        return pressed_kvm.X + PopupOffsetX;
+                    }
+                    if(NeedsOuterTranslate) {
+                        return OuterTranslateX;
+                    }
+                    return 0;
                 }
-                return PrevKeyViewModel == null ?
-                0 :
-                PrevKeyViewModel.X + PrevKeyViewModel.Width;
-            }
-            set {
-                if(X != value) {
-                    _x = value;
-                    this.RaisePropertyChanged(nameof(X));
-                }
+                return PrevKeyViewModel.X + PrevKeyViewModel.Width;
             }
         }
-        private double? _y;
+
         public double Y {
             get {
-                if(_y.HasValue) {
-                    return _y.Value;
+                if(IsPopupKey && PopupKeyParent is { } pressed_kvm) {
+                    return pressed_kvm.Y - pressed_kvm.Height + PopupOffsetY;
                 }
-                return Row * Height;
-            }
-            set {
-                if (Y != value) {
-                    _y = value;
-                    this.RaisePropertyChanged(nameof(Y));
+                if(!Row.HasValue) {
+                    return double.MinValue;
                 }
+                return Row.Value * Height;
             }
         }
 
         public double Width =>
-            ColumnSpan * (SpecialKeyType == SpecialKeyType.None ?
+             ColumnSpan * (SpecialKeyType == SpecialKeyType.None ?
                 Parent.DefaultKeyWidth :
                 Parent.SpecialKeyWidth);
         public double Height =>
@@ -128,20 +133,62 @@ namespace iosKeyboardTest
         public double OuterTranslateX =>
             NeedsOuterTranslate && IsVisible ?
                 Parent.DefaultKeyWidth / 2 : 0;
-        public int Row { get; set; }
-        public int Column { get; set; }
+        public int? Row { get; set; }
+        public int? Column { get; set; }
         public int ColumnSpan { get; set; } = 1;
         #endregion
 
         #region State
-        public bool IsHoldFocusKey { get; set; }
-        public bool IsHolding { get; set; }
-        public bool IsHoldKey { get; set; }
+        public bool CanRepeat =>
+            SpecialKeyType == SpecialKeyType.Backspace;
+        bool IsSpaceKey =>
+            PrimaryValue == " ";
+        public bool HasAnyPopup =>
+            HasPressPopup || HasHoldPopup;
+        public bool HasPressPopup =>
+            IsInput && !IsSpaceKey;
+        public bool HasHoldPopup =>
+            SecondaryCharacters.Any();
+        public bool IsActiveKey { 
+            get {
+                if(IsPressed) {
+                    if(Parent != null && Parent.PopupKeys.Any()) {
+                        // popupkeys take active for input
+                        return false;
+                    }
+                    return true;
+                }
+                if(IsPopupKey &&
+                    Parent.KeyboardPointerLocation is { } p &&
+                    Parent.PopupKeys is { } pu_kvml) {
+                    // NOTE this presumes theres only ONE line of popup chars
+
+                    if(pu_kvml.FirstOrDefault() == this) {
+                        // first popup
+                        return p.X <= X + Width;
+                    }
+                    if(pu_kvml.LastOrDefault() == this) {
+                        // last popup
+                        return p.X >= X;
+                    }
+                    //some other
+                    return p.X >= X && p.X <= X + Width;
+                }
+                return false;
+            } 
+        }
+        public DateTime? PressedDt { get; private set; }
+        public bool IsPressed { get; set; }
+        public bool IsPopupKey =>
+            PopupKeyIdx >= 0;
+        public int PopupKeyIdx { get; set; } = -1;
         public bool NeedsOuterTranslate { get; set; }
         public bool NeedsSymbolTranslate =>
             MisAlignedCharacters.Contains(PrimaryValue);
         public bool IsSpecial =>
             SpecialKeyType != SpecialKeyType.None;
+        public bool IsInput =>
+            !IsSpecial;
         public bool IsShiftOn =>
             SpecialKeyType == SpecialKeyType.Shift &&
             CharSet == CharSetType.Letters &&
@@ -179,7 +226,9 @@ namespace iosKeyboardTest
         {
             Parent = parent;
             PrevKeyViewModel = prev;
+            PropertyChanged += KeyViewModel_PropertyChanged;
         }
+
         #endregion
 
         #region Public Methods
@@ -193,11 +242,22 @@ namespace iosKeyboardTest
         #endregion
 
         #region Private Methods
+
+        private void KeyViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(IsPressed):
+                    PressedDt = IsPressed ? DateTime.Now : null;
+                    if(!IsPressed) {
+
+                    }
+                    break;
+            }
+        }
         
         #endregion
 
         #region Commands
-        
+
         #endregion
     }
 }

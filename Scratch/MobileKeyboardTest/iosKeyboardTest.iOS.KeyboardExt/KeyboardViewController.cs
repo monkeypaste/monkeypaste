@@ -20,7 +20,7 @@ using Thickness = Avalonia.Thickness;
 
 namespace iosKeyboardTest.iOS.KeyboardExt {
 #pragma warning disable CA1010
-    public partial class KeyboardViewController : UIInputViewController, iosIKeyboardInputConnection, IAvaloniaViewController {    
+    public partial class KeyboardViewController : UIInputViewController, IKeyboardInputConnection_ios, IAvaloniaViewController {    
 #pragma warning restore CA1010
 
         #region Private Variables
@@ -30,14 +30,11 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         UIStackView innerStackView;
 
         CGSize keyboardSize = new CGSize(1000, 300);
-        MyKeyboardView kb;
+        KeyboardView kb;
         AvaloniaView kbv;
         AppDelegate ad;
 
         string error = "NO ERROR";
-
-        //UIView av;
-        //DateTime ctorDt = default, loadDt = default;
         #endregion
 
         #region Constants
@@ -96,7 +93,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         #endregion
 
         #region iosIKeyboardInputConnection Implementation
-        bool iosIKeyboardInputConnection.NeedsInputModeSwitchKey =>
+        bool IKeyboardInputConnection_ios.NeedsInputModeSwitchKey =>
             this.NeedsInputModeSwitchKey;
 
         public void OnInputModeSwitched() {
@@ -132,20 +129,18 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             base.DidReceiveMemoryWarning();
             // Release any cached data, images, etc that aren't in use.
         }
-        public override void LoadView() {
-            base.LoadView();
-            InitAv();
-        }
         public override void UpdateViewConstraints() {
             base.UpdateViewConstraints();
 
             // Add custom view sizing constraints here
         }
-        
+        public override void LoadView() {
+            base.LoadView();
+            InitAv(); 
+        }
         public override void ViewDidLoad() {
             base.ViewDidLoad();
             SetupKeyboardView();
-            //InputView.AddSubview(new AvaloniaView());
         }
         public override void TextWillChange(IUITextInput textInput) {
             // The app is about to change the document's contents. Perform any preparation here.
@@ -172,17 +167,37 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
         #region Private Methods
         private void InitAv() {
+            if(ad is not null) {
+                return;
+            }
             try {
-                if (ad == null) {
-                    ad = new AppDelegate();
-                    ad.FinishedLaunching(UIApplication.SharedApplication, null);
+                void OnInit(object sender, EventArgs e) {
+                    kb = KeyboardViewModel.CreateKeyboardView(this, iosDisplayInfo.ScaledSize, iosDisplayInfo.Scaling, out var unscaledSize);
+                    keyboardSize = new CGSize(unscaledSize.Width / iosDisplayInfo.Scaling, unscaledSize.Height / iosDisplayInfo.Scaling);
+                    kbv = new AvaloniaView() {
+                        Content = kb
+                    };
+                    kbv.InitWithController(this);
                 }
-                kb = KeyboardViewModel.CreateKeyboardView(this, iosDisplayInfo.ScaledSize, iosDisplayInfo.Scaling, out var unscaledSize);
-                keyboardSize = new CGSize(unscaledSize.Width/ iosDisplayInfo.Scaling, unscaledSize.Height/iosDisplayInfo.Scaling);
-                kbv = new AvaloniaView() {
-                    Content = kb
-                };
-                kbv.InitWithController(this);
+                App.OnInitialized += OnInit;
+
+                ad = new AppDelegate();
+                ad.FinishedLaunching(UIApplication.SharedApplication, null);
+            }
+            catch (Exception ex) {
+                error = string.IsNullOrWhiteSpace(ex.Message) ? "EMPTY ERROR" : ex.Message;
+            }
+        }
+        void AddKeyboardView() {
+            try {
+                if (kbv == null) {
+                    InitAv();
+                }
+                outerStackView.InsertArrangedSubview(kbv,0);
+
+                NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
+                    kbv.HeightAnchor.ConstraintGreaterThanOrEqualTo(keyboardSize.Height),
+                    });
             }
             catch (Exception ex) {
                 error = string.IsNullOrWhiteSpace(ex.Message) ? "EMPTY ERROR" : ex.Message;
@@ -205,21 +220,6 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                     outerStackView.RightAnchor.ConstraintEqualTo(View.RightAnchor),
                     });
 
-
-            try {
-                if (kbv == null) {
-                    InitAv();
-                }
-                outerStackView.AddArrangedSubview(kbv);
-
-                NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
-                    kbv.HeightAnchor.ConstraintGreaterThanOrEqualTo(keyboardSize.Height),
-                    });
-            }
-            catch (Exception ex) {
-                error = string.IsNullOrWhiteSpace(ex.Message) ? "EMPTY ERROR" : ex.Message;
-            }
-
             innerStackView = new UIStackView() {
                 BackgroundColor = UIColor.Purple,
                 Axis = UILayoutConstraintAxis.Horizontal,
@@ -233,88 +233,44 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                 });
 
 
-
             nextKeyboardButton = new UIButton(UIButtonType.System);
             string title = kbv == null ? "NO KB" : "YUUUUUUP";
             nextKeyboardButton.SetTitle(title, UIControlState.Normal);
             nextKeyboardButton.SizeToFit();
-            //nextKeyboardButton.TranslatesAutoresizingMaskIntoConstraints = false;
             nextKeyboardButton.AddTarget(this, new Selector("advanceToNextInputMode"), UIControlEvent.TouchUpInside);
             innerStackView.AddArrangedSubview(nextKeyboardButton);
-            //NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[] {
-            //    nextKeyboardButton.LeftAnchor.ConstraintEqualTo(View.LeftAnchor),
-            //    nextKeyboardButton.BottomAnchor.ConstraintEqualTo(View.BottomAnchor),
-            //});
 
 
             showErrorButton = new UIButton(UIButtonType.System);
             showErrorButton.SetTitle(error, UIControlState.Normal);
             showErrorButton.SizeToFit();
-            //showErrorButton.TranslatesAutoresizingMaskIntoConstraints = false;
             showErrorButton.TouchUpInside += (s, e) => {
-                //DispatchQueue.MainQueue.DispatchAsync(() => {
                 var alert = UIAlertController.Create(error, error, UIAlertControllerStyle.Alert);
                 var ok = UIAlertAction.Create("OK", UIAlertActionStyle.Default, (x) => {
                     Debug.WriteLine("whatever");
                 });
                 alert.AddAction(ok);
                 this.PresentViewController(alert, true, null);
-                //});
             };
             innerStackView.AddArrangedSubview(showErrorButton);
-            //NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[] {
-            //    showErrorButton.RightAnchor.ConstraintEqualTo(View.RightAnchor),
-            //    showErrorButton.TopAnchor.ConstraintEqualTo(nextKeyboardButton.TopAnchor),
+
+            AddKeyboardView();
+            //DispatchQueue.MainQueue.DispatchAsync(async () => {
+            //    await Task.Delay(500);
+            //    AddKeyboardView();
             //});
+        }
 
+        public override void ViewDidDisappear(bool animated) {
+            base.ViewDidDisappear(animated);
+            /*
+            maybe try something like this if mem issues:
 
-
-
-            DispatchQueue.GetGlobalQueue(DispatchQueuePriority.Default).DispatchAsync(async () => {
-                //var ui_kbv = iosExtAvaloniaViewLoader.AvViewObj as AvaloniaView;
-                await Task.Delay(300);
-
-                //var ui_kbv = Dispatcher.UIThread.Invoke(() => {
-                //TestAvaloniaView.SharedLayer = View.Layer;
-                //var ui_kbv = new AvaloniaView() {
-                //    Content = new Avalonia.Controls.Border() {
-                //        Width = 600,
-                //        Height = 600,
-                //        Background = Brushes.Brown
-                //    }
-                //};
-                //    return ui_kbv;
-                //});
-                DispatchQueue.MainQueue.DispatchAsync(() => {
-
-
-                    //if(iosExtAvaloniaViewLoader.AvViewObj is IMauiContext ctx) {
-
-                    //    var cv = new Border() {
-                    //        WidthRequest = 600,
-                    //        HeightRequest = 600,
-                    //        BackgroundColor = Colors.Cyan
-                    //    }.ToPlatform(ctx);
-                    //    InputView.AddSubview(cv);
-                    //}
-
-                    //InitAv();
-
-                    //var ui_kbv = new AvaloniaView() {
-                    //    Content = new Avalonia.Controls.Border() {
-                    //        Width = 600,
-                    //        Height = 600,
-                    //        Background = Brushes.Brown
-                    //    }
-                    //};
-
-                    //View.AddSubview(ui_kbv);
-                    //NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[] {
-                    //    ui_kbv.WidthAnchor.ConstraintGreaterThanOrEqualTo(600),
-                    //    ui_kbv.HeightAnchor.ConstraintGreaterThanOrEqualTo(600),
-                    //});
-                });
-            });
+            for subview in view.subviews {
+                subview.removeFromSuperview()
+            }
+            keyboardUIHostingController?.rootView = AnyView(EmptyView())
+            */
         }
         #endregion
 

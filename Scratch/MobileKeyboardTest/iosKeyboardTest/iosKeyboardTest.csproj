@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>$(TargetFrameworkPrefix)</TargetFramework>
     <Nullable>disable</Nullable>
     <LangVersion>latest</LangVersion>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
@@ -15,9 +15,23 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.6" />
 
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\Keyboard\KeyGrid\KeyboardGridView.axaml.cs">
+      <DependentUpon>KeyboardGridView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Keyboard\KeyGrid\Key\KeyView.axaml.cs">
+      <DependentUpon>KeyView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Keyboard\KeyboardView.axaml.cs">
+      <DependentUpon>KeyboardView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Keyboard\MenuStrip\KeyboardMenuStripView.axaml.cs">
+      <DependentUpon>KeyboardMenuStripView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

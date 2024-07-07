@@ -23,7 +23,7 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
                 //KeyboardExtHelper.
                 //KeyboardViewController.InitAv();
                 //if (MainView.IsMainViewLoaded) {
-                //    Console.WriteLine("Already loaded");
+                //    Debug.WriteLine("Already loaded");
                 //    //KeyboardViewController.CreateKeyboardView();
                 //} else {
                 //    MainView.OnMainViewLoaded += (s, e) => {

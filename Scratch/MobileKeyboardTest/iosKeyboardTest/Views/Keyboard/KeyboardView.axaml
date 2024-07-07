@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:iosKeyboardTest"
+             Background="Pink"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             ClipToBounds="False"
+             x:DataType="local:KeyboardMainViewModel"
+             x:Class="iosKeyboardTest.KeyboardView">
+    <UserControl.Styles>
+    </UserControl.Styles>
+    <Grid RowDefinitions="Auto,*"
+          Width="{Binding TotalWidth}"
+          Height="{Binding TotalHeight}">
+        <local:KeyboardMenuStripView Background="Purple"
+                                     Height="{Binding MenuHeight}" />
+        <local:KeyboardGridView Grid.Row="1"
+                                x:DataType="local:KeyboardViewModel"
+                                Width="{Binding KeyboardWidth}"
+                                Height="{Binding KeyboardHeight}"
+                                DataContext="{Binding KeyboardViewModel}" />
+    </Grid>
+</UserControl>
