@@ -19,11 +19,11 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         if(OperatingSystem.IsWindows()) {
-            //this.Width = 360;
-            //this.Height = 740;
+            this.Width = 360;
+            this.Height = 740;
 
-            this.Width = 810;
-            this.Height = 1080;
+            //this.Width = 810;
+            //this.Height = 1080;
         }
         this.GetObservable(BoundsProperty).Subscribe(value => OnBoundsChanged());
     }
