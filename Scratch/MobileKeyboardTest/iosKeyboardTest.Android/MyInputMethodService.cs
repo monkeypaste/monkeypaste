@@ -117,6 +117,9 @@ namespace iosKeyboardTest.Android
             }
             this.CurrentInputConnection.SendKeyEvent(new KeyEvent(KeyEventActions.Down, global::Android.Views.Keycode.Enter));
         }
+
+        public void OnNavigate(int rowChange, int colChange) {
+        }
         #endregion
     }
 }

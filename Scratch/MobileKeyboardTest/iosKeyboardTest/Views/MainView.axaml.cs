@@ -23,15 +23,17 @@ public partial class MainView : UserControl
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-
+        double scale = 1;
         if(OperatingSystem.IsWindows() &&
             TopLevel.GetTopLevel(this) is Window w) {
-            var kbv = KeyboardMainViewModel.CreateKeyboardView(_conn, this.Bounds.Size, w.DesktopScaling,out _);
-            OuterPanel.Children.Add(kbv);
+            scale = w.DesktopScaling;
+            
+        }
+        var kbv = KeyboardMainViewModel.CreateKeyboardView(_conn, this.Bounds.Size, scale, out _);
+        OuterPanel.Children.Add(kbv);
 
-            if (_conn is IKeyboardInputConnection_desktop icd) {
-                icd.SetInputSource(this.TestTextBox);
-            }
+        if (_conn is IKeyboardInputConnection_desktop icd) {
+            icd.SetInputSource(this.TestTextBox);
         }
         TestTextBox.Focus();
     }

@@ -3,13 +3,7 @@
              xmlns:local="using:iosKeyboardTest"
              x:Class="iosKeyboardTest.iOS.KeyboardExt.App"
              RequestedThemeVariant="Default">
-  <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-
-  <Application.DataTemplates>
-    <local:ViewLocator/>
-  </Application.DataTemplates>
-
-  <Application.Styles>
-    <FluentTheme />
-  </Application.Styles>
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
 </Application>

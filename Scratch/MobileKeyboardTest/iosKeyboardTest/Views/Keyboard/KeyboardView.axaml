@@ -10,17 +10,33 @@
              ClipToBounds="False"
              x:DataType="local:KeyboardMainViewModel"
              x:Class="iosKeyboardTest.KeyboardView">
-    <UserControl.Styles>
-    </UserControl.Styles>
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="CursorControlBgBrush" Opacity="0.7" Color="Black" />
+        <SolidColorBrush x:Key="CursorControlFgBrush">White</SolidColorBrush>
+    </UserControl.Resources>
     <Grid RowDefinitions="Auto,*"
           Width="{Binding TotalWidth}"
           Height="{Binding TotalHeight}">
+        <!--  MENU STRIP  -->
         <local:KeyboardMenuStripView Background="Purple"
                                      Height="{Binding MenuHeight}" />
+        <!--  KEYBOARD  -->
         <local:KeyboardGridView Grid.Row="1"
                                 x:DataType="local:KeyboardViewModel"
                                 Width="{Binding KeyboardWidth}"
                                 Height="{Binding KeyboardHeight}"
                                 DataContext="{Binding KeyboardViewModel}" />
+        <!--  CURSOR CONTROL OVERLAY  -->
+        <Grid Grid.RowSpan="2"
+              DataContext="{Binding KeyboardViewModel}"
+              Background="{DynamicResource CursorControlBgBrush}"
+              IsHitTestVisible="False"
+              IsVisible="{Binding IsCursorControlEnabled}">
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       TextAlignment="Center"
+                       Foreground="{DynamicResource CursorControlFgBrush}"
+                       Text="Cursor Control" />
+        </Grid>
     </Grid>
 </UserControl>

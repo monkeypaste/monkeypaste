@@ -30,7 +30,7 @@
     <Compile Update="Views\Keyboard\KeyboardView.axaml.cs">
       <DependentUpon>KeyboardView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Keyboard\MenuStrip\KeyboardMenuStripView.axaml.cs">
+    <Compile Update="Views\Keyboard\KeyGrid\MenuStrip\KeyboardMenuStripView.axaml.cs">
       <DependentUpon>KeyboardMenuStripView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>

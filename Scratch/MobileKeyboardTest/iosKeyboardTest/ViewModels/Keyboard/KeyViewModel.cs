@@ -158,7 +158,66 @@ namespace iosKeyboardTest
         #endregion
 
         #region Appearance
+        public double PrimaryFontSize =>
+            Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * PrimaryFontSizeRatio);
+        public double SecondaryFontSize {
+            get {
+                double fs = Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * SecondaryFontSizeRatio);
+                if (!IsPulling) {
+                    return fs;
+                }
+                double pull_percent = PullTranslateY / MaxPullTranslateY;
+                fs = PrimaryFontSize * pull_percent;
+                return fs;
+            }
+        }
+        public double SecondaryOpacity {
+            get {
+                double op = IsSecondaryVisible ? 1:0;
+                if(!IsPulling) {
+                    return op;
+                }
+                double pull_percent = PullTranslateY / MaxPullTranslateY;
+                op = pull_percent;
+                return op;
+            }
+        }
+        public double PrimaryOpacity {
+            get {
+                double op = 1;
+                if(!IsPulling) {
+                    return op;
+                }
+                double pull_percent = PullTranslateY / MaxPullTranslateY;
+                op = 1 - pull_percent;
+                return op;
+            }
+        }
 
+        public double SecondaryTranslateOffsetX {
+            get {
+                double x = -3;
+                if(!IsPulling) {
+                    return x;
+                }
+                double max_x = (-Width / 4);// - (SecondaryFontSize/2);
+                double pull_percent = PullTranslateY / MaxPullTranslateY;
+                x = max_x * pull_percent;
+                return x;
+            }
+        }
+        public double SecondaryTranslateOffsetY {
+            get {
+                double y = 3;
+                if (!IsPulling) {
+                    return y;
+                }
+                double max_top = (Height / 4) - 5;// - (SecondaryFontSize*1);
+                double pull_percent = PullTranslateY / MaxPullTranslateY;
+                y = max_top * pull_percent;
+                return y;
+            }
+        }
         public bool IsSecondaryVisible =>
             Parent.IsNumbers ||
             (Parent.CharSet == CharSetType.Letters && IsInput);
@@ -222,10 +281,7 @@ namespace iosKeyboardTest
         }
 
         #endregion
-        public double PrimaryFontSize =>
-            Math.Min(MaxFontSize,Math.Min(InnerWidth, InnerHeight) * PrimaryFontSizeRatio);
-        public double SecondaryFontSize =>
-            Math.Min(MaxFontSize, Math.Min(InnerWidth, InnerHeight) * SecondaryFontSizeRatio);
+        
         int MaxPopupColCount => Parent.MaxPopupColCount;
         public double X {
             get {
@@ -286,7 +342,15 @@ namespace iosKeyboardTest
         #endregion
 
         #region State
-
+        public bool CanPullKey =>
+            !IsPopupKey && !string.IsNullOrEmpty(SecondaryValue);
+        public bool IsPulling =>
+            PullTranslateY >= MaxPullTranslateY/2;
+        public bool IsPulled =>
+            PullTranslateY >= MaxPullTranslateY * 0.75;
+        public double PullTranslateY { get; set; } = 0;
+        public double MaxPullTranslateY =>
+            InnerHeight/2;
         public bool CanRepeat =>
             SpecialKeyType == SpecialKeyType.Backspace;
         bool IsSpaceKey =>
@@ -300,16 +364,8 @@ namespace iosKeyboardTest
         //public bool IsActiveKey =>
         //    Parent.ActiveKeyViewModel == this;
         public DateTime? LastActiveDt { get; set; }
-        private bool? _isActiveKey;
-
-        public void ClearActive() {
-            _isActiveKey = null;
-        }
         public bool IsActiveKey {
             get {
-                if(_isActiveKey.HasValue) {
-                    return _isActiveKey.Value;
-                }
                 if (IsPressed) {
                     if (Parent != null && Parent.PopupKeys.Any()) {
                         // popupkeys take active for input
@@ -318,7 +374,7 @@ namespace iosKeyboardTest
                     return true;
                 }
                 if (!IsPopupKey ||
-                    IsFakePopupKey ||
+                    //IsFakePopupKey ||
                     Parent.KeyboardPointerDownLocation is not { } pd ||
                     Parent.KeyboardPointerLocation is not { } p ||
                     Parent.DefaultPopupKey is not { } def_pu_kvm ||
@@ -336,7 +392,7 @@ namespace iosKeyboardTest
                 bool in_x = false;
                 bool in_y = false;
 
-                bool is_rightest = Parent.PopupKeys.Where(x=>!x.IsFakePopupKey).Max(x => x.X) == X;
+                bool is_rightest = Parent.PopupKeys/*.Where(x=>!x.IsFakePopupKey)*/.Max(x => x.X) == X;
                 if (Column == 0) {
                     // first col
                     in_x = px <= X + Width;
@@ -350,7 +406,7 @@ namespace iosKeyboardTest
                     in_x = px >= X && px <= X + Width;
                 }
 
-                bool is_bottomest = Parent.PopupKeys.Where(x => !x.IsFakePopupKey).Max(x => x.Y) == Y;
+                bool is_bottomest = Parent.PopupKeys/*.Where(x => !x.IsFakePopupKey)*/.Max(x => x.Y) == Y;
                 if (Row == 0) {
                     // top row 
                     in_y = py <= Y + Height;
@@ -364,12 +420,6 @@ namespace iosKeyboardTest
                     in_y = py >= Y && py <= Y + Height;
                 }
                 return in_x && in_y;
-            }
-            set {
-                if(_isActiveKey != value) {
-                    _isActiveKey = value;
-                    this.RaisePropertyChanged(nameof(IsActiveKey));
-                }
             }
         }
         public DateTime? PressedDt { get; private set; }
@@ -511,9 +561,11 @@ namespace iosKeyboardTest
         private void KeyViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsPressed):
+                    //PullTranslateY = IsPressed ? 50 : 0;
+                    //this.RaisePropertyChanged(nameof(PullTranslateY));
                     PressedDt = IsPressed ? DateTime.Now : null;
-                    if(!IsPressed && CurrentChar == "d") {
-
+                    if(!IsPressed) {
+                        PullTranslateY = 0;
                     }
                     break;
                 case nameof(IsActiveKey):

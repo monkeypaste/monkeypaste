@@ -1,4 +1,7 @@
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.iOS;
+using Avalonia.Media;
 using CoreFoundation;
 using CoreGraphics;
 using ObjCRuntime;
@@ -14,18 +17,28 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 #pragma warning restore CA1010
 
         #region Private Variables
-        bool isKeyboardReady;
-        UIButton nextKeyboardButton;
-        UIButton showErrorButton;
-        UIStackView outerStackView;
-        UIStackView innerStackView;
+        UIButton nextKeyboardButton = null;
+        UIButton showErrorButton = null;
+        UIStackView outerStackView = null;
+        UIStackView innerStackView = null;
+        UITextView noFullAccessLabelView = null;
 
         CGSize keyboardSize = new CGSize(1000, 300);
-        KeyboardView kb;
-        AvaloniaView kbv;
-        AppDelegate ad;
+        KeyboardView kb = null;
+        AvaloniaView kbv = null;
+        AppDelegate ad = null;
 
-        string error = "NO ERROR";
+        string error {
+            get => MainViewModel.ErrorText;
+            set {
+                var val = value ?? string.Empty;
+                MainViewModel.ErrorText += Environment.NewLine + val;
+                if(showErrorButton != null) {
+                    showErrorButton.SetTitle(MainViewModel.ErrorText, UIControlState.Normal);
+                }
+            }
+        }
+
         #endregion
 
         #region Constants
@@ -102,7 +115,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             View.EndEditing(true);
         }
 
-        public void OnInputNavigate(int deltaX, int deltaY) {
+        public void OnNavigate(int deltaX, int deltaY) {
             string all_text =
                 TextDocumentProxy.DocumentContextBeforeInput +
                 TextDocumentProxy.SelectedText +
@@ -110,6 +123,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             //var lines = all_text.Split(new string[] {Environment.NewLine})
             //TextDocumentProxy.AdjustTextPositionByCharacterOffset
         }
+
         #endregion
 
         #endregion
@@ -135,12 +149,19 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             // Add custom view sizing constraints here
         }
         public override void LoadView() {
-            InitAv(); 
             base.LoadView();
+            if(this.HasFullAccess) {
+                InitAvAndKeyboard();
+            }
+            
         }
         public override void ViewDidLoad() {
             base.ViewDidLoad();
-            SetupKeyboardView();
+            if(this.HasFullAccess) {
+                SetupKeyboardView();
+            } else {
+                SetupFallbackView();
+            }
         }
         public override void TextWillChange(IUITextInput textInput) {
             // The app is about to change the document's contents. Perform any preparation here.
@@ -166,62 +187,103 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         #endregion
 
         #region Private Methods
-        private void InitAv() {
-            if(isKeyboardReady) {
-                return;
-            }
+        private void InitAvAndKeyboard() {
             try {
-                void OnInit(object sender, EventArgs e) {
-                    App.OnInitialized -= OnInit;
-
-                    try {
-                        kb = KeyboardMainViewModel.CreateKeyboardView(this, iosDisplayInfo.ScaledSize, iosDisplayInfo.Scaling, out var unscaledSize);
-                        keyboardSize = new CGSize(unscaledSize.Width / iosDisplayInfo.Scaling, unscaledSize.Height / iosDisplayInfo.Scaling);
-                        kbv = new AvaloniaView() {
-                            Content = kb
-                        };
-                        kbv.InitWithController(this);
-                        isKeyboardReady = true;
-                    } catch(Exception ex) {
-                        error = string.IsNullOrWhiteSpace(ex.Message) ? "EMPTY ERROR" : ex.Message;
-                    }
-                }
-                App.OnInitialized += OnInit;
                 ad = new AppDelegate();
                 ad.FinishedLaunching(UIApplication.SharedApplication, null);
+                //kb = KeyboardMainViewModel.CreateKeyboardView(this, iosDisplayInfo.ScaledSize, iosDisplayInfo.Scaling, out var unscaledSize);
+                //keyboardSize = new CGSize(unscaledSize.Width / iosDisplayInfo.Scaling, unscaledSize.Height / iosDisplayInfo.Scaling);
+                kbv = new AvaloniaView() {
+                    Content = new Avalonia.Controls.Border() {
+                        Background = Brushes.Pink,
+                        Width = 600,
+                        Height = 600
+                    }
+                };
+                //kbv.InitWithController(this);
+                //if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform) {
+                //    singleViewPlatform.MainView = kb;
+                //}
             }
             catch (Exception ex) {
                 error = string.IsNullOrWhiteSpace(ex.Message) ? "EMPTY ERROR" : ex.Message;
             }
         }
         void AddKeyboardView() {
-            if (isKeyboardReady) {
-                try {
-                    outerStackView.InsertArrangedSubview(kbv, 0);
-                    NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
+            try {
+                if(kbv == null) {
+                    InitAvAndKeyboard();
+                }
+                outerStackView.AddArrangedSubview(kbv);
+                NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
                         kbv.HeightAnchor.ConstraintGreaterThanOrEqualTo(keyboardSize.Height),
                         });
-                }
-                catch (Exception ex) {
-                    isKeyboardReady = false;
-                    error = string.IsNullOrWhiteSpace(ex.Message) ? "EMPTY ERROR" : ex.Message;
-                }
-
-                return;
             }
-            // av not initialized yet
-            DispatchQueue.MainQueue.DispatchAsync(async () => {
-                // wait for keyboard to be ready
-                var sw = Stopwatch.StartNew();
-                while(!isKeyboardReady) {
-                    await Task.Delay(50);
-                    if(sw.Elapsed >= TimeSpan.FromSeconds(5)) {
-                        // TODO should show an error or something here
-                        return;
-                    }
-                }
-                AddKeyboardView();
-            });
+            catch (Exception ex) {
+                //  isKeyboardReady = false;
+                error = string.IsNullOrWhiteSpace(ex.Message) ? "EMPTY ERROR" : ex.Message;
+            }
+        }
+        void SetupFallbackView() {
+            outerStackView = new UIStackView() {
+                BackgroundColor = UIColor.Magenta,
+                Axis = UILayoutConstraintAxis.Vertical,
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                Spacing = 5
+            };
+            View.AddSubview(outerStackView);
+
+            AddKeyboardView();
+
+            NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
+                    outerStackView.HeightAnchor.ConstraintGreaterThanOrEqualTo(300),
+                    outerStackView.TopAnchor.ConstraintEqualTo(View.TopAnchor),
+                    outerStackView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor),
+                    outerStackView.LeftAnchor.ConstraintEqualTo(View.LeftAnchor),
+                    outerStackView.RightAnchor.ConstraintEqualTo(View.RightAnchor),
+                    });
+
+            noFullAccessLabelView = new UITextView();
+            noFullAccessLabelView.Text = "Full access is required. Enable in Settings->General->Keyboard->iosKeyboardTest";
+            noFullAccessLabelView.TextContainer.LineBreakMode = UILineBreakMode.WordWrap;// NSLineBreakByWordWrapping;
+            noFullAccessLabelView.Font = UIFont.PreferredHeadline;
+            noFullAccessLabelView.TranslatesAutoresizingMaskIntoConstraints = true;
+            outerStackView.AddArrangedSubview(noFullAccessLabelView);
+
+
+            innerStackView = new UIStackView() {
+                BackgroundColor = UIColor.Purple,
+                Axis = UILayoutConstraintAxis.Horizontal,
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                Spacing = 5
+            };
+            outerStackView.AddArrangedSubview(innerStackView);
+            NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
+                innerStackView.LeftAnchor.ConstraintEqualTo(outerStackView.LeftAnchor),
+                innerStackView.RightAnchor.ConstraintEqualTo(outerStackView.RightAnchor),
+                });
+
+
+            nextKeyboardButton = new UIButton(UIButtonType.System);
+            string title = kbv == null ? "NO KB" : "YUUUUUUP";
+            nextKeyboardButton.SetTitle(title, UIControlState.Normal);
+            nextKeyboardButton.SizeToFit();
+            nextKeyboardButton.AddTarget(this, new Selector("advanceToNextInputMode"), UIControlEvent.TouchUpInside);
+            innerStackView.AddArrangedSubview(nextKeyboardButton);
+
+
+            showErrorButton = new UIButton(UIButtonType.System);
+            showErrorButton.SetTitle(error, UIControlState.Normal);
+            showErrorButton.SizeToFit();
+            showErrorButton.TouchUpInside += (s, e) => {
+                var alert = UIAlertController.Create(error, error, UIAlertControllerStyle.Alert);
+                var ok = UIAlertAction.Create("OK", UIAlertActionStyle.Default, (x) => {
+                    Debug.WriteLine("whatever");
+                });
+                alert.AddAction(ok);
+                this.PresentViewController(alert, true, null);
+            };
+            innerStackView.AddArrangedSubview(showErrorButton);
         }
         void SetupKeyboardView() {
             outerStackView = new UIStackView() {
@@ -231,6 +293,8 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
                 Spacing = 5
             };
             View.AddSubview(outerStackView);
+
+            AddKeyboardView();
 
             NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
                     outerStackView.HeightAnchor.ConstraintGreaterThanOrEqualTo(300),
@@ -274,7 +338,11 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             };
             innerStackView.AddArrangedSubview(showErrorButton);
 
-            AddKeyboardView();
+            DispatchQueue.GetGlobalQueue(DispatchQueuePriority.Default).DispatchAsync(async () => {
+                await Task.Delay(300);
+                DispatchQueue.MainQueue.DispatchAsync(() => {
+                });
+            });
         }
 
         public override void ViewDidDisappear(bool animated) {

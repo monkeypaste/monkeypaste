@@ -18,7 +18,8 @@
         <SolidColorBrush x:Key="HoldFocusBgBrush">Orange</SolidColorBrush>
         <SolidColorBrush x:Key="HoldFgBrush">Black</SolidColorBrush>
         <SolidColorBrush x:Key="PressedBgBrush">Gray</SolidColorBrush>
-        <SolidColorBrush x:Key="ShiftBrush">SkyBlue</SolidColorBrush>
+        <SolidColorBrush x:Key="ShiftBrush">Cyan</SolidColorBrush>
+
         <LinearGradientBrush x:Key="DefaultKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Color="Silver" Offset="0" />
@@ -71,15 +72,15 @@
         </Style>
 
         <!--  KEY BACKGROUND  -->
-        <Style Selector="local|KeyView Border">
+        <Style Selector="local|KeyView Border#KeyBgRect">
             <Setter Property="Background"
                     Value="{DynamicResource DefaultKeyBgBrush}" />
         </Style>
-        <Style Selector="local|KeyView:not(.popup-key):not(.down) Border">
+        <Style Selector="local|KeyView:not(.popup-key):not(.down) Border#KeyBgRect">
             <Setter Property="BoxShadow"
                     Value="0 0.5 0 0 whitesmoke" />
         </Style>
-        <Style Selector="local|KeyView.special:not(.down) Border">
+        <Style Selector="local|KeyView.special:not(.down) Border#KeyBgRect">
             <Setter Property="Background"
                     Value="{DynamicResource SpecialKeyBgBrush}" />
         </Style>
@@ -87,11 +88,11 @@
             <Setter Property="Background"
                     Value="{DynamicResource PressedBgBrush}" />
         </Style>
-        <Style Selector="local|KeyView.shift-lock:not(.down) Border">
+        <Style Selector="local|KeyView.shift-lock:not(.down) Border#KeyBgRect">
             <Setter Property="Background"
                     Value="{DynamicResource ShiftBrush}" />
         </Style>
-        <Style Selector="local|KeyView.popup-key:not(.down) Border">
+        <Style Selector="local|KeyView.popup-key:not(.down) Border#KeyBgRect">
             <Setter Property="Background"
                     Value="{DynamicResource HoldBgBrush}" />
         </Style>
@@ -99,7 +100,7 @@
             <Setter Property="Foreground"
                     Value="{DynamicResource HoldFgBrush}" />
         </Style>
-        <Style Selector="local|KeyView.hold-focus-key:not(.down) Border">
+        <Style Selector="local|KeyView.hold-focus-key:not(.down) Border#KeyBgRect">
             <Setter Property="Background"
                     Value="{DynamicResource HoldFocusBgBrush}" />
         </Style>
@@ -117,11 +118,9 @@
                     Value="Right" />
             <Setter Property="VerticalAlignment"
                     Value="Top" />
-            <Setter Property="Margin"
-                    Value="3" />
+            <!--<Setter Property="Margin"
+                    Value="3" />-->
         </Style>
-        <!--  NUMBERS TEXT LAYOUTS  -->
-
         <!--<Style Selector="ItemsControl#KeyItemsControl.numbers TextBlock#KeyTextBlock">
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
@@ -138,6 +137,8 @@
         </Style>-->
     </UserControl.Styles>
     <Grid RowDefinitions="Auto,*">
+
+        <!--  KEYBOARD  -->
 
         <ItemsControl x:Name="KeyItemsControl"
                       Classes.numbers="{Binding IsNumbers}"

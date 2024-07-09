@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using System;
+using System.Diagnostics;
 
 namespace iosKeyboardTest.Desktop;
 
@@ -37,5 +38,14 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
 
     public void SetInputSource(TextBox textBox) {
         InputTextBox = textBox;
+    }
+
+    public void OnNavigate(int dx, int dy) {
+        if(InputTextBox == null) {
+            return;
+        }
+        Debug.WriteLine($"DX: {dx} DY: {dy}");
+        //InputTextBox.SelectionStart = InputTextBox.SelectionEnd;
+        InputTextBox.CaretIndex += CursorControlHelper.FindCaretOffset(InputTextBox.Text, InputTextBox.CaretIndex, dx, dy);
     }
 }
