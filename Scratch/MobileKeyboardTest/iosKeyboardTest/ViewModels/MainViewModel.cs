@@ -1,8 +1,11 @@
-﻿namespace iosKeyboardTest;
+﻿using System;
 
-public class MainViewModel : ViewModelBase
-{
-    public static string ErrorText { get; set; } = "NO ERRORS";
+namespace iosKeyboardTest;
+
+public class MainViewModel : ViewModelBase {
+    public static bool IsMockKeyboardVisible =>
+        OperatingSystem.IsWindows();
+    public static string ErrorText { get; set; } //= Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
     public static string Test => "Yoooo dude";
 #pragma warning disable CA1822 // Mark members as static
     public string Greeting => "Welcome to Avalonia!";

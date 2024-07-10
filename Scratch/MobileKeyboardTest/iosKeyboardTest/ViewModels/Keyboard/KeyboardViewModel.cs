@@ -101,10 +101,17 @@ namespace iosKeyboardTest
         public double SpecialKeyWidth =>
             DefaultKeyWidth * (IsNumbers ? 1 : SpecialKeyWidthRatio);
 
-        public double KeyboardWidth =>
-            ScreenSize.Width;
-        public double KeyboardHeight =>
-            ScreenSize.Height * KeyboardMainViewModel.TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO;
+        private double? kw;
+        public double KeyboardWidth {
+            get => kw.HasValue ? kw.Value : ScreenSize.Width;
+            set => kw = value;
+        }
+
+        private double? kh;
+        public double KeyboardHeight {
+            get => kh.HasValue ? kh.Value : ScreenSize.Height * KeyboardMainViewModel.TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO;
+            set => kh = value;
+        }
 
         public double PopupOverflowTranslateX {
             get {
@@ -138,6 +145,11 @@ namespace iosKeyboardTest
         #endregion
 
         #region State
+        public string ErrorText { get; private set; } = "NO ERRORS";
+        public bool NeedsNextKeyboardButton =>
+            OperatingSystem.IsIOS() &&
+            InputConnection != null &&
+            (InputConnection as IKeyboardInputConnection_ios).NeedsInputModeSwitchKey;
         double CursorControlFactorX => 4;
         double CursorControlFactorY => 4;
         public bool IsNumbers =>
@@ -169,11 +181,13 @@ namespace iosKeyboardTest
         public KeyboardViewModel(KeyboardMainViewModel parent, IKeyboardInputConnection inputConn) 
         {
             Debug.WriteLine("kbvm ctor called");
+            Keys.CollectionChanged += Keys_CollectionChanged;
             Parent = parent ?? new();
             SetInputConnection(inputConn); 
             RefreshLayout();
             Init(KeyboardFlags.Phone);
         }
+
         #endregion
 
         #region Public Methods
@@ -235,6 +249,12 @@ namespace iosKeyboardTest
             UpdateKeyboardState();
         }
 
+        public void SetError(string msg) {
+            Dispatcher.UIThread.Post(() => {
+                ErrorText = msg;
+                this.RaisePropertyChanged(nameof(ErrorText));
+            });
+        }
         #endregion
 
         #region Protected Methods
@@ -258,6 +278,17 @@ namespace iosKeyboardTest
                 }
             }
             UpdateKeyboardState();
+        }
+
+
+        private void Keys_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            if(e.OldItems == null ||
+                e.OldItems.OfType<KeyViewModel>() is not { } removed_kvml) {
+                return;
+            }
+            foreach(var kvm in removed_kvml) {
+                kvm.Cleanup();
+            }
         }
         KeyViewModel GetKeyUnderPoint(Point p) {
             var result = Keys
@@ -628,6 +659,7 @@ namespace iosKeyboardTest
                         // release comes from active not pressed
                         // when pulled don't care whats active just use secondary
                         pv = PressedKeyViewModel.SecondaryValue;
+                        PressedKeyViewModel.PullTranslateY = 0;
                     }
                     InputConnection?.OnText(pv);
 
@@ -648,6 +680,13 @@ namespace iosKeyboardTest
         #endregion
 
         #region Commands
+        public ICommand NextKeyboardCommand => ReactiveCommand.Create(() => {
+            if(InputConnection is not IKeyboardInputConnection_ios ic_ios
+            ) {
+                return;
+            }
+            ic_ios.OnInputModeSwitched();
+        });
         #endregion
     }
 }

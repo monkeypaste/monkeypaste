@@ -20,8 +20,10 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
     {
         protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) {
             return base.CustomizeAppBuilder(builder)
-                .WithInterFont()
-                .UseReactiveUI()
+           .With(new iOSPlatformOptions { RenderingMode = [iOSRenderingMode.Metal] })
+                //.WithInterFont()
+                //.UseReactiveUI()
+
                 ;
         }
     }

@@ -20,9 +20,9 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             }
             IsInitialized = true;
             OnInitialized?.Invoke(this, EventArgs.Empty);
-            singleViewPlatform.MainView = new MainView {
-                DataContext = new MainViewModel()
-            };
+            //singleViewPlatform.MainView = new MainView {
+            //    DataContext = new MainViewModel()
+            //};
             base.OnFrameworkInitializationCompleted();
         }
     }

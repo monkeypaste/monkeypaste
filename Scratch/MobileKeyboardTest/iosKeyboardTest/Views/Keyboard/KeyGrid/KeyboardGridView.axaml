@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:iosKeyboardTest"
-             Background="Pink"
+             Background="Brown"
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
@@ -19,8 +19,10 @@
         <SolidColorBrush x:Key="HoldFgBrush">Black</SolidColorBrush>
         <SolidColorBrush x:Key="PressedBgBrush">Gray</SolidColorBrush>
         <SolidColorBrush x:Key="ShiftBrush">Cyan</SolidColorBrush>
+        <SolidColorBrush x:Key="DefaultKeyBgBrush">DimGray</SolidColorBrush>
+        <SolidColorBrush x:Key="SpecialKeyBgBrush">#333333</SolidColorBrush>
 
-        <LinearGradientBrush x:Key="DefaultKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+        <!--<LinearGradientBrush x:Key="DefaultKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Color="Silver" Offset="0" />
                 <GradientStop Color="DimGray" Offset="0.09" />
@@ -35,7 +37,7 @@
                 <GradientStop Color="#333333" Offset="0.8" />
                 <GradientStop Color="#222222" Offset="1" />
             </LinearGradientBrush.GradientStops>
-        </LinearGradientBrush>
+        </LinearGradientBrush>-->
     </UserControl.Resources>
     <UserControl.Styles>
         <!--  KEY LOCATION  -->
@@ -77,8 +79,8 @@
                     Value="{DynamicResource DefaultKeyBgBrush}" />
         </Style>
         <Style Selector="local|KeyView:not(.popup-key):not(.down) Border#KeyBgRect">
-            <Setter Property="BoxShadow"
-                    Value="0 0.5 0 0 whitesmoke" />
+            <!--<Setter Property="BoxShadow"
+                    Value="0 0.5 0 0 whitesmoke" />-->
         </Style>
         <Style Selector="local|KeyView.special:not(.down) Border#KeyBgRect">
             <Setter Property="Background"
@@ -118,23 +120,7 @@
                     Value="Right" />
             <Setter Property="VerticalAlignment"
                     Value="Top" />
-            <!--<Setter Property="Margin"
-                    Value="3" />-->
         </Style>
-        <!--<Style Selector="ItemsControl#KeyItemsControl.numbers TextBlock#KeyTextBlock">
-        <Setter Property="HorizontalAlignment"
-                Value="Center" />
-        <Setter Property="VerticalAlignment"
-                Value="Center" />
-      </Style>
-        <Style Selector="ItemsControl#KeyItemsControl.numbers TextBlock#SecondaryKeyTextBlock">
-            <Setter Property="HorizontalAlignment"
-                    Value="Right" />
-            <Setter Property="VerticalAlignment"
-                    Value="Top" />
-            <Setter Property="Margin"
-                    Value="3" />
-        </Style>-->
     </UserControl.Styles>
     <Grid RowDefinitions="Auto,*">
 

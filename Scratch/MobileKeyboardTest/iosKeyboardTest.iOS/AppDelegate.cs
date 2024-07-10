@@ -18,6 +18,7 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
         return base.CustomizeAppBuilder(builder)
             .WithInterFont()
             .UseReactiveUI()
+            .With(new iOSPlatformOptions { RenderingMode = [iOSRenderingMode.Metal] })
             //.UseMaui<MauiApplication>(this)
             .AfterSetup(_ => {
                 //KeyboardExtHelper.
@@ -54,10 +55,3 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
 
 
 }
-
-//public class MauiApplication : Microsoft.Maui.Controls.Application {
-//    public static MauiApplication Instance { get; private set; }
-//    public MauiApplication() {
-//        Instance = this;
-//    }
-//}

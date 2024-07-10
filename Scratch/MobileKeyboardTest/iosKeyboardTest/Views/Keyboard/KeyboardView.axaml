@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:iosKeyboardTest"
-             Background="Pink"
+             Background="Red"
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
@@ -14,18 +14,38 @@
         <SolidColorBrush x:Key="CursorControlBgBrush" Opacity="0.7" Color="Black" />
         <SolidColorBrush x:Key="CursorControlFgBrush">White</SolidColorBrush>
     </UserControl.Resources>
-    <Grid RowDefinitions="Auto,*"
+    <Grid RowDefinitions="Auto,*,Auto"
           Width="{Binding TotalWidth}"
           Height="{Binding TotalHeight}">
         <!--  MENU STRIP  -->
         <local:KeyboardMenuStripView Background="Purple"
                                      Height="{Binding MenuHeight}" />
         <!--  KEYBOARD  -->
-        <local:KeyboardGridView Grid.Row="1"
+        <local:KeyboardGridView x:Name="KeyboardGridView"
+                                Grid.Row="1"
                                 x:DataType="local:KeyboardViewModel"
                                 Width="{Binding KeyboardWidth}"
                                 Height="{Binding KeyboardHeight}"
                                 DataContext="{Binding KeyboardViewModel}" />
+
+        <!--  NEXT KEYBOARD  -->
+        <StackPanel Grid.Row="2"
+                    Spacing="10"
+                    Orientation="Horizontal"
+                    DataContext="{Binding KeyboardViewModel}"
+                    x:DataType="local:KeyboardViewModel"
+                    IsVisible="{Binding NeedsNextKeyboardButton}">
+            <Button x:Name="NextKeyboardButton"
+                    Command="{Binding NextKeyboardCommand}">
+                <TextBlock Foreground="{DynamicResource CursorControlFgBrush}"
+                           FontSize="24"
+                           Text="⌨" />
+            </Button>
+            <TextBlock x:Name="StatusText"
+                       Foreground="Black"
+                       FontSize="16"
+                       Text="{Binding ErrorText}" />
+        </StackPanel>
         <!--  CURSOR CONTROL OVERLAY  -->
         <Grid Grid.RowSpan="2"
               DataContext="{Binding KeyboardViewModel}"

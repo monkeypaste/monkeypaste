@@ -55,7 +55,9 @@ public class KeyboardMainViewModel : ViewModelBase
     public double TotalWidth =>
         KeyboardViewModel.KeyboardWidth;
     public double TotalHeight =>
-        KeyboardViewModel.KeyboardHeight + MenuHeight;
+        KeyboardViewModel.KeyboardHeight + 
+        (KeyboardViewModel.NeedsNextKeyboardButton ? MenuHeight : 0) +
+        MenuHeight;
     public double MenuHeight =>
         KeyboardViewModel.KeyHeight + KeyHeightPad;
     #endregion
@@ -81,6 +83,12 @@ public class KeyboardMainViewModel : ViewModelBase
         _screenSize = scaledScreenSize;
         RefreshLayout();
     }
+    public void ForceSize(Size size) {
+
+        KeyboardViewModel.KeyboardWidth = size.Width;
+        KeyboardViewModel.KeyboardHeight = size.Height;
+        RefreshLayout();
+    }
     #endregion
 
     #region Protected Methods
@@ -93,6 +101,8 @@ public class KeyboardMainViewModel : ViewModelBase
         this.RaisePropertyChanged(nameof(MenuHeight));
 
         KeyboardViewModel.RefreshLayout();
+
+
     }
     #endregion
 

@@ -22,6 +22,9 @@ sealed class Program
             .WithInterFont()
             .LogToTrace()
             .UseReactiveUI()
+        .With(new Win32PlatformOptions {
+                RenderingMode = [Win32RenderingMode.Software]
+        })
         .AfterSetup(_=> {
             MainView.ForceInputConn(new DesktopInputConnection());
         });

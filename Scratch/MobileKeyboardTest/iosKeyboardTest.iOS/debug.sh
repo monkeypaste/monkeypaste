@@ -38,15 +38,15 @@ if [ "$1" = "manual" ] || [ "$2" = "manual" ]; then
 	cd bin/${CONFIG}/${FRAMEWORK}/${RUNTIME}/publish
 
 	# unzip the IPA file to tmp folder
-	rm -r ./tmp
 	mkdir ./tmp
 	unzip ${EXE_NAME}.ipa -d ./tmp
-	cd -
+	#cd -
 
 	# run ios-deploy to install the app into iOS device
-	#ios-deploy --debug -b ./tmp/Payload/*.app
-	CUR_DIR=`echo pwd`
-	./ios-ebee-deploy.sh -b "${CUR_DIR}/bin/${CONFIG}/${FRAMEWORK}/${RUNTIME}/publish/tmp/Payload/${EXE_NAME}.app" -i "${DEVICE_ID}" -l "${CUR_DIR}\output.log" -p "aaaa"
+	ios-deploy -b ./tmp/Payload/*.app
+	rm -r ./tmp
+	#CUR_DIR=`echo pwd`
+	#./ios-ebee-deploy.sh -b "${CUR_DIR}/bin/${CONFIG}/${FRAMEWORK}/${RUNTIME}/publish/tmp/Payload/${EXE_NAME}.app" -i "${DEVICE_ID}" -l "${CUR_DIR}\output.log" -p "aaaa"
 else
 	dotnet build -t:Run -f ${FRAMEWORK} -p:Platform=${PLATFORM} ${DEVICE_ARG}${DEVICE_ID} -p:RuntimeIdentifier=${RUNTIME}
 fi

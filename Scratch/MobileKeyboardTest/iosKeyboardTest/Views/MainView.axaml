@@ -9,11 +9,10 @@
              x:Class="iosKeyboardTest.MainView"
              Background="Lime"
              x:DataType="local:MainViewModel">
-    <StackPanel x:Name="OuterPanel"
-                Spacing="10"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
+    <Grid x:Name="OuterPanel"
+          RowDefinitions="Auto,Auto,Auto,0.3*">
         <SelectableTextBlock Text="{Binding ErrorText}"
+                             Grid.Row="0"
                              FontSize="24"
                              HorizontalAlignment="Center"
                              VerticalAlignment="Center"
@@ -21,14 +20,17 @@
                              MaxWidth="300"
                              Foreground="Red" />
         <TextBox x:Name="TestTextBox"
+                 Grid.Row="1"
                  AcceptsReturn="True"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
                  Text="Yo how ya doin?" />
         <Button HorizontalAlignment="Center"
+                Grid.Row="2"
                 VerticalAlignment="Center"
                 x:Name="TestButton">
             Sup
         </Button>
-    </StackPanel>
+        <!--<local:KeyboardView Grid.Row="3" />-->
+    </Grid>
 </UserControl>
