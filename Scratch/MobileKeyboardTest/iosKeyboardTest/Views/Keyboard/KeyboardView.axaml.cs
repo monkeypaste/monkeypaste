@@ -13,10 +13,9 @@ using System.Linq;
 
 namespace iosKeyboardTest
 {
-
     public partial class KeyboardView : UserControl {
-        KeyboardMainViewModel BindingContext =>
-            DataContext as KeyboardMainViewModel;
+        public KeyboardViewModel BindingContext =>
+            DataContext as KeyboardViewModel;
         public KeyboardView() 
         {
             InitializeComponent();

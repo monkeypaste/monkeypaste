@@ -253,31 +253,30 @@ namespace iosKeyboardTest
 
         public CornerRadius CornerRadius {
             get {
-                return new();
-                //double cr = 5;
-                //if(IsPopupKey) {
-                //    int max_row = Parent.PopupKeys.Max(x => x.Row);
-                //    int max_col = Parent.PopupKeys.Max(x => x.Column);
-                //    double tl = 0;
-                //    double tr = 0;
-                //    double bl = 0;
-                //    double br = 0;
-                //    if(Row == 0 && Column == 0) {
-                //        tl = cr;
-                //    }
-                //    if (Row == 0 && Column == max_col) {
-                //        tr = cr;
-                //    }
-                //    if (Row == max_row && Column == max_col) {
-                //        br = cr;
-                //    }
-                //    if (Row == max_row && Column == 0) {
-                //        bl = cr;
-                //    }
-                //    return new CornerRadius(tl, tr, br, bl);
+                double cr = 5;
+                if (IsPopupKey) {
+                    int max_row = Parent.PopupKeys.Max(x => x.Row);
+                    int max_col = Parent.PopupKeys.Max(x => x.Column);
+                    double tl = 0;
+                    double tr = 0;
+                    double bl = 0;
+                    double br = 0;
+                    if (Row == 0 && Column == 0) {
+                        tl = cr;
+                    }
+                    if (Row == 0 && Column == max_col) {
+                        tr = cr;
+                    }
+                    if (Row == max_row && Column == max_col) {
+                        br = cr;
+                    }
+                    if (Row == max_row && Column == 0) {
+                        bl = cr;
+                    }
+                    return new CornerRadius(tl, tr, br, bl);
 
-                //}
-                //return new CornerRadius(cr);
+                }
+                return new CornerRadius(cr);
             }
         }
 
@@ -419,6 +418,9 @@ namespace iosKeyboardTest
                 if (!in_y) {
                     // inner row
                     in_y = py >= Y && py <= Y + Height;
+                }
+                if(in_x && in_y) {
+
                 }
                 return in_x && in_y;
             }

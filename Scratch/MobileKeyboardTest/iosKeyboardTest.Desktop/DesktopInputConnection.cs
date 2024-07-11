@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using System;
 using System.Diagnostics;
 
@@ -6,6 +8,8 @@ namespace iosKeyboardTest.Desktop;
 
 public class DesktopInputConnection : IKeyboardInputConnection_desktop {
     TextBox InputTextBox { get; set; }
+    Control RenderSource { get; set; }
+    Control PointerInputSource { get; set; }
     public void OnText(string text) {
         if(InputTextBox == null) {
             return;
@@ -36,7 +40,7 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
 
     }
 
-    public void SetInputSource(TextBox textBox) {
+    public void SetKeyboardInputSource(TextBox textBox) {
         InputTextBox = textBox;
     }
 
@@ -48,4 +52,42 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
         //InputTextBox.SelectionStart = InputTextBox.SelectionEnd;
         InputTextBox.CaretIndex += CursorControlHelper.FindCaretOffset(InputTextBox.Text, InputTextBox.CaretIndex, dx, dy);
     }
+
+    #region IHeadlessRender Implementation
+    public Bitmap RenderToBitmap(double screenScale) {
+        if(RenderSource is not { } rs) {
+            return null;
+        }
+
+        return RenderHelpers.RenderToBitmap(rs,screenScale);
+    }
+
+    public event EventHandler<Point?> OnPointerChanged;
+    public void SetPointerInputSource(Control sourceControl) {
+        PointerInputSource = sourceControl;
+
+        PointerInputSource.PointerPressed += (s, e) => {
+            var loc = e.GetPosition(PointerInputSource);
+            OnPointerChanged?.Invoke(this, loc);
+        };
+        PointerInputSource.PointerMoved += (s, e) => {
+            if (OperatingSystem.IsWindows() &&
+                !e.GetCurrentPoint(s as Visual).Properties.IsLeftButtonPressed) {
+                // ignore mouse movement on desktop
+                OnPointerChanged?.Invoke(this, null);
+                return;
+            }
+            var loc = e.GetPosition(PointerInputSource);
+            OnPointerChanged?.Invoke(this, loc);
+        };
+        PointerInputSource.PointerReleased += (s, e) => {
+            OnPointerChanged?.Invoke(this, null);
+        };
+    }
+    public void SetRenderSource(Control sourceControl) {
+        RenderSource = sourceControl;
+
+        
+    }
+    #endregion
 }

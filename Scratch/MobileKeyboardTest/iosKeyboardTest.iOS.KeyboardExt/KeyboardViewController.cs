@@ -1,7 +1,10 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.iOS;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Rendering;
 using Avalonia.Threading;
 using CoreFoundation;
 using CoreGraphics;
@@ -21,7 +24,7 @@ using Thickness = Avalonia.Thickness;
 
 namespace iosKeyboardTest.iOS.KeyboardExt {
 #pragma warning disable CA1010
-    public partial class KeyboardViewController : UIInputViewController, IKeyboardInputConnection_ios, IAvaloniaViewController 
+    public partial class KeyboardViewController : UIInputViewController, IKeyboardInputConnection_ios 
         {
 #pragma warning restore CA1010
 
@@ -29,14 +32,18 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         UIButton nextKeyboardButton = null;
         UIButton showErrorButton = null;
         UIButton replaceViewButton = null;
-        UIStackView outerStackView = null;
-        UIStackView innerStackView = null;
+
         UITextView noFullAccessLabelView = null;
 
+        UIStackView outerStackView = null;
+        UIStackView innerStackView = null;
+
+        UIImageView imgView = null;
+        ImgViewWrapper imgWrapper = null;
+
+        NSTimer renderTimer = null;
+
         CGSize keyboardSize = new CGSize(5000, 300);
-        KeyboardView kb { get; set; }
-        AvaloniaView kbv { get; set; }
-        AppDelegate ad { get; set; }
 
         string _error;
         string error {
@@ -44,11 +51,8 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             set {
                 var val = value ?? string.Empty;
                 _error = val + Environment.NewLine + _error;
-                if(this.HasFullAccess && 
-                    kb != null && 
-                    kb.DataContext is KeyboardMainViewModel kbmvm &&
-                    kbmvm.KeyboardViewModel is { } kbvm) {
-                    kbvm.SetError(val);
+                if(this.HasFullAccess) {
+                    KeyboardRenderer.SetError(val);
                     return;
                 } 
                 if(showErrorButton != null) {
@@ -76,50 +80,65 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
 
         #region Interfaces
 
-        #region IAvaloniaViewController Implementation
+        #region iosIKeyboardInputConnection Implementation
 
-        private UIStatusBarStyle? _preferredStatusBarStyle;
-        private bool? _prefersStatusBarHidden;
-        public Thickness SafeAreaPadding { get; private set; }
+        public event EventHandler<Point?> OnPointerChanged;
 
-        public event EventHandler SafeAreaPaddingChanged;
+        void SetupRenderHost() {
+            renderTimer = NSTimer.CreateRepeatingScheduledTimer(
+                    TimeSpan.FromMilliseconds(1000d / 120d), delegate {
+                        RenderKeyboard();
+                    });
+            imgWrapper.OnTouchEvent += (s, e) => {
+                Point? p = e == null ? null : new Point(e.Value.X, e.Value.Y);
+                OnPointerChanged?.Invoke(this, p);
+            };
+        }
+        void AddRenderHost() {
+            try {
+                Size unscaledSize = default;
+                
+                KeyboardRenderer.Init(
+                    this,
+                    KeyboardViewModel.GetTotalSizeByScreenSize(iosDisplayInfo.ScaledSize),
+                    iosDisplayInfo.Scaling,
+                    out unscaledSize);
+                
 
-        public override void ViewDidLayoutSubviews() {
-            base.ViewDidLayoutSubviews();
-            var size = View?.Frame.Size ?? default;
-            var frame = View?.SafeAreaLayoutGuide.LayoutFrame ?? default;
-            var safeArea = new Thickness(frame.Left, frame.Top, size.Width - frame.Right, size.Height - frame.Bottom);
-            if (SafeAreaPadding != safeArea) {
-                SafeAreaPadding = safeArea;
-                SafeAreaPaddingChanged?.Invoke(this, EventArgs.Empty);
+                keyboardSize = new CGSize(
+                    unscaledSize.Width / iosDisplayInfo.Scaling,
+                    unscaledSize.Height / iosDisplayInfo.Scaling);
+
+                imgWrapper = new ImgViewWrapper() {
+                    BackgroundColor = UIColor.Blue,
+                    TranslatesAutoresizingMaskIntoConstraints = false
+                };
+                
+                outerStackView.InsertArrangedSubview(imgWrapper,0);
+                NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
+                    imgWrapper.WidthAnchor.ConstraintGreaterThanOrEqualTo(keyboardSize.Width),
+
+                    imgWrapper.HeightAnchor.ConstraintGreaterThanOrEqualTo(keyboardSize.Height),
+                    });
+
+                imgView = new UIImageView();
+                imgView.TranslatesAutoresizingMaskIntoConstraints = false;
+                imgWrapper.AddSubview(imgView);
+                NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
+                    imgView.WidthAnchor.ConstraintEqualTo(imgWrapper.WidthAnchor),
+                    imgView.HeightAnchor.ConstraintEqualTo(imgWrapper.HeightAnchor),
+                    });
+            }catch(Exception ex) {
+                error = ex.ToString();
             }
-        }
 
-        /// <inheritdoc/>
-        public override bool PrefersStatusBarHidden() {
-            return _prefersStatusBarHidden ??= base.PrefersStatusBarHidden();
         }
-
-        /// <inheritdoc/>
-        public override UIStatusBarStyle PreferredStatusBarStyle() {
-            // don't set _preferredStatusBarStyle value if it's null, so we can keep "default" there instead of actual app style.
-            return _preferredStatusBarStyle ?? base.PreferredStatusBarStyle();
-        }
-
-        UIStatusBarStyle IAvaloniaViewController.PreferredStatusBarStyle {
-            get => _preferredStatusBarStyle ?? UIStatusBarStyle.Default;
-            set {
-                _preferredStatusBarStyle = value;
-                SetNeedsStatusBarAppearanceUpdate();
+        void RenderKeyboard() {
+            if(imgView == null ||
+                KeyboardRenderer.GetKeyboardImageBytes(iosDisplayInfo.Scaling) is not { } imgBytes) {
+                return;
             }
-        }
-
-        bool IAvaloniaViewController.PrefersStatusBarHidden {
-            get => _prefersStatusBarHidden ?? false; // false is default on ios/ipados
-            set {
-                _prefersStatusBarHidden = value;
-                SetNeedsStatusBarAppearanceUpdate();
-            }
+            imgView.Image = new UIImage(NSData.FromArray(imgBytes));
         }
         #endregion
 
@@ -168,20 +187,13 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         }
         public override void ViewDidLoad() {
             base.ViewDidLoad();
-            
-            //DispatchQueue.DefaultGlobalQueue.DispatchAfter(
-            //    new DispatchTime((ulong)TimeSpan.FromMilliseconds(500).Nanoseconds), () => {
-                    //DispatchQueue.MainQueue.DispatchAsync(() => {
-                        //await Task.Delay(500);
-                        InitAvAndKeyboard();
-                        if (this.HasFullAccess) {
-                            SetupKeyboardView();
-                        } else {
-                            SetupFallbackView();
-                        }
-                   // });
-                //});
-            
+
+            //InitAvAndKeyboard();
+            if (this.HasFullAccess) {
+                SetupKeyboardView();
+            } else {
+                SetupFallbackView();
+            }
         }
         public override void ViewDidDisappear(bool animated) {
             base.ViewDidDisappear(animated);
@@ -206,6 +218,7 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
         void SetupKeyboardView() {
             try {
                 AddOuterContainer();
+                //AddRenderHost();
                 AddInnerContiner();
                 AddButtons();
             }
@@ -219,86 +232,6 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             foreach (var sv in View.Subviews) {
                 sv.RemoveFromSuperview();
             }
-        }
-        private void InitAvAndKeyboard() {
-            if (App.IsInitialized) {
-                return;
-            }
-
-            try {
-                App.OnInitialized += (s, e) => {
-                    error = "AV INITIALIZED";
-                };
-                ad = new AppDelegate();
-                ad.FinishedLaunching(UIApplication.SharedApplication, null);
-
-                if (this.HasFullAccess) {
-                    kb = KeyboardMainViewModel.CreateKeyboardView(this, iosDisplayInfo.ScaledSize, iosDisplayInfo.Scaling, out var unscaledSize);
-                    keyboardSize = new CGSize(unscaledSize.Width / iosDisplayInfo.Scaling, unscaledSize.Height / iosDisplayInfo.Scaling);
-                    //keyboardSize = new CGSize(unscaledSize.Width * iosDisplayInfo.Scaling, unscaledSize.Height * iosDisplayInfo.Scaling);
-
-                    kbv = new AvaloniaView() {
-                        BackgroundColor = UIColor.Blue,
-                        Content = kb
-                    };
-                } else {
-                    kbv = new AvaloniaView() {
-                        Content = new Avalonia.Controls.Border() {
-                            Background = Brushes.Pink,
-                            Width = 600,
-                            Height = 600
-                        }
-                    };
-                }
-                //kbv.InitWithController(this);
-
-            }
-            catch (Exception ex) {
-                error = ex.ToString();
-            }
-        }
-        void AddKeyboard(bool replaceView = false) {
-            //if (outerStackView.Subviews.Contains(kbv)) {
-            //    return;
-            //}
-            double pre_mem = GetMemory();
-            if (kbv == null) {
-                InitAvAndKeyboard();
-            }
-            kbv.TranslatesAutoresizingMaskIntoConstraints = false;
-
-            if (replaceView) {
-                View.BackgroundColor = UIColor.Orange;
-                if(kb.DataContext is KeyboardMainViewModel kbmvm) {
-                    kbmvm.ForceSize(new Size(keyboardSize.Width*2,keyboardSize.Height));
-                }
-                //View = kbv;
-
-                outerStackView.AddArrangedSubview(kbv);
-                NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
-                    kbv.HeightAnchor.ConstraintGreaterThanOrEqualTo(keyboardSize.Height),
-                    kbv.WidthAnchor.ConstraintGreaterThanOrEqualTo(keyboardSize.Width),
-                    });
-
-                foreach (var sv in outerStackView.Subviews) {
-                    if (sv == kbv) {
-                        continue;
-                    }
-                    sv.RemoveFromSuperview();
-                    //sv.Dispose();
-                }
-
-            } else {
-                outerStackView.InsertArrangedSubview(kbv, 0);
-                NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
-                    kbv.HeightAnchor.ConstraintGreaterThanOrEqualTo(keyboardSize.Height),
-                    kbv.WidthAnchor.ConstraintGreaterThanOrEqualTo(keyboardSize.Width),
-                    });
-            }
-            
-            double post_mem = GetMemory();
-            error = $"W: {keyboardSize.Width} H: {keyboardSize.Height}";
-            //error = $"Pre: {pre_mem}mb Post: {post_mem}mb Diff: {post_mem - pre_mem}mb";
         }
         void AddFullAcccessLabel() {
             //if (outerStackView.Subviews.Contains(noFullAccessLabelView)) {
@@ -362,8 +295,8 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             //    return;
             //}
             nextKeyboardButton = new UIButton(UIButtonType.System);
-            string title = kbv == null ? "NO KB" : "YUUUUUUP";
-            nextKeyboardButton.SetTitle(title, UIControlState.Normal);
+            //string title = kbv == null ? "NO KB" : "YUUUUUUP";
+            nextKeyboardButton.SetTitle("Next Keyboard", UIControlState.Normal);
             nextKeyboardButton.SizeToFit();
             nextKeyboardButton.TranslatesAutoresizingMaskIntoConstraints = false;
             nextKeyboardButton.AddTarget(this, new Selector("advanceToNextInputMode"), UIControlEvent.TouchUpInside);
@@ -386,7 +319,8 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             showErrorButton.SizeToFit();
             showErrorButton.TranslatesAutoresizingMaskIntoConstraints = false;
             showErrorButton.TouchUpInside += (s, e) => {
-                AddKeyboard();
+                //AddKeyboard();
+                AddRenderHost();
             };
             innerStackView.AddArrangedSubview(showErrorButton);
             //NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
@@ -404,7 +338,15 @@ namespace iosKeyboardTest.iOS.KeyboardExt {
             replaceViewButton.SizeToFit();
             replaceViewButton.TranslatesAutoresizingMaskIntoConstraints = false;
             replaceViewButton.TouchUpInside += (s, e) => {
-                AddKeyboard(true);
+                //AddKeyboard(true);
+                //RenderKeyboard();
+                if(renderTimer == null) {
+
+                    SetupRenderHost();
+                } else {
+                    renderTimer.Fire();
+                }
+
             };
             innerStackView.AddArrangedSubview(replaceViewButton);
             //NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]{
@@ -478,8 +420,8 @@ PC.Dispose();
             // Releases the view if it doesn't have a superview.
             base.DidReceiveMemoryWarning();
             error = "MEMORY WARNING";
-            RemoveAllSubviews();
-            SetupFallbackView();
+            //RemoveAllSubviews();
+            //SetupFallbackView();
             // Release any cached data, images, etc that aren't in use.
         }
         public override void UpdateViewConstraints() {
@@ -487,26 +429,43 @@ PC.Dispose();
 
             // Add custom view sizing constraints here
         }
-        //public KeyboardViewController() : base() {
-        //    InitAvAndKeyboard();
-        //}
-        //public KeyboardViewController(NSCoder coder) :base(coder) {
-        //    InitAvAndKeyboard();
-        //}
-        //public KeyboardViewController(string? nibName, NSBundle? bundle) : base(nibName,bundle) {
-
-        //    InitAvAndKeyboard();
-        //}
-
-        //protected KeyboardViewController(NSObjectFlag t) : base(t) {
-
-        //    InitAvAndKeyboard();
-        //}
-
         public KeyboardViewController(IntPtr handle) : base(handle) {
             // don't do stuff here
             //InitAvAndKeyboard();
         }
+
     }
 
+#pragma warning disable CA1010 // Generic interface should also be implemented
+    public class ImgViewWrapper : UIView {
+#pragma warning restore CA1010 // Generic interface should also be implemented
+        public event EventHandler<CGPoint?> OnTouchEvent;
+        public override void TouchesBegan(NSSet touches, UIEvent evt) {
+            if(touches.FirstOrDefault() is not UITouch t) {
+                return;
+            }
+            OnTouchEvent?.Invoke(this, t.LocationInView(this));
+        }
+        public override void TouchesMoved(NSSet touches, UIEvent evt) {
+            if (touches.FirstOrDefault() is not UITouch t) {
+                return;
+            }
+            OnTouchEvent?.Invoke(this, t.LocationInView(this));
+
+        }
+        public override void TouchesEnded(NSSet touches, UIEvent evt) {
+            if (touches.FirstOrDefault() is not UITouch t) {
+                return;
+            }
+            OnTouchEvent?.Invoke(this, null);
+        }
+        
+    }
+#pragma warning disable CA1010 // Generic interface should also be implemented
+    public class FastImageView : UIImageView {
+#pragma warning restore CA1010 // Generic interface should also be implemented
+        void Test() {
+           // Renderer
+        }
+    }
 }

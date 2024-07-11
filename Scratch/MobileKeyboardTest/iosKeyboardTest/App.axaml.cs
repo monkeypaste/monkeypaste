@@ -6,11 +6,18 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
+#if ENABLE_XAML_HOT_RELOAD
+using HotAvalonia;
+#endif
+
 namespace iosKeyboardTest {
     public partial class App : Application {
         public const string WAIT_FOR_DEBUG_ARG = "--wait-for-attach";
         public const string BREAK_ON_ATTACH_ARG = "--break-on-attach";
         public override void Initialize() {
+#if ENABLE_XAML_HOT_RELOAD
+            this.EnableHotReload(); 
+#endif
             AvaloniaXamlLoader.Load(this);
         }
 

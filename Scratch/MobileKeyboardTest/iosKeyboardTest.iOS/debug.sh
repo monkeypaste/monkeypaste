@@ -46,7 +46,7 @@ if [ "$1" = "manual" ] || [ "$2" = "manual" ]; then
 	ios-deploy -b ./tmp/Payload/*.app
 	rm -r ./tmp
 	#CUR_DIR=`echo pwd`
-	#./ios-ebee-deploy.sh -b "${CUR_DIR}/bin/${CONFIG}/${FRAMEWORK}/${RUNTIME}/publish/tmp/Payload/${EXE_NAME}.app" -i "${DEVICE_ID}" -l "${CUR_DIR}\output.log" -p "aaaa"
+	#./ios-ebee-deploy.sh -b "${CUR_DIR}/bin/${CONFIG}/${FRAMEWORK}/${RUNTIME}/publish/tmp/Payload/${EXE_NAME}.app" -i "${DEVICE_ID}" -l "${CUR_DIR}\output.log"
 else
 	dotnet build -t:Run -f ${FRAMEWORK} -p:Platform=${PLATFORM} ${DEVICE_ARG}${DEVICE_ID} -p:RuntimeIdentifier=${RUNTIME}
 fi

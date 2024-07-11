@@ -16,6 +16,8 @@ namespace iosKeyboardTest
 {
     public partial class KeyView : UserControl
     {
+        public KeyViewModel BindingContext =>
+            DataContext as KeyViewModel;
         public KeyView()
         {
             InitializeComponent();

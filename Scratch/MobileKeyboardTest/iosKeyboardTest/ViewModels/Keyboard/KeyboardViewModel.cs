@@ -1,7 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Shapes;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using DynamicData;
@@ -15,17 +17,30 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Size = Avalonia.Size;
 
-namespace iosKeyboardTest
-{
+namespace iosKeyboardTest {
     public class KeyboardViewModel : ViewModelBase {
         #region Private Variables        
         #endregion
 
         #region Constants
+        const double TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO = 0.3;
         #endregion
 
         #region Statics
-
+        public static KeyboardViewModel Instance { get; private set; }
+        public static Size GetTotalSizeByScreenSize(Size scaledScreenSize) {
+            return new Size(scaledScreenSize.Width, scaledScreenSize.Height * TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO);
+        }
+        public static KeyboardView CreateKeyboardView(IKeyboardInputConnection inputConn, Size scaledSize, double scale, out Size unscaledSize) {
+            var kbvm = new KeyboardViewModel(inputConn, scaledSize, scale);
+            var kbv = new KeyboardView() {
+                DataContext = kbvm,
+                Width = kbvm.TotalWidth,
+                Height = kbvm.TotalHeight
+            };
+            unscaledSize = new Size(kbvm.TotalWidth * scale, kbvm.TotalHeight * scale);
+            return kbv;
+        }
         #endregion
 
         #region Interfaces
@@ -34,7 +49,6 @@ namespace iosKeyboardTest
         #region Properties
 
         #region View Models
-        public KeyboardMainViewModel Parent { get; private set; }
         public ObservableCollection<KeyViewModel> Keys { get; set; } = [];
         public KeyViewModel PressedKeyViewModel =>
             Keys
@@ -60,7 +74,6 @@ namespace iosKeyboardTest
         #endregion
 
         #region Layout
-
         public double PopupWidth =>
             PopupKeys.Any() ?
                 (PopupKeys.Max(x => x.Column) + 1) * DefaultKeyWidth :
@@ -71,8 +84,6 @@ namespace iosKeyboardTest
                 0;
         public int MaxColCount =>
             Rows.Max(x => x.Count());
-        public Size ScreenSize =>
-            Parent.ScreenSize;
 
         private double _defKeyWidth = -1;
         public double DefaultKeyWidth {
@@ -88,7 +99,11 @@ namespace iosKeyboardTest
         private double _keyHeight = -1;
         public double KeyHeight {
             get {
+                if(!Rows.Any()) {
+                    return 0;
+                }
                 if (_keyHeight <= 0) {
+                    // avoid div by 0
                     _keyHeight = KeyboardHeight / Rows.Count();
                 }
                 return _keyHeight;
@@ -101,17 +116,19 @@ namespace iosKeyboardTest
         public double SpecialKeyWidth =>
             DefaultKeyWidth * (IsNumbers ? 1 : SpecialKeyWidthRatio);
 
-        private double? kw;
-        public double KeyboardWidth {
-            get => kw.HasValue ? kw.Value : ScreenSize.Width;
-            set => kw = value;
-        }
+        double MenuHeightPad => 5;
+        public double MenuHeight =>
+            KeyHeight + MenuHeightPad;
+        public double KeyboardWidth { get; private set; }
 
-        private double? kh;
-        public double KeyboardHeight {
-            get => kh.HasValue ? kh.Value : ScreenSize.Height * KeyboardMainViewModel.TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO;
-            set => kh = value;
-        }
+        public double KeyboardHeight { get; private set; }
+        public double TotalWidth =>
+            KeyboardWidth;
+        public double TotalHeight =>
+            KeyboardHeight +
+            (NeedsNextKeyboardButton ? MenuHeight : 0) +
+            MenuHeight;
+
 
         public double PopupOverflowTranslateX {
             get {
@@ -145,6 +162,9 @@ namespace iosKeyboardTest
         #endregion
 
         #region State
+        bool IsHeadlessMode =>
+            InputConnection is IHeadlessRender;
+        public double ScreenScaling { get; set; }
         public string ErrorText { get; private set; } = "NO ERRORS";
         public bool NeedsNextKeyboardButton =>
             OperatingSystem.IsIOS() &&
@@ -170,6 +190,8 @@ namespace iosKeyboardTest
         public CharSetType CharSet { get; set; }
         public ShiftStateType ShiftState { get; set; }
         IKeyboardInputConnection InputConnection { get; set; }
+        IHeadlessRender HeadlessRender =>
+            InputConnection as IHeadlessRender;
         public bool IsCursorControlEnabled => LastCursorControlUpdateLocation.HasValue;
         Point? LastCursorControlUpdateLocation { get; set; }
         #endregion
@@ -177,15 +199,21 @@ namespace iosKeyboardTest
         #endregion
 
         #region Constructors
-        public KeyboardViewModel() : this(null,null) { }
-        public KeyboardViewModel(KeyboardMainViewModel parent, IKeyboardInputConnection inputConn) 
+        public KeyboardViewModel() : this(null,new Size(360,740),2.75) { }
+        public KeyboardViewModel(IKeyboardInputConnection inputConn, Size scaledSize, double scale) 
         {
+            if(Instance != null) {
+                // singleton error
+                Debugger.Break();
+            }
+            Instance = this;
             Debug.WriteLine("kbvm ctor called");
+            ScreenScaling = scale;
             Keys.CollectionChanged += Keys_CollectionChanged;
-            Parent = parent ?? new();
-            SetInputConnection(inputConn); 
-            RefreshLayout();
+            SetInputConnection(inputConn);
+
             Init(KeyboardFlags.Phone);
+            SetDesiredSize(scaledSize);
         }
 
         #endregion
@@ -255,6 +283,29 @@ namespace iosKeyboardTest
                 this.RaisePropertyChanged(nameof(ErrorText));
             });
         }
+
+        public void SetDesiredSize(Size scaledSize) {
+            double w = scaledSize.Width;
+            double h = scaledSize.Height;
+            if(IsHeadlessMode) {
+                //w *= ScreenScaling;
+                //h *= ScreenScaling;
+            }
+            KeyboardWidth = w;
+            KeyboardHeight = h;
+            //while(true) {
+            //    // hack to update layout until Total Size equals param size
+            //    // since layout depends on KeyboardWidth/Height NOT total
+            //    //RefreshLayout();
+            //    // initially TotalHeight is bigger than param size by top/bottom menu heights
+            //    double diff = TotalHeight - size.Height;
+            //    if(Math.Abs(diff) < 0.01) {
+            //        break;
+            //    }
+            //    KeyboardHeight -= 0.01;
+            //}
+            //double final_diff = TotalHeight - size.Height;
+        }
         #endregion
 
         #region Protected Methods
@@ -290,7 +341,13 @@ namespace iosKeyboardTest
                 kvm.Cleanup();
             }
         }
-        KeyViewModel GetKeyUnderPoint(Point p) {
+        KeyViewModel GetKeyUnderPoint(Point scaledPoint) {
+            var p = scaledPoint;
+            if(IsHeadlessMode) {
+                // translate for menu strip height
+                //p = new Point(scaledPoint.X * ScreenScaling, (scaledPoint.Y * ScreenScaling) - MenuHeight);
+                p = new Point(scaledPoint.X, scaledPoint.Y - MenuHeight);
+            }
             var result = Keys
                 .Where(x => x != null)
                 .Select(x => (x, new Rect(x.X, x.Y, x.Width, x.Height)))
@@ -302,6 +359,9 @@ namespace iosKeyboardTest
             this.RaisePropertyChanged(nameof(KeyboardWidth));
             this.RaisePropertyChanged(nameof(KeyboardHeight));
             this.RaisePropertyChanged(nameof(IsCursorControlEnabled));
+            this.RaisePropertyChanged(nameof(TotalWidth));
+            this.RaisePropertyChanged(nameof(TotalHeight));
+            this.RaisePropertyChanged(nameof(MenuHeight));
 
             foreach (var row in Rows.ToList()) {
                 // center middle row for non-symbol char set
@@ -493,7 +553,11 @@ namespace iosKeyboardTest
                         FinishHoldTimer();
                         return;
                     }
-                    if(cur_pressed_kvm.CanRepeat) {
+                    //if(cur_pressed_kvm == null) {
+                    //    await Task.Delay(hold_delay);
+                    //    continue;
+                    //}
+                    if(cur_pressed_kvm != null && cur_pressed_kvm.CanRepeat) {
                         // only backspace key
                         if(hold_sw.Elapsed >= MinRepeatDur) {
                             RepeatCount++;
@@ -508,10 +572,10 @@ namespace iosKeyboardTest
                     }
                     if (hold_sw.Elapsed >= MinHoldDur) {
                         // hold
-                        if (cur_pressed_kvm.IsSpaceBar) {
+                        if (cur_pressed_kvm != null && cur_pressed_kvm.IsSpaceBar) {
                             StartCursorControl();
                         } else {
-                            if (cur_pressed_kvm.HasHoldPopup) {
+                            if (cur_pressed_kvm != null && cur_pressed_kvm.HasHoldPopup) {
                                 ShowHoldPopup(cur_pressed_kvm);
                             }
                             FinishHoldTimer();
@@ -686,6 +750,23 @@ namespace iosKeyboardTest
                 return;
             }
             ic_ios.OnInputModeSwitched();
+        });
+        
+        public ICommand Test1Command => ReactiveCommand.Create<object>(
+            (args) => {
+
+                var test = new Border() {
+                    Width = 100,
+                    Height = 100,
+                    Child = new Ellipse() {
+                        Width = 100,
+                        Height = 100,
+                        Fill = Brushes.Orange
+                    }
+                };
+                RenderHelpers.RenderToFile(test, @"C:\Users\tkefauver\Desktop\test1.png");
+
+
         });
         #endregion
     }

@@ -19,10 +19,8 @@
         <SolidColorBrush x:Key="HoldFgBrush">Black</SolidColorBrush>
         <SolidColorBrush x:Key="PressedBgBrush">Gray</SolidColorBrush>
         <SolidColorBrush x:Key="ShiftBrush">Cyan</SolidColorBrush>
-        <SolidColorBrush x:Key="DefaultKeyBgBrush">DimGray</SolidColorBrush>
-        <SolidColorBrush x:Key="SpecialKeyBgBrush">#333333</SolidColorBrush>
 
-        <!--<LinearGradientBrush x:Key="DefaultKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
+        <LinearGradientBrush x:Key="DefaultKeyBgBrush" TransformOrigin="50%,50%" StartPoint="15%,0%" EndPoint="15%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Color="Silver" Offset="0" />
                 <GradientStop Color="DimGray" Offset="0.09" />
@@ -37,7 +35,7 @@
                 <GradientStop Color="#333333" Offset="0.8" />
                 <GradientStop Color="#222222" Offset="1" />
             </LinearGradientBrush.GradientStops>
-        </LinearGradientBrush>-->
+        </LinearGradientBrush>
     </UserControl.Resources>
     <UserControl.Styles>
         <!--  KEY LOCATION  -->

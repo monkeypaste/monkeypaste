@@ -7,6 +7,7 @@
      <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
      <ApplicationVersion>1</ApplicationVersion>
      <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
+   
      <!--<RuntimeIdentifiers>ios-arm64</RuntimeIdentifiers>-->
    <!--<RuntimeIdentifiers>iossimulator-x64</RuntimeIdentifiers>-->
     <!--<UseMaui>true</UseMaui>-->

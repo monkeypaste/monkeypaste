@@ -18,7 +18,7 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
         return base.CustomizeAppBuilder(builder)
             .WithInterFont()
             .UseReactiveUI()
-            .With(new iOSPlatformOptions { RenderingMode = [iOSRenderingMode.Metal] })
+            //.With(new iOSPlatformOptions { RenderingMode = [iOSRenderingMode.Metal] })
             //.UseMaui<MauiApplication>(this)
             .AfterSetup(_ => {
                 //KeyboardExtHelper.

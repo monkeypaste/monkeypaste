@@ -30,9 +30,9 @@ public partial class MainWindow : Window
 
     void OnBoundsChanged() {
         if (this.GetVisualDescendants().OfType<KeyboardView>().FirstOrDefault() is not { } kbv ||
-            kbv.DataContext is not KeyboardMainViewModel kbvm) {
+            kbv.DataContext is not KeyboardViewModel kbvm) {
             return;
         }
-        kbvm.SetScreenSize(this.Bounds.Size);
+        kbvm.SetDesiredSize(KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size));
     }
 }

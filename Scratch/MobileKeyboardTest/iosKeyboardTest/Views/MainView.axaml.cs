@@ -3,6 +3,9 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Shapes;
 using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System;
 using System.Linq;
@@ -24,12 +27,11 @@ public partial class MainView : UserControl
     }
     void OnBoundsChanged() {
         if (this.GetVisualDescendants().OfType<KeyboardView>().FirstOrDefault() is not { } kbv || 
-            kbv.DataContext is not KeyboardMainViewModel kbmvm) {
+            kbv.DataContext is not KeyboardViewModel kbmvm) {
             return;
         }
-        double w = this.Bounds.Width;
-        double h = this.Bounds.Height * KeyboardMainViewModel.TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO;
-        kbmvm.ForceSize(new Size(w, h));
+
+        kbmvm.SetDesiredSize(KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size));
         kbv.Width = kbmvm.TotalWidth;
         kbv.Height = kbmvm.TotalHeight;
     }
@@ -43,13 +45,61 @@ public partial class MainView : UserControl
                 scale = w.DesktopScaling;
 
             }
-            var kbv = KeyboardMainViewModel.CreateKeyboardView(_conn, this.Bounds.Size, scale, out _);
-            kbv.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Bottom;
-            OuterPanel.Children.Add(kbv);
-            Grid.SetRow(kbv, 3);
+            var kbv = KeyboardViewModel.CreateKeyboardView(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
+
+            var hidden_window = new Window() {
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ShowInTaskbar = false,
+                WindowState = WindowState.Minimized,
+                SystemDecorations = SystemDecorations.None,
+                Content = kbv
+            };
+            hidden_window.Show();
+
+            var HeadlessKeyboardImage = new Image();
+
+            var bg_border = new Viewbox() {
+                Width = kbv.BindingContext.TotalWidth,
+                Height = kbv.BindingContext.TotalHeight,
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Bottom,
+                Child = new Border {
+                    Background = Brushes.MidnightBlue,
+                    Child = HeadlessKeyboardImage,
+                }
+            };
+
+            OuterPanel.Children.Add(bg_border);
+            Grid.SetRow(bg_border, 3);
 
             if (_conn is IKeyboardInputConnection_desktop icd) {
-                icd.SetInputSource(this.TestTextBox);
+                icd.SetKeyboardInputSource(this.TestTextBox);                
+            }
+            if(_conn is IHeadLessRender_desktop hrd) {
+                hrd.SetRenderSource(kbv);
+                hrd.SetPointerInputSource(bg_border);
+                scale = 1;
+                var render_timer = new DispatcherTimer() {
+                    Interval = TimeSpan.FromMilliseconds(1000d / 120d),
+                    IsEnabled = true
+                };
+
+                render_timer.Tick += (s, e) => {
+                    scale = 2.25;
+                    HeadlessKeyboardImage.Source = hrd.RenderToBitmap(scale);
+                };
+
+                HeadlessKeyboardImage.Source = hrd.RenderToBitmap(scale);
+
+                hrd.OnPointerChanged += (s, e) => {
+                    kbv.BindingContext.SetPointerLocation(e);
+                    //HeadlessKeyboardImage.Source = hrd.RenderToBitmap(scale);
+                    //RenderHelpers.RenderToFile(kbv, @"C:\Users\tkefauver\Desktop\test2.png");
+                    if(e == null) {
+                        
+                    }
+                };
+
+                
             }
         }
         TestTextBox.Focus();

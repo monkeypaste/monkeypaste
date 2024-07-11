@@ -15,7 +15,7 @@ namespace iosKeyboardTest
 {
 
     public partial class KeyboardGridView : UserControl {
-        KeyboardViewModel BindingContext =>
+        public KeyboardViewModel BindingContext =>
             DataContext as KeyboardViewModel;
 
         public KeyboardGridView() 
