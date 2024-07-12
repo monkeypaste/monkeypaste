@@ -510,6 +510,11 @@ namespace iosKeyboardTest
 
         #endregion
 
+        #region Events
+
+        public event EventHandler OnCleanup;
+        #endregion
+
         #region Constructors
         public KeyViewModel(KeyboardViewModel parent, KeyViewModel prev, object keyObj)
         {
@@ -525,6 +530,7 @@ namespace iosKeyboardTest
 
         public void Cleanup() {
             PropertyChanged -= KeyViewModel_PropertyChanged;
+            OnCleanup?.Invoke(this, EventArgs.Empty);
         }
         public override string ToString()
         {

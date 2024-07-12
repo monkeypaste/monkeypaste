@@ -19,6 +19,12 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
   </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Update="Views\TestView.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+  </ItemGroup>
   
   <!-- HOT RELOAD -->
   <!--<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -32,6 +38,10 @@
   </ItemGroup>-->
 
   <ItemGroup>
+    <Compile Update="Views\TestView.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>TestView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Keyboard\KeyGrid\KeyboardGridView.axaml.cs">
       <DependentUpon>KeyboardGridView.axaml</DependentUpon>
     </Compile>

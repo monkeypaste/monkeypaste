@@ -8,6 +8,12 @@ using Size = Avalonia.Size;
 
 namespace iosKeyboardTest {
     public static class RenderHelpers {
+        public static Bitmap RenderToBitmap(byte[] bytes) {
+            using(var ms = new MemoryStream(bytes)) {
+                var bmp = new Bitmap(ms);
+                return bmp;
+            }
+        }
         public static Bitmap RenderToBitmap(Control target, double scale = 1, int quality = 100) {
             int pw = (int)(target.Width * scale);
             int ph = (int)(target.Height * scale);

@@ -66,10 +66,10 @@
             <Setter Property="Foreground"
                     Value="{DynamicResource ShiftBrush}" />
         </Style>
-        <Style Selector="local|KeyView.shift TextBlock">
-            <Setter Property="Foreground"
-                    Value="{DynamicResource ShiftBrush}" />
-        </Style>
+      <Style Selector="local|KeyView.popup-key:not(.down) TextBlock">
+        <Setter Property="Foreground"
+                Value="{DynamicResource HoldFgBrush}" />
+      </Style>
 
         <!--  KEY BACKGROUND  -->
         <Style Selector="local|KeyView Border#KeyBgRect">
@@ -96,10 +96,6 @@
             <Setter Property="Background"
                     Value="{DynamicResource HoldBgBrush}" />
         </Style>
-        <Style Selector="local|KeyView.popup-key:not(.down) TextBlock">
-            <Setter Property="Foreground"
-                    Value="{DynamicResource HoldFgBrush}" />
-        </Style>
         <Style Selector="local|KeyView.hold-focus-key:not(.down) Border#KeyBgRect">
             <Setter Property="Background"
                     Value="{DynamicResource HoldFocusBgBrush}" />
@@ -125,8 +121,6 @@
         <!--  KEYBOARD  -->
 
         <ItemsControl x:Name="KeyItemsControl"
-                      Classes.numbers="{Binding IsNumbers}"
-                      Classes.secondary="{Binding IsSecondaryVisible}"
                       ClipToBounds="False"
                       Grid.Row="1"
                       HorizontalAlignment="Left"

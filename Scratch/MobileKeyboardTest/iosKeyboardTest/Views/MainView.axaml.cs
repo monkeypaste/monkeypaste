@@ -8,6 +8,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace iosKeyboardTest;
@@ -38,29 +39,59 @@ public partial class MainView : UserControl
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
+
+        TestButton.Click += (s, e) => {
+            //var test = new Border() {
+            //    Background = Brushes.Purple,
+            //    Width = 1000,
+            //    Height = 1000,
+            //    //Child = new Ellipse() {
+            //    //    Width = 100,
+            //    //    Height = 100,
+            //    //    Fill = Brushes.Orange
+            //    //}
+            //    Child = new TestView() {
+            //        Width = 100,
+            //        Height = 100
+            //    }
+            //};
+            var rect = new Rect(0, 0, 1000, 300);
+            //var test = new TestView() {
+            //    Width = rect.Width,
+            //    Height = rect.Height
+            //};
+            
+
+            var test = KeyboardBuilder.Build(null, new Size(1000, 300), 2.25, out _);
+            test.Measure(rect.Size);
+            test.Arrange(rect);
+            test.UpdateLayout();
+            test.InvalidateVisual();
+            RenderHelpers.RenderToFile(test, @"C:\Users\tkefauver\Desktop\test1.png");
+        };
+
         if(MainViewModel.IsMockKeyboardVisible) {
             double scale = 1;
             if (OperatingSystem.IsWindows() &&
             TopLevel.GetTopLevel(this) is Window w) {
                 scale = w.DesktopScaling;
-
             }
-            var kbv = KeyboardViewModel.CreateKeyboardView(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
-
-            var hidden_window = new Window() {
-                SizeToContent = SizeToContent.WidthAndHeight,
-                ShowInTaskbar = false,
-                WindowState = WindowState.Minimized,
-                SystemDecorations = SystemDecorations.None,
-                Content = kbv
-            };
-            hidden_window.Show();
+            var kbv = KeyboardBuilder.Build(_conn, KeyboardViewModel.GetTotalSizeByScreenSize(this.Bounds.Size), scale, out _);
+            var kbvm = kbv.DataContext as KeyboardViewModel;
+            //var hidden_window = new Window() {
+            //    SizeToContent = SizeToContent.WidthAndHeight,
+            //    ShowInTaskbar = false,
+            //    WindowState = WindowState.Minimized,
+            //    SystemDecorations = SystemDecorations.None,
+            //    Content = kbv
+            //};
+            //hidden_window.Show();
 
             var HeadlessKeyboardImage = new Image();
 
             var bg_border = new Viewbox() {
-                Width = kbv.BindingContext.TotalWidth,
-                Height = kbv.BindingContext.TotalHeight,
+                Width = kbvm.TotalWidth,
+                Height = kbvm.TotalHeight,
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Bottom,
                 Child = new Border {
                     Background = Brushes.MidnightBlue,
@@ -75,23 +106,29 @@ public partial class MainView : UserControl
                 icd.SetKeyboardInputSource(this.TestTextBox);                
             }
             if(_conn is IHeadLessRender_desktop hrd) {
-                hrd.SetRenderSource(kbv);
+                //hrd.SetRenderSource(kbv);
                 hrd.SetPointerInputSource(bg_border);
-                scale = 1;
+                //scale = 1;
                 var render_timer = new DispatcherTimer() {
                     Interval = TimeSpan.FromMilliseconds(1000d / 120d),
                     IsEnabled = true
                 };
 
-                render_timer.Tick += (s, e) => {
-                    scale = 2.25;
-                    HeadlessKeyboardImage.Source = hrd.RenderToBitmap(scale);
-                };
+                void RenderKeyboard() {
+                    if (KeyboardRenderer.GetKeyboardImageBytes(scale) is not { } bytes) {
+                        return;
+                    }
+                    HeadlessKeyboardImage.Source = RenderHelpers.RenderToBitmap(bytes);
+                }
 
-                HeadlessKeyboardImage.Source = hrd.RenderToBitmap(scale);
+                render_timer.Tick += (s, e) => {
+                    RenderKeyboard();
+                };
+                RenderKeyboard();
 
                 hrd.OnPointerChanged += (s, e) => {
-                    kbv.BindingContext.SetPointerLocation(e);
+                    kbvm.SetPointerLocation(e);
+                    //kbv.BindingContext.Test1Command.Execute(null);
                     //HeadlessKeyboardImage.Source = hrd.RenderToBitmap(scale);
                     //RenderHelpers.RenderToFile(kbv, @"C:\Users\tkefauver\Desktop\test2.png");
                     if(e == null) {

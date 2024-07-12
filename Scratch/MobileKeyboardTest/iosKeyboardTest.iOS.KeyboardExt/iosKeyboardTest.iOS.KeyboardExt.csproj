@@ -29,6 +29,10 @@
    <ItemGroup>
      <Compile Remove="Main.cs" />
    </ItemGroup>
+
+   <ItemGroup>
+     <None Remove="banner_full.png" />
+   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
   </ItemGroup>
@@ -37,5 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Remove="App.axaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="banner_full.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
   </ItemGroup>
 </Project>

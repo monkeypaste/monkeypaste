@@ -54,13 +54,6 @@ public class DesktopInputConnection : IKeyboardInputConnection_desktop {
     }
 
     #region IHeadlessRender Implementation
-    public Bitmap RenderToBitmap(double screenScale) {
-        if(RenderSource is not { } rs) {
-            return null;
-        }
-
-        return RenderHelpers.RenderToBitmap(rs,screenScale);
-    }
 
     public event EventHandler<Point?> OnPointerChanged;
     public void SetPointerInputSource(Control sourceControl) {

@@ -27,8 +27,10 @@ if [ "$1" = "sim" ] || [ "$2" = "sim" ]; then
 	RUNTIME="iossimulator-x64"
 	# ipad 17.2
 	#DEVICE_ID="D57D4990-6DCF-4D75-AC49-C3B7AD0959F4"
-	# ipad 17.4
+	# ipad 17.4 4th gen
 	DEVICE_ID="D533CCC7-612A-479E-A0E6-4898E27D519F"
+	# ipad 17.4 M4
+	#DEVICE_ID="88D47586-6855-4CF7-805F-EFB0996B7180"
 	DEVICE_ARG="-p:_DeviceName=:v2:udid="
 fi
 
@@ -43,7 +45,7 @@ if [ "$1" = "manual" ] || [ "$2" = "manual" ]; then
 	#cd -
 
 	# run ios-deploy to install the app into iOS device
-	ios-deploy -b ./tmp/Payload/*.app
+	ios-deploy -r -b ./tmp/Payload/*.app -O "/Users/tkefauver/Desktop/output.log" -E "/Users/tkefauver/Desktop/error.log"
 	rm -r ./tmp
 	#CUR_DIR=`echo pwd`
 	#./ios-ebee-deploy.sh -b "${CUR_DIR}/bin/${CONFIG}/${FRAMEWORK}/${RUNTIME}/publish/tmp/Payload/${EXE_NAME}.app" -i "${DEVICE_ID}" -l "${CUR_DIR}\output.log"

@@ -30,8 +30,7 @@
 
         <!--  INNER GRID  -->
 
-        <Border x:Name="ForegroundBorder"
-                Classes.popup-key="{Binding IsPopupKey}">
+        <Border x:Name="ForegroundBorder">
             <!--<Border.RenderTransform>
                 <TranslateTransform Y="{Binding PullTranslateY}" />
             </Border.RenderTransform>-->

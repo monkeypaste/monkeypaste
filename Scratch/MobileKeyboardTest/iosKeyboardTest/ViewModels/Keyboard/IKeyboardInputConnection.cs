@@ -24,6 +24,5 @@ namespace iosKeyboardTest {
     public interface IHeadLessRender_desktop : IHeadlessRender {
         void SetRenderSource(Control sourceControl);
         void SetPointerInputSource(Control sourceControl);
-        Bitmap RenderToBitmap(double screenScaling);
     }
 }

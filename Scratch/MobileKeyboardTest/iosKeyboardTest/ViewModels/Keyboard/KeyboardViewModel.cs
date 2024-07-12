@@ -27,7 +27,6 @@ namespace iosKeyboardTest {
         #endregion
 
         #region Statics
-        public static KeyboardViewModel Instance { get; private set; }
         public static Size GetTotalSizeByScreenSize(Size scaledScreenSize) {
             return new Size(scaledScreenSize.Width, scaledScreenSize.Height * TOTAL_KEYBOARD_SCREEN_HEIGHT_RATIO);
         }
@@ -167,9 +166,10 @@ namespace iosKeyboardTest {
         public double ScreenScaling { get; set; }
         public string ErrorText { get; private set; } = "NO ERRORS";
         public bool NeedsNextKeyboardButton =>
-            OperatingSystem.IsIOS() &&
+            //OperatingSystem.IsWindows() ||
+            (OperatingSystem.IsIOS() &&
             InputConnection != null &&
-            (InputConnection as IKeyboardInputConnection_ios).NeedsInputModeSwitchKey;
+            (InputConnection as IKeyboardInputConnection_ios).NeedsInputModeSwitchKey);
         double CursorControlFactorX => 4;
         double CursorControlFactorY => 4;
         public bool IsNumbers =>
@@ -202,11 +202,6 @@ namespace iosKeyboardTest {
         public KeyboardViewModel() : this(null,new Size(360,740),2.75) { }
         public KeyboardViewModel(IKeyboardInputConnection inputConn, Size scaledSize, double scale) 
         {
-            if(Instance != null) {
-                // singleton error
-                Debugger.Break();
-            }
-            Instance = this;
             Debug.WriteLine("kbvm ctor called");
             ScreenScaling = scale;
             Keys.CollectionChanged += Keys_CollectionChanged;
@@ -354,7 +349,7 @@ namespace iosKeyboardTest {
                 .FirstOrDefault(x => x.Item2.Contains(p));
             return result.x;
         }
-        void UpdateKeyboardState() {
+        public void UpdateKeyboardState() {
             this.RaisePropertyChanged(nameof(Keys));
             this.RaisePropertyChanged(nameof(KeyboardWidth));
             this.RaisePropertyChanged(nameof(KeyboardHeight));
@@ -398,6 +393,7 @@ namespace iosKeyboardTest {
                 key.RaisePropertyChanged(nameof(key.NeedsSymbolTranslate));
                 key.RaisePropertyChanged(nameof(key.IsActiveKey));
                 key.RaisePropertyChanged(nameof(key.IsPressed));
+                key.RaisePropertyChanged(nameof(key.IsSpecial));
                 //Debug.WriteLine(key.PrimaryValue);
             }
         }
@@ -755,15 +751,33 @@ namespace iosKeyboardTest {
         public ICommand Test1Command => ReactiveCommand.Create<object>(
             (args) => {
 
-                var test = new Border() {
-                    Width = 100,
-                    Height = 100,
-                    Child = new Ellipse() {
-                        Width = 100,
-                        Height = 100,
-                        Fill = Brushes.Orange
-                    }
-                };
+                //var test = new Border() {
+                //    Background = Brushes.Purple,
+                //    Width = 1000,
+                //    Height = 1000,
+                //    //Child = new Ellipse() {
+                //    //    Width = 100,
+                //    //    Height = 100,
+                //    //    Fill = Brushes.Orange
+                //    //}
+                //    Child = new TestView() {
+                //        Width = 100,
+                //        Height = 100
+                //    }
+                //};
+                //var rect = new Rect(0, 0, 500, 500);
+                //var test = new TestView() {
+                //    Width = rect.Width,
+                //    Height = rect.Height
+                //};
+                //test.InitializeComponent();
+                //test.Measure(rect.Size);
+                //test.Arrange(rect);
+                //test.UpdateLayout();
+                //test.InvalidateVisual();
+
+                var test = KeyboardBuilder.Build(InputConnection,new Size(KeyboardWidth,KeyboardHeight),ScreenScaling, out _);
+
                 RenderHelpers.RenderToFile(test, @"C:\Users\tkefauver\Desktop\test1.png");
 
 
